@@ -943,10 +943,22 @@ public:
      */
     const MouseConfig &getConfig() const;
 
-    /** @brief  Returns the component's current state.
+    /** Moves the mouse
+     *  @param x    New absolute horizontal coordinate
+     *  @param y    New absolute vertical coordinate
      */
-    // const MouseInfo &getInfo() const;
-    // const MouseInfo &getCachedInfo() const;
+    void setXY(double x, double y);
+
+    /** Moves the mouse
+     *  @param dx       Relative horizontal mouse movement
+     *  @param dy       Relative vertical mouse movement
+     */
+    void setDxDy(double dx, double dy);
+
+    /** Triggers a mouse button event
+     *  @param action   The triggered event
+     */
+    void trigger(GamePadAction action);
 
     /** Feeds a coordinate into the shake detector.
      *
@@ -971,23 +983,6 @@ public:
      *  @return     true iff a shaking mouse has been detected.
      */
     bool detectShakeDxDy(double dx, double dy);
-
-    /** Moves the mouse
-     *  @param x    New absolute horizontal coordinate
-     *  @param y    New absolute vertical coordinate
-     */
-    void setXY(double x, double y);
-
-    /** Moves the mouse
-     *  @param dx       Relative horizontal mouse movement
-     *  @param dy       Relative vertical mouse movement
-     */
-    void setDxDy(double dx, double dy);
-
-    /** Triggers a mouse button event
-     *  @param action   The triggered event
-     */
-    void trigger(GamePadAction action);
 };
 
 

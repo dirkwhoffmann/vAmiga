@@ -1408,7 +1408,35 @@ JoystickAPI::trigger(GamePadAction event)
 // Peripherals (Mouse)
 //
 
-bool 
+const MouseConfig &
+MouseAPI::getConfig() const
+{
+    VAMIGA_PUBLIC
+    return mouse->getConfig();
+}
+
+void
+MouseAPI::setXY(double x, double y)
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::MOUSE_MOVE_ABS, CoordCmd { .port = mouse->objid, .x = x, .y = y }));
+}
+
+void
+MouseAPI::setDxDy(double dx, double dy)
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::MOUSE_MOVE_REL, CoordCmd { .port = mouse->objid, .x = dx, .y = dy }));
+}
+
+void
+MouseAPI::trigger(GamePadAction action)
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::MOUSE_BUTTON, GamePadCmd { .port = mouse->objid, .action = action }));
+}
+
+bool
 MouseAPI::detectShakeXY(double x, double y)
 {
     VAMIGA_PUBLIC
@@ -1422,26 +1450,6 @@ MouseAPI::detectShakeDxDy(double dx, double dy)
     return mouse->detectShakeDxDy(dx, dy);
 }
 
-void 
-MouseAPI::setXY(double x, double y)
-{
-    VAMIGA_PUBLIC
-    emu->put(Command(Cmd::MOUSE_MOVE_ABS, CoordCmd { .port = mouse->objid, .x = x, .y = y }));
-}
-
-void 
-MouseAPI::setDxDy(double dx, double dy)
-{
-    VAMIGA_PUBLIC
-    emu->put(Command(Cmd::MOUSE_MOVE_REL, CoordCmd { .port = mouse->objid, .x = dx, .y = dy }));
-}
-
-void 
-MouseAPI::trigger(GamePadAction action)
-{
-    VAMIGA_PUBLIC
-    emu->put(Command(Cmd::MOUSE_BUTTON, GamePadCmd { .port = mouse->objid, .action = action }));
-}
 
 //
 // Misc (MsgQueue)

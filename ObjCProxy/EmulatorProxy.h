@@ -671,6 +671,9 @@ NSString *EventSlotName(EventSlot slot);
 
 @interface JoystickProxy : CoreComponentProxy { }
 
+@property (readonly) JoystickInfo info;
+@property (readonly) JoystickInfo cachedInfo;
+
 - (void)trigger:(GamePadAction)event;
 
 @end

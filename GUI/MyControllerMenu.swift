@@ -362,6 +362,9 @@ extension MyController: NSMenuItemValidation {
 
         // Save to disk
         try? screenshot.save()
+
+        // Create a visual effect
+        // renderer.flash()
     }
     
     @IBAction func browseScreenshotsAction(_ sender: Any!) {

@@ -949,16 +949,6 @@ NSString *EventSlotName(EventSlot slot)
     return (MouseAPI *)obj;
 }
 
-- (BOOL)detectShakeAbs:(NSPoint)pos
-{
-    return [self mouse]->detectShakeXY(pos.x, pos.y);
-}
-
-- (BOOL)detectShakeRel:(NSPoint)pos
-{
-    return [self mouse]->detectShakeDxDy(pos.x, pos.y);
-}
-
 - (void)setXY:(NSPoint)pos
 {
     [self mouse]->setXY(pos.x, pos.y);
@@ -974,6 +964,16 @@ NSString *EventSlotName(EventSlot slot)
     [self mouse]->trigger(event);
 }
 
+- (BOOL)detectShakeAbs:(NSPoint)pos
+{
+    return [self mouse]->detectShakeXY(pos.x, pos.y);
+}
+
+- (BOOL)detectShakeRel:(NSPoint)pos
+{
+    return [self mouse]->detectShakeDxDy(pos.x, pos.y);
+}
+
 @end
 
 
@@ -986,6 +986,16 @@ NSString *EventSlotName(EventSlot slot)
 - (JoystickAPI *)joystick
 {
     return (JoystickAPI *)obj;
+}
+
+- (JoystickInfo)info
+{
+    return [self joystick]->getInfo();
+}
+
+- (JoystickInfo)cachedInfo
+{
+    return [self joystick]->getCachedInfo();
 }
 
 - (void)trigger:(GamePadAction)event

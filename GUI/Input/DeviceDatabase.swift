@@ -39,7 +39,7 @@
 typealias HIDMapping = [ HIDEvent: [ Int: [ Int: [GamePadAction] ] ] ]
 
 func printHIDMapping(_ mapping: HIDMapping) {
-
+    
     for (event, keys) in mapping {
         print("\(event):")
         for (key, value) in keys {
@@ -49,153 +49,153 @@ func printHIDMapping(_ mapping: HIDMapping) {
 }
 
 class DeviceDatabase {
-
+    
     // Known devices
     private var devices: [GUID: String] = [:]
-
+    
     //
     // Initializing
     //
-
+    
     init() {
-
+        
         devices = [:]
-
+        
         // Load database from the user defaults storage
         if let encoded = UserDefaults.standard.data(forKey: Keys.Dev.schemes),
            let decoded = try? JSONDecoder().decode([GUID: String].self, from: encoded) {
             devices = decoded
         }
-
+        
         // If the database still empty, register all known devices
         if devices.isEmpty { reset() }
     }
-
+    
     func reset() {
-
+        
         // Start from scratch
         devices = [:]
-
+        
         // Register all known devices
         parse(file: "gamecontrollerdb", withExtension: "txt")
     }
-
+    
     //
     // Creating the database
     //
-
+    
     private func parse(file: String, withExtension ext: String) {
-
+        
         if let url = Bundle.main.url(forResource: file, withExtension: ext) {
-
+            
             do {
-
+                
                 let fileContents = try String(contentsOf: url, encoding: .utf8)
                 for line in fileContents.split(separator: "\n") {
                     self.parse(line: String(line))
                 }
-
+                
             } catch { print("Error reading file: \(error)") }
         }
     }
-
+    
     private func parse(line: String) {
-
+        
         // Eliminate newline characters (if any)
         var descriptor = line.replacingOccurrences(of: "\n", with: "")
-
+        
         // Eliminate unneeded commas at both ends
         descriptor = descriptor.trimmingCharacters(in: CharacterSet(charactersIn: ","))
-
+        
         // Extract the GUID and create a mapping
         if let guid = GUID(string: descriptor) { devices[guid] = descriptor }
     }
-
+    
     func update(line: String) {
-
+        
         parse(line: line)
     }
-
+    
     //
     // Querying descriptors
     //
-
+    
     func isKnown(guid: GUID, exact: Bool = false) -> Bool {
-
+        
         return seek(guid: guid, exact: exact) != nil
     }
-
+    
     func seek(guid: GUID, withDelimiter del: String) -> String {
-
+        
         let result = seek(guid: guid).trimmingCharacters(in: CharacterSet(charactersIn: ","))
         return result.replacingOccurrences(of: ",", with: del)
     }
-
+    
     func seek(guid: GUID) -> String {
-
+        
         let macOS = "Mac OS X"
         
         // Search for a perfect match
         if let result = seek(guid: guid, exact: true, platform: macOS) { return result }
-
+        
         // Search again, ignoring the version number
         if let result = seek(guid: guid, exact: false, platform: macOS) { return result }
-
+        
         // Search again, ignoring the platform
         if let result = seek(guid: guid, exact: true) { return result }
-
+        
         // Search again, ignoring the version number and the platform
         if let result = seek(guid: guid, exact: false) { return result }
-
+        
         // Return a fallback descriptor
         return "Generic,a:b0,b:b1,leftx:a0,lefty:a1"
     }
-
+    
     private func seek(guid: GUID, exact: Bool, platform: String? = nil) -> String? {
-
+        
         for (otherguid, descriptor) in devices {
-
+            
             // Compare the vendor ID
             if !guid.match(guid: otherguid, offset: 8, length: 4) { continue }
-
+            
             // Compare the product ID
             if !guid.match(guid: otherguid, offset: 16, length: 4) { continue }
-
+            
             // Compare the version if requested
             if exact && !guid.match(guid: otherguid, offset: 24, length: 4) { continue }
-
+            
             // Compare the platform if requested
             if platform != nil && platform != extract(from: descriptor, key: "platform:") { continue }
             
             return descriptor;
         }
-
+        
         return nil
     }
-
+    
     func extract(from descriptor: String, key: String) -> String? {
         
         guard let range = descriptor.range(of: key) else { return nil }
-            
+        
         let start = descriptor.index(range.upperBound, offsetBy: 0)
         let end = descriptor[start...].firstIndex(of: ",") ?? descriptor.endIndex
-
+        
         return String(descriptor[start..<end])
     }
     
     //
     // Compute mappings
     //
-
+    
     func query(guid: GUID) -> HIDMapping {
-
+        
         return query(descriptor: seek(guid: guid))
     }
-
+    
     func query(descriptor: String) -> HIDMapping {
-
+        
         var result: HIDMapping = [
-
+            
             .AXIS: [:],
             .BUTTON: [:],
             .DPAD_UP: [0:[:]],
@@ -204,13 +204,13 @@ class DeviceDatabase {
             .DPAD_LEFT: [0:[:]],
             .HATSWITCH: [0:[:]]
         ]
-
+        
         // Add default values for the directional pad
         result[.DPAD_UP]![0] = [0:[.RELEASE_Y], 1:[.PULL_UP]]
         result[.DPAD_DOWN]![0] = [0:[.RELEASE_Y], 1:[.PULL_DOWN]]
         result[.DPAD_RIGHT]![0] = [0:[.RELEASE_X,], 1:[.PULL_RIGHT]]
         result[.DPAD_LEFT]![0] = [0:[.RELEASE_X,], 1:[.PULL_LEFT]]
-
+        
         // Add default values for the hat switch
         result[.HATSWITCH]![0]![0] = [.RELEASE_XY]
         result[.HATSWITCH]![0]![1] = [.PULL_UP]
@@ -221,15 +221,15 @@ class DeviceDatabase {
         result[.HATSWITCH]![0]![12] = [.PULL_DOWN,.PULL_LEFT]
         result[.HATSWITCH]![0]![8] = [.PULL_LEFT]
         result[.HATSWITCH]![0]![9] = [.PULL_UP,.PULL_LEFT]
-
+        
         // Iterate through all key value pairs
         for assignment in descriptor.split(separator: ",") {
-
+            
             let pair = assignment.split(separator: ":").map { String($0) }
             if pair.count != 2 { continue }
-
+            
             switch (pair[1]) {
-
+                
             case "a0":  result[.AXIS]![0] = mapAxis(key: pair[0])
             case "a1":  result[.AXIS]![1] = mapAxis(key: pair[0])
             case "a2":  result[.AXIS]![2] = mapAxis(key: pair[0])
@@ -271,22 +271,22 @@ class DeviceDatabase {
             case "b14": result[.BUTTON]![14] = mapButton(key: pair[0])
             case "b15": result[.BUTTON]![15] = mapButton(key: pair[0])
             case "b16": result[.BUTTON]![16] = mapButton(key: pair[0])
-
+                
             default:
                 break
             }
         }
-
+        
         // printHIDMapping(result)
         return result
     }
-
+    
     private func mapAxis(key: String, rev: Bool = false) -> [Int: [GamePadAction]] {
-
+        
         var result: [Int: [GamePadAction]] = [:]
-
+        
         switch (key) {
-
+            
         case "leftx", "rightx":
             result = [-1: [.PULL_LEFT], 0: [.RELEASE_X], 1: [.PULL_RIGHT]]
         case "lefty", "righty":
@@ -302,20 +302,20 @@ class DeviceDatabase {
         default:
             break
         }
-
+        
         if rev, let left = result[-1], let right = result[1] {
-
+            
             result[-1] = right
             result[1]  = left
         }
-
+        
         return result
     }
-
+    
     private func mapButton(key: String) -> [Int: [GamePadAction]] {
-
+        
         switch (key) {
-
+            
         case "a", "b", "x", "y", "leftshoulder", "rightshoulder":
             return [0: [.RELEASE_FIRE], 1: [.PRESS_FIRE]]
         case "dpdown":
@@ -330,15 +330,15 @@ class DeviceDatabase {
             return [:]
         }
     }
-
+    
     //
     // Misc
     //
-
+    
     func save() {
-
+        
         debug(.hid)
-
+        
         if let encoded = try? JSONEncoder().encode(devices) {
             UserDefaults.standard.set(encoded, forKey: Keys.Dev.schemes)
         }

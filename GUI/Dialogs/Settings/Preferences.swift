@@ -29,35 +29,6 @@ class Preferences {
     // General
     //
 
-    // Snapshots
-    /*
-    var autoSnapshots = false {
-        didSet {
-            for emu in myAppDelegate.proxies {
-                emu.set(.AMIGA_SNAP_AUTO, enable: autoSnapshots)
-            }
-        }
-    }
-    var snapshotInterval = 0 {
-        didSet {
-            for emu in myAppDelegate.proxies {
-                emu.set(.AMIGA_SNAP_DELAY, value: snapshotInterval)
-            }
-        }
-    }
-    var snapshotStorage = 0 {
-        didSet { for c in myAppDelegate.controllers {
-            c.mydocument.snapshots.maxSize = snapshotStorage * 1024 * 1024 }
-        }
-    }
-    var snapshotSlots = 0 {
-        didSet { for c in myAppDelegate.controllers {
-            c.mydocument.snapshots.maxCount = snapshotSlots }
-        }
-    }
-    */
-    var snapshotAutoDelete: Bool = true
-
     // Fullscreen
     var keepAspectRatio = false
     var exitOnEsc = false
@@ -71,7 +42,10 @@ class Preferences {
     //
     // Captures
     //
-    
+
+    // Snapshots
+    var snapshotAutoDelete: Bool = true
+
     // Screenshots
     var screenshotFormat = NSBitmapImageRep.FileType.png
     var screenshotFormatIntValue: Int {
@@ -102,33 +76,6 @@ class Preferences {
         }
     }
 
-    // Videos
-    /*
-    var captureSource: CaptureSource = .visible
-    var captureSourceIntValue: Int {
-        get { return Int(captureSource.rawValue) }
-        set { captureSource = CaptureSource(rawValue: Int(newValue)) ?? .visible }
-    }
-    var bitRate = 512 {
-        didSet {
-            if bitRate < 64 { bitRate = 64 }
-            if bitRate > 16384 { bitRate = 16384 }
-        }
-    }
-    var aspectX = 768 {
-        didSet {
-            if aspectX < 1 { aspectX = 1 }
-            if aspectX > 999 { aspectX = 999 }
-        }
-    }
-    var aspectY = 702 {
-        didSet {
-            if aspectY < 1 { aspectY = 1 }
-            if aspectY > 999 { aspectY = 999 }
-        }
-    }
-    */
-    
     //
     // Controls
     //

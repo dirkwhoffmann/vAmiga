@@ -409,16 +409,6 @@ extension Canvas {
             return MTLRegion(origin: origin, size: size)
         }
 
-        /*
-        func region(cx: Int, cy: Int, width: Int, height: Int) -> MTLRegion {
-        
-            // Assemble the region
-            let origin = MTLOrigin(x: cx - width / 2, y: cy - height / 2, z: 0)
-            let size = MTLSize(width: width, height: height, depth: 1)
-            return MTLRegion(origin: origin, size: size)
-        }
-        */
-        
         func region(x1: Int, x2: Int, y1: Int, y2: Int) -> MTLRegion {
         
             // Revert to the entire texture if a zero rect is given
@@ -477,14 +467,6 @@ extension Canvas {
         }
     }
 
-    /*
-    private func screenshot(texture: MTLTexture, rect: CGRect) -> NSImage? {
-
-        texture.blit()
-        return NSImage.make(texture: texture, rect: rect)
-    }
-    */
-    
     private func screenshot(texture: MTLTexture, region: MTLRegion) -> NSImage? {
 
         texture.blit()

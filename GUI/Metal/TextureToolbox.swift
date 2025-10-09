@@ -264,47 +264,6 @@ extension MTLTexture {
 
         return buffer
     }
-    
-    // MOVE TO CUSTOM CODE. TOO SPECIALIZED
-    /*
-    func innerArea(device: MTLDevice) -> CGRect {
-    
-        guard let buffer = blitTextureToBuffer(device: device, texture: self) else {
-
-            print("Failed to access texture data");
-            return CGRect.zero
-        }
-
-        let w = width
-        let h = height
-        let p = buffer.contents().bindMemory(to: Int32.self, capacity: w * h)
-        
-        let first = p[2 * width + 2]
-
-        func empty(row: Int) -> Bool {
-            print("first = \(first)")
-            for x in 0..<w { if p[row * w + x] != first { print("diff = \(p[row * w + x])"); return false } }
-            return true
-        }
- 
-        func empty(col: Int) -> Bool {
-            for y in 0..<h { if p[y * w + col] != first { return false } }
-            return true
-        }
-        
-        var x1 = 2
-        var x2 = width - 2
-        var y1 = 2
-        var y2 = height - 2
-        
-        while x2 > 0 && empty(col: x2) { x2 -= 1 }
-        while x1 < x2 && empty(col: x1) { x1 += 1 }
-        while y2 > 0 && empty(row: y2) { y2 -= 1 }
-        while y1 < y2 && empty(row: y1) { y1 += 1 }
-
-        return CGRect.init(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
-    }
-    */
 }
 
 //

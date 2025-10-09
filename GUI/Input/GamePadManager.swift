@@ -26,30 +26,30 @@ struct InputDevice {
  */
 @MainActor
 class GamePadManager {
-
+    
     // Reference to the main controller
     var controller: MyController!
     
     // Reference to the HID manager
     var hidManager: IOHIDManager
-        
+    
     // Gamepad storage
     var gamePads: [Int: GamePad] = [:]
-
+    
     // Lock for synchronizing asynchroneous calls
     var lock = NSLock()
-
+    
     //
     // Initializing
     //
     
     init(parent: MyController) {
-    
+        
         self.controller = parent
-      
+        
         hidManager = IOHIDManagerCreate(kCFAllocatorDefault,
                                         IOOptionBits(kIOHIDOptionsTypeNone))
-
+        
         // Add default devices
         gamePads[0] = GamePad(manager: self, type: .MOUSE)
         gamePads[0]!.name = "Mouse"
@@ -60,15 +60,15 @@ class GamePadManager {
         gamePads[1]!.name = "Joystick Keyset 1"
         gamePads[1]!.icon = SFSymbol.get(.arrowkeys)
         gamePads[1]!.keyMap = 1
-
+        
         gamePads[2] = GamePad(manager: self, type: .JOYSTICK)
         gamePads[2]!.name = "Joystick Keyset 2"
         gamePads[2]!.icon = SFSymbol.get(.arrowkeys)
         gamePads[2]!.keyMap = 2
-
+        
         // Tell the mouse event receiver where the mouse resides
         parent.metal.mouse1 = gamePads[0]!
-                
+        
         // Prepare to accept HID devices
         let deviceCriteria = [
             [
@@ -88,7 +88,7 @@ class GamePadManager {
                 kIOHIDDeviceUsageKey: kHIDUsage_GD_Mouse
             ]
         ]
-                
+        
         // Declare bridging closures (bridge between Swift methods and C callbacks)
         let matchingCallback: IOHIDDeviceCallback = { inContext, inResult, inSender, device in
             let this: GamePadManager = unsafeBitCast(inContext, to: GamePadManager.self)
@@ -111,23 +111,26 @@ class GamePadManager {
     
     func shutDown() {
         
+        debug(.hid, "GamePadManager: shutdown")
+        
         debug(.shutdown)
         
         // Terminate communication with all connected HID devices
         for (_, pad) in gamePads { pad.device?.close() }
-
+        
         // Close the HID manager
         IOHIDManagerClose(hidManager, IOOptionBits(kIOHIDOptionsTypeNone))
-
+        
         // Free all slots
         gamePads = [:]
     }
-
+    
     deinit {
         
+        debug(.hid, "GamePadManager: deinit")
         debug(.shutdown)
     }
-        
+    
     //
     // Managing slots
     //
@@ -141,10 +144,10 @@ class GamePadManager {
         
         var nr = 0
         while !isEmpty(slot: nr) { nr += 1 }
-
+        
         // We support up to 7 devices
         if nr < 7 { return nr }
-
+        
         warn("Maximum number of devices reached")
         return nil
     }
@@ -157,11 +160,11 @@ class GamePadManager {
         // Bind the new device
         gamePads[slot]?.port = port
     }
-
+    
     func name(slot: Int) -> String {
         return gamePads[slot]?.name ?? "External device"
     }
-
+    
     func icon(slot: Int) -> NSImage {
         return gamePads[slot]?.icon ?? SFSymbol.get(.gamecontroller)
     }
@@ -175,12 +178,12 @@ class GamePadManager {
                         result: IOReturn,
                         sender: UnsafeMutableRawPointer?,
                         device: IOHIDDevice) {
-    
+        
         lock.lock(); defer { lock.unlock() }
-
+        
         debug(.hid)
         if (Int.hid != 0) { device.listProperties() }
-
+        
         // Ignore internal devices
         if device.isInternalDevice { return }
         
@@ -189,7 +192,7 @@ class GamePadManager {
         
         // Add device
         addDevice(slot: slot, device: device)
-                
+        
         // Reconnect devices (assignments trigger side effects)
         controller.config.gameDevice1 = controller.config.gameDevice1
         controller.config.gameDevice2 = controller.config.gameDevice2
@@ -218,7 +221,7 @@ class GamePadManager {
             
             // Create a GamePad object
             gamePads[slot] = GamePad(manager: self, device: device, type: .JOYSTICK)
-                        
+            
             // Register input value callback
             let hidContext = unsafeBitCast(gamePads[slot], to: UnsafeMutableRawPointer.self)
             IOHIDDeviceRegisterInputValueCallback(device,
@@ -235,24 +238,24 @@ class GamePadManager {
         lock.lock(); defer { lock.unlock() }
         
         debug(.hid)
-            
+        
         // Search for a matching locationID and remove device
         for (slot, pad) in gamePads where pad.locationID == device.locationID {
             gamePads[slot] = nil
         }
-
+        
         // Inform about the changed configuration
         controller.toolbar.validateVisibleItems()
         myAppDelegate.deviceAdded()
-
+        
         if Int.hid != 0 { listDevices() }
     }
-
+    
     func updateHidMapping() {
-
+        
         for (_, pad) in gamePads { pad.updateMapping() }
     }
-
+    
     func listDevices() {
         
         print("Input devices:")
@@ -262,34 +265,14 @@ class GamePadManager {
             dev.dump()
         }
     }
-
+    
     func refresh(popup: NSPopUpButton, hide: Bool = false) {
-
+        
         refresh(menu: popup.menu!, hide: hide)
-        /*
-        let slots = [
-            InputDevice.mouse,
-            InputDevice.keyset1,
-            InputDevice.keyset2,
-            InputDevice.joystick1,
-            InputDevice.joystick2,
-            InputDevice.joystick3,
-            InputDevice.joystick4
-        ]
-                
-        for s in slots {
-            if let item = popup.menu?.item(withTag: s) {
-                item.title = name(slot: s)
-                item.image = icon(slot: s)
-                item.isEnabled = isUsed(slot: s)
-                item.isHidden = isEmpty(slot: s) && hide
-            }
-        }
-        */
     }
-
+    
     func refresh(menu: NSMenu, hide: Bool = false) {
-
+        
         let slots = [
             InputDevice.mouse,
             InputDevice.keyset1,
@@ -299,7 +282,7 @@ class GamePadManager {
             InputDevice.joystick3,
             InputDevice.joystick4
         ]
-
+        
         for s in slots {
             if let item = menu.item(withTag: s) {
                 item.title = name(slot: s)

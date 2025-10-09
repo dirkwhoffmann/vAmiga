@@ -133,6 +133,9 @@
 		505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505CEF5D26BD12430078FF52 /* DropZone.swift */; };
 		505DD69D2E0815B800D9E8B2 /* FSStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */; };
 		505DD69E2E0815B800D9E8B2 /* FSStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */; };
+		505F457A2E96A2B200418105 /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505F45792E96A2A600418105 /* NSImage.swift */; };
+		505F457C2E96A34200418105 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505F457B2E96A33F00418105 /* CGRect.swift */; };
+		505F45802E96A45000418105 /* CGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505F457F2E96A44C00418105 /* CGImage.swift */; };
 		50627FD3286EBA7300F2A835 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* Texture.cpp */; };
 		50627FD5286EBACA00F2A835 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* Texture.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
@@ -727,6 +730,9 @@
 		505CEF5D26BD12430078FF52 /* DropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropZone.swift; sourceTree = "<group>"; };
 		505DD69B2E0815AC00D9E8B2 /* FSStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSStorage.h; sourceTree = "<group>"; };
 		505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSStorage.cpp; sourceTree = "<group>"; };
+		505F45792E96A2A600418105 /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
+		505F457B2E96A33F00418105 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
+		505F457F2E96A44C00418105 /* CGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImage.swift; sourceTree = "<group>"; };
 		50627FD1286EBA7300F2A835 /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		50627FD2286EBA7300F2A835 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
@@ -1408,6 +1414,9 @@
 		5058A916281C774600C223C9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				505F457F2E96A44C00418105 /* CGImage.swift */,
+				505F457B2E96A33F00418105 /* CGRect.swift */,
+				505F45792E96A2A600418105 /* NSImage.swift */,
 				50C246022E8ABAC600B134F6 /* Symbols.swift */,
 				50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */,
 				50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */,
@@ -1462,7 +1471,6 @@
 				508FE00E21EA227B0043D0E9 /* MacAudio.swift */,
 				50F580652431D1A000E7D84D /* Screenshot.swift */,
 				501A9936243A07A100D269B2 /* Storage.swift */,
-				5058A916281C774600C223C9 /* Extensions */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -1685,6 +1693,7 @@
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
 				50DE55392E874641001789C9 /* MyToolbarItems.swift */,
 				50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */,
+				5058A916281C774600C223C9 /* Extensions */,
 				505B801E23FE6582002407FE /* System */,
 				508FDFCB21EA20510043D0E9 /* Metal */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
@@ -2588,6 +2597,7 @@
 				50B14C2821EB97EC002E32A6 /* EmulatorProxy.mm in Sources */,
 				501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */,
 				50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */,
+				505F45802E96A45000418105 /* CGImage.swift in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
 				5009B7FC2557051A0037288E /* EADFFile.cpp in Sources */,
 				5056506C25440FFB00A79D27 /* MutableFileSystem.cpp in Sources */,
@@ -2666,6 +2676,7 @@
 				501C514227C0CE6600DF1DD5 /* DriveDescriptors.cpp in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				50E1D2C826CCF97C001FE199 /* ChronoExtensions.swift in Sources */,
+				505F457C2E96A34200418105 /* CGRect.swift in Sources */,
 				50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
@@ -2706,6 +2717,7 @@
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
+				505F457A2E96A2B200418105 /* NSImage.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */,
 				5020B38E295336E5009732AC /* Host.cpp in Sources */,
 				50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */,
