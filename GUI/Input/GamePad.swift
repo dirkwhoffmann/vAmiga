@@ -400,9 +400,7 @@ class GamePad {
         if let controller = myAppDelegate.settingsController, controller.isVisible {
             controller.devicesVC?.refreshDeviceActions(actions: events)
         }
-        
-        // if notify { myAppDelegate.devicePulled(events: events) }
-        
+                
         return events != []
     }
     

@@ -45,16 +45,16 @@
                                 <rect key="frame" x="100" y="64" width="600" height="478"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="aJw-Xr-hX4" customClass="OnboardingPageContainerView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="4" y="5" width="592" height="470"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="478"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJh-cj-HCv">
-                                            <rect key="frame" x="264" y="406" width="64" height="64"/>
+                                            <rect key="frame" x="268" y="414" width="64" height="64"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="logo" id="YGI-39-aQd"/>
                                         </imageView>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDd-Tl-hJY">
-                                            <rect key="frame" x="230" y="28" width="124" height="40"/>
+                                            <rect key="frame" x="234" y="28" width="124" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -65,11 +65,11 @@
                                             </connections>
                                         </button>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
-                                            <rect key="frame" x="211" y="76" width="163" height="25"/>
+                                            <rect key="frame" x="215" y="76" width="163" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </customView>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
-                                            <rect key="frame" x="0.0" y="116" width="600" height="320"/>
+                                            <rect key="frame" x="0.0" y="124" width="600" height="320"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                     </subviews>
@@ -339,7 +339,7 @@
         <image name="amigaBall" width="263" height="265"/>
         <image name="arrowshape.backward.circle" catalog="system" width="15" height="15"/>
         <image name="iconGeneral" width="256" height="256"/>
-        <image name="logo" width="1024" height="638"/>
+        <image name="logo" width="516" height="516"/>
         <image name="logo75" width="516" height="516"/>
         <image name="rom_aros" width="129" height="157"/>
         <image name="rom_diag" width="129" height="157"/>

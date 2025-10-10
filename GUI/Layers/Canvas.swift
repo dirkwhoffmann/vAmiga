@@ -22,19 +22,19 @@ class Canvas: Layer {
     // Indicates whether the recently drawn frames were long or short frames
     var currLOF = true
     var prevLOF = true
-
+    
     // Used to determine if the GPU texture needs to be updated
     var prevNr = 0
-
+    
     // Variable used to emulate interlace flickering
     var flickerCnt = 0
-
+    
     // Tracked display window (adaptive viewport feature)
     var x1 = CGFloat(0)
     var y1 = CGFloat(0)
     var x2 = CGFloat(0)
     var y2 = CGFloat(0)
-
+    
     //
     // Textures
     //
@@ -46,12 +46,12 @@ class Canvas: Layer {
      */
     var lfTexture: MTLTexture! = nil
     var sfTexture: MTLTexture! = nil
-
+    
     /* Merge texture
      * The long frame and short frame textures are merged into this one.
      */
     var mergeTexture: MTLTexture! = nil
-
+    
     /* Bloom textures to emulate blooming (512 x 512)
      * To emulate a bloom effect, the emulator texture is first split into it's
      * R, G, and B parts. Each texture is then run through a Gaussian blur
@@ -62,12 +62,12 @@ class Canvas: Layer {
     var bloomTextureR: MTLTexture! = nil
     var bloomTextureG: MTLTexture! = nil
     var bloomTextureB: MTLTexture! = nil
-
+    
     /* Lowres enhancement texture (experimental)
      * Trying to use in-texture upscaling to enhance lowres mode
      */
     var lowresEnhancedTexture: MTLTexture! = nil
-
+    
     /* Upscaled emulator texture (2048 x 2048)
      * In the first texture processing stage, the emulator texture is bumped up
      * by a factor of 4. The user can choose between bypass upscaling which
@@ -75,33 +75,33 @@ class Canvas: Layer {
      * algorithms such as xBr.
      */
     var upscaledTexture: MTLTexture! = nil
-
+    
     /* Upscaled texture with scanlines (2048 x 2048)
      * In the second texture processing stage, a scanline effect is applied to
      * the upscaled texture.
      */
     var scanlineTexture: MTLTexture! = nil
-
+    
     /* The final texture. This texture is passed to the fragment shader.
      */
     var finalTexture: MTLTexture! = nil
-
+    
     // Part of the texture that is currently visible
     var textureRect = CGRect.zero { didSet { buildVertexBuffers() } }
-
+    
     //
     // Buffers and Uniforms
     //
     
     var quad2D: Node?
-            
+    
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var fragmentUniforms = FragmentUniforms(alpha: 1.0,
                                             white: 0.0,
                                             dotMaskWidth: 0,
                                             dotMaskHeight: 0,
                                             scanlineDistance: 0)
-
+    
     var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
                                       shortFrameScale: 1.0)
     
@@ -110,7 +110,7 @@ class Canvas: Layer {
     //
     
     override init(renderer: Renderer) {
-
+        
         super.init(renderer: renderer)
         buildVertexBuffers()
         buildTextures()
@@ -129,12 +129,12 @@ class Canvas: Layer {
     }
     
     func buildTextures() {
-     
+        
         // Texture usages
         let r: MTLTextureUsage = [ .shaderRead ]
         let rwt: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget ]
         let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ]
-
+        
         // Emulator texture (long frames)
         lfTexture = device.makeTexture(size: TextureSize.original, usage: r)
         renderer.metalAssert(lfTexture != nil,
@@ -174,95 +174,95 @@ class Canvas: Layer {
         renderer.metalAssert(scanlineTexture != nil,
                              "The scanline texture could not be allocated.")
     }
-
+    
     //
     // Updating
     //
     
     override func update(frames: Int64) {
-            
+        
         super.update(frames: frames)
-
+        
         // Grab the current texture
         updateTexture()
-
+        
         // Let the emulator compute the next frame
         emu?.wakeUp()
     }
-
+    
     func updateTexture() {
-
+        
         precondition(lfTexture != nil)
         precondition(sfTexture != nil)
-
+        
         var buffer: UnsafePointer<UInt32>!
         var nr = 0
-
+        
         // Prevent the stable texture from changing
         emu?.videoPort.lockTexture()
-
+        
         // Grab the stable texture
         emu?.videoPort.texture(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
-
+        
         // Check for duplicated or dropped frames
         if nr != prevNr + 1 {
-
+            
             debug(.vsync, "Frame sync mismatch (\(prevNr) -> \(nr))")
         }
         prevNr = nr
-
+        
         // Update the GPU texture
         if currLOF {
             lfTexture.replace(w: Int(TPP) * VAMIGA.HPIXELS, h: VAMIGA.VPIXELS, buffer: buffer)
         } else {
             sfTexture.replace(w: Int(TPP) * VAMIGA.HPIXELS, h: VAMIGA.VPIXELS, buffer: buffer)
         }
-
+        
         // Release the texture lock
         emu?.videoPort.unlockTexture()
     }
-
+    
     //
     // Rendering
     //
     
     func makeCommandBuffer(buffer: MTLCommandBuffer) {
-
+        
         func applyGauss(_ texture: inout MTLTexture, radius: Float) {
             
             let gauss = MPSImageGaussianBlur(device: device, sigma: radius)
             gauss.encode(commandBuffer: buffer,
                          inPlaceTexture: &texture, fallbackCopyAllocator: nil)
         }
-
+        
         // Compute the merge texture
         if currLOF == prevLOF {
-
+            
             if currLOF {
-
+                
                 // Case 1: Non-interlace mode, two long frames in a row
                 scaleFilter.apply(commandBuffer: buffer,
                                   textures: [lfTexture, mergeTexture])
-
+                
             } else {
-
+                
                 // Case 2: Non-interlace mode, two short frames in a row
                 scaleFilter.apply(commandBuffer: buffer,
                                   textures: [sfTexture, mergeTexture])
             }
-
+            
         } else {
-
+            
             // Case 3: Interlace mode, long frame followed by a short frame
             if renderer.shaderOptions.flicker > 0 {
-
+                
                 let weight = 1.0 - renderer.shaderOptions.flickerWeight
                 mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
                 mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
                 flickerCnt += 1
-
+                
             } else {
-
+                
                 mergeUniforms.longFrameScale = 1.0
                 mergeUniforms.shortFrameScale = 1.0
             }
@@ -273,17 +273,17 @@ class Canvas: Layer {
                               length: MemoryLayout<MergeUniforms>.stride)
         }
         finalTexture = mergeTexture
-
+        
         // Compute the upscaled texture (first pass, in-texture upscaling)
         if renderer.config.enhancer != 0 {
-
+            
             enhancer.apply(commandBuffer: buffer,
                            source: finalTexture,
                            target: lowresEnhancedTexture)
-
+            
             finalTexture = lowresEnhancedTexture
         }
-
+        
         // Compute the bloom textures
         if renderer.shaderOptions.bloom != 0 {
             bloomFilter.apply(commandBuffer: buffer,
@@ -301,7 +301,7 @@ class Canvas: Layer {
         
         // Compute the upscaled texture (second pass)
         if renderer.config.upscaler != 0 {
-
+            
             upscaler.apply(commandBuffer: buffer,
                            source: finalTexture,
                            target: upscaledTexture)
@@ -309,16 +309,16 @@ class Canvas: Layer {
         } else {
             upscaledTexture = finalTexture
         }
-
+        
         // Blur the upscaled texture
         if renderer.shaderOptions.blur != 0 {
             
             applyGauss(&finalTexture, radius: renderer.shaderOptions.blurRadius)
         }
-
+        
         // Emulate scanlines
         if renderer.shaderOptions.scanlines == 1 {
-
+            
             scanlineFilter.apply(commandBuffer: buffer,
                                  source: finalTexture,
                                  target: scanlineTexture,
@@ -336,7 +336,7 @@ class Canvas: Layer {
         encoder.setFragmentTexture(bloomTextureG, index: 2)
         encoder.setFragmentTexture(bloomTextureB, index: 3)
         encoder.setFragmentTexture(ressourceManager.dotMask, index: 4)
-
+        
         // Select the texture sampler
         if renderer.shaderOptions.blur > 0 {
             encoder.setFragmentSamplerState(ressourceManager.samplerLinear, index: 0)
@@ -357,11 +357,9 @@ class Canvas: Layer {
                                  length: MemoryLayout<FragmentUniforms>.stride,
                                  index: 1)
     }
-
+    
     func render(_ encoder: MTLRenderCommandEncoder) {
-
-        if !shouldRender { return }
-        
+                
         // Configure the vertex shader
         encoder.setVertexBytes(&vertexUniforms2D,
                                length: MemoryLayout<VertexUniforms>.stride,
@@ -380,7 +378,7 @@ class Canvas: Layer {
 //
 
 extension Canvas {
-        
+    
     func screenshot(source: ScreenshotSource, cutout: ScreenshotCutout, width: Int? = nil, height: Int? = nil) -> NSImage? {
         
         // print("screenshot(source: \(source), cutout: \(cutout), width: \(width), height: \(height)")
@@ -394,23 +392,23 @@ extension Canvas {
     }
     
     func screenshot(texture: MTLTexture, cutout: ScreenshotCutout, width: Int? = nil, height: Int? = nil) -> NSImage? {
-
-        // print("screenshot(cutout: \(cutout), width: \(width), height: \(height)")
-
-        func region(cgRect rect: CGRect) -> MTLRegion {
         
+        // print("screenshot(cutout: \(cutout), width: \(width), height: \(height)")
+        
+        func region(cgRect rect: CGRect) -> MTLRegion {
+            
             // Compute scaling factors
             let w = CGFloat(texture.width)
             let h = CGFloat(texture.height)
-
+            
             // Assemble the region
             let origin = MTLOrigin(x: Int(rect.minX * w), y: Int(rect.minY * h), z: 0)
             let size = MTLSize(width: Int(rect.width * w), height: Int(rect.height * h), depth: 1)
             return MTLRegion(origin: origin, size: size)
         }
-
-        func region(x1: Int, x2: Int, y1: Int, y2: Int) -> MTLRegion {
         
+        func region(x1: Int, x2: Int, y1: Int, y2: Int) -> MTLRegion {
+            
             // Revert to the entire texture if a zero rect is given
             if x1 == x2 || y1 == y2 { return region(cgRect: largestVisibleNormalized) }
             
@@ -437,42 +435,42 @@ extension Canvas {
             // Find the uses area inside the emulator texture
             var x1 = 0, x2 = 0, y1 = 0, y2 = 0
             emu?.videoPort.innerArea(&x1, x2: &x2, y1: &y1, y2: &y2)
-
+            
             // Compute width and height
             var w = x2 - x1 + 1, h = y2 - y1 + 1
-
+            
             // Scale to texture coordinates
             x1 *= 2; x2 *= 2; w *= 2; y1 *= 4; y2 *= 4; h *= 4
-
+            
             // Compute the center
             let cx = Int((x1 + x2) / 2)
             let cy = Int((y1 + y2) / 2)
-                                
+            
             // Readjust the rectangle in custom mode
             if cutout == .custom {
                 
                 x1 = cx - width! / 2; x2 = x1 + width!
                 y1 = cy - height! / 2; y2 = y1 + height!
             }
-
+            
             // Apply minimum width and height
             /*
-            if cutout == .custom { w = 0; h = 0 }
-            if w < width ?? 0 { x1 = cx - width! / 2; x2 = x1 + width! }
-            if h < height ?? 0 { y1 = cy - height! / 2; y2 = y1 + height! }
-            */
+             if cutout == .custom { w = 0; h = 0 }
+             if w < width ?? 0 { x1 = cx - width! / 2; x2 = x1 + width! }
+             if h < height ?? 0 { y1 = cy - height! / 2; y2 = y1 + height! }
+             */
             
             let mtlreg = region(x1: x1, x2: x2, y1: y1, y2: y2)
             return screenshot(texture: texture, region: mtlreg)
         }
     }
-
+    
     private func screenshot(texture: MTLTexture, region: MTLRegion) -> NSImage? {
-
+        
         texture.blit()
         return NSImage.make(texture: texture, region: region)
     }
-
+    
     private var framebuffer: NSImage? {
         
         guard let drawable = renderer.metalLayer.nextDrawable() else { return nil }
@@ -498,7 +496,7 @@ extension Canvas {
         blitEncoder.endEncoding()
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
-                
+        
         // Convert the texture into an NSImage
         let alpha = CGImageAlphaInfo.premultipliedFirst.rawValue
         let leEn32 = CGBitmapInfo.byteOrder32Little.rawValue

@@ -176,12 +176,6 @@ extension MyController: NSMenuItemValidation {
         // Apply new settings
         config.applyUserDefaults()
         pref.applyUserDefaults()
-        
-        // Power on
-        /*
-        emu.powerOn()
-        try? emu.run()
-        */
 
         // Launch the onboarding agent
         renderer.onboarding.open(delay: 1.0)
@@ -449,7 +443,7 @@ extension MyController: NSMenuItemValidation {
         }
 
         refreshStatusBar()
-        // myAppDelegate.prefController?.refresh()
+        myAppDelegate.settingsController?.refresh()
     }
     
     //

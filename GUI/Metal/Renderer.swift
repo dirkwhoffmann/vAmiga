@@ -228,8 +228,8 @@ class Renderer: NSObject, MTKViewDelegate {
         }
     }
     
-    func processMessage(_ msg: Message) {
-        
+    func process(message msg: Message) {
+
         let option = Option(rawValue: Int(msg.value))!
 
         switch msg.type {

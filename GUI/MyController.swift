@@ -167,6 +167,7 @@ extension MyController {
 
     func commonInit() {
 
+        debug(.lifetime)
         assert(!initialized, "Double-initialization of MyController")
 
         mydocument = document as? MyDocument
@@ -196,9 +197,6 @@ extension MyController {
         // Setup window
         configureWindow()
 
-        // Create speed monitor
-        // speedometer = Speedometer()
-
         // Launch the emulator
         launch()
 
@@ -208,7 +206,7 @@ extension MyController {
 
         do {
 
-            // Switch the Amiga on
+            // Press the virtual power switch
             emu?.powerOn()
 
             // Start emulation
@@ -216,26 +214,12 @@ extension MyController {
 
         } catch {
 
-            // Switch the Amiga off
+            // Switch off
             emu?.powerOff()
 
             // Open the onboarding agent
-            // renderer.splashScreen.shouldRender = false
-            // renderer.canvas.shouldRender = false
             renderer.onboarding.open(delay: 1.0)
         }
-
-        // Add media file (if provided on startup)
-        /*
-        if let url = mydocument.launchURL {
-
-            debug(.media, "Media URL = \(url)")
-
-            do { try mm.mount(url: url) } catch {
-                self.showAlert(.cantOpen(url: url), error: error, async: true)
-            }
-        }
-        */
 
         // Update toolbar
         toolbar.validateVisibleItems()
@@ -371,16 +355,16 @@ extension MyController {
         var pos: String { return "(\(emu.amiga.info.vpos),\(emu.amiga.info.hpos))" }
 
         func passToInspector() {
-            for inspector in inspectors { inspector.processMessage(msg) }
+            // for inspector in inspectors { inspector.processMessage(msg) }
         }
         func passToDashboard() {
-            for dashboard in dashboards { dashboard.processMessage(msg) }
+            // for dashboard in dashboards { dashboard.processMessage(msg) }
         }
 
         switch msg.type {
 
         case .CONFIG:
-            // configurator?.refresh()
+
             refreshStatusBar()
             passToInspector()
             passToDashboard()
@@ -406,7 +390,6 @@ extension MyController {
             
             clearInfo()
             passToInspector()
-            // configurator?.refresh()
             settings?.refresh()
 
         case .RUN:
@@ -604,7 +587,7 @@ extension MyController {
             refreshStatusBar()
 
         case .MON_SETTING:
-            renderer.processMessage(msg)
+            renderer.process(message: msg)
 
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
@@ -658,6 +641,10 @@ extension MyController {
             warn("Unknown message: \(msg)")
             fatalError()
         }
+
+        // Pass message to all open auxiliary panels
+        for inspector in inspectors { inspector.processMessage(msg) }
+        for dashboard in dashboards { dashboard.processMessage(msg) }
     }
 
     func setInfo(_ text: String?, _ text2: String? = nil) {
