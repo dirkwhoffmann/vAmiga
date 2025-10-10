@@ -52,7 +52,7 @@ Configurable::setOption(const string &opt, const string &value)
 }
 
 void
-Configurable::resetConfig(const Defaults &defaults, isize objid)
+Configurable::resetConfigItems(const Defaults &defaults, isize objid)
 {
     for (auto &option : getOptions()) {
         
