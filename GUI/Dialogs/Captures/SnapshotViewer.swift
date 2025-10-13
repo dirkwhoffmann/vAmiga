@@ -32,22 +32,20 @@ class SnapshotViewer: DialogController {
     var centerItem: Int { return numItems / 2 }
     var lastItem: Int { return numItems - 1 }
     var empty: Bool { return numItems == 0 }
-    
-    // Remembers the auto-snapshot setting
-    var takeSnapshots = false
-    
+
+    // Remembers the emulator state
+    var wasRunning = false
+
     override func dialogDidShow() {
         
         super.dialogDidShow()
         
         now = Date()
-        
-        // Don't let the emulator take snapshots while the dialog is open
-        takeSnapshots = emu?.get(.AMIGA_SNAP_AUTO) != 0
-        emu?.set(.AMIGA_SNAP_AUTO, enable: false)
-        
+
+        wasRunning = emu?.running ?? false
+        if wasRunning { emu?.pause() }
+
         updateLabels()
-        
         self.carousel.type = iCarouselType.timeMachine
         self.carousel.isHidden = false
         self.updateCarousel(goto: myDocument.snapshots.count - 1, animated: false)
@@ -160,14 +158,14 @@ class SnapshotViewer: DialogController {
         } catch {
             NSSound.beep()
         }
+
+        if wasRunning { try? emu?.run() }
     }
     
     @IBAction override func cancelAction(_ sender: Any!) {
         
         hide()
-        
-        emu?.set(.AMIGA_SNAP_AUTO, enable: takeSnapshots)
-        
+                
         // Hide some controls
         let items: [NSView] = [
             
@@ -182,6 +180,8 @@ class SnapshotViewer: DialogController {
         ]
         
         for item in items { item.isHidden = true }
+
+        if wasRunning { try? emu?.run() }
     }
 }
 

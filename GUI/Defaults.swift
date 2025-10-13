@@ -1065,7 +1065,6 @@ extension DefaultsProxy {
         remove(.CIA_IDLE_SLEEP, [0, 1])
         remove(.AUD_FASTPATH)
         remove(.AMIGA_WS_COMPRESSION)
-        remove(.AMIGA_SNAP_COMPRESSOR)
     }
 }
 
@@ -1088,7 +1087,6 @@ extension Configuration {
         ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
         audioFastPath = defaults.get(.AUD_FASTPATH) != 0
         wsCompressor = defaults.get(.AMIGA_WS_COMPRESSION)
-        snapCompressor = defaults.get(.AMIGA_SNAP_COMPRESSOR)
 
         emu?.resume()
     }
@@ -1109,7 +1107,6 @@ extension Configuration {
         defaults.set(.CIA_IDLE_SLEEP, [0,1], ciaIdleSleep)
         defaults.set(.AUD_FASTPATH, audioFastPath)
         defaults.set(.AMIGA_WS_COMPRESSION, wsCompressor)
-        defaults.set(.AMIGA_SNAP_COMPRESSOR, snapCompressor)
         defaults.save()
 
         emu?.resume()
@@ -1323,8 +1320,8 @@ extension Configuration {
         filterType = defaults.get(.AUD_FILTER_TYPE)
         
         samplingMethod = defaults.get(.AUD_SAMPLING_METHOD)
-        audioBufferSize = defaults.get(.AUD_BUFFER_SIZE, audioBufferSize)
-        asr = defaults.get(.AUD_ASR, asr)
+        audioBufferSize = defaults.get(.AUD_BUFFER_SIZE)
+        asr = defaults.get(.AUD_ASR)
 
         emu?.resume()
     }

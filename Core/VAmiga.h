@@ -76,8 +76,20 @@ public:
 
 
     /// @}
-    /// @name Managing workspaces and snapshots
+    /// @name Working with workspaces and snapshots
     /// @{
+
+    /** @brief  Loads a workspace.
+     *
+     *  @param  path    Path to a workspace folder
+     */
+    void loadWorkspace(const fs::path &path);
+
+    /** @brief  Saves a workspace to disk.
+     *
+     *  @param  path    Destination path
+     */
+    void saveWorkspace(const fs::path &path) const;
 
     /** @brief  Takes a snapshot
      *
@@ -86,11 +98,24 @@ public:
      *  @note   The function transfers the ownership to the caller. It is
      *          his responsibility of the caller to free the object.
      */
-    class MediaFile *takeSnapshot();
+    [[deprecated]] class MediaFile *takeSnapshot();
 
-    /** @brief  Loads a snapshot into the emulator.
+    /** @brief  Takes a snapshot
      *
-     *  @param  snapshot    Reference to a snapshot.
+     *  @param  compressor   The snapshot compression method
+     *  @param  delay              Optional delay in seconds
+     *  @param  repeat            if true, snapshots are taken continuously
+     *
+     *  @return A pointer to the created Snapshot object.
+     *
+     *  @note   The function transfers the ownership to the caller. It is
+     *          his responsibility of the caller to free the object.
+     */
+    MediaFile *takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
+
+    /** @brief  Loads a snapshot.
+     *
+     *  @param  snapshot    Reference to a snapshot
      */
     void loadSnapshot(const MediaFile &snapshot);
     void loadSnapshot(const fs::path &path);
@@ -100,12 +125,7 @@ public:
      *  @param  path    Destination path
      */
     void saveSnapshot(const fs::path &path) const;
-    
-    /** @brief  Experimental
-     */
-    void loadWorkspace(const fs::path &path);
-    void saveWorkspace(const fs::path &path) const;
-    
+
     
     /// @}
     /// @name Auto-inspecting components

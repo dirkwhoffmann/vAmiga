@@ -1701,6 +1701,12 @@ NSString *EventSlotName(EventSlot slot)
     return [self make:amiga->amiga.takeSnapshot()];
 }
 
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c
+{
+    auto amiga = (VAmiga *)proxy->obj;
+    return [self make:amiga->amiga.takeSnapshot(c)];
+}
+
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
                          type:(FileType)type
                     exception:(ExceptionWrapper *)ex
@@ -2163,15 +2169,15 @@ NSString *EventSlotName(EventSlot slot)
     return @(ss.str().c_str());
 }
 
-- (MediaFileProxy *)takeSnapshot
+- (MediaFileProxy *) takeSnapshot:(Compressor)compressor
 {
     try {
-        
-        MediaFile *file = [self amiga]->takeSnapshot();
-        return [MediaFileProxy make:file];
-        
+
+        MediaFile *snapshot = [self amiga]->takeSnapshot(compressor);
+        return [MediaFileProxy make:snapshot];
+
     } catch (AppError &error) {
-        
+
         return nil;
     }
 }

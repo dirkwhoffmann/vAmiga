@@ -2265,7 +2265,28 @@ AmigaAPI::takeSnapshot()
     return amiga->takeSnapshot();
 }
 
-void 
+MediaFile *
+AmigaAPI::takeSnapshot(Compressor compressor, isize delay, bool repeat)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    return amiga->takeSnapshot(compressor, delay, repeat);
+}
+
+void
+AmigaAPI::loadWorkspace(const fs::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->loadWorkspace(path);
+}
+
+void
+AmigaAPI::saveWorkspace(const fs::path &path) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->saveWorkspace(path);
+}
+
+void
 AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -2303,20 +2324,6 @@ AmigaAPI::saveSnapshot(const fs::path &path) const
     VAMIGA_PUBLIC_SUSPEND
     amiga->saveSnapshot(path);
     
-}
-
-void
-AmigaAPI::loadWorkspace(const fs::path &path)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    amiga->loadWorkspace(path);
-}
-
-void
-AmigaAPI::saveWorkspace(const fs::path &path) const
-{
-    VAMIGA_PUBLIC_SUSPEND
-    amiga->saveWorkspace(path);
 }
 
 u64

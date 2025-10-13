@@ -77,12 +77,6 @@ AudioPort::_dump(Category category, std::ostream &os) const
 }
 
 void
-AudioPort::_initialize()
-{
-
-}
-
-void
 AudioPort::_didReset(bool hard)
 {
     stats = { };
@@ -306,7 +300,7 @@ AudioPort::cacheInfo(AudioPortInfo &result) const
 void
 AudioPort::cacheStats(AudioPortStats &result) const
 {
-    stats.fillLevel = stream.fillLevel();
+    result.fillLevel = stream.fillLevel();
 }
 
 void
@@ -397,8 +391,8 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     stream.mutex.lock();
 
     // Check for a buffer overflow
-    if (stream.count() + count >= stream.cap()) handleBufferOverflow();
-    
+    if (stream.free() < count) handleBufferOverflow();
+
     // Check if we can take a fast path
     if (config.idleFastPath) {
 
@@ -494,11 +488,6 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 void
 AudioPort::handleBufferUnderflow()
 {
-    // There are two common scenarios in which buffer underflows occur:
-    //
-    // (1) The consumer runs slightly faster than the producer
-    // (2) The producer is halted or not startet yet
-
     // Wipe out the buffer and reset the write pointer
     stream.clear(SamplePair{0,0});
     stream.alignWritePtr();
@@ -507,7 +496,7 @@ AudioPort::handleBufferUnderflow()
     auto elapsedTime = util::Time::now() - lastAlignment;
     lastAlignment = util::Time::now();
     
-    // Adjust the sample rate, if condition (1) holds
+    // Adjust the sample rate if the emulator runs under normal conditions
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferUnderflows++;
@@ -522,11 +511,6 @@ AudioPort::handleBufferUnderflow()
 void
 AudioPort::handleBufferOverflow()
 {
-    // There are two common scenarios in which buffer overflows occur:
-    //
-    // (1) The consumer runs slightly slower than the producer
-    // (2) The consumer is halted or not startet yet
-
     // Reset the write pointer
     stream.alignWritePtr();
 
@@ -534,7 +518,7 @@ AudioPort::handleBufferOverflow()
     auto elapsedTime = util::Time::now() - lastAlignment;
     lastAlignment = util::Time::now();
 
-    // Adjust the sample rate, if condition (1) holds
+    // Adjust the sample rate if the emulator runs under normal conditions
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferOverflows++;
@@ -555,6 +539,9 @@ AudioPort::ignoreNextUnderOrOverflow()
 isize
 AudioPort::copyMono(float *buffer, isize n)
 {
+    // Inform the sample rate detector about the number of requested samples
+    detector.feed(n);
+    
     // Copy sound samples
     auto cnt = stream.copyMono(buffer, n);
     stats.consumedSamples += cnt;
@@ -584,6 +571,9 @@ AudioPort::copyStereo(float *left, float *right, isize n)
 isize
 AudioPort::copyInterleaved(float *buffer, isize n)
 {
+    // Inform the sample rate detector about the number of requested samples
+    detector.feed(n);
+
     // Copy sound samples
     auto cnt = stream.copyInterleaved(buffer, n);
     stats.consumedSamples += cnt;

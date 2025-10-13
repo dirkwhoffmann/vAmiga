@@ -75,9 +75,6 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
         Opt::AMIGA_VSYNC,
         Opt::AMIGA_SPEED_BOOST,
         Opt::AMIGA_RUN_AHEAD,
-        Opt::AMIGA_SNAP_AUTO,
-        Opt::AMIGA_SNAP_DELAY,
-        Opt::AMIGA_SNAP_COMPRESSOR,
         Opt::AMIGA_WS_COMPRESSION,
     };
     
@@ -441,12 +438,13 @@ public:
 public:
 
     // Takes a snapshot
-    MediaFile *takeSnapshot();
+    [[deprecated]] MediaFile *takeSnapshot();
+    MediaFile *takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
 
     // Loads a snapshot from a file
     void loadSnapshot(const fs::path &path) throws;
     void loadSnapshot(const MediaFile &file) throws;
-    void loadSnapshot(const class Snapshot &snapshot) throws;
+    // void loadSnapshot(const class Snapshot &snapshot) throws;
 
     // Saves a snapshot to a file
     void saveSnapshot(const fs::path &path) throws;

@@ -25,14 +25,14 @@ extension UTType {
 
 @MainActor
 class MyDocument: NSDocument {
-
+    
     // The window controller of this document
     var controller: MyController { return windowControllers.first as! MyController }
     
     var console: Console { return controller.renderer.console }
     var canvas: Canvas { return controller.renderer.canvas }
     var pref: Preferences { return myAppDelegate.pref }
-
+    
     // Optional media URL provided on app launch
     var launchURL: URL?
     
@@ -51,18 +51,18 @@ class MyDocument: NSDocument {
     //
     
     override init() {
-
+        
         debug(.lifetime)
-
+        
         super.init()
         
         // Check for OS compatibility
-         if #available(macOS 27, *) {
-
-         showAlert(.unsupportedOSVersion)
-         NSApp.terminate(self)
-         return
-         }
+        if #available(macOS 27, *) {
+            
+            showAlert(.unsupportedOSVersion)
+            NSApp.terminate(self)
+            return
+        }
         
         // Check for Metal support
         if MTLCreateSystemDefaultDevice() == nil {
@@ -97,17 +97,17 @@ class MyDocument: NSDocument {
         let controller = MyController(windowNibName: "MyDocument")
         self.addWindowController(controller)
     }
-
+    
     func shutDown() {
-
+        
         debug(.shutdown, "Remove proxy...")
-
+        
         emu?.kill()
         emu = nil
-
+        
         debug(.shutdown, "Done")
     }
-
+    
     //
     // Loading
     //
@@ -115,7 +115,6 @@ class MyDocument: NSDocument {
     override open func read(from url: URL, ofType typeName: String) throws {
         
         debug(.media)
-        // launchURL = url
     }
     
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {

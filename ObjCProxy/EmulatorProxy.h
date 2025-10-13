@@ -404,7 +404,7 @@ NSString *EventSlotName(EventSlot slot);
 @property NSInteger autoInspectionMask;
 @property (readonly) NSString *stateString;
 
-- (MediaFileProxy *) takeSnapshot;
+- (MediaFileProxy *) takeSnapshot:(Compressor)compressor;
 - (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadSnapshotFromUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
@@ -893,7 +893,8 @@ NSString *EventSlotName(EventSlot slot);
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy;
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy __attribute__((deprecated));
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c;
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;

@@ -32,11 +32,6 @@ enum class Opt : long
     AMIGA_VSYNC,            ///< Derive the frame rate to the VSYNC signal
     AMIGA_SPEED_BOOST,      ///< Speed adjustment in percent
     AMIGA_RUN_AHEAD,        ///< Number of run-ahead frames
-    
-    // Snapshots
-    AMIGA_SNAP_AUTO,        ///< Automatically take a snapshots
-    AMIGA_SNAP_DELAY,       ///< Delay between two snapshots in seconds
-    AMIGA_SNAP_COMPRESSOR,  ///< Snapshot compression method
 
     // Workspaces
     AMIGA_WS_COMPRESSION,   ///< Workspace media file compression
@@ -243,9 +238,6 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::AMIGA_VSYNC:               return "AMIGA.VSYNC";
             case Opt::AMIGA_SPEED_BOOST:         return "AMIGA.SPEED_BOOST";
             case Opt::AMIGA_RUN_AHEAD:           return "AMIGA.RUN_AHEAD";
-            case Opt::AMIGA_SNAP_AUTO:           return "AMIGA.SNAP_AUTO";
-            case Opt::AMIGA_SNAP_DELAY:          return "AMIGA.SNAP_DELAY";
-            case Opt::AMIGA_SNAP_COMPRESSOR:     return "AMIGA.SNAP_COMPRESSOR";
             case Opt::AMIGA_WS_COMPRESSION:      return "AMIGA.WS_COMPRESSION";
                 
             case Opt::AGNUS_REVISION:            return "AGNUS.REVISION";
@@ -425,9 +417,6 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::AMIGA_VSYNC:               return "VSYNC mode";
             case Opt::AMIGA_SPEED_BOOST:         return "Speed adjustment";
             case Opt::AMIGA_RUN_AHEAD:           return "Run-ahead frames";
-            case Opt::AMIGA_SNAP_AUTO:           return "Automatically take snapshots";
-            case Opt::AMIGA_SNAP_DELAY:          return "Time span between two snapshots";
-            case Opt::AMIGA_SNAP_COMPRESSOR:     return "Snapshot compression method";
             case Opt::AMIGA_WS_COMPRESSION:      return "Compress workspaces";
 
             case Opt::AGNUS_REVISION:            return "Chip revision";

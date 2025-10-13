@@ -68,7 +68,6 @@ class PerformanceSettingsViewController: SettingsViewController {
 
         // Compression
         wsCompressor.selectItem(withTag: config.wsCompressor)
-        snapCompressor.selectItem(withTag: config.snapCompressor)
     }
 
     override func preset(tag: Int) {
@@ -149,10 +148,5 @@ class PerformanceSettingsViewController: SettingsViewController {
     @IBAction func wsCompressorAction(_ sender: NSPopUpButton!) {
 
         config?.wsCompressor = sender.selectedTag()
-    }
-
-    @IBAction func snapCompressorAction(_ sender: NSPopUpButton!) {
-
-        config?.snapCompressor = sender.selectedTag()
     }
 }

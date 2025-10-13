@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// import Darwin
-
 extension AmigaProxy {
 
     func loadSnapshot(_ proxy: MediaFileProxy) throws {

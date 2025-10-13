@@ -45,21 +45,15 @@ namespace vamiga {
 class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, AudioPortStats>  {
 
     friend class AudioFilter;
+    friend class Paula;
 
-    Descriptions descriptions = {
-        {
-            .type           = Class::AudioPort,
-            .name           = "AudioPort",
-            .description    = "Audio Port",
-            .shell          = "audio"
-        },
-        {
-            .type           = Class::AudioPort,
-            .name           = "RecAudioPort",
-            .description    = "Audio Port (Recorder)",
-            .shell          = ""
-        },
-    };
+    Descriptions descriptions = {{
+
+        .type           = Class::AudioPort,
+        .name           = "AudioPort",
+        .description    = "Audio Port",
+        .shell          = "audio"
+    }};
 
     Options options = {
 
@@ -78,8 +72,6 @@ class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, A
         Opt::AUD_ASR,
         Opt::AUD_FASTPATH
     };
-
-    friend class Paula;
 
     // Current configuration
     AudioPortConfig config = { };
@@ -101,13 +93,13 @@ class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, A
     float vol[4] = { };
 
     // Panning factors
-    float pan[4] ={ };
+    float pan[4] = { };
 
     // Master volumes (fadable)
     util::Animated<float> volL;
     util::Animated<float> volR;
 
-    // Used to determine if a Msg::MUTE should be send
+    // Used to determine if Msg::MUTE should be send
     bool wasMuted = false;
 
 
@@ -157,7 +149,6 @@ public:
         return *this;
     }
 
-
     // Resets the output buffer and the two audio filters
     void clear();
 
@@ -201,7 +192,6 @@ private:
     void _dump(Category category, std::ostream &os) const override;
     void _didLoad() override;
     void _didReset(bool hard) override;
-    void _initialize() override;
     void _powerOn() override;
     void _run() override;
     void _pause() override;

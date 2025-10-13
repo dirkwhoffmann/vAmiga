@@ -363,10 +363,6 @@ class Configuration {
         get { return emu?.get(.AMIGA_WS_COMPRESSION) ?? 0 }
         set { emu?.set(.AMIGA_WS_COMPRESSION, value: newValue) }
     }
-    var snapCompressor: Int {
-        get { return emu?.get(.AMIGA_SNAP_COMPRESSOR) ?? 0 }
-        set { emu?.set(.AMIGA_SNAP_COMPRESSOR, value: newValue) }
-    }
 
     //
     // Compatibility

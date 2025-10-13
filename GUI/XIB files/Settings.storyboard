@@ -1299,14 +1299,14 @@
                                 <rect key="frame" x="324" y="20" width="296" height="169"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <clipView key="contentView" drawsBackground="NO" id="pqT-hI-mht">
-                                    <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="279" height="169"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Id4-fh-SHh">
-                                            <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="279" height="169"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="296" height="169"/>
+                                            <size key="minSize" width="279" height="169"/>
                                             <size key="maxSize" width="296" height="10000000"/>
                                             <connections>
                                                 <outlet property="delegate" destination="di1-gt-ffY" id="Mwy-8D-gXr"/>
@@ -3454,15 +3454,6 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b43-Lb-YBi">
-                                <rect key="frame" x="365" y="157" width="88" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Snapshots:" id="f3D-od-rnv">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rGA-tm-1eY">
                                 <rect key="frame" x="456" y="183" width="144" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -3620,33 +3611,6 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A1Y-NP-typ">
-                                <rect key="frame" x="456" y="152" width="144" height="26"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="ARa-OH-kA6" id="ADV-VY-RRI">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
-                                    <menu key="menu" title="OtherViews" autoenablesItems="NO" id="WCK-bW-rr4">
-                                        <items>
-                                            <menuItem title="Off" state="on" id="ARa-OH-kA6">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="GZIP" tag="1" id="zVo-R5-lw7">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="LZ4" tag="2" id="c7a-PM-4lS">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="RLE" tag="3" id="hZU-xh-ES6">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="snapCompressorAction:" target="Rvf-AP-e5x" id="COD-8d-yqn"/>
-                                </connections>
-                            </popUpButton>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="oWx-tZ-CyK"/>
                         <viewLayoutGuide key="layoutMargins" id="5h0-Xy-bwc"/>
@@ -3661,7 +3625,6 @@
                         <outlet property="runAheadInfo" destination="6fp-LG-bO3" id="yci-Lc-um5"/>
                         <outlet property="runAheadLabel" destination="mDb-kB-XXg" id="dwr-gj-psS"/>
                         <outlet property="runAheadSlider" destination="CfA-32-MAB" id="ZN0-Tq-TNZ"/>
-                        <outlet property="snapCompressor" destination="A1Y-NP-typ" id="gcm-zb-F20"/>
                         <outlet property="speedBoost" destination="QCX-WA-qi8" id="hhA-5V-qmf"/>
                         <outlet property="speedBoostInfo" destination="Rt2-Y4-XQO" id="C0W-Wc-TsP"/>
                         <outlet property="vSync" destination="IRe-4u-5X4" id="KGF-PR-Nwa"/>
@@ -5823,6 +5786,7 @@
         <!--Captures Settings View Controller-->
         <scene sceneID="49g-Bh-hVy">
             <objects>
+                <customObject id="CuE-jg-DbS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="Captures" id="xGL-wo-7T8" customClass="CapturesSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Q4X-PC-yna" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
@@ -5838,7 +5802,7 @@
                                 </textFieldCell>
                             </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gjv-7G-uXc">
-                                <rect key="frame" x="33" y="340" width="205" height="25"/>
+                                <rect key="frame" x="32" y="306" width="205" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Auto-delete oldest snapshot" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="jTP-Nz-Zzh">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -5849,7 +5813,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MBe-qE-P6f">
-                                <rect key="frame" x="25" y="183" width="58" height="18"/>
+                                <rect key="frame" x="58" y="150" width="58" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Source:" id="Nkc-Dq-L5P">
                                     <font key="font" metaFont="system"/>
@@ -5858,7 +5822,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pFl-O2-RmQ">
-                                <rect key="frame" x="86" y="178" width="191" height="26"/>
+                                <rect key="frame" x="122" y="145" width="176" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Emulator Texture" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="t7P-pB-L86" id="xBS-id-6is">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -5882,7 +5846,7 @@
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1IE-nx-5wc">
-                                <rect key="frame" x="25" y="153" width="58" height="18"/>
+                                <rect key="frame" x="58" y="120" width="58" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Cutout:" id="x2R-jD-X9O">
                                     <font key="font" metaFont="system"/>
@@ -5891,25 +5855,16 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LCL-Ki-KDU">
-                                <rect key="frame" x="87" y="123" width="45" height="18"/>
+                                <rect key="frame" x="110" y="90" width="45" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Width:" id="gnJ-LF-QKb">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eo5-RA-xWe">
-                                <rect key="frame" x="178" y="123" width="51" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Height:" id="CQe-nM-Kb7">
+                                <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Size:" id="gnJ-LF-QKb">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x21-NE-1Tz">
-                                <rect key="frame" x="86" y="148" width="191" height="26"/>
+                                <rect key="frame" x="122" y="115" width="176" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Visible Area" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="G4w-VQ-JZK" id="es3-pn-hAz">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -5936,7 +5891,7 @@
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eO0-7w-9aC">
-                                <rect key="frame" x="18" y="247" width="231" height="17"/>
+                                <rect key="frame" x="39" y="214" width="231" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" title="Screenshots" id="Yds-Yy-dEI">
                                     <font key="font" metaFont="systemBold"/>
@@ -5954,7 +5909,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q10-QN-isQ" customClass="LiveTextField" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="135" y="121" width="41" height="21"/>
+                                <rect key="frame" x="160" y="88" width="45" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="9999" drawsBackground="YES" id="SiI-8f-cVf">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="hNR-2X-bUF"/>
@@ -5967,7 +5922,7 @@
                                 </connections>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmZ-19-DdP" customClass="LiveTextField" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="232" y="121" width="41" height="21"/>
+                                <rect key="frame" x="227" y="89" width="45" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="9999" drawsBackground="YES" id="pjy-Hs-qR2">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Lcq-i8-jYH"/>
@@ -5980,7 +5935,7 @@
                                 </connections>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Syu-aJ-OQP">
-                                <rect key="frame" x="30" y="213" width="53" height="18"/>
+                                <rect key="frame" x="63" y="180" width="53" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="453-sg-DX3">
                                     <font key="font" metaFont="system"/>
@@ -5989,7 +5944,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2lN-ml-qxk">
-                                <rect key="frame" x="86" y="208" width="191" height="26"/>
+                                <rect key="frame" x="122" y="175" width="176" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="TIFF image" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="pRB-6h-DdX" id="qJm-Gu-GPR">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -6123,7 +6078,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </box>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a20-Uf-gjJ">
-                                <rect key="frame" x="53" y="287" width="249" height="48"/>
+                                <rect key="frame" x="52" y="253" width="226" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" selectable="YES" title="Lorem ipsum dolor sit amet" id="RNK-Op-Zs1">
                                     <font key="font" metaFont="smallSystem"/>
@@ -6142,6 +6097,51 @@
                                     <action selector="retroVisorAction:" target="xGL-wo-7T8" id="hik-4l-qXv"/>
                                 </connections>
                             </button>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TSE-3u-i1y">
+                                <rect key="frame" x="27" y="340" width="89" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Compression:" id="4z0-sM-Yfd">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dya-dC-Ygm">
+                                <rect key="frame" x="122" y="336" width="176" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="ArR-nM-iNL" id="JCo-Ty-5hg">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="message"/>
+                                    <menu key="menu" title="OtherViews" autoenablesItems="NO" id="jde-63-Fo5">
+                                        <items>
+                                            <menuItem title="Off" state="on" id="ArR-nM-iNL">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="GZIP" tag="1" id="g10-tD-7Vh">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="LZ4" tag="2" id="HvW-3Z-PRj">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="RLE" tag="3" id="eEF-8E-zNx">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="snapCompressorAction:" target="xGL-wo-7T8" id="qsT-In-hQ2"/>
+                                </connections>
+                            </popUpButton>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eo5-RA-xWe">
+                                <rect key="frame" x="206" y="90" width="16" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="x" id="CQe-nM-Kb7">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tSZ-sq-JPg"/>
                         <viewLayoutGuide key="layoutMargins" id="Qtf-PM-bTa"/>
@@ -6160,9 +6160,9 @@
                         <outlet property="screenshotWidthText" destination="LCL-Ki-KDU" id="JCn-3a-VRw"/>
                         <outlet property="snapshotHelp" destination="a20-Uf-gjJ" id="b3D-OW-Uhr"/>
                         <outlet property="snapshotsAutoDelete" destination="gjv-7G-uXc" id="sO8-H0-vXZ"/>
+                        <outlet property="snapshotsCompressorPopup" destination="dya-dC-Ygm" id="Kmv-L2-PvD"/>
                     </connections>
                 </viewController>
-                <customObject id="CuE-jg-DbS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2056" y="339"/>
         </scene>

@@ -29,9 +29,6 @@ Defaults::Defaults()
     setFallback(Opt::AMIGA_SPEED_BOOST,          100);
     setFallback(Opt::AMIGA_RUN_AHEAD,            0);
 
-    setFallback(Opt::AMIGA_SNAP_AUTO,            false);
-    setFallback(Opt::AMIGA_SNAP_DELAY,           10);
-    setFallback(Opt::AMIGA_SNAP_COMPRESSOR,      (i64)Compressor::LZ4);
     setFallback(Opt::AMIGA_WS_COMPRESSION,       true);
 
     setFallback(Opt::AGNUS_REVISION,             (i64)AgnusRevision::ECS_1MB);
@@ -184,7 +181,7 @@ Defaults::Defaults()
     setFallback(Opt::AUD_VOLL,                   50);
     setFallback(Opt::AUD_VOLR,                   50);
     setFallback(Opt::AUD_FILTER_TYPE,            (i64)FilterType::A500);
-    setFallback(Opt::AUD_BUFFER_SIZE,            (i64)4096);
+    setFallback(Opt::AUD_BUFFER_SIZE,            4096);
     setFallback(Opt::AUD_SAMPLING_METHOD,        (i64)SamplingMethod::NONE);
     setFallback(Opt::AUD_ASR,                    true);
     setFallback(Opt::AUD_FASTPATH,               true);
