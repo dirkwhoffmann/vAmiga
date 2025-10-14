@@ -53,13 +53,6 @@ class CapturesSettingsViewController: SettingsViewController {
             "vAmiga stores up to \(MyDocument.maxSnapshots) snapshots. " +
             "Manual deletion is required to add another."
         }
-            /*
-        snapshotCapacity.integerValue = pref.snapshotStorage
-        snapshotAutoDelete.state = pref.snapshotAutoDelete ? .on : .off
-        autoSnapshots.state = pref.autoSnapshots ? .on : .off
-        snapshotInterval.integerValue = pref.snapshotInterval
-        snapshotInterval.isEnabled = pref.autoSnapshots
-        */
 
         // Screenshots
         let framebuffer = pref.screenshotSource == .framebuffer
@@ -84,6 +77,7 @@ class CapturesSettingsViewController: SettingsViewController {
     @IBAction func snapCompressorAction(_ sender: NSPopUpButton!) {
 
         pref.snapshotCompressorIntValue = sender.selectedTag()
+        refresh()
     }
 
     @IBAction func autoDeleteSnapshotAction(_ sender: NSButton!) {
@@ -131,17 +125,15 @@ class CapturesSettingsViewController: SettingsViewController {
 
     override func preset(tag: Int) {
 
-        print("preset(tag: \(tag))")
-
         // Revert to standard settings
-        EmulatorProxy.defaults.removeGeneralUserDefaults()
+        EmulatorProxy.defaults.removeCapturesUserDefaults()
 
         // Apply the new settings
-        pref.applyGeneralUserDefaults()
+        pref.applyCapturesUserDefaults()
     }
 
     override func save() {
 
-        pref.saveGeneralUserDefaults()
+        pref.saveCapturesUserDefaults()
     }
 }

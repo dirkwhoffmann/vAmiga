@@ -125,9 +125,7 @@ class Preferences {
     var amigaKeysComb: Int!
 
     // Mouse
-    var retainMouseKeyComb: Int! // DEPRECATED
     var retainMouseByClick: Bool!
     var retainMouseByEntering: Bool!
-    var releaseMouseKeyComb: Int! // DEPRECATED
     var releaseMouseByShaking: Bool!
 }

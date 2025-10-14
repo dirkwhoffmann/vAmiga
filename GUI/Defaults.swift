@@ -308,10 +308,8 @@ struct Keys {
         static let exitOnEsc              = "General.FullscreenExitOnEsc"
 
         // Mouse
-        static let retainMouseKeyComb    = "General.RetainMouseKeyComb"
         static let retainMouseByClick    = "General.RetainMouseByClick"
         static let retainMouseByEntering = "General.RetainMouseByEntering"
-        static let releaseMouseKeyComb   = "General.ReleaseMouseKeyComb"
         static let releaseMouseByShaking = "General.ReleaseMouseByShaking"
 
         // Miscellaneous
@@ -334,10 +332,8 @@ extension DefaultsProxy {
         register(Keys.Gen.exitOnEsc, true)
 
         // Mouse
-        register(Keys.Gen.retainMouseKeyComb, 0)
         register(Keys.Gen.retainMouseByClick, true)
         register(Keys.Gen.retainMouseByEntering, false)
-        register(Keys.Gen.releaseMouseKeyComb, 0)
         register(Keys.Gen.releaseMouseByShaking, true)
 
         // Misc
@@ -354,10 +350,8 @@ extension DefaultsProxy {
         let keys = [ Keys.Gen.keepAspectRatio,
                      Keys.Gen.exitOnEsc,
 
-                     Keys.Gen.retainMouseKeyComb,
                      Keys.Gen.retainMouseByClick,
                      Keys.Gen.retainMouseByEntering,
-                     Keys.Gen.releaseMouseKeyComb,
                      Keys.Gen.releaseMouseByShaking,
 
                      Keys.Gen.ejectWithoutAsking,
@@ -381,10 +375,8 @@ extension Preferences {
         defaults.set(Keys.Gen.keepAspectRatio, keepAspectRatio)
         defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
 
-        defaults.set(Keys.Gen.retainMouseKeyComb, retainMouseKeyComb)
         defaults.set(Keys.Gen.retainMouseByClick, retainMouseByClick)
         defaults.set(Keys.Gen.retainMouseByEntering, retainMouseByEntering)
-        defaults.set(Keys.Gen.releaseMouseKeyComb, releaseMouseKeyComb)
         defaults.set(Keys.Gen.releaseMouseByShaking, releaseMouseByShaking)
 
         defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
@@ -403,10 +395,8 @@ extension Preferences {
         keepAspectRatio = defaults.bool(Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(Keys.Gen.exitOnEsc)
 
-        retainMouseKeyComb = defaults.int(Keys.Gen.retainMouseKeyComb)
         retainMouseByClick = defaults.bool(Keys.Gen.retainMouseByClick)
         retainMouseByEntering = defaults.bool(Keys.Gen.retainMouseByEntering)
-        releaseMouseKeyComb = defaults.int(Keys.Gen.releaseMouseKeyComb)
         releaseMouseByShaking = defaults.bool(Keys.Gen.releaseMouseByShaking)
 
         ejectWithoutAsking = defaults.bool(Keys.Gen.ejectWithoutAsking)
@@ -426,6 +416,7 @@ extension Keys {
     struct Cap {
 
         // Snapshots
+        static let snapshotCompressor     = "Cap.SnapshotCompressor"
         static let snapshotAutoDelete     = "Cap.SnapshotAutoDelete"
 
         // Screenshots
@@ -445,6 +436,7 @@ extension DefaultsProxy {
         debug(.defaults)
 
         // Snapshots
+        register(Keys.Cap.snapshotCompressor, Compressor.LZ4.rawValue)
         register(Keys.Cap.snapshotAutoDelete, true)
 
         // Screenshots
@@ -459,7 +451,8 @@ extension DefaultsProxy {
         
         debug(.defaults)
         
-        let keys = [ Keys.Cap.snapshotAutoDelete,
+        let keys = [ Keys.Cap.snapshotCompressor,
+                     Keys.Cap.snapshotAutoDelete,
 
                      Keys.Cap.screenshotFormat,
                      Keys.Cap.screenshotSource,
@@ -480,6 +473,7 @@ extension Preferences {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
+        defaults.set(Keys.Cap.snapshotCompressor, snapshotCompressorIntValue)
         defaults.set(Keys.Cap.snapshotAutoDelete, snapshotAutoDelete)
 
         defaults.set(Keys.Cap.screenshotFormat, screenshotFormatIntValue)
@@ -496,6 +490,7 @@ extension Preferences {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
+        snapshotCompressorIntValue = defaults.int(Keys.Cap.snapshotCompressor)
         snapshotAutoDelete = defaults.bool(Keys.Cap.snapshotAutoDelete)
   
         screenshotFormatIntValue = defaults.int(Keys.Cap.screenshotFormat)
@@ -522,12 +517,6 @@ extension Keys {
         static let disconnectJoyKeys     = "Controls.DisconnectKeys"
         static let amigaKeysCombEnable   = "Controls.AmigaKeysCombEnable"
         static let amigaKeysComb         = "Controls.AmigaKeysComb"
-
-        // Joysticks
-        static let autofire              = "Controls.Autofire"
-        static let autofireBursts        = "Controls.AutofireBursts"
-        static let autofireBullets       = "Controls.AutofireBullets"
-        static let autofireFrequency     = "Controls.AutofireFrequency"
     }
 }
 
@@ -565,12 +554,6 @@ extension DefaultsProxy {
         register(Keys.Con.disconnectJoyKeys, true)
         register(Keys.Con.amigaKeysCombEnable, true)
         register(Keys.Con.amigaKeysComb, 0)
-
-        // Joysticks
-        register(Keys.Con.autofire, false)
-        register(Keys.Con.autofireBursts, false)
-        register(Keys.Con.autofireBullets, 3)
-        register(Keys.Con.autofireFrequency, 25)
     }
     
     func removeControlsUserDefaults() {
@@ -582,11 +565,7 @@ extension DefaultsProxy {
                      Keys.Con.joyKeyMap2,
                      Keys.Con.disconnectJoyKeys,
                      Keys.Con.amigaKeysCombEnable,
-                     Keys.Con.amigaKeysComb,
-
-                     Keys.Con.autofire,
-                     Keys.Con.autofireBullets,
-                     Keys.Con.autofireFrequency ]
+                     Keys.Con.amigaKeysComb ]
 
         for key in keys { removeKey(key) }
     }
@@ -607,11 +586,6 @@ extension Preferences {
         defaults.set(Keys.Con.amigaKeysCombEnable, amigaKeysCombEnable)
         defaults.set(Keys.Con.amigaKeysComb, amigaKeysComb)
 
-        defaults.set(Keys.Con.autofire, autofire)
-        defaults.set(Keys.Con.autofireBursts, autofireBursts)
-        defaults.set(Keys.Con.autofireBullets, autofireBullets)
-        defaults.set(Keys.Con.autofireFrequency, autofireFrequency)
-
         defaults.save()
     }
     
@@ -626,11 +600,6 @@ extension Preferences {
         disconnectJoyKeys = defaults.bool(Keys.Con.disconnectJoyKeys)
         amigaKeysCombEnable = defaults.bool(Keys.Con.amigaKeysCombEnable)
         amigaKeysComb = defaults.int(Keys.Con.amigaKeysComb)
-
-        autofire = defaults.bool(Keys.Con.autofire)
-        autofireBursts = defaults.bool(Keys.Con.autofireBursts)
-        autofireBullets = defaults.int(Keys.Con.autofireBullets)
-        autofireFrequency = defaults.int(Keys.Con.autofireFrequency)
     }
 }
 

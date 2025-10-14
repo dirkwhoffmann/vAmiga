@@ -17,6 +17,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/*
 enum class HIDEvent
 {
     AXIS,
@@ -52,6 +53,7 @@ struct HIDEventEnum : Reflection<HIDEventEnum, HIDEvent>
         return "";
     }
 };
+*/
 
 enum class GamePadAction : long
 {

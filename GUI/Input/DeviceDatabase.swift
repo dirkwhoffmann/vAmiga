@@ -35,6 +35,17 @@
  * vendor ID and product ID.
  */
 
+enum HIDEvent {
+
+    case AXIS
+    case BUTTON
+    case DPAD_UP
+    case DPAD_DOWN
+    case DPAD_RIGHT
+    case DPAD_LEFT
+    case HATSWITCH
+}
+
 // Mapping scheme: HIDEvent -> Item -> Value -> [Actions]
 typealias HIDMapping = [ HIDEvent: [ Int: [ Int: [GamePadAction] ] ] ]
 

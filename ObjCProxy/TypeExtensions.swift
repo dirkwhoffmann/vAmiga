@@ -42,7 +42,6 @@ typealias FSItemType = vamiga.FSItemType
 typealias FSVolumeType = vamiga.FSFormat
 typealias GamePadAction = vamiga.GamePadAction
 typealias HardDriveInfo = vamiga.HardDriveInfo
-typealias HIDEvent = vamiga.HIDEvent
 typealias MemorySource = vamiga.MemSrc
 typealias MemInfo = vamiga.MemInfo
 typealias MemStats = vamiga.MemStats
@@ -63,6 +62,7 @@ typealias UARTInfo = vamiga.UARTInfo
 typealias VideoFormat = vamiga.TV
 typealias Warp = vamiga.Warp
 
+/*
 extension HIDEvent: CustomStringConvertible {
 
     public var description: String {
@@ -71,6 +71,7 @@ extension HIDEvent: CustomStringConvertible {
         return String(cString: vamiga.HIDEventEnum._key(key))
     }
 }
+*/
 
 extension GamePadAction: CustomStringConvertible {
 

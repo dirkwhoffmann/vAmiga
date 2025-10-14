@@ -112,7 +112,6 @@ class DevicesSettingsViewController: SettingsViewController {
         case .DPAD_RIGHT: text = "DPad = Right"
         case .DPAD_LEFT: text = "DPad = Left"
         case .HATSWITCH: text = "h\(nr).\(value)"
-        default: text = ""
         }
 
         hidEvent?.stringValue = text

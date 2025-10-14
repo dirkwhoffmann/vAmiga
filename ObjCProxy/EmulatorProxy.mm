@@ -1695,12 +1695,6 @@ NSString *EventSlotName(EventSlot slot)
     catch (AppError &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy
-{
-    auto amiga = (VAmiga *)proxy->obj;
-    return [self make:amiga->amiga.takeSnapshot()];
-}
-
 + (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c
 {
     auto amiga = (VAmiga *)proxy->obj;

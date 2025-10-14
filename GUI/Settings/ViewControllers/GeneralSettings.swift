@@ -50,10 +50,8 @@ class GeneralSettingsViewController: SettingsViewController {
         pauseInBackground.state = pref.pauseInBackground ? .on : .off
 
         // Mouse
-        retainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
         retainMouseByClick.state = pref.retainMouseByClick ? .on : .off
         retainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
-        releaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
         releaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
     }
 
@@ -77,12 +75,6 @@ class GeneralSettingsViewController: SettingsViewController {
     // Action methods (Mouse)
     //
 
-    @IBAction func retainMouseKeyCombAction(_ sender: NSPopUpButton!) {
-
-        pref.retainMouseKeyComb = sender.selectedTag()
-        refresh()
-    }
-
     @IBAction func retainMouseAction(_ sender: NSButton!) {
 
         switch sender.tag {
@@ -92,12 +84,6 @@ class GeneralSettingsViewController: SettingsViewController {
         default: fatalError()
         }
 
-        refresh()
-    }
-
-    @IBAction func releaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
-
-        pref.releaseMouseKeyComb = sender.selectedTag()
         refresh()
     }
 
@@ -171,8 +157,6 @@ class GeneralSettingsViewController: SettingsViewController {
     }
 
     override func preset(tag: Int) {
-
-        print("preset(tag: \(tag))")
 
         // Revert to standard settings
         EmulatorProxy.defaults.removeGeneralUserDefaults()
