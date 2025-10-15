@@ -58,9 +58,6 @@ class GamePad {
     // Indicates if a joystick emulation key is currently pressed
     var keyUp = false, keyDown = false, keyLeft = false, keyRight = false
     
-    // Indicates if other components should be notified when the device is used
-    var notify = false
-    
     /* Rescued information from the latest invocation of the action function.
      * This information is utilized to determine whether a joystick event has
      * to be triggered.

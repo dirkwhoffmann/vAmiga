@@ -41,6 +41,7 @@ class OnboardingLayerViewController: NSViewController {
     
     // Onboarding settings
     var amigaModel = 0
+    var pal = true
     var rom = 0
     
     // Array holding the individual view controllers for each panel
@@ -152,7 +153,10 @@ class OnboardingLayerViewController: NSViewController {
         
         // Amiga model
         config.revertTo(model: amigaModel)
-        
+
+        // Video standard
+        config.machineType = pal ? 0 : 1
+
         // Kickstart
         switch rom {
         case 0: mm.installAros()
@@ -206,7 +210,17 @@ class OnboardingViewController: NSViewController {
 
 @MainActor
 class OnboardingViewController1: OnboardingViewController {
-    
+
+    @IBOutlet weak var a500Button: OnboardingButton!
+    @IBOutlet weak var a1000Button: OnboardingButton!
+    @IBOutlet weak var a2000Button: OnboardingButton!
+    @IBOutlet weak var palButton: OnboardingButton!
+    @IBOutlet weak var ntscButton: OnboardingButton!
+
+    var pal: Bool {
+        get { layer.onboardingVC.pal }
+        set { layer.onboardingVC.pal = newValue; refresh() }
+    }
     var amigaModel: Int {
         get { layer.onboardingVC.amigaModel }
         set { layer.onboardingVC.amigaModel = newValue; refresh() }
@@ -214,22 +228,28 @@ class OnboardingViewController1: OnboardingViewController {
     var a500: Bool { amigaModel == 0 }
     var a1000: Bool { amigaModel == 1 }
     var a2000: Bool { amigaModel == 2 }
-    
-    @IBOutlet weak var a500Button: OnboardingButton!
-    @IBOutlet weak var a1000Button: OnboardingButton!
-    @IBOutlet weak var a2000Button: OnboardingButton!
-    
+
     @IBAction func modelAction(_ sender: NSControl) {
         
         amigaModel = sender.tag
         
     }
+
+    @IBAction func palAction(_ sender: NSControl) {
+
+        pal = sender.tag == 0
+    }
     
     override func refresh() {
-        
+
+        a500Button.label?.stringValue = "A500 " + (pal ? "(PAL)" : "(NTSC)")
+        a1000Button.label?.stringValue = "A1000 " + (pal ? "(PAL)" : "(NTSC)")
+        a2000Button.label?.stringValue = "A2000 " + (pal ? "(PAL)" : "(NTSC)")
         a500Button.state = a500 ? .on : .off
         a1000Button.state = a1000 ? .on : .off
         a2000Button.state = a2000 ? .on : .off
+        palButton.state = pal ? .on : .off
+        ntscButton.state = !pal ? .on : .off
     }
 }
 

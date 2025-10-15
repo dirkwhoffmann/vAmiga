@@ -74,12 +74,18 @@ class OnboardingButton: NSControl {
         switch state {
 
         case .on:
+            box.boxType = .custom
             box.isTransparent = false
+            box.borderWidth = 2
+            box.cornerRadius = 8
+            box.borderColor = .tertiaryLabelColor.withAlphaComponent(0.05)
+            box.fillColor = .tertiaryLabelColor.withAlphaComponent(0.05)
             label?.textColor = .labelColor
             icon?.isEnabled = true
 
         default:
             box.isTransparent = true
+            box.borderWidth = 0
             label?.textColor = .secondaryLabelColor
             icon?.isEnabled = false
         }

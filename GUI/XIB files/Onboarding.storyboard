@@ -48,13 +48,8 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="478"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJh-cj-HCv">
-                                            <rect key="frame" x="268" y="414" width="64" height="64"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="logo" id="YGI-39-aQd"/>
-                                        </imageView>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDd-Tl-hJY">
-                                            <rect key="frame" x="234" y="28" width="124" height="40"/>
+                                            <rect key="frame" x="234" y="-3" width="124" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -65,11 +60,11 @@
                                             </connections>
                                         </button>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
-                                            <rect key="frame" x="215" y="76" width="163" height="25"/>
+                                            <rect key="frame" x="215" y="42" width="163" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </customView>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
-                                            <rect key="frame" x="0.0" y="124" width="600" height="320"/>
+                                            <rect key="frame" x="0.0" y="78" width="600" height="400"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                     </subviews>
@@ -94,11 +89,11 @@
             <objects>
                 <viewController storyboardIdentifier="Step1" id="KL4-sg-GCT" customClass="OnboardingViewController1" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="HIV-aB-hge">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IXq-8M-6a9">
-                                <rect key="frame" x="34" y="191" width="4" height="21"/>
+                                <rect key="frame" x="34" y="271" width="4" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="mVI-W1-Jd1">
                                     <font key="font" textStyle="title2" name=".SFNS-Regular"/>
@@ -113,12 +108,12 @@
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0kl-1l-Bw6">
                                         <rect key="frame" x="28" y="47" width="116" height="116"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="iconGeneral" id="S49-TA-fAi"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="a500alpha" id="S49-TA-fAi"/>
                                     </imageView>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z2B-cT-CJl">
-                                        <rect key="frame" x="46" y="19" width="79" height="19"/>
+                                        <rect key="frame" x="-2" y="19" width="176" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 500" id="vK6-Jy-ZzN">
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="A500" id="vK6-Jy-ZzN">
                                             <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -141,9 +136,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H2t-Og-Ow4">
-                                        <rect key="frame" x="43" y="19" width="86" height="19"/>
+                                        <rect key="frame" x="-2" y="19" width="176" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 1000" id="ISU-AL-2ZG">
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="A1000" id="ISU-AL-2ZG">
                                             <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -152,7 +147,7 @@
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s4d-em-Ub8">
                                         <rect key="frame" x="28" y="47" width="116" height="116"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="iconGeneral" id="FfS-TH-Llm"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="a1000alpha" id="FfS-TH-Llm"/>
                                     </imageView>
                                 </subviews>
                                 <userDefinedRuntimeAttributes>
@@ -173,12 +168,12 @@
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lm6-wX-qgk">
                                         <rect key="frame" x="28" y="47" width="116" height="116"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="iconGeneral" id="se2-Le-8wf"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="a2000alpha" id="se2-Le-8wf"/>
                                     </imageView>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="516-A9-sFl">
-                                        <rect key="frame" x="42" y="19" width="88" height="19"/>
+                                        <rect key="frame" x="-2" y="19" width="176" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 2000" id="Fph-W3-yhf">
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="A2000" id="Fph-W3-yhf">
                                             <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -197,7 +192,7 @@
                                 </connections>
                             </customView>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24e-iW-3NA">
-                                <rect key="frame" x="66" y="199" width="470" height="45"/>
+                                <rect key="frame" x="66" y="279" width="470" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" alignment="center" title="We’ll have you ready in just a few steps. Start by selecting the Amiga model you want to emulate." id="aes-Tn-02o">
                                     <font key="font" size="15" name="Optima-Regular"/>
@@ -205,8 +200,48 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O1H-Bp-XAg" customClass="OnboardingButton" customModule="vAmiga" customModuleProvider="target">
+                                <rect key="frame" x="214" y="192" width="81" height="56"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ctk-4d-H0F">
+                                        <rect key="frame" x="12" y="0.0" width="56" height="56"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="FlagWavedEU" id="uDY-gH-Znf"/>
+                                    </imageView>
+                                </subviews>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="tag">
+                                        <integer key="value" value="0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="palAction:" target="KL4-sg-GCT" id="mrm-N0-e6i"/>
+                                    <outlet property="icon" destination="Ctk-4d-H0F" id="OJa-8y-FZr"/>
+                                </connections>
+                            </customView>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jQE-Y9-8f2" customClass="OnboardingButton" customModule="vAmiga" customModuleProvider="target">
+                                <rect key="frame" x="307" y="192" width="79" height="56"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7zB-Tq-Xw5">
+                                        <rect key="frame" x="11" y="0.0" width="56" height="56"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="FlagWavedUSA" id="QDH-mh-xKb"/>
+                                    </imageView>
+                                </subviews>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="tag">
+                                        <integer key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="palAction:" target="KL4-sg-GCT" id="Q9v-Ph-pE8"/>
+                                    <outlet property="icon" destination="7zB-Tq-Xw5" id="oaa-zN-a3g"/>
+                                </connections>
+                            </customView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MPP-aL-sNx">
-                                <rect key="frame" x="208" y="263" width="235" height="43"/>
+                                <rect key="frame" x="212" y="343" width="235" height="43"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Getting Started" id="hxe-bT-8uW">
                                     <font key="font" size="36" name="Optima-Regular"/>
@@ -215,7 +250,7 @@
                                 </textFieldCell>
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MnG-rs-JpJ">
-                                <rect key="frame" x="159" y="263" width="43" height="43"/>
+                                <rect key="frame" x="155" y="341" width="48" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="logo75" id="2Bx-Ef-AM8"/>
                             </imageView>
@@ -225,6 +260,8 @@
                         <outlet property="a1000Button" destination="DIx-c2-1e2" id="820-XA-NwO"/>
                         <outlet property="a2000Button" destination="mKG-ZA-MwM" id="9uu-QY-3hM"/>
                         <outlet property="a500Button" destination="gdP-Vi-S6Q" id="e54-bL-MIJ"/>
+                        <outlet property="ntscButton" destination="jQE-Y9-8f2" id="nOf-ie-irh"/>
+                        <outlet property="palButton" destination="O1H-Bp-XAg" id="Fe4-Fc-kua"/>
                     </connections>
                 </viewController>
                 <customObject id="Ls3-jX-HZO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -236,11 +273,11 @@
             <objects>
                 <viewController storyboardIdentifier="Step2" id="OdN-Uv-fbm" customClass="OnboardingViewController2" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="ZFP-lg-r4I">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OSh-wY-c44" customClass="OnboardingButton" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="99" y="0.0" width="172" height="172"/>
+                                <rect key="frame" x="99" y="80" width="172" height="172"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="smL-sr-Pex">
@@ -270,7 +307,7 @@
                                 </connections>
                             </customView>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VnZ-AB-D80" customClass="OnboardingButton" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="330" y="0.0" width="172" height="172"/>
+                                <rect key="frame" x="330" y="80" width="172" height="172"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dH8-lh-L3c">
@@ -300,7 +337,7 @@
                                 </connections>
                             </customView>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RlB-z9-9CI">
-                                <rect key="frame" x="62" y="194" width="476" height="59"/>
+                                <rect key="frame" x="62" y="274" width="476" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" alignment="center" id="B7E-NL-dFO">
                                     <font key="font" size="15" name="Optima-Regular"/>
@@ -310,16 +347,16 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYn-tQ-i13">
-                                <rect key="frame" x="258" y="263" width="136" height="43"/>
+                                <rect key="frame" x="278" y="343" width="102" height="43"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Kickstart" id="XZR-t7-Hj3">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="ROMs" id="XZR-t7-Hj3">
                                     <font key="font" size="36" name="Optima-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iIW-vm-gQP">
-                                <rect key="frame" x="208" y="263" width="43" height="43"/>
+                                <rect key="frame" x="222" y="341" width="48" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="logo75" id="g5v-Ze-c5m"/>
                             </imageView>
@@ -336,10 +373,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="FlagWavedEU" width="512" height="512"/>
+        <image name="FlagWavedUSA" width="512" height="512"/>
+        <image name="a1000alpha" width="2418" height="704"/>
+        <image name="a2000alpha" width="2102" height="828"/>
+        <image name="a500alpha" width="1470" height="850"/>
         <image name="amigaBall" width="263" height="265"/>
         <image name="arrowshape.backward.circle" catalog="system" width="15" height="15"/>
-        <image name="iconGeneral" width="256" height="256"/>
-        <image name="logo" width="516" height="516"/>
         <image name="logo75" width="516" height="516"/>
         <image name="rom_aros" width="129" height="157"/>
         <image name="rom_diag" width="129" height="157"/>
