@@ -18,18 +18,18 @@ class MyDocumentController: NSDocumentController {
         var doc : NSDocument!
         
         debug(.lifetime, "makeDocument(withContentsOf: \(url), ofType: \(typeName)")
-
-        if typeName.components(separatedBy: ".").last?.lowercased() != "vamiga" {
         
+        if typeName.components(separatedBy: ".").last?.lowercased() != "vamiga" {
+            
             // For media files, attach the file to a new untitled document
             doc = try super.makeUntitledDocument(ofType: typeName)
-
+            
         } else {
             
             // For workspaces, follow the standard procedure
             doc = try super.makeDocument(withContentsOf: url, ofType: typeName)
         }
-
+        
         (doc as? MyDocument)?.launchURL = url
         return doc
     }

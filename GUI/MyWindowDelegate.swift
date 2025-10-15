@@ -7,58 +7,47 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import CoreGraphics
-
 @MainActor
 extension MyController: NSWindowDelegate {
-        
+    
     public func windowDidBecomeMain(_ notification: Notification) {
         
         debug(.lifetime)
-
+        
         // Initialize if this window becomes active the first time
         if !initialized { commonInit() }
-
+        
         guard let window = notification.object as? NSWindow else { return }
-
+        
         // Declare this controller the active one
         MyAppDelegate.currentController = self
-
+        
         // Update the preferences window (if open)
         myAppDelegate.settingsController?.refresh()
-
+        
         // Update the menu bar
         hideOrShowDriveMenus()
-
+        
         // Restart the emulator if it was paused when the window lost focus
         if pref.pauseInBackground && pauseInBackgroundSavedState { try? emu?.run() }
-
+        
         // Register to receive mouse movement events
         window.acceptsMouseMovedEvents = true
         
         // Make sure the aspect ratio is correct
         adjustWindowSize()
-
+        
         // Update the status bar
         refreshStatusBar()
     }
     
     public func windowDidResignMain(_ notification: Notification) {
-
-        debug(.lifetime)
-
-        /*
-        if MyAppDelegate.currentController === self {
-            MyAppDelegate.currentController = nil
-        }
-
-        // Inform the emulator (mutes audio)
-        emu?.put(.FOCUS, value: 0)
-        */
         
-        // Stop emulator if it is configured to pause in background
+        debug(.lifetime)
+        
+        // Stop the emulator if configured to pause in background
         if let emu = emu {
-
+            
             pauseInBackgroundSavedState = emu.running
             if pref.pauseInBackground { emu.pause() }
         }
@@ -67,30 +56,30 @@ extension MyController: NSWindowDelegate {
     public func windowShouldClose(_ sender: NSWindow) -> Bool {
         
         debug(.lifetime)
-
+        
         if proceedWithUnsavedFloppyDisks() {
             return true
         } else {
             return false
         }
     }
-
+    
     public func windowWillClose(_ notification: Notification) {
         
         debug(.lifetime)
-                
+        
         debug(.shutdown, "Pause emulation...")
-        emu!.pause()
-
+        emu?.pause()
+        
         debug(.shutdown, "Shut down the audio unit...")
         macAudio.shutDown()
-
+        
         debug(.shutdown, "Close all inspectors...")
         for inspector in inspectors {
             inspector.close()
             inspector.join()
         }
-
+        
         debug(.shutdown, "Close all dashboards...")
         for dashboard in dashboards {
             dashboard.close()
@@ -99,44 +88,44 @@ extension MyController: NSWindowDelegate {
         
         debug(.shutdown, "Stop the renderer...")
         renderer.halt()
-
+        
         debug(.shutdown, "Disconnect all gaming devices...")
         gamePadManager.shutDown()
-
+        
         debug(.shutdown, "Shut down the emulator...")
-        emu!.halt()
-
+        emu?.halt()
+        
         debug(.shutdown, "Done")
     }
     
     func shutDown() {
-                
+        
         debug(.shutdown)
         mydocument.shutDown()
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {
-
+        
         debug(.lifetime)
-
+        
         renderer.fullscreen = true
         showStatusBar(false)
     }
     
     public func windowDidEnterFullScreen(_ notification: Notification) {
-
+        
         debug(.lifetime)
     }
     
     public func windowWillExitFullScreen(_ notification: Notification) {
-
+        
         debug(.lifetime)
         renderer.fullscreen = false
         showStatusBar(true)
     }
     
     public func windowDidExitFullScreen(_ notification: Notification) {
-
+        
         debug(.lifetime)
     }
     
@@ -151,7 +140,7 @@ extension MyController: NSWindowDelegate {
     }
     
     public func window(_ window: NSWindow, willUseFullScreenContentSize proposedSize: NSSize) -> NSSize {
-
+        
         var myRect = metal.bounds
         myRect.size = proposedSize
         return proposedSize
@@ -176,26 +165,26 @@ extension MyController: NSWindowDelegate {
         
         return NSSize(width: size.width + dx, height: size.height)
     }
-
+    
     func fixSizeY(window: NSWindow, size: NSSize) -> NSSize {
-
+        
         // Get some basic parameters
         let windowFrame = window.frame
         let deltaX = size.width - windowFrame.size.width
         let deltaY = size.height - windowFrame.size.height
-
+        
         // How big would the metal view become?
         let metalFrame = metal.frame
         let metalX = metalFrame.size.width + deltaX
         let metalY = metalFrame.size.height + deltaY
-
+        
         // We want to achieve an aspect ratio of 4:3
         let newMetalY  = metalX * (3.0 / 4.0)
         let dy = newMetalY - metalY
-
+        
         return NSSize(width: size.width, height: size.height + dy)
     }
-
+    
     // Fixes a NSRect to match our desired aspect ration
     func fixRect(window: NSWindow, rect: NSRect) -> NSRect {
         
@@ -217,17 +206,17 @@ extension MyController: NSWindowDelegate {
     
     public func windowWillUseStandardFrame(_ window: NSWindow,
                                            defaultFrame newFrame: NSRect) -> NSRect {
-
+        
         return fixRect(window: window, rect: newFrame)
     }
-
+    
     public func windowDidChangeScreen(_ notification: Notification) {
-
+        
         debug(.vsync)
     }
-
+    
     public func windowDidChangeScreenProfile(_ notification: Notification) {
-
+        
         debug(.vsync)
     }
 }
@@ -235,7 +224,7 @@ extension MyController: NSWindowDelegate {
 extension MyController {
     
     func adjustWindowSize(dy: CGFloat = 0.0) {
-
+        
         // Only proceed in window mode
         if renderer?.fullscreen == true { return }
         
@@ -245,7 +234,7 @@ extension MyController {
         // Modify the frame height
         frame.origin.y -= dy
         frame.size.height += dy
-
+        
         // Compute the size correction
         let newsize = windowWillResize(window!, to: frame.size)
         let yCorrection = newsize.height - frame.size.height
@@ -256,27 +245,27 @@ extension MyController {
         
         window!.setFrame(frame, display: true)
     }
-
+    
     func adjustWindowSize(height: CGFloat) {
-
+        
         // Only proceed in window mode
         if renderer?.fullscreen == true { return }
-
+        
         // Get window frame
         guard var frame = window?.frame else { return }
         let yCorrection = round(height) - metal.frame.height
-
+        
         // Modify the frame height
         let borderHeight = frame.height - metal.frame.height
         frame.size.height = round(height) + borderHeight
-
+        
         // Compute the size correction
         let newSize = fixSizeX(window: window!, size: frame.size)
-
+        
         // Adjust frame
         frame.origin.y -= yCorrection
         frame.size = newSize
-
+        
         window!.setFrame(frame, display: true)
     }
 }

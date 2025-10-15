@@ -81,7 +81,6 @@ class GamePad {
         self.type = type
         
         name = device?.name ?? "HID device"
-        // icon = NSImage(named: isMouse ? "devMouseTemplate" : "devGamepad1Template")!
         icon = isMouse ? SFSymbol.get(.mouse) : SFSymbol.get(.gamecontroller)
         
         updateMapping()
