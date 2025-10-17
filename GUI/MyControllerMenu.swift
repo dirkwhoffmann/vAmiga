@@ -13,10 +13,11 @@ extension MyController: NSMenuItemValidation {
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
         
         guard let emu = emu else { return true }
-        
-        let powered = emu.poweredOn
-        let running = emu.running
-        let paused = emu.paused
+
+        let info = emu.info
+        let powered = info.powered
+        let running = info.running
+        let paused = info.paused
         
         var dfn: FloppyDriveProxy { return emu.df(item.tag)! }
         var hdn: HardDriveProxy { return emu.hd(item.tag)! }
@@ -128,18 +129,6 @@ extension MyController: NSMenuItemValidation {
     //
     // Action methods (App menu)
     //
-    
-    /*
-     @IBAction func preferencesAction(_ sender: Any!) {
-     
-     if myAppDelegate.prefController == nil {
-     myAppDelegate.prefController =
-     PreferencesController(with: self, nibName: "Preferences")
-     }
-     myAppDelegate.prefController!.showWindow(self)
-     myAppDelegate.prefController!.refresh()
-     }
-     */
     
     @IBAction func settingsAction(_ sender: Any?) {
         
@@ -297,7 +286,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func browseSnapshotsAction(_ sender: Any!) {
         
         if snapshotBrowser == nil {
-            snapshotBrowser = SnapshotViewer(with: self, nibName: "SnapshotDialog")
+            snapshotBrowser = SnapshotViewer(with: self, nibName: "SnapshotViewer")
         }
         snapshotBrowser?.showAsSheet()
     }

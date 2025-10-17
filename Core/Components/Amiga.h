@@ -444,7 +444,6 @@ public:
     // Loads a snapshot from a file
     void loadSnapshot(const fs::path &path) throws;
     void loadSnapshot(const MediaFile &file) throws;
-    // void loadSnapshot(const class Snapshot &snapshot) throws;
 
     // Saves a snapshot to a file
     void saveSnapshot(const fs::path &path) throws;

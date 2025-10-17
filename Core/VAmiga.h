@@ -118,6 +118,11 @@ public:
      *  @param  snapshot    Reference to a snapshot
      */
     void loadSnapshot(const MediaFile &snapshot);
+
+    /** @brief  Loads a snapshot
+     *
+     *  @param  path    Source path
+     */
     void loadSnapshot(const fs::path &path);
     
     /** @brief  Saves a snapshot to disk.

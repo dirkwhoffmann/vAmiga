@@ -287,7 +287,7 @@
 		50B70CAD252CE0BF006B5191 /* AudioPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* AudioPort.cpp */; };
 		50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */; };
 		50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegs.cpp */; };
-		50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50B9354824347EF9000C78B8 /* SnapshotDialog.xib */; };
+		50B9354924347EF9000C78B8 /* SnapshotViewer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50B9354824347EF9000C78B8 /* SnapshotViewer.xib */; };
 		50B9354B243481AB000C78B8 /* SnapshotViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B9354A243481AB000C78B8 /* SnapshotViewer.swift */; };
 		50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
@@ -969,7 +969,7 @@
 		50B70CAC252CE0BF006B5191 /* AudioPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioPort.h; sourceTree = "<group>"; };
 		50B81E0724E6BCCA004384C9 /* DiskControllerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerRegs.cpp; sourceTree = "<group>"; };
 		50B81E0924E6BEA5004384C9 /* CIARegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIARegs.cpp; sourceTree = "<group>"; };
-		50B9354824347EF9000C78B8 /* SnapshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SnapshotDialog.xib; sourceTree = "<group>"; };
+		50B9354824347EF9000C78B8 /* SnapshotViewer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SnapshotViewer.xib; sourceTree = "<group>"; };
 		50B9354A243481AB000C78B8 /* SnapshotViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotViewer.swift; sourceTree = "<group>"; };
 		50B9C426260942D000A86C31 /* RetroShell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RetroShell.cpp; sourceTree = "<group>"; };
 		50B9C427260942D000A86C31 /* RetroShell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetroShell.h; sourceTree = "<group>"; };
@@ -1639,7 +1639,7 @@
 				500217B72449CF7000E1A096 /* Configuration.xib */,
 				50DED6AE2202EBA200B8195F /* Inspector.xib */,
 				504FC7D42D314F2E00F0B733 /* Dashboard.storyboard */,
-				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
+				50B9354824347EF9000C78B8 /* SnapshotViewer.xib */,
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */,
 				5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */,
@@ -2427,7 +2427,7 @@
 				500A4EAA24472B55002A4DE1 /* door_close.aiff in Resources */,
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
-				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
+				50B9354924347EF9000C78B8 /* SnapshotViewer.xib in Resources */,
 				500217B82449CF7000E1A096 /* Configuration.xib in Resources */,
 				50EA98F929D4883500FE99B0 /* A1000ANSI.xib in Resources */,
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
