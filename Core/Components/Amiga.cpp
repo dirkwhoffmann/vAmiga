@@ -1098,20 +1098,6 @@ Amiga::clearFlag(u32 flag)
 }
 
 MediaFile *
-Amiga::takeSnapshot()
-{
-    Snapshot *result;
-    
-    // Take the snapshot
-   result = new Snapshot(*this);
-    
-    // Compress the snapshot if requested
-    result->compress(config.snapshotCompressor);
-    
-    return result;
-}
-
-MediaFile *
 Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
     if (delay != 0) {

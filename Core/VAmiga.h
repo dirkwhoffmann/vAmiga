@@ -11,6 +11,7 @@
 
 #include "VAmigaTypes.h"
 #include "Error.h"
+#include "MediaFile.h"
 
 namespace vamiga {
 
@@ -90,15 +91,6 @@ public:
      *  @param  path    Destination path
      */
     void saveWorkspace(const fs::path &path) const;
-
-    /** @brief  Takes a snapshot
-     *
-     *  @return A pointer to the created Snapshot object.
-     *
-     *  @note   The function transfers the ownership to the caller. It is
-     *          his responsibility of the caller to free the object.
-     */
-    [[deprecated]] class MediaFile *takeSnapshot();
 
     /** @brief  Takes a snapshot
      *

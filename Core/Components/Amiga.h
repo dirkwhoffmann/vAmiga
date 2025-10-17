@@ -438,7 +438,6 @@ public:
 public:
 
     // Takes a snapshot
-    [[deprecated]] MediaFile *takeSnapshot();
     MediaFile *takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
 
     // Loads a snapshot from a file

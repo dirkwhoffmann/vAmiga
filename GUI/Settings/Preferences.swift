@@ -35,7 +35,6 @@ class Preferences {
 
     // Misc
     var ejectWithoutAsking = false
-    var detachWithoutAsking = false
     var closeWithoutAsking = false
     var pauseInBackground = false
 

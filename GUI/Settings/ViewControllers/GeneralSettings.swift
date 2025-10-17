@@ -22,7 +22,6 @@ class GeneralSettingsViewController: SettingsViewController {
 
     // Misc
     @IBOutlet weak var ejectWithoutAskingButton: NSButton!
-    @IBOutlet weak var detachWithoutAskingButton: NSButton!
     @IBOutlet weak var closeWithoutAskingButton: NSButton!
     @IBOutlet weak var pauseInBackground: NSButton!
 
@@ -45,7 +44,6 @@ class GeneralSettingsViewController: SettingsViewController {
 
         // Miscellaneous
         ejectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
-        detachWithoutAskingButton.state = pref.detachWithoutAsking ? .on : .off
         closeWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
         pauseInBackground.state = pref.pauseInBackground ? .on : .off
 
@@ -105,12 +103,6 @@ class GeneralSettingsViewController: SettingsViewController {
     @IBAction func ejectWithoutAskingAction(_ sender: NSButton!) {
 
         pref.ejectWithoutAsking = (sender.state == .on)
-        refresh()
-    }
-
-    @IBAction func detachWithoutAskingAction(_ sender: NSButton!) {
-
-        pref.detachWithoutAsking = (sender.state == .on)
         refresh()
     }
 

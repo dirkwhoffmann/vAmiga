@@ -314,7 +314,6 @@ struct Keys {
         
         // Miscellaneous
         static let ejectWithoutAsking     = "General.EjectWithoutAsking"
-        static let detachWithoutAsking    = "General.DetachWithoutAsking"
         static let closeWithoutAsking     = "General.CloseWithoutAsking"
         static let pauseInBackground      = "General.PauseInBackground"
     }
@@ -338,7 +337,6 @@ extension DefaultsProxy {
         
         // Misc
         register(Keys.Gen.ejectWithoutAsking, false)
-        register(Keys.Gen.detachWithoutAsking, false)
         register(Keys.Gen.closeWithoutAsking, false)
         register(Keys.Gen.pauseInBackground, false)
     }
@@ -355,7 +353,6 @@ extension DefaultsProxy {
                      Keys.Gen.releaseMouseByShaking,
                      
                      Keys.Gen.ejectWithoutAsking,
-                     Keys.Gen.detachWithoutAsking,
                      Keys.Gen.closeWithoutAsking,
                      Keys.Gen.pauseInBackground
         ]
@@ -380,7 +377,6 @@ extension Preferences {
         defaults.set(Keys.Gen.releaseMouseByShaking, releaseMouseByShaking)
         
         defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
-        defaults.set(Keys.Gen.detachWithoutAsking, detachWithoutAsking)
         defaults.set(Keys.Gen.closeWithoutAsking, closeWithoutAsking)
         defaults.set(Keys.Gen.pauseInBackground, pauseInBackground)
         
@@ -400,7 +396,6 @@ extension Preferences {
         releaseMouseByShaking = defaults.bool(Keys.Gen.releaseMouseByShaking)
         
         ejectWithoutAsking = defaults.bool(Keys.Gen.ejectWithoutAsking)
-        detachWithoutAsking = defaults.bool(Keys.Gen.detachWithoutAsking)
         closeWithoutAsking = defaults.bool(Keys.Gen.closeWithoutAsking)
         pauseInBackground = defaults.bool(Keys.Gen.pauseInBackground)
     }

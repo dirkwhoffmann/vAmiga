@@ -2259,13 +2259,6 @@ VAmiga::put(const Command &cmd)
 //
 
 MediaFile *
-AmigaAPI::takeSnapshot()
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return amiga->takeSnapshot();
-}
-
-MediaFile *
 AmigaAPI::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
     VAMIGA_PUBLIC_SUSPEND
