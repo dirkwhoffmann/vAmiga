@@ -1692,11 +1692,14 @@
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
 				50DE55392E874641001789C9 /* MyToolbarItems.swift */,
 				50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */,
+				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				5058A916281C774600C223C9 /* Extensions */,
 				505B801E23FE6582002407FE /* System */,
 				508FDFCB21EA20510043D0E9 /* Metal */,
 				50C8C44C2607409B00F4E012 /* Layers */,
 				50144E372E7BE5F2009E15B4 /* Settings */,
+				509F7F1521ED141F00A530E4 /* Inspector */,
+				5043154E2D2AE311006C14FF /* Dashboard */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
 				509F7F1621ED156100A530E4 /* Input */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
@@ -1722,12 +1725,18 @@
 		508FE03921EA22CC0043D0E9 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
-				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
-				5043154E2D2AE311006C14FF /* Dashboard */,
-				509F7F1521ED141F00A530E4 /* Inspector */,
-				509731472C932F1B008D5634 /* Captures */,
-				509731482C932F71008D5634 /* Media */,
+				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
+				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
+				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
+				501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */,
+				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
+				501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */,
+				50D715A227CCA84F0085C1AA /* PartitionSelector.swift */,
+				509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */,
+				50B9354A243481AB000C78B8 /* SnapshotViewer.swift */,
+				507727EC242F2CE3009D01DA /* iCarousel.h */,
+				507727ED242F2CE3009D01DA /* iCarousel.m */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -1774,31 +1783,6 @@
 				50FCCA7A262AAAEA00398342 /* Script.cpp */,
 				5009B7F5255702C00037288E /* RomFiles */,
 				5009B7F7255702D40037288E /* DiskFiles */,
-			);
-			path = Media;
-			sourceTree = "<group>";
-		};
-		509731472C932F1B008D5634 /* Captures */ = {
-			isa = PBXGroup;
-			children = (
-				509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */,
-				50B9354A243481AB000C78B8 /* SnapshotViewer.swift */,
-				507727EC242F2CE3009D01DA /* iCarousel.h */,
-				507727ED242F2CE3009D01DA /* iCarousel.m */,
-			);
-			path = Captures;
-			sourceTree = "<group>";
-		};
-		509731482C932F71008D5634 /* Media */ = {
-			isa = PBXGroup;
-			children = (
-				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
-				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
-				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
-				501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */,
-				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
-				501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */,
-				50D715A227CCA84F0085C1AA /* PartitionSelector.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";

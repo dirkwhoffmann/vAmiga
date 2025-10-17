@@ -8,8 +8,7 @@
 // -----------------------------------------------------------------------------
 
 import Foundation
-
-import Cocoa
+// import Cocoa
 
 @MainActor
 class DragImageView: NSImageView, NSDraggingSource {
