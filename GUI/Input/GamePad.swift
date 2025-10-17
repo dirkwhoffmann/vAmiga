@@ -25,8 +25,8 @@ class GamePad {
     var db: DeviceDatabase { return myAppDelegate.database }
     
     // The control port this device is connected to (0, 1, or nil)
-    var port: Int?
-    
+    var port: Int? { didSet { assert(port == nil || port == 0 || port == 1) } }
+
     // HID mapping
     var mapping: HIDMapping?
     
@@ -389,9 +389,9 @@ class GamePad {
         
         let emu = manager.controller.emu!
         
-        if port == 1 { for e in events { emu.controlPort1.joystick.trigger(e) } }
-        if port == 2 { for e in events { emu.controlPort2.joystick.trigger(e) } }
-        
+        if port == 0 { for e in events { emu.controlPort1.joystick.trigger(e) } }
+        if port == 1 { for e in events { emu.controlPort2.joystick.trigger(e) } }
+
         // Notify the GUI
         if let controller = myAppDelegate.settingsController, controller.isVisible {
             controller.devicesVC?.refreshDeviceActions(actions: events)
@@ -405,9 +405,9 @@ class GamePad {
         
         let emu = manager.controller.emu!
         
-        if port == 1 { for e in events { emu.controlPort1.mouse.trigger(e) } }
-        if port == 2 { for e in events { emu.controlPort2.mouse.trigger(e) } }
-        
+        if port == 0 { for e in events { emu.controlPort1.mouse.trigger(e) } }
+        if port == 1 { for e in events { emu.controlPort2.mouse.trigger(e) } }
+
         return events != []
     }
     
@@ -418,8 +418,8 @@ class GamePad {
         // Check for a shaking mouse
         emu.controlPort1.mouse.detectShakeRel(delta)
         
-        if port == 1 { emu.controlPort1.mouse.setDxDy(delta) }
-        if port == 2 { emu.controlPort2.mouse.setDxDy(delta) }
+        if port == 0 { emu.controlPort1.mouse.setDxDy(delta) }
+        if port == 1 { emu.controlPort2.mouse.setDxDy(delta) }
     }
     
     func processKeyDownEvent(macKey: MacKey) -> Bool {
@@ -455,11 +455,11 @@ class GamePad {
         let emu = manager.controller.emu!
         
         if isMouse {
-            if port == 1 { for e in events { emu.controlPort1.mouse.trigger(e) } }
-            if port == 2 { for e in events { emu.controlPort2.mouse.trigger(e) } }
+            if port == 0 { for e in events { emu.controlPort1.mouse.trigger(e) } }
+            if port == 1 { for e in events { emu.controlPort2.mouse.trigger(e) } }
         } else {
-            if port == 1 { for e in events { emu.controlPort1.joystick.trigger(e) } }
-            if port == 2 { for e in events { emu.controlPort2.joystick.trigger(e) } }
+            if port == 0 { for e in events { emu.controlPort1.joystick.trigger(e) } }
+            if port == 1 { for e in events { emu.controlPort2.joystick.trigger(e) } }
         }
     }
 }
