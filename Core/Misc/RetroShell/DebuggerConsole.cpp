@@ -172,6 +172,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "next" },
         .chelp  = { "Step over the next instruction" },
+        .flags  = rs::shadowed,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             emulator.stepOver();
@@ -773,6 +774,111 @@ DebuggerConsole::initCommands(RSCommand &root)
     root.clone({"e"}, "e.b", { 1 });
     root.clone({"e"}, "e.w", { 2 });
     root.clone({"e"}, "e.l", { 4 });
+
+    root.add({
+
+        .tokens = { "r" },
+        .ghelp  = { "Show registers" }
+    });
+
+    root.add({
+
+        .tokens = { "r", "cpu" },
+        .chelp  = { "Motorola CPU" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, cpu, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "ciaa" },
+        .chelp  = { "Complex Interface Adapter A" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, ciaa, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "ciab" },
+        .chelp  = { "Complex Interface Adapter B" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, ciab, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "agnus" },
+        .chelp  = { "Custom Chipset" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, agnus, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "blitter" },
+        .chelp  = { "Coprocessor" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, blitter, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "copper" },
+        .chelp  = { "Coprocessor" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, copper, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "paula" },
+        .chelp  = { "Ports, Audio, Interrupts" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, paula, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "denise" },
+        .chelp  = { "Graphics" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, denise, Category::Registers);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "r", "rtc" },
+        .chelp  = { "Real-time clock" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, rtc, Category::Registers);
+        }
+    });
     
     root.add({
         
@@ -1218,18 +1324,6 @@ DebuggerConsole::initCommands(RSCommand &root)
             }, .payload = {i}
         });
     }
-    
-    RSCommand::currentGroup = "Miscellaneous";
-
-    root.add({
-
-        .tokens = { "checksums" },
-        .chelp  = { "Displays checksum of various components" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            dump(os, amiga, Category::Checksums);
-        }
-    });
 
     root.add({
         
@@ -1287,112 +1381,8 @@ DebuggerConsole::initCommands(RSCommand &root)
             dump(os, remoteManager.gdbServer, Category::State );
         }
     });
-    
-    root.add({
-        
-        .tokens = { "r" },
-        .ghelp  = { "Show registers" }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "cpu" },
-        .chelp  = { "Motorola CPU" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, cpu, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "ciaa" },
-        .chelp  = { "Complex Interface Adapter A" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, ciaa, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "ciab" },
-        .chelp  = { "Complex Interface Adapter B" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, ciab, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "agnus" },
-        .chelp  = { "Custom Chipset" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, agnus, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "blitter" },
-        .chelp  = { "Coprocessor" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, blitter, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "copper" },
-        .chelp  = { "Coprocessor" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, copper, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "paula" },
-        .chelp  = { "Ports, Audio, Interrupts" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, paula, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "denise" },
-        .chelp  = { "Graphics" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, denise, Category::Registers);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { "r", "rtc" },
-        .chelp  = { "Real-time clock" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, rtc, Category::Registers);
-        }
-    });
-    
+
+
     //
     // OSDebugger
     //
@@ -1601,7 +1591,17 @@ DebuggerConsole::initCommands(RSCommand &root)
     //
     
     RSCommand::currentGroup = "Miscellaneous";
-    
+
+    root.add({
+
+        .tokens = { "checksums" },
+        .chelp  = { "Displays checksum of various components" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, amiga, Category::Checksums);
+        }
+    });
+
     root.add({
         
         .tokens = { "debug" },
