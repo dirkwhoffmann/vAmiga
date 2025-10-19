@@ -378,7 +378,7 @@ Amiga::saveWorkspace(const fs::path &path)
     ss << "\n";
 
     // Dump the current config
-    exportConfig(ss, false, { Class::Host} );
+    exportConfig(ss, false, { Class::Host } );
 
     // Export ROMs
     ss << "\n# ROMs\n\n";
@@ -421,7 +421,6 @@ Amiga::initWorkspace()
 {
     /* This function is called at the beginning of a workspace script */
     
-    // Power off the Amiga to make it configurable
     emulator.powerOff();
 }
 
@@ -429,11 +428,8 @@ void
 Amiga::activateWorkspace()
 {
     /* This function is called at the end of a workspace script */
-     
-    // Power on the Amiga
+
     emulator.run();
-    
-    // Inform the GUI
     msgQueue.put(Msg::WORKSPACE_LOADED);
 }
 
@@ -695,6 +691,23 @@ Amiga::_dump(Category category, std::ostream &os) const
         os << std::endl;
     }
 
+    if (category == Category::Checksums) {
+
+        for (auto &c : subComponents) {
+
+            os << tab(c->objectName());
+            os << hex(c->checksum(false))  << "  " << dec(c->size()) << " bytes";
+            os << std::endl;
+
+            for (auto &cc : c->subComponents) {
+
+                os << tab(cc->objectName());
+                os << hex(cc->checksum(true)) << "  " << dec(cc->size()) << " bytes";
+                os << std::endl;
+            }
+        }
+    }
+    
     if (category == Category::Current) {
 
         auto dmacon = agnus.dmacon;

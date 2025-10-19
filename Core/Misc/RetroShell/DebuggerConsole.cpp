@@ -1220,7 +1220,17 @@ DebuggerConsole::initCommands(RSCommand &root)
     }
     
     RSCommand::currentGroup = "Miscellaneous";
-    
+
+    root.add({
+
+        .tokens = { "checksums" },
+        .chelp  = { "Displays checksum of various components" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, amiga, Category::Checksums);
+        }
+    });
+
     root.add({
         
         .tokens = { "?", "thread" },

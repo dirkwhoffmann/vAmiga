@@ -21,9 +21,6 @@ Script::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
 
-    // For backwards compatibility with v3.x, we temporarily accept .ini, too.
-    // if (suffix == ".INI") return true;
-    
     return suffix == ".RETROSH";
 }
 
@@ -37,13 +34,6 @@ bool
 Script::isCompatible(const Buffer<u8> &buf)
 {
     return isCompatible(buf.ptr, buf.size);
-}
-
-void
-Script::execute(class Amiga &amiga)
-{
-    string s((char *)data.ptr, data.size);
-    amiga.retroShell.asyncExecScript(s);
 }
 
 }

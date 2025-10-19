@@ -1151,13 +1151,13 @@ Console::initCommands(RSCommand &root)
 }
 
 const char *
-Console::registerComponent(CoreComponent &c, bool shadowed)
+Console::registerComponent(CoreComponent &c, usize flags)
 {
-    return registerComponent(c, root, shadowed);
+    return registerComponent(c, root, flags);
 }
 
 const char *
-Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
+Console::registerComponent(CoreComponent &c, RSCommand &root, usize flags)
 {
     // Get the shell name and the options for this component
     auto cmd = c.shellName();
@@ -1181,8 +1181,8 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
             .tokens = { cmd },
             .ghelp  = descr,
             .chelp  = { "Display the current configuration" },
-            .flags  = shadowed ? rs::shadowed : 0,
-            
+            .flags  = flags,
+
             .func   = [this, &c] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 retroShell.commander.dump(os, c, Category::Config);

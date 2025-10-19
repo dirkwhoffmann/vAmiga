@@ -71,38 +71,7 @@ void
 CommanderConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);
-    
-    //
-    // Console management
-    //
-    
-    /*
-     root.add({
-     
-     .tokens = { "." },
-     .chelp  = { "Switch to the next console" },
-     .flags  = rs::hidden,
-     
-     .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-     
-     retroShell.enterDebugger();
-     }
-     });
-     
-     root.add({
-     
-     .tokens = { ".." },
-     .chelp  = { "Switch to the previous console" },
-     .flags  = rs::hidden,
-     
-     .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-     
-     retroShell.enterNavigator();
-     }
-     });
-     */
-    
-    
+
     //
     // Workspace management
     //
@@ -142,14 +111,9 @@ CommanderConsole::initCommands(RSCommand &root)
     //
     
     RSCommand::currentGroup = "Regression testing";
-    
-    root.add({
-        
-        .tokens = { "regression" },
-        .ghelp  = { "Runs the regression tester" },
-        .flags  = releaseBuild ? rs::hidden : 0
-    });
-    
+
+    auto cmd = registerComponent(amiga.regressionTester, releaseBuild ? rs::hidden : 0);
+
     root.add({
         
         .tokens = { "regression", "setup" },
@@ -261,7 +225,7 @@ CommanderConsole::initCommands(RSCommand &root)
     // Components (Amiga)
     //
     
-    auto cmd = registerComponent(amiga);
+    cmd = registerComponent(amiga);
     
     root.add({
         
@@ -562,9 +526,9 @@ CommanderConsole::initCommands(RSCommand &root)
     
     for (isize i = 0; i <= 1; i++) {
         
-        if (i == 0) cmd = registerComponent(controlPort1.joystick, true);
-        if (i == 1) cmd = registerComponent(controlPort2.joystick, true);
-        
+        if (i == 0) cmd = registerComponent(controlPort1.joystick, rs::shadowed);
+        if (i == 1) cmd = registerComponent(controlPort2.joystick, rs::shadowed);
+
         root.add({
             
             .tokens = { cmd, "press" },
@@ -708,9 +672,9 @@ CommanderConsole::initCommands(RSCommand &root)
     
     for (isize i = 0; i <= 1; i++) {
         
-        if (i == 0) cmd = registerComponent(controlPort1.mouse, true);
-        if (i == 1) cmd = registerComponent(controlPort2.mouse, true);
-        
+        if (i == 0) cmd = registerComponent(controlPort1.mouse, rs::shadowed);
+        if (i == 1) cmd = registerComponent(controlPort2.mouse, rs::shadowed);
+
         root.add({
             
             .tokens = { cmd, "press" },
@@ -768,8 +732,8 @@ CommanderConsole::initCommands(RSCommand &root)
     
     for (isize i = 0; i <= 3; i++) {
         
-        cmd = registerComponent(*df[i], true);
-        
+        cmd = registerComponent(*df[i], rs::shadowed);
+
         if (i >= 1 && i <= 3) {
             
             root.add({
@@ -858,8 +822,8 @@ CommanderConsole::initCommands(RSCommand &root)
     
     for (isize i = 0; i <= 3; i++) {
         
-        cmd = registerComponent(*hd[i], true);
-        
+        cmd = registerComponent(*hd[i], rs::shadowed);
+
         root.add({
             
             .tokens = { cmd, "connect" },

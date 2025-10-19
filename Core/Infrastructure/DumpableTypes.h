@@ -20,6 +20,7 @@ enum class Category : long
     Breakpoints,
     Bus,
     Catchpoints,
+    Checksums,
     Config,
     Current,
     Debug,
