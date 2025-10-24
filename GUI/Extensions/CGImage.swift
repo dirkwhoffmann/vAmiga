@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-public extension CGImage {
+extension CGImage {
 
     static func defaultBitmapInfo() -> CGBitmapInfo {
 

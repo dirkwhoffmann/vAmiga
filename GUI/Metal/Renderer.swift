@@ -261,8 +261,8 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func draw(in view: MTKView) {
         
-        MainActor.assertIsolated("Not isolated!!")
-        
+        MainActor.assertIsolated("Not isolated!")
+
         frames += 1
         update(frames: frames)
 

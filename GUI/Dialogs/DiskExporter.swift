@@ -159,7 +159,6 @@ class DiskExporter: DialogController {
     override func dialogWillShow() {
 
         super.dialogWillShow()
-        
         updatePartitionPopup()
         updateFormatPopup()
         update()

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-public extension CGRect {
+extension CGRect {
 
     static let one = CGRect(x: 0, y: 0, width: 1, height: 1)
 }

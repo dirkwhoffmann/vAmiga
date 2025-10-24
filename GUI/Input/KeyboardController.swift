@@ -82,8 +82,6 @@ class KeyboardController: NSObject {
     
     func keyUp(with event: NSEvent) {
 
-        print("keyUp: \(event)")
-
         // Intercept if the console is open
         if renderer.console.isVisible { renderer.console.keyUp(with: event); return }
 

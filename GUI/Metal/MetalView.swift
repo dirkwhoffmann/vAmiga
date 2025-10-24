@@ -10,7 +10,7 @@
 import MetalKit
 
 @MainActor
-public class MetalView: MTKView {
+class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!
     

@@ -46,7 +46,7 @@ extension Renderer {
         
         metalLayer.device = device
         metalLayer.pixelFormat = MTLPixelFormat.bgra8Unorm
-        metalLayer.framebufferOnly = true
+        metalLayer.framebufferOnly = false
         metalLayer.frame = metalLayer.frame
     }
 

@@ -25,7 +25,7 @@ struct BuildSettings {
 // Debug settings
 //
 
-public extension Int {
+extension Int {
     
     static let audio        = 0     // Audio unit
     static let config       = 0     // Configuration

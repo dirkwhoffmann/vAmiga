@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-public extension NSImage {
+extension NSImage {
 
     convenience init(color: NSColor, size: NSSize) {
 

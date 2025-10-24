@@ -521,7 +521,7 @@ extension FileSystemProxy {
 //
 
 @MainActor
-public extension EmulatorProxy {
+extension EmulatorProxy {
     
     func df(_ nr: Int) -> FloppyDriveProxy? {
         
@@ -673,7 +673,7 @@ extension HardDriveProxy {
     }
 }
 
-public extension RemoteManagerProxy {
+extension RemoteManagerProxy {
     
     var icon: NSImage? {
 

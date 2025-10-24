@@ -10,7 +10,7 @@
 import AppKit
 
 @MainActor
-public extension MetalView {
+extension MetalView {
 
     //
     // Keyboard events

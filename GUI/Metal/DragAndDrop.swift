@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 @MainActor
-public extension MetalView {
+extension MetalView {
 
     func acceptedTypes() -> [NSPasteboard.PasteboardType] {
 
