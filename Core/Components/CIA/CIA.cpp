@@ -715,13 +715,13 @@ CIA::sleep()
     
     // Determine maximum possible sleep cycle based on timer counts
     assert(IS_CIA_CYCLE(clock));
-    Cycle sleepA = clock + CIA_CYCLES((counterA > 2) ? (counterA - 1) : 0);
-    Cycle sleepB = clock + CIA_CYCLES((counterB > 2) ? (counterB - 1) : 0);
-    
+    Cycle sleepA = clock + CIA_CYCLES((counterA > 3) ? (counterA - 2) : 0);
+    Cycle sleepB = clock + CIA_CYCLES((counterB > 3) ? (counterB - 2) : 0);
+
     // CIAs with stopped timers can sleep forever
-    if (!(feed & CIACountA0)) sleepA = INT64_MAX;
-    if (!(feed & CIACountB0)) sleepB = INT64_MAX;
-    
+    if ((feed & CIACountA) == 0) sleepA = INT64_MAX;
+    if ((feed & CIACountB) == 0) sleepB = INT64_MAX;
+
     // Determine the wakeup cycle
     auto wakeupAt = std::min(sleepA, sleepB);
 
