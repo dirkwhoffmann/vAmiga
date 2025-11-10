@@ -84,13 +84,13 @@ public:
      *
      *  @param  path    Path to a workspace folder
      */
-    void loadWorkspace(const fs::path &path);
+    void loadWorkspace(const std::filesystem::path &path);
 
     /** @brief  Saves a workspace to disk.
      *
      *  @param  path    Destination path
      */
-    void saveWorkspace(const fs::path &path) const;
+    void saveWorkspace(const std::filesystem::path &path) const;
 
     /** @brief  Takes a snapshot
      *
@@ -115,13 +115,13 @@ public:
      *
      *  @param  path    Source path
      */
-    void loadSnapshot(const fs::path &path);
-    
+    void loadSnapshot(const std::filesystem::path &path);
+
     /** @brief  Saves a snapshot to disk.
      *
      *  @param  path    Destination path
      */
-    void saveSnapshot(const fs::path &path) const;
+    void saveSnapshot(const std::filesystem::path &path) const;
 
     
     /// @}
@@ -546,8 +546,8 @@ public:
     /** @brief  Loads a ROM from a file
      *          The ROM type is determined automatically.
      */
-    void loadRom(const fs::path &path);
-    void loadExt(const fs::path &path);
+    void loadRom(const std::filesystem::path &path);
+    void loadExt(const std::filesystem::path &path);
 
     /** @brief  Loads a ROM provided by a RomFile
      */
@@ -561,9 +561,9 @@ public:
 
     /** @brief  Saves a Rom to disk
      */
-    void saveRom(const fs::path &path);
-    void saveWom(const fs::path &path);
-    void saveExt(const fs::path &path);
+    void saveRom(const std::filesystem::path &path);
+    void saveWom(const std::filesystem::path &path);
+    void saveExt(const std::filesystem::path &path);
 
     /** @brief  Removes a ROM
      */
@@ -728,8 +728,8 @@ public:
      *  @param  wp      Write-protection status of the disk.
      */
     void insertMedia(MediaFile &file, bool wp);
-    void insert(const fs::path &path, bool wp);
-    
+    void insert(const std::filesystem::path &path, bool wp);
+
     /** @brief  Inserts a disk created from a file system.
      *  @param  fs      A file system wrapper object.
      *  @param  wp      Write-protection status of the disk.
@@ -831,7 +831,7 @@ public:
     /** @brief  Attaches a hard drive provided by an URL to a media file.
      *  @param  path    Path to the media file.
      */
-    void attach(const fs::path &path);
+    void attach(const std::filesystem::path &path);
 
     /** @brief  Attaches a hard drive provided by a media file.
      *  @param  file    A media file wrapper object.
@@ -849,11 +849,11 @@ public:
     /** @brief  Imports files from a folder
      *  @note   All existing files are deleted prior to importing the folder.
      */
-    void importFiles(const fs::path &path);
-    
+    void importFiles(const std::filesystem::path &path);
+
     /** @brief  Exports the hard drive to an HDF file on disk
      */
-    void writeToFile(const fs::path &path);
+    void writeToFile(const std::filesystem::path &path);
 
     /** @brief  Converts the hard drive to an HDF media file
      */
@@ -1290,7 +1290,7 @@ public:
      *  @throw  AppError (#Fault::FILE_NOT_FOUND)
      *  @throw  AppError (#Fault::SYNTAX)
      */
-    void load(const fs::path &path);
+    void load(const std::filesystem::path &path);
 
     /** @brief  Loads a storage file from a stream
      *  @throw  AppError (#Fault::SYNTAX)
@@ -1305,7 +1305,7 @@ public:
     /** @brief  Saves a storage file to disk
      *  @throw  AppError (#Fault::FILE_CANT_WRITE)
      */
-    void save(const fs::path &path);
+    void save(const std::filesystem::path &path);
 
     /** @brief  Saves a storage file to stream
      */
@@ -1558,7 +1558,7 @@ public:
     void import(const HardDrive &hdn, isize part);
     void importDf(isize n);
     void importHd(isize n, isize part);
-    void import(const fs::path &path, bool recursive = true, bool contents = false);
+    void import(const std::filesystem::path &path, bool recursive = true, bool contents = false);
 
 
     /** @brief  Exports the file system in the file system navigator
@@ -1615,8 +1615,7 @@ public:
     
     // Ports
     AudioPortAPI audioPort;
-    ControlPortAPI controlPort1;
-    ControlPortAPI controlPort2;
+    ControlPortAPI controlPort1, controlPort2;
     SerialPortAPI serialPort;
     VideoPortAPI videoPort;
 
@@ -1939,7 +1938,7 @@ public:
      *              This feature is useful for debugging to compare two virtual
      *              machine configurations.
      */
-    void exportConfig(const fs::path &path, bool diff = false) const;
+    void exportConfig(const std::filesystem::path &path, bool diff = false) const;
     void exportConfig(std::ostream &stream, bool diff = false) const;
     
     

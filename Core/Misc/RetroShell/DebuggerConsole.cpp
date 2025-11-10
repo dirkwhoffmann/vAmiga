@@ -1343,7 +1343,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Display a server status summary" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            dump(os, remoteManager, Category::Status);
+            dump(os, remoteManager, Category::State);
         }
     });
     

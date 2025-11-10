@@ -31,7 +31,7 @@ RemoteManager::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     
-    if (category == Category::Status) {
+    if (category == Category::State) {
 
         os << "Remote server status: " << std::endl << std::endl;
 

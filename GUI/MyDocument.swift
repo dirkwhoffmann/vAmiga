@@ -204,9 +204,7 @@ class MyDocument: NSDocument {
     //
     
     func processWorkspaceFile(url: URL, force: Bool = false) throws {
-        
-        // Swift.print("processWorkspaceFile \(url) force: \(force)")
-        
+
         // Load workspace
         try emu?.amiga.loadWorkspace(url: url)
         

@@ -58,8 +58,6 @@ class KeyboardController: NSObject {
     
     func keyDown(with event: NSEvent) {
 
-        print("keyDown: \(event)")
-
         // Intercept if the console is open
         if renderer.console.isVisible { renderer.console.keyDown(with: event); return }
                 

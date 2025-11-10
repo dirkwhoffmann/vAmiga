@@ -98,26 +98,22 @@ class SettingsSplitViewController: NSSplitViewController {
 
     override func keyDown(with event: NSEvent) {
 
-        print("keyDown: \(event)")
         current?.keyDown(with: event)
     }
 
     override func flagsChanged(with event: NSEvent) {
 
-        print("flagsChanged: \(event)")
         current?.flagsChanged(with: event)
     }
 
     @IBAction func presetAction(_ sender: NSPopUpButton) {
 
-        print("presetAction")
         current?.preset(tag: sender.selectedTag())
         current?.refresh()
     }
 
     @IBAction func saveAction(_ sender: Any) {
 
-        print("saveAction")
         current?.save()
         current?.refresh()
     }

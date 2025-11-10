@@ -46,7 +46,6 @@ enum class Category : long
     Slots,
     State,
     Stats,
-    Status,
     Storage,
     SwTraps,
     Tod,

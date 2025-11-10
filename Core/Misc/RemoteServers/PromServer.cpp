@@ -103,7 +103,7 @@ PromServer::respond(const httplib::Request& request)
     }
     
     {   auto stats_a = ciaa.getStats();
-        auto stats_b = ciaa.getStats();
+        auto stats_b = ciab.getStats();
         
         translate("vamiga_ciaa_idle_sec", "",
                   "gauge", stats_a.idleCycles,
