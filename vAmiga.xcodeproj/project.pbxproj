@@ -161,6 +161,10 @@
 		506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 506B47172562E06A009FEFC3 /* VolumeInspector.xib */; };
 		506B471D256396BC009FEFC3 /* VolumeInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B471C256396BC009FEFC3 /* VolumeInspector.swift */; };
 		506C71E22D2A0C3F007CBD93 /* DashboardPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */; };
+		506D57B92EC4B81200E21501 /* ServerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D57B82EC4B81100E21501 /* ServerSettings.swift */; };
+		506D57BB2EC4B84D00E21501 /* RangeField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D57BA2EC4B84A00E21501 /* RangeField.swift */; };
+		506D57BE2EC4BE6800E21501 /* RpcServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D57BD2EC4BE6700E21501 /* RpcServer.cpp */; };
+		506D57BF2EC4BE6800E21501 /* RpcServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D57BD2EC4BE6700E21501 /* RpcServer.cpp */; };
 		506D6AB2276C7B2D002C9711 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D6AB0276C7B2D002C9711 /* StringUtils.cpp */; };
 		506E5B1D2DE8E3C300CEA916 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506E5B182DE8D6B000CEA916 /* Monitor.cpp */; };
 		506E5B1E2DE8E3C300CEA916 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506E5B182DE8D6B000CEA916 /* Monitor.cpp */; };
@@ -763,6 +767,12 @@
 		506B47172562E06A009FEFC3 /* VolumeInspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VolumeInspector.xib; sourceTree = "<group>"; };
 		506B471C256396BC009FEFC3 /* VolumeInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeInspector.swift; sourceTree = "<group>"; };
 		506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPanel.swift; sourceTree = "<group>"; };
+		506D57B82EC4B81100E21501 /* ServerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSettings.swift; sourceTree = "<group>"; };
+		506D57BA2EC4B84A00E21501 /* RangeField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeField.swift; sourceTree = "<group>"; };
+		506D57BC2EC4BE5A00E21501 /* RpcServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RpcServer.h; sourceTree = "<group>"; };
+		506D57BD2EC4BE6700E21501 /* RpcServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RpcServer.cpp; sourceTree = "<group>"; };
+		506D57C02EC4BF2700E21501 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		506D57C12EC4BF2E00E21501 /* json_fwd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_fwd.h; sourceTree = "<group>"; };
 		506D6AB0276C7B2D002C9711 /* StringUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
 		506D6AB1276C7B2D002C9711 /* StringUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
 		506E5B172DE8D6A200CEA916 /* Monitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Monitor.h; sourceTree = "<group>"; };
@@ -1249,6 +1259,7 @@
 				500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */,
 				500B0D392E801808008FC5E1 /* AudioSettings.swift */,
 				500B0D3B2E801815008FC5E1 /* VideoSettings.swift */,
+				506D57B82EC4B81100E21501 /* ServerSettings.swift */,
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
 			);
 			path = ViewControllers;
@@ -1490,6 +1501,8 @@
 		506436E129C1D82500768528 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				506D57C12EC4BF2E00E21501 /* json_fwd.h */,
+				506D57C02EC4BF2700E21501 /* json.h */,
 				9C47C0302D6215B100E57B41 /* lz4.h */,
 				9C47C0312D6215B100E57B41 /* lz4.c */,
 				506407C82D19D0A7002FBC57 /* httplib.h */,
@@ -2002,6 +2015,7 @@
 		50B114B42E8FB08400EC854D /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				506D57BA2EC4B84A00E21501 /* RangeField.swift */,
 				507201802E85196800BB8A58 /* OnboardingButton.swift */,
 				500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */,
 				5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */,
@@ -2103,13 +2117,15 @@
 				506407CA2D1AC455002FBC57 /* SocketServer.cpp */,
 				506407CD2D1AD86D002FBC57 /* HttpServer.h */,
 				506407CE2D1AD87C002FBC57 /* HttpServer.cpp */,
-				505C83FC2773C9BA001F8159 /* SerServer.h */,
-				505C83FB2773C9BA001F8159 /* SerServer.cpp */,
 				50AD90592771B2770011ECCB /* RshServer.h */,
 				50AD90582771B2770011ECCB /* RshServer.cpp */,
+				506D57BC2EC4BE5A00E21501 /* RpcServer.h */,
+				506D57BD2EC4BE6700E21501 /* RpcServer.cpp */,
 				50BF1CC7276D174200386540 /* GdbServer.h */,
 				50BF1CC6276D174200386540 /* GdbServer.cpp */,
 				50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */,
+				505C83FC2773C9BA001F8159 /* SerServer.h */,
+				505C83FB2773C9BA001F8159 /* SerServer.cpp */,
 				506405192D19CA05002FBC57 /* PromServer.h */,
 				5064051A2D19CA0C002FBC57 /* PromServer.cpp */,
 				50E98B50275A124900AA0CB9 /* Socket.h */,
@@ -2590,6 +2606,7 @@
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				507C01B02D25683600E29933 /* LogicViewFormatter.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
+				506D57BE2EC4BE6800E21501 /* RpcServer.cpp in Sources */,
 				509F41EA243B0FF700AD0FE4 /* ScreenshotViewer.swift in Sources */,
 				506D6AB2276C7B2D002C9711 /* StringUtils.cpp in Sources */,
 				50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */,
@@ -2676,6 +2693,7 @@
 				50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
+				506D57B92EC4B81200E21501 /* ServerSettings.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
 				50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */,
 				501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */,
@@ -2692,6 +2710,7 @@
 				5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				50EAD99C256E76820053F9AC /* HDFFile.h in Sources */,
+				506D57BB2EC4B84D00E21501 /* RangeField.swift in Sources */,
 				50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */,
 				50FAC77525160BBF00E47421 /* FloppyFile.cpp in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
@@ -2782,6 +2801,7 @@
 				9C47C0322D6215B100E57B41 /* lz4.c in Sources */,
 				50FC04BA27DA19B200C3E566 /* FloppyDisk.cpp in Sources */,
 				50FC04A927DA198E00C3E566 /* FastBlitter.cpp in Sources */,
+				506D57BF2EC4BE6800E21501 /* RpcServer.cpp in Sources */,
 				50FC04B527DA19A900C3E566 /* HdController.cpp in Sources */,
 				50FC04E427DA1A1400C3E566 /* u_quick.c in Sources */,
 				50FC04F927DA1A8F00C3E566 /* StateMachineRegs.cpp in Sources */,

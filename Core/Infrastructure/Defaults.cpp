@@ -193,18 +193,23 @@ Defaults::Defaults()
     setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::RSH });
     setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::RSH });
 
+    setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::RPC });
+    setFallback(Opt::SRV_PORT,                   8082,                   { (i64)ServerType::RPC });
+    setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::RPC });
+    setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::RPC });
+
     setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::GDB });
-    setFallback(Opt::SRV_PORT,                   8082,                   { (i64)ServerType::GDB });
+    setFallback(Opt::SRV_PORT,                   8083,                   { (i64)ServerType::GDB });
     setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::GDB });
     setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::GDB });
 
     setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::PROM });
-    setFallback(Opt::SRV_PORT,                   8083,                   { (i64)ServerType::PROM });
+    setFallback(Opt::SRV_PORT,                   8084,                   { (i64)ServerType::PROM });
     setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::PROM });
     setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::PROM });
 
     setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::SER });
-    setFallback(Opt::SRV_PORT,                   8084,                   { (i64)ServerType::SER });
+    setFallback(Opt::SRV_PORT,                   8085,                   { (i64)ServerType::SER });
     setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::SER });
     setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::SER });
 

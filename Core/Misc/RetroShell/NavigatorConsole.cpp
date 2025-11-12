@@ -24,7 +24,7 @@ NavigatorConsole::_pause()
 }
 
 string
-NavigatorConsole::getPrompt()
+NavigatorConsole::prompt()
 {
     std::stringstream ss;
     
@@ -44,6 +44,20 @@ NavigatorConsole::getPrompt()
 }
 
 void
+NavigatorConsole::didActivate()
+{
+
+}
+
+void
+NavigatorConsole::didDeactivate()
+{
+
+}
+
+
+/*
+void
 NavigatorConsole::welcome()
 {
     if (vAmigaDOS) {
@@ -61,7 +75,9 @@ NavigatorConsole::welcome()
         Console::welcome();
     }
 }
+*/
 
+/*
 void
 NavigatorConsole::summary()
 {
@@ -96,6 +112,7 @@ NavigatorConsole::pressReturn(bool shift)
 {
     Console::pressReturn(shift);
 }
+*/
 
 void
 NavigatorConsole::autoComplete(Tokens &argv)
@@ -424,7 +441,32 @@ NavigatorConsole::initCommands(RSCommand &root)
     std::vector<string> help;
     
     Console::initCommands(root);
-    
+
+
+    //
+    // Empty command
+    //
+
+    root.add({
+
+        .tokens = { "return" },
+        .chelp  = { "Print status information" },
+        .flags  = rs::hidden,
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            if (fs.isInitialized()) {
+
+                fs.dump(Category::Info, os);
+
+            } else {
+
+                os << "    No file system present.\n";
+                os << "    Use the 'import' command to load one.";
+            }
+        }
+    });
+
+
     //
     // Console management
     //

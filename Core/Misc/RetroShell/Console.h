@@ -18,7 +18,22 @@
 
 namespace vamiga {
 
-typedef std::pair<isize, string> QueuedCmd;
+class ConsoleDelegate {
+
+public:
+
+    virtual ~ConsoleDelegate() { }
+
+    // Called when the console is entered or left
+    virtual void didActivate() { };
+    virtual void didDeactivate() { };
+
+    // Provides the output of an executed RetroShell command
+    virtual void willExecute(const InputLine &input) = 0;
+
+    virtual void didExecute(const InputLine &input, std::stringstream &ss) = 0; // DEPRECATED
+    virtual void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) = 0; // DEPRECATED
+};
 
 struct TooFewArgumentsError : public util::ParseError {
     using ParseError::ParseError;
@@ -61,8 +76,8 @@ public:
     void add(const string &input);
 };
 
-class Console : public SubComponent {
-    
+class Console : public SubComponent, public ConsoleDelegate {
+
     friend class RetroShell;
     friend class RshServer;
     friend class Interpreter;
@@ -92,6 +107,11 @@ class Console : public SubComponent {
         
     };
     
+public:
+
+    // Delegates
+    std::vector<ConsoleDelegate *> delegates;
+
 protected:
     
     // Root node of the command tree
@@ -181,7 +201,15 @@ protected:
 public:
     
     const Options &getOptions() const override { return options; }
-    
+
+
+    //
+    // Methods from ConsoleDelegate
+    //
+
+    void willExecute(const InputLine &input) override;
+    void didExecute(const InputLine &input, std::stringstream &ss) override;
+    void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) override;
     
     //
     // Working with the text storage
@@ -206,7 +234,7 @@ public:
     Console &operator<<(const vspace &value);
     
     // Returns the prompt
-    virtual string getPrompt() = 0;
+    virtual string prompt() = 0;
     
     // Returns the contents of the whole storage as a single C string
     const char *text();
@@ -219,7 +247,7 @@ public:
     
     // Marks the text storage as dirty
     void needsDisplay();
-    
+
 protected:
     
     // Clears the console window
@@ -230,16 +258,7 @@ protected:
     
     // Returns true if the last line contains no text
     bool lastLineIsEmpty();
-    
-    // Prints the welcome message
-    virtual void welcome() = 0;
-    
-    // Prints the status summary
-    virtual void summary() = 0;
-    
-    // Prints the help line
-    virtual void printHelp(isize tab = 0);
-    
+
     
     //
     // Managing user input
@@ -340,9 +359,8 @@ public:
 protected:
     
     // Executes a single command
-    void exec(const string& userInput, bool verbose = false) throws;
-    void exec(const Tokens &argv, bool verbose = false) throws;
-    
+    void exec(const InputLine& cmd) throws;
+
     // Prints a usage string for a command
     void cmdUsage(const RSCommand &cmd, const string &prefix);
     void argUsage(const RSCommand &cmd, const string &prefix);
@@ -371,15 +389,25 @@ protected:
 
 class CommanderConsole final : public Console
 {
+    bool activated = false;
+
     using Console::Console;
-    
+
+    //
+    // Methods from Console
+    //
+
     virtual void initCommands(RSCommand &root) override;
     void _pause() override;
-    string getPrompt() override;
-    void welcome() override;
-    void summary() override;
-    void printHelp(isize tab = 0) override;
-    void pressReturn(bool shift) override;
+    string prompt() override;
+
+
+    //
+    // Methods from ConsoleDelegate
+    //
+
+    void didActivate() override;
+    void didDeactivate() override;
 };
 
 class DebuggerConsole final : public Console
@@ -392,11 +420,15 @@ class DebuggerConsole final : public Console
     
     virtual void initCommands(RSCommand &root) override;
     void _pause() override;
-    string getPrompt() override;
-    void welcome() override;
-    void summary() override;
-    void printHelp(isize tab = 0) override;
-    void pressReturn(bool shift) override;
+    string prompt() override;
+
+
+    //
+    // Methods from ConsoleDelegate
+    //
+
+    void didActivate() override;
+    void didDeactivate() override;
 };
 
 class NavigatorConsole final : public Console
@@ -411,15 +443,20 @@ class NavigatorConsole final : public Console
     
     virtual void initCommands(RSCommand &root) override;
     void _pause() override;
-    string getPrompt() override;
-    void welcome() override;
-    void summary() override;
-    void printHelp(isize tab = 0) override;
-    void pressReturn(bool shift) override;
+    string prompt() override;
     void autoComplete(Tokens &argv) override;
     void help(std::ostream &os, const string &argv, isize tabs) override;
     string autoCompleteFilename(const string &input, usize flags) const;
-    
+
+
+    //
+    // Methods from ConsoleDelegate
+    //
+
+    void didActivate() override;
+    void didDeactivate() override;
+
+
     //
     // Parsing input
     //

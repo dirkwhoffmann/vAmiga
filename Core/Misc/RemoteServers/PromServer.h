@@ -19,8 +19,6 @@ public:
 
     using HttpServer::HttpServer;
 
-protected:
-
     PromServer& operator= (const PromServer& other) {
 
         HttpServer::operator = (other);

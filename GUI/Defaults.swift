@@ -1571,3 +1571,95 @@ extension Configuration {
         emu?.resume()
     }
 }
+
+//
+// User defaults (Server)
+//
+
+@MainActor
+extension Keys {
+
+    struct Ser {
+
+        static let rshConnect       = "Server.Rsh.Connect"
+        static let rshPort          = "Server.Rsh.Port"
+        static let rpcConnect       = "Server.Rpc.Connect"
+        static let rpcPort          = "Server.Rpc.Port"
+        static let gdbConnect       = "Server.Gdb.Connect"
+        static let gdbPort          = "Server.Gdb.Port"
+        static let promConnect      = "Server.Prom.Connect"
+        static let promPort         = "Server.Prom.Port"
+        static let serConnect       = "Server.Ser.Connect"
+        static let serPort          = "Server.Ser.Port"
+    }
+}
+
+@MainActor
+extension DefaultsProxy {
+
+    func registerServerUserDefaults() {
+
+        debug(.defaults)
+        // No GUI related items in this sections    }
+    }
+
+    func removeServerUserDefaults() {
+
+        debug(.defaults)
+
+        remove(.SRV_ENABLE, [0, 1, 2, 3])
+        remove(.SRV_PORT, [0, 1, 2, 3])
+    }
+}
+
+@MainActor
+extension Configuration {
+
+    func saveServerUserDefaults() {
+
+        debug(.defaults)
+
+        if let emu = emu {
+
+            emu.suspend()
+
+            let defaults = EmulatorProxy.defaults!
+
+            defaults.set(.SRV_ENABLE, 0, rshSeverEnable)
+            defaults.set(.SRV_PORT, 0, rshSeverPort)
+            defaults.set(.SRV_ENABLE, 1, gdbSeverEnable)
+            defaults.set(.SRV_PORT, 1, gdbSeverPort)
+            defaults.set(.SRV_ENABLE, 2, promSeverEnable)
+            defaults.set(.SRV_PORT, 2, promSeverPort)
+            defaults.set(.SRV_ENABLE, 3, serSeverEnable)
+            defaults.set(.SRV_PORT, 3, serSeverPort)
+
+            defaults.save()
+
+            emu.resume()
+        }
+    }
+
+    func applyServerUserDefaults() {
+
+        debug(.defaults)
+
+        if let emu = emu {
+
+            emu.suspend()
+
+            let defaults = EmulatorProxy.defaults!
+
+            rshSeverEnable = defaults.get(.SRV_ENABLE, 0) != 0
+            rshSeverPort = defaults.get(.SRV_PORT, 0)
+            gdbSeverEnable = defaults.get(.SRV_ENABLE, 1) != 0
+            gdbSeverPort = defaults.get(.SRV_PORT, 1)
+            promSeverEnable = defaults.get(.SRV_ENABLE, 2) != 0
+            promSeverPort = defaults.get(.SRV_PORT, 2)
+            serSeverEnable = defaults.get(.SRV_ENABLE, 3) != 0
+            serSeverPort = defaults.get(.SRV_PORT, 3)
+
+            emu.resume()
+        }
+    }
+}

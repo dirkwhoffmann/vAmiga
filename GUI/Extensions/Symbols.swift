@@ -11,6 +11,7 @@ import AppKit
 
 enum SFSymbol {
 
+    case alarm
     case arrowClock
     case arrowDown
     case arrowkeys
@@ -22,6 +23,8 @@ enum SFSymbol {
     case keyboard
     case magnifyingglass
     case mouse
+    case serverListening
+    case serverConnected
     case nosign
     case pause
     case play
@@ -33,18 +36,21 @@ enum SFSymbol {
 
         switch self {
 
+        case .alarm:            return [ "alarm" ]
         case .arrowClock:       return [ "clock.arrow.trianglehead.counterclockwise.rotate.90",
                                          "clock.arrow.circlepath" ]
         case .arrowDown:        return [ "arrow.down.circle" ]
         case .arrowkeys:        return [ "arrowkeys" ]
         case .arrowUp:          return [ "arrow.up.circle" ]
-        case .console:          return [ "text.rectangle", "apple.terminal", "text.alignleft" ]
+        case .console:          return [ "fossil.shell", "text.justify.left", "text.rectangle", "apple.terminal", "text.alignleft" ]
         case .gamecontroller:   return [ "gamecontroller" ]
         case .gauge:            return [ "gauge.chart.lefthalf.righthalf", "gauge.with.needle" ]
         case .gear:             return [ "gear" ]
         case .keyboard:         return [ "keyboard" ]
         case .magnifyingglass:  return [ "magnifyingglass" ]
         case .mouse:            return [ "computermouse" ]
+        case .serverListening:  return [ "point.3.connected.trianglepath.dotted" ]
+        case .serverConnected:  return [ "point.3.filled.connected.trianglepath.dotted" ]
         case .nosign:           return [ "nosign" ]
         case .pause:            return [ "pause.circle" ]
         case .play:             return [ "play.circle" ]

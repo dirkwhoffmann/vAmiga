@@ -11,10 +11,11 @@
 
 #include "SubComponent.h"
 #include "RemoteManagerTypes.h"
-#include "SerServer.h"
 #include "RshServer.h"
+#include "RpcServer.h"
 #include "GdbServer.h"
 #include "PromServer.h"
+#include "SerServer.h"
 
 namespace vamiga {
 
@@ -38,13 +39,14 @@ public:
     
     // The remote servers
     RshServer rshServer = RshServer(amiga, isize(ServerType::RSH));
+    RpcServer rpcServer = RpcServer(amiga, isize(ServerType::RPC));
     GdbServer gdbServer = GdbServer(amiga, isize(ServerType::GDB));
     PromServer promServer = PromServer(amiga, isize(ServerType::PROM));
     SerServer serServer = SerServer(amiga, isize(ServerType::SER));
 
     // Convenience access
     std::vector <RemoteServer *> servers = {
-        &rshServer, &gdbServer, &promServer, &serServer
+        &rshServer, &rpcServer, &gdbServer, &promServer, &serServer
     };
 
     
@@ -58,9 +60,11 @@ public:
     
     RemoteManager& operator= (const RemoteManager& other) {
 
-        CLONE(serServer)
         CLONE(rshServer)
+        CLONE(rpcServer)
         CLONE(gdbServer)
+        CLONE(promServer)
+        CLONE(serServer)
 
         return *this;
     }

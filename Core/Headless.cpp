@@ -585,21 +585,32 @@ Headless::smokeTestScript[] = {
     "hd1 set PAN 50",
     "hd1 set STEP_VOLUME 50",
 
-    "server",
-    "server serial",
-    "server serial set PORT 8000",
-    "server serial set VERBOSE true",
-    "server serial set VERBOSE false",
+    "server rsh",
+    "server rsh set PORT 8000",
+    "server rsh set VERBOSE true",
+    "server rsh set VERBOSE false",
 
-    "server rshell",
-    "server rshell set PORT 8000",
-    "server rshell set VERBOSE true",
-    "server rshell set VERBOSE false",
+    "server rpc",
+    "server rpc set PORT 8000",
+    "server rpc set VERBOSE true",
+    "server rpc set VERBOSE false",
 
     "server gdb",
     "server gdb set PORT 8000",
     "server gdb set VERBOSE true",
     "server gdb set VERBOSE false",
+
+    "server",
+    "server prom",
+    "server prom set PORT 8000",
+    "server prom set VERBOSE true",
+    "server prom set VERBOSE false",
+
+    "server",
+    "server ser",
+    "server ser set PORT 8000",
+    "server ser set VERBOSE true",
+    "server ser set VERBOSE false",
 
     // Enter debugger
     "debugger",

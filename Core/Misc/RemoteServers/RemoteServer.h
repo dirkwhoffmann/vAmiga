@@ -25,7 +25,11 @@ class RemoteServer : public SubComponent, public Inspectable<RemoteServerInfo> {
 
         .name           = "RshServer",
         .description    = "Remote Shell Server",
-        .shell          = "server rshell"
+        .shell          = "server rsh"
+    }, {
+        .name           = "RpcServer",
+        .description    = "RPC Remote Server",
+        .shell          = "server rpc"
     }, {
         .name           = "GdbServer",
         .description    = "GDB Remote Server",
@@ -37,7 +41,7 @@ class RemoteServer : public SubComponent, public Inspectable<RemoteServerInfo> {
     }, {
         .name           = "SerServer",
         .description    = "Serial Port Server",
-        .shell          = "server serial"
+        .shell          = "server ser"
     }};
 
     Options options = {

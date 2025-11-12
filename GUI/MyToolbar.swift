@@ -72,7 +72,8 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         
-        return [ .inspectors,
+        return [ .settings,
+                 .inspectors,
                  .flexibleSpace,
                  .snapshots,
                  .flexibleSpace,
@@ -80,8 +81,6 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
                  .port2,
                  .flexibleSpace,
                  .keyboard,
-                 .flexibleSpace,
-                 .settings,
                  .flexibleSpace,
                  .controls ]
     }
@@ -101,8 +100,17 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         
         switch itemIdentifier {
             
+        case .settings:
+
+            settings = MyToolbarItemGroup(identifier: .settings,
+                                          images: [.gear],
+                                          actions: [#selector(settingsAction)],
+                                          target: self,
+                                          label: "Settings")
+            return settings
+
         case .inspectors:
-            
+
             let images: [SFSymbol] = [
                 
                 .magnifyingglass,
@@ -176,16 +184,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
                                           label: "Keyboard")
             return keyboard
             
-        case .settings:
-            
-            settings = MyToolbarItemGroup(identifier: .settings,
-                                          images: [.gear],
-                                          actions: [#selector(settingsAction)],
-                                          target: self,
-                                          label: "Settings")
-            return settings
-            
-        case .controls:
+         case .controls:
             
             let images: [SFSymbol] = [
                 

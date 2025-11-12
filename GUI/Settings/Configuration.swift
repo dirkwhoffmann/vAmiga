@@ -642,6 +642,53 @@ class Configuration {
         set { emu?.set(.MON_DISALIGNMENT_V, value: newValue) }
     }
 
+    //
+    // Servers
+    //
+
+    var rshSeverEnable: Bool {
+        get { return emu?.get(.SRV_ENABLE, id: 0) != 0 }
+        set { emu?.set(.SRV_ENABLE, id: 0, enable: newValue ) }
+    }
+    var rshSeverPort: Int {
+        get { return emu?.get(.SRV_PORT, id: 0) ?? 0 }
+        set { emu?.set(.SRV_PORT, id: 0, value: newValue ) }
+    }
+    /*
+    var rpcSeverEnable: Bool {
+        get { return emu?.get(.SRV_ENABLE, id: 1) != 0 }
+        set { emu?.set(.SRV_ENABLE, id: 1, enable: newValue ) }
+    }
+    var rpcSeverPort: Int {
+        get { return emu?.get(.SRV_PORT, id: 1) ?? 0 }
+        set { emu?.set(.SRV_PORT, id: 1, value: newValue ) }
+    }
+    */
+    var gdbSeverEnable: Bool {
+        get { return emu?.get(.SRV_ENABLE, id: 1) != 0 }
+        set { emu?.set(.SRV_ENABLE, id: 1, enable: newValue ) }
+    }
+    var gdbSeverPort: Int {
+        get { return emu?.get(.SRV_PORT, id: 1) ?? 0 }
+        set { emu?.set(.SRV_PORT, id: 1, value: newValue ) }
+    }
+    var promSeverEnable: Bool {
+        get { return emu?.get(.SRV_ENABLE, id: 2) != 0 }
+        set { emu?.set(.SRV_ENABLE, id: 2, enable: newValue ) }
+    }
+    var promSeverPort: Int {
+        get { return emu?.get(.SRV_PORT, id: 2) ?? 0 }
+        set { emu?.set(.SRV_PORT, id: 2, value: newValue ) }
+    }
+    var serSeverEnable: Bool {
+        get { return emu?.get(.SRV_ENABLE, id: 3) != 0 }
+        set { emu?.set(.SRV_ENABLE, id: 3, enable: newValue ) }
+    }
+    var serSeverPort: Int {
+        get { return emu?.get(.SRV_PORT, id: 3) ?? 0 }
+        set { emu?.set(.SRV_PORT, id: 3, value: newValue ) }
+    }
+
     init(with controller: MyController) { parent = controller }
 
     func revertTo(model: Int) {

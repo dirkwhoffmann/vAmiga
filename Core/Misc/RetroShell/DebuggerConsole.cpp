@@ -19,13 +19,13 @@ DebuggerConsole::_pause()
     if (retroShell.inDebugShell()) {
         
         *this << '\n';
-        exec("state");
-        *this << getPrompt();
+        exec(InputLine {.input = "state"});
+        *this << prompt();
     }
 }
 
 string
-DebuggerConsole::getPrompt()
+DebuggerConsole::prompt()
 {
     std::stringstream ss;
     
@@ -40,6 +40,19 @@ DebuggerConsole::getPrompt()
     return ss.str();
 }
 
+void
+DebuggerConsole::didActivate()
+{
+    emulator.trackOn(1);
+}
+
+void
+DebuggerConsole::didDeactivate()
+{
+    emulator.trackOff(1);
+}
+
+/*
 void
 DebuggerConsole::welcome()
 {
@@ -79,12 +92,34 @@ DebuggerConsole::pressReturn(bool shift)
         Console::pressReturn(shift);
     }
 }
+*/
 
 void
 DebuggerConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);
-    
+
+    //
+    // Empty command
+    //
+
+    root.add({
+
+        .tokens = { "return" },
+        .chelp  = { "Print status information" },
+        .flags  = rs::hidden,
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            if (emulator.isPaused()) {
+                emulator.stepInto();
+            } else {
+                os << std::endl;
+                amiga.dump(Category::Current, os);
+            }
+        }
+    });
+
+
     //
     // Console management
     //

@@ -19,10 +19,11 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<CoreComponent *> {
         
-        &serServer,
         &rshServer,
+        &rpcServer,
+        &gdbServer,
         &promServer,
-        &gdbServer
+        &serServer
     };
 }
 
@@ -56,11 +57,12 @@ void
 RemoteManager::cacheInfo(RemoteManagerInfo &result) const
 {
     {   SYNCHRONIZED
-        
-        info.numLaunching = numLaunching();
-        info.numListening = numListening();
-        info.numConnected = numConnected();
-        info.numErroneous = numErroneous();
+
+        info.rshInfo = rshServer.getInfo();
+        info.rpcInfo = rpcServer.getInfo();
+        info.gdbInfo = gdbServer.getInfo();
+        info.promInfo = promServer.getInfo();
+        info.serInfo = serServer.getInfo();
     }
 }
 
@@ -117,6 +119,7 @@ RemoteManager::update()
     };
 
     launchDaemon(rshServer, rshServer.config);
+    launchDaemon(rpcServer, rpcServer.config);
     launchDaemon(gdbServer, gdbServer.config);
     launchDaemon(promServer, promServer.config);
     launchDaemon(serServer, serServer.config);

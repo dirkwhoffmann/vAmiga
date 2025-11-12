@@ -21,17 +21,33 @@ CommanderConsole::_pause()
 }
 
 string
-CommanderConsole::getPrompt()
+CommanderConsole::prompt()
 {
     return "vAmiga% ";
 }
 
 void
-CommanderConsole::welcome()
+CommanderConsole::didActivate()
 {
-    Console::welcome();
+    if (!activated) {
+
+        *this << "RetroShell " << Amiga::build() << '\n';
+        *this << '\n';
+        *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+        *this << "https://github.com/dirkwhoffmann/vamiga" << '\n';
+        *this << '\n';
+    }
+
+    activated = true;
 }
 
+void
+CommanderConsole::didDeactivate()
+{
+
+}
+
+/*
 void
 CommanderConsole::summary()
 {
@@ -54,23 +70,36 @@ CommanderConsole::summary()
     // *this << ss;
     *this << vspace{1};
 }
-
-void
-CommanderConsole::printHelp(isize tab)
-{
-    Console::printHelp(tab);
-}
-
-void
-CommanderConsole::pressReturn(bool shift)
-{
-    Console::pressReturn(shift);
-}
+*/
 
 void
 CommanderConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);
+
+
+    //
+    // Empty command
+    //
+
+    root.add({
+
+        .tokens = { "return" },
+        .chelp  = { "Print status information" },
+        .flags  = rs::hidden,
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            os << "Model   Chip    Slow    Fast    Agnus   Denise  ROM" << std::endl;
+            os << std::setw(8) << std::left << BankMapEnum::key(BankMap(amiga.get(Opt::MEM_BANKMAP)));
+            os << std::setw(8) << std::left << (std::to_string(amiga.get(Opt::MEM_CHIP_RAM)) + " MB");
+            os << std::setw(8) << std::left << (std::to_string(amiga.get(Opt::MEM_SLOW_RAM)) + " MB");
+            os << std::setw(8) << std::left << (std::to_string(amiga.get(Opt::MEM_FAST_RAM)) + " MB");
+            os << std::setw(8) << std::left << (agnus.isECS() ? "ECS" : "OCS");
+            os << std::setw(8) << std::left << (denise.isECS() ? "ECS" : "OCS");
+            os << mem.getRomTraits().title << std::endl;
+        }
+    });
+
 
     //
     // Workspace management
@@ -1010,6 +1039,7 @@ CommanderConsole::initCommands(RSCommand &root)
     });
     
     cmd = registerComponent(remoteManager.rshServer);
+    cmd = registerComponent(remoteManager.rpcServer);
     cmd = registerComponent(remoteManager.gdbServer);
     cmd = registerComponent(remoteManager.promServer);
     cmd = registerComponent(remoteManager.serServer);
