@@ -192,9 +192,9 @@ OptionParser::create(Opt opt, i64 arg)
 
         case Opt::DIAG_BOARD:                return boolParser();
 
+        case Opt::SRV_ENABLE:                return boolParser();
         case Opt::SRV_PORT:                  return numParser();
         case Opt::SRV_PROTOCOL:              return enumParser.template operator()<ServerProtocolEnum,ServerProtocol>();
-        case Opt::SRV_AUTORUN:               return boolParser();
         case Opt::SRV_VERBOSE:               return boolParser();
 
         default:

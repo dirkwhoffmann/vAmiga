@@ -31,17 +31,20 @@ class RemoteManager final : public SubComponent, public Inspectable<RemoteManage
 
     };
 
+    // Frame counter
+    usize frame = 0;
+
 public:
     
     // The remote servers
-    SerServer serServer = SerServer(amiga, isize(ServerType::SER));
     RshServer rshServer = RshServer(amiga, isize(ServerType::RSH));
-    PromServer promServer = PromServer(amiga, isize(ServerType::PROM));
     GdbServer gdbServer = GdbServer(amiga, isize(ServerType::GDB));
+    PromServer promServer = PromServer(amiga, isize(ServerType::PROM));
+    SerServer serServer = SerServer(amiga, isize(ServerType::SER));
 
     // Convenience access
     std::vector <RemoteServer *> servers = {
-        &serServer, &rshServer, &gdbServer, &promServer
+        &rshServer, &gdbServer, &promServer, &serServer
     };
 
     
@@ -117,11 +120,13 @@ public:
 
 
     //
-    // Servicing events
+    // Running the launch daemon
     //
     
 public:
-    
+
+    void update();
+
     void serviceServerEvent();
 };
 

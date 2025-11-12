@@ -36,7 +36,7 @@ GdbServer::_dump(Category category, std::ostream &os) const
 }
 
 bool
-GdbServer::shouldRun()
+GdbServer::canRun()
 {
     // Don't run if no process is specified
     if (processName == "") return false;

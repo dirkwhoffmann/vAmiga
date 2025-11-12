@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Infrastructure/Reflection.h"
+#include "RemoteServerTypes.h"
 
 namespace vamiga {
 
@@ -19,25 +20,25 @@ namespace vamiga {
 
 enum class ServerType : long
 {
-    SER,
     RSH,
+    GDB,
     PROM,
-    GDB
+    SER
 };
 
 struct ServerTypeEnum : Reflection<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(ServerType::GDB);
-    
+    static constexpr long maxVal = long(ServerType::SER);
+
     static const char *_key(ServerType value)
     {
         switch (value) {
                 
-            case ServerType::SER:    return "SER";
             case ServerType::RSH:    return "RSH";
-            case ServerType::PROM:   return "PROM";
             case ServerType::GDB:    return "GDB";
+            case ServerType::PROM:   return "PROM";
+            case ServerType::SER:    return "SER";
         }
         return "???";
     }
@@ -45,10 +46,10 @@ struct ServerTypeEnum : Reflection<ServerTypeEnum, ServerType>
     {
         switch (value) {
                 
-            case ServerType::SER:    return "Serial port server";
             case ServerType::RSH:    return "Remote shell server";
-            case ServerType::PROM:   return "Prometheus server";
             case ServerType::GDB:    return "Debug server";
+            case ServerType::PROM:   return "Prometheus server";
+            case ServerType::SER:    return "Serial port server";
         }
         return "???";
     }
@@ -65,6 +66,11 @@ typedef struct
     isize numListening;
     isize numConnected;
     isize numErroneous;
+
+    RemoteServerInfo rshInfo;
+    RemoteServerInfo rpcInfo;
+    RemoteServerInfo dapInfo;
+    RemoteServerInfo promInfo;
 }
 RemoteManagerInfo;
 

@@ -17,34 +17,34 @@
 
 namespace vamiga {
 
-class RemoteServer : public SubComponent {
+class RemoteServer : public SubComponent, public Inspectable<RemoteServerInfo> {
 
     friend class RemoteManager;
 
     Descriptions descriptions = {{
 
-        .name           = "SerServer",
-        .description    = "Serial Port Server",
-        .shell          = "server serial"
-    }, {
         .name           = "RshServer",
         .description    = "Remote Shell Server",
         .shell          = "server rshell"
+    }, {
+        .name           = "GdbServer",
+        .description    = "GDB Remote Server",
+        .shell          = "server gdb"
     }, {
         .name           = "PromServer",
         .description    = "Prometheus Server",
         .shell          = "server prom"
     }, {
-        .name           = "GdbServer",
-        .description    = "GDB Remote Server",
-        .shell          = "server gdb"
+        .name           = "SerServer",
+        .description    = "Serial Port Server",
+        .shell          = "server serial"
     }};
 
     Options options = {
 
+        Opt::SRV_ENABLE,
         Opt::SRV_PORT,
         Opt::SRV_PROTOCOL,
-        Opt::SRV_AUTORUN,
         Opt::SRV_VERBOSE
     };
 
@@ -106,9 +106,9 @@ protected:
 
         worker
 
+        << config.enable
         << config.port
         << config.protocol
-        << config.autoRun
         << config.verbose;
 
     };
@@ -135,12 +135,22 @@ public:
 
 
     //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(RemoteServerInfo &result) const override;
+
+
+    //
     // Examining state
     //
     
 public:
 
     bool isOff() const { return state == SrvState::OFF; }
+    bool isWaiting() const { return state == SrvState::WAITING; }
     bool isStarting() const { return state == SrvState::STARTING; }
     bool isListening() const { return state == SrvState::LISTENING; }
     bool isConnected() const { return state == SrvState::CONNECTED; }
@@ -152,7 +162,7 @@ public:
     // Starting and stopping the server
     //
     
-public:
+private: // public:
 
     // Launch the remote server
     virtual void start() throws;
@@ -170,8 +180,8 @@ protected:
     
 private:
     
-    // Used by the launch daemon to determine if actions should be taken
-    virtual bool shouldRun() { return true; }
+    // Indicates if the server is ready to launch
+    virtual bool canRun() { return true; }
 
 
     //

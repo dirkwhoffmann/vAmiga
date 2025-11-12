@@ -65,7 +65,7 @@ private:
     
 public:
     
-    bool shouldRun() override;
+    bool canRun() override;
 
 
     //

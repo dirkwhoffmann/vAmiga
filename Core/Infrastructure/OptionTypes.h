@@ -212,9 +212,9 @@ enum class Opt : long
     DIAG_BOARD,
     
     // Remote servers
+    SRV_ENABLE,
     SRV_PORT,
     SRV_PROTOCOL,
-    SRV_AUTORUN,
     SRV_VERBOSE
 };
 
@@ -394,10 +394,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
                 
             case Opt::DIAG_BOARD:                return "DIAG_BOARD";
                 
-            case Opt::SRV_PORT:                  return "SRV.PORT";
-            case Opt::SRV_PROTOCOL:              return "SRV.PROTOCOL";
-            case Opt::SRV_AUTORUN:               return "SRV.AUTORUN";
-            case Opt::SRV_VERBOSE:               return "SRV.VERBOSE";
+            case Opt::SRV_ENABLE:               return "SRV.ENABLE";
+            case Opt::SRV_PORT:                 return "SRV.PORT";
+            case Opt::SRV_PROTOCOL:             return "SRV.PROTOCOL";
+            case Opt::SRV_VERBOSE:              return "SRV.VERBOSE";
         }
         return "???";
     }
@@ -573,10 +573,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
                 
             case Opt::DIAG_BOARD:                return "Diagnose board";
                 
-            case Opt::SRV_PORT:                  return "Server port";
-            case Opt::SRV_PROTOCOL:              return "Server protocol";
-            case Opt::SRV_AUTORUN:               return "Auto run";
-            case Opt::SRV_VERBOSE:               return "Verbose mode";
+            case Opt::SRV_ENABLE:            return "Server enable status";
+            case Opt::SRV_PORT:              return "Server port";
+            case Opt::SRV_PROTOCOL:          return "Server protocol";
+            case Opt::SRV_VERBOSE:           return "Verbose mode";
         }
         return "???";
     }

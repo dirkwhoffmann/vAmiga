@@ -1009,94 +1009,10 @@ CommanderConsole::initCommands(RSCommand &root)
         }
     });
     
-    cmd = registerComponent(remoteManager.serServer);
-    
     cmd = registerComponent(remoteManager.rshServer);
-    
-    root.add({
-        
-        .tokens = { cmd, "start" },
-        .chelp  = { "Starts the retro shell server" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.rshServer.start();
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { cmd, "stop" },
-        .chelp  = { "Stops the retro shell server" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.rshServer.stop();
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { cmd, "disconnect" },
-        .chelp  = { "Disconnects a client" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.rshServer.disconnect();
-        }
-    });
-    
-    cmd = registerComponent(remoteManager.promServer);
-    
-    root.add({
-        
-        .tokens = { cmd, "start" },
-        .chelp  = { "Starts the Prometheus server" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.promServer.start();
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { cmd, "stop" },
-        .chelp  = { "Stops the Prometheus server" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.promServer.stop();
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { cmd, "disconnect" },
-        .chelp  = { "Disconnects a client" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.promServer.disconnect();
-        }
-    });
-    
     cmd = registerComponent(remoteManager.gdbServer);
-    
-    root.add({
-        
-        .tokens = { cmd, "attach" },
-        .chelp  = { "Attaches the GDB server to a process" },
-        .args   = { { .name = { "process", "Process number" } } },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.gdbServer.attach(args.at("process"));
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { cmd, "detach" },
-        .chelp  = { "Detaches the GDB server from a process" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            remoteManager.gdbServer.detach();
-        }
-    });
+    cmd = registerComponent(remoteManager.promServer);
+    cmd = registerComponent(remoteManager.serServer);
 }
 
 }

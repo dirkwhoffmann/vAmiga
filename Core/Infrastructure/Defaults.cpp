@@ -188,22 +188,25 @@ Defaults::Defaults()
 
     setFallback(Opt::DIAG_BOARD,                 false);
 
-    setFallback(Opt::SRV_PORT,                   8080,                   { (i64)ServerType::SER });
-    setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::SER });
-    setFallback(Opt::SRV_AUTORUN,                false,                  { (i64)ServerType::SER });
-    setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::SER });
+    setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::RSH });
     setFallback(Opt::SRV_PORT,                   8081,                   { (i64)ServerType::RSH });
     setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::RSH });
-    setFallback(Opt::SRV_AUTORUN,                false,                  { (i64)ServerType::RSH });
     setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::RSH });
-    setFallback(Opt::SRV_PORT,                   8082,                   { (i64)ServerType::PROM });
-    setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::PROM });
-    setFallback(Opt::SRV_AUTORUN,                false,                  { (i64)ServerType::PROM });
-    setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::PROM });
-    setFallback(Opt::SRV_PORT,                   8083,                   { (i64)ServerType::GDB });
+
+    setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::GDB });
+    setFallback(Opt::SRV_PORT,                   8082,                   { (i64)ServerType::GDB });
     setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::GDB });
-    setFallback(Opt::SRV_AUTORUN,                false,                  { (i64)ServerType::GDB });
     setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::GDB });
+
+    setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::PROM });
+    setFallback(Opt::SRV_PORT,                   8083,                   { (i64)ServerType::PROM });
+    setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::PROM });
+    setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::PROM });
+
+    setFallback(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::SER });
+    setFallback(Opt::SRV_PORT,                   8084,                   { (i64)ServerType::SER });
+    setFallback(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::SER });
+    setFallback(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::SER });
 
     setFallback("ROM_PATH",                     "");
     setFallback("EXT_PATH",                     "");
