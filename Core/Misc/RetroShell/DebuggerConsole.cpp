@@ -52,48 +52,6 @@ DebuggerConsole::didDeactivate()
     emulator.trackOff(1);
 }
 
-/*
-void
-DebuggerConsole::welcome()
-{
-    Console::welcome();
-}
-
-void
-DebuggerConsole::summary()
-{
-    std::stringstream ss;
-    
-    // ss << "RetroShell Debugger" << std::endl << std::endl;
-    amiga.dump(Category::Current, ss);
-    
-    *this << vspace{1};
-    string line;
-    while(std::getline(ss, line)) { *this << "    " << line << '\n'; }
-    // *this << ss;
-    *this << vspace{1};
-}
-
-void
-DebuggerConsole::printHelp(isize tab)
-{
-    Console::printHelp(tab);
-}
-
-void
-DebuggerConsole::pressReturn(bool shift)
-{
-    if (emulator.isPaused() && !shift && input.empty()) {
-        
-        emulator.stepInto();
-        
-    } else {
-        
-        Console::pressReturn(shift);
-    }
-}
-*/
-
 void
 DebuggerConsole::initCommands(RSCommand &root)
 {
@@ -605,9 +563,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .args   = { { .name = { "address", "Memory address" }, .flags = rs::opt } },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            std::stringstream ss;
-            cpu.disassembleRange(ss, parseAddr(args, "address", cpu.getPC0()), 16);
-            retroShell << '\n' << ss << '\n';
+            cpu.disassembleRange(os, parseAddr(args, "address", cpu.getPC0()), 16);
         }
     });
     
@@ -620,9 +576,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             
             if (args.contains("address")) { current = parseAddr(args, "address"); }
             
-            std::stringstream ss;
-            current += (u32)mem.debugger.ascDump<Accessor::CPU>(ss, current, 16);
-            retroShell << '\n' << ss << '\n';
+            current += (u32)mem.debugger.ascDump<Accessor::CPU>(os, current, 16);
         }
     });
     
@@ -643,9 +597,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             
             if (args.contains("address")) { current = parseAddr(args, "address"); }
             
-            std::stringstream ss;
-            current += (u32)mem.debugger.memDump<Accessor::CPU>(ss, current, 16, values[0]);
-            retroShell << '\n' << ss << '\n';
+            current += (u32)mem.debugger.memDump<Accessor::CPU>(os, current, 16, values[0]);
         }, .payload = {2}
     });
     
@@ -761,16 +713,12 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (found >= 0) {
                     
-                    std::stringstream ss;
-                    mem.debugger.memDump<Accessor::CPU>(ss, u32(found), 1, values[0]);
-                    retroShell << ss;
+                    mem.debugger.memDump<Accessor::CPU>(os, u32(found), 1, values[0]);
                     current = u32(found);
                     
                 } else {
                     
-                    std::stringstream ss;
-                    ss << "Not found";
-                    retroShell << ss;
+                    os << "Not found";
                 }
             }, .payload = {1}
     });
@@ -1435,9 +1383,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            std::stringstream ss;
-            osDebugger.dumpInfo(ss);
-            retroShell << ss;
+            osDebugger.dumpInfo(os);
         }
     });
     
@@ -1447,9 +1393,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            std::stringstream ss;
-            osDebugger.dumpExecBase(ss);
-            retroShell << ss;
+            osDebugger.dumpExecBase(os);
         }
     });
     
@@ -1460,9 +1404,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            std::stringstream ss;
-            osDebugger.dumpIntVectors(ss);
-            retroShell << ss;
+            osDebugger.dumpIntVectors(os);
         }
     });
     
@@ -1475,18 +1417,15 @@ DebuggerConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                std::stringstream ss;
                 isize num;
                 
                 if (!args.contains("nr")) {
-                    osDebugger.dumpLibraries(ss);
+                    osDebugger.dumpLibraries(os);
                 } else if (util::parseHex(args.at("nr"), &num)) {
-                    osDebugger.dumpLibrary(ss, (u32)num);
+                    osDebugger.dumpLibrary(os, (u32)num);
                 } else {
-                    osDebugger.dumpLibrary(ss, args.at("nr"));
+                    osDebugger.dumpLibrary(os, args.at("nr"));
                 }
-                
-                retroShell << ss;
             }
     });
     
@@ -1499,18 +1438,15 @@ DebuggerConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                std::stringstream ss;
                 isize num;
                 
                 if (!args.contains("nr")) {
-                    osDebugger.dumpDevices(ss);
+                    osDebugger.dumpDevices(os);
                 } else if (util::parseHex(args.at("nr"), &num)) {
-                    osDebugger.dumpDevice(ss, (u32)num);
+                    osDebugger.dumpDevice(os, (u32)num);
                 } else {
-                    osDebugger.dumpDevice(ss, args.at("nr"));
+                    osDebugger.dumpDevice(os, args.at("nr"));
                 }
-                
-                retroShell << ss;
             }
     });
     
@@ -1523,18 +1459,15 @@ DebuggerConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                std::stringstream ss;
                 isize num;
                 
                 if (!args.contains("nr")) {
-                    osDebugger.dumpResources(ss);
+                    osDebugger.dumpResources(os);
                 } else if (util::parseHex(args.at("nr"), &num)) {
-                    osDebugger.dumpResource(ss, (u32)num);
+                    osDebugger.dumpResource(os, (u32)num);
                 } else {
-                    osDebugger.dumpResource(ss, args.at("nr"));
+                    osDebugger.dumpResource(os, args.at("nr"));
                 }
-                
-                retroShell << ss;
             }
     });
     
@@ -1547,18 +1480,15 @@ DebuggerConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                std::stringstream ss;
                 isize num;
                 
                 if (!args.contains("nr")) {
-                    osDebugger.dumpTasks(ss);
+                    osDebugger.dumpTasks(os);
                 } else if (util::parseHex(args.at("nr"), &num)) {
-                    osDebugger.dumpTask(ss, (u32)num);
+                    osDebugger.dumpTask(os, (u32)num);
                 } else {
-                    osDebugger.dumpTask(ss, args.at("nr"));
+                    osDebugger.dumpTask(os, args.at("nr"));
                 }
-                
-                retroShell << ss;
             }
     });
     
@@ -1571,18 +1501,15 @@ DebuggerConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                std::stringstream ss;
                 isize num;
                 
                 if (!args.contains("nr")) {
-                    osDebugger.dumpProcesses(ss);
+                    osDebugger.dumpProcesses(os);
                 } else if (util::parseHex(args.at("nr"), &num)) {
-                    osDebugger.dumpProcess(ss, (u32)num);
+                    osDebugger.dumpProcess(os, (u32)num);
                 } else {
-                    osDebugger.dumpProcess(ss, args.at("nr"));
+                    osDebugger.dumpProcess(os, args.at("nr"));
                 }
-                
-                retroShell << ss;
             }
     });
     
@@ -1691,16 +1618,13 @@ DebuggerConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                std::stringstream ss;
                 auto value = args.at("value");
                 
                 if (isNum(value)) {
-                    mem.debugger.convertNumeric(ss, (u32)parseNum(value));
+                    mem.debugger.convertNumeric(os, (u32)parseNum(value));
                 } else {
-                    mem.debugger.convertNumeric(ss, value);
+                    mem.debugger.convertNumeric(os, value);
                 }
-                
-                retroShell << '\n' << ss << '\n';
             }
     });
 }
