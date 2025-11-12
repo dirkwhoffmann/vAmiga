@@ -53,6 +53,13 @@ protected:
     // Methods from RemoteServer
     //
 
+    virtual bool canRun() override { return true; }
+
+    
+    //
+    // Methods from SocketServer
+    //
+
     string doReceive() throws override;
     void doProcess(const string &packet) throws override;
     void doSend(const string &packet) throws  override;

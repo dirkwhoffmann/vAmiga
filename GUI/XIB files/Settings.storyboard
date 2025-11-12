@@ -369,9 +369,6 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
-                                <connections>
-                                    <action selector="retainMouseKeyCombAction:" target="ejc-Ml-G1m" id="gIQ-XD-6IZ"/>
-                                </connections>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="boU-G9-by9">
                                 <rect key="frame" x="152" y="210" width="72" height="19"/>
@@ -387,9 +384,6 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
-                                <connections>
-                                    <action selector="releaseMouseKeyCombAction:" target="ejc-Ml-G1m" id="TcO-Yx-mDc"/>
-                                </connections>
                             </popUpButton>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eMj-ay-62P">
                                 <rect key="frame" x="332" y="205" width="249" height="25"/>
@@ -1287,14 +1281,14 @@
                                 <rect key="frame" x="324" y="20" width="296" height="169"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <clipView key="contentView" drawsBackground="NO" id="pqT-hI-mht">
-                                    <rect key="frame" x="0.0" y="0.0" width="279" height="169"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Id4-fh-SHh">
-                                            <rect key="frame" x="0.0" y="0.0" width="279" height="169"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="279" height="169"/>
+                                            <size key="minSize" width="296" height="169"/>
                                             <size key="maxSize" width="296" height="10000000"/>
                                             <connections>
                                                 <outlet property="delegate" destination="di1-gt-ffY" id="Mwy-8D-gXr"/>
@@ -6157,7 +6151,7 @@
         <!--Server Settings View Controller-->
         <scene sceneID="XRV-Wm-BYY">
             <objects>
-                <viewController storyboardIdentifier="Server" id="B8X-qZ-eJc" customClass="ServerSettingsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Server" id="B8X-qZ-eJc" customClass="ServerSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="BOx-X1-IRm" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -6244,14 +6238,331 @@
                                     </subviews>
                                 </view>
                             </box>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Npf-7i-wR6">
+                                <rect key="frame" x="20" y="390" width="168" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Remote Shell Server" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="Ia7-FR-tkV">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="systemBold"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="enableAction:" target="B8X-qZ-eJc" id="YVi-dO-1Ag"/>
+                                </connections>
+                            </button>
+                            <button tag="2" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rHD-2y-xXc">
+                                <rect key="frame" x="20" y="80" width="170" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="DAP Adapter" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="VBZ-T7-6i9">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="systemBold"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="enableAction:" target="B8X-qZ-eJc" id="3Df-rz-1wI"/>
+                                </connections>
+                            </button>
+                            <button tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xYM-0y-kTt">
+                                <rect key="frame" x="20" y="310" width="170" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="RPC Server" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="VXO-7v-gE9">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="systemBold"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="enableAction:" target="B8X-qZ-eJc" id="yW8-dB-8Gh"/>
+                                </connections>
+                            </button>
+                            <button tag="3" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RUb-yo-RrQ">
+                                <rect key="frame" x="20" y="230" width="172" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Prometheus Sever" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="9Cd-H9-0YF">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="systemBold"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="enableAction:" target="B8X-qZ-eJc" id="0Fo-wy-CYR"/>
+                                </connections>
+                            </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bkz-de-yqu">
+                                <rect key="frame" x="42" y="362" width="34" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Port:" id="6pH-sn-nbW">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BRJ-75-vnN">
+                                <rect key="frame" x="215" y="390" width="134" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Disconnected" id="yH2-5Y-eJh">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9yS-0r-4NR">
+                                <rect key="frame" x="215" y="310" width="134" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Disconnected" id="XFW-WK-8uJ">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yvv-9m-5tX">
+                                <rect key="frame" x="215" y="80" width="134" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Disconnected" id="mDV-bj-6sb">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iom-g6-Eql" customClass="RangeField" customModule="VirtualC64" customModuleProvider="target">
+                                <rect key="frame" x="81" y="359" width="56" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="oZu-GR-g87">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="8D2-mY-t0t"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="portAction:" target="B8X-qZ-eJc" id="1z4-h5-poR"/>
+                                </connections>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GeH-dj-0Es">
+                                <rect key="frame" x="42" y="282" width="34" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Port:" id="zFA-AS-PjT">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="9ms-Op-xIe" customClass="RangeField" customModule="VirtualC64" customModuleProvider="target">
+                                <rect key="frame" x="81" y="279" width="56" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="gfT-Og-5Bh">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="E8e-k2-6EK"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="portAction:" target="B8X-qZ-eJc" id="L48-we-OK3"/>
+                                </connections>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yvg-BD-G67">
+                                <rect key="frame" x="42" y="202" width="34" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Port:" id="HZS-It-OrX">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="4tc-hB-n96" customClass="RangeField" customModule="VirtualC64" customModuleProvider="target">
+                                <rect key="frame" x="81" y="199" width="56" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="kN7-2c-1gV">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="ejh-GD-p8f"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="portAction:" target="B8X-qZ-eJc" id="dnH-jn-Srf"/>
+                                </connections>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vYy-4A-KCm">
+                                <rect key="frame" x="42" y="52" width="34" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Port:" id="hkf-PY-c8t">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="ltp-ya-eo5" customClass="RangeField" customModule="VirtualC64" customModuleProvider="target">
+                                <rect key="frame" x="81" y="49" width="56" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Ohm-6V-GKG">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="vT1-gV-O0S"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="portAction:" target="B8X-qZ-eJc" id="fWm-o6-SfR"/>
+                                </connections>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w98-6d-WLK">
+                                <rect key="frame" x="215" y="341" width="405" height="43"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" id="9mg-lT-gqX">
+                                    <font key="font" metaFont="system"/>
+                                    <string key="title">Provides TCP access to RetroShell for interactive command execution. Connect easily using Telnet or Netcat to control and monitor the emulator remotely.
+</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WjF-WK-Jev">
+                                <rect key="frame" x="215" y="111" width="405" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" id="3wS-ja-WuD">
+                                    <font key="font" metaFont="system"/>
+                                    <string key="title">Provides TCP access to the Amiga's serial port. 
+</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lev-Yh-l7P">
+                                <rect key="frame" x="215" y="16" width="405" height="59"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" id="OkZ-CE-xSG">
+                                    <font key="font" metaFont="system"/>
+                                    <string key="title">Offers a Debug Adapter Protocol interface for connecting external debug clients, enabling source-level debugging and runtime inspection of the emulated system.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6yf-3c-Ex2">
+                                <rect key="frame" x="215" y="161" width="405" height="64"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" id="3un-25-v1h">
+                                    <font key="font" metaFont="system"/>
+                                    <string key="title">Exposes real-time emulation metrics for Prometheus-compatible clients, allowing performance monitoring, visualization, and analysis through Grafana or similar tools.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zIZ-az-ts8">
+                                <rect key="frame" x="215" y="250" width="405" height="55"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" id="0Zt-qb-dTa">
+                                    <font key="font" metaFont="system"/>
+                                    <string key="title">Enables structured communication with RetroShell using RPC packages. Ideal for automation, scripting, or integrating external tools with the emulator’s internal APIs.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wbd-D2-ver">
+                                <rect key="frame" x="215" y="230" width="134" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Disconnected" id="vrn-Kp-QZE">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button tag="4" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wP1-yy-JxD">
+                                <rect key="frame" x="20" y="150" width="172" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Serial Port Server" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="CgY-5e-FoK">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="systemBold"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="enableAction:" target="B8X-qZ-eJc" id="4I4-s7-nSh"/>
+                                </connections>
+                            </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MLg-gI-Yyk">
+                                <rect key="frame" x="42" y="122" width="34" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Port:" id="b2P-3U-khK">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="OuD-Uk-hky" customClass="RangeField" customModule="VirtualC64" customModuleProvider="target">
+                                <rect key="frame" x="81" y="118" width="56" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="ffq-hh-Wug">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="rQ2-Yx-cn9"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="portAction:" target="B8X-qZ-eJc" id="sRv-gy-Buq"/>
+                                </connections>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Nx-Nv-wMB">
+                                <rect key="frame" x="215" y="150" width="134" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Disconnected" id="BLM-QG-pWv">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7dN-cJ-ra4">
+                                <rect key="frame" x="188" y="388" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="wifi.circle.fill" catalog="system" id="f6w-do-lcc"/>
+                            </imageView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wK2-pb-WZt">
+                                <rect key="frame" x="188" y="308" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="wifi.circle.fill" catalog="system" id="iYN-49-EIf"/>
+                            </imageView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M7S-h9-Twe">
+                                <rect key="frame" x="188" y="228" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="wifi.circle.fill" catalog="system" id="Obw-tC-V7y"/>
+                            </imageView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1hm-y0-rVz">
+                                <rect key="frame" x="188" y="148" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="wifi.circle.fill" catalog="system" id="a4a-fO-WIH"/>
+                            </imageView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MhQ-pS-Ru5">
+                                <rect key="frame" x="188" y="78" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="wifi.circle.fill" catalog="system" id="DrR-6A-9qG"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jcM-PT-cOm"/>
                         <viewLayoutGuide key="layoutMargins" id="S4Z-Xw-0Jv"/>
                     </view>
                     <connections>
+                        <outlet property="dapEnable" destination="rHD-2y-xXc" id="UJg-tb-8YJ"/>
+                        <outlet property="dapInfo" destination="Lev-Yh-l7P" id="Uhw-h1-SOd"/>
+                        <outlet property="dapPort" destination="ltp-ya-eo5" id="Cvq-IY-tFp"/>
+                        <outlet property="dapPortText" destination="vYy-4A-KCm" id="CHX-sF-tAw"/>
+                        <outlet property="dapStatusIcon" destination="MhQ-pS-Ru5" id="BxN-oZ-5bM"/>
+                        <outlet property="dapStatusText" destination="Yvv-9m-5tX" id="QAJ-rz-3Ki"/>
                         <outlet property="lockImage" destination="KkV-LP-9f2" id="sWo-Nb-4x0"/>
                         <outlet property="lockInfo1" destination="6TY-pB-flu" id="SVc-pE-dOJ"/>
                         <outlet property="lockInfo2" destination="hPA-qd-UV7" id="A9o-uM-9Vw"/>
+                        <outlet property="promEnable" destination="RUb-yo-RrQ" id="msz-8d-r46"/>
+                        <outlet property="promInfo" destination="6yf-3c-Ex2" id="QWa-sV-Qhh"/>
+                        <outlet property="promPort" destination="4tc-hB-n96" id="l4O-Os-uhp"/>
+                        <outlet property="promPortText" destination="Yvg-BD-G67" id="2ff-fQ-iIm"/>
+                        <outlet property="promStatusIcon" destination="M7S-h9-Twe" id="7zH-sT-6cW"/>
+                        <outlet property="promStatusText" destination="Wbd-D2-ver" id="JgD-de-a7I"/>
+                        <outlet property="rpcEnable" destination="xYM-0y-kTt" id="DWd-Tx-vLA"/>
+                        <outlet property="rpcInfo" destination="zIZ-az-ts8" id="zc5-ZV-70c"/>
+                        <outlet property="rpcPort" destination="9ms-Op-xIe" id="75O-iv-7E8"/>
+                        <outlet property="rpcPortText" destination="GeH-dj-0Es" id="oOk-so-B5v"/>
+                        <outlet property="rpcStatusIcon" destination="wK2-pb-WZt" id="SvL-fR-2cs"/>
+                        <outlet property="rpcStatusText" destination="9yS-0r-4NR" id="DRp-ho-Mrh"/>
+                        <outlet property="rshEnable" destination="Npf-7i-wR6" id="NTF-TM-hql"/>
+                        <outlet property="rshInfo" destination="w98-6d-WLK" id="kFL-vJ-y2z"/>
+                        <outlet property="rshPort" destination="iom-g6-Eql" id="xt5-dw-MU4"/>
+                        <outlet property="rshPortText" destination="Bkz-de-yqu" id="l7H-vH-xcE"/>
+                        <outlet property="rshStatusIcon" destination="7dN-cJ-ra4" id="pHQ-XF-fNY"/>
+                        <outlet property="rshStatusText" destination="BRJ-75-vnN" id="FAq-j5-bii"/>
+                        <outlet property="serEnable" destination="wP1-yy-JxD" id="RYx-nc-RIW"/>
+                        <outlet property="serInfo" destination="WjF-WK-Jev" id="xzs-GM-L7b"/>
+                        <outlet property="serPort" destination="OuD-Uk-hky" id="oVt-vT-s3J"/>
+                        <outlet property="serPortText" destination="MLg-gI-Yyk" id="eKE-Oo-2D2"/>
+                        <outlet property="serStatusIcon" destination="1hm-y0-rVz" id="UsW-d1-0K8"/>
+                        <outlet property="serStatusText" destination="0Nx-Nv-wMB" id="K8B-80-3gn"/>
                     </connections>
                 </viewController>
                 <customObject id="9Xe-75-Yew" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -6284,7 +6595,8 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="trashTemplate" width="174" height="214"/>
+        <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>
     </resources>
 </document>

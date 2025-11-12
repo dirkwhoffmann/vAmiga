@@ -613,7 +613,8 @@ extension MyController {
             
         case .SRV_STATE:
             refreshStatusBar()
-            
+            settings?.refresh()
+
         case .SRV_RECEIVE, .SRV_SEND:
             break
             

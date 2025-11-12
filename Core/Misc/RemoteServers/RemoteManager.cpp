@@ -114,7 +114,7 @@ RemoteManager::update()
         if (server.canRun()) {
             if (server.isWaiting()) server.start();
         } else {
-            if (!server.isOff()) server.stop();
+            if (!server.isOff() && !server.isWaiting()) server.stop();
         }
     };
 

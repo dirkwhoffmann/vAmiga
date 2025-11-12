@@ -646,47 +646,45 @@ class Configuration {
     // Servers
     //
 
-    var rshSeverEnable: Bool {
+    var rshServerEnable: Bool {
         get { return emu?.get(.SRV_ENABLE, id: 0) != 0 }
         set { emu?.set(.SRV_ENABLE, id: 0, enable: newValue ) }
     }
-    var rshSeverPort: Int {
+    var rshServerPort: Int {
         get { return emu?.get(.SRV_PORT, id: 0) ?? 0 }
         set { emu?.set(.SRV_PORT, id: 0, value: newValue ) }
     }
-    /*
-    var rpcSeverEnable: Bool {
+    var rpcServerEnable: Bool {
         get { return emu?.get(.SRV_ENABLE, id: 1) != 0 }
         set { emu?.set(.SRV_ENABLE, id: 1, enable: newValue ) }
     }
-    var rpcSeverPort: Int {
+    var rpcServerPort: Int {
         get { return emu?.get(.SRV_PORT, id: 1) ?? 0 }
         set { emu?.set(.SRV_PORT, id: 1, value: newValue ) }
     }
-    */
-    var gdbSeverEnable: Bool {
-        get { return emu?.get(.SRV_ENABLE, id: 1) != 0 }
-        set { emu?.set(.SRV_ENABLE, id: 1, enable: newValue ) }
-    }
-    var gdbSeverPort: Int {
-        get { return emu?.get(.SRV_PORT, id: 1) ?? 0 }
-        set { emu?.set(.SRV_PORT, id: 1, value: newValue ) }
-    }
-    var promSeverEnable: Bool {
+    var gdbServerEnable: Bool {
         get { return emu?.get(.SRV_ENABLE, id: 2) != 0 }
         set { emu?.set(.SRV_ENABLE, id: 2, enable: newValue ) }
     }
-    var promSeverPort: Int {
+    var gdbServerPort: Int {
         get { return emu?.get(.SRV_PORT, id: 2) ?? 0 }
         set { emu?.set(.SRV_PORT, id: 2, value: newValue ) }
     }
-    var serSeverEnable: Bool {
+    var promServerEnable: Bool {
         get { return emu?.get(.SRV_ENABLE, id: 3) != 0 }
         set { emu?.set(.SRV_ENABLE, id: 3, enable: newValue ) }
     }
-    var serSeverPort: Int {
+    var promServerPort: Int {
         get { return emu?.get(.SRV_PORT, id: 3) ?? 0 }
         set { emu?.set(.SRV_PORT, id: 3, value: newValue ) }
+    }
+    var serServerEnable: Bool {
+        get { return emu?.get(.SRV_ENABLE, id: 4) != 0 }
+        set { emu?.set(.SRV_ENABLE, id: 4, enable: newValue ) }
+    }
+    var serServerPort: Int {
+        get { return emu?.get(.SRV_PORT, id: 4) ?? 0 }
+        set { emu?.set(.SRV_PORT, id: 4, value: newValue ) }
     }
 
     init(with controller: MyController) { parent = controller }

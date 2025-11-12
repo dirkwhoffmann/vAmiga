@@ -96,6 +96,7 @@ RemoteServer::setOption(Opt option, i64 value)
         case Opt::SRV_ENABLE:
 
             config.enable = (bool)value;
+            printf("config.enable = %d\n", config.enable);
             return;
 
         case Opt::SRV_PORT:

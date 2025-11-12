@@ -47,7 +47,8 @@ class SidebarViewController: NSViewController {
             SidebarItem(title: "Performance",   icon: "hare"),
             SidebarItem(title: "Compatibility", icon: "compass.drawing"),
             SidebarItem(title: "Audio",         icon: "waveform"),
-            SidebarItem(title: "Video",         icon: "eye")
+            SidebarItem(title: "Video",         icon: "eye"),
+            SidebarItem(title: "Server",        icon: "network")
         ])
     ]
 

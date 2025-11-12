@@ -8,25 +8,59 @@
 // -----------------------------------------------------------------------------
 
 class ServerSettingsViewController: SettingsViewController {
-
-    // Drive
+    
+    // Remote Shell server
     @IBOutlet weak var rshEnable: NSButton!
-    @IBOutlet weak var rshStatus: NSTextField!
+    @IBOutlet weak var rshStatusIcon: NSImageView!
+    @IBOutlet weak var rshStatusText: NSTextField!
+    @IBOutlet weak var rshPortText: NSTextField!
     @IBOutlet weak var rshPort: RangeField!
+    @IBOutlet weak var rshInfo: NSTextField!
+
+    // RPC server
     @IBOutlet weak var rpcEnable: NSButton!
-    @IBOutlet weak var rpcStatus: NSTextField!
+    @IBOutlet weak var rpcStatusIcon: NSImageView!
+    @IBOutlet weak var rpcStatusText: NSTextField!
+    @IBOutlet weak var rpcPortText: NSTextField!
     @IBOutlet weak var rpcPort: RangeField!
+    @IBOutlet weak var rpcInfo: NSTextField!
+
+    // DAP server (not implemented yet)
     @IBOutlet weak var dapEnable: NSButton!
-    @IBOutlet weak var dapStatus: NSTextField!
+    @IBOutlet weak var dapStatusIcon: NSImageView!
+    @IBOutlet weak var dapStatusText: NSTextField!
+    @IBOutlet weak var dapPortText: NSTextField!
     @IBOutlet weak var dapPort: RangeField!
+    @IBOutlet weak var dapInfo: NSTextField!
+
+    // Prometheus server
     @IBOutlet weak var promEnable: NSButton!
-    @IBOutlet weak var promStatus: NSTextField!
+    @IBOutlet weak var promStatusIcon: NSImageView!
+    @IBOutlet weak var promStatusText: NSTextField!
+    @IBOutlet weak var promPortText: NSTextField!
     @IBOutlet weak var promPort: RangeField!
+    @IBOutlet weak var promInfo: NSTextField!
+
+    // Serial server
+    @IBOutlet weak var serEnable: NSButton!
+    @IBOutlet weak var serStatusIcon: NSImageView!
+    @IBOutlet weak var serStatusText: NSTextField!
+    @IBOutlet weak var serPortText: NSTextField!
+    @IBOutlet weak var serPort: RangeField!
+    @IBOutlet weak var serInfo: NSTextField!
 
     override func viewDidLoad() {
 
         log(.lifetime)
-        [rshPort, rpcPort, dapPort, promPort].forEach { $0.setRange(0...65535) }
+        [rshPort, rpcPort, promPort, serPort, dapPort].forEach { $0.setRange(0...65535) }
+
+        // Hide the DAP adapter until it is supported
+        dapEnable.isHidden = true
+        dapStatusIcon.isHidden = true
+        dapStatusText.isHidden = true
+        dapPortText.isHidden = true
+        dapPort.isHidden = true
+        dapInfo.isHidden = true
     }
 
     override func refresh() {
@@ -45,18 +79,19 @@ class ServerSettingsViewController: SettingsViewController {
             }
         }
 
-        func update(_ component: NSTextField, state: SrvState) {
-
+        func update(_ icon: NSImageView, _ text: NSTextField, state: SrvState) {
             let format = prettyPrint(state: state)
-
-            component.stringValue = format.0
-            component.textColor = format.1
-            component.font = NSFont.boldSystemFont(ofSize: component.font?.pointSize ?? NSFont.systemFontSize)
+            icon.contentTintColor = format.1
+            text.stringValue = format.0
+            // text.textColor = format.1
+            text.font = NSFont.boldSystemFont(ofSize: text.font?.pointSize ?? NSFont.systemFontSize)
 
         }
-        func update(_ component: NSControl, enable: Bool) {
-            component.isEnabled = enable
+        /*
+        func update(_ components: [NSControl], enable: Bool) {
+            components.forEach { $0.isEnabled = enable }
         }
+        */
 
         super.refresh()
 
@@ -64,38 +99,62 @@ class ServerSettingsViewController: SettingsViewController {
 
         let serverInfo = emu.remoteManager.info
 
-        // RSH server
-        rshEnable.state = config.rshSeverEnable ? .on : .off
-        rshPort.integerValue = Int(config.rshSeverPort)
-        update(rshStatus, state: serverInfo.rshInfo.state)
+        // Remote Shell server
+        var enable = config.rshServerEnable
+        rshEnable.state = enable ? .on : .off
+        rshPort.integerValue = Int(config.rshServerPort)
+        update(rshStatusIcon, rshStatusText, state: serverInfo.rshInfo.state)
+        rshPort.isEnabled = enable
+        rshPortText.textColor = enable ? .textColor : .secondaryLabelColor
+        rshInfo.textColor = enable ? .textColor : .secondaryLabelColor
 
         // RPC server
-        /*
-        rpcEnable.state = config.rpcSeverEnable ? .on : .off
-        rpcPort.integerValue = Int(config.rpcSeverPort)
-        update(rpcStatus, state: serverInfo.rpcInfo.state)
-        */
+        enable = config.rpcServerEnable
+        rpcEnable.state = enable ? .on : .off
+        rpcPort.integerValue = Int(config.rpcServerPort)
+        update(rpcStatusIcon, rpcStatusText, state: serverInfo.rpcInfo.state)
+        rpcPort.isEnabled = enable
+        rpcPortText.textColor = enable ? .textColor : .secondaryLabelColor
+        rpcInfo.textColor = enable ? .textColor : .secondaryLabelColor
 
-        // DAP server
-        /*
-        dapEnable.state = config.dapSeverEnable ? .on : .off
-        dapPort.integerValue = Int(config.dapSeverPort)
-        update(dapStatus, state: serverInfo.dapInfo.state)
-        */
+        // GDB server
+        enable = config.gdbServerEnable
+        dapEnable.state = enable ? .on : .off
+        dapPort.integerValue = Int(config.gdbServerPort)
+        update(dapStatusIcon, dapStatusText, state: serverInfo.gdbInfo.state)
+        dapPort.isEnabled = enable
+        dapPortText.textColor = enable ? .textColor : .secondaryLabelColor
+        dapInfo.textColor = enable ? .textColor : .secondaryLabelColor
 
-        // Prom server
-        promEnable.state = config.promSeverEnable ? .on : .off
-        promPort.integerValue = Int(config.promSeverPort)
-        update(promStatus, state: serverInfo.promInfo.state)
+        // Prometheus server
+        enable = config.promServerEnable
+        promEnable.state = enable ? .on : .off
+        promPort.integerValue = Int(config.promServerPort)
+        update(promStatusIcon, promStatusText, state: serverInfo.promInfo.state)
+        promPort.isEnabled = enable
+        promPortText.textColor = enable ? .textColor : .secondaryLabelColor
+        promInfo.textColor = enable ? .textColor : .secondaryLabelColor
+
+        // Serial port server
+        enable = config.serServerEnable
+        serEnable.state = enable ? .on : .off
+        serPort.integerValue = Int(config.serServerPort)
+        update(serStatusIcon, serStatusText, state: serverInfo.serInfo.state)
+        serPort.isEnabled = enable
+        serPortText.textColor = enable ? .textColor : .secondaryLabelColor
+        serInfo.textColor = enable ? .textColor : .secondaryLabelColor
     }
 
     @IBAction func enableAction(_ sender: NSButton!) {
 
+        print("enableAction \(sender.integerValue)")
+
         switch sender.tag {
-        case 0: config?.rshSeverEnable = sender.state == .on
-        case 1: config?.gdbSeverEnable = sender.state == .on
-        case 2: config?.promSeverEnable = sender.state == .on
-        case 3: config?.serSeverEnable = sender.state == .on
+        case 0: config?.rshServerEnable = sender.state == .on
+        case 1: config?.rpcServerEnable = sender.state == .on
+        case 2: config?.gdbServerEnable = sender.state == .on
+        case 3: config?.promServerEnable = sender.state == .on
+        case 4: config?.serServerEnable = sender.state == .on
         default: fatalError()
         }
     }
@@ -105,10 +164,11 @@ class ServerSettingsViewController: SettingsViewController {
         print("portAction \(sender.integerValue)")
 
         switch sender.tag {
-        case 0: config?.rshSeverPort = sender.integerValue
-        case 1: config?.gdbSeverPort = sender.integerValue
-        case 2: config?.promSeverPort = sender.integerValue
-        case 3: config?.serSeverPort = sender.integerValue
+        case 0: config?.rshServerPort = sender.integerValue
+        case 1: config?.rpcServerPort = sender.integerValue
+        case 2: config?.gdbServerPort = sender.integerValue
+        case 3: config?.promServerPort = sender.integerValue
+        case 4: config?.serServerPort = sender.integerValue
         default: fatalError()
         }
     }

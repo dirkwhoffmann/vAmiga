@@ -31,6 +31,7 @@ enum SFSymbol {
     case power
     case reset
     case trash
+    case wifi
 
     var systemNames: [String] {
 
@@ -57,6 +58,7 @@ enum SFSymbol {
         case .power:            return [ "power" ]
         case .reset:            return [ "arrow.counterclockwise.circle" ]
         case .trash:            return [ "trash" ]
+        case .wifi:             return [ "wifi.circle" ]
         }
     }
 

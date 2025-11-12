@@ -41,6 +41,7 @@ protected:
 
 public:
 
+    virtual bool canRun() override { return true; }
     void main() override;
 
 

@@ -185,7 +185,7 @@ protected:
 private:
     
     // Indicates if the server is ready to launch
-    virtual bool canRun() { return true; }
+    virtual bool canRun() = 0; // { return true; }
 
 
     //

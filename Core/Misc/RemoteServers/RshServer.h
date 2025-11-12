@@ -34,6 +34,12 @@ private:
 
     void _dump(Category category, std::ostream &os) const override;
 
+    //
+    // Methods from RemoteServer
+    //
+
+    virtual bool canRun() override { return true; }
+
 
     //
     // Methods from SocketServer
