@@ -505,10 +505,10 @@ AudioPort::handleBufferUnderflow()
         // Adjust the sample rate
         setSampleRate(host.getConfig().sampleRate);
         debug(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
-    }
 
-    // Inform the GUI
-    msgQueue.put(Msg::AUDBUF_UNDERFLOW, elapsedTime.asMilliseconds());
+        // Inform the GUI
+        msgQueue.put(Msg::AUDBUF_UNDERFLOW, elapsedTime.asMilliseconds());
+    }
 }
 
 void
@@ -530,10 +530,10 @@ AudioPort::handleBufferOverflow()
         // Adjust the sample rate
         setSampleRate(host.getConfig().sampleRate);
         debug(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
-    }
 
-    // Inform the GUI
-    msgQueue.put(Msg::AUDBUF_OVERFLOW, elapsedTime.asMilliseconds());
+        // Inform the GUI
+        msgQueue.put(Msg::AUDBUF_OVERFLOW, elapsedTime.asMilliseconds());
+    }
 }
 
 void
