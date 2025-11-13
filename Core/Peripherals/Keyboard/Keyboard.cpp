@@ -241,7 +241,7 @@ Keyboard::processHandshake()
         case KbState::SYNC:      state = KbState::STRM_ON;  break;
         case KbState::STRM_ON:   state = KbState::STRM_OFF; break;
         case KbState::STRM_OFF:  state = KbState::SEND;     break;
-        case KbState::SEND:                                       break;
+        case KbState::SEND:                                 break;
 
         default:
             fatalError;

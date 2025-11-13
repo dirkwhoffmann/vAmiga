@@ -694,11 +694,13 @@ CIA::executeOneCycle()
 
     // Sleep when threshold is reached
     if (tiredness > 8 && config.idleSleep) {
+
         sleep();
-        scheduleWakeUp();
-    } else {
-        scheduleNextExecution();
+        if (sleeping) { scheduleWakeUp(); return; }
     }
+
+    // Schedule the next event
+   scheduleNextExecution();
 }
 
 void

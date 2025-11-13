@@ -1063,17 +1063,10 @@ void
 KeyboardAPI::press(KeyCode key, double delay, double duration)
 {
     VAMIGA_PUBLIC
-    if (delay == 0.0) {
 
-        keyboard->press(key);
-        emu->markAsDirty();
+    emu->put(Command(Cmd::KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
 
-    } else {
-        
-        emu->put(Command(Cmd::KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
-    }
     if (duration != 0.0) {
-        
         emu->put(Command(Cmd::KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay + duration }));
     }
 }
@@ -1082,17 +1075,10 @@ void
 KeyboardAPI::toggle(KeyCode key, double delay, double duration)
 {
     VAMIGA_PUBLIC
-    if (delay == 0.0) {
-        
-        keyboard->toggle(key);
-        emu->markAsDirty();
-        
-    } else {
-        
-        emu->put(Command(Cmd::KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay }));
-    }
+
+    emu->put(Command(Cmd::KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay }));
+
     if (duration != 0.0) {
-        
         emu->put(Command(Cmd::KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay + duration }));
     }
 }
@@ -1101,15 +1087,8 @@ void
 KeyboardAPI::release(KeyCode key, double delay)
 {
     VAMIGA_PUBLIC
-    if (delay == 0.0) {
-        
-        keyboard->release(key);
-        emu->markAsDirty();
-        
-    } else {
-        
-        emu->put(Command(Cmd::KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
-    }
+
+    emu->put(Command(Cmd::KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
 }
 
 void

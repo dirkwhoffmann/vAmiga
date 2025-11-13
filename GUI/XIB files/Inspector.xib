@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24412" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24412"/>
         <capability name="Combo buttons" minToolsVersion="14.0" minSystemVersion="13.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -8668,7 +8668,7 @@
                     <toolbarItem implicitItemIdentifier="734485CB-4D20-4467-B031-F50B2814FCB3" label="Display Format" paletteLabel="Display Format" image="NSListViewTemplate" title="Hexadecimal" sizingBehavior="auto" id="B0D-DL-Uz5">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="Iv8-xh-GD1">
-                            <rect key="frame" x="13" y="14" width="61" height="24"/>
+                            <rect key="frame" x="11" y="14" width="64" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="Hexadecimal" bezelStyle="texturedRounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="ZeO-O1-JPI" id="AKj-Sb-MMp">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -8691,7 +8691,7 @@
                     <toolbarItem implicitItemIdentifier="E42DD58F-EAB7-4712-9B76-AFD35C3B0C4D" label="Inspection Target" paletteLabel="Inspection Target" title="CPU" sizingBehavior="auto" id="BQe-nn-Lal">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b86-1a-Fn4">
-                            <rect key="frame" x="2" y="14" width="95" height="24"/>
+                            <rect key="frame" x="1" y="14" width="97" height="24"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="CPU" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="LXU-RO-3xV" id="Wsk-Xi-B1a">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="message"/>

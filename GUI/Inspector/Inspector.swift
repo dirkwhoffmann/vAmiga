@@ -748,7 +748,7 @@ class Inspector: DialogController {
             case "Paula": refreshPaula(count: count, full: full)
             case "Ports": refreshPorts(count: count, full: full)
             case "Events": refreshEvents(count: count, full: full)
-            default: break
+            default: fatalError("Invalid id: \(id)") // break
             }
         }
         
