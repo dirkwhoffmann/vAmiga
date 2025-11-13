@@ -72,7 +72,11 @@ enum class Msg : long
     
     // Denise
     VIEWPORT,
-    
+
+    // Audio
+    AUDBUF_UNDERFLOW,
+    AUDBUF_OVERFLOW,
+
     // Memory
     MEM_LAYOUT,
     
@@ -187,7 +191,10 @@ struct MsgEnum : Reflection<MsgEnum, Msg>
             case Msg::COPPERWP_UPDATED:      return "COPPERWP_UPDATED";
                 
             case Msg::VIEWPORT:              return "VIEWPORT";
-                
+
+            case Msg::AUDBUF_UNDERFLOW:      return "AUDBUF_UNDERFLOW";
+            case Msg::AUDBUF_OVERFLOW:       return "AUDBUF_OVERFLOW";
+
             case Msg::MEM_LAYOUT:            return "MEM_LAYOUT";
                 
             case Msg::DRIVE_CONNECT:         return "DRIVE_CONNECT";

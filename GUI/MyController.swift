@@ -488,8 +488,8 @@ extension MyController {
                                               vstrt: Int(msg.viewport.vstrt),
                                               hstop: Int(msg.viewport.hstop),
                                               vstop: Int(msg.viewport.vstop))
-            
-        case .MEM_LAYOUT:
+
+        case .AUDBUF_OVERFLOW, .AUDBUF_UNDERFLOW, .MEM_LAYOUT:
                 break
 
         case .DRIVE_CONNECT:
