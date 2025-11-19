@@ -17,13 +17,13 @@
 static constexpr int VER_MAJOR      = 4;
 static constexpr int VER_MINOR      = 4;
 static constexpr int VER_SUBMINOR   = 0;
-static constexpr int VER_BETA       = 4;
+static constexpr int VER_BETA       = 5;
 
 // Snapshot version number
 static constexpr int SNP_MAJOR      = 4;
 static constexpr int SNP_MINOR      = 4;
 static constexpr int SNP_SUBMINOR   = 0;
-static constexpr int SNP_BETA       = 4;
+static constexpr int SNP_BETA       = 5;
 
 
 //

@@ -83,15 +83,8 @@ class ServerSettingsViewController: SettingsViewController {
             let format = prettyPrint(state: state)
             icon.contentTintColor = format.1
             text.stringValue = format.0
-            // text.textColor = format.1
             text.font = NSFont.boldSystemFont(ofSize: text.font?.pointSize ?? NSFont.systemFontSize)
-
         }
-        /*
-        func update(_ components: [NSControl], enable: Bool) {
-            components.forEach { $0.isEnabled = enable }
-        }
-        */
 
         super.refresh()
 
