@@ -254,6 +254,8 @@
 		509D049A2EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
 		509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
 		509D07672EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
+		509D07692EDB1B6500355638 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07682EDB1B6000355638 /* Loggable.cpp */; };
+		509D076A2EDB1B6500355638 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07682EDB1B6000355638 /* Loggable.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -909,6 +911,7 @@
 		509D07632EDADBC300355638 /* Loggable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Loggable.h; sourceTree = "<group>"; };
 		509D07642EDAF09F00355638 /* FileSystemFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystemFactory.h; sourceTree = "<group>"; };
 		509D07652EDAF0A800355638 /* FileSystemFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemFactory.cpp; sourceTree = "<group>"; };
+		509D07682EDB1B6000355638 /* Loggable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Loggable.cpp; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -1302,6 +1305,7 @@
 				50EFB0BD2C1812E20013B73C /* Option.h */,
 				50EFB0BC2C1812E20013B73C /* Option.cpp */,
 				509D07632EDADBC300355638 /* Loggable.h */,
+				509D07682EDB1B6000355638 /* Loggable.cpp */,
 				50EFC7DF22E840870036A3DF /* Serializable.h */,
 				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
 				5062F1942D550730004546A2 /* DumpableTypes.h */,
@@ -2624,6 +2628,7 @@
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
+				509D076A2EDB1B6500355638 /* Loggable.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* EmulatorProxy.mm in Sources */,
@@ -2794,6 +2799,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				509D07692EDB1B6500355638 /* Loggable.cpp in Sources */,
 				50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */,
 				50E5BF802BB1D2510004712B /* STFile.cpp in Sources */,
 				50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */,

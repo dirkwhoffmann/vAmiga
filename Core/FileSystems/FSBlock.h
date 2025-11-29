@@ -9,19 +9,20 @@
 
 #pragma once
 
-#include "CoreObject.h"
+#include "FSComponent.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "BootBlockImage.h"
 #include "Aliases.h"
+#include "Error.h"
 
 namespace vamiga {
 
 using util::Buffer;
 
-struct FSBlock : CoreObject {
+struct FSBlock : Loggable {
 
     friend class FSDoctor;
     
@@ -56,19 +57,21 @@ public:
 
     void init(FSBlockType t);
 
-    static FSBlock *make(FileSystem *ref, Block nr, FSBlockType type) throws;
+    static FSBlock *make(FileSystem *ref, Block nr, FSBlockType type);
     static std::vector<Block> refs(const std::vector<const FSBlock *> blocks);
 
 
     //
-    // Methods from CoreObject
+    // Printing debug information
     //
     
-protected:
-    
-    const char *objectName() const override;
-    void _dump(Category category, std::ostream &os) const override;
-    
+public:
+
+    const char *objectName() const;
+    void dumpInfo(std::ostream &os) const;
+    void dumpStorage(std::ostream &os) const;
+    void dumpBlocks(std::ostream &os) const;
+
     
     //
     // Querying block properties

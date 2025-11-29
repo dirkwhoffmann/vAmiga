@@ -43,7 +43,7 @@ class Loggable {
 public:
 
     // Verbosity level
-    long verbosity = 1;
+    static long verbosity;
 
     virtual ~Loggable() = default;
 

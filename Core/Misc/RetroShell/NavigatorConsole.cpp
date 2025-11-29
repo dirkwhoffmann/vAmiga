@@ -1042,7 +1042,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &file = parseFile(args, "path");
-                file.dump(args.contains("v") ? Category::Blocks : Category::Info, os);
+                args.contains("v") ? file.dumpBlocks(os) : file.dumpInfo(os);
+                // file.dump(args.contains("v") ? Category::Blocks : Category::Info, os);
             }
     });
     
