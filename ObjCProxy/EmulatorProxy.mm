@@ -11,7 +11,7 @@
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
 #import "Emulator.h"
-#import "FileSystem.h"
+#import "FileSystemFactory.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;
@@ -1353,7 +1353,8 @@ NSString *EventSlotName(EventSlot slot)
     try {
 
         auto file = (MediaFile *)(proxy->obj);
-        auto dev = new FileSystem(*file);
+        // auto dev = new FileSystem(*file);
+        auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file));
         return [self make:dev];
 
     }  catch (AppError &error) {
@@ -1368,7 +1369,8 @@ NSString *EventSlotName(EventSlot slot)
     try {
 
         auto file = (MediaFile *)(proxy->obj);
-        auto dev = new FileSystem(*file, nr);
+        // auto dev = new FileSystem(*file, nr);
+        auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file, nr));
         return [self make:dev];
 
     }  catch (AppError &error) {

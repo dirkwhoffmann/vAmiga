@@ -96,6 +96,7 @@ void
 FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
 {
     assert(buf);
+    assert(len == layout.numBlocks * 512);
 
     debug(FS_DEBUG, "Importing %ld blocks from buffer...\n", layout.numBlocks);
 

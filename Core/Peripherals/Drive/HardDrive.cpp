@@ -10,7 +10,7 @@
 #include "config.h"
 #include "HardDrive.h"
 #include "Emulator.h"
-#include "FileSystem.h"
+#include "FileSystemFactory.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
 #include "IOUtils.h"
@@ -367,7 +367,7 @@ HardDrive::isBootable()
 {
     try {
         
-        if (FileSystem(*this).exists("s/startup-sequence")) {
+        if (FileSystemFactory::fromHardDrive(*this).exists("s/startup-sequence")) {
 
             debug(HDR_DEBUG, "Bootable drive\n");
             return true;
@@ -462,7 +462,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
 
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
-            auto fs = FileSystem(*this, i);
+            auto fs = FileSystemFactory::fromHardDrive(*this, i);
             fs.dump(i == 0 ? Category::Info : Category::State, os);
         }
         
@@ -471,7 +471,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
             os << std::endl;
             os << tab("Partition");
             os << dec(i) << std::endl;
-            auto fs = FileSystem(*this, i);
+            auto fs = FileSystemFactory::fromHardDrive(*this, i);
             fs.dump(Category::Properties, os);
         }
     }

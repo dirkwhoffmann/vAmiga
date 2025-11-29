@@ -15,7 +15,7 @@
 #include "ADFFile.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
-#include "FileSystem.h"
+#include "FileSystemFactory.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"
 #include "OSDescriptors.h"
@@ -1031,8 +1031,8 @@ void
 FloppyDrive::catchFile(const fs::path &path)
 {
     // Extract the file system
-    auto fs = FileSystem(*this);
-    
+    auto fs = FileSystemFactory::fromFloppyDrive(*this);
+
     // Seek file
     auto file = fs.seekPtr(&fs.root(), path);
     if (!file->isFile()) throw AppError(Fault::FS_NOT_A_FILE, path.string());
