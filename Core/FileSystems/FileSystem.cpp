@@ -265,7 +265,7 @@ FileSystem::dumpState(std::ostream &os) const noexcept
 
     auto stat = getStat();
 
-    auto size = std::to_string(stat.numBlocks) + " (x " + std::to_string(traits.bsize) + ")";
+    auto size = std::to_string(traits.blocks) + " (x " + std::to_string(traits.bsize) + ")";
 
     if (isFormatted()) {
 
@@ -314,11 +314,11 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     os << tab("Boot block");
     os << bootStat.bbName << std::endl;
     os << tab("Capacity");
-    os << util::byteCountAsString(stat.numBlocks * traits.bsize) << std::endl;
+    os << util::byteCountAsString(traits.blocks * traits.bsize) << std::endl;
     os << tab("Block size");
     os << dec(traits.bsize) << " Bytes" << std::endl;
     os << tab("Blocks");
-    os << dec(stat.numBlocks) << std::endl;
+    os << dec(traits.blocks) << std::endl;
     os << tab("Used");
     os << dec(stat.usedBlocks);
     os << tab("Free");
@@ -347,9 +347,7 @@ FileSystem::getStat() const noexcept
 
     FSStat result = {
 
-        .numBlocks  = storage.numBlocks(),
-        .numBytes   = storage.numBytes(),
-        .blockSize  = storage.blockSize(),
+        .traits     = traits,
 
         .freeBlocks = storage.freeBlocks(),
         .freeBytes  = storage.freeBytes(),

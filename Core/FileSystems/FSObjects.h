@@ -112,9 +112,7 @@ struct FSAttr {
 struct FSStat {
 
     // Capacity information
-    isize numBlocks;
-    isize numBytes;
-    isize blockSize;
+    FSTraits traits;
 
     // Usage information
     isize freeBlocks;

@@ -1406,7 +1406,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)capacityString
 {
-    auto str = util::byteCountAsString([self fs]->getStat().numBytes);
+    auto str = util::byteCountAsString([self fs]->bytes());
     return @(str.c_str());
 }
 
@@ -1433,17 +1433,17 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)blockSize
 {
-    return [self fs]->getStat().blockSize;
+    return [self fs]->bsize();
 }
 
 - (NSInteger)numBlocks
 {
-    return [self fs]->getStat().numBlocks;
+    return [self fs]->blocks();
 }
 
 - (NSInteger)numBytes
 {
-    return [self fs]->getStat().numBytes;
+    return [self fs]->bytes();
 }
 
 - (NSInteger)usedBlocks

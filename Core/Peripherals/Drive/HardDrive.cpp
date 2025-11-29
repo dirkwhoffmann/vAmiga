@@ -125,7 +125,7 @@ HardDrive::init(isize size)
 void
 HardDrive::init(const FileSystem &fs)
 {
-    auto geometry = GeometryDescriptor(fs.getStat().numBytes);
+    auto geometry = GeometryDescriptor(fs.bytes());
 
     // Create the drive
     init(geometry);
