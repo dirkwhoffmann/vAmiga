@@ -1084,8 +1084,8 @@ FloppyDrive::insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path 
     
     
     // Create a file system and import the directory
-    FileSystem volume(diameter(), density(), fs, path);
-            
+    FileSystem volume = FileSystemFactory::createLowLevel(diameter(), density(), fs, path);
+
     // Make the volume bootable
     volume.makeBootable(bb);
     

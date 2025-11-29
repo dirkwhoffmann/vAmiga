@@ -113,35 +113,20 @@ private:
 public:
     
     FileSystem() { stats = {}; };
-    FileSystem(const FSDescriptor &layout, u8 *buf, isize len) : FileSystem() { init(layout, buf, len); }
-    /*
-    FileSystem(const MediaFile &file, isize part = 0) : FileSystem() { init(file, part); }
-    FileSystem(const ADFFile &adf) : FileSystem() { init(adf); }
-    FileSystem(const HDFFile &hdf, isize part = 0) : FileSystem() { init(hdf, part); }
-    FileSystem(const FloppyDrive &dfn) : FileSystem() { init(dfn); }
-    FileSystem(const HardDrive &hdn, isize part = 0) : FileSystem() { init(hdn, part); }
-     */
-
     FileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
+    FileSystem(const FSDescriptor &layout, u8 *buf, isize len) : FileSystem() { init(layout, buf, len); }
     FileSystem(const FSDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
-    FileSystem(Diameter dia, Density den, FSFormat dos, const fs::path &path = {}) { init(dia, den, dos, path); }
 
+    // Delete the copy constructor to avoid accidential duplications
     FileSystem(const FileSystem&) = delete;
     FileSystem& operator=(const FileSystem&) = delete;
-    
+
     virtual ~FileSystem();
 
-    void init(const FSDescriptor &layout, u8 *buf, isize len);
-    void init(const MediaFile &file, isize part);
-    void init(const ADFFile &adf);
-    void init(const HDFFile &hdf, isize part);
-    void init(const FloppyDrive &dfn);
-    void init(const HardDrive &hdn, isize part);
-
     void init(isize capacity, isize bsize = 512);
+    void init(const FSDescriptor &layout, u8 *buf, isize len);
     void init(const FSDescriptor &layout, const fs::path &path = {});
-    void init(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
-    
+
     bool isInitialized() const noexcept;
     bool isFormatted() const noexcept;
 

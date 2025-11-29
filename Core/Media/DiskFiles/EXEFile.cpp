@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "EXEFile.h"
-#include "FileSystem.h"
+#include "FileSystemFactory.h"
 #include "IOUtils.h"
 #include "OSDescriptors.h"
 
@@ -46,7 +46,7 @@ EXEFile::finalizeRead()
     bool hd = data.size > 853000;
 
     // Create a new file system
-    FileSystem volume(Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
+    FileSystem volume = FileSystemFactory::createLowLevel(Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
     volume.setName(FSName("Disk"));
     
     // Make the volume bootable

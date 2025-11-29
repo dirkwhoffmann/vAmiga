@@ -11,6 +11,7 @@
 #include "Console.h"
 #include "Emulator.h"
 #include "StringUtils.h"
+#include "FileSystemFactory.h"
 #include <regex>
 
 #include "Chrono.h"
@@ -302,13 +303,15 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSB
 void
 NavigatorConsole::import(const FloppyDrive &dfn)
 {
-    fs.init(dfn);
+    FileSystemFactory::initFromFloppy(fs, dfn);
+    // fs.init(dfn);
 }
 
 void
 NavigatorConsole::import(const HardDrive &hdn, isize part)
 {
-    fs.init(hdn, part);
+    FileSystemFactory::initFromHardDrive(fs, hdn);
+    // fs.init(hdn, part);
 }
 
 void
@@ -649,8 +652,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto n = values[0];
-                
-                fs.init(*df[n]);
+
+                FileSystemFactory::initFromFloppy(fs, *df[n]);
+                // fs.init(*df[n]);
                 fs.dump(Category::Info, os);
                 
             }, .payload = {i}
@@ -675,8 +679,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto n = values[0];
-                
-                fs.init(*hd[n], 0);
+
+                FileSystemFactory::initFromHardDrive(fs, *hd[n], 0);
+                // fs.init(*hd[n], 0);
                 fs.dump(Category::Info, os);
                 
             }, .payload = {i}

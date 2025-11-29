@@ -66,6 +66,7 @@ FileSystem::init(const FSDescriptor &layout, const fs::path &path)
     }
 }
 
+/*
 void
 FileSystem::init(Diameter dia, Density den, FSFormat dos, const fs::path &path)
 {
@@ -75,6 +76,7 @@ FileSystem::init(Diameter dia, Density den, FSFormat dos, const fs::path &path)
     // Create the device
     init(descriptor, path);
 }
+*/
 
 void
 FileSystem::format(string name)

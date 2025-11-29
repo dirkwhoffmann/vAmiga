@@ -38,6 +38,7 @@ FileSystem::~FileSystem()
 
 }
 
+/*
 void
 FileSystem::init(const MediaFile &file, isize part) throws
 {
@@ -91,6 +92,7 @@ FileSystem::init(const HardDrive &hdn, isize part)
     // Initialize with the HDF
     init(hdf, part);
 }
+*/
 
 void
 FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
