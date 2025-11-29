@@ -67,7 +67,7 @@ class HDFFile;
 class FloppyDrive;
 class HardDrive;
 
-class FileSystem : public Loggable, public Dumpable {
+class FileSystem : public Loggable { // }, public Dumpable {
 
     friend struct FSBlock;
     friend class  FSComponent;
@@ -93,7 +93,7 @@ private:
     //
 
     // Block storage
-    FSStorage storage = FSStorage(this);
+    FSStorage storage = FSStorage(*this);
 
     // Allocation and allocation map managenent
     FSAllocator allocator = FSAllocator(*this);
@@ -143,15 +143,17 @@ public:
 
 
     //
-    // Methods from CoreObject
+    // Printing debug information
     //
     
-protected:
+public:
+
+    void dumpInfo(std::ostream &ss = std::cout) const noexcept;
+    void dumpState(std::ostream &ss = std::cout) const noexcept;
+    void dumpProps(std::ostream &ss = std::cout) const noexcept;
+    void dumpBlocks(std::ostream &ss = std::cout) const noexcept;
+
     
-    // const char *objectName() const noexcept override { return "FileSystem"; }
-    void _dump(Category category, std::ostream &os) const noexcept override;
-
-
     //
     // Querying properties
     //

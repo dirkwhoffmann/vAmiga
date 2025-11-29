@@ -10,11 +10,11 @@
 #pragma once
 
 #include "FSTypes.h"
-#include "CoreObject.h"
+#include "Loggable.h"
 
 namespace vamiga {
 
-class FSComponent : public CoreObject {
+class FSComponent : public Loggable {
 
 public:
 
@@ -24,9 +24,6 @@ public:
     class FSDoctor &doctor;
 
     explicit FSComponent(FileSystem& fs);
-
-    const char *objectName() const override { return "FS"; }
-    void _dump(Category category, std::ostream &os) const override { }
 };
 
 }

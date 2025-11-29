@@ -11,18 +11,18 @@
 
 #include "FSTypes.h"
 #include "FSBlock.h"
-// #include "CoreObject.h"
+#include "FSComponent.h"
 #include "Inspectable.h"
 #include <ranges>
 
 namespace vamiga {
 
-class FSStorage final : public CoreObject {
+class FSStorage final : public FSComponent {
 
 private:
 
     // Reference to the owner of this storage
-    class FileSystem *fs = nullptr;
+    // class FileSystem *fs = nullptr;
 
     // File system capacity in blocks
     isize capacity {};
@@ -40,8 +40,8 @@ private:
 
 public:
 
-    FSStorage(FileSystem *fs) : fs(fs), bsize(512) { };
-    FSStorage(FileSystem *fs, isize capacity, isize bsize = 512);
+    FSStorage(FileSystem &fs);
+    FSStorage(FileSystem &fs, isize capacity, isize bsize = 512);
     virtual ~FSStorage();
 
     void init(isize capacity, isize bsize = 512);
@@ -50,13 +50,12 @@ public:
 
 
     //
-    // Methods from CoreObject
+    // Printing debug information
     //
 
-protected:
+public:
 
-    const char *objectName() const override { return "BlockStorage"; }
-    void _dump(Category category, std::ostream &os) const override;
+    void dump(std::ostream &os) const;
 
 
     //

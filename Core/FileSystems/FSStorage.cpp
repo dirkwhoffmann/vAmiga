@@ -13,7 +13,8 @@
 
 namespace vamiga {
 
-FSStorage::FSStorage(FileSystem *fs, isize capacity, isize bsize) : fs(fs)
+FSStorage::FSStorage(FileSystem &fs) : FSComponent(fs), bsize(512) { };
+FSStorage::FSStorage(FileSystem &fs, isize capacity, isize bsize) : FSStorage(fs)
 {
     init(capacity, bsize);
 }
@@ -26,7 +27,6 @@ FSStorage::~FSStorage()
 void
 FSStorage::dealloc()
 {
-    fs = nullptr;
     blocks.clear();
 }
 
@@ -44,21 +44,12 @@ FSStorage::init(isize capacity, isize bsize)
 }
 
 void
-FSStorage::_dump(Category category, std::ostream &os) const
+FSStorage::dump(std::ostream &os) const
 {
     using namespace util;
 
-    switch (category) {
-
-        case Category::Blocks:
-
-            os << tab("Capacity") << numBlocks() << " blocks (x " << bsize << " bytes)" << std::endl;
-            os << tab("Hashed blocks") << blocks.size() << std::endl;
-            break;
-
-        default:
-            break;
-    }
+    os << tab("Capacity") << numBlocks() << " blocks (x " << bsize << " bytes)" << std::endl;
+    os << tab("Hashed blocks") << blocks.size() << std::endl;
 }
 
 std::vector<Block>
@@ -100,7 +91,7 @@ FSStorage::read(Block nr) noexcept
 
     // Create the block if it does not yet exist
     if (!blocks.contains(nr)) {
-        blocks.emplace(nr, std::make_unique<FSBlock>(fs, nr, FSBlockType::EMPTY));
+        blocks.emplace(nr, std::make_unique<FSBlock>(&fs, nr, FSBlockType::EMPTY));
     }
 
     // Return a block reference
@@ -150,7 +141,7 @@ FSStorage::at(Block nr)
 {
     if (auto *result = read(nr); result) return *result;
 
-    if (!fs->isInitialized()) {
+    if (!fs.isInitialized()) {
         throw AppError(Fault::FS_UNINITIALIZED);
     } else {
         throw AppError(Fault::FS_OUT_OF_RANGE, std::to_string(nr));
@@ -162,7 +153,7 @@ FSStorage::at(Block nr, FSBlockType type)
 {
     if (auto *result = read(nr, type); result) return *result;
 
-    if (!fs->isInitialized()) {
+    if (!fs.isInitialized()) {
         throw AppError(Fault::FS_UNINITIALIZED);
     } else if (read(nr)) {
         throw AppError(Fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
@@ -176,7 +167,7 @@ FSStorage::at(Block nr, std::vector<FSBlockType> types)
 {
     if (auto *result = read(nr, types); result) return *result;
 
-    if (!fs->isInitialized()) {
+    if (!fs.isInitialized()) {
         throw AppError(Fault::FS_UNINITIALIZED);
     } else if (read(nr)) {
         throw AppError(Fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));

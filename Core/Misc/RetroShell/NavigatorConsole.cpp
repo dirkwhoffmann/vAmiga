@@ -461,7 +461,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             if (fs.isInitialized()) {
 
-                fs.dump(Category::Info, os);
+                fs.dumpInfo(os);
 
             } else {
 
@@ -520,7 +520,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             fs.init(FSDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
-            fs.dump(Category::Info, os);
+            fs.dumpInfo(os);
         }
     });
     
@@ -531,7 +531,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             fs.init(FSDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
-            fs.dump(Category::Info, os);
+            fs.dumpInfo(os);
         }
     });
     
@@ -542,7 +542,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             fs.init(FSDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
-            fs.dump(Category::Info, os);
+            fs.dumpInfo(os);
         }
     });
     
@@ -562,7 +562,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto blocks = (mb + 511) / 512;
                 
                 fs.init(FSDescriptor(blocks, FSFormat::NODOS));
-                fs.dump(Category::Info, os);
+                fs.dumpInfo(os);
             }
     });
     
@@ -584,7 +584,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto geometry = GeometryDescriptor(c, h, s, b);
                 fs.init(FSDescriptor(geometry, FSFormat::NODOS));
-                fs.dump(Category::Info, os);
+                fs.dumpInfo(os);
             }
     });
     
@@ -610,7 +610,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 // Format the device
                 fs.format(type, args.contains("name") ? args.at("name") : "New Disk");
-                fs.dump(Category::Info, os);
+                fs.dumpInfo(os);
             }
     });
     
@@ -656,9 +656,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto n = values[0];
 
                 FileSystemFactory::initFromFloppy(fs, *df[n]);
-                // fs.init(*df[n]);
-                fs.dump(Category::Info, os);
-                
+                fs.dumpInfo(os);
+
             }, .payload = {i}
         });
     }
@@ -683,9 +682,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto n = values[0];
 
                 FileSystemFactory::initFromHardDrive(fs, *hd[n], 0);
-                // fs.init(*hd[n], 0);
-                fs.dump(Category::Info, os);
-                
+                fs.dumpInfo(os);
+
             }, .payload = {i}
         });
     }
@@ -1023,9 +1021,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 if (args.contains("b")) {
-                    fs.dump(Category::Storage, os);
+                    fs.dumpBlocks(os);
                 } else {
-                    fs.dump(Category::Info, os);
+                    fs.dumpInfo(os);
                 }
                 
             }

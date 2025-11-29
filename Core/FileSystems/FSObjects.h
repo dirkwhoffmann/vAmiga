@@ -9,7 +9,6 @@
 
 #pragma once
 
-// #include "CoreObject.h"
 #include "FSTypes.h"
 #include <ostream>
 #include <regex>

@@ -69,8 +69,8 @@ EXEFile::finalizeRead()
     volume.importer.updateChecksums();
 
     // Print some debug information about the volume
-    if (FS_DEBUG) volume.dump(Category::State);
-    
+    if (FS_DEBUG) volume.dumpState();
+
     // Check file system integrity
     if (FS_DEBUG) volume.doctor.xray(true, std::cout, false);
 

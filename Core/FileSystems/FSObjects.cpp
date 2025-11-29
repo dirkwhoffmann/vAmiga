@@ -398,7 +398,9 @@ FSTime::str() const
 u32
 FSAttr::mode() const
 {
-    mode_t mode = 0;
+    u32 mode = 0;
+
+#ifndef _WIN32
 
     // File type
     mode |= isDir ? S_IFDIR : S_IFREG;
@@ -412,6 +414,8 @@ FSAttr::mode() const
     if (mode & S_IRUSR) mode |= S_IRGRP | S_IROTH;
     if (mode & S_IWUSR) mode |= S_IWGRP | S_IWOTH;
     if (mode & S_IXUSR) mode |= S_IXGRP | S_IXOTH;
+
+#endif
 
     return mode;
 }

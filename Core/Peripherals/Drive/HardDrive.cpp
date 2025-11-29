@@ -463,7 +463,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
             auto fs = FileSystemFactory::fromHardDrive(*this, i);
-            fs.dump(i == 0 ? Category::Info : Category::State, os);
+            i == 0 ? fs.dumpInfo(os) : fs.dumpState(os);
         }
         
         for (isize i = 0; i < isize(ptable.size()); i++) {
@@ -472,7 +472,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
             os << tab("Partition");
             os << dec(i) << std::endl;
             auto fs = FileSystemFactory::fromHardDrive(*this, i);
-            fs.dump(Category::Properties, os);
+            fs.dumpProps(os);
         }
     }
     
