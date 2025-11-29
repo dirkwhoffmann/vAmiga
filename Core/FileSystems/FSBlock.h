@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FSComponent.h"
+#include "FSExtension.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
 #include "Buffer.h"

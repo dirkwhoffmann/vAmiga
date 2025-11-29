@@ -9,18 +9,18 @@
 
 #pragma once
 
-#include "FSComponent.h"
+#include "FSExtension.h"
 
 namespace vamiga {
 
-class FSDoctor final : public FSComponent {
+class FSDoctor final : public FSExtension {
 
 public:
 
     // Result of the latest examination
     FSDiagnosis diagnosis;
 
-    using FSComponent::FSComponent;
+    using FSExtension::FSExtension;
 
 
     //

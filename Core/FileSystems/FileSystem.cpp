@@ -33,11 +33,6 @@ FSTraits::adf() const
     size == 1802240;      // 1760 KB (HD)
 }
 
-FileSystem::~FileSystem()
-{
-
-}
-
 void
 FileSystem::init(isize capacity, isize bsize)
 {
@@ -143,7 +138,7 @@ FileSystem::init(const FSDescriptor &layout, const fs::path &path)
 bool
 FileSystem::isInitialized() const noexcept
 {
-    return numBlocks() > 0;
+    return blocks() > 0;
 }
 
 bool
@@ -308,6 +303,7 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     using namespace util;
 
     auto stat = getStat();
+    auto bootStat = getBootStat();
 
     os << tab("Name");
     os << stat.name.cpp_str() << std::endl;
@@ -316,7 +312,7 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     os << tab("Modified");
     os << stat.mDate.str() << std::endl;
     os << tab("Boot block");
-    os << getBootBlockName() << std::endl;
+    os << bootStat.bbName << std::endl;
     os << tab("Capacity");
     os << util::byteCountAsString(stat.numBlocks * traits.bsize) << std::endl;
     os << tab("Block size");
@@ -372,30 +368,22 @@ FileSystem::getStat() const noexcept
     return result;
 }
 
+FSBootStat
+FileSystem::getBootStat() const noexcept
+{
+    auto bb = BootBlockImage(storage[0].data(), storage[1].data());
+
+    FSBootStat result = {
+
+        .bbName = bb.name,
+        .bbType = bb.type,
+        .hasVirus = bb.type == BootBlockType::VIRUS
+    };
+
+    return result;
+}
+
 /*
-FSName
-FileSystem::getName() const noexcept
-{
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
-    return rb ? rb->getName() : FSName("");
-}
-
-FSTime
-FileSystem::getCreationDate() const noexcept
-{
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
-    return rb ? rb->getCreationDate() : FSTime();
-}
-
-FSTime
-FileSystem::getModificationDate() const noexcept
-{
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
-    // FSBlock *rb = rootBlockPtr(rootBlock);
-    return rb ? rb->getModificationDate() : FSTime();
-}
-*/
-
 string
 FileSystem::getBootBlockName() const noexcept
 {
@@ -407,6 +395,7 @@ FileSystem::bootBlockType() const noexcept
 {
     return BootBlockImage(storage[0].data(), storage[1].data()).type;
 }
+*/
 
 FSAttr
 FileSystem::attr(Block nr) const

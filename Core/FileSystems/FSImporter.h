@@ -9,15 +9,15 @@
 
 #pragma once
 
-#include "FSComponent.h"
+#include "FSExtension.h"
 
 namespace vamiga {
 
-class FSImporter final : public FSComponent {
+class FSImporter final : public FSExtension {
 
 public:
 
-    using FSComponent::FSComponent;
+    using FSExtension::FSExtension;
 
     // Imports the volume from a buffer compatible with the ADF or HDF format
     void importVolume(const u8 *src, isize size) throws;

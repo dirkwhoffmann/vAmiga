@@ -208,7 +208,7 @@ NavigatorConsole::parseBlock(const string &argv)
         return nr;
     }
     
-    throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
+    throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
 }
 
 Block
@@ -227,7 +227,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
         if (!fs.isInitialized()) {
             throw AppError(Fault::FS_UNINITIALIZED);
         } else {
-            throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
+            throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
         }
     }
     return nr;
@@ -1096,7 +1096,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             fs.require_formatted();
-            os << "Boot block: " << fs.getBootBlockName() << std::endl;
+            os << "Boot block: " << fs.getBootStat().bbName << std::endl;
         }
     });
     

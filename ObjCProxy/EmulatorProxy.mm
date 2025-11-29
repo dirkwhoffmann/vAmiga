@@ -1400,7 +1400,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)bootBlockName
 {
-    auto str = [self fs]->getBootBlockName();
+    auto str = [self fs]->getBootStat().bbName;
     return @(str.c_str());
 }
 
@@ -1458,7 +1458,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (BOOL)hasVirus
 {
-    return [self fs]->hasVirus();
+    return [self fs]->getBootStat().hasVirus;
 }
 
 - (void)killVirus

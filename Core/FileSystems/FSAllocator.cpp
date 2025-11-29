@@ -54,7 +54,7 @@ bool
 FSAllocator::allocatable(isize count) const noexcept
 {
     Block i = ap;
-    isize capacity = fs.numBlocks();
+    isize capacity = fs.blocks();
 
     while (count > 0) {
 
@@ -72,7 +72,7 @@ FSAllocator::allocatable(isize count) const noexcept
 Block
 FSAllocator::allocate()
 {
-    auto numBlocks = fs.numBlocks();
+    auto numBlocks = fs.blocks();
     Block i = ap;
 
     while (!fs.isEmpty(i)) {
@@ -130,7 +130,7 @@ FSAllocator::allocate(isize count, std::vector<Block> &result, std::vector<Block
         }
 
         // Move to the next block
-        i = (i + 1) % fs.numBlocks();
+        i = (i + 1) % fs.blocks();
 
         // Fail if we looped all the way and still need blocks
         if (i == ap && count > 0) {
@@ -322,7 +322,7 @@ FSAllocator::numUnallocated() const noexcept
     if (FS_DEBUG) {
 
         isize count = 0;
-        for (isize i = 0; i < fs.numBlocks(); i++) { if (isUnallocated(Block(i))) count++; }
+        for (isize i = 0; i < fs.blocks(); i++) { if (isUnallocated(Block(i))) count++; }
         debug(true, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
         assert(count == result);
     }
@@ -333,7 +333,7 @@ FSAllocator::numUnallocated() const noexcept
 isize
 FSAllocator::numAllocated() const noexcept
 {
-    return fs.numBlocks() - numUnallocated();
+    return fs.blocks() - numUnallocated();
 }
 
 std::vector<u32>
@@ -341,7 +341,7 @@ FSAllocator::serializeBitmap() const
 {
     if (!fs.isFormatted()) return {};
 
-    auto longwords = ((fs.numBlocks() - 2) + 31) / 32;
+    auto longwords = ((fs.blocks() - 2) + 31) / 32;
     std::vector<u32> result;
     result.reserve(longwords);
 
@@ -362,7 +362,7 @@ FSAllocator::serializeBitmap() const
     }
 
     // Zero out the superfluous bits in the last word
-    if (auto bits = (fs.numBlocks() - 2) % 32; bits && !result.empty()) {
+    if (auto bits = (fs.blocks() - 2) % 32; bits && !result.empty()) {
         result.back() &= (1 << bits) - 1;
     }
 

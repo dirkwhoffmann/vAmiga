@@ -9,18 +9,18 @@
 
 #pragma once
 
-#include "FSComponent.h"
+#include "FSExtension.h"
 
 namespace vamiga {
 
-class FSAllocator final : public FSComponent {
+class FSAllocator final : public FSExtension {
 
 public:
 
     // Allocation pointer (selects the block to allocate next)
     Block ap = 0;
 
-    using FSComponent::FSComponent;
+    using FSExtension::FSExtension;
 
 
     //

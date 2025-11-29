@@ -127,8 +127,8 @@ ADFFile::init(const FloppyDrive &drive)
 void
 ADFFile::init(const FileSystem &volume)
 {
-    switch (volume.numBlocks()) {
-            
+    switch (volume.blocks()) {
+
         case 2 * 880:
             init(Diameter::INCH_35, Density::DD);
             break;

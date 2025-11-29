@@ -70,7 +70,7 @@ class HardDrive;
 class FileSystem : public Loggable { // }, public Dumpable {
 
     friend struct FSBlock;
-    friend class  FSComponent;
+    friend class  FSExtension;
     friend class  FSDoctor;
     friend class  FSAllocator;
     friend struct FSHashTable;
@@ -130,9 +130,7 @@ public:
     FileSystem(const FSDescriptor &layout, u8 *buf, isize len) : FileSystem() { init(layout, buf, len); }
     FileSystem(const FSDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
     FileSystem(const FileSystem&) = delete;
-    FileSystem& operator=(const FileSystem&) = delete;
-
-    virtual ~FileSystem();
+    virtual ~FileSystem() = default;
 
     void init(isize capacity, isize bsize = 512);
     void init(const FSDescriptor &layout, u8 *buf, isize len);
@@ -140,6 +138,8 @@ public:
 
     bool isInitialized() const noexcept;
     bool isFormatted() const noexcept;
+
+    FileSystem& operator=(const FileSystem&) = delete;
 
 
     //
@@ -155,46 +155,26 @@ public:
 
     
     //
-    // Querying properties
+    // Querying file system properties
     //
 
 public:
 
     // Returns static file system properties
     const FSTraits &getTraits() const noexcept { return traits; }
-
-    // Returns capacity information
-    isize numBlocks() const noexcept { return storage.numBlocks(); }
-    [[deprecated]] isize numBytes() const noexcept { return storage.numBytes(); }
-    [[deprecated]] isize blockSize() const noexcept { return storage.blockSize(); }
+    isize blocks() const noexcept { return traits.blocks; }
+    isize bytes() const noexcept { return traits.bytes; }
+    isize bsize() const noexcept { return traits.bsize; }
 
     // Returns usage information and root metadata
     FSStat getStat() const noexcept;
 
-    // Get information about the file system
+    // Returns information about the boot block
+    FSBootStat getBootStat() const noexcept;
+
+    // Returns information about file permissions
     FSAttr attr(Block nr) const;
     FSAttr attr(const FSBlock &fhd) const;
-
-
-    // Reports usage information
-    /*
-    [[deprecated]] isize freeBlocks() const noexcept { return storage.freeBlocks(); }
-    [[deprecated]] isize usedBlocks() const noexcept { return storage.usedBlocks(); }
-    [[deprecated]] isize freeBytes() const noexcept { return storage.freeBytes(); }
-    [[deprecated]] isize usedBytes() const noexcept { return storage.usedBytes(); }
-    */
-
-    // Analyzes the root block
-    /*
-    [[deprecated]] FSName getName() const noexcept;
-    [[deprecated]] FSTime getCreationDate() const noexcept;
-    [[deprecated]] FSTime getModificationDate() const noexcept;
-    */
-
-    // Analyzes the boot block
-    string getBootBlockName() const noexcept;
-    BootBlockType bootBlockType() const noexcept;
-    bool hasVirus() const noexcept { return bootBlockType() == BootBlockType::VIRUS; }
 
 
     //

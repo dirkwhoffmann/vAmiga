@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-FSStorage::FSStorage(FileSystem &fs) : FSComponent(fs), bsize(512) { };
+FSStorage::FSStorage(FileSystem &fs) : FSExtension(fs), bsize(512) { };
 FSStorage::FSStorage(FileSystem &fs, isize capacity, isize bsize) : FSStorage(fs)
 {
     init(capacity, bsize);

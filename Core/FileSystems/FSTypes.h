@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BootBlockImageTypes.h"
 
 namespace vamiga {
 
@@ -380,7 +380,6 @@ struct FSTraits
     isize blocks = 0;
     isize bytes = 0;
     isize bsize = 512;
-
     isize reserved = 2;
 
     bool ofs() const { return isOFSVolumeType(dos); }

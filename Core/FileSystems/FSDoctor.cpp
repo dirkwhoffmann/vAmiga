@@ -305,7 +305,7 @@ FSDoctor::xrayBitmap(bool strict)
     used.insert(fs.bmExtBlocks.begin(), fs.bmExtBlocks.end());
 
     // Check all blocks (ignoring the first two boot blocks)
-    for (isize i = 2, capacity = fs.numBlocks(); i < capacity; i++) {
+    for (isize i = 2, capacity = fs.blocks(); i < capacity; i++) {
 
         bool allocated = fs.allocator.isAllocated(Block(i));
         bool contained = used.contains(Block(i));
@@ -762,7 +762,7 @@ FSDoctor::nextBlockOfType(FSBlockType type, Block after) const
     isize result = after;
 
     do {
-        result = (result + 1) % fs.numBlocks();
+        result = (result + 1) % fs.blocks();
         if (storage.getType(Block(result)) == type) return result;
 
     } while (result != isize(after));

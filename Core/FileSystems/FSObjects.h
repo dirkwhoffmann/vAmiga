@@ -133,4 +133,16 @@ struct FSStat {
     isize writes;
 };
 
+struct FSBootStat {
+
+    // Name of the boot block
+    FSName bbName;
+
+    // Boot block type
+    BootBlockType bbType;
+
+    // Infection status
+    bool hasVirus;
+};
+
 }

@@ -246,8 +246,8 @@
 		509D048B2EDA46CA00355638 /* FileSystemMutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04892EDA46CA00355638 /* FileSystemMutation.cpp */; };
 		509D048E2EDA46D700355638 /* FSAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D048D2EDA46D700355638 /* FSAllocator.cpp */; };
 		509D048F2EDA46D700355638 /* FSAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D048D2EDA46D700355638 /* FSAllocator.cpp */; };
-		509D04922EDA46E400355638 /* FSComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04912EDA46E400355638 /* FSComponent.cpp */; };
-		509D04932EDA46E400355638 /* FSComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04912EDA46E400355638 /* FSComponent.cpp */; };
+		509D04922EDA46E400355638 /* FSExtension.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04912EDA46E400355638 /* FSExtension.cpp */; };
+		509D04932EDA46E400355638 /* FSExtension.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04912EDA46E400355638 /* FSExtension.cpp */; };
 		509D04972EDA471900355638 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04952EDA471900355638 /* FSExporter.cpp */; };
 		509D04982EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
 		509D04992EDA471900355638 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04952EDA471900355638 /* FSExporter.cpp */; };
@@ -902,8 +902,8 @@
 		509D04892EDA46CA00355638 /* FileSystemMutation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemMutation.cpp; sourceTree = "<group>"; };
 		509D048C2EDA46D700355638 /* FSAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSAllocator.h; sourceTree = "<group>"; };
 		509D048D2EDA46D700355638 /* FSAllocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSAllocator.cpp; sourceTree = "<group>"; };
-		509D04902EDA46E400355638 /* FSComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSComponent.h; sourceTree = "<group>"; };
-		509D04912EDA46E400355638 /* FSComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSComponent.cpp; sourceTree = "<group>"; };
+		509D04902EDA46E400355638 /* FSExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSExtension.h; sourceTree = "<group>"; };
+		509D04912EDA46E400355638 /* FSExtension.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSExtension.cpp; sourceTree = "<group>"; };
 		509D04942EDA471900355638 /* FSExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSExporter.h; sourceTree = "<group>"; };
 		509D04952EDA471900355638 /* FSExporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSExporter.cpp; sourceTree = "<group>"; };
 		509D04962EDA471900355638 /* FSImporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSImporter.cpp; sourceTree = "<group>"; };
@@ -1433,8 +1433,8 @@
 				509D04892EDA46CA00355638 /* FileSystemMutation.cpp */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
-				509D04902EDA46E400355638 /* FSComponent.h */,
-				509D04912EDA46E400355638 /* FSComponent.cpp */,
+				509D04902EDA46E400355638 /* FSExtension.h */,
+				509D04912EDA46E400355638 /* FSExtension.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
 				50565070254573E100A79D27 /* FSBlock.cpp */,
 				509D048C2EDA46D700355638 /* FSAllocator.h */,
@@ -2694,7 +2694,7 @@
 				509D04982EDA471900355638 /* FSImporter.cpp in Sources */,
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
 				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
-				509D04932EDA46E400355638 /* FSComponent.cpp in Sources */,
+				509D04932EDA46E400355638 /* FSExtension.cpp in Sources */,
 				50CFF56A2C259FB900A47ECC /* Serializable.cpp in Sources */,
 				50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
@@ -2804,7 +2804,7 @@
 				50E5BF802BB1D2510004712B /* STFile.cpp in Sources */,
 				50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */,
 				50FC049B27DA197500C3E566 /* AgnusInfo.cpp in Sources */,
-				509D04922EDA46E400355638 /* FSComponent.cpp in Sources */,
+				509D04922EDA46E400355638 /* FSExtension.cpp in Sources */,
 				50FC04DC27DA1A1400C3E566 /* getbits.c in Sources */,
 				506407CB2D1AC45A002FBC57 /* SocketServer.cpp in Sources */,
 				50FC048327DA190400C3E566 /* CoreObject.cpp in Sources */,

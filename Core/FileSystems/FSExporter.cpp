@@ -14,13 +14,13 @@ namespace vamiga {
 bool
 FSExporter::exportVolume(u8 *dst, isize size) const
 {
-    return exportBlocks(0, (Block)(fs.numBlocks() - 1), dst, size);
+    return exportBlocks(0, (Block)(fs.blocks() - 1), dst, size);
 }
 
 bool
 FSExporter::exportVolume(u8 *dst, isize size, Fault *err) const
 {
-    return exportBlocks(0, (Block)(fs.numBlocks() - 1), dst, size, err);
+    return exportBlocks(0, (Block)(fs.blocks() - 1), dst, size, err);
 }
 
 bool
@@ -48,7 +48,7 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size) const
 bool
 FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *err) const
 {
-    assert(last < (Block)fs.numBlocks());
+    assert(last < (Block)fs.blocks());
     assert(first <= last);
     assert(dst);
 

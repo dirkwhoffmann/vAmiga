@@ -11,13 +11,13 @@
 
 #include "FSTypes.h"
 #include "FSBlock.h"
-#include "FSComponent.h"
+#include "FSExtension.h"
 #include "Inspectable.h"
 #include <ranges>
 
 namespace vamiga {
 
-class FSStorage final : public FSComponent {
+class FSStorage final : public FSExtension {
 
 private:
 

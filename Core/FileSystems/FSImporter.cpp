@@ -28,7 +28,7 @@ FSImporter::importVolume(const u8 *src, isize size)
     if (traits.dos == FSFormat::NODOS) throw AppError(Fault::FS_UNSUPPORTED);
 
     // Import all blocks
-    for (isize i = 0; i < fs.numBlocks(); i++) {
+    for (isize i = 0; i < fs.blocks(); i++) {
 
         const u8 *data = src + i * traits.bsize;
 

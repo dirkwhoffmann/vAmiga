@@ -46,11 +46,11 @@ FileSystem::format(FSFormat dos, string name){
     if (dos == FSFormat::NODOS) return;
 
     // Perform some consistency checks
-    assert(numBlocks() > 2);
+    assert(blocks() > 2);
     assert(rootBlock > 0);
 
     // Trash all existing data
-    storage.init(numBlocks());
+    storage.init(blocks());
 
     // Create boot blocks
     storage[0].init(FSBlockType::BOOT);
@@ -81,7 +81,7 @@ FileSystem::format(FSFormat dos, string name){
 
     // Mark free blocks as free in the bitmap block
     // TODO: SPEED THIS UP
-    for (isize i = 0; i < numBlocks(); i++) {
+    for (isize i = 0; i < blocks(); i++) {
         if (storage.isEmpty(Block(i))) allocator.markAsFree(Block(i));
     }
     
@@ -320,7 +320,7 @@ FileSystem::killVirus()
     assert(storage.getType(0) == FSBlockType::BOOT);
     assert(storage.getType(1) == FSBlockType::BOOT);
 
-    if (bootBlockType() == BootBlockType::VIRUS) {
+    if (getBootStat().hasVirus) {
 
         auto id =
         traits.ofs() ? BootBlockId::AMIGADOS_13 :

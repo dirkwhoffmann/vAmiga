@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class FSComponent : public Loggable {
+class FSExtension : public Loggable {
 
 public:
 
@@ -23,7 +23,7 @@ public:
     class FSStorage &storage;
     class FSDoctor &doctor;
 
-    explicit FSComponent(FileSystem& fs);
+    explicit FSExtension(FileSystem& fs);
 };
 
 }

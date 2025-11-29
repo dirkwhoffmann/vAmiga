@@ -1942,7 +1942,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < fs->numBlocks()) {
+    while (block && blocksTotal < fs->blocks()) {
 
         blocksTotal++;
         

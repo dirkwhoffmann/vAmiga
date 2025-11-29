@@ -8,7 +8,7 @@ FileSystemFactory.cpp
 FileSystemMutation.cpp
 FSAllocator.cpp
 FSBlock.cpp
-FSComponent.cpp
+FSExtension.cpp
 FSDescriptor.cpp
 FSDoctor.cpp
 FSExporter.cpp

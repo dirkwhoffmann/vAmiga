@@ -9,15 +9,15 @@
 
 #pragma once
 
-#include "FSComponent.h"
+#include "FSExtension.h"
 
 namespace vamiga {
 
-class FSExporter final : public FSComponent {
+class FSExporter final : public FSExtension {
 
 public:
 
-    using FSComponent::FSComponent;
+    using FSExtension::FSExtension;
 
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;

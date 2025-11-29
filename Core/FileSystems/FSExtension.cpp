@@ -7,12 +7,12 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FSComponent.h"
+#include "FSExtension.h"
 #include "FileSystem.h"
 
 namespace vamiga {
 
-FSComponent::FSComponent(FileSystem& fs) :
+FSExtension::FSExtension(FileSystem& fs) :
 
 fs(fs),
 traits(fs.traits),
