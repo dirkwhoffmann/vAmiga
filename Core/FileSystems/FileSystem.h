@@ -75,7 +75,7 @@ class FileSystem : public Loggable {
     friend class  FSAllocator;
     friend struct FSHashTable;
     friend struct FSPartition;
-    friend class  FSTree;
+    friend struct FSTree;
 
     // Static file system properties
     FSTraits traits;
@@ -448,24 +448,8 @@ private:
 
     std::vector<const FSBlock *> match(const FSBlock *top,
                                        std::vector<FSPattern> pattern) const;
-
-
-
-public:
-
-    /*
-    void require_initialized() const;
-    void require_formatted() const;
-    void require_file_or_directory(const FSBlock &block) const;
-
-    void ensureFile(const FSBlock &node);
-    void ensureFileOrDirectory(const FSBlock &node);
-    void ensureDirectory(const FSBlock &node);
-    void ensureNotRoot(const FSBlock &node);
-    void ensureEmptyDirectory(const FSBlock &node);
-    void ensureNotExist(const FSBlock &node, const FSName &name);
-     */
 };
+
 
 //
 // Argument checkers

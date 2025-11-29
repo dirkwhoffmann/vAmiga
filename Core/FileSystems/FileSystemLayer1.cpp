@@ -191,6 +191,82 @@ FileSystem::unlink(const FSBlock &node)
     deleteFromHashTable(node);
 }
 
+void
+FileSystem::addToHashTable(const FSBlock &item)
+{
+    addToHashTable(item.getParentDirRef(), item.nr);
+}
+
+void
+FileSystem::addToHashTable(Block parent, Block ref)
+{
+    FSBlock *pp = read(parent);
+    if (!pp) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pp->hasHashTable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+
+    FSBlock *pr = read(ref);
+    if (!pr) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pr->isHashable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+
+    // Read the linked list from the proper hash-table bucket
+    u32 hash = pr->hashValue() % pp->hashTableSize();
+    auto chain = collectHashedBlocks(pp->nr, hash);
+
+    if (chain.empty()) {
+
+        // If the bucket is empty, make the reference the first entry
+        pp->setHashRef(hash, ref);
+        pp->updateChecksum();
+
+    } else {
+
+        // Otherwise, put the reference at the end of the linked list
+        read(chain.back())->setNextHashRef(ref);
+        read(chain.back())->updateChecksum();
+    }
+}
+
+void
+FileSystem::deleteFromHashTable(const FSBlock &item)
+{
+    deleteFromHashTable(item.getParentDirRef(), item.nr);
+}
+
+void
+FileSystem::deleteFromHashTable(Block parent, Block ref)
+{
+    FSBlock *pp = read(parent);
+    if (!pp) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pp->hasHashTable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+
+    FSBlock *pr = read(ref);
+    if (!pr) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pr->isHashable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+
+    // Read the linked list from the proper hash-table bucket
+    u32 hash = pr->hashValue() % pp->hashTableSize();
+    auto chain = collectHashedBlocks(pp->nr, hash);
+
+    // Find the element
+    if (auto it = std::find(chain.begin(), chain.end(), ref); it != chain.end()) {
+
+        auto pred = it != chain.begin() ? *(it - 1) : 0;
+        auto succ = (it + 1) != chain.end() ? *(it + 1) : 0;
+
+        // Remove the element from the list
+        if (!pred) {
+
+            pp->setHashRef(hash, succ);
+            pp->updateChecksum();
+
+        } else {
+
+            read(pred)->setNextHashRef(succ);
+            read(pred)->updateChecksum();
+        }
+    }
+}
+
 FSBlock &
 FileSystem::createFile(FSBlock &at, const FSName &name)
 {
@@ -240,6 +316,57 @@ FileSystem::rm(const FSBlock &node)
 
     // Reclaim all associated storage blocks
     reclaim(node);
+}
+
+void
+FileSystem::rename(FSBlock &item, const FSName &name)
+{
+    // Renaming the root updates the file system name
+    if (item.isRoot()) { setName(name); return; }
+
+    // For regular items, relocate entry in the parent directory
+    move(item, *item.getParentDirBlock(), name);
+}
+
+void
+FileSystem::move(FSBlock &item, FSBlock &dest)
+{
+    move (item, dest, item.name());
+}
+
+void
+FileSystem::move(FSBlock &item, FSBlock &dest, const FSName &name)
+{
+    require::fileOrDirectory(item);
+    require::notExist(dest, name);
+
+    // Detach the item from its current parent
+    unlink(item);
+
+    // Apply new name if provided
+    item.setName(name);
+
+    // Insert into the destination directory
+    link(dest, item);
+}
+
+void
+FileSystem::copy(const FSBlock &item, FSBlock &dest)
+{
+    copy(item, dest, item.cppName());
+}
+
+void
+FileSystem::copy(const FSBlock &item, FSBlock &dest, const FSName &name)
+{
+    require::file(item);
+    require::directory(dest);
+
+    // Read source file
+    Buffer<u8> buffer; item.extractData(buffer);
+
+    // Create file at destination
+    createFile(dest, name, buffer);
 }
 
 void
