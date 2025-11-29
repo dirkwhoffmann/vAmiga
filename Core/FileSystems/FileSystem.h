@@ -60,9 +60,6 @@
 #include "FSExporter.h"
 #include "Loggable.h"
 
-#include "ADFFile.h"
-#include "HDFFile.h"
-
 namespace vamiga {
 
 class ADFFile;
@@ -104,6 +101,17 @@ private:
     // Location of bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
+
+
+    //
+    // Static functions
+    //
+
+    // Makes a file name compatible with the host file system
+    // static fs::path sanitize(const string &filename);
+
+    // Makes a file name compatible with the Amiga file system
+    // static string unsanitize(const fs::path &filename);
 
 
     //

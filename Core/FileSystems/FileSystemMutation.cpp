@@ -18,53 +18,6 @@
 
 namespace vamiga {
 
-void
-FileSystem::init(isize capacity, isize bsize)
-{
-    traits.blocks   = capacity;
-    traits.bytes    = capacity * bsize;
-    traits.bsize    = bsize;
-
-    storage.init(capacity);
-
-    if (isize(rootBlock) >= capacity) rootBlock = 0;
-    if (isize(current) >= capacity) current = 0;
-}
-
-void
-FileSystem::init(const FSDescriptor &layout, const fs::path &path)
-{
-    if (FS_DEBUG) { layout.dump(); }
-
-    // Create all blocks
-    init(isize(layout.numBlocks));
-
-    // Copy layout parameters
-    traits.dos      = layout.dos;
-    traits.reserved = layout.numReserved;
-    rootBlock       = layout.rootBlock;
-    bmBlocks        = layout.bmBlocks;
-    bmExtBlocks     = layout.bmExtBlocks;
-
-    // Format the file system
-    format();
-
-    // Start allocating blocks at the middle of the disk
-    allocator.ap = rootBlock;
-
-    // Print some debug information
-    if (FS_DEBUG) { dump(Category::State); }
-    
-    // Import files if a path is given
-    if (!path.empty()) {
-        
-        // Add all files
-        importer.import(root(), path, true, true);
-
-        // Assign device name
-        setName(FSName(path.filename().string()));
-    }
-}
 
 /*
 void

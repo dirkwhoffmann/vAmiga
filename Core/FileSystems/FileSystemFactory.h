@@ -10,6 +10,8 @@
 #pragma once
 
 #include "FileSystem.h"
+#include "ADFFile.h"
+#include "HDFFile.h"
 
 namespace vamiga {
 

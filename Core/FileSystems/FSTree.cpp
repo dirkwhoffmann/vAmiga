@@ -72,7 +72,7 @@ fs::path
 FSTree::hostName() const
 {
     if (!node) return {};
-    return Host::sanitize(node->name().cpp_str());
+    return FSName::sanitize(node->name().cpp_str());
 }
 
 

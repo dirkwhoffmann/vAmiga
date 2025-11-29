@@ -12,6 +12,8 @@
 #include "Emulator.h"
 #include "StringUtils.h"
 #include "FileSystemFactory.h"
+#include "ADFFile.h"
+#include "HDFFile.h"
 #include <regex>
 
 #include "Chrono.h"

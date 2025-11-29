@@ -11,7 +11,6 @@
 #include "FSBlock.h"
 #include "FileSystem.h"
 #include "MemUtils.h"
-#include "Host.h"
 #include <algorithm>
 
 namespace vamiga {

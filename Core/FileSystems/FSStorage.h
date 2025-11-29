@@ -11,7 +11,7 @@
 
 #include "FSTypes.h"
 #include "FSBlock.h"
-#include "CoreObject.h"
+// #include "CoreObject.h"
 #include "Inspectable.h"
 #include <ranges>
 

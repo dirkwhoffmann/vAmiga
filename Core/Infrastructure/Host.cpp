@@ -98,6 +98,7 @@ Host::_dump(Category category, std::ostream &os) const
     }
 }
 
+/*
 fs::path
 Host::sanitize(const string &filename)
 {
@@ -163,12 +164,6 @@ Host::sanitize(const string &filename)
     // Avoid reserved Windows names
     if (isReserved(result)) result = "__" + result;
 
-    /*
-    if (filename != result) {
-        printf("sanitize: %s -> %s\n", filename.c_str(), result.c_str());
-    }
-    */
-    
     return fs::path(result);
 }
 
@@ -238,15 +233,10 @@ Host::unsanitize(const fs::path &filename)
             }
         }
     }
-    
-    /*
-    if (filename.string() != result) {
-        printf("unsanitize: %s -> %s\n", filename.string().c_str(), result.c_str());
-    }
-    */
-    
+
     return result;
 }
+*/
 
 void
 Host::setSearchPath(const fs::path &path)

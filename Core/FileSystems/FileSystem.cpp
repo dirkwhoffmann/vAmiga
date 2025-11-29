@@ -23,14 +23,14 @@ bool
 FSTraits::adf() const
 {
     auto size = blocks * bsize;
-    
+
     return
-    size == ADFFile::ADFSIZE_35_DD ||
-    size == ADFFile::ADFSIZE_35_DD_81 ||
-    size == ADFFile::ADFSIZE_35_DD_82 ||
-    size == ADFFile::ADFSIZE_35_DD_83 ||
-    size == ADFFile::ADFSIZE_35_DD_84 ||
-    size == ADFFile::ADFSIZE_35_HD;
+    size == 901120   ||   //  880 KB (DD)
+    size == 912384   ||   //  891 KB (DD + 1 cyl)
+    size == 923648   ||   //  902 KB (DD + 2 cyls)
+    size == 934912   ||   //  913 KB (DD + 3 cyls)
+    size == 946176   ||   //  924 KB (DD + 4 cyls)
+    size == 1802240;      // 1760 KB (HD)
 }
 
 FileSystem::~FileSystem()
@@ -38,61 +38,18 @@ FileSystem::~FileSystem()
 
 }
 
-/*
 void
-FileSystem::init(const MediaFile &file, isize part) throws
+FileSystem::init(isize capacity, isize bsize)
 {
-    switch (file.type()) {
+    traits.blocks   = capacity;
+    traits.bytes    = capacity * bsize;
+    traits.bsize    = bsize;
 
-        case FileType::ADF:  init(dynamic_cast<const ADFFile &>(file)); break;
-        case FileType::HDF:  init(dynamic_cast<const HDFFile &>(file), part); break;
+    storage.init(capacity);
 
-        default:
-            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
-    }
+    if (isize(rootBlock) >= capacity) rootBlock = 0;
+    if (isize(current) >= capacity) current = 0;
 }
-
-void
-FileSystem::init(const ADFFile &adf)
-{
-    // Get a file system descriptor
-    auto descriptor = adf.getFileSystemDescriptor();
-
-    // Import the file system
-    init(descriptor, adf.data.ptr, descriptor.numBlocks * 512);
-}
-
-void
-FileSystem::init(const HDFFile &hdf, isize part)
-{
-    // Get a file system descriptor
-    auto descriptor = hdf.getFileSystemDescriptor(part);
-
-    // Import the file system
-    assert(hdf.partitionSize(part) == descriptor.numBlocks * 512);
-    init(descriptor, hdf.partitionData(part), hdf.partitionSize(part));
-}
-
-void
-FileSystem::init(const FloppyDrive &dfn)
-{
-    // Convert the floppy drive into an ADF
-    auto adf = ADFFile(dfn);
-
-    // Initialize with the ADF
-    init(adf);
-}
-
-void
-FileSystem::init(const HardDrive &hdn, isize part)
-{
-    // Convert the hard drive into an HDF
-    auto hdf = HDFFile(hdn);
-
-    // Initialize with the HDF
-    init(hdf, part);
-}
-*/
 
 void
 FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
@@ -132,7 +89,7 @@ FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
             // Import block data
             storage[i].importBlock(data, traits.bsize);
 
-            // Emulate errors
+            // Emulate some errors for debugging
             /*
             auto *data = storage[i].data();
             for (isize i = 0; i < 20; i++) {
@@ -146,6 +103,41 @@ FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
     current = rootBlock;
 
     debug(FS_DEBUG, "Success\n");
+}
+
+void
+FileSystem::init(const FSDescriptor &layout, const fs::path &path)
+{
+    if (FS_DEBUG) { layout.dump(); }
+
+    // Create all blocks
+    init(isize(layout.numBlocks));
+
+    // Copy layout parameters
+    traits.dos      = layout.dos;
+    traits.reserved = layout.numReserved;
+    rootBlock       = layout.rootBlock;
+    bmBlocks        = layout.bmBlocks;
+    bmExtBlocks     = layout.bmExtBlocks;
+
+    // Format the file system
+    format();
+
+    // Start allocating blocks at the middle of the disk
+    allocator.ap = rootBlock;
+
+    // Print some debug information
+    if (FS_DEBUG) { dump(Category::State); }
+
+    // Import files if a path is given
+    if (!path.empty()) {
+
+        // Add all files
+        importer.import(root(), path, true, true);
+
+        // Assign device name
+        setName(FSName(path.filename().string()));
+    }
 }
 
 bool

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "CoreObject.h"
+// #include "CoreObject.h"
 #include "FSTypes.h"
 #include <ostream>
 #include <regex>
@@ -45,14 +45,21 @@ struct FSString {
 };
 
 struct FSName : FSString {
-    
+
+    // Makes a file name compatible with the host file system
+    static fs::path sanitize(const string &filename);
+
+    // Makes a file name compatible with the Amiga file system
+    static string unsanitize(const fs::path &filename);
+
+    // Constructors
     FSName(const string &cpp);
     FSName(const char *c);
     FSName(const u8 *bcpl);
     FSName(const fs::path &path);
     FSName(const std::map<string,string> map, const string &cpp, const string fallback);
 
-    fs::path path() const;
+    fs::path path() const { return sanitize(str); }
 };
 
 struct FSComment : FSString {
@@ -100,7 +107,7 @@ struct FSAttr {
     FSTime ctime;       // Creation time
     FSTime mtime;       // Last modification time
 
-    mode_t mode() const;
+    u32 mode() const;
 };
 
 struct FSStat {
