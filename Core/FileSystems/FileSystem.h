@@ -58,6 +58,8 @@
 #include "FSAllocator.h"
 #include "FSImporter.h"
 #include "FSExporter.h"
+#include "Loggable.h"
+
 #include "ADFFile.h"
 #include "HDFFile.h"
 
@@ -68,7 +70,7 @@ class HDFFile;
 class FloppyDrive;
 class HardDrive;
 
-class FileSystem : public CoreObject, public Inspectable<FSInfo, Void> {
+class FileSystem : public Loggable, public Dumpable, public Inspectable<FSInfo, Void> {
 
     friend struct FSBlock;
     friend class  FSComponent;
@@ -76,7 +78,6 @@ class FileSystem : public CoreObject, public Inspectable<FSInfo, Void> {
     friend class  FSAllocator;
     friend struct FSHashTable;
     friend struct FSPartition;
-    friend class  FileSystem;
 
     // Static file system properties
     FSTraits traits;
@@ -145,7 +146,7 @@ public:
     
 protected:
     
-    const char *objectName() const noexcept override { return "FileSystem"; }
+    // const char *objectName() const noexcept override { return "FileSystem"; }
     void _dump(Category category, std::ostream &os) const noexcept override;
 
 

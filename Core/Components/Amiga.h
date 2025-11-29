@@ -286,7 +286,7 @@ public:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-    void prefix(isize level, const char *component, isize line) const override;
+    void prefix(long level, const void *sender, long line) const override;
 
 private:
 

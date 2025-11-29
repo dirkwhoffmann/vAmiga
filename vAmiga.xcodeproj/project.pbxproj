@@ -904,6 +904,7 @@
 		509D04952EDA471900355638 /* FSExporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSExporter.cpp; sourceTree = "<group>"; };
 		509D04962EDA471900355638 /* FSImporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSImporter.cpp; sourceTree = "<group>"; };
 		509D049B2EDA472900355638 /* FSImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSImporter.h; sourceTree = "<group>"; };
+		509D07632EDADBC300355638 /* Loggable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Loggable.h; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -1296,6 +1297,7 @@
 				50EFB0C02C1812F50013B73C /* OptionTypes.h */,
 				50EFB0BD2C1812E20013B73C /* Option.h */,
 				50EFB0BC2C1812E20013B73C /* Option.cpp */,
+				509D07632EDADBC300355638 /* Loggable.h */,
 				50EFC7DF22E840870036A3DF /* Serializable.h */,
 				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
 				5062F1942D550730004546A2 /* DumpableTypes.h */,

@@ -13,17 +13,26 @@
 
 namespace vamiga {
 
+/*
 isize
 CoreObject::verbosity = 3;
+*/
+
+CoreObject::CoreObject()
+{
+    verbosity = 3;
+}
 
 void
-CoreObject::prefix(isize level, const char *component, isize line) const
+CoreObject::prefix(long level, const void *sender, long line) const
 {
+    auto *obj = dynamic_cast<CoreObject *>((CoreObject *)sender);
+
     if (level == 1) {
-        fprintf(stderr, "%s: ", component);
+        fprintf(stderr, "%s: ", obj ? obj->objectName() : "");
     }
     if (level >= 2) {
-        fprintf(stderr, "%s:%ld ", component, line);
+        fprintf(stderr, "%s:%ld ", obj ? obj->objectName() : "", line);
     }
 }
 

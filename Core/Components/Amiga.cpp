@@ -86,7 +86,7 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::prefix(isize level, const char *component, isize line) const
+Amiga::prefix(long level, const void *sender, long line) const
 {
     if (level) {
         
@@ -119,8 +119,8 @@ Amiga::prefix(isize level, const char *component, isize line) const
             fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
         }
         if (level >= 2) {
-            
-            fprintf(stderr, "%s:%ld ", component, line);
+
+            CoreObject::prefix(level, sender, line);
         }
     }
 }

@@ -70,9 +70,9 @@ SubComponent::isRunAheadInstance() const
 }
 
 void
-SubComponent::prefix(isize level, const char *component, isize line) const
+SubComponent::prefix(long level, const void *sender, long line) const
 {
-    amiga.prefix(level, component, line);
+    amiga.prefix(level, sender, line);
 }
 
 }

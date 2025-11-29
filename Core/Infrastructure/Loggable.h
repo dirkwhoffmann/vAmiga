@@ -9,40 +9,6 @@
 
 #pragma once
 
-#include "Annotations.h"
-#include "Loggable.h"
-#include "Error.h"
-#include "Dumpable.h"
-
-namespace vamiga {
-
-class CoreObject : public Dumpable, public Loggable {
-
-protected:
-
-    // Verbosity level
-    // static isize verbosity;
-
-    
-    //
-    // Initializing
-    //
-
-public:
-
-    CoreObject();
-    virtual ~CoreObject() = default;
-
-    // Returns the name for this component
-    virtual const char *objectName() const = 0;
-
-    // Returns a textual description for this component
-    virtual const char *description() const { return ""; }
-    
-    // Called by debug() and trace() to produce a detailed debug output
-    virtual void prefix(long level, const void *sender, long line) const override;
-};
-
 /* This file provides several macros for printing messages:
  *
  *   - msg    Information message   (Shows up in all builds)
@@ -70,7 +36,23 @@ public:
  * be performed when variadic functions are used.
  */
 
-/*
+namespace vamiga {
+
+class Loggable {
+
+public:
+
+    // Verbosity level
+    long verbosity = 1;
+
+    virtual ~Loggable() = default;
+
+protected:
+
+    // Called by debug() and trace() to produce a detailed debug output
+    virtual void prefix(long verbosity, const void *sender, long line) const { };
+};
+
 #define msg(format, ...) \
 fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__);
 
@@ -82,18 +64,17 @@ fprintf(stderr, "Warning: " format __VA_OPT__(,) __VA_ARGS__);
 
 #define debug(enable, format, ...) \
 if (enable) { if (verbosity) { \
-prefix(verbosity, objectName(), __LINE__); \
+prefix(verbosity, this, __LINE__); \
 fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
 
 #define trace(enable, format, ...) \
 if (enable) { if (verbosity) { \
-prefix(5, objectName(), __LINE__); \
+prefix(5, this, __LINE__); \
 fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
 
 #define xfiles(format, ...) \
 if (XFILES) { if (verbosity) { \
-prefix(verbosity, objectName(), __LINE__); \
+prefix(verbosity, this, __LINE__); \
 fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }}
-*/
 
 }
