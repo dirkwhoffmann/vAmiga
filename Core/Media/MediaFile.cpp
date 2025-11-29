@@ -88,7 +88,7 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
 }
 
 MediaFile *
-MediaFile::make(class MutableFileSystem &fs, FileType type)
+MediaFile::make(class FileSystem &fs, FileType type)
 {
     switch (type) {
 

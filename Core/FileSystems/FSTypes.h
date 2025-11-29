@@ -419,10 +419,12 @@ typedef struct
 }
 FSInfo;
 
+/*
 typedef struct
 {
     isize blockReads;
 }
 FSStats;
+*/
 
 }

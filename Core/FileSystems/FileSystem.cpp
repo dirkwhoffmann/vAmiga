@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "IOUtils.h"
-#include "MutableFileSystem.h"
+#include "FileSystem.h"
 #include "MemUtils.h"
 
 #include <climits>
@@ -180,6 +180,7 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 
         case Category::State:
         {
+            auto stat = getStat();
             auto info = getInfo();
             auto size = std::to_string(info.numBlocks) + " (x " + std::to_string(traits.bsize) + ")";
 
@@ -195,7 +196,7 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
                 os << "  ";
                 os << std::setw(3) << std::right << std::setfill(' ') << isize(info.fillLevel);
                 os << "%  ";
-                os << getName().c_str() << std::endl;
+                os << stat.name.c_str() << std::endl;
 
             } else {
 
@@ -215,14 +216,15 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
         }
         case Category::Properties:
         {
+            auto stat = getStat();
             auto info = getInfo();
 
             os << tab("Name");
-            os << getName().cpp_str() << std::endl;
+            os << stat.name.cpp_str() << std::endl;
             os << tab("Created");
-            os << getCreationDate() << std::endl;
+            os << stat.bDate.str() << std::endl;
             os << tab("Modified");
-            os << getModificationDate() << std::endl;
+            os << stat.mDate.str() << std::endl;
             os << tab("Boot block");
             os << getBootBlockName() << std::endl;
             os << tab("Capacity");
@@ -259,24 +261,48 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 void
 FileSystem::cacheInfo(FSInfo &result) const noexcept
 {
-    result.name = getName().cpp_str();
-    result.creationDate = getCreationDate();
-    result.modificationDate = getModificationDate();
+    auto stat = getStat();
+
+    result.name = stat.name.cpp_str();
+    result.creationDate = stat.bDate.str();
+    result.modificationDate = stat.mDate.str();
 
     result.numBlocks = storage.numBlocks();
-    result.freeBlocks = numUnallocated();
+    result.freeBlocks = storage.freeBlocks(); //  allocator.numUnallocated();
     result.usedBlocks = result.numBlocks - result.freeBlocks;
     result.freeBytes = result.freeBlocks * traits.bsize;
     result.usedBytes = result.usedBlocks * traits.bsize;
     result.fillLevel = double(100) * result.usedBlocks / result.numBlocks;
 }
 
-void
-FileSystem::cacheStats(FSStats &result) const noexcept
+FSStat
+FileSystem::getStat() const noexcept
 {
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
 
+    FSStat result = {
+
+        .numBlocks  = storage.numBlocks(),
+        .numBytes   = storage.numBytes(),
+        .blockSize  = storage.blockSize(),
+
+        .freeBlocks = storage.freeBlocks(),
+        .freeBytes  = storage.freeBytes(),
+        .usedBlocks = storage.usedBlocks(),
+        .usedBytes  = storage.usedBytes(),
+
+        .name       = rb ? rb->getName() : FSName(""),
+        .bDate      = rb ? rb->getCreationDate() : FSTime(),
+        .mDate      = rb ? rb->getModificationDate() : FSTime(),
+
+        .reads      = 0, // Not yet supported
+        .writes     = 0, // Not yet supported
+    };
+
+    return result;
 }
 
+/*
 FSName
 FileSystem::getName() const noexcept
 {
@@ -284,20 +310,21 @@ FileSystem::getName() const noexcept
     return rb ? rb->getName() : FSName("");
 }
 
-string
+FSTime
 FileSystem::getCreationDate() const noexcept
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
-    return rb ? rb->getCreationDate().str() : "";
+    return rb ? rb->getCreationDate() : FSTime();
 }
 
-string
+FSTime
 FileSystem::getModificationDate() const noexcept
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
     // FSBlock *rb = rootBlockPtr(rootBlock);
-    return rb ? rb->getModificationDate().str() : "";
+    return rb ? rb->getModificationDate() : FSTime();
 }
+*/
 
 string
 FileSystem::getBootBlockName() const noexcept
@@ -311,101 +338,112 @@ FileSystem::bootBlockType() const noexcept
     return BootBlockImage(storage[0].data(), storage[1].data()).type;
 }
 
+FSAttr
+FileSystem::attr(Block nr) const
+{
+    return attr(at(nr));
+}
+
+FSAttr
+FileSystem::attr(const FSBlock &fhd) const
+{
+    isize size = fhd.getFileSize();
+    isize blocks = allocator.requiredBlocks(size);
+
+    FSAttr result = {
+
+        .size   = size,
+        .blocks = blocks,
+        .prot   = fhd.getProtectionBits(),
+        .isDir  = fhd.isDirectory(),
+        .ctime  = fhd.getCreationDate(),
+        .mtime  = fhd.getModificationDate()
+    };
+
+    return result;
+}
+
 FSBlock *
 FileSystem::read(Block nr) noexcept
 {
-    stats.blockReads++;
     return storage.read(nr);
 }
 
 FSBlock *
 FileSystem::read(Block nr, FSBlockType type) noexcept
 {
-    stats.blockReads++;
     return storage.read(nr, type);
 }
 
 FSBlock *
 FileSystem::read(Block nr, std::vector<FSBlockType> types) noexcept
 {
-    stats.blockReads++;
     return storage.read(nr, types);
 }
 
 const FSBlock *
 FileSystem::read(Block nr) const noexcept
 {
-    stats.blockReads++;
     return storage.read(nr);
 }
 
 const FSBlock *
 FileSystem::read(Block nr, FSBlockType type) const noexcept
 {
-    stats.blockReads++;
     return storage.read(nr, type);
 }
 
 const FSBlock *
 FileSystem::read(Block nr, std::vector<FSBlockType> types) const noexcept
 {
-    stats.blockReads++;
     return storage.read(nr, types);
 }
 
 FSBlock &
 FileSystem::at(Block nr)
 {
-    stats.blockReads++;
     return storage.at(nr);
 }
 
 FSBlock &
 FileSystem::at(Block nr, FSBlockType type)
 {
-    stats.blockReads++;
     return storage.at(nr, type);
 }
 
 FSBlock &
 FileSystem::at(Block nr, std::vector<FSBlockType> types)
 {
-    stats.blockReads++;
     return storage.at(nr, types);
 }
 
 const FSBlock &
 FileSystem::at(Block nr) const
 {
-    stats.blockReads++;
     return storage.at(nr);
 }
 
 const FSBlock &
 FileSystem::at(Block nr, FSBlockType type) const
 {
-    stats.blockReads++;
     return storage.at(nr, type);
 }
 
 const FSBlock &
 FileSystem::at(Block nr, std::vector<FSBlockType> types) const
 {
-    stats.blockReads++;
     return storage.at(nr, types);
 }
 
 FSBlock &
 FileSystem::operator[](size_t nr)
 {
-    stats.blockReads++;
     return storage[nr];
 }
 
 const FSBlock &
 FileSystem::operator[](size_t nr) const
 {
-    stats.blockReads++;
     return storage[nr];
 }
 
@@ -419,128 +457,6 @@ FSItemType
 FileSystem::typeOf(Block nr, isize pos) const noexcept
 {
     return storage.read(nr) ? storage[nr].itemType(pos) : FSItemType::UNUSED;
-}
-
-string
-FileSystem::ascii(Block nr, isize offset, isize len) const noexcept
-{
-    assert(offset + len <= traits.bsize);
-
-    return  util::createAscii(storage[nr].data() + offset, len);
-}
-
-bool
-FileSystem::isUnallocated(Block nr) const noexcept
-{
-    assert(isize(nr) < traits.blocks);
-
-    // The first two blocks are always allocated and not part of the bitmap
-    if (nr < 2) return false;
-
-    // Locate the allocation bit in the bitmap block
-    isize byte, bit;
-    auto *bm = locateAllocationBit(nr, &byte, &bit);
-
-    // Read the bit
-    return bm ? GET_BIT(bm->data()[byte], bit) : false;
-}
-
-FSBlock *
-FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept
-{
-    assert(isize(nr) < traits.blocks);
-
-    // The first two blocks are always allocated and not part of the map
-    if (nr < 2) return nullptr;
-    nr -= 2;
-
-    // Locate the bitmap block which stores the allocation bit
-    isize bitsPerBlock = (traits.bsize - 4) * 8;
-    isize bmNr = nr / bitsPerBlock;
-
-    // Get the bitmap block
-    FSBlock *bm = (bmNr < (isize)bmBlocks.size()) ? read(bmBlocks[bmNr], FSBlockType::BITMAP) : nullptr;
-    if (!bm) {
-        warn("Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
-        return nullptr;
-    }
-
-    // Locate the byte position (note: the long word ordering will be reversed)
-    nr = nr % bitsPerBlock;
-    isize rByte = nr / 8;
-
-    // Rectifiy the ordering
-    switch (rByte % 4) {
-        case 0: rByte += 3; break;
-        case 1: rByte += 1; break;
-        case 2: rByte -= 1; break;
-        case 3: rByte -= 3; break;
-    }
-
-    // Skip the checksum which is located in the first four bytes
-    rByte += 4;
-    assert(rByte >= 4 && rByte < traits.bsize);
-
-    *byte = rByte;
-    *bit = nr % 8;
-
-    return bm;
-}
-
-const FSBlock *
-FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->locateAllocationBit(nr, byte, bit));
-}
-
-isize
-FileSystem::numUnallocated() const noexcept
-{
-    isize result = 0;
-    for (auto &it : serializeBitmap()) result += util::popcount(it);
-
-    if (FS_DEBUG) {
-
-        isize count = 0;
-        for (isize i = 0; i < numBlocks(); i++) { if (isUnallocated(Block(i))) count++; }
-        debug(true, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
-        assert(count == result);
-    }
-
-    return result;
-}
-
-std::vector<u32>
-FileSystem::serializeBitmap() const
-{
-    if (!isFormatted()) return {};
-
-    auto longwords = ((numBlocks() - 2) + 31) / 32;
-    std::vector<u32> result;
-    result.reserve(longwords);
-
-    // Iterate through all bitmap blocks
-    isize j = 0;
-    for (auto &it : bmBlocks) {
-
-        if (auto *bm = read(it, FSBlockType::BITMAP); bm) {
-
-            auto *data = bm->data();
-            for (isize i = 4; i < traits.bsize; i += 4) {
-
-                if (j == longwords) break;
-                result.push_back(HI_HI_LO_LO(data[i], data[i+1], data[i+2], data[i+3]));
-                j++;
-            }
-        }
-    }
-
-    // Zero out the superfluous bits in the last word
-    if (auto bits = (numBlocks() - 2) % 32; bits && !result.empty()) {
-        result.back() &= (1 << bits) - 1;
-    }
-
-    return result;
 }
 
 FSBlock &
@@ -884,10 +800,16 @@ FileSystem::exists(const FSBlock &top, const fs::path &path) const
 std::vector<const FSBlock *>
 FileSystem::collectDataBlocks(const FSBlock &node) const
 {
-    std::vector<const FSBlock *> result;
+    // Gather all blocks containing data block references
+    auto blocks = collectListBlocks(node);
+    blocks.push_back(&node);
 
-    // Iterate through all list blocks and collect all data block references
-    for (auto &it : collectListBlocks(node)) {
+    // Setup the result vector
+    std::vector<const FSBlock *> result;
+    result.reserve(blocks.size() * node.getMaxDataBlockRefs());
+
+    // Crawl through blocks and collect all data block references
+    for (auto &it : blocks) {
 
         isize num = std::min(it->getNumDataBlockRefs(), it->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
@@ -903,6 +825,7 @@ std::vector<Block>
 FileSystem::collectDataBlocks(Block ref) const
 {
     std::vector<Block> result;
+
     if (auto *ptr = read(ref)) {
         for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
     }
@@ -912,19 +835,30 @@ FileSystem::collectDataBlocks(Block ref) const
 std::vector<const FSBlock *>
 FileSystem::collectListBlocks(const FSBlock &node) const
 {
-    return collect(node, [&](auto *block) { return block->getNextListBlock(); });
+    std::vector<const FSBlock *> result;
+
+    if (auto *ptr = node.getNextListBlock()) {
+        result = collect(*ptr, [&](auto *block) { return block->getNextListBlock(); });
+    }
+    return result;
 }
 
 std::vector<Block>
 FileSystem::collectListBlocks(const Block ref) const
 {
-    return collect(ref, [&](auto *block) { return block->getNextListBlock(); });
+    std::vector<Block> result;
+
+    if (auto *ptr = read(ref)) {
+        for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
+    }
+    return result;
 }
 
 std::vector<Block>
 FileSystem::collectHashedBlocks(Block ref, isize bucket) const
 {
     std::vector<Block> result;
+
     if (auto *ptr = read(ref)) {
         for (auto &it: collectHashedBlocks(*ptr, bucket)) result.push_back(it->nr);
     }
@@ -1063,131 +997,38 @@ FileSystem::require_file_or_directory(const FSBlock &node) const
 }
 
 void
-FileSystem::createUsageMap(u8 *buffer, isize len) const
+FileSystem::ensureFile(const FSBlock &node)
 {
-    storage.createUsageMap(buffer, len);
-/*
-    // Setup priorities
-    i8 pri[12];
-    pri[isize(FSBlockType::UNKNOWN_BLOCK)]      = 0;
-    pri[isize(FSBlockType::EMPTY_BLOCK)]        = 1;
-    pri[isize(FSBlockType::BOOT_BLOCK)]         = 8;
-    pri[isize(FSBlockType::ROOT_BLOCK)]         = 9;
-    pri[isize(FSBlockType::BITMAP_BLOCK)]       = 7;
-    pri[isize(FSBlockType::BITMAP_EXT_BLOCK)]   = 6;
-    pri[isize(FSBlockType::USERDIR_BLOCK)]      = 5;
-    pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 3;
-    pri[isize(FSBlockType::FILELIST_BLOCK)]     = 2;
-    pri[isize(FSBlockType::DATA_BLOCK_OFS)]     = 2;
-    pri[isize(FSBlockType::DATA_BLOCK_FFS)]     = 2;
-    
-    // Start from scratch
-    for (isize i = 0; i < len; i++) buffer[i] = 0;
- 
-    // Analyze all blocks
-    for (isize i = 1, max = numBlocks(); i < max; i++) {
-
-        auto val = u8(storage.getType(Block(i)));
-        // auto val = u8(blocks[i]->type);
-        auto pos = i * (len - 1) / (max - 1);
-        if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
-        if (pri[buffer[pos]] == pri[val] && pos > 0 && buffer[pos-1] != val) buffer[pos] = val;
-    }
-    
-    // Fill gaps
-    for (isize pos = 1; pos < len; pos++) {
-        
-        if (buffer[pos] == u8(FSBlockType::UNKNOWN_BLOCK)) {
-            buffer[pos] = buffer[pos - 1];
-        }
-    }
- */
+    if (!node.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
 }
 
 void
-FileSystem::createAllocationMap(u8 *buffer, isize len) const
+FileSystem::ensureFileOrDirectory(const FSBlock &node)
 {
-    storage.createAllocationMap(buffer, len);
-    /*
-    // Setup priorities
-    u8 pri[4] = { 0, 1, 2, 3 };
+    if (!node.isRegular()) throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
 
-    auto &map = doctor.diagnosis.bitmapErrors;
-
-    // Start from scratch
-    for (isize i = 0; i < len; i++) buffer[i] = 255;
- 
-    // Analyze all blocks
-    for (isize i = 0, max = numBlocks(); i < max; i++) {
-
-        u8 val = isFree(Block(i)) ? 0 : map.contains(Block(i)) ? u8(map.at(Block(i)) + 1) : 1;
-        auto pos = i * (len - 1) / (max - 1);
-        if (buffer[pos] == 255 || pri[buffer[pos]] < pri[val]) buffer[pos] = val;
-    }
-    
-    // Fill gaps
-    for (isize pos = 1; pos < len; pos++) {
-        
-        if (buffer[pos] == 255) {
-            buffer[pos] = buffer[pos - 1];
-        }
-    }
-    */
 }
 
 void
-FileSystem::createHealthMap(u8 *buffer, isize len) const
+FileSystem::ensureDirectory(const FSBlock &node)
 {
-    storage.createHealthMap(buffer, len);
-/*
-    bool strict = true; // TODO: Allow non-strict checking
-
-    // Setup priorities
-    i8 pri[3] = { 0, 1, 2 };
- 
-    // Start from scratch
-    for (isize i = 0; i < len; i++) buffer[i] = 255;
-
-    // Mark all used blocks
-    // auto &map = storage.blocks;
-    // for (isize i = 0, max = numBlocks(); i < max; i++) {
-
-    // Analyze all blocks
-    for (isize i = 0, max = numBlocks(); i < max; i++) {
-
-        auto corrupted = doctor.xray(Block(i), strict); //  storage[i].corrupted;
-        auto empty = isEmpty(Block(i));
-        
-        u8 val = empty ? 0 : corrupted ? 2 : 1;
-        auto pos = i * (len - 1) / (max - 1);
-        
-        if (buffer[pos] == 255 || pri[buffer[pos]] < pri[val]) buffer[pos] = val;
-    }
-    
-    // Fill gaps
-    for (isize pos = 1; pos < len; pos++) {
-        
-        if (buffer[pos] == 255) {
-            buffer[pos] = buffer[pos - 1];
-        }
-    }
- */
+    if (!node.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
-isize
-FileSystem::nextBlockOfType(FSBlockType type, Block after) const
+void
+FileSystem::ensureNotRoot(const FSBlock &node)
 {
-    assert(isize(after) < traits.blocks);
+    if (node.isRoot()) throw AppError(Fault::FS_INVALID_PATH);
+}
 
-    isize result = after;
-    
-    do {
-        result = (result + 1) % numBlocks();
-        if (storage.getType(Block(result)) == type) return result;
+void
+FileSystem::ensureEmptyDirectory(const FSBlock &node)
+{
+    ensureDirectory(node);
 
-    } while (result != isize(after));
-    
-    return -1;
+    if (FSTree(node, { .recursive = false }).size() != 0) {
+        throw AppError(Fault::FS_DIR_NOT_EMPTY);
+    }
 }
 
 }

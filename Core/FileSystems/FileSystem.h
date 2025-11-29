@@ -9,6 +9,45 @@
 
 #pragma once
 
+/* The FileSystem class represents an Amiga file system (OFS or FFS).
+ * It models a logical volume that can be created from either an ADF or an HDF.
+ * In the case of an HDF, each partition can be converted into an independent
+ * file system instance.
+ *
+ * The FileSystem class is organized as a layered architecture to separate
+ * responsibilities and to enforce downward-only dependencies.
+ *
+ *  ---------------------
+ * |     POSIX Layer     |    Layer 3:
+ *  ---------------------
+ *            |               Wraps a Layer-3 file system with all lower-level
+ *            |               access functions hidden. It exposes a POSIX-like
+ *            |               high-level API that provides operations such as
+ *            |               open, close, read, write, and file handles.
+ *            V
+ *  -----------------------
+ * | Path Resolution Layer |  Layer 2:
+ *  -----------------------
+ *            |               Resolves symbolic and relative paths into file
+ *            |               system objects and canonicalizes paths. It depends
+ *            |               only on the read/write layer.
+ *            |
+ *            V
+ *  -----------------------
+ * |       Node Layer      |  Layer 1:
+ *  -----------------------
+ *            |               Interprets storage blocks as files and directories
+ *            |               according to OFS or FFS semantics. It allows the
+ *            |               upper layers to create files, directories, and to
+ *            |               modify metadata.
+ *            V
+ *  -----------------------
+ * |  Block Storage Layer  |  Layer 0:
+ *  -----------------------
+ *                            Storage the actual block data.
+ *
+ */
+
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSDescriptor.h"
@@ -16,10 +55,11 @@
 #include "FSTree.h"
 #include "FSStorage.h"
 #include "FSDoctor.h"
+#include "FSAllocator.h"
+#include "FSImporter.h"
+#include "FSExporter.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
-#include <stack>
-#include <unordered_set>
 
 namespace vamiga {
 
@@ -28,41 +68,36 @@ class HDFFile;
 class FloppyDrive;
 class HardDrive;
 
-/* An object of type FileSystem represents an Amiga file system (OFS or FFS).
- * It is a logical volume that can be created from an ADF or HDF. In the latter
- * case, each partition can be converted into a file system individually. The
- * class provides functions for analyzing the volume's integrity, as well as
- * for reading files and directories.
- *
- * The MutableFileSystem class extends FileSystem by adding functions for
- * modifying the contents of the file system. It allows the creation of empty
- * file systems of a specified type and provides functions for manipulating
- * files and directories, such as creating, deleting, or moving items.
- */
-class FileSystem : public CoreObject, public Inspectable<FSInfo, FSStats> {
+class FileSystem : public CoreObject, public Inspectable<FSInfo, Void> {
 
     friend struct FSBlock;
+    friend class  FSComponent;
     friend class  FSDoctor;
+    friend class  FSAllocator;
     friend struct FSHashTable;
     friend struct FSPartition;
-
-public:
-
-    // Disk doctor
-    FSDoctor doctor = FSDoctor(*this);
-
-protected:
+    friend class  FileSystem;
 
     // Static file system properties
     FSTraits traits;
 
-    // Block storage
+public:
+
+    // Public Components
+    FSDoctor doctor = FSDoctor(*this);
+    FSImporter importer = FSImporter(*this);
+    FSExporter exporter = FSExporter(*this);
+
+private:
+
+    // Private Components
     FSStorage storage = FSStorage(this);
+    FSAllocator allocator = FSAllocator(*this);
 
     // Location of the root block
     Block rootBlock = 0;
 
-    // Location of the current directory
+    // Location of the current directory (TODO: MOVE TO POSIX LAYER)
     Block current = 0;
 
     // Location of bitmap blocks and extended bitmap blocks
@@ -83,6 +118,10 @@ public:
     FileSystem(const FloppyDrive &dfn) : FileSystem() { init(dfn); }
     FileSystem(const HardDrive &hdn, isize part = 0) : FileSystem() { init(hdn, part); }
 
+    FileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
+    FileSystem(const FSDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
+    FileSystem(Diameter dia, Density den, FSFormat dos, const fs::path &path = {}) { init(dia, den, dos, path); }
+
     virtual ~FileSystem();
 
     void init(const FSDescriptor &layout, u8 *buf, isize len);
@@ -92,6 +131,10 @@ public:
     void init(const FloppyDrive &dfn);
     void init(const HardDrive &hdn, isize part);
 
+    void init(isize capacity, isize bsize = 512);
+    void init(const FSDescriptor &layout, const fs::path &path = {});
+    void init(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
+    
     bool isInitialized() const noexcept;
     bool isFormatted() const noexcept;
 
@@ -113,11 +156,11 @@ protected:
 public:
 
     void cacheInfo(FSInfo &result) const noexcept override;
-    void cacheStats(FSStats &result) const noexcept override;
+    // void cacheStats(FSStats &result) const noexcept override;
 
 
     //
-    // Querying file system properties
+    // Querying properties
     //
 
 public:
@@ -127,13 +170,31 @@ public:
 
     // Returns capacity information
     isize numBlocks() const noexcept { return storage.numBlocks(); }
-    isize numBytes() const noexcept { return storage.numBytes(); }
-    isize blockSize() const noexcept { return storage.blockSize(); }
+    [[deprecated]] isize numBytes() const noexcept { return storage.numBytes(); }
+    [[deprecated]] isize blockSize() const noexcept { return storage.blockSize(); }
+
+    // Returns usage information and root metadata
+    FSStat getStat() const noexcept;
+
+    // Get information about the file system
+    FSAttr attr(Block nr) const;
+    FSAttr attr(const FSBlock &fhd) const;
+
+
+    // Reports usage information
+    /*
+    [[deprecated]] isize freeBlocks() const noexcept { return storage.freeBlocks(); }
+    [[deprecated]] isize usedBlocks() const noexcept { return storage.usedBlocks(); }
+    [[deprecated]] isize freeBytes() const noexcept { return storage.freeBytes(); }
+    [[deprecated]] isize usedBytes() const noexcept { return storage.usedBytes(); }
+    */
 
     // Analyzes the root block
-    FSName getName() const noexcept;
-    string getCreationDate() const noexcept;
-    string getModificationDate() const noexcept;
+    /*
+    [[deprecated]] FSName getName() const noexcept;
+    [[deprecated]] FSTime getCreationDate() const noexcept;
+    [[deprecated]] FSTime getModificationDate() const noexcept;
+    */
 
     // Analyzes the boot block
     string getBootBlockName() const noexcept;
@@ -154,8 +215,6 @@ public:
 
     // Convenience wrappers
     bool isEmpty(Block nr) const noexcept { return typeOf(nr) == FSBlockType::EMPTY; }
-
-protected:
 
     // Predicts the type of a block
     FSBlockType predictType(Block nr, const u8 *buf) const noexcept;
@@ -189,30 +248,6 @@ public:
 
 
     //
-    // Managing the block allocation bitmap
-    //
-
-public:
-    
-    // Checks if a block is allocated or unallocated
-    bool isUnallocated(Block nr) const noexcept;
-    bool isAllocated(Block nr) const noexcept { return !isUnallocated(nr); }
-
-    // Returns the number of allocated or unallocated blocks
-    isize numUnallocated() const noexcept;
-    isize numAllocated() const noexcept { return numBlocks() - numUnallocated(); }
-
-protected:
-    
-    // Locates the allocation bit for a certain block
-    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept;
-    const FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept;
-
-    // Translate the bitmap into to a vector with the n-bit set iff the n-th block is free
-    std::vector<u32> serializeBitmap() const;
-
-
-    //
     // Managing files and directories
     //
 
@@ -222,7 +257,7 @@ public:
     FSBlock &root() { return at(rootBlock); }
     const FSBlock &root() const { return at(rootBlock); }
 
-    // Returns the working directory
+    // Returns the working directory (TODO: MOVE TO POSIX LAYER)
     FSBlock &pwd() { return at(current); }
     const FSBlock &pwd() const { return at(current); }
 
@@ -232,7 +267,7 @@ public:
     const FSBlock &parent(const FSBlock &block) const;
     const FSBlock *parent(const FSBlock *block) const noexcept;
 
-    // Changes the working directory
+    // Changes the working directory (TODO: MOVE TO POSIX LAYER)
     void cd(const FSName &name);
     void cd(const FSBlock &path);
     void cd(const string &path);
@@ -255,7 +290,7 @@ public:
     FSBlock &seek(const FSBlock &top, const string &name);
     const FSBlock &seek(const FSBlock &top, const FSName &name) const;
     const FSBlock &seek(const FSBlock &top, const fs::path &name) const;
-    const FSBlock &seek(const FSBlock &v, const string &name) const;
+    const FSBlock &seek(const FSBlock &top, const string &name) const;
 
     // Seeks all items satisfying a predicate
     std::vector<const FSBlock *> find(const FSOpt &opt) const;
@@ -317,27 +352,130 @@ public:
     void require_formatted() const;
     void require_file_or_directory(const FSBlock &block) const;
 
+    void ensureFile(const FSBlock &node);
+    void ensureFileOrDirectory(const FSBlock &node);
+    void ensureDirectory(const FSBlock &node);
+    void ensureNotRoot(const FSBlock &node);
+    void ensureEmptyDirectory(const FSBlock &node);
+
 
     //
-    // GUI helper functions
+    // LAYER 2: WRITE
+    //
+
+    //
+    // Formatting
     //
 
 public:
 
-    // Returns a portion of the block as an ASCII dump
-    string ascii(Block nr, isize offset, isize len) const noexcept;
+    // Formats the volume
+    void format(string name = "");
+    void format(FSFormat dos, string name = "");
 
-    // Returns a block summary for creating the block usage image
-    void createUsageMap(u8 *buffer, isize len) const;
+    // Assigns the volume name
+    void setName(FSName name);
+    void setName(string name) { setName(FSName(name)); }
 
-    // Returns a usage summary for creating the block allocation image
-    void createAllocationMap(u8 *buffer, isize len) const;
 
-    // Returns a block summary for creating the diagnose image
-    void createHealthMap(u8 *buffer, isize len) const;
-    
-    // Searches the block list for a block of a specific type
-    isize nextBlockOfType(FSBlockType type, Block after) const;
+    //
+    // Creating and deleting blocks
+    //
+
+private:
+
+    // Adds a new block of a certain kind
+    void addFileListBlock(Block at, Block head, Block prev);
+    void addDataBlock(Block at, isize id, Block head, Block prev);
+
+    // Creates a new block of a certain kind
+    FSBlock &newUserDirBlock(const FSName &name);
+    FSBlock &newFileHeaderBlock(const FSName &name);
+
+
+    //
+    // Managing the boot blocks
+    //
+
+public:
+
+    // Installs a boot block
+    void makeBootable(BootBlockId id);
+
+    // Removes a boot block virus from the current partition (if any)
+    void killVirus();
+
+
+    //
+    // Creating files and directories
+    //
+
+public:
+
+    // Creates a new directory
+    FSBlock &createDir(FSBlock &at, const FSName &name);
+
+    // Creates a directory entry
+    FSBlock &link(FSBlock &at, const FSName &name); // DEPRECATED
+    void link(FSBlock &at, const FSName &name, FSBlock &fhb);  // DEPRECATED
+    void link(FSBlock &at, FSBlock &fhb);
+
+    // Removes a directory entry
+    void unlink(const FSBlock &fhb);
+
+    // Frees the file header block and all related data blocks
+    void reclaim(const FSBlock &fhb);
+
+    // Creates a new file
+    FSBlock &createFile(FSBlock &at, const FSName &name);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const string &str);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const u8 *buf, isize size);
+
+private:
+
+    // FSBlock &createFile(FSBlock &at, FSBlock &fhb, const u8 *buf, isize size);
+    FSBlock &replace(FSBlock &fhb,
+                     const u8 *buf, isize size,
+                     std::vector<Block> listBlocks = {},
+                     std::vector<Block> dataBlocks = {});
+
+public:
+
+    // Changes the size of an existing file, pads with 0
+    void resize(FSBlock &at, isize size);
+
+    // Changes the size and cotents of an existing file
+    void replace(FSBlock &at, const Buffer<u8> &data);
+
+    // Update file contents with new data
+
+    // Renames a file or directory
+    void rename(FSBlock &item, const FSName &name);
+
+    // Moves a file or directory to another location
+    void move(FSBlock &item, const FSBlock &dest, const FSName &name = "");
+
+    // Copies a file
+    void copy(const FSBlock &item, FSBlock &dest);
+    void copy(const FSBlock &item, FSBlock &dest, const FSName &name);
+
+    // Delete a file
+    void deleteFile(const FSBlock &at);
+
+private:
+
+    // Adds a hash-table entry for a given item
+    void addToHashTable(const FSBlock &item);
+    void addToHashTable(Block parent, Block ref);
+
+    // Removes the hash-table entry for a given item
+    void deleteFromHashTable(const FSBlock &item);
+    void deleteFromHashTable(Block parent, Block ref);
+
+    // Adds bytes to a data block
+    isize addData(Block nr, const u8 *buf, isize size);
+    isize addData(FSBlock &block, const u8 *buf, isize size);
 };
 
 }

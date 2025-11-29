@@ -199,12 +199,12 @@ time_t
 FSTime::time() const
 {
     const u32 secPerDay = 24 * 60 * 60;
-    time_t t = days * secPerDay + mins * 60 + ticks / 50;
-    
+    u32 t = days * secPerDay + mins * 60 + ticks / 50;
+
     // Shift reference point from Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
     t += (8 * 365 + 2) * secPerDay;
 
-    return t;
+    return (time_t)t;
 }
 
 void
@@ -249,6 +249,27 @@ FSTime::str() const
 {
     string result = dateStr() + " " + timeStr();
     return result;
+}
+
+mode_t
+FSAttr::mode() const
+{
+    mode_t mode = 0;
+
+    // File type
+    mode |= isDir ? S_IFDIR : S_IFREG;
+
+    // Owner permissions
+    if (!(prot & 0x01)) mode |= S_IRUSR;
+    if (!(prot & 0x02)) mode |= S_IWUSR;
+    if (!(prot & 0x04)) mode |= S_IXUSR;
+
+    // Mirror owner permissions to group and others
+    if (mode & S_IRUSR) mode |= S_IRGRP | S_IROTH;
+    if (mode & S_IWUSR) mode |= S_IWGRP | S_IWOTH;
+    if (mode & S_IXUSR) mode |= S_IXGRP | S_IXOTH;
+
+    return mode;
 }
 
 }

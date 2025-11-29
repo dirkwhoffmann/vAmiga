@@ -14,7 +14,7 @@
 #include "RSCommand.h"
 #include "Parser.h"
 #include "TextStorage.h"
-#include "MutableFileSystem.h"
+#include "FileSystem.h"
 
 namespace vamiga {
 
@@ -433,7 +433,7 @@ class DebuggerConsole final : public Console
 
 class NavigatorConsole final : public Console
 {
-    MutableFileSystem fs;
+    FileSystem fs;
     
     using Console::Console;
     

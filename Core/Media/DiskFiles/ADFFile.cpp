@@ -17,7 +17,7 @@
 #include "FloppyDrive.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
-#include "MutableFileSystem.h"
+#include "FileSystem.h"
 
 namespace vamiga {
 
@@ -125,7 +125,7 @@ ADFFile::init(const FloppyDrive &drive)
 }
 
 void
-ADFFile::init(const MutableFileSystem &volume)
+ADFFile::init(const FileSystem &volume)
 {
     switch (volume.numBlocks()) {
             
@@ -141,7 +141,7 @@ ADFFile::init(const MutableFileSystem &volume)
             throw AppError(Fault::FS_WRONG_CAPACITY);
     }
 
-    volume.exportVolume(data.ptr, data.size);
+    volume.exporter.exportVolume(data.ptr, data.size);
 }
 
 void
@@ -297,14 +297,14 @@ ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
     descriptor.dos = fs;
     
     // Create an empty file system
-    MutableFileSystem volume(descriptor);
+    FileSystem volume(descriptor);
     volume.setName(FSName(name));
     
     // Write boot code
     volume.makeBootable(id);
     
     // Export the file system to the ADF
-    if (!volume.exportVolume(data.ptr, data.size)) throw AppError(Fault::FS_UNKNOWN);
+    if (!volume.exporter.exportVolume(data.ptr, data.size)) throw AppError(Fault::FS_UNKNOWN);
 }
 
 void

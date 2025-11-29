@@ -79,6 +79,7 @@ struct FSTime {
     u32 mins;
     u32 ticks;
     
+    FSTime() : days(0), mins(0), ticks(0) { }
     FSTime(time_t t);
     FSTime(const u8 *p);
 
@@ -88,6 +89,41 @@ struct FSTime {
     string dateStr() const;
     string timeStr() const;
     string str() const;
+};
+
+struct FSAttr {
+
+    isize size;         // File size in bytes
+    isize blocks;       // Number of occupied blocks
+    u32 prot;           // Protection flags
+    bool isDir;         // Is it a directory?
+    FSTime ctime;       // Creation time
+    FSTime mtime;       // Last modification time
+
+    mode_t mode() const;
+};
+
+struct FSStat {
+
+    // Capacity information
+    isize numBlocks;
+    isize numBytes;
+    isize blockSize;
+
+    // Usage information
+    isize freeBlocks;
+    isize freeBytes;
+    isize usedBlocks;
+    isize usedBytes;
+
+    // Root block metadata
+    FSName name;
+    FSTime bDate;
+    FSTime mDate;
+
+    // Access statistics
+    isize reads;
+    isize writes;
 };
 
 }

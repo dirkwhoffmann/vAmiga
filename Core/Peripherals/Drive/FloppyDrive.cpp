@@ -15,7 +15,7 @@
 #include "ADFFile.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
-#include "MutableFileSystem.h"
+#include "FileSystem.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"
 #include "OSDescriptors.h"
@@ -1031,7 +1031,7 @@ void
 FloppyDrive::catchFile(const fs::path &path)
 {
     // Extract the file system
-    auto fs = MutableFileSystem(*this);
+    auto fs = FileSystem(*this);
     
     // Seek file
     auto file = fs.seekPtr(&fs.root(), path);
@@ -1084,7 +1084,7 @@ FloppyDrive::insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path 
     
     
     // Create a file system and import the directory
-    MutableFileSystem volume(diameter(), density(), fs, path);
+    FileSystem volume(diameter(), density(), fs, path);
             
     // Make the volume bootable
     volume.makeBootable(bb);

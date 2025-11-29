@@ -1,0 +1,43 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
+//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
+
+#pragma once
+
+#include "FSComponent.h"
+
+namespace vamiga {
+
+class FSExporter final : public FSComponent {
+
+public:
+
+    using FSComponent::FSComponent;
+
+    // Exports the volume to a buffer
+    bool exportVolume(u8 *dst, isize size) const;
+    bool exportVolume(u8 *dst, isize size, Fault *error) const;
+
+    // Exports a single block or a range of blocks to a buffer
+    bool exportBlock(Block nr, u8 *dst, isize size) const;
+    bool exportBlock(Block nr, u8 *dst, isize size, Fault *error) const;
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
+
+    // Exports a single block or a range of blocks to a file
+    void exportBlock(Block nr, const fs::path &path) const;
+    void exportBlocks(Block first, Block last, const fs::path &path) const;
+    void exportBlocks(const fs::path &path) const;
+
+    // Exports the volume to a buffer
+    void exportFiles(Block nr, const fs::path &path, bool recursive = true, bool contents = false) const;
+    void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
+    void exportFiles(const fs::path &path, bool recursive = true, bool contents = false) const;
+};
+
+}

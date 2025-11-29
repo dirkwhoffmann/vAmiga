@@ -115,7 +115,6 @@
 		5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */; };
 		5050EC4127BE97E000394F4F /* HardDiskCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5050EC4027BE97E000394F4F /* HardDiskCreator.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
-		5056506C25440FFB00A79D27 /* MutableFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */; };
 		50565072254573E100A79D27 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
 		5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		5057551025EAFF7900280977 /* Checksum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B3C44725EAFB5500651700 /* Checksum.cpp */; };
@@ -243,6 +242,16 @@
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
+		509D048A2EDA46CA00355638 /* FileSystemMutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04892EDA46CA00355638 /* FileSystemMutation.cpp */; };
+		509D048B2EDA46CA00355638 /* FileSystemMutation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04892EDA46CA00355638 /* FileSystemMutation.cpp */; };
+		509D048E2EDA46D700355638 /* FSAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D048D2EDA46D700355638 /* FSAllocator.cpp */; };
+		509D048F2EDA46D700355638 /* FSAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D048D2EDA46D700355638 /* FSAllocator.cpp */; };
+		509D04922EDA46E400355638 /* FSComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04912EDA46E400355638 /* FSComponent.cpp */; };
+		509D04932EDA46E400355638 /* FSComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04912EDA46E400355638 /* FSComponent.cpp */; };
+		509D04972EDA471900355638 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04952EDA471900355638 /* FSExporter.cpp */; };
+		509D04982EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
+		509D04992EDA471900355638 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04952EDA471900355638 /* FSExporter.cpp */; };
+		509D049A2EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -464,7 +473,6 @@
 		50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FC04CF27DA19F600C3E566 /* FSDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C01082577A8C000F9E05C /* FSDescriptor.cpp */; };
 		50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E427CA6209002F6CCC /* FileSystem.cpp */; };
-		50FC04D127DA19F600C3E566 /* MutableFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */; };
 		50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
 		50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
@@ -703,8 +711,6 @@
 		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
-		5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MutableFileSystem.cpp; sourceTree = "<group>"; };
-		5056506B25440FFB00A79D27 /* MutableFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MutableFileSystem.h; sourceTree = "<group>"; };
 		50565070254573E100A79D27 /* FSBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBlock.cpp; sourceTree = "<group>"; };
 		50565071254573E100A79D27 /* FSBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBlock.h; sourceTree = "<group>"; };
 		5056507A25459C8800A79D27 /* FSObjects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSObjects.cpp; sourceTree = "<group>"; };
@@ -889,6 +895,15 @@
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
+		509D04892EDA46CA00355638 /* FileSystemMutation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemMutation.cpp; sourceTree = "<group>"; };
+		509D048C2EDA46D700355638 /* FSAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSAllocator.h; sourceTree = "<group>"; };
+		509D048D2EDA46D700355638 /* FSAllocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSAllocator.cpp; sourceTree = "<group>"; };
+		509D04902EDA46E400355638 /* FSComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSComponent.h; sourceTree = "<group>"; };
+		509D04912EDA46E400355638 /* FSComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSComponent.cpp; sourceTree = "<group>"; };
+		509D04942EDA471900355638 /* FSExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSExporter.h; sourceTree = "<group>"; };
+		509D04952EDA471900355638 /* FSExporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSExporter.cpp; sourceTree = "<group>"; };
+		509D04962EDA471900355638 /* FSImporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSImporter.cpp; sourceTree = "<group>"; };
+		509D049B2EDA472900355638 /* FSImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSImporter.h; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -1403,18 +1418,25 @@
 				505C01082577A8C000F9E05C /* FSDescriptor.cpp */,
 				5029C6E527CA6209002F6CCC /* FileSystem.h */,
 				5029C6E427CA6209002F6CCC /* FileSystem.cpp */,
-				5056506B25440FFB00A79D27 /* MutableFileSystem.h */,
-				5056506A25440FFB00A79D27 /* MutableFileSystem.cpp */,
+				509D04892EDA46CA00355638 /* FileSystemMutation.cpp */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
+				509D04902EDA46E400355638 /* FSComponent.h */,
+				509D04912EDA46E400355638 /* FSComponent.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
 				50565070254573E100A79D27 /* FSBlock.cpp */,
+				509D048C2EDA46D700355638 /* FSAllocator.h */,
+				509D048D2EDA46D700355638 /* FSAllocator.cpp */,
 				50A0F71A2E0E688800972CBC /* FSTree.h */,
 				50A0F71B2E0E688D00972CBC /* FSTree.cpp */,
 				505DD69B2E0815AC00D9E8B2 /* FSStorage.h */,
 				505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */,
 				50A0F71E2E11157D00972CBC /* FSDoctor.h */,
 				50A0F71F2E11158D00972CBC /* FSDoctor.cpp */,
+				509D049B2EDA472900355638 /* FSImporter.h */,
+				509D04962EDA471900355638 /* FSImporter.cpp */,
+				509D04942EDA471900355638 /* FSExporter.h */,
+				509D04952EDA471900355638 /* FSExporter.cpp */,
 				50A6146E260DC91600A01428 /* BootBlockImageTypes.h */,
 				50A64B94257A63A600442964 /* BootBlockImage.h */,
 				50A64B95257A63A600442964 /* BootBlockImage.cpp */,
@@ -2493,6 +2515,7 @@
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
 				50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
+				509D048E2EDA46D700355638 /* FSAllocator.cpp in Sources */,
 				509C3663260B1D95004F160A /* CommanderConsole.cpp in Sources */,
 				50AE6EDF24D93EDD000AA367 /* AgnusRegs.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
@@ -2600,7 +2623,6 @@
 				505F45802E96A45000418105 /* CGImage.swift in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
 				5009B7FC2557051A0037288E /* EADFFile.cpp in Sources */,
-				5056506C25440FFB00A79D27 /* MutableFileSystem.cpp in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
@@ -2654,8 +2676,11 @@
 				502023EA27B6BDEA00820DB6 /* ZorroBoard.cpp in Sources */,
 				50A0F71C2E0E689000972CBC /* FSTree.cpp in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
+				509D04972EDA471900355638 /* FSExporter.cpp in Sources */,
+				509D04982EDA471900355638 /* FSImporter.cpp in Sources */,
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
 				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
+				509D04932EDA46E400355638 /* FSComponent.cpp in Sources */,
 				50CFF56A2C259FB900A47ECC /* Serializable.cpp in Sources */,
 				50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
@@ -2738,6 +2763,7 @@
 				50144E3D2E7BEA8D009E15B4 /* SidebarViewController.swift in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
+				509D048B2EDA46CA00355638 /* FileSystemMutation.cpp in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
 				501D20122E7FEE19007B1242 /* RomSettings.swift in Sources */,
 				506407CF2D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
@@ -2760,10 +2786,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */,
-				50FC04D127DA19F600C3E566 /* MutableFileSystem.cpp in Sources */,
 				50E5BF802BB1D2510004712B /* STFile.cpp in Sources */,
 				50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */,
 				50FC049B27DA197500C3E566 /* AgnusInfo.cpp in Sources */,
+				509D04922EDA46E400355638 /* FSComponent.cpp in Sources */,
 				50FC04DC27DA1A1400C3E566 /* getbits.c in Sources */,
 				506407CB2D1AC45A002FBC57 /* SocketServer.cpp in Sources */,
 				50FC048327DA190400C3E566 /* CoreObject.cpp in Sources */,
@@ -2790,6 +2816,8 @@
 				50FC04A027DA197A00C3E566 /* Sequencer.cpp in Sources */,
 				50FC048F27DA195D00C3E566 /* PaulaEvents.cpp in Sources */,
 				50FC04CF27DA19F600C3E566 /* FSDescriptor.cpp in Sources */,
+				509D04992EDA471900355638 /* FSExporter.cpp in Sources */,
+				509D049A2EDA471900355638 /* FSImporter.cpp in Sources */,
 				50FC04BF27DA19CE00C3E566 /* KeyboardEvents.cpp in Sources */,
 				50FC04B727DA19A900C3E566 /* ZorroBoard.cpp in Sources */,
 				50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */,
@@ -2901,6 +2929,7 @@
 				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
+				509D048A2EDA46CA00355638 /* FileSystemMutation.cpp in Sources */,
 				50FC047F27DA12AB00C3E566 /* Parser.cpp in Sources */,
 				5012DCE12D5B33C200233B6A /* HDZFile.cpp in Sources */,
 				50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */,
@@ -2923,6 +2952,7 @@
 				50FC04EB27DA1A4500C3E566 /* RshServer.cpp in Sources */,
 				50FC04E827DA1A3500C3E566 /* OSDebugger.cpp in Sources */,
 				50FC04F427DA1A8F00C3E566 /* AudioStream.cpp in Sources */,
+				509D048F2EDA46D700355638 /* FSAllocator.cpp in Sources */,
 				50CFF56B2C259FB900A47ECC /* Serializable.cpp in Sources */,
 				50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */,
 				50FC04B027DA199600C3E566 /* Memory.cpp in Sources */,

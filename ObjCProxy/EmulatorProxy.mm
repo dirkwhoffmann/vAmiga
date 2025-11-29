@@ -11,7 +11,7 @@
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
 #import "Emulator.h"
-#import "MutableFileSystem.h"
+#import "FileSystem.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;
@@ -1335,12 +1335,12 @@ NSString *EventSlotName(EventSlot slot)
 
 @implementation FileSystemProxy
 
-- (MutableFileSystem *)fs
+- (FileSystem *)fs
 {
-    return (MutableFileSystem *)obj;
+    return (FileSystem *)obj;
 }
 
-+ (instancetype)make:(MutableFileSystem *)volume
++ (instancetype)make:(FileSystem *)volume
 {
     if (volume == nullptr) { return nil; }
     
@@ -1353,7 +1353,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
 
         auto file = (MediaFile *)(proxy->obj);
-        auto dev = new MutableFileSystem(*file);
+        auto dev = new FileSystem(*file);
         return [self make:dev];
 
     }  catch (AppError &error) {
@@ -1368,7 +1368,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
 
         auto file = (MediaFile *)(proxy->obj);
-        auto dev = new MutableFileSystem(*file, nr);
+        auto dev = new FileSystem(*file, nr);
         return [self make:dev];
 
     }  catch (AppError &error) {
@@ -1380,20 +1380,20 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)name
 {
-    auto str = [self fs]->getName();
+    auto str = [self fs]->getStat().name;
     return @(str.c_str());
 }
 
 - (NSString *)creationDate
 {
-    auto str = [self fs]->getCreationDate();
-    return @(str.c_str());
+    auto str = [self fs]->getStat().bDate;
+    return @(str.str().c_str());
 }
 
 - (NSString *)modificationDate
 {
-    auto str = [self fs]->getModificationDate();
-    return @(str.c_str());
+    auto str = [self fs]->getStat().mDate;
+    return @(str.str().c_str());
 }
 
 - (NSString *)bootBlockName
@@ -1404,7 +1404,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)capacityString
 {
-    auto str = util::byteCountAsString([self fs]->numBytes());
+    auto str = util::byteCountAsString([self fs]->getStat().numBytes);
     return @(str.c_str());
 }
 
@@ -1431,17 +1431,17 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)blockSize
 {
-    return [self fs]->blockSize();
+    return [self fs]->getStat().blockSize;
 }
 
 - (NSInteger)numBlocks
 {
-    return [self fs]->numBlocks();
+    return [self fs]->getStat().numBlocks;
 }
 
 - (NSInteger)numBytes
 {
-    return [self fs]->numBytes();
+    return [self fs]->getStat().numBytes;
 }
 
 - (NSInteger)usedBlocks
@@ -1529,38 +1529,38 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len
 {
-    return @([self fs]->ascii(Block(block), offset, len).c_str());
+    return @([self fs]->doctor.ascii(Block(block), offset, len).c_str());
 }
 
 - (void)export:(NSString *)path recursive:(BOOL)rec contents:(BOOL)con exception:(ExceptionWrapper *)ex
 {
-    try { return [self fs]->exportFiles([path fileSystemRepresentation], rec, con); }
+    try { return [self fs]->exporter.exportFiles([path fileSystemRepresentation], rec, con); }
     catch (AppError &error) { [ex save:error]; }
 }
 
 - (void)createUsageMap:(u8 *)buf length:(NSInteger)len
 {
-    [self fs]->createUsageMap((u8 *)buf, len);
+    [self fs]->doctor.createUsageMap((u8 *)buf, len);
 }
 
 - (void)createAllocationMap:(u8 *)buf length:(NSInteger)len
 {
-    [self fs]->createAllocationMap((u8 *)buf, len);
+    [self fs]->doctor.createAllocationMap((u8 *)buf, len);
 }
 
 - (void)createHealthMap:(u8 *)buf length:(NSInteger)len
 {
-    [self fs]->createHealthMap((u8 *)buf, len);
+    [self fs]->doctor.createHealthMap((u8 *)buf, len);
 }
 
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after
 {
-    return [self fs]->nextBlockOfType(type, Block(after));
+    return [self fs]->doctor.nextBlockOfType(type, Block(after));
 }
 
 - (void)rectifyAllocationMap
 {
-    [self fs]->rectifyAllocationMap();
+    [self fs]->doctor.rectifyBitmap();
 }
 
 @end
@@ -1723,7 +1723,7 @@ NSString *EventSlotName(EventSlot slot)
                               type:(FileType)type
                          exception:(ExceptionWrapper *)ex
 {
-    auto fs = (MutableFileSystem *)proxy->obj;
+    auto fs = (FileSystem *)proxy->obj;
     try { return [self make: MediaFile::make(*fs, type)]; }
     catch (AppError &error) { [ex save:error]; return nil; }
 }

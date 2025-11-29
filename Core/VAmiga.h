@@ -734,7 +734,7 @@ public:
      *  @param  fs      A file system wrapper object.
      *  @param  wp      Write-protection status of the disk.
      */
-    void insertFileSystem(const class MutableFileSystem &fs, bool wp);
+    void insertFileSystem(const class FileSystem &fs, bool wp);
 
     /** @brief  Ejects the current disk.
      */

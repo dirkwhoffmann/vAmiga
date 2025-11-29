@@ -10,7 +10,7 @@
 #include "config.h"
 #include "HardDrive.h"
 #include "Emulator.h"
-#include "MutableFileSystem.h"
+#include "FileSystem.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
 #include "IOUtils.h"
@@ -123,19 +123,19 @@ HardDrive::init(isize size)
 }
 
 void
-HardDrive::init(const MutableFileSystem &fs)
+HardDrive::init(const FileSystem &fs)
 {
-    auto geometry = GeometryDescriptor(fs.numBytes());
-    
+    auto geometry = GeometryDescriptor(fs.getStat().numBytes);
+
     // Create the drive
     init(geometry);
         
     // Update the partition table
-    ptable[0].name = fs.getName().cpp_str();
+    ptable[0].name = fs.getStat().name.cpp_str();
     ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
 
     // Copy over all blocks
-    fs.exportVolume(data.ptr, geometry.numBytes());
+    fs.exporter.exportVolume(data.ptr, geometry.numBytes());
 }
 
 void 
@@ -462,7 +462,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
 
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
-            auto fs = MutableFileSystem(*this, i);
+            auto fs = FileSystem(*this, i);
             fs.dump(i == 0 ? Category::Info : Category::State, os);
         }
         
@@ -471,7 +471,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
             os << std::endl;
             os << tab("Partition");
             os << dec(i) << std::endl;
-            auto fs = MutableFileSystem(*this, i);
+            auto fs = FileSystem(*this, i);
             fs.dump(Category::Properties, os);
         }
     }
@@ -566,7 +566,7 @@ HardDrive::format(FSFormat fsType, string name)
         auto layout = FSDescriptor(geometry, fsType);
 
         // Create an empty file system
-        auto fs = MutableFileSystem(layout);
+        auto fs = FileSystem(layout);
         
         // Name the file system
         fs.setName(name);
@@ -760,10 +760,10 @@ HardDrive::importFolder(const fs::path &path) throws
         FSDescriptor layout(geometry, traits.fsType);
         
         // Create a new file system
-        auto fs = MutableFileSystem(layout);
+        auto fs = FileSystem(layout);
         
         // Import all files
-        fs.import(fs.root(), path, true, true);
+        fs.importer.import(fs.root(), path, true, true);
 
         // Name the file system
         fs.setName(traits.name);

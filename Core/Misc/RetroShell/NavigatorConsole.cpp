@@ -34,7 +34,7 @@ NavigatorConsole::prompt()
         
         ss << "[" << std::to_string(pwd.nr) << "]";
         
-        auto fsName = fs.getName();
+        auto fsName = fs.getStat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
         if (pwd.isDirectory()) ss << " " << pwd.absName();
     }
@@ -328,13 +328,13 @@ NavigatorConsole::importHd(isize n, isize part)
 void
 NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
 {
-    fs.import(path, recursive, contents);
+    fs.importer.import(path, recursive, contents);
 }
 
 void
 NavigatorConsole::exportBlocks(fs::path path)
 {
-    fs.exportBlocks(path);
+    fs.exporter.exportBlocks(path);
 }
 
 FSBlock &
@@ -627,7 +627,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 bool recursive = true;
                 bool contents = path.back() == '/';
                 
-                fs.import(fs.pwd(), hostPath, recursive, contents);
+                fs.importer.import(fs.pwd(), hostPath, recursive, contents);
             }
     });
     
@@ -697,7 +697,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto path = host.makeAbsolute(args.at("path"));
                 auto nr = parseBlock(args, "nr", fs.pwd().nr);
                 
-                fs.importBlock(nr, path);
+                fs.importer.importBlock(nr, path);
             }
     });
     
@@ -722,14 +722,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                         
                         auto &item = parsePath(args, "file");
                         auto name = item.cppName();
-                        if (name.empty()) name = fs.getName().cpp_str();
-                        fs.exportFiles(item, "/export", recursive, true);
+                        if (name.empty()) name = fs.getStat().name.cpp_str();
+                        fs.exporter.exportFiles(item, "/export", recursive, true);
                         msgQueue.setPayload( { "/export", name } );
                         
                     } else {
                         
-                        fs.exportBlocks("/export");
-                        auto name = fs.getName().cpp_str();
+                        fs.exporter.exportBlocks("/export");
+                        auto name = fs.getStat().name.cpp_str();
                         name += fs.getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );
                     }
@@ -759,7 +759,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                     auto path = args.at("path");
                     auto hostPath = host.makeAbsolute(args.at("path"));
-                    fs.exportFiles(item, hostPath, recursive, contents);
+                    fs.exporter.exportFiles(item, hostPath, recursive, contents);
                 }
         });
     }
@@ -826,14 +826,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 if constexpr (vAmigaDOS) {
                     
-                    fs.exportBlock(nr, "blob");
+                    fs.exporter.exportBlock(nr, "blob");
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT);
                     
                 } else {
                     
                     auto path = host.makeAbsolute(args.at("path"));
-                    fs.exportBlock(nr, path);
+                    fs.exporter.exportBlock(nr, path);
                 }
             }
     });

@@ -326,7 +326,7 @@ public:
     void addBitmapBlockRefs(std::vector<Block> &refs,
                             std::vector<Block>::iterator &it);
     
-    //Gets or sets a link to a bitmap block
+    // Gets or sets a link to a bitmap block
     isize numBmBlockRefs() const;
     Block getBmBlockRef(isize nr) const;
     void setBmBlockRef(isize nr, Block ref);
@@ -365,8 +365,8 @@ public:
     
     isize writeData(std::ostream &os) const;
     isize writeData(std::ostream &os, isize size) const;
-    isize extractData(Buffer<u8> &buf) const;
     isize writeData(Buffer<u8> &buf, isize offset, isize count) const;
+    isize extractData(Buffer<u8> &buf) const;
 
     
     //

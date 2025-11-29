@@ -9,24 +9,18 @@
 
 #pragma once
 
-#include "FSTypes.h"
-#include "CoreObject.h"
+#include "FSComponent.h"
 
 namespace vamiga {
 
-class FSDoctor final : public CoreObject {
-
-    // Reference to the patient
-    class FileSystem &fs;
+class FSDoctor final : public FSComponent {
 
 public:
 
     // Result of the latest examination
     FSDiagnosis diagnosis;
 
-public:
-
-    FSDoctor(FileSystem& fs) : fs(fs) { }
+    using FSComponent::FSComponent;
 
 
     //
@@ -71,8 +65,8 @@ public:
     FSBlockError xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
 
     // Checks the allocation table. Returns the number of errors. Stores details in 'diagnosis'
-    isize xrayBitmap(bool strict);
-    isize xrayBitmap(bool strict, std::ostream &os);
+    isize xrayBitmap(bool strict = false);
+    isize xrayBitmap(std::ostream &os, bool strict = false);
 
     // Rectifies all blocks
     void rectify(bool strict);
@@ -82,7 +76,29 @@ public:
     void rectify(FSBlock &node, bool strict);
 
     // Rectifies the allocation table
-    void rectifyBitmap(bool strict);
+    void rectifyBitmap(bool strict = false);
+
+
+    //
+    // GUI helper functions
+    //
+
+public:
+
+    // Returns a portion of the block as an ASCII dump
+    string ascii(Block nr, isize offset, isize len) const noexcept;
+
+    // Returns a block summary for creating the block usage image
+    void createUsageMap(u8 *buffer, isize len) const;
+
+    // Returns a usage summary for creating the block allocation image
+    void createAllocationMap(u8 *buffer, isize len) const;
+
+    // Returns a block summary for creating the diagnose image
+    void createHealthMap(u8 *buffer, isize len) const;
+
+    // Searches the block list for a block of a specific type
+    isize nextBlockOfType(FSBlockType type, Block after) const;
 };
 
 }

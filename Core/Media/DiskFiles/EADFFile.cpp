@@ -11,7 +11,7 @@
 #include "EADFFile.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
-#include "MutableFileSystem.h"
+#include "FileSystem.h"
 #include "IOUtils.h"
 
 namespace vamiga {

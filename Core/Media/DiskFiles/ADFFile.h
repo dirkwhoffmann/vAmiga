@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-class MutableFileSystem;
+class FileSystem;
 
 class ADFFile : public FloppyFile {
 
@@ -51,13 +51,13 @@ public:
     ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
     ADFFile(const class FloppyDisk &disk) throws { init(disk); }
     ADFFile(const class FloppyDrive &drive) throws { init(drive); }
-    ADFFile(const MutableFileSystem &volume) throws { init(volume); }
-    
+    ADFFile(const FileSystem &volume) throws { init(volume); }
+
     void init(Diameter dia, Density den) throws;
     void init(const FloppyDiskDescriptor &descr) throws;
     void init(const FloppyDisk &disk) throws;
     void init(const FloppyDrive &drive) throws;
-    void init(const MutableFileSystem &volume) throws;
+    void init(const FileSystem &volume) throws;
 
     
     //

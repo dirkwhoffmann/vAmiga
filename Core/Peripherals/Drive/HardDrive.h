@@ -114,7 +114,7 @@ public:
     void init(isize size);
 
     // Creates a hard drive with the contents of a file system
-    void init(const class MutableFileSystem &fs) throws;
+    void init(const class FileSystem &fs) throws;
 
     // Creates a hard drive with the contents of a media file
     void init(const class MediaFile &file) throws;

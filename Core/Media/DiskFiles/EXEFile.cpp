@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "EXEFile.h"
-#include "MutableFileSystem.h"
+#include "FileSystem.h"
 #include "IOUtils.h"
 #include "OSDescriptors.h"
 
@@ -46,7 +46,7 @@ EXEFile::finalizeRead()
     bool hd = data.size > 853000;
 
     // Create a new file system
-    MutableFileSystem volume(Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
+    FileSystem volume(Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
     volume.setName(FSName("Disk"));
     
     // Make the volume bootable
@@ -66,7 +66,7 @@ EXEFile::finalizeRead()
     }
 
     // Finalize
-    volume.updateChecksums();
+    volume.importer.updateChecksums();
 
     // Print some debug information about the volume
     if (FS_DEBUG) volume.dump(Category::State);
