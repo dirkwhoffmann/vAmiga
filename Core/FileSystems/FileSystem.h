@@ -67,7 +67,7 @@ class HDFFile;
 class FloppyDrive;
 class HardDrive;
 
-class FileSystem : public Loggable { // }, public Dumpable {
+class FileSystem : public Loggable {
 
     friend struct FSBlock;
     friend class  FSExtension;
@@ -75,18 +75,11 @@ class FileSystem : public Loggable { // }, public Dumpable {
     friend class  FSAllocator;
     friend struct FSHashTable;
     friend struct FSPartition;
+    friend class  FSTree;
 
     // Static file system properties
     FSTraits traits;
 
-public:
-
-    //Subcomponents
-    FSDoctor doctor = FSDoctor(*this);
-    FSImporter importer = FSImporter(*this);
-    FSExporter exporter = FSExporter(*this);
-
-private:
 
     //
     // Layer 0
@@ -119,12 +112,20 @@ private:
     Block current = 0;
 
 
+public:
+
+    //Subcomponents
+    FSDoctor doctor = FSDoctor(*this);
+    FSImporter importer = FSImporter(*this);
+    FSExporter exporter = FSExporter(*this);
+
+
     //
     // Initializing
     //
-    
+
 public:
-    
+
     FileSystem() { };
     FileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
     FileSystem(const FSDescriptor &layout, u8 *buf, isize len) : FileSystem() { init(layout, buf, len); }
@@ -145,7 +146,7 @@ public:
     //
     // Printing debug information
     //
-    
+
 public:
 
     void dumpInfo(std::ostream &ss = std::cout) const noexcept;
@@ -153,7 +154,7 @@ public:
     void dumpProps(std::ostream &ss = std::cout) const noexcept;
     void dumpBlocks(std::ostream &ss = std::cout) const noexcept;
 
-    
+
     //
     // Querying file system properties
     //
@@ -167,15 +168,19 @@ public:
     isize bsize() const noexcept { return traits.bsize; }
 
     // Returns usage information and root metadata
-    FSStat getStat() const noexcept;
+    FSStat stat() const noexcept;
 
     // Returns information about the boot block
-    FSBootStat getBootStat() const noexcept;
+    FSBootStat bootStat() const noexcept;
 
     // Returns information about file permissions
     FSAttr attr(Block nr) const;
     FSAttr attr(const FSBlock &fhd) const;
 
+
+    // -------------------------------------------------------------------------
+    //                                    Layer 0
+    // -------------------------------------------------------------------------
 
     //
     // Querying block properties
@@ -185,20 +190,20 @@ public:
 
     // Returns the type of a certain block or a block item
     FSBlockType typeOf(Block nr) const noexcept;
-    bool is(Block nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
     FSItemType typeOf(Block nr, isize pos) const noexcept;
 
     // Convenience wrappers
-    bool isEmpty(Block nr) const noexcept { return typeOf(nr) == FSBlockType::EMPTY; }
+    bool is(Block nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
+    bool isEmpty(Block nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
 
-    // Predicts the type of a block
+    // Predicts the type of a block based on the stored data
     FSBlockType predictType(Block nr, const u8 *buf) const noexcept;
 
 
     //
     // Accessing the block storage
     //
-    
+
 public:
 
     // Returns a block pointer or null if the block does not exist
@@ -222,84 +227,80 @@ public:
     const FSBlock &operator[](size_t nr) const;
 
 
+    // -------------------------------------------------------------------------
+    //                                    Layer 1
+    // -------------------------------------------------------------------------
+
     //
-    // Managing files and directories
+    // Formatting
     //
 
 public:
 
-    // Returns the root of the directory tree
-    FSBlock &root() { return at(rootBlock); }
-    const FSBlock &root() const { return at(rootBlock); }
+    // Formats the volume
+    void format(string name = "");
+    void format(FSFormat dos, string name = "");
 
-    // Returns the working directory (TODO: MOVE TO POSIX LAYER)
-    FSBlock &pwd() { return at(current); }
-    const FSBlock &pwd() const { return at(current); }
+    // Assigns the volume name
+    void setName(FSName name);
+    void setName(string name) { setName(FSName(name)); }
 
-    // Returns the parent directory
-    FSBlock &parent(const FSBlock &block);
-    FSBlock *parent(const FSBlock *block) noexcept;
-    const FSBlock &parent(const FSBlock &block) const;
-    const FSBlock *parent(const FSBlock *block) const noexcept;
+    // Installs a boot block
+    void makeBootable(BootBlockId id);
 
-    // Changes the working directory (TODO: MOVE TO POSIX LAYER)
-    void cd(const FSName &name);
-    void cd(const FSBlock &path);
-    void cd(const string &path);
+    // Removes a boot block virus from the current partition (if any)
+    void killVirus();
 
-    // Checks if a an item exists in the directory tree
-    bool exists(const FSBlock &top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
-    // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock *seekPtr(const FSBlock *top, const FSName &name) noexcept;
-    FSBlock *seekPtr(const FSBlock *top, const fs::path &name) noexcept;
-    FSBlock *seekPtr(const FSBlock *top, const string &name) noexcept;
-    const FSBlock *seekPtr(const FSBlock *top, const FSName &name) const noexcept;
-    const FSBlock *seekPtr(const FSBlock *top, const fs::path &name) const noexcept;
-    const FSBlock *seekPtr(const FSBlock *top, const string &name) const noexcept;
+    //
+    // Managing directories
+    //
 
-    // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock &seek(const FSBlock &top, const FSName &name);
-    FSBlock &seek(const FSBlock &top, const fs::path &name);
-    FSBlock &seek(const FSBlock &top, const string &name);
-    const FSBlock &seek(const FSBlock &top, const FSName &name) const;
-    const FSBlock &seek(const FSBlock &top, const fs::path &name) const;
-    const FSBlock &seek(const FSBlock &top, const string &name) const;
+    // Creates a new directory
+    FSBlock &mkdir(FSBlock &at, const FSName &name);
 
-    // Seeks all items satisfying a predicate
-    std::vector<const FSBlock *> find(const FSOpt &opt) const;
-    std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
-    std::vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
-    std::vector<Block> find(Block root, const FSOpt &opt) const;
+    // Removes an empty directory
+    void rmdir(FSBlock &at, const FSName &name);
 
-    // Seeks all items with a pattern-matching name
-    std::vector<const FSBlock *> find(const FSPattern &pattern) const;
-    std::vector<const FSBlock *> find(const FSBlock *top, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> find(const FSBlock &top, const FSPattern &pattern) const;
-    std::vector<Block> find(Block root, const FSPattern &pattern) const;
+    // Looks up a directory item
+    FSBlock *searchDir(const FSBlock &at, const FSName &name);
 
-    // Collects all items with a pattern-matching path
-    std::vector<const FSBlock *> match(const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
-    std::vector<Block> match(Block root, const FSPattern &pattern) const;
+    // Creates a directory entry
+    void link(FSBlock &at, FSBlock &fhb);
+
+    // Removes a directory entry
+    void unlink(const FSBlock &fhb);
+
+    //
+    // Managing files
+    //
+
+
+
+
+
+
+    //
+    // Creating and deleting blocks
+    //
 
 private:
 
-    std::vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
-                                      std::unordered_set<Block> &visited) const;
+    // Creates a new block of a certain kind
+    FSBlock &newUserDirBlock(const FSName &name);
+    FSBlock &newFileHeaderBlock(const FSName &name);
 
-    std::vector<const FSBlock *> match(const FSBlock *top,
-                                       std::vector<FSPattern> pattern) const;
+    // Adds a new block of a certain kind
+    void addFileListBlock(Block at, Block head, Block prev);
+    void addDataBlock(Block at, isize id, Block head, Block prev);
 
 
     //
     // Traversing linked lists
     //
 
-public:
-    
+private:
+
     // Follows a linked list and collects all blocks
     std::vector<const FSBlock *> collect(const FSBlock &block,
                                          std::function<const FSBlock *(const FSBlock *)> next) const;
@@ -332,53 +333,12 @@ public:
     void ensureDirectory(const FSBlock &node);
     void ensureNotRoot(const FSBlock &node);
     void ensureEmptyDirectory(const FSBlock &node);
+    void ensureNotExist(const FSBlock &node, const FSName &name);
 
 
     //
     // LAYER 2: WRITE
     //
-
-    //
-    // Formatting
-    //
-
-public:
-
-    // Formats the volume
-    void format(string name = "");
-    void format(FSFormat dos, string name = "");
-
-    // Assigns the volume name
-    void setName(FSName name);
-    void setName(string name) { setName(FSName(name)); }
-
-
-    //
-    // Creating and deleting blocks
-    //
-
-private:
-
-    // Adds a new block of a certain kind
-    void addFileListBlock(Block at, Block head, Block prev);
-    void addDataBlock(Block at, isize id, Block head, Block prev);
-
-    // Creates a new block of a certain kind
-    FSBlock &newUserDirBlock(const FSName &name);
-    FSBlock &newFileHeaderBlock(const FSName &name);
-
-
-    //
-    // Managing the boot blocks
-    //
-
-public:
-
-    // Installs a boot block
-    void makeBootable(BootBlockId id);
-
-    // Removes a boot block virus from the current partition (if any)
-    void killVirus();
 
 
     //
@@ -387,16 +347,13 @@ public:
 
 public:
 
-    // Creates a new directory
-    FSBlock &createDir(FSBlock &at, const FSName &name);
 
     // Creates a directory entry
     FSBlock &link(FSBlock &at, const FSName &name); // DEPRECATED
     void link(FSBlock &at, const FSName &name, FSBlock &fhb);  // DEPRECATED
-    void link(FSBlock &at, FSBlock &fhb);
+    // void link(FSBlock &at, FSBlock &fhb);
 
-    // Removes a directory entry
-    void unlink(const FSBlock &fhb);
+
 
     // Frees the file header block and all related data blocks
     void reclaim(const FSBlock &fhb);
@@ -451,6 +408,79 @@ private:
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
     isize addData(FSBlock &block, const u8 *buf, isize size);
+
+    //
+    // Seeking files and directories
+    //
+
+public:
+
+    // Returns the root of the directory tree (TODO: MOVE TO RESOLVER LAYER)
+    FSBlock &root() { return at(rootBlock); }
+    const FSBlock &root() const { return at(rootBlock); }
+
+    // Returns the working directory (TODO: MOVE TO RESOLVER LAYER)
+    FSBlock &pwd() { return at(current); }
+    const FSBlock &pwd() const { return at(current); }
+
+    // Returns the parent directory
+    FSBlock &parent(const FSBlock &block);
+    FSBlock *parent(const FSBlock *block) noexcept;
+    const FSBlock &parent(const FSBlock &block) const;
+    const FSBlock *parent(const FSBlock *block) const noexcept;
+
+    // Changes the working directory (TODO: MOVE TO RESOLVER LAYER)
+    void cd(const FSName &name);
+    void cd(const FSBlock &path);
+    void cd(const string &path);
+
+    // Checks if a an item exists in the directory tree
+    bool exists(const FSBlock &top, const fs::path &path) const;
+    bool exists(const fs::path &path) const { return exists(pwd(), path); }
+
+    // Seeks an item in the directory tree (returns nullptr if not found)
+    FSBlock *seekPtr(const FSBlock *top, const FSName &name) noexcept;
+    FSBlock *seekPtr(const FSBlock *top, const fs::path &name) noexcept;
+    FSBlock *seekPtr(const FSBlock *top, const string &name) noexcept;
+    const FSBlock *seekPtr(const FSBlock *top, const FSName &name) const noexcept;
+    const FSBlock *seekPtr(const FSBlock *top, const fs::path &name) const noexcept;
+    const FSBlock *seekPtr(const FSBlock *top, const string &name) const noexcept;
+
+    // Seeks an item in the directory tree (returns nullptr if not found)
+    FSBlock &seek(const FSBlock &top, const FSName &name);
+    FSBlock &seek(const FSBlock &top, const fs::path &name);
+    FSBlock &seek(const FSBlock &top, const string &name);
+    const FSBlock &seek(const FSBlock &top, const FSName &name) const;
+    const FSBlock &seek(const FSBlock &top, const fs::path &name) const;
+    const FSBlock &seek(const FSBlock &top, const string &name) const;
+
+    // Seeks all items satisfying a predicate
+    std::vector<const FSBlock *> find(const FSOpt &opt) const;
+    std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
+    std::vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
+    std::vector<Block> find(Block root, const FSOpt &opt) const;
+
+    // Seeks all items with a pattern-matching name
+    std::vector<const FSBlock *> find(const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSBlock *top, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSBlock &top, const FSPattern &pattern) const;
+    std::vector<Block> find(Block root, const FSPattern &pattern) const;
+
+    // Collects all items with a pattern-matching path
+    std::vector<const FSBlock *> match(const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
+    std::vector<Block> match(Block root, const FSPattern &pattern) const;
+
+private:
+
+    std::vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
+                                      std::unordered_set<Block> &visited) const;
+
+    std::vector<const FSBlock *> match(const FSBlock *top,
+                                       std::vector<FSPattern> pattern) const;
+
+
 };
 
 }

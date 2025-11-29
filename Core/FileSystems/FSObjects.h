@@ -134,10 +134,10 @@ struct FSStat {
 struct FSBootStat {
 
     // Name of the boot block
-    FSName bbName;
+    FSName name;
 
     // Boot block type
-    BootBlockType bbType;
+    BootBlockType type;
 
     // Infection status
     bool hasVirus;

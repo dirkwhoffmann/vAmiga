@@ -12,6 +12,7 @@ Defaults.cpp
 Dumpable.cpp
 GuardList.cpp
 Host.cpp
+Loggable.cpp
 MsgQueue.cpp
 Option.cpp
 Serializable.cpp

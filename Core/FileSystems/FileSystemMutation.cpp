@@ -31,83 +31,7 @@ FileSystem::init(Diameter dia, Density den, FSFormat dos, const fs::path &path)
 }
 */
 
-void
-FileSystem::format(string name)
-{
-    format(traits.dos);
-}
 
-void
-FileSystem::format(FSFormat dos, string name){
-
-    require_initialized();
-
-    traits.dos = dos;
-    if (dos == FSFormat::NODOS) return;
-
-    // Perform some consistency checks
-    assert(blocks() > 2);
-    assert(rootBlock > 0);
-
-    // Trash all existing data
-    storage.init(blocks());
-
-    // Create boot blocks
-    storage[0].init(FSBlockType::BOOT);
-    storage[1].init(FSBlockType::BOOT);
-
-    // Create the root block
-    storage[rootBlock].init(FSBlockType::ROOT);
-
-    // Create bitmap blocks
-    for (auto& ref : bmBlocks) {
-        
-        // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
-        storage[ref].init(FSBlockType::BITMAP);
-    }
-
-    // Add bitmap extension blocks
-    Block pred = rootBlock;
-    for (auto &ref : bmExtBlocks) {
-
-        // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        storage[ref].init(FSBlockType::BITMAP_EXT);
-        storage[pred].setNextBmExtBlockRef(ref);
-        pred = ref;
-    }
-    
-    // Add all bitmap block references
-    storage[rootBlock].addBitmapBlockRefs(bmBlocks);
-
-    // Mark free blocks as free in the bitmap block
-    // TODO: SPEED THIS UP
-    for (isize i = 0; i < blocks(); i++) {
-        if (storage.isEmpty(Block(i))) allocator.markAsFree(Block(i));
-    }
-    
-    // Set the volume name
-    if (name != "") setName(name);
-
-    // Rectify checksums
-    storage[0].updateChecksum();
-    storage[1].updateChecksum();
-    storage[rootBlock].updateChecksum();
-    for (auto& ref : bmBlocks) { storage[ref].updateChecksum(); }
-    for (auto& ref : bmExtBlocks) { storage[ref].updateChecksum(); }
-
-    // Set the current directory
-    current = rootBlock;
-}
-
-void
-FileSystem::setName(FSName name)
-{
-    if (auto *rb = storage.read(rootBlock, FSBlockType::ROOT); rb) {
-
-        rb->setName(name);
-        rb->updateChecksum();
-    }
-}
 
 /*
 isize
@@ -305,37 +229,6 @@ FileSystem::newFileHeaderBlock(const FSName &name)
     return at(nr);
 }
 
-void
-FileSystem::makeBootable(BootBlockId id)
-{
-    assert(storage.getType(0) == FSBlockType::BOOT);
-    assert(storage.getType(1) == FSBlockType::BOOT);
-    storage[0].writeBootBlock(id, 0);
-    storage[1].writeBootBlock(id, 1);
-}
-
-void
-FileSystem::killVirus()
-{
-    assert(storage.getType(0) == FSBlockType::BOOT);
-    assert(storage.getType(1) == FSBlockType::BOOT);
-
-    if (getBootStat().hasVirus) {
-
-        auto id =
-        traits.ofs() ? BootBlockId::AMIGADOS_13 :
-        traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
-
-        if (id != BootBlockId::NONE) {
-            storage[0].writeBootBlock(id, 0);
-            storage[1].writeBootBlock(id, 1);
-        } else {
-            std::memset(storage[0].data() + 4, 0, traits.bsize - 4);
-            std::memset(storage[1].data(), 0, traits.bsize);
-        }
-    }
-}
-
 /*
 void
 FileSystem::setAllocationBit(Block nr, bool value)
@@ -366,21 +259,6 @@ FileSystem::rectifyAllocationMap()
 */
 
 FSBlock &
-FileSystem::createDir(FSBlock &at, const FSName &name)
-{
-    ensureDirectory(at);
-
-    // Error out if the file already exists
-    if (seekPtr(&at, name)) throw(AppError(Fault::FS_EXISTS, name.cpp_str()));
-
-    FSBlock &block = newUserDirBlock(name);
-    block.setParentDirRef(at.nr);
-    addToHashTable(at.nr, block.nr);
-
-    return block;
-}
-
-FSBlock &
 FileSystem::link(FSBlock &at, const FSName &name)
 {
     FSBlock &fhb = newFileHeaderBlock(name);
@@ -408,33 +286,6 @@ FileSystem::link(FSBlock &at, const FSName &name, FSBlock &fhb)
     fhb.setParentDirRef(at.nr);
     addToHashTable(at.nr, fhb.nr);
 }
-
-void
-FileSystem::link(FSBlock &at, FSBlock &fhb)
-{
-    auto name = fhb.name();
-
-    // Files can only be linked to directories
-    if (!at.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
-
-    // Error out if the file already exists
-    if (seekPtr(&at, name)) throw(AppError(Fault::FS_EXISTS, name.cpp_str()));
-
-    // Wire up
-    fhb.setParentDirRef(at.nr);
-    addToHashTable(at.nr, fhb.nr);
-}
-
-void
-FileSystem::unlink(const FSBlock &node)
-{
-    // Check block type
-    if (!node.isFile() && !node.isDirectory()) throw AppError(Fault::FS_NOT_A_FILE);
-
-    // Remove the file from the hash table
-    deleteFromHashTable(node);
-}
-
 
 void
 FileSystem::reclaim(const FSBlock &node)

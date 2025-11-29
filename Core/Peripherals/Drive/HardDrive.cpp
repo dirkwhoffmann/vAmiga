@@ -131,7 +131,7 @@ HardDrive::init(const FileSystem &fs)
     init(geometry);
         
     // Update the partition table
-    ptable[0].name = fs.getStat().name.cpp_str();
+    ptable[0].name = fs.stat().name.cpp_str();
     ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
 
     // Copy over all blocks

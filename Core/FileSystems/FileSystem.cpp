@@ -252,8 +252,6 @@ FileSystem::dumpInfo(std::ostream &os) const noexcept
 {
     using namespace util;
 
-    auto stat = getStat();
-
     os << "Type   Size             Used    Free    Full  Name" << std::endl;
     dumpState(os);
 }
@@ -263,7 +261,7 @@ FileSystem::dumpState(std::ostream &os) const noexcept
 {
     using namespace util;
 
-    auto stat = getStat();
+    auto st = stat();
 
     auto size = std::to_string(traits.blocks) + " (x " + std::to_string(traits.bsize) + ")";
 
@@ -273,13 +271,13 @@ FileSystem::dumpState(std::ostream &os) const noexcept
         os << "  ";
         os << std::setw(15) << std::left << std::setfill(' ') << size;
         os << "  ";
-        os << std::setw(6) << std::left << std::setfill(' ') << stat.usedBlocks;
+        os << std::setw(6) << std::left << std::setfill(' ') << st.usedBlocks;
         os << "  ";
-        os << std::setw(6) << std::left << std::setfill(' ') << stat.freeBlocks;
+        os << std::setw(6) << std::left << std::setfill(' ') << st.freeBlocks;
         os << "  ";
-        os << std::setw(3) << std::right << std::setfill(' ') << isize(stat.fill);
+        os << std::setw(3) << std::right << std::setfill(' ') << isize(st.fill);
         os << "%  ";
-        os << stat.name.c_str() << std::endl;
+        os << st.name.c_str() << std::endl;
 
     } else {
 
@@ -302,17 +300,17 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
 {
     using namespace util;
 
-    auto stat = getStat();
-    auto bootStat = getBootStat();
+    auto st = stat();
+    auto bst = bootStat();
 
     os << tab("Name");
-    os << stat.name.cpp_str() << std::endl;
+    os << st.name.cpp_str() << std::endl;
     os << tab("Created");
-    os << stat.bDate.str() << std::endl;
+    os << st.bDate.str() << std::endl;
     os << tab("Modified");
-    os << stat.mDate.str() << std::endl;
+    os << st.mDate.str() << std::endl;
     os << tab("Boot block");
-    os << bootStat.bbName << std::endl;
+    os << bst.name << std::endl;
     os << tab("Capacity");
     os << util::byteCountAsString(traits.blocks * traits.bsize) << std::endl;
     os << tab("Block size");
@@ -320,10 +318,10 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     os << tab("Blocks");
     os << dec(traits.blocks) << std::endl;
     os << tab("Used");
-    os << dec(stat.usedBlocks);
+    os << dec(st.usedBlocks);
     os << tab("Free");
-    os << dec(stat.freeBlocks);
-    os << " (" <<  std::fixed << std::setprecision(2) << stat.fill << "%)" << std::endl;
+    os << dec(st.freeBlocks);
+    os << " (" <<  std::fixed << std::setprecision(2) << st.fill << "%)" << std::endl;
     os << tab("Root block");
     os << dec(rootBlock) << std::endl;
     os << tab("Bitmap blocks");
@@ -341,7 +339,7 @@ FileSystem::dumpBlocks(std::ostream &os) const noexcept
 }
 
 FSStat
-FileSystem::getStat() const noexcept
+FileSystem::stat() const noexcept
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
 
@@ -367,14 +365,14 @@ FileSystem::getStat() const noexcept
 }
 
 FSBootStat
-FileSystem::getBootStat() const noexcept
+FileSystem::bootStat() const noexcept
 {
     auto bb = BootBlockImage(storage[0].data(), storage[1].data());
 
     FSBootStat result = {
 
-        .bbName = bb.name,
-        .bbType = bb.type,
+        .name = bb.name,
+        .type = bb.type,
         .hasVirus = bb.type == BootBlockType::VIRUS
     };
 
@@ -420,101 +418,7 @@ FileSystem::attr(const FSBlock &fhd) const
     return result;
 }
 
-FSBlock *
-FileSystem::read(Block nr) noexcept
-{
-    return storage.read(nr);
-}
 
-FSBlock *
-FileSystem::read(Block nr, FSBlockType type) noexcept
-{
-    return storage.read(nr, type);
-}
-
-FSBlock *
-FileSystem::read(Block nr, std::vector<FSBlockType> types) noexcept
-{
-    return storage.read(nr, types);
-}
-
-const FSBlock *
-FileSystem::read(Block nr) const noexcept
-{
-    return storage.read(nr);
-}
-
-const FSBlock *
-FileSystem::read(Block nr, FSBlockType type) const noexcept
-{
-    return storage.read(nr, type);
-}
-
-const FSBlock *
-FileSystem::read(Block nr, std::vector<FSBlockType> types) const noexcept
-{
-    return storage.read(nr, types);
-}
-
-FSBlock &
-FileSystem::at(Block nr)
-{
-    return storage.at(nr);
-}
-
-FSBlock &
-FileSystem::at(Block nr, FSBlockType type)
-{
-    return storage.at(nr, type);
-}
-
-FSBlock &
-FileSystem::at(Block nr, std::vector<FSBlockType> types)
-{
-    return storage.at(nr, types);
-}
-
-const FSBlock &
-FileSystem::at(Block nr) const
-{
-    return storage.at(nr);
-}
-
-const FSBlock &
-FileSystem::at(Block nr, FSBlockType type) const
-{
-    return storage.at(nr, type);
-}
-
-const FSBlock &
-FileSystem::at(Block nr, std::vector<FSBlockType> types) const
-{
-    return storage.at(nr, types);
-}
-
-FSBlock &
-FileSystem::operator[](size_t nr)
-{
-    return storage[nr];
-}
-
-const FSBlock &
-FileSystem::operator[](size_t nr) const
-{
-    return storage[nr];
-}
-
-FSBlockType
-FileSystem::typeOf(Block nr) const noexcept
-{
-    return storage.getType(nr);
-}
-
-FSItemType
-FileSystem::typeOf(Block nr, isize pos) const noexcept
-{
-    return storage.read(nr) ? storage[nr].itemType(pos) : FSItemType::UNUSED;
-}
 
 FSBlock &
 FileSystem::parent(const FSBlock &node)
@@ -554,6 +458,7 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
     if (name == ".")  return read(root->nr);
     if (name == "..") return parent(root);
 
+    // TODO: USE SEARCHDIR
     // Only proceed if a hash table is present
     if (root->hasHashTable()) {
 
@@ -997,40 +902,6 @@ FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSB
     return result;
 }
 
-FSBlockType
-FileSystem::predictType(Block nr, const u8 *buf) const noexcept
-{
-    assert(buf != nullptr);
-    
-    // Is it a boot block?
-    if (nr == 0 || nr == 1) return FSBlockType::BOOT;
-    
-    // Is it a bitmap block?
-    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
-        return FSBlockType::BITMAP;
-    
-    // Is it a bitmap extension block?
-    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
-        return FSBlockType::BITMAP_EXT;
-
-    // For all other blocks, check the type and subtype fields
-    u32 type = FSBlock::read32(buf);
-    u32 subtype = FSBlock::read32(buf + traits.bsize - 4);
-
-    if (type == 2  && subtype == 1)       return FSBlockType::ROOT;
-    if (type == 2  && subtype == 2)       return FSBlockType::USERDIR;
-    if (type == 2  && subtype == (u32)-3) return FSBlockType::FILEHEADER;
-    if (type == 16 && subtype == (u32)-3) return FSBlockType::FILELIST;
-
-    // Check if this block is a data block
-    if (traits.ofs()) {
-        if (type == 8) return FSBlockType::DATA_OFS;
-    } else {
-        for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA_FFS;
-    }
-    
-    return FSBlockType::EMPTY;
-}
 
 void
 FileSystem::require_initialized() const
@@ -1087,5 +958,13 @@ FileSystem::ensureEmptyDirectory(const FSBlock &node)
         throw AppError(Fault::FS_DIR_NOT_EMPTY);
     }
 }
+
+void
+FileSystem::ensureNotExist(const FSBlock &node, const FSName &name)
+{
+    ensureDirectory(node);
+    if (searchDir(node, name) != nullptr) throw AppError(Fault::FS_EXISTS);
+}
+
 
 }

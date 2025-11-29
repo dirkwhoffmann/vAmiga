@@ -37,7 +37,7 @@ NavigatorConsole::prompt()
         
         ss << "[" << std::to_string(pwd.nr) << "]";
         
-        auto fsName = fs.getStat().name;
+        auto fsName = fs.stat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
         if (pwd.isDirectory()) ss << " " << pwd.absName();
     }
@@ -727,14 +727,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                         
                         auto &item = parsePath(args, "file");
                         auto name = item.cppName();
-                        if (name.empty()) name = fs.getStat().name.cpp_str();
+                        if (name.empty()) name = fs.stat().name.cpp_str();
                         fs.exporter.exportFiles(item, "/export", recursive, true);
                         msgQueue.setPayload( { "/export", name } );
                         
                     } else {
                         
                         fs.exporter.exportBlocks("/export");
-                        auto name = fs.getStat().name.cpp_str();
+                        auto name = fs.stat().name.cpp_str();
                         name += fs.getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );
                     }
@@ -1096,7 +1096,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             fs.require_formatted();
-            os << "Boot block: " << fs.getBootStat().bbName << std::endl;
+            os << "Boot block: " << fs.bootStat().name << std::endl;
         }
     });
     
@@ -1250,7 +1250,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
                 auto *p = &path;
                 for (auto &it: missing) {
-                    if (p) p = &fs.createDir(*p, FSName(it));
+                    if (p) p = &fs.mkdir(*p, FSName(it));
                 }
             }
     });

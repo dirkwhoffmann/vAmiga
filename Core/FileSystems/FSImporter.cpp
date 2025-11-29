@@ -111,7 +111,7 @@ FSImporter::import(FSBlock &top, const fs::directory_entry &entry, bool recursiv
         debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
-        auto &subdir = fs.createDir(top, fsname);
+        auto &subdir = fs.mkdir(top, fsname);
 
         // Import all items
         for (const auto& it : fs::directory_iterator(entry)) {

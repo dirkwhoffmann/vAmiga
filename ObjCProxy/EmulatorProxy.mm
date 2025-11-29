@@ -1382,25 +1382,25 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)name
 {
-    auto str = [self fs]->getStat().name;
+    auto str = [self fs]->stat().name;
     return @(str.c_str());
 }
 
 - (NSString *)creationDate
 {
-    auto str = [self fs]->getStat().bDate;
+    auto str = [self fs]->stat().bDate;
     return @(str.str().c_str());
 }
 
 - (NSString *)modificationDate
 {
-    auto str = [self fs]->getStat().mDate;
+    auto str = [self fs]->stat().mDate;
     return @(str.str().c_str());
 }
 
 - (NSString *)bootBlockName
 {
-    auto str = [self fs]->getBootStat().bbName;
+    auto str = [self fs]->bootStat().name;
     return @(str.c_str());
 }
 
@@ -1412,7 +1412,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)fillLevelString
 {
-    auto str = util::fillLevelAsString([self fs]->getStat().fill);
+    auto str = util::fillLevelAsString([self fs]->stat().fill);
     return @(str.c_str());
 }
 
@@ -1448,17 +1448,17 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)usedBlocks
 {
-    return [self fs]->getStat().usedBlocks;
+    return [self fs]->stat().usedBlocks;
 }
 
 - (double)fillLevel
 {
-    return [self fs]->getStat().fill;
+    return [self fs]->stat().fill;
 }
 
 - (BOOL)hasVirus
 {
-    return [self fs]->getBootStat().hasVirus;
+    return [self fs]->bootStat().hasVirus;
 }
 
 - (void)killVirus

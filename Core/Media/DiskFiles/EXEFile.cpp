@@ -59,7 +59,7 @@ EXEFile::finalizeRead()
         volume.createFile(*dir, FSName("file"), data);
 
         // Add a script directory
-        dir = &volume.createDir(*dir, FSName("s"));
+        dir = &volume.mkdir(*dir, FSName("s"));
 
         // Add a startup sequence
         volume.createFile(*dir, "startup-sequence", "file");

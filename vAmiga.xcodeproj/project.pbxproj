@@ -256,6 +256,10 @@
 		509D07672EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
 		509D07692EDB1B6500355638 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07682EDB1B6000355638 /* Loggable.cpp */; };
 		509D076A2EDB1B6500355638 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07682EDB1B6000355638 /* Loggable.cpp */; };
+		509D076C2EDB295200355638 /* FileSystem0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystem0.cpp */; };
+		509D076D2EDB295200355638 /* FileSystem0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystem0.cpp */; };
+		509D076F2EDB2A0900355638 /* FileSystem1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystem1.cpp */; };
+		509D07702EDB2A0900355638 /* FileSystem1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystem1.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -912,6 +916,8 @@
 		509D07642EDAF09F00355638 /* FileSystemFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystemFactory.h; sourceTree = "<group>"; };
 		509D07652EDAF0A800355638 /* FileSystemFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemFactory.cpp; sourceTree = "<group>"; };
 		509D07682EDB1B6000355638 /* Loggable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Loggable.cpp; sourceTree = "<group>"; };
+		509D076B2EDB294700355638 /* FileSystem0.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem0.cpp; sourceTree = "<group>"; };
+		509D076E2EDB2A0500355638 /* FileSystem1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem1.cpp; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -1430,6 +1436,8 @@
 				505C01082577A8C000F9E05C /* FSDescriptor.cpp */,
 				5029C6E527CA6209002F6CCC /* FileSystem.h */,
 				5029C6E427CA6209002F6CCC /* FileSystem.cpp */,
+				509D076B2EDB294700355638 /* FileSystem0.cpp */,
+				509D076E2EDB2A0500355638 /* FileSystem1.cpp */,
 				509D04892EDA46CA00355638 /* FileSystemMutation.cpp */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
@@ -2504,6 +2512,7 @@
 				50650F4E2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				507201812E85197600BB8A58 /* OnboardingButton.swift in Sources */,
+				509D07702EDB2A0900355638 /* FileSystem1.cpp in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
 				50157EED28257B7C000E9DDD /* Config.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
@@ -2602,6 +2611,7 @@
 				50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
+				509D076C2EDB295200355638 /* FileSystem0.cpp in Sources */,
 				505DD69E2E0815B800D9E8B2 /* FSStorage.cpp in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
@@ -2901,6 +2911,7 @@
 				50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */,
 				50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */,
 				50FC047827DA129B00C3E566 /* Chrono.cpp in Sources */,
+				509D076F2EDB2A0900355638 /* FileSystem1.cpp in Sources */,
 				50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */,
 				50FC04F127DA1A4500C3E566 /* GdbServerCmds.cpp in Sources */,
 				50FC04E927DA1A3700C3E566 /* OSDebuggerRead.cpp in Sources */,
@@ -2973,6 +2984,7 @@
 				50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */,
 				50FC04B027DA199600C3E566 /* Memory.cpp in Sources */,
 				50FC04D527DA1A0000C3E566 /* CommanderConsole.cpp in Sources */,
+				509D076D2EDB295200355638 /* FileSystem0.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
