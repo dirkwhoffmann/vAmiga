@@ -122,7 +122,8 @@ struct FSStat {
     isize freeBytes;
     isize usedBlocks;
     isize usedBytes;
-
+    double fill;
+    
     // Root block metadata
     FSName name;
     FSTime bDate;

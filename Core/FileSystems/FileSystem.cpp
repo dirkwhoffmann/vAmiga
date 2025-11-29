@@ -166,6 +166,8 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 {
     using namespace util;
 
+    auto stat = getStat();
+
     switch (category) {
 
         case Category::Info:
@@ -175,9 +177,7 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 
         case Category::State:
         {
-            auto stat = getStat();
-            auto info = getInfo();
-            auto size = std::to_string(info.numBlocks) + " (x " + std::to_string(traits.bsize) + ")";
+            auto size = std::to_string(stat.numBlocks) + " (x " + std::to_string(traits.bsize) + ")";
 
             if (isFormatted()) {
 
@@ -185,11 +185,11 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
                 os << "  ";
                 os << std::setw(15) << std::left << std::setfill(' ') << size;
                 os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << info.usedBlocks;
+                os << std::setw(6) << std::left << std::setfill(' ') << stat.usedBlocks;
                 os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << info.freeBlocks;
+                os << std::setw(6) << std::left << std::setfill(' ') << stat.freeBlocks;
                 os << "  ";
-                os << std::setw(3) << std::right << std::setfill(' ') << isize(info.fillLevel);
+                os << std::setw(3) << std::right << std::setfill(' ') << isize(stat.fill);
                 os << "%  ";
                 os << stat.name.c_str() << std::endl;
 
@@ -211,9 +211,6 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
         }
         case Category::Properties:
         {
-            auto stat = getStat();
-            auto info = getInfo();
-
             os << tab("Name");
             os << stat.name.cpp_str() << std::endl;
             os << tab("Created");
@@ -223,16 +220,16 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
             os << tab("Boot block");
             os << getBootBlockName() << std::endl;
             os << tab("Capacity");
-            os << util::byteCountAsString(info.numBlocks * traits.bsize) << std::endl;
+            os << util::byteCountAsString(stat.numBlocks * traits.bsize) << std::endl;
             os << tab("Block size");
             os << dec(traits.bsize) << " Bytes" << std::endl;
             os << tab("Blocks");
-            os << dec(info.numBlocks) << std::endl;
+            os << dec(stat.numBlocks) << std::endl;
             os << tab("Used");
-            os << dec(info.usedBlocks);
+            os << dec(stat.usedBlocks);
             os << tab("Free");
-            os << dec(info.freeBlocks);
-            os << " (" <<  std::fixed << std::setprecision(2) << info.fillLevel << "%)" << std::endl;
+            os << dec(stat.freeBlocks);
+            os << " (" <<  std::fixed << std::setprecision(2) << stat.fill << "%)" << std::endl;
             os << tab("Root block");
             os << dec(rootBlock) << std::endl;
             os << tab("Bitmap blocks");
@@ -253,6 +250,7 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
     }
 }
 
+/*
 void
 FileSystem::cacheInfo(FSInfo &result) const noexcept
 {
@@ -269,6 +267,7 @@ FileSystem::cacheInfo(FSInfo &result) const noexcept
     result.usedBytes = result.usedBlocks * traits.bsize;
     result.fillLevel = double(100) * result.usedBlocks / result.numBlocks;
 }
+*/
 
 FSStat
 FileSystem::getStat() const noexcept
@@ -285,6 +284,7 @@ FileSystem::getStat() const noexcept
         .freeBytes  = storage.freeBytes(),
         .usedBlocks = storage.usedBlocks(),
         .usedBytes  = storage.usedBytes(),
+        .fill       = double(100) * storage.usedBlocks() / storage.numBlocks(),
 
         .name       = rb ? rb->getName() : FSName(""),
         .bDate      = rb ? rb->getCreationDate() : FSTime(),

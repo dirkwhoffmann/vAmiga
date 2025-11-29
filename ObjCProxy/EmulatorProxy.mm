@@ -1412,7 +1412,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)fillLevelString
 {
-    auto str = util::fillLevelAsString([self fs]->getInfo().fillLevel);
+    auto str = util::fillLevelAsString([self fs]->getStat().fill);
     return @(str.c_str());
 }
 
@@ -1448,12 +1448,12 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)usedBlocks
 {
-    return [self fs]->getInfo().usedBlocks;
+    return [self fs]->getStat().usedBlocks;
 }
 
 - (double)fillLevel
 {
-    return [self fs]->getInfo().fillLevel;
+    return [self fs]->getStat().fill;
 }
 
 - (BOOL)hasVirus

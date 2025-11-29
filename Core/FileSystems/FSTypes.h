@@ -402,29 +402,4 @@ typedef struct
 }
 FSDiagnosis;
 
-typedef struct
-{
-    // Name and time stamps
-    string name;
-    string creationDate;
-    string modificationDate;
-
-    // Capacity information
-    isize numBlocks;
-    isize freeBlocks;
-    isize usedBlocks;
-    isize freeBytes;
-    isize usedBytes;
-    double fillLevel;
-}
-FSInfo;
-
-/*
-typedef struct
-{
-    isize blockReads;
-}
-FSStats;
-*/
-
 }

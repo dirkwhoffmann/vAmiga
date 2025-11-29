@@ -67,7 +67,7 @@ class HDFFile;
 class FloppyDrive;
 class HardDrive;
 
-class FileSystem : public Loggable, public Dumpable, public Inspectable<FSInfo, Void> {
+class FileSystem : public Loggable, public Dumpable {
 
     friend struct FSBlock;
     friend class  FSComponent;
@@ -81,22 +81,30 @@ class FileSystem : public Loggable, public Dumpable, public Inspectable<FSInfo, 
 
 public:
 
-    // Public Components
+    //Subcomponents
     FSDoctor doctor = FSDoctor(*this);
     FSImporter importer = FSImporter(*this);
     FSExporter exporter = FSExporter(*this);
 
 private:
 
-    // Private Components
+    //
+    // Layer 0
+    //
+
+    // Block storage
     FSStorage storage = FSStorage(this);
+
+    // Allocation and allocation map managenent
     FSAllocator allocator = FSAllocator(*this);
+
+
+    //
+    // Layer 1
+    //
 
     // Location of the root block
     Block rootBlock = 0;
-
-    // Location of the current directory (TODO: MOVE TO POSIX LAYER)
-    Block current = 0;
 
     // Location of bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
@@ -104,14 +112,11 @@ private:
 
 
     //
-    // Static functions
+    // Layer 2
     //
 
-    // Makes a file name compatible with the host file system
-    // static fs::path sanitize(const string &filename);
-
-    // Makes a file name compatible with the Amiga file system
-    // static string unsanitize(const fs::path &filename);
+    // Location of the current directory
+    Block current = 0;
 
 
     //
@@ -120,12 +125,10 @@ private:
     
 public:
     
-    FileSystem() { stats = {}; };
+    FileSystem() { };
     FileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
     FileSystem(const FSDescriptor &layout, u8 *buf, isize len) : FileSystem() { init(layout, buf, len); }
     FileSystem(const FSDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
-
-    // Delete the copy constructor to avoid accidential duplications
     FileSystem(const FileSystem&) = delete;
     FileSystem& operator=(const FileSystem&) = delete;
 
@@ -147,16 +150,6 @@ protected:
     
     // const char *objectName() const noexcept override { return "FileSystem"; }
     void _dump(Category category, std::ostream &os) const noexcept override;
-
-
-    //
-    // Methods from Inspectable
-    //
-
-public:
-
-    void cacheInfo(FSInfo &result) const noexcept override;
-    // void cacheStats(FSStats &result) const noexcept override;
 
 
     //
