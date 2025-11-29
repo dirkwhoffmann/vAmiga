@@ -4,9 +4,9 @@ target_sources(VACore PRIVATE
 
 BootBlockImage.cpp
 FileSystem.cpp
-FileSystem0.cpp
-FileSystem1.cpp
-FileSystem2.cpp
+FileSystemLayer0.cpp
+FileSystemLayer1.cpp
+FileSystemLayer2.cpp
 FileSystemFactory.cpp
 FileSystemMutation.cpp
 FSAllocator.cpp

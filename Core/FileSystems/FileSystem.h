@@ -327,6 +327,11 @@ private:
     // Creating and destroying blocks
     //
 
+public:
+
+    // Frees the blocks of a deleted directory or file
+    void reclaim(const FSBlock &fhb);
+
 private:
 
     // Creates a new block of a certain kind
@@ -340,9 +345,6 @@ private:
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
     isize addData(FSBlock &block, const u8 *buf, isize size);
-
-    // Frees the blocks of a deleted directory or file
-    void reclaim(const FSBlock &fhb);
 
 
     //
