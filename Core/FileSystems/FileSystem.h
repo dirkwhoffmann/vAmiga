@@ -179,7 +179,7 @@ public:
 
 
     // -------------------------------------------------------------------------
-    //                                    Layer 0
+    //                             Layer 0: Blocks
     // -------------------------------------------------------------------------
 
     //
@@ -228,7 +228,7 @@ public:
 
 
     // -------------------------------------------------------------------------
-    //                                    Layer 1
+    //                             Layer 1: Nodes
     // -------------------------------------------------------------------------
 
     //
@@ -260,10 +260,10 @@ public:
     FSBlock &mkdir(FSBlock &at, const FSName &name);
 
     // Removes an empty directory
-    void rmdir(FSBlock &at, const FSName &name);
+    void rmdir(FSBlock &at);
 
     // Looks up a directory item
-    FSBlock *searchDir(const FSBlock &at, const FSName &name);
+    FSBlock *searchdir(const FSBlock &at, const FSName &name);
 
     // Creates a directory entry
     void link(FSBlock &at, FSBlock &fhb);
@@ -271,17 +271,60 @@ public:
     // Removes a directory entry
     void unlink(const FSBlock &fhb);
 
+private:
+
+    // Adds a hash-table entry for a given item
+    void addToHashTable(const FSBlock &item);
+    void addToHashTable(Block parent, Block ref);
+
+    // Removes the hash-table entry for a given item
+    void deleteFromHashTable(const FSBlock &item);
+    void deleteFromHashTable(Block parent, Block ref);
+
+
     //
     // Managing files
     //
 
+public:
 
+    // Creates a new file
+    FSBlock &createFile(FSBlock &at, const FSName &name);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const u8 *buf, isize size);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const string &str);
 
+    // Delete a file
+    void rm(const FSBlock &at);
 
+    // Renames a file or directory
+    void rename(FSBlock &item, const FSName &name);
+
+    // Moves a file or directory to another location
+    void move(FSBlock &item, FSBlock &dest);
+    void move(FSBlock &item, FSBlock &dest, const FSName &name);
+
+    // Copies a file
+    void copy(const FSBlock &item, FSBlock &dest);
+    void copy(const FSBlock &item, FSBlock &dest, const FSName &name);
+
+    // Shrinks or expands an existing file (pad with 0)
+    void resize(FSBlock &at, isize size);
+
+    // Replaces the cotents of an existing file
+    void replace(FSBlock &at, const Buffer<u8> &data);
+
+private:
+
+    // Main replace function
+    FSBlock &replace(FSBlock &fhb,
+                     const u8 *buf, isize size,
+                     std::vector<Block> listBlocks = {},
+                     std::vector<Block> dataBlocks = {});
 
 
     //
-    // Creating and deleting blocks
+    // Creating and destroying blocks
     //
 
 private:
@@ -294,6 +337,13 @@ private:
     void addFileListBlock(Block at, Block head, Block prev);
     void addDataBlock(Block at, isize id, Block head, Block prev);
 
+    // Adds bytes to a data block
+    isize addData(Block nr, const u8 *buf, isize size);
+    isize addData(FSBlock &block, const u8 *buf, isize size);
+
+    // Frees the blocks of a deleted directory or file
+    void reclaim(const FSBlock &fhb);
+
 
     //
     // Traversing linked lists
@@ -302,10 +352,9 @@ private:
 private:
 
     // Follows a linked list and collects all blocks
-    std::vector<const FSBlock *> collect(const FSBlock &block,
-                                         std::function<const FSBlock *(const FSBlock *)> next) const;
-    std::vector<Block> collect(const Block nr,
-                               std::function<const FSBlock *(const FSBlock *)> next) const;
+    using BlockIterator = std::function<const FSBlock *(const FSBlock *)>;
+    std::vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const;
+    std::vector<Block> collect(const Block nr, BlockIterator succ) const;
 
     // Collects blocks of a certain type
     std::vector<const FSBlock *> collectDataBlocks(const FSBlock &block) const;
@@ -318,96 +367,25 @@ private:
     std::vector<Block> collectHashedBlocks(Block nr) const;
 
 
-    //
-    // Argument checkers
-    //
-
-public:
-
-    void require_initialized() const;
-    void require_formatted() const;
-    void require_file_or_directory(const FSBlock &block) const;
-
-    void ensureFile(const FSBlock &node);
-    void ensureFileOrDirectory(const FSBlock &node);
-    void ensureDirectory(const FSBlock &node);
-    void ensureNotRoot(const FSBlock &node);
-    void ensureEmptyDirectory(const FSBlock &node);
-    void ensureNotExist(const FSBlock &node, const FSName &name);
-
+    // -------------------------------------------------------------------------
+    //                           Layer 2: Paths
+    // -------------------------------------------------------------------------
 
     //
-    // LAYER 2: WRITE
-    //
-
-
-    //
-    // Creating files and directories
+    // Managing the working directory
     //
 
 public:
+    
+    // Returns the working directory
+    FSBlock &pwd() { return at(current); }
+    const FSBlock &pwd() const { return at(current); }
 
+    // Changes the working directory
+    void cd(const FSName &name);
+    void cd(const FSBlock &path);
+    void cd(const string &path);
 
-    // Creates a directory entry
-    FSBlock &link(FSBlock &at, const FSName &name); // DEPRECATED
-    void link(FSBlock &at, const FSName &name, FSBlock &fhb);  // DEPRECATED
-    // void link(FSBlock &at, FSBlock &fhb);
-
-
-
-    // Frees the file header block and all related data blocks
-    void reclaim(const FSBlock &fhb);
-
-    // Creates a new file
-    FSBlock &createFile(FSBlock &at, const FSName &name);
-    FSBlock &createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf);
-    FSBlock &createFile(FSBlock &at, const FSName &name, const string &str);
-    FSBlock &createFile(FSBlock &at, const FSName &name, const u8 *buf, isize size);
-
-private:
-
-    // FSBlock &createFile(FSBlock &at, FSBlock &fhb, const u8 *buf, isize size);
-    FSBlock &replace(FSBlock &fhb,
-                     const u8 *buf, isize size,
-                     std::vector<Block> listBlocks = {},
-                     std::vector<Block> dataBlocks = {});
-
-public:
-
-    // Changes the size of an existing file, pads with 0
-    void resize(FSBlock &at, isize size);
-
-    // Changes the size and cotents of an existing file
-    void replace(FSBlock &at, const Buffer<u8> &data);
-
-    // Update file contents with new data
-
-    // Renames a file or directory
-    void rename(FSBlock &item, const FSName &name);
-
-    // Moves a file or directory to another location
-    void move(FSBlock &item, const FSBlock &dest, const FSName &name = "");
-
-    // Copies a file
-    void copy(const FSBlock &item, FSBlock &dest);
-    void copy(const FSBlock &item, FSBlock &dest, const FSName &name);
-
-    // Delete a file
-    void deleteFile(const FSBlock &at);
-
-private:
-
-    // Adds a hash-table entry for a given item
-    void addToHashTable(const FSBlock &item);
-    void addToHashTable(Block parent, Block ref);
-
-    // Removes the hash-table entry for a given item
-    void deleteFromHashTable(const FSBlock &item);
-    void deleteFromHashTable(Block parent, Block ref);
-
-    // Adds bytes to a data block
-    isize addData(Block nr, const u8 *buf, isize size);
-    isize addData(FSBlock &block, const u8 *buf, isize size);
 
     //
     // Seeking files and directories
@@ -415,24 +393,15 @@ private:
 
 public:
 
-    // Returns the root of the directory tree (TODO: MOVE TO RESOLVER LAYER)
+    // Returns the root of the directory tree
     FSBlock &root() { return at(rootBlock); }
     const FSBlock &root() const { return at(rootBlock); }
 
-    // Returns the working directory (TODO: MOVE TO RESOLVER LAYER)
-    FSBlock &pwd() { return at(current); }
-    const FSBlock &pwd() const { return at(current); }
-
-    // Returns the parent directory
+    // Returns the parent directory of an item
     FSBlock &parent(const FSBlock &block);
     FSBlock *parent(const FSBlock *block) noexcept;
     const FSBlock &parent(const FSBlock &block) const;
     const FSBlock *parent(const FSBlock *block) const noexcept;
-
-    // Changes the working directory (TODO: MOVE TO RESOLVER LAYER)
-    void cd(const FSName &name);
-    void cd(const FSBlock &path);
-    void cd(const string &path);
 
     // Checks if a an item exists in the directory tree
     bool exists(const FSBlock &top, const fs::path &path) const;
@@ -481,6 +450,37 @@ private:
                                        std::vector<FSPattern> pattern) const;
 
 
+
+public:
+
+    /*
+    void require_initialized() const;
+    void require_formatted() const;
+    void require_file_or_directory(const FSBlock &block) const;
+
+    void ensureFile(const FSBlock &node);
+    void ensureFileOrDirectory(const FSBlock &node);
+    void ensureDirectory(const FSBlock &node);
+    void ensureNotRoot(const FSBlock &node);
+    void ensureEmptyDirectory(const FSBlock &node);
+    void ensureNotExist(const FSBlock &node, const FSName &name);
+     */
 };
+
+//
+// Argument checkers
+//
+
+namespace require {
+
+    void initialized(const FileSystem &fs);
+    void formatted(const FileSystem &fs);
+    void file(const FSBlock &node);
+    void directory(const FSBlock &block);
+    void fileOrDirectory(const FSBlock &block);
+    void notRoot(const FSBlock &block);
+    void emptyDirectory(const FSBlock &block);
+    void notExist(const FSBlock &dir, const FSName &name);
+}
 
 }

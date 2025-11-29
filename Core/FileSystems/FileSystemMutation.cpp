@@ -185,49 +185,6 @@ FileSystem::deallocateBlocks(const std::vector<Block> &nrs)
 }
 #endif
 
-void
-FileSystem::addFileListBlock(Block at, Block head, Block prev)
-{
-    if (auto *prevBlock = read(prev); prevBlock) {
-
-        storage[at].init(FSBlockType::FILELIST);
-        storage[at].setFileHeaderRef(head);
-
-        prevBlock->setNextListBlockRef(at);
-    }
-}
-
-void
-FileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
-{
-    if (auto *prevBlock = read(prev); prevBlock) {
-
-        storage[at].init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
-        storage[at].setDataBlockNr((Block)id);
-        storage[at].setFileHeaderRef(head);
-        prevBlock->setNextDataBlockRef(at);
-    }
-}
-
-FSBlock &
-FileSystem::newUserDirBlock(const FSName &name)
-{
-    Block nr = allocator.allocate();
-
-    storage[nr].init(FSBlockType::USERDIR);
-    storage[nr].setName(name);
-    return at(nr);
-}
-
-FSBlock &
-FileSystem::newFileHeaderBlock(const FSName &name)
-{
-    Block nr = allocator.allocate();
-
-    storage[nr].init(FSBlockType::FILEHEADER);
-    storage[nr].setName(name);
-    return at(nr);
-}
 
 /*
 void
@@ -258,6 +215,7 @@ FileSystem::rectifyAllocationMap()
 }
 */
 
+/*
 FSBlock &
 FileSystem::link(FSBlock &at, const FSName &name)
 {
@@ -286,213 +244,38 @@ FileSystem::link(FSBlock &at, const FSName &name, FSBlock &fhb)
     fhb.setParentDirRef(at.nr);
     addToHashTable(at.nr, fhb.nr);
 }
-
-void
-FileSystem::reclaim(const FSBlock &node)
-{
-    if (node.isDirectory()) {
-
-        // Remove user directory block
-        storage.erase(node.nr); allocator.markAsFree(node.nr);
-        return;
-    }
-
-    if (node.isFile()) {
-
-        // Collect all blocks occupied by this file
-        auto dataBlocks = collectDataBlocks(node.nr);
-        auto listBlocks = collectListBlocks(node.nr);
-
-        // Remove all blocks
-        storage.erase(node.nr); allocator.markAsFree(node.nr);
-        for (auto &it : dataBlocks) { storage.erase(it); allocator.markAsFree(it); }
-        for (auto &it : listBlocks) { storage.erase(it); allocator.markAsFree(it); }
-        return;
-    }
-
-    throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY, node.absName());
-}
-
-
-FSBlock &
-FileSystem::createFile(FSBlock &at, const FSName &name)
-{
-    // ensureDirectory(at);
-    // Error out if the file already exists
-    // if (seekPtr(&at, name)) throw(AppError(Fault::FS_EXISTS, name.cpp_str()));
-
-    // Create a new file header block
-    FSBlock &block = newFileHeaderBlock(name);
-
-    // Add the block to the parent directory
-    link(at, block);
-
-    return block;
-}
-
-FSBlock &
-FileSystem::createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf)
-{
-    return createFile(at, name, buf.ptr, buf.size);
-}
-
-FSBlock &
-FileSystem::createFile(FSBlock &top, const FSName &name, const string &str)
-{
-    return createFile(top, name, (const u8 *)str.c_str(), (isize)str.size());
-}
-
-FSBlock &
-FileSystem::createFile(FSBlock &top, const FSName &name, const u8 *buf, isize size)
-{
-    ensureDirectory(top);
-
-    // Create a file header block
-    auto &fhb = createFile(top, name);
-
-    // Write data
-    return replace(fhb, buf, size);
-
-    /*
-    // Allocate blocks
-    std::vector<Block> listBlocks;
-    std::vector<Block> dataBlocks;
-    allocateFileBlocks(size, listBlocks, dataBlocks);
-
-    for (usize i = 0; i < listBlocks.size(); i++) {
-
-        // Add a list block
-        addFileListBlock(listBlocks[i], file.nr, i == 0 ? file.nr : listBlocks[i-1]);
-    }
-
-    for (usize i = 0; i < dataBlocks.size(); i++) {
-
-        // Add a data block
-        addDataBlock(dataBlocks[i], i + 1, file.nr, i == 0 ? file.nr : dataBlocks[i-1]);
-
-        // Determine the list block managing this data block
-        FSBlock *lb = read((i < numRefs) ? file.nr : listBlocks[i / numRefs - 1]);
-
-        // Link the data block
-        lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
-
-        // Add data bytes
-        isize written = addData(dataBlocks[i], buf, size);
-        buf += written;
-        size -= written;
-    }
-
-    // Rectify checksums
-    for (auto &it : listBlocks) { at(it).updateChecksum(); }
-    for (auto &it : dataBlocks) { at(it).updateChecksum(); }
-    file.updateChecksum();
-    // top.updateChecksum();
-
-    return file;
-    */
-}
-
-FSBlock &
-FileSystem::replace(FSBlock &fhb,
-                       const u8 *buf, isize size,
-                       std::vector<Block> listBlocks,
-                       std::vector<Block> dataBlocks)
-{
-    // Number of data block references held in a file header or list block
-    const isize numRefs = ((traits.bsize / 4) - 56);
-
-    // Start with a clean reference area
-    fhb.setNextListBlockRef(0);
-    fhb.setNextDataBlockRef(0);
-    for (isize i = 0; i < numRefs; i++) fhb.setDataBlockRef(i, 0);
-
-    // Allocate blocks
-    allocator.allocateFileBlocks(size, listBlocks, dataBlocks);
-
-    for (usize i = 0; i < listBlocks.size(); i++) {
-
-        // Add a list block
-        addFileListBlock(listBlocks[i], fhb.nr, i == 0 ? fhb.nr : listBlocks[i-1]);
-    }
-
-    for (isize i = 0; i < (isize)dataBlocks.size(); i++) {
-
-        // Add a data block
-        addDataBlock(dataBlocks[i], i + 1, fhb.nr, i == 0 ? fhb.nr : dataBlocks[i-1]);
-
-        // Determine the list block managing this data block
-        FSBlock *lb = read((i < numRefs) ? fhb.nr : listBlocks[i / numRefs - 1]);
-
-        // Link the data block
-        lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
-
-        // Add data bytes
-        isize written = addData(dataBlocks[i], buf, size);
-        buf += written;
-        size -= written;
-    }
-
-    // Set file size
-    fhb.setFileSize(u32(size));
-
-    // Rectify checksums
-    for (auto &it : listBlocks) { at(it).updateChecksum(); }
-    for (auto &it : dataBlocks) { at(it).updateChecksum(); }
-    fhb.updateChecksum();
-
-    return fhb;
-}
-
-void
-FileSystem::resize(FSBlock &at, isize size)
-{
-    // Get data
-    Buffer<u8> buffer; at.extractData(buffer);
-
-    // Resize the buffer (pad with 0 if the buffer expands)
-    buffer.resize(size, 0);
-
-    // Resize the file with the contents of the created buffer
-    replace(at, buffer);
-}
-
-void
-FileSystem::replace(FSBlock &at, const Buffer<u8> &data)
-{
-    // Collect all blocks occupied by this file
-    auto listBlocks = collectListBlocks(at.nr);
-    auto dataBlocks = collectDataBlocks(at.nr);
-
-    // Update the file contents
-    replace(at, data.ptr, data.size, listBlocks, dataBlocks);
-}
+*/
 
 void
 FileSystem::rename(FSBlock &item, const FSName &name)
 {
-    // Renaming the root node renames the name of the file system
+    // Renaming the root updates the file system name
     if (item.isRoot()) { setName(name); return; }
 
-    // For files and directories, reposition the item in the hash table
+    // For regular items, relocate entry in the parent directory
     move(item, *item.getParentDirBlock(), name);
 }
 
 void
-FileSystem::move(FSBlock &item, const FSBlock &dest, const FSName &name)
+FileSystem::move(FSBlock &item, FSBlock &dest)
 {
-    ensureDirectory(dest);
+    move (item, dest, item.name());
+}
 
-    // Remove the item from the hash table
-    deleteFromHashTable(item);
+void
+FileSystem::move(FSBlock &item, FSBlock &dest, const FSName &name)
+{
+    require::fileOrDirectory(item);
+    require::notExist(dest, name);
 
-    // Rename if a new name is provided
-    if (name != "") item.setName(name);
+    // Detach the item from its current parent
+    unlink(item);
 
-    // Add the item to the new hash table
-    addToHashTable(dest.nr, item.nr);
+    // Apply new name if provided
+    item.setName(name);
 
-    // Assign the new parent directory
-    item.setParentDirRef(dest.nr);
+    // Insert into the destination directory
+    link(dest, item);
 }
 
 void
@@ -504,54 +287,15 @@ FileSystem::copy(const FSBlock &item, FSBlock &dest)
 void
 FileSystem::copy(const FSBlock &item, FSBlock &dest, const FSName &name)
 {
-    if (!item.isFile()) throw AppError(Fault::FS_NOT_A_FILE, item.absName());
-    if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
+    require::file(item);
+    require::directory(dest);
 
-    // Read the file
+    // Read source file
     Buffer<u8> buffer; item.extractData(buffer);
 
-    // Recreate the file at the target location
+    // Create file at destination
     createFile(dest, name, buffer);
 }
-
-void
-FileSystem::deleteFile(const FSBlock &node)
-{
-    unlink(node);
-    reclaim(node);
-
-    /*
-    if (!node.isFile()) throw AppError(Fault::FS_NOT_A_FILE, node.absName());
-
-    // Collect all blocks occupied by this file
-    auto dataBlocks = collectDataBlocks(node.nr);
-    auto listBlocks = collectListBlocks(node.nr);
-
-    // Remove the file from the hash table
-    deleteFromHashTable(node);
-
-    // Remove all blocks
-    storage.erase(node.nr); markAsFree(node.nr);
-    for (auto &it : dataBlocks) { storage.erase(it); markAsFree(it); }
-    for (auto &it : listBlocks) { storage.erase(it); markAsFree(it); }
-    */
-}
-
-/*
-void
-FileSystem::rmdir(const FSBlock &at)
-{
-    // Only directories can be removed
-    if (!at.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
-
-    // The directory must be empty
-    FSTree tree(at, FSOpt{});
-    if (!tree.empty()) throw AppError(Fault::FS_DIR_NOT_EMPTY);
-
-    // Remove directory from hash table
-    deleteFromHashTable(at);
-}
-*/
 
 void
 FileSystem::addToHashTable(const FSBlock &item)
@@ -627,41 +371,6 @@ FileSystem::deleteFromHashTable(Block parent, Block ref)
             read(pred)->updateChecksum();
         }
     }
-}
-
-isize
-FileSystem::addData(Block nr, const u8 *buf, isize size)
-{
-    FSBlock *block = read(nr);
-    return block ? addData(*block, buf, size) : 0;
-}
-
-isize
-FileSystem::addData(FSBlock &block, const u8 *buf, isize size)
-{
-    isize count = 0;
-    
-    switch (block.type) {
-            
-        case FSBlockType::DATA_OFS:
-            
-            count = std::min(traits.bsize - 24, size);
-            std::memcpy(block.data() + 24, buf, count);
-            block.setDataBytesInBlock((u32)count);
-            block.updateChecksum();
-            break;
-
-        case FSBlockType::DATA_FFS:
-
-            count = std::min(traits.bsize, size);
-            std::memcpy(block.data(), buf, count);
-            break;
-
-        default:
-            break;
-    }
-    
-    return count;
 }
 
 /*

@@ -420,539 +420,54 @@ FileSystem::attr(const FSBlock &fhd) const
 
 
 
-FSBlock &
-FileSystem::parent(const FSBlock &node)
+
+
+
+
+
+namespace require {
+
+void
+initialized(const FileSystem &fs)
 {
-    auto *ptr = parent(&node);
-    return ptr ? *ptr : at(node.nr);
-}
-
-const FSBlock &
-FileSystem::parent(const FSBlock &node) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->parent(node));
-}
-
-FSBlock *
-FileSystem::parent(const FSBlock *node) noexcept
-{
-    return node->isRoot() ? read(node->nr) : read(node->nr)->getParentDirBlock();
-}
-
-const FSBlock *
-FileSystem::parent(const FSBlock *node) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->parent(node));
-}
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
-{
-    if (!root) return nullptr;
-
-    std::unordered_set<Block> visited;
-
-    // Check for special tokens
-    if (name == "/")  return read(rootBlock);
-    if (name == "")   return read(root->nr);
-    if (name == ".")  return read(root->nr);
-    if (name == "..") return parent(root);
-
-    // TODO: USE SEARCHDIR
-    // Only proceed if a hash table is present
-    if (root->hasHashTable()) {
-
-        // Compute the table position and read the item
-        u32 hash = name.hashValue(traits.dos) % root->hashTableSize();
-        u32 ref = root->getHashRef(hash);
-
-        // Traverse the linked list until the item has been found
-        while (ref && visited.find(ref) == visited.end())  {
-
-            auto *block = read(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
-            if (block == nullptr) break;
-
-            if (block->isNamed(name)) return block;
-
-            visited.insert(ref);
-            ref = block->getNextHashRef();
-        }
-    }
-    return nullptr;
-}
-
-const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const FSName &name) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
-}
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const fs::path &name) noexcept
-{
-    if (!root) return nullptr;
-
-    FSBlock *result = read(root->nr);
-    for (const auto &it : name) { if (result) { result = seekPtr(result, FSName(it)); } }
-    return result;
-}
-
-const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const fs::path &name) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
-}
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const string &name) noexcept
-{
-    if (!root) return nullptr;
-
-    auto parts = util::split(name, '/');
-    if (!name.empty() && name[0] == '/') { parts.insert(parts.begin(), "/"); }
-
-    FSBlock *result = read(root->nr);
-    for (auto &it : parts) { if (result) { result = seekPtr(result, FSName(it)); } }
-    return result;
-}
-
-const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const string &name) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
-}
-
-FSBlock &
-FileSystem::seek(const FSBlock &root, const FSName &name)
-{
-    if (auto *it = seekPtr(&root, name); it) return *it;
-    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
-}
-
-const FSBlock &
-FileSystem::seek(const FSBlock &root, const FSName &name) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
-}
-
-FSBlock &
-FileSystem::seek(const FSBlock &root, const fs::path &name)
-{
-    if (auto *it = seekPtr(&root, name); it) return *it;
-    throw AppError(Fault::FS_NOT_FOUND, name.string());
-}
-
-const FSBlock &
-FileSystem::seek(const FSBlock &root, const fs::path &name) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
-}
-
-FSBlock &
-FileSystem::seek(const FSBlock &root, const string &name)
-{
-    if (auto *it = seekPtr(&root, name); it) return *it;
-    throw AppError(Fault::FS_NOT_FOUND, name);
-}
-
-const FSBlock &
-FileSystem::seek(const FSBlock &root, const string &name) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSOpt &opt) const
-{
-    return find(pwd(), opt);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock &root, const FSOpt &opt) const
-{
-    require_file_or_directory(root);
-    return find(&root, opt);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSOpt &opt) const
-{
-    if (!root) return {};
-    std::unordered_set<Block> visited;
-    return find(root, opt, visited);
-}
-
-std::vector<Block>
-FileSystem::find(Block root, const FSOpt &opt) const
-{
-    return FSBlock::refs(find(read(root), opt));
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block> &visited) const
-{
-    std::vector<const FSBlock *> result;
-
-    // Collect all items in the hash table
-    auto hashedBlocks = collectHashedBlocks(*root);
-
-    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
-
-        // Add item if accepted
-        if (opt.accept(*it)) result.push_back(*it);
-
-        // Break the loop if this block has been visited before
-        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
-
-        // Remember the block as visited
-        visited.insert((*it)->nr);
-    }
-
-    // Search subdirectories
-    if (opt.recursive) {
-
-        for (auto &it : hashedBlocks) {
-
-            if (it->isDirectory()) {
-
-                auto blocks = find(it, opt, visited);
-                result.insert(result.end(), blocks.begin(), blocks.end());
-            }
-        }
-    }
-
-    // Sort the result
-    if (opt.sort) {
-
-        std::sort(result.begin(), result.end(),
-                  [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
-    }
-
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSPattern &pattern) const
-{
-    std::vector<Block> result;
-
-    // Determine the directory to start searching
-    auto &start = pattern.isAbsolute() ? root() : pwd();
-
-    // Seek all files matching the provided pattern
-    return find(start, pattern);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock &root, const FSPattern &pattern) const
-{
-    return find(&root, pattern);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
-{
-    return find(root, {
-        .recursive = true,
-        .filter = [&](const FSBlock &item) { return pattern.match(item.cppName()); }
-    });
-}
-
-std::vector<Block>
-FileSystem::find(Block root, const FSPattern &pattern) const
-{
-    return FSBlock::refs(find(read(root), pattern));
-}
-
-std::vector<const FSBlock *>
-FileSystem::match(const FSPattern &pattern) const
-{
-    if (pattern.isAbsolute()) {
-        return match(&root(), pattern.splitted());
-    } else {
-        return match(&pwd(), pattern.splitted());
-    }
-}
-
-std::vector<const FSBlock *>
-FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
-{
-    if (pattern.isAbsolute()) {
-        return match(&root(), pattern.splitted());
-    } else {
-        return match(node, pattern.splitted());
-    }
-}
-
-std::vector<const FSBlock *>
-FileSystem::match(const FSBlock &node, const FSPattern &pattern) const
-{
-    return match(&node, pattern);
-}
-
-std::vector<const FSBlock *>
-FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
-{
-    std::vector<const FSBlock *> result;
-
-    if (patterns.empty()) return {};
-
-    // Get all directory items
-    // auto items = traverse(*root, { .recursive = false} );
-    auto items = FSTree(*root, { .recursive = false} );
-
-    // Extract the first pattern
-    auto pattern = patterns.front(); patterns.erase(patterns.begin());
-
-    if (patterns.empty()) {
-
-        // Collect all matching items
-        for (auto &item : items.children) {
-            if (pattern.match(item.node->cppName())) {
-                result.push_back(item.node);
-            }
-        }
-
-    } else {
-
-        // Continue by searching all matching subdirectories
-        for (auto &item : items.children) {
-            if (item.node->isDirectory() && pattern.match(item.node->cppName())) {
-                auto subdirItems = match(item.node, patterns);
-                result.insert(result.end(), subdirItems.begin(), subdirItems.end());
-            }
-        }
-    }
-
-    return result;
-}
-
-std::vector<Block>
-FileSystem::match(Block root, const FSPattern &pattern) const
-{
-    return FSBlock::refs(match(read(root), pattern));
+    if (!fs.isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
 }
 
 void
-FileSystem::cd(const FSName &name)
+formatted(const FileSystem &fs)
 {
-    if (auto ptr = seekPtr(&pwd(), name); ptr) cd (*ptr);
-    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
+    if (!fs.isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!fs.isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
 }
 
 void
-FileSystem::cd(const FSBlock &path)
-{
-    current = path.nr;
-}
-
-void
-FileSystem::cd(const string &path)
-{
-    if (auto ptr = seekPtr(&pwd(), path); ptr) cd (*ptr);
-    throw AppError(Fault::FS_NOT_FOUND, path);
-}
-
-bool
-FileSystem::exists(const FSBlock &top, const fs::path &path) const
-{
-    return seekPtr(&top, path) != nullptr;
-}
-
-std::vector<const FSBlock *>
-FileSystem::collectDataBlocks(const FSBlock &node) const
-{
-    // Gather all blocks containing data block references
-    auto blocks = collectListBlocks(node);
-    blocks.push_back(&node);
-
-    // Setup the result vector
-    std::vector<const FSBlock *> result;
-    result.reserve(blocks.size() * node.getMaxDataBlockRefs());
-
-    // Crawl through blocks and collect all data block references
-    for (auto &it : blocks) {
-
-        isize num = std::min(it->getNumDataBlockRefs(), it->getMaxDataBlockRefs());
-        for (isize i = 0; i < num; i++) {
-            if (auto *ptr = it->getDataBlock(i); ptr) {
-                result.push_back(ptr);
-            }
-        }
-    }
-    return result;
-}
-
-std::vector<Block>
-FileSystem::collectDataBlocks(Block ref) const
-{
-    std::vector<Block> result;
-
-    if (auto *ptr = read(ref)) {
-        for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
-    }
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::collectListBlocks(const FSBlock &node) const
-{
-    std::vector<const FSBlock *> result;
-
-    if (auto *ptr = node.getNextListBlock()) {
-        result = collect(*ptr, [&](auto *block) { return block->getNextListBlock(); });
-    }
-    return result;
-}
-
-std::vector<Block>
-FileSystem::collectListBlocks(const Block ref) const
-{
-    std::vector<Block> result;
-
-    if (auto *ptr = read(ref)) {
-        for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
-    }
-    return result;
-}
-
-std::vector<Block>
-FileSystem::collectHashedBlocks(Block ref, isize bucket) const
-{
-    std::vector<Block> result;
-
-    if (auto *ptr = read(ref)) {
-        for (auto &it: collectHashedBlocks(*ptr, bucket)) result.push_back(it->nr);
-    }
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
-{
-    auto first = node.getHashRef((u32)bucket);
-    if (auto *ptr = read(first, { FSBlockType::USERDIR, FSBlockType::FILEHEADER }); ptr) {
-        return collect(*ptr, [&](auto *p) { return p->getNextHashBlock(); });
-    } else {
-        return {};
-    }
-}
-
-std::vector<Block>
-FileSystem::collectHashedBlocks(Block ref) const
-{
-    std::vector<Block> result;
-    if (auto *ptr = read(ref)) {
-        for (auto &it: collectHashedBlocks(*ptr)) result.push_back(it->nr);
-    }
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::collectHashedBlocks(const FSBlock &node) const
-{
-    std::vector<const FSBlock *> result;
-
-    // Walk through all hash table buckets in reverse order
-    for (isize i = (isize)node.hashTableSize() - 1; i >= 0; i--) {
-        for (auto &it : collectHashedBlocks(node, i)) result.push_back(it);
-    }
-    return result;
-}
-
-std::vector<Block>
-FileSystem::collect(const Block nr, std::function<const FSBlock *(FSBlock const *)> next) const
-{
-    std::vector<Block> result;
-    std::unordered_set<Block> visited;
-
-    for (auto block = read(nr); block; block = next(block)) {
-
-        // Break the loop if this block has been visited before
-        if (visited.contains(block->nr)) break;
-
-        // Add the block
-        result.push_back(block->nr);
-
-        // Remember the block as visited
-        visited.insert(block->nr);
-    }
-
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSBlock *)> next) const
-{
-    std::vector<const FSBlock *> result;
-    std::unordered_set<Block> visited;
-
-    for (auto block = read(node.nr); block != nullptr; block = next(block)) {
-
-        // Break the loop if this block has been visited before
-        if (visited.contains(block->nr)) break;
-
-        // Add the block
-        result.push_back(block);
-
-        // Remember the block as visited
-        visited.insert(block->nr);
-    }
-
-    return result;
-}
-
-
-void
-FileSystem::require_initialized() const
-{
-    if (!isInitialized())   throw AppError(Fault::FS_UNINITIALIZED);
-}
-
-void
-FileSystem::require_formatted() const
-{
-    if (!isInitialized())   throw AppError(Fault::FS_UNINITIALIZED);
-    if (!isFormatted())     throw AppError(Fault::FS_UNFORMATTED);
-}
-
-void
-FileSystem::require_file_or_directory(const FSBlock &node) const
-{
-    if (!isInitialized())   throw AppError(Fault::FS_UNINITIALIZED);
-    if (!isFormatted())     throw AppError(Fault::FS_UNFORMATTED);
-    if (!node.isRegular())  throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
-}
-
-void
-FileSystem::ensureFile(const FSBlock &node)
+file(const FSBlock &node)
 {
     if (!node.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
 }
 
 void
-FileSystem::ensureFileOrDirectory(const FSBlock &node)
+fileOrDirectory(const FSBlock &node)
 {
     if (!node.isRegular()) throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
-
 }
 
 void
-FileSystem::ensureDirectory(const FSBlock &node)
+directory(const FSBlock &node)
 {
     if (!node.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 void
-FileSystem::ensureNotRoot(const FSBlock &node)
+notRoot(const FSBlock &node)
 {
     if (node.isRoot()) throw AppError(Fault::FS_INVALID_PATH);
 }
 
 void
-FileSystem::ensureEmptyDirectory(const FSBlock &node)
+emptyDirectory(const FSBlock &node)
 {
-    ensureDirectory(node);
+    directory(node);
 
     if (FSTree(node, { .recursive = false }).size() != 0) {
         throw AppError(Fault::FS_DIR_NOT_EMPTY);
@@ -960,11 +475,10 @@ FileSystem::ensureEmptyDirectory(const FSBlock &node)
 }
 
 void
-FileSystem::ensureNotExist(const FSBlock &node, const FSName &name)
+notExist(const FSBlock &node, const FSName &name)
 {
-    ensureDirectory(node);
-    if (searchDir(node, name) != nullptr) throw AppError(Fault::FS_EXISTS);
+    directory(node);
+    if (node.fs->searchdir(node, name) != nullptr) throw AppError(Fault::FS_EXISTS);
 }
 
-
-}
+}}

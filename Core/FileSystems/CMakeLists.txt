@@ -6,6 +6,7 @@ BootBlockImage.cpp
 FileSystem.cpp
 FileSystem0.cpp
 FileSystem1.cpp
+FileSystem2.cpp
 FileSystemFactory.cpp
 FileSystemMutation.cpp
 FSAllocator.cpp

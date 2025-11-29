@@ -260,6 +260,8 @@
 		509D076D2EDB295200355638 /* FileSystem0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystem0.cpp */; };
 		509D076F2EDB2A0900355638 /* FileSystem1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystem1.cpp */; };
 		509D07702EDB2A0900355638 /* FileSystem1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystem1.cpp */; };
+		509D07732EDB920100355638 /* FileSystem2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystem2.cpp */; };
+		509D07742EDB920100355638 /* FileSystem2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystem2.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -918,6 +920,7 @@
 		509D07682EDB1B6000355638 /* Loggable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Loggable.cpp; sourceTree = "<group>"; };
 		509D076B2EDB294700355638 /* FileSystem0.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem0.cpp; sourceTree = "<group>"; };
 		509D076E2EDB2A0500355638 /* FileSystem1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem1.cpp; sourceTree = "<group>"; };
+		509D07722EDB8CD200355638 /* FileSystem2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem2.cpp; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -1438,6 +1441,7 @@
 				5029C6E427CA6209002F6CCC /* FileSystem.cpp */,
 				509D076B2EDB294700355638 /* FileSystem0.cpp */,
 				509D076E2EDB2A0500355638 /* FileSystem1.cpp */,
+				509D07722EDB8CD200355638 /* FileSystem2.cpp */,
 				509D04892EDA46CA00355638 /* FileSystemMutation.cpp */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
@@ -2634,6 +2638,7 @@
 				50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */,
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
+				509D07732EDB920100355638 /* FileSystem2.cpp in Sources */,
 				504FC7C92D31292200F0B733 /* Dashboard.swift in Sources */,
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
@@ -2953,6 +2958,7 @@
 				50FC048427DA190400C3E566 /* Thread.cpp in Sources */,
 				50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */,
 				50FC047927DA129F00C3E566 /* Concurrency.cpp in Sources */,
+				509D07742EDB920100355638 /* FileSystem2.cpp in Sources */,
 				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,

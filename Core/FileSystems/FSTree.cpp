@@ -31,7 +31,8 @@ FSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<Block> &vi
 {
     auto &fs = *top.fs;
 
-    top.fs->require_file_or_directory(top);
+    require::fileOrDirectory(top);
+    // top.fs->require_file_or_directory(top);
     node = fs.read(top.nr);
 
     // Collect all items in the hash table

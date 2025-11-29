@@ -202,8 +202,8 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 Block
 NavigatorConsole::parseBlock(const string &argv)
 {
-    fs.require_initialized();
-    
+    require::initialized(fs);
+
     if (auto nr = Block(parseNum(argv)); fs.read(nr)) {
         return nr;
     }
@@ -624,9 +624,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "Host file system directory" } },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                fs.require_formatted();
-                
+
+                require::formatted(fs);
+
                 auto path = args.at("path");
                 auto hostPath = host.makeAbsolute(args.at("path"));
                 bool recursive = true;
@@ -1082,7 +1082,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .chelp  = { BootBlockIdEnum::help(BootBlockId(value)) },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                fs.require_formatted();
+                require::formatted(fs);
                 fs.makeBootable(BootBlockId(values[0]));
                 
             },  .payload = { value }
@@ -1095,7 +1095,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Scan a boot block for viruses" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            fs.require_formatted();
+            require::formatted(fs);
             os << "Boot block: " << fs.bootStat().name << std::endl;
         }
     });
@@ -1106,7 +1106,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Kills a boot block virus" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            fs.require_formatted();
+            require::formatted(fs);
             fs.killVirus();
         }
     });
@@ -1352,7 +1352,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 if (path.isFile()) {
                     
-                    fs.deleteFile(path);
+                    fs.rm(path);
                     
                 } else if (path.isDirectory()) {
                     throw AppError(Fault::FS_NOT_A_FILE, args.at("path"));
