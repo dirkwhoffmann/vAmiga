@@ -103,7 +103,7 @@ public:
      *  @note   The function transfers the ownership to the caller. It is
      *          his responsibility of the caller to free the object.
      */
-    MediaFile *takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
+    std::unique_ptr<MediaFile> takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
 
     /** @brief  Loads a snapshot.
      *
@@ -740,7 +740,7 @@ public:
      */
     void ejectDisk();
 
-    MediaFile *exportDisk(FileType type);
+    std::unique_ptr<MediaFile> exportDisk(FileType type);
 
     /** @brief  Creates a textual bit representation of a track's data
      */
@@ -857,7 +857,7 @@ public:
 
     /** @brief  Converts the hard drive to an HDF media file
      */
-    MediaFile *createHDF();
+    std::unique_ptr<MediaFile> createHDF();
 };
 
 

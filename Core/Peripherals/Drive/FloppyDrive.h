@@ -373,7 +373,7 @@ public:
     void ejectDisk(Cycle delay = 0);
 
     // Exports the current disk
-    MediaFile *exportDisk(FileType type);
+    std::unique_ptr<MediaFile> exportDisk(FileType type);
 
     // Replaces the current disk (recommended way to insert disks)
     void swapDisk(std::unique_ptr<FloppyDisk> disk) throws;

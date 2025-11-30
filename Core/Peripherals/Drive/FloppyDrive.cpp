@@ -993,14 +993,14 @@ FloppyDrive::ejectDisk(Cycle delay)
     if (objid == 3) ejectDisk <SLOT_DC3> (delay);
 }
 
-MediaFile *
+std::unique_ptr<MediaFile>
 FloppyDrive::exportDisk(FileType type)
 {
     switch (type) {
 
-        case FileType::ADF:      return new MediaFile(ADFFactory::make(*this));
-        case FileType::EADF:     return new MediaFile(make_unique<EADFFile>(*this));
-        case FileType::IMG:      return new MediaFile(make_unique<IMGFile>(*this));
+        case FileType::ADF:      return make_unique<MediaFile>(ADFFactory::make(*this));
+        case FileType::EADF:     return make_unique<MediaFile>(make_unique<EADFFile>(*this));
+        case FileType::IMG:      return make_unique<MediaFile>(make_unique<IMGFile>(*this));
 
         default:
             throw AppError(Fault::FILE_TYPE_UNSUPPORTED);

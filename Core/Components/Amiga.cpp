@@ -1126,7 +1126,7 @@ Amiga::clearFlag(u32 flag)
     flags &= ~flag;
 }
 
-MediaFile *
+unique_ptr<MediaFile>
 Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
     if (delay != 0) {
@@ -1142,7 +1142,7 @@ Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
     // Compress the snapshot if requested
     result->compress(compressor);
 
-    return new MediaFile(std::move(result));
+    return make_unique<MediaFile>(std::move(result));
 }
 
 void
@@ -1152,23 +1152,11 @@ Amiga::serviceSnpEvent(EventID eventId)
     if (objid != 0) { agnus.cancel<SLOT_SNP>(); return; }
 
     // Take snapshot and hand it over to the GUI
-    auto *snapshot = takeSnapshot(Compressor(agnus.data[SLOT_SNP] >> 24));
-    msgQueue.put( Message { .type = Msg::SNAPSHOT_TAKEN, .snapshot = { snapshot } } );
+    auto snapshot = takeSnapshot(Compressor(agnus.data[SLOT_SNP] >> 24));
+    msgQueue.put( Message { .type = Msg::SNAPSHOT_TAKEN, .snapshot = { snapshot.release() } } );
 
     // Schedule the next event
     scheduleNextSnpEvent();
-
-    /*
-    // Check for the main instance (ignore the run-ahead instance)
-    if (objid == 0) {
-
-        // Take snapshot and hand it over to GUI
-        msgQueue.put(Msg::SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = new Snapshot(*this) } );
-    }
-
-    // Schedule the next event
-    scheduleNextSnpEvent();
-    */
 }
 
 void

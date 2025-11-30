@@ -1293,8 +1293,15 @@ NSString *EventSlotName(EventSlot slot)
 
 - (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex
 {
-    try { return [MediaFileProxy make:[self drive]->exportDisk(type)]; }
-    catch (AppError &error) { [ex save:error]; }
+    try {
+
+        auto disk = [self drive]->exportDisk(type);
+
+        //Transfer ownership to ObjC via release
+        return [MediaFileProxy make:disk.release()];
+
+    } catch (AppError &error) { [ex save:error]; }
+
     return nil;
 }
 
@@ -1702,7 +1709,10 @@ NSString *EventSlotName(EventSlot slot)
 + (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c
 {
     auto amiga = (VAmiga *)proxy->obj;
-    return [self make:amiga->amiga.takeSnapshot(c)];
+    auto snap = amiga->amiga.takeSnapshot(c);
+
+    //Transfer ownership to ObjC via release
+    return [self make:snap.release()];
 }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
@@ -2171,8 +2181,10 @@ NSString *EventSlotName(EventSlot slot)
 {
     try {
 
-        MediaFile *snapshot = [self amiga]->takeSnapshot(compressor);
-        return [MediaFileProxy make:snapshot];
+        auto snap = [self amiga]->takeSnapshot(compressor);
+
+        //Transfer ownership to ObjC via release
+        return [MediaFileProxy make:snap.release()];
 
     } catch (AppError &error) {
 

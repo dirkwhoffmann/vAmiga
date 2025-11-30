@@ -1192,7 +1192,7 @@ FloppyDriveAPI::ejectDisk()
     drive->ejectDisk();
 }
 
-class MediaFile *
+std::unique_ptr<MediaFile>
 FloppyDriveAPI::exportDisk(FileType type)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -1324,11 +1324,11 @@ HardDriveAPI::writeToFile(const fs::path &path)
     drive->writeToFile(path);
 }
 
-MediaFile *
+std::unique_ptr<MediaFile>
 HardDriveAPI::createHDF()
 {
     VAMIGA_PUBLIC_SUSPEND
-    return new MediaFile(HDFFactory::make(*drive));
+    return make_unique<MediaFile>(HDFFactory::make(*drive));
 }
 
 
@@ -2238,7 +2238,7 @@ VAmiga::put(const Command &cmd)
 // AmigaAPI
 //
 
-MediaFile *
+std::unique_ptr<MediaFile>
 AmigaAPI::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
     VAMIGA_PUBLIC_SUSPEND

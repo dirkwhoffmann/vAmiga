@@ -438,7 +438,7 @@ public:
 public:
 
     // Takes a snapshot
-    MediaFile *takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
+    std::unique_ptr<MediaFile> takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
 
     // Loads a snapshot from a file
     void loadSnapshot(const fs::path &path) throws;
