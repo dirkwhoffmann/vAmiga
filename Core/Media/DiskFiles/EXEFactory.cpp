@@ -1,8 +1,27 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  EXEFactory.cpp
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
 //
-//  Created by Dirk Hoffmann on 30.11.25.
-//  Copyright © 2025 Dirk Hoffmann. All rights reserved.
-//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "EXEFactory.h"
+
+namespace vamiga {
+
+std::unique_ptr<EXEFile>
+EXEFactory::make(const fs::path &path)
+{
+    return std::make_unique<EXEFile>(path);
+}
+
+std::unique_ptr<EXEFile>
+EXEFactory::make(const u8 *buf, isize len)
+{
+    return std::make_unique<EXEFile>(buf, len);
+}
+
+}

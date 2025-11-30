@@ -9,15 +9,11 @@
 
 #include "config.h"
 #include "ADFFactory.h"
-#include "Amiga.h"
 #include "BootBlockImage.h"
 #include "Checksum.h"
 #include "EADFFile.h"
-#include "FloppyDisk.h"
-#include "FloppyDrive.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
-#include "FileSystem.h"
 
 namespace vamiga {
 

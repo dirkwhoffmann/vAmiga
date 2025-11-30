@@ -9,16 +9,18 @@
 
 #pragma once
 
-#include "DMSFile.h"
+#include "EADFFile.h"
 
 namespace vamiga {
 
-class DMSFactory {
+class EADFFactory {
 
 public:
 
-    static std::unique_ptr<DMSFile> make(const fs::path &path);
-    static std::unique_ptr<DMSFile> make(const u8 *buf, isize len);
+    static std::unique_ptr<EADFFile> make(const fs::path &path);
+    static std::unique_ptr<EADFFile> make(const u8 *buf, isize len);
+    static std::unique_ptr<EADFFile> make(const class FloppyDisk &disk);
+    static std::unique_ptr<EADFFile> make(const class FloppyDrive &drive);
 };
 
 }

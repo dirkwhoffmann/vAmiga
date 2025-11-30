@@ -57,11 +57,12 @@ class FloppyDisk : public CoreObject {
     friend class FloppyDrive;
     friend class ADFFile;
     friend class EADFFile;
+    friend class EADFFactory;
     friend class IMGFile;
     friend class STFile;
 
 public:
-    
+
     // The form factor of this disk
     Diameter diameter;
     

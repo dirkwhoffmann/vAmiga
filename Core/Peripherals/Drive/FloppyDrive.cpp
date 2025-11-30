@@ -12,8 +12,6 @@
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "DiskController.h"
-#include "EADFFile.h"
-// #include "IMGFile.h"
 #include "FileFactories.h"
 #include "FileSystemFactory.h"
 #include "MsgQueue.h"
@@ -999,7 +997,7 @@ FloppyDrive::exportDisk(FileType type)
     switch (type) {
 
         case FileType::ADF:      return make_unique<MediaFile>(ADFFactory::make(*this));
-        case FileType::EADF:     return make_unique<MediaFile>(make_unique<EADFFile>(*this));
+        case FileType::EADF:     return make_unique<MediaFile>(EADFFactory::make(*this));
         case FileType::IMG:      return make_unique<MediaFile>(IMGFactory::make(*this));
 
         default:

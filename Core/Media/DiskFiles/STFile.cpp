@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "STFile.h"
+#include "STFactory.h"
 #include "Checksum.h"
 #include "FloppyDisk.h"
 #include "IOUtils.h"
@@ -33,27 +33,6 @@ bool
 STFile::isCompatible(const Buffer<u8> &buf)
 {
     return isCompatible(buf.ptr, buf.size);
-}
-
-void
-STFile::init(Diameter dia, Density den)
-{
-    // We only support 3.5"DD disks at the moment
-    if (dia == Diameter::INCH_35 && den == Density::DD) {
-
-        data.init(9 * 160 * 512);
-
-    } else {
-
-        throw AppError(Fault::DISK_INVALID_LAYOUT);
-    }
-}
-
-void
-STFile::init(FloppyDisk &disk)
-{
-    init(Diameter::INCH_35, Density::DD);
-    decodeDisk(disk);
 }
 
 isize
@@ -93,9 +72,9 @@ STFile::encodeDisk(FloppyDisk &disk) const
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
 
-        STFile tmp(disk);
+        auto tmp = STFactory::make(disk);
         debug(IMG_DEBUG, "Saving image to /tmp/debug.img for debugging\n");
-        tmp.writeToFile("/tmp/tmp.img");
+        tmp->writeToFile("/tmp/tmp.img");
     }
 }
 

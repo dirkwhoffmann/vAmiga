@@ -54,10 +54,10 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(path));
         case FileType::HDF:          return new MediaFile(HDFFactory::make(path));
         case FileType::HDZ:          return new MediaFile(HDZFactory::make(path));
-        case FileType::IMG:          return new MediaFile(make_unique<IMGFile>(path));
-        case FileType::ST:           return new MediaFile(make_unique<STFile>(path));
-        case FileType::DMS:          return new MediaFile(make_unique<DMSFile>(path));
-        case FileType::EXE:          return new MediaFile(make_unique<EXEFile>(path));
+        case FileType::IMG:          return new MediaFile(IMGFactory::make(path));
+        case FileType::ST:           return new MediaFile(STFactory::make(path));
+        case FileType::DMS:          return new MediaFile(DMSFactory::make(path));
+        case FileType::EXE:          return new MediaFile(EXEFactory::make(path));
         case FileType::ROM:          return new MediaFile(make_unique<RomFile>(path));
 
         default:
@@ -77,10 +77,10 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
         case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(buf, len));
         case FileType::HDF:          return new MediaFile(HDFFactory::make(buf, len));
         case FileType::HDZ:          return new MediaFile(HDZFactory::make(buf, len));
-        case FileType::IMG:          return new MediaFile(make_unique<IMGFile>(buf, len));
-        case FileType::ST:           return new MediaFile(make_unique<STFile>(buf, len));
-        case FileType::DMS:          return new MediaFile(make_unique<DMSFile>(buf, len));
-        case FileType::EXE:          return new MediaFile(make_unique<EXEFile>(buf, len));
+        case FileType::IMG:          return new MediaFile(IMGFactory::make(buf, len));
+        case FileType::ST:           return new MediaFile(STFactory::make(buf, len));
+        case FileType::DMS:          return new MediaFile(DMSFactory::make(buf, len));
+        case FileType::EXE:          return new MediaFile(EXEFactory::make(buf, len));
         case FileType::ROM:          return new MediaFile(make_unique<RomFile>(buf, len));
 
         default:
@@ -107,7 +107,7 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
 
         case FileType::ADF:          return new MediaFile(ADFFactory::make(drive.getDisk()));
         case FileType::ADZ:          return new MediaFile(ADZFactory::make(drive.getDisk()));
-        case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(drive.getDisk()));
+        case FileType::EADF:         return new MediaFile(EADFFactory::make(drive.getDisk()));
         case FileType::IMG:          return new MediaFile(IMGFactory::make(drive.getDisk()));
 
         default:

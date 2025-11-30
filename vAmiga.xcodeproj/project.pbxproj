@@ -270,6 +270,10 @@
 		509E76032EDCCC1B00608FA7 /* STFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76012EDCCC1A00608FA7 /* STFactory.cpp */; };
 		509E76082EDCCC3A00608FA7 /* EXEFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76072EDCCC3900608FA7 /* EXEFactory.cpp */; };
 		509E76092EDCCC3B00608FA7 /* EXEFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76072EDCCC3900608FA7 /* EXEFactory.cpp */; };
+		509E760A2EDCE26600608FA7 /* DMSFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76052EDCCC2F00608FA7 /* DMSFactory.cpp */; };
+		509E760B2EDCE26600608FA7 /* DMSFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76052EDCCC2F00608FA7 /* DMSFactory.cpp */; };
+		509E760E2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */; };
+		509E760F2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -947,6 +951,8 @@
 		509E76052EDCCC2F00608FA7 /* DMSFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DMSFactory.cpp; sourceTree = "<group>"; };
 		509E76062EDCCC3100608FA7 /* EXEFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEFactory.h; sourceTree = "<group>"; };
 		509E76072EDCCC3900608FA7 /* EXEFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEFactory.cpp; sourceTree = "<group>"; };
+		509E760C2EDCE3A300608FA7 /* EADFFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EADFFactory.h; sourceTree = "<group>"; };
+		509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EADFFactory.cpp; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -1302,6 +1308,8 @@
 				50E79D352EDC37D70052277E /* ADZFactory.cpp */,
 				504CC8BF2D5A819200C2AC9A /* ADZFile.h */,
 				504CC8C02D5A819D00C2AC9A /* ADZFile.cpp */,
+				509E760C2EDCE3A300608FA7 /* EADFFactory.h */,
+				509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */,
 				5009B7FB2557051A0037288E /* EADFFile.h */,
 				5009B7FA2557051A0037288E /* EADFFile.cpp */,
 				509E75FC2EDCCBFF00608FA7 /* IMGFactory.h */,
@@ -2700,6 +2708,7 @@
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
+				509E760E2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */,
 				509D076A2EDB1B6500355638 /* Loggable.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
@@ -2776,6 +2785,7 @@
 				500B0D402E8099AA008FC5E1 /* CapturesSettings.swift in Sources */,
 				500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
+				509E760A2EDCE26600608FA7 /* DMSFactory.cpp in Sources */,
 				9C47C0332D6215B100E57B41 /* lz4.c in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				50210B2027CB6A41001193AA /* Drive.cpp in Sources */,
@@ -2961,6 +2971,7 @@
 				50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */,
 				50627FD5286EBACA00F2A835 /* Texture.cpp in Sources */,
 				50FC04AD27DA198E00C3E566 /* BlitterInfo.cpp in Sources */,
+				509E760F2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */,
 				50FC04D627DA1A0000C3E566 /* RSCommand.cpp in Sources */,
 				50FC04E227DA1A1400C3E566 /* u_heavy.c in Sources */,
 				50FC04FD27DA1AAB00C3E566 /* UARTEvents.cpp in Sources */,
@@ -3029,6 +3040,7 @@
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
 				50FC047F27DA12AB00C3E566 /* Parser.cpp in Sources */,
 				5012DCE12D5B33C200233B6A /* HDZFile.cpp in Sources */,
+				509E760B2EDCE26600608FA7 /* DMSFactory.cpp in Sources */,
 				50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */,
 				50FC04E527DA1A1400C3E566 /* u_init.c in Sources */,
 				50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */,

@@ -33,15 +33,8 @@ public:
     using AnyFile::init;
 
     STFile(const fs::path &path) throws { init(path); }
-    // STFile(const fs::path &path, std::istream &stream) throws { init(path, stream); }
+    STFile(isize len) throws { init(len); }
     STFile(const u8 *buf, isize len) throws { init(buf, len); }
-    STFile(Diameter dia, Density den) throws { init(dia, den); }
-    STFile(class FloppyDisk &disk) throws { init(disk); }
-
-private:
-
-    void init(Diameter dia, Density den) throws;
-    void init(class FloppyDisk &disk) throws;
 
 
     //

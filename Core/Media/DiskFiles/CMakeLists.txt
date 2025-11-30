@@ -17,5 +17,8 @@ ADFFactory.cpp
 ADZFactory.cpp
 HDFFactory.cpp
 HDZFactory.cpp
-
+IMGFactory.cpp
+DMSFactory.cpp
+EXEFactory.cpp
+STFactory.cpp
 )

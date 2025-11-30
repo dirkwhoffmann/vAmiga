@@ -35,15 +35,6 @@ public:
     IMGFile(const fs::path &path) throws { init(path); }
     IMGFile(isize len) throws { init(len); }
     IMGFile(const u8 *buf, isize len) throws { init(buf, len); }
-    // IMGFile(Diameter dia, Density den) throws { init(dia, den); }
-    // IMGFile(class FloppyDisk &disk) throws { init(disk); }
-    // IMGFile(class FloppyDrive &drive) throws { init(drive); }
-
-private:
-    
-    // void init(Diameter dia, Density den) throws;
-    // void init(class FloppyDisk &disk) throws;
-    // void init(class FloppyDrive &drive) throws;
 
 
     //

@@ -35,36 +35,6 @@ IMGFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-/*
-void
-IMGFile::init(Diameter dia, Density den)
-{
-    // We only support 3.5"DD disks at the moment
-    if (dia == Diameter::INCH_35 && den == Density::DD) {
-
-        data.init(9 * 160 * 512);
-
-    } else {
-
-        throw AppError(Fault::DISK_INVALID_LAYOUT);
-    }
-}
-
-void
-IMGFile::init(FloppyDisk &disk)
-{
-    init(Diameter::INCH_35, Density::DD);
-    decodeDisk(disk);
-}
-
-void
-IMGFile::init(FloppyDrive &drive)
-{
-    if (drive.disk == nullptr) throw AppError(Fault::DISK_MISSING);
-    init(*drive.disk);
-}
-*/
-
 isize
 IMGFile::numCyls() const
 {

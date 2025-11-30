@@ -49,6 +49,7 @@ EADFFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
+/*
 void
 EADFFile::init(FloppyDisk &disk)
 {
@@ -73,6 +74,7 @@ EADFFile::init(FloppyDrive &drive)
     if (drive.disk == nullptr) throw AppError(Fault::DISK_MISSING);
     init(*drive.disk);
 }
+*/
 
 isize
 EADFFile::numCyls() const
