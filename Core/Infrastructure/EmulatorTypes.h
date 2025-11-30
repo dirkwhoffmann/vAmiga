@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Infrastructure/ThreadTypes.h"
-#include "Components/AmigaTypes.h"
+#include "ThreadTypes.h"
+#include "AmigaTypes.h"
 
 namespace vamiga {
 

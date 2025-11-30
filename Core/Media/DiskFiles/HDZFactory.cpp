@@ -7,20 +7,33 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
-
-#include "HDZFile.h"
+#include "config.h"
+#include "HDZFactory.h"
 
 namespace vamiga {
 
-class HDZFactory {
+std::unique_ptr<HDZFile>
+HDZFactory::make(const fs::path &path)
+{
+    return std::make_unique<HDZFile>(path);
+}
 
-public:
+std::unique_ptr<HDZFile>
+HDZFactory::make(const u8 *buf, isize len)
+{
+    return std::make_unique<HDZFile>(buf, len);
+}
 
-    static std::unique_ptr<HDZFile> make(const fs::path &path);
-    static std::unique_ptr<HDZFile> make(const u8 *buf, isize len);
-    static std::unique_ptr<HDZFile> make(const class HDFFile &adf);
-    static std::unique_ptr<HDZFile> make(const std::unique_ptr<HDFFile>& adf);
-};
+std::unique_ptr<HDZFile>
+HDZFactory::make(const HDFFile &hdf)
+{
+    return std::make_unique<HDZFile>(hdf);
+}
+
+std::unique_ptr<HDZFile>
+HDZFactory::make(const std::unique_ptr<HDFFile>& hdf)
+{
+    return make(*hdf);
+}
 
 }

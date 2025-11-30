@@ -10,6 +10,7 @@
 #include "config.h"
 #include "RetroShell.h"
 #include "Emulator.h"
+#include "MediaFile.h"
 #include <istream>
 #include <sstream>
 #include <string>

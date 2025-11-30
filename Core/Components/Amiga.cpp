@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Amiga.h"
+#include "MediaFile.h"
 #include "ADZFactory.h"
 #include "Emulator.h"
 #include "Option.h"
@@ -1129,12 +1130,12 @@ Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
     }
 
     // Take the snapshot
-    Snapshot *result = new Snapshot(*this);
+    auto result = make_unique<Snapshot>(*this);
 
     // Compress the snapshot if requested
     result->compress(compressor);
 
-    return result;
+    return new MediaFile(std::move(result));
 }
 
 void
@@ -1179,26 +1180,33 @@ Amiga::scheduleNextSnpEvent()
 void
 Amiga::loadSnapshot(const fs::path &path)
 {
-    loadSnapshot(Snapshot(path));
+    loadSnapshot(MediaFile(make_unique<Snapshot>(path)));
 }
 
 void
 Amiga::loadSnapshot(const MediaFile &file)
 {
-    const Snapshot &snap = dynamic_cast<const Snapshot &>(file);
+    try {
 
-    // Make a copy so we can modify the snapshot
-    Snapshot snapshot(snap);
-    
-    // Uncompress the snapshot
-    snapshot.uncompress();
-    
-    // Restore the saved state (may throw)
-    load(snapshot.getData());
-        
-    // Inform the GUI
-    msgQueue.put(Msg::SNAPSHOT_RESTORED);
-    msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
+        const Snapshot &snap = dynamic_cast<const Snapshot &>(*file.file);
+
+        // Make a copy so we can modify the snapshot
+        Snapshot snapshot(snap);
+
+        // Uncompress the snapshot
+        snapshot.uncompress();
+
+        // Restore the saved state (may throw)
+        load(snapshot.getData());
+
+        // Inform the GUI
+        msgQueue.put(Msg::SNAPSHOT_RESTORED);
+        msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
+
+    } catch (const std::bad_cast &) {
+
+        throw AppError(Fault::FILE_TYPE_MISMATCH);
+    }
 }
 
 void

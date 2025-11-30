@@ -788,8 +788,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto n = values[0];
                 // df[n]->insertMediaFile(ADFFile(fs), false);
-                auto tmp = ADFFactory::make(fs);
-                df[n]->insertMediaFile(*tmp, false);
+                auto tmp = MediaFile(ADFFactory::make(fs));
+                df[n]->insertMediaFile(tmp, false);
 
             }, .payload = {i}
         });

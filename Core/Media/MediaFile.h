@@ -12,6 +12,7 @@
 #include "MediaFileTypes.h"
 #include "FloppyDiskTypes.h"
 #include "AmigaTypes.h"
+#include "AnyFile.h"
 #include <sstream>
 #include <fstream>
 
@@ -21,6 +22,10 @@ class MediaFile {
 
 public:
 
+    // The wrapped file
+    unique_ptr<class AnyFile> file;
+
+    MediaFile(unique_ptr<AnyFile> file) : file(std::move(file)) {}
     virtual ~MediaFile() = default;
 
 
@@ -28,10 +33,12 @@ public:
     // Static methods
     //
 
+public:
+
     // Determines the type of an arbitrary file on disk
     static FileType type(const fs::path &path);
 
-    // Factory methods
+    // Factory methods (TODO: Return unique_ptr)
     static MediaFile *make(const fs::path &path);
     static MediaFile *make(const fs::path &path, FileType type);
     static MediaFile *make(const u8 *buf, isize len, FileType type);
@@ -41,39 +48,45 @@ public:
 
 
     //
-    // Methods
+    // Public API
     //
 
+public:
+
     // Returns the media type of this file
-    virtual FileType type() const { return FileType::UNKNOWN; }
+    FileType type() const { return file->type(); }
 
     // Returns the size of this file
-    virtual isize getSize() const = 0;
+    isize getSize() const { return file->getSize(); }
 
     // Returns a textual representation of the file size
-    virtual string getSizeAsString() const;
+    string getSizeAsString() const { return file->getSizeAsString(); }
+
+    // Returns a pointer to the wrapped file
+    const AnyFile *get() const { return file.get(); }
+    AnyFile *get() { return file.get(); }
 
     // Returns a pointer to the file data
-    virtual u8 *getData() const = 0;
+    u8 *getData() const { return file->getData(); }
 
     // Returns a fingerprint (hash value) for this file
-    virtual u64 fnv64() const = 0;
-    virtual u32 crc32() const = 0;
+    u64 fnv64() const { return file->fnv64(); }
+    u32 crc32() const { return file->crc32(); }
 
     // Return a timestamp (if present)
-    virtual time_t timestamp() const { return time_t(0); }
+    time_t timestamp() const { return time_t(0); } // TODO: ADD TO ANYFILE
 
     // Return the size of the preview image (only available for snapshot files)
-    virtual std::pair <isize,isize> previewImageSize() const { return { 0, 0 }; }
+    std::pair <isize,isize> previewImageSize() const;
 
     // Return a preview image (only available for snapshot files)
-    virtual const u32 *previewImageData() const { return nullptr; }
+    const u32 *previewImageData() const ;
 
     // Handels data compression (only implemented by snapshot files)
-    virtual Compressor compressor() const { return Compressor::NONE; }
-    virtual bool isCompressed() const { return compressor() != Compressor::NONE; }
-    virtual void compress(Compressor method) { }
-    virtual void uncompress() { }
+    virtual Compressor compressor() const;
+    virtual bool isCompressed() const;
+    virtual void compress(Compressor method);
+    virtual void uncompress();
 
     // Returns media information
     DiskInfo getDiskInfo() const;
@@ -81,9 +94,9 @@ public:
     HDFInfo getHDFInfo() const;
 
     // Flashes the contents of the file into a buffer
-    virtual void flash(u8 *buf, isize offset, isize len) const = 0;
-    virtual void flash(u8 *buf, isize offset = 0) const = 0;
-    
+    void flash(u8 *buf, isize offset, isize len) { file->flash(buf, offset, len); }
+    void flash(u8 *buf, isize offset = 0) { file->flash(buf, offset); }
+
 
     //
     // Accessing raw data
@@ -92,20 +105,21 @@ public:
 public:
 
     // Reads data from the file
-    virtual u8 readByte(isize b, isize offset) const { return 0; }
-    virtual u8 readByte(isize t, isize s, isize offset) const { return 0; }
-    virtual void readSector(u8 *dst, isize b) const { }
-    virtual void readSector(u8 *dst, isize t, isize s) const { }
+    virtual u8 readByte(isize b, isize offset) const;
+    virtual u8 readByte(isize t, isize s, isize offset) const;
+    virtual void readSector(u8 *dst, isize b) const;
+    virtual void readSector(u8 *dst, isize t, isize s) const;
 
     // Generates a hex dump for some sector data
-    virtual string hexdump(isize b, isize offset, isize len) const { return ""; }
-    virtual string hexdump(isize t, isize s, isize offset, isize len) const { return ""; }
-    virtual string hexdump(isize c, isize h, isize s, isize offset, isize len) const { return ""; }
+    virtual string hexdump(isize b, isize offset, isize len) const;
+    virtual string hexdump(isize t, isize s, isize offset, isize len) const;
+    virtual string hexdump(isize c, isize h, isize s, isize offset, isize len) const;
 
     // Generates an ASCII dump for some sector data
-    virtual string asciidump(isize b, isize offset, isize len) const { return ""; }
-    virtual string asciidump(isize t, isize s, isize offset, isize len) const { return ""; }
-    virtual string asciidump(isize c, isize h, isize s, isize offset, isize len) const { return ""; }
+    virtual string asciidump(isize b, isize offset, isize len) const;
+    virtual string asciidump(isize t, isize s, isize offset, isize len) const;
+    virtual string asciidump(isize c, isize h, isize s, isize offset, isize len) const;
+
 
     //
     // Serializing
@@ -113,12 +127,12 @@ public:
 
 public:
 
-    virtual isize readFromBuffer(const u8 *buf, isize len) = 0;
+    virtual isize readFromBuffer(const u8 *buf, isize len) { return file->readFromBuffer(buf, len); }
 
-    virtual isize writeToStream(std::ostream &stream) const = 0;
-    virtual isize writeToFile(const fs::path &path) const = 0;
-    virtual isize writePartitionToFile(const fs::path &path, isize partition) const = 0;
-    virtual isize writeToBuffer(u8 *buf) const = 0;
+    virtual isize writeToStream(std::ostream &stream) const { return file->writeToStream(stream); }
+    virtual isize writeToFile(const fs::path &path) const { return file->writeToFile(path); }
+    virtual isize writePartitionToFile(const fs::path &path, isize partition) const { return file->writePartitionToFile(path, partition); }
+    virtual isize writeToBuffer(u8 *buf) const { return file->writeToBuffer(buf); }
 };
 
 }

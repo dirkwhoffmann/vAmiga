@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FileSystem.h"
+#include "MediaFile.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 

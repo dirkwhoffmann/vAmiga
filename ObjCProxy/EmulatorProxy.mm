@@ -2006,7 +2006,7 @@ NSString *EventSlotName(EventSlot slot)
 
 + (FileType)typeOfUrl:(NSURL *)url
 {
-    return AnyFile::type([url fileSystemRepresentation]);
+    return MediaFile::type([url fileSystemRepresentation]);
 }
 
 - (FileType)type

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "MediaFile.h"
 #include "FloppyFile.h"
 #include "ADFFile.h"
 #include "ADZFile.h"
@@ -33,7 +34,7 @@ FloppyFile::make(const fs::path &path)
         throw AppError(Fault::FILE_CANT_READ, path);
     }
 
-    switch (type(path)) {
+    switch (MediaFile::type(path)) {
 
         case FileType::ADF:  result = new ADFFile(buffer.ptr, buffer.size); break;
         case FileType::ADZ:  result = new ADZFile(buffer.ptr, buffer.size); break;

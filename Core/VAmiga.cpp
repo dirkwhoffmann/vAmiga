@@ -11,6 +11,7 @@
 #include "VAmiga.h"
 #include "Concurrency.h"
 #include "Emulator.h"
+#include "FileFactories.h"
 #include "GuardList.h"
 
 namespace vamiga {
@@ -1327,7 +1328,7 @@ MediaFile *
 HardDriveAPI::createHDF()
 {
     VAMIGA_PUBLIC_SUSPEND
-    return new HDFFile(*drive);
+    return new MediaFile(HDFFactory::make(*drive));
 }
 
 

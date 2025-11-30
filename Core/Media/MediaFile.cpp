@@ -10,6 +10,7 @@
 #include "config.h"
 #include "VAmiga.h"
 #include "Media.h"
+#include "FileFactories.h"
 
 namespace vamiga {
 
@@ -45,19 +46,19 @@ MediaFile::make(const fs::path &path, FileType type)
 {
     switch (type) {
 
-        case FileType::WORKSPACE:    return new Workspace(path);
-        case FileType::SNAPSHOT:     return new Snapshot(path);
-        case FileType::SCRIPT:       return new Script(path);
-        case FileType::ADF:          return new ADFFile(path);
-        case FileType::ADZ:          return new ADZFile(path);
-        case FileType::EADF:         return new EADFFile(path);
-        case FileType::HDF:          return new HDFFile(path);
-        case FileType::HDZ:          return new HDZFile(path);
-        case FileType::IMG:          return new IMGFile(path);
-        case FileType::ST:           return new STFile(path);
-        case FileType::DMS:          return new DMSFile(path);
-        case FileType::EXE:          return new EXEFile(path);
-        case FileType::ROM:          return new RomFile(path);
+        case FileType::WORKSPACE:    return new MediaFile(make_unique<Workspace>(path));
+        case FileType::SNAPSHOT:     return new MediaFile(make_unique<Snapshot>(path));
+        case FileType::SCRIPT:       return new MediaFile(make_unique<Script>(path));
+        case FileType::ADF:          return new MediaFile(ADFFactory::make(path));
+        case FileType::ADZ:          return new MediaFile(ADZFactory::make(path));
+        case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(path));
+        case FileType::HDF:          return new MediaFile(HDFFactory::make(path));
+        case FileType::HDZ:          return new MediaFile(HDZFactory::make(path));
+        case FileType::IMG:          return new MediaFile(make_unique<IMGFile>(path));
+        case FileType::ST:           return new MediaFile(make_unique<STFile>(path));
+        case FileType::DMS:          return new MediaFile(make_unique<DMSFile>(path));
+        case FileType::EXE:          return new MediaFile(make_unique<EXEFile>(path));
+        case FileType::ROM:          return new MediaFile(make_unique<RomFile>(path));
 
         default:
             throw AppError(Fault::FILE_TYPE_MISMATCH, path);
@@ -69,18 +70,18 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
 {
     switch (type) {
 
-        case FileType::SNAPSHOT:     return new Snapshot(buf, len);
-        case FileType::SCRIPT:       return new Script(buf, len);
-        case FileType::ADF:          return new ADFFile(buf, len);
-        case FileType::ADZ:          return new ADZFile(buf, len);
-        case FileType::EADF:         return new EADFFile(buf, len);
-        case FileType::HDF:          return new HDFFile(buf, len);
-        case FileType::HDZ:          return new HDZFile(buf, len);
-        case FileType::IMG:          return new IMGFile(buf, len);
-        case FileType::ST:           return new STFile(buf, len);
-        case FileType::DMS:          return new DMSFile(buf, len);
-        case FileType::EXE:          return new EXEFile(buf, len);
-        case FileType::ROM:          return new RomFile(buf, len);
+        case FileType::SNAPSHOT:     return new MediaFile(make_unique<Snapshot>(buf, len));
+        case FileType::SCRIPT:       return new MediaFile(make_unique<Script>(buf, len));
+        case FileType::ADF:          return new MediaFile(ADFFactory::make(buf, len));
+        case FileType::ADZ:          return new MediaFile(ADZFactory::make(buf, len));
+        case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(buf, len));
+        case FileType::HDF:          return new MediaFile(HDFFactory::make(buf, len));
+        case FileType::HDZ:          return new MediaFile(HDZFactory::make(buf, len));
+        case FileType::IMG:          return new MediaFile(make_unique<IMGFile>(buf, len));
+        case FileType::ST:           return new MediaFile(make_unique<STFile>(buf, len));
+        case FileType::DMS:          return new MediaFile(make_unique<DMSFile>(buf, len));
+        case FileType::EXE:          return new MediaFile(make_unique<EXEFile>(buf, len));
+        case FileType::ROM:          return new MediaFile(make_unique<RomFile>(buf, len));
 
         default:
             return nullptr;
@@ -92,7 +93,7 @@ MediaFile::make(FileSystem &fs, FileType type)
 {
     switch (type) {
 
-        case FileType::ADF:         if (auto p = ADFFactory::make(fs)) return p.release();
+        case FileType::ADF:          return new MediaFile(ADFFactory::make(fs));
 
         default:
             return nullptr;
@@ -102,20 +103,16 @@ MediaFile::make(FileSystem &fs, FileType type)
 MediaFile *
 MediaFile::make(FloppyDriveAPI &drive, FileType type)
 {
-    unique_ptr<AnyFile> p;
-
     switch (type) {
 
-        case FileType::ADF:          p = ADFFactory::make(drive.getDisk()); break;
-        case FileType::ADZ:          p = ADZFactory::make(drive.getDisk()); break;
-        case FileType::EADF:         return new EADFFile(drive.getDisk());
-        case FileType::IMG:          return new IMGFile(drive.getDisk());
+        case FileType::ADF:          return new MediaFile(ADFFactory::make(drive.getDisk()));
+        case FileType::ADZ:          return new MediaFile(ADZFactory::make(drive.getDisk()));
+        case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(drive.getDisk()));
+        case FileType::IMG:          return new MediaFile(make_unique<IMGFile>(drive.getDisk()));
 
         default:
             return nullptr;
     }
-
-    return p.release();
 }
 
 MediaFile *
@@ -123,18 +120,64 @@ MediaFile::make(HardDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FileType::HDF:      return new HDFFile(drive.getDrive());
-        case FileType::HDZ:      return new HDZFile(drive.getDrive());
+        case FileType::HDF:      return new MediaFile(HDFFactory::make(drive.getDrive()));
+        case FileType::HDZ:      return new MediaFile(HDZFactory::make(drive.getDrive()));
 
         default:
             return nullptr;
     }
 }
 
-string
-MediaFile::getSizeAsString() const
+std::pair <isize,isize>
+MediaFile::previewImageSize() const
 {
-    return util::byteCountAsString(getSize());
+    if (auto snapshot = dynamic_cast<const Snapshot *>(file.get())) {
+        return snapshot->previewImageSize();
+    }
+    return {0,0};
+}
+
+const u32 *
+MediaFile::previewImageData() const
+{
+    if (auto snapshot = dynamic_cast<const Snapshot *>(file.get())) {
+        return snapshot->previewImageData();
+    }
+    return nullptr;
+}
+
+Compressor
+MediaFile::compressor() const
+{
+    if (auto snapshot = dynamic_cast<const Snapshot *>(file.get())) {
+        return snapshot->compressor();
+    }
+    return Compressor::NONE;
+}
+
+bool
+MediaFile::isCompressed() const
+{
+    if (auto snapshot = dynamic_cast<const Snapshot *>(file.get())) {
+        return snapshot->isCompressed();
+    }
+    return false;
+}
+
+void
+MediaFile::compress(Compressor method)
+{
+    if (auto snapshot = dynamic_cast<Snapshot *>(file.get())) {
+        snapshot->compress(method);
+    }
+}
+
+void
+MediaFile::uncompress()
+{
+    if (auto snapshot = dynamic_cast<Snapshot *>(file.get())) {
+        snapshot->uncompress();
+    }
 }
 
 DiskInfo
@@ -205,6 +248,94 @@ MediaFile::getHDFInfo() const
 
         throw AppError(Fault::FILE_TYPE_MISMATCH);
     }
+}
+
+u8
+MediaFile::readByte(isize b, isize offset) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->readByte(b, offset);
+    }
+    return 0;
+}
+
+u8
+MediaFile::readByte(isize t, isize s, isize offset) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->readByte(t, s, offset);
+    }
+    return 0;
+}
+
+void
+MediaFile::readSector(u8 *dst, isize b) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        disk->readSector(dst, b);
+    }
+}
+
+void
+MediaFile::readSector(u8 *dst, isize t, isize s) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        disk->readSector(dst, t, s);
+    }
+}
+
+string
+MediaFile::hexdump(isize b, isize offset, isize len) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return hexdump(b, offset, len);
+    }
+    return "";
+}
+
+string
+MediaFile::hexdump(isize t, isize s, isize offset, isize len) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return hexdump(t, s, offset, len);
+    }
+    return "";
+}
+
+string
+MediaFile::hexdump(isize c, isize h, isize s, isize offset, isize len) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return hexdump(c, h, offset, len);
+    }
+    return "";
+}
+
+string
+MediaFile::asciidump(isize b, isize offset, isize len) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return asciidump(b, offset, len);
+    }
+    return "";
+}
+
+string
+MediaFile::asciidump(isize t, isize s, isize offset, isize len) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return asciidump(t, s, offset, len);
+    }
+    return "";
+}
+
+string
+MediaFile::asciidump(isize c, isize h, isize s, isize offset, isize len) const
+{
+    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return asciidump(c, h, s, offset, len);
+    }
+    return "";
 }
 
 }

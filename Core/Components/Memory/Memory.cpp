@@ -22,6 +22,7 @@
 #include "RTC.h"
 #include "ZorroManager.h"
 #include "RomDatabase.h"
+#include "MediaFile.h"
 
 namespace vamiga {
 
@@ -669,18 +670,16 @@ Memory::extFingerprint() const
 void
 Memory::loadRom(MediaFile &file)
 {
-    try {
-
-        auto &romFile = dynamic_cast<RomFile &>(file);
+    if (auto *romFile = dynamic_cast<RomFile *>(file.get())) {
 
         // Decrypt Rom
-        if (romFile.isEncrypted()) romFile.decrypt();
+        if (romFile->isEncrypted()) romFile->decrypt();
 
         // Allocate memory
-        allocRom((i32)romFile.data.size);
+        allocRom((i32)romFile->data.size);
 
         // Load Rom
-        romFile.flash(rom);
+        romFile->flash(rom);
 
         // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
         hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
@@ -688,7 +687,7 @@ Memory::loadRom(MediaFile &file)
         // Remove extended Rom (if any)
         deleteExt();
 
-    } catch (...) {
+    } else {
 
         throw AppError(Fault::FILE_TYPE_MISMATCH);
     }
@@ -697,15 +696,17 @@ Memory::loadRom(MediaFile &file)
 void
 Memory::loadRom(const fs::path &path)
 {
-    RomFile file(path);
-    loadRom(file);
+    auto file = MediaFile::make(path, FileType::ROM);
+    loadRom(*file);
+    delete file;
 }
 
 void
 Memory::loadRom(const u8 *buf, isize len)
 {
-    RomFile file(buf, len);
-    loadRom(file);
+    auto file = MediaFile::make(buf, len, FileType::ROM);
+    loadRom(*file);
+    delete file;
 }
 
 void
@@ -730,15 +731,17 @@ Memory::loadExt(MediaFile &file)
 void
 Memory::loadExt(const fs::path &path)
 {
-    RomFile file(path);
-    loadExt(file);
+    auto file = MediaFile::make(path, FileType::ROM);
+    loadExt(*file);
+    delete file;
 }
 
 void
 Memory::loadExt(const u8 *buf, isize len)
 {
-    RomFile file(buf, len);
-    loadExt(file);
+    auto file = MediaFile::make(buf, len, FileType::ROM);
+    loadExt(*file);
+    delete file;
 }
 
 void

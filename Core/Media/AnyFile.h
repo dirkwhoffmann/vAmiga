@@ -9,8 +9,8 @@
 
 #pragma once
 
+#include "MediaFileTypes.h"
 #include "CoreObject.h"
-#include "MediaFile.h"
 #include "Checksum.h"
 #include "IOUtils.h"
 #include "Buffer.h"
@@ -21,7 +21,7 @@ namespace vamiga {
 
 using util::Buffer;
 
-class AnyFile : public CoreObject, public MediaFile {
+class AnyFile : public CoreObject {
 
 public:
     
@@ -48,28 +48,27 @@ public:
 
     explicit operator bool() const { return data.ptr != nullptr; }
 
-    
-    //
-    // Methods from CoreObject
-    //
-    
-    /*
-private:
-    
-    void _dump(Category category, std::ostream &os) const override { }
-     */
-
 
     //
-    // Methods from MediaFile
+    // General
+    //
+
+    // Returns the media type of this file
+    virtual FileType type() const { return FileType::UNKNOWN; }
+
+    
+    //
+    // Data management
     //
     
 public:
 
-    virtual isize getSize() const override { return data.size; }
-    virtual u8 *getData() const override { return data.ptr; }
-    virtual u64 fnv64() const override { return data.fnv64(); }
-    virtual u32 crc32() const override { return data.crc32(); }
+    virtual isize getSize() const { return data.size; }
+    virtual u8 *getData() const { return data.ptr; }
+    virtual u64 fnv64() const { return data.fnv64(); }
+    virtual u32 crc32() const { return data.crc32(); }
+
+    string getSizeAsString() const;
 
     
     //
@@ -77,33 +76,31 @@ public:
     //
 
     // Copies the file contents into a buffer
-    virtual void flash(u8 *buf, isize offset, isize len) const override;
-    virtual void flash(u8 *buf, isize offset = 0) const override;
+    virtual void flash(u8 *buf, isize offset, isize len) const;
+    virtual void flash(u8 *buf, isize offset = 0) const;
 
-    
+
     //
     // Serializing
     //
     
-protected:
-    
+public:
+
     virtual bool isCompatiblePath(const fs::path &path) const = 0;
     virtual bool isCompatibleBuffer(const u8 *buf, isize len) const = 0;
     bool isCompatibleBuffer(const Buffer<u8> &buffer);
-    isize readFromBuffer(const u8 *buf, isize len) throws override;
-    isize readFromBuffer(const Buffer<u8> &buffer) throws;
-
-public:
+    isize readFromBuffer(const u8 *buf, isize len);
+    isize readFromBuffer(const Buffer<u8> &buffer);
     
-    isize writeToStream(std::ostream &stream, isize offset, isize len) const throws;
-    isize writeToFile(const fs::path &path, isize offset, isize len) const throws;
-    isize writeToBuffer(u8 *buf, isize offset, isize len) const throws;
-    isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const throws;
+    isize writeToStream(std::ostream &stream, isize offset, isize len) const;
+    isize writeToFile(const fs::path &path, isize offset, isize len) const;
+    isize writeToBuffer(u8 *buf, isize offset, isize len) const;
+    isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const;
 
-    isize writeToStream(std::ostream &stream) const throws override;
-    isize writeToFile(const fs::path &path) const throws override;
-    isize writePartitionToFile(const fs::path &path, isize partition) const throws override;
-    isize writeToBuffer(u8 *buf) const throws override;
+    isize writeToStream(std::ostream &stream) const;
+    isize writeToFile(const fs::path &path) const;
+    isize writePartitionToFile(const fs::path &path, isize partition) const;
+    isize writeToBuffer(u8 *buf) const throws;
     isize writeToBuffer(Buffer<u8> &buffer) const throws;
 
 private:

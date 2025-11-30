@@ -1133,6 +1133,7 @@
 		50E79D392EDC48C40052277E /* HDFFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFactory.cpp; sourceTree = "<group>"; };
 		50E79D3C2EDC48C80052277E /* HDZFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDZFactory.h; sourceTree = "<group>"; };
 		50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDZFactory.cpp; sourceTree = "<group>"; };
+		50E79D402EDC514B0052277E /* FileFactories.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileFactories.h; sourceTree = "<group>"; };
 		50E8199225B350DA00D2E3A5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		50E98B4F275A124900AA0CB9 /* Socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
 		50E98B50275A124900AA0CB9 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
@@ -1273,8 +1274,8 @@
 				50E79D392EDC48C40052277E /* HDFFactory.cpp */,
 				50EAD99B256E76820053F9AC /* HDFFile.h */,
 				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
-				50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */,
 				50E79D3C2EDC48C80052277E /* HDZFactory.h */,
+				50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */,
 				5012DCDE2D5B33BA00233B6A /* HDZFile.h */,
 				5012DCDF2D5B33C100233B6A /* HDZFile.cpp */,
 				50FAC77425160BBF00E47421 /* FloppyFile.h */,
@@ -1858,6 +1859,7 @@
 				50985ABD2C418D370079CFC5 /* MediaFileTypes.h */,
 				50985ABA2C418D190079CFC5 /* MediaFile.h */,
 				50985AB92C418D190079CFC5 /* MediaFile.cpp */,
+				50E79D402EDC514B0052277E /* FileFactories.h */,
 				508FE06421EA318D0043D0E9 /* AnyFile.h */,
 				508FE06321EA318D0043D0E9 /* AnyFile.cpp */,
 				5068EA312D4B5BED00B44FB5 /* Workspace.h */,

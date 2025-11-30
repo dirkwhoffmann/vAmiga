@@ -175,7 +175,7 @@ private:
     
 public:
     
-    isize writePartitionToFile(const fs::path &path, isize nr) const override;
+    isize writePartitionToFile(const fs::path &path, isize nr) const;
 };
 
 }

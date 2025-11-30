@@ -11,6 +11,7 @@
 #include "HardDrive.h"
 #include "Emulator.h"
 #include "FileSystemFactory.h"
+#include "MediaFile.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
 #include "IOUtils.h"
@@ -141,13 +142,13 @@ HardDrive::init(const FileSystem &fs)
 void 
 HardDrive::init(const MediaFile &file)
 {
-    if (const auto *hdf = dynamic_cast<const HDFFile *>(&file)) {
-        
+    if (const auto *hdf = dynamic_cast<const HDFFile *>(file.get())) {
+
         init(*hdf);
         return;
     }
     
-    if (const auto *hdz = dynamic_cast<const HDZFile *>(&file)) {
+    if (const auto *hdz = dynamic_cast<const HDZFile *>(file.get())) {
         
         init(*hdz);
         return;

@@ -70,6 +70,12 @@ AnyFile::~AnyFile()
 
 }
 
+string
+AnyFile::getSizeAsString() const
+{
+    return util::byteCountAsString(getSize());
+}
+
 void
 AnyFile::flash(u8 *buf, isize offset, isize len) const
 {
