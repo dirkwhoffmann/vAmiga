@@ -362,6 +362,10 @@
 		50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
 		50E79D362EDC37D80052277E /* ADZFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79D352EDC37D70052277E /* ADZFactory.cpp */; };
 		50E79D372EDC37D80052277E /* ADZFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79D352EDC37D70052277E /* ADZFactory.cpp */; };
+		50E79D3A2EDC48C50052277E /* HDFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79D392EDC48C40052277E /* HDFFactory.cpp */; };
+		50E79D3B2EDC48C50052277E /* HDFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79D392EDC48C40052277E /* HDFFactory.cpp */; };
+		50E79D3E2EDC48CF0052277E /* HDZFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */; };
+		50E79D3F2EDC48CF0052277E /* HDZFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */; };
 		50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E8199225B350DA00D2E3A5 /* Errors.swift */; };
 		50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B4F275A124900AA0CB9 /* Socket.cpp */; };
 		50E98B55275A127F00AA0CB9 /* RemoteServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */; };
@@ -1125,6 +1129,10 @@
 		50E79BE8232D123000D296FB /* SubComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubComponent.h; sourceTree = "<group>"; };
 		50E79D342EDC37CF0052277E /* ADZFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADZFactory.h; sourceTree = "<group>"; };
 		50E79D352EDC37D70052277E /* ADZFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADZFactory.cpp; sourceTree = "<group>"; };
+		50E79D382EDC48BB0052277E /* HDFFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFactory.h; sourceTree = "<group>"; };
+		50E79D392EDC48C40052277E /* HDFFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFactory.cpp; sourceTree = "<group>"; };
+		50E79D3C2EDC48C80052277E /* HDZFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDZFactory.h; sourceTree = "<group>"; };
+		50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDZFactory.cpp; sourceTree = "<group>"; };
 		50E8199225B350DA00D2E3A5 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		50E98B4F275A124900AA0CB9 /* Socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Socket.cpp; sourceTree = "<group>"; };
 		50E98B50275A124900AA0CB9 /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
@@ -1261,8 +1269,12 @@
 				50CF464F2620433F00BB3B95 /* CMakeLists.txt */,
 				50E1B0A527CE7164005E41DA /* DiskFile.h */,
 				50E1B0A427CE7164005E41DA /* DiskFile.cpp */,
+				50E79D382EDC48BB0052277E /* HDFFactory.h */,
+				50E79D392EDC48C40052277E /* HDFFactory.cpp */,
 				50EAD99B256E76820053F9AC /* HDFFile.h */,
 				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
+				50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */,
+				50E79D3C2EDC48C80052277E /* HDZFactory.h */,
 				5012DCDE2D5B33BA00233B6A /* HDZFile.h */,
 				5012DCDF2D5B33C100233B6A /* HDZFile.cpp */,
 				50FAC77425160BBF00E47421 /* FloppyFile.h */,
@@ -2649,6 +2661,7 @@
 				500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */,
 				50EFB0C82C18D72C0013B73C /* Dumpable.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
+				50E79D3B2EDC48C50052277E /* HDFFactory.cpp in Sources */,
 				500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */,
 				5012DCE02D5B33C200233B6A /* HDZFile.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* MyWindowDelegate.swift in Sources */,
@@ -2741,6 +2754,7 @@
 				50210B2027CB6A41001193AA /* Drive.cpp in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
+				50E79D3F2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
 				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,
 				50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */,
 				5012DCE42D5C85CD00233B6A /* Compression.cpp in Sources */,
@@ -2835,6 +2849,7 @@
 				50E5BF802BB1D2510004712B /* STFile.cpp in Sources */,
 				50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */,
 				50FC049B27DA197500C3E566 /* AgnusInfo.cpp in Sources */,
+				50E79D3A2EDC48C50052277E /* HDFFactory.cpp in Sources */,
 				509D04922EDA46E400355638 /* FSExtension.cpp in Sources */,
 				50FC04DC27DA1A1400C3E566 /* getbits.c in Sources */,
 				506407CB2D1AC45A002FBC57 /* SocketServer.cpp in Sources */,
@@ -2887,6 +2902,7 @@
 				50650F4F2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
 				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
+				50E79D3E2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
 				50EFB0C92C18D72C0013B73C /* Dumpable.cpp in Sources */,
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,

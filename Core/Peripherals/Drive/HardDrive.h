@@ -55,6 +55,7 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     };
     
     friend class HDFFile;
+    friend class HDFFactory;
     friend class HdController;
 
     // Write-through storage files

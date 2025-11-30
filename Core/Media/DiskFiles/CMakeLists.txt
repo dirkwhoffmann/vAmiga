@@ -13,5 +13,9 @@ IMGFile.cpp
 STFile.cpp
 DMSFile.cpp
 EXEFile.cpp
+ADFFactory.cpp
+ADZFactory.cpp
+HDFFactory.cpp
+HDZFactory.cpp
 
 )
