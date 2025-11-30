@@ -133,7 +133,7 @@ void
 Headless::runScript(const fs::path &path)
 {
     // Read the input script
-    Script script(path);
+    auto script = MediaFile::make(path, FileType::SCRIPT);
 
     // Create an emulator instance
     VAmiga vamiga;
@@ -149,7 +149,7 @@ Headless::runScript(const fs::path &path)
 
     // Execute script
     const auto timeout = util::Time::seconds(500.0);
-    vamiga.retroShell.execScript(script);
+    vamiga.retroShell.execScript(*script);
     waitForWakeUp(timeout);
 }
 

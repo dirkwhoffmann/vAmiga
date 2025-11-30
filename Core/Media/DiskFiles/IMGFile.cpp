@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "IMGFile.h"
+#include "IMGFactory.h"
 #include "Checksum.h"
 #include "FloppyDrive.h"
 #include "IOUtils.h"
@@ -35,6 +35,7 @@ IMGFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
+/*
 void
 IMGFile::init(Diameter dia, Density den)
 {
@@ -62,6 +63,7 @@ IMGFile::init(FloppyDrive &drive)
     if (drive.disk == nullptr) throw AppError(Fault::DISK_MISSING);
     init(*drive.disk);
 }
+*/
 
 isize
 IMGFile::numCyls() const
@@ -99,10 +101,10 @@ IMGFile::encodeDisk(FloppyDisk &disk) const
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
-        
-        IMGFile tmp(disk);
+
+        auto tmp = IMGFactory::make(disk);
         debug(IMG_DEBUG, "Saving image to /tmp/debug.img for debugging\n");
-        tmp.writeToFile("/tmp/tmp.img");
+        tmp->writeToFile("/tmp/tmp.img");
     }
 }
 

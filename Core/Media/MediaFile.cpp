@@ -108,7 +108,7 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
         case FileType::ADF:          return new MediaFile(ADFFactory::make(drive.getDisk()));
         case FileType::ADZ:          return new MediaFile(ADZFactory::make(drive.getDisk()));
         case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(drive.getDisk()));
-        case FileType::IMG:          return new MediaFile(make_unique<IMGFile>(drive.getDisk()));
+        case FileType::IMG:          return new MediaFile(IMGFactory::make(drive.getDisk()));
 
         default:
             return nullptr;

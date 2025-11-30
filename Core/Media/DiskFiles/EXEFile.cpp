@@ -77,7 +77,7 @@ EXEFile::finalizeRead()
 
     // Convert the volume into an ADF
     // adf.init(volume);
-    adf = *ADFFactory::make(volume);
+    adf = *ADFFactory::make(*volume);
 }
 
 }

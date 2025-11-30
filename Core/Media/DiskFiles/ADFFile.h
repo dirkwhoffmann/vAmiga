@@ -46,19 +46,6 @@ public:
     ADFFile(const fs::path &path) throws { init(path); }
     ADFFile(isize len) throws { init(len); }
     ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
-    /*
-    ADFFile(Diameter dia, Density den) throws { init(dia, den); }
-    ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
-    ADFFile(const class FloppyDisk &disk) throws { init(disk); }
-    ADFFile(const class FloppyDrive &drive) throws { init(drive); }
-    ADFFile(const FileSystem &volume) throws { init(volume); }
-
-    void init(Diameter dia, Density den) throws;
-    void init(const FloppyDiskDescriptor &descr) throws;
-    void init(const FloppyDisk &disk) throws;
-    void init(const FloppyDrive &drive) throws;
-    void init(const FileSystem &volume) throws;
-    */
 
     
     //

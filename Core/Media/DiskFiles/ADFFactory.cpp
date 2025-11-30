@@ -110,10 +110,11 @@ ADFFactory::make(const FileSystem &volume)
     return adf;
 }
 
+/*
 std::unique_ptr<ADFFile>
 ADFFactory::make(const unique_ptr<FileSystem> &volume)
 {
     return make(*volume);
 }
-
+*/
 }

@@ -12,9 +12,9 @@
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "DiskController.h"
-#include "ADFFactory.h"
 #include "EADFFile.h"
-#include "IMGFile.h"
+// #include "IMGFile.h"
+#include "FileFactories.h"
 #include "FileSystemFactory.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"
@@ -1000,7 +1000,7 @@ FloppyDrive::exportDisk(FileType type)
 
         case FileType::ADF:      return make_unique<MediaFile>(ADFFactory::make(*this));
         case FileType::EADF:     return make_unique<MediaFile>(make_unique<EADFFile>(*this));
-        case FileType::IMG:      return make_unique<MediaFile>(make_unique<IMGFile>(*this));
+        case FileType::IMG:      return make_unique<MediaFile>(IMGFactory::make(*this));
 
         default:
             throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
@@ -1058,7 +1058,7 @@ FloppyDrive::catchFile(const fs::path &path)
     file->overwriteData(buffer);
     
     // Convert the modified file system back to a disk
-    auto adf = ADFFactory::make(fs); //  ADFFile(fs);
+    auto adf = ADFFactory::make(*fs); //  ADFFile(fs);
 
     // Replace the old disk
     swapDisk(*adf);
@@ -1093,7 +1093,7 @@ FloppyDrive::insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path 
     if (FS_DEBUG) volume->doctor.xray(true, std::cout, false);
 
     // Convert the file system into an ADF
-    auto adf = ADFFactory::make(volume);
+    auto adf = ADFFactory::make(*volume);
 
     // Insert the ADF
     swapDisk(*adf);

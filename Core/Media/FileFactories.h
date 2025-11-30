@@ -11,3 +11,7 @@
 #include "ADZFactory.h"
 #include "HDFFactory.h"
 #include "HDZFactory.h"
+#include "IMGFactory.h"
+#include "DMSFactory.h"
+#include "EXEFactory.h"
+#include "STFactory.h"
