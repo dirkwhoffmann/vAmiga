@@ -104,6 +104,7 @@ private:
     
     void init(Diameter dia, Density den, bool wp) throws;
     void init(const class FloppyFile &file, bool wp) throws;
+    void init(unique_ptr<FloppyFile> file, bool wp) throws;
     void init(SerReader &reader, Diameter dia, Density den, bool wp) throws;
 
     

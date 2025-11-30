@@ -88,11 +88,11 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
 }
 
 MediaFile *
-MediaFile::make(class FileSystem &fs, FileType type)
+MediaFile::make(FileSystem &fs, FileType type)
 {
     switch (type) {
 
-        case FileType::ADF:          return new ADFFile(fs);
+        case FileType::ADF:         if (auto p = ADFFactory::make(fs)) return p.release();
 
         default:
             return nullptr;
@@ -102,16 +102,20 @@ MediaFile::make(class FileSystem &fs, FileType type)
 MediaFile *
 MediaFile::make(FloppyDriveAPI &drive, FileType type)
 {
+    unique_ptr<AnyFile> p;
+
     switch (type) {
 
-        case FileType::ADF:          return new ADFFile(drive.getDisk());
-        case FileType::ADZ:          return new ADZFile(drive.getDisk());
+        case FileType::ADF:          p = ADFFactory::make(drive.getDisk()); break;
+        case FileType::ADZ:          p = ADZFactory::make(drive.getDisk()); break;
         case FileType::EADF:         return new EADFFile(drive.getDisk());
         case FileType::IMG:          return new IMGFile(drive.getDisk());
 
         default:
             return nullptr;
     }
+
+    return p.release();
 }
 
 MediaFile *

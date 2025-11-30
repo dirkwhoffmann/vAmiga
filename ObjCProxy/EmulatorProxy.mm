@@ -1354,8 +1354,9 @@ NSString *EventSlotName(EventSlot slot)
 
         auto file = (MediaFile *)(proxy->obj);
         // auto dev = new FileSystem(*file);
-        auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file));
-        return [self make:dev];
+        // auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file));
+        auto dev = FileSystemFactory::fromMediaFile(*file);
+        return [self make:dev.release()];
 
     }  catch (AppError &error) {
 
@@ -1370,8 +1371,9 @@ NSString *EventSlotName(EventSlot slot)
 
         auto file = (MediaFile *)(proxy->obj);
         // auto dev = new FileSystem(*file, nr);
-        auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file, nr));
-        return [self make:dev];
+        // auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file, nr));
+        auto dev = FileSystemFactory::fromMediaFile(*file);
+        return [self make:dev.release()];
 
     }  catch (AppError &error) {
 

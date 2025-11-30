@@ -42,6 +42,12 @@ FloppyDisk::init(const class FloppyFile &file, bool wp)
 }
 
 void
+FloppyDisk::init(unique_ptr<FloppyFile> file, bool wp)
+{
+    init(*file, wp);
+}
+
+void
 FloppyDisk::init(SerReader &reader, Diameter dia, Density den, bool wp)
 {
     init(dia, den, wp);

@@ -12,7 +12,7 @@
 #include "Emulator.h"
 #include "StringUtils.h"
 #include "FileSystemFactory.h"
-#include "ADFFile.h"
+#include "ADFFactory.h"
 #include "HDFFile.h"
 #include <regex>
 
@@ -787,8 +787,10 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto n = values[0];
-                df[n]->insertMediaFile(ADFFile(fs), false);
-                
+                // df[n]->insertMediaFile(ADFFile(fs), false);
+                auto tmp = ADFFactory::make(fs);
+                df[n]->insertMediaFile(*tmp, false);
+
             }, .payload = {i}
         });
     }

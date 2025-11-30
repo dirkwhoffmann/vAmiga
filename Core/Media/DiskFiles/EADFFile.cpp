@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "EADFFile.h"
+#include "ADFFactory.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "FileSystem.h"
@@ -154,7 +155,8 @@ EADFFile::finalizeRead()
         auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
-        adf.init(getDescriptor());
+        adf = *ADFFactory::make(getDescriptor());
+        // adf.init(getDescriptor());
         adf.decodeDisk(disk);
 
     } catch (...) { }
@@ -193,16 +195,17 @@ EADFFile::encodeDisk(class FloppyDisk &disk) const
     debug(MFM_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    ADFFile adf(getDescriptor());
+    // ADFFile adf(getDescriptor());
+    auto adf = ADFFactory::make(getDescriptor());
 
     // Wipe out all data
     disk.clearDisk(0);
 
     // Encode all standard tracks
-    for (Track t = 0; t < tracks; t++) encodeStandardTrack(adf, t);
+    for (Track t = 0; t < tracks; t++) encodeStandardTrack(*adf, t);
 
     // Convert the ADF to a disk
-    disk.encodeDisk(adf);
+    disk.encodeDisk(*adf);
 
     // Encode all extended tracks
     for (Track t = 0; t < tracks; t++) encodeExtendedTrack(disk, t);

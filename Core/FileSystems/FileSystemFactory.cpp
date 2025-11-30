@@ -9,26 +9,26 @@
 
 #include "config.h"
 #include "FileSystemFactory.h"
-#include "ADFFile.h"
+#include "ADFFactory.h"
 #include "HDFFile.h"
 
 namespace vamiga {
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::fromADF(const ADFFile &adf) {
 
     auto desc = adf.getFileSystemDescriptor();
-    return FileSystem(desc, adf.data.ptr, desc.numBlocks * 512);
+    return make_unique<FileSystem>(desc, adf.data.ptr, desc.numBlocks * 512);
 }
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::fromHDF(const HDFFile &hdf, isize part)
 {
     auto desc = hdf.getFileSystemDescriptor(part);
-    return FileSystem(desc, hdf.partitionData(part), hdf.partitionSize(part));
+    return make_unique<FileSystem>(desc, hdf.partitionData(part), hdf.partitionSize(part));
 }
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::fromMediaFile(const MediaFile &file, isize part)
 {
     switch (file.type()) {
@@ -48,38 +48,38 @@ FileSystemFactory::fromMediaFile(const MediaFile &file, isize part)
     }
 }
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::fromFloppyDrive(const FloppyDrive &dfn)
 {
-    return fromADF(ADFFile(dfn));
+    return fromADF(*ADFFactory::make(dfn));
 }
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::fromHardDrive(const HardDrive &hdn, isize part)
 {
     return fromHDF(HDFFile(hdn), part);
 }
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::createEmpty(isize capacity, isize blockSize)
 {
-    return FileSystem(capacity, blockSize);
+    return make_unique<FileSystem>(capacity, blockSize);
 }
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::createFromDescriptor(const FSDescriptor &desc,
                                                    const fs::path &path)
 {
-    return FileSystem(desc, path);
+    return make_unique<FileSystem>(desc, path);
 }
 
-FileSystem
+std::unique_ptr<FileSystem>
 FileSystemFactory::createLowLevel(Diameter dia,
                                   Density den,
                                   FSFormat dos,
                                   const fs::path &path)
 {
-    return FileSystem(FSDescriptor(dia, den, dos), path);
+    return make_unique<FileSystem>(FSDescriptor(dia, den, dos), path);
 }
 
 void
@@ -119,7 +119,7 @@ FileSystemFactory::initFromMedia(FileSystem &fs, const MediaFile &file, isize pa
 void
 FileSystemFactory::initFromFloppy(FileSystem &fs, const FloppyDrive &dfn)
 {
-    initFromADF(fs, ADFFile(dfn));
+    initFromADF(fs, *ADFFactory::make(dfn));
 }
 
 void

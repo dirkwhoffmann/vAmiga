@@ -40,15 +40,12 @@ public:
 
     virtual ~AnyFile();
 
-    // void init(std::istream &stream) throws;
-    // void init(const fs::path &path, std::istream &stream) throws;
     void init(isize len) throws;
     void init(const u8 *buf, isize len) throws;
     void init(const Buffer<u8> &buffer) throws;
     void init(const string &str) throws;
     void init(const fs::path &path) throws;
-    // void init(FILE *file) throws;
-    
+
     explicit operator bool() const { return data.ptr != nullptr; }
 
     

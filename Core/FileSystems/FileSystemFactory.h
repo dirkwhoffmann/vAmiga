@@ -20,14 +20,14 @@ class FileSystemFactory {
 public:
 
     // Create a new filesystem (returns by value)
-    static FileSystem fromADF(const ADFFile &adf);
-    static FileSystem fromHDF(const HDFFile &hdf, isize part = 0);
-    static FileSystem fromMediaFile(const MediaFile &file, isize part = 0);
-    static FileSystem fromFloppyDrive(const FloppyDrive &df);
-    static FileSystem fromHardDrive(const HardDrive &hd, isize part = 0);
-    static FileSystem createEmpty(isize capacity, isize blockSize = 512);
-    static FileSystem createFromDescriptor(const FSDescriptor &, const fs::path &path = {});
-    static FileSystem createLowLevel(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
+    static std::unique_ptr<FileSystem> fromADF(const ADFFile &adf);
+    static std::unique_ptr<FileSystem> fromHDF(const HDFFile &hdf, isize part = 0);
+    static std::unique_ptr<FileSystem> fromMediaFile(const MediaFile &file, isize part = 0);
+    static std::unique_ptr<FileSystem> fromFloppyDrive(const FloppyDrive &df);
+    static std::unique_ptr<FileSystem> fromHardDrive(const HardDrive &hd, isize part = 0);
+    static std::unique_ptr<FileSystem> createEmpty(isize capacity, isize blockSize = 512);
+    static std::unique_ptr<FileSystem> createFromDescriptor(const FSDescriptor &, const fs::path &path = {});
+    static std::unique_ptr<FileSystem> createLowLevel(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
 
     // Initialize an existing filesystem
     static void initFromADF(FileSystem &fs, const ADFFile &adf);

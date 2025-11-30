@@ -16,15 +16,28 @@
 
 namespace vamiga::util {
 
-template <class T> Allocator<T>&
-Allocator<T>::operator= (const Allocator<T>& other)
+template <class T>
+Allocator<T>::Allocator(const Allocator& other)
 {
-    // Reallocate buffer if needed
-    if (size != other.size) alloc(other.size);
+    ptr = nullptr;
+    size = other.size;
+
+    if (size) {
+
+        ptr = new T[size];
+        memcpy(ptr, other.ptr, size * sizeof(T));
+    }
+}
+
+template <class T> Allocator<T>&
+Allocator<T>::operator=(const Allocator<T>& other)
+{
+    // Reallocate buffer
+    alloc(other.size);
     assert(size == other.size);
 
     // Copy buffer
-    if (size) memcpy(ptr, other.ptr, size);
+    if (size) memcpy(ptr, other.ptr, size * sizeof(T));
     return *this;
 }
 

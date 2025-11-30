@@ -12,7 +12,7 @@
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "DiskController.h"
-#include "ADFFile.h"
+#include "ADFFactory.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
 #include "FileSystemFactory.h"
@@ -996,15 +996,19 @@ FloppyDrive::ejectDisk(Cycle delay)
 MediaFile *
 FloppyDrive::exportDisk(FileType type)
 {
+    unique_ptr<AnyFile> p;
+
     switch (type) {
 
-        case FileType::ADF:      return new ADFFile(*this);
+        case FileType::ADF:      p = ADFFactory::make(*this); break;
         case FileType::EADF:     return new EADFFile(*this);
         case FileType::IMG:      return new IMGFile(*this);
 
         default:
             throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
     }
+
+    return p.release();
 }
 
 template <EventSlot s> void
@@ -1034,7 +1038,7 @@ FloppyDrive::catchFile(const fs::path &path)
     auto fs = FileSystemFactory::fromFloppyDrive(*this);
 
     // Seek file
-    auto file = fs.seekPtr(&fs.root(), path);
+    auto file = fs->seekPtr(&fs->root(), path);
     if (!file->isFile()) throw AppError(Fault::FS_NOT_A_FILE, path.string());
 
     // Extract file
@@ -1058,10 +1062,10 @@ FloppyDrive::catchFile(const fs::path &path)
     file->overwriteData(buffer);
     
     // Convert the modified file system back to a disk
-    auto adf = ADFFile(fs);
-    
+    auto adf = ADFFactory::make(fs); //  ADFFile(fs);
+
     // Replace the old disk
-    swapDisk(std::make_unique<FloppyDisk>(adf));
+    swapDisk(*adf);
 }
 
 void
@@ -1084,19 +1088,19 @@ FloppyDrive::insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path 
     
     
     // Create a file system and import the directory
-    FileSystem volume = FileSystemFactory::createLowLevel(diameter(), density(), fs, path);
+    auto volume = FileSystemFactory::createLowLevel(diameter(), density(), fs, path);
 
     // Make the volume bootable
-    volume.makeBootable(bb);
-    
+    volume->makeBootable(bb);
+
     // Check file system consistency
-    if (FS_DEBUG) volume.doctor.xray(true, std::cout, false);
+    if (FS_DEBUG) volume->doctor.xray(true, std::cout, false);
 
     // Convert the file system into an ADF
-    ADFFile adf(volume);
-    
+    auto adf = ADFFactory::make(volume);
+
     // Insert the ADF
-    swapDisk(adf);
+    swapDisk(*adf);
 }
 
 void

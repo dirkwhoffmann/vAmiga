@@ -29,9 +29,7 @@ public:
     static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
-    
-private:
-    
+        
     // Returns the size of an ADF file of a given disk type in bytes
     static isize fileSize(Diameter diameter, Density density) throws;
 
@@ -46,7 +44,9 @@ public:
     
     ADFFile() { }
     ADFFile(const fs::path &path) throws { init(path); }
+    ADFFile(isize len) throws { init(len); }
     ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
+    /*
     ADFFile(Diameter dia, Density den) throws { init(dia, den); }
     ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
     ADFFile(const class FloppyDisk &disk) throws { init(disk); }
@@ -58,6 +58,7 @@ public:
     void init(const FloppyDisk &disk) throws;
     void init(const FloppyDrive &drive) throws;
     void init(const FileSystem &volume) throws;
+    */
 
     
     //

@@ -12,18 +12,18 @@
 #include "Workspace.h"
 #include "Snapshot.h"
 #include "Script.h"
-#include "RomFiles/RomFile.h"
-#include "DiskFiles/DiskFile.h"
-#include "DiskFiles/ADFFile.h"
-#include "DiskFiles/ADZFile.h"
-#include "DiskFiles/EADFFile.h"
-#include "DiskFiles/HDFFile.h"
-#include "DiskFiles/HDZFile.h"
-#include "DiskFiles/FloppyFile.h"
-#include "DiskFiles/IMGFile.h"
-#include "DiskFiles/DMSFile.h"
-#include "DiskFiles/EXEFile.h"
-#include "DiskFiles/STFile.h"
+#include "RomFile.h"
+#include "DiskFile.h"
+#include "ADFFactory.h"
+#include "ADZFactory.h"
+#include "EADFFile.h"
+#include "HDFFile.h"
+#include "HDZFile.h"
+#include "FloppyFile.h"
+#include "IMGFile.h"
+#include "DMSFile.h"
+#include "EXEFile.h"
+#include "STFile.h"
 
 /* All media files are organized in the class hierarchy displayed below.
  * MediaFile is a wrapper class which is referenced in the public API. Below
@@ -36,11 +36,11 @@
  *  ------------
  * | MediaFile  |     Public API
  *  ------------
- *         |
+ *       |
  *   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- *         |
+ *       |
  *  ------------
- * | AnyFile  |     Internal classes
+ * |  AnyFile   |     Internal classes
  *  ------------
  *       |
  *       |--------------------------------------------

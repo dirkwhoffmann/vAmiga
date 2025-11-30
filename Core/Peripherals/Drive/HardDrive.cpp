@@ -366,8 +366,10 @@ bool
 HardDrive::isBootable()
 {
     try {
-        
-        if (FileSystemFactory::fromHardDrive(*this).exists("s/startup-sequence")) {
+
+        auto fs = FileSystemFactory::fromHardDrive(*this);
+
+        if (fs->exists("s/startup-sequence")) {
 
             debug(HDR_DEBUG, "Bootable drive\n");
             return true;
@@ -463,7 +465,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
             auto fs = FileSystemFactory::fromHardDrive(*this, i);
-            i == 0 ? fs.dumpInfo(os) : fs.dumpState(os);
+            i == 0 ? fs->dumpInfo(os) : fs->dumpState(os);
         }
         
         for (isize i = 0; i < isize(ptable.size()); i++) {
@@ -472,7 +474,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
             os << tab("Partition");
             os << dec(i) << std::endl;
             auto fs = FileSystemFactory::fromHardDrive(*this, i);
-            fs.dumpProps(os);
+            fs->dumpProps(os);
         }
     }
     

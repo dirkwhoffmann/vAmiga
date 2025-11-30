@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "EXEFile.h"
+#include "ADFFactory.h"
 #include "FileSystemFactory.h"
 #include "IOUtils.h"
 #include "OSDescriptors.h"
@@ -46,36 +47,37 @@ EXEFile::finalizeRead()
     bool hd = data.size > 853000;
 
     // Create a new file system
-    FileSystem volume = FileSystemFactory::createLowLevel(Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
-    volume.setName(FSName("Disk"));
-    
+    auto volume = FileSystemFactory::createLowLevel(Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
+    volume->setName(FSName("Disk"));
+
     // Make the volume bootable
-    volume.makeBootable(BootBlockId::AMIGADOS_13);
+    volume->makeBootable(BootBlockId::AMIGADOS_13);
 
     // Start at the root directory
-    if (auto *dir = &volume.root(); dir) {
+    if (auto *dir = &volume->root(); dir) {
 
         // Add the executable
-        volume.createFile(*dir, FSName("file"), data);
+        volume->createFile(*dir, FSName("file"), data);
 
         // Add a script directory
-        dir = &volume.mkdir(*dir, FSName("s"));
+        dir = &volume->mkdir(*dir, FSName("s"));
 
         // Add a startup sequence
-        volume.createFile(*dir, "startup-sequence", "file");
+        volume->createFile(*dir, "startup-sequence", "file");
     }
 
     // Finalize
-    volume.importer.updateChecksums();
+    volume->importer.updateChecksums();
 
     // Print some debug information about the volume
-    if (FS_DEBUG) volume.dumpState();
+    if (FS_DEBUG) volume->dumpState();
 
     // Check file system integrity
-    if (FS_DEBUG) volume.doctor.xray(true, std::cout, false);
+    if (FS_DEBUG) volume->doctor.xray(true, std::cout, false);
 
     // Convert the volume into an ADF
-    adf.init(volume);
+    // adf.init(volume);
+    adf = *ADFFactory::make(volume);
 }
 
 }

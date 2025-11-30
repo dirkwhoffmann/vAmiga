@@ -36,6 +36,13 @@ typedef unsigned long      usize;
 
 
 //
+// Pointers
+//
+
+#include <memory>
+namespace vamiga { using std::unique_ptr, std::make_unique; }
+
+//
 // Strings
 //
 

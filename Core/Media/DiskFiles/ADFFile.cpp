@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "ADFFile.h"
+#include "ADFFactory.h"
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "Checksum.h"
@@ -65,6 +65,7 @@ ADFFile::fileSize(Diameter diameter, Density density)
     throw AppError(Fault::DISK_INVALID_DENSITY);
 }
 
+/*
 void
 ADFFile::init(Diameter diameter, Density density)
 {
@@ -143,6 +144,7 @@ ADFFile::init(const FileSystem &volume)
 
     volume.exporter.exportVolume(data.ptr, data.size);
 }
+*/
 
 void
 ADFFile::finalizeRead()
@@ -328,12 +330,11 @@ ADFFile::encodeDisk(FloppyDisk &disk) const
 
     // In debug mode, also run the decoder
     if (ADF_DEBUG) {
-        
-        ADFFile adf(disk);
-        // auto tmp = Amiga::tmp("debug.adf").string();
+
+        auto adf = ADFFactory::make(disk);
         string tmp = "/tmp/debug.adf";
         debug(ADF_DEBUG, "Saving image to %s for debugging\n", tmp.c_str());
-        adf.writeToFile(tmp);
+        adf->writeToFile(tmp);
     }
 }
 

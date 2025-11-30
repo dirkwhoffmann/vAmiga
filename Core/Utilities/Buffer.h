@@ -26,10 +26,10 @@ template <class T> struct Allocator {
     isize size;
     
     Allocator(T *&ptr) : ptr(ptr), size(0) { ptr = nullptr; }
-    Allocator(const Allocator&) = delete;
+    Allocator(const Allocator&);
+    Allocator& operator= (const Allocator&);
     ~Allocator() { dealloc(); }
-    Allocator& operator= (const Allocator& other);
-    
+
     // Queries the buffer state
     isize bytesize() const { return size * sizeof(T); }
     bool empty() const { return size == 0; }
