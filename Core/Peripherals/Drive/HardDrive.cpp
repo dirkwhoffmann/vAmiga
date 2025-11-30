@@ -12,8 +12,8 @@
 #include "Emulator.h"
 #include "FileSystemFactory.h"
 #include "MediaFile.h"
-#include "HDFFile.h"
-#include "HDZFile.h"
+#include "HDFFactory.h"
+#include "HDZFactory.h"
 #include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -781,8 +781,8 @@ HardDrive::writeToFile(const fs::path &path) throws
 {
     if (!path.empty()) {
 
-        auto hdf = HDFFile(*this);
-        hdf.writeToFile(path);
+        auto hdf = HDFFactory::make(*this); //  HDFFile(*this);
+        hdf->writeToFile(path);
     }
 }
 

@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FileSystemFactory.h"
 #include "ADFFactory.h"
+#include "HDFFactory.h"
 #include "HDFFile.h"
 
 namespace vamiga {
@@ -57,7 +58,7 @@ FileSystemFactory::fromFloppyDrive(const FloppyDrive &dfn)
 std::unique_ptr<FileSystem>
 FileSystemFactory::fromHardDrive(const HardDrive &hdn, isize part)
 {
-    return fromHDF(HDFFile(hdn), part);
+    return fromHDF(*HDFFactory::make(hdn), part);
 }
 
 std::unique_ptr<FileSystem>
@@ -125,7 +126,7 @@ FileSystemFactory::initFromFloppy(FileSystem &fs, const FloppyDrive &dfn)
 void
 FileSystemFactory::initFromHardDrive(FileSystem &fs, const HardDrive &hdn, isize part)
 {
-    initFromHDF(fs, HDFFile(hdn));
+    initFromHDF(fs, *HDFFactory::make(hdn));
 }
 
 void

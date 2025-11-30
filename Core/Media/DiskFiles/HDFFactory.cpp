@@ -36,10 +36,4 @@ HDFFactory::make(const class HardDrive &drive)
     return hdf;
 }
 
-std::unique_ptr<HDFFile>
-HDFFactory::make(const unique_ptr<HardDrive> &hd)
-{
-    return make(*hd);
-}
-
 }

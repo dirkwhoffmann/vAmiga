@@ -19,8 +19,9 @@ public:
 
     static std::unique_ptr<HDZFile> make(const fs::path &path);
     static std::unique_ptr<HDZFile> make(const u8 *buf, isize len);
-    static std::unique_ptr<HDZFile> make(const class HDFFile &adf);
-    static std::unique_ptr<HDZFile> make(const std::unique_ptr<HDFFile>& adf);
+    static std::unique_ptr<HDZFile> make(const class HDFFile &hdf);
+    static std::unique_ptr<HDZFile> make(const class HardDrive &hd);
+    // static std::unique_ptr<HDZFile> make(const std::unique_ptr<HDFFile>& adf);
 };
 
 }

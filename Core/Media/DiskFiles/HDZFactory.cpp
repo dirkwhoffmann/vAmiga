@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "HDZFactory.h"
+#include "HDFFactory.h"
 
 namespace vamiga {
 
@@ -31,9 +32,17 @@ HDZFactory::make(const HDFFile &hdf)
 }
 
 std::unique_ptr<HDZFile>
+HDZFactory::make(const class HardDrive &hd)
+{
+    return make(*HDFFactory::make(hd));
+}
+
+/*
+std::unique_ptr<HDZFile>
 HDZFactory::make(const std::unique_ptr<HDFFile>& hdf)
 {
     return make(*hdf);
 }
+*/
 
 }

@@ -52,11 +52,9 @@ public:
     HDFFile() { }
     HDFFile(const fs::path &path) throws { init(path); }
     HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
-    HDFFile(const class HardDrive &hd) throws { init(hd); }
 
     void init(const fs::path &path) throws;
     void init(const u8 *buf, isize len) throws;
-    void init(const class HardDrive &hd) throws;
 
     const char *objectName() const override { return "HDF"; }
 

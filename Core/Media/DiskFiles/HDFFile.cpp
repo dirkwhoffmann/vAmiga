@@ -10,7 +10,7 @@
 #include "config.h"
 #include "HDFFile.h"
 #include "Chrono.h"
-#include "HardDrive.h"
+// #include "HardDrive.h"
 #include "IOUtils.h"
 #include "Memory.h"
 #include "OSDescriptors.h"
@@ -71,15 +71,6 @@ HDFFile::init(const u8 *buf, isize len)
     if (isOversized(len)) throw AppError(Fault::HDR_TOO_LARGE);
 
     AnyFile::init(buf, len);
-}
-
-void
-HDFFile::init(const HardDrive &drive)
-{
-    AnyFile::readFromBuffer(drive.data);
-    
-    // Overwrite the predicted geometry with the precise one
-    geometry = drive.getGeometry();
 }
 
 isize

@@ -253,7 +253,7 @@ MediaFile::getHDFInfo() const
 u8
 MediaFile::readByte(isize b, isize offset) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
         return disk->readByte(b, offset);
     }
     return 0;
@@ -262,7 +262,7 @@ MediaFile::readByte(isize b, isize offset) const
 u8
 MediaFile::readByte(isize t, isize s, isize offset) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
         return disk->readByte(t, s, offset);
     }
     return 0;
@@ -271,7 +271,7 @@ MediaFile::readByte(isize t, isize s, isize offset) const
 void
 MediaFile::readSector(u8 *dst, isize b) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
         disk->readSector(dst, b);
     }
 }
@@ -279,7 +279,7 @@ MediaFile::readSector(u8 *dst, isize b) const
 void
 MediaFile::readSector(u8 *dst, isize t, isize s) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
         disk->readSector(dst, t, s);
     }
 }
@@ -287,8 +287,8 @@ MediaFile::readSector(u8 *dst, isize t, isize s) const
 string
 MediaFile::hexdump(isize b, isize offset, isize len) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
-        return hexdump(b, offset, len);
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->hexdump(b, offset, len);
     }
     return "";
 }
@@ -296,8 +296,8 @@ MediaFile::hexdump(isize b, isize offset, isize len) const
 string
 MediaFile::hexdump(isize t, isize s, isize offset, isize len) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
-        return hexdump(t, s, offset, len);
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->hexdump(t, s, offset, len);
     }
     return "";
 }
@@ -305,8 +305,8 @@ MediaFile::hexdump(isize t, isize s, isize offset, isize len) const
 string
 MediaFile::hexdump(isize c, isize h, isize s, isize offset, isize len) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
-        return hexdump(c, h, offset, len);
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->hexdump(c, h, offset, len);
     }
     return "";
 }
@@ -314,8 +314,8 @@ MediaFile::hexdump(isize c, isize h, isize s, isize offset, isize len) const
 string
 MediaFile::asciidump(isize b, isize offset, isize len) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
-        return asciidump(b, offset, len);
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->asciidump(b, offset, len);
     }
     return "";
 }
@@ -323,8 +323,8 @@ MediaFile::asciidump(isize b, isize offset, isize len) const
 string
 MediaFile::asciidump(isize t, isize s, isize offset, isize len) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
-        return asciidump(t, s, offset, len);
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->asciidump(t, s, offset, len);
     }
     return "";
 }
@@ -332,8 +332,8 @@ MediaFile::asciidump(isize t, isize s, isize offset, isize len) const
 string
 MediaFile::asciidump(isize c, isize h, isize s, isize offset, isize len) const
 {
-    if (auto disk = dynamic_cast<const DiskFile *>(file.get())) {
-        return asciidump(c, h, s, offset, len);
+    if (auto *disk = dynamic_cast<const DiskFile *>(file.get())) {
+        return disk->asciidump(c, h, s, offset, len);
     }
     return "";
 }

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "ADZFactory.h"
+#include "ADFFactory.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include <utility>
