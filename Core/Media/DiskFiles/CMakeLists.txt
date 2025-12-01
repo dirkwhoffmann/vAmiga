@@ -13,6 +13,7 @@ IMGFile.cpp
 STFile.cpp
 DMSFile.cpp
 EXEFile.cpp
+FloppyFactory.cpp
 ADFFactory.cpp
 ADZFactory.cpp
 HDFFactory.cpp
@@ -21,4 +22,12 @@ IMGFactory.cpp
 DMSFactory.cpp
 EXEFactory.cpp
 STFactory.cpp
+ADFEncoder.cpp
+ADZEncoder.cpp
+HDFEncoder.cpp
+HDZEncoder.cpp
+IMGEncoder.cpp
+DMSEncoder.cpp
+EXEEncoder.cpp
+STEncoder.cpp
 )

@@ -19,37 +19,6 @@
 
 namespace vamiga {
 
-FloppyFile *
-FloppyFile::make(const fs::path &path)
-{
-    FloppyFile *result = nullptr;
-
-    if (!fs::exists(path)) {
-        throw AppError(Fault::FILE_NOT_FOUND, path);
-    }
-
-    Buffer<u8> buffer(path);
-    
-    if (buffer.empty()) {
-        throw AppError(Fault::FILE_CANT_READ, path);
-    }
-
-    switch (MediaFile::type(path)) {
-
-        case FileType::ADF:  result = new ADFFile(buffer.ptr, buffer.size); break;
-        case FileType::ADZ:  result = new ADZFile(buffer.ptr, buffer.size); break;
-        case FileType::IMG:  result = new IMGFile(buffer.ptr, buffer.size); break;
-        case FileType::DMS:  result = new DMSFile(buffer.ptr, buffer.size); break;
-        case FileType::EXE:  result = new EXEFile(buffer.ptr, buffer.size); break;
-
-        default:
-            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
-    }
-
-    result->path = path;
-    return result;
-}
-
 FloppyDiskDescriptor
 FloppyFile::getDescriptor() const
 {

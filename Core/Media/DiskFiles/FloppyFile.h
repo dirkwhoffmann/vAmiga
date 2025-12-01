@@ -11,22 +11,13 @@
 
 #include "DiskFile.h"
 #include "BootBlockImage.h"
-#include "FloppyDisk.h"
+#include "FloppyDriveTypes.h"
 
 namespace vamiga {
 
 class FloppyDisk;
 
 class FloppyFile : public DiskFile {
-
-    //
-    // Creating
-    //
-
-public:
-
-    static FloppyFile *make(const fs::path &path) throws;
-
 
     //
     // Initializing
@@ -53,16 +44,14 @@ public:
     bool isDD() { return getDensity() == Density::DD; }
     bool isHD() { return getDensity() == Density::HD; }
 
-    // Analyzes the boot block
+
+    //
+    // Managing the boot blocks
+    //
+
     virtual BootBlockType bootBlockType() const { return BootBlockType::STANDARD; }
     virtual const char *bootBlockName() const { return ""; }
     bool hasVirus() const { return bootBlockType() == BootBlockType::VIRUS; }
-
-
-    //
-    // Repairing
-    //
-
     virtual void killVirus() { };
 };
 

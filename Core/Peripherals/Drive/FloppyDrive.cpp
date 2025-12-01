@@ -12,7 +12,7 @@
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "DiskController.h"
-#include "FileFactories.h"
+#include "Media.h"
 #include "FileSystemFactory.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"
@@ -1133,8 +1133,9 @@ void
 FloppyDrive::swapDisk(const fs::path &path)
 {
     if (!fs::is_directory(path)) {
-        
-        std::unique_ptr<FloppyFile> file(FloppyFile::make(path));
+
+        auto file = FloppyFactory::make(path);
+        // std::unique_ptr<FloppyFile> file(FloppyFile::make(path));
         swapDisk(*file);
         return;
     }

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "ADZFile.h"
+#include "Chrono.h"
 
 namespace vamiga {
 

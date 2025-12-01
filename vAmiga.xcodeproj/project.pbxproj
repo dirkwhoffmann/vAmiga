@@ -290,6 +290,8 @@
 		509E762B2EDDC66900608FA7 /* DMSEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76292EDDC66800608FA7 /* DMSEncoder.cpp */; };
 		509E762E2EDDC93600608FA7 /* EXEEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */; };
 		509E762F2EDDC93600608FA7 /* EXEEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */; };
+		509E76322EDDD6DB00608FA7 /* FloppyFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */; };
+		509E76332EDDD6DB00608FA7 /* FloppyFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -985,6 +987,8 @@
 		509E76292EDDC66800608FA7 /* DMSEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DMSEncoder.cpp; sourceTree = "<group>"; };
 		509E762C2EDDC92E00608FA7 /* EXEEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEEncoder.h; sourceTree = "<group>"; };
 		509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEEncoder.cpp; sourceTree = "<group>"; };
+		509E76302EDDD6D200608FA7 /* FloppyFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFactory.h; sourceTree = "<group>"; };
+		509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFactory.cpp; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -1332,6 +1336,8 @@
 				5012DCDF2D5B33C100233B6A /* HDZFile.cpp */,
 				50FAC77425160BBF00E47421 /* FloppyFile.h */,
 				50FAC77325160BBF00E47421 /* FloppyFile.cpp */,
+				509E76302EDDD6D200608FA7 /* FloppyFactory.h */,
+				509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */,
 				509D07792EDBA42F00355638 /* ADFFactory.h */,
 				509D077A2EDBA43900355638 /* ADFFactory.cpp */,
 				509E76142EDDB6E700608FA7 /* ADFEncoder.h */,
@@ -2617,6 +2623,7 @@
 				5057551025EAFF7900280977 /* Checksum.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				502023ED27B6BE7200820DB6 /* RamExpansion.cpp in Sources */,
+				509E76332EDDD6DB00608FA7 /* FloppyFactory.cpp in Sources */,
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
 				50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */,
@@ -2941,6 +2948,7 @@
 				50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */,
 				50E5BF802BB1D2510004712B /* STFile.cpp in Sources */,
 				50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */,
+				509E76322EDDD6DB00608FA7 /* FloppyFactory.cpp in Sources */,
 				50FC049B27DA197500C3E566 /* AgnusInfo.cpp in Sources */,
 				50E79D3A2EDC48C50052277E /* HDFFactory.cpp in Sources */,
 				509D04922EDA46E400355638 /* FSExtension.cpp in Sources */,
