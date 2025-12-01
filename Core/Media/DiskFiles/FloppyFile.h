@@ -72,8 +72,8 @@ public:
 
 public:
 
-    virtual void encodeDisk(FloppyDisk &disk) const throws { fatalError; }
-    virtual void decodeDisk(const FloppyDisk &disk) throws { fatalError; }
+    [[deprecated]] virtual void encodeDisk(FloppyDisk &disk) const throws { fatalError; }
+    [[deprecated]] virtual void decodeDisk(const FloppyDisk &disk) throws { fatalError; }
 };
 
 }

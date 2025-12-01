@@ -55,11 +55,16 @@ class FloppyFile;
 class FloppyDisk : public CoreObject {
     
     friend class FloppyDrive;
-    friend class ADFFile;
-    friend class EADFFile;
-    friend class EADFFactory;
-    friend class IMGFile;
-    friend class STFile;
+    friend class ADFEncoder;
+    friend class EADFEncoder;
+    friend class IMGEncoder;
+    friend class STEncoder;
+    friend class DiskEncoder;
+    friend class ADFFile; // TODO: REMOVE
+    friend class EADFFile; // TODO: REMOVE
+    friend class EADFFactory; // TODO: REMOVE
+    friend class IMGFile; // TODO: REMOVE
+    friend class STFile; // TODO: REMOVE 
 
 public:
 

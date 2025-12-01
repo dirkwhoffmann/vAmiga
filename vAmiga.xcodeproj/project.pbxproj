@@ -274,6 +274,22 @@
 		509E760B2EDCE26600608FA7 /* DMSFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76052EDCCC2F00608FA7 /* DMSFactory.cpp */; };
 		509E760E2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */; };
 		509E760F2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */; };
+		509E76122EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
+		509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
+		509E76162EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */; };
+		509E76172EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */; };
+		509E761A2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */; };
+		509E761B2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */; };
+		509E761E2EDDBA6800608FA7 /* EADFEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E761D2EDDBA6700608FA7 /* EADFEncoder.cpp */; };
+		509E761F2EDDBA6800608FA7 /* EADFEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E761D2EDDBA6700608FA7 /* EADFEncoder.cpp */; };
+		509E76222EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */; };
+		509E76232EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */; };
+		509E76262EDDC34B00608FA7 /* STEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76252EDDC34900608FA7 /* STEncoder.cpp */; };
+		509E76272EDDC34B00608FA7 /* STEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76252EDDC34900608FA7 /* STEncoder.cpp */; };
+		509E762A2EDDC66900608FA7 /* DMSEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76292EDDC66800608FA7 /* DMSEncoder.cpp */; };
+		509E762B2EDDC66900608FA7 /* DMSEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76292EDDC66800608FA7 /* DMSEncoder.cpp */; };
+		509E762E2EDDC93600608FA7 /* EXEEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */; };
+		509E762F2EDDC93600608FA7 /* EXEEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -953,6 +969,22 @@
 		509E76072EDCCC3900608FA7 /* EXEFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEFactory.cpp; sourceTree = "<group>"; };
 		509E760C2EDCE3A300608FA7 /* EADFFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EADFFactory.h; sourceTree = "<group>"; };
 		509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EADFFactory.cpp; sourceTree = "<group>"; };
+		509E76102EDD74E400608FA7 /* DiskEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskEncoder.h; sourceTree = "<group>"; };
+		509E76112EDD74F700608FA7 /* DiskEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskEncoder.cpp; sourceTree = "<group>"; };
+		509E76142EDDB6E700608FA7 /* ADFEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFEncoder.h; sourceTree = "<group>"; };
+		509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFEncoder.cpp; sourceTree = "<group>"; };
+		509E76182EDDB8BA00608FA7 /* ADZEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADZEncoder.h; sourceTree = "<group>"; };
+		509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADZEncoder.cpp; sourceTree = "<group>"; };
+		509E761C2EDDBA5A00608FA7 /* EADFEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EADFEncoder.h; sourceTree = "<group>"; };
+		509E761D2EDDBA6700608FA7 /* EADFEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EADFEncoder.cpp; sourceTree = "<group>"; };
+		509E76202EDDBF9800608FA7 /* IMGEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGEncoder.h; sourceTree = "<group>"; };
+		509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGEncoder.cpp; sourceTree = "<group>"; };
+		509E76242EDDC34200608FA7 /* STEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = STEncoder.h; sourceTree = "<group>"; };
+		509E76252EDDC34900608FA7 /* STEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = STEncoder.cpp; sourceTree = "<group>"; };
+		509E76282EDDC66000608FA7 /* DMSEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMSEncoder.h; sourceTree = "<group>"; };
+		509E76292EDDC66800608FA7 /* DMSEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DMSEncoder.cpp; sourceTree = "<group>"; };
+		509E762C2EDDC92E00608FA7 /* EXEEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEEncoder.h; sourceTree = "<group>"; };
+		509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEEncoder.cpp; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -1302,30 +1334,44 @@
 				50FAC77325160BBF00E47421 /* FloppyFile.cpp */,
 				509D07792EDBA42F00355638 /* ADFFactory.h */,
 				509D077A2EDBA43900355638 /* ADFFactory.cpp */,
+				509E76142EDDB6E700608FA7 /* ADFEncoder.h */,
+				509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
 				50E79D342EDC37CF0052277E /* ADZFactory.h */,
 				50E79D352EDC37D70052277E /* ADZFactory.cpp */,
+				509E76182EDDB8BA00608FA7 /* ADZEncoder.h */,
+				509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */,
 				504CC8BF2D5A819200C2AC9A /* ADZFile.h */,
 				504CC8C02D5A819D00C2AC9A /* ADZFile.cpp */,
 				509E760C2EDCE3A300608FA7 /* EADFFactory.h */,
 				509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */,
+				509E761C2EDDBA5A00608FA7 /* EADFEncoder.h */,
+				509E761D2EDDBA6700608FA7 /* EADFEncoder.cpp */,
 				5009B7FB2557051A0037288E /* EADFFile.h */,
 				5009B7FA2557051A0037288E /* EADFFile.cpp */,
 				509E75FC2EDCCBFF00608FA7 /* IMGFactory.h */,
 				509E75FD2EDCCC0600608FA7 /* IMGFactory.cpp */,
+				509E76202EDDBF9800608FA7 /* IMGEncoder.h */,
+				509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */,
 				50FAC76F2515EBED00E47421 /* IMGFile.h */,
 				50FAC76E2515EBED00E47421 /* IMGFile.cpp */,
 				509E76002EDCCC1300608FA7 /* STFactory.h */,
 				509E76012EDCCC1A00608FA7 /* STFactory.cpp */,
+				509E76242EDDC34200608FA7 /* STEncoder.h */,
+				509E76252EDDC34900608FA7 /* STEncoder.cpp */,
 				50E5BF7E2BB1D2510004712B /* STFile.h */,
 				50E5BF7D2BB1D2510004712B /* STFile.cpp */,
 				509E76042EDCCC2900608FA7 /* DMSFactory.h */,
 				509E76052EDCCC2F00608FA7 /* DMSFactory.cpp */,
+				509E76282EDDC66000608FA7 /* DMSEncoder.h */,
+				509E76292EDDC66800608FA7 /* DMSEncoder.cpp */,
 				50F54B3224B5DDAF0078FDC9 /* DMSFile.h */,
 				50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */,
 				509E76062EDCCC3100608FA7 /* EXEFactory.h */,
 				509E76072EDCCC3900608FA7 /* EXEFactory.cpp */,
+				509E762C2EDDC92E00608FA7 /* EXEEncoder.h */,
+				509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */,
 				5019B1EF254B292D00A7AB95 /* EXEFile.h */,
 				5019B1EE254B292D00A7AB95 /* EXEFile.cpp */,
 			);
@@ -1968,6 +2014,8 @@
 				50D52442227878E900F8959D /* FloppyDiskTypes.h */,
 				50F6EEB721F4F5C60091155D /* FloppyDisk.h */,
 				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,
+				509E76102EDD74E400608FA7 /* DiskEncoder.h */,
+				509E76112EDD74F700608FA7 /* DiskEncoder.cpp */,
 			);
 			path = Drive;
 			sourceTree = "<group>";
@@ -2561,6 +2609,7 @@
 				506C71E22D2A0C3F007CBD93 /* DashboardPanel.swift in Sources */,
 				50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
 				506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */,
+				509E76122EDD74F800608FA7 /* DiskEncoder.cpp in Sources */,
 				501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */,
 				50144E362E7BE5EA009E15B4 /* SettingsWindowController.swift in Sources */,
 				509C365E260B177E004F160A /* Console.cpp in Sources */,
@@ -2603,6 +2652,7 @@
 				50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
 				509D048E2EDA46D700355638 /* FSAllocator.cpp in Sources */,
+				509E761F2EDDBA6800608FA7 /* EADFEncoder.cpp in Sources */,
 				509C3663260B1D95004F160A /* CommanderConsole.cpp in Sources */,
 				50AE6EDF24D93EDD000AA367 /* AgnusRegs.cpp in Sources */,
 				509E76082EDCCC3A00608FA7 /* EXEFactory.cpp in Sources */,
@@ -2669,6 +2719,7 @@
 				500B0D272E7C9D5B008FC5E1 /* DevicesSettings.swift in Sources */,
 				506E5B1D2DE8E3C300CEA916 /* Monitor.cpp in Sources */,
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
+				509E762F2EDDC93600608FA7 /* EXEEncoder.cpp in Sources */,
 				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,
 				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
 				5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */,
@@ -2789,6 +2840,7 @@
 				9C47C0332D6215B100E57B41 /* lz4.c in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				50210B2027CB6A41001193AA /* Drive.cpp in Sources */,
+				509E76172EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				50E79D3F2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
@@ -2814,6 +2866,7 @@
 				50144E3B2E7BE709009E15B4 /* GeneralSettings.swift in Sources */,
 				50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
+				509E76262EDDC34B00608FA7 /* STEncoder.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				506D57B92EC4B81200E21501 /* ServerSettings.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
@@ -2853,7 +2906,9 @@
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
 				50E1B0A627CE7164005E41DA /* DiskFile.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
+				509E762B2EDDC66900608FA7 /* DMSEncoder.cpp in Sources */,
 				5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */,
+				509E761B2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
 				50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */,
@@ -2861,6 +2916,7 @@
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
+				509E76232EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */,
 				501D20122E7FEE19007B1242 /* RomSettings.swift in Sources */,
 				506407CF2D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
@@ -2918,6 +2974,7 @@
 				509D04992EDA471900355638 /* FSExporter.cpp in Sources */,
 				509D049A2EDA471900355638 /* FSImporter.cpp in Sources */,
 				50FC04BF27DA19CE00C3E566 /* KeyboardEvents.cpp in Sources */,
+				509E76272EDDC34B00608FA7 /* STEncoder.cpp in Sources */,
 				50FC04B727DA19A900C3E566 /* ZorroBoard.cpp in Sources */,
 				50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */,
 				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
@@ -2927,6 +2984,7 @@
 				50FC049F27DA197A00C3E566 /* SequencerBpl.cpp in Sources */,
 				9C47C0322D6215B100E57B41 /* lz4.c in Sources */,
 				50FC04BA27DA19B200C3E566 /* FloppyDisk.cpp in Sources */,
+				509E762E2EDDC93600608FA7 /* EXEEncoder.cpp in Sources */,
 				50FC04A927DA198E00C3E566 /* FastBlitter.cpp in Sources */,
 				506D57BF2EC4BE6800E21501 /* RpcServer.cpp in Sources */,
 				50FC04B527DA19A900C3E566 /* HdController.cpp in Sources */,
@@ -2967,6 +3025,7 @@
 				50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */,
 				50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */,
 				50FC048527DA190400C3E566 /* Error.cpp in Sources */,
+				509E761E2EDDBA6800608FA7 /* EADFEncoder.cpp in Sources */,
 				50FC048727DA194200C3E566 /* CPU.cpp in Sources */,
 				50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */,
 				50627FD5286EBACA00F2A835 /* Texture.cpp in Sources */,
@@ -2974,6 +3033,7 @@
 				509E760F2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */,
 				50FC04D627DA1A0000C3E566 /* RSCommand.cpp in Sources */,
 				50FC04E227DA1A1400C3E566 /* u_heavy.c in Sources */,
+				509E762A2EDDC66900608FA7 /* DMSEncoder.cpp in Sources */,
 				50FC04FD27DA1AAB00C3E566 /* UARTEvents.cpp in Sources */,
 				50FC048027DA190400C3E566 /* CoreComponent.cpp in Sources */,
 				509D07782EDB993F00355638 /* PosixFileSystem.cpp in Sources */,
@@ -3011,6 +3071,7 @@
 				506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50E79D372EDC37D80052277E /* ADZFactory.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
+				509E76162EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */,
 				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,
 				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,
 				50FC04A427DA198100C3E566 /* Copper.cpp in Sources */,
@@ -3021,6 +3082,7 @@
 				507C01BB2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				50FC047727DA129800C3E566 /* Buffer.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,
+				509E76222EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */,
 				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
 				50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
@@ -3052,6 +3114,7 @@
 				50FC047C27DA12AB00C3E566 /* Checksum.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
+				509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */,
 				5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */,
 				505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
@@ -3061,6 +3124,7 @@
 				50FC04EB27DA1A4500C3E566 /* RshServer.cpp in Sources */,
 				50FC04E827DA1A3500C3E566 /* OSDebugger.cpp in Sources */,
 				50FC04F427DA1A8F00C3E566 /* AudioStream.cpp in Sources */,
+				509E761A2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */,
 				509D048F2EDA46D700355638 /* FSAllocator.cpp in Sources */,
 				50CFF56B2C259FB900A47ECC /* Serializable.cpp in Sources */,
 				50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */,

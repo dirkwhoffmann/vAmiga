@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FloppyDisk.h"
-#include "FloppyFile.h"
+#include "Media.h"
 
 namespace vamiga {
 
@@ -282,26 +282,19 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
     // Start with an unformatted disk
     clearDisk();
 
-    // Call the MFM encoder
-    file.encodeDisk(*this);
+    switch (file.type()) {
 
-    // Rectify the track alignment
+        case FileType::ADF:  ADFEncoder::encode(dynamic_cast<const ADFFile &>(file), *this); break;
+        case FileType::ADZ:  ADZEncoder::encode(dynamic_cast<const ADZFile &>(file), *this); break;
+        case FileType::EADF: EADFEncoder::encode(dynamic_cast<const EADFFile &>(file), *this); break;
+        case FileType::IMG:  IMGEncoder::encode(dynamic_cast<const IMGFile &>(file), *this); break;
+        case FileType::ST:   STEncoder::encode(dynamic_cast<const STFile &>(file), *this); break;
+        case FileType::DMS:  DMSEncoder::encode(dynamic_cast<const DMSFile &>(file), *this); break;
+        case FileType::EXE:  EXEEncoder::encode(dynamic_cast<const EXEFile &>(file), *this); break;
 
-    /* By default, all tracks are arranged to start at the same offset position.
-     * Some disks, however, are known to require a different alignment to work
-     * in vAmiga. We check for these disks and align the tracks accordingly.
-     */
-    /*
-    switch (file.crc32()) {
-
-        case 0x4db280dd:    // T2 - The Arcade Game (1993)(Virgin)[cr FLT].adf
-        case 0xb41e9935:    // T2 - The Arcade Game (1993)(Virgin)[cr FLT](Disk 1 of 2).adf
-        case 0x889f7bbe:    // T2 - The Arcade Game (1993)(Virgin)[cr FLT](Disk 1 of 2)[t +4 MST].adf
-
-            shiftTracks(20);
-            break;
+        default:
+            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
     }
-    */
 }
 
 void

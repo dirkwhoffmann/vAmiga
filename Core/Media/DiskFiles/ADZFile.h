@@ -15,6 +15,8 @@ namespace vamiga {
 
 class ADZFile : public FloppyFile {
 
+    friend class ADZEncoder;
+    
     ADFFile adf;
 
 public:
