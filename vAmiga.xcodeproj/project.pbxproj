@@ -771,6 +771,15 @@
 		505A133C2C3A837A00FF8D2C /* CoreComponentTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreComponentTypes.h; sourceTree = "<group>"; };
 		505A133D2C3BA8A000FF8D2C /* MemoryDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryDebugger.cpp; sourceTree = "<group>"; };
 		505A133E2C3BA8A000FF8D2C /* MemoryDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryDebugger.h; sourceTree = "<group>"; };
+		505A19452EDDF6CF000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A19472EDDF6FC000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A19492EDDF715000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A194B2EDDF742000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A194D2EDDF75C000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A194F2EDDF77B000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A19512EDDF79D000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A19532EDDF7BD000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A19552EDDF7DC000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -989,6 +998,7 @@
 		509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEEncoder.cpp; sourceTree = "<group>"; };
 		509E76302EDDD6D200608FA7 /* FloppyFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFactory.h; sourceTree = "<group>"; };
 		509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFactory.cpp; sourceTree = "<group>"; };
+		509E76382EDDF57400608FA7 /* CmakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmakeLists.txt; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -1117,7 +1127,6 @@
 		50CF46462620432300BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF46492620432B00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF464C2620433400BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		50CF464F2620433F00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF46562620436A00BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF46592620437900BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50CF465C262043C500BB3B95 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1307,7 +1316,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5009B7F5255702C00037288E /* RomFiles */ = {
+		5009B7F5255702C00037288E /* Rom */ = {
 			isa = PBXGroup;
 			children = (
 				50CF464C2620433400BB3B95 /* CMakeLists.txt */,
@@ -1317,71 +1326,7 @@
 				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
 				50F79C9F2C79B04A006A13A8 /* DiagRom.h */,
 			);
-			path = RomFiles;
-			sourceTree = "<group>";
-		};
-		5009B7F7255702D40037288E /* DiskFiles */ = {
-			isa = PBXGroup;
-			children = (
-				50CF464F2620433F00BB3B95 /* CMakeLists.txt */,
-				50E1B0A527CE7164005E41DA /* DiskFile.h */,
-				50E1B0A427CE7164005E41DA /* DiskFile.cpp */,
-				50E79D382EDC48BB0052277E /* HDFFactory.h */,
-				50E79D392EDC48C40052277E /* HDFFactory.cpp */,
-				50EAD99B256E76820053F9AC /* HDFFile.h */,
-				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
-				50E79D3C2EDC48C80052277E /* HDZFactory.h */,
-				50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */,
-				5012DCDE2D5B33BA00233B6A /* HDZFile.h */,
-				5012DCDF2D5B33C100233B6A /* HDZFile.cpp */,
-				50FAC77425160BBF00E47421 /* FloppyFile.h */,
-				50FAC77325160BBF00E47421 /* FloppyFile.cpp */,
-				509E76302EDDD6D200608FA7 /* FloppyFactory.h */,
-				509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */,
-				509D07792EDBA42F00355638 /* ADFFactory.h */,
-				509D077A2EDBA43900355638 /* ADFFactory.cpp */,
-				509E76142EDDB6E700608FA7 /* ADFEncoder.h */,
-				509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */,
-				508833ED21F0D21B009890EA /* ADFFile.h */,
-				508833EC21F0D21B009890EA /* ADFFile.cpp */,
-				50E79D342EDC37CF0052277E /* ADZFactory.h */,
-				50E79D352EDC37D70052277E /* ADZFactory.cpp */,
-				509E76182EDDB8BA00608FA7 /* ADZEncoder.h */,
-				509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */,
-				504CC8BF2D5A819200C2AC9A /* ADZFile.h */,
-				504CC8C02D5A819D00C2AC9A /* ADZFile.cpp */,
-				509E760C2EDCE3A300608FA7 /* EADFFactory.h */,
-				509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */,
-				509E761C2EDDBA5A00608FA7 /* EADFEncoder.h */,
-				509E761D2EDDBA6700608FA7 /* EADFEncoder.cpp */,
-				5009B7FB2557051A0037288E /* EADFFile.h */,
-				5009B7FA2557051A0037288E /* EADFFile.cpp */,
-				509E75FC2EDCCBFF00608FA7 /* IMGFactory.h */,
-				509E75FD2EDCCC0600608FA7 /* IMGFactory.cpp */,
-				509E76202EDDBF9800608FA7 /* IMGEncoder.h */,
-				509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */,
-				50FAC76F2515EBED00E47421 /* IMGFile.h */,
-				50FAC76E2515EBED00E47421 /* IMGFile.cpp */,
-				509E76002EDCCC1300608FA7 /* STFactory.h */,
-				509E76012EDCCC1A00608FA7 /* STFactory.cpp */,
-				509E76242EDDC34200608FA7 /* STEncoder.h */,
-				509E76252EDDC34900608FA7 /* STEncoder.cpp */,
-				50E5BF7E2BB1D2510004712B /* STFile.h */,
-				50E5BF7D2BB1D2510004712B /* STFile.cpp */,
-				509E76042EDCCC2900608FA7 /* DMSFactory.h */,
-				509E76052EDCCC2F00608FA7 /* DMSFactory.cpp */,
-				509E76282EDDC66000608FA7 /* DMSEncoder.h */,
-				509E76292EDDC66800608FA7 /* DMSEncoder.cpp */,
-				50F54B3224B5DDAF0078FDC9 /* DMSFile.h */,
-				50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */,
-				509E76062EDCCC3100608FA7 /* EXEFactory.h */,
-				509E76072EDCCC3900608FA7 /* EXEFactory.cpp */,
-				509E762C2EDDC92E00608FA7 /* EXEEncoder.h */,
-				509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */,
-				5019B1EF254B292D00A7AB95 /* EXEFile.h */,
-				5019B1EE254B292D00A7AB95 /* EXEFile.cpp */,
-			);
-			path = DiskFiles;
+			path = Rom;
 			sourceTree = "<group>";
 		};
 		500B0D2E2E7EB089008FC5E1 /* ViewControllers */ = {
@@ -1590,6 +1535,128 @@
 				50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		505A193C2EDDF5ED000BB9C2 /* HDF */ = {
+			isa = PBXGroup;
+			children = (
+				505A19452EDDF6CF000BB9C2 /* CMakeLists.txt */,
+				50E79D382EDC48BB0052277E /* HDFFactory.h */,
+				50E79D392EDC48C40052277E /* HDFFactory.cpp */,
+				50EAD99B256E76820053F9AC /* HDFFile.h */,
+				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
+			);
+			path = HDF;
+			sourceTree = "<group>";
+		};
+		505A193D2EDDF5FB000BB9C2 /* HDZ */ = {
+			isa = PBXGroup;
+			children = (
+				505A19472EDDF6FC000BB9C2 /* CMakeLists.txt */,
+				50E79D3C2EDC48C80052277E /* HDZFactory.h */,
+				50E79D3D2EDC48CE0052277E /* HDZFactory.cpp */,
+				5012DCDE2D5B33BA00233B6A /* HDZFile.h */,
+				5012DCDF2D5B33C100233B6A /* HDZFile.cpp */,
+			);
+			path = HDZ;
+			sourceTree = "<group>";
+		};
+		505A193E2EDDF60B000BB9C2 /* ADF */ = {
+			isa = PBXGroup;
+			children = (
+				505A19492EDDF715000BB9C2 /* CMakeLists.txt */,
+				509D07792EDBA42F00355638 /* ADFFactory.h */,
+				509D077A2EDBA43900355638 /* ADFFactory.cpp */,
+				509E76142EDDB6E700608FA7 /* ADFEncoder.h */,
+				509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */,
+				508833ED21F0D21B009890EA /* ADFFile.h */,
+				508833EC21F0D21B009890EA /* ADFFile.cpp */,
+			);
+			path = ADF;
+			sourceTree = "<group>";
+		};
+		505A193F2EDDF618000BB9C2 /* ADZ */ = {
+			isa = PBXGroup;
+			children = (
+				505A194B2EDDF742000BB9C2 /* CMakeLists.txt */,
+				50E79D342EDC37CF0052277E /* ADZFactory.h */,
+				50E79D352EDC37D70052277E /* ADZFactory.cpp */,
+				509E76182EDDB8BA00608FA7 /* ADZEncoder.h */,
+				509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */,
+				504CC8BF2D5A819200C2AC9A /* ADZFile.h */,
+				504CC8C02D5A819D00C2AC9A /* ADZFile.cpp */,
+			);
+			path = ADZ;
+			sourceTree = "<group>";
+		};
+		505A19402EDDF622000BB9C2 /* EADF */ = {
+			isa = PBXGroup;
+			children = (
+				505A194D2EDDF75C000BB9C2 /* CMakeLists.txt */,
+				509E760C2EDCE3A300608FA7 /* EADFFactory.h */,
+				509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */,
+				509E761C2EDDBA5A00608FA7 /* EADFEncoder.h */,
+				509E761D2EDDBA6700608FA7 /* EADFEncoder.cpp */,
+				5009B7FB2557051A0037288E /* EADFFile.h */,
+				5009B7FA2557051A0037288E /* EADFFile.cpp */,
+			);
+			path = EADF;
+			sourceTree = "<group>";
+		};
+		505A19412EDDF62A000BB9C2 /* IMG */ = {
+			isa = PBXGroup;
+			children = (
+				505A194F2EDDF77B000BB9C2 /* CMakeLists.txt */,
+				509E75FC2EDCCBFF00608FA7 /* IMGFactory.h */,
+				509E75FD2EDCCC0600608FA7 /* IMGFactory.cpp */,
+				509E76202EDDBF9800608FA7 /* IMGEncoder.h */,
+				509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */,
+				50FAC76F2515EBED00E47421 /* IMGFile.h */,
+				50FAC76E2515EBED00E47421 /* IMGFile.cpp */,
+			);
+			path = IMG;
+			sourceTree = "<group>";
+		};
+		505A19422EDDF632000BB9C2 /* ST */ = {
+			isa = PBXGroup;
+			children = (
+				505A19512EDDF79D000BB9C2 /* CMakeLists.txt */,
+				509E76002EDCCC1300608FA7 /* STFactory.h */,
+				509E76012EDCCC1A00608FA7 /* STFactory.cpp */,
+				509E76242EDDC34200608FA7 /* STEncoder.h */,
+				509E76252EDDC34900608FA7 /* STEncoder.cpp */,
+				50E5BF7E2BB1D2510004712B /* STFile.h */,
+				50E5BF7D2BB1D2510004712B /* STFile.cpp */,
+			);
+			path = ST;
+			sourceTree = "<group>";
+		};
+		505A19432EDDF63C000BB9C2 /* DMS */ = {
+			isa = PBXGroup;
+			children = (
+				505A19532EDDF7BD000BB9C2 /* CMakeLists.txt */,
+				509E76042EDCCC2900608FA7 /* DMSFactory.h */,
+				509E76052EDCCC2F00608FA7 /* DMSFactory.cpp */,
+				509E76282EDDC66000608FA7 /* DMSEncoder.h */,
+				509E76292EDDC66800608FA7 /* DMSEncoder.cpp */,
+				50F54B3224B5DDAF0078FDC9 /* DMSFile.h */,
+				50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */,
+			);
+			path = DMS;
+			sourceTree = "<group>";
+		};
+		505A19442EDDF647000BB9C2 /* EXE */ = {
+			isa = PBXGroup;
+			children = (
+				505A19552EDDF7DC000BB9C2 /* CMakeLists.txt */,
+				509E76062EDCCC3100608FA7 /* EXEFactory.h */,
+				509E76072EDCCC3900608FA7 /* EXEFactory.cpp */,
+				509E762C2EDDC92E00608FA7 /* EXEEncoder.h */,
+				509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */,
+				5019B1EF254B292D00A7AB95 /* EXEFile.h */,
+				5019B1EE254B292D00A7AB95 /* EXEFile.cpp */,
+			);
+			path = EXE;
 			sourceTree = "<group>";
 		};
 		505B801C23FE626E002407FE /* Memory */ = {
@@ -1925,8 +1992,7 @@
 				506436E329C1D90B00768528 /* Components */,
 				505B801D23FE628F002407FE /* Ports */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
-				508FE06621EA31E50043D0E9 /* Media */,
-				5056506925440FDE00A79D27 /* FileSystems */,
+				509E76342EDDF53600608FA7 /* Storage */,
 				506436E129C1D82500768528 /* ThirdParty */,
 				50E98B52275A125700AA0CB9 /* Misc */,
 			);
@@ -1950,10 +2016,34 @@
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
 				50FCCA7B262AAAEA00398342 /* Script.h */,
 				50FCCA7A262AAAEA00398342 /* Script.cpp */,
-				5009B7F5255702C00037288E /* RomFiles */,
-				5009B7F7255702D40037288E /* DiskFiles */,
+				50E1B0A527CE7164005E41DA /* DiskFile.h */,
+				50E1B0A427CE7164005E41DA /* DiskFile.cpp */,
+				50FAC77425160BBF00E47421 /* FloppyFile.h */,
+				50FAC77325160BBF00E47421 /* FloppyFile.cpp */,
+				509E76302EDDD6D200608FA7 /* FloppyFactory.h */,
+				509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */,
+				5009B7F5255702C00037288E /* Rom */,
+				505A193C2EDDF5ED000BB9C2 /* HDF */,
+				505A193D2EDDF5FB000BB9C2 /* HDZ */,
+				505A193E2EDDF60B000BB9C2 /* ADF */,
+				505A193F2EDDF618000BB9C2 /* ADZ */,
+				505A19402EDDF622000BB9C2 /* EADF */,
+				505A19412EDDF62A000BB9C2 /* IMG */,
+				505A19422EDDF632000BB9C2 /* ST */,
+				505A19432EDDF63C000BB9C2 /* DMS */,
+				505A19442EDDF647000BB9C2 /* EXE */,
 			);
 			path = Media;
+			sourceTree = "<group>";
+		};
+		509E76342EDDF53600608FA7 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				509E76382EDDF57400608FA7 /* CmakeLists.txt */,
+				5056506925440FDE00A79D27 /* FileSystems */,
+				508FE06621EA31E50043D0E9 /* Media */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		509F7F1521ED141F00A530E4 /* Inspector */ = {
@@ -2525,6 +2615,7 @@
 					};
 					50FC046C27DA0FA500C3E566 = {
 						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 2610;
 					};
 				};
 			};
@@ -3576,6 +3667,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -3587,6 +3679,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -3594,6 +3688,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -3605,6 +3700,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};

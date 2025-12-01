@@ -47,8 +47,8 @@
 #include "Peripherals/Monitor/MonitorTypes.h"
 
 // Media
-#include "Media/MediaFileTypes.h"
-#include "FileSystems/FSTypes.h"
+#include "Storage/Media/MediaFileTypes.h"
+#include "Storage/FileSystems/FSTypes.h"
 
 // Miscellaneous
 #include "Misc/LogicAnalyzer/LogicAnalyzerTypes.h"
