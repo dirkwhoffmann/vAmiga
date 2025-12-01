@@ -11,7 +11,9 @@
 
 #include "DiskFile.h"
 #include "BootBlockImage.h"
-#include "FloppyDriveTypes.h"
+#include "FloppyDiskTypes.h"
+#include "FSTypes.h"
+#include "StorageTypes.h"
 
 namespace vamiga {
 

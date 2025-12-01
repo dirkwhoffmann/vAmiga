@@ -25,12 +25,6 @@ typedef i64 DMACycle;         // DMA cycle units
 // Pixels
 typedef isize Pixel;
 
-// Block devices
-typedef isize Cylinder;
-typedef isize Head;
-typedef isize Sector;
-typedef isize Track;
-
 // Keyboard
 typedef u8 KeyCode;
 

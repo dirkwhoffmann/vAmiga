@@ -121,7 +121,6 @@ struct PartitionDescriptor : SerializableStruct
 
     } STRUCT_SERIALIZERS(serialize);
 
-
     // Initializers
     PartitionDescriptor() { };
     PartitionDescriptor(const GeometryDescriptor &geo);

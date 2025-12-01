@@ -780,6 +780,7 @@
 		505A19512EDDF79D000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A19532EDDF7BD000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A19552EDDF7DC000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		505A19572EDE0BAB000BB9C2 /* StorageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTypes.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -998,7 +999,7 @@
 		509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEEncoder.cpp; sourceTree = "<group>"; };
 		509E76302EDDD6D200608FA7 /* FloppyFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFactory.h; sourceTree = "<group>"; };
 		509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFactory.cpp; sourceTree = "<group>"; };
-		509E76382EDDF57400608FA7 /* CmakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CmakeLists.txt; sourceTree = "<group>"; };
+		509E76382EDDF57400608FA7 /* CmakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CmakeLists.txt; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -2040,6 +2041,9 @@
 			isa = PBXGroup;
 			children = (
 				509E76382EDDF57400608FA7 /* CmakeLists.txt */,
+				505A19572EDE0BAB000BB9C2 /* StorageTypes.h */,
+				501C514127C0CE6600DF1DD5 /* DriveDescriptors.h */,
+				501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */,
 				5056506925440FDE00A79D27 /* FileSystems */,
 				508FE06621EA31E50043D0E9 /* Media */,
 			);
@@ -2096,8 +2100,6 @@
 			isa = PBXGroup;
 			children = (
 				50CF46462620432300BB3B95 /* CMakeLists.txt */,
-				501C514127C0CE6600DF1DD5 /* DriveDescriptors.h */,
-				501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */,
 				500770C1227C9FF3003A5F76 /* DriveTypes.h */,
 				50210B1F27CB6A41001193AA /* Drive.h */,
 				50210B1E27CB6A41001193AA /* Drive.cpp */,
