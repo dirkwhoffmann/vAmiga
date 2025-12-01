@@ -24,8 +24,6 @@ EXEFactory.cpp
 STFactory.cpp
 ADFEncoder.cpp
 ADZEncoder.cpp
-HDFEncoder.cpp
-HDZEncoder.cpp
 IMGEncoder.cpp
 DMSEncoder.cpp
 EXEEncoder.cpp

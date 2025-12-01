@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "FSTypes.h"
 #include "AnyFile.h"
 
 namespace vamiga {

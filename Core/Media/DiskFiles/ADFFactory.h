@@ -10,7 +10,6 @@
 #pragma once
 
 #include "ADFFile.h"
-#include "FileSystem.h"
 
 namespace vamiga {
 
@@ -24,7 +23,7 @@ public:
     static std::unique_ptr<ADFFile> make(const FloppyDiskDescriptor &descr);
     static std::unique_ptr<ADFFile> make(const class FloppyDisk &disk);
     static std::unique_ptr<ADFFile> make(const class FloppyDrive &drive);
-    static std::unique_ptr<ADFFile> make(const FileSystem &volume);
+    static std::unique_ptr<ADFFile> make(const class FileSystem &volume);
 };
 
 }

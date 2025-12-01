@@ -14,6 +14,7 @@
 #include "EADFFile.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
+#include "FileSystem.h"
 
 namespace vamiga {
 

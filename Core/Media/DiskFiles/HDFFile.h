@@ -10,9 +10,7 @@
 #pragma once
 
 #include "DiskFile.h"
-#include "MediaFileTypes.h"
 #include "FSDescriptor.h"
-#include "DriveTypes.h"
 
 namespace vamiga {
 

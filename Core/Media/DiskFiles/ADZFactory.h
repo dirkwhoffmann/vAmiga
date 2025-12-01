@@ -10,7 +10,6 @@
 #pragma once
 
 #include "ADZFile.h"
-#include "FileSystem.h"
 
 namespace vamiga {
 
