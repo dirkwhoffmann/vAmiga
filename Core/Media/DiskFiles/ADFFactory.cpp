@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "ADFFactory.h"
+#include "ADFEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 // #include <utility>
@@ -74,8 +75,7 @@ ADFFactory::make(const class FloppyDisk &disk)
     assert(adf->numTracks() == 160);
     assert(adf->numSectors() == 11 || adf->numSectors() == 22);
 
-    adf->decodeDisk(disk);
-
+    ADFEncoder::decode(*adf, disk);
     return adf;
 }
 

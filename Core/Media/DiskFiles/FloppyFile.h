@@ -64,16 +64,6 @@ public:
     //
 
     virtual void killVirus() { };
-
-
-    //
-    // Encoding
-    //
-
-public:
-
-    [[deprecated]] virtual void encodeDisk(FloppyDisk &disk) const throws { fatalError; }
-    [[deprecated]] virtual void decodeDisk(const FloppyDisk &disk) throws { fatalError; }
 };
 
 }

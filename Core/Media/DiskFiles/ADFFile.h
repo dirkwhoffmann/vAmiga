@@ -91,17 +91,6 @@ public:
     const char *bootBlockName() const override;
     void killVirus() override;
 
-    void encodeDisk(class FloppyDisk &disk) const throws override;
-    void decodeDisk(const class FloppyDisk &disk) throws override;
-
-private:
-    
-    void encodeTrack(class FloppyDisk &disk, Track t) const throws;
-    void encodeSector(class FloppyDisk &disk, Track t, Sector s) const throws;
-
-    void decodeTrack(const class FloppyDisk &disk, Track t) throws;
-    void decodeSector(u8 *dst, const u8 *src) throws;
-
     
     //
     // Querying disk properties

@@ -115,14 +115,6 @@ public:
     void readSector(u8 *dst, isize b) const override { }
     void readSector(u8 *dst, isize t, isize s) const override { }
     
-    void encodeDisk(class FloppyDisk &disk) const throws override;
-    void decodeDisk(const class FloppyDisk &disk) throws override;
-    
-private:
-    
-    void encodeStandardTrack(class ADFFile &adf, Track t) const throws;
-    void encodeExtendedTrack(class FloppyDisk &disk, Track t) const throws;
-
 
     // Scanning the raw data
     //

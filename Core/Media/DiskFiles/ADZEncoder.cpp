@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "ADZEncoder.h"
-#include "ADZFactory.h"
+#include "ADFEncoder.h"
 #include "Error.h"
 
 namespace vamiga {
@@ -16,7 +16,7 @@ namespace vamiga {
 void
 ADZEncoder::encode(const ADZFile &adz, FloppyDisk &disk)
 {
-    adz.adf.encodeDisk(disk);
+    ADFEncoder::encode(adz.adf, disk);
 }
 
 }

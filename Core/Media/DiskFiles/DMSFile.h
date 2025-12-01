@@ -71,7 +71,6 @@ public:
     const char *bootBlockName() const override { return adf.bootBlockName(); }
     void readSector(u8 *target, isize s) const override { return adf.readSector(target, s); }
     void readSector(u8 *target, isize t, isize s) const override { return adf.readSector(target, t, s); }
-    void encodeDisk(class FloppyDisk &disk) const throws override { return adf.encodeDisk(disk); }
 };
 
 }

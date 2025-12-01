@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "EADFFactory.h"
+#include "EADFEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 
@@ -41,7 +42,7 @@ EADFFactory::make(const class FloppyDisk &disk)
     }
 
     auto eadf = make_unique<EADFFile>(length);
-    eadf->decodeDisk(disk);
+    EADFEncoder::decode(*eadf, disk);
     return eadf;
 }
 
