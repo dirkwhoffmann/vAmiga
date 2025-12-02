@@ -36,6 +36,30 @@ ADFFactory::make(Diameter dia, Density den)
 }
 
 std::unique_ptr<ADFFile>
+ADFFactory::make(const GeometryDescriptor &descr)
+{
+    auto blocks = descr.numBlocks();
+
+    switch (blocks) {
+
+        case ADFFile::ADFSIZE_35_DD:
+        case ADFFile::ADFSIZE_35_DD_81:
+        case ADFFile::ADFSIZE_35_DD_82:
+        case ADFFile::ADFSIZE_35_DD_83:
+        case ADFFile::ADFSIZE_35_DD_84:
+        case ADFFile::ADFSIZE_35_HD:
+
+            return std::make_unique<ADFFile>(blocks);
+
+        default:
+            break;
+    }
+
+    throw AppError(Fault::DISK_INVALID_LAYOUT);
+}
+
+/*
+std::unique_ptr<ADFFile>
 ADFFactory::make(const FloppyDiskDescriptor &descr)
 {
     if (descr.diameter != Diameter::INCH_35) throw AppError(Fault::DISK_INVALID_DIAMETER);
@@ -66,6 +90,7 @@ ADFFactory::make(const FloppyDiskDescriptor &descr)
             throw AppError(Fault::DISK_INVALID_DENSITY);
     }
 }
+*/
 
 std::unique_ptr<ADFFile>
 ADFFactory::make(const class FloppyDisk &disk)

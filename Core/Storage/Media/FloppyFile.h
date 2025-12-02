@@ -12,8 +12,9 @@
 #include "DiskFile.h"
 #include "BootBlockImage.h"
 #include "FloppyDiskTypes.h"
+#include "DeviceDescriptors.h"
 #include "FSTypes.h"
-#include "StorageTypes.h"
+#include "DeviceTypes.h"
 
 namespace vamiga {
 
@@ -41,7 +42,7 @@ public:
     // Informs about the disk type
     virtual Diameter getDiameter() const = 0;
     virtual Density getDensity() const = 0;
-    virtual FloppyDiskDescriptor getDescriptor() const;
+    virtual GeometryDescriptor getGeometry() const;
     bool isSD() { return getDensity() == Density::SD; }
     bool isDD() { return getDensity() == Density::DD; }
     bool isHD() { return getDensity() == Density::HD; }

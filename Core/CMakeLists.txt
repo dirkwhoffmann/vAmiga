@@ -61,7 +61,6 @@ target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # Add subdirectories
 add_subdirectory(Infrastructure)
 add_subdirectory(Components)
-add_subdirectory(Media)
 add_subdirectory(Misc)
 add_subdirectory(Peripherals)
 add_subdirectory(Ports)

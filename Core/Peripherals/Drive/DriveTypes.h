@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MediaFileTypes.h"
-#include "StorageTypes.h"
+#include "DeviceTypes.h"
 #include "Aliases.h"
 
 namespace vamiga {

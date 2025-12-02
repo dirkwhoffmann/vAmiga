@@ -8,27 +8,14 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "MediaFile.h"
 #include "FloppyFile.h"
-#include "ADFFile.h"
-#include "ADZFile.h"
-#include "IMGFile.h"
-#include "DMSFile.h"
-#include "EXEFile.h"
-#include "StringUtils.h"
 
 namespace vamiga {
 
-FloppyDiskDescriptor
-FloppyFile::getDescriptor() const
+GeometryDescriptor
+FloppyFile::getGeometry() const
 {
-    return FloppyDiskDescriptor {
-
-        .diameter = getDiameter(),
-        .density = getDensity(),
-        .sides = numHeads(),
-        .cylinders = numCyls()
-    };
+    return GeometryDescriptor(numCyls(), numHeads(), numSectors(), bsize());
 }
 
 }

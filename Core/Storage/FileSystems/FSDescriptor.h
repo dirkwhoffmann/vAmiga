@@ -14,7 +14,7 @@
 #include "Error.h"
 #include "FSObjects.h"
 #include "FSBlock.h"
-#include "DriveDescriptors.h"
+#include "DeviceDescriptors.h"
 
 namespace vamiga {
 

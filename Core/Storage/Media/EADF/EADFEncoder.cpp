@@ -23,7 +23,7 @@ EADFEncoder::encode(const EADFFile &eadf, FloppyDisk &disk)
     if (MFM_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    auto adf = ADFFactory::make(eadf.getDescriptor());
+    auto adf = ADFFactory::make(eadf.getGeometry()); // getDescriptor());
 
     // Wipe out all data
     disk.clearDisk(0);

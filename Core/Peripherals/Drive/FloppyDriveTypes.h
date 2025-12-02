@@ -10,7 +10,7 @@
 #pragma once
 
 #include "DriveTypes.h"
-#include "StorageTypes.h"
+#include "DeviceTypes.h"
 #include "FloppyDiskTypes.h"
 #include "BootBlockImageTypes.h"
 

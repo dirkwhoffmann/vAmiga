@@ -158,7 +158,7 @@ EADFFile::finalizeRead()
         auto disk = FloppyDisk(*this);
 
         // Convert the disk to a standard ADF
-        adf = *ADFFactory::make(getDescriptor());
+        adf = *ADFFactory::make(getGeometry()); //  Descriptor());
         ADFEncoder::decode(adf, disk);
 
     } catch (...) { }

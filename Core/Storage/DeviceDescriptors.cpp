@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "DriveDescriptors.h"
+#include "DeviceDescriptors.h"
 #include "Error.h"
 #include "FSTypes.h"
 #include "IOUtils.h"

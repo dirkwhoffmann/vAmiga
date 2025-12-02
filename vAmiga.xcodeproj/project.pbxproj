@@ -56,7 +56,7 @@
 		501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C36302C1C17B1000FA274 /* CmdQueue.cpp */; };
 		501C513B27C0084200DF1DD5 /* HardDiskConfigurator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */; };
 		501C513F27C0C63A00DF1DD5 /* HardDiskConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */; };
-		501C514227C0CE6600DF1DD5 /* DriveDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */; };
+		501C514227C0CE6600DF1DD5 /* DeviceDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */; };
 		501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */; };
 		501C514827C2AD8C00DF1DD5 /* DiskExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */; };
 		501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514927C38FE500DF1DD5 /* DragImageView.swift */; };
@@ -500,7 +500,7 @@
 		50FC04B927DA19B200C3E566 /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50210B1E27CB6A41001193AA /* Drive.cpp */; };
 		50FC04BA27DA19B200C3E566 /* FloppyDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */; };
 		50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5004C3A527BD516E00A9161A /* HardDrive.cpp */; };
-		50FC04BC27DA19B200C3E566 /* DriveDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */; };
+		50FC04BC27DA19B200C3E566 /* DeviceDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */; };
 		50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50FC04BF27DA19CE00C3E566 /* KeyboardEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */; };
@@ -670,8 +670,8 @@
 		501C36342C1C17CB000FA274 /* CmdQueueTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CmdQueueTypes.h; sourceTree = "<group>"; };
 		501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskConfigurator.xib; sourceTree = "<group>"; };
 		501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskConfigurator.swift; sourceTree = "<group>"; };
-		501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DriveDescriptors.cpp; sourceTree = "<group>"; };
-		501C514127C0CE6600DF1DD5 /* DriveDescriptors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveDescriptors.h; sourceTree = "<group>"; };
+		501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceDescriptors.cpp; sourceTree = "<group>"; };
+		501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceDescriptors.h; sourceTree = "<group>"; };
 		501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DiskExporter.xib; sourceTree = "<group>"; };
 		501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskExporter.swift; sourceTree = "<group>"; };
 		501C514927C38FE500DF1DD5 /* DragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragImageView.swift; sourceTree = "<group>"; };
@@ -780,7 +780,7 @@
 		505A19512EDDF79D000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A19532EDDF7BD000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A19552EDDF7DC000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		505A19572EDE0BAB000BB9C2 /* StorageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTypes.h; sourceTree = "<group>"; };
+		505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceTypes.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -2041,9 +2041,9 @@
 			isa = PBXGroup;
 			children = (
 				509E76382EDDF57400608FA7 /* CmakeLists.txt */,
-				505A19572EDE0BAB000BB9C2 /* StorageTypes.h */,
-				501C514127C0CE6600DF1DD5 /* DriveDescriptors.h */,
-				501C514027C0CE6600DF1DD5 /* DriveDescriptors.cpp */,
+				505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */,
+				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
+				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
 				5056506925440FDE00A79D27 /* FileSystems */,
 				508FE06621EA31E50043D0E9 /* Media */,
 			);
@@ -2948,7 +2948,7 @@
 				50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */,
 				5012DCE42D5C85CD00233B6A /* Compression.cpp in Sources */,
 				50B9354B243481AB000C78B8 /* SnapshotViewer.swift in Sources */,
-				501C514227C0CE6600DF1DD5 /* DriveDescriptors.cpp in Sources */,
+				501C514227C0CE6600DF1DD5 /* DeviceDescriptors.cpp in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				50E1D2C826CCF97C001FE199 /* ChronoExtensions.swift in Sources */,
 				505F457C2E96A34200418105 /* CGRect.swift in Sources */,
@@ -3091,7 +3091,7 @@
 				50FC04B527DA19A900C3E566 /* HdController.cpp in Sources */,
 				50FC04E427DA1A1400C3E566 /* u_quick.c in Sources */,
 				50FC04F927DA1A8F00C3E566 /* StateMachineRegs.cpp in Sources */,
-				50FC04BC27DA19B200C3E566 /* DriveDescriptors.cpp in Sources */,
+				50FC04BC27DA19B200C3E566 /* DeviceDescriptors.cpp in Sources */,
 				50FC049627DA196C00C3E566 /* DeniseDebugger.cpp in Sources */,
 				50FC04E727DA1A1400C3E566 /* u_deep.c in Sources */,
 				50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */,
