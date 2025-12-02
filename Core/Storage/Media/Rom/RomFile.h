@@ -38,7 +38,7 @@ public:
     RomFile(const fs::path &path) throws { init(path); }
     RomFile(const u8 *buf, isize len) throws { init(buf, len); }
 
-    const char *objectName() const override { return "ROM"; }
+    // const char *objectName() const override { return "ROM"; }
 
 
     //

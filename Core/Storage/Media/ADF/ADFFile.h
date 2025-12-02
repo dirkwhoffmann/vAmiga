@@ -54,7 +54,7 @@ public:
 
 public:
     
-    const char *objectName() const override { return "ADF"; }
+    // const char *objectName() const override { return "ADF"; }
 
     
     //

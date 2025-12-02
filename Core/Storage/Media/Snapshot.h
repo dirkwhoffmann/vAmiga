@@ -71,7 +71,7 @@ public:
     Snapshot(Amiga &amiga);
     Snapshot(Amiga &amiga, Compressor compressor);
     
-    const char *objectName() const override { return "Snapshot"; }
+    // const char *objectName() const override { return "Snapshot"; }
     
     
     //

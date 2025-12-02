@@ -40,7 +40,7 @@ private:
     
 public:
     
-    const char *objectName() const override { return "Workspace"; }
+    // const char *objectName() const override { return "Workspace"; }
     
     
     //

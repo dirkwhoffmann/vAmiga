@@ -43,7 +43,7 @@ public:
     
 public:
     
-    const char *objectName() const override { return "IMG"; }
+    // const char *objectName() const override { return "IMG"; }
     
     
     //

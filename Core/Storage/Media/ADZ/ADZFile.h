@@ -40,7 +40,7 @@ public:
     
     void init(const class ADFFile &adf) throws;
     
-    const char *objectName() const override { return "ADZ"; }
+    // const char *objectName() const override { return "ADZ"; }
 
     
     //

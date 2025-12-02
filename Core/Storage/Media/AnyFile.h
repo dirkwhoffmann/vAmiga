@@ -10,7 +10,10 @@
 #pragma once
 
 #include "MediaFileTypes.h"
-#include "CoreObject.h"
+#include "Annotations.h"
+#include "Loggable.h"
+#include "Error.h"
+#include "Dumpable.h"
 #include "Checksum.h"
 #include "IOUtils.h"
 #include "Buffer.h"
@@ -21,7 +24,7 @@ namespace vamiga {
 
 using util::Buffer;
 
-class AnyFile : public CoreObject {
+class AnyFile : public Loggable { // CoreObject {
 
 public:
     

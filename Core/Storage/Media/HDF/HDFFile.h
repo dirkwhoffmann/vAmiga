@@ -54,7 +54,7 @@ public:
     void init(const fs::path &path) throws;
     void init(const u8 *buf, isize len) throws;
 
-    const char *objectName() const override { return "HDF"; }
+    // const char *objectName() const override { return "HDF"; }
 
     
     //

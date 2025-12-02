@@ -38,7 +38,7 @@ public:
 
     void init(const class HDFFile &hdf) throws;
 
-    const char *objectName() const override { return "HDZ"; }
+    // const char *objectName() const override { return "HDZ"; }
 
     
     //
