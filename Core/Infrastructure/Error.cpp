@@ -11,6 +11,7 @@
 #include "Error.h"
 #include "Constants.h"
 #include "Macros.h"
+#include "DeviceTypes.h"
 
 namespace vamiga {
 

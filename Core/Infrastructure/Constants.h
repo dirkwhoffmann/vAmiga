@@ -127,13 +127,14 @@ static const isize VBLANK_CNT = 0x14;   // VBLANK_MAX - VBLANK_MIN + 1
 // Hard drive geometry limits
 //
 
+/*
 static const isize HDR_C_MIN =  16;
 static const isize HDR_C_MAX =  16384;
 static const isize HDR_H_MIN =  1;
 static const isize HDR_H_MAX =  16;
 static const isize HDR_S_MIN =  16;
 static const isize HDR_S_MAX =  63;
-
+*/
 
 //
 // Custom registers

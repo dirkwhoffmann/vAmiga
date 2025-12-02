@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "Constants.h"
+// #include "Constants.h"
 #include "Serializable.h"
-#include "FloppyDiskTypes.h"
+#include "DeviceTypes.h"
 
 namespace vamiga {
 

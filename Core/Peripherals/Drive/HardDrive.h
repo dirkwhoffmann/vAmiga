@@ -11,6 +11,7 @@
 
 #include "HardDriveTypes.h"
 #include "HdControllerTypes.h"
+#include "FSTypes.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
 #include "Buffer.h"
