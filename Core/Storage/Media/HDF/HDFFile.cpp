@@ -10,7 +10,7 @@
 #include "config.h"
 #include "HDFFile.h"
 #include "Chrono.h"
-// #include "HardDrive.h"
+#include "FSBlock.h"
 #include "IOUtils.h"
 #include "Memory.h"
 #include "OSDescriptors.h"

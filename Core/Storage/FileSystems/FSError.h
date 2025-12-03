@@ -10,7 +10,9 @@
 #pragma once
 
 #include "utl/exception.h"
-#include "Reflection.h"
+#include "utl/abilities/Reflectable.h"
+
+using utl::abilities::Reflectable;
 
 namespace vamiga {
 
@@ -50,7 +52,7 @@ enum class FSFault : long
     FS_CANNOT_CREATE_FILE
 };
 
-struct FSFaultEnum : Reflection<FSFaultEnum, FSFault>
+struct FSFaultEnum : Reflectable<FSFaultEnum, FSFault>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSFault::FS_CANNOT_CREATE_FILE);

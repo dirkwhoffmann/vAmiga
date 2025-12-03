@@ -10,10 +10,6 @@
 #pragma once
 
 #include "FSTypes.h"
-#include "FloppyDisk.h"
-#include "Error.h"
-#include "FSObjects.h"
-#include "FSBlock.h"
 #include "DeviceDescriptors.h"
 
 namespace vamiga {

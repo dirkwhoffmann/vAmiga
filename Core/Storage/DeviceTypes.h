@@ -9,7 +9,9 @@
 
 #pragma once
 
-#include "Reflection.h"
+#include "utl/abilities/Reflectable.h"
+
+using utl::abilities::Reflectable;
 
 namespace vamiga {
 
@@ -47,7 +49,7 @@ enum class Diameter : long
     INCH_525
 };
 
-struct DiameterEnum : Reflection<DiameterEnum, Diameter>
+struct DiameterEnum : Reflectable<DiameterEnum, Diameter>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Diameter::INCH_525);
@@ -79,7 +81,7 @@ enum class Density
     HD
 };
 
-struct DensityEnum : Reflection<DensityEnum, Density>
+struct DensityEnum : Reflectable<DensityEnum, Density>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Density::HD);

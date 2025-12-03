@@ -28,7 +28,4 @@ typedef isize Pixel;
 // Keyboard
 typedef u8 KeyCode;
 
-// File Systems
-typedef u32 Block;
-
 }
