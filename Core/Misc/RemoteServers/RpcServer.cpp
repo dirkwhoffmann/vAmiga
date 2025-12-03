@@ -117,7 +117,7 @@ RpcServer::doProcess(const string &payload)
         json response = {
 
             {"jsonrpc", "2.0"},
-            {"error", {{"code", e.data}, {"message", e.what()}}},
+            {"error", {{"code", e.data()}, {"message", e.what()}}},
             {"id", nullptr}
         };
         send(response.dump());
@@ -160,7 +160,7 @@ RpcServer::didExecute(const InputLine& input, std::stringstream &ss, std::except
 
     // For application errors, use the fault identifier
     if (const auto *error = dynamic_cast<const AppError *>(&exc)) {
-        code = error->data;
+        code = i64(error->fault());
     }
 
     json response = {

@@ -64,7 +64,7 @@ Thread::execute()
         } catch (StateChangeException &exc) {
             
             // Serve a state change request
-            switchState((ExecState)exc.data);
+            switchState((ExecState)exc.data());
         }
         
         loadClock.stop();

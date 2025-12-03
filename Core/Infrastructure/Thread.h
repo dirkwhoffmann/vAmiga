@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "utl/exception.h"
 #include "ThreadTypes.h"
 #include "CoreComponent.h"
 #include "Concurrency.h"

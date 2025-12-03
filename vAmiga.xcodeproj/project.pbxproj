@@ -727,6 +727,8 @@
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		503FC4B02EE00FE400637C95 /* exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = exception.h; sourceTree = "<group>"; };
+		503FC4B42EE04C2B00637C95 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -1469,6 +1471,31 @@
 			path = Agnus;
 			sourceTree = "<group>";
 		};
+		503FC4B12EE00FF900637C95 /* utlib */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4B32EE048E000637C95 /* include */,
+			);
+			path = utlib;
+			sourceTree = "<group>";
+		};
+		503FC4B22EE048D800637C95 /* utl */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4B42EE04C2B00637C95 /* types.h */,
+				503FC4B02EE00FE400637C95 /* exception.h */,
+			);
+			path = utl;
+			sourceTree = "<group>";
+		};
+		503FC4B32EE048E000637C95 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4B22EE048D800637C95 /* utl */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		5043154E2D2AE311006C14FF /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -1980,6 +2007,7 @@
 		508FE06021EA318D0043D0E9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				503FC4B12EE00FF900637C95 /* utlib */,
 				50CF461C2620420500BB3B95 /* CMakeLists.txt */,
 				50B14C0921EB228E002E32A6 /* config.h */,
 				505B331E2B46D0CA00D3736F /* config.cpp */,
@@ -3517,7 +3545,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				HEADER_SEARCH_PATHS = Core;
+				HEADER_SEARCH_PATHS = (
+					Core,
+					Core/utlib/include,
+				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3570,7 +3601,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				HEADER_SEARCH_PATHS = Core;
+				HEADER_SEARCH_PATHS = (
+					Core,
+					Core/utlib/include,
+				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

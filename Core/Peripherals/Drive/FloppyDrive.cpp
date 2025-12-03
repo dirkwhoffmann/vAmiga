@@ -1148,10 +1148,9 @@ FloppyDrive::swapDisk(const fs::path &path)
         
         if (err.fault() == Fault::FS_OUT_OF_SPACE) {
             
-            err.description =
-            string("The directory is too large. ") +
-            string("The files do not fit onto a single ") +
-            DensityEnum::key(density()) + " disk.";
+            err.set_msg(string("The directory is too large. ") +
+                        string("The files do not fit onto a single ") +
+                        DensityEnum::key(density()) + " disk.");
         }
         throw;
     }
