@@ -35,10 +35,10 @@ ADFEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
     // In debug mode, also run the decoder
     if (ADF_DEBUG) {
 
-        auto adf = ADFFactory::make(disk);
-        string tmp = "/tmp/debug.adf";
-        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        adf->writeToFile(tmp);
+        auto tmp = ADFFactory::make(disk);
+        string name = "/tmp/debug.adf";
+        fprintf(stderr, "Saving image to %s for debugging\n", name.c_str());
+        tmp->writeToFile(name);
     }
 }
 
