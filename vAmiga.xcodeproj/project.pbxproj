@@ -97,6 +97,10 @@
 		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
 		503FC4BF2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
+		503FC4CA2EE0AB0D00637C95 /* FileSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4C92EE0AB0500637C95 /* FileSupport.cpp */; };
+		503FC4CB2EE0AB0D00637C95 /* FileSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4C92EE0AB0500637C95 /* FileSupport.cpp */; };
+		503FC4CD2EE0AB1600637C95 /* StreamSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */; };
+		503FC4CE2EE0AB1600637C95 /* StreamSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5042FB122D4E4E8200E4A167 /* FilePanel.swift */; };
@@ -740,6 +744,12 @@
 		503FC4C22EE092D900637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4C42EE092EE00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4C52EE093DD00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMakeLists.txt; sourceTree = "<group>"; };
+		503FC4C62EE0A95000637C95 /* FileSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSupport.h; sourceTree = "<group>"; };
+		503FC4C82EE0A97D00637C95 /* StreamSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StreamSupport.h; sourceTree = "<group>"; };
+		503FC4C92EE0AB0500637C95 /* FileSupport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSupport.cpp; sourceTree = "<group>"; };
+		503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamSupport.cpp; sourceTree = "<group>"; };
+		503FC4D02EE0ADF300637C95 /* hints.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hints.h; sourceTree = "<group>"; };
+		503FC4D12EE0B0F900637C95 /* Bytes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bytes.h; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -1495,9 +1505,11 @@
 			isa = PBXGroup;
 			children = (
 				503FC4C42EE092EE00637C95 /* CMakeLists.txt */,
-				503FC4B42EE04C2B00637C95 /* types.h */,
 				503FC4B02EE00FE400637C95 /* exception.h */,
+				503FC4D02EE0ADF300637C95 /* hints.h */,
+				503FC4B42EE04C2B00637C95 /* types.h */,
 				503FC4BC2EE091B700637C95 /* abilities */,
+				503FC4C72EE0A96300637C95 /* support */,
 			);
 			path = utl;
 			sourceTree = "<group>";
@@ -1523,6 +1535,7 @@
 			isa = PBXGroup;
 			children = (
 				503FC4C12EE091F600637C95 /* abilities */,
+				503FC4CF2EE0AB1D00637C95 /* support */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1533,6 +1546,25 @@
 				503FC4BD2EE091DC00637C95 /* Reflectable.cpp */,
 			);
 			path = abilities;
+			sourceTree = "<group>";
+		};
+		503FC4C72EE0A96300637C95 /* support */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4D12EE0B0F900637C95 /* Bytes.h */,
+				503FC4C62EE0A95000637C95 /* FileSupport.h */,
+				503FC4C82EE0A97D00637C95 /* StreamSupport.h */,
+			);
+			path = support;
+			sourceTree = "<group>";
+		};
+		503FC4CF2EE0AB1D00637C95 /* support */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4C92EE0AB0500637C95 /* FileSupport.cpp */,
+				503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */,
+			);
+			path = support;
 			sourceTree = "<group>";
 		};
 		5043154E2D2AE311006C14FF /* Dashboard */ = {
@@ -2807,6 +2839,7 @@
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				509D077B2EDBA43A00355638 /* ADFFactory.cpp in Sources */,
 				5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */,
+				503FC4CE2EE0AB1600637C95 /* StreamSupport.cpp in Sources */,
 				50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */,
 				500B0D362E8017BC008FC5E1 /* PerformanceSettings.swift in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
@@ -2816,6 +2849,7 @@
 				508AC36927B7F6FD006AD2E7 /* HdController.cpp in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				50C8C452260747EA00F4E012 /* Canvas.swift in Sources */,
+				503FC4CA2EE0AB0D00637C95 /* FileSupport.cpp in Sources */,
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
 				50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
@@ -3238,6 +3272,7 @@
 				502B303928469CF600673377 /* Beam.cpp in Sources */,
 				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
 				5012DCE52D5C85CD00233B6A /* Compression.cpp in Sources */,
+				503FC4CD2EE0AB1600637C95 /* StreamSupport.cpp in Sources */,
 				50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,
@@ -3282,6 +3317,7 @@
 				50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */,
 				50FC04C327DA19DA00C3E566 /* AnyFile.cpp in Sources */,
 				50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */,
+				503FC4CB2EE0AB0D00637C95 /* FileSupport.cpp in Sources */,
 				50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */,
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
 				50FC047C27DA12AB00C3E566 /* Checksum.cpp in Sources */,

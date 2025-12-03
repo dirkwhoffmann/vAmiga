@@ -1,0 +1,88 @@
+// -----------------------------------------------------------------------------
+// This file is part of utlib - A lightweight utility library
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
+//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
+
+#pragma once
+
+#include "utl/types.h"
+
+namespace utl {
+
+using namespace types;
+
+//
+// Accessing bits and bytes
+//
+
+// Returns the low nibble or the high nibble of a 8 bit value
+#define LO_NIBBLE(x) (u8)((x) & 0xF)
+#define HI_NIBBLE(x) (u8)(((x) >> 4) & 0xF)
+
+// Returns the low byte or the high byte of a 16 bit value
+#define LO_BYTE(x) (u8)((x) & 0xFF)
+#define HI_BYTE(x) (u8)((x) >> 8)
+
+// Returns the low word or the high word of a 32 bit value
+#define LO_WORD(x) (u16)((x) & 0xFFFF)
+#define HI_WORD(x) (u16)((x) >> 16)
+
+// Constructs a larger integer in little endian byte format
+#define LO_HI(x,y) (u16)((y) << 8 | (x))
+#define LO_LO_HI(x,y,z) (u32)((z) << 16 | (y) << 8 | (x))
+#define LO_LO_HI_HI(x,y,z,w) (u32)((w) << 24 | (z) << 16 | (y) << 8 | (x))
+#define LO_W_HI_W(x,y) (u32)((y) << 16 | (x))
+
+// Constructs a larger integer in big endian byte format
+#define HI_LO(x,y) (u16)((x) << 8 | (y))
+#define HI_HI_LO(x,y,z) (u32)((x) << 16 | (y) << 8 | (z))
+#define HI_HI_LO_LO(x,y,z,w) (u32)((x) << 24 | (y) << 16 | (z) << 8 | (w))
+#define HI_W_LO_W(x,y) (u32)((x) << 16 | (y))
+
+// Returns a certain byte of a larger integer
+#define BYTE0(x) LO_BYTE(x)
+#define BYTE1(x) LO_BYTE((x) >> 8)
+#define BYTE2(x) LO_BYTE((x) >> 16)
+#define BYTE3(x) LO_BYTE((x) >> 24)
+#define GET_BYTE(x,nr) LO_BYTE((x) >> (8 * (nr)))
+
+// Returns a non-zero value if the n-th bit is set in x
+#define GET_BIT(x,nr) ((x) & (1 << (nr)))
+
+// Sets, clears, or toggles single bits
+#define SET_BIT(x,nr) ((x) |= (1 << (nr)))
+#define CLR_BIT(x,nr) ((x) &= ~(1 << (nr)))
+#define TOGGLE_BIT(x,nr) ((x) ^= (1 << (nr)))
+
+// Replaces bits, bytes, and words
+#define REPLACE_BIT(x,nr,v) ((v) ? SET_BIT(x, nr) : CLR_BIT(x, nr))
+#define REPLACE_LO(x,y) (((x) & ~0x00FF) | (y))
+#define REPLACE_HI(x,y) (((x) & ~0xFF00) | ((y) << 8))
+#define REPLACE_LO_WORD(x,y) (((x) & ~0xFFFF) | (y))
+#define REPLACE_HI_WORD(x,y) (((x) & ~0xFFFF0000) | ((y) << 16))
+
+// Checks if none or all bits of a bitmask are set
+#define ALL_CLR(x,m) (((x) & (m)) == 0)
+#define ALL_SET(x,m) (((x) & (m)) == m)
+
+// Checks for a rising or a falling edge
+#define RISING_EDGE(x,y) (!(x) && (y))
+#define RISING_EDGE_BIT(x,y,n) (!((x) & (1 << (n))) && ((y) & (1 << (n))))
+#define FALLING_EDGE(x,y) ((x) && !(y))
+#define FALLING_EDGE_BIT(x,y,n) (((x) & (1 << (n))) && !((y) & (1 << (n))))
+
+// Checks is a number is even or odd
+#define IS_EVEN(x) (!IS_ODD(x))
+#define IS_ODD(x) ((x) & 1)
+
+// Rounds a number up or down to the next even or odd number
+#define UP_TO_NEXT_EVEN(x) ((x) + ((x) & 1))
+#define DOWN_TO_NEXT_EVEN(x) ((x) & (~1))
+#define UP_TO_NEXT_ODD(x) ((x) | 1)
+#define DOWN_TO_NEXT_ODD(x) ((x) - !((x) & 1))
+
+}

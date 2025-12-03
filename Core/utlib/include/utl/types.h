@@ -38,4 +38,19 @@ using std::optional;
 using std::unordered_map;
 using std::vector;
 
+//
+// Converting data types
+//
+
+// Signed alternative for the sizeof keyword
+template <typename T>
+constexpr isize isizeof(const T&) noexcept {
+    return static_cast<isize>(sizeof(T));
+}
+
+template <typename T>
+constexpr isize isizeof() noexcept {
+    return static_cast<isize>(sizeof(T));
+}
+
 }

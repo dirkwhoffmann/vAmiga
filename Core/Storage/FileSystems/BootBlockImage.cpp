@@ -1124,8 +1124,8 @@ BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
     isize i,j;
     
     // Try to find a match in the data base
-    for (i = 0; i < isizeof(bbRecord) / isizeof(BBRecord); i++) {
-        
+    for (i = 0; i < isizeof(bbRecord) / isizeof<BBRecord>(); i++) {
+
         if (bbRecord[i].type == BootBlockType::STANDARD && bbRecord[i].image) {
             
             // For standard boot blocks, we require a perfect match (except DOS type and checksum)
@@ -1165,7 +1165,7 @@ BootBlockImage::BootBlockImage(const string &name)
 {
     std::memset(data, 0, 1024);
     
-    for (isize i = 0; i < isizeof(bbRecord) / isizeof(BBRecord); i++) {
+    for (isize i = 0; i < isizeof(bbRecord) / isizeof<BBRecord>(); i++) {
         
         if (strcmp(bbRecord[i].name, name.c_str()) == 0) {
             std::memcpy(this->data, bbRecord[i].image, bbRecord[i].size);

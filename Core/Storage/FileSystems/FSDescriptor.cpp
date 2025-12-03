@@ -8,9 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "utl/support/FileSupport.h"
+#include "utl/support/StreamSupport.h"
 #include "FSDescriptor.h"
 #include "FSError.h"
-#include "IOUtils.h"
+
+// #include "IOUtils.h"
 
 namespace vamiga {
 
@@ -95,7 +98,7 @@ FSDescriptor::dump() const
 void
 FSDescriptor::dump(std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl;
     
     os << tab("Blocks");
     os << dec(numBlocks) << std::endl;

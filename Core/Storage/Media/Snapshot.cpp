@@ -50,7 +50,7 @@ Snapshot::isCompatible(const fs::path &path)
 bool
 Snapshot::isCompatible(const u8 *buf, isize len)
 {
-    if (len < isizeof(SnapshotHeader)) return false;
+    if (len < isizeof<SnapshotHeader>()) return false;
     return util::matchingBufferHeader(buf, "VASNAP");
 }
 

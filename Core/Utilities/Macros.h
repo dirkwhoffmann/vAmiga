@@ -108,7 +108,7 @@
 //
 
 // Signed alternative for the sizeof keyword
-#define isizeof(x) (isize)(sizeof(x))
+// #define isizeof(x) (isize)(sizeof(x))
 
 
 //
