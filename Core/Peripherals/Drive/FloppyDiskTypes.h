@@ -10,7 +10,6 @@
 #pragma once
 
 #include "FSTypes.h"
-#include "BootBlockImageTypes.h"
 #include "DeviceTypes.h"
 
 namespace vamiga {

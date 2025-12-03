@@ -229,7 +229,7 @@ Joystick::ciapa() const
 void
 Joystick::trigger(GamePadAction event)
 {
-    assert_enum(GamePadAction, event);
+    GamePadActionEnum::validate(event);
 
     debug(PRT_DEBUG, "trigger(%s)\n", GamePadActionEnum::key(event));
 

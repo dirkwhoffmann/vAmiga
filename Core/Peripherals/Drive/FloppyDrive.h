@@ -11,7 +11,6 @@
 
 #include "FloppyDriveTypes.h"
 #include "AgnusTypes.h"
-#include "BootBlockImageTypes.h"
 #include "FSTypes.h"
 #include "Drive.h"
 #include "FloppyDisk.h"

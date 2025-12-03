@@ -108,7 +108,7 @@ Paula::executeUntil(Cycle target)
 void
 Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
 {
-    assert_enum(IrqSource, src);
+    IrqSourceEnum::validate(src);
     assert(trigger != 0);
     assert(agnus.id[SLOT_IRQ] == IRQ_CHECK);
 

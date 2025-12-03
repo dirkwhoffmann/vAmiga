@@ -95,6 +95,8 @@
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
+		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
+		503FC4BF2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5042FB122D4E4E8200E4A167 /* FilePanel.swift */; };
@@ -733,6 +735,11 @@
 		503FC4B42EE04C2B00637C95 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
 		503FC4B62EE06D0A00637C95 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
+		503FC4B92EE08B2B00637C95 /* Reflectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflectable.h; sourceTree = "<group>"; };
+		503FC4BD2EE091DC00637C95 /* Reflectable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Reflectable.cpp; sourceTree = "<group>"; };
+		503FC4C22EE092D900637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		503FC4C42EE092EE00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		503FC4C52EE093DD00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -1005,7 +1012,7 @@
 		509E762D2EDDC93500608FA7 /* EXEEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEEncoder.cpp; sourceTree = "<group>"; };
 		509E76302EDDD6D200608FA7 /* FloppyFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFactory.h; sourceTree = "<group>"; };
 		509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFactory.cpp; sourceTree = "<group>"; };
-		509E76382EDDF57400608FA7 /* CmakeLists_rename.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CmakeLists_rename.txt; sourceTree = "<group>"; };
+		509E76382EDDF57400608FA7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -1032,7 +1039,6 @@
 		50A6145A260D14FE00A01428 /* ErrorTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErrorTypes.h; sourceTree = "<group>"; };
 		50A61461260DB7F900A01428 /* Parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
 		50A61462260DB7F900A01428 /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
-		50A6146E260DC91600A01428 /* BootBlockImageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BootBlockImageTypes.h; sourceTree = "<group>"; };
 		50A61470260DCA6200A01428 /* RomFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFileTypes.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BootBlockImage.h; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
@@ -1478,7 +1484,9 @@
 		503FC4B12EE00FF900637C95 /* utlib */ = {
 			isa = PBXGroup;
 			children = (
+				503FC4C52EE093DD00637C95 /* CMakeLists.txt */,
 				503FC4B32EE048E000637C95 /* include */,
+				503FC4C02EE091EC00637C95 /* src */,
 			);
 			path = utlib;
 			sourceTree = "<group>";
@@ -1486,8 +1494,10 @@
 		503FC4B22EE048D800637C95 /* utl */ = {
 			isa = PBXGroup;
 			children = (
+				503FC4C42EE092EE00637C95 /* CMakeLists.txt */,
 				503FC4B42EE04C2B00637C95 /* types.h */,
 				503FC4B02EE00FE400637C95 /* exception.h */,
+				503FC4BC2EE091B700637C95 /* abilities */,
 			);
 			path = utl;
 			sourceTree = "<group>";
@@ -1498,6 +1508,31 @@
 				503FC4B22EE048D800637C95 /* utl */,
 			);
 			path = include;
+			sourceTree = "<group>";
+		};
+		503FC4BC2EE091B700637C95 /* abilities */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4C22EE092D900637C95 /* CMakeLists.txt */,
+				503FC4B92EE08B2B00637C95 /* Reflectable.h */,
+			);
+			path = abilities;
+			sourceTree = "<group>";
+		};
+		503FC4C02EE091EC00637C95 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4C12EE091F600637C95 /* abilities */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		503FC4C12EE091F600637C95 /* abilities */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4BD2EE091DC00637C95 /* Reflectable.cpp */,
+			);
+			path = abilities;
 			sourceTree = "<group>";
 		};
 		5043154E2D2AE311006C14FF /* Dashboard */ = {
@@ -1549,7 +1584,6 @@
 				509D04962EDA471900355638 /* FSImporter.cpp */,
 				509D04942EDA471900355638 /* FSExporter.h */,
 				509D04952EDA471900355638 /* FSExporter.cpp */,
-				50A6146E260DC91600A01428 /* BootBlockImageTypes.h */,
 				50A64B94257A63A600442964 /* BootBlockImage.h */,
 				50A64B95257A63A600442964 /* BootBlockImage.cpp */,
 			);
@@ -2074,7 +2108,7 @@
 		509E76342EDDF53600608FA7 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				509E76382EDDF57400608FA7 /* CmakeLists_rename.txt */,
+				509E76382EDDF57400608FA7 /* CMakeLists.txt */,
 				505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */,
 				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
 				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
@@ -2825,6 +2859,7 @@
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
 				50DA83E12C160DCA001209AA /* Emulator.cpp in Sources */,
+				503FC4BF2EE091E300637C95 /* Reflectable.cpp in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */,
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
@@ -3140,6 +3175,7 @@
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
+				503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */,
 				501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
 				504CC8C22D5A819F00C2AC9A /* ADZFile.cpp in Sources */,
 				505B33202B46D25700D3736F /* config.cpp in Sources */,

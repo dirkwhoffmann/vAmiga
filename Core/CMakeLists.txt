@@ -59,6 +59,7 @@ endif()
 target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add subdirectories
+add_subdirectory(utlib)
 add_subdirectory(Infrastructure)
 add_subdirectory(Components)
 add_subdirectory(Misc)
@@ -71,7 +72,7 @@ add_subdirectory(Utilities)
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(VACore xdms Threads::Threads)
+target_link_libraries(VACore utlib xdms Threads::Threads)
 
 # Link zlib if available
 if(ZLIB_FOUND)

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "BootBlockImageTypes.h"
+#include "FSTypes.h"
 
 namespace vamiga {
 

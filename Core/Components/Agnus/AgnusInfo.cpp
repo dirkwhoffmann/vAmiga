@@ -18,7 +18,7 @@ namespace vamiga {
 const char *
 Agnus::eventName(EventSlot slot, EventID id)
 {
-    assert_enum(EventSlot, slot);
+    EventSlotEnum::validate(slot);
     
     switch (slot) {
 

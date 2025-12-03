@@ -9,14 +9,15 @@
 
 #pragma once
 
-#include "BootBlockImageTypes.h"
+#include "utl/abilities/Reflectable.h"
+using utl::abilities::Reflectable;
 
 namespace vamiga {
 
 struct FSBlock;
 typedef u32 Block;
 typedef std::function<bool(const FSBlock &)> FSBlockFilter;
-typedef std::function<string(const FSBlock &)> FSBlockFormatter;
+typedef std::function<std::string(const FSBlock &)> FSBlockFormatter;
 typedef std::function<bool(const FSBlock &, const FSBlock &)> FSBlockSorter;
 
 struct FSOpt
@@ -44,7 +45,7 @@ enum class FSFormat : long
     NODOS
 };
 
-struct FSFormatEnum : Reflection<FSFormatEnum, FSFormat>
+struct FSFormatEnum : Reflectable<FSFormatEnum, FSFormat>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSFormat::NODOS);
@@ -141,7 +142,7 @@ enum class FSBlockType : long
     DATA_FFS
 };
 
-struct FSBlockTypeEnum : Reflection<FSBlockTypeEnum, FSBlockType>
+struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSBlockType::DATA_FFS);
@@ -214,7 +215,7 @@ enum class FSItemType
     BITMAP
 };
 
-struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
+struct FSItemTypeEnum : Reflectable<FSItemTypeEnum, FSItemType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSItemType::BITMAP);
@@ -334,7 +335,7 @@ enum class FSBlockError : long
     INVALID_HASHTABLE_SIZE
 };
 
-struct FSBlockErrorEnum : Reflection<FSBlockErrorEnum, FSBlockError>
+struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSBlockError::INVALID_HASHTABLE_SIZE);
@@ -365,6 +366,74 @@ struct FSBlockErrorEnum : Reflection<FSBlockErrorEnum, FSBlockError>
     static const char *help(FSBlockType value)
     {
         return "";
+    }
+};
+
+enum class BootBlockType
+{
+    STANDARD,
+    VIRUS,
+    CUSTOM
+};
+
+struct BootBlockTypeEnum : Reflectable<BootBlockTypeEnum, BootBlockType>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(BootBlockType::CUSTOM);
+
+    static const char *_key(BootBlockType value)
+    {
+        switch (value) {
+
+            case BootBlockType::STANDARD:  return "STANDARD";
+            case BootBlockType::VIRUS:     return "VIRUS";
+            case BootBlockType::CUSTOM:    return "CUSTOM";
+        }
+        return "???";
+    }
+    static const char *help(BootBlockType value)
+    {
+        return "";
+    }
+};
+
+enum class BootBlockId
+{
+    NONE,
+    AMIGADOS_13,
+    AMIGADOS_20,
+    SCA,
+    BYTE_BANDIT
+};
+
+struct BootBlockIdEnum : Reflectable<BootBlockIdEnum, BootBlockId>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(BootBlockId::BYTE_BANDIT);
+
+    static const char *_key(BootBlockId value)
+    {
+        switch (value) {
+
+            case BootBlockId::NONE:         return "NONE";
+            case BootBlockId::AMIGADOS_13:  return "AMIGADOS_13";
+            case BootBlockId::AMIGADOS_20:  return "AMIGADOS_20";
+            case BootBlockId::SCA:          return "SCA";
+            case BootBlockId::BYTE_BANDIT:  return "BYTE_BANDIT";
+        }
+        return "???";
+    }
+    static const char *help(BootBlockId value)
+    {
+        switch (value) {
+
+            case BootBlockId::NONE:         return "Empty block";
+            case BootBlockId::AMIGADOS_13:  return "Kickstart 1.3 boot block";
+            case BootBlockId::AMIGADOS_20:  return "Kickstart 2.0 boot block";
+            case BootBlockId::SCA:          return "SCA Virus";
+            case BootBlockId::BYTE_BANDIT:  return "Byte Bandit Virus";
+        }
+        return "???";
     }
 };
 

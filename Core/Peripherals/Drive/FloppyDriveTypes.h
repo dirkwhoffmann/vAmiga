@@ -12,7 +12,6 @@
 #include "DriveTypes.h"
 #include "DeviceTypes.h"
 #include "FloppyDiskTypes.h"
-#include "BootBlockImageTypes.h"
 
 namespace vamiga {
 

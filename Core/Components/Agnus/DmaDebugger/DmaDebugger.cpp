@@ -307,8 +307,8 @@ DmaDebugger::cacheInfo(DmaDebuggerInfo &result) const
 void
 DmaDebugger::getColor(DmaChannel channel, double *rgb) const
 {
-    assert_enum(DmaChannel, channel);
-    
+    DmaChannelEnum::validate(channel);
+
     RgbColor color = RgbColor(config.debugColor[isize(channel)]);
     rgb[0] = color.r;
     rgb[1] = color.g;
@@ -318,7 +318,7 @@ DmaDebugger::getColor(DmaChannel channel, double *rgb) const
 void
 DmaDebugger::setColor(BusOwner owner, u32 rgba)
 {
-    assert_enum(BusOwner, owner);
+    BusOwnerEnum::key(owner);
 
     // Compute the color variants used for drawing
     RgbColor color = RgbColor(rgba);

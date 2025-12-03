@@ -51,8 +51,8 @@ ADFFile::isCompatible(const Buffer<u8> &buf)
 isize
 ADFFile::fileSize(Diameter diameter, Density density)
 {
-    assert_enum(Diameter, diameter);
-    assert_enum(Density, density);
+    DiameterEnum::validate(diameter);
+    DensityEnum::validate(density);
 
     if (diameter != Diameter::INCH_35) throw AppError(Fault::DISK_INVALID_DIAMETER);
     
@@ -283,7 +283,7 @@ ADFFile::killVirus()
 void
 ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
 {
-    assert_enum(FSFormat, fs);
+    FSFormatEnum::validate(fs);
 
     debug(ADF_DEBUG,
           "Formatting disk (%ld, %s)\n", numBlocks(), FSFormatEnum::key(fs));

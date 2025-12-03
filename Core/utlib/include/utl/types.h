@@ -7,7 +7,15 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-namespace utl {
+#pragma once
+
+#include <filesystem>
+#include <optional>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+namespace utl::types {
 
 // Signed integers
 typedef signed char        i8;
@@ -22,5 +30,12 @@ typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef unsigned long long u64;
 typedef unsigned long      usize;
+
+namespace fs = std::filesystem;
+
+using std::string;
+using std::optional;
+using std::unordered_map;
+using std::vector;
 
 }

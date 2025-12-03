@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of utlib - A lightweight utility library
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the Mozilla Public License v2
@@ -9,10 +9,12 @@
 
 #pragma once
 
-#include "BasicTypes.h"
+#include "utl/types.h"
 #include <functional>
 #include <map>
 #include <unordered_map>
+
+using namespace utl::types;
 
 /* The purpose of the Reflection interface is to make the symbolic names of
  * an enumeration type available inside the application. I.e., it provides
@@ -37,11 +39,9 @@
  * the prefix.
  */
 
-namespace vamiga {
+namespace utl::abilities {
 
-// #define assert_enum(e,v) assert(e##Enum::isValid(v))
-
-template <class T, typename E> struct Reflection {
+template <class T, typename E> struct Reflectable {
 
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }
@@ -59,43 +59,46 @@ template <class T, typename E> struct Reflection {
     static const char *key(E value, bool withPrefix = false) {
 
         auto *p = fullKey(value);
-        
+
         if (!withPrefix) {
             for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;
         }
         return p;
     }
-    
+
     // Collects all elements
     static std::vector<E> elements(std::function<bool(E)> filter = [](E){ return true; }) {
-        
+
         std::vector<E> result;
-        
+
         for (long i = T::minVal; i <= T::maxVal; i += isBitField() ? i : 1) {
             if (filter(E(i))) result.push_back(E(i));
         }
-        
+
         return result;
     }
-    
-    // Collects all key / value pairs
-    static std::vector < std::pair<string,long> >
-    pairs(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }) {
 
-        std::vector < std::pair<string,long> > result;
+    // Collects all key / value pairs
+    static std::vector < std::pair<std::string,long> >
+    pairs(bool withPrefix = false,
+          std::function<bool(E)> filter = [](E){ return true; }) {
+
+        std::vector < std::pair<std::string,long> > result;
 
         for (long i = T::minVal; i <= T::maxVal; i += isBitField() ? i : 1) {
             if (filter(E(i))) result.push_back(std::make_pair(key(E(i), withPrefix), i));
         }
-        
+
         return result;
     }
 
     // Returns all keys in form of a textual list representation
-    static string
-    keyList(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }, const string &delim = ", ") {
+    static std::string
+    keyList(bool withPrefix = false,
+            std::function<bool(E)> filter = [](E){ return true; },
+            const std::string &delim = ", ") {
 
-        string result;
+        std::string result;
 
         for (const auto &pair : pairs(withPrefix, filter)) {
             result += (result.empty() ? "" : delim) + pair.first;
@@ -105,22 +108,23 @@ template <class T, typename E> struct Reflection {
     }
 
     // Convenience wrapper
-    static string argList(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }) {
+    static std::string argList(bool withPrefix = false,
+                               std::function<bool(E)> filter = [](E){ return true; }) {
 
         return "{ " + keyList(withPrefix, filter, " | ") + " }";
     }
-    
-    // Returns a textual representation for a bit mask
-    static const string mask(isize mask, bool withPrefix = false) {
 
-        string result;
+    // Returns a textual representation for a bit mask
+    static const std::string mask(isize mask, bool withPrefix = false) {
+
+        std::string result;
 
         for (isize i = T::minVal; i <= T::maxVal; i += isBitField() ? i : 1) {
             if (mask & (isBitField() ? i : 1 << i)) {
                 result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
             }
         }
-        
+
         return result;
     }
 };

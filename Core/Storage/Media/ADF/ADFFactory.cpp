@@ -31,7 +31,9 @@ ADFFactory::make(const u8 *buf, isize len)
 std::unique_ptr<ADFFile>
 ADFFactory::make(Diameter dia, Density den)
 {
-    assert_enum(Diameter, dia);
+    DiameterEnum::validate(dia);
+    DensityEnum::validate(den);
+    
     return std::make_unique<ADFFile>(ADFFile::fileSize(dia, den));
 }
 

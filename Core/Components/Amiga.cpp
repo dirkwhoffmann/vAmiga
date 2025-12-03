@@ -531,7 +531,7 @@ Amiga::set(const string &opt, const string &value, const std::vector<isize> obji
 void
 Amiga::set(ConfigScheme scheme)
 {
-    assert_enum(ConfigScheme, scheme);
+    ConfigSchemeEnum::validate(scheme);
 
     emulator.revertToDefaultConfig();
 
