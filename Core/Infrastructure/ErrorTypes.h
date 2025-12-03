@@ -157,6 +157,7 @@ enum class Fault : long
     GDB_UNSUPPORTED_CMD,
     
     // File system
+    /*
     FS_UNKNOWN,
     FS_OUT_OF_RANGE,
     FS_INVALID_PATH,
@@ -186,13 +187,14 @@ enum class Fault : long
     FS_DIR_NOT_EMPTY,
     FS_CANNOT_CREATE_DIR,
     FS_CANNOT_CREATE_FILE
+    */
 };
 
 struct FaultEnum : Reflection<FaultEnum, Fault>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(Fault::FS_CANNOT_CREATE_FILE);
-    
+    static constexpr long maxVal = long(Fault::GDB_UNSUPPORTED_CMD);
+
     static const char *_key(Fault value)
     {
         switch (value) {
@@ -318,7 +320,8 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::GDB_INVALID_CHECKSUM:        return "GDB_INVALID_CHECKSUM";
             case Fault::GDB_UNRECOGNIZED_CMD:        return "GDB_UNRECOGNIZED_CMD";
             case Fault::GDB_UNSUPPORTED_CMD:         return "GDB_UNSUPPORTED_CMD";
-                
+
+                /*
             case Fault::FS_UNKNOWN:                  return "FS_UNKNOWN";
             case Fault::FS_OUT_OF_RANGE:             return "FS_OUT_OF_RANGE";
             case Fault::FS_INVALID_PATH:             return "FS_INVALID_PATH";
@@ -346,6 +349,7 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
             case Fault::FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
             case Fault::FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
+                 */
         }
         return "???";
     }

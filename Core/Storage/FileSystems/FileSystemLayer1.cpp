@@ -127,7 +127,7 @@ FileSystem::mkdir(FSBlock &at, const FSName &name)
     require::directory(at);
 
     // Error out if the file already exists
-    if (searchdir(at, name)) throw(AppError(Fault::FS_EXISTS, name.cpp_str()));
+    if (searchdir(at, name)) throw(FSError(FSFault::FS_EXISTS, name.cpp_str()));
 
     FSBlock &block = newUserDirBlock(name);
     block.setParentDirRef(at.nr);
@@ -201,12 +201,12 @@ void
 FileSystem::addToHashTable(Block parent, Block ref)
 {
     FSBlock *pp = read(parent);
-    if (!pp) throw AppError(Fault::FS_OUT_OF_RANGE);
-    if (!pp->hasHashTable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+    if (!pp) throw FSError(FSFault::FS_OUT_OF_RANGE);
+    if (!pp->hasHashTable()) throw FSError(FSFault::FS_WRONG_BLOCK_TYPE);
 
     FSBlock *pr = read(ref);
-    if (!pr) throw AppError(Fault::FS_OUT_OF_RANGE);
-    if (!pr->isHashable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+    if (!pr) throw FSError(FSFault::FS_OUT_OF_RANGE);
+    if (!pr->isHashable()) throw FSError(FSFault::FS_WRONG_BLOCK_TYPE);
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr->hashValue() % pp->hashTableSize();
@@ -236,12 +236,12 @@ void
 FileSystem::deleteFromHashTable(Block parent, Block ref)
 {
     FSBlock *pp = read(parent);
-    if (!pp) throw AppError(Fault::FS_OUT_OF_RANGE);
-    if (!pp->hasHashTable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+    if (!pp) throw FSError(FSFault::FS_OUT_OF_RANGE);
+    if (!pp->hasHashTable()) throw FSError(FSFault::FS_WRONG_BLOCK_TYPE);
 
     FSBlock *pr = read(ref);
-    if (!pr) throw AppError(Fault::FS_OUT_OF_RANGE);
-    if (!pr->isHashable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+    if (!pr) throw FSError(FSFault::FS_OUT_OF_RANGE);
+    if (!pr->isHashable()) throw FSError(FSFault::FS_WRONG_BLOCK_TYPE);
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr->hashValue() % pp->hashTableSize();
@@ -546,7 +546,7 @@ FileSystem::reclaim(const FSBlock &node)
         return;
     }
 
-    throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY, node.absName());
+    throw FSError(FSFault::FS_NOT_A_FILE_OR_DIRECTORY, node.absName());
 }
 
 std::vector<const FSBlock *>

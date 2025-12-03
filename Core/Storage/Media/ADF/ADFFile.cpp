@@ -303,7 +303,7 @@ ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
     volume.makeBootable(id);
     
     // Export the file system to the ADF
-    if (!volume.exporter.exportVolume(data.ptr, data.size)) throw AppError(Fault::FS_UNKNOWN);
+    if (!volume.exporter.exportVolume(data.ptr, data.size)) throw FSError(FSFault::FS_UNKNOWN);
 }
 
 void

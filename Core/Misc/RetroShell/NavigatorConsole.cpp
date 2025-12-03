@@ -225,7 +225,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
     if (!fs.read(nr)) {
         
         if (!fs.isInitialized()) {
-            throw AppError(Fault::FS_UNINITIALIZED);
+            throw FSError(FSFault::FS_UNINITIALIZED);
         } else {
             throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
         }
@@ -251,7 +251,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
         } catch (...) {
             
             // The item does not exist
-            throw AppError(Fault::FS_NOT_FOUND, argv.at(token));
+            throw FSError(FSFault::FS_NOT_FOUND, argv.at(token));
         }
     }
 }
@@ -272,12 +272,12 @@ FSBlock &
 NavigatorConsole::parseFile(const Arguments &argv, const string &token, FSBlock &fallback)
 {
     if (!fs.isFormatted()) {
-        throw AppError(Fault::FS_UNFORMATTED);
+        throw FSError(FSFault::FS_UNFORMATTED);
     }
     auto &path = parsePath(argv, token, fallback);
     
     if (!path.isFile()) {
-        throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(path.nr));
+        throw FSError(FSFault::FS_NOT_A_FILE, "Block " + std::to_string(path.nr));
     }
     return path;
 }
@@ -292,12 +292,12 @@ FSBlock &
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback)
 {
     if (!fs.isFormatted()) {
-        throw AppError(Fault::FS_UNFORMATTED);
+        throw FSError(FSFault::FS_UNFORMATTED);
     }
     auto &path = parsePath(argv, token, fallback);
     
     if (!path.isDirectory()) {
-        throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.nr));
+        throw FSError(FSFault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.nr));
     }
     return path;
 }
@@ -357,8 +357,8 @@ NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &
 FSBlock &
 NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
-    if (!fs.isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
-    
+    if (!fs.isFormatted()) throw FSError(FSFault::FS_UNFORMATTED);
+
     auto tokens = util::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
     
@@ -1128,7 +1128,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto &file = parsePath(args, "path", fs.pwd());
                 if (!file.isFile()) {
-                    throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
+                    throw FSError(FSFault::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
                 
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
@@ -1248,7 +1248,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto &path = matchPath(args.at("name"), missing);
                 
                 if (missing.empty()) {
-                    throw(AppError(Fault::FS_EXISTS, args.at("name")));
+                    throw(FSError(FSFault::FS_EXISTS, args.at("name")));
                 }
                 auto *p = &path;
                 for (auto &it: missing) {
@@ -1281,7 +1281,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                     if (path.isFile()) {
                         
-                        throw AppError(Fault::FS_EXISTS, args.at("target"));
+                        throw FSError(FSFault::FS_EXISTS, args.at("target"));
                     }
                     if (path.isDirectory()) {
                         
@@ -1297,7 +1297,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                 } else {
                     
-                    throw AppError(Fault::FS_NOT_FOUND, missing.front());
+                    throw FSError(FSFault::FS_NOT_FOUND, missing.front());
                 }
             }
     });
@@ -1322,7 +1322,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                     if (path.isFile()) {
                         
-                        throw AppError(Fault::FS_EXISTS, args.at("target"));
+                        throw FSError(FSFault::FS_EXISTS, args.at("target"));
                     }
                     if (path.isDirectory()) {
                         
@@ -1335,7 +1335,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                 } else {
                     
-                    throw AppError(Fault::FS_NOT_FOUND, missing.front());
+                    throw FSError(FSFault::FS_NOT_FOUND, missing.front());
                 }
             }
     });
@@ -1357,7 +1357,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     fs.rm(path);
                     
                 } else if (path.isDirectory()) {
-                    throw AppError(Fault::FS_NOT_A_FILE, args.at("path"));
+                    throw FSError(FSFault::FS_NOT_A_FILE, args.at("path"));
                 } else {
                     throw util::ParseError("Not a file or directory");
                 }

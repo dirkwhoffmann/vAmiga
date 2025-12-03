@@ -289,7 +289,7 @@ FSPattern::FSPattern(const string glob) : glob(glob)
     try {
         regex = std::regex(re, std::regex::ECMAScript | std::regex::icase);
     } catch (const std::regex_error &) {
-        throw AppError(Fault::FS_INVALID_REGEX, glob);
+        throw FSError(FSFault::FS_INVALID_REGEX, glob);
     }
 }
 

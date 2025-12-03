@@ -11,6 +11,7 @@
 
 #include "FSExtension.h"
 #include "FSTypes.h"
+#include "FSError.h"
 #include "FSObjects.h"
 #include "Buffer.h"
 #include "IOUtils.h"
@@ -191,12 +192,12 @@ public:
     void exportBlock(u8 *dst, isize bsize) const;
 
     // Exports this block to the host file system
-    Fault exportBlock(const fs::path &path) const;
+    FSFault exportBlock(const fs::path &path) const;
 
 private:
     
-    Fault exportUserDirBlock(const fs::path &path) const;
-    Fault exportFileHeaderBlock(const fs::path &path) const;
+    FSFault exportUserDirBlock(const fs::path &path) const;
+    FSFault exportFileHeaderBlock(const fs::path &path) const;
 
 
     //

@@ -115,7 +115,7 @@ FSBlock::make(FileSystem *ref, Block nr, FSBlockType type)
             return new FSBlock(ref, nr, type);
 
         default:
-            throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+            throw FSError(FSFault::FS_WRONG_BLOCK_TYPE);
     }
 }
 
@@ -145,7 +145,7 @@ FSBlock::objectName() const
         case FSBlockType::DATA_FFS:    return "FSBlock (FFF)";
 
         default:
-            throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
+            throw FSError(FSFault::FS_WRONG_BLOCK_TYPE);
     }
 }
 
@@ -764,7 +764,7 @@ FSBlock::exportBlock(u8 *dst, isize size) const
     }
 }
 
-Fault
+FSFault
 FSBlock::exportBlock(const fs::path &path) const
 {
     switch (type) {
@@ -773,11 +773,11 @@ FSBlock::exportBlock(const fs::path &path) const
         case FSBlockType::FILEHEADER: return exportFileHeaderBlock(path);
             
         default:
-            return Fault::OK;
+            return FSFault::FS_OK;
     }
 }
 
-Fault
+FSFault
 FSBlock::exportUserDirBlock(const fs::path &path) const
 {
     // Assemble the host file name
@@ -785,12 +785,12 @@ FSBlock::exportUserDirBlock(const fs::path &path) const
     debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
-    if (!util::createDirectory(filename)) return Fault::FS_CANNOT_CREATE_DIR;
+    if (!util::createDirectory(filename)) return FSFault::FS_CANNOT_CREATE_DIR;
 
-    return Fault::OK;
+    return FSFault::FS_OK;
 }
 
-Fault
+FSFault
 FSBlock::exportFileHeaderBlock(const fs::path &path) const
 {
     // Assemble the host file name
@@ -799,11 +799,11 @@ FSBlock::exportFileHeaderBlock(const fs::path &path) const
 
     // Open file
     std::ofstream file(filename, std::ofstream::binary);
-    if (!file.is_open()) return Fault::FS_CANNOT_CREATE_FILE;
-    
+    if (!file.is_open()) return FSFault::FS_CANNOT_CREATE_FILE;
+
     // Write data
     writeData(file);
-    return Fault::OK;
+    return FSFault::FS_OK;
 }
 
 bool
@@ -1842,7 +1842,7 @@ isize
 FSBlock::extractData(Buffer<u8> &buf) const
 {
     // Only call this function for file header blocks
-    if (type != FSBlockType::FILEHEADER) throw AppError(Fault::FS_NOT_A_FILE);
+    if (type != FSBlockType::FILEHEADER) throw FSError(FSFault::FS_NOT_A_FILE);
 
     isize bytesRemaining = getFileSize();
     isize bytesTotal = 0;

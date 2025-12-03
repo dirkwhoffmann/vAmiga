@@ -10,6 +10,7 @@ FileSystemLayer2.cpp
 FileSystemFactory.cpp
 FSAllocator.cpp
 FSBlock.cpp
+FSError.cpp
 FSExtension.cpp
 FSDescriptor.cpp
 FSDoctor.cpp

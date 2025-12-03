@@ -21,13 +21,13 @@ public:
 
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;
-    bool exportVolume(u8 *dst, isize size, Fault *error) const;
+    bool exportVolume(u8 *dst, isize size, FSFault *error) const;
 
     // Exports a single block or a range of blocks to a buffer
     bool exportBlock(Block nr, u8 *dst, isize size) const;
-    bool exportBlock(Block nr, u8 *dst, isize size, Fault *error) const;
+    bool exportBlock(Block nr, u8 *dst, isize size, FSFault *error) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
-    bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *error) const;
 
     // Exports a single block or a range of blocks to a file
     void exportBlock(Block nr, const fs::path &path) const;

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "FSDescriptor.h"
+#include "FSError.h"
 #include "IOUtils.h"
 
 namespace vamiga {
@@ -116,16 +117,16 @@ void
 FSDescriptor::checkCompatibility() const
 {
     if (numBytes() > MB(504) || FORCE_FS_WRONG_CAPACITY) {
-        throw AppError(Fault::FS_WRONG_CAPACITY);
+        throw FSError(FSFault::FS_WRONG_CAPACITY);
     }
     if (bsize != 512 || FORCE_FS_WRONG_BSIZE) {
-        throw AppError(Fault::FS_WRONG_BSIZE);
+        throw FSError(FSFault::FS_WRONG_BSIZE);
     }
     if (!FSFormatEnum::isValid(dos) || FORCE_FS_WRONG_DOS_TYPE) {
-        throw AppError(Fault::FS_WRONG_DOS_TYPE);
+        throw FSError(FSFault::FS_WRONG_DOS_TYPE);
     }
     if (isize(rootBlock) >= numBlocks) {
-        throw AppError(Fault::FS_OUT_OF_RANGE);
+        throw FSError(FSFault::FS_OUT_OF_RANGE);
     }
 }
 

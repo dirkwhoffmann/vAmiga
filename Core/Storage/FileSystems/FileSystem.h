@@ -49,6 +49,7 @@
  */
 
 #include "FSTypes.h"
+#include "FSError.h"
 #include "FSBlock.h"
 #include "FSDescriptor.h"
 #include "FSObjects.h"

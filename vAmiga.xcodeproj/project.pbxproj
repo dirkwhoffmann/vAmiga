@@ -93,6 +93,8 @@
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
+		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
+		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5042FB122D4E4E8200E4A167 /* FilePanel.swift */; };
@@ -729,6 +731,8 @@
 		5039924625B219FC0084B808 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		503FC4B02EE00FE400637C95 /* exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = exception.h; sourceTree = "<group>"; };
 		503FC4B42EE04C2B00637C95 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
+		503FC4B62EE06D0A00637C95 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -1516,6 +1520,8 @@
 				509D07642EDAF09F00355638 /* FileSystemFactory.h */,
 				509D07652EDAF0A800355638 /* FileSystemFactory.cpp */,
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
+				503FC4B52EE06D0100637C95 /* FSError.h */,
+				503FC4B62EE06D0A00637C95 /* FSError.cpp */,
 				505C01092577A8C000F9E05C /* FSDescriptor.h */,
 				505C01082577A8C000F9E05C /* FSDescriptor.cpp */,
 				5029C6E527CA6209002F6CCC /* FileSystem.h */,
@@ -2890,6 +2896,7 @@
 				509E760E2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */,
 				509D076A2EDB1B6500355638 /* Loggable.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
+				503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* EmulatorProxy.mm in Sources */,
 				501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */,
@@ -3176,6 +3183,7 @@
 				5068EA332D4B5BF800B44FB5 /* Workspace.cpp in Sources */,
 				50FC04B827DA19B200C3E566 /* FloppyDrive.cpp in Sources */,
 				50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */,
+				503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */,
 				50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */,
 				50FC047827DA129B00C3E566 /* Chrono.cpp in Sources */,
 				509D076F2EDB2A0900355638 /* FileSystemLayer1.cpp in Sources */,

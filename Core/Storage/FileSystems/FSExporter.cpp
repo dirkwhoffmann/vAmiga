@@ -18,7 +18,7 @@ FSExporter::exportVolume(u8 *dst, isize size) const
 }
 
 bool
-FSExporter::exportVolume(u8 *dst, isize size, Fault *err) const
+FSExporter::exportVolume(u8 *dst, isize size, FSFault *err) const
 {
     return exportBlocks(0, (Block)(fs.blocks() - 1), dst, size, err);
 }
@@ -30,7 +30,7 @@ FSExporter::exportBlock(Block nr, u8 *dst, isize size) const
 }
 
 bool
-FSExporter::exportBlock(Block nr, u8 *dst, isize size, Fault *error) const
+FSExporter::exportBlock(Block nr, u8 *dst, isize size, FSFault *error) const
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
@@ -38,15 +38,15 @@ FSExporter::exportBlock(Block nr, u8 *dst, isize size, Fault *error) const
 bool
 FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size) const
 {
-    Fault error;
+    FSFault error;
     bool result = exportBlocks(first, last, dst, size, &error);
 
-    assert(result == (error == Fault::OK));
+    assert(result == (error == FSFault::FS_OK));
     return result;
 }
 
 bool
-FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *err) const
+FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *err) const
 {
     assert(last < (Block)fs.blocks());
     assert(first <= last);
@@ -58,13 +58,13 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *er
 
     // Only proceed if the (predicted) block size matches
     if (size % traits.bsize != 0) {
-        if (err) *err = Fault::FS_WRONG_BSIZE;
+        if (err) *err = FSFault::FS_WRONG_BSIZE;
         return false;
     }
 
     // Only proceed if the source buffer contains the right amount of data
     if (count * traits.bsize != size) {
-        if (err) *err = Fault::FS_WRONG_CAPACITY;
+        if (err) *err = FSFault::FS_WRONG_CAPACITY;
         return false;
     }
 
@@ -78,7 +78,7 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *er
     }
 
     debug(FS_DEBUG, "Success\n");
-    if (err) *err = Fault::OK;
+    if (err) *err = FSFault::FS_OK;
     return true;
 }
 

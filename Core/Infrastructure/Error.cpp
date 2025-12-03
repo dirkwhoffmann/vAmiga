@@ -360,6 +360,7 @@ AppError::AppError(Fault code, const string &s) : utl::exception(code)
             set_msg("Corrupted hunk structure.");
             break;
 
+            /*
         case Fault::FS_UNINITIALIZED:
             set_msg("No file system present.");
             break;
@@ -443,7 +444,8 @@ AppError::AppError(Fault code, const string &s) : utl::exception(code)
         case Fault::FS_CANNOT_CREATE_FILE:
             set_msg("Unable to create file.");
             break;
-
+             */
+            
         default:
             set_msg(string("Error code ") + std::to_string((i64)fault()) +
             " (" + FaultEnum::key(fault()) + ").");
