@@ -12,9 +12,9 @@
 #include "utl/exception.h"
 #include "utl/abilities/Reflectable.h"
 
-using utl::abilities::Reflectable;
-
 namespace vamiga {
+
+using namespace utl::abilities;
 
 enum class FSFault : long
 {
@@ -104,9 +104,9 @@ class FSError : public utl::exception
 {
 public:
 
-    FSError(FSFault fault, const string &s);
-    FSError(FSFault fault, const char *s) : FSError(fault, string(s)) { };
-    FSError(FSFault fault, const fs::path &p) : FSError(fault, p.string()) { };
+    FSError(FSFault fault, const std::string &s);
+    FSError(FSFault fault, const char *s) : FSError(fault, std::string(s)) { };
+    FSError(FSFault fault, const std::filesystem::path &p) : FSError(fault, p.string()) { };
     FSError(FSFault fault, std::integral auto v) : FSError(fault, std::to_string(v)) { };
     FSError(FSFault fault) : FSError(fault, "") { }
 

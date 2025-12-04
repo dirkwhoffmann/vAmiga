@@ -9,10 +9,13 @@
 
 #pragma once
 
+#include "utl/abilities/Loggable.h"
 #include "FSTypes.h"
 #include "Loggable.h"
 
 namespace vamiga {
+
+using namespace utl::abilities;
 
 class FSExtension : public Loggable {
 

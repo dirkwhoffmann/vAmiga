@@ -219,7 +219,7 @@ FloppyDisk::clearDisk()
 
     // Initialize with random data
     srand(0);
-    for (isize i = 0; i < isizeof(data.raw); i++) {
+    for (usize i = 0; i < sizeof(data.raw); i++) {
         data.raw[i] = rand() & 0xFF;
     }
     
@@ -238,7 +238,7 @@ FloppyDisk::clearDisk()
 void
 FloppyDisk::clearDisk(u8 value)
 {
-    for (isize i = 0; i < isizeof(data.raw); i++) {
+    for (usize i = 0; i < sizeof(data.raw); i++) {
         data.raw[i] = value;
     }
 }
@@ -259,7 +259,7 @@ FloppyDisk::clearTrack(Track t, u8 value)
 {
     assert(t < numTracks());
 
-    for (isize i = 0; i < isizeof(data.track[t]); i++) {
+    for (usize i = 0; i < sizeof(data.track[t]); i++) {
         data.track[t][i] = value;
     }
 }
@@ -410,8 +410,10 @@ FloppyDisk::repeatTracks()
 {
     for (Track t = 0; t < 168; t++) {
         
-        isize end = length.track[t];
-        for (isize i = end, j = 0; i < isizeof(data.track[t]); i++, j++) {
+        auto end = isize(length.track[t]);
+        auto max = isize(sizeof(data.track[t]));
+
+        for (isize i = end, j = 0; i < max; i++, j++) {
             data.track[t][i] = data.track[t][j];
         }
     }

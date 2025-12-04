@@ -48,6 +48,7 @@
  *
  */
 
+#include "utl/abilities/Loggable.h"
 #include "FSTypes.h"
 #include "FSError.h"
 #include "FSBlock.h"
@@ -67,6 +68,8 @@ class ADFFile;
 class HDFFile;
 class FloppyDrive;
 class HardDrive;
+
+using namespace utl::abilities;
 
 class FileSystem : public Loggable {
 

@@ -50,7 +50,7 @@ Snapshot::isCompatible(const fs::path &path)
 bool
 Snapshot::isCompatible(const u8 *buf, isize len)
 {
-    if (len < isizeof<SnapshotHeader>()) return false;
+    if (len < isize(sizeof(SnapshotHeader))) return false;
     return util::matchingBufferHeader(buf, "VASNAP");
 }
 
@@ -68,7 +68,7 @@ Snapshot::Snapshot(isize capacity)
     
     SnapshotHeader *header = (SnapshotHeader *)data.ptr;
     
-    for (isize i = 0; i < isizeof(signature); i++)
+    for (usize i = 0; i < sizeof(signature); i++)
         header->magic[i] = signature[i];
     header->major = SNP_MAJOR;
     header->minor = SNP_MINOR;

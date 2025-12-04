@@ -7,8 +7,6 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
-
 #include "utl/support/Bytes.h"
 #include "utl/support/StreamSupport.h"
 

@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of utlib - A lightweight utility library
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the Mozilla Public License v2
@@ -36,7 +36,7 @@
  * be performed when variadic functions are used.
  */
 
-namespace vamiga {
+namespace utl::abilities {
 
 class Loggable {
 

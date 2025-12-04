@@ -107,8 +107,8 @@ RomFile::isCompatible(const u8 *buf, isize length)
     // Boot Roms
     if (length == KB(8) || length == KB(16)) {
 
-        isize len = isizeof(bootRomHeaders[0]);
-        isize cnt = isizeof(bootRomHeaders) / len;
+        auto len = isize(sizeof(bootRomHeaders[0]));
+        auto cnt = isize(sizeof(bootRomHeaders)) / len;
 
         for (isize i = 0; i < cnt; i++) {
             if (util::matchingBufferHeader(buf, bootRomHeaders[i], len)) return true;
@@ -119,8 +119,8 @@ RomFile::isCompatible(const u8 *buf, isize length)
     // Kickstart Roms
     if (length == KB(256) || length == KB(512)) {
 
-        isize len = isizeof(kickRomHeaders[0]);
-        isize cnt = isizeof(kickRomHeaders) / len;
+        auto len = isize(sizeof(kickRomHeaders[0]));
+        auto cnt = isize(sizeof(kickRomHeaders)) / len;
 
         for (isize i = 0; i < cnt; i++) {
             if (util::matchingBufferHeader(buf, kickRomHeaders[i], len)) return true;
@@ -131,8 +131,8 @@ RomFile::isCompatible(const u8 *buf, isize length)
     // Encrypted Kickstart Roms
     if (length == KB(256) + 11 || length == KB(512) + 11) {
 
-        isize len = isizeof(encrRomHeaders[0]);
-        isize cnt = isizeof(encrRomHeaders) / len;
+        auto len = isize(sizeof(encrRomHeaders[0]));
+        auto cnt = isize(sizeof(encrRomHeaders)) / len;
 
         for (isize i = 0; i < cnt; i++) {
             if (util::matchingBufferHeader(buf, encrRomHeaders[i], len)) return true;

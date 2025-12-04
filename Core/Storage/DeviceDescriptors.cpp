@@ -73,7 +73,7 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
     
     // Compute all geometries compatible with the given block count
     for (isize h = GeometryDescriptor::hMin; h <= GeometryDescriptor::hMax; h++) {
-        for (isize i = 0; i < isizeof(sizes); i++) {
+        for (usize i = 0; i < sizeof(sizes); i++) {
 
             auto s = isize(sizes[i]);
             auto blocksPerCyl = h * s;

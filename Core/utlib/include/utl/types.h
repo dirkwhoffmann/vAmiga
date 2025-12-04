@@ -31,18 +31,24 @@ typedef unsigned int       u32;
 typedef unsigned long long u64;
 typedef unsigned long      usize;
 
-namespace fs = std::filesystem;
-
 using std::string;
 using std::optional;
 using std::unordered_map;
 using std::vector;
+
+namespace fs = std::filesystem;
+
+}
+
+// using namespace types;
+
 
 //
 // Converting data types
 //
 
 // Signed alternative for the sizeof keyword
+/*
 template <typename T>
 constexpr isize isizeof(const T&) noexcept {
     return static_cast<isize>(sizeof(T));
@@ -52,5 +58,6 @@ template <typename T>
 constexpr isize isizeof() noexcept {
     return static_cast<isize>(sizeof(T));
 }
+*/
 
-}
+// }

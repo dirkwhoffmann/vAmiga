@@ -101,6 +101,12 @@
 		503FC4CB2EE0AB0D00637C95 /* FileSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4C92EE0AB0500637C95 /* FileSupport.cpp */; };
 		503FC4CD2EE0AB1600637C95 /* StreamSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */; };
 		503FC4CE2EE0AB1600637C95 /* StreamSupport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */; };
+		503FC4D42EE0D8A500637C95 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4D32EE0D8A100637C95 /* Loggable.cpp */; };
+		503FC4D52EE0D8A500637C95 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4D32EE0D8A100637C95 /* Loggable.cpp */; };
+		503FC4D92EE157AE00637C95 /* Compressible.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4D82EE157A900637C95 /* Compressible.cpp */; };
+		503FC4DA2EE157AE00637C95 /* Compressible.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4D82EE157A900637C95 /* Compressible.cpp */; };
+		503FC4DC2EE157B700637C95 /* Hashable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4DB2EE157B300637C95 /* Hashable.cpp */; };
+		503FC4DD2EE157B700637C95 /* Hashable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4DB2EE157B300637C95 /* Hashable.cpp */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5042FB122D4E4E8200E4A167 /* FilePanel.swift */; };
@@ -260,8 +266,6 @@
 		509D049A2EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
 		509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
 		509D07672EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
-		509D07692EDB1B6500355638 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07682EDB1B6000355638 /* Loggable.cpp */; };
-		509D076A2EDB1B6500355638 /* Loggable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07682EDB1B6000355638 /* Loggable.cpp */; };
 		509D076C2EDB295200355638 /* FileSystemLayer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer0.cpp */; };
 		509D076D2EDB295200355638 /* FileSystemLayer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer0.cpp */; };
 		509D076F2EDB2A0900355638 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystemLayer1.cpp */; };
@@ -750,6 +754,12 @@
 		503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamSupport.cpp; sourceTree = "<group>"; };
 		503FC4D02EE0ADF300637C95 /* hints.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hints.h; sourceTree = "<group>"; };
 		503FC4D12EE0B0F900637C95 /* Bytes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bytes.h; sourceTree = "<group>"; };
+		503FC4D22EE0D81E00637C95 /* Loggable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Loggable.h; sourceTree = "<group>"; };
+		503FC4D32EE0D8A100637C95 /* Loggable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Loggable.cpp; sourceTree = "<group>"; };
+		503FC4D62EE1576400637C95 /* Hashable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Hashable.h; sourceTree = "<group>"; };
+		503FC4D72EE1576E00637C95 /* Compressible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Compressible.h; sourceTree = "<group>"; };
+		503FC4D82EE157A900637C95 /* Compressible.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Compressible.cpp; sourceTree = "<group>"; };
+		503FC4DB2EE157B300637C95 /* Hashable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Hashable.cpp; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -982,10 +992,8 @@
 		509D04952EDA471900355638 /* FSExporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSExporter.cpp; sourceTree = "<group>"; };
 		509D04962EDA471900355638 /* FSImporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSImporter.cpp; sourceTree = "<group>"; };
 		509D049B2EDA472900355638 /* FSImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSImporter.h; sourceTree = "<group>"; };
-		509D07632EDADBC300355638 /* Loggable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Loggable.h; sourceTree = "<group>"; };
 		509D07642EDAF09F00355638 /* FileSystemFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystemFactory.h; sourceTree = "<group>"; };
 		509D07652EDAF0A800355638 /* FileSystemFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemFactory.cpp; sourceTree = "<group>"; };
-		509D07682EDB1B6000355638 /* Loggable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Loggable.cpp; sourceTree = "<group>"; };
 		509D076B2EDB294700355638 /* FileSystemLayer0.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer0.cpp; sourceTree = "<group>"; };
 		509D076E2EDB2A0500355638 /* FileSystemLayer1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer1.cpp; sourceTree = "<group>"; };
 		509D07722EDB8CD200355638 /* FileSystemLayer2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer2.cpp; sourceTree = "<group>"; };
@@ -1389,8 +1397,6 @@
 				50EFB0C02C1812F50013B73C /* OptionTypes.h */,
 				50EFB0BD2C1812E20013B73C /* Option.h */,
 				50EFB0BC2C1812E20013B73C /* Option.cpp */,
-				509D07632EDADBC300355638 /* Loggable.h */,
-				509D07682EDB1B6000355638 /* Loggable.cpp */,
 				50EFC7DF22E840870036A3DF /* Serializable.h */,
 				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
 				5062F1942D550730004546A2 /* DumpableTypes.h */,
@@ -1526,6 +1532,9 @@
 			isa = PBXGroup;
 			children = (
 				503FC4C22EE092D900637C95 /* CMakeLists.txt */,
+				503FC4D72EE1576E00637C95 /* Compressible.h */,
+				503FC4D62EE1576400637C95 /* Hashable.h */,
+				503FC4D22EE0D81E00637C95 /* Loggable.h */,
 				503FC4B92EE08B2B00637C95 /* Reflectable.h */,
 			);
 			path = abilities;
@@ -1543,6 +1552,9 @@
 		503FC4C12EE091F600637C95 /* abilities */ = {
 			isa = PBXGroup;
 			children = (
+				503FC4D82EE157A900637C95 /* Compressible.cpp */,
+				503FC4DB2EE157B300637C95 /* Hashable.cpp */,
+				503FC4D32EE0D8A100637C95 /* Loggable.cpp */,
 				503FC4BD2EE091DC00637C95 /* Reflectable.cpp */,
 			);
 			path = abilities;
@@ -2956,6 +2968,7 @@
 				508FE02B21EA227B0043D0E9 /* MyWindowDelegate.swift in Sources */,
 				50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */,
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
+				503FC4DA2EE157AE00637C95 /* Compressible.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
 				509D07732EDB920100355638 /* FileSystemLayer2.cpp in Sources */,
 				504FC7C92D31292200F0B733 /* Dashboard.swift in Sources */,
@@ -2963,7 +2976,6 @@
 				509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
 				509E760E2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */,
-				509D076A2EDB1B6500355638 /* Loggable.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
 				503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
@@ -2999,6 +3011,7 @@
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
 				5029C6E327CA2F66002F6CCC /* DiskInspector.swift in Sources */,
 				505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */,
+				503FC4DD2EE157B700637C95 /* Hashable.cpp in Sources */,
 				506407CC2D1AC45A002FBC57 /* SocketServer.cpp in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
 				505B331F2B46D25700D3736F /* config.cpp in Sources */,
@@ -3087,6 +3100,7 @@
 				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
 				50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */,
 				5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */,
+				503FC4D52EE0D8A500637C95 /* Loggable.cpp in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				50EAD99C256E76820053F9AC /* HDFFile.h in Sources */,
 				506D57BB2EC4B84D00E21501 /* RangeField.swift in Sources */,
@@ -3141,7 +3155,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				509D07692EDB1B6500355638 /* Loggable.cpp in Sources */,
 				50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */,
 				50E5BF802BB1D2510004712B /* STFile.cpp in Sources */,
 				50FC04BB27DA19B200C3E566 /* HardDrive.cpp in Sources */,
@@ -3151,6 +3164,7 @@
 				509D04922EDA46E400355638 /* FSExtension.cpp in Sources */,
 				50FC04DC27DA1A1400C3E566 /* getbits.c in Sources */,
 				506407CB2D1AC45A002FBC57 /* SocketServer.cpp in Sources */,
+				503FC4D92EE157AE00637C95 /* Compressible.cpp in Sources */,
 				50FC048327DA190400C3E566 /* CoreObject.cpp in Sources */,
 				50FC04C027DA19CE00C3E566 /* Keyboard.cpp in Sources */,
 				50FC048A27DA195600C3E566 /* CIARegs.cpp in Sources */,
@@ -3277,6 +3291,7 @@
 				50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,
 				506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
+				503FC4D42EE0D8A500637C95 /* Loggable.cpp in Sources */,
 				50E79D372EDC37D80052277E /* ADZFactory.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
 				509E76162EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */,
@@ -3287,6 +3302,7 @@
 				50DA83E62C161961001209AA /* VAmiga.cpp in Sources */,
 				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
 				50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */,
+				503FC4DC2EE157B700637C95 /* Hashable.cpp in Sources */,
 				507C01BB2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				50FC047727DA129800C3E566 /* Buffer.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,

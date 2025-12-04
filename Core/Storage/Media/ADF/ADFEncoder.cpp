@@ -171,9 +171,9 @@ ADFEncoder::decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t)
 
     // Seek all sync marks
     std::vector<isize> sectorStart(sectors);
-    isize nr = 0; isize index = 0;
+    isize nr = 0; usize index = 0;
 
-    while (index < isizeof(disk.data.track[t]) && nr < sectors) {
+    while (index < sizeof(disk.data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489
         if (src[index++] != 0x44) continue;

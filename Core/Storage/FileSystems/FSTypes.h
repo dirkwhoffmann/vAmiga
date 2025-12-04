@@ -10,9 +10,11 @@
 #pragma once
 
 #include "utl/abilities/Reflectable.h"
-using utl::abilities::Reflectable;
 
 namespace vamiga {
+
+// using namespace utl::types;
+using namespace utl::abilities;
 
 struct FSBlock;
 typedef u32 Block;

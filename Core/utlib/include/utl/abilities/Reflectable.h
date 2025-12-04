@@ -14,8 +14,6 @@
 #include <map>
 #include <unordered_map>
 
-using namespace utl::types;
-
 /* The purpose of the Reflection interface is to make the symbolic names of
  * an enumeration type available inside the application. I.e., it provides
  * several functions for converting enum values to strings and vice versa.
@@ -40,6 +38,8 @@ using namespace utl::types;
  */
 
 namespace utl::abilities {
+
+using namespace utl::types;
 
 template <class T, typename E> struct Reflectable {
 

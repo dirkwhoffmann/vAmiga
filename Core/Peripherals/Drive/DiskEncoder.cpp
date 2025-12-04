@@ -154,9 +154,9 @@ DiskEncoder::decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t)
 
     // Seek all sync marks
     std::vector<isize> sectorStart(sectors);
-    isize nr = 0; isize index = 0;
+    isize nr = 0; usize index = 0;
 
-    while (index < isizeof(disk.data.track[t]) && nr < sectors) {
+    while (index < sizeof(disk.data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489
         if (src[index++] != 0x44) continue;
@@ -358,7 +358,7 @@ DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector 
     buf[573] = LO_BYTE(crc);
 
     // Write GAP
-    for (isize i = 574; i < isizeof(buf); i++) { buf[i] = 0x4E; }
+    for (usize i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
 
     // Determine the start of this sector
     u8 *p = disk.data.track[t] + 194 + s * 1300;
@@ -395,7 +395,7 @@ DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
         sectorStart[i] = 0;
     }
     isize cnt = 0;
-    for (isize i = 0; i < isizeof(disk.data.track[t]) - 16;) {
+    for (usize i = 0; i < sizeof(disk.data.track[t]) - 16;) {
 
         // Seek IDAM block
         if (src[i++] != 0x44) continue;
@@ -573,7 +573,7 @@ DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, Track t, Sector s
     buf[573] = LO_BYTE(crc);
 
     // Write GAP
-    for (isize i = 574; i < isizeof(buf); i++) { buf[i] = 0x4E; }
+    for (usize i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
 
     // Determine the start of this sector
     u8 *p = disk.data.track[t] + 194 + s * 1300;
@@ -610,7 +610,7 @@ DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, Track t)
         sectorStart[i] = 0;
     }
     isize cnt = 0;
-    for (isize i = 0; i < isizeof(disk.data.track[t]) - 16;) {
+    for (usize i = 0; i < sizeof(disk.data.track[t]) - 16;) {
 
         // Seek IDAM block
         if (src[i++] != 0x44) continue;

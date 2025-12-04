@@ -259,7 +259,7 @@ Denise::drawOdd(Pixel offset)
             case Resolution::LORES:
 
                 // Synthesize two lores pixels
-                assert(pixel + 1 < isizeof(dBuffer));
+                assert(pixel + 1 < isize(sizeof(dBuffer)));
                 dBuffer[pixel] = (dBuffer[pixel] & 0b101010) | index;
                 pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b101010) | index;
@@ -269,7 +269,7 @@ Denise::drawOdd(Pixel offset)
             case Resolution::HIRES:
 
                 // Synthesize one hires pixel
-                assert(pixel < isizeof(dBuffer));
+                assert(pixel < isize(sizeof(dBuffer)));
                 dBuffer[pixel] = (dBuffer[pixel] & 0b101010) | index;
                 pixel++;
                 break;
@@ -277,7 +277,7 @@ Denise::drawOdd(Pixel offset)
             case Resolution::SHRES:
 
                 // Synthesize a superHires pixel
-                assert(pixel < isizeof(dBuffer));
+                assert(pixel < isize(sizeof(dBuffer)));
                 if (i % 2 == 0) {
                     dBuffer[pixel] = u8((dBuffer[pixel] & 0b111011) | index << 2);
                 } else {
@@ -324,7 +324,7 @@ Denise::drawEven(Pixel offset)
             case Resolution::LORES:
 
                 // Synthesize s lores pixel
-                assert(pixel + 1 < isizeof(dBuffer));
+                assert(pixel + 1 < isize(sizeof(dBuffer)));
                 dBuffer[pixel] = (dBuffer[pixel] & 0b010101) | index;
                 pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b010101) | index;
@@ -334,7 +334,7 @@ Denise::drawEven(Pixel offset)
             case Resolution::HIRES:
 
                 // Synthesize a hires pixel
-                assert(pixel < isizeof(dBuffer));
+                assert(pixel < isize(sizeof(dBuffer)));
                 dBuffer[pixel] = (dBuffer[pixel] & 0b010101) | index;
                 pixel++;
                 break;
@@ -342,7 +342,7 @@ Denise::drawEven(Pixel offset)
             case Resolution::SHRES:
 
                 // Synthesize a superHires pixel
-                assert(pixel < isizeof(dBuffer));
+                assert(pixel < isize(sizeof(dBuffer)));
                 if (i % 2 == 0) {
                     dBuffer[pixel] = u8((dBuffer[pixel] & 0b110111) | index << 2);
                 } else {
@@ -396,7 +396,7 @@ Denise::drawBoth(Pixel offset)
             case Resolution::LORES:
 
                 // Synthesize s lores pixel
-                assert(pixel + 1 < isizeof(dBuffer));
+                assert(pixel + 1 < isize(sizeof(dBuffer)));
                 dBuffer[pixel] = index;
                 pixel++;
                 dBuffer[pixel] = index;
@@ -406,7 +406,7 @@ Denise::drawBoth(Pixel offset)
             case Resolution::HIRES:
 
                 // Synthesize a hires pixel
-                assert(pixel < isizeof(dBuffer));
+                assert(pixel < isize(sizeof(dBuffer)));
                 dBuffer[pixel] = index;
                 pixel++;
                 break;
@@ -414,7 +414,7 @@ Denise::drawBoth(Pixel offset)
             case Resolution::SHRES:
 
                 // Synthesize a superHires pixel
-                assert(pixel < isizeof(dBuffer));
+                assert(pixel < isize(sizeof(dBuffer)));
                 if (i % 2 == 0) {
                     dBuffer[pixel] = u8(index << 2);
                 } else {
@@ -527,7 +527,7 @@ Denise::translate()
     // Wipe out some bitplane data if requested
     if (config.hiddenBitplanes) {
 
-        for (isize i = 0; i < isizeof(dBuffer); i++) {
+        for (usize i = 0; i < sizeof(dBuffer); i++) {
             dBuffer[i] &= ~config.hiddenBitplanes;
         }
     }
@@ -889,8 +889,8 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
 
-    assert(hstrt <= isizeof(mBuffer));
-    assert(hstop <= isizeof(mBuffer));
+    assert(hstrt <= isize(sizeof(mBuffer)));
+    assert(hstop <= isize(sizeof(mBuffer)));
 
     bool armed1 = GET_BIT(armed, sprite1);
     bool armed2 = GET_BIT(armed, sprite2);
@@ -1043,7 +1043,7 @@ Denise::updateBorderBuffer()
     // Initialize trigger position (position of first register change if any)
     auto trigger = diwChanges.trigger();
 
-    for (isize i = 0; i < isizeof(bBuffer); i++) {
+    for (isize i = 0; i < isize(sizeof(bBuffer)); i++) {
 
         // Update comparison values if needed
         if (i == trigger) {

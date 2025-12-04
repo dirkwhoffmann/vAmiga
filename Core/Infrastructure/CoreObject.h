@@ -9,12 +9,14 @@
 
 #pragma once
 
+#include "utl/abilities/Loggable.h"
 #include "Annotations.h"
-#include "Loggable.h"
 #include "Error.h"
 #include "Dumpable.h"
 
 namespace vamiga {
+
+using namespace utl::abilities;
 
 class CoreObject : public Dumpable, public Loggable {
 

@@ -6,7 +6,7 @@
 
 namespace vamiga {
 
-#define EXPROM_SIZE isizeof(exprom)
+#define EXPROM_SIZE isize(sizeof(exprom))
 
 const u8 exprom[2890] = {
 

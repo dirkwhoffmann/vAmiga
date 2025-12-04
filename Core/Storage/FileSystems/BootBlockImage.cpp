@@ -1121,10 +1121,10 @@ BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
     std::memcpy(data, buf1, 512);
     std::memcpy(data + 512, buf2, 512);
     
-    isize i,j;
-    
+    usize i,j;
+
     // Try to find a match in the data base
-    for (i = 0; i < isizeof(bbRecord) / isizeof<BBRecord>(); i++) {
+    for (i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
 
         if (bbRecord[i].type == BootBlockType::STANDARD && bbRecord[i].image) {
             
@@ -1165,8 +1165,8 @@ BootBlockImage::BootBlockImage(const string &name)
 {
     std::memset(data, 0, 1024);
     
-    for (isize i = 0; i < isizeof(bbRecord) / isizeof<BBRecord>(); i++) {
-        
+    for (usize i = 0; i < sizeof(bbRecord) / sizeof(BBRecord); i++) {
+
         if (strcmp(bbRecord[i].name, name.c_str()) == 0) {
             std::memcpy(this->data, bbRecord[i].image, bbRecord[i].size);
             this->type = bbRecord[i].type;

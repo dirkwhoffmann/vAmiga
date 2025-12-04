@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "utl/abilities/Loggable.h"
 #include "MediaFileTypes.h"
 #include "Annotations.h"
 #include "Loggable.h"
@@ -23,8 +24,9 @@
 namespace vamiga {
 
 using util::Buffer;
+using namespace utl::abilities;
 
-class AnyFile : public Loggable { // CoreObject {
+class AnyFile : public Loggable {
 
 public:
     
