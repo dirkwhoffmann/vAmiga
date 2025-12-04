@@ -85,4 +85,14 @@ using namespace types;
 #define UP_TO_NEXT_ODD(x) ((x) | 1)
 #define DOWN_TO_NEXT_ODD(x) ((x) - !((x) & 1))
 
+// Reads a value in big-endian format
+#define R8BE(a)  (*(u8 *)(a))
+#define R16BE(a) HI_LO(*(u8 *)(a), *((u8 *)(a)+1))
+#define R32BE(a) HI_HI_LO_LO(*(u8 *)(a), *((u8 *)(a)+1), *((u8 *)(a)+2), *((u8 *)(a)+3))
+
+// Writes a value in big-endian format
+#define W8BE(a,v)  { *(u8 *)(a) = (v); }
+#define W16BE(a,v) { *(u8 *)(a) = HI_BYTE(v); *((u8 *)(a)+1) = LO_BYTE(v); }
+#define W32BE(a,v) { W16BE(a,HI_WORD(v)); W16BE((a)+2,LO_WORD(v)); }
+
 }

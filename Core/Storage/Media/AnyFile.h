@@ -14,7 +14,6 @@
 #include "Annotations.h"
 #include "Loggable.h"
 #include "Error.h"
-#include "Dumpable.h"
 #include "Checksum.h"
 #include "IOUtils.h"
 #include "Utilities/Buffer.h"

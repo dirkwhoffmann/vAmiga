@@ -8,8 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "utl/abilities/Compressible.h"
+#include "utl/support/Bytes.h"
 
-#include "MemUtils.h"
 #include "lz4.h"
 #ifdef USE_ZLIB
 #include <zlib.h>

@@ -9,40 +9,50 @@
 
 #pragma once
 
+#include "CoreObjectTypes.h"
 #include "utl/abilities/Loggable.h"
 #include "Annotations.h"
 #include "Error.h"
-#include "Dumpable.h"
 
 namespace vamiga {
 
 using namespace utl::abilities;
 
-class CoreObject : public Dumpable, public Loggable {
-
+class CoreObject : public Loggable {
+    
 protected:
-
+    
     // Verbosity level
     // static isize verbosity;
-
+    
     
     //
     // Initializing
     //
-
+    
 public:
-
+    
     CoreObject();
     virtual ~CoreObject() = default;
-
+    
     // Returns the name for this component
     virtual const char *objectName() const = 0;
-
+    
     // Returns a textual description for this component
     virtual const char *description() const { return ""; }
     
     // Called by debug() and trace() to produce a detailed debug output
     virtual void prefix(long level, const void *sender, long line) const override;
+    
+    
+    //
+    // Dumping state
+    //
+    
+    virtual void _dump(Category category, std::ostream &ss) const { }
+    
+    void dump(Category category, std::ostream &ss) const;
+    void dump(Category category) const;
 };
 
 /* This file provides several macros for printing messages:

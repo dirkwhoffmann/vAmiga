@@ -36,4 +36,16 @@ CoreObject::prefix(long level, const void *sender, long line) const
     }
 }
 
+void
+CoreObject::dump(Category category, std::ostream &ss) const
+{
+    _dump(category, ss);
+}
+
+void
+CoreObject::dump(Category category) const
+{
+    dump(category, std::cout);
+}
+
 }
