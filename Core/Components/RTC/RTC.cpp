@@ -12,6 +12,9 @@
 #include "Chrono.h"
 #include "Amiga.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -95,8 +98,8 @@ RTC::operator << (SerResetter &worker)
 void
 RTC::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::Config) {
         
         dumpConfig(os);

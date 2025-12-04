@@ -12,6 +12,9 @@
 #include "Agnus.h"
 #include "CPU.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -31,7 +34,7 @@ Paula::Paula(Amiga& ref) : SubComponent(ref)
 void
 Paula::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     if (category == Category::Registers) {
         

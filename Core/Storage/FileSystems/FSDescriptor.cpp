@@ -98,7 +98,7 @@ FSDescriptor::dump() const
 void
 FSDescriptor::dump(std::ostream &os) const
 {
-    using namespace utl;
+    using namespace utl::support;
 
     os << tab("Blocks");
     os << dec(numBlocks) << std::endl;

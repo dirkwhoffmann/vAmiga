@@ -9,7 +9,10 @@
 
 #include "FSStorage.h"
 #include "FileSystem.h"
+#include "utl/support/Streams.h"
 #include <algorithm>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -46,7 +49,7 @@ FSStorage::init(isize capacity, isize bsize)
 void
 FSStorage::dump(std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     os << tab("Capacity") << numBlocks() << " blocks (x " << bsize << " bytes)" << std::endl;
     os << tab("Hashed blocks") << blocks.size() << std::endl;

@@ -10,6 +10,9 @@
 #include "config.h"
 #include "FloppyDisk.h"
 #include "Media.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -62,8 +65,8 @@ FloppyDisk::~FloppyDisk()
 void
 FloppyDisk::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::State) {
         
         os << tab("Type");

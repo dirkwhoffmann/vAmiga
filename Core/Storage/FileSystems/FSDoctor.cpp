@@ -10,8 +10,13 @@
 #include "config.h"
 #include "FSDoctor.h"
 #include "FileSystem.h"
+#include "utl/support/Streams.h"
+#include "utl/support/Strings.h"
 #include <unordered_map>
 #include <unordered_set>
+#include <sstream>
+
+namespace utl { using namespace support; }
 
 //
 // Macros used inside the check() methods
@@ -88,7 +93,7 @@ namespace vamiga {
 void
 FSDoctor::dump(Block nr, std::ostream &os)
 {
-    using namespace util;
+    using namespace utl::support;
 
     FSBlock &p = fs.at(nr);
 
@@ -270,7 +275,7 @@ FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
 
             } else {
 
-                os << util::tab("Block " + std::to_string(it) + "");
+                os << utl::tab("Block " + std::to_string(it) + "");
                 os << errors << (errors == 1 ? " anomaly" : " anomalies") << std::endl;
             }
 
@@ -338,16 +343,16 @@ FSDoctor::xrayBitmap(std::ostream &os, bool strict)
 
     if (auto total = usedButUnallocated.size() + unusedButAllocated.size(); total) {
 
-        os << util::tab("Bitmap anomalies:") << blocks(total) << std::endl;
+        os << utl::tab("Bitmap anomalies:") << blocks(total) << std::endl;
 
         if (!usedButUnallocated.empty()) {
 
-            os << util::tab("Used but unallocated:");
+            os << utl::tab("Used but unallocated:");
             os << FSBlock::rangeString(usedButUnallocated) << std::endl;
         }
         if (!unusedButAllocated.empty()) {
 
-            os << util::tab("Allocated but unused:");
+            os << utl::tab("Allocated but unused:");
             os << FSBlock::rangeString(unusedButAllocated) << std::endl;
         }
     }
@@ -734,7 +739,7 @@ FSDoctor::ascii(Block nr, isize offset, isize len) const noexcept
 {
     assert(offset + len <= traits.bsize);
 
-    return  util::createAscii(storage[nr].data() + offset, len);
+    return  utl::createAscii(storage[nr].data() + offset, len);
 }
 
 void

@@ -11,7 +11,10 @@
 #include "RpcServer.h"
 #include "Emulator.h"
 #include "json.h"
+#include "utl/support/Strings.h"
 #include <thread>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -48,12 +51,12 @@ RpcServer::doReceive()
     string payload = connection.recv();
 
     // Remove LF and CR (if present)
-    payload = util::rtrim(payload, "\n\r");
+    payload = utl::rtrim(payload, "\n\r");
 
     if (config.verbose) {
 
-        retroShell << "R: " << util::makePrintable(payload) << "\n";
-        printf("R: %s\n", util::makePrintable(payload).c_str());
+        retroShell << "R: " << utl::makePrintable(payload) << "\n";
+        printf("R: %s\n", utl::makePrintable(payload).c_str());
     }
 
     return payload;
@@ -66,8 +69,8 @@ RpcServer::doSend(const string &payload)
 
     if (config.verbose) {
 
-        retroShell << "T: " << util::makePrintable(payload) << "\n";
-        printf("T: %s\n", util::makePrintable(payload).c_str());
+        retroShell << "T: " << utl::makePrintable(payload) << "\n";
+        printf("T: %s\n", utl::makePrintable(payload).c_str());
     }
 }
 

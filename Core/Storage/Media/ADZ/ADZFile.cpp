@@ -10,6 +10,9 @@
 #include "config.h"
 #include "ADZFile.h"
 #include "utl/chrono.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -36,7 +39,7 @@ ADZFile::init(const class ADFFile &adf) throws
 bool
 ADZFile::isCompatible(const fs::path &path)
 {
-    auto suffix = util::uppercased(path.extension().string());
+    auto suffix = utl::uppercased(path.extension().string());
     return suffix == ".ADZ";
 }
 

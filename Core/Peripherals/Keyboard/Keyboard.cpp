@@ -11,6 +11,9 @@
 #include "Keyboard.h"
 #include "Amiga.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -76,8 +79,8 @@ Keyboard::setOption(Opt option, i64 value)
 void
 Keyboard::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::Config) {
         
         dumpConfig(os);

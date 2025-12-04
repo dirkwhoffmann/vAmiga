@@ -10,10 +10,14 @@
 #include "config.h"
 #include "IOUtils.h"
 #include "FileSystem.h"
+#include "utl/support/Streams.h"
+#include "utl/support/Strings.h"
 #include <climits>
 #include <unordered_set>
 #include <stack>
 #include <algorithm>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -248,8 +252,6 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 void
 FileSystem::dumpInfo(std::ostream &os) const noexcept
 {
-    using namespace util;
-
     os << "Type   Size             Used    Free    Full  Name" << std::endl;
     dumpState(os);
 }
@@ -257,7 +259,7 @@ FileSystem::dumpInfo(std::ostream &os) const noexcept
 void
 FileSystem::dumpState(std::ostream &os) const noexcept
 {
-    using namespace util;
+    using namespace utl::support;
 
     auto st = stat();
 
@@ -296,7 +298,7 @@ FileSystem::dumpState(std::ostream &os) const noexcept
 void
 FileSystem::dumpProps(std::ostream &os) const noexcept
 {
-    using namespace util;
+    using namespace utl::support;
 
     auto st = stat();
     auto bst = bootStat();
@@ -310,7 +312,7 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     os << tab("Boot block");
     os << bst.name << std::endl;
     os << tab("Capacity");
-    os << util::byteCountAsString(traits.blocks * traits.bsize) << std::endl;
+    os << utl::byteCountAsString(traits.blocks * traits.bsize) << std::endl;
     os << tab("Block size");
     os << dec(traits.bsize) << " Bytes" << std::endl;
     os << tab("Blocks");
@@ -325,7 +327,7 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     os << tab("Bitmap blocks");
     for (auto& it : bmBlocks) { os << dec(it) << " "; }
     os << std::endl;
-    os << util::tab("Extension blocks");
+    os << tab("Extension blocks");
     for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
     os << std::endl;
 }

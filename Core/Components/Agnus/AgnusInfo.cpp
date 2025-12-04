@@ -12,6 +12,7 @@
 #include "IOUtils.h"
 #include "CIA.h"
 #include "CPU.h"
+#include "utl/support/Streams.h"
 
 namespace vamiga {
 
@@ -477,8 +478,8 @@ Agnus::eventName(EventSlot slot, EventID id)
 void
 Agnus::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::Config) {
 
         dumpConfig(os);

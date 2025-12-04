@@ -7,6 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #include "config.h"
 #include "Macros.h"
 #include "IOUtils.h"
@@ -275,3 +277,5 @@ const string &bol::yes = "yes";
 const string &bol::no = "no";
 
 }
+
+#endif

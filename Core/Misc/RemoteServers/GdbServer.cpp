@@ -16,13 +16,17 @@
 #include "MsgQueue.h"
 #include "OSDebugger.h"
 #include "RetroShell.h"
+#include "utl/support/Streams.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
 void
 GdbServer::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     RemoteServer::_dump(category, os);
 
@@ -52,10 +56,10 @@ GdbServer::doReceive()
     auto cmd = connection.recv();
     
     // Remove LF and CR (if present)
-    cmd = util::rtrim(cmd, "\n\r");
+    cmd = utl::rtrim(cmd, "\n\r");
 
     if (config.verbose) {
-        retroShell << "R: " << util::makePrintable(cmd) << "\n";
+        retroShell << "R: " << utl::makePrintable(cmd) << "\n";
     }
 
     latestCmd = cmd;
@@ -68,7 +72,7 @@ GdbServer::doSend(const string &payload)
     connection.send(payload);
     
     if (config.verbose) {
-        retroShell << "T: " << util::makePrintable(payload) << "\n";
+        retroShell << "T: " << utl::makePrintable(payload) << "\n";
     }
 }
 
@@ -131,9 +135,9 @@ GdbServer::attach(const string &name)
     if (readSegList()) {
 
         retroShell << "Successfully attached to process '" << processName << "'\n\n";
-        retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
-        retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
-        retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
+        retroShell << "    Data segment: " << utl::hexstr <8> (dataSeg()) << "\n";
+        retroShell << "    Code segment: " << utl::hexstr <8> (codeSeg()) << "\n";
+        retroShell << "     BSS segment: " << utl::hexstr <8> (bssSeg()) << "\n\n";
     }
 
     if (segList.empty()) {
@@ -197,7 +201,7 @@ GdbServer::computeChecksum(const string &s)
     u8 chk = 0;
     for(auto &c : s) U8_INC(chk, c);
 
-    return util::hexstr <2> (chk);
+    return utl::hexstr <2> (chk);
 }
 
 bool
@@ -210,16 +214,16 @@ string
 GdbServer::readRegister(isize nr)
 {
     if (nr >= 0 && nr <= 7) {
-        return util::hexstr <8> ((u32)cpu.getD((int)(nr)));
+        return utl::hexstr <8> ((u32)cpu.getD((int)(nr)));
     }
     if (nr >= 8 && nr <= 15) {
-        return util::hexstr <8> ((u32)cpu.getA((int)(nr - 8)));
+        return utl::hexstr <8> ((u32)cpu.getA((int)(nr - 8)));
     }
     if (nr == 16) {
-        return util::hexstr <8> ((u32)cpu.getSR());
+        return utl::hexstr <8> ((u32)cpu.getSR());
     }
     if (nr == 17) {
-        return util::hexstr <8> ((u32)cpu.getPC());
+        return utl::hexstr <8> ((u32)cpu.getPC());
     }
 
     return "xxxxxxxx";
@@ -229,7 +233,7 @@ string
 GdbServer::readMemory(isize addr)
 {
     auto byte = mem.spypeek8 <Accessor::CPU> ((u32)addr);
-    return util::hexstr <2> (byte);
+    return utl::hexstr <2> (byte);
 }
 
 void

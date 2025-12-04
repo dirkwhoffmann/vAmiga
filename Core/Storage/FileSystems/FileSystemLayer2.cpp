@@ -9,6 +9,9 @@
 
 #include "config.h"
 #include "FileSystem.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -126,7 +129,7 @@ FileSystem::seekPtr(const FSBlock *root, const string &name) noexcept
 {
     if (!root) return nullptr;
 
-    auto parts = util::split(name, '/');
+    auto parts = utl::split(name, '/');
     if (!name.empty() && name[0] == '/') { parts.insert(parts.begin(), "/"); }
 
     FSBlock *result = read(root->nr);

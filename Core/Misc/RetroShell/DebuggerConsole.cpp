@@ -10,6 +10,10 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
+#include "Parser.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -1421,7 +1425,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (!args.contains("nr")) {
                     osDebugger.dumpLibraries(os);
-                } else if (util::parseHex(args.at("nr"), &num)) {
+                } else if (utl::parseHex(args.at("nr"), &num)) {
                     osDebugger.dumpLibrary(os, (u32)num);
                 } else {
                     osDebugger.dumpLibrary(os, args.at("nr"));
@@ -1442,7 +1446,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (!args.contains("nr")) {
                     osDebugger.dumpDevices(os);
-                } else if (util::parseHex(args.at("nr"), &num)) {
+                } else if (utl::parseHex(args.at("nr"), &num)) {
                     osDebugger.dumpDevice(os, (u32)num);
                 } else {
                     osDebugger.dumpDevice(os, args.at("nr"));
@@ -1463,7 +1467,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (!args.contains("nr")) {
                     osDebugger.dumpResources(os);
-                } else if (util::parseHex(args.at("nr"), &num)) {
+                } else if (utl::parseHex(args.at("nr"), &num)) {
                     osDebugger.dumpResource(os, (u32)num);
                 } else {
                     osDebugger.dumpResource(os, args.at("nr"));
@@ -1484,7 +1488,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (!args.contains("nr")) {
                     osDebugger.dumpTasks(os);
-                } else if (util::parseHex(args.at("nr"), &num)) {
+                } else if (utl::parseHex(args.at("nr"), &num)) {
                     osDebugger.dumpTask(os, (u32)num);
                 } else {
                     osDebugger.dumpTask(os, args.at("nr"));
@@ -1505,7 +1509,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (!args.contains("nr")) {
                     osDebugger.dumpProcesses(os);
-                } else if (util::parseHex(args.at("nr"), &num)) {
+                } else if (utl::parseHex(args.at("nr"), &num)) {
                     osDebugger.dumpProcess(os, (u32)num);
                 } else {
                     osDebugger.dumpProcess(os, args.at("nr"));

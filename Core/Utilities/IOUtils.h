@@ -7,6 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #pragma once
 
 #include "BasicTypes.h"
@@ -150,3 +152,4 @@ inline std::ostream &operator <<(std::ostream &os, bol v) { return v(os); }
 inline std::ostream &operator <<(std::ostream &os, str v) { return v(os); }
 
 }
+#endif

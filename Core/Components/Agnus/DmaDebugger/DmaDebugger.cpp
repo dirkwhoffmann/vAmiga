@@ -10,6 +10,9 @@
 #include "config.h"
 #include "DmaDebugger.h"
 #include "Amiga.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -23,7 +26,7 @@ DmaDebugger::_dump(Category category, std::ostream &os) const
 {
     auto print = [&]() {
 
-        using namespace util;
+        using namespace utl::support;
 
         for (int i = 0; i < beamtraps.elements(); i++) {
 

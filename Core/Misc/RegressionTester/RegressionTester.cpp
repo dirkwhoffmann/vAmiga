@@ -11,8 +11,10 @@
 #include "RegressionTester.h"
 #include "Emulator.h"
 #include "IOUtils.h"
-
+#include "utl/support/Files.h"
 #include <fstream>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -20,7 +22,7 @@ void
 RegressionTester::prepare(ConfigScheme scheme, const fs::path &rom, const fs::path &ext)
 {
     // Only proceed if the /tmp folder exisits
-    if (!util::fileExists("/tmp")) throw AppError(Fault::DIR_NOT_FOUND, "/tmp");
+    if (!utl::fileExists("/tmp")) throw AppError(Fault::DIR_NOT_FOUND, "/tmp");
 
     // Check if we've got write permissions
     if (host.tmp() != "/tmp") throw AppError(Fault::DIR_ACCESS_DENIED, "/tmp");

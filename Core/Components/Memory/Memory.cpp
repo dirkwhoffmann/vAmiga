@@ -22,6 +22,9 @@
 #include "ZorroManager.h"
 #include "RomDatabase.h"
 #include "MediaFile.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -36,6 +39,8 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
 void
 Memory::_dump(Category category, std::ostream &os) const
 {
+    using namespace utl::support;
+
     if (category == Category::Config) {
         
         dumpConfig(os);
@@ -47,27 +52,27 @@ Memory::_dump(Category category, std::ostream &os) const
         auto womTraits = getWomTraits();
         auto extTraits = getExtTraits();
 
-        os << util::tab("Rom");
-        os << util::hex(romTraits.crc) << " (CRC32)  ";
+        os << tab("Rom");
+        os << hex(romTraits.crc) << " (CRC32)  ";
         os << romTraits.title << " " << romTraits.released << std::endl;
-        os << util::tab("Wom");
-        os << util::hex(womTraits.crc) << " (CRC32)  ";
+        os << tab("Wom");
+        os << hex(womTraits.crc) << " (CRC32)  ";
         os << womTraits.title << " " << womTraits.released << std::endl;
-        os << util::tab("Extended Rom");
-        os << util::hex(extTraits.crc) << " (CRC32)  ";
+        os << tab("Extended Rom");
+        os << hex(extTraits.crc) << " (CRC32)  ";
         os << extTraits.title << " " << extTraits.released << std::endl;
-        os << util::tab("Chip Ram");
-        os << util::hex(Hashable::crc32(chip, config.chipSize)) << " (CRC32)  " << std::endl;
-        os << util::tab("Slow Ram");
-        os << util::hex(Hashable::crc32(slow, config.slowSize)) << " (CRC32)  " << std::endl;
-        os << util::tab("Fast Ram");
-        os << util::hex(Hashable::crc32(fast, config.fastSize)) << " (CRC32)  " << std::endl;
+        os << tab("Chip Ram");
+        os << hex(Hashable::crc32(chip, config.chipSize)) << " (CRC32)  " << std::endl;
+        os << tab("Slow Ram");
+        os << hex(Hashable::crc32(slow, config.slowSize)) << " (CRC32)  " << std::endl;
+        os << tab("Fast Ram");
+        os << hex(Hashable::crc32(fast, config.fastSize)) << " (CRC32)  " << std::endl;
 
         os << std::endl;
-        os << util::tab("Data bus");
-        os << util::hex(dataBus) << std::endl;
-        os << util::tab("Wom is locked");
-        os << util::bol(womIsLocked) << std::endl;
+        os << tab("Data bus");
+        os << hex(dataBus) << std::endl;
+        os << tab("Wom is locked");
+        os << bol(womIsLocked) << std::endl;
     }
     
     if (category == Category::BankMap) {
@@ -82,8 +87,8 @@ Memory::_dump(Category category, std::ostream &os) const
             if (oldsrc != newsrc) {
                 
                 os << "        ";
-                os << util::hex((u8)(oldi)) << "0000" << " - ";
-                os << util::hex((u8)(i - 1)) << "ffff : ";
+                os << hex((u8)(oldi)) << "0000" << " - ";
+                os << hex((u8)(i - 1)) << "ffff : ";
                 os << MemSrcEnum::key(oldsrc) << std::endl;
 
                 oldsrc = newsrc;

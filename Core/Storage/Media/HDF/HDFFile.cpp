@@ -15,6 +15,9 @@
 #include "Memory.h"
 #include "OSDescriptors.h"
 #include "StringUtils.h"
+#include "utl/support/Files.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -59,7 +62,7 @@ void
 HDFFile::init(const fs::path &path)
 {
     // Check size
-    if (isOversized(util::getSizeOfFile(path))) throw AppError(Fault::HDR_TOO_LARGE);
+    if (isOversized(utl::getSizeOfFile(path))) throw AppError(Fault::HDR_TOO_LARGE);
     
     AnyFile::init(path);
 }

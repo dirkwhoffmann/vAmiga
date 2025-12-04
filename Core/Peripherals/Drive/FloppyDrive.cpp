@@ -17,6 +17,9 @@
 #include "MsgQueue.h"
 #include "CmdQueue.h"
 #include "OSDescriptors.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -246,8 +249,8 @@ FloppyDrive::cacheInfo(FloppyDriveInfo &info) const
 void
 FloppyDrive::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::Config) {
         
         dumpConfig(os);

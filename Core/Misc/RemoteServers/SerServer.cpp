@@ -15,13 +15,17 @@
 #include "SerialPort.h"
 #include "Thread.h"
 #include "UART.h"
+#include "utl/support/Streams.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
 void
 SerServer::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     RemoteServer::_dump(category, os);
     
@@ -53,7 +57,7 @@ SerServer::doReceive()
     receivedBytes += (isize)result.size();
     
     if (config.verbose) {
-        retroShell << "R: " << util::makePrintable(result) << "\n";
+        retroShell << "R: " << utl::makePrintable(result) << "\n";
     }
 
     return result;
@@ -66,7 +70,7 @@ SerServer::doSend(const string &packet)
     connection.send(packet);
     
     if (config.verbose) {
-        retroShell << "T: " << util::makePrintable(packet) << "\n";
+        retroShell << "T: " << utl::makePrintable(packet) << "\n";
     }
 }
 

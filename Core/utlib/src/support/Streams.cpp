@@ -10,7 +10,7 @@
 #include "utl/support/Bytes.h"
 #include "utl/support/Streams.h"
 
-namespace utl {
+namespace utl::support {
 
 std::ostream &
 dec::operator()(std::ostream &os) const

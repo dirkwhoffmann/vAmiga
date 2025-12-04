@@ -15,13 +15,16 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
 void
 SocketServer::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     if (category == Category::State) {
 

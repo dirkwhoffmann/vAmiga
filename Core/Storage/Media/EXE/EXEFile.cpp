@@ -13,13 +13,18 @@
 #include "FileSystemFactory.h"
 #include "IOUtils.h"
 #include "OSDescriptors.h"
+#include "utl/support/Files.h"
+#include "utl/support/Strings.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
 bool
 EXEFile::isCompatible(const fs::path &path)
 {
-    auto suffix = util::uppercased(path.extension().string());
+    auto suffix = utl::uppercased(path.extension().string());
     return suffix == ".EXE";
 }
 
@@ -31,7 +36,7 @@ EXEFile::isCompatible(const u8 *buf, isize len)
     // Only accept the file if it fits onto a HD disk
     if (len > 1710000) return false;
 
-    return util::matchingBufferHeader(buf, signature, sizeof(signature));
+    return utl::matchingBufferHeader(buf, signature, sizeof(signature));
 }
 
 bool

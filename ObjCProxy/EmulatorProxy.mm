@@ -12,6 +12,9 @@
 #import "VAmiga.h"
 #import "Emulator.h"
 #import "FileSystemFactory.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 using namespace vamiga;
 using namespace vamiga::moira;
@@ -1415,13 +1418,13 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)capacityString
 {
-    auto str = util::byteCountAsString([self fs]->bytes());
+    auto str = utl::byteCountAsString([self fs]->bytes());
     return @(str.c_str());
 }
 
 - (NSString *)fillLevelString
 {
-    auto str = util::fillLevelAsString([self fs]->stat().fill);
+    auto str = utl::fillLevelAsString([self fs]->stat().fill);
     return @(str.c_str());
 }
 

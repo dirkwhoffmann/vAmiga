@@ -15,6 +15,9 @@
 #include <istream>
 #include <sstream>
 #include <string>
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -169,7 +172,7 @@ Console::operator<<(unsigned long long value)
 Console &
 Console::operator<<(const std::vector<string> &vec)
 {
-    *this << util::concat(vec);
+    *this << utl::concat(vec);
     return *this;
 }
 
@@ -503,7 +506,7 @@ Console::autoComplete(const string& userInput)
     autoComplete(tokens);
     
     // Recreate the command string
-    string result = util::concat(tokens);
+    string result = utl::concat(tokens);
     
     // Add a space if the command has been fully completed ...
     if (auto cmd = getRoot().seek(tokens); cmd && !tokens.empty()) {

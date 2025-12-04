@@ -18,6 +18,9 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "SerialPort.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -197,7 +200,7 @@ CIA::cacheStats(CIAStats &result) const
 void
 CIA::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
     
     if (category == Category::Config) {
         

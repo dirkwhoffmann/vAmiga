@@ -12,6 +12,9 @@
 #include "IOUtils.h"
 #include "Agnus.h"
 #include "SerialPort.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -30,8 +33,8 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 void
 RemoteManager::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::State) {
 
         os << "Remote server status: " << std::endl << std::endl;

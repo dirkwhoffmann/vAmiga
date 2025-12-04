@@ -12,7 +12,7 @@
 #include "utl/types.h"
 #include <bitset>
 
-namespace utl {
+namespace utl::support {
 
 using namespace types;
 

@@ -15,6 +15,8 @@
 #include "MsgQueue.h"
 #include <cmath>
 #include <algorithm>
+#include "utl/support/Streams.h"
+#include "utl/support/Strings.h"
 
 namespace vamiga {
 
@@ -30,8 +32,8 @@ AudioPort::AudioPort(Amiga& ref, isize objid) : SubComponent(ref, objid)
 void
 AudioPort::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::Config) {
         
         dumpConfig(os);

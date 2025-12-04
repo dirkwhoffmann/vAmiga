@@ -11,6 +11,9 @@
 #include "MemoryDebugger.h"
 #include "Emulator.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -413,6 +416,8 @@ MemoryDebugger::convertNumeric(std::ostream &os, const string &s) const
 template <typename T> void
 MemoryDebugger::convertNumeric(std::ostream &os, T value, const char *fmt) const
 {
+    using namespace utl::support;
+
     bool ctrl = false;
     isize tab = 0;
 
@@ -434,10 +439,10 @@ MemoryDebugger::convertNumeric(std::ostream &os, T value, const char *fmt) const
         
         switch (c) {
 
-            case 'd': os << util::dec(value); break;
-            case 'h': os << util::hex(value); break;
-            case 'b': os << util::bin(value); break;
-            case 's': os << util::str(value); break;
+            case 'd': os << dec(value); break;
+            case 'h': os << hex(value); break;
+            case 'b': os << bin(value); break;
+            case 's': os << str(value); break;
 
             default:
                 fatalError;

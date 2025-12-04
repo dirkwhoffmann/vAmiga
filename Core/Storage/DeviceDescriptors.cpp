@@ -13,7 +13,10 @@
 #include "FSTypes.h"
 #include "IOUtils.h"
 #include "OSDebugger.h"
+#include "utl/support/Streams.h"
 #include <algorithm>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -111,8 +114,8 @@ GeometryDescriptor::dump() const
 void
 GeometryDescriptor::dump(std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     os << tab("Geometry");
     os << dec(cylinders) << " - ";
     os << dec(heads) << " - ";
@@ -167,8 +170,8 @@ PartitionDescriptor::dump() const
 void
 PartitionDescriptor::dump(std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     os << tab("Name");
     os << name << std::endl;
     os << tab("Flags");
@@ -225,7 +228,7 @@ DriverDescriptor::dump() const
 void
 DriverDescriptor::dump(std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     os << tab("DOS type");
     os << hex(dosType);

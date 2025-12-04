@@ -12,6 +12,7 @@
 #include "Option.h"
 #include "Defaults.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
 #include <algorithm>
 
 namespace vamiga {
@@ -67,7 +68,7 @@ Configurable::resetConfigItems(const Defaults &defaults, isize objid)
 void
 Configurable::dumpConfig(std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     for (auto &opt: getOptions()) {
 

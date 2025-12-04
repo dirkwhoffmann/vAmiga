@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Emulator.h"
 #include "CIA.h"
+#include "utl/support/Streams.h"
 #include <cmath>
 
 namespace vamiga {
@@ -139,7 +140,7 @@ AudioFilter::AudioFilter(Amiga& amiga, AudioPort& port) : SubComponent(amiga, po
 void
 AudioFilter::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     if (category == Category::Config) {
 

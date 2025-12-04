@@ -1132,6 +1132,7 @@
 		50BCB9912EE1CC86000C53CF /* chrono.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = chrono.h; sourceTree = "<group>"; };
 		50BCB9922EE1CDE6000C53CF /* storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = storage.h; sourceTree = "<group>"; };
 		50BCB9972EE1DB07000C53CF /* Bytes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bytes.cpp; sourceTree = "<group>"; };
+		50BCB99A2EE229F6000C53CF /* support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = support.h; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -1519,6 +1520,7 @@
 				503FC4B02EE00FE400637C95 /* exception.h */,
 				503FC4D02EE0ADF300637C95 /* hints.h */,
 				50BCB9922EE1CDE6000C53CF /* storage.h */,
+				50BCB99A2EE229F6000C53CF /* support.h */,
 				503FC4BC2EE091B700637C95 /* abilities */,
 				503FC4F72EE1C21F00637C95 /* animation */,
 				503FC4E92EE1B96D00637C95 /* chrono */,

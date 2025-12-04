@@ -15,6 +15,9 @@
 #include "FloppyDrive.h"
 #include "FileSystem.h"
 #include "IOUtils.h"
+#include "utl/support/Files.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -29,7 +32,7 @@ EADFFile::isCompatible(const fs::path &path)
 {
     for (auto &header : extAdfHeaders) {
 
-        if (util::matchingFileHeader(path, header)) return true;
+        if (utl::matchingFileHeader(path, header)) return true;
     }
     return false;
 }
@@ -39,7 +42,7 @@ EADFFile::isCompatible(const u8 *buf, isize len)
 {
     for (auto &header : extAdfHeaders) {
 
-        if (util::matchingBufferHeader(buf, header)) return true;
+        if (utl::matchingBufferHeader(buf, header)) return true;
     }
     return false;
 }

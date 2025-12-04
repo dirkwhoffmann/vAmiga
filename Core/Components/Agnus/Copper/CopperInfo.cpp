@@ -10,13 +10,14 @@
 #include "config.h"
 #include "Agnus.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
 
 namespace vamiga {
 
 void
 Copper::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     if (category == Category::List1 || category == Category::List2) {
 

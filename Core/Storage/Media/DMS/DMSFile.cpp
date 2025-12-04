@@ -9,6 +9,10 @@
 
 #include "config.h"
 #include "DMSFile.h"
+#include "utl/support/Files.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 extern "C" {
 unsigned short extractDMS(const unsigned char *in, size_t inSize,
@@ -20,14 +24,14 @@ namespace vamiga {
 bool
 DMSFile::isCompatible(const fs::path &path)
 {
-    auto suffix = util::uppercased(path.extension().string());
+    auto suffix = utl::uppercased(path.extension().string());
     return suffix == ".DMS";
 }
 
 bool
 DMSFile::isCompatible(const u8 *buf, isize len)
 {
-    return util::matchingBufferHeader(buf, "DMS!");
+    return utl::matchingBufferHeader(buf, "DMS!");
 }
 
 bool

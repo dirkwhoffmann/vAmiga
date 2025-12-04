@@ -11,6 +11,7 @@
 #include "FileSystem.h"
 #include "Host.h"
 #include <algorithm>
+#include <fstream>
 
 namespace vamiga {
 

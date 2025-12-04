@@ -11,13 +11,17 @@
 #include "Sequencer.h"
 #include "Agnus.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
 void
 Sequencer::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     if (category == Category::Dma) {
 
@@ -108,7 +112,7 @@ Sequencer::_dump(Category category, std::ostream &os) const
         
         for (isize i = 0; i < sigRecorder.count(); i++) {
             
-            auto trigger = util::hexstr<2>((isize)sigRecorder.keys[i]);
+            auto trigger = utl::hexstr<2>((isize)sigRecorder.keys[i]);
             auto signal = name(sigRecorder.elements[i]);
             
             os << tab("Event at $" + trigger) << signal << std::endl;

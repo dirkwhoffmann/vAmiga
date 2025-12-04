@@ -15,7 +15,10 @@
 #include "Option.h"
 #include "Media.h"
 #include "Chrono.h"
+#include "utl/support/Streams.h"
 #include <algorithm>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -666,7 +669,7 @@ Amiga::masterClockFrequency() const
 void
 Amiga::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     if (category == Category::Config) {
         

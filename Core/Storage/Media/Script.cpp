@@ -11,15 +11,17 @@
 #include "Script.h"
 #include "Amiga.h"
 #include "IOUtils.h"
-
+#include "utl/support/Strings.h"
 #include <sstream>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
 bool
 Script::isCompatible(const fs::path &path)
 {
-    auto suffix = util::uppercased(path.extension().string());
+    auto suffix = utl::uppercased(path.extension().string());
 
     return suffix == ".RETROSH";
 }

@@ -12,6 +12,9 @@
 #include "CmdQueue.h"
 #include "IOUtils.h"
 #include "Paula.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -51,8 +54,8 @@ ControlPort::cacheInfo(ControlPortInfo &info) const
 void
 ControlPort::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::State) {
         
         os << tab("Control port");

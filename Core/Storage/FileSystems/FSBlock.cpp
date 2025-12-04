@@ -10,7 +10,13 @@
 #include "config.h"
 #include "FSBlock.h"
 #include "FileSystem.h"
+#include "utl/support/Files.h"
+#include "utl/support/Streams.h"
+#include "utl/support/Strings.h"
 #include <algorithm>
+#include <fstream>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -239,7 +245,7 @@ FSBlock::relName(const FSBlock &top) const
         result = name + "/" + result;
     }
 
-    return util::trim(result, "/");
+    return utl::trim(result, "/");
 }
 
 fs::path
@@ -619,7 +625,7 @@ FSBlock::updateChecksum()
 void
 FSBlock::dumpInfo(std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     auto byteStr = [&os](isize num) {
 
@@ -662,6 +668,8 @@ FSBlock::dumpInfo(std::ostream &os) const
 void
 FSBlock::dumpBlocks(std::ostream &os) const
 {
+    using namespace utl::support;
+
     switch (type) {
 
         case FSBlockType::FILEHEADER:
@@ -671,17 +679,17 @@ FSBlock::dumpBlocks(std::ostream &os) const
             auto dataBlocks = fs->collectDataBlocks(nr);
             auto totalBlocks = 1 + listBlocks.size() + dataBlocks.size();
 
-            os << util::tab("Name");
+            os << tab("Name");
             os << getName().cpp_str() << std::endl;
-            os << util::tab("Blocks");
+            os << tab("Blocks");
             os << totalBlocks << " Block" << (totalBlocks == 1 ? "" : "s") << std::endl;
-            os << util::tab("Size");
+            os << tab("Size");
             os << size << " Byte" << (size == 1 ? "" : "s") << std::endl;
-            os << util::tab("File header block");
+            os << tab("File header block");
             os << nr << std::endl;
-            os << util::tab("File list blocks");
+            os << tab("File list blocks");
             os << FSBlock::rangeString(listBlocks) << std::endl;
-            os << util::tab("Data blocks");
+            os << tab("Data blocks");
             os << FSBlock::rangeString(dataBlocks) << std::endl;
         }
         default:
@@ -734,7 +742,7 @@ FSBlock::rangeString(const std::vector<Block> &vec)
         end = v[i];
     }
 
-    return util::concat(chunks, ", ");
+    return utl::concat(chunks, ", ");
 }
 
 void
@@ -784,7 +792,7 @@ FSBlock::exportUserDirBlock(const fs::path &path) const
     debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
-    if (!util::createDirectory(filename)) return FSFault::FS_CANNOT_CREATE_DIR;
+    if (!utl::createDirectory(filename)) return FSFault::FS_CANNOT_CREATE_DIR;
 
     return FSFault::FS_OK;
 }

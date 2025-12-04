@@ -19,6 +19,10 @@
 #include "HDFFile.h"
 #include "RomFile.h"
 #include "Script.h"
+#include "utl/support/Strings.h"
+#include "utl/support/Files.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -73,7 +77,7 @@ AnyFile::~AnyFile()
 string
 AnyFile::getSizeAsString() const
 {
-    return util::byteCountAsString(getSize());
+    return utl::byteCountAsString(getSize());
 }
 
 void
@@ -129,7 +133,7 @@ AnyFile::writeToStream(std::ostream &stream, isize offset, isize len) const
 isize
 AnyFile::writeToFile(const fs::path &path, isize offset, isize len) const
 {
-    if (util::isDirectory(path)) {
+    if (utl::isDirectory(path)) {
         throw AppError(Fault::FILE_IS_DIRECTORY);
     }
     

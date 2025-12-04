@@ -9,6 +9,9 @@
 
 #include "config.h"
 #include "DiskFile.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -57,7 +60,7 @@ DiskFile::describeGeometry()
 string
 DiskFile::describeCapacity()
 {
-    return util::byteCountAsString(numBytes());
+    return utl::byteCountAsString(numBytes());
 }
 
 string
@@ -67,7 +70,7 @@ DiskFile::hexdump(isize b, isize offset, isize len) const
     auto p = data.ptr + b * bsize();
     
     for (isize i = 0; i < len; i++) {
-        result += (i == 0 ? "" : " ") + util::hexstr<2>(p[i]);
+        result += (i == 0 ? "" : " ") + utl::hexstr<2>(p[i]);
     }
 
     return result;

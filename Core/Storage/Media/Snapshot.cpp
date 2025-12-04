@@ -11,6 +11,10 @@
 #include "Snapshot.h"
 #include "Amiga.h"
 #include "IOUtils.h"
+#include "utl/support/Files.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -43,15 +47,15 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 bool
 Snapshot::isCompatible(const fs::path &path)
 {
-    auto suffix = util::uppercased(path.extension().string());
-    return suffix == ".VASNAP" && util::matchingFileHeader(path, "VASNAP");
+    auto suffix = utl::uppercased(path.extension().string());
+    return suffix == ".VASNAP" && utl::matchingFileHeader(path, "VASNAP");
 }
 
 bool
 Snapshot::isCompatible(const u8 *buf, isize len)
 {
     if (len < isize(sizeof(SnapshotHeader))) return false;
-    return util::matchingBufferHeader(buf, "VASNAP");
+    return utl::matchingBufferHeader(buf, "VASNAP");
 }
 
 bool

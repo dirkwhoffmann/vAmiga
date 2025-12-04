@@ -13,6 +13,9 @@
 #include "EADFFile.h"
 #include "IOUtils.h"
 #include "FileSystem.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -20,7 +23,7 @@ bool
 ADFFile::isCompatible(const fs::path &path)
 {
     // Check the suffix
-    auto suffix = util::uppercased(path.extension().string());
+    auto suffix = utl::uppercased(path.extension().string());
     if (suffix != ".ADF") return false;
     
     // Make sure it's not an extended ADF

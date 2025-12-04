@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "FileSystem.h"
+#include <fstream>
 
 namespace vamiga {
 

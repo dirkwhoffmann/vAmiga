@@ -12,7 +12,11 @@
 #include "Emulator.h"
 #include "IOUtils.h"
 #include "StringUtils.h"
+#include "utl/support/Streams.h"
+#include "utl/support/Files.h"
 #include <unordered_set>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -87,7 +91,7 @@ Host::resetConfigItems(const class Defaults &defaults, isize objid)
 void
 Host::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
 
     if (category == Category::Config) {
 
@@ -295,7 +299,7 @@ Host::tmp(const string &name, bool unique) const
     auto result = base / name;
 
     // Make the file name unique if requested
-    if (unique) result = fs::path(util::makeUniquePath(result));
+    if (unique) result = fs::path(utl::makeUniquePath(result));
 
     return result;
 }

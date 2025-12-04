@@ -13,10 +13,13 @@
 #include "Chrono.h"
 #include "Macros.h"
 #include "Host.h"
-
+#include "utl/support/Strings.h"
 #include <algorithm>
 #include <cstring>
 #include <unordered_set>
+#include <sys/stat.h>
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -55,7 +58,7 @@ FSString::capital(char c, FSFormat dos)
 bool
 FSString::operator== (const FSString &rhs) const
 {
-    return util::uppercased(str) == util::uppercased(rhs.str);
+    return utl::uppercased(str) == utl::uppercased(rhs.str);
 }
 
 /*
@@ -97,7 +100,7 @@ FSString::write(u8 *p)
 bool
 FSString::operator<(const FSString& other) const
 {
-    return util::uppercased(cpp_str()) < util::uppercased(other.cpp_str());
+    return utl::uppercased(cpp_str()) < utl::uppercased(other.cpp_str());
 }
 
 std::ostream &operator<<(std::ostream &os, const FSString &str) {
@@ -154,7 +157,7 @@ FSName::sanitize(const string &filename)
             "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
         };
 
-        return reserved.count(util::uppercased(name)) > 0;
+        return reserved.count(utl::uppercased(name)) > 0;
     };
 
     string result;
@@ -227,7 +230,7 @@ FSName::unsanitize(const fs::path &filename)
         };
 
         if (s.rfind("__", 0) != 0) return false;
-        return reserved.count(util::uppercased(s.substr(2))) > 0;
+        return reserved.count(utl::uppercased(s.substr(2))) > 0;
     };
 
     std::string result;
@@ -306,7 +309,7 @@ FSPattern::splitted() const
         parts = util::split(glob, '/');
     }
     */
-    for (auto &it : util::split(util::trim(glob, "/"), '/')) {
+    for (auto &it : utl::split(utl::trim(glob, "/"), '/')) {
         result.push_back(FSPattern(it));
     }
     return result;

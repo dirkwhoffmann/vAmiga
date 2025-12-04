@@ -12,6 +12,9 @@
 #include "Amiga.h"
 #include "StringUtils.h"
 #include "IOUtils.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -224,18 +227,20 @@ Defaults::Defaults()
 void
 Defaults::_dump(Category category, std::ostream &os) const
 {
+    using namespace utl::support;
+
     for (const auto &it: fallbacks) {
 
         const string key = it.first;
 
         if (values.contains(key)) {
 
-            os << util::tab(key);
+            os << tab(key);
             os << values.at(key) << std::endl;
 
         } else {
 
-            os << util::tab(key);
+            os << tab(key);
             os << fallbacks.at(key) << " (Default)" << std::endl;
         }
     }

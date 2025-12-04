@@ -11,13 +11,14 @@
 #include "ZorroManager.h"
 #include "Amiga.h"
 #include "Memory.h"
+#include "utl/support/Streams.h"
 
 namespace vamiga {
 
 void
 ZorroManager::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl::support;
     
     if (category == Category::Slots) {
         

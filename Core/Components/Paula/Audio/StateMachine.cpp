@@ -12,6 +12,9 @@
 #include "Paula.h"
 #include "IOUtils.h"
 #include "Amiga.h"
+#include "utl/support/Streams.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -24,8 +27,8 @@ StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 template <isize nr> void
 StateMachine<nr>::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-    
+    using namespace utl::support;
+
     if (category == Category::State) {
 
         os << tab("State machine") << dec(nr) << std::endl;

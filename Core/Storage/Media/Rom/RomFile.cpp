@@ -12,6 +12,10 @@
 #include "IOUtils.h"
 #include "Macros.h"
 #include "RomDatabase.h"
+#include "utl/support/Files.h"
+
+namespace utl { using namespace support; }
+
 
 namespace vamiga {
 
@@ -79,7 +83,7 @@ const u8 RomFile::encrRomHeaders[1][11] = {
 bool
 RomFile::isCompatible(const fs::path &path)
 {
-    auto size = util::getSizeOfFile(path);
+    auto size = utl::getSizeOfFile(path);
     
     const std::vector<isize> allowedSizes = {
         
@@ -110,7 +114,7 @@ RomFile::isCompatible(const u8 *buf, isize length)
         auto cnt = isize(sizeof(bootRomHeaders)) / len;
 
         for (isize i = 0; i < cnt; i++) {
-            if (util::matchingBufferHeader(buf, bootRomHeaders[i], len)) return true;
+            if (utl::matchingBufferHeader(buf, bootRomHeaders[i], len)) return true;
         }
         return ALLOW_ALL_ROMS;
     }
@@ -122,7 +126,7 @@ RomFile::isCompatible(const u8 *buf, isize length)
         auto cnt = isize(sizeof(kickRomHeaders)) / len;
 
         for (isize i = 0; i < cnt; i++) {
-            if (util::matchingBufferHeader(buf, kickRomHeaders[i], len)) return true;
+            if (utl::matchingBufferHeader(buf, kickRomHeaders[i], len)) return true;
         }
         return ALLOW_ALL_ROMS;
     }
@@ -134,7 +138,7 @@ RomFile::isCompatible(const u8 *buf, isize length)
         auto cnt = isize(sizeof(encrRomHeaders)) / len;
 
         for (isize i = 0; i < cnt; i++) {
-            if (util::matchingBufferHeader(buf, encrRomHeaders[i], len)) return true;
+            if (utl::matchingBufferHeader(buf, encrRomHeaders[i], len)) return true;
         }
     }
 
@@ -150,7 +154,7 @@ RomFile::isCompatible(const Buffer<u8> &buf)
 bool
 RomFile::isEncrypted()
 {
-    return util::matchingBufferHeader(data.ptr, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
+    return utl::matchingBufferHeader(data.ptr, encrRomHeaders[0], sizeof(encrRomHeaders[0]));
 }
 
 void

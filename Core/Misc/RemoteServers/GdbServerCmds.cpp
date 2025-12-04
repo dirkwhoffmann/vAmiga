@@ -15,6 +15,9 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"
+#include "utl/support/Strings.h"
+
+namespace utl { using namespace support; }
 
 namespace vamiga {
 
@@ -48,9 +51,9 @@ GdbServer::process <'q', GdbCmd::Offset> (string arg)
 {
     string result;
 
-    result += "Text=" + util::hexstr <8> (codeSeg()) + ";";
-    result += "Data=" + util::hexstr <8> (dataSeg()) + ";";
-    result += "Bss="  + util::hexstr <8> (bssSeg());
+    result += "Text=" + utl::hexstr <8> (codeSeg()) + ";";
+    result += "Data=" + utl::hexstr <8> (dataSeg()) + ";";
+    result += "Bss="  + utl::hexstr <8> (bssSeg());
 
     reply(result);
 }
@@ -225,7 +228,7 @@ GdbServer::process <'q'> (string cmd)
 template <> void
 GdbServer::process <'Q'> (string cmd)
 {
-    auto tokens = util::split(cmd, ':');
+    auto tokens = utl::split(cmd, ':');
 
     if (tokens[0] == "StartNoAckMode") {
 
@@ -271,7 +274,7 @@ GdbServer::process <'G'> (string cmd)
 template <> void
 GdbServer::process <'?'> (string cmd)
 {
-    auto pc = util::hexstr <8> (cpu.getPC0());
+    auto pc = utl::hexstr <8> (cpu.getPC0());
     reply("T051:" + pc + ";");
 
     /*
@@ -302,16 +305,16 @@ GdbServer::process <'k'> (string cmd)
 template <> void
 GdbServer::process <'m'> (string cmd)
 {
-    auto tokens = util::split(cmd, ',');
+    auto tokens = utl::split(cmd, ',');
     
     if (tokens.size() == 2) {
 
         string result;
 
         isize addr;
-        util::parseHex(tokens[0], &addr);
+        utl::parseHex(tokens[0], &addr);
         isize size;
-        util::parseHex(tokens[1], &size);
+        utl::parseHex(tokens[1], &size);
 
         for (isize i = 0; i < size; i++) {
             result += readMemory(addr + i);
@@ -335,7 +338,7 @@ template <> void
 GdbServer::process <'p'> (string cmd)
 {
     isize nr;
-    util::parseHex(cmd, &nr);
+    utl::parseHex(cmd, &nr);
     reply(readRegister(nr));
 }
 
@@ -360,7 +363,7 @@ GdbServer::process <'D'> (string cmd)
 template <> void
 GdbServer::process <'Z'> (string cmd)
 {
-    auto tokens = util::split(cmd, ',');
+    auto tokens = utl::split(cmd, ',');
     
     if (tokens.size() == 3) {
 
@@ -383,7 +386,7 @@ GdbServer::process <'Z'> (string cmd)
 template <> void
 GdbServer::process <'z'> (string cmd)
 {
-    auto tokens = util::split(cmd, ',');
+    auto tokens = utl::split(cmd, ',');
     
     if (tokens.size() == 3) {
 
