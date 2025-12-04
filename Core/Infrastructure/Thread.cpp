@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Thread.h"
-#include "Chrono.h"
+#include "utl/chrono.h"
 #include <iostream>
 
 namespace vamiga {
@@ -34,7 +34,7 @@ void
 Thread::resync()
 {
     resyncs++;
-    baseTime = util::Time::now();
+    baseTime = utl::Time::now();
     frameCounter = 0;
 }
 
@@ -94,7 +94,7 @@ Thread::sleep()
     if (warp && isRunning()) return;
     
     // Set a timeout to prevent the thread from stalling
-    auto timeout = util::Time::milliseconds(50);
+    auto timeout = utl::Time::milliseconds(50);
 
     // Wait for the next pulse
     waitForWakeUp(timeout);

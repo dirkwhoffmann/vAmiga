@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "utl/support/FileSupport.h"
+#include "utl/support/Files.h"
 #include "utl/hints.h"
 #include <fstream>
 #include <cassert>

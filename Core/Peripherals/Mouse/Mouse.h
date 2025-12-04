@@ -13,7 +13,7 @@
 #include "AgnusTypes.h"
 #include "Joystick.h"
 #include "SubComponent.h"
-#include "Chrono.h"
+#include "utl/chrono.h"
 
 namespace vamiga {
 
@@ -33,7 +33,7 @@ class ShakeDetector {
     
     // Time stamps
     u64 lastTurn = 0;
-    util::Time lastShake;
+    utl::Time lastShake;
     
 public:
     

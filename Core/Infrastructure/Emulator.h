@@ -43,7 +43,7 @@ private:
     CmdQueue cmdQueue;
 
     // Texture lock
-    util::Mutex textureLock;
+    utl::Mutex textureLock;
 
 
     //

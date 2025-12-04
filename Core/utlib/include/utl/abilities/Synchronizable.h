@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of utlib - A lightweight utility library
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the Mozilla Public License v2
@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "Concurrency.h"
+#include "utl/concurrency/ReentrantMutex.h"
 
-namespace vamiga {
+namespace utl::abilities {
 
 class Synchronizable {
 
@@ -21,7 +21,7 @@ public:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    mutable util::ReentrantMutex mutex;
+    mutable utl::concurrency::ReentrantMutex mutex;
 
 };
 
@@ -35,6 +35,6 @@ public:
  *          ...
  *     }
  */
-#define SYNCHRONIZED util::AutoMutex _am(mutex);
+#define SYNCHRONIZED utl::concurrency::AutoMutex _am(mutex);
 
 }

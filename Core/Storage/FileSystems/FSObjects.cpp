@@ -368,7 +368,7 @@ FSTime::dateStr() const
     char tmp[32];
     
     time_t t = time();
-    tm gm = util::Time::gmtime(t);
+    tm gm = utl::Time::gmtime(t);
     snprintf(tmp, sizeof(tmp), "%02d-%s-%02d", gm.tm_mday, month[gm.tm_mon % 12], gm.tm_year % 100);
 
     return string(tmp);
@@ -380,7 +380,7 @@ FSTime::timeStr() const
     char tmp[32];
     
     time_t t = time();
-    tm local = util::Time::gmtime(t);
+    tm local = utl::Time::gmtime(t);
 
     snprintf(tmp, sizeof(tmp), "%02d:%02d:%02d",
              local.tm_hour, local.tm_min, local.tm_sec);

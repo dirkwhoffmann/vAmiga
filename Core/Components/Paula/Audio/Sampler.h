@@ -11,7 +11,7 @@
 
 #include "SamplerTypes.h"
 #include "Constants.h"
-#include "RingBuffer.h"
+#include "utl/storage.h"
 #include "Aliases.h"
 
 namespace vamiga {
@@ -23,7 +23,7 @@ namespace vamiga {
  * preserve the timing information.
  */
 
-struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT> {
+struct Sampler : utl::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT> {
     
     // Initializes the ring buffer with a single dummy element
     void reset();

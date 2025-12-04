@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Mouse.h"
 #include "Amiga.h"
-#include "Chrono.h"
+#include "utl/chrono.h"
 #include "IOUtils.h"
 
 namespace vamiga {
@@ -302,7 +302,7 @@ ShakeDetector::isShakingRel(double dx) {
     // Check for a direction reversal
     if (dx * dxsign < 0) {
 
-        u64 dt = util::Time::now().asNanoseconds() - lastTurn;
+        u64 dt = utl::Time::now().asNanoseconds() - lastTurn;
         dxsign = -dxsign;
 
         // A direction reversal is considered part of a shake, if the
@@ -320,7 +320,7 @@ ShakeDetector::isShakingRel(double dx) {
                 if (dxturns > 3) {
                     
                     // debug(PRT_DEBUG, "Mouse shake detected\n");
-                    lastShake = util::Time::now().asNanoseconds();
+                    lastShake = utl::Time::now().asNanoseconds();
                     dxturns = 0;
                     return true;
                 }
@@ -334,7 +334,7 @@ ShakeDetector::isShakingRel(double dx) {
             dxsum = 0;
         }
         
-        lastTurn = util::Time::now().asNanoseconds();
+        lastTurn = utl::Time::now().asNanoseconds();
     }
     
     return false;

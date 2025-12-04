@@ -234,7 +234,7 @@ RTC::time2registers()
     time_t rtcTime = getTime();
     
     // Convert the time_t value to a tm struct
-    auto t = util::Time::local(rtcTime);
+    auto t = utl::Time::local(rtcTime);
     
     // Write the registers
     config.model == RTCRevision::RICOH ? time2registersRicoh(&t) : time2registersOki(&t);

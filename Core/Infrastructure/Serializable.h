@@ -12,7 +12,7 @@
 #include "Macros.h"
 #include "MemUtils.h"
 #include "Utilities/Buffer.h"
-#include "RingBuffer.h"
+#include "Utilities/RingBuffer.h"
 #include <concepts>
 
 namespace vamiga {

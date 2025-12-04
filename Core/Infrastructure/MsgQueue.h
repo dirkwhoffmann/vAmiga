@@ -11,15 +11,15 @@
 
 #include "MsgQueueTypes.h"
 #include "CoreObject.h"
-#include "Synchronizable.h"
-#include "RingBuffer.h"
+#include "utl/concurrency.h"
+#include "utl/storage.h"
 
 namespace vamiga {
 
 class MsgQueue final : CoreObject, Synchronizable {
 
     // Ring buffer storing all pending messages
-    util::RingBuffer <Message, 4096> queue;
+    utl::RingBuffer <Message, 4096> queue;
 
     // Used by WASM builds to pass additional parameters
     std::vector<string> payload;

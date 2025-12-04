@@ -17,9 +17,6 @@
 #include "MemUtils.h"
 using vamiga::util::DumpOpt;
 
-// #include "Checksum.h"
-// #include "Compression.h"
-// #include <functional>
 #include <ostream>
 
 namespace utl::storage {

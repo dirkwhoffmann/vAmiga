@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "ADZFile.h"
-#include "Chrono.h"
+#include "utl/chrono.h"
 
 namespace vamiga {
 
@@ -21,7 +21,7 @@ ADZFile::init(const class ADFFile &adf) throws
 
     debug(HDF_DEBUG, "Uncompressed ADF size: %ld bytes\n", data.size);
     
-    {   util::StopWatch(HDF_DEBUG, "Compressing ADF...");
+    {   utl::StopWatch(HDF_DEBUG, "Compressing ADF...");
         
         try {
             data.gzip();

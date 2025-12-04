@@ -42,25 +42,9 @@ namespace fs = std::filesystem;
 }
 
 // Make types visible in subspaces
-namespace utl::abilities { using namespace utl::types; }
-namespace utl::storage   { using namespace utl::types; }
-
-
-//
-// Converting data types
-//
-
-// Signed alternative for the sizeof keyword
-/*
-template <typename T>
-constexpr isize isizeof(const T&) noexcept {
-    return static_cast<isize>(sizeof(T));
-}
-
-template <typename T>
-constexpr isize isizeof() noexcept {
-    return static_cast<isize>(sizeof(T));
-}
-*/
-
-// }
+namespace utl::abilities   { using namespace utl::types; }
+namespace utl::animation   { using namespace utl::types; }
+namespace utl::chrono      { using namespace utl::types; }
+namespace utl::concurrency { using namespace utl::types; }
+namespace utl::storage     { using namespace utl::types; }
+namespace utl::support     { using namespace utl::types; }

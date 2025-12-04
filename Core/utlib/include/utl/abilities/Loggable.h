@@ -40,8 +40,6 @@
 
 namespace utl::abilities {
 
-using namespace utl::types;
-
 class Loggable {
 
 public:

@@ -8,8 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "utl/support/FileSupport.h"
-#include "utl/support/StreamSupport.h"
+#include "utl/support/Files.h"
+#include "utl/support/Streams.h"
 #include "FSDescriptor.h"
 #include "FSError.h"
 
@@ -99,7 +99,7 @@ void
 FSDescriptor::dump(std::ostream &os) const
 {
     using namespace utl;
-    
+
     os << tab("Blocks");
     os << dec(numBlocks) << std::endl;
     os << tab("BSize");

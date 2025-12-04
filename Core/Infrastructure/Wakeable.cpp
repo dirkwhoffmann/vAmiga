@@ -13,7 +13,7 @@
 namespace vamiga {
 
 void
-Wakeable::waitForWakeUp(util::Time timeout)
+Wakeable::waitForWakeUp(utl::Time timeout)
 {
     auto now = std::chrono::system_clock::now();
     auto delay = std::chrono::nanoseconds(timeout.asNanoseconds());

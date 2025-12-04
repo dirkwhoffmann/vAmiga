@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <cassert>
 
 //
 // Optimizing code

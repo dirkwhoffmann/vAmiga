@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "utl/support/Bytes.h"
-#include "utl/support/StreamSupport.h"
+#include "utl/support/Streams.h"
 
 namespace utl {
 

@@ -14,11 +14,13 @@
 #include "Animated.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"
-#include "Chrono.h"
 #include "Sampler.h"
 #include "SampleRateDetector.h"
+#include "utl/chrono.h"
 
 namespace vamiga {
+
+using namespace utl::animation;
 
 /* Architecture of the audio pipeline
  *
@@ -87,7 +89,7 @@ class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, A
     double fraction = 0.0;
 
     // Time stamp of the last write pointer alignment
-    util::Time lastAlignment = util::Time::now();
+    utl::Time lastAlignment = utl::Time::now();
     
     // Channel volumes
     float vol[4] = { };
@@ -96,8 +98,8 @@ class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, A
     float pan[4] = { };
 
     // Master volumes (fadable)
-    util::Animated<float> volL;
-    util::Animated<float> volR;
+    Animated<float> volL;
+    Animated<float> volR;
 
     // Used to determine if Msg::MUTE should be send
     bool wasMuted = false;

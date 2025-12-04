@@ -39,8 +39,6 @@
 
 namespace utl::abilities {
 
-using namespace utl::types;
-
 template <class T, typename E> struct Reflectable {
 
     // Checks whether this enum is a bit fiels rather than a standard enum

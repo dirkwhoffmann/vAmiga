@@ -13,8 +13,11 @@
 #include "ChangeRecorder.h"
 #include "Constants.h"
 #include "Texture.h"
+#include "utl/concurrency.h"
 
 namespace vamiga {
+
+using namespace utl::concurrency;
 
 class PixelEngine final : public SubComponent {
 
@@ -59,7 +62,7 @@ private:
     isize activeBuffer = 0;
 
     // Mutex for synchronizing access to the stable buffer
-    util::Mutex bufferMutex;
+    Mutex bufferMutex;
 
     
     //

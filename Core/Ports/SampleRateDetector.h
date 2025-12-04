@@ -10,7 +10,7 @@
 #pragma once
 
 #include "SubComponent.h"
-#include "Chrono.h"
+#include "utl/chrono.h"
 
 namespace vamiga {
 
@@ -32,7 +32,7 @@ class SampleRateDetector final : public SubComponent {
     isize count = 0;
 
     // Measured timespan between two requests
-    util::Clock delta;
+    utl::Clock delta;
 
     // Ring buffer storing the latest measurements
     util::RingBuffer<double, 256> buffer;

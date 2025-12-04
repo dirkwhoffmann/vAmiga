@@ -10,13 +10,18 @@
 #pragma once
 
 #include "utl/exception.h"
+#include "utl/chrono.h"
 #include "ThreadTypes.h"
 #include "CoreComponent.h"
 #include "Concurrency.h"
-#include "Chrono.h"
+// #include "Chrono.h"
 #include "Wakeable.h"
+#include <thread>
+#include <latch>
 
 namespace vamiga {
+
+using namespace utl::concurrency;
 
 /** Requests a state change from within the emulator.
  *  This exception is thrown inside the emulator core when the CPU stops
@@ -44,9 +49,9 @@ protected:
     std::latch initLatch {1};
 
     // Synchronization mutex
-    mutable util::ReentrantMutex lock;
-    mutable util::ReentrantMutex suspensionLock;
-    
+    mutable ReentrantMutex lock;
+    mutable ReentrantMutex suspensionLock;
+
     // Warp and track state
     u8 warp = 0;
     u8 track = 0;
@@ -57,11 +62,11 @@ protected:
     isize statsCounter = 0;
 
     // Time stamps
-    util::Time baseTime;
+    utl::Time baseTime;
     
     // Clocks for measuring the CPU load
-    util::Clock nonstopClock;
-    util::Clock loadClock;
+    utl::Clock nonstopClock;
+    utl::Clock loadClock;
 
     // Statistical information (CPU load, frames per second, thread resyncs)
     double cpuLoad = 0.0;
@@ -69,7 +74,7 @@ protected:
     isize resyncs = 0;
 
     // Debug clocks
-    util::Clock wakeupClock;
+    utl::Clock wakeupClock;
 
     
     //
