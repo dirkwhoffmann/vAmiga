@@ -11,7 +11,6 @@
 #include "DeviceDescriptors.h"
 #include "Error.h"
 #include "FSTypes.h"
-#include "IOUtils.h"
 #include "OSDebugger.h"
 #include "utl/support/Streams.h"
 #include <algorithm>

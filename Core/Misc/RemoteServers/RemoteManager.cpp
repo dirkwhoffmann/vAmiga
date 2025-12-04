@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "RemoteManager.h"
-#include "IOUtils.h"
 #include "Agnus.h"
 #include "SerialPort.h"
 #include "utl/support/Streams.h"

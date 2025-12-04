@@ -11,7 +11,6 @@
 #include "AudioPort.h"
 #include "Emulator.h"
 #include "CIA.h"
-#include "IOUtils.h"
 #include "MsgQueue.h"
 #include <cmath>
 #include <algorithm>

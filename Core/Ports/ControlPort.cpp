@@ -10,7 +10,6 @@
 #include "config.h"
 #include "ControlPort.h"
 #include "CmdQueue.h"
-#include "IOUtils.h"
 #include "Paula.h"
 #include "utl/support/Streams.h"
 

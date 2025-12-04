@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "Agnus.h"
-#include "IOUtils.h"
 #include "CIA.h"
 #include "CPU.h"
 #include "utl/support/Streams.h"

@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "IOUtils.h"
 #include "FileSystem.h"
 #include "utl/support/Streams.h"
 #include "utl/support/Strings.h"

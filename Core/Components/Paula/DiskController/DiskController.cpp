@@ -13,7 +13,6 @@
 #include "Agnus.h"
 #include "ADFFile.h"
 #include "FloppyDrive.h"
-#include "IOUtils.h"
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "Thread.h"

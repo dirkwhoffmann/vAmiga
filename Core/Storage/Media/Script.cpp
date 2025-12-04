@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Script.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "utl/support/Strings.h"
 #include <sstream>
 

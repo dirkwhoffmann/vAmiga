@@ -10,7 +10,6 @@
 #include "config.h"
 #include "MemoryDebugger.h"
 #include "Emulator.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace utl { using namespace support; }

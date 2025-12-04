@@ -13,7 +13,6 @@
 #include "CPU.h"
 #include "Agnus.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "utl/support/Strings.h"

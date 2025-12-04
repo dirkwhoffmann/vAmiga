@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "RomFile.h"
-#include "IOUtils.h"
 #include "Macros.h"
 #include "RomDatabase.h"
 #include "utl/support/Files.h"

@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Snapshot.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "utl/support/Files.h"
 #include "utl/support/Strings.h"
 

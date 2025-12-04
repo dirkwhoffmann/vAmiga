@@ -13,8 +13,6 @@
 #include "FSDescriptor.h"
 #include "FSError.h"
 
-// #include "IOUtils.h"
-
 namespace vamiga {
 
 FSDescriptor::FSDescriptor(isize numBlocks, FSFormat dos)

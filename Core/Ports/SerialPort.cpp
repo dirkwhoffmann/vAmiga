@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "SerialPort.h"
-#include "IOUtils.h"
 #include "Amiga.h"
 #include "utl/support/Streams.h"
 

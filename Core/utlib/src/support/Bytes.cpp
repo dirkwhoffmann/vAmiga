@@ -9,6 +9,7 @@
 
 #include "utl/support/Bytes.h"
 #include <cassert>
+#include <cstring>
 
 namespace utl::support {
 

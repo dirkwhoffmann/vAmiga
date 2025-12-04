@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Blitter.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "Thread.h"
 
 namespace vamiga {

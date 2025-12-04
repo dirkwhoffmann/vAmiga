@@ -10,7 +10,6 @@
 #include "config.h"
 #include "RegressionTester.h"
 #include "Emulator.h"
-#include "IOUtils.h"
 #include "utl/support/Files.h"
 #include <fstream>
 

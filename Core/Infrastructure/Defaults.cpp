@@ -11,7 +11,6 @@
 #include "Defaults.h"
 #include "Amiga.h"
 #include "StringUtils.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace utl { using namespace support; }

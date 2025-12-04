@@ -12,7 +12,6 @@
 #include "Denise.h"
 #include "Agnus.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 
 namespace vamiga {
 

@@ -10,7 +10,6 @@
 #include "config.h"
 #include "IMGFactory.h"
 #include "FloppyDrive.h"
-#include "IOUtils.h"
 #include "utl/support/Strings.h"
 
 namespace utl { using namespace support; }

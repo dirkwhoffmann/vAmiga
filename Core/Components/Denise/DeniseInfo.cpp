@@ -11,7 +11,6 @@
 #include "Denise.h"
 #include "Agnus.h"
 #include "ControlPort.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace utl { using namespace support; }

@@ -10,7 +10,6 @@
 #include "config.h"
 #include "TOD.h"
 #include "CIA.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace vamiga {

@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Keyboard.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace utl { using namespace support; }

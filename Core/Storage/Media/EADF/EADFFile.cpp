@@ -14,7 +14,6 @@
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "FileSystem.h"
-#include "IOUtils.h"
 #include "utl/support/Files.h"
 
 namespace utl { using namespace support; }

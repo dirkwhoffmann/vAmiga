@@ -11,7 +11,6 @@
 
 #include "DriveTypes.h"
 #include "SubComponent.h"
-#include "IOUtils.h"
 
 namespace vamiga {
 

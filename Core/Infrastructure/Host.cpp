@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Host.h"
 #include "Emulator.h"
-#include "IOUtils.h"
 #include "StringUtils.h"
 #include "utl/support/Streams.h"
 #include "utl/support/Files.h"

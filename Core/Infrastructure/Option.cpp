@@ -11,7 +11,6 @@
 #include "Option.h"
 #include "VAmigaTypes.h"
 #include "Error.h"
-#include "IOUtils.h"
 #include <sstream>
 
 namespace vamiga {

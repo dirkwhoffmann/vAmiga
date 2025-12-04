@@ -11,7 +11,6 @@
 #include "RemoteServer.h"
 #include "Emulator.h"
 #include "CPU.h"
-#include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"

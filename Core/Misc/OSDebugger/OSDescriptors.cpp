@@ -10,7 +10,6 @@
 #include "config.h"
 #include "OSDescriptors.h"
 #include "CoreObject.h"
-#include "IOUtils.h"
 #include "Error.h"
 #include "Macros.h"
 #include "utl/support/Bytes.h"

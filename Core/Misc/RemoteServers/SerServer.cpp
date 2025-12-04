@@ -10,7 +10,6 @@
 #include "config.h"
 #include "SerServer.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "RetroShell.h"
 #include "SerialPort.h"
 #include "Thread.h"

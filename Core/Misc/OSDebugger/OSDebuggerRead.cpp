@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "OSDebugger.h"
-#include "IOUtils.h"
 #include "Memory.h"
 
 namespace vamiga {

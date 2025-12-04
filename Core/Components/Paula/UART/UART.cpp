@@ -10,7 +10,6 @@
 #include "config.h"
 #include "UART.h"
 #include "Agnus.h"
-#include "IOUtils.h"
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "RemoteManager.h"

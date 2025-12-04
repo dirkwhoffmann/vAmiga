@@ -11,7 +11,6 @@
 #include "RTC.h"
 #include "Chrono.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace utl { using namespace support; }

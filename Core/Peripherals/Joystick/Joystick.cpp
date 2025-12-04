@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Joystick.h"
 #include "Amiga.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 #include <sstream>
 

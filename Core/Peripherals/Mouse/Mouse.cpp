@@ -11,7 +11,6 @@
 #include "Mouse.h"
 #include "Amiga.h"
 #include "utl/chrono.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace utl { using namespace support; }

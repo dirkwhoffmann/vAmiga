@@ -11,7 +11,6 @@
 #include "CopperDebugger.h"
 #include "Emulator.h"
 #include "Copper.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 #include "utl/support/Strings.h"
 

@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "ZorroBoard.h"
-#include "IOUtils.h"
 #include "Memory.h"
 #include "utl/support/Streams.h"
 

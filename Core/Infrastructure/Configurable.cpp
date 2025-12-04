@@ -11,7 +11,6 @@
 #include "Configurable.h"
 #include "Option.h"
 #include "Defaults.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 #include <algorithm>
 

@@ -11,7 +11,6 @@
 
 #include "SubComponent.h"
 #include "HostTypes.h"
-#include "IOUtils.h"
 
 namespace vamiga {
 

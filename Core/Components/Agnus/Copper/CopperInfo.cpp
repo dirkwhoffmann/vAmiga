@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "Agnus.h"
-#include "IOUtils.h"
 #include "utl/support/Streams.h"
 
 namespace vamiga {

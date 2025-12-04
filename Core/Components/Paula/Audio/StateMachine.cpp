@@ -10,7 +10,6 @@
 #include "config.h"
 #include "StateMachine.h"
 #include "Paula.h"
-#include "IOUtils.h"
 #include "Amiga.h"
 #include "utl/support/Streams.h"
 

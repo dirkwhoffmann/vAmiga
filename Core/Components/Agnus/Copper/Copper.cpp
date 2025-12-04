@@ -11,7 +11,6 @@
 #include "Copper.h"
 #include "Emulator.h"
 #include "CopperDebugger.h"
-#include "IOUtils.h"
 #include "PixelEngine.h"
 
 namespace vamiga {
