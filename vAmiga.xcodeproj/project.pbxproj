@@ -760,6 +760,8 @@
 		503FC4D72EE1576E00637C95 /* Compressible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Compressible.h; sourceTree = "<group>"; };
 		503FC4D82EE157A900637C95 /* Compressible.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Compressible.cpp; sourceTree = "<group>"; };
 		503FC4DB2EE157B300637C95 /* Hashable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Hashable.cpp; sourceTree = "<group>"; };
+		503FC4DE2EE16FCA00637C95 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
+		503FC4DF2EE16FD500637C95 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -1515,6 +1517,7 @@
 				503FC4D02EE0ADF300637C95 /* hints.h */,
 				503FC4B42EE04C2B00637C95 /* types.h */,
 				503FC4BC2EE091B700637C95 /* abilities */,
+				503FC4E02EE16FE000637C95 /* storage */,
 				503FC4C72EE0A96300637C95 /* support */,
 			);
 			path = utl;
@@ -1577,6 +1580,15 @@
 				503FC4CC2EE0AB1000637C95 /* StreamSupport.cpp */,
 			);
 			path = support;
+			sourceTree = "<group>";
+		};
+		503FC4E02EE16FE000637C95 /* storage */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4DE2EE16FCA00637C95 /* Buffer.h */,
+				503FC4DF2EE16FD500637C95 /* Buffer.cpp */,
+			);
+			path = storage;
 			sourceTree = "<group>";
 		};
 		5043154E2D2AE311006C14FF /* Dashboard */ = {

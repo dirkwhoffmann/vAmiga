@@ -36,7 +36,11 @@
  * be performed when variadic functions are used.
  */
 
+#include "utl/types.h"
+
 namespace utl::abilities {
+
+using namespace utl::types;
 
 class Loggable {
 

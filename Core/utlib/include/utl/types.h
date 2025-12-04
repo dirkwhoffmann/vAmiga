@@ -10,6 +10,7 @@
 #pragma once
 
 #include <filesystem>
+#include <functional>
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -40,7 +41,9 @@ namespace fs = std::filesystem;
 
 }
 
-// using namespace types;
+// Make types visible in subspaces
+namespace utl::abilities { using namespace utl::types; }
+namespace utl::storage   { using namespace utl::types; }
 
 
 //

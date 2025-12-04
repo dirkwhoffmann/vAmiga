@@ -17,7 +17,7 @@
 #include "Dumpable.h"
 #include "Checksum.h"
 #include "IOUtils.h"
-#include "Buffer.h"
+#include "Utilities/Buffer.h"
 #include <sstream>
 #include <fstream>
 

@@ -10,7 +10,7 @@
 #pragma once
 
 #include "CoreObject.h"
-#include "Buffer.h"
+#include "Utilities/Buffer.h"
 
 namespace vamiga {
 
