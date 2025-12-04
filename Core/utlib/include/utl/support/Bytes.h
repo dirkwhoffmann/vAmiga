@@ -145,11 +145,13 @@ inline u64 bigEndian(u64 x)
 // Bit counting
 //
 
+/*
 #ifdef _MSC_VER
 inline isize popcount(u32 x) { return isize(__popcnt(u32(x))); }
 #else
 inline isize popcount(u32 x) { return isize(__builtin_popcount(u32(x))); }
 #endif
+*/
 
 // Checks if a certain memory area is all zero
 bool isZero(const u8 *ptr, isize size);
