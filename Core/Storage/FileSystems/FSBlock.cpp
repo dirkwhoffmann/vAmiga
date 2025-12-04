@@ -10,7 +10,6 @@
 #include "config.h"
 #include "FSBlock.h"
 #include "FileSystem.h"
-#include "MemUtils.h"
 #include <algorithm>
 
 namespace vamiga {

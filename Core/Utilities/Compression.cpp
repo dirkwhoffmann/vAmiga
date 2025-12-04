@@ -9,7 +9,8 @@
 
 #include "config.h"
 #include "Compression.h"
-#include "MemUtils.h"
+#include "utl/support/Bytes.h"
+
 #include "lz4.h"
 #ifdef USE_ZLIB
 #include <zlib.h>

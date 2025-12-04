@@ -13,7 +13,6 @@
 #include "CPU.h"
 #include "IOUtils.h"
 #include "Memory.h"
-#include "MemUtils.h"
 #include "MsgQueue.h"
 #include "RetroShell.h"
 

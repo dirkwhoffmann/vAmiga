@@ -14,10 +14,6 @@
 #include "utl/abilities/Hashable.h"
 #include "utl/abilities/Dumpable.h"
 
-// REMOVE ASAP
-// #include "MemUtils.h"
-// using vamiga::util::DumpOpt;
-
 #include <ostream>
 
 namespace utl::storage {

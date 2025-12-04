@@ -10,8 +10,6 @@
 #include "config.h"
 #include "IOUtils.h"
 #include "FileSystem.h"
-#include "MemUtils.h"
-
 #include <climits>
 #include <unordered_set>
 #include <stack>

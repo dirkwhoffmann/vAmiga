@@ -14,8 +14,6 @@
 #include "FSTypes.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
-// #include "Buffer.h"
-#include "MemUtils.h"
 #include "utl/storage.h"
 
 namespace vamiga {

@@ -32,6 +32,12 @@ public:
 
     virtual ~Dumpable() = default;
 
+    // Prints a hex dump of a buffer to the console (DEPRECATED)
+    void hexdump(u8 *p, isize size, isize cols, isize pad) const;
+    void hexdump(u8 *p, isize size, isize cols = 32) const;
+    void hexdumpWords(u8 *p, isize size, isize cols = 32) const;
+    void hexdumpLongwords(u8 *p, isize size, isize cols = 32) const;
+
     static void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>);
     static void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>, const char *fmt);
     static void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len);

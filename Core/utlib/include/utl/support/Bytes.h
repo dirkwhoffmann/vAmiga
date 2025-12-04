@@ -93,6 +93,64 @@ namespace utl::support {
 #define W16BE(a,v) { *(u8 *)(a) = HI_BYTE(v); *((u8 *)(a)+1) = LO_BYTE(v); }
 #define W32BE(a,v) { W16BE(a,HI_WORD(v)); W16BE((a)+2,LO_WORD(v)); }
 
+// Reverses the byte ordering in an integer value
+#ifdef _MSC_VER
+#define SWAP16 _byteswap_ushort
+#define SWAP32 _byteswap_ulong
+#define SWAP64 _byteswap_uint64
+#else
+#define SWAP16  __builtin_bswap16
+#define SWAP32  __builtin_bswap32
+#define SWAP64  __builtin_bswap64
+#endif
+
+//
+// Byte order
+//
+
+// Returns the big endian representation of an integer value
+template<typename T> T bigEndian(T x);
+
+template<>
+inline u16 bigEndian(u16 x)
+{
+    if constexpr (std::endian::native == std::endian::big) {
+        return x;
+    } else {
+        return SWAP16(x);
+    }
+}
+
+template<>
+inline u32 bigEndian(u32 x)
+{
+    if constexpr (std::endian::native == std::endian::big) {
+        return x;
+    } else {
+        return SWAP32(x);
+    }
+}
+
+template<>
+inline u64 bigEndian(u64 x)
+{
+    if constexpr (std::endian::native == std::endian::big) {
+        return x;
+    } else {
+        return SWAP64(x);
+    }
+}
+
+//
+// Bit counting
+//
+
+#ifdef _MSC_VER
+inline isize popcount(u32 x) { return isize(__popcnt(u32(x))); }
+#else
+inline isize popcount(u32 x) { return isize(__builtin_popcount(u32(x))); }
+#endif
+
 // Checks if a certain memory area is all zero
 bool isZero(const u8 *ptr, isize size);
 

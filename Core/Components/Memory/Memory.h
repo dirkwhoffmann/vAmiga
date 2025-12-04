@@ -12,7 +12,6 @@
 #include "MemoryTypes.h"
 #include "MemoryDebugger.h"
 #include "RomFileTypes.h"
-#include "MemUtils.h"
 #include "utl/storage.h"
 
 namespace vamiga {

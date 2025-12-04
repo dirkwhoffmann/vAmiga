@@ -318,7 +318,7 @@ isize
 FSAllocator::numUnallocated() const noexcept
 {
     isize result = 0;
-    for (auto &it : serializeBitmap()) result += util::popcount(it);
+    for (auto &it : serializeBitmap()) result += utl::support::popcount(it);
 
     if (FS_DEBUG) {
 

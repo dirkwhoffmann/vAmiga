@@ -10,11 +10,15 @@
 #pragma once
 
 #include "Macros.h"
-#include "MemUtils.h"
 #include "utl/storage.h"
+#include "utl/abilities/Hashable.h"
+#include "utl/support/Bytes.h"
+
 #include <concepts>
 
 namespace vamiga {
+
+using utl::abilities::Hashable;
 
 struct SerializableStruct {
 
@@ -263,7 +267,7 @@ public:
 #define CHECK(type) \
 auto& operator<<(type& v) \
 { \
-hash = util::fnvIt64(hash, (u64)v); \
+hash = Hashable::fnvIt64(hash, (u64)v); \
 return *this; \
 }
 
@@ -273,7 +277,7 @@ public:
 
     u64 hash;
 
-    SerChecker() { hash = util::fnvInit64(); }
+    SerChecker() { hash = Hashable::fnvInit64(); }
 
     CHECK(const bool)
     CHECK(const char)
@@ -293,7 +297,7 @@ public:
     template <class T>
     auto& operator<<(utl::Allocator<T> &a)
     {
-        hash = util::fnvIt64(hash, a.fnv64());
+        hash = Hashable::fnvIt64(hash, a.fnv64());
         return *this;
     }
 
@@ -335,7 +339,7 @@ public:
     {
         auto len = v.length();
         for (usize i = 0; i < len; i++) {
-            hash = util::fnvIt64(hash, v[i]);
+            hash = Hashable::fnvIt64(hash, v[i]);
         }
         return *this;
     }
@@ -369,7 +373,7 @@ public:
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerChecker& operator<<(E &v)
     {
-        hash = util::fnvIt64(hash, u64(v));
+        hash = Hashable::fnvIt64(hash, u64(v));
         return *this;
     }
 

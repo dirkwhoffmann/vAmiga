@@ -10,7 +10,6 @@
 #include "config.h"
 #include "RomFile.h"
 #include "IOUtils.h"
-#include "MemUtils.h"
 #include "Macros.h"
 #include "RomDatabase.h"
 

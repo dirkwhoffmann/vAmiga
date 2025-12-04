@@ -13,7 +13,6 @@
 #include "Checksum.h"
 #include "EADFFile.h"
 #include "IOUtils.h"
-#include "MemUtils.h"
 #include "FileSystem.h"
 
 namespace vamiga {
@@ -309,7 +308,7 @@ ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
 void
 ADFFile::dumpSector(Sector s) const
 {
-    util::hexdump(data.ptr + 512 * s, 512);
+    Dumpable::hexdump(data.ptr + 512 * s, 512);
 }
 
 }

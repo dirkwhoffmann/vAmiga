@@ -16,14 +16,10 @@ namespace vamiga {
 void
 HttpServer::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-
     if (category == Category::State) {
 
         RemoteServer::_dump(category, os);
-        // os << tab("...");
-        // os << dec(...) << std::endl;
-
+ 
     } else {
 
         RemoteServer::_dump(category, os);

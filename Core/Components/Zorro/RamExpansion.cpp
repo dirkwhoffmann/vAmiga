@@ -16,8 +16,6 @@ namespace vamiga {
 void
 RamExpansion::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-
     ZorroBoard::_dump(category, os);
 }
 
