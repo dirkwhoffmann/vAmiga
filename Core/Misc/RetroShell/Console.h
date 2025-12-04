@@ -471,8 +471,8 @@ class NavigatorConsole final : public Console
     FSBlock &parseDirectory(const Arguments &argv, const string &token);
     FSBlock &parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback);
     
-    util::DumpOpt parseDumpOpts(const Arguments &argv);
-    
+    DumpOpt parseDumpOpts(const Arguments &argv);
+
     // Experimental
     FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound);
     FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound, FSBlock &fallback);

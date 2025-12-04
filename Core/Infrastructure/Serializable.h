@@ -11,8 +11,7 @@
 
 #include "Macros.h"
 #include "MemUtils.h"
-#include "Utilities/Buffer.h"
-#include "Utilities/RingBuffer.h"
+#include "utl/storage.h"
 #include <concepts>
 
 namespace vamiga {
@@ -161,14 +160,14 @@ public:
     COUNTD(const double)
        
     template <class T>
-    auto& operator<<(util::Allocator<T> &a)
+    auto& operator<<(utl::Allocator<T> &a)
     {
         count += 8 + a.size;
         return *this;
     }
 
     template <class T, isize N>
-    auto& operator<<(util::Array<T, N> &a)
+    auto& operator<<(utl::Array<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.elements << a.w;
@@ -176,7 +175,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedArray<T, N> &a)
+    auto& operator<<(utl::SortedArray<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -185,7 +184,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::RingBuffer<T, N> &a)
+    auto& operator<<(utl::RingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.r << a.w;
@@ -193,7 +192,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    auto& operator<<(utl::SortedRingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -292,14 +291,14 @@ public:
     CHECK(const double)
 
     template <class T>
-    auto& operator<<(util::Allocator<T> &a)
+    auto& operator<<(utl::Allocator<T> &a)
     {
         hash = util::fnvIt64(hash, a.fnv64());
         return *this;
     }
 
     template <class T, isize N>
-    auto& operator<<(util::Array<T, N> &a)
+    auto& operator<<(utl::Array<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.elements << a.w;
@@ -307,7 +306,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedArray<T, N> &a)
+    auto& operator<<(utl::SortedArray<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -316,7 +315,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::RingBuffer<T, N> &a)
+    auto& operator<<(utl::RingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.r << a.w;
@@ -324,7 +323,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    auto& operator<<(utl::SortedRingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -430,7 +429,7 @@ public:
     DESERIALIZED(double)
 
     template <class T>
-    auto& operator<<(util::Allocator<T> &a)
+    auto& operator<<(utl::Allocator<T> &a)
     {
         i64 len;
         *this << len;
@@ -440,7 +439,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::Array<T, N> &a)
+    auto& operator<<(utl::Array<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.elements << a.w;
@@ -448,7 +447,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedArray<T, N> &a)
+    auto& operator<<(utl::SortedArray<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -457,7 +456,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::RingBuffer<T, N> &a)
+    auto& operator<<(utl::RingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.r << a.w;
@@ -465,7 +464,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    auto& operator<<(utl::SortedRingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -584,7 +583,7 @@ public:
     SERIALIZED(const double)
 
     template <class T>
-    auto& operator<<(util::Allocator<T> &a)
+    auto& operator<<(utl::Allocator<T> &a)
     {
         *this << i64(a.size);
         a.copy(ptr);
@@ -593,7 +592,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::Array<T, N> &a)
+    auto& operator<<(utl::Array<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.elements << a.w;
@@ -601,7 +600,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedArray<T, N> &a)
+    auto& operator<<(utl::SortedArray<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -610,7 +609,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::RingBuffer<T, N> &a)
+    auto& operator<<(utl::RingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.r << a.w;
@@ -618,7 +617,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    auto& operator<<(utl::SortedRingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -728,14 +727,14 @@ public:
     RESET(double)
 
     template <class T>
-    auto& operator<<(util::Allocator<T> &a)
+    auto& operator<<(utl::Allocator<T> &a)
     {
         a.clear();
         return *this;
     }
 
     template <class T, isize N>
-    auto& operator<<(util::Array<T, N> &a)
+    auto& operator<<(utl::Array<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.elements << a.w;
@@ -743,7 +742,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedArray<T, N> &a)
+    auto& operator<<(utl::SortedArray<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];
@@ -752,7 +751,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::RingBuffer<T, N> &a)
+    auto& operator<<(utl::RingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         *this << a.r << a.w;
@@ -760,7 +759,7 @@ public:
     }
 
     template <class T, isize N>
-    auto& operator<<(util::SortedRingBuffer<T, N> &a)
+    auto& operator<<(utl::SortedRingBuffer<T, N> &a)
     {
         for(isize i = 0; i < N; ++i) *this << a.elements[i];
         for(isize i = 0; i < N; ++i) *this << a.keys[i];

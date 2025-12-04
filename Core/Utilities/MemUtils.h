@@ -110,23 +110,25 @@ void hexdump(u8 *p, isize size, isize cols = 32);
 void hexdumpWords(u8 *p, isize size, isize cols = 32);
 void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
 
-// Dumps memory data in customizable formats
-struct DumpOpt
-{
-    // const char *fmt;
-    isize base;
-    isize size;
-    isize prefix;
-    isize columns;
-    isize lines;
-    bool tail;
-    bool nr;
-    bool offset;
-    bool ascii;
-};
-void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>);
-void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>, const char *fmt);
-void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len);
-void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len, const char *fmt);
- 
+/*
+ // Dumps memory data in customizable formats
+ struct DumpOpt
+ {
+ // const char *fmt;
+ isize base;
+ isize size;
+ isize prefix;
+ isize columns;
+ isize lines;
+ bool tail;
+ bool nr;
+ bool offset;
+ bool ascii;
+ };
+ void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>);
+ void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>, const char *fmt);
+ void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len);
+ void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len, const char *fmt);
+ */
+
 }

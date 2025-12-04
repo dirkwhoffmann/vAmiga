@@ -7,11 +7,19 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "utl/storage/Buffer.h"
-
+#include "utl/support/Bytes.h"
+#include "utl/abilities/Dumpable.h"
+#include <sstream>
 #include <fstream>
 
-namespace utl::storage {
+namespace utl {
+
+using namespace utl::support;
+using namespace utl::abilities;
+
+namespace storage {
 
 template <class T>
 Allocator<T>::Allocator(const Allocator& other)
@@ -214,25 +222,25 @@ Allocator<T>::copy(T *buf, isize offset, isize len) const
 template <class T> void
 Allocator<T>::patch(const u8 *seq, const u8 *subst)
 {
-    if (ptr) util::replace((u8 *)ptr, bytesize(), seq, subst);
+    if (ptr) utl::replace((u8 *)ptr, bytesize(), seq, subst);
 }
 
 template <class T> void
 Allocator<T>::patch(const char *seq, const char *subst)
 {
-    if (ptr) util::replace((char *)ptr, bytesize(), seq, subst);
+    if (ptr) utl::replace((char *)ptr, bytesize(), seq, subst);
 }
 
 template <class T> void
 Allocator<T>::dump(std::ostream &os, DumpOpt opt)
 {
-    util::dump(os, opt, ptr, size);
+    Dumpable::dump(os, opt, ptr, size);
 }
 
 template <class T> void
 Allocator<T>::dump(std::ostream &os, DumpOpt opt, const char *fmt)
 {
-    util::dump(os, opt, ptr, size, fmt);
+    Dumpable::dump(os, opt, ptr, size, fmt);
 }
 
 template <class T> void
@@ -325,4 +333,5 @@ template void Allocator<u8>::hexDump(std::ostream &os);
 template void Allocator<u8>::memDump(std::ostream &os);
 // template void Allocator<u8>::txtDump(std::ostream &os);
 template void Allocator<u8>::type(std::ostream &os, DumpOpt opt);
-}
+
+}}

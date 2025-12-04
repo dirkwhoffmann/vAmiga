@@ -93,6 +93,7 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
     hexdump(p, size, cols, 4);
 }
 
+/*
 void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)> read)
 {
     string fmt;
@@ -263,5 +264,5 @@ void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len, const char *
 
     dump(os, opt, read, fmt);
 }
-
+*/
 }

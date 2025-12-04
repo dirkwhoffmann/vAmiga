@@ -10,14 +10,14 @@
 #pragma once
 
 #include "FrameBufferTypes.h"
-#include "Buffer.h"
 #include "Constants.h"
 #include "Colors.h"
+#include "utl/storage.h"
 
 
 namespace vamiga {
 
-using util::Buffer;
+using utl::Buffer;
 
 class Texture {
 

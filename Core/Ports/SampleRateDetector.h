@@ -11,6 +11,7 @@
 
 #include "SubComponent.h"
 #include "utl/chrono.h"
+#include "utl/storage.h"
 
 namespace vamiga {
 
@@ -35,7 +36,7 @@ class SampleRateDetector final : public SubComponent {
     utl::Clock delta;
 
     // Ring buffer storing the latest measurements
-    util::RingBuffer<double, 256> buffer;
+    utl::RingBuffer<double, 256> buffer;
 
     // Number of filtered out outliers at both ends
     const isize trash = 6;

@@ -10,11 +10,11 @@
 #pragma once
 
 #include "CoreObject.h"
-#include "Utilities/Buffer.h"
+#include "utl/storage.h"
 
 namespace vamiga {
 
-using util::Buffer;
+using utl::Buffer;
 
 #define HUNK_UNIT       999
 #define HUNK_NAME       1000

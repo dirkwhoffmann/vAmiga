@@ -7,6 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "STEncoder.h"
 #include "STFactory.h"
 #include "IMGEncoder.h"

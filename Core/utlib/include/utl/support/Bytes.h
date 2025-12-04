@@ -11,9 +11,7 @@
 
 #include "utl/types.h"
 
-namespace utl {
-
-using namespace types;
+namespace utl::support {
 
 //
 // Accessing bits and bytes
@@ -94,5 +92,12 @@ using namespace types;
 #define W8BE(a,v)  { *(u8 *)(a) = (v); }
 #define W16BE(a,v) { *(u8 *)(a) = HI_BYTE(v); *((u8 *)(a)+1) = LO_BYTE(v); }
 #define W32BE(a,v) { W16BE(a,HI_WORD(v)); W16BE((a)+2,LO_WORD(v)); }
+
+// Checks if a certain memory area is all zero
+bool isZero(const u8 *ptr, isize size);
+
+// Replaces the first occurence of a byte or character sequence by another one
+void replace(u8 *p, isize size, const u8 *sequence, const u8 *substitute);
+void replace(char *p, isize size, const char *sequence, const char *substitute);
 
 }

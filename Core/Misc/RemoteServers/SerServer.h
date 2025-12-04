@@ -10,14 +10,14 @@
 #pragma once
 
 #include "SocketServer.h"
-#include "RingBuffer.h"
+#include "utl/storage.h"
 
 namespace vamiga {
 
 class SerServer final : public SocketServer {
 
     // A ringbuffer for buffering incoming bytes
-    util::SortedRingBuffer <u8, 8096> buffer;
+    utl::SortedRingBuffer <u8, 8096> buffer;
     
     /* Indicates if we are currenty running in buffering mode. In this mode,
      * incoming bytes are collected in the ring buffer withous passing them

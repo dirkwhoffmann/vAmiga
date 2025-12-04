@@ -376,7 +376,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     return *p;
 }
 
-util::DumpOpt
+DumpOpt
 NavigatorConsole::parseDumpOpts(const Arguments &argv)
 {
     auto lines = argv.contains("lines") ? parseNum(argv.at("lines")) : -1;

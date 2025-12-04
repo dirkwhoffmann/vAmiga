@@ -9,12 +9,13 @@
 
 #pragma once
 
-#include "RingBuffer.h"
+// #include "RingBuffer.h"
 #include "Serializable.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
 #include "MemoryTypes.h"
 #include "Aliases.h"
+#include "utl/storage.h"
 #include <functional>
 
 namespace vamiga {
@@ -66,7 +67,7 @@ public:
 };
 
 template <isize capacity>
-struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
+struct RegChangeRecorder : public utl::SortedRingBuffer<RegChange, capacity>
 {
     Cycle trigger() {
         return this->isEmpty() ? NEVER : this->keys[this->r];
@@ -92,7 +93,7 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
 // Signal change recorder
 //
 
-struct SigRecorder : public util::SortedArray<u32, 256>
+struct SigRecorder : public utl::SortedArray<u32, 256>
 {
     bool modified = false;
     

@@ -12,10 +12,11 @@
 #include "utl/types.h"
 #include "utl/abilities/Compressible.h"
 #include "utl/abilities/Hashable.h"
+#include "utl/abilities/Dumpable.h"
 
 // REMOVE ASAP
-#include "MemUtils.h"
-using vamiga::util::DumpOpt;
+// #include "MemUtils.h"
+// using vamiga::util::DumpOpt;
 
 #include <ostream>
 
@@ -23,7 +24,7 @@ namespace utl::storage {
 
 using namespace utl::abilities;
 
-template <class T> struct Allocator : public Hashable {
+template <class T> struct Allocator : public Hashable, public Dumpable {
 
     static constexpr isize maxCapacity = 512 * 1024 * 1024;
 
@@ -68,10 +69,10 @@ template <class T> struct Allocator : public Hashable {
     void patch(const char *seq, const char *subst);
 
     // Computes a checksum of a certain kind
-    u32 fnv32() const { return ptr ? fnv32((u8 *)ptr, bytesize()) : 0; }
-    u64 fnv64() const { return ptr ? fnv64((u8 *)ptr, bytesize()) : 0; }
-    u16 crc16() const { return ptr ? crc16((u8 *)ptr, bytesize()) : 0; }
-    u32 crc32() const { return ptr ? crc32((u8 *)ptr, bytesize()) : 0; }
+    u32 fnv32() const { return ptr ? Hashable::fnv32((u8 *)ptr, bytesize()) : 0; }
+    u64 fnv64() const { return ptr ? Hashable::fnv64((u8 *)ptr, bytesize()) : 0; }
+    u16 crc16() const { return ptr ? Hashable::crc16((u8 *)ptr, bytesize()) : 0; }
+    u32 crc32() const { return ptr ? Hashable::crc32((u8 *)ptr, bytesize()) : 0; }
 
     // Pretty-printing the buffer contents
     void dump(std::ostream &os, DumpOpt opt);

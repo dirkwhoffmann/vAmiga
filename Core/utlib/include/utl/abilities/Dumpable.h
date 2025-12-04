@@ -15,7 +15,6 @@ namespace utl::abilities {
 
 struct DumpOpt
 {
-    // const char *fmt;
     isize base;
     isize size;
     isize prefix;
@@ -29,10 +28,17 @@ struct DumpOpt
 
 class Dumpable {
 
+public:
+
+    virtual ~Dumpable() = default;
+
     static void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>);
     static void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)>, const char *fmt);
     static void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len);
     static void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len, const char *fmt);
+
+    // virtual void dump(std::ostream &os, DumpOpt opt) { };
+    // virtual void dump(std::ostream &os, DumpOpt opt, const char *fmt) { };
 };
 
 }

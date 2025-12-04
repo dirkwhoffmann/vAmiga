@@ -697,15 +697,15 @@ FSBlock::dumpStorage(std::ostream &os) const
 }
 
 void
-FSBlock::hexDump(std::ostream &os, const util::DumpOpt &opt)
+FSBlock::hexDump(std::ostream &os, const DumpOpt &opt)
 {
     if (type == FSBlockType::EMPTY) {
 
-        util::dump(os, opt, [&](isize offset, isize bytes) { return offset < bsize() ? 0 : -1; } );
+        Dumpable::dump(os, opt, [&](isize offset, isize bytes) { return offset < bsize() ? 0 : -1; } );
 
     } else {
 
-        util::dump(os, opt, bdata, bsize());
+        Dumpable::dump(os, opt, bdata, bsize());
     }
 }
 

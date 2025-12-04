@@ -16,13 +16,13 @@
 #include "Error.h"
 #include "Checksum.h"
 #include "IOUtils.h"
-#include "Utilities/Buffer.h"
+#include "utl/storage.h"
 #include <sstream>
 #include <fstream>
 
 namespace vamiga {
 
-using util::Buffer;
+using utl::Buffer;
 using namespace utl::abilities;
 
 class AnyFile : public Loggable {

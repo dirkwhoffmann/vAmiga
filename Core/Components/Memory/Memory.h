@@ -13,12 +13,12 @@
 #include "MemoryDebugger.h"
 #include "RomFileTypes.h"
 #include "MemUtils.h"
-#include "Buffer.h"
+#include "utl/storage.h"
 
 namespace vamiga {
 
-using util::Allocator;
-using util::Buffer;
+using utl::Allocator;
+using utl::Buffer;
 
 #define SLOW_RAM_STRT 0xC00000
 #define FAST_RAM_STRT ramExpansion.getBaseAddr()

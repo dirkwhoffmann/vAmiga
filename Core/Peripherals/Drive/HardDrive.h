@@ -14,8 +14,9 @@
 #include "FSTypes.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
-#include "Buffer.h"
+// #include "Buffer.h"
 #include "MemUtils.h"
+#include "utl/storage.h"
 
 namespace vamiga {
 
@@ -83,10 +84,10 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     std::vector <DriverDescriptor> drivers;
 
     // Disk data
-    util::Buffer<u8> data;
+    utl::Buffer<u8> data;
     
     // Keeps track of modified blocks (to update the run-ahead instance)
-    util::Buffer<bool> dirty;
+    utl::Buffer<bool> dirty;
 
     // Current position of the read/write head
     DriveHead head;
@@ -358,7 +359,7 @@ public:
     i8 write(isize offset, isize length, u32 addr);
     
     // Reads a loadable file system
-    void readDriver(isize nr, util::Buffer<u8> &driver);
+    void readDriver(isize nr, utl::Buffer<u8> &driver);
     
 private:
 

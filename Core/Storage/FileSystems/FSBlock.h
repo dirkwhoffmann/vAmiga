@@ -13,7 +13,8 @@
 #include "FSTypes.h"
 #include "FSError.h"
 #include "FSObjects.h"
-#include "Utilities/Buffer.h"
+#include "utl/storage.h"
+#include "utl/abilities/Dumpable.h"
 #include "IOUtils.h"
 #include "BootBlockImage.h"
 #include "Aliases.h"
@@ -21,7 +22,8 @@
 
 namespace vamiga {
 
-using util::Buffer;
+using utl::Buffer;
+using utl::abilities::DumpOpt;
 
 struct FSBlock : Loggable {
 
@@ -163,7 +165,7 @@ private:
 
 public:
 
-    void hexDump(std::ostream &os, const util::DumpOpt &opt);
+    void hexDump(std::ostream &os, const DumpOpt &opt);
 
     // Experimental
     static string rangeString(const std::vector<Block> &vec);
