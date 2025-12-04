@@ -13,7 +13,6 @@
 #include "SubComponent.h"
 #include "AgnusTypes.h"
 #include "Beam.h"
-#include "Checksum.h"
 #include "CopperDebugger.h"
 #include "Memory.h"
 
@@ -92,7 +91,7 @@ public:
 private:
 
     u64 checkcnt = 0;
-    u32 checksum = util::fnvInit32();
+    u32 checksum = Hashable::fnvInit32();
 
 
     //

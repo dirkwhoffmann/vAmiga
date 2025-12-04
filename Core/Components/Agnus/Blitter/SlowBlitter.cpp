@@ -1109,8 +1109,8 @@ Blitter::exec()
             }
 
             if (BLT_CHECKSUM) {
-                check1 = util::fnvIt32(check1, dhold);
-                check2 = util::fnvIt32(check2, bltdpt);
+                check1 = Hashable::fnvIt32(check1, dhold);
+                check2 = Hashable::fnvIt32(check2, bltdpt);
             }
             trace(BLT_DEBUG, "    D = %X -> %X\n", dhold, bltdpt);
             
@@ -1372,8 +1372,8 @@ Blitter::execLine()
             }
 
             if (BLT_CHECKSUM) {
-                check1 = util::fnvIt32(check1, dhold);
-                check2 = util::fnvIt32(check2, bltdpt);
+                check1 = Hashable::fnvIt32(check1, dhold);
+                check2 = Hashable::fnvIt32(check2, bltdpt);
             }
         }
     }

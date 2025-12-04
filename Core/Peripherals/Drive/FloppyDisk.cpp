@@ -111,10 +111,10 @@ FloppyDisk::isValidHeadPos(Cylinder c, Head h, isize offset) const
 u64
 FloppyDisk::checksum() const
 {
-    auto result = util::fnvInit64();
+    auto result = Hashable::fnvInit64();
 
     for (Track t = 0; t < numTracks(); t++) {
-        result = util::fnvIt64(result, checksum(t));
+        result = Hashable::fnvIt64(result, checksum(t));
     }
 
     return result;
@@ -123,7 +123,7 @@ FloppyDisk::checksum() const
 u64
 FloppyDisk::checksum(Track t) const
 {
-    return util::fnv64(data.track[t], length.track[t]);
+    return Hashable::fnv64(data.track[t], length.track[t]);
 }
 
 u64

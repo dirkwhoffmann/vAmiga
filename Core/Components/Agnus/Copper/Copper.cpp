@@ -11,7 +11,6 @@
 #include "Copper.h"
 #include "Emulator.h"
 #include "CopperDebugger.h"
-#include "Checksum.h"
 #include "IOUtils.h"
 #include "PixelEngine.h"
 
@@ -423,7 +422,7 @@ Copper::eofHandler()
                 agnus.pos.frame, checksum, checkcnt, cop1lc, cop2lc);
         }
         checkcnt = 0;
-        checksum = util::fnvInit32();
+        checksum = Hashable::fnvInit32();
     }
 }
 

@@ -116,7 +116,7 @@ Copper::serviceEvent(EventID id)
 
             if (COP_CHECKSUM) {
                 checkcnt++;
-                checksum = util::fnvIt32(checksum, cop1ins);
+                checksum = Hashable::fnvIt32(checksum, cop1ins);
             }
 
             // Fork execution depending on the instruction type
@@ -134,7 +134,7 @@ Copper::serviceEvent(EventID id)
             cop2ins = agnus.doCopperDmaRead(coppc);
             advancePC();
 
-            if (COP_CHECKSUM) checksum = util::fnvIt32(checksum, cop2ins);
+            if (COP_CHECKSUM) checksum = Hashable::fnvIt32(checksum, cop2ins);
 
             // Extract register number from the first instruction word
             reg = (cop1ins & 0x1FE);
@@ -180,7 +180,7 @@ Copper::serviceEvent(EventID id)
             cop2ins = agnus.doCopperDmaRead(coppc);
             advancePC();
 
-            if (COP_CHECKSUM) checksum = util::fnvIt32(checksum, cop2ins);
+            if (COP_CHECKSUM) checksum = Hashable::fnvIt32(checksum, cop2ins);
 
             // Fork execution depending on the instruction type
             schedule(isWaitCmd() ? COP_WAIT1 : COP_SKIP1);

@@ -62,7 +62,7 @@ ADFEncoder::encodeTrack(const ADFFile &adf, FloppyDisk &disk, Track t)
 
     // Compute a debug checksum
     if (ADF_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n",
-                           t, util::fnv32(disk.data.track[t], disk.length.track[t]));
+                           t, Hashable::fnv32(disk.data.track[t], disk.length.track[t]));
 }
 
 void

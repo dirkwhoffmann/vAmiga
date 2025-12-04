@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "STFactory.h"
-#include "Checksum.h"
 #include "FloppyDisk.h"
 #include "IOUtils.h"
 

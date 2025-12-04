@@ -11,7 +11,6 @@
 #include "CoreComponent.h"
 #include "Emulator.h"
 #include "Defaults.h"
-#include "Checksum.h"
 #include "Option.h"
 #include <algorithm>
 

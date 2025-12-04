@@ -11,7 +11,6 @@
 #include "Memory.h"
 #include "Emulator.h"
 #include "Agnus.h"
-#include "Checksum.h"
 #include "CIA.h"
 #include "CPU.h"
 #include "Denise.h"
@@ -58,11 +57,11 @@ Memory::_dump(Category category, std::ostream &os) const
         os << util::hex(extTraits.crc) << " (CRC32)  ";
         os << extTraits.title << " " << extTraits.released << std::endl;
         os << util::tab("Chip Ram");
-        os << util::hex(util::crc32(chip, config.chipSize)) << " (CRC32)  " << std::endl;
+        os << util::hex(Hashable::crc32(chip, config.chipSize)) << " (CRC32)  " << std::endl;
         os << util::tab("Slow Ram");
-        os << util::hex(util::crc32(slow, config.slowSize)) << " (CRC32)  " << std::endl;
+        os << util::hex(Hashable::crc32(slow, config.slowSize)) << " (CRC32)  " << std::endl;
         os << util::tab("Fast Ram");
-        os << util::hex(util::crc32(fast, config.fastSize)) << " (CRC32)  " << std::endl;
+        os << util::hex(Hashable::crc32(fast, config.fastSize)) << " (CRC32)  " << std::endl;
 
         os << std::endl;
         os << util::tab("Data bus");
@@ -640,31 +639,31 @@ Memory::getRomTraits(u32 crc)
 const RomTraits &
 Memory::getRomTraits() const
 {
-    return getRomTraits(util::crc32(rom, config.romSize));
+    return getRomTraits(Hashable::crc32(rom, config.romSize));
 }
 
 const RomTraits &
 Memory::getWomTraits() const
 {
-    return getRomTraits(util::crc32(wom, config.womSize));
+    return getRomTraits(Hashable::crc32(wom, config.womSize));
 }
 
 const RomTraits &
 Memory::getExtTraits() const
 {
-    return getRomTraits(util::crc32(ext, config.extSize));
+    return getRomTraits(Hashable::crc32(ext, config.extSize));
 }
 
 u32
 Memory::romFingerprint() const
 {
-    return util::crc32(rom, config.romSize);
+    return Hashable::crc32(rom, config.romSize);
 }
 
 u32
 Memory::extFingerprint() const
 {
-    return util::crc32(ext, config.extSize);
+    return Hashable::crc32(ext, config.extSize);
 }
 
 void

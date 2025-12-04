@@ -10,7 +10,6 @@
 #include "config.h"
 #include "ADFFactory.h"
 #include "BootBlockImage.h"
-#include "Checksum.h"
 #include "EADFFile.h"
 #include "IOUtils.h"
 #include "FileSystem.h"

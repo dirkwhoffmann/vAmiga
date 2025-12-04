@@ -91,7 +91,7 @@ IMGEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s
     buf[19] = 2;
 
     // Compute and write CRC
-    u16 crc = util::crc16(&buf[12], 8);
+    u16 crc = Hashable::crc16(&buf[12], 8);
     buf[20] = HI_BYTE(crc);
     buf[21] = LO_BYTE(crc);
 
@@ -111,7 +111,7 @@ IMGEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s
     img.readSector(&buf[60], t, s);
 
     // Compute and write CRC
-    crc = util::crc16(&buf[56], 516);
+    crc = Hashable::crc16(&buf[56], 516);
     buf[572] = HI_BYTE(crc);
     buf[573] = LO_BYTE(crc);
 

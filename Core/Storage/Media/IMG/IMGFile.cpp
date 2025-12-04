@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "IMGFactory.h"
-#include "Checksum.h"
 #include "FloppyDrive.h"
 #include "IOUtils.h"
 

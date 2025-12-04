@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Blitter.h"
 #include "Agnus.h"
-#include "Checksum.h"
 #include "Memory.h"
 #include "Paula.h"
 
@@ -151,8 +150,8 @@ void Blitter::doFastCopyBlit()
                 mem.poke16 <Accessor::AGNUS> (dpt, dhold);
 
                 if (BLT_CHECKSUM) {
-                    check1 = util::fnvIt32(check1, dhold);
-                    check2 = util::fnvIt32(check2, dpt & agnus.ptrMask);
+                    check1 = Hashable::fnvIt32(check1, dhold);
+                    check2 = Hashable::fnvIt32(check2, dpt & agnus.ptrMask);
                 }
                 trace(BLT_DEBUG, "    D = %X -> %X\n", dhold, dpt);
                 
@@ -287,8 +286,8 @@ Blitter::doFastLineBlit()
             mem.poke16 <Accessor::AGNUS> (bltdpt, dhold);
             
             if (BLT_CHECKSUM) {
-                check1 = util::fnvIt32(check1, dhold);
-                check2 = util::fnvIt32(check2, bltdpt & agnus.ptrMask);
+                check1 = Hashable::fnvIt32(check1, dhold);
+                check2 = Hashable::fnvIt32(check2, bltdpt & agnus.ptrMask);
             }
         }
         
