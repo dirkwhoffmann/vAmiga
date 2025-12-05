@@ -365,7 +365,7 @@ public:
     bool isInsertable(const FloppyDisk &disk) const;
 
     // Inserts a new disk with an optional delay
-    void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay = 0) throws;
+    void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay = 0);
     void insertMediaFile(const class MediaFile &file, bool wp);
 
     // Ejects the current disk with an optional delay
@@ -375,17 +375,17 @@ public:
     std::unique_ptr<MediaFile> exportDisk(FileType type);
 
     // Replaces the current disk (recommended way to insert disks)
-    void swapDisk(std::unique_ptr<FloppyDisk> disk) throws;
-    void swapDisk(class FloppyFile &file) throws;
-    void swapDisk(const fs::path &path) throws;
+    void swapDisk(std::unique_ptr<FloppyDisk> disk);
+    void swapDisk(class FloppyFile &file);
+    void swapDisk(const fs::path &path);
 
     // Replaces the current disk with a factory-fresh disk
-    void insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path &path = {}) throws;
+    void insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path &path = {});
     
 private:
     
     template <EventSlot s> void ejectDisk(Cycle delay);
-    template <EventSlot s> void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay) throws;
+    template <EventSlot s> void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay);
 
  
     //
@@ -395,7 +395,7 @@ private:
 public:
     
     // Sets a catchpoint on the specified file
-    void catchFile(const fs::path &path) throws;
+    void catchFile(const fs::path &path);
     
     
     //

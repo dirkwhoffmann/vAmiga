@@ -115,17 +115,17 @@ public:
     void init(isize size);
 
     // Creates a hard drive with the contents of a file system
-    void init(const class FileSystem &fs) throws;
+    void init(const class FileSystem &fs);
 
     // Creates a hard drive with the contents of a media file
-    void init(const class MediaFile &file) throws;
+    void init(const class MediaFile &file);
 
     // Creates a hard drive with the contents of an HDF or HDZ
-    void init(const class HDFFile &hdf) throws;
-    void init(const class HDZFile &hdz) throws;
+    void init(const class HDFFile &hdf);
+    void init(const class HDZFile &hdz);
 
     // Creates a hard drive with the contents of an HDF file
-    void init(const fs::path &path) throws;
+    void init(const fs::path &path);
 
     const HardDriveTraits &getTraits() const {
 
@@ -337,11 +337,11 @@ public:
     string defaultName(isize partition = 0) const;
 
     // Formats the disk
-    void format(FSFormat fs, string name) throws;
+    void format(FSFormat fs, string name);
 
     // Change the drive geometry
-    void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;
-    void changeGeometry(const GeometryDescriptor &geometry) throws;
+    void changeGeometry(isize c, isize h, isize s, isize b = 512);
+    void changeGeometry(const GeometryDescriptor &geometry);
     
     
     //
@@ -376,10 +376,10 @@ private:
 public:
     
     // Imports files from a folder (deletes existing files)
-    void importFolder(const fs::path &path) throws;
+    void importFolder(const fs::path &path);
     
     // Exports the disk in HDF format
-    void writeToFile(const fs::path &path) throws;
+    void writeToFile(const fs::path &path);
 
     
     //

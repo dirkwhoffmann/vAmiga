@@ -32,11 +32,11 @@ public:
     
     using AnyFile::init;
     
-    HDZFile(const fs::path &path) throws { init(path); }
-    HDZFile(const u8 *buf, isize len) throws { init(buf, len); }
-    HDZFile(const class HDFFile &hdf) throws { init(hdf); }
+    HDZFile(const fs::path &path) { init(path); }
+    HDZFile(const u8 *buf, isize len) { init(buf, len); }
+    HDZFile(const class HDFFile &hdf) { init(hdf); }
 
-    void init(const class HDFFile &hdf) throws;
+    void init(const class HDFFile &hdf);
 
     // const char *objectName() const override { return "HDZ"; }
 
@@ -49,7 +49,7 @@ public:
     u64 fnv64() const override { return hdf.fnv64(); }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
-    void finalizeRead() throws override;
+    void finalizeRead() override;
 
     
     //

@@ -17,7 +17,7 @@ namespace utl { using namespace support; }
 namespace vamiga {
 
 void
-ADZFile::init(const class ADFFile &adf) throws
+ADZFile::init(const class ADFFile &adf)
 {
     this->adf = ADFFile(adf.data.ptr, adf.data.size);
     data = adf.data;

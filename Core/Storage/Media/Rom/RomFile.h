@@ -35,8 +35,8 @@ public:
     // Initializing
     //
 
-    RomFile(const fs::path &path) throws { init(path); }
-    RomFile(const u8 *buf, isize len) throws { init(buf, len); }
+    RomFile(const fs::path &path) { init(path); }
+    RomFile(const u8 *buf, isize len) { init(buf, len); }
 
     // const char *objectName() const override { return "ROM"; }
 
@@ -64,7 +64,7 @@ public:
      * a rom.key file is seeked in the directory the encrypted Rom was loaded
      * from and applied to the encrypted data.
      */
-    void decrypt() throws;
+    void decrypt();
 };
 
 }

@@ -34,11 +34,11 @@ public:
     
     using AnyFile::init;
     
-    ADZFile(const fs::path &path) throws { init(path); }
-    ADZFile(const u8 *buf, isize len) throws { init(buf, len); }
-    ADZFile(const class ADFFile &adf) throws { init(adf); }
+    ADZFile(const fs::path &path) { init(path); }
+    ADZFile(const u8 *buf, isize len) { init(buf, len); }
+    ADZFile(const class ADFFile &adf) { init(adf); }
     
-    void init(const class ADFFile &adf) throws;
+    void init(const class ADFFile &adf);
     
     // const char *objectName() const override { return "ADZ"; }
 
@@ -51,7 +51,7 @@ public:
     u64 fnv64() const override { return adf.fnv64(); }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
-    void finalizeRead() throws override;
+    void finalizeRead() override;
 
     
     //

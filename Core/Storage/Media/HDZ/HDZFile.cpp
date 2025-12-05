@@ -36,7 +36,7 @@ HDZFile::isCompatible(const Buffer<u8> &buf)
 }
 
 void
-HDZFile::init(const class HDFFile &hdf) throws
+HDZFile::init(const class HDFFile &hdf)
 {
     this->hdf = hdf;
     data = hdf.data;

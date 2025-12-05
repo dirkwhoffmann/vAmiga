@@ -32,9 +32,9 @@ public:
 
     using AnyFile::init;
 
-    STFile(const fs::path &path) throws { init(path); }
-    STFile(isize len) throws { init(len); }
-    STFile(const u8 *buf, isize len) throws { init(buf, len); }
+    STFile(const fs::path &path) { init(path); }
+    STFile(isize len) { init(len); }
+    STFile(const u8 *buf, isize len) { init(buf, len); }
 
 
     //

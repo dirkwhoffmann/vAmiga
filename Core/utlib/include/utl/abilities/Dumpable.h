@@ -10,6 +10,7 @@
 #pragma once
 
 #include "utl/types.h"
+#include <functional>
 
 namespace utl::abilities {
 

@@ -62,7 +62,7 @@ private:
     void main() override;
 
     // Inner loops (called from main)
-    void mainLoop() throws;
+    void mainLoop();
     void sessionLoop();
 
 
@@ -73,14 +73,14 @@ private:
 public:
 
     // Receives or packet
-    string receive() throws;
+    string receive();
 
     // Sends a packet
-    void send(const string &payload) throws;
-    void send(char payload) throws;
-    void send(int payload) throws;
-    void send(long payload) throws;
-    void send(std::stringstream &payload) throws;
+    void send(const string &payload);
+    void send(char payload);
+    void send(int payload);
+    void send(long payload);
+    void send(std::stringstream &payload);
 
     // Operator overloads
     using RemoteServer::operator<<;
@@ -91,7 +91,7 @@ public:
     SocketServer &operator<<(std::stringstream &payload) { send(payload); return *this; }
 
     // Processes a package
-    void process(const string &payload) throws;
+    void process(const string &payload);
 
 
     //
@@ -100,9 +100,9 @@ public:
 
 private:
 
-    virtual string doReceive() throws = 0;
-    virtual void doSend(const string &payload) throws = 0;
-    virtual void doProcess(const string &payload) throws = 0;
+    virtual string doReceive() = 0;
+    virtual void doSend(const string &payload) = 0;
+    virtual void doProcess(const string &payload) = 0;
 
 
     //

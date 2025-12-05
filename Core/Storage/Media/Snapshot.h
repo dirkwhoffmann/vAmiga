@@ -64,9 +64,9 @@ public:
     // Initializing
     //
     
-    Snapshot(const Snapshot &other) throws { init(other.data.ptr, other.data.size); }
-    Snapshot(const fs::path &path) throws { init(path); }
-    Snapshot(const u8 *buf, isize len) throws { init(buf, len); }
+    Snapshot(const Snapshot &other) { init(other.data.ptr, other.data.size); }
+    Snapshot(const fs::path &path) { init(path); }
+    Snapshot(const u8 *buf, isize len) { init(buf, len); }
     Snapshot(isize capacity);
     Snapshot(Amiga &amiga);
     Snapshot(Amiga &amiga, Compressor compressor);
@@ -81,7 +81,7 @@ public:
     FileType type() const override { return FileType::SNAPSHOT; }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
-    void finalizeRead() throws override;
+    void finalizeRead() override;
     
     
     //

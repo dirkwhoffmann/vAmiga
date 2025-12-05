@@ -134,7 +134,7 @@ public:
 
 public:
 
-    os::ExecBase getExecBase() const throws;
+    os::ExecBase getExecBase() const;
     
     void read(u32 addr, os::CommandLineInterface *result) const;
     void read(u32 addr, os::ExecBase *result) const;
@@ -194,7 +194,7 @@ public:
     // Performing sanity checks
     //
     
-    void checkExecBase(const os::ExecBase &execBase) const throws;
+    void checkExecBase(const os::ExecBase &execBase) const;
     
 
     //

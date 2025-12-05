@@ -221,13 +221,13 @@ HardDrive::init(const HDFFile &hdf)
 }
 
 void
-HardDrive::init(const HDZFile &hdz) throws
+HardDrive::init(const HDZFile &hdz)
 {
     init(hdz.hdf);
 }
 
 void
-HardDrive::init(const fs::path &path) throws
+HardDrive::init(const fs::path &path)
 {
     if (!fs::exists(path)) {
 
@@ -747,7 +747,7 @@ HardDrive::moveHead(isize c, isize h, isize s)
 }
 
 void
-HardDrive::importFolder(const fs::path &path) throws
+HardDrive::importFolder(const fs::path &path)
 {
     if (!fs::exists(path)) {
 
@@ -779,11 +779,11 @@ HardDrive::importFolder(const fs::path &path) throws
 }
 
 void
-HardDrive::writeToFile(const fs::path &path) throws
+HardDrive::writeToFile(const fs::path &path)
 {
     if (!path.empty()) {
 
-        auto hdf = HDFFactory::make(*this); //  HDFFile(*this);
+        auto hdf = HDFFactory::make(*this);
         hdf->writeToFile(path);
     }
 }

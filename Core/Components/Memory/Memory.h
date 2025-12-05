@@ -340,7 +340,7 @@ public:
     
 private:
 
-    void _isReady() const throws override;
+    void _isReady() const override;
 
 
     //
@@ -422,19 +422,19 @@ public:
     void eraseExt() { std::memset(ext, 0, config.extSize); }
     
     // Installs a Boot Rom or Kickstart Rom
-    void loadRom(class MediaFile &file) throws;
-    void loadRom(const fs::path &path) throws;
-    void loadRom(const u8 *buf, isize len) throws;
+    void loadRom(class MediaFile &file);
+    void loadRom(const fs::path &path);
+    void loadRom(const u8 *buf, isize len);
     
     // Installs a Kickstart expansion Rom
-    void loadExt(class MediaFile &file) throws;
-    void loadExt(const fs::path &path) throws;
-    void loadExt(const u8 *buf, isize len) throws;
+    void loadExt(class MediaFile &file);
+    void loadExt(const fs::path &path);
+    void loadExt(const u8 *buf, isize len);
 
     // Saves a Rom to disk
-    void saveRom(const fs::path &path) const throws;
-    void saveWom(const fs::path &path) const throws;
-    void saveExt(const fs::path &path) const throws;
+    void saveRom(const fs::path &path) const;
+    void saveWom(const fs::path &path) const;
+    void saveExt(const fs::path &path) const;
 
     // Fixes two bugs in Kickstart 1.2 expansion.library
     void patchExpansionLib();

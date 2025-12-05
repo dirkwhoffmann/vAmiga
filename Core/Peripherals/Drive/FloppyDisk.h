@@ -100,18 +100,18 @@ private:
 public:
     
     FloppyDisk() = default;
-    FloppyDisk(Diameter dia, Density den, bool wp = false) throws { init(dia, den, wp); }
-    FloppyDisk(const FloppyFile &file, bool wp = false) throws { init(file, wp); }
-    FloppyDisk(SerReader &reader, Diameter dia, Density den, bool wp = false) throws {
+    FloppyDisk(Diameter dia, Density den, bool wp = false) { init(dia, den, wp); }
+    FloppyDisk(const FloppyFile &file, bool wp = false) { init(file, wp); }
+    FloppyDisk(SerReader &reader, Diameter dia, Density den, bool wp = false) {
         init(reader, dia, den, wp); }
     ~FloppyDisk();
     
 private:
     
-    void init(Diameter dia, Density den, bool wp) throws;
-    void init(const class FloppyFile &file, bool wp) throws;
-    void init(unique_ptr<FloppyFile> file, bool wp) throws;
-    void init(SerReader &reader, Diameter dia, Density den, bool wp) throws;
+    void init(Diameter dia, Density den, bool wp);
+    void init(const class FloppyFile &file, bool wp);
+    void init(unique_ptr<FloppyFile> file, bool wp);
+    void init(SerReader &reader, Diameter dia, Density den, bool wp);
 
     
 public:

@@ -31,7 +31,7 @@ public:
     static bool isCompatible(const Buffer<u8> &buffer);
         
     // Returns the size of an ADF file of a given disk type in bytes
-    static isize fileSize(Diameter diameter, Density density) throws;
+    static isize fileSize(Diameter diameter, Density density);
 
     
     //
@@ -43,9 +43,9 @@ public:
     using AnyFile::init;
     
     ADFFile() { }
-    ADFFile(const fs::path &path) throws { init(path); }
-    ADFFile(isize len) throws { init(len); }
-    ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
+    ADFFile(const fs::path &path) { init(path); }
+    ADFFile(isize len) { init(len); }
+    ADFFile(const u8 *buf, isize len) { init(buf, len); }
 
     
     //
@@ -108,7 +108,7 @@ public:
 
 public:
     
-    void formatDisk(FSFormat fs, BootBlockId id, string name) throws;
+    void formatDisk(FSFormat fs, BootBlockId id, string name);
 
     
     //

@@ -32,4 +32,4 @@
  * documentary purposes only as C++ implicitly marks all functions with
  * noexcept(false) by default.
  */
-#define throws noexcept(false)
+// #define throws noexcept(false)

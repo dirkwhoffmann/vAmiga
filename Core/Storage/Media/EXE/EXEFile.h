@@ -32,8 +32,8 @@ public:
     
     using AnyFile::init;
     
-    EXEFile(const fs::path &path) throws { init(path); }
-    EXEFile(const u8 *buf, isize len) throws { init(buf, len); }
+    EXEFile(const fs::path &path) { init(path); }
+    EXEFile(const u8 *buf, isize len) { init(buf, len); }
     
     // const char *objectName() const override { return "EXE"; }
     const ADFFile &getADF() const { return adf; }
@@ -46,7 +46,7 @@ public:
     u64 fnv64() const override { return adf.fnv64(); }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
-    void finalizeRead() throws override;
+    void finalizeRead() override;
     
     
     //

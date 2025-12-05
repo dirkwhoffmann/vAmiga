@@ -178,7 +178,7 @@ public:
 
     void powerOn();
     void powerOff();
-    void run() throws;
+    void run(); // Throws
     void pause();
     void halt();
 
@@ -201,7 +201,7 @@ public:
 private:
 
     // Returns if the emulator is ready to runs, throws an exception otherwise
-    virtual void isReady() throws = 0;
+    virtual void isReady() = 0;
 
 
     //

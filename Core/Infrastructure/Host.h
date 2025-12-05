@@ -112,10 +112,10 @@ public:
     fs::path makeAbsolute(const fs::path &path) const;
 
     // Returns a path to a temporary folder
-    fs::path tmp() const throws;
+    fs::path tmp() const;
 
     // Assembles a path to a temporary file
-    fs::path tmp(const string &name, bool unique = false) const throws;
+    fs::path tmp(const string &name, bool unique = false) const;
 };
 
 }

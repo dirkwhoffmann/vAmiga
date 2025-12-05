@@ -48,11 +48,11 @@ public:
 public:
     
     HDFFile() { }
-    HDFFile(const fs::path &path) throws { init(path); }
-    HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
+    HDFFile(const fs::path &path) { init(path); }
+    HDFFile(const u8 *buf, isize len) { init(buf, len); }
 
-    void init(const fs::path &path) throws;
-    void init(const u8 *buf, isize len) throws;
+    void init(const fs::path &path);
+    void init(const u8 *buf, isize len);
 
     // const char *objectName() const override { return "HDF"; }
 

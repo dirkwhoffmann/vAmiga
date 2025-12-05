@@ -32,23 +32,16 @@ public:
     
     using AnyFile::init;
     
-    IMGFile(const fs::path &path) throws { init(path); }
-    IMGFile(isize len) throws { init(len); }
-    IMGFile(const u8 *buf, isize len) throws { init(buf, len); }
+    IMGFile(const fs::path &path) { init(path); }
+    IMGFile(isize len) { init(len); }
+    IMGFile(const u8 *buf, isize len) { init(buf, len); }
 
 
-    //
-    // Methods from CoreObject
-    //
-    
-public:
-    
-    // const char *objectName() const override { return "IMG"; }
-    
-    
     //
     // Methods from AnyFile
     //
+
+public:
 
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }

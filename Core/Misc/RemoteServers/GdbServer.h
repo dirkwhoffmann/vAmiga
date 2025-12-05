@@ -79,9 +79,9 @@ private:
 public:
     
     bool canRun() override;
-    string doReceive() throws override;
-    void doSend(const string &payload) throws override;
-    void doProcess(const string &payload) throws override;
+    string doReceive() override;
+    void doSend(const string &payload) override;
+    void doProcess(const string &payload) override;
     void didStart() override;
     void didStop() override;
     void didConnect() override;
@@ -124,16 +124,16 @@ public:
 public:
     
     // Processes a packet in the format used by GDB
-    void process(string packet) throws;
+    void process(string packet);
     
     // Processes a checksum-free packet with the first letter stripped off
-    void process(char letter, string packet) throws;
+    void process(char letter, string packet);
     
 private:
     
     // Processes a single command (GdbServerCmds.cpp)
-    template <char letter> void process(string arg) throws;
-    template <char letter, GdbCmd cmd> void process(string arg) throws;
+    template <char letter> void process(string arg);
+    template <char letter, GdbCmd cmd> void process(string arg);
     
     // Sends a packet with control characters and a checksum attached
     void reply(const string &payload);

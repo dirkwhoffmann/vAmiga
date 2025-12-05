@@ -10,7 +10,6 @@
 #include "utl/abilities/Dumpable.h"
 #include "utl/support/Strings.h"
 #include "utl/hints.h"
-#include <functional>
 
 namespace utl::abilities {
 

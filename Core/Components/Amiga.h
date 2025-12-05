@@ -342,17 +342,17 @@ public:
 public:
 
     // Queries an option
-    i64 get(Opt opt, isize id = 0) const throws;
+    i64 get(Opt opt, isize id = 0) const;
 
     // Checks an option
-    void check(Opt opt, i64 value, const std::vector<isize> objids = { }) throws;
+    void check(Opt opt, i64 value, const std::vector<isize> objids = { });
 
     // Sets an option
-    void set(Opt opt, i64 value, const std::vector<isize> objids = { }) throws;
+    void set(Opt opt, i64 value, const std::vector<isize> objids = { });
 
     // Convenience wrappers
-    void set(Opt opt, const string &value, const std::vector<isize> objids = { }) throws;
-    void set(const string &opt, const string &value, const std::vector<isize> objids = { }) throws;
+    void set(Opt opt, const string &value, const std::vector<isize> objids = { });
+    void set(const string &opt, const string &value, const std::vector<isize> objids = { });
 
     // Configures the emulator to match a specific Amiga model
     void set(ConfigScheme model);
@@ -422,7 +422,7 @@ public:
 public:
     
     // Loads a workspace from a file
-    void loadWorkspace(const fs::path &path) throws;
+    void loadWorkspace(const fs::path &path);
 
     // Saves the current workspace to a file
     void saveWorkspace(const fs::path &path);
@@ -442,11 +442,11 @@ public:
     std::unique_ptr<MediaFile> takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
 
     // Loads a snapshot from a file
-    void loadSnapshot(const fs::path &path) throws;
-    void loadSnapshot(const MediaFile &file) throws;
+    void loadSnapshot(const fs::path &path);
+    void loadSnapshot(const MediaFile &file);
 
     // Saves a snapshot to a file
-    void saveSnapshot(const fs::path &path) throws;
+    void saveSnapshot(const fs::path &path);
 
     // Services a snapshot event
     void serviceSnpEvent(EventID id);

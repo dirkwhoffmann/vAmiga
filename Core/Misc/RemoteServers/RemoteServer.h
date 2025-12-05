@@ -169,13 +169,13 @@ public:
 private: // public:
 
     // Launch the remote server
-    virtual void start() throws;
+    virtual void start();
 
     // Shuts down the remote server
-    virtual void stop() throws;
+    virtual void stop();
 
     // Disconnects the client
-    virtual void disconnect() throws = 0;
+    virtual void disconnect() = 0;
 
 protected:
 
@@ -195,7 +195,7 @@ private:
 protected:
 
     // The main thread function
-    virtual void main() throws = 0;
+    virtual void main() = 0;
 
     // Reports an error to the GUI
     void handleError(const char *description);

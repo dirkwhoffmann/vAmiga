@@ -43,11 +43,11 @@ public:
 
     virtual ~AnyFile();
 
-    void init(isize len) throws;
-    void init(const u8 *buf, isize len) throws;
-    void init(const Buffer<u8> &buffer) throws;
-    void init(const string &str) throws;
-    void init(const fs::path &path) throws;
+    void init(isize len);
+    void init(const u8 *buf, isize len);
+    void init(const Buffer<u8> &buffer);
+    void init(const string &str);
+    void init(const fs::path &path);
 
     explicit operator bool() const { return data.ptr != nullptr; }
 
@@ -103,13 +103,13 @@ public:
     isize writeToStream(std::ostream &stream) const;
     isize writeToFile(const fs::path &path) const;
     isize writePartitionToFile(const fs::path &path, isize partition) const;
-    isize writeToBuffer(u8 *buf) const throws;
-    isize writeToBuffer(Buffer<u8> &buffer) const throws;
+    isize writeToBuffer(u8 *buf) const;
+    isize writeToBuffer(Buffer<u8> &buffer) const;
 
 private:
     
     // Delegation methods
-    virtual void finalizeRead() throws { };
+    virtual void finalizeRead() { };
 };
 
 }

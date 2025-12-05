@@ -47,9 +47,9 @@ private:
     // Methods from SocketServer
     //
 
-    string doReceive() throws override;
-    void doProcess(const string &packet) throws override;
-    void doSend(const string &packet)throws  override;
+    string doReceive() override;
+    void doProcess(const string &packet) override;
+    void doSend(const string &packet) override;
     void didStart() override;
     void didConnect() override;
 
