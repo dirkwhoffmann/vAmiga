@@ -11,7 +11,7 @@
 #include "DeviceDescriptors.h"
 #include "Error.h"
 #include "FSTypes.h"
-#include "OSDebugger.h"
+// #include "OSDebugger.h"
 #include "utl/io.h"
 #include <algorithm>
 
@@ -231,10 +231,10 @@ DriverDescriptor::dump(std::ostream &os) const
 
     os << tab("DOS type");
     os << hex(dosType);
-    os << " (" << OSDebugger::dosTypeStr(dosType) << ")" << std::endl;
+    // os << " (" << OSDebugger::dosTypeStr(dosType) << ")" << std::endl;
     os << tab("DOS version");
     os << hex(dosVersion);
-    os << " (" << OSDebugger::dosVersionStr(dosVersion) << ")" << std::endl;
+    // os << " (" << OSDebugger::dosVersionStr(dosVersion) << ")" << std::endl;
     os << tab("Patch flags");
     os << hex(patchFlags) << std::endl;
     os << tab("Code blocks");

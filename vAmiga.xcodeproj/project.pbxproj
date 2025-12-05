@@ -364,6 +364,8 @@
 		50BCB9A42EE2CD3D000C53CF /* Reportable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9A22EE2CD39000C53CF /* Reportable.cpp */; };
 		50BCB9A72EE2F347000C53CF /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9A62EE2F344000C53CF /* Parser.cpp */; };
 		50BCB9A82EE2F347000C53CF /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9A62EE2F344000C53CF /* Parser.cpp */; };
+		50BCB9AB2EE2FA11000C53CF /* DeviceError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */; };
+		50BCB9AC2EE2FA11000C53CF /* DeviceError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */; };
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
 		50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CC6276D174200386540 /* GdbServer.cpp */; };
 		50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
@@ -1132,6 +1134,8 @@
 		50BCB9A22EE2CD39000C53CF /* Reportable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Reportable.cpp; sourceTree = "<group>"; };
 		50BCB9A52EE2F335000C53CF /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		50BCB9A62EE2F344000C53CF /* Parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
+		50BCB9A92EE2F9FF000C53CF /* DeviceError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceError.h; sourceTree = "<group>"; };
+		50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceError.cpp; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -2227,6 +2231,8 @@
 			children = (
 				509E76382EDDF57400608FA7 /* CMakeLists.txt */,
 				505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */,
+				50BCB9A92EE2F9FF000C53CF /* DeviceError.h */,
+				50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */,
 				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
 				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
 				5056506925440FDE00A79D27 /* FileSystems */,
@@ -3144,6 +3150,7 @@
 				509E76262EDDC34B00608FA7 /* STEncoder.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				506D57B92EC4B81200E21501 /* ServerSettings.swift in Sources */,
+				50BCB9AC2EE2FA11000C53CF /* DeviceError.cpp in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
 				50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */,
 				501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */,
@@ -3277,6 +3284,7 @@
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
 				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50E79D3E2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
+				50BCB9AB2EE2FA11000C53CF /* DeviceError.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,

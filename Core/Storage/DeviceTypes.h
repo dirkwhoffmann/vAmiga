@@ -10,8 +10,7 @@
 #pragma once
 
 #include "utl/abilities/Reflectable.h"
-
-using utl::abilities::Reflectable;
+using namespace utl::abilities;
 
 namespace vamiga {
 

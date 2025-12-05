@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Serializable.h"
 #include "DeviceTypes.h"
+#include "Serializable.h"
 
 namespace vamiga {
 

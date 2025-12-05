@@ -7,12 +7,12 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
 #include "utl/storage/Buffer.h"
 #include "utl/support/Bytes.h"
 #include "utl/abilities/Dumpable.h"
 #include <sstream>
 #include <fstream>
+#include <cassert>
 
 namespace utl {
 
