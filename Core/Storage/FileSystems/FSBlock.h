@@ -13,10 +13,10 @@
 #include "FSTypes.h"
 #include "FSError.h"
 #include "FSObjects.h"
+#include "BootBlockImage.h"
 #include "utl/storage.h"
 #include "utl/types/UtlError.h"
 #include "utl/abilities/Dumpable.h"
-#include "BootBlockImage.h"
 
 namespace vamiga {
 

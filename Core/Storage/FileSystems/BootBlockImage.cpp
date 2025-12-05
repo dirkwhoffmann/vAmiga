@@ -9,8 +9,6 @@
 
 #include "config.h"
 #include "BootBlockImage.h"
-#include "Macros.h"
-#include <cstring>
 
 namespace vamiga {
 
