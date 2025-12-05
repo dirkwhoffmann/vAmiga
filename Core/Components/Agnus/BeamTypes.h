@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -23,7 +23,7 @@ enum class FrameType
     NTSC_SF_SL    // NTSC short frame starting with a short line
 };
 
-struct FrameTypeEnum : Reflection<FrameTypeEnum, FrameType>
+struct FrameTypeEnum : Reflectable<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FrameType::NTSC_SF_SL);

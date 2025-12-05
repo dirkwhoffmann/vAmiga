@@ -25,14 +25,14 @@ class Reportable {
 
 protected:
 
-    virtual const Report report(isize category = 0) const = 0;
+    virtual const Report makeReport(isize category = 0) const = 0;
 
 public:
 
     Reportable() = default;
     virtual ~Reportable() = default;
     
-    void report(std::ostream &os, isize category = 0) const;
+    virtual void report(std::ostream &os, isize category = 0) const;
 };
 
 }

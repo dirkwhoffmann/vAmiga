@@ -14,7 +14,7 @@ namespace utl::abilities {
 void
 Reportable::report(std::ostream &os, isize category) const
 {
-    for (const auto& item : report(category)) {
+    for (const auto& item : makeReport(category)) {
 
         os << std::setw(22) << std::left
         << item.key << ": "

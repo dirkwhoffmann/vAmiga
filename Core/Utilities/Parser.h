@@ -53,16 +53,20 @@ string parseSeq(const string& token) throws;
 
 template <typename Enum> long parseEnum(const string& key)
 {
-    return parsePartialEnum <Enum> (key, [](long){ return true; });
+    // return parsePartialEnum <Enum> (key, [](long){ return true; });
+    return (long)Enum::parseEnum(key);
 }
 
 template <typename R, typename Enum> R parseEnum(const string& key)
 {
-    return (R)parseEnum <Enum> (key);
+    // return (R)parseEnum <Enum> (key);
+    return Enum::parseEnum(key);
 }
 
 template <typename Enum> long parsePartialEnum(const string& key, std::function<bool(long)> accept)
 {
+    return (long)Enum::parsePartialEnum(key, accept);
+    /*
     string upper, prefix, suffix;
 
     // Convert the search string to upper case
@@ -85,11 +89,13 @@ template <typename Enum> long parsePartialEnum(const string& key, std::function<
     }
 
     throw EnumParseError(key, Enum::keyList());
+    */
 }
 
 template <typename R, typename Enum> R parsePartialEnum(const string& key, std::function<bool(long)> accept)
 {
-    return (R)parsePartialEnum<Enum>(key, accept);
+    return Enum::parsePartialEnum(key, accept);
+    // return (R)parsePartialEnum<Enum>(key, accept);
 }
 
 }

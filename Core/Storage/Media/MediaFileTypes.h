@@ -36,7 +36,7 @@ enum class FileType : long
     ROM
 };
 
-struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
+struct FileTypeEnum : Reflectable<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FileType::ROM);

@@ -25,7 +25,7 @@ enum class DiskFlags
     MODIFIED   = 2
 };
 
-struct DiskFlagsEnum : Reflection<DiskFlagsEnum, DiskFlags>
+struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
     static constexpr long maxVal = long(DiskFlags::MODIFIED);

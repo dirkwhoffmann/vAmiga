@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -28,7 +28,7 @@ enum class SrvState : long
     INVALID         // The server is in an error state
 };
 
-struct SrvStateEnum : Reflection<SrvStateEnum, SrvState>
+struct SrvStateEnum : Reflectable<SrvStateEnum, SrvState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SrvState::INVALID);
@@ -58,7 +58,7 @@ enum class ServerProtocol
     DEFAULT
 };
 
-struct ServerProtocolEnum : Reflection<ServerProtocolEnum, ServerProtocol>
+struct ServerProtocolEnum : Reflectable<ServerProtocolEnum, ServerProtocol>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ServerProtocol::DEFAULT);

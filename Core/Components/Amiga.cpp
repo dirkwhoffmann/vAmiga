@@ -667,6 +667,12 @@ Amiga::masterClockFrequency() const
 }
 
 void
+Amiga::report(std::ostream &os, isize category) const
+{
+    _dump(Category(category), os);
+}
+
+void
 Amiga::_dump(Category category, std::ostream &os) const
 {
     using namespace utl;

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -155,42 +155,9 @@ enum class Fault : long
     GDB_INVALID_CHECKSUM,
     GDB_UNRECOGNIZED_CMD,
     GDB_UNSUPPORTED_CMD,
-    
-    // File system
-    /*
-    FS_UNKNOWN,
-    FS_OUT_OF_RANGE,
-    FS_INVALID_PATH,
-    FS_INVALID_REGEX,
-    FS_NOT_A_DIRECTORY,
-    FS_NOT_A_FILE,
-    FS_NOT_A_FILE_OR_DIRECTORY,
-    FS_NOT_FOUND,
-    FS_EXISTS,
-    FS_CANNOT_OPEN,
-
-    FS_UNINITIALIZED,
-    FS_UNFORMATTED,
-    FS_UNSUPPORTED,
-    FS_READ_ONLY,
-    FS_WRONG_BSIZE,
-    FS_WRONG_CAPACITY,
-    FS_WRONG_DOS_TYPE,
-    FS_WRONG_BLOCK_TYPE,
-    FS_HAS_CYCLES,
-    FS_CORRUPTED,
-
-    // File system (import errors)
-    FS_OUT_OF_SPACE,
-    
-    // File system (export errors)
-    FS_DIR_NOT_EMPTY,
-    FS_CANNOT_CREATE_DIR,
-    FS_CANNOT_CREATE_FILE
-    */
 };
 
-struct FaultEnum : Reflection<FaultEnum, Fault>
+struct FaultEnum : Reflectable<FaultEnum, Fault>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Fault::GDB_UNSUPPORTED_CMD);
@@ -320,36 +287,6 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::GDB_INVALID_CHECKSUM:        return "GDB_INVALID_CHECKSUM";
             case Fault::GDB_UNRECOGNIZED_CMD:        return "GDB_UNRECOGNIZED_CMD";
             case Fault::GDB_UNSUPPORTED_CMD:         return "GDB_UNSUPPORTED_CMD";
-
-                /*
-            case Fault::FS_UNKNOWN:                  return "FS_UNKNOWN";
-            case Fault::FS_OUT_OF_RANGE:             return "FS_OUT_OF_RANGE";
-            case Fault::FS_INVALID_PATH:             return "FS_INVALID_PATH";
-            case Fault::FS_INVALID_REGEX:            return "FS_INVALID_REGEX";
-            case Fault::FS_NOT_A_DIRECTORY:          return "FS_NOT_A_DIRECTORY";
-            case Fault::FS_NOT_A_FILE:               return "FS_NOT_A_FILE";
-            case Fault::FS_NOT_A_FILE_OR_DIRECTORY:  return "FS_NOT_A_FILE_OR_DIRECTORY";
-            case Fault::FS_NOT_FOUND:                return "FS_NOT_FOUND";
-            case Fault::FS_EXISTS:                   return "FS_EXISTS";
-            case Fault::FS_CANNOT_OPEN:              return "FS_CANNOT_OPEN";
-
-            case Fault::FS_UNINITIALIZED:            return "FS_UNINITIALIZED";
-            case Fault::FS_UNFORMATTED:              return "FS_UNFORMATTED";
-            case Fault::FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
-            case Fault::FS_READ_ONLY:                return "FS_READ_ONLY";
-            case Fault::FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
-            case Fault::FS_WRONG_CAPACITY:           return "FS_WRONG_CAPACITY";
-            case Fault::FS_WRONG_DOS_TYPE:           return "FS_WRONG_DOS_TYPE";
-            case Fault::FS_WRONG_BLOCK_TYPE:         return "FS_WRONG_BLOCK_TYPE";
-            case Fault::FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
-            case Fault::FS_CORRUPTED:                return "FS_CORRUPTED";
-                
-            case Fault::FS_OUT_OF_SPACE:             return "FS_OUT_OF_SPACE";
-                
-            case Fault::FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
-            case Fault::FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
-            case Fault::FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
-                 */
         }
         return "???";
     }

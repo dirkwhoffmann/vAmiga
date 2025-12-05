@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -71,7 +71,7 @@ enum class IoCommand
     TD_LASTCOMM         // 24
 };
 
-struct IoCommandEnum : Reflection<IoCommandEnum, IoCommand>
+struct IoCommandEnum : Reflectable<IoCommandEnum, IoCommand>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(IoCommand::TD_LASTCOMM);
@@ -122,7 +122,7 @@ enum class HdcState
     READY           // The controller is fully operational
 };
 
-struct HdcStateEnum : Reflection<HdcStateEnum, HdcState>
+struct HdcStateEnum : Reflectable<HdcStateEnum, HdcState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HdcState::READY);

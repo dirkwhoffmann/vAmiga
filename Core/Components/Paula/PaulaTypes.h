@@ -38,7 +38,7 @@ enum class IrqSource : long
     EXTER
 };
 
-struct IrqSourceEnum : Reflection<IrqSourceEnum, IrqSource>
+struct IrqSourceEnum : Reflectable<IrqSourceEnum, IrqSource>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(IrqSource::EXTER);

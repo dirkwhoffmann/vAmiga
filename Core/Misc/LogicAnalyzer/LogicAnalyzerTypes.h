@@ -23,7 +23,7 @@ enum class Probe : long
     IPL
 };
 
-struct ProbeEnum : Reflection<ProbeEnum, Probe>
+struct ProbeEnum : Reflectable<ProbeEnum, Probe>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Probe::IPL);

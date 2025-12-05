@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -28,7 +28,7 @@ enum class Palette
     SEPIA
 };
 
-struct PaletteEnum : Reflection<PaletteEnum, Palette>
+struct PaletteEnum : Reflectable<PaletteEnum, Palette>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Palette::SEPIA);
@@ -71,7 +71,7 @@ enum class Zoom
     EXTREME
 };
 
-struct ZoomEnum : Reflection<ZoomEnum, Zoom>
+struct ZoomEnum : Reflectable<ZoomEnum, Zoom>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Zoom::EXTREME);
@@ -106,7 +106,7 @@ enum class Center
     AUTO,
 };
 
-struct CenterEnum : Reflection<CenterEnum, Center>
+struct CenterEnum : Reflectable<CenterEnum, Center>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Center::AUTO);
@@ -138,7 +138,7 @@ enum class Upscaler : long
     XBR_4X                     ///< XBR upscaler (4x)
 };
 
-struct UpscalerEnum : Reflection<UpscalerEnum, Upscaler> {
+struct UpscalerEnum : Reflectable<UpscalerEnum, Upscaler> {
 
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Upscaler::XBR_4X);
@@ -169,7 +169,7 @@ enum class Dotmask : long
     TRISECTED_SHIFTED           ///< Dotmask pattern 4
 };
 
-struct DotmaskEnum : Reflection<DotmaskEnum, Dotmask> {
+struct DotmaskEnum : Reflectable<DotmaskEnum, Dotmask> {
 
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Dotmask::TRISECTED_SHIFTED);
@@ -200,7 +200,7 @@ enum class Scanlines : long
     SUPERIMPOSE               ///< Emulate scanlines in the fragment shader
 };
 
-struct ScanlinesEnum : Reflection<ScanlinesEnum, Scanlines> {
+struct ScanlinesEnum : Reflectable<ScanlinesEnum, Scanlines> {
 
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Scanlines::SUPERIMPOSE);

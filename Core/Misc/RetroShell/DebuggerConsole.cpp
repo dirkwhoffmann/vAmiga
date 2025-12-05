@@ -76,7 +76,8 @@ DebuggerConsole::initCommands(RSCommand &root)
                 emulator.stepInto();
             } else {
                 os << std::endl;
-                amiga.dump(Category::Current, os);
+                // amiga.dump(Category::Current, os);
+                amiga.report(os, isize(Category::Current));
             }
         }
     });

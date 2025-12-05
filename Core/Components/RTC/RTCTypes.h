@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -24,7 +24,7 @@ enum class RTCRevision : long
     RICOH
 };
 
-struct RTCRevisionEnum : Reflection<RTCRevisionEnum, RTCRevision>
+struct RTCRevisionEnum : Reflectable<RTCRevisionEnum, RTCRevision>
 {
     static constexpr auto minVal = (long)RTCRevision::NONE;
     static constexpr auto maxVal = (long)RTCRevision::RICOH;

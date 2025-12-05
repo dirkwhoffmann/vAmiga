@@ -152,7 +152,7 @@ enum class DebugFlag
     GDB_DEBUG,        ///< GDB server
 };
 
-struct DebugFlagEnum : Reflection<DebugFlagEnum, DebugFlag>
+struct DebugFlagEnum : Reflectable<DebugFlagEnum, DebugFlag>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DebugFlag::GDB_DEBUG);

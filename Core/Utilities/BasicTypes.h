@@ -10,6 +10,7 @@
 #pragma once
 
 #include "utl/types.h"
+#include "utl/abilities/Reflectable.h"
 #include <sys/types.h>
 #include <stdint.h>
 
@@ -20,6 +21,7 @@
 namespace vamiga {
 
 using namespace utl::types;
+using utl::abilities::Reflectable;
 
 /*
 // Signed integers

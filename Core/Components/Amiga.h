@@ -287,6 +287,7 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
     void prefix(long level, const void *sender, long line) const override;
+    void report(std::ostream &os, isize category) const override;
 
 private:
 

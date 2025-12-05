@@ -46,7 +46,7 @@ public:
 
 protected:
 
-    const Report report(isize category) const override { return {{ "Name", objectName() }}; }
+    const Report makeReport(isize category) const override { return {{ "Name", objectName() }}; }
 
 
     //
@@ -54,7 +54,7 @@ protected:
     //
 
 public:
-    
+
     virtual void _dump(Category category, std::ostream &ss) const { }
     
     void dump(Category category, std::ostream &ss) const;

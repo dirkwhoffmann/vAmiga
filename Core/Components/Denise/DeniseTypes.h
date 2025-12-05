@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -20,10 +20,10 @@ namespace vamiga {
 enum class DeniseRev : long
 {
     OCS,           // Revision 8362R8
-    ECS            // Revision 8373      (only partially supported)
+    ECS            // Revision 8373      (partially supported)
 };
 
-struct DeniseRevEnum : Reflection<DeniseRevEnum, DeniseRev>
+struct DeniseRevEnum : Reflectable<DeniseRevEnum, DeniseRev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DeniseRev::ECS);

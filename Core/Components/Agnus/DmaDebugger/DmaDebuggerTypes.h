@@ -24,7 +24,7 @@ enum class DmaDisplayMode
     ODD_EVEN_LAYERS
 };
 
-struct DmaDisplayModeEnum : Reflection<DmaDisplayModeEnum, DmaDisplayMode>
+struct DmaDisplayModeEnum : Reflectable<DmaDisplayModeEnum, DmaDisplayMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DmaDisplayMode::ODD_EVEN_LAYERS);
@@ -64,7 +64,7 @@ enum class DmaChannel
     COUNT
 };
 
-struct DmaChannelEnum : Reflection<DmaChannelEnum, DmaChannel>
+struct DmaChannelEnum : Reflectable<DmaChannelEnum, DmaChannel>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DmaChannel::REFRESH);

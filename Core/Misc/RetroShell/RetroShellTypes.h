@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -35,7 +35,7 @@ enum class RSKey
     CR
 };
 
-struct RSKeyEnum : Reflection<RSKeyEnum, RSKey>
+struct RSKeyEnum : Reflectable<RSKeyEnum, RSKey>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RSKey::CR);

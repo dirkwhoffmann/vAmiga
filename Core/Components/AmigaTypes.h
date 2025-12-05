@@ -27,7 +27,7 @@ enum class Compressor : long
     RLE3
 };
 
-struct CompressorEnum : Reflection<CompressorEnum, Compressor>
+struct CompressorEnum : Reflectable<CompressorEnum, Compressor>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Compressor::RLE3);
@@ -64,7 +64,7 @@ enum class TV : long
     NTSC
 };
 
-struct TVEnum : Reflection<TVEnum, TV>
+struct TVEnum : Reflectable<TVEnum, TV>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(TV::NTSC);
@@ -96,7 +96,7 @@ enum class Resolution : long
     SHRES       // SuperHires mode (ECS only)
 };
 
-struct ResolutionEnum : Reflection<ResolutionEnum, Resolution>
+struct ResolutionEnum : Reflectable<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Resolution::SHRES);
@@ -130,7 +130,7 @@ enum class Warp : long
     ALWAYS
 };
 
-struct WarpEnum : Reflection<WarpEnum, Warp>
+struct WarpEnum : Reflectable<WarpEnum, Warp>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Warp::ALWAYS);
@@ -159,7 +159,7 @@ enum class ConfigScheme : long
     A500_PLUS_1MB
 };
 
-struct ConfigSchemeEnum : Reflection<ConfigSchemeEnum, ConfigScheme>
+struct ConfigSchemeEnum : Reflectable<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ConfigScheme::A500_PLUS_1MB);
@@ -245,7 +245,7 @@ enum class Reg : long
 };
 
 static_assert(Reg::NO_OP == Reg(0x1FE >> 1));
-struct RegEnum : Reflection<RegEnum, Reg>
+struct RegEnum : Reflectable<RegEnum, Reg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Reg::NO_OP);

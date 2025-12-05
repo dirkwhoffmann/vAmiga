@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -24,7 +24,7 @@ enum class ControlPortDevice
     JOYSTICK
 };
 
-struct ControlPortDeviceEnum : Reflection<ControlPortDeviceEnum, ControlPortDevice>
+struct ControlPortDeviceEnum : Reflectable<ControlPortDeviceEnum, ControlPortDevice>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ControlPortDevice::JOYSTICK);

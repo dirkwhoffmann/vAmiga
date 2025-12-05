@@ -9,6 +9,11 @@
 
 #pragma once
 
+#include "utl/abilities/Reflectable.h"
+
+using utl::abilities::Reflectable;
+#if 0
+
 #include "BasicTypes.h"
 #include <functional>
 #include <map>
@@ -126,3 +131,4 @@ template <class T, typename E> struct Reflection {
 };
 
 }
+#endif

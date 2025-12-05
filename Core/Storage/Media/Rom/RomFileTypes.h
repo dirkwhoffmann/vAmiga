@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -132,7 +132,7 @@ enum class RomVendor
     OTHER
 };
 
-struct RomVendorEnum : Reflection<RomVendorEnum, RomVendor> {
+struct RomVendorEnum : Reflectable<RomVendorEnum, RomVendor> {
     
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RomVendor::OTHER);

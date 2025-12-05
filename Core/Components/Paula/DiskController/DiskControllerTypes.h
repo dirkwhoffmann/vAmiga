@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
@@ -28,7 +28,7 @@ enum class DriveDmaState
     FLUSH,   // Drive is finishing up the write process
 };
 
-struct DriveStateEnum : Reflection<DriveStateEnum, DriveDmaState>
+struct DriveStateEnum : Reflectable<DriveStateEnum, DriveDmaState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DriveDmaState::FLUSH);

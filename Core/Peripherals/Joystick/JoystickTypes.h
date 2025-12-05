@@ -9,51 +9,13 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
 //
 // Enumerations
 //
-
-/*
-enum class HIDEvent
-{
-    AXIS,
-    BUTTON,
-    DPAD_UP,
-    DPAD_DOWN,
-    DPAD_RIGHT,
-    DPAD_LEFT,
-    HATSWITCH,
-};
-
-struct HIDEventEnum : Reflection<HIDEventEnum, HIDEvent>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = long(HIDEvent::HATSWITCH);
-
-    static const char *_key(HIDEvent value)
-    {
-        switch (value) {
-
-            case HIDEvent::AXIS:        return "AXIS";
-            case HIDEvent::BUTTON:      return "BUTTON";
-            case HIDEvent::DPAD_UP:     return "DPAD_UP";
-            case HIDEvent::DPAD_DOWN:   return "DPAD_DOWN";
-            case HIDEvent::DPAD_RIGHT:  return "DPAD_RIGHT";
-            case HIDEvent::DPAD_LEFT:   return "DPAD_LEFT";
-            case HIDEvent::HATSWITCH:   return "HATSWITCH";
-        }
-        return "???";
-    }
-    static const char *help(HIDEvent value)
-    {
-        return "";
-    }
-};
-*/
 
 enum class GamePadAction : long
 {
@@ -78,7 +40,7 @@ enum class GamePadAction : long
     RELEASE_RIGHT   // Release the right mouse button
 };
 
-struct GamePadActionEnum : Reflection<GamePadActionEnum, GamePadAction>
+struct GamePadActionEnum : Reflectable<GamePadActionEnum, GamePadAction>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(GamePadAction::RELEASE_RIGHT);

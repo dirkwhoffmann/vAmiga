@@ -105,6 +105,37 @@ template <class T, typename E> struct Reflectable {
         return result;
     }
 
+    static E parseEnum(const string& key)
+    {
+        return parsePartialEnum(key, [](long){ return true; });
+    }
+
+    static E parsePartialEnum(const string& key, std::function<bool(long)> accept)
+    {
+        string upper, prefix, suffix;
+
+        // Convert the search string to upper case
+        for (auto c : key) { upper += (char)std::toupper(c); }
+
+        // Search all keys
+        for (const auto &i : elements()) {
+
+            if (!accept(long(i))) continue;
+
+            auto enumkey = string(fullKey(i));
+
+            // Check if the full key matches
+            if (enumkey == upper) return i;
+
+            // If a section marker is present, check the plain key, too
+            if (auto pos = enumkey.find('.'); pos != std::string::npos) {
+                if (enumkey.substr(pos + 1, string::npos) == upper) return i;
+            }
+        }
+
+        throw utl::exception(keyList(), "Parse error");
+    }
+
     // Convenience wrapper
     static std::string argList(bool withPrefix = false,
                                std::function<bool(E)> filter = [](E){ return true; }) {
