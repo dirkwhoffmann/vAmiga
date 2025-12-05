@@ -21,6 +21,11 @@ namespace fault {
 
 enum : long
 {
+    IO_CANT_READ,
+    IO_CANT_WRITE,
+    IO_CANT_CREATE
+
+    /*
     // File/path issues
     IO_ENOENT          = long(std::errc::no_such_file_or_directory),
     IO_EEXIST          = long(std::errc::file_exists),
@@ -44,17 +49,23 @@ enum : long
 
     // Encoding
     IO_EILSEQ          = long(std::errc::illegal_byte_sequence)
+    */
 };
 
 struct IOFaultEnum : Reflectable<IOFaultEnum, long>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(IO_EILSEQ);
+    static constexpr long maxVal = long(IO_CANT_CREATE);
 
     static const char *_key(long value) {
 
         switch (value) {
 
+            case IO_CANT_READ:     return "IO_CANT_READ";
+            case IO_CANT_WRITE:    return "IO_CANT_WRITE";
+            case IO_CANT_CREATE:   return "IO_CANT_CREATE";
+
+                /*
                 // File/path issues
             case IO_ENOENT:          return "IO_ENOENT";
             case IO_EEXIST:          return "IO_EEXIST";
@@ -78,6 +89,7 @@ struct IOFaultEnum : Reflectable<IOFaultEnum, long>
 
                 // Encoding
             case IO_EILSEQ:          return "IO_EILSEQ";
+                 */
         }
         return "???";
     }

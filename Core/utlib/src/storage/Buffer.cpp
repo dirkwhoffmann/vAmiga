@@ -10,9 +10,10 @@
 #include "utl/storage/Buffer.h"
 #include "utl/support/Bytes.h"
 #include "utl/abilities/Dumpable.h"
-#include <sstream>
-#include <fstream>
 #include <cassert>
+#include <cstring>
+#include <fstream>
+#include <sstream>
 
 namespace utl {
 
@@ -42,7 +43,7 @@ Allocator<T>::operator=(const Allocator<T>& other)
     assert(size == other.size);
 
     // Copy buffer
-    if (size) memcpy(ptr, other.ptr, size * sizeof(T));
+    if (size) std::memcpy(ptr, other.ptr, size * sizeof(T));
     return *this;
 }
 

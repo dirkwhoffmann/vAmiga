@@ -15,6 +15,19 @@ IOError::IOError(long fault, const std::string &msg) : Error()
 {
      switch (fault) {
 
+         case fault::IO_CANT_READ:
+             set_msg("Failed to read from file \"" + msg + "\".");
+             break;
+
+         case fault::IO_CANT_WRITE:
+             set_msg("Failed to write to file \"" + msg + "\".");
+             break;
+
+         case fault::IO_CANT_CREATE:
+             set_msg("Failed to create file \"" + msg + "\".");
+             break;
+
+             /*
          case fault::IO_ENOENT:
              set_msg(msg + " does not exist.");
              break;
@@ -62,7 +75,8 @@ IOError::IOError(long fault, const std::string &msg) : Error()
          case fault::IO_EILSEQ:
              set_msg("Illegal byte sequence in: " + msg);
              break;
-
+              */
+             
          default:
              set_msg("IOError " + std::to_string(fault) +
                      " (" + std::string(fault::IOFaultEnum::key(fault)) + ")");

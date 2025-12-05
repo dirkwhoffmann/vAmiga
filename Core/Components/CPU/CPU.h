@@ -10,10 +10,10 @@
 #pragma once
 
 #include "CPUTypes.h"
+#include "utl/storage.h"
 #include "SubComponent.h"
 #include "CmdQueue.h"
 #include "GuardList.h"
-#include "RingBuffer.h"
 #include "Moira.h"
 
 namespace vamiga {

@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "utl/io.h"
 #include "FSDescriptor.h"
 #include "FSError.h"
+#include "utl/io.h"
 
 namespace vamiga {
 

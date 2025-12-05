@@ -48,7 +48,6 @@
  *
  */
 
-#include "utl/abilities/Loggable.h"
 #include "FSTypes.h"
 #include "FSError.h"
 #include "FSBlock.h"
@@ -60,6 +59,7 @@
 #include "FSAllocator.h"
 #include "FSImporter.h"
 #include "FSExporter.h"
+#include "utl/abilities/Loggable.h"
 
 namespace vamiga {
 
