@@ -14,19 +14,19 @@
 
 namespace vamiga {
 
-class AppException : public utl::exception
+class AppException : public utl::Exception
 {
 public:
 
-    AppException(i64 d, const string &s) : utl::exception(d, s) { }
-    AppException(i64 d) : utl::exception(d) { }
-    AppException(const string &s) : utl::exception(0, s) { }
-    AppException() : utl::exception(0) { }
+    AppException(i64 d, const string &s) : utl::Exception(d, s) { }
+    AppException(i64 d) : utl::Exception(d) { }
+    AppException(const string &s) : utl::Exception(0, s) { }
+    AppException() : utl::Exception(0) { }
 
     i64 data() const { return *payload<i64>(); }
 };
 
-struct AppError : public utl::exception
+struct AppError : public utl::Exception
 {
 public:
 

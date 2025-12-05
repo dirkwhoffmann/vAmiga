@@ -86,7 +86,7 @@ struct DeviceFaultEnum : Reflectable<DeviceFaultEnum, DeviceFault>
     }
 };
 
-class DeviceError : public utl::exception
+class DeviceError : public utl::Exception
 {
 public:
 

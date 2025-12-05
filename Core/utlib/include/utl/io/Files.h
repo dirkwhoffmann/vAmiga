@@ -9,16 +9,17 @@
 
 #pragma once
 
-#include "utl/types.h"
+// #include "utl/types.h"
+#include "utl/abilities/Reflectable.h"
 #include <iostream>
 #include <algorithm>
 #include <filesystem>
 
 namespace fs = std::filesystem;
 
-namespace utl::io {
+using utl::abilities::Reflectable;
 
-using namespace types;
+namespace utl {
 
 //
 // Handling files

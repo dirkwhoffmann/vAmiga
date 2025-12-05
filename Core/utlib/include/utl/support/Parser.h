@@ -10,9 +10,14 @@
 #pragma once
 
 #include "utl/types.h"
+#include "utl/abilities/Reflectable.h"
+#include "utl/types/UtlError.h"
+
 #include <functional>
 
 namespace utl::support {
+
+using utl::abilities::Reflectable;
 
 struct ParseError : public std::exception {
 

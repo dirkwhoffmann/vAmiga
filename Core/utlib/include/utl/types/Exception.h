@@ -15,15 +15,20 @@
 
 namespace utl {
 
-class exception : public std::exception {
+class Exception : public std::exception {
 
     std::any _payload;
     std::string _msg;
 
+    virtual void init(std::any payload, std::string msg) {
+        _payload = std::move(payload); _msg = std::move(msg);
+    }
+
 public:
 
-    explicit exception(std::any payload = {}, std::string msg = "")
-        : _payload(std::move(payload)), _msg(std::move(msg)) {}
+    explicit Exception(std::any payload = {}, std::string msg = "") {
+        init(payload, msg);
+    }
 
     const char *what() const noexcept override {
         return _msg.c_str();

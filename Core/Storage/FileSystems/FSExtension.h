@@ -9,9 +9,8 @@
 
 #pragma once
 
-#include "utl/abilities/Loggable.h"
 #include "FSTypes.h"
-#include "Loggable.h"
+#include "utl/abilities/Loggable.h"
 
 namespace vamiga {
 

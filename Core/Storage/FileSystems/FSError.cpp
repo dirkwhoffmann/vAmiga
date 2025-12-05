@@ -11,7 +11,7 @@
 
 namespace vamiga {
 
-FSError::FSError(FSFault code, const string &s) : utl::exception(code)
+FSError::FSError(FSFault code, const string &s) : utl::Exception(code)
 {
     switch (code)
     {

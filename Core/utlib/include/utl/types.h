@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "types/integers.h"
-#include "types/my_exception.h"
+#include "types/Exception.h"
 
 namespace utl { using namespace types; }
 

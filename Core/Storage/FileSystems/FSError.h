@@ -99,7 +99,7 @@ struct FSFaultEnum : Reflectable<FSFaultEnum, FSFault>
     }
 };
 
-class FSError : public utl::exception
+class FSError : public utl::Exception
 {
 public:
 

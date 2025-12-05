@@ -13,7 +13,7 @@
 #include <cassert>
 #include <sys/stat.h>
 
-namespace utl::io {
+namespace utl {
 
 fs::path
 makeUniquePath(const fs::path &path)

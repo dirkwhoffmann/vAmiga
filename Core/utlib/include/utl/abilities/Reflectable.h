@@ -133,7 +133,7 @@ template <class T, typename E> struct Reflectable {
             }
         }
 
-        throw utl::exception(keyList(), "Parse error");
+        throw utl::Exception(keyList(), "Parse error");
     }
 
     // Convenience wrapper

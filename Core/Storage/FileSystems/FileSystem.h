@@ -60,7 +60,6 @@
 #include "FSAllocator.h"
 #include "FSImporter.h"
 #include "FSExporter.h"
-#include "Loggable.h"
 
 namespace vamiga {
 

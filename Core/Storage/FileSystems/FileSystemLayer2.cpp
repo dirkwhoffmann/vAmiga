@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FileSystem.h"
-#include "utl/support/Strings.h"
+#include "utl/support.h"
 
 namespace utl { using namespace support; }
 
