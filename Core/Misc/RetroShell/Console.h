@@ -12,9 +12,9 @@
 #include "RetroShellTypes.h"
 #include "SubComponent.h"
 #include "RSCommand.h"
-#include "Parser.h"
 #include "TextStorage.h"
 #include "FileSystem.h"
+#include "utl/support.h"
 
 namespace vamiga {
 
@@ -35,19 +35,19 @@ public:
     virtual void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) = 0; // DEPRECATED
 };
 
-struct TooFewArgumentsError : public util::ParseError {
+struct TooFewArgumentsError : public utl::ParseError {
     using ParseError::ParseError;
 };
 
-struct TooManyArgumentsError : public util::ParseError {
+struct TooManyArgumentsError : public utl::ParseError {
     using ParseError::ParseError;
 };
 
-struct UnknownFlagError : public util::ParseError {
+struct UnknownFlagError : public utl::ParseError {
     using ParseError::ParseError;
 };
 
-struct UnknownKeyValueError : public util::ParseError {
+struct UnknownKeyValueError : public utl::ParseError {
     using ParseError::ParseError;
 };
 
@@ -334,16 +334,16 @@ protected:
     string parseSeq(const string &argv, const string &fallback) const;
     
     template <typename T> long parseEnum(const string &argv) {
-        return util::parseEnum<T>(argv);
+        return utl::parseEnum<T>(argv);
     }
     template <typename T> long parseEnum(const string &argv, long fallback) {
-        try { return util::parseEnum<T>(argv); } catch(...) { return fallback; }
+        try { return utl::parseEnum<T>(argv); } catch(...) { return fallback; }
     }
     template <typename E, typename T> E parseEnum(const string &argv) {
-        return (E)util::parseEnum<T>(argv);
+        return (E)utl::parseEnum<T>(argv);
     }
     template <typename E, typename T> long parseEnum(const string &argv, E fallback) {
-        try { return (E)util::parseEnum<T>(argv); } catch(...) { return fallback; }
+        try { return (E)utl::parseEnum<T>(argv); } catch(...) { return fallback; }
     }
     
     

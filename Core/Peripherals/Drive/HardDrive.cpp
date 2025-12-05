@@ -18,8 +18,6 @@
 #include "MsgQueue.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 std::fstream HardDrive::wtStream[4];

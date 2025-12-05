@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "support/Bytes.h"
+#include "support/Parser.h"
 #include "support/Strings.h"
 
 namespace utl { using namespace support; }

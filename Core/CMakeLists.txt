@@ -67,7 +67,6 @@ add_subdirectory(Peripherals)
 add_subdirectory(Ports)
 add_subdirectory(Storage)
 add_subdirectory(ThirdParty)
-add_subdirectory(Utilities)
 
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)

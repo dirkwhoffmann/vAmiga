@@ -12,8 +12,6 @@
 #include "Emulator.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 template <Accessor A> const char *

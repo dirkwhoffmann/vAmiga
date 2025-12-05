@@ -13,8 +13,6 @@
 #include "CPU.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 Paula::Paula(Amiga& ref) : SubComponent(ref)

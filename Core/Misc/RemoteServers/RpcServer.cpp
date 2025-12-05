@@ -11,7 +11,7 @@
 #include "RpcServer.h"
 #include "Emulator.h"
 #include "json.h"
-#include "utl/support/Strings.h"
+#include "utl/support.h"
 #include <thread>
 
 namespace utl { using namespace support; }
@@ -31,8 +31,6 @@ RpcServer::_initialize()
 void
 RpcServer::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-
     RemoteServer::_dump(category, os);
 }
 
@@ -157,7 +155,7 @@ RpcServer::didExecute(const InputLine& input, std::stringstream &ss, std::except
     i64 code = -32603;
 
     // For parse errors, use a value from the server-defined error range
-    if (dynamic_cast<const util::ParseError *>(&exc)) {
+    if (dynamic_cast<const utl::ParseError *>(&exc)) {
         code = -32000;
     }
 

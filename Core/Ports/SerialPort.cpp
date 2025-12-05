@@ -12,8 +12,6 @@
 #include "Amiga.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 i64

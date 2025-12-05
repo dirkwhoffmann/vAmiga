@@ -13,8 +13,6 @@
 #include "utl/io.h"
 #include <unordered_set>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 i64

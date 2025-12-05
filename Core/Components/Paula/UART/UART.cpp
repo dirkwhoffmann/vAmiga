@@ -18,8 +18,6 @@
 #include <algorithm>
 #include <iostream>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 void

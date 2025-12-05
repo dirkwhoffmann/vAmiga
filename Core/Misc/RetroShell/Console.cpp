@@ -10,12 +10,11 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
-#include "Parser.h"
 #include "Option.h"
 #include <istream>
 #include <sstream>
 #include <string>
-#include "utl/support/Strings.h"
+#include "utl/support.h"
 
 namespace utl { using namespace support; }
 
@@ -578,7 +577,7 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
                 }
             }
             if (!found && descr.isRequired()){
-                throw util::ParseError("Missing flag " + keyStr);
+                throw utl::ParseError("Missing flag " + keyStr);
             }
             continue;
         }
@@ -602,7 +601,7 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
                 }
             }
             if (!found && descr.isRequired()) {
-                throw util::ParseError("Missing key-value pair " + descr.keyValueStr());
+                throw utl::ParseError("Missing key-value pair " + descr.keyValueStr());
             }
             continue;
         }
@@ -639,25 +638,25 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
 bool
 Console::isBool(const string &argv) const
 {
-    return util::isBool(argv);
+    return utl::isBool(argv);
 }
 
 bool
 Console::isOnOff(const string  &argv) const
 {
-    return util::isOnOff(argv);
+    return utl::isOnOff(argv);
 }
 
 long
 Console::isNum(const string &argv) const
 {
-    return util::isNum(argv);
+    return utl::isNum(argv);
 }
 
 bool
 Console::parseBool(const string &argv) const
 {
-    return util::parseBool(argv);
+    return utl::parseBool(argv);
 }
 
 bool
@@ -682,7 +681,7 @@ Console::parseBool(const Arguments &argv, const string &key, long fallback) cons
 bool
 Console::parseOnOff(const string &argv) const
 {
-    return util::parseOnOff(argv);
+    return utl::parseOnOff(argv);
 }
 
 bool
@@ -707,7 +706,7 @@ Console::parseOnOff(const Arguments &argv, const string &key) const
 long
 Console::parseNum(const string &argv) const
 {
-    return util::parseNum(argv);
+    return utl::parseNum(argv);
 }
 
 long
@@ -757,7 +756,7 @@ Console::parseAddr(const Arguments &argv, const string &key, long fallback) cons
 string
 Console::parseSeq(const string &argv) const
 {
-    return util::parseSeq(argv);
+    return utl::parseSeq(argv);
 }
 
 string
@@ -792,7 +791,7 @@ Console::exec(const InputLine& cmd)
         auto [c, args] = seekCommand(tokens);
 
         // Only proceed if a command has been found
-        if (c == &root) throw util::ParseError(tokens[0]);
+        if (c == &root) throw utl::ParseError(tokens[0]);
 
         // Parse arguments
         Arguments parsedArgs = parse(*c, args);
@@ -873,31 +872,31 @@ Console::describe(std::ostream &ss, const std::exception &e, isize line, const s
         ss << '\n';
         return;
     }
-    if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
+    if (auto err = dynamic_cast<const utl::EnumParseError *>(&e)) {
         
         ss << err->token << " is not a valid key." << '\n';
         ss << "Expected: " << err->expected << '\n';
         return;
     }
-    if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
+    if (auto err = dynamic_cast<const utl::ParseNumError *>(&e)) {
         
         ss << err->token << " is not a number.";
         ss << '\n';
         return;
     }
-    if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
+    if (auto err = dynamic_cast<const utl::ParseBoolError *>(&e)) {
         
         ss << err->token << " must be true or false.";
         ss << '\n';
         return;
     }
-    if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
+    if (auto err = dynamic_cast<const utl::ParseOnOffError *>(&e)) {
         
         ss << "'" << err->token << "' must be on or off.";
         ss << '\n';
         return;
     }
-    if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
+    if (auto err = dynamic_cast<const utl::ParseError *>(&e)) {
         
         if (auto what = string(err->what()); !what.empty()) {
             ss << err->what() << ": ";

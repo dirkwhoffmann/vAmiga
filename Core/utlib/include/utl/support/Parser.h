@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of utlib - A lightweight utility library
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the Mozilla Public License v2
@@ -9,11 +9,10 @@
 
 #pragma once
 
-#include "BasicTypes.h"
-#include "Annotations.h"
+#include "utl/types.h"
 #include <functional>
 
-namespace vamiga::util {
+namespace utl::support {
 
 struct ParseError : public std::exception {
 
@@ -66,36 +65,11 @@ template <typename R, typename Enum> R parseEnum(const string& key)
 template <typename Enum> long parsePartialEnum(const string& key, std::function<bool(long)> accept)
 {
     return (long)Enum::parsePartialEnum(key, accept);
-    /*
-    string upper, prefix, suffix;
-
-    // Convert the search string to upper case
-    for (auto c : key) { upper += (char)std::toupper(c); }
-
-    // Search all keys
-    for (const auto &i : Enum::elements()) {
-
-        if (!accept(long(i))) continue;
-
-        auto enumkey = string(Enum::fullKey(i));
-
-        // Check if the full key matches
-        if (enumkey == upper) return long(i);
-
-        // If a section marker is present, check the plain key, too
-        if (auto pos = enumkey.find('.'); pos != std::string::npos) {
-            if (enumkey.substr(pos + 1, string::npos) == upper) return long(i);
-        }
-    }
-
-    throw EnumParseError(key, Enum::keyList());
-    */
 }
 
 template <typename R, typename Enum> R parsePartialEnum(const string& key, std::function<bool(long)> accept)
 {
     return Enum::parsePartialEnum(key, accept);
-    // return (R)parsePartialEnum<Enum>(key, accept);
 }
 
 }

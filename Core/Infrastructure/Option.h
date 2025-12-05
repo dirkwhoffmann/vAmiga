@@ -10,7 +10,7 @@
 #pragma once
 
 #include "OptionTypes.h"
-#include "Parser.h"
+#include "utl/support.h"
 #include <memory>
 
 namespace vamiga {
@@ -63,7 +63,7 @@ public:
 
     using OptionParser::OptionParser;
 
-    virtual i64 parse(const string &s) override { arg = util::parseBool(s); return arg; }
+    virtual i64 parse(const string &s) override { arg = utl::parseBool(s); return arg; }
     virtual string asString() override { return arg ? "true" : "false"; }
     virtual string keyList() override { return "true, false"; }
     virtual string argList() override { return "{ true | false }"; }
@@ -75,7 +75,7 @@ public:
 
     using OptionParser::OptionParser;
 
-    virtual i64 parse(const string &s) override { arg = util::parseNum(s); return arg; }
+    virtual i64 parse(const string &s) override { arg = utl::parseNum(s); return arg; }
     virtual string asPlainString() override { return std::to_string(arg); }
     virtual string asString() override { return asPlainString() + unit; }
     virtual string keyList() override { return "<value>"; }
@@ -88,7 +88,7 @@ public:
 
     using OptionParser::OptionParser;
 
-    virtual i64 parse(const string &s) override { arg = util::parseNum(s); return arg; }
+    virtual i64 parse(const string &s) override { arg = utl::parseNum(s); return arg; }
     virtual string asPlainString() override;
     virtual string asString() override { return asPlainString() + unit; }
     virtual string keyList() override { return "<value>"; }
@@ -100,7 +100,7 @@ class EnumParser : public OptionParser {
 
     using OptionParser::OptionParser;
 
-    virtual i64 parse(const string &s) override { return (arg = util::parseEnum<T>(s)); }
+    virtual i64 parse(const string &s) override { return (arg = utl::parseEnum<T>(s)); }
     std::vector <std::pair<string,long>> pairs() override { return T::pairs(); }
     virtual string asString() override { return T::key(E(arg)); }
     virtual string keyList() override { return T::keyList(); }

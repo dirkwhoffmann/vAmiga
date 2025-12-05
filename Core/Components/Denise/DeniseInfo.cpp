@@ -13,8 +13,6 @@
 #include "ControlPort.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 void 

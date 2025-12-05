@@ -389,10 +389,10 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
     auto size = l ? 4 : w ? 2 : 1;
     
     if ((int)a + (int)o + (int)d > 1) {
-        throw util::ParseError("Flags -a, -o, -d are mutually exclusive");
+        throw utl::ParseError("Flags -a, -o, -d are mutually exclusive");
     }
     if ((int)a + (int)w + (int)l > 1) {
-        throw util::ParseError("Flags -a, -w, -l are mutually exclusive");
+        throw utl::ParseError("Flags -a, -w, -l are mutually exclusive");
     }
     if (o) return {
         
@@ -605,7 +605,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 if (dos == "FFS") type = FSFormat::FFS;
                 
                 if (type == FSFormat::NODOS) {
-                    throw util::ParseError("Expected values: OFS or FFS");
+                    throw utl::ParseError("Expected values: OFS or FFS");
                 }
                 
                 // Format the device
@@ -1359,7 +1359,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 } else if (path.isDirectory()) {
                     throw FSError(FSFault::FS_NOT_A_FILE, args.at("path"));
                 } else {
-                    throw util::ParseError("Not a file or directory");
+                    throw utl::ParseError("Not a file or directory");
                 }
                 
             }

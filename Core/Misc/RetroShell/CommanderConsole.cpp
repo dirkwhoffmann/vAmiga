@@ -903,9 +903,9 @@ CommanderConsole::initCommands(RSCommand &root)
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                     
-                    auto c = util::parseNum(args.at("cylinders"));
-                    auto h = util::parseNum(args.at("heads"));
-                    auto s = util::parseNum(args.at("sectors"));
+                    auto c = utl::parseNum(args.at("cylinders"));
+                    auto h = utl::parseNum(args.at("heads"));
+                    auto s = utl::parseNum(args.at("sectors"));
                     
                     amiga.hd[values[0]]->changeGeometry(c, h, s);
                     

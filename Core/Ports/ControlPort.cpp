@@ -13,8 +13,6 @@
 #include "Paula.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref, nr)

@@ -15,10 +15,9 @@
 #include "Amiga.h"
 #include "Memory.h"
 #include "MsgQueue.h"
-#include "utl/support/Strings.h"
+#include "utl/support.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
 
 //
 // Moira

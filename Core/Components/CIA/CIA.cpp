@@ -19,8 +19,6 @@
 #include "SerialPort.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 CIA::CIA(Amiga& ref, isize objid) : SubComponent(ref, objid)

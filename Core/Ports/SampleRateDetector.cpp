@@ -17,8 +17,6 @@ namespace vamiga {
 void
 SampleRateDetector::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
-
     if (category == Category::State) {
 
     }
