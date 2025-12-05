@@ -1034,7 +1034,7 @@ FloppyDrive::catchFile(const fs::path &path)
 
     // Seek file
     auto file = fs->seekPtr(&fs->root(), path);
-    if (!file->isFile()) throw FSError(FSFault::FS_NOT_A_FILE, path.string());
+    if (!file->isFile()) throw FSError(fault::FS_NOT_A_FILE, path.string());
 
     // Extract file
     Buffer<u8> buffer;
@@ -1147,7 +1147,7 @@ FloppyDrive::swapDisk(const fs::path &path)
 
     }  catch (FSError &err) {
         
-        if (err.fault() == FSFault::FS_OUT_OF_SPACE) {
+        if (err.fault() == fault::FS_OUT_OF_SPACE) {
 
             err.set_msg(string("The directory is too large. ") +
                         string("The files do not fit onto a single ") +

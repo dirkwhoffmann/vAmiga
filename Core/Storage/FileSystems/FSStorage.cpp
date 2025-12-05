@@ -83,7 +83,7 @@ FSStorage::getType(Block nr) const noexcept
 void
 FSStorage::setType(Block nr, FSBlockType type)
 {
-    if (isize(nr) >= capacity) throw FSError(FSFault::FS_OUT_OF_RANGE);
+    if (isize(nr) >= capacity) throw FSError(fault::FS_OUT_OF_RANGE);
     blocks.at(nr)->init(type);
 }
 
@@ -145,9 +145,9 @@ FSStorage::at(Block nr)
     if (auto *result = read(nr); result) return *result;
 
     if (!fs.isInitialized()) {
-        throw FSError(FSFault::FS_UNINITIALIZED);
+        throw FSError(fault::FS_UNINITIALIZED);
     } else {
-        throw FSError(FSFault::FS_OUT_OF_RANGE, std::to_string(nr));
+        throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
     }
 }
 
@@ -157,11 +157,11 @@ FSStorage::at(Block nr, FSBlockType type)
     if (auto *result = read(nr, type); result) return *result;
 
     if (!fs.isInitialized()) {
-        throw FSError(FSFault::FS_UNINITIALIZED);
+        throw FSError(fault::FS_UNINITIALIZED);
     } else if (read(nr)) {
-        throw FSError(FSFault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+        throw FSError(fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
     } else {
-        throw FSError(FSFault::FS_OUT_OF_RANGE, std::to_string(nr));
+        throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
     }
 }
 
@@ -171,11 +171,11 @@ FSStorage::at(Block nr, std::vector<FSBlockType> types)
     if (auto *result = read(nr, types); result) return *result;
 
     if (!fs.isInitialized()) {
-        throw FSError(FSFault::FS_UNINITIALIZED);
+        throw FSError(fault::FS_UNINITIALIZED);
     } else if (read(nr)) {
-        throw FSError(FSFault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+        throw FSError(fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
     } else {
-        throw FSError(FSFault::FS_OUT_OF_RANGE, std::to_string(nr));
+        throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
     }
 }
 

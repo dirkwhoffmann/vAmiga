@@ -16,7 +16,9 @@ namespace vamiga {
 
 using namespace utl::abilities;
 
-enum class FSFault : long
+namespace fault {
+
+enum : long
 {
     FS_OK,
     FS_UNKNOWN,
@@ -52,65 +54,69 @@ enum class FSFault : long
     FS_CANNOT_CREATE_FILE
 };
 
-struct FSFaultEnum : Reflectable<FSFaultEnum, FSFault>
+struct FSFaultEnum : Reflectable<FSFaultEnum, long>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSFault::FS_CANNOT_CREATE_FILE);
+    static constexpr long maxVal = FS_CANNOT_CREATE_FILE;
 
-    static const char *_key(FSFault value)
+    static const char *_key(long value)
     {
         switch (value) {
 
-            case FSFault::FS_OK:                       return "OK";
-            case FSFault::FS_UNKNOWN:                  return "UNKNOWN";
+            case FS_OK:                       return "OK";
+            case FS_UNKNOWN:                  return "UNKNOWN";
 
-            case FSFault::FS_OUT_OF_RANGE:             return "OUT_OF_RANGE";
-            case FSFault::FS_INVALID_PATH:             return "INVALID_PATH";
-            case FSFault::FS_INVALID_REGEX:            return "INVALID_REGEX";
-            case FSFault::FS_NOT_A_DIRECTORY:          return "NOT_A_DIRECTORY";
-            case FSFault::FS_NOT_A_FILE:               return "NOT_A_FILE";
-            case FSFault::FS_NOT_A_FILE_OR_DIRECTORY:  return "NOT_A_FILE_OR_DIRECTORY";
-            case FSFault::FS_NOT_FOUND:                return "NOT_FOUND";
-            case FSFault::FS_EXISTS:                   return "EXISTS";
-            case FSFault::FS_CANNOT_OPEN:              return "CANNOT_OPEN";
+            case FS_OUT_OF_RANGE:             return "OUT_OF_RANGE";
+            case FS_INVALID_PATH:             return "INVALID_PATH";
+            case FS_INVALID_REGEX:            return "INVALID_REGEX";
+            case FS_NOT_A_DIRECTORY:          return "NOT_A_DIRECTORY";
+            case FS_NOT_A_FILE:               return "NOT_A_FILE";
+            case FS_NOT_A_FILE_OR_DIRECTORY:  return "NOT_A_FILE_OR_DIRECTORY";
+            case FS_NOT_FOUND:                return "NOT_FOUND";
+            case FS_EXISTS:                   return "EXISTS";
+            case FS_CANNOT_OPEN:              return "CANNOT_OPEN";
 
-            case FSFault::FS_UNINITIALIZED:            return "UNINITIALIZED";
-            case FSFault::FS_UNFORMATTED:              return "UNFORMATTED";
-            case FSFault::FS_UNSUPPORTED:              return "UNSUPPORTED";
-            case FSFault::FS_READ_ONLY:                return "READ_ONLY";
-            case FSFault::FS_WRONG_BSIZE:              return "WRONG_BSIZE";
-            case FSFault::FS_WRONG_CAPACITY:           return "WRONG_CAPACITY";
-            case FSFault::FS_WRONG_DOS_TYPE:           return "WRONG_DOS_TYPE";
-            case FSFault::FS_WRONG_BLOCK_TYPE:         return "WRONG_BLOCK_TYPE";
-            case FSFault::FS_HAS_CYCLES:               return "HAS_CYCLES";
-            case FSFault::FS_CORRUPTED:                return "CORRUPTED";
+            case FS_UNINITIALIZED:            return "UNINITIALIZED";
+            case FS_UNFORMATTED:              return "UNFORMATTED";
+            case FS_UNSUPPORTED:              return "UNSUPPORTED";
+            case FS_READ_ONLY:                return "READ_ONLY";
+            case FS_WRONG_BSIZE:              return "WRONG_BSIZE";
+            case FS_WRONG_CAPACITY:           return "WRONG_CAPACITY";
+            case FS_WRONG_DOS_TYPE:           return "WRONG_DOS_TYPE";
+            case FS_WRONG_BLOCK_TYPE:         return "WRONG_BLOCK_TYPE";
+            case FS_HAS_CYCLES:               return "HAS_CYCLES";
+            case FS_CORRUPTED:                return "CORRUPTED";
 
-            case FSFault::FS_OUT_OF_SPACE:             return "OUT_OF_SPACE";
+            case FS_OUT_OF_SPACE:             return "OUT_OF_SPACE";
 
-            case FSFault::FS_DIR_NOT_EMPTY:            return "DIR_NOT_EMPTY";
-            case FSFault::FS_CANNOT_CREATE_DIR:        return "CANNOT_CREATE_DIR";
-            case FSFault::FS_CANNOT_CREATE_FILE:       return "CANNOT_CREATE_FILE";
+            case FS_DIR_NOT_EMPTY:            return "DIR_NOT_EMPTY";
+            case FS_CANNOT_CREATE_DIR:        return "CANNOT_CREATE_DIR";
+            case FS_CANNOT_CREATE_FILE:       return "CANNOT_CREATE_FILE";
         }
         return "???";
     }
 
-    static const char *help(FSFault value)
+    static const char *help(long value)
     {
         return "";
     }
 };
 
-class FSError : public utl::GenericException<FSFault>
-{
+}
+
+using FSFault = long;
+
+class FSError : public utl::Error {
+
 public:
 
-    FSError(FSFault fault, const std::string &s);
-    FSError(FSFault fault, const char *s) : FSError(fault, std::string(s)) { };
-    FSError(FSFault fault, const std::filesystem::path &p) : FSError(fault, p.string()) { };
-    FSError(FSFault fault, std::integral auto v) : FSError(fault, std::to_string(v)) { };
-    FSError(FSFault fault) : FSError(fault, "") { }
+    FSError(long fault, const std::string &s = "");
+    // FSError(FSFault fault, const char *s) : FSError(fault, std::string(s)) { };
+    FSError(long fault, const std::filesystem::path &p) : FSError(fault, p.string()) { };
+    FSError(long fault, std::integral auto v) : FSError(fault, std::to_string(v)) { };
+    // FSError(FSFault fault) : FSError(fault, "") { }
 
-    FSFault fault() const { return FSFault(_payload); }
+    // FSFault fault() const { return FSFault(_payload); }
 };
 
 }

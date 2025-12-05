@@ -117,16 +117,16 @@ void
 FSDescriptor::checkCompatibility() const
 {
     if (numBytes() > MB(504) || FORCE_FS_WRONG_CAPACITY) {
-        throw FSError(FSFault::FS_WRONG_CAPACITY);
+        throw FSError(fault::FS_WRONG_CAPACITY);
     }
     if (bsize != 512 || FORCE_FS_WRONG_BSIZE) {
-        throw FSError(FSFault::FS_WRONG_BSIZE);
+        throw FSError(fault::FS_WRONG_BSIZE);
     }
     if (!FSFormatEnum::isValid(dos) || FORCE_FS_WRONG_DOS_TYPE) {
-        throw FSError(FSFault::FS_WRONG_DOS_TYPE);
+        throw FSError(fault::FS_WRONG_DOS_TYPE);
     }
     if (isize(rootBlock) >= numBlocks) {
-        throw FSError(FSFault::FS_OUT_OF_RANGE);
+        throw FSError(fault::FS_OUT_OF_RANGE);
     }
 }
 

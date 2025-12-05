@@ -290,7 +290,7 @@ FSPattern::FSPattern(const string glob) : glob(glob)
     try {
         regex = std::regex(re, std::regex::ECMAScript | std::regex::icase);
     } catch (const std::regex_error &) {
-        throw FSError(FSFault::FS_INVALID_REGEX, glob);
+        throw FSError(fault::FS_INVALID_REGEX, glob);
     }
 }
 
@@ -300,13 +300,6 @@ FSPattern::splitted() const
     std::vector<FSPattern> result;
     std::vector<string> parts;
 
-    /*
-    if (isAbsolute()) {
-        parts = util::split(glob.substr(1), '/');
-    } else {
-        parts = util::split(glob, '/');
-    }
-    */
     for (auto &it : utl::split(utl::trim(glob, "/"), '/')) {
         result.push_back(FSPattern(it));
     }

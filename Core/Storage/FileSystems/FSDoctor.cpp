@@ -685,7 +685,7 @@ void
 FSDoctor::rectify(bool strict)
 {
     auto *mfs = dynamic_cast<FileSystem *>(&fs);
-    if (!mfs) throw FSError(FSFault::FS_READ_ONLY);
+    if (!mfs) throw FSError(fault::FS_READ_ONLY);
 
     xray(strict);
 
@@ -703,7 +703,7 @@ void
 FSDoctor::rectify(FSBlock &node, bool strict)
 {
     auto *mfs = dynamic_cast<FileSystem *>(&fs);
-    if (!mfs) throw FSError(FSFault::FS_READ_ONLY);
+    if (!mfs) throw FSError(fault::FS_READ_ONLY);
 
     for (isize i = 0; i < fs.traits.bsize / 4; i += 4) {
 

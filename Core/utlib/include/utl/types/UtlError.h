@@ -100,17 +100,17 @@ enum : long
 struct ParseFaultEnum : Reflectable<ParseFaultEnum, long>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(fault::PARSE_ENUM_ERROR);
+    static constexpr long maxVal = PARSE_ENUM_ERROR;
 
     static const char *_key(long value)
     {
         switch (value) {
 
-            case fault::PARSE_UNKNOWN:       return "PARSE_UNKNOWN";
-            case fault::PARSE_BOOL_ERROR:    return "PARSE_BOOL_ERROR";
-            case fault::PARSE_ON_OFF_ERROR:  return "PARSE_ON_OFF_ERROR";
-            case fault::PARSE_NUM_ERROR:     return "PARSE_NUM_ERROR";
-            case fault::PARSE_ENUM_ERROR:    return "PARSE_ENUM_ERROR";
+            case PARSE_UNKNOWN:       return "PARSE_UNKNOWN";
+            case PARSE_BOOL_ERROR:    return "PARSE_BOOL_ERROR";
+            case PARSE_ON_OFF_ERROR:  return "PARSE_ON_OFF_ERROR";
+            case PARSE_NUM_ERROR:     return "PARSE_NUM_ERROR";
+            case PARSE_ENUM_ERROR:    return "PARSE_ENUM_ERROR";
         }
         return "???";
     }

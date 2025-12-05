@@ -196,7 +196,7 @@ PosixFileSystem::getHandle(HandleRef ref)
     auto it = handles.find(ref);
 
     if (it == handles.end()) {
-        throw FSError(FSFault::FS_NOT_FOUND, ref); // TODO: Throw FS_INVALID_HANDLE
+        throw FSError(fault::FS_NOT_FOUND, ref); // TODO: Throw FS_INVALID_HANDLE
     }
 
     return it->second;
@@ -259,7 +259,7 @@ PosixFileSystem::lseek(HandleRef ref, isize offset, u16 whence)
         case SEEK_END:  newOffset = fileSize + offset; break;
 
         default:
-            throw FSError(FSFault::FS_UNKNOWN); // TODO: Throw, e.g., FS_INVALID_FLAG
+            throw FSError(fault::FS_UNKNOWN); // TODO: Throw, e.g., FS_INVALID_FLAG
     }
 
     // Ensure that the offset is not negative

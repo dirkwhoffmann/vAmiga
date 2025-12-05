@@ -59,7 +59,7 @@ FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
     layout.checkCompatibility();
 
     // Only proceed if the volume is formatted
-    if (layout.dos == FSFormat::NODOS) throw FSError(FSFault::FS_UNFORMATTED);
+    if (layout.dos == FSFormat::NODOS) throw FSError(fault::FS_UNFORMATTED);
 
     // Copy layout parameters
     traits.dos      = layout.dos;
@@ -429,38 +429,38 @@ namespace require {
 void
 initialized(const FileSystem &fs)
 {
-    if (!fs.isInitialized()) throw FSError(FSFault::FS_UNINITIALIZED);
+    if (!fs.isInitialized()) throw FSError(fault::FS_UNINITIALIZED);
 }
 
 void
 formatted(const FileSystem &fs)
 {
-    if (!fs.isInitialized()) throw FSError(FSFault::FS_UNINITIALIZED);
-    if (!fs.isFormatted()) throw FSError(FSFault::FS_UNFORMATTED);
+    if (!fs.isInitialized()) throw FSError(fault::FS_UNINITIALIZED);
+    if (!fs.isFormatted()) throw FSError(fault::FS_UNFORMATTED);
 }
 
 void
 file(const FSBlock &node)
 {
-    if (!node.isFile()) throw FSError(FSFault::FS_NOT_A_FILE);
+    if (!node.isFile()) throw FSError(fault::FS_NOT_A_FILE);
 }
 
 void
 fileOrDirectory(const FSBlock &node)
 {
-    if (!node.isRegular()) throw FSError(FSFault::FS_NOT_A_FILE_OR_DIRECTORY);
+    if (!node.isRegular()) throw FSError(fault::FS_NOT_A_FILE_OR_DIRECTORY);
 }
 
 void
 directory(const FSBlock &node)
 {
-    if (!node.isDirectory()) throw FSError(FSFault::FS_NOT_A_DIRECTORY);
+    if (!node.isDirectory()) throw FSError(fault::FS_NOT_A_DIRECTORY);
 }
 
 void
 notRoot(const FSBlock &node)
 {
-    if (node.isRoot()) throw FSError(FSFault::FS_INVALID_PATH);
+    if (node.isRoot()) throw FSError(fault::FS_INVALID_PATH);
 }
 
 void
@@ -469,7 +469,7 @@ emptyDirectory(const FSBlock &node)
     directory(node);
 
     if (FSTree(node, { .recursive = false }).size() != 0) {
-        throw FSError(FSFault::FS_DIR_NOT_EMPTY);
+        throw FSError(fault::FS_DIR_NOT_EMPTY);
     }
 }
 
@@ -477,7 +477,7 @@ void
 notExist(const FSBlock &node, const FSName &name)
 {
     directory(node);
-    if (node.fs->searchdir(node, name) != nullptr) throw FSError(FSFault::FS_EXISTS);
+    if (node.fs->searchdir(node, name) != nullptr) throw FSError(fault::FS_EXISTS);
 }
 
 }}

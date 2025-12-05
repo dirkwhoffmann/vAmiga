@@ -45,7 +45,7 @@ FSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<Block> &vi
         if (opt.accept(*it)) children.push_back(*it);
 
         // Break the loop if this block has been visited before
-        if (visited.contains((*it)->nr)) throw FSError(FSFault::FS_HAS_CYCLES);
+        if (visited.contains((*it)->nr)) throw FSError(fault::FS_HAS_CYCLES);
 
         // Remember the block as visited
         visited.insert((*it)->nr);
@@ -196,10 +196,10 @@ FSTree::save(const fs::path &path, const FSOpt &opt) const
         if (fs::exists(path)) {
 
             if (!fs::is_directory(path)) {
-                throw FSError(FSFault::FS_NOT_A_DIRECTORY, path.string());
+                throw FSError(fault::FS_NOT_A_DIRECTORY, path.string());
             }
             if (!fs::is_empty(path)) {
-                throw FSError(FSFault::FS_DIR_NOT_EMPTY, path.string());
+                throw FSError(fault::FS_DIR_NOT_EMPTY, path.string());
             }
 
         } else {
@@ -212,7 +212,7 @@ FSTree::save(const fs::path &path, const FSOpt &opt) const
     if (isFile()) {
 
         if (fs::exists(path)) {
-            throw FSError(FSFault::FS_EXISTS, path.string());
+            throw FSError(fault::FS_EXISTS, path.string());
         }
         saveFile(path, opt);
     }
