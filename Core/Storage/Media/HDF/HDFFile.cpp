@@ -13,8 +13,8 @@
 #include "FSBlock.h"
 #include "Memory.h"
 #include "OSDescriptors.h"
-#include "StringUtils.h"
 #include "utl/io.h"
+#include "utl/support.h"
 
 namespace utl { using namespace support; }
 
@@ -23,7 +23,7 @@ namespace vamiga {
 bool
 HDFFile::isCompatible(const fs::path &path)
 {
-    auto suffix = util::uppercased(path.extension().string());
+    auto suffix = utl::uppercased(path.extension().string());
     return suffix == ".HDF";
 }
 
@@ -129,7 +129,7 @@ HDFFile::getPartitionDescriptor(isize part) const
     if (auto pb = seekPB(part); pb) {
         
         // Extract information from the partition block
-        result.name           = util::createStr(pb + 37, 31);
+        result.name           = utl::createStr(pb + 37, 31);
         result.flags          = R32BE(pb + 20);
         result.sizeBlock      = R32BE(pb + 132);
         result.heads          = R32BE(pb + 140);
@@ -461,7 +461,7 @@ std::optional<string>
 HDFFile::rdbString(isize offset, isize len) const
 {
     if (auto rdb = seekRDB(); rdb) {
-        return util::createStr(rdb + offset, len);
+        return utl::createStr(rdb + offset, len);
     }
     
     return { };

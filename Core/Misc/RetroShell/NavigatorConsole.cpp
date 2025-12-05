@@ -10,10 +10,10 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
-#include "StringUtils.h"
 #include "FileSystemFactory.h"
 #include "ADFFactory.h"
 #include "HDFFile.h"
+#include "utl/support.h"
 #include <regex>
 
 #include "Chrono.h"
@@ -164,7 +164,7 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
     }
     
     // Auto-complete all common characters
-    auto completed = util::commonPrefix(names, false);
+    auto completed = utl::commonPrefix(names, false);
     
     return completed;
 }
@@ -359,7 +359,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
     if (!fs.isFormatted()) throw FSError(FSFault::FS_UNFORMATTED);
 
-    auto tokens = util::split(path, '/');
+    auto tokens = utl::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
     
     auto *p = &fs.pwd();
@@ -600,7 +600,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 // Determine the DOS type
                 auto type = FSFormat::NODOS;
-                auto dos = util::uppercased(args.at("dos"));
+                auto dos = utl::uppercased(args.at("dos"));
                 if (dos == "OFS") type = FSFormat::OFS;
                 if (dos == "FFS") type = FSFormat::FFS;
                 

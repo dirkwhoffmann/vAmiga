@@ -11,6 +11,7 @@
 
 #include "CoreObjectTypes.h"
 #include "utl/abilities/Loggable.h"
+#include "utl/abilities/Reportable.h"
 #include "Annotations.h"
 #include "Error.h"
 
@@ -18,8 +19,8 @@ namespace vamiga {
 
 using namespace utl::abilities;
 
-class CoreObject : public Loggable {
-    
+class CoreObject : public Loggable, Reportable {
+
     //
     // Initializing
     //
@@ -42,6 +43,17 @@ public:
     //
     // Reporting state
     //
+
+protected:
+
+    const Report report(isize category) const override { return {{ "Name", objectName() }}; }
+
+
+    //
+    // Dumping state (deprecated, will be replaced by 'Reportable' API)
+    //
+
+public:
     
     virtual void _dump(Category category, std::ostream &ss) const { }
     

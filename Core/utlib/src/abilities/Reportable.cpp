@@ -7,32 +7,19 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
-
-#include "utl/types.h"
+#include "utl/abilities/Reportable.h"
 
 namespace utl::abilities {
 
-struct ReportItem {
+void
+Reportable::report(std::ostream &os, isize category) const
+{
+    for (const auto& item : report(category)) {
 
-    string key;
-    string value;
-};
-
-using Report = std::vector<ReportItem>;
-
-class Reportable {
-
-protected:
-
-    virtual const Report report(isize category = 0) const = 0;
-
-public:
-
-    Reportable() = default;
-    virtual ~Reportable() = default;
-    
-    void report(std::ostream &os, isize category = 0) const;
-};
+        os << std::setw(22) << std::left
+        << item.key << ": "
+        << item.value << "\n";
+    }
+}
 
 }

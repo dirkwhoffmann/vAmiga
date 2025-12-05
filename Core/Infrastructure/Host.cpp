@@ -10,7 +10,6 @@
 #include "config.h"
 #include "Host.h"
 #include "Emulator.h"
-#include "StringUtils.h"
 #include "utl/io.h"
 #include <unordered_set>
 

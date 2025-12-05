@@ -11,7 +11,7 @@
 #include "RshServer.h"
 #include "Amiga.h"
 #include "RetroShell.h"
-#include "StringUtils.h"
+#include "utl/support.h"
 
 namespace vamiga {
 
@@ -70,7 +70,7 @@ RshServer::doReceive()
     string payload = connection.recv();
     
     // Remove LF and CR (if present)
-    payload = util::rtrim(payload, "\n\r");
+    payload = utl::rtrim(payload, "\n\r");
 
     // Ask the client to delete the input (will be replicated by RetroShell)
     // connection.send("\033[A\33[2K\r");

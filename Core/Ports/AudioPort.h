@@ -11,16 +11,12 @@
 
 #include "AudioPortTypes.h"
 #include "SubComponent.h"
-#include "Animated.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"
 #include "Sampler.h"
 #include "SampleRateDetector.h"
 #include "utl/chrono.h"
-
-namespace vamiga {
-
-using namespace utl::animation;
+#include "utl/animation.h"
 
 /* Architecture of the audio pipeline
  *
@@ -43,6 +39,8 @@ using namespace utl::animation;
  *    3     |   ---------                                         |
  *           -----------------------------------------------------
  */
+
+namespace vamiga {
 
 class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, AudioPortStats>  {
 
@@ -98,8 +96,8 @@ class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, A
     float pan[4] = { };
 
     // Master volumes (fadable)
-    Animated<float> volL;
-    Animated<float> volR;
+    utl::Animated<float> volL;
+    utl::Animated<float> volR;
 
     // Used to determine if Msg::MUTE should be send
     bool wasMuted = false;
