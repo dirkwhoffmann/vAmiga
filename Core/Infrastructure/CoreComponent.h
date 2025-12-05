@@ -12,10 +12,10 @@
 #include "CoreComponentTypes.h"
 #include "EmulatorTypes.h"
 #include "CoreObject.h"
-#include "Concurrency.h"
 #include "Configurable.h"
 #include "Inspectable.h"
 #include "Serializable.h"
+#include "utl/concurrency.h"
 #include "utl/abilities/Synchronizable.h"
 #include <functional>
 

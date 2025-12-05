@@ -9,10 +9,10 @@
 
 #include "config.h"
 #include "VAmiga.h"
-#include "Concurrency.h"
 #include "Emulator.h"
 #include "FileFactories.h"
 #include "GuardList.h"
+#include "utl/concurrency.h"
 
 namespace vamiga {
 

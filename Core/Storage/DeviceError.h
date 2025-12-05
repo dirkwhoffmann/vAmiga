@@ -10,15 +10,17 @@
 #pragma once
 
 #include "utl/abilities/Reflectable.h"
+#include "utl/types/UtlError.h"
 
 namespace vamiga {
 
 using namespace utl::abilities;
 
-enum class DeviceFault : long
+namespace fault {
+
+enum : long
 {
-    OK,
-    UNKNOWN,
+    DEV_UNKNOWN,
 
     // Floppy disks
     DSK_MISSING,
@@ -44,59 +46,57 @@ enum class DeviceFault : long
     HDR_UNSUPPORTED
 };
 
-struct DeviceFaultEnum : Reflectable<DeviceFaultEnum, DeviceFault>
+struct DeviceFaultEnum : Reflectable<DeviceFaultEnum, long>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(DeviceFault::HDR_UNSUPPORTED);
+    static constexpr long maxVal = HDR_UNSUPPORTED;
 
-    static const char *_key(DeviceFault value)
+    static const char *_key(long value)
     {
         switch (value) {
 
-            case DeviceFault::OK:                          return "OK";
-            case DeviceFault::UNKNOWN:                     return "UNKNOWN";
+            case DEV_UNKNOWN:                 return "UNKNOWN";
 
-            case DeviceFault::DSK_MISSING:                 return "DISK_MISSING";
-            case DeviceFault::DSK_INCOMPATIBLE:            return "DISK_INCOMPATIBLE";
-            case DeviceFault::DSK_INVALID_DIAMETER:        return "DISK_INVALID_DIAMETER";
-            case DeviceFault::DSK_INVALID_DENSITY:         return "DISK_INVALID_DENSITY";
-            case DeviceFault::DSK_INVALID_LAYOUT:          return "DISK_INVALID_LAYOUT";
-            case DeviceFault::DSK_WRONG_SECTOR_COUNT:      return "DISK_WRONG_SECTOR_COUNT";
-            case DeviceFault::DSK_INVALID_SECTOR_NUMBER:   return "DISK_INVALID_SECTOR_NUMBER";
+            case DSK_MISSING:                 return "DISK_MISSING";
+            case DSK_INCOMPATIBLE:            return "DISK_INCOMPATIBLE";
+            case DSK_INVALID_DIAMETER:        return "DISK_INVALID_DIAMETER";
+            case DSK_INVALID_DENSITY:         return "DISK_INVALID_DENSITY";
+            case DSK_INVALID_LAYOUT:          return "DISK_INVALID_LAYOUT";
+            case DSK_WRONG_SECTOR_COUNT:      return "DISK_WRONG_SECTOR_COUNT";
+            case DSK_INVALID_SECTOR_NUMBER:   return "DISK_INVALID_SECTOR_NUMBER";
 
-            case DeviceFault::HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
-            case DeviceFault::HDR_UNSUPPORTED_CYL_COUNT:   return "HDR_UNSUPPORTED_CYL_COUNT";
-            case DeviceFault::HDR_UNSUPPORTED_HEAD_COUNT:  return "HDR_UNSUPPORTED_HEAD_COUNT";
-            case DeviceFault::HDR_UNSUPPORTED_SEC_COUNT:   return "HDR_UNSUPPORTED_SEC_COUNT";
-            case DeviceFault::HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
-            case DeviceFault::HDR_UNKNOWN_GEOMETRY:        return "HDR_UNKNOWN_GEOMETRY";
-            case DeviceFault::HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
-            case DeviceFault::HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
-            case DeviceFault::HDR_CORRUPTED_PTABLE:        return "HDR_CORRUPTED_PTABLE";
-            case DeviceFault::HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
-            case DeviceFault::HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
-            case DeviceFault::HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
+            case HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
+            case HDR_UNSUPPORTED_CYL_COUNT:   return "HDR_UNSUPPORTED_CYL_COUNT";
+            case HDR_UNSUPPORTED_HEAD_COUNT:  return "HDR_UNSUPPORTED_HEAD_COUNT";
+            case HDR_UNSUPPORTED_SEC_COUNT:   return "HDR_UNSUPPORTED_SEC_COUNT";
+            case HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
+            case HDR_UNKNOWN_GEOMETRY:        return "HDR_UNKNOWN_GEOMETRY";
+            case HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
+            case HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
+            case HDR_CORRUPTED_PTABLE:        return "HDR_CORRUPTED_PTABLE";
+            case HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
+            case HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
+            case HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
         }
         return "???";
     }
 
-    static const char *help(DeviceFault value)
+    static const char *help(long value)
     {
         return "";
     }
 };
 
-class DeviceError : public utl::GenericException<DeviceFault>
+}
+
+class DeviceError : public utl::Error
 {
 public:
 
-    DeviceError(DeviceFault fault, const std::string &s);
-    DeviceError(DeviceFault fault, const char *s) : DeviceError(fault, std::string(s)) { };
-    DeviceError(DeviceFault fault, const std::filesystem::path &p) : DeviceError(fault, p.string()) { };
-    DeviceError(DeviceFault fault, std::integral auto v) : DeviceError(fault, std::to_string(v)) { };
-    DeviceError(DeviceFault fault) : DeviceError(fault, "") { }
-
-    DeviceFault fault() const { return _payload; }
+    DeviceError(long fault, const std::string &s = "");
+    DeviceError(long fault, const char *s) : DeviceError(fault, std::string(s)) { };
+    DeviceError(long fault, const std::filesystem::path &p) : DeviceError(fault, p.string()) { };
+    DeviceError(long fault, std::integral auto v) : DeviceError(fault, std::to_string(v)) { };
 };
 
 }
