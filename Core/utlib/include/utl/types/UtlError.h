@@ -13,9 +13,9 @@
 #include "utl/abilities/Reflectable.h"
 #include <system_error>
 
-namespace utl {
-
 using namespace utl::abilities;
+
+namespace utl {
 
 namespace fault {
 
@@ -123,28 +123,22 @@ struct ParseFaultEnum : Reflectable<ParseFaultEnum, long>
 
 }
 
-class Error : public Exception {
+class Error : public GenericException<long> {
 
 public:
 
-    Error(long d, const std::string &s) : Exception(d, s) { }
-    Error(long d) : Exception(d) { }
-    Error(const std::string &s) : Exception(0, s) { }
-    Error() : Exception(0) { }
-
-    long fault() const { return *payload<long>(); }
+    Error(long d = 0, const std::string &s = "") : GenericException<long>(d, s) { }
+    long fault() const { return _payload; }
 };
 
 struct IOError : public Error {
 
-    using Error::Error;
-    void init(std::any payload, std::string msg) override;
+    IOError(long d, const std::string &s);
 };
 
 struct NewParseError : public Error {
 
-    using Error::Error;
-    void init(std::any payload, std::string msg) override;
+    NewParseError(long d, const std::string &s);
 };
 
 }

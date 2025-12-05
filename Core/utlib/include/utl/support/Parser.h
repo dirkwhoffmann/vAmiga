@@ -57,24 +57,34 @@ string parseSeq(const string& token);
 
 template <typename Enum> long parseEnum(const string& key)
 {
-    // return parsePartialEnum <Enum> (key, [](long){ return true; });
-    return (long)Enum::parseEnum(key);
+    if (auto result = Enum::parseEnum(key)) {
+        return long(*result);
+    }
+    throw NewParseError(fault::PARSE_ENUM_ERROR, Enum::keyList());
 }
 
 template <typename R, typename Enum> R parseEnum(const string& key)
 {
-    // return (R)parseEnum <Enum> (key);
-    return Enum::parseEnum(key);
+    if (auto result = Enum::parseEnum(key)) {
+        return result;
+    }
+    throw NewParseError(fault::PARSE_ENUM_ERROR, Enum::keyList());
 }
 
 template <typename Enum> long parsePartialEnum(const string& key, std::function<bool(long)> accept)
 {
-    return (long)Enum::parsePartialEnum(key, accept);
+    if (auto result = (long)Enum::parsePartialEnum(key, accept)) {
+        return result;
+    }
+    throw NewParseError(fault::PARSE_ENUM_ERROR, Enum::keyList());
 }
 
 template <typename R, typename Enum> R parsePartialEnum(const string& key, std::function<bool(long)> accept)
 {
-    return Enum::parsePartialEnum(key, accept);
+    if (auto result = Enum::parsePartialEnum(key, accept)) {
+        return result;
+    }
+    throw NewParseError(fault::PARSE_ENUM_ERROR, Enum::keyList());
 }
 
 }

@@ -11,13 +11,10 @@
 
 namespace utl {
 
-void
-IOError::init(std::any payload, std::string msg)
+IOError::IOError(long fault, const std::string &msg) : Error()
 {
-    auto fault = std::any_cast<long>(payload);
+     switch (fault) {
 
-     switch (fault)
-     {
          case fault::IO_ENOENT:
              set_msg(msg + " does not exist.");
              break;
@@ -72,13 +69,10 @@ IOError::init(std::any payload, std::string msg)
     }
 }
 
-void
-NewParseError::init(std::any payload, std::string msg)
+NewParseError::NewParseError(long fault, const std::string &msg) : Error()
 {
-    auto fault = std::any_cast<long>(payload);
+    switch (fault) {
 
-    switch (fault)
-    {
         case fault::PARSE_BOOL_ERROR:
             set_msg(msg + " must be true or false.");
             break;

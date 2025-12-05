@@ -10,6 +10,7 @@
 #pragma once
 
 #include "utl/abilities/Reflectable.h"
+#include "utl/types/UtlError.h"
 
 namespace vamiga {
 
@@ -99,7 +100,7 @@ struct FSFaultEnum : Reflectable<FSFaultEnum, FSFault>
     }
 };
 
-class FSError : public utl::Exception
+class FSError : public utl::GenericException<FSFault>
 {
 public:
 
@@ -109,7 +110,7 @@ public:
     FSError(FSFault fault, std::integral auto v) : FSError(fault, std::to_string(v)) { };
     FSError(FSFault fault) : FSError(fault, "") { }
 
-    FSFault fault() const { return *payload<FSFault>(); }
+    FSFault fault() const { return FSFault(_payload); }
 };
 
 }

@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-AppError::AppError(Fault code, const string &s) : utl::Exception(code)
+AppError::AppError(Fault code, const string &s) : utl::GenericException<Fault>(code)
 {
     // string _msg;
     

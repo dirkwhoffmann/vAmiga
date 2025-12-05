@@ -16,7 +16,7 @@
 #include "Configurable.h"
 #include "Inspectable.h"
 #include "Serializable.h"
-#include "Synchronizable.h"
+#include "utl/abilities/Synchronizable.h"
 #include <functional>
 
 namespace vamiga {

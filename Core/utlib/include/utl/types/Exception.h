@@ -15,42 +15,26 @@
 
 namespace utl {
 
-class Exception : public std::exception {
+struct Exception : public std::exception {
 
-    std::any _payload;
+};
+
+template<typename T>
+struct GenericException : public Exception {
+
+    T _payload;
     std::string _msg;
 
-    virtual void init(std::any payload, std::string msg) {
-        _payload = std::move(payload); _msg = std::move(msg);
-    }
-
-public:
-
-    explicit Exception(std::any payload = {}, std::string msg = "") {
-        init(payload, msg);
-    }
+    explicit GenericException(T payload = {}, std::string msg = "")
+    : _payload(std::move(payload)), _msg(std::move(msg)) { }
 
     const char *what() const noexcept override {
         return _msg.c_str();
     }
 
     // Setters
-    void set_msg(std::string value) {
-        _msg = std::move(value);
-    }
-    template<class T> void set_payload(T&& value) {
-        _payload = std::forward<T>(value);
-    }
-
-    // Return typed pointer to payload if type matches
-    template<class T> const T* payload() const noexcept {
-        return std::any_cast<T>(&_payload);
-    }
-
-    // Return payload as std::any
-    const std::any& payload() const noexcept {
-        return _payload;
-    }
+    void set_msg(std::string value) { _msg = std::move(value); }
+    void set_payload(T value) { _payload = std::move(value); }
 };
 
 }

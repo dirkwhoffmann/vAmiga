@@ -86,7 +86,7 @@ struct DeviceFaultEnum : Reflectable<DeviceFaultEnum, DeviceFault>
     }
 };
 
-class DeviceError : public utl::Exception
+class DeviceError : public utl::GenericException<DeviceFault>
 {
 public:
 
@@ -96,7 +96,7 @@ public:
     DeviceError(DeviceFault fault, std::integral auto v) : DeviceError(fault, std::to_string(v)) { };
     DeviceError(DeviceFault fault) : DeviceError(fault, "") { }
 
-    DeviceFault fault() const { return *payload<DeviceFault>(); }
+    DeviceFault fault() const { return _payload; }
 };
 
 }

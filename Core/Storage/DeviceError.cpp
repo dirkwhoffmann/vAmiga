@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-DeviceError::DeviceError(DeviceFault code, const string &s) : utl::Exception(code)
+DeviceError::DeviceError(DeviceFault code, const string &s) : utl::GenericException<DeviceFault>(code)
 {
     switch (code)
     {

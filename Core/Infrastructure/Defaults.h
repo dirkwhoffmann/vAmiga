@@ -11,7 +11,7 @@
 
 #include "CoreObject.h"
 #include "OptionTypes.h"
-#include "Synchronizable.h"
+#include "utl/abilities/Synchronizable.h"
 
 namespace vamiga {
 

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "utl/types.h"
+
 #include <functional>
 #include <map>
 #include <unordered_map>
@@ -105,12 +106,12 @@ template <class T, typename E> struct Reflectable {
         return result;
     }
 
-    static E parseEnum(const string& key)
+    static optional<E> parseEnum(const string& key)
     {
         return parsePartialEnum(key, [](long){ return true; });
     }
 
-    static E parsePartialEnum(const string& key, std::function<bool(long)> accept)
+    static optional<E> parsePartialEnum(const string& key, std::function<bool(long)> accept)
     {
         string upper, prefix, suffix;
 
@@ -133,7 +134,9 @@ template <class T, typename E> struct Reflectable {
             }
         }
 
-        throw utl::Exception(keyList(), "Parse error");
+        return {};
+        // throw ParseError(fault::PARSE_ENUM_ERROR, keyList());
+        // throw utl::Exception(keyList(), "Parse error");
     }
 
     // Convenience wrapper
