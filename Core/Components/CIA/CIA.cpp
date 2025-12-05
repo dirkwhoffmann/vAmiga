@@ -17,7 +17,7 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "SerialPort.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace utl { using namespace support; }
 
@@ -199,7 +199,7 @@ CIA::cacheStats(CIAStats &result) const
 void
 CIA::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
     
     if (category == Category::Config) {
         

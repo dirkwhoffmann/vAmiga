@@ -12,17 +12,11 @@
 #include "utl/types.h"
 #include <iostream>
 #include <algorithm>
+#include <filesystem>
 
-/*
-#include <fcntl.h>
-#include <fstream>
-#include <istream>
-#include <iostream>
-#include <sstream>
-#include <sys/stat.h>
-*/
+namespace fs = std::filesystem;
 
-namespace utl {
+namespace utl::io {
 
 using namespace types;
 

@@ -22,7 +22,7 @@
 #include "ZorroManager.h"
 #include "RomDatabase.h"
 #include "MediaFile.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace utl { using namespace support; }
 
@@ -39,7 +39,7 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
 void
 Memory::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Config) {
         

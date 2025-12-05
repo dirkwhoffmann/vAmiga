@@ -10,7 +10,7 @@
 #include "config.h"
 #include "TOD.h"
 #include "CIA.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace vamiga {
 
@@ -46,7 +46,7 @@ TOD::cacheInfo(TODInfo &info) const
 void 
 TOD::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::State) {
         

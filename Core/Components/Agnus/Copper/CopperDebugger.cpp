@@ -11,7 +11,7 @@
 #include "CopperDebugger.h"
 #include "Emulator.h"
 #include "Copper.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 
 namespace utl { using namespace support; }
@@ -51,7 +51,7 @@ CopperDebugger::_didReset(bool hard)
 void
 CopperDebugger::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     auto print = [&](const string &name, const GuardList &guards) {
 

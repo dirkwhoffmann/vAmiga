@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Workspace.h"
-#include "utl/support/Files.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 
 #include <sstream>

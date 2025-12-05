@@ -10,7 +10,7 @@
 #include "config.h"
 #include "RegressionTester.h"
 #include "Emulator.h"
-#include "utl/support/Files.h"
+#include "utl/io.h"
 #include <fstream>
 
 namespace utl { using namespace support; }

@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Sequencer.h"
 #include "Agnus.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 
 namespace utl { using namespace support; }
@@ -20,7 +20,7 @@ namespace vamiga {
 void
 Sequencer::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Dma) {
 

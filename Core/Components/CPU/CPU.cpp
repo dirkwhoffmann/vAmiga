@@ -16,7 +16,7 @@
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "utl/support/Strings.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace utl { using namespace support; }
 
@@ -485,7 +485,7 @@ CPU::cacheInfo(CPUInfo &info) const
 void
 CPU::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     auto print = [&](const string &name, const GuardList &guards) {
 

@@ -9,7 +9,7 @@
 
 #include "FSStorage.h"
 #include "FileSystem.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include <algorithm>
 
 namespace utl { using namespace support; }
@@ -49,7 +49,7 @@ FSStorage::init(isize capacity, isize bsize)
 void
 FSStorage::dump(std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     os << tab("Capacity") << numBlocks() << " blocks (x " << bsize << " bytes)" << std::endl;
     os << tab("Hashed blocks") << blocks.size() << std::endl;

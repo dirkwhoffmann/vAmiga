@@ -7,10 +7,10 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "utl/support/Bytes.h"
-#include "utl/support/Streams.h"
+#include "utl/support.h"
+#include "utl/io.h"
 
-namespace utl::support {
+namespace utl::io {
 
 std::ostream &
 dec::operator()(std::ostream &os) const

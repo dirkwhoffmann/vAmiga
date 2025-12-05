@@ -9,14 +9,14 @@
 
 #include "config.h"
 #include "Agnus.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace vamiga {
 
 void
 Blitter::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Config) {
         

@@ -11,7 +11,7 @@
 #include "Agnus.h"
 #include "CIA.h"
 #include "CPU.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace vamiga {
 
@@ -477,7 +477,7 @@ Agnus::eventName(EventSlot slot, EventID id)
 void
 Agnus::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Config) {
 
@@ -575,7 +575,7 @@ Agnus::_dump(Category category, std::ostream &os) const
         
         for (isize i = 0; i < SLOT_COUNT; i++) {
             
-            EventSlotInfo &sinfo = info.slotInfo[i];
+            auto &sinfo = info.slotInfo[i];
 
             os << std::left << std::setw(10) << EventSlotEnum::key(sinfo.slot);
             os << std::left << std::setw(14) << sinfo.eventName;

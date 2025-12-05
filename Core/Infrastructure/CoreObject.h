@@ -20,12 +20,6 @@ using namespace utl::abilities;
 
 class CoreObject : public Loggable {
     
-protected:
-    
-    // Verbosity level
-    // static isize verbosity;
-    
-    
     //
     // Initializing
     //
@@ -46,7 +40,7 @@ public:
     
     
     //
-    // Dumping state
+    // Reporting state
     //
     
     virtual void _dump(Category category, std::ostream &ss) const { }

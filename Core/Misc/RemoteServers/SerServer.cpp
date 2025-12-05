@@ -14,7 +14,7 @@
 #include "SerialPort.h"
 #include "Thread.h"
 #include "UART.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 
 namespace utl { using namespace support; }
@@ -24,7 +24,7 @@ namespace vamiga {
 void
 SerServer::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     RemoteServer::_dump(category, os);
     

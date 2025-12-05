@@ -7,13 +7,13 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "utl/support/Files.h"
+#include "utl/io.h"
 #include "utl/hints.h"
 #include <fstream>
 #include <cassert>
 #include <sys/stat.h>
 
-namespace utl {
+namespace utl::io {
 
 fs::path
 makeUniquePath(const fs::path &path)

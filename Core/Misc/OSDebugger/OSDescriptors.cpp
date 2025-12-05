@@ -12,8 +12,8 @@
 #include "CoreObject.h"
 #include "Error.h"
 #include "Macros.h"
-#include "utl/support/Bytes.h"
-#include "utl/support/Streams.h"
+#include "utl/support.h"
+#include "utl/io.h"
 #include <iostream>
 
 namespace vamiga {
@@ -86,7 +86,7 @@ HunkDescriptor::dump(Category category) const
 void
 HunkDescriptor::dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Sections) {
         
@@ -279,7 +279,7 @@ ProgramUnitDescriptor::dump(Category category) const
 void
 ProgramUnitDescriptor::dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Hunks || category == Category::Sections) {
         

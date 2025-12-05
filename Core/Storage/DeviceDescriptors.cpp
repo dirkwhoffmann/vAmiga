@@ -12,7 +12,7 @@
 #include "Error.h"
 #include "FSTypes.h"
 #include "OSDebugger.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include <algorithm>
 
 namespace utl { using namespace support; }
@@ -113,7 +113,7 @@ GeometryDescriptor::dump() const
 void
 GeometryDescriptor::dump(std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     os << tab("Geometry");
     os << dec(cylinders) << " - ";
@@ -169,7 +169,7 @@ PartitionDescriptor::dump() const
 void
 PartitionDescriptor::dump(std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     os << tab("Name");
     os << name << std::endl;
@@ -227,7 +227,7 @@ DriverDescriptor::dump() const
 void
 DriverDescriptor::dump(std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     os << tab("DOS type");
     os << hex(dosType);

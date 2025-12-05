@@ -10,7 +10,7 @@
 #pragma once
 
 #include "ErrorTypes.h"
-#include "utl/exception.h"
+#include "utl/types.h"
 
 namespace vamiga {
 

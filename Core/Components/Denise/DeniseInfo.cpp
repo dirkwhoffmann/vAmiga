@@ -11,7 +11,7 @@
 #include "Denise.h"
 #include "Agnus.h"
 #include "ControlPort.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace utl { using namespace support; }
 
@@ -57,7 +57,7 @@ Denise::cacheInfo(DeniseInfo &info) const
 void
 Denise::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Config) {
         

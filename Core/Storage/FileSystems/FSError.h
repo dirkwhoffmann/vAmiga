@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "utl/exception.h"
 #include "utl/abilities/Reflectable.h"
 
 namespace vamiga {

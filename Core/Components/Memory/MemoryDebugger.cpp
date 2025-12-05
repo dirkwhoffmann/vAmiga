@@ -10,7 +10,7 @@
 #include "config.h"
 #include "MemoryDebugger.h"
 #include "Emulator.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace utl { using namespace support; }
 
@@ -415,7 +415,7 @@ MemoryDebugger::convertNumeric(std::ostream &os, const string &s) const
 template <typename T> void
 MemoryDebugger::convertNumeric(std::ostream &os, T value, const char *fmt) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     bool ctrl = false;
     isize tab = 0;

@@ -14,7 +14,7 @@
 #include "Paula.h"
 #include "RemoteManager.h"
 #include "SerialPort.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include <algorithm>
 #include <iostream>
 
@@ -45,7 +45,7 @@ UART::cacheInfo(UARTInfo &info) const
 void
 UART::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
     
     if (category == Category::State) {
         

@@ -10,7 +10,7 @@
 #include "config.h"
 #include "FSDoctor.h"
 #include "FileSystem.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <unordered_map>
 #include <unordered_set>
@@ -93,7 +93,7 @@ namespace vamiga {
 void
 FSDoctor::dump(Block nr, std::ostream &os)
 {
-    using namespace utl::support;
+    using namespace utl;
 
     FSBlock &p = fs.at(nr);
 

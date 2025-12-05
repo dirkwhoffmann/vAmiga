@@ -10,8 +10,7 @@
 #include "config.h"
 #include "FSBlock.h"
 #include "FileSystem.h"
-#include "utl/support/Files.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <algorithm>
 #include <fstream>
@@ -625,7 +624,7 @@ FSBlock::updateChecksum()
 void
 FSBlock::dumpInfo(std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     auto byteStr = [&os](isize num) {
 
@@ -668,7 +667,7 @@ FSBlock::dumpInfo(std::ostream &os) const
 void
 FSBlock::dumpBlocks(std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     switch (type) {
 

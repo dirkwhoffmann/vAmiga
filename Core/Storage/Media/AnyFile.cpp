@@ -19,8 +19,8 @@
 #include "HDFFile.h"
 #include "RomFile.h"
 #include "Script.h"
-#include "utl/support/Strings.h"
-#include "utl/support/Files.h"
+#include "utl/io.h"
+#include "utl/support.h"
 
 namespace utl { using namespace support; }
 

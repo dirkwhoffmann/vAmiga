@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Joystick.h"
 #include "Amiga.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include <sstream>
 
 namespace utl { using namespace support; }
@@ -98,7 +98,7 @@ Joystick::setOption(Opt option, i64 value)
 void
 Joystick::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Config) {
 

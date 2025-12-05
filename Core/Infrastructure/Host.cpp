@@ -11,8 +11,7 @@
 #include "Host.h"
 #include "Emulator.h"
 #include "StringUtils.h"
-#include "utl/support/Streams.h"
-#include "utl/support/Files.h"
+#include "utl/io.h"
 #include <unordered_set>
 
 namespace utl { using namespace support; }
@@ -90,7 +89,7 @@ Host::resetConfigItems(const class Defaults &defaults, isize objid)
 void
 Host::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Config) {
 

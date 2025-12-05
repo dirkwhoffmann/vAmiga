@@ -25,6 +25,7 @@ struct Void { };
  *  are the average CIA activity or the current fill level of the audio buffer.
  */
 template <typename T1, typename T2 = Void>
+requires std::is_default_constructible_v<T1> && std::is_default_constructible_v<T2>
 class Inspectable {
 
 protected:
@@ -34,34 +35,34 @@ protected:
 
 public:
 
-    Inspectable() { }
+    Inspectable() = default;
     virtual ~Inspectable() = default;
 
-    T1 &getInfo() const {
+    const T1 &getInfo() const {
 
         cacheInfo(info);
         return info;
     }
 
-    T1 &getCachedInfo() const {
+    const T1 &getCachedInfo() const {
 
         return info;
     }
 
-    T2 &getStats() const {
+    const T2 &getStats() const {
 
         cacheStats(stats);
         return stats;
     }
 
-    T2 &getCachedStats() const {
+    const T2 &getCachedStats() const {
 
         return stats;
     }
 
     virtual void clearStats() {
 
-        memset(&stats, 0, sizeof(stats));
+        stats = T2{};
     }
 
     virtual void record() const {
@@ -70,7 +71,7 @@ public:
         cacheStats(stats);
     }
 
-private:
+protected:
 
     virtual void cacheInfo(T1 &result) const { };
     virtual void cacheStats(T2 &result) const { };

@@ -11,7 +11,7 @@
 #include "Defaults.h"
 #include "Amiga.h"
 #include "StringUtils.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace utl { using namespace support; }
 
@@ -226,7 +226,7 @@ Defaults::Defaults()
 void
 Defaults::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     for (const auto &it: fallbacks) {
 

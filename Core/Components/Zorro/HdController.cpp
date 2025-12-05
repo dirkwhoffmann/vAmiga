@@ -15,7 +15,7 @@
 #include "FloppyDrive.h"
 #include "OSDebugger.h"
 #include "OSDescriptors.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 
 namespace utl { using namespace support; }
 
@@ -29,7 +29,7 @@ HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref, hdr.obj
 void
 HdController::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     ZorroBoard::_dump(category, os);
     

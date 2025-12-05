@@ -731,8 +731,8 @@
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
-		503FC4B02EE00FE400637C95 /* exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = exception.h; sourceTree = "<group>"; };
-		503FC4B42EE04C2B00637C95 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		503FC4B02EE00FE400637C95 /* my_exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = my_exception.h; sourceTree = "<group>"; };
+		503FC4B42EE04C2B00637C95 /* integers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = integers.h; sourceTree = "<group>"; };
 		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
 		503FC4B62EE06D0A00637C95 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		503FC4B92EE08B2B00637C95 /* Reflectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflectable.h; sourceTree = "<group>"; };
@@ -1131,6 +1131,9 @@
 		50BCB9922EE1CDE6000C53CF /* storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = storage.h; sourceTree = "<group>"; };
 		50BCB9972EE1DB07000C53CF /* Bytes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bytes.cpp; sourceTree = "<group>"; };
 		50BCB99A2EE229F6000C53CF /* support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = support.h; sourceTree = "<group>"; };
+		50BCB99C2EE2C33B000C53CF /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		50BCB99D2EE2C53D000C53CF /* Reportable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reportable.h; sourceTree = "<group>"; };
+		50BCB99F2EE2C84D000C53CF /* io.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = io.h; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -1509,18 +1512,20 @@
 			isa = PBXGroup;
 			children = (
 				503FC4C42EE092EE00637C95 /* CMakeLists.txt */,
-				503FC4B42EE04C2B00637C95 /* types.h */,
+				50BCB99C2EE2C33B000C53CF /* types.h */,
 				50BCB9902EE1C84C000C53CF /* abilities.h */,
 				50BCB9912EE1CC86000C53CF /* chrono.h */,
 				503FC4FB2EE1C49500637C95 /* concurrency.h */,
-				503FC4B02EE00FE400637C95 /* exception.h */,
 				503FC4D02EE0ADF300637C95 /* hints.h */,
+				50BCB99F2EE2C84D000C53CF /* io.h */,
 				50BCB9922EE1CDE6000C53CF /* storage.h */,
 				50BCB99A2EE229F6000C53CF /* support.h */,
+				50BCB99B2EE2C32B000C53CF /* types */,
 				503FC4BC2EE091B700637C95 /* abilities */,
 				503FC4F72EE1C21F00637C95 /* animation */,
 				503FC4E92EE1B96D00637C95 /* chrono */,
 				503FC4F82EE1C35100637C95 /* concurrency */,
+				50BCB99E2EE2C834000C53CF /* io */,
 				503FC4E02EE16FE000637C95 /* storage */,
 				503FC4C72EE0A96300637C95 /* support */,
 			);
@@ -1544,6 +1549,7 @@
 				503FC4D62EE1576400637C95 /* Hashable.h */,
 				503FC4D22EE0D81E00637C95 /* Loggable.h */,
 				503FC4B92EE08B2B00637C95 /* Reflectable.h */,
+				50BCB99D2EE2C53D000C53CF /* Reportable.h */,
 				503FC4FC2EE1C75300637C95 /* Synchronizable.h */,
 			);
 			path = abilities;
@@ -1576,8 +1582,6 @@
 			isa = PBXGroup;
 			children = (
 				503FC4D12EE0B0F900637C95 /* Bytes.h */,
-				503FC4C62EE0A95000637C95 /* Files.h */,
-				503FC4C82EE0A97D00637C95 /* Streams.h */,
 				503FC4E82EE1B36B00637C95 /* Strings.h */,
 			);
 			path = support;
@@ -2515,6 +2519,24 @@
 				509C3658260B1766004F160A /* RSCommand.cpp */,
 			);
 			path = RetroShell;
+			sourceTree = "<group>";
+		};
+		50BCB99B2EE2C32B000C53CF /* types */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4B42EE04C2B00637C95 /* integers.h */,
+				503FC4B02EE00FE400637C95 /* my_exception.h */,
+			);
+			path = types;
+			sourceTree = "<group>";
+		};
+		50BCB99E2EE2C834000C53CF /* io */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4C62EE0A95000637C95 /* Files.h */,
+				503FC4C82EE0A97D00637C95 /* Streams.h */,
+			);
+			path = io;
 			sourceTree = "<group>";
 		};
 		50BF1CCA276DBF2E00386540 /* RemoteServers */ = {

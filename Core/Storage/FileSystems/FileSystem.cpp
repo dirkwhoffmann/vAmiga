@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FileSystem.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <climits>
 #include <unordered_set>
@@ -258,7 +258,7 @@ FileSystem::dumpInfo(std::ostream &os) const noexcept
 void
 FileSystem::dumpState(std::ostream &os) const noexcept
 {
-    using namespace utl::support;
+    using namespace utl;
 
     auto st = stat();
 
@@ -297,7 +297,7 @@ FileSystem::dumpState(std::ostream &os) const noexcept
 void
 FileSystem::dumpProps(std::ostream &os) const noexcept
 {
-    using namespace utl::support;
+    using namespace utl;
 
     auto st = stat();
     auto bst = bootStat();

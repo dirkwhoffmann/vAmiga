@@ -16,7 +16,7 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "Thread.h"
-#include "utl/support/Streams.h"
+#include "utl/io.h"
 #include <algorithm>
 
 namespace utl { using namespace support; }
@@ -117,7 +117,7 @@ DiskController::cacheInfo(DiskControllerInfo &result) const
 void
 DiskController::_dump(Category category, std::ostream &os) const
 {
-    using namespace utl::support;
+    using namespace utl;
 
     if (category == Category::Config) {
         

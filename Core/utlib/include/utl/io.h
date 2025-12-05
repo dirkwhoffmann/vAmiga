@@ -7,18 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "types/integers.h"
-#include "types/my_exception.h"
+#include "io/Files.h"
+#include "io/Streams.h"
 
-namespace utl { using namespace types; }
-
-#include <filesystem>
-#include <optional>
-#include <string>
-#include <vector>
-
-namespace fs = std::filesystem;
-
-using std::optional;
-using std::string;
-using std::vector;
+namespace utl { using namespace io; }
