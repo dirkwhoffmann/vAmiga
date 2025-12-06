@@ -794,14 +794,14 @@ const DiskControllerInfo &
 DiskControllerAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return diskController->getInfo();
+    return diskController->info.current();
 }
 
 const DiskControllerInfo &
 DiskControllerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return diskController->getCachedInfo();
+    return diskController->info.cached();
 }
 
 const UARTInfo &

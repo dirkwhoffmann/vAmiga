@@ -13,6 +13,8 @@
 #include "Amiga.h"
 #include "Script.h"
 #include "DiagRom.h"
+#include "utl/chrono.h"
+#include "utl/support.h"
 #include <chrono>
 
 int main(int argc, char *argv[])
@@ -112,7 +114,7 @@ Headless::checkArguments()
     }
 
     // The input file must exist
-    if (keys.find("arg1") != keys.end() && !util::fileExists(keys["arg1"])) {
+    if (keys.find("arg1") != keys.end() && !utl::fileExists(keys["arg1"])) {
         throw SyntaxError("File " + keys["arg1"] + " does not exist");
     }
 }
@@ -148,7 +150,7 @@ Headless::runScript(const fs::path &path)
     vamiga.launch(this, vamiga::process);
 
     // Execute script
-    const auto timeout = util::Time::seconds(500.0);
+    const auto timeout = utl::Time::seconds(500.0);
     vamiga.retroShell.execScript(*script);
     waitForWakeUp(timeout);
 }

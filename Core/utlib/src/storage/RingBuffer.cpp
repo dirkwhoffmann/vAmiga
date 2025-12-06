@@ -9,7 +9,6 @@
 
 #include "utl/storage/RingBuffer.h"
 
-
 namespace utl::storage {
 
 }

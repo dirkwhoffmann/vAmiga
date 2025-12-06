@@ -12,10 +12,11 @@
 #include "VideoPortTypes.h"
 #include "SubComponent.h"
 #include "Texture.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 
-class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, VideoPortStats> {
+class VideoPort final : public SubComponent {
 
     Descriptions descriptions = {{
 
@@ -33,12 +34,28 @@ class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, V
     // Current configuration
     VideoPortConfig config = { };
 
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<VideoPortInfo> info;
+    utl::Memorized<VideoPortStats> metrics;
+
+private:
+
     // Predefined frame buffers
     mutable Texture whiteNoise;
     Texture blank;
 
     //  White noise data
     Buffer <Texel> noise;
+
+    // TODO: IMPLEMENT FRAME DROP COUNTING ON THE GUI SIDE ?!
+
+    // Remembers the number of the most recently grabbed frame
+    mutable isize latestGrabbedFrame = 0;
+
+    // Counts the number of dropped frames
+    isize droppedFrames = 0;
 
 
     //
@@ -106,8 +123,6 @@ public:
 
 public:
 
-    void cacheInfo(VideoPortInfo &result) const override;
-    void cacheStats(VideoPortStats &result) const override;
     VideoPortInfo cacheInfo() const;
     VideoPortStats cacheStats() const;
 

@@ -21,6 +21,11 @@
 
 namespace vamiga {
 
+DiskController::DiskController(Amiga& ref) : SubComponent(ref)
+{
+    info.bind([this] { return cacheInfo(); } );
+}
+
 void
 DiskController::operator << (SerResetter &worker)
 {
@@ -90,25 +95,6 @@ DiskController::setOption(Opt option, i64 value)
             
         default:
             fatalError;
-    }
-}
-
-void 
-DiskController::cacheInfo(DiskControllerInfo &result) const
-{
-    {   SYNCHRONIZED
-
-        info.selectedDrive = selected;
-        info.state = state;
-        info.fifoCount = fifoCount;
-        info.dsklen = dsklen;
-        info.dskbytr = computeDSKBYTR();
-        info.dsksync = dsksync;
-        info.prb = prb;
-        
-        for (isize i = 0; i < 6; i++) {
-            info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
-        }
     }
 }
 

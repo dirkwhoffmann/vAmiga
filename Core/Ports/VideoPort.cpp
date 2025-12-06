@@ -31,6 +31,9 @@ VideoPort::VideoPort(Amiga &ref) : SubComponent(ref)
     for (isize i = 0; i < blank.pixels.size; i++) {
         blank.pixels.ptr[i] = 0xFF000000;
     }
+
+    info.bind([this] { return cacheInfo(); } );
+    metrics.bind([this] { return cacheStats(); } );
 };
 
 VideoPort::~VideoPort()
@@ -96,18 +99,6 @@ VideoPort::setOption(Opt opt, i64 value)
     }
 }
 
-void 
-VideoPort::cacheInfo(VideoPortInfo &result) const
-{
-
-}
-
-void 
-VideoPort::cacheStats(VideoPortStats &result) const
-{
-
-}
-
 VideoPortInfo
 VideoPort::cacheInfo() const
 {
@@ -126,7 +117,7 @@ VideoPort::getTexture(isize offset) const
     if (isPoweredOn()) {
 
         auto &result = denise.pixelEngine.getStableBuffer(offset);
-        info.latestGrabbedFrame = result.nr;
+        latestGrabbedFrame = result.nr;
         return result;
     }
     if (config.whiteNoise) {
@@ -146,14 +137,14 @@ void
 VideoPort::buffersWillSwap()
 {
     // Check if the texture has been grabbed
-    auto grabbed = info.latestGrabbedFrame;
+    auto grabbed = latestGrabbedFrame;
     auto current = denise.pixelEngine.getStableBuffer().nr;
 
     if (grabbed < current) {
 
-        stats.droppedFrames++;
-        debug(VID_DEBUG, "Frame %lld dropped (total: %ld latest: %lld)\n", 
-            current, stats.droppedFrames, grabbed);
+        droppedFrames++;
+        debug(VID_DEBUG, "Frame %lld dropped (total: %ld latest: %ld)\n", 
+            current, droppedFrames, grabbed);
     }
 }
 
