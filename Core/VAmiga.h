@@ -303,7 +303,8 @@ public:
 
     /** @brief  Returns statistical information about the components.
      */
-    CIAStats getStats() const;
+    CIAMetrics getMetrics() const;
+    CIAMetrics getCachedMetrics() const;
 };
 
 

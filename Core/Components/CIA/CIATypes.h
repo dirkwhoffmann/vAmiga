@@ -163,6 +163,6 @@ typedef struct
     
     double idlePercentage;
 }
-CIAStats;
+CIAMetrics;
 
 }

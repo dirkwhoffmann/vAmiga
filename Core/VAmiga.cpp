@@ -215,21 +215,28 @@ const CIAInfo &
 CIAAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return cia->getInfo();
+    return cia->info.current();
 }
 
 const CIAInfo &
 CIAAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return cia->getCachedInfo();
+    return cia->info.cached();
 }
 
-CIAStats
-CIAAPI::getStats() const
+CIAMetrics
+CIAAPI::getMetrics() const
 {
     VAMIGA_PUBLIC
-    return cia->getStats();
+    return cia->metrics.current();
+}
+
+CIAMetrics
+CIAAPI::getCachedMetrics() const
+{
+    VAMIGA_PUBLIC
+    return cia->metrics.cached();
 }
 
 

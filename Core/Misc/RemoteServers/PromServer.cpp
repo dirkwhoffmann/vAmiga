@@ -100,9 +100,9 @@ PromServer::respond(const httplib::Request& request)
                   {{"component","agnus"}});
     }
     
-    {   auto stats_a = ciaa.getStats();
-        auto stats_b = ciab.getStats();
-        
+    {   auto stats_a = ciaa.metrics.current();
+        auto stats_b = ciab.metrics.current();
+
         translate("vamiga_ciaa_idle_sec", "",
                   "gauge", stats_a.idleCycles,
                   {{"component","ciaa"}});

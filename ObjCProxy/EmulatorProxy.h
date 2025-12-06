@@ -425,7 +425,7 @@ NSString *EventSlotName(EventSlot slot);
  
 @property (readonly) CIAInfo info;
 @property (readonly) CIAInfo cachedInfo;
-@property (readonly) CIAStats stats;
+@property (readonly) CIAMetrics stats;
 
 @end
 

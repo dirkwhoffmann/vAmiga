@@ -449,9 +449,9 @@ NSString *EventSlotName(EventSlot slot)
     return [self cia]->getCachedInfo();
 }
 
-- (CIAStats)stats
+- (CIAMetrics)stats
 {
-    return [self cia]->getStats();
+    return [self cia]->getMetrics();
 }
 
 @end

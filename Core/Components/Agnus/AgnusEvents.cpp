@@ -780,18 +780,44 @@ Agnus::serviceINSEvent()
     u64 mask = data[SLOT_INS];
 
     // Analyze bit mask
-    if (mask & 1LL << long(Class::Agnus))           { agnus.record(); }
-    if (mask & 1LL << long(Class::Amiga))           { amiga.info.record(); }
-    if (mask & 1LL << long(Class::Blitter))         { blitter.record(); }
-    if (mask & 1LL << long(Class::Copper))          { copper.record(); }
-    if (mask & 1LL << long(Class::CIA))             { ciaa.record(); ciab.record(); }
-    if (mask & 1LL << long(Class::CPU))             { cpu.info.record(); }
-    if (mask & 1LL << long(Class::Denise))          { denise.record(); }
-    if (mask & 1LL << long(Class::Memory))          { mem.record(); }
-    if (mask & 1LL << long(Class::Paula))           { paula.record(); }
-    if (mask & 1LL << long(Class::UART))            { uart.record(); }
-    if (mask & 1LL << long(Class::ControlPort))     { controlPort1.record(); controlPort2.record(); }
-    if (mask & 1LL << long(Class::SerialPort))      { serialPort.record(); }
+    if (mask & 1LL << long(Class::Agnus)) {
+        agnus.record();
+    }
+    if (mask & 1LL << long(Class::Amiga)) {
+        amiga.info.record();
+    }
+    if (mask & 1LL << long(Class::Blitter)) {
+        blitter.record();
+    }
+    if (mask & 1LL << long(Class::Copper)) {
+        copper.record();
+    }
+    if (mask & 1LL << long(Class::CIA)) {
+        ciaa.info.record(); ciaa.metrics.record();
+        ciab.info.record(); ciab.metrics.record();
+    }
+    if (mask & 1LL << long(Class::CPU)) {
+        cpu.info.record();
+    }
+    if (mask & 1LL << long(Class::Denise)) {
+        denise.record();
+    }
+    if (mask & 1LL << long(Class::Memory)) {
+        mem.record();
+    }
+    if (mask & 1LL << long(Class::Paula)) {
+        paula.record();
+    }
+    if (mask & 1LL << long(Class::UART)) {
+        uart.record();
+    }
+    if (mask & 1LL << long(Class::ControlPort)) {
+        controlPort1.record();
+        controlPort2.record();
+    }
+    if (mask & 1LL << long(Class::SerialPort)) {
+        serialPort.record();
+    }
 
     // Reschedule the event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000007));

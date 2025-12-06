@@ -13,10 +13,11 @@
 #include "SubComponent.h"
 #include "AgnusTypes.h"
 #include "TOD.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 
-class CIA : public SubComponent, public Inspectable<CIAInfo, CIAStats> {
+class CIA : public SubComponent {
 
     friend class TOD;
 
@@ -47,6 +48,12 @@ protected:
 
     // Current configuration
     CIAConfig config = {};
+
+public:
+
+    // State and metrics
+    utl::Memorized<CIAInfo> info;
+    utl::Memorized<CIAMetrics> metrics;
 
 
     //
@@ -461,10 +468,8 @@ private:
 
 public:
 
-    void cacheInfo(CIAInfo &result) const override;
-    void cacheStats(CIAStats &result) const override;
     CIAInfo cacheInfo() const;
-    CIAStats cacheStats() const;
+    CIAMetrics cacheMetrics() const;
 
 
     //
