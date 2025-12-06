@@ -10,7 +10,7 @@
 #pragma once
 
 #include "VAmiga.h"
-#include "Wakeable.h"
+#include "utl/concurrency.h"
 #include <map>
 
 namespace vamiga {

@@ -10,6 +10,8 @@
 #include "concurrency/ReentrantMutex.h"
 #include "concurrency/AutoMutex.h"
 #include "abilities/Synchronizable.h"
+#include "abilities/Wakeable.h"
 
 namespace utl { using namespace concurrency; }
 namespace utl { using abilities::Synchronizable; }
+namespace utl { using abilities::Wakeable; }

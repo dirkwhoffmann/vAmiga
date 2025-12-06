@@ -7,10 +7,9 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
-#include "Wakeable.h"
+#include "utl/abilities/Wakeable.h"
 
-namespace vamiga {
+namespace utl::abilities {
 
 void
 Wakeable::waitForWakeUp(utl::Time timeout)

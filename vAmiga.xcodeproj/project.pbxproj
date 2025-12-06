@@ -1411,8 +1411,6 @@
 				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
 				50EFB0CB2C18D95B0013B73C /* Inspectable.h */,
 				50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */,
-				50EFB0CF2C18E01E0013B73C /* Wakeable.h */,
-				50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */,
 				50EFB0B92C1811C90013B73C /* Configurable.h */,
 				50EFB0B82C1811C90013B73C /* Configurable.cpp */,
 				5062F1942D550730004546A2 /* CoreObjectTypes.h */,
@@ -1558,6 +1556,7 @@
 				503FC4B92EE08B2B00637C95 /* Reflectable.h */,
 				50BCB99D2EE2C53D000C53CF /* Reportable.h */,
 				503FC4FC2EE1C75300637C95 /* Synchronizable.h */,
+				50EFB0CF2C18E01E0013B73C /* Wakeable.h */,
 			);
 			path = abilities;
 			sourceTree = "<group>";
@@ -1583,6 +1582,7 @@
 				503FC4D32EE0D8A100637C95 /* Loggable.cpp */,
 				503FC4BD2EE091DC00637C95 /* Reflectable.cpp */,
 				50BCB9A22EE2CD39000C53CF /* Reportable.cpp */,
+				50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */,
 			);
 			path = abilities;
 			sourceTree = "<group>";
