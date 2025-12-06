@@ -9,8 +9,8 @@
 
 #include "config.h"
 #include "RTC.h"
-#include "Chrono.h"
 #include "Amiga.h"
+#include "utl/chrono.h"
 #include "utl/io.h"
 
 namespace vamiga {

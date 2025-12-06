@@ -300,6 +300,7 @@ public:
 
     // Returns information about the disk
     void cacheInfo(HardDriveInfo &info) const override;
+    HardDriveInfo cacheInfo() const;
 
     // Returns information about a specific partition
     const PartitionDescriptor &getPartitionDescriptor(isize nr) const;

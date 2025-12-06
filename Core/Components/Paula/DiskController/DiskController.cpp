@@ -112,6 +112,26 @@ DiskController::cacheInfo(DiskControllerInfo &result) const
     }
 }
 
+DiskControllerInfo
+DiskController::cacheInfo() const
+{
+    DiskControllerInfo info;
+
+    info.selectedDrive = selected;
+    info.state = state;
+    info.fifoCount = fifoCount;
+    info.dsklen = dsklen;
+    info.dskbytr = computeDSKBYTR();
+    info.dsksync = dsksync;
+    info.prb = prb;
+
+    for (isize i = 0; i < 6; i++) {
+        info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
+    }
+    
+    return info;
+}
+
 void
 DiskController::_dump(Category category, std::ostream &os) const
 {

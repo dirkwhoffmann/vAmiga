@@ -413,6 +413,35 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
     }
 }
 
+HardDriveInfo
+HardDrive::cacheInfo() const
+{
+    HardDriveInfo info;
+
+    info.nr = objid;
+
+    info.isConnected = isConnected();
+    info.isCompatible = isCompatible();
+
+    info.hasDisk = hasDisk();
+    info.hasModifiedDisk = hasModifiedDisk();
+    info.hasUnmodifiedDisk = hasUnmodifiedDisk();
+    info.hasProtectedDisk = hasProtectedDisk();
+    info.hasUnprotectedDisk = hasUnprotectedDisk();
+
+    info.partitions = numPartitions();
+
+    // Flags
+    info.writeProtected = getFlag(DiskFlags::PROTECTED);
+    info.modified = getFlag(DiskFlags::MODIFIED);
+
+    // State
+    info.state = state;
+    info.head = head;
+    
+    return info;
+}
+
 void
 HardDrive::_didLoad()
 {

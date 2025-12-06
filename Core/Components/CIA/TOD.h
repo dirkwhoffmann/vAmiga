@@ -151,6 +151,7 @@ private:
 public:
 
     void cacheInfo(TODInfo &result) const override;
+    TODInfo cacheInfo() const;
 
 
     //

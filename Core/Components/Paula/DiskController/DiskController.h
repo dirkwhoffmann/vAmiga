@@ -210,6 +210,8 @@ public:
 public:
     
     void cacheInfo(DiskControllerInfo &result) const override;
+    DiskControllerInfo cacheInfo() const;
+
 
     //
     // Accessing

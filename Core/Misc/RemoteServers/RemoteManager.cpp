@@ -68,6 +68,20 @@ RemoteManager::cacheInfo(RemoteManagerInfo &result) const
     }
 }
 
+RemoteManagerInfo
+RemoteManager::cacheInfo() const
+{
+    RemoteManagerInfo info;
+
+    info.rshInfo = rshServer.getInfo();
+    info.rpcInfo = rpcServer.getInfo();
+    info.gdbInfo = gdbServer.getInfo();
+    info.promInfo = promServer.getInfo();
+    info.serInfo = serServer.getInfo();
+
+    return info;
+}
+
 isize
 RemoteManager::numLaunching() const
 {

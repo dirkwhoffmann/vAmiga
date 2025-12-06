@@ -225,6 +225,7 @@ public:
 public:
 
     void cacheInfo(CPUInfo &result) const override;
+    CPUInfo cacheInfo() const;
 
 
     //

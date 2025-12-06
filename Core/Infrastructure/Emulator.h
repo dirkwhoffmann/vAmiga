@@ -86,6 +86,8 @@ public:
 
     void cacheInfo(EmulatorInfo &result) const override;
     void cacheStats(EmulatorStats &result) const override;
+    EmulatorInfo cacheInfo() const;
+    EmulatorStats cacheStats() const;
 
 
     //

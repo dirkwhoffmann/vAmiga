@@ -146,6 +146,7 @@ private:
 private:
 
     void cacheInfo(JoystickInfo &result) const override;
+    JoystickInfo cacheInfo() const;
 
 
     //

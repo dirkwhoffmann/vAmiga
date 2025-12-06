@@ -14,7 +14,7 @@
 #include "Emulator.h"
 #include "Option.h"
 #include "Media.h"
-#include "Chrono.h"
+#include "utl/chrono.h"
 #include "utl/io.h"
 #include <algorithm>
 
@@ -1117,16 +1117,17 @@ Amiga::cacheInfo(AmigaInfo &result) const
 AmigaInfo
 Amiga::cacheInfo() const
 {
-    return AmigaInfo {
+    AmigaInfo info;
 
-        .cpuClock = cpu.getMasterClock(),
-        .dmaClock = agnus.clock,
-        .ciaAClock = ciaA.getClock(),
-        .ciaBClock = ciaB.getClock(),
-        .frame = agnus.pos.frame,
-        .vpos = agnus.pos.v,
-        .hpos = agnus.pos.h
-    };
+    info.cpuClock = cpu.getMasterClock();
+    info.dmaClock = agnus.clock;
+    info.ciaAClock = ciaA.getClock();
+    info.ciaBClock = ciaB.getClock();
+    info.frame = agnus.pos.frame;
+    info.vpos = agnus.pos.v;
+    info.hpos = agnus.pos.h;
+
+    return info;
 }
 
 void

@@ -463,6 +463,8 @@ public:
 
     void cacheInfo(CIAInfo &result) const override;
     void cacheStats(CIAStats &result) const override;
+    CIAInfo cacheInfo() const;
+    CIAStats cacheStats() const;
 
 
     //

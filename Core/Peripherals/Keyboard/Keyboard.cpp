@@ -26,6 +26,17 @@ Keyboard::cacheInfo(KeyboardInfo &result) const
     }
 }
 
+KeyboardInfo
+Keyboard::cacheInfo() const
+{
+    KeyboardInfo info;
+
+    info.state = state;
+    info.shiftReg = shiftReg;
+
+    return info;
+}
+
 void
 Keyboard::_didReset(bool hard)
 {    

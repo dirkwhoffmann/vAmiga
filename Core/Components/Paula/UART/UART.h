@@ -132,6 +132,7 @@ public:
 public:
 
     void cacheInfo(UARTInfo &result) const override;
+    UARTInfo cacheInfo() const;
 
     
     //

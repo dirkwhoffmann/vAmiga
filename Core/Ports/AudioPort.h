@@ -224,6 +224,8 @@ public:
 
     void cacheInfo(AudioPortInfo &result) const override;
     void cacheStats(AudioPortStats &result) const override;
+    AudioPortInfo cacheInfo() const;
+    AudioPortStats cacheStats() const;
 
 
     //

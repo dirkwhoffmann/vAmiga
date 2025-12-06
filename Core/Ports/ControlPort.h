@@ -140,6 +140,7 @@ public:
 public:
 
     void cacheInfo(ControlPortInfo &result) const override;
+    ControlPortInfo cacheInfo() const;
 
     bool isPort1() const { return objid == 0; }
     bool isPort2() const { return objid == 1; }

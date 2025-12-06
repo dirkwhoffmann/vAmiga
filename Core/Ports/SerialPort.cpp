@@ -88,6 +88,23 @@ SerialPort::cacheInfo(SerialPortInfo &info) const
     }
 }
 
+SerialPortInfo
+SerialPort::cacheInfo() const
+{
+    SerialPortInfo info;
+
+    info.port = port;
+    info.txd = getTXD();
+    info.rxd = getRXD();
+    info.rts = getRTS();
+    info.cts = getCTS();
+    info.dsr = getDSR();
+    info.cd = getCD();
+    info.dtr = getDTR();
+    
+    return info;
+}
+
 void
 SerialPort::_dump(Category category, std::ostream &os) const
 {

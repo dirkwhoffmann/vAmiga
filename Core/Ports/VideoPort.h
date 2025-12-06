@@ -108,6 +108,8 @@ public:
 
     void cacheInfo(VideoPortInfo &result) const override;
     void cacheStats(VideoPortStats &result) const override;
+    VideoPortInfo cacheInfo() const;
+    VideoPortStats cacheStats() const;
 
 
     //

@@ -305,6 +305,32 @@ DmaDebugger::cacheInfo(DmaDebuggerInfo &result) const
     }
 }
 
+DmaDebuggerInfo
+DmaDebugger::cacheInfo() const
+{
+    DmaDebuggerInfo info;
+
+    info.visualizeCopper = config.visualize[isize(DmaChannel::COPPER)];
+    info.visualizeBlitter = config.visualize[isize(DmaChannel::BLITTER)];
+    info.visualizeDisk = config.visualize[isize(DmaChannel::DISK)];
+    info.visualizeAudio = config.visualize[isize(DmaChannel::AUDIO)];
+    info.visualizeSprites = config.visualize[isize(DmaChannel::SPRITE)];
+    info.visualizeBitplanes = config.visualize[isize(DmaChannel::BITPLANE)];
+    info.visualizeCpu = config.visualize[isize(DmaChannel::CPU)];
+    info.visualizeRefresh = config.visualize[isize(DmaChannel::REFRESH)];
+
+    getColor(DmaChannel::COPPER, info.copperColor);
+    getColor(DmaChannel::BLITTER, info.blitterColor);
+    getColor(DmaChannel::DISK, info.diskColor);
+    getColor(DmaChannel::AUDIO, info.audioColor);
+    getColor(DmaChannel::SPRITE, info.spriteColor);
+    getColor(DmaChannel::BITPLANE, info.bitplaneColor);
+    getColor(DmaChannel::CPU, info.cpuColor);
+    getColor(DmaChannel::REFRESH, info.refreshColor);
+
+    return info;
+}
+
 void
 DmaDebugger::getColor(DmaChannel channel, double *rgb) const
 {

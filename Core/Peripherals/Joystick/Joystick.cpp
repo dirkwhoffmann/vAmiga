@@ -33,6 +33,18 @@ Joystick::cacheInfo(JoystickInfo &result) const
     }
 }
 
+JoystickInfo
+Joystick::cacheInfo() const
+{
+    JoystickInfo info;
+
+    info.button = button;
+    info.axisX  = axisX;
+    info.axisY  = axisY;
+
+    return info;
+}
+
 i64
 Joystick::getOption(Opt option) const
 {

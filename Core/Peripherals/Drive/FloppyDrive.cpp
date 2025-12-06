@@ -244,6 +244,25 @@ FloppyDrive::cacheInfo(FloppyDriveInfo &info) const
     }
 }
 
+FloppyDriveInfo
+FloppyDrive::cacheInfo() const
+{
+    FloppyDriveInfo info;
+
+    info.nr = objid;
+    info.head = head;
+    info.isConnected = isConnected();
+    info.hasDisk = hasDisk();
+    info.hasModifiedDisk = hasModifiedDisk();
+    info.hasUnmodifiedDisk = hasUnmodifiedDisk();
+    info.hasProtectedDisk = hasProtectedDisk();
+    info.hasUnprotectedDisk = hasUnprotectedDisk();
+    info.motor = getMotor();
+    info.writing = isWriting();
+    
+    return info;
+}
+
 void
 FloppyDrive::_dump(Category category, std::ostream &os) const
 {

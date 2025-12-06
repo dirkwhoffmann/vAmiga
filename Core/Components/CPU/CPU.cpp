@@ -481,6 +481,38 @@ CPU::cacheInfo(CPUInfo &info) const
     }
 }
 
+CPUInfo
+CPU::cacheInfo() const
+{
+    CPUInfo info;
+
+    info.clock = clock;
+
+    info.pc0 = getPC0() & 0xFFFFFF;
+    info.ird = getIRD();
+    info.irc = getIRC();
+
+    for (int i = 0; i < 8; i++) {
+        info.d[i] = getD(i);
+        info.a[i] = getA(i);
+    }
+    info.isp = getISP();
+    info.usp = getUSP();
+    info.msp = getMSP();
+    info.vbr = getVBR();
+    info.sr = getSR();
+    info.sfc = (u8)getSFC();
+    info.dfc = (u8)getDFC();
+    info.cacr = (u8)getCACR();
+    info.caar = (u8)getCAAR();
+    info.ipl = (u8)getIPL();
+    info.fc = (u8)readFC();
+
+    info.halt = isHalted();
+
+    return info;
+}
+
 void
 CPU::_dump(Category category, std::ostream &os) const
 {

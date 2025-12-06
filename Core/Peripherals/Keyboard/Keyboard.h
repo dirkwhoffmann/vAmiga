@@ -128,7 +128,8 @@ public:
 public:
 
     void cacheInfo(KeyboardInfo &result) const override;
-    
+    KeyboardInfo cacheInfo() const;
+
 
     //
     // Methods from Configurable

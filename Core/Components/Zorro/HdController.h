@@ -144,6 +144,8 @@ public:
 
     void cacheInfo(HdcInfo &result) const override;
     void cacheStats(HdcStats &result) const override;
+    HdcInfo cacheInfo() const;
+    HdcStats cacheStats() const;
 
 
     //

@@ -188,6 +188,7 @@ private:
 public:
 
     void cacheInfo(StateMachineInfo &result) const override;
+    StateMachineInfo cacheInfo() const;
 
 
     //

@@ -354,7 +354,8 @@ private:
 public:
 
     void cacheInfo(BlitterInfo &result) const override;
-    
+    BlitterInfo cacheInfo() const;
+
 
     //
     // Methods from Configurable

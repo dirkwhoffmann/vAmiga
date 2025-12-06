@@ -503,6 +503,7 @@ public:
 public:
     
     void cacheInfo(DeniseInfo &result) const override;
+    DeniseInfo cacheInfo() const;
 
 
     //

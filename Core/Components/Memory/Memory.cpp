@@ -467,6 +467,29 @@ Memory::cacheInfo(MemInfo &result) const
     }
 }
 
+MemInfo
+Memory::cacheInfo() const
+{
+    MemInfo info;
+
+    info.hasRom = hasRom();
+    info.hasWom = hasWom();
+    info.hasExt = hasExt();
+    info.hasBootRom = hasBootRom();
+    info.hasKickRom = hasKickRom();
+    info.womLock = womIsLocked;
+
+    info.romMask = romMask;
+    info.womMask = womMask;
+    info.extMask = extMask;
+    info.chipMask = chipMask;
+
+    for (isize i = 0; i < 256; i++) info.cpuMemSrc[i] = cpuMemSrc[i];
+    for (isize i = 0; i < 256; i++) info.agnusMemSrc[i] = agnusMemSrc[i];
+
+    return info;
+}
+
 void
 Memory::_isReady() const
 {    

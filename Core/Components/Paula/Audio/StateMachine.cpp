@@ -52,6 +52,24 @@ StateMachine<nr>::cacheInfo(StateMachineInfo &info) const
     }
 }
 
+template <isize nr> StateMachineInfo
+StateMachine<nr>::cacheInfo() const
+{
+    StateMachineInfo info;
+
+    info.state = state;
+    info.dma = AUDxON();
+    info.audlenLatch = audlenLatch;
+    info.audlen = audlen;
+    info.audperLatch = audperLatch;
+    info.audper = audper;
+    info.audvolLatch = audvolLatch;
+    info.audvol = audvol;
+    info.auddat = auddat;
+
+    return info;
+}
+
 template <isize nr> void
 StateMachine<nr>::enableDMA()
 {

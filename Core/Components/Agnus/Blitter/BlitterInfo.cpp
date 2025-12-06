@@ -130,4 +130,54 @@ Blitter::cacheInfo(BlitterInfo &info) const
     }
 }
 
+BlitterInfo
+Blitter::cacheInfo() const
+{
+    BlitterInfo info;
+
+    auto minterm = bltconLF();
+    auto mintermOut = doMintermLogic(ahold, bhold, chold, (u8)minterm);
+
+    info.bltcon0 = bltcon0;
+    info.bltcon1 = bltcon1;
+    info.ash = bltconASH();
+    info.bsh = bltconBSH();
+    info.minterm = bltconLF();
+    info.bltapt  = bltapt;
+    info.bltbpt  = bltbpt;
+    info.bltcpt  = bltcpt;
+    info.bltdpt  = bltdpt;
+    info.bltafwm = bltafwm;
+    info.bltalwm = bltalwm;
+    info.bltamod = bltamod;
+    info.bltbmod = bltbmod;
+    info.bltcmod = bltcmod;
+    info.bltdmod = bltdmod;
+    info.aold = aold;
+    info.bold = bold;
+    info.anew = anew;
+    info.bnew = bnew;
+    info.ahold = ahold;
+    info.bhold = bhold;
+    info.chold = chold;
+    info.dhold = dhold;
+    info.barrelAin = anew & mask;
+    info.barrelAout = barrelShifter(anew & mask, aold, bltconASH(), bltconDESC());
+    info.barrelBin = bnew;
+    info.barrelBout = barrelShifter(bnew, bold, bltconBSH(), bltconDESC());
+    info.mintermOut = mintermOut;
+    info.fillIn = mintermOut;
+    info.fillOut = dhold;
+    info.bbusy = bbusy;
+    info.bzero = bzero;
+    info.firstWord = isFirstWord();
+    info.lastWord = isLastWord();
+    info.fci = bltconFCI();
+    info.fco = fillCarry;
+    info.fillEnable = bltconFE();
+    info.storeToDest = bltconUSED() && !lockD;
+    
+    return info;
+}
+
 }

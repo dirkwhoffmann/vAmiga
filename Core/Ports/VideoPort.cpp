@@ -108,6 +108,18 @@ VideoPort::cacheStats(VideoPortStats &result) const
 
 }
 
+VideoPortInfo
+VideoPort::cacheInfo() const
+{
+    return {};
+}
+
+VideoPortStats
+VideoPort::cacheStats() const
+{
+    return {};
+}
+
 const Texture &
 VideoPort::getTexture(isize offset) const
 {

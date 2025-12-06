@@ -168,7 +168,8 @@ private:
 public:
 
     void cacheInfo(CopperInfo &result) const override;
-    
+    CopperInfo cacheInfo() const;
+
 
     //
     // Accessing

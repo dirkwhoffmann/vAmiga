@@ -354,6 +354,7 @@ public:
 public:
     
     void cacheInfo(AgnusInfo &result) const override;
+    AgnusInfo cacheInfo() const;
 
 private:
     

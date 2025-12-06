@@ -304,6 +304,26 @@ AudioPort::cacheStats(AudioPortStats &result) const
     result.fillLevel = stream.fillLevel();
 }
 
+AudioPortInfo
+AudioPort::cacheInfo() const
+{
+    AudioPortInfo info;
+
+    info.isMuted = isMuted();
+
+    return info;
+}
+
+AudioPortStats
+AudioPort::cacheStats() const
+{
+    AudioPortStats stats;
+
+    stats.fillLevel = stream.fillLevel();
+
+    return stats;
+}
+
 void
 AudioPort::_didLoad()
 {

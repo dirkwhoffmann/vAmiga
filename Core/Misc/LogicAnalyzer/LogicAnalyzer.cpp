@@ -49,6 +49,22 @@ LogicAnalyzer::cacheInfo(LogicAnalyzerInfo &info) const
     }
 }
 
+LogicAnalyzerInfo
+LogicAnalyzer::cacheInfo() const
+{
+    LogicAnalyzerInfo info;
+
+    info.busOwner = agnus.busOwner;
+    info.addrBus = agnus.busAddr;
+    info.dataBus = agnus.busData;
+
+    for (isize i = 0; i < 4; i++) {
+        info.channel[i] = record[i];
+    }
+
+    return info;
+}
+
 i64
 LogicAnalyzer::getOption(Opt option) const
 {

@@ -174,7 +174,6 @@ CIA::cacheInfo(CIAInfo &info) const
     }
 }
 
-
 void 
 CIA::cacheStats(CIAStats &result) const
 {
@@ -192,6 +191,64 @@ CIA::cacheStats(CIAStats &result) const
         // debug(true, "totalDiff: %lld idleDiff: %lld\n", totalDiff, idleDiff);
         result.idlePercentage =  totalDiff ? double(idleDiff) / double(totalDiff) : 1.0;
     }
+}
+
+CIAInfo
+CIA::cacheInfo() const
+{
+    CIAInfo info;
+
+    info.portA.port = computePA();
+    info.portA.reg = pra;
+    info.portA.dir = ddra;
+
+    info.portB.port = computePB();
+    info.portB.reg = prb;
+    info.portB.dir = ddrb;
+
+    info.timerA.count = LO_HI(spypeek(0x04), spypeek(0x05));
+    info.timerA.latch = latchA;
+    info.timerA.running = (delay & CIACountA3);
+    info.timerA.toggle = cra & 0x04;
+    info.timerA.pbout = cra & 0x02;
+    info.timerA.oneShot = cra & 0x08;
+
+    info.timerB.count = LO_HI(spypeek(0x06), spypeek(0x07));
+    info.timerB.latch = latchB;
+    info.timerB.running = (delay & CIACountB3);
+    info.timerB.toggle = crb & 0x04;
+    info.timerB.pbout = crb & 0x02;
+    info.timerB.oneShot = crb & 0x08;
+
+    info.sdr = sdr;
+    info.ssr = ssr;
+    info.icr = icr;
+    info.imr = imr;
+    info.irq = irq;
+
+    info.tod = tod.info;
+    info.todIrqEnable = imr & 0x04;
+
+    return info;
+}
+
+CIAStats
+CIA::cacheStats() const
+{
+    CIAStats stats;
+
+    auto total = AS_CIA_CYCLES(agnus.clock);
+    auto idle = idleTotal() + idleSince();
+
+    auto totalDiff = total - stats.totalCycles;
+    auto idleDiff = idle - stats.idleCycles;
+
+    stats.totalCycles = total;
+    stats.idleCycles = idle;
+
+    stats.idlePercentage =  totalDiff ? double(idleDiff) / double(totalDiff) : 1.0;
+
+    return stats;
 }
 
 void

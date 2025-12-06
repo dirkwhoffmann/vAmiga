@@ -126,6 +126,7 @@ public:
 public:
 
     void cacheInfo(SerialPortInfo &info) const override;
+    SerialPortInfo cacheInfo() const;
 
     
     //

@@ -43,7 +43,19 @@ TOD::cacheInfo(TODInfo &info) const
     }
 }
 
-void 
+TODInfo
+TOD::cacheInfo() const
+{
+    TODInfo info;
+    
+    info.value = tod.value;
+    info.latch = latch.value;
+    info.alarm = alarm.value;
+    
+    return info;
+}
+
+void
 TOD::_dump(Category category, std::ostream &os) const
 {
     using namespace utl;

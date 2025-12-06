@@ -85,7 +85,8 @@ public:
 public:
 
     void cacheInfo(LogicAnalyzerInfo &result) const override;
-    
+    LogicAnalyzerInfo cacheInfo() const;
+
     
     //
     // Methods from Configurable

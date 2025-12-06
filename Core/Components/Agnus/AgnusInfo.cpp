@@ -678,6 +678,70 @@ Agnus::cacheInfo(AgnusInfo &info) const
     }
 }
 
+AgnusInfo
+Agnus::cacheInfo() const
+{
+    AgnusInfo info;
+
+    info.vpos     = pos.v;
+    info.hpos     = pos.h;
+    info.frame    = pos.frame;
+
+    info.dmacon   = dmacon;
+    info.bplcon0  = bplcon0;
+    info.ddfstrt  = sequencer.ddfstrt;
+    info.ddfstop  = sequencer.ddfstop;
+    info.diwstrt  = sequencer.diwstrt;
+    info.diwstop  = sequencer.diwstop;
+
+    info.bpl1mod  = bpl1mod;
+    info.bpl2mod  = bpl2mod;
+    info.bltamod  = blitter.bltamod;
+    info.bltbmod  = blitter.bltbmod;
+    info.bltcmod  = blitter.bltcmod;
+    info.bltdmod  = blitter.bltdmod;
+    info.bltcon0  = blitter.bltcon0;
+    info.bls      = bls;
+
+    info.coppc0   = copper.coppc0 & ptrMask;
+    info.dskpt    = dskpt & ptrMask;
+    info.bltpt[0] = blitter.bltapt & ptrMask;
+    info.bltpt[1] = blitter.bltbpt & ptrMask;
+    info.bltpt[2] = blitter.bltcpt & ptrMask;
+    info.bltpt[3] = blitter.bltdpt & ptrMask;
+    for (isize i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & ptrMask;
+    for (isize i = 0; i < 4; i++) info.audpt[i] = audpt[i] & ptrMask;
+    for (isize i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
+    for (isize i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;
+
+    info.eventInfo.cpuClock = cpu.getMasterClock();
+    info.eventInfo.cpuCycles = cpu.getCpuClock();
+    info.eventInfo.dmaClock = agnus.clock;
+    info.eventInfo.ciaAClock = ciaa.getClock();
+    info.eventInfo.ciaBClock  = ciab.getClock();
+    info.eventInfo.frame = agnus.pos.frame;
+    info.eventInfo.vpos = agnus.pos.v;
+    info.eventInfo.hpos = agnus.pos.h;
+
+    for (isize i = 0; i < SLOT_COUNT; i++) {
+
+        info.slotInfo[i].slot = EventSlot(i);
+        info.slotInfo[i].eventId = id[i];
+        info.slotInfo[i].trigger = trigger[i];
+        info.slotInfo[i].triggerRel = trigger[i] - agnus.clock;
+
+        auto beam = pos + isize(AS_DMA_CYCLES(trigger[i] - clock));
+
+        info.slotInfo[i].vpos = beam.v;
+        info.slotInfo[i].hpos = beam.h;
+        info.slotInfo[i].frameRel = long(beam.frame - pos.frame);
+
+        info.slotInfo[i].eventName = eventName((EventSlot)i, id[i]);
+    }
+
+    return info;
+}
+
 void
 Agnus::updateStats()
 {

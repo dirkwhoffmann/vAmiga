@@ -10,7 +10,8 @@
 #include "config.h"
 #include "HDZFile.h"
 #include "Chrono.h"
-#include "utl/support/Strings.h"
+#include "utl/chrono.h"
+#include "utl/support.h"
 
 namespace utl { using namespace support; }
 

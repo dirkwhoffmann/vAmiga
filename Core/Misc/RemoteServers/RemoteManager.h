@@ -108,6 +108,7 @@ public:
 public:
 
     void cacheInfo(RemoteManagerInfo &result) const override;
+    RemoteManagerInfo cacheInfo() const;
 
 
     //

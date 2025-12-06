@@ -122,7 +122,8 @@ private:
 private:
     
     void cacheInfo(RetroShellInfo &result) const override;
-    
+    RetroShellInfo cacheInfo() const;
+
     
     //
     // Methods from Configurable

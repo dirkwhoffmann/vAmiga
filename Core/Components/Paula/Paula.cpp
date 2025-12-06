@@ -92,6 +92,18 @@ Paula::cacheInfo(PaulaInfo &info) const
     }
 }
 
+PaulaInfo
+Paula::cacheInfo() const
+{
+    PaulaInfo info;
+
+    info.intreq = intreq;
+    info.intena = intena;
+    info.adkcon = adkcon;
+
+    return info;
+}
+
 void
 Paula::_didLoad()
 {

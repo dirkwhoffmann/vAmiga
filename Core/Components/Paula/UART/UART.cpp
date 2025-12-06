@@ -40,6 +40,21 @@ UART::cacheInfo(UARTInfo &info) const
     }
 }
 
+UARTInfo
+UART::cacheInfo() const
+{
+    UARTInfo info;
+
+    info.serper = serper;
+    info.baudRate = baudRate();
+    info.receiveBuffer = receiveBuffer;
+    info.receiveShiftReg = receiveShiftReg;
+    info.transmitBuffer = transmitBuffer;
+    info.transmitShiftReg = transmitShiftReg;
+
+    return info;
+}
+
 void
 UART::_dump(Category category, std::ostream &os) const
 {

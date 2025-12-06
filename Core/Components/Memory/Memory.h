@@ -314,7 +314,7 @@ private:
 public:
 
     void cacheInfo(MemInfo &result) const override;
-    // void cacheStats(MemStats &result) const override;
+    MemInfo cacheInfo() const;
 
 private:
     

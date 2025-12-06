@@ -137,6 +137,16 @@ RemoteServer::cacheInfo(RemoteServerInfo &result) const
     info.state = state;
 }
 
+RemoteServerInfo
+RemoteServer::cacheInfo() const
+{
+    RemoteServerInfo info;
+
+    info.state = state;
+
+    return info;
+}
+
 void
 RemoteServer::start()
 {

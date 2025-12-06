@@ -246,6 +246,7 @@ public:
     
     // Returns the result of the latest inspection
     void cacheInfo(FloppyDriveInfo &info) const override;
+    FloppyDriveInfo cacheInfo() const;
 
     // Returns the identification pattern of this drive
     u32 getDriveId() const;

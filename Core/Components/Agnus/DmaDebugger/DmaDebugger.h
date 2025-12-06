@@ -128,7 +128,8 @@ private:
 public:
     
     void cacheInfo(DmaDebuggerInfo &result) const override;
-    
+    DmaDebuggerInfo cacheInfo() const;
+
     
     //
     // Methods from Configurable

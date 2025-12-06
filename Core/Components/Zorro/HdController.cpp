@@ -64,6 +64,25 @@ HdController::cacheStats(HdcStats &result) const
     
 }
 
+HdcInfo
+HdController::cacheInfo() const
+{
+    HdcInfo info;
+
+    info.nr        = objid;
+    info.pluggedIn = pluggedIn();
+    info.state     = getHdcState();
+
+    return info;
+}
+
+HdcStats
+HdController::cacheStats() const
+{
+    // TODO
+    return {};
+}
+
 void
 HdController::_didReset(bool hard)
 {    

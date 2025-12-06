@@ -212,6 +212,7 @@ public:
 public:
     
     void cacheInfo(PaulaInfo &result) const override;
+    PaulaInfo cacheInfo() const;
 
 
     //

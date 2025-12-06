@@ -164,6 +164,34 @@ Emulator::cacheStats(EmulatorStats &result) const
     }
 }
 
+EmulatorInfo
+Emulator::cacheInfo() const
+{
+    EmulatorInfo info;
+
+    info.state = state;
+    info.powered = isPoweredOn();
+    info.paused = isPaused();
+    info.running = isRunning();
+    info.suspended = isSuspended();
+    info.warping = isWarping();
+    info.tracking = isTracking();
+
+    return info;
+}
+
+EmulatorStats
+Emulator::cacheStats() const
+{
+    EmulatorStats stats;
+
+    stats.cpuLoad = cpuLoad;
+    stats.fps     = fps;
+    stats.resyncs = resyncs;
+
+    return stats;
+}
+
 i64
 Emulator::get(Opt opt, isize objid) const
 {

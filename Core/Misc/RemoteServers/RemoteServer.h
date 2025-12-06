@@ -145,6 +145,7 @@ public:
 public:
 
     void cacheInfo(RemoteServerInfo &result) const override;
+    RemoteServerInfo cacheInfo() const;
 
 
     //

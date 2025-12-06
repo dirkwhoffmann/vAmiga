@@ -43,6 +43,17 @@ RetroShell::cacheInfo(RetroShellInfo &result) const
     }
 }
 
+RetroShellInfo
+RetroShell::cacheInfo() const
+{
+    RetroShellInfo info;
+
+    info.console = current->objid;
+    info.cursorRel = current->cursorRel();
+
+    return info;
+}
+
 void
 RetroShell::enterConsole(isize nr)
 {
