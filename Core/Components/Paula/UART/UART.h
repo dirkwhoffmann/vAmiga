@@ -13,10 +13,13 @@
 #include "Constants.h"
 #include "SubComponent.h"
 #include "AgnusTypes.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 
-class UART final : public SubComponent, public Inspectable<UARTInfo> {
+class UART final : public SubComponent {
+
+    friend class SerServer;
 
     Descriptions descriptions = {{
 
@@ -30,8 +33,13 @@ class UART final : public SubComponent, public Inspectable<UARTInfo> {
 
     };
 
-    friend class SerServer;
-    
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<UARTInfo> info;
+
+private:
+
     // Port period and control register
     u16 serper;
 
@@ -62,8 +70,8 @@ class UART final : public SubComponent, public Inspectable<UARTInfo> {
 
 public:
     
-    using SubComponent::SubComponent;
-    
+    UART(Amiga &ref);
+
     UART& operator= (const UART& other) {
 
         CLONE(serper)
@@ -126,12 +134,11 @@ public:
 
 
     //
-    // Methods from Inspectable
+    // Analyzing
     //
 
 public:
 
-    void cacheInfo(UARTInfo &result) const override;
     UARTInfo cacheInfo() const;
 
     

@@ -15,10 +15,11 @@
 #include "DeniseDebugger.h"
 #include "Memory.h"
 #include "PixelEngine.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 
-class Denise final : public SubComponent, public Inspectable<DeniseInfo> {
+class Denise final : public SubComponent {
 
     friend class DeniseDebugger;
 
@@ -47,7 +48,12 @@ class Denise final : public SubComponent, public Inspectable<DeniseInfo> {
     // Current configuration
     DeniseConfig config = {};
     
-    
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<DeniseInfo> info;
+
+
     //
     // Subcomponents
     //
@@ -502,7 +508,6 @@ public:
 
 public:
     
-    void cacheInfo(DeniseInfo &result) const override;
     DeniseInfo cacheInfo() const;
 
 

@@ -15,6 +15,7 @@
 #include "Beamtraps.h"
 #include "Colors.h"
 #include "Constants.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

@@ -13,6 +13,7 @@
 #include "SubComponent.h"
 #include "Console.h"
 #include "TextStorage.h"
+#include "utl/wrappers.h"
 #include <sstream>
 #include <fstream>
 #include <functional>

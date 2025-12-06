@@ -15,6 +15,7 @@
 #include "AgnusTypes.h"
 #include "Drive.h"
 #include "utl/storage.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

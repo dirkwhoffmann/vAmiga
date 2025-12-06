@@ -14,6 +14,7 @@
 #include "SubComponent.h"
 #include "CmdQueue.h"
 #include "utl/storage.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

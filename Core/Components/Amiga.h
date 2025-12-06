@@ -86,7 +86,7 @@ class Amiga final : public CoreComponent {
 
 public:
     
-    // The current state
+    // Result of the latest inspection
     utl::Memorized<AmigaInfo> info;
 
 
@@ -315,12 +315,11 @@ private:
 
 
     //
-    // Methods from Inspectable
+    // Analyzing
     //
 
 public:
 
-    // void cacheInfo(AmigaInfo &result) const override;
     AmigaInfo cacheInfo() const;
 
     u64 getAutoInspectionMask() const;

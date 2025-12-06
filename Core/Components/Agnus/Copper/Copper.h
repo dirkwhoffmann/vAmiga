@@ -15,6 +15,7 @@
 #include "Beam.h"
 #include "CopperDebugger.h"
 #include "Memory.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

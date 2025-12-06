@@ -156,21 +156,28 @@ const AgnusInfo &
 AgnusAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return agnus->getInfo();
+    return agnus->info.current();
 }
 
 const AgnusInfo &
 AgnusAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return agnus->getCachedInfo();
+    return agnus->info.cached();
 }
 
-const AgnusStats &
-AgnusAPI::getStats() const
+const AgnusMetrics &
+AgnusAPI::getMetrics() const
 {
     VAMIGA_PUBLIC
-    return agnus->getStats();
+    return agnus->metrics.current();
+}
+
+const AgnusMetrics &
+AgnusAPI::getCachedMetrics() const
+{
+    VAMIGA_PUBLIC
+    return agnus->metrics.cached();
 }
 
 const AgnusTraits
@@ -503,14 +510,14 @@ const DeniseInfo &
 DeniseAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return denise->getInfo();
+    return denise->info.current();
 }
 
 const DeniseInfo &
 DeniseAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return denise->getCachedInfo();
+    return denise->info.cached();
 }
 
 
@@ -808,14 +815,14 @@ const UARTInfo &
 UARTAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return uart->getInfo();
+    return uart->info.current();
 }
 
 const UARTInfo &
 UARTAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return uart->getCachedInfo();
+    return uart->info.cached();
 }
 
 const PaulaInfo &
@@ -1964,21 +1971,28 @@ const EmulatorInfo &
 VAmiga::getInfo() const
 {
     VAMIGA_PUBLIC
-    return emu->getInfo();
+    return emu->info.current();
 }
 
 const EmulatorInfo &
 VAmiga::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return emu->getCachedInfo();
+    return emu->info.cached();
 }
 
-const EmulatorStats &
-VAmiga::getStats() const
+const EmulatorMetrics &
+VAmiga::getMetrics() const
 {
     VAMIGA_PUBLIC
-    return emu->getStats();
+    return emu->metrics.current();
+}
+
+const EmulatorMetrics &
+VAmiga::getCachedMetrics() const
+{
+    VAMIGA_PUBLIC
+    return emu->metrics.cached();
 }
 
 bool

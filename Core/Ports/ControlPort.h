@@ -14,6 +14,7 @@
 #include "SubComponent.h"
 #include "Joystick.h"
 #include "Mouse.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

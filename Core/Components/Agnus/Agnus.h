@@ -18,6 +18,7 @@
 #include "DmaDebugger.h"
 #include "Sequencer.h"
 #include "Memory.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 
@@ -33,7 +34,7 @@ static constexpr usize DRAW_EVEN = 0b010;
 static constexpr usize DRAW_BOTH = 0b011;
 
 
-class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
+class Agnus : public SubComponent {
 
     Descriptions descriptions = {{
 
@@ -51,6 +52,15 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
     // Current configuration
     AgnusConfig config = {};
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<AgnusInfo> info;
+    utl::Memorized<AgnusMetrics> metrics;
+
+    // Internally stored metrics
+    AgnusMetrics stats = {};
 
 
     //
@@ -353,8 +363,8 @@ public:
     
 public:
     
-    void cacheInfo(AgnusInfo &result) const override;
     AgnusInfo cacheInfo() const;
+    AgnusMetrics cacheMetrics() const;
 
 private:
     

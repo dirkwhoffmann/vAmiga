@@ -16,6 +16,7 @@
 #include "GdbServer.h"
 #include "PromServer.h"
 #include "SerServer.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

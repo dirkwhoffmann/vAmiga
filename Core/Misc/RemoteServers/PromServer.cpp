@@ -54,129 +54,129 @@ PromServer::respond(const httplib::Request& request)
     
     output << std::fixed << std::setprecision(4);
     
-    {   auto stats = emulator.getStats();
-        
+    {   auto metrics = emulator.metrics.current();
+
         translate("vamiga_cpu_load", "",
-                  "gauge", stats.cpuLoad,
+                  "gauge", metrics.cpuLoad,
                   {{"component","emulator"}});
         
         translate("vamiga_fps", "",
-                  "gauge", stats.fps,
+                  "gauge", metrics.fps,
                   {{"component","emulator"}});
         
         translate("vamiga_resyncs", "",
-                  "gauge", stats.resyncs,
+                  "gauge", metrics.resyncs,
                   {{"component","emulator"}});
     }
     
-    {   auto stats = agnus.getStats();
-        
+    {   auto metrics = agnus.metrics.current();
+
         translate("vamiga_activity_copper", "",
-                  "gauge", stats.copperActivity,
+                  "gauge", metrics.copperActivity,
                   {{"component","agnus"}});
         
         translate("vamiga_activity_blitter", "",
-                  "gauge", stats.blitterActivity,
+                  "gauge", metrics.blitterActivity,
                   {{"component","agnus"}});
         
         translate("vamiga_activity_disk", "",
-                  "gauge", stats.diskActivity,
+                  "gauge", metrics.diskActivity,
                   {{"component","agnus"}});
         
         translate("vamiga_activity_disk", "",
-                  "gauge", stats.diskActivity,
+                  "gauge", metrics.diskActivity,
                   {{"component","agnus"}});
         
         translate("vamiga_activity_audio", "",
-                  "gauge", stats.audioActivity,
+                  "gauge", metrics.audioActivity,
                   {{"component","agnus"}});
         
         translate("vamiga_activity_sprite", "",
-                  "gauge", stats.spriteActivity,
+                  "gauge", metrics.spriteActivity,
                   {{"component","agnus"}});
         
         translate("vamiga_activity_bitplane", "",
-                  "gauge", stats.bitplaneActivity,
+                  "gauge", metrics.bitplaneActivity,
                   {{"component","agnus"}});
     }
     
-    {   auto stats_a = ciaa.metrics.current();
-        auto stats_b = ciab.metrics.current();
+    {   auto metrics_a = ciaa.metrics.current();
+        auto metrics_b = ciab.metrics.current();
 
         translate("vamiga_ciaa_idle_sec", "",
-                  "gauge", stats_a.idleCycles,
+                  "gauge", metrics_a.idleCycles,
                   {{"component","ciaa"}});
         translate("vamiga_ciab_idle_sec", "",
-                  "gauge", stats_b.idleCycles,
+                  "gauge", metrics_b.idleCycles,
                   {{"component","ciab"}});
         
         translate("vamiga_cia_idle_sec_total", "",
-                  "gauge", stats_a.totalCycles,
+                  "gauge", metrics_a.totalCycles,
                   {{"component","ciaa"}});
         translate("vamiga_cia_idle_sec_total", "",
-                  "gauge", stats_b.totalCycles,
+                  "gauge", metrics_b.totalCycles,
                   {{"component","ciab"}});
         
         translate("vamiga_cia_idle_percentage", "",
-                  "gauge", stats_a.idlePercentage,
+                  "gauge", metrics_a.idlePercentage,
                   {{"component","ciaa"}});
         translate("vamiga_cia_idle_percentage", "",
-                  "gauge", stats_b.idlePercentage,
+                  "gauge", metrics_b.idlePercentage,
                   {{"component","ciab"}});
     }
     
-    {   auto stats = mem.getStats();
+    {   auto metrics = mem.getStats();
 
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.chipReads.accumulated,
+                  "gauge", metrics.chipReads.accumulated,
                   {{"component","memory"},{"location","chip_ram"},{"type","read"}});
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.chipWrites.accumulated,
+                  "gauge", metrics.chipWrites.accumulated,
                   {{"component","memory"},{"location","chip_ram"},{"type","write"}});
 
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.slowReads.accumulated,
+                  "gauge", metrics.slowReads.accumulated,
                   {{"component","memory"},{"location","slow_ram"},{"type","read"}});
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.slowWrites.accumulated,
+                  "gauge", metrics.slowWrites.accumulated,
                   {{"component","memory"},{"location","slow_ram"},{"type","write"}});
 
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.fastReads.accumulated,
+                  "gauge", metrics.fastReads.accumulated,
                   {{"component","memory"},{"location","fast_ram"},{"type","read"}});
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.fastWrites.accumulated,
+                  "gauge", metrics.fastWrites.accumulated,
                   {{"component","memory"},{"location","fast_ram"},{"type","write"}});
 
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.kickReads.accumulated,
+                  "gauge", metrics.kickReads.accumulated,
                   {{"component","memory"},{"location","rom"},{"type","read"}});
         translate("vamiga_mem_accesses", "",
-                  "gauge", stats.kickWrites.accumulated,
+                  "gauge", metrics.kickWrites.accumulated,
                   {{"component","memory"},{"location","rom"},{"type","write"}});
     }
     
-    {   auto stats = audioPort.getStats();
+    {   auto metrics = audioPort.getStats();
         
         translate("vamiga_audio_buffer_exceptions", "",
-                  "gauge", stats.bufferOverflows,
+                  "gauge", metrics.bufferOverflows,
                   {{"component","audio"},{"type","overflow"}});
         translate("vamiga_audio_buffer_exceptions", "",
-                  "gauge", stats.bufferUnderflows,
+                  "gauge", metrics.bufferUnderflows,
                   {{"component","audio"},{"type","underflow"}});
         
         translate("vamiga_audio_samples", "",
-                  "gauge", stats.consumedSamples,
+                  "gauge", metrics.consumedSamples,
                   {{"component","audio"},{"type","consumed"}});
         translate("vamiga_audio_samples", "",
-                  "gauge", stats.producedSamples,
+                  "gauge", metrics.producedSamples,
                   {{"component","audio"},{"type","produced"}});
         translate("vamiga_audio_samples", "",
-                  "gauge", stats.idleSamples,
+                  "gauge", metrics.idleSamples,
                   {{"component","audio"},{"type","idle"}});
         
         translate("vamiga_audio_fill_level", "",
-                  "gauge", stats.fillLevel,
+                  "gauge", metrics.fillLevel,
                   {{"component","audio"}});
     }
         

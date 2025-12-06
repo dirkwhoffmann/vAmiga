@@ -13,6 +13,7 @@
 #include "ZorroBoard.h"
 #include "HDFFile.h"
 #include "RomFileTypes.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

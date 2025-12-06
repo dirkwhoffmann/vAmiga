@@ -49,13 +49,11 @@ private:
     //  White noise data
     Buffer <Texel> noise;
 
-    // TODO: IMPLEMENT FRAME DROP COUNTING ON THE GUI SIDE ?!
-
     // Remembers the number of the most recently grabbed frame
     mutable isize latestGrabbedFrame = 0;
 
     // Counts the number of dropped frames
-    isize droppedFrames = 0;
+    mutable isize droppedFrames = 0;
 
 
     //

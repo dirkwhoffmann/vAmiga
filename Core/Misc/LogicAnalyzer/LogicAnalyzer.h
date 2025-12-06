@@ -12,6 +12,7 @@
 #include "LogicAnalyzerTypes.h"
 #include "SubComponent.h"
 #include "Constants.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

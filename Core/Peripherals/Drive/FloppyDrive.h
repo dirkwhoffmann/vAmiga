@@ -17,6 +17,7 @@
 #include "DiskController.h"
 #include "Thread.h"
 #include "CmdQueueTypes.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

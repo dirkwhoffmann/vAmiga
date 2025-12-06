@@ -573,7 +573,7 @@ typedef struct
     double spriteActivity;
     double bitplaneActivity;
 }
-AgnusStats;
+AgnusMetrics;
 
 
 //

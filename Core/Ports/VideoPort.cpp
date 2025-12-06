@@ -102,13 +102,13 @@ VideoPort::setOption(Opt opt, i64 value)
 VideoPortInfo
 VideoPort::cacheInfo() const
 {
-    return {};
+    return VideoPortInfo { .latestGrabbedFrame = latestGrabbedFrame };
 }
 
 VideoPortStats
 VideoPort::cacheStats() const
 {
-    return {};
+    return VideoPortStats { .droppedFrames = droppedFrames };
 }
 
 const Texture &

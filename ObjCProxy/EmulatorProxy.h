@@ -246,7 +246,7 @@ NSString *EventSlotName(EventSlot slot);
 
 @property (readonly) EmulatorInfo info;
 @property (readonly) EmulatorInfo cachedInfo;
-@property (readonly) EmulatorStats stats;
+@property (readonly) EmulatorMetrics stats;
 
 @property (readonly) BOOL poweredOn;
 @property (readonly) BOOL poweredOff;
@@ -498,7 +498,7 @@ NSString *EventSlotName(EventSlot slot);
 
 @property (readonly) AgnusInfo info;
 @property (readonly) AgnusInfo cachedInfo;
-@property (readonly) AgnusStats stats;
+@property (readonly) AgnusMetrics stats;
 @property (readonly) AgnusTraits traits;
 
 - (EventSlotInfo)cachedSlotInfo:(NSInteger)slot;

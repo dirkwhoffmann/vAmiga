@@ -713,9 +713,9 @@ NSString *EventSlotName(EventSlot slot)
     return [self agnus]->getCachedInfo();
 }
 
-- (AgnusStats)stats
+- (AgnusMetrics)stats
 {
-    return [self agnus]->getStats();
+    return [self agnus]->getMetrics();
 }
 
 - (AgnusTraits)traits
@@ -2362,9 +2362,9 @@ NSString *EventSlotName(EventSlot slot)
     return [self emu]->getCachedInfo();
 }
 
-- (EmulatorStats)stats
+- (EmulatorMetrics)stats
 {
-    return [self emu]->getStats();
+    return [self emu]->getMetrics();
 }
 
 - (BOOL)poweredOn

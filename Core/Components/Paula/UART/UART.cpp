@@ -20,24 +20,15 @@
 
 namespace vamiga {
 
+UART::UART(Amiga &ref) : SubComponent(ref)
+{
+    info.bind([this] { return cacheInfo(); } );
+};
+
 void
 UART::_didReset(bool hard)
 {
     outBit = 1;
-}
-
-void
-UART::cacheInfo(UARTInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.serper = serper;
-        info.baudRate = baudRate();
-        info.receiveBuffer = receiveBuffer;
-        info.receiveShiftReg = receiveShiftReg;
-        info.transmitBuffer = transmitBuffer;
-        info.transmitShiftReg = transmitShiftReg;
-    }
 }
 
 UARTInfo

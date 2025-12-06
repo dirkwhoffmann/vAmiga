@@ -11,6 +11,7 @@
 
 #include "SerialPortTypes.h"
 #include "SubComponent.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 

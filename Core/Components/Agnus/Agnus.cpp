@@ -14,14 +14,17 @@
 namespace vamiga {
 
 Agnus::Agnus(Amiga& ref) : SubComponent(ref)
-{    
+{
     subComponents = std::vector<CoreComponent *> {
-        
+
         &sequencer,
         &copper,
         &blitter,
         &dmaDebugger
     };
+
+    info.bind([this] { return cacheInfo(); } );
+    metrics.bind([this] { return cacheMetrics(); } );
 }
 
 Agnus&
@@ -97,8 +100,8 @@ Agnus::operator << (SerResetter &worker)
     // Adjust to the correct video mode
     setVideoFormat(amiga.getConfig().type);
 
-    // Initialize statistical counters
-    clearStats();
+    // Reset all metrics
+    stats = {};
 
     // Initialize all event slots
     for (isize i = 0; i < SLOT_COUNT; i++) {

@@ -31,7 +31,8 @@ Emulator::defaults;
 
 Emulator::Emulator()
 {
-
+    info.bind([this] { return cacheInfo(); } );
+    metrics.bind([this] { return cacheMetrics(); } );
 }
 
 Emulator::~Emulator()
@@ -100,25 +101,26 @@ Emulator::_dump(Category category, std::ostream &os) const
 
     if (category == Category::RunAhead) {
 
-         auto &pos = main.agnus.pos;
-         auto &rua = ahead.agnus.pos;
+        auto &pos = main.agnus.pos;
+        auto &rua = ahead.agnus.pos;
+        auto metr = metrics.current();
 
-         os << "Primary instance:" << std::endl << std::endl;
+        os << "Primary instance:" << std::endl << std::endl;
 
-         os << tab("Frame");
-         os << dec(pos.frame) << std::endl;
-         os << tab("Beam");
-         os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
+        os << tab("Frame");
+        os << dec(pos.frame) << std::endl;
+        os << tab("Beam");
+        os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
 
-         os << "Run-ahead instance:" << std::endl << std::endl;
+        os << "Run-ahead instance:" << std::endl << std::endl;
 
-         os << tab("Clone nr");
-         os << dec(stats.clones) << std::endl;
-         os << tab("Frame");
-         os << dec(rua.frame) << std::endl;
-         os << tab("Beam");
-         os << " (" << dec(rua.v) << "," << dec(rua.h) << ")" << std::endl;
-     }
+        os << tab("Clone nr");
+        os << dec(metr.clones) << std::endl;
+        os << tab("Frame");
+        os << dec(rua.frame) << std::endl;
+        os << tab("Beam");
+        os << " (" << dec(rua.v) << "," << dec(rua.h) << ")" << std::endl;
+    }
     
     if (category == Category::State) {
 
@@ -138,32 +140,6 @@ Emulator::_dump(Category category, std::ostream &os) const
     }
 }
 
-void
-Emulator::cacheInfo(EmulatorInfo &result) const
-{
-    {   SYNCHRONIZED
-
-        result.state = state;
-        result.powered = isPoweredOn();
-        result.paused = isPaused();
-        result.running = isRunning();
-        result.suspended = isSuspended();
-        result.warping = isWarping();
-        result.tracking = isTracking();
-    }
-}
-
-void
-Emulator::cacheStats(EmulatorStats &result) const
-{
-    {   SYNCHRONIZED
-
-        result.cpuLoad = cpuLoad;
-        result.fps = fps;
-        result.resyncs = resyncs;
-    }
-}
-
 EmulatorInfo
 Emulator::cacheInfo() const
 {
@@ -180,14 +156,15 @@ Emulator::cacheInfo() const
     return info;
 }
 
-EmulatorStats
-Emulator::cacheStats() const
+EmulatorMetrics
+Emulator::cacheMetrics() const
 {
-    EmulatorStats stats;
+    EmulatorMetrics stats;
 
     stats.cpuLoad = cpuLoad;
     stats.fps     = fps;
     stats.resyncs = resyncs;
+    stats.clones  = clones;
 
     return stats;
 }
@@ -335,7 +312,7 @@ Emulator::isReady()
 void
 Emulator::cloneRunAheadInstance()
 {
-    stats.clones++;
+    clones++;
 
     // Recreate the runahead instance from scratch
     ahead = main; isDirty = false;

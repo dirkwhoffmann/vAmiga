@@ -781,7 +781,8 @@ Agnus::serviceINSEvent()
 
     // Analyze bit mask
     if (mask & 1LL << long(Class::Agnus)) {
-        agnus.record();
+        agnus.info.record();
+        agnus.metrics.record();
     }
     if (mask & 1LL << long(Class::Amiga)) {
         amiga.info.record();
@@ -800,7 +801,7 @@ Agnus::serviceINSEvent()
         cpu.info.record();
     }
     if (mask & 1LL << long(Class::Denise)) {
-        denise.record();
+        denise.info.record();
     }
     if (mask & 1LL << long(Class::Memory)) {
         mem.record();
@@ -809,7 +810,7 @@ Agnus::serviceINSEvent()
         paula.info.record();
     }
     if (mask & 1LL << long(Class::UART)) {
-        uart.record();
+        uart.info.record();
     }
     if (mask & 1LL << long(Class::ControlPort)) {
         controlPort1.record();

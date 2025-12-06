@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-class Emulator : public Thread, public Synchronizable, public Inspectable<EmulatorInfo, EmulatorStats> {
+class Emulator : public Thread, public Synchronizable {
 
     friend class API;
     friend class VAmiga;
@@ -28,6 +28,10 @@ public:
     // User default settings
     static Defaults defaults;
 
+    // Result of the latest inspection
+    utl::Memorized<EmulatorInfo> info;
+    utl::Memorized<EmulatorMetrics> metrics;
+
 private:
 
     // The main emulator instance
@@ -36,6 +40,9 @@ private:
     // The run-ahead instance
     Amiga ahead = Amiga(*this, 1);
 
+    // Counts the number of created clones
+    isize clones = 0;
+    
     // Indicates if the run-ahead instance needs to be updated
     bool isDirty = true;
 
@@ -84,10 +91,8 @@ private:
 
 public:
 
-    void cacheInfo(EmulatorInfo &result) const override;
-    void cacheStats(EmulatorStats &result) const override;
     EmulatorInfo cacheInfo() const;
-    EmulatorStats cacheStats() const;
+    EmulatorMetrics cacheMetrics() const;
 
 
     //

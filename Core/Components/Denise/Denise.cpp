@@ -21,6 +21,8 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
         
         &pixelEngine,
     };
+
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void

@@ -15,43 +15,6 @@
 
 namespace vamiga {
 
-void 
-Denise::cacheInfo(DeniseInfo &info) const
-{
-    {   SYNCHRONIZED
-
-        info.ecs = isECS();
-        
-        info.bplcon0 = bplcon0;
-        info.bplcon1 = bplcon1;
-        info.bplcon2 = bplcon2;
-        info.bpu = bpu();
-        
-        info.diwstrt = diwstrt;
-        info.diwstop = diwstop;
-        info.viewport.hstrt = hstrt;
-        info.viewport.hstop = hstop;
-        info.viewport.vstrt = agnus.sequencer.vstrt;
-        info.viewport.vstop = agnus.sequencer.vstop;
-        
-        info.joydat[0] = controlPort1.joydat();
-        info.joydat[1] = controlPort2.joydat();
-        info.clxdat = 0;
-        
-        for (isize i = 0; i < 6; i++) {
-            info.bpldat[i] = bpldat[i];
-        }
-        for (isize i = 0; i < 32; i++) {
-            info.colorReg[i] = pixelEngine.getColor(i);
-            info.color[i] = (u32)pixelEngine.palette[i];
-        }
-        for (isize i = 0; i < 8; i++) {
-            info.sprite[i] = debugger.latchedSpriteInfo[i];
-            info.sprite[i].data = debugger.latchedSpriteData[i];
-        }
-    }
-}
-
 DeniseInfo
 Denise::cacheInfo() const
 {

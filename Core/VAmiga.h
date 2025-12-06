@@ -272,7 +272,8 @@ public:
 
     /** @brief  Returns statistical information about the components.
      */
-    const AgnusStats &getStats() const;
+    const AgnusMetrics &getMetrics() const;
+    const AgnusMetrics &getCachedMetrics() const;
 
     /** @brief  Provides details about the currently selected chip revision.
      */
@@ -1667,7 +1668,8 @@ public:
     
     /** @brief  Returns statistical information about the components.
      */
-    const EmulatorStats &getStats() const;
+    const EmulatorMetrics &getMetrics() const;
+    const EmulatorMetrics &getCachedMetrics() const;
 
     /// @}
     /// @name Querying the emulator state
