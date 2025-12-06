@@ -1132,7 +1132,6 @@
 		50BCB99C2EE2C33B000C53CF /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		50BCB99D2EE2C53D000C53CF /* Reportable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reportable.h; sourceTree = "<group>"; };
 		50BCB99F2EE2C84D000C53CF /* io.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = io.h; sourceTree = "<group>"; };
-		50BCB9A02EE2CCA1000C53CF /* animation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = animation.h; sourceTree = "<group>"; };
 		50BCB9A22EE2CD39000C53CF /* Reportable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Reportable.cpp; sourceTree = "<group>"; };
 		50BCB9A52EE2F335000C53CF /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		50BCB9A62EE2F344000C53CF /* Parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
@@ -1140,6 +1139,9 @@
 		50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceError.cpp; sourceTree = "<group>"; };
 		50BCB9AD2EE34637000C53CF /* UtlError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UtlError.h; sourceTree = "<group>"; };
 		50BCB9AE2EE346A6000C53CF /* Error.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
+		50BCB9B62EE43CAE000C53CF /* Cached.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cached.h; sourceTree = "<group>"; };
+		50BCB9B82EE43CC6000C53CF /* Memorized.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memorized.h; sourceTree = "<group>"; };
+		50BCB9BB2EE447B3000C53CF /* wrappers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wrappers.h; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -1518,21 +1520,21 @@
 				503FC4C42EE092EE00637C95 /* CMakeLists.txt */,
 				50BCB99C2EE2C33B000C53CF /* types.h */,
 				50BCB9902EE1C84C000C53CF /* abilities.h */,
-				50BCB9A02EE2CCA1000C53CF /* animation.h */,
 				50BCB9912EE1CC86000C53CF /* chrono.h */,
 				503FC4FB2EE1C49500637C95 /* concurrency.h */,
 				503FC4D02EE0ADF300637C95 /* hints.h */,
 				50BCB99F2EE2C84D000C53CF /* io.h */,
 				50BCB9922EE1CDE6000C53CF /* storage.h */,
 				50BCB99A2EE229F6000C53CF /* support.h */,
+				50BCB9BB2EE447B3000C53CF /* wrappers.h */,
 				50BCB99B2EE2C32B000C53CF /* types */,
 				503FC4BC2EE091B700637C95 /* abilities */,
-				503FC4F72EE1C21F00637C95 /* animation */,
 				503FC4E92EE1B96D00637C95 /* chrono */,
 				503FC4F82EE1C35100637C95 /* concurrency */,
 				50BCB99E2EE2C834000C53CF /* io */,
 				503FC4E02EE16FE000637C95 /* storage */,
 				503FC4C72EE0A96300637C95 /* support */,
+				50BCB9BA2EE4461D000C53CF /* wrappers */,
 			);
 			path = utl;
 			sourceTree = "<group>";
@@ -1643,14 +1645,6 @@
 				503FC4F52EE1BD3300637C95 /* RingBuffer.cpp */,
 			);
 			path = storage;
-			sourceTree = "<group>";
-		};
-		503FC4F72EE1C21F00637C95 /* animation */ = {
-			isa = PBXGroup;
-			children = (
-				503FC4F62EE1C20A00637C95 /* Animated.h */,
-			);
-			path = animation;
 			sourceTree = "<group>";
 		};
 		503FC4F82EE1C35100637C95 /* concurrency */ = {
@@ -2543,6 +2537,16 @@
 				50BCB9AE2EE346A6000C53CF /* Error.cpp */,
 			);
 			path = types;
+			sourceTree = "<group>";
+		};
+		50BCB9BA2EE4461D000C53CF /* wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				503FC4F62EE1C20A00637C95 /* Animated.h */,
+				50BCB9B62EE43CAE000C53CF /* Cached.h */,
+				50BCB9B82EE43CC6000C53CF /* Memorized.h */,
+			);
+			path = wrappers;
 			sourceTree = "<group>";
 		};
 		50BF1CCA276DBF2E00386540 /* RemoteServers */ = {

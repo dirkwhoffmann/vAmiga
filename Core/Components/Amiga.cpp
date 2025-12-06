@@ -81,6 +81,8 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
         &osDebugger,
         &regressionTester
     };
+
+    amigaInfo.bind([this] { return cacheInfo(); } );
 }
 
 Amiga::~Amiga()
@@ -1107,6 +1109,8 @@ Amiga::fastForward(isize frames)
 void
 Amiga::cacheInfo(AmigaInfo &result) const
 {
+    result = cacheInfo();
+    /*
     {   SYNCHRONIZED
 
         info.cpuClock = cpu.getMasterClock();
@@ -1117,6 +1121,22 @@ Amiga::cacheInfo(AmigaInfo &result) const
         info.vpos = agnus.pos.v;
         info.hpos = agnus.pos.h;
     }
+    */
+}
+
+AmigaInfo
+Amiga::cacheInfo() const
+{
+    return AmigaInfo {
+
+        .cpuClock = cpu.getMasterClock(),
+        .dmaClock = agnus.clock,
+        .ciaAClock = ciaA.getClock(),
+        .ciaBClock = ciaB.getClock(),
+        .frame = agnus.pos.frame,
+        .vpos = agnus.pos.v,
+        .hpos = agnus.pos.h
+    };
 }
 
 void

@@ -16,7 +16,7 @@
 #include "Sampler.h"
 #include "SampleRateDetector.h"
 #include "utl/chrono.h"
-#include "utl/animation.h"
+#include "utl/wrappers.h"
 
 /* Architecture of the audio pipeline
  *

@@ -46,6 +46,9 @@
 #include "RshServer.h"
 #include "SerialPort.h"
 
+// Utilities
+#include "utl/wrappers.h"
+
 namespace vamiga {
 
 class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
@@ -80,6 +83,9 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
     
     // The current configuration
     AmigaConfig config = {};
+
+    // The current state
+    utl::Memorized<AmigaInfo> amigaInfo;
 
 
     //
@@ -313,6 +319,7 @@ private:
 public:
 
     void cacheInfo(AmigaInfo &result) const override;
+    AmigaInfo cacheInfo() const;
 
     u64 getAutoInspectionMask() const;
     void setAutoInspectionMask(u64 mask);
@@ -499,3 +506,4 @@ public:
 };
 
 }
+

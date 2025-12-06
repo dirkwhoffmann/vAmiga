@@ -11,7 +11,7 @@
 
 #include "utl/types.h"
 
-namespace utl::animation {
+namespace utl::wrappers {
 
 /* This class provides a wrapper around a value type making it fadable. I.e.,
  * the value can be smoothly increased to it's maximum value or decreases to

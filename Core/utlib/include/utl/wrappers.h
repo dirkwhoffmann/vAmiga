@@ -7,6 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "animation/Animated.h"
+#include "wrappers/Animated.h"
+#include "wrappers/Cached.h"
+#include "wrappers/Memorized.h"
 
-namespace utl { using namespace animation; }
+namespace utl { using namespace wrappers; }

@@ -16,6 +16,5 @@ Option.cpp
 Serializable.cpp
 SubComponent.cpp
 Thread.cpp
-Wakeable.cpp
 
 )
