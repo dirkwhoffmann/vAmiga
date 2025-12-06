@@ -26,6 +26,8 @@ namespace vamiga {
 
 class SerialPort final : public SubComponent, public Inspectable<SerialPortInfo> {
 
+    friend class UART;
+
     Descriptions descriptions = {{
 
         .type           = Class::SerialPort,
@@ -40,10 +42,13 @@ class SerialPort final : public SubComponent, public Inspectable<SerialPortInfo>
         Opt::SER_VERBOSE
     };
 
-    friend class UART;
-    
     // Current configuration
     SerialPortConfig config = {};
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<SerialPortInfo> info;
 
     // The current values of the port pins
     u32 port = 0;
@@ -59,7 +64,7 @@ class SerialPort final : public SubComponent, public Inspectable<SerialPortInfo>
 
 public:
 
-    using SubComponent::SubComponent;
+    SerialPort(Amiga& ref);
 
     SerialPort& operator= (const SerialPort& other) {
 

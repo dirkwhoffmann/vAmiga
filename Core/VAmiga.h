@@ -774,6 +774,7 @@ public:
     /** @brief  Returns statistical information about the components.
      */
     const HdcStats &getStats() const;
+    const HdcStats &getCachedStats() const;
 };
 
 class HardDriveAPI : public API {

@@ -14,6 +14,11 @@
 
 namespace vamiga {
 
+SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
+{
+    info.bind([this] { return cacheInfo(); } );
+}
+
 i64
 SerialPort::getOption(Opt option) const
 {

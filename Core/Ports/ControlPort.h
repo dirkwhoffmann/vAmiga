@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-class ControlPort final : public SubComponent, public Inspectable<ControlPortInfo> {
+class ControlPort final : public SubComponent {
 
     Descriptions descriptions = {
         {
@@ -35,10 +35,14 @@ class ControlPort final : public SubComponent, public Inspectable<ControlPortInf
         }
     };
 
-
     Options options = {
 
     };
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<ControlPortInfo> info;
 
 private:
 
@@ -135,12 +139,11 @@ public:
 
 
     //
-    // Methods from Inspectable
+    // Analyzing
     //
 
 public:
 
-    void cacheInfo(ControlPortInfo &result) const override;
     ControlPortInfo cacheInfo() const;
 
     bool isPort1() const { return objid == 0; }

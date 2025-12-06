@@ -813,8 +813,8 @@ Agnus::serviceINSEvent()
         uart.info.record();
     }
     if (mask & 1LL << long(Class::ControlPort)) {
-        controlPort1.record();
-        controlPort2.record();
+        controlPort1.info.record();
+        controlPort2.info.record();
     }
     if (mask & 1LL << long(Class::SerialPort)) {
         serialPort.record();

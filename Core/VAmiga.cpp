@@ -948,14 +948,14 @@ const ControlPortInfo &
 ControlPortAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return controlPort->getInfo();
+    return controlPort->info.current();
 }
 
 const ControlPortInfo &
 ControlPortAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return controlPort->getCachedInfo();
+    return controlPort->info.cached();
 }
 
 
@@ -1361,21 +1361,28 @@ const HdcInfo &
 HdControllerAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return controller->getInfo();
+    return controller->info.current();
 }
 
 const HdcInfo &
 HdControllerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return controller->getCachedInfo();
+    return controller->info.cached();
 }
 
 const HdcStats &
 HdControllerAPI::getStats() const
 {
     VAMIGA_PUBLIC
-    return controller->getStats();
+    return controller->metrics.current();
+}
+
+const HdcStats &
+HdControllerAPI::getCachedStats() const
+{
+    VAMIGA_PUBLIC
+    return controller->metrics.cached();
 }
 
 

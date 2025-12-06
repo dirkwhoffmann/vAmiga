@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-class HdController : public ZorroBoard, public Inspectable<HdcInfo, HdcStats> {
+class HdController : public ZorroBoard {
 
     Descriptions descriptions = {
         {
@@ -50,6 +50,17 @@ class HdController : public ZorroBoard, public Inspectable<HdcInfo, HdcStats> {
 
         Opt::HDC_CONNECT
     };
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<HdcInfo> info;
+    utl::Memorized<HdcStats> metrics;
+
+private:
+
+    // Current metrics
+    HdcStats _metrics = {};
 
     // The hard drive this controller is connected to
     HardDrive &drive;
@@ -138,13 +149,11 @@ private:
 
 
     //
-    // Methods from Inspectable
+    //  Analyzing
     //
 
 public:
 
-    void cacheInfo(HdcInfo &result) const override;
-    void cacheStats(HdcStats &result) const override;
     HdcInfo cacheInfo() const;
     HdcStats cacheStats() const;
 

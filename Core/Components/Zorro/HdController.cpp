@@ -21,7 +21,8 @@ namespace vamiga {
 
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref, hdr.objid), drive(hdr)
 {
-
+    info.bind([this] { return cacheInfo(); } );
+    metrics.bind([this] { return cacheStats(); } );
 }
 
 void
@@ -37,31 +38,15 @@ HdController::_dump(Category category, std::ostream &os) const
     }
     
     if (category == Category::Stats) {
-        
-        // for (isize i = 0; IoCommandEnum::isValid(i); i++) {
+
+        auto stats = metrics.current();
+
         for (const auto &i : IoCommandEnum::elements()) {
             
             os << tab(IoCommandEnum::key(i));
             os << stats.cmdCount[long(i)] << std::endl;
         }
     }
-}
-
-void 
-HdController::cacheInfo(HdcInfo &result) const
-{
-    {   SYNCHRONIZED
-        
-        result.nr = objid;
-        result.pluggedIn = pluggedIn();
-        result.state = getHdcState();
-    }
-}
-
-void 
-HdController::cacheStats(HdcStats &result) const
-{
-    
 }
 
 HdcInfo
@@ -79,8 +64,7 @@ HdController::cacheInfo() const
 HdcStats
 HdController::cacheStats() const
 {
-    // TODO
-    return {};
+    return _metrics;
 }
 
 void
@@ -103,7 +87,7 @@ HdController::_didReset(bool hard)
         resetHdcState();
         
         // Wipe out previously recorded usage information
-        clearStats();
+        _metrics = {};
     }
 }
 
@@ -373,7 +357,7 @@ HdController::processCmd(u32 ptr)
     }
     
     // Update the usage profile
-    if (IoCommandEnum::isValid(cmd)) stats.cmdCount[long(cmd)]++;
+    if (IoCommandEnum::isValid(cmd)) _metrics.cmdCount[long(cmd)]++;
     
     switch (cmd) {
             
