@@ -51,7 +51,7 @@
 
 namespace vamiga {
 
-class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
+class Amiga final : public CoreComponent {
 
     friend class Emulator;
 
@@ -84,8 +84,10 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
     // The current configuration
     AmigaConfig config = {};
 
+public:
+    
     // The current state
-    utl::Memorized<AmigaInfo> amigaInfo;
+    utl::Memorized<AmigaInfo> info;
 
 
     //
@@ -318,7 +320,7 @@ private:
 
 public:
 
-    void cacheInfo(AmigaInfo &result) const override;
+    // void cacheInfo(AmigaInfo &result) const override;
     AmigaInfo cacheInfo() const;
 
     u64 getAutoInspectionMask() const;

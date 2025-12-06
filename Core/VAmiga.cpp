@@ -81,14 +81,14 @@ const AmigaInfo &
 AmigaAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return amiga->getInfo();
+    return amiga->info.current();
 }
 
 const AmigaInfo &
 AmigaAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return amiga->getCachedInfo();
+    return amiga->info.cached();
 }
 
 void

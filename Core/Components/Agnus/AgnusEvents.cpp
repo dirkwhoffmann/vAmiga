@@ -781,7 +781,7 @@ Agnus::serviceINSEvent()
 
     // Analyze bit mask
     if (mask & 1LL << long(Class::Agnus))           { agnus.record(); }
-    if (mask & 1LL << long(Class::Amiga))           { amiga.record(); }
+    if (mask & 1LL << long(Class::Amiga))           { amiga.info.record(); }
     if (mask & 1LL << long(Class::Blitter))         { blitter.record(); }
     if (mask & 1LL << long(Class::Copper))          { copper.record(); }
     if (mask & 1LL << long(Class::CIA))             { ciaa.record(); ciab.record(); }

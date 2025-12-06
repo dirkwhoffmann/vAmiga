@@ -16,18 +16,22 @@ namespace utl::wrappers {
 
 template <typename T> class Cached {
 
-    std::optional<T> value;
+    mutable std::optional<T> value;
     std::function<T()> getter;
 
 public:
 
     explicit Cached(std::function<T()> g = {}) : getter(g) {}
+    void bind(std::function<T()> g) { getter = g; value.reset(); }
 
-    // void setGetter(std::function<T()> g) { getter = g; value.reset(); }
+    void record() const {
+
+        if (getter) { value = getter(); }
+    }
 
     const T &get() const {
 
-        if (!value && getter) { value = getter(); }
+        if (!value) { record(); }
         return *value;
     }
 
