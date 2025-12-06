@@ -9,8 +9,8 @@
 
 #include "utl/abilities/Compressible.h"
 #include "utl/support/Bytes.h"
+#include "utl/thirdparty/lz4.h"
 
-#include "lz4.h"
 #ifdef USE_ZLIB
 #include <zlib.h>
 #endif

@@ -1535,6 +1535,7 @@
 				503FC4E02EE16FE000637C95 /* storage */,
 				503FC4C72EE0A96300637C95 /* support */,
 				50BCB9BA2EE4461D000C53CF /* wrappers */,
+				50BCB9BD2EE47FD6000C53CF /* thirdparty */,
 			);
 			path = utl;
 			sourceTree = "<group>";
@@ -1572,6 +1573,7 @@
 				503FC4F42EE1BD0B00637C95 /* storage */,
 				50BCB9BC2EE45C2D000C53CF /* io */,
 				503FC4CF2EE0AB1D00637C95 /* support */,
+				50BCB9BE2EE48055000C53CF /* thirdparty */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1914,8 +1916,6 @@
 				506436E229C1D84D00768528 /* CMakeLists.txt */,
 				506D57C12EC4BF2E00E21501 /* json_fwd.h */,
 				506D57C02EC4BF2700E21501 /* json.h */,
-				9C47C0302D6215B100E57B41 /* lz4.h */,
-				9C47C0312D6215B100E57B41 /* lz4.c */,
 				506407C82D19D0A7002FBC57 /* httplib.h */,
 				50F54B0B24B5D31D0078FDC9 /* xdms */,
 			);
@@ -2555,6 +2555,22 @@
 				50BCB9A62EE2F344000C53CF /* Parser.cpp */,
 			);
 			path = io;
+			sourceTree = "<group>";
+		};
+		50BCB9BD2EE47FD6000C53CF /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				9C47C0302D6215B100E57B41 /* lz4.h */,
+			);
+			path = thirdparty;
+			sourceTree = "<group>";
+		};
+		50BCB9BE2EE48055000C53CF /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				9C47C0312D6215B100E57B41 /* lz4.c */,
+			);
+			path = thirdparty;
 			sourceTree = "<group>";
 		};
 		50BF1CCA276DBF2E00386540 /* RemoteServers */ = {

@@ -80,8 +80,8 @@ if(ZLIB_FOUND)
   target_compile_definitions(VACore PUBLIC USE_ZLIB=1)  # Optional define for conditional compilation
 endif()
 
-target_link_libraries(VACore lz4)
-target_link_libraries(VAHeadless lz4)
+#target_link_libraries(VACore lz4)
+#target_link_libraries(VAHeadless lz4)
 
 # Add tests
 add_test(NAME SelfTest1 COMMAND VAHeadless --verbose --footprint)

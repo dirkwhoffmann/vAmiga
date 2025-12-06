@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(utlib LANGUAGES CXX)
+project(utlib LANGUAGES C CXX)
 
 # -------------------------------------------------------------------
 # Options
@@ -28,6 +28,7 @@ target_compile_features(utlib INTERFACE cxx_std_17)
 # Example: exceptions
 file(GLOB_RECURSE UTL_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c"
 )
 
 if(UTL_SRC)
