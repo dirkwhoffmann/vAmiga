@@ -26,6 +26,9 @@ AudioPort::AudioPort(Amiga& ref, isize objid) : SubComponent(ref, objid)
         &filter,
         &detector
     };
+
+    info.bind([this] { return cacheInfo(); } );
+    metrics.bind([this] { return cacheMetrics(); } );
 }
 
 void

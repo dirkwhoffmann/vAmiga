@@ -28,13 +28,14 @@ target_compile_features(utlib INTERFACE cxx_std_17)
 # Example: exceptions
 file(GLOB_RECURSE UTL_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/*.c"
 )
 
 if(UTL_SRC)
     add_library(utlib_core STATIC ${UTL_SRC})
     target_include_directories(utlib_core PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thirdparty>
         $<INSTALL_INTERFACE:include>
     )
     target_compile_features(utlib_core PUBLIC cxx_std_17)

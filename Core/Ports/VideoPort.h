@@ -50,7 +50,7 @@ private:
     Buffer <Texel> noise;
 
     // Remembers the number of the most recently grabbed frame
-    mutable isize latestGrabbedFrame = 0;
+    mutable i64 latestGrabbedFrame = 0;
 
     // Counts the number of dropped frames
     mutable isize droppedFrames = 0;

@@ -16,7 +16,7 @@ namespace vamiga {
 
 DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
 {
-    
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void
@@ -277,31 +277,6 @@ DmaDebugger::setOption(Opt option, i64 value)
             
         default:
             fatalError;
-    }
-}
-
-void
-DmaDebugger::cacheInfo(DmaDebuggerInfo &result) const
-{
-    {   SYNCHRONIZED
-        
-        result.visualizeCopper = config.visualize[isize(DmaChannel::COPPER)];
-        result.visualizeBlitter = config.visualize[isize(DmaChannel::BLITTER)];
-        result.visualizeDisk = config.visualize[isize(DmaChannel::DISK)];
-        result.visualizeAudio = config.visualize[isize(DmaChannel::AUDIO)];
-        result.visualizeSprites = config.visualize[isize(DmaChannel::SPRITE)];
-        result.visualizeBitplanes = config.visualize[isize(DmaChannel::BITPLANE)];
-        result.visualizeCpu = config.visualize[isize(DmaChannel::CPU)];
-        result.visualizeRefresh = config.visualize[isize(DmaChannel::REFRESH)];
-        
-        getColor(DmaChannel::COPPER, result.copperColor);
-        getColor(DmaChannel::BLITTER, result.blitterColor);
-        getColor(DmaChannel::DISK, result.diskColor);
-        getColor(DmaChannel::AUDIO, result.audioColor);
-        getColor(DmaChannel::SPRITE, result.spriteColor);
-        getColor(DmaChannel::BITPLANE, result.bitplaneColor);
-        getColor(DmaChannel::CPU, result.cpuColor);
-        getColor(DmaChannel::REFRESH, result.refreshColor);
     }
 }
 

@@ -19,8 +19,11 @@
 
 namespace vamiga {
 
-class Copper final : public SubComponent, public Inspectable<CopperInfo>
-{
+class Copper final : public SubComponent {
+
+    friend class Agnus;
+    friend class CopperDebugger;
+
     Descriptions descriptions = {{
 
         .type           = Class::Copper,
@@ -33,10 +36,10 @@ class Copper final : public SubComponent, public Inspectable<CopperInfo>
 
     };
 
-    friend class Agnus;
-    friend class CopperDebugger;
-    
 public:
+
+    // Result of the latest inspection
+    utl::Memorized<CopperInfo> info;
 
     // The Copper debugger
     CopperDebugger debugger = CopperDebugger(amiga);
@@ -168,7 +171,6 @@ private:
 
 public:
 
-    void cacheInfo(CopperInfo &result) const override;
     CopperInfo cacheInfo() const;
 
 

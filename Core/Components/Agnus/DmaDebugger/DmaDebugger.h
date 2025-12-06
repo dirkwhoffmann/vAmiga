@@ -19,7 +19,7 @@
 
 namespace vamiga {
 
-class DmaDebugger final : public SubComponent, public Inspectable<DmaDebuggerInfo> {
+class DmaDebugger final : public SubComponent {
     
     Descriptions descriptions = {{
         
@@ -54,7 +54,14 @@ class DmaDebugger final : public SubComponent, public Inspectable<DmaDebuggerInf
     
     // Current configuration
     DmaDebuggerConfig config = {};
-    
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<DmaDebuggerInfo> info;
+
+private:
+
     // Enable bits
     bool visualize[BUS_COUNT] = {};
     
@@ -128,7 +135,6 @@ private:
     
 public:
     
-    void cacheInfo(DmaDebuggerInfo &result) const override;
     DmaDebuggerInfo cacheInfo() const;
 
     

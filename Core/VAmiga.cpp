@@ -135,14 +135,14 @@ const DmaDebuggerInfo &
 DmaDebuggerAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return dmaDebugger->getInfo();
+    return dmaDebugger->info.current();
 }
 
 const DmaDebuggerInfo &
 DmaDebuggerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return dmaDebugger->getCachedInfo();
+    return dmaDebugger->info.cached();
 }
 
 const AgnusConfig &
@@ -255,14 +255,14 @@ const CopperInfo &
 CopperAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return copper->getInfo();
+    return copper->info.current();
 }
 
 const CopperInfo &
 CopperAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return copper->getCachedInfo();
+    return copper->info.cached();
 }
 
 string

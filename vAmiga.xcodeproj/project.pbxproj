@@ -1510,6 +1510,7 @@
 				503FC4C52EE093DD00637C95 /* CMakeLists.txt */,
 				503FC4B32EE048E000637C95 /* include */,
 				503FC4C02EE091EC00637C95 /* src */,
+				50BCB9BF2EE4BDA3000C53CF /* thirdparty */,
 			);
 			path = utlib;
 			sourceTree = "<group>";
@@ -1535,7 +1536,6 @@
 				503FC4E02EE16FE000637C95 /* storage */,
 				503FC4C72EE0A96300637C95 /* support */,
 				50BCB9BA2EE4461D000C53CF /* wrappers */,
-				50BCB9BD2EE47FD6000C53CF /* thirdparty */,
 			);
 			path = utl;
 			sourceTree = "<group>";
@@ -1573,7 +1573,6 @@
 				503FC4F42EE1BD0B00637C95 /* storage */,
 				50BCB9BC2EE45C2D000C53CF /* io */,
 				503FC4CF2EE0AB1D00637C95 /* support */,
-				50BCB9BE2EE48055000C53CF /* thirdparty */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2557,17 +2556,10 @@
 			path = io;
 			sourceTree = "<group>";
 		};
-		50BCB9BD2EE47FD6000C53CF /* thirdparty */ = {
+		50BCB9BF2EE4BDA3000C53CF /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
 				9C47C0302D6215B100E57B41 /* lz4.h */,
-			);
-			path = thirdparty;
-			sourceTree = "<group>";
-		};
-		50BCB9BE2EE48055000C53CF /* thirdparty */ = {
-			isa = PBXGroup;
-			children = (
 				9C47C0312D6215B100E57B41 /* lz4.c */,
 			);
 			path = thirdparty;

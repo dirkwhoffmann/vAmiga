@@ -21,6 +21,8 @@ Copper::Copper(Amiga& ref) : SubComponent(ref)
         
         &debugger
     };
+
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void

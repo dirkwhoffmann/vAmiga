@@ -791,7 +791,7 @@ Agnus::serviceINSEvent()
         blitter.info.record();
     }
     if (mask & 1LL << long(Class::Copper)) {
-        copper.record();
+        copper.info.record();
     }
     if (mask & 1LL << long(Class::CIA)) {
         ciaa.info.record(); ciaa.metrics.record();
