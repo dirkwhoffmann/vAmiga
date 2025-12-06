@@ -156,7 +156,7 @@ PromServer::respond(const httplib::Request& request)
                   {{"component","memory"},{"location","rom"},{"type","write"}});
     }
     
-    {   auto metrics = audioPort.getStats();
+    {   auto metrics = audioPort.metrics.current();
         
         translate("vamiga_audio_buffer_exceptions", "",
                   "gauge", metrics.bufferOverflows,

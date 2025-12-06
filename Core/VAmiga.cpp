@@ -196,14 +196,14 @@ const BlitterInfo &
 BlitterAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return blitter->getInfo();
+    return blitter->info.current();
 }
 
 const BlitterInfo &
 BlitterAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return blitter->getCachedInfo();
+    return blitter->info.cached();
 }
 
 
@@ -880,21 +880,28 @@ const AudioPortInfo &
 AudioPortAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return port->getInfo();
+    return port->info.current();
 }
 
 const AudioPortInfo &
 AudioPortAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return port->getCachedInfo();
+    return port->info.cached();
 }
 
-const AudioPortStats &
+const AudioPortMetrics &
 AudioPortAPI::getStats() const
 {
     VAMIGA_PUBLIC
-    return port->getStats();
+    return port->metrics.current();
+}
+
+const AudioPortMetrics &
+AudioPortAPI::getCachedStats() const
+{
+    VAMIGA_PUBLIC
+    return port->metrics.cached();
 }
 
 isize

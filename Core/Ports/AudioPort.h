@@ -42,7 +42,7 @@
 
 namespace vamiga {
 
-class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, AudioPortStats>  {
+class AudioPort final : public SubComponent {
 
     friend class AudioFilter;
     friend class Paula;
@@ -75,6 +75,17 @@ class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, A
 
     // Current configuration
     AudioPortConfig config = { };
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<AudioPortInfo> info;
+    utl::Memorized<AudioPortMetrics> metrics;
+
+private:
+
+    // Internal metrics
+    AudioPortMetrics stats = {};
     
     // Current sample rate
     double sampleRate = 44100.0;
@@ -222,10 +233,8 @@ public:
 
 public:
 
-    void cacheInfo(AudioPortInfo &result) const override;
-    void cacheStats(AudioPortStats &result) const override;
     AudioPortInfo cacheInfo() const;
-    AudioPortStats cacheStats() const;
+    AudioPortMetrics cacheMetrics() const;
 
 
     //

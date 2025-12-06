@@ -643,7 +643,7 @@ NSString *EventSlotName(EventSlot slot)
     return (AudioPortAPI *)obj;
 }
 
-- (AudioPortStats)stats
+- (AudioPortMetrics)stats
 {
     return [self port]->getStats();
 }

@@ -58,6 +58,6 @@ typedef struct
     i64 consumedSamples;
     double fillLevel;
 }
-AudioPortStats;
+AudioPortMetrics;
 
 }

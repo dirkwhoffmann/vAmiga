@@ -476,7 +476,7 @@ NSString *EventSlotName(EventSlot slot);
 
 @interface AudioPortProxy : CoreComponentProxy { }
 
-@property (readonly) AudioPortStats stats;
+@property (readonly) AudioPortMetrics stats;
 
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n;
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;

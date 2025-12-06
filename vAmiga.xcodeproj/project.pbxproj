@@ -1911,12 +1911,12 @@
 		506436E129C1D82500768528 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				506436E229C1D84D00768528 /* CMakeLists.txt */,
 				506D57C12EC4BF2E00E21501 /* json_fwd.h */,
 				506D57C02EC4BF2700E21501 /* json.h */,
 				9C47C0302D6215B100E57B41 /* lz4.h */,
 				9C47C0312D6215B100E57B41 /* lz4.c */,
 				506407C82D19D0A7002FBC57 /* httplib.h */,
-				506436E229C1D84D00768528 /* CMakeLists.txt */,
 				50F54B0B24B5D31D0078FDC9 /* xdms */,
 			);
 			path = ThirdParty;

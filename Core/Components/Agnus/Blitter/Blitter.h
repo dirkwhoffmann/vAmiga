@@ -31,7 +31,7 @@ namespace vamiga {
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
-class Blitter final : public SubComponent, public Inspectable<BlitterInfo>
+class Blitter final : public SubComponent
 {
     friend class Agnus;
 
@@ -55,10 +55,17 @@ class Blitter final : public SubComponent, public Inspectable<BlitterInfo>
     u8 fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
     u8 nextCarryIn[2][256];        // [carry in][data]
     
-    
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<BlitterInfo> info;
+
+
     //
     // Blitter registers
     //
+
+private:
     
     // Control registers
     u16 bltcon0;
@@ -349,12 +356,11 @@ private:
 
 
     //
-    // Methods from Inspectable
+    // Analyzing
     //
 
 public:
 
-    void cacheInfo(BlitterInfo &result) const override;
     BlitterInfo cacheInfo() const;
 
 

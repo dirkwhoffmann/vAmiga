@@ -788,7 +788,7 @@ Agnus::serviceINSEvent()
         amiga.info.record();
     }
     if (mask & 1LL << long(Class::Blitter)) {
-        blitter.record();
+        blitter.info.record();
     }
     if (mask & 1LL << long(Class::Copper)) {
         copper.record();

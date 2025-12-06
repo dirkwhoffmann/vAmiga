@@ -16,7 +16,7 @@ namespace vamiga {
 
 Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 {
-
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void

@@ -292,18 +292,6 @@ AudioPort::setSampleRate(double hz)
     filter.setup(sampleRate);
 }
 
-void
-AudioPort::cacheInfo(AudioPortInfo &result) const
-{
-    result.isMuted = isMuted();
-}
-
-void
-AudioPort::cacheStats(AudioPortStats &result) const
-{
-    result.fillLevel = stream.fillLevel();
-}
-
 AudioPortInfo
 AudioPort::cacheInfo() const
 {
@@ -314,14 +302,14 @@ AudioPort::cacheInfo() const
     return info;
 }
 
-AudioPortStats
-AudioPort::cacheStats() const
+AudioPortMetrics
+AudioPort::cacheMetrics() const
 {
-    AudioPortStats stats;
+    AudioPortMetrics result = stats;
 
-    stats.fillLevel = stream.fillLevel();
+    result.fillLevel = stream.fillLevel();
 
-    return stats;
+    return result;
 }
 
 void

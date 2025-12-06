@@ -1033,7 +1033,8 @@ public:
 
     /** @brief  Returns statistical information about the components.
      */
-    const AudioPortStats &getStats() const;
+    const AudioPortMetrics &getStats() const;
+    const AudioPortMetrics &getCachedStats() const;
 
     /// @}
     /// @name Retrieving audio data
