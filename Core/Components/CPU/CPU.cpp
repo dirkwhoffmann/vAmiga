@@ -284,7 +284,7 @@ namespace vamiga {
 
 CPU::CPU(Amiga& ref) : moira::Moira(ref)
 {
-    
+    info.bind([this] { return cacheInfo(); } );
 }
 
 i64
@@ -447,37 +447,6 @@ CPU::_didReset(bool hard)
          *  be reset at the completion of the RESET instruction."
          *  [Motorola M68000 User Manual]
          */
-    }
-}
-
-void
-CPU::cacheInfo(CPUInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.clock = clock;
-
-        info.pc0 = getPC0() & 0xFFFFFF;
-        info.ird = getIRD();
-        info.irc = getIRC();
-        
-        for (int i = 0; i < 8; i++) {
-            info.d[i] = getD(i);
-            info.a[i] = getA(i);
-        }
-        info.isp = getISP();
-        info.usp = getUSP();
-        info.msp = getMSP();
-        info.vbr = getVBR();
-        info.sr = getSR();
-        info.sfc = (u8)getSFC();
-        info.dfc = (u8)getDFC();
-        info.cacr = (u8)getCACR();
-        info.caar = (u8)getCAAR();
-        info.ipl = (u8)getIPL();
-        info.fc = (u8)readFC(); // TODO
-        
-        info.halt = isHalted();
     }
 }
 

@@ -1570,6 +1570,7 @@
 				503FC4C12EE091F600637C95 /* abilities */,
 				503FC4EC2EE1BA6700637C95 /* chrono */,
 				503FC4F42EE1BD0B00637C95 /* storage */,
+				50BCB9BC2EE45C2D000C53CF /* io */,
 				503FC4CF2EE0AB1D00637C95 /* support */,
 			);
 			path = src;
@@ -1592,7 +1593,6 @@
 		503FC4C72EE0A96300637C95 /* support */ = {
 			isa = PBXGroup;
 			children = (
-				50BCB9A52EE2F335000C53CF /* Parser.h */,
 				503FC4D12EE0B0F900637C95 /* Bytes.h */,
 				503FC4E82EE1B36B00637C95 /* Strings.h */,
 			);
@@ -1602,7 +1602,6 @@
 		503FC4CF2EE0AB1D00637C95 /* support */ = {
 			isa = PBXGroup;
 			children = (
-				50BCB9A62EE2F344000C53CF /* Parser.cpp */,
 				50BCB9972EE1DB07000C53CF /* Bytes.cpp */,
 				503FC4C92EE0AB0500637C95 /* Files.cpp */,
 				503FC4CC2EE0AB1000637C95 /* Streams.cpp */,
@@ -2526,6 +2525,7 @@
 			isa = PBXGroup;
 			children = (
 				503FC4C62EE0A95000637C95 /* Files.h */,
+				50BCB9A52EE2F335000C53CF /* Parser.h */,
 				503FC4C82EE0A97D00637C95 /* Streams.h */,
 			);
 			path = io;
@@ -2547,6 +2547,14 @@
 				50BCB9B82EE43CC6000C53CF /* Memorized.h */,
 			);
 			path = wrappers;
+			sourceTree = "<group>";
+		};
+		50BCB9BC2EE45C2D000C53CF /* io */ = {
+			isa = PBXGroup;
+			children = (
+				50BCB9A62EE2F344000C53CF /* Parser.cpp */,
+			);
+			path = io;
 			sourceTree = "<group>";
 		};
 		50BF1CCA276DBF2E00386540 /* RemoteServers */ = {

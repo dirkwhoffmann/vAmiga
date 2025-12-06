@@ -470,14 +470,14 @@ const CPUInfo &
 CPUAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return cpu->getInfo();
+    return cpu->info.current();
 }
 
 const CPUInfo &
 CPUAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return cpu->getCachedInfo();
+    return cpu->info.cached();
 }
 
 

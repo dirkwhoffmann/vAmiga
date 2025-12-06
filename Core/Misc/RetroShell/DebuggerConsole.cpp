@@ -10,8 +10,8 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
-#include "Parser.h"
-#include "utl/support/Strings.h"
+#include "utl/io.h"
+#include "utl/support.h"
 
 namespace utl { using namespace support; }
 

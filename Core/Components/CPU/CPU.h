@@ -10,15 +10,16 @@
 #pragma once
 
 #include "CPUTypes.h"
-#include "utl/storage.h"
 #include "SubComponent.h"
 #include "CmdQueue.h"
 #include "GuardList.h"
 #include "Moira.h"
+#include "utl/storage.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 
-class CPU : public moira::Moira, public Inspectable<CPUInfo>
+class CPU : public moira::Moira
 {
     friend class Moira;
 
@@ -44,7 +45,10 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
     CPUConfig config = {};
 
 public:
-    
+
+    // The current state
+    utl::Memorized<CPUInfo> info;
+
     // Breakpoints, Watchpoints, Catchpoints
     GuardList breakpoints = GuardList(amiga, debugger.breakpoints);
     GuardList watchpoints = GuardList(amiga, debugger.watchpoints);
@@ -224,7 +228,6 @@ public:
 
 public:
 
-    void cacheInfo(CPUInfo &result) const override;
     CPUInfo cacheInfo() const;
 
 

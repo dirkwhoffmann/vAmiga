@@ -785,7 +785,7 @@ Agnus::serviceINSEvent()
     if (mask & 1LL << long(Class::Blitter))         { blitter.record(); }
     if (mask & 1LL << long(Class::Copper))          { copper.record(); }
     if (mask & 1LL << long(Class::CIA))             { ciaa.record(); ciab.record(); }
-    if (mask & 1LL << long(Class::CPU))             { cpu.record(); }
+    if (mask & 1LL << long(Class::CPU))             { cpu.info.record(); }
     if (mask & 1LL << long(Class::Denise))          { denise.record(); }
     if (mask & 1LL << long(Class::Memory))          { mem.record(); }
     if (mask & 1LL << long(Class::Paula))           { paula.record(); }
