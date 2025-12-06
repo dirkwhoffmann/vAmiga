@@ -762,10 +762,10 @@ AudioChannelAPI::getInfo() const
     
     switch (channel) {
             
-        case 0:     return paula->channel0.getInfo();
-        case 1:     return paula->channel1.getInfo();
-        case 2:     return paula->channel2.getInfo();
-        default:    return paula->channel3.getInfo();
+        case 0:     return paula->channel0.info.current();
+        case 1:     return paula->channel1.info.current();
+        case 2:     return paula->channel2.info.current();
+        default:    return paula->channel3.info.current();
     }
 }
 
@@ -776,10 +776,10 @@ AudioChannelAPI::getCachedInfo() const
     
     switch (channel) {
             
-        case 0:     return paula->channel0.getCachedInfo();
-        case 1:     return paula->channel1.getCachedInfo();
-        case 2:     return paula->channel2.getCachedInfo();
-        default:    return paula->channel3.getCachedInfo();
+        case 0:     return paula->channel0.info.cached();
+        case 1:     return paula->channel1.info.cached();
+        case 2:     return paula->channel2.info.cached();
+        default:    return paula->channel3.info.cached();
     }
 }
 
@@ -822,14 +822,14 @@ const PaulaInfo &
 PaulaAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return paula->getInfo();
+    return paula->info.current();
 }
 
 const PaulaInfo &
 PaulaAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return paula->getCachedInfo();
+    return paula->info.cached();
 }
 
 

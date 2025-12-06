@@ -806,7 +806,7 @@ Agnus::serviceINSEvent()
         mem.record();
     }
     if (mask & 1LL << long(Class::Paula)) {
-        paula.record();
+        paula.info.record();
     }
     if (mask & 1LL << long(Class::UART)) {
         uart.record();

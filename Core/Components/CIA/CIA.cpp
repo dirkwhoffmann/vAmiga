@@ -172,7 +172,7 @@ CIA::cacheInfo() const
     info.imr = imr;
     info.irq = irq;
 
-    info.tod = tod.info;
+    info.tod = tod.cacheInfo();
     info.todIrqEnable = imr & 0x04;
 
     return info;

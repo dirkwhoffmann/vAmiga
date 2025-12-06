@@ -11,6 +11,7 @@
 
 #include "TODTypes.h"
 #include "SubComponent.h"
+#include "utl/wrappers.h"
 
 namespace vamiga {
 
@@ -26,7 +27,9 @@ typedef union
 }
 Counter24;
 
-class TOD final : public SubComponent, public Inspectable<TODInfo> {
+class TOD final : public SubComponent {
+
+    friend class CIA;
 
     Descriptions descriptions = {{
 
@@ -39,8 +42,6 @@ class TOD final : public SubComponent, public Inspectable<TODInfo> {
     Options options = {
 
     };
-
-    friend class CIA;
 
     // Reference to the connected CIA
     class CIA &cia;
@@ -77,7 +78,12 @@ class TOD final : public SubComponent, public Inspectable<TODInfo> {
      * checkIrq() for edge detection.
      */
     bool matching;
-    
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<TODInfo> info;
+
     
     //
     // Initializing
@@ -150,7 +156,6 @@ private:
 
 public:
 
-    void cacheInfo(TODInfo &result) const override;
     TODInfo cacheInfo() const;
 
 

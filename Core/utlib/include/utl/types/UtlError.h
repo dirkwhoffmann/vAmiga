@@ -146,11 +146,13 @@ public:
 struct IOError : public Error {
 
     IOError(long d, const std::string &s);
+    IOError(long d, const std::filesystem::path &p) : IOError(d, p.string()) { }
 };
 
 struct NewParseError : public Error {
 
     NewParseError(long d, const std::string &s);
+    NewParseError(long d, const std::filesystem::path &p) : NewParseError(d, p.string()) { }
 };
 
 }

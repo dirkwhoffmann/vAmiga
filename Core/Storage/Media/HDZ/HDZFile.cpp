@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "HDZFile.h"
-#include "Chrono.h"
 #include "utl/chrono.h"
 #include "utl/support.h"
 

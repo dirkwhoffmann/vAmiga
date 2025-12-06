@@ -18,7 +18,7 @@ namespace vamiga {
 template <isize nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 {
-    
+    info.bind([this] { return cacheInfo(); } );
 }
 
 template <isize nr> void
@@ -32,23 +32,6 @@ StateMachine<nr>::_dump(Category category, std::ostream &os) const
         os << tab("State") << dec(state) << std::endl;
         os << tab("AUDxIP") << bol(AUDxIP()) << std::endl;
         os << tab("AUDxON") << bol(AUDxON()) << std::endl;
-    }
-}
-
-template <isize nr> void
-StateMachine<nr>::cacheInfo(StateMachineInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.state = state;
-        info.dma = AUDxON();
-        info.audlenLatch = audlenLatch;
-        info.audlen = audlen;
-        info.audperLatch = audperLatch;
-        info.audper = audper;
-        info.audvolLatch = audvolLatch;
-        info.audvol = audvol;
-        info.auddat = auddat;
     }
 }
 
@@ -396,10 +379,12 @@ template StateMachine<1>::StateMachine(Amiga &ref);
 template StateMachine<2>::StateMachine(Amiga &ref);
 template StateMachine<3>::StateMachine(Amiga &ref);
 
+/*
 template void StateMachine<0>::cacheInfo(StateMachineInfo &result) const;
 template void StateMachine<1>::cacheInfo(StateMachineInfo &result) const;
 template void StateMachine<2>::cacheInfo(StateMachineInfo &result) const;
 template void StateMachine<3>::cacheInfo(StateMachineInfo &result) const;
+*/
 
 template void StateMachine<0>::enableDMA();
 template void StateMachine<1>::enableDMA();

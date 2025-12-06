@@ -26,6 +26,8 @@ Paula::Paula(Amiga& ref) : SubComponent(ref)
         &diskController,
         &uart
     };
+
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void
@@ -79,17 +81,6 @@ Paula::_warpOff()
 {
     // audioPort.rampUp();
     audioPort.clear();
-}
-
-void 
-Paula::cacheInfo(PaulaInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.intreq = intreq;
-        info.intena = intena;
-        info.adkcon = adkcon;
-    }
 }
 
 PaulaInfo

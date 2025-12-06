@@ -16,7 +16,7 @@ namespace vamiga {
 
 TOD::TOD(CIA &ciaref, Amiga& ref) : SubComponent(ref), cia(ciaref)
 {
-
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void
@@ -29,17 +29,6 @@ TOD::operator << (SerResetter &worker)
         stopped = true;
         matching = true;
         tod.hi = 0x1;
-    }
-}
-
-void
-TOD::cacheInfo(TODInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.value = tod.value;
-        info.latch = latch.value;
-        info.alarm = alarm.value;
     }
 }
 
