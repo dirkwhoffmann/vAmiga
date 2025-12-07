@@ -15,11 +15,11 @@
 
 namespace utl::wrappers {
 
-template <typename T> class Cached : utl::abilities::Synchronizable {
+template <typename T> class Backed : utl::abilities::Synchronizable {
 
 public:
 
-    // Underlying stored value (used by default getter)
+    // Stored value (used by default getter)
     T value = {};
 
 private:
@@ -27,42 +27,58 @@ private:
     mutable std::optional<T> cache;
     mutable T live;
 
-    // Default getter returns the stored value (for “backed by variable” mode)
+    // Default getter returns the stored value ("backed by variable” mode)
     std::function<T()> getter = [&] { return value; };
 
 public:
 
-    Cached() = default;
-    explicit Cached(std::function<T()> g) : getter(std::move(g)) { }
+    Backed() = default;
+    explicit Backed(std::function<T()> g) : getter(std::move(g)) { }
     void bind(std::function<T()> g) { getter = std::move(g); }
 
-    // Returns the live value (without touching the cache)
+    // Start over with a clean state
+    void clear() {
+
+        {   SYNCHRONIZED
+
+            value = {};
+            cache.reset();
+        }
+    }
+
+    // Returns the live value
     const T& current() const {
 
         live = getter();
         return live;
     }
 
-    // Creates a stable snapshot
-    void record() {
-
-        SYNCHRONIZED
-        cache = getter();
-    }
-
-    // Returns the last snapshot
+    // Returns the latest snapshot
     const T& backed() const {
 
-        SYNCHRONIZED
-        if (!cache) { cache = getter(); }
-        return *cache;
+        {   SYNCHRONIZED
+
+            if (!cache) { cache = getter(); }
+            return *cache;
+        }
     }
 
-    // Force the cache to be recomputed in the next cached() call
+    // Takes a snapshot
+    void record() {
+
+        {   SYNCHRONIZED
+
+            cache = getter();
+        }
+    }
+
+    // Force the snapshot to be recomputed in the next backed() call
     void invalidate() const {
 
-        SYNCHRONIZED
-        cache.reset();
+        {   SYNCHRONIZED
+
+            cache.reset();
+        }
     }
 };
 

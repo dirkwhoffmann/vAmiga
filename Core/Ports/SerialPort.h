@@ -48,7 +48,7 @@ class SerialPort final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<SerialPortInfo> info;
+    utl::Backed<SerialPortInfo> info;
 
     // The current values of the port pins
     u32 port = 0;

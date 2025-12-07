@@ -633,7 +633,7 @@ const MemInfo &
 MemoryAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return mem->info.cached();
+    return mem->info.backed();
 }
 
 const MemStats &
@@ -647,7 +647,7 @@ const MemStats &
 MemoryAPI::getCachedMetrics() const
 {
     VAMIGA_PUBLIC
-    return mem->metrics.cached();
+    return mem->metrics.backed();
 }
 
 const RomTraits &
@@ -988,7 +988,7 @@ const SerialPortInfo &
 SerialPortAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return serialPort->info.cached();
+    return serialPort->info.backed();
 }
 
 int

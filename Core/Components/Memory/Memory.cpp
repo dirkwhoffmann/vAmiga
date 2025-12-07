@@ -34,7 +34,6 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
     };
 
     info.bind([this] { return cacheInfo(); } );
-    metrics.bind([this] { return cacheMetrics(); } );
 }
 
 void
@@ -303,7 +302,7 @@ Memory::_didReset(bool hard)
     updateMemSrcTables();
 
     // Initialize statistical counters
-    _metrics = {};
+    metrics.clear();
 }
 
 void
@@ -471,12 +470,6 @@ Memory::cacheInfo() const
     return info;
 }
 
-MemStats
-Memory::cacheMetrics() const
-{
-    return _metrics;
-}
-
 void
 Memory::_isReady() const
 {    
@@ -503,6 +496,8 @@ void
 Memory::updateStats()
 {
     const double w = 0.5;
+
+    MemStats &_metrics = metrics.value;
 
     _metrics.chipReads.accumulated =
     w * _metrics.chipReads.accumulated + (1.0 - w) * _metrics.chipReads.raw;
@@ -1109,7 +1104,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::CHIP> (u32 addr)
 
     dataBus = READ_CHIP_8(addr);
 
-    _metrics.chipReads.raw++;
+    metrics.value.chipReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
 
@@ -1124,7 +1119,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::CHIP> (u32 addr)
 
     dataBus = READ_CHIP_16(addr);
 
-    _metrics.chipReads.raw++;
+    metrics.value.chipReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1145,7 +1140,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::SLOW> (u32 addr)
 
     dataBus = READ_SLOW_8(addr);
 
-    _metrics.slowReads.raw++;
+    metrics.value.slowReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1160,7 +1155,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::SLOW> (u32 addr)
     
     dataBus = READ_SLOW_16(addr);
 
-    _metrics.slowReads.raw++;
+    metrics.value.slowReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1178,7 +1173,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::FAST> (u32 addr)
 {
     ASSERT_FAST_ADDR(addr);
     
-    _metrics.fastReads.raw++;
+    metrics.value.fastReads.raw++;
     return READ_FAST_8(addr);
 }
 
@@ -1191,7 +1186,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::FAST> (u32 addr)
     
     ASSERT_FAST_ADDR(addr);
     
-    _metrics.fastReads.raw++;
+    metrics.value.fastReads.raw++;
     return READ_FAST_16(addr);
 }
 
@@ -1358,7 +1353,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::ROM> (u32 addr)
 {
     ASSERT_ROM_ADDR(addr);
     
-    _metrics.kickReads.raw++;
+    metrics.value.kickReads.raw++;
     return READ_ROM_8(addr);
 }
 
@@ -1367,7 +1362,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::ROM> (u32 addr)
 {
     ASSERT_ROM_ADDR(addr);
     
-    _metrics.kickReads.raw++;
+    metrics.value.kickReads.raw++;
     return READ_ROM_16(addr);
 }
 
@@ -1382,7 +1377,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::WOM> (u32 addr)
 {
     ASSERT_WOM_ADDR(addr);
     
-    _metrics.kickReads.raw++;
+    metrics.value.kickReads.raw++;
     return READ_WOM_8(addr);
 }
 
@@ -1391,7 +1386,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::WOM> (u32 addr)
 {
     ASSERT_WOM_ADDR(addr);
     
-    _metrics.kickReads.raw++;
+    metrics.value.kickReads.raw++;
     return READ_WOM_16(addr);
 }
 
@@ -1406,7 +1401,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::EXT> (u32 addr)
 {
     ASSERT_EXT_ADDR(addr);
     
-    _metrics.kickReads.raw++;
+    metrics.value.kickReads.raw++;
     return READ_EXT_8(addr);
 }
 
@@ -1415,7 +1410,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::EXT> (u32 addr)
 {
     ASSERT_EXT_ADDR(addr);
     
-    _metrics.kickReads.raw++;
+    metrics.value.kickReads.raw++;
     return READ_EXT_16(addr);
 }
 
@@ -1660,7 +1655,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u8 value)
     
     dataBus = value;
 
-    _metrics.chipWrites.raw++;
+    metrics.value.chipWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
 
@@ -1682,7 +1677,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u16 value)
     
     dataBus = value;
 
-    _metrics.chipWrites.raw++;
+    metrics.value.chipWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
 
@@ -1698,7 +1693,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::SLOW> (u32 addr, u8 value)
     
     dataBus = value;
 
-    _metrics.slowWrites.raw++;
+    metrics.value.slowWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1714,7 +1709,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::SLOW> (u32 addr, u16 value)
     
     dataBus = value;
 
-    _metrics.slowWrites.raw++;
+    metrics.value.slowWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1726,7 +1721,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::FAST> (u32 addr, u8 value)
 {
     ASSERT_FAST_ADDR(addr);
     
-    _metrics.fastWrites.raw++;
+    metrics.value.fastWrites.raw++;
     WRITE_FAST_8(addr, value);
 }
 
@@ -1735,7 +1730,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::FAST> (u32 addr, u16 value)
 {
     ASSERT_FAST_ADDR(addr);
     
-    _metrics.fastWrites.raw++;
+    metrics.value.fastWrites.raw++;
     WRITE_FAST_16(addr, value);
 }
 
@@ -1857,7 +1852,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::ROM> (u32 addr, u8 value)
 {
     ASSERT_ROM_ADDR(addr);
     
-    _metrics.kickWrites.raw++;
+    metrics.value.kickWrites.raw++;
 
     // On Amigas with a WOM, writing into ROM space locks the WOM
     if (hasWom() && !womIsLocked) {
@@ -1878,7 +1873,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::WOM> (u32 addr, u8 value)
 {
     ASSERT_WOM_ADDR(addr);
     
-    _metrics.kickWrites.raw++;
+    metrics.value.kickWrites.raw++;
     if (!womIsLocked) WRITE_WOM_8(addr, value);
 }
 
@@ -1887,7 +1882,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::WOM> (u32 addr, u16 value)
 {
     ASSERT_WOM_ADDR(addr);
 
-    _metrics.kickWrites.raw++;
+    metrics.value.kickWrites.raw++;
     if (!womIsLocked) WRITE_WOM_16(addr, value);
 }
 
@@ -1895,14 +1890,14 @@ template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::EXT> (u32 addr, u8 value)
 {
     ASSERT_EXT_ADDR(addr);
-    _metrics.kickWrites.raw++;
+    metrics.value.kickWrites.raw++;
 }
 
 template <> void
 Memory::poke16 <Accessor::CPU, MemSrc::EXT> (u32 addr, u16 value)
 {
     ASSERT_EXT_ADDR(addr);
-    _metrics.kickWrites.raw++;
+    metrics.value.kickWrites.raw++;
 }
 
 template<> void

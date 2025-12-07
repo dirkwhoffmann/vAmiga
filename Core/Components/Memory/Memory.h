@@ -132,8 +132,8 @@ class Memory final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<MemInfo> info;
-    utl::Memorized<MemStats> metrics;
+    utl::Backed<MemInfo> info;
+    utl::Backed<MemStats> metrics;
 
 
     //
@@ -225,7 +225,7 @@ public:
     u16 dataBus;
 
     // Statistics
-    MemStats _metrics = {};
+    // MemStats _metrics = {};
 
 
     //
@@ -328,7 +328,7 @@ private:
 public:
 
     MemInfo cacheInfo() const;
-    MemStats cacheMetrics() const;
+    // MemStats cacheMetrics() const;
 
 private:
     
