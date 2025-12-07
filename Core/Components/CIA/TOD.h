@@ -82,7 +82,7 @@ class TOD final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<TODInfo> info;
+    utl::Backed<TODInfo> info;
 
     
     //

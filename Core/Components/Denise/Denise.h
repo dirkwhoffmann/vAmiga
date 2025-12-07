@@ -51,7 +51,7 @@ class Denise final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<DeniseInfo> info;
+    utl::Backed<DeniseInfo> info;
 
 
     //

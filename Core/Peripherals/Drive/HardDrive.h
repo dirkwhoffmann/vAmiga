@@ -62,7 +62,7 @@ class HardDrive final : public Drive {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<HardDriveInfo> info;
+    utl::Backed<HardDriveInfo> info;
 
 private:
 

@@ -43,7 +43,7 @@ class Joystick final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<JoystickInfo> info;
+    utl::Backed<JoystickInfo> info;
 
 private:
 

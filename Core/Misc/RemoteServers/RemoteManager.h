@@ -36,7 +36,7 @@ class RemoteManager final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<RemoteManagerInfo> info;
+    utl::Backed<RemoteManagerInfo> info;
 
 private:
 

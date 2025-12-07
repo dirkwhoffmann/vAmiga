@@ -87,7 +87,7 @@ class Amiga final : public CoreComponent {
 public:
     
     // Result of the latest inspection
-    utl::Memorized<AmigaInfo> info;
+    utl::Backed<AmigaInfo> info;
 
 
     //

@@ -439,7 +439,7 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly) MemConfig config;
 @property (readonly) MemInfo info;
 @property (readonly) MemInfo cachedInfo;
-@property (readonly) MemStats stats;
+@property (readonly) MemMetrics stats;
 @property (readonly) RomTraits romTraits;
 @property (readonly) RomTraits womTraits;
 @property (readonly) RomTraits extTraits;

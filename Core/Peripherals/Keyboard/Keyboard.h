@@ -36,7 +36,7 @@ class Keyboard final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<KeyboardInfo> info;
+    utl::Backed<KeyboardInfo> info;
 
 private:
 

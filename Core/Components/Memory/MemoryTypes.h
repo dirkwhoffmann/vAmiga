@@ -298,6 +298,6 @@ typedef struct
     struct { isize raw; double accumulated; } kickReads;
     struct { isize raw; double accumulated; } kickWrites;
 }
-MemStats;
+MemMetrics;
 
 }

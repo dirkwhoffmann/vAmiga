@@ -59,7 +59,7 @@ class RetroShell final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<RetroShellInfo> info;
+    utl::Backed<RetroShellInfo> info;
 
 private:
 

@@ -38,7 +38,7 @@ class Paula final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<PaulaInfo> info;
+    utl::Backed<PaulaInfo> info;
 
 
     //

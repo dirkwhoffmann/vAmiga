@@ -54,7 +54,7 @@ class StateMachine final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<StateMachineInfo> info;
+    utl::Backed<StateMachineInfo> info;
 
     // The state machine has been executed up to this clock cycle
     Cycle clock;

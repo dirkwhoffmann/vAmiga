@@ -47,7 +47,7 @@ class CPU : public moira::Moira
 public:
 
     // The current state
-    utl::Memorized<CPUInfo> info;
+    utl::Backed<CPUInfo> info;
 
     // Breakpoints, Watchpoints, Catchpoints
     GuardList breakpoints = GuardList(amiga, debugger.breakpoints);

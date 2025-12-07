@@ -483,7 +483,7 @@ NSString *EventSlotName(EventSlot slot)
     return [self mem]->getCachedInfo();
 }
 
-- (MemStats)stats
+- (MemMetrics)stats
 {
     return [self mem]->getMetrics();
 }

@@ -58,7 +58,7 @@ class DmaDebugger final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<DmaDebuggerInfo> info;
+    utl::Backed<DmaDebuggerInfo> info;
 
 private:
 

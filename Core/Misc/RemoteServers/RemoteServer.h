@@ -56,7 +56,7 @@ class RemoteServer : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<RemoteServerInfo> info;
+    utl::Backed<RemoteServerInfo> info;
 
 protected:
     

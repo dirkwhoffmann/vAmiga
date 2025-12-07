@@ -69,7 +69,7 @@ class FloppyDrive final : public Drive {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<FloppyDriveInfo> info;
+    utl::Backed<FloppyDriveInfo> info;
 
 private:
 

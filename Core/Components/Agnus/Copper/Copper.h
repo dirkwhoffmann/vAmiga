@@ -39,7 +39,7 @@ class Copper final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<CopperInfo> info;
+    utl::Backed<CopperInfo> info;
 
     // The Copper debugger
     CopperDebugger debugger = CopperDebugger(amiga);

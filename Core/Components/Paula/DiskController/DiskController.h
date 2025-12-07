@@ -39,7 +39,7 @@ class DiskController final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<DiskControllerInfo> info;
+    utl::Backed<DiskControllerInfo> info;
 
 private:
 

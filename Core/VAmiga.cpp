@@ -88,7 +88,7 @@ const AmigaInfo &
 AmigaAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return amiga->info.cached();
+    return amiga->info.backed();
 }
 
 void
@@ -121,7 +121,7 @@ const LogicAnalyzerInfo &
 LogicAnalyzerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return logicAnalyzer->info.cached();
+    return logicAnalyzer->info.backed();
 }
 
 const DmaDebuggerConfig &
@@ -142,7 +142,7 @@ const DmaDebuggerInfo &
 DmaDebuggerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return dmaDebugger->info.cached();
+    return dmaDebugger->info.backed();
 }
 
 const AgnusConfig &
@@ -262,7 +262,7 @@ const CopperInfo &
 CopperAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return copper->info.cached();
+    return copper->info.backed();
 }
 
 string
@@ -491,7 +491,7 @@ const CPUInfo &
 CPUAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return cpu->info.cached();
+    return cpu->info.backed();
 }
 
 
@@ -517,7 +517,7 @@ const DeniseInfo &
 DeniseAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return denise->info.cached();
+    return denise->info.backed();
 }
 
 
@@ -636,14 +636,14 @@ MemoryAPI::getCachedInfo() const
     return mem->info.backed();
 }
 
-const MemStats &
+const MemMetrics &
 MemoryAPI::getMetrics() const
 {
     VAMIGA_PUBLIC
     return mem->metrics.current();
 }
 
-const MemStats &
+const MemMetrics &
 MemoryAPI::getCachedMetrics() const
 {
     VAMIGA_PUBLIC
@@ -790,10 +790,10 @@ AudioChannelAPI::getCachedInfo() const
     
     switch (channel) {
             
-        case 0:     return paula->channel0.info.cached();
-        case 1:     return paula->channel1.info.cached();
-        case 2:     return paula->channel2.info.cached();
-        default:    return paula->channel3.info.cached();
+        case 0:     return paula->channel0.info.backed();
+        case 1:     return paula->channel1.info.backed();
+        case 2:     return paula->channel2.info.backed();
+        default:    return paula->channel3.info.backed();
     }
 }
 
@@ -815,7 +815,7 @@ const DiskControllerInfo &
 DiskControllerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return diskController->info.cached();
+    return diskController->info.backed();
 }
 
 const UARTInfo &
@@ -829,7 +829,7 @@ const UARTInfo &
 UARTAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return uart->info.cached();
+    return uart->info.backed();
 }
 
 const PaulaInfo &
@@ -843,7 +843,7 @@ const PaulaInfo &
 PaulaAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return paula->info.cached();
+    return paula->info.backed();
 }
 
 
@@ -962,7 +962,7 @@ const ControlPortInfo &
 ControlPortAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return controlPort->info.cached();
+    return controlPort->info.backed();
 }
 
 
@@ -1078,7 +1078,7 @@ const KeyboardInfo &
 KeyboardAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return keyboard->info.cached();
+    return keyboard->info.backed();
 }
 
 bool
@@ -1156,7 +1156,7 @@ const FloppyDriveInfo &
 FloppyDriveAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return drive->info.cached();
+    return drive->info.backed();
 }
 
 FloppyDisk &
@@ -1264,7 +1264,7 @@ const HardDriveInfo &
 HardDriveAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return drive->info.cached();
+    return drive->info.backed();
 }
 
 const HardDriveTraits &
@@ -1408,7 +1408,7 @@ const JoystickInfo &
 JoystickAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return joystick->info.cached();
+    return joystick->info.backed();
 }
 
 void 
@@ -1701,7 +1701,7 @@ const RemoteManagerInfo &
 RemoteManagerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return remoteManager->info.cached();
+    return remoteManager->info.backed();
 }
 
 
@@ -1720,7 +1720,7 @@ const RetroShellInfo &
 RetroShellAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return retroShell->info.cached();
+    return retroShell->info.backed();
 }
 
 const char *

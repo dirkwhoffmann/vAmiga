@@ -36,7 +36,7 @@ class UART final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<UARTInfo> info;
+    utl::Backed<UARTInfo> info;
 
 private:
 

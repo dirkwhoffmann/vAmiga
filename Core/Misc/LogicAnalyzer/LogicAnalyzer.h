@@ -44,7 +44,7 @@ class LogicAnalyzer final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<LogicAnalyzerInfo> info;
+    utl::Backed<LogicAnalyzerInfo> info;
 
 private:
 

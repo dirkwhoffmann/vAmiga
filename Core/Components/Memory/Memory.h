@@ -133,7 +133,7 @@ public:
 
     // Result of the latest inspection
     utl::Backed<MemInfo> info;
-    utl::Backed<MemStats> metrics;
+    utl::Backed<MemMetrics> metrics;
 
 
     //
@@ -225,7 +225,7 @@ public:
     u16 dataBus;
 
     // Statistics
-    // MemStats _metrics = {};
+    // MemMetrics _metrics = {};
 
 
     //
@@ -328,7 +328,7 @@ private:
 public:
 
     MemInfo cacheInfo() const;
-    // MemStats cacheMetrics() const;
+    // MemMetrics cacheMetrics() const;
 
 private:
     

@@ -42,7 +42,7 @@ class ControlPort final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<ControlPortInfo> info;
+    utl::Backed<ControlPortInfo> info;
 
 private:
 

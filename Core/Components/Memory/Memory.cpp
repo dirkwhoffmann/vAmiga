@@ -497,7 +497,7 @@ Memory::updateStats()
 {
     const double w = 0.5;
 
-    MemStats &_metrics = metrics.value;
+    MemMetrics &_metrics = metrics.value;
 
     _metrics.chipReads.accumulated =
     w * _metrics.chipReads.accumulated + (1.0 - w) * _metrics.chipReads.raw;
