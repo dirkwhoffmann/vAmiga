@@ -16,7 +16,7 @@
 
 #include <ostream>
 
-namespace utl::storage {
+namespace utl {
 
 template <class T> struct Allocator : public Hashable, public Dumpable {
 

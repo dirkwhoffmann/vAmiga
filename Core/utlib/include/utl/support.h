@@ -9,5 +9,3 @@
 
 #include "support/Bytes.h"
 #include "support/Strings.h"
-
-namespace utl { using namespace support; }

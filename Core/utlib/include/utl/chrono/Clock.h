@@ -11,7 +11,7 @@
 
 #include "utl/chrono/Time.h"
 
-namespace utl::chrono {
+namespace utl {
 
 class Clock {
 

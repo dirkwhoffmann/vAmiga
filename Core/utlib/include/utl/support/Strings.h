@@ -12,7 +12,7 @@
 #include "utl/types.h"
 #include <sstream>
 
-namespace utl::support {
+namespace utl {
 
 //
 // Creating

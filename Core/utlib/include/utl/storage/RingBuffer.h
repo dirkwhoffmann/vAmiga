@@ -11,7 +11,7 @@
 
 #include "utl/types.h"
 
-namespace utl::storage {
+namespace utl {
 
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:

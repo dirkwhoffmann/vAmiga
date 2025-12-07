@@ -13,5 +13,3 @@
 #include "abilities/Loggable.h"
 #include "abilities/Reflectable.h"
 #include "abilities/Synchronizable.h"
-
-namespace utl { using namespace abilities; }

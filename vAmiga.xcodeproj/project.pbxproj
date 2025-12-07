@@ -356,8 +356,6 @@
 		50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
 		50BCB9932EE1D88E000C53CF /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4DF2EE16FD500637C95 /* Buffer.cpp */; };
 		50BCB9942EE1D88E000C53CF /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4DF2EE16FD500637C95 /* Buffer.cpp */; };
-		50BCB9952EE1D895000C53CF /* RingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4F52EE1BD3300637C95 /* RingBuffer.cpp */; };
-		50BCB9962EE1D895000C53CF /* RingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4F52EE1BD3300637C95 /* RingBuffer.cpp */; };
 		50BCB9982EE1DB0A000C53CF /* Bytes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9972EE1DB07000C53CF /* Bytes.cpp */; };
 		50BCB9992EE1DB0A000C53CF /* Bytes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9972EE1DB07000C53CF /* Bytes.cpp */; };
 		50BCB9A32EE2CD3D000C53CF /* Reportable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9A22EE2CD39000C53CF /* Reportable.cpp */; };
@@ -765,7 +763,6 @@
 		503FC4ED2EE1BA6F00637C95 /* Time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
 		503FC4F02EE1BA7900637C95 /* Clock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Clock.cpp; sourceTree = "<group>"; };
 		503FC4F32EE1BCFB00637C95 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
-		503FC4F52EE1BD3300637C95 /* RingBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RingBuffer.cpp; sourceTree = "<group>"; };
 		503FC4F62EE1C20A00637C95 /* Animated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Animated.h; sourceTree = "<group>"; };
 		503FC4F92EE1C35A00637C95 /* ReentrantMutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReentrantMutex.h; sourceTree = "<group>"; };
 		503FC4FA2EE1C36B00637C95 /* AutoMutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoMutex.h; sourceTree = "<group>"; };
@@ -1637,7 +1634,6 @@
 			isa = PBXGroup;
 			children = (
 				503FC4DF2EE16FD500637C95 /* Buffer.cpp */,
-				503FC4F52EE1BD3300637C95 /* RingBuffer.cpp */,
 			);
 			path = storage;
 			sourceTree = "<group>";
@@ -2938,7 +2934,6 @@
 				50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */,
 				503FC4E62EE1B36400637C95 /* Strings.cpp in Sources */,
 				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,
-				50BCB9952EE1D895000C53CF /* RingBuffer.cpp in Sources */,
 				505C010A2577A8C000F9E05C /* FSDescriptor.cpp in Sources */,
 				509E76032EDCCC1B00608FA7 /* STFactory.cpp in Sources */,
 				504CC8C12D5A819F00C2AC9A /* ADZFile.cpp in Sources */,
@@ -3431,7 +3426,6 @@
 				503FC4CB2EE0AB0D00637C95 /* Files.cpp in Sources */,
 				50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */,
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
-				50BCB9962EE1D895000C53CF /* RingBuffer.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
 				509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */,

@@ -21,7 +21,7 @@ public:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    mutable utl::concurrency::ReentrantMutex mutex;
+    mutable ReentrantMutex mutex;
 
 };
 
@@ -35,6 +35,6 @@ public:
  *          ...
  *     }
  */
-#define SYNCHRONIZED utl::concurrency::AutoMutex _am(mutex);
+#define SYNCHRONIZED utl::AutoMutex _am(mutex);
 
 }

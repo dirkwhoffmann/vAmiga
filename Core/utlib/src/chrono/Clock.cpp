@@ -9,7 +9,7 @@
 
 #include "utl/chrono/Clock.h"
 
-namespace utl::chrono {
+namespace utl {
 
 Clock::Clock()
 {

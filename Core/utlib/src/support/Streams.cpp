@@ -10,7 +10,7 @@
 #include "utl/support.h"
 #include "utl/io.h"
 
-namespace utl::io {
+namespace utl {
 
 std::ostream &
 dec::operator()(std::ostream &os) const

@@ -11,5 +11,3 @@
 #include "concurrency/AutoMutex.h"
 #include "abilities/Synchronizable.h"
 #include "abilities/Wakeable.h"
-
-namespace utl { using namespace concurrency; }

@@ -9,7 +9,7 @@
 
 #include "utl/io/Parser.h"
 
-namespace utl::io {
+namespace utl {
 
 bool isBool(const string& token)
 {

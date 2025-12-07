@@ -12,7 +12,7 @@
 #include <ctime>
 #include <thread>
 
-namespace utl::chrono {
+namespace utl {
 
 #if defined(__MACH__)
 

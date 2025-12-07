@@ -10,5 +10,3 @@
 #include "io/Files.h"
 #include "io/Parser.h"
 #include "io/Streams.h"
-
-namespace utl { using namespace io; }

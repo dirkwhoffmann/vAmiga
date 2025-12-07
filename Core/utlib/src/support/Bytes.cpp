@@ -11,7 +11,7 @@
 #include <cassert>
 #include <cstring>
 
-namespace utl::support {
+namespace utl {
 
 bool isZero(const u8 *ptr, isize size)
 {

@@ -12,7 +12,7 @@
 #include "utl/types.h"
 #include <mutex>
 
-namespace utl::concurrency {
+namespace utl {
 
 class Mutex
 {

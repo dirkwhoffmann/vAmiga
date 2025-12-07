@@ -10,7 +10,7 @@
 #include "utl/support/Strings.h"
 #include <sstream>
 
-namespace utl::support {
+namespace utl {
 
 string createStr(const u8 *buf, isize maxLen)
 {

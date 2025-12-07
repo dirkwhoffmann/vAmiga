@@ -9,5 +9,3 @@
 
 #include "chrono/Time.h"
 #include "chrono/Clock.h"
-
-namespace utl { using namespace chrono; }

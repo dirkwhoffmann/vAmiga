@@ -11,7 +11,7 @@
 
 #include "utl/types.h"
 
-namespace utl::support {
+namespace utl {
 
 //
 // Accessing bits and bytes

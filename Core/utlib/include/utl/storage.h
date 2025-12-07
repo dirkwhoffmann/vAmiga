@@ -9,5 +9,3 @@
 
 #include "storage/Buffer.h"
 #include "storage/RingBuffer.h"
-
-namespace utl { using namespace storage; }

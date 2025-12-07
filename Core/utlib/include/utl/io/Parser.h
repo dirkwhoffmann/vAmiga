@@ -15,7 +15,7 @@
 
 #include <functional>
 
-namespace utl::io {
+namespace utl {
 
 struct ParseError : public std::exception {
 

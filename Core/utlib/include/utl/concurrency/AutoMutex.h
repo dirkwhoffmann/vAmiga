@@ -11,7 +11,7 @@
 
 #include "utl/types.h"
 
-namespace utl::concurrency {
+namespace utl {
 
 class AutoMutex
 {
