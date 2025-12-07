@@ -102,7 +102,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 #define WRITE_EXT_16(x,y)   W16BE(ext + ((x) & extMask), (y))
 
 
-class Memory final : public SubComponent, public Inspectable<MemInfo, MemStats> {
+class Memory final : public SubComponent {
 
     Descriptions descriptions = {{
 
@@ -131,7 +131,17 @@ class Memory final : public SubComponent, public Inspectable<MemInfo, MemStats> 
 
 public:
 
+    // Result of the latest inspection
+    utl::Memorized<MemInfo> info;
+    utl::Memorized<MemStats> metrics;
+
+
+    //
     // Subcomponents
+    //
+
+public:
+
     MemoryDebugger debugger = MemoryDebugger(amiga);
 
     /* About
@@ -213,7 +223,10 @@ public:
 
     // The last value on the data bus
     u16 dataBus;
-    
+
+    // Statistics
+    MemStats _metrics = {};
+
 
     //
     // Methods
@@ -314,8 +327,8 @@ private:
 
 public:
 
-    void cacheInfo(MemInfo &result) const override;
     MemInfo cacheInfo() const;
+    MemStats cacheMetrics() const;
 
 private:
     

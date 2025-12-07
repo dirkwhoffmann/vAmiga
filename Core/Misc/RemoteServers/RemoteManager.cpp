@@ -27,6 +27,8 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
         &promServer,
         &serServer
     };
+
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void
@@ -55,29 +57,16 @@ RemoteManager::_dump(Category category, std::ostream &os) const
     }
 }
 
-void
-RemoteManager::cacheInfo(RemoteManagerInfo &result) const
-{
-    {   SYNCHRONIZED
-
-        info.rshInfo = rshServer.getInfo();
-        info.rpcInfo = rpcServer.getInfo();
-        info.gdbInfo = gdbServer.getInfo();
-        info.promInfo = promServer.getInfo();
-        info.serInfo = serServer.getInfo();
-    }
-}
-
 RemoteManagerInfo
 RemoteManager::cacheInfo() const
 {
     RemoteManagerInfo info;
 
-    info.rshInfo = rshServer.getInfo();
-    info.rpcInfo = rpcServer.getInfo();
-    info.gdbInfo = gdbServer.getInfo();
-    info.promInfo = promServer.getInfo();
-    info.serInfo = serServer.getInfo();
+    info.rshInfo = rshServer.cacheInfo();
+    info.rpcInfo = rpcServer.cacheInfo();
+    info.gdbInfo = gdbServer.cacheInfo();
+    info.promInfo = promServer.cacheInfo();
+    info.serInfo = serServer.cacheInfo();
 
     return info;
 }

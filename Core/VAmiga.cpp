@@ -626,21 +626,28 @@ const MemInfo &
 MemoryAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return mem->getInfo();
+    return mem->info.current();
 }
 
 const MemInfo &
 MemoryAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return mem->getCachedInfo();
+    return mem->info.cached();
 }
 
 const MemStats &
-MemoryAPI::getStats() const
+MemoryAPI::getMetrics() const
 {
     VAMIGA_PUBLIC
-    return mem->getStats();
+    return mem->metrics.current();
+}
+
+const MemStats &
+MemoryAPI::getCachedMetrics() const
+{
+    VAMIGA_PUBLIC
+    return mem->metrics.cached();
 }
 
 const RomTraits &
@@ -1687,14 +1694,14 @@ const RemoteManagerInfo &
 RemoteManagerAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return remoteManager->getInfo();
+    return remoteManager->info.current();
 }
 
 const RemoteManagerInfo &
 RemoteManagerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return remoteManager->getCachedInfo();
+    return remoteManager->info.cached();
 }
 
 
@@ -1706,14 +1713,14 @@ const RetroShellInfo &
 RetroShellAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return retroShell->getInfo();
+    return retroShell->info.current();
 }
 
 const RetroShellInfo &
 RetroShellAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return retroShell->getCachedInfo();
+    return retroShell->info.cached();
 }
 
 const char *

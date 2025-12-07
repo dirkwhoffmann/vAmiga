@@ -20,6 +20,11 @@ namespace utl { using namespace support; }
 
 namespace vamiga {
 
+RemoteServer::RemoteServer(Amiga& ref, isize id) : SubComponent(ref, id)
+{
+    info.bind([this] { return cacheInfo(); } );
+}
+
 void
 RemoteServer::shutDownServer()
 {
@@ -129,12 +134,6 @@ RemoteServer::setOption(Opt option, i64 value)
         default:
             fatalError;
     }
-}
-
-void
-RemoteServer::cacheInfo(RemoteServerInfo &result) const
-{
-    info.state = state;
 }
 
 RemoteServerInfo

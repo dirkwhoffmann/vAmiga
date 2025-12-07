@@ -141,7 +141,7 @@ private:
 
 
     //
-    // Methods from Inspectable
+    // Analyzing
     //
 
 private:

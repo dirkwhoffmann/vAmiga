@@ -20,7 +20,7 @@
 
 namespace vamiga {
 
-class RemoteManager final : public SubComponent, public Inspectable<RemoteManagerInfo> {
+class RemoteManager final : public SubComponent {
 
     Descriptions descriptions = {{
 
@@ -32,6 +32,13 @@ class RemoteManager final : public SubComponent, public Inspectable<RemoteManage
     Options options = {
 
     };
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<RemoteManagerInfo> info;
+
+private:
 
     // Frame counter
     usize frame = 0;
@@ -103,12 +110,11 @@ public:
 
 
     //
-    // Methods from Inspectable
+    // Analyzing
     //
 
 public:
 
-    void cacheInfo(RemoteManagerInfo &result) const override;
     RemoteManagerInfo cacheInfo() const;
 
 

@@ -804,7 +804,8 @@ Agnus::serviceINSEvent()
         denise.info.record();
     }
     if (mask & 1LL << long(Class::Memory)) {
-        mem.record();
+        mem.info.record();
+        mem.metrics.record();
     }
     if (mask & 1LL << long(Class::Paula)) {
         paula.info.record();

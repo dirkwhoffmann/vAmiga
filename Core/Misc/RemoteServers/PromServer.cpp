@@ -125,7 +125,7 @@ PromServer::respond(const httplib::Request& request)
                   {{"component","ciab"}});
     }
     
-    {   auto metrics = mem.getStats();
+    {   auto metrics = mem.metrics.current();
 
         translate("vamiga_mem_accesses", "",
                   "gauge", metrics.chipReads.accumulated,

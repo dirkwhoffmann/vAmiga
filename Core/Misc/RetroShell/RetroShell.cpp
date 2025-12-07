@@ -25,22 +25,14 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
         &debugger,
         &navigator
     };
+
+    info.bind([this] { return cacheInfo(); } );
 }
 
 void
 RetroShell::_initialize()
 {
 
-}
-
-void
-RetroShell::cacheInfo(RetroShellInfo &result) const
-{
-    {   SYNCHRONIZED
-        
-        result.console = current->objid;
-        result.cursorRel = current->cursorRel();
-    }
 }
 
 RetroShellInfo

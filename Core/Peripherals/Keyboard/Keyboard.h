@@ -123,7 +123,7 @@ public:
 
     
     //
-    // Methods from Inspectable
+    // Analyzing
     //
 
 public:

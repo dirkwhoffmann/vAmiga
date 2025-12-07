@@ -533,7 +533,8 @@ public:
 
     /** @brief  Returns statistical information about the components.
      */
-    const MemStats &getStats() const;
+    const MemStats &getMetrics() const;
+    const MemStats &getCachedMetrics() const;
 
     /** @brief  Provides details about the installed ROM, WOM, or ROM extension.
      */

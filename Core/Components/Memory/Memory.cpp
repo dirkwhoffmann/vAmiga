@@ -32,6 +32,9 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
 
         &debugger
     };
+
+    info.bind([this] { return cacheInfo(); } );
+    metrics.bind([this] { return cacheMetrics(); } );
 }
 
 void
@@ -300,7 +303,7 @@ Memory::_didReset(bool hard)
     updateMemSrcTables();
 
     // Initialize statistical counters
-    clearStats();
+    _metrics = {};
 }
 
 void
@@ -445,28 +448,6 @@ Memory::operator << (SerWriter &worker)
     worker.copy(fast, fastSize);
 }
 
-void
-Memory::cacheInfo(MemInfo &result) const
-{
-    {   SYNCHRONIZED
-        
-        result.hasRom = hasRom();
-        result.hasWom = hasWom();
-        result.hasExt = hasExt();
-        result.hasBootRom = hasBootRom();
-        result.hasKickRom = hasKickRom();
-        result.womLock = womIsLocked;
-        
-        result.romMask = romMask;
-        result.womMask = womMask;
-        result.extMask = extMask;
-        result.chipMask = chipMask;
-        
-        for (isize i = 0; i < 256; i++) result.cpuMemSrc[i] = cpuMemSrc[i];
-        for (isize i = 0; i < 256; i++) result.agnusMemSrc[i] = agnusMemSrc[i];
-    }
-}
-
 MemInfo
 Memory::cacheInfo() const
 {
@@ -488,6 +469,12 @@ Memory::cacheInfo() const
     for (isize i = 0; i < 256; i++) info.agnusMemSrc[i] = agnusMemSrc[i];
 
     return info;
+}
+
+MemStats
+Memory::cacheMetrics() const
+{
+    return _metrics;
 }
 
 void
@@ -516,32 +503,32 @@ void
 Memory::updateStats()
 {
     const double w = 0.5;
-    
-    stats.chipReads.accumulated =
-    w * stats.chipReads.accumulated + (1.0 - w) * stats.chipReads.raw;
-    stats.chipWrites.accumulated =
-    w * stats.chipWrites.accumulated + (1.0 - w) * stats.chipWrites.raw;
-    stats.slowReads.accumulated =
-    w * stats.slowReads.accumulated + (1.0 - w) * stats.slowReads.raw;
-    stats.slowWrites.accumulated =
-    w * stats.slowWrites.accumulated + (1.0 - w) * stats.slowWrites.raw;
-    stats.fastReads.accumulated =
-    w * stats.fastReads.accumulated + (1.0 - w) * stats.fastReads.raw;
-    stats.fastWrites.accumulated =
-    w * stats.fastWrites.accumulated + (1.0 - w) * stats.fastWrites.raw;
-    stats.kickReads.accumulated =
-    w * stats.kickReads.accumulated + (1.0 - w) * stats.kickReads.raw;
-    stats.kickWrites.accumulated =
-    w * stats.kickWrites.accumulated + (1.0 - w) * stats.kickWrites.raw;
 
-    stats.chipReads.raw = 0;
-    stats.chipWrites.raw = 0;
-    stats.slowReads.raw = 0;
-    stats.slowWrites.raw = 0;
-    stats.fastReads.raw = 0;
-    stats.fastWrites.raw = 0;
-    stats.kickReads.raw = 0;
-    stats.kickWrites.raw = 0;
+    _metrics.chipReads.accumulated =
+    w * _metrics.chipReads.accumulated + (1.0 - w) * _metrics.chipReads.raw;
+    _metrics.chipWrites.accumulated =
+    w * _metrics.chipWrites.accumulated + (1.0 - w) * _metrics.chipWrites.raw;
+    _metrics.slowReads.accumulated =
+    w * _metrics.slowReads.accumulated + (1.0 - w) * _metrics.slowReads.raw;
+    _metrics.slowWrites.accumulated =
+    w * _metrics.slowWrites.accumulated + (1.0 - w) * _metrics.slowWrites.raw;
+    _metrics.fastReads.accumulated =
+    w * _metrics.fastReads.accumulated + (1.0 - w) * _metrics.fastReads.raw;
+    _metrics.fastWrites.accumulated =
+    w * _metrics.fastWrites.accumulated + (1.0 - w) * _metrics.fastWrites.raw;
+    _metrics.kickReads.accumulated =
+    w * _metrics.kickReads.accumulated + (1.0 - w) * _metrics.kickReads.raw;
+    _metrics.kickWrites.accumulated =
+    w * _metrics.kickWrites.accumulated + (1.0 - w) * _metrics.kickWrites.raw;
+
+    _metrics.chipReads.raw = 0;
+    _metrics.chipWrites.raw = 0;
+    _metrics.slowReads.raw = 0;
+    _metrics.slowWrites.raw = 0;
+    _metrics.fastReads.raw = 0;
+    _metrics.fastWrites.raw = 0;
+    _metrics.kickReads.raw = 0;
+    _metrics.kickWrites.raw = 0;
 }
 
 void
@@ -1122,7 +1109,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::CHIP> (u32 addr)
 
     dataBus = READ_CHIP_8(addr);
 
-    stats.chipReads.raw++;
+    _metrics.chipReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
 
@@ -1137,7 +1124,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::CHIP> (u32 addr)
 
     dataBus = READ_CHIP_16(addr);
 
-    stats.chipReads.raw++;
+    _metrics.chipReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1158,7 +1145,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::SLOW> (u32 addr)
 
     dataBus = READ_SLOW_8(addr);
 
-    stats.slowReads.raw++;
+    _metrics.slowReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1173,7 +1160,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::SLOW> (u32 addr)
     
     dataBus = READ_SLOW_16(addr);
 
-    stats.slowReads.raw++;
+    _metrics.slowReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1191,7 +1178,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::FAST> (u32 addr)
 {
     ASSERT_FAST_ADDR(addr);
     
-    stats.fastReads.raw++;
+    _metrics.fastReads.raw++;
     return READ_FAST_8(addr);
 }
 
@@ -1204,7 +1191,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::FAST> (u32 addr)
     
     ASSERT_FAST_ADDR(addr);
     
-    stats.fastReads.raw++;
+    _metrics.fastReads.raw++;
     return READ_FAST_16(addr);
 }
 
@@ -1371,7 +1358,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::ROM> (u32 addr)
 {
     ASSERT_ROM_ADDR(addr);
     
-    stats.kickReads.raw++;
+    _metrics.kickReads.raw++;
     return READ_ROM_8(addr);
 }
 
@@ -1380,7 +1367,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::ROM> (u32 addr)
 {
     ASSERT_ROM_ADDR(addr);
     
-    stats.kickReads.raw++;
+    _metrics.kickReads.raw++;
     return READ_ROM_16(addr);
 }
 
@@ -1395,7 +1382,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::WOM> (u32 addr)
 {
     ASSERT_WOM_ADDR(addr);
     
-    stats.kickReads.raw++;
+    _metrics.kickReads.raw++;
     return READ_WOM_8(addr);
 }
 
@@ -1404,7 +1391,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::WOM> (u32 addr)
 {
     ASSERT_WOM_ADDR(addr);
     
-    stats.kickReads.raw++;
+    _metrics.kickReads.raw++;
     return READ_WOM_16(addr);
 }
 
@@ -1419,7 +1406,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::EXT> (u32 addr)
 {
     ASSERT_EXT_ADDR(addr);
     
-    stats.kickReads.raw++;
+    _metrics.kickReads.raw++;
     return READ_EXT_8(addr);
 }
 
@@ -1428,7 +1415,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::EXT> (u32 addr)
 {
     ASSERT_EXT_ADDR(addr);
     
-    stats.kickReads.raw++;
+    _metrics.kickReads.raw++;
     return READ_EXT_16(addr);
 }
 
@@ -1673,7 +1660,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u8 value)
     
     dataBus = value;
 
-    stats.chipWrites.raw++;
+    _metrics.chipWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
 
@@ -1695,7 +1682,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u16 value)
     
     dataBus = value;
 
-    stats.chipWrites.raw++;
+    _metrics.chipWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
 
@@ -1711,7 +1698,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::SLOW> (u32 addr, u8 value)
     
     dataBus = value;
 
-    stats.slowWrites.raw++;
+    _metrics.slowWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1727,7 +1714,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::SLOW> (u32 addr, u16 value)
     
     dataBus = value;
 
-    stats.slowWrites.raw++;
+    _metrics.slowWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
     agnus.busData[agnus.pos.h] = dataBus;
     
@@ -1739,7 +1726,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::FAST> (u32 addr, u8 value)
 {
     ASSERT_FAST_ADDR(addr);
     
-    stats.fastWrites.raw++;
+    _metrics.fastWrites.raw++;
     WRITE_FAST_8(addr, value);
 }
 
@@ -1748,7 +1735,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::FAST> (u32 addr, u16 value)
 {
     ASSERT_FAST_ADDR(addr);
     
-    stats.fastWrites.raw++;
+    _metrics.fastWrites.raw++;
     WRITE_FAST_16(addr, value);
 }
 
@@ -1870,8 +1857,8 @@ Memory::poke8 <Accessor::CPU, MemSrc::ROM> (u32 addr, u8 value)
 {
     ASSERT_ROM_ADDR(addr);
     
-    stats.kickWrites.raw++;
-    
+    _metrics.kickWrites.raw++;
+
     // On Amigas with a WOM, writing into ROM space locks the WOM
     if (hasWom() && !womIsLocked) {
         debug(MEM_DEBUG, "Locking WOM\n");
@@ -1891,7 +1878,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::WOM> (u32 addr, u8 value)
 {
     ASSERT_WOM_ADDR(addr);
     
-    stats.kickWrites.raw++;
+    _metrics.kickWrites.raw++;
     if (!womIsLocked) WRITE_WOM_8(addr, value);
 }
 
@@ -1900,7 +1887,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::WOM> (u32 addr, u16 value)
 {
     ASSERT_WOM_ADDR(addr);
 
-    stats.kickWrites.raw++;
+    _metrics.kickWrites.raw++;
     if (!womIsLocked) WRITE_WOM_16(addr, value);
 }
 
@@ -1908,14 +1895,14 @@ template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::EXT> (u32 addr, u8 value)
 {
     ASSERT_EXT_ADDR(addr);
-    stats.kickWrites.raw++;
+    _metrics.kickWrites.raw++;
 }
 
 template <> void
 Memory::poke16 <Accessor::CPU, MemSrc::EXT> (u32 addr, u16 value)
 {
     ASSERT_EXT_ADDR(addr);
-    stats.kickWrites.raw++;
+    _metrics.kickWrites.raw++;
 }
 
 template<> void

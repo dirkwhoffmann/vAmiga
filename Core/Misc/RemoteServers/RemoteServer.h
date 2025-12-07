@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-class RemoteServer : public SubComponent, public Inspectable<RemoteServerInfo> {
+class RemoteServer : public SubComponent {
 
     friend class RemoteManager;
 
@@ -53,6 +53,11 @@ class RemoteServer : public SubComponent, public Inspectable<RemoteServerInfo> {
         Opt::SRV_VERBOSE
     };
 
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<RemoteServerInfo> info;
+
 protected:
     
     // Current configuration
@@ -71,7 +76,7 @@ protected:
     
 public:
     
-    using SubComponent::SubComponent;
+    RemoteServer(Amiga& ref, isize id);
     ~RemoteServer() { shutDownServer(); }
     void shutDownServer();
     
@@ -145,7 +150,6 @@ public:
 
 public:
 
-    void cacheInfo(RemoteServerInfo &result) const override;
     RemoteServerInfo cacheInfo() const;
 
 

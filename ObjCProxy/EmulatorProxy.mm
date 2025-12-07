@@ -485,7 +485,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (MemStats)stats
 {
-    return [self mem]->getStats();
+    return [self mem]->getMetrics();
 }
 
 - (RomTraits)romTraits

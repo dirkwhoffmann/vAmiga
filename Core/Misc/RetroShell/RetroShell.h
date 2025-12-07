@@ -40,7 +40,7 @@
 
 namespace vamiga {
 
-class RetroShell final : public SubComponent, public Inspectable<RetroShellInfo> {
+class RetroShell final : public SubComponent {
     
     friend class RshServer;
     
@@ -55,7 +55,14 @@ class RetroShell final : public SubComponent, public Inspectable<RetroShellInfo>
     Options options = {
         
     };
-    
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<RetroShellInfo> info;
+
+private:
+
     TextStorage s1, s2, s3;
     
 public:
@@ -117,12 +124,11 @@ private:
     
     
     //
-    // Methods from Inspectable
+    // Analyzing
     //
     
 private:
     
-    void cacheInfo(RetroShellInfo &result) const override;
     RetroShellInfo cacheInfo() const;
 
     
