@@ -15,7 +15,7 @@
 #include <zlib.h>
 #endif
 
-namespace utl::abilities {
+namespace utl {
 
 #ifdef USE_ZLIB
 

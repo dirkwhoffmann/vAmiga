@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-using namespace utl::abilities;
+using namespace utl;
 
 struct FSBlock;
 typedef u32 Block;

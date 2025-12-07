@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-using namespace utl::abilities;
+using namespace utl;
 
 namespace fault {
 

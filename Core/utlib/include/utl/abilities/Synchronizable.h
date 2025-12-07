@@ -11,7 +11,7 @@
 
 #include "utl/concurrency/ReentrantMutex.h"
 
-namespace utl::abilities {
+namespace utl {
 
 class Synchronizable {
 

@@ -68,8 +68,6 @@ class HDFFile;
 class FloppyDrive;
 class HardDrive;
 
-using namespace utl::abilities;
-
 class FileSystem : public Loggable {
 
     friend struct FSBlock;

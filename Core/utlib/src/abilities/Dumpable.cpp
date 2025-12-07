@@ -11,7 +11,7 @@
 #include "utl/support/Strings.h"
 #include "utl/hints.h"
 
-namespace utl::abilities {
+namespace utl {
 
 using namespace utl::support;
 

@@ -15,7 +15,7 @@
 
 namespace utl::wrappers {
 
-template <typename T> class Backed : utl::abilities::Synchronizable {
+template <typename T> class Backed : utl::Synchronizable {
 
 public:
 

@@ -12,7 +12,7 @@
 #include "utl/chrono.h"
 #include <condition_variable>
 
-namespace utl::abilities {
+namespace utl {
 
 class Wakeable
 {

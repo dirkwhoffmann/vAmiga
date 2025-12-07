@@ -13,5 +13,3 @@
 #include "abilities/Wakeable.h"
 
 namespace utl { using namespace concurrency; }
-namespace utl { using abilities::Synchronizable; }
-namespace utl { using abilities::Wakeable; }

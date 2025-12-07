@@ -9,7 +9,7 @@
 
 #include "utl/abilities/Wakeable.h"
 
-namespace utl::abilities {
+namespace utl {
 
 void
 Wakeable::waitForWakeUp(utl::Time timeout)

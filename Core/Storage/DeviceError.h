@@ -14,8 +14,6 @@
 
 namespace vamiga {
 
-using namespace utl::abilities;
-
 namespace fault {
 
 enum : long

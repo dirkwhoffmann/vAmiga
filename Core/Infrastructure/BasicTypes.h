@@ -20,8 +20,8 @@
 
 namespace vamiga {
 
+using namespace utl;
 using namespace utl::types;
-using utl::abilities::Reflectable;
 
 /*
 // Signed integers

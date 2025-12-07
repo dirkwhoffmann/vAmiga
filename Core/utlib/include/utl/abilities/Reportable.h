@@ -11,7 +11,7 @@
 
 #include "utl/types.h"
 
-namespace utl::abilities {
+namespace utl {
 
 struct ReportItem {
 

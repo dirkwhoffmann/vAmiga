@@ -10,7 +10,7 @@
 #include "utl/abilities/Hashable.h"
 #include "utl/hints.h"
 
-namespace utl::abilities {
+namespace utl {
 
 u32 NO_SANITIZE("unsigned-integer-overflow")
 Hashable::fnvIt32(u32 prv, u32 val)

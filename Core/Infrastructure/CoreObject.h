@@ -16,8 +16,6 @@
 
 namespace vamiga {
 
-using namespace utl::abilities;
-
 class CoreObject : public Loggable, Reportable {
 
     //

@@ -10,9 +10,10 @@
 #pragma once
 
 #include "utl/abilities/Reflectable.h"
-using namespace utl::abilities;
 
 namespace vamiga {
+
+using namespace utl;
 
 //
 // Constants

@@ -38,7 +38,7 @@
  * the prefix.
  */
 
-namespace utl::abilities {
+namespace utl {
 
 template <class T, typename E> struct Reflectable {
 

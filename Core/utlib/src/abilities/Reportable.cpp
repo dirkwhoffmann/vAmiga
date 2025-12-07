@@ -9,7 +9,7 @@
 
 #include "utl/abilities/Reportable.h"
 
-namespace utl::abilities {
+namespace utl {
 
 void
 Reportable::report(std::ostream &os, isize category) const

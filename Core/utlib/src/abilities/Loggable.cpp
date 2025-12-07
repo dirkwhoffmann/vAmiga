@@ -9,7 +9,7 @@
 
 #include "utl/abilities/Loggable.h"
 
-namespace utl::abilities {
+namespace utl {
 
 long
 Loggable::verbosity = 3;

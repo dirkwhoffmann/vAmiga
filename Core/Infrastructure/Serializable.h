@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-using utl::abilities::Hashable;
+using utl::Hashable;
 
 struct SerializableStruct {
 

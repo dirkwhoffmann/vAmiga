@@ -15,7 +15,7 @@
 
 namespace utl::wrappers {
 
-template <typename T> class Cached : utl::abilities::Synchronizable {
+template <typename T> class Cached : utl::Synchronizable {
 
 public:
 

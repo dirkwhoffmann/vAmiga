@@ -20,7 +20,6 @@
 namespace vamiga {
 
 using utl::Buffer;
-using namespace utl::abilities;
 
 class AnyFile : public Dumpable, public Loggable {
 

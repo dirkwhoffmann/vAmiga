@@ -28,7 +28,6 @@ typedef unsigned long      usize;
 }
 
 // Make types visible in subspaces
-namespace utl::abilities   { using namespace utl::types; }
 namespace utl::animation   { using namespace utl::types; }
 namespace utl::chrono      { using namespace utl::types; }
 namespace utl::concurrency { using namespace utl::types; }

@@ -17,8 +17,6 @@
 
 namespace utl::io {
 
-using utl::abilities::Reflectable;
-
 struct ParseError : public std::exception {
 
     string token;

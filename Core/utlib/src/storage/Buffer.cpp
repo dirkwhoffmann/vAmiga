@@ -18,7 +18,6 @@
 namespace utl {
 
 using namespace utl::support;
-using namespace utl::abilities;
 
 namespace storage {
 

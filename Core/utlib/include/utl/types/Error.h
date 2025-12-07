@@ -13,8 +13,6 @@
 #include "utl/abilities/Reflectable.h"
 #include <system_error>
 
-using namespace utl::abilities;
-
 namespace utl {
 
 namespace fault::io {

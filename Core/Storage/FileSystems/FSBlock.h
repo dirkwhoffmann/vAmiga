@@ -21,7 +21,7 @@
 namespace vamiga {
 
 using utl::Buffer;
-using utl::abilities::DumpOpt;
+using utl::DumpOpt;
 
 struct FSBlock : Loggable {
 

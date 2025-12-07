@@ -12,7 +12,7 @@
 #include "utl/types.h"
 #include <functional>
 
-namespace utl::abilities {
+namespace utl {
 
 struct DumpOpt
 {

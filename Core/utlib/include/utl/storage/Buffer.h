@@ -18,8 +18,6 @@
 
 namespace utl::storage {
 
-using namespace utl::abilities;
-
 template <class T> struct Allocator : public Hashable, public Dumpable {
 
     static constexpr isize maxCapacity = 512 * 1024 * 1024;
