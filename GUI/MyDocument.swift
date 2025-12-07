@@ -233,17 +233,10 @@ class MyDocument: NSDocument {
     //
     
     func processSnapshotFile(url: URL) throws {
-        
-        let file = try MediaManager.createFileProxy(from: url, type: .SNAPSHOT)
-        try processSnapshotFile(file: file)
+
+        try emu?.amiga.loadSnapshot(url: url)
     }
-    
-    func processSnapshotFile(file: MediaFileProxy) throws {
-        
-        try emu?.amiga.loadSnapshot(file)
-        appendSnapshot(file: file)
-    }
-    
+
     @discardableResult
     func appendSnapshot(file: MediaFileProxy) -> Bool {
         
@@ -263,16 +256,10 @@ class MyDocument: NSDocument {
     //
     
     func processScriptFile(url: URL, force: Bool = false) throws {
-        
-        let file = try MediaManager.createFileProxy(from: url, type: .SCRIPT)
-        try processScriptFile(file: file, force: force)
-    }
-    
-    func processScriptFile(file: MediaFileProxy, force: Bool = false) throws {
-        
-        console.runScript(script: file)
-    }
-    
+
+        console.runScript(url: url)
+     }
+
     //
     // Exporting disks
     //

@@ -56,6 +56,16 @@ using namespace vamiga;
 //
 
 typedef struct {
+
+    struct {
+        NSInteger CANT_READ;
+        NSInteger CANT_WRITE;
+        NSInteger CANT_CREATE;
+    } IO;
+
+} VAmigaFaults;
+
+typedef struct {
     
     struct {
         
@@ -121,6 +131,7 @@ typedef struct {
     
 } VAmigaConstants;
 
+extern const VAmigaFaults FAULT;
 extern const VAmigaConstants VAMIGA;
 
 NSString *EventSlotName(EventSlot slot);
@@ -847,7 +858,8 @@ NSString *EventSlotName(EventSlot slot);
 - (void)pressKey:(char)c;
 - (void)pressSpecialKey:(RSKey)key;
 - (void)pressSpecialKey:(RSKey)key shift:(BOOL)shift;
-- (void)executeScript:(MediaFileProxy *)file;
+// - (void)executeScript:(MediaFileProxy *)file;
+- (void)executeScript:(NSURL *)url;
 - (void)executeString:(NSString *)string;
 
 @end

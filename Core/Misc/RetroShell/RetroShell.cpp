@@ -11,6 +11,7 @@
 #include "RetroShell.h"
 #include "Emulator.h"
 #include "MediaFile.h"
+#include "utl/io.h"
 #include <istream>
 #include <sstream>
 #include <string>
@@ -88,6 +89,14 @@ RetroShell::asyncExec(const InputLine &command, bool append)
     
     // Process the command queue in the next update cycle
     emulator.put(Command(Cmd::RSH_EXECUTE));
+}
+
+void
+RetroShell::asyncExecScript(const fs::path &path)
+{
+    auto stream = std::ifstream(path);
+    if (!stream.is_open()) throw AppError(Fault::FILE_NOT_FOUND, path);
+    asyncExecScript(stream);
 }
 
 void

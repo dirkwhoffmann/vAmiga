@@ -666,13 +666,15 @@ extension Configuration {
             
             // Kickstart
             url = UserDefaults.romUrl
-            if url == nil { throw AppError(.FILE_CANT_WRITE) }
+            // if url == nil { throw AppError(.FILE_CANT_WRITE) }
+            if url == nil { throw AppError("Failed to save Kickstart ROM to app support folder") }
             try? fm.removeItem(at: url!)
             if emu.mem.info.hasRom { try emu.mem.saveRom(url!) }
             
             // Kickstart extension
             url = UserDefaults.extUrl
-            if url == nil { throw AppError(.FILE_CANT_WRITE) }
+            // if url == nil { throw AppError(.FILE_CANT_WRITE) }
+            if url == nil { throw AppError("Failed to save Extension ROM to app support folder") }
             try? fm.removeItem(at: url!)
             if emu.mem.info.hasExt { try emu.mem.saveExt(url!) }
             

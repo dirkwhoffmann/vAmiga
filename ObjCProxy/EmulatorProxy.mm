@@ -19,6 +19,13 @@ namespace utl { using namespace support; }
 using namespace vamiga;
 using namespace vamiga::moira;
 
+const VAmigaFaults FAULT = {
+
+    .IO.CANT_READ   = utl::fault::IO_CANT_READ,
+    .IO.CANT_WRITE  = utl::fault::IO_CANT_WRITE,
+    .IO.CANT_CREATE = utl::fault::IO_CANT_CREATE
+};
+
 const VAmigaConstants VAMIGA = {
     
     .PAL.FREQUENCY.CLK = PAL::CLK_FREQUENCY,
@@ -1652,10 +1659,17 @@ NSString *EventSlotName(EventSlot slot)
     [self shell]->press(key, shift);
 }
 
+- (void)executeScript:(NSURL *)url
+{
+    [self shell]->execScript(fs::path(url.fileSystemRepresentation));
+}
+
+/*
 - (void)executeScript:(MediaFileProxy *)file
 {
     [self shell]->execScript(*(MediaFile *)file->obj);
 }
+*/
 
 - (void)executeString:(NSString *)str
 {

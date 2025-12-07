@@ -21,6 +21,8 @@ namespace fault {
 
 enum : long
 {
+//     IO_FILE_NOT_FOUND,
+
     IO_CANT_READ,
     IO_CANT_WRITE,
     IO_CANT_CREATE

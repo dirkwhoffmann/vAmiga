@@ -264,7 +264,8 @@ class MediaManager {
     //
     // Creating media files from URLs
     //
-    
+
+    /*
     static func createFileProxy(from url: URL, type: FileType) throws -> MediaFileProxy {
         
         return try createFileProxy(from: url, allowedTypes: [type])
@@ -288,7 +289,8 @@ class MediaManager {
         throw AppError(.FILE_TYPE_MISMATCH,
                        "The type of this file is not known to the emulator.")
     }
-    
+    */
+
     //
     // Mouting media files
     //
@@ -303,8 +305,9 @@ class MediaManager {
         let type = MediaFileProxy.type(of: url)
         if !types.contains(type) {
             
-            throw AppError(.FILE_TYPE_MISMATCH,
-                           "The type of this file is not known to the emulator.")
+            //throw AppError(.FILE_TYPE_MISMATCH,
+            //               "The type of this file is not known to the emulator.")
+            throw AppError("The type of this file is not known to the emulator.")
         }
         
         switch type {

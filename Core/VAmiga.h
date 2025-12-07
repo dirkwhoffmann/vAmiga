@@ -1548,6 +1548,7 @@ public:
      *  MSG\_SCRIPT\_DONE is sent. If shell execution has been aborted due
      *  to an error, MSG\_SCRIPT\_ABORT is sent.
      */
+    void execScript(const fs::path &path);
     void execScript(std::stringstream &ss);
     void execScript(const std::ifstream &fs);
     void execScript(const string &contents);

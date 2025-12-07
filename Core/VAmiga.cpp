@@ -1752,6 +1752,13 @@ RetroShellAPI::press(const string &s)
 }
 
 void
+RetroShellAPI::execScript(const fs::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->asyncExecScript(path);
+}
+
+void
 RetroShellAPI::execScript(std::stringstream &ss)
 {
     VAMIGA_PUBLIC_SUSPEND
