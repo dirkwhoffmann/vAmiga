@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "utl/types/UtlError.h"
+#include "utl/types/Error.h"
 #include "utl/abilities/Reflectable.h"
 #include <system_error>
 
@@ -24,32 +24,6 @@ enum : long
     IO_CANT_READ,
     IO_CANT_WRITE,
     IO_CANT_CREATE
-
-    /*
-    // File/path issues
-    IO_ENOENT          = long(std::errc::no_such_file_or_directory),
-    IO_EEXIST          = long(std::errc::file_exists),
-    IO_ENOTDIR         = long(std::errc::not_a_directory),
-    IO_EISDIR          = long(std::errc::is_a_directory),
-
-    // Permissions
-    IO_EACCES          = long(std::errc::permission_denied),
-    IO_EPERM           = long(std::errc::operation_not_permitted),
-
-    // Disk / I/O errors
-    IO_ENOSPC          = long(std::errc::no_space_on_device),
-    IO_EFBIG           = long(std::errc::file_too_large),
-    IO_EIO             = long(std::errc::io_error),
-
-    // Seeking
-    IO_ESPIPE          = long(std::errc::invalid_seek),
-
-    // Resource issues
-    IO_EAGAIN          = long(std::errc::resource_unavailable_try_again),
-
-    // Encoding
-    IO_EILSEQ          = long(std::errc::illegal_byte_sequence)
-    */
 };
 
 struct IOFaultEnum : Reflectable<IOFaultEnum, long>
@@ -64,45 +38,13 @@ struct IOFaultEnum : Reflectable<IOFaultEnum, long>
             case IO_CANT_READ:     return "IO_CANT_READ";
             case IO_CANT_WRITE:    return "IO_CANT_WRITE";
             case IO_CANT_CREATE:   return "IO_CANT_CREATE";
-
-                /*
-                // File/path issues
-            case IO_ENOENT:          return "IO_ENOENT";
-            case IO_EEXIST:          return "IO_EEXIST";
-            case IO_ENOTDIR:         return "IO_ENOTDIR";
-            case IO_EISDIR:          return "IO_EISDIR";
-
-                // Permissions
-            case IO_EACCES:          return "IO_EACCES";
-            case IO_EPERM:           return "IO_EPERM";
-
-                // Disk / I/O errors
-            case IO_ENOSPC:          return "IO_ENOSPC";
-            case IO_EFBIG:           return "IO_EFBIG";
-            case IO_EIO:             return "IO_EIO";
-
-                // Seeking
-            case IO_ESPIPE:          return "IO_ESPIPE";
-
-                // Resource issues
-            case IO_EAGAIN:          return "IO_EAGAIN";
-
-                // Encoding
-            case IO_EILSEQ:          return "IO_EILSEQ";
-                 */
         }
         return "???";
-    }
-
-    static const char *help(long value) {
-
-        return "";
     }
 };
 
 enum : long
 {
-    PARSE_UNKNOWN,
     PARSE_BOOL_ERROR,
     PARSE_ON_OFF_ERROR,
     PARSE_NUM_ERROR,
@@ -118,7 +60,6 @@ struct ParseFaultEnum : Reflectable<ParseFaultEnum, long>
     {
         switch (value) {
 
-            case PARSE_UNKNOWN:       return "PARSE_UNKNOWN";
             case PARSE_BOOL_ERROR:    return "PARSE_BOOL_ERROR";
             case PARSE_ON_OFF_ERROR:  return "PARSE_ON_OFF_ERROR";
             case PARSE_NUM_ERROR:     return "PARSE_NUM_ERROR";

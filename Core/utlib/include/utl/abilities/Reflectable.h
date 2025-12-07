@@ -135,8 +135,6 @@ template <class T, typename E> struct Reflectable {
         }
 
         return {};
-        // throw ParseError(fault::PARSE_ENUM_ERROR, keyList());
-        // throw utl::Exception(keyList(), "Parse error");
     }
 
     // Convenience wrapper

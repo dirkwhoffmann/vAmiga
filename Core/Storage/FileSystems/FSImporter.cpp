@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FileSystem.h"
-#include "utl/types/UtlError.h"
+#include "utl/types/Error.h"
 #include <fstream>
 
 namespace vamiga {

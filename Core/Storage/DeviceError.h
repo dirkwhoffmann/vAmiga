@@ -9,8 +9,8 @@
 
 #pragma once
 
+#include "utl/types/Error.h"
 #include "utl/abilities/Reflectable.h"
-#include "utl/types/UtlError.h"
 
 namespace vamiga {
 

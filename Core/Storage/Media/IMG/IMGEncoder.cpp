@@ -10,7 +10,7 @@
 #include "config.h"
 #include "IMGEncoder.h"
 #include "IMGFactory.h"
-#include "Error.h"
+#include "AppError.h"  // TODO: REMOVE DEPENDENCY
 
 namespace vamiga {
 

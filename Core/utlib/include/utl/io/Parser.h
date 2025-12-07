@@ -10,8 +10,8 @@
 #pragma once
 
 #include "utl/types.h"
+#include "utl/types/Error.h"
 #include "utl/abilities/Reflectable.h"
-#include "utl/types/UtlError.h"
 
 #include <functional>
 

@@ -9,7 +9,7 @@
 
 #include "FSTree.h"
 #include "FileSystem.h"
-#include "utl/types/UtlError.h"
+#include "utl/types/Error.h"
 #include <algorithm>
 #include <fstream>
 

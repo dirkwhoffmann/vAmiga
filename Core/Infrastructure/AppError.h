@@ -10,7 +10,7 @@
 #pragma once
 
 #include "BasicTypes.h"
-#include "ErrorTypes.h"
+#include "AppErrorTypes.h"
 
 namespace vamiga {
 

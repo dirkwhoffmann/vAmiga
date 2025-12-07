@@ -13,7 +13,7 @@
 #include "ADFFactory.h"
 #include "IMGFactory.h"
 #include "STFactory.h"
-#include "Error.h"
+#include "AppError.h"
 
 namespace vamiga {
 

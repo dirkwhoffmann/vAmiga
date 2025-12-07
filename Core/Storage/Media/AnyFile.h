@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MediaFileTypes.h"
-#include "Error.h"
+#include "AppError.h" // TODO: REMOVE DEPENDENCY
 #include "utl/abilities/Dumpable.h"
 #include "utl/abilities/Loggable.h"
 #include "utl/storage.h"

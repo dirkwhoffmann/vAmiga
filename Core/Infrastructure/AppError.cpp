@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Error.h"
+#include "AppError.h"
 #include "Constants.h"
 #include "Macros.h"
 #include "DeviceTypes.h"

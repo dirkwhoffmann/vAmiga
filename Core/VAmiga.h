@@ -10,7 +10,7 @@
 #pragma once
 
 #include "VAmigaTypes.h"
-#include "Error.h"
+#include "AppError.h"
 #include "MediaFile.h"
 
 namespace vamiga {

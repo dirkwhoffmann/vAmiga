@@ -10,7 +10,7 @@
 #include "config.h"
 #include "ADZEncoder.h"
 #include "ADFEncoder.h"
-#include "Error.h"
+#include "AppError.h" // TODO: REMOVE DEPENDENCY
 
 namespace vamiga {
 

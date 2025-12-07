@@ -11,7 +11,7 @@
 #include "EADFEncoder.h"
 #include "EADFFactory.h"
 #include "ADFFactory.h"
-#include "Error.h"
+#include "AppError.h"  // TODO: REMOVE DEPENDENCY
 
 namespace vamiga {
 

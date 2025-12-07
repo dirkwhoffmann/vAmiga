@@ -16,7 +16,7 @@
 #include "Infrastructure/CmdQueueTypes.h"
 #include "Infrastructure/CoreObjectTypes.h"
 #include "Infrastructure/CoreComponentTypes.h"
-#include "Infrastructure/ErrorTypes.h"
+#include "Infrastructure/AppErrorTypes.h"
 #include "Infrastructure/GuardListTypes.h"
 #include "Infrastructure/MsgQueueTypes.h"
 
