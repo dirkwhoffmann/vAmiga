@@ -77,22 +77,6 @@ SerialPort::setOption(Opt option, i64 value)
     }
 }
 
-void
-SerialPort::cacheInfo(SerialPortInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.port = port;
-        info.txd = getTXD();
-        info.rxd = getRXD();
-        info.rts = getRTS();
-        info.cts = getCTS();
-        info.dsr = getDSR();
-        info.cd = getCD();
-        info.dtr = getDTR();
-    }
-}
-
 SerialPortInfo
 SerialPort::cacheInfo() const
 {

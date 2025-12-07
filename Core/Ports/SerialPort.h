@@ -24,7 +24,7 @@ namespace vamiga {
 #define DTR_MASK (1 << 20)
 #define RI_MASK  (1 << 22)
 
-class SerialPort final : public SubComponent, public Inspectable<SerialPortInfo> {
+class SerialPort final : public SubComponent {
 
     friend class UART;
 
@@ -131,7 +131,6 @@ public:
 
 public:
 
-    void cacheInfo(SerialPortInfo &info) const override;
     SerialPortInfo cacheInfo() const;
 
     

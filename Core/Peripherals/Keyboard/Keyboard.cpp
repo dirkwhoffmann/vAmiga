@@ -16,15 +16,10 @@ namespace utl { using namespace support; }
 
 namespace vamiga {
 
-void
-Keyboard::cacheInfo(KeyboardInfo &result) const
+Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
 {
-    {   SYNCHRONIZED
-        
-        result.state = state;
-        result.shiftReg = shiftReg;
-    }
-}
+    info.bind([this] { return cacheInfo(); } );
+};
 
 KeyboardInfo
 Keyboard::cacheInfo() const

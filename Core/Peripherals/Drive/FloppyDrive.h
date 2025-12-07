@@ -21,7 +21,9 @@
 
 namespace vamiga {
 
-class FloppyDrive final : public Drive, public Inspectable<FloppyDriveInfo> {
+class FloppyDrive final : public Drive {
+
+    friend class DiskController;
 
     Descriptions descriptions = {
         {
@@ -64,7 +66,12 @@ class FloppyDrive final : public Drive, public Inspectable<FloppyDriveInfo> {
         Opt::DRIVE_EJECT_VOLUME
     };
 
-    friend class DiskController;
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<FloppyDriveInfo> info;
+
+private:
 
     // Current configuration
     FloppyDriveConfig config = {};
@@ -130,7 +137,7 @@ private:
 
 public:
 
-    using Drive::Drive;
+    FloppyDrive(Amiga& ref, isize nr);
 
     FloppyDrive& operator= (const FloppyDrive& other);
 
@@ -246,7 +253,6 @@ public:
 public:
     
     // Returns the result of the latest inspection
-    void cacheInfo(FloppyDriveInfo &info) const override;
     FloppyDriveInfo cacheInfo() const;
 
     // Returns the identification pattern of this drive

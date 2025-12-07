@@ -24,7 +24,7 @@ std::fstream HardDrive::wtStream[4];
 
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
-
+    info.bind([this] { return cacheInfo(); } );
 }
 
 HardDrive::~HardDrive()
@@ -383,34 +383,6 @@ HardDrive::isBootable()
     
     debug(HDR_DEBUG, "Unbootable drive\n");
     return false;
-}
-
-void
-HardDrive::cacheInfo(HardDriveInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.nr = objid;
-        
-        info.isConnected = isConnected();
-        info.isCompatible = isCompatible();
-
-        info.hasDisk = hasDisk();
-        info.hasModifiedDisk = hasModifiedDisk();
-        info.hasUnmodifiedDisk = hasUnmodifiedDisk();
-        info.hasProtectedDisk = hasProtectedDisk();
-        info.hasUnprotectedDisk = hasUnprotectedDisk();
-
-        info.partitions = numPartitions();
-
-        // Flags
-        info.writeProtected = getFlag(DiskFlags::PROTECTED);
-        info.modified = getFlag(DiskFlags::MODIFIED);
-
-        // State
-        info.state = state;
-        info.head = head;
-    }
 }
 
 HardDriveInfo

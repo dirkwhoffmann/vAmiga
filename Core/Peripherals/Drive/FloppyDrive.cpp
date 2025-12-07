@@ -21,7 +21,12 @@
 
 namespace vamiga {
 
-FloppyDrive& 
+FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
+{
+    info.bind([this] { return cacheInfo(); } );
+}
+
+FloppyDrive&
 FloppyDrive::operator= (const FloppyDrive& other) {
 
     auto clone = [&](std::unique_ptr<FloppyDisk> &disk, const std::unique_ptr<FloppyDisk> &other) {
@@ -223,24 +228,6 @@ FloppyDrive::density() const
             
         default:
             fatalError;
-    }
-}
-
-void
-FloppyDrive::cacheInfo(FloppyDriveInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.nr = objid;
-        info.head = head;
-        info.isConnected = isConnected();
-        info.hasDisk = hasDisk();
-        info.hasModifiedDisk = hasModifiedDisk();
-        info.hasUnmodifiedDisk = hasUnmodifiedDisk();
-        info.hasProtectedDisk = hasProtectedDisk();
-        info.hasUnprotectedDisk = hasUnprotectedDisk();
-        info.motor = getMotor();
-        info.writing = isWriting();
     }
 }
 

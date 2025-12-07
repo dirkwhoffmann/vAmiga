@@ -818,7 +818,7 @@ Agnus::serviceINSEvent()
         controlPort2.info.record();
     }
     if (mask & 1LL << long(Class::SerialPort)) {
-        serialPort.record();
+        serialPort.info.record();
     }
 
     // Reschedule the event

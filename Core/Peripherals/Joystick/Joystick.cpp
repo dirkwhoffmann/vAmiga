@@ -19,19 +19,8 @@ namespace vamiga {
 
 Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid), port(pref)
 {
-
+    info.bind([this] { return cacheInfo(); } );
 };
-
-void
-Joystick::cacheInfo(JoystickInfo &result) const
-{
-    {   SYNCHRONIZED
-
-        result.button = button;
-        result.axisX = axisX;
-        result.axisY = axisY;
-    }
-}
 
 JoystickInfo
 Joystick::cacheInfo() const

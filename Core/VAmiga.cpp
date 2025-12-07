@@ -981,14 +981,14 @@ const SerialPortInfo &
 SerialPortAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return serialPort->getInfo();
+    return serialPort->info.current();
 }
 
 const SerialPortInfo &
 SerialPortAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return serialPort->getCachedInfo();
+    return serialPort->info.cached();
 }
 
 int
@@ -1071,14 +1071,14 @@ const KeyboardInfo &
 KeyboardAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return keyboard->getInfo();
+    return keyboard->info.current();
 }
 
 const KeyboardInfo &
 KeyboardAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return keyboard->getCachedInfo();
+    return keyboard->info.cached();
 }
 
 bool
@@ -1149,14 +1149,14 @@ const FloppyDriveInfo &
 FloppyDriveAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return drive->getInfo();
+    return drive->info.current();
 }
 
 const FloppyDriveInfo &
 FloppyDriveAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return drive->getCachedInfo();
+    return drive->info.cached();
 }
 
 FloppyDisk &
@@ -1257,14 +1257,14 @@ const HardDriveInfo &
 HardDriveAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return drive->getInfo();
+    return drive->info.current();
 }
 
 const HardDriveInfo &
 HardDriveAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return drive->getCachedInfo();
+    return drive->info.cached();
 }
 
 const HardDriveTraits &
@@ -1401,14 +1401,14 @@ const JoystickInfo &
 JoystickAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return joystick->getInfo();
+    return joystick->info.current();
 }
 
 const JoystickInfo &
 JoystickAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return joystick->getCachedInfo();
+    return joystick->info.cached();
 }
 
 void 

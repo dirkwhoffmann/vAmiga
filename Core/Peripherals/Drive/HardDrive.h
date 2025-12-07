@@ -19,8 +19,12 @@
 
 namespace vamiga {
 
-class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
-    
+class HardDrive final : public Drive {
+
+    friend class HDFFile;
+    friend class HDFFactory;
+    friend class HdController;
+
     Descriptions descriptions = {
         {
             .type           = Class::HardDrive,
@@ -54,10 +58,13 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
         Opt::HDR_PAN,
         Opt::HDR_STEP_VOLUME
     };
-    
-    friend class HDFFile;
-    friend class HDFFactory;
-    friend class HdController;
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<HardDriveInfo> info;
+
+private:
 
     // Write-through storage files
     static std::fstream wtStream[4];
@@ -300,7 +307,6 @@ private:
 public:
 
     // Returns information about the disk
-    void cacheInfo(HardDriveInfo &info) const override;
     HardDriveInfo cacheInfo() const;
 
     // Returns information about a specific partition

@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-class Joystick final : public SubComponent, public Inspectable<JoystickInfo> {
+class Joystick final : public SubComponent {
 
     Descriptions descriptions = {
         {
@@ -39,6 +39,13 @@ class Joystick final : public SubComponent, public Inspectable<JoystickInfo> {
         Opt::JOY_AUTOFIRE_BULLETS,
         Opt::JOY_AUTOFIRE_DELAY
     };
+
+public:
+
+    // Result of the latest inspection
+    utl::Memorized<JoystickInfo> info;
+
+private:
 
     // Reference to control port this device belongs to
     ControlPort &port;
@@ -146,7 +153,6 @@ private:
 
 private:
 
-    void cacheInfo(JoystickInfo &result) const override;
     JoystickInfo cacheInfo() const;
 
 
