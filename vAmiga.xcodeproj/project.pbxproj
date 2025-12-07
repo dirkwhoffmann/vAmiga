@@ -431,8 +431,6 @@
 		50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
 		50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
 		50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
-		50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */; };
-		50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */; };
 		50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */; };
 		50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
@@ -1263,8 +1261,6 @@
 		50EFB0BC2C1812E20013B73C /* Option.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Option.cpp; sourceTree = "<group>"; };
 		50EFB0BD2C1812E20013B73C /* Option.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Option.h; sourceTree = "<group>"; };
 		50EFB0C02C1812F50013B73C /* OptionTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionTypes.h; sourceTree = "<group>"; };
-		50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Inspectable.cpp; sourceTree = "<group>"; };
-		50EFB0CB2C18D95B0013B73C /* Inspectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Inspectable.h; sourceTree = "<group>"; };
 		50EFB0CE2C18E01E0013B73C /* Wakeable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Wakeable.cpp; sourceTree = "<group>"; };
 		50EFB0CF2C18E01E0013B73C /* Wakeable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wakeable.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serializable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serializable.h; sourceTree = "<group>"; };
@@ -1411,8 +1407,6 @@
 				50EFB0BC2C1812E20013B73C /* Option.cpp */,
 				50EFC7DF22E840870036A3DF /* Serializable.h */,
 				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
-				50EFB0CB2C18D95B0013B73C /* Inspectable.h */,
-				50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */,
 				50EFB0B92C1811C90013B73C /* Configurable.h */,
 				50EFB0B82C1811C90013B73C /* Configurable.cpp */,
 				5062F1942D550730004546A2 /* CoreObjectTypes.h */,
@@ -3230,7 +3224,6 @@
 				509E761B2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
-				50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */,
 				50144E3D2E7BEA8D009E15B4 /* SidebarViewController.swift in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
@@ -3403,7 +3396,6 @@
 				50FC04A627DA198100C3E566 /* CopperEvents.cpp in Sources */,
 				50DA83E62C161961001209AA /* VAmiga.cpp in Sources */,
 				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
-				50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */,
 				503FC4DC2EE157B700637C95 /* Hashable.cpp in Sources */,
 				507C01BB2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,

@@ -114,14 +114,14 @@ const LogicAnalyzerInfo &
 LogicAnalyzerAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return logicAnalyzer->getInfo();
+    return logicAnalyzer->info.current();
 }
 
 const LogicAnalyzerInfo &
 LogicAnalyzerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return logicAnalyzer->getCachedInfo();
+    return logicAnalyzer->info.cached();
 }
 
 const DmaDebuggerConfig &

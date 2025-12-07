@@ -13,6 +13,11 @@
 
 namespace vamiga {
 
+LogicAnalyzer::LogicAnalyzer(Amiga& ref) : SubComponent(ref)
+{
+    info.bind([this] { return cacheInfo(); } );
+};
+
 void
 LogicAnalyzer::_pause()
 {
@@ -31,21 +36,6 @@ LogicAnalyzer::_dump(Category category, std::ostream &os) const
     if (category == Category::Config) {
         
         dumpConfig(os);
-    }
-}
-
-void
-LogicAnalyzer::cacheInfo(LogicAnalyzerInfo &info) const
-{
-    {   SYNCHRONIZED
-        
-        info.busOwner = agnus.busOwner;
-        info.addrBus = agnus.busAddr;
-        info.dataBus = agnus.busData;
-        
-        for (isize i = 0; i < 4; i++) {
-            info.channel[i] = record[i];
-        }
     }
 }
 

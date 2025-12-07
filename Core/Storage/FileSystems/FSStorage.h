@@ -12,7 +12,7 @@
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSExtension.h"
-#include "Inspectable.h"
+#include <iostream>
 #include <ranges>
 
 namespace vamiga {
