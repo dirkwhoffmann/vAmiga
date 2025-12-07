@@ -10,7 +10,7 @@
 #include "config.h"
 #include "ADFEncoder.h"
 #include "ADFFactory.h"
-#include "AppError.h" // TODO: REMOVE DEPENCENCY
+#include "DeviceError.h"
 
 namespace vamiga {
 
@@ -18,10 +18,10 @@ void
 ADFEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
 {
     if (disk.getDiameter() != adf.getDiameter()) {
-        throw AppError(Fault::DISK_INVALID_DIAMETER);
+        throw DeviceError(fault::DSK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != adf.getDensity()) {
-        throw AppError(Fault::DISK_INVALID_DENSITY);
+        throw DeviceError(fault::DSK_INVALID_DENSITY);
     }
 
     isize tracks = adf.numTracks();
@@ -146,10 +146,10 @@ ADFEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
     if (ADF_DEBUG) fprintf(stderr, "Decoding Amiga disk with %ld tracks\n", tracks);
 
     if (disk.getDiameter() != adf.getDiameter()) {
-        throw AppError(Fault::DISK_INVALID_DIAMETER);
+        throw DeviceError(fault::DSK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != adf.getDensity()) {
-        throw AppError(Fault::DISK_INVALID_DENSITY);
+        throw DeviceError(fault::DSK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -193,7 +193,7 @@ ADFEncoder::decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t)
     if (nr != sectors) {
 
         warn("Found %ld sectors, expected %ld. Aborting.\n", nr, sectors);
-        throw AppError(Fault::DISK_WRONG_SECTOR_COUNT);
+        throw DeviceError(fault::DSK_WRONG_SECTOR_COUNT);
     }
 
     // Decode all sectors
@@ -216,7 +216,7 @@ ADFEncoder::decodeSector(ADFFile &adf, u8 *dst, const u8 *src)
     u8 sector = info[2];
     if (sector >= adf.numSectors()) {
         warn("Invalid sector number %d. Aborting.\n", sector);
-        throw AppError(Fault::DISK_INVALID_SECTOR_NUMBER);
+        throw DeviceError(fault::DSK_INVALID_SECTOR_NUMBER);
     }
 
     // Skip sector header
