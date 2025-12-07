@@ -21,9 +21,9 @@ using namespace vamiga::moira;
 
 const VAmigaFaults FAULT = {
 
-    .IO.CANT_READ   = utl::fault::IO_CANT_READ,
-    .IO.CANT_WRITE  = utl::fault::IO_CANT_WRITE,
-    .IO.CANT_CREATE = utl::fault::IO_CANT_CREATE
+    .IO.CANT_READ   = utl::fault::io::FILE_CANT_READ,
+    .IO.CANT_WRITE  = utl::fault::io::FILE_CANT_WRITE,
+    .IO.CANT_CREATE = utl::fault::io::FILE_CANT_CREATE
 };
 
 const VAmigaConstants VAMIGA = {

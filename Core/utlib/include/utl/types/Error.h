@@ -17,33 +17,55 @@ using namespace utl::abilities;
 
 namespace utl {
 
-namespace fault {
+namespace fault::io {
 
 enum : long
 {
-//     IO_FILE_NOT_FOUND,
-
-    IO_CANT_READ,
-    IO_CANT_WRITE,
-    IO_CANT_CREATE
+    DIR_NOT_FOUND,        ///< Directory does not exist
+    DIR_ACCESS_DENIED,    ///< File access denied
+    DIR_CANT_CREATE,      ///< Unable to create a directory
+    DIR_NOT_EMPTY,        ///< Directory is not empty
+    FILE_NOT_FOUND,       ///< File not found error
+    FILE_EXISTS,          ///< File already exists
+    FILE_IS_DIRECTORY,    ///< The file is a directory
+    FILE_ACCESS_DENIED,   ///< File access denied
+    FILE_TYPE_MISMATCH,   ///< File type mismatch
+    FILE_TYPE_UNSUPPORTED,///< Unsupported file type
+    FILE_CANT_READ,       ///< Can't read from file
+    FILE_CANT_WRITE,      ///< Can't write to file
+    FILE_CANT_CREATE,     ///< Can't create file
 };
 
 struct IOFaultEnum : Reflectable<IOFaultEnum, long>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(IO_CANT_CREATE);
+    static constexpr long maxVal = long(FILE_CANT_CREATE);
 
     static const char *_key(long value) {
 
         switch (value) {
 
-            case IO_CANT_READ:     return "IO_CANT_READ";
-            case IO_CANT_WRITE:    return "IO_CANT_WRITE";
-            case IO_CANT_CREATE:   return "IO_CANT_CREATE";
+            case DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
+            case DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
+            case DIR_CANT_CREATE:             return "DIR_CANT_CREATE";
+            case DIR_NOT_EMPTY:               return "DIR_NOT_EMPTY";
+            case FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
+            case FILE_EXISTS:                 return "FILE_EXISTS";
+            case FILE_IS_DIRECTORY:           return "FILE_IS_DIRECtORY";
+            case FILE_ACCESS_DENIED:          return "FILE_ACCESS_DENIED";
+            case FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
+            case FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";
+            case FILE_CANT_READ:              return "FILE_CANT_READ";
+            case FILE_CANT_WRITE:             return "FILE_CANT_WRITE";
+            case FILE_CANT_CREATE:            return "FILE_CANT_CREATE";
         }
         return "???";
     }
 };
+
+}
+
+namespace fault::parse {
 
 enum : long
 {

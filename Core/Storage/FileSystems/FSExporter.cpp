@@ -99,7 +99,7 @@ FSExporter::exportBlocks(Block first, Block last, const fs::path &path) const
     std::ofstream stream(path, std::ios::binary);
 
     if (!stream.is_open()) {
-        throw IOError(fault::IO_CANT_CREATE, path);
+        throw IOError(fault::io::FILE_CANT_CREATE, path);
     }
 
     for (Block i = first; i <= last; i++) {
@@ -109,7 +109,7 @@ FSExporter::exportBlocks(Block first, Block last, const fs::path &path) const
     }
 
     if (!stream) {
-        throw IOError(fault::IO_CANT_WRITE, path);
+        throw IOError(fault::io::FILE_CANT_WRITE, path);
     }
 }
 

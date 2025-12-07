@@ -65,7 +65,7 @@ FSImporter::import(FSBlock &top, const fs::path &path, bool recursive, bool cont
     // Get the directory item
     try { dir = fs::directory_entry(path); } catch (...) {
         // throw AppError(Fault::FILE_CANT_READ);
-        throw IOError(fault::IO_CANT_READ, path);
+        throw IOError(fault::io::FILE_CANT_READ, path);
     }
 
     if (dir.is_directory() && contents) {
@@ -134,14 +134,14 @@ FSImporter::importBlock(Block nr, const fs::path &path)
     std::ifstream stream(path, std::ios::binary);
 
     if (!stream.is_open()) {
-        throw IOError(fault::IO_CANT_READ, path);
+        throw IOError(fault::io::FILE_CANT_READ, path);
     }
 
     auto *data = fs.at(nr).data();
     stream.read((char *)data, traits.bsize);
 
     if (!stream) {
-        throw IOError(fault::IO_CANT_READ, path);
+        throw IOError(fault::io::FILE_CANT_READ, path);
     }
 }
 

@@ -246,13 +246,13 @@ FSTree::saveFile(const fs::path &path, const FSOpt &opt) const
     // Open file
     std::ofstream stream(path, std::ios::binary);
     if (!stream.is_open()) {
-        throw IOError(fault::IO_CANT_CREATE, path);
+        throw IOError(fault::io::FILE_CANT_CREATE, path);
     }
 
     // Write data
     stream.write((const char *)buffer.ptr, buffer.size);
     if (!stream) {
-        throw IOError(fault::IO_CANT_WRITE, path);
+        throw IOError(fault::io::FILE_CANT_WRITE, path);
     }
 }
 
