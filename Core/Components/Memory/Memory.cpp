@@ -22,6 +22,7 @@
 #include "ZorroManager.h"
 #include "RomDatabase.h"
 #include "MediaFile.h"
+#include "MediaError.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -387,12 +388,12 @@ Memory::operator << (SerReader &worker)
     << fastSize;
 
     // Check the integrity of the new values before allocating memory
-    if (romSize > KB(512)) throw CoreError(CoreError::SNAP_CORRUPTED);
-    if (womSize > KB(256)) throw CoreError(CoreError::SNAP_CORRUPTED);
-    if (extSize > KB(512)) throw CoreError(CoreError::SNAP_CORRUPTED);
-    if (chipSize > MB(2)) throw CoreError(CoreError::SNAP_CORRUPTED);
-    if (slowSize > KB(1792)) throw CoreError(CoreError::SNAP_CORRUPTED);
-    if (fastSize > MB(8)) throw CoreError(CoreError::SNAP_CORRUPTED);
+    if (romSize > KB(512)) throw MediaError(MediaError::SNAP_CORRUPTED);
+    if (womSize > KB(256)) throw MediaError(MediaError::SNAP_CORRUPTED);
+    if (extSize > KB(512)) throw MediaError(MediaError::SNAP_CORRUPTED);
+    if (chipSize > MB(2)) throw MediaError(MediaError::SNAP_CORRUPTED);
+    if (slowSize > KB(1792)) throw MediaError(MediaError::SNAP_CORRUPTED);
+    if (fastSize > MB(8)) throw MediaError(MediaError::SNAP_CORRUPTED);
 
     // Allocate ROM space
     if (config.saveRoms) {

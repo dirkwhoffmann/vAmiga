@@ -55,37 +55,21 @@ struct CoreError : public Error {
     static constexpr long AROS_NO_EXTROM    = 505;
 
     // Hard drive controller
-    static constexpr long HDC_INIT                   = 800;
-
-    // Snapshots
-    static constexpr long SNAP_TOO_OLD               = 901; ///< Snapshot was created with an older version
-    static constexpr long SNAP_TOO_NEW               = 902; ///< Snapshot was created with a later version
-    static constexpr long SNAP_IS_BETA               = 903; ///< Snapshot was created with a beta release
-    static constexpr long SNAP_CORRUPTED             = 904; ///< Snapshot data is corrupted
-
-    // Media files
-    static constexpr long DMS_CANT_CREATE            = 1000;
-    static constexpr long EXT_FACTOR5                = 1001;
-    static constexpr long EXT_INCOMPATIBLE           = 1002;
-    static constexpr long EXT_CORRUPTED              = 1003;
-
-    // Encrypted Roms
-    static constexpr long MISSING_ROM_KEY            = 1104;
-    static constexpr long INVALID_ROM_KEY            = 1105;
+    static constexpr long HDC_INIT          = 600;
 
     // Debugger
-    static constexpr long REG_READ_ONLY              = 1200;
-    static constexpr long REG_WRITE_ONLY             = 1201;
-    static constexpr long REG_UNUSED                 = 1202;
-    static constexpr long ADDR_UNALIGNED             = 1203;
+    static constexpr long REG_READ_ONLY     = 700;
+    static constexpr long REG_WRITE_ONLY    = 701;
+    static constexpr long REG_UNUSED        = 702;
+    static constexpr long ADDR_UNALIGNED    = 703;
 
     // OS Debugger
-    static constexpr long OSDB                       = 1300;
-    static constexpr long HUNK_BAD_COOKIE            = 1301;
-    static constexpr long HUNK_BAD_HEADER            = 1302;
-    static constexpr long HUNK_NO_SECTIONS           = 1303;
-    static constexpr long HUNK_UNSUPPORTED           = 1304;
-    static constexpr long HUNK_CORRUPTED             = 1305;
+    static constexpr long OSDB              = 800;
+    static constexpr long HUNK_BAD_COOKIE   = 801;
+    static constexpr long HUNK_BAD_HEADER   = 802;
+    static constexpr long HUNK_NO_SECTIONS  = 803;
+    static constexpr long HUNK_UNSUPPORTED  = 804;
+    static constexpr long HUNK_CORRUPTED    = 805;
 
     const char *errstr() const noexcept override {
 
@@ -126,19 +110,6 @@ struct CoreError : public Error {
             case AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
 
             case HDC_INIT:                    return "HDC_INIT";
-
-            case SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
-            case SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
-            case SNAP_IS_BETA:                return "SNAP_IS_BETA";
-            case SNAP_CORRUPTED:              return "SNAP_CORRUPTED";
-
-            case DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
-            case EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
-            case EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
-            case EXT_CORRUPTED:               return "EXT_CORRUPTED";
-
-            case MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
-            case INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
 
             case REG_READ_ONLY:               return "REG_READ_ONLY";
             case REG_WRITE_ONLY:              return "REG_WRITE_ONLY";

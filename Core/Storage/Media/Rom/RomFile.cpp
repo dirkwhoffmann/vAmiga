@@ -11,6 +11,7 @@
 #include "RomFile.h"
 #include "Macros.h"
 #include "RomDatabase.h"
+#include "MediaError.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -169,8 +170,8 @@ RomFile::decrypt()
 
     // Load the rom.key file
     romKey.init(romKeyPath);
-    if (romKey.empty()) throw CoreError(CoreError::MISSING_ROM_KEY);
-    
+    if (romKey.empty()) throw MediaError(MediaError::MISSING_ROM_KEY);
+
     // Decrypt
     decrypted.alloc(data.size - headerSize);
     for (isize i = 0, j = headerSize; j < data.size; i++, j++) {
@@ -182,7 +183,7 @@ RomFile::decrypt()
     
     // Check if we've got a valid ROM
     if (!isCompatible(data.ptr, data.size)) {
-        throw CoreError(CoreError::INVALID_ROM_KEY);
+        throw MediaError(MediaError::INVALID_ROM_KEY);
     }
 }
 

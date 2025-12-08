@@ -14,6 +14,7 @@
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "FileSystem.h"
+#include "MediaError.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -103,19 +104,19 @@ EADFFile::finalizeRead()
     if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
         
         warn("Only UAE-1ADF files are supported\n");
-        throw CoreError(CoreError::EXT_FACTOR5);
+        throw MediaError(MediaError::EXT_FACTOR5);
     }
     
     if (numTracks < 160 || numTracks > 168) {
 
         warn("Invalid number of tracks\n");
-        throw CoreError(CoreError::EXT_CORRUPTED);
+        throw MediaError(MediaError::EXT_CORRUPTED);
     }
 
     if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
         
         warn("File size mismatch\n");
-        throw CoreError(CoreError::EXT_CORRUPTED);
+        throw MediaError(MediaError::EXT_CORRUPTED);
     }
 
     for (isize i = 0; i < numTracks; i++) {
@@ -123,7 +124,7 @@ EADFFile::finalizeRead()
         if (typeOfTrack(i) != 0 && typeOfTrack(i) != 1) {
             
             warn("Unsupported track format\n");
-            throw CoreError(CoreError::EXT_INCOMPATIBLE);
+            throw MediaError(MediaError::EXT_INCOMPATIBLE);
         }
 
         if (typeOfTrack(i) == 0) {
@@ -131,20 +132,20 @@ EADFFile::finalizeRead()
             if (usedBitsForTrack(i) != 11 * 512 * 8) {
 
                 warn("Unsupported standard track size\n");
-                throw CoreError(CoreError::EXT_CORRUPTED);
+                throw MediaError(MediaError::EXT_CORRUPTED);
             }
         }
 
         if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
             
             warn("Corrupted length information\n");
-            throw CoreError(CoreError::EXT_CORRUPTED);
+            throw MediaError(MediaError::EXT_CORRUPTED);
         }
 
         if (usedBitsForTrack(i) % 8) {
             
             warn("Truncating track (bit count is not a multiple of 8)\n");
-            // throw CoreError(CoreError::EXT_INCOMPATIBLE);
+            // throw MediaError(MediaError::EXT_INCOMPATIBLE);
             W32BE(data.ptr + 12 + 12 * i + 8, usedBitsForTrack(i) & ~7);
         }
     }

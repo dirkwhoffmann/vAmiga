@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Snapshot.h"
 #include "Amiga.h"
+#include "MediaError.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
@@ -98,13 +99,13 @@ Snapshot::Snapshot(Amiga &amiga, Compressor compressor) : Snapshot(amiga)
 void
 Snapshot::finalizeRead()
 {
-    if (FORCE_SNAP_TOO_OLD) throw CoreError(CoreError::SNAP_TOO_OLD);
-    if (FORCE_SNAP_TOO_NEW) throw CoreError(CoreError::SNAP_TOO_NEW);
-    if (FORCE_SNAP_IS_BETA) throw CoreError(CoreError::SNAP_IS_BETA);
+    if (FORCE_SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
+    if (FORCE_SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);
+    if (FORCE_SNAP_IS_BETA) throw MediaError(MediaError::SNAP_IS_BETA);
 
-    if (isTooOld()) throw CoreError(CoreError::SNAP_TOO_OLD);
-    if (isTooNew()) throw CoreError(CoreError::SNAP_TOO_NEW);
-    if (isBeta() && !betaRelease) throw CoreError(CoreError::SNAP_IS_BETA);
+    if (isTooOld()) throw MediaError(MediaError::SNAP_TOO_OLD);
+    if (isTooNew()) throw MediaError(MediaError::SNAP_TOO_NEW);
+    if (isBeta() && !betaRelease) throw MediaError(MediaError::SNAP_IS_BETA);
 }
 
 std::pair <isize,isize>

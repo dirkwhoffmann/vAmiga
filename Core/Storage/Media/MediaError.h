@@ -60,10 +60,10 @@ struct MediaError : public Error {
     }
 
     explicit MediaError(long fault, const string &s);
-    explicit MediaError(long fault, const char *s) : CoreError(fault, string(s)) { };
-    explicit MediaError(long fault, const fs::path &p) : CoreError(fault, p.string()) { };
-    explicit MediaError(long fault, std::integral auto v) : CoreError(fault, std::to_string(v)) { };
-    explicit MediaError(long fault) : CoreError(fault, "") { }
+    explicit MediaError(long fault, const char *s) : MediaError(fault, string(s)) { };
+    explicit MediaError(long fault, const fs::path &p) : MediaError(fault, p.string()) { };
+    explicit MediaError(long fault, std::integral auto v) : MediaError(fault, std::to_string(v)) { };
+    explicit MediaError(long fault) : MediaError(fault, "") { }
 };
 
 }

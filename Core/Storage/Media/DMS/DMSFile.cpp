@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "DMSFile.h"
+#include "MediaError.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
@@ -52,7 +53,7 @@ DMSFile::finalizeRead()
     }
     
     if (adfData) free(adfData);
-    if (!adf) throw CoreError(CoreError::DMS_CANT_CREATE);
+    if (!adf) throw MediaError(MediaError::DMS_CANT_CREATE);
 }
 
 }
