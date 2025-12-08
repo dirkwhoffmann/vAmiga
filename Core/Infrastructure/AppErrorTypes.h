@@ -50,6 +50,7 @@ enum class Fault : long
     OUT_OF_MEMORY,        ///< Out of memory
 
     // File IO
+    /*
     DIR_NOT_FOUND,        ///< Directory does not exist
     DIR_ACCESS_DENIED,    ///< File access denied
     DIR_CANT_CREATE,      ///< Unable to create a directory
@@ -63,6 +64,7 @@ enum class Fault : long
     FILE_CANT_READ,       ///< Can't read from file
     FILE_CANT_WRITE,      ///< Can't write to file
     FILE_CANT_CREATE,     ///< Can't create file
+    */
     
     // Ram
     CHIP_RAM_MISSING,
@@ -194,7 +196,8 @@ struct FaultEnum : Reflectable<FaultEnum, Fault>
             case Fault::CP_ALREADY_SET:              return "CP_ALREADY_SET";
                 
             case Fault::OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
-                
+
+                /*
             case Fault::DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
             case Fault::DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
             case Fault::DIR_CANT_CREATE:             return "DIR_CANT_CREATE";
@@ -208,7 +211,8 @@ struct FaultEnum : Reflectable<FaultEnum, Fault>
             case Fault::FILE_CANT_READ:              return "FILE_CANT_READ";
             case Fault::FILE_CANT_WRITE:             return "FILE_CANT_WRITE";
             case Fault::FILE_CANT_CREATE:            return "FILE_CANT_CREATE";
-                
+                */
+
             case Fault::CHIP_RAM_MISSING:            return "CHIP_RAM_MISSING";
             case Fault::CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
             case Fault::AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";

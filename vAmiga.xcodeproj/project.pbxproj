@@ -730,7 +730,7 @@
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* AppError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppError.h; sourceTree = "<group>"; };
 		503FC4B02EE00FE400637C95 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
-		503FC4B42EE04C2B00637C95 /* integers_.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = integers_.h; sourceTree = "<group>"; };
+		503FC4B42EE04C2B00637C95 /* Integers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Integers.h; sourceTree = "<group>"; };
 		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
 		503FC4B62EE06D0A00637C95 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		503FC4B92EE08B2B00637C95 /* Reflectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflectable.h; sourceTree = "<group>"; };
@@ -2502,7 +2502,7 @@
 		50BCB99B2EE2C32B000C53CF /* types */ = {
 			isa = PBXGroup;
 			children = (
-				503FC4B42EE04C2B00637C95 /* integers_.h */,
+				503FC4B42EE04C2B00637C95 /* Integers.h */,
 				503FC4B02EE00FE400637C95 /* Exception.h */,
 			);
 			path = types;

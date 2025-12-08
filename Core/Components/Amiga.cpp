@@ -1218,7 +1218,7 @@ Amiga::loadSnapshot(const MediaFile &file)
 
     } catch (const std::bad_cast &) {
 
-        throw AppError(Fault::FILE_TYPE_MISMATCH);
+        throw IOError(IOError::FILE_TYPE_MISMATCH);
     }
 }
 

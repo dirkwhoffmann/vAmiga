@@ -63,7 +63,7 @@ FSImporter::import(FSBlock &top, const fs::path &path, bool recursive, bool cont
 
     // Get the directory item
     try { dir = fs::directory_entry(path); } catch (...) {
-        // throw AppError(Fault::FILE_CANT_READ);
+        // throw IOError(IOError::FILE_CANT_READ);
         throw IOError(IOError::FILE_CANT_READ, path);
     }
 

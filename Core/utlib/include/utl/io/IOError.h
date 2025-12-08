@@ -50,7 +50,7 @@ struct IOError : public Error {
         return "UNKNOWN_IO_FAULT";
     }
 
-    IOError(long fault, const std::string &msg) : Error(fault) {
+    IOError(long fault, const std::string &msg = "") : Error(fault) {
 
         switch (fault) {
 

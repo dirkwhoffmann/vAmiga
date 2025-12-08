@@ -11,6 +11,7 @@
 #include "VAmiga.h"
 #include "Media.h"
 #include "FileFactories.h"
+#include "utl/io.h"
 
 namespace vamiga {
 
@@ -61,7 +62,7 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::ROM:          return new MediaFile(make_unique<RomFile>(path));
 
         default:
-            throw AppError(Fault::FILE_TYPE_MISMATCH, path);
+            throw IOError(IOError::FILE_TYPE_MISMATCH, path);
     }
 }
 
@@ -201,7 +202,7 @@ MediaFile::getDiskInfo() const
 
     } catch (...) {
 
-        throw AppError(Fault::FILE_TYPE_MISMATCH);
+        throw IOError(IOError::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -225,7 +226,7 @@ MediaFile::getFloppyDiskInfo() const
 
     } catch (...) {
 
-        throw AppError(Fault::FILE_TYPE_MISMATCH);
+        throw IOError(IOError::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -246,7 +247,7 @@ MediaFile::getHDFInfo() const
 
     } catch (...) {
 
-        throw AppError(Fault::FILE_TYPE_MISMATCH);
+        throw IOError(IOError::FILE_TYPE_MISMATCH);
     }
 }
 

@@ -12,6 +12,7 @@
 #include "ADFFactory.h"
 #include "HDFFactory.h"
 #include "HDFFile.h"
+#include "utl/io.h"
 
 namespace vamiga {
 
@@ -45,7 +46,7 @@ FileSystemFactory::fromMediaFile(const MediaFile &file, isize part)
             break;
 
         default:
-            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
 
@@ -113,7 +114,7 @@ FileSystemFactory::initFromMedia(FileSystem &fs, const MediaFile &file, isize pa
             break;
 
         default:
-            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
 

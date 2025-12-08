@@ -1008,7 +1008,7 @@ FloppyDrive::exportDisk(FileType type)
         case FileType::IMG:      return make_unique<MediaFile>(IMGFactory::make(*this));
 
         default:
-            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
 
@@ -1172,7 +1172,7 @@ FloppyDrive::insertMediaFile(const MediaFile &file, bool wp)
         return;
     }
 
-    throw AppError(Fault::FILE_TYPE_MISMATCH);
+    throw IOError(IOError::FILE_TYPE_MISMATCH);
 }
 
 template <EventSlot s> void

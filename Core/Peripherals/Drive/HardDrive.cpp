@@ -154,7 +154,7 @@ HardDrive::init(const MediaFile &file)
         return;
     }
     
-    throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
 void
@@ -229,7 +229,7 @@ HardDrive::init(const fs::path &path)
 {
     if (!fs::exists(path)) {
 
-        throw AppError(Fault::FILE_NOT_FOUND, path);
+        throw IOError(IOError::FILE_NOT_FOUND, path);
     }
 
     if (fs::is_directory(path)) {
@@ -243,7 +243,7 @@ HardDrive::init(const fs::path &path)
         try { init(HDFFile(path)); return; } catch(...) { }
         try { init(HDZFile(path)); return; } catch(...) { }
         
-        throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+        throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
 
@@ -750,7 +750,7 @@ HardDrive::importFolder(const fs::path &path)
 {
     if (!fs::exists(path)) {
 
-        throw AppError(Fault::FILE_NOT_FOUND, path);
+        throw IOError(IOError::FILE_NOT_FOUND, path);
     }
     
     if (fs::is_directory(path)) {

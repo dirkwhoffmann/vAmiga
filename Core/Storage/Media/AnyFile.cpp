@@ -48,10 +48,10 @@ AnyFile::init(const fs::path &path)
     std::ifstream stream(path, std::ios::binary);
     
     if (!stream.is_open()) {
-        throw AppError(Fault::FILE_NOT_FOUND, path);
+        throw IOError(IOError::FILE_NOT_FOUND, path);
     }
     if (!isCompatiblePath(path)) {
-        throw AppError(Fault::FILE_TYPE_MISMATCH, path);
+        throw IOError(IOError::FILE_TYPE_MISMATCH, path);
     }
     std::ostringstream sstr(std::ios::binary);
     sstr << stream.rdbuf();
@@ -63,7 +63,7 @@ void
 AnyFile::init(const u8 *buf, isize len)
 {    
     assert(buf);
-    if (!isCompatibleBuffer(buf, len)) throw AppError(Fault::FILE_TYPE_MISMATCH);
+    if (!isCompatibleBuffer(buf, len)) throw IOError(IOError::FILE_TYPE_MISMATCH);
     readFromBuffer(buf, len);
 }
 
@@ -132,13 +132,13 @@ isize
 AnyFile::writeToFile(const fs::path &path, isize offset, isize len) const
 {
     if (utl::isDirectory(path)) {
-        throw AppError(Fault::FILE_IS_DIRECTORY);
+        throw IOError(IOError::FILE_IS_DIRECTORY);
     }
     
     std::ofstream stream(path, std::ofstream::binary);
 
     if (!stream.is_open()) {
-        throw AppError(Fault::FILE_CANT_WRITE, path);
+        throw IOError(IOError::FILE_CANT_WRITE, path);
     }
     
     isize result = writeToStream(stream, offset, len);
@@ -181,7 +181,7 @@ AnyFile::writeToFile(const fs::path &path) const
 isize 
 AnyFile::writePartitionToFile(const fs::path &path, isize partition) const
 {
-    throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
 isize

@@ -696,7 +696,7 @@ Memory::loadRom(MediaFile &file)
 
     } else {
 
-        throw AppError(Fault::FILE_TYPE_MISMATCH);
+        throw IOError(IOError::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -731,7 +731,7 @@ Memory::loadExt(MediaFile &file)
 
     } catch (...) {
 
-        throw AppError(Fault::FILE_TYPE_MISMATCH);
+        throw IOError(IOError::FILE_TYPE_MISMATCH);
     }
 }
 

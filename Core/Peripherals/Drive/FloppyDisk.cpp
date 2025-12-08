@@ -294,7 +294,7 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
         case FileType::EXE:  EXEEncoder::encode(dynamic_cast<const EXEFile &>(file), *this); break;
 
         default:
-            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
 

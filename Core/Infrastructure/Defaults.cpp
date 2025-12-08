@@ -249,7 +249,7 @@ Defaults::load(const fs::path &path)
     auto fs = std::ifstream(path, std::ifstream::binary);
 
     if (!fs.is_open()) {
-        throw AppError(Fault::FILE_NOT_FOUND);
+        throw IOError(IOError::FILE_NOT_FOUND);
     }
 
     debug(DEF_DEBUG, "Loading user defaults from %s...\n", path.string().c_str());
@@ -342,7 +342,7 @@ Defaults::save(const fs::path &path)
     auto fs = std::ofstream(path, std::ofstream::binary);
 
     if (!fs.is_open()) {
-        throw AppError(Fault::FILE_CANT_WRITE);
+        throw IOError(IOError::FILE_CANT_WRITE);
     }
 
     save(fs);

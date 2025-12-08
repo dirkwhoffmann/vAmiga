@@ -227,7 +227,7 @@ void
 MemoryDebugger::load(const fs::path &path, u32 addr)
 {
     std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw AppError(Fault::FILE_NOT_FOUND, path);
+    if (!stream.is_open()) throw IOError(IOError::FILE_NOT_FOUND, path);
 
     load(stream, addr);
 }
@@ -246,7 +246,7 @@ void
 MemoryDebugger::save(const fs::path& path, u32 addr, isize count)
 {
     std::ofstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw AppError(Fault::FILE_CANT_CREATE, path);
+    if (!stream.is_open()) throw IOError(IOError::FILE_CANT_CREATE, path);
 
     save(stream, addr, count);
 }

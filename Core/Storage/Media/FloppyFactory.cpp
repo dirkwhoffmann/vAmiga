@@ -15,6 +15,7 @@
 #include "IMGFactory.h"
 #include "DMSFactory.h"
 #include "EXEFactory.h"
+#include "utl/io.h"
 
 namespace vamiga {
 
@@ -32,7 +33,7 @@ FloppyFactory::make(const fs::path &path)
         case FileType::EXE:  result = EXEFactory::make(path); break;
 
         default:
-            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
+            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 
     result->path = path;

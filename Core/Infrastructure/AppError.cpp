@@ -102,6 +102,7 @@ AppError::AppError(Fault code, const string &s) : utl::GenericException<Fault>(c
             set_msg("This catchpoint is already set.");
             break;
 
+            /*
         case Fault::DIR_NOT_FOUND:
             set_msg("Folder \"" + s + "\" not found.");
             break;
@@ -145,6 +146,7 @@ AppError::AppError(Fault code, const string &s) : utl::GenericException<Fault>(c
         case Fault::FILE_CANT_CREATE:
             set_msg("Failed to create file \"" + s + "\".");
             break;
+            */
             
         case Fault::OUT_OF_MEMORY:
             set_msg("Out of memory.");
