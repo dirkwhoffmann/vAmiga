@@ -12,6 +12,7 @@
 #include "FSBlock.h"
 #include "Memory.h"
 #include "OSDescriptors.h"
+#include "DeviceError.h"
 #include "utl/chrono.h"
 #include "utl/io.h"
 #include "utl/support.h"
@@ -59,7 +60,7 @@ void
 HDFFile::init(const fs::path &path)
 {
     // Check size
-    if (isOversized(utl::getSizeOfFile(path))) throw CoreError(CoreError::HDR_TOO_LARGE);
+    if (isOversized(utl::getSizeOfFile(path))) throw DeviceError(DeviceError::HDR_TOO_LARGE);
     
     AnyFile::init(path);
 }
@@ -68,7 +69,7 @@ void
 HDFFile::init(const u8 *buf, isize len)
 {
     // Check size
-    if (isOversized(len)) throw CoreError(CoreError::HDR_TOO_LARGE);
+    if (isOversized(len)) throw DeviceError(DeviceError::HDR_TOO_LARGE);
 
     AnyFile::init(buf, len);
 }
@@ -194,10 +195,10 @@ HDFFile::getDriverDescriptor(isize driver) const
             auto lsegBlock = seekBlock(lsegRef);
             
             if (!lsegBlock || strcmp((const char *)lsegBlock, "LSEG")) {
-                throw CoreError(CoreError::HDR_CORRUPTED_LSEG);
+                throw DeviceError(DeviceError::HDR_CORRUPTED_LSEG);
             }
             if (i >= 1024) {
-                throw CoreError(CoreError::HDR_CORRUPTED_LSEG);
+                throw DeviceError(DeviceError::HDR_CORRUPTED_LSEG);
             }
             
             result.blocks.push_back(lsegRef);

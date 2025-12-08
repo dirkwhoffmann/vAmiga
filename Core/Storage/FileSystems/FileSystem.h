@@ -59,6 +59,7 @@
 #include "FSAllocator.h"
 #include "FSImporter.h"
 #include "FSExporter.h"
+#include "DeviceError.h"
 #include "utl/abilities/Loggable.h"
 
 namespace vamiga {

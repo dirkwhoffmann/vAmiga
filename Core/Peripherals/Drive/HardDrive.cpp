@@ -598,7 +598,7 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 
     } else {
         
-        throw CoreError(CoreError::HDR_UNMATCHED_GEOMETRY);
+        throw DeviceError(DeviceError::HDR_UNMATCHED_GEOMETRY);
     }
 }
 

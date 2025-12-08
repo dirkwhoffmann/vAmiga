@@ -423,7 +423,7 @@ Emulator::getDebugVariable(DebugFlag flag)
 {
 #ifdef NDEBUG
     
-    throw AppError(AppError::OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
+    throw CoreError(CoreError::OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
     
 #else
     
@@ -554,7 +554,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
 {
 #ifdef NDEBUG
     
-    throw AppError(AppError::OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
+    throw CoreError(CoreError::OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
 
 #else
     

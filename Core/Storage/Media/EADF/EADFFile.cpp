@@ -72,7 +72,7 @@ EADFFile::init(FloppyDisk &disk)
 void
 EADFFile::init(FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw AppError(AppError::DISK_MISSING);
+    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
     init(*drive.disk);
 }
 */
@@ -144,7 +144,7 @@ EADFFile::finalizeRead()
         if (usedBitsForTrack(i) % 8) {
             
             warn("Truncating track (bit count is not a multiple of 8)\n");
-            // throw AppError(AppError::EXT_INCOMPATIBLE);
+            // throw CoreError(CoreError::EXT_INCOMPATIBLE);
             W32BE(data.ptr + 12 + 12 * i + 8, usedBitsForTrack(i) & ~7);
         }
     }

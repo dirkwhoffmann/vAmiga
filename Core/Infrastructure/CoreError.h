@@ -55,6 +55,7 @@ struct CoreError : public Error {
     static constexpr long AROS_NO_EXTROM    = 505;
 
     // Floppy disks
+    /*
     static constexpr long DISK_MISSING               = 600;
     static constexpr long DISK_INCOMPATIBLE          = 601;
     static constexpr long DISK_INVALID_DIAMETER      = 602;
@@ -76,7 +77,8 @@ struct CoreError : public Error {
     static constexpr long HDR_CORRUPTED_FSH          = 709;
     static constexpr long HDR_CORRUPTED_LSEG         = 710;
     static constexpr long HDR_UNSUPPORTED            = 711;
-
+    */
+    
     // Hard drive controller
     static constexpr long HDC_INIT                   = 800;
 
@@ -149,6 +151,7 @@ struct CoreError : public Error {
             case ROM_MISSING:                 return "ROM_MISSING";
             case AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
 
+                /*
             case DISK_MISSING:                return "DISK_MISSING";
             case DISK_INCOMPATIBLE:           return "DISK_INCOMPATIBLE";
             case DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
@@ -169,7 +172,7 @@ struct CoreError : public Error {
             case HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
             case HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
             case HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
-
+            */
             case HDC_INIT:                    return "HDC_INIT";
 
             case SNAP_TOO_OLD:                return "SNAP_TOO_OLD";

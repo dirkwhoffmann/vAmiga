@@ -1020,7 +1020,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
     debug(DSK_DEBUG, "insertDisk <%ld> (%lld)\n", s, delay);
 
     // Only proceed if the provided disk is compatible with this drive
-    if (!isInsertable(*disk)) throw CoreError(CoreError::DISK_INCOMPATIBLE);
+    if (!isInsertable(*disk)) throw DeviceError(DeviceError::DSK_INCOMPATIBLE);
     
     // Get ownership of the disk
     diskToInsert = std::move(disk);
@@ -1110,7 +1110,7 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
     debug(DSK_DEBUG, "swapDisk()\n");
     
     // Only proceed if the provided disk is compatible with this drive
-    if (!isInsertable(*disk)) throw CoreError(CoreError::DISK_INCOMPATIBLE);
+    if (!isInsertable(*disk)) throw DeviceError(DeviceError::DSK_INCOMPATIBLE);
     
     // Determine delay (in pause mode, we insert immediately)
     auto delay = isRunning() ? config.diskSwapDelay : 0;

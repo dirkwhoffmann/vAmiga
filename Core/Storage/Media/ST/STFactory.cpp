@@ -12,6 +12,7 @@
 #include "STEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
+#include "DeviceError.h"
 
 namespace vamiga {
 
@@ -33,7 +34,7 @@ STFactory::make(Diameter dia, Density den)
     if (dia != Diameter::INCH_35 || den != Density::DD) {
 
         // We only support 3.5"DD disks at the moment
-        throw CoreError(CoreError::DISK_INVALID_LAYOUT);
+        throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
     }
 
     return make_unique<STFile>(9 * 160 * 512);
@@ -50,7 +51,7 @@ STFactory::make(const class FloppyDisk &disk)
 std::unique_ptr<STFile>
 STFactory::make(const class FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
+    if (drive.disk == nullptr) throw DeviceError(DeviceError::DSK_MISSING);
     return make(*drive.disk);
 }
 

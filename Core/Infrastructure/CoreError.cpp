@@ -127,6 +127,7 @@ CoreError::CoreError(long code, const string &s) : Error(code)
             set_msg("No Extension Rom installed.");
             break;
 
+            /*
         case DISK_MISSING:
             set_msg("No disk in drive.");
             break;
@@ -214,7 +215,8 @@ CoreError::CoreError(long code, const string &s) : Error(code)
         case HDR_UNSUPPORTED:
             set_msg("The hard drive is encoded in an unknown or unsupported format.");
             break;
-
+             */
+            
         case HDC_INIT:
             set_msg("Failed to initialize hard drive: " + s);
             break;

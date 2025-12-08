@@ -18,10 +18,10 @@ void
 IMGEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
 {
     if (disk.getDiameter() != img.getDiameter()) {
-        throw DeviceError(fault::DSK_INVALID_DIAMETER);
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != img.getDensity()) {
-        throw DeviceError(fault::DSK_INVALID_DENSITY);
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
     isize tracks = img.numTracks();
@@ -144,10 +144,10 @@ IMGEncoder::decode(class IMGFile &img, const FloppyDisk &disk)
     if (IMG_DEBUG) fprintf(stderr, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (disk.getDiameter() != img.getDiameter()) {
-        throw DeviceError(fault::DSK_INVALID_DIAMETER);
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != img.getDensity()) {
-        throw DeviceError(fault::DSK_INVALID_DENSITY);
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -201,12 +201,12 @@ IMGEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
             cnt++;
 
         } else {
-            throw DeviceError(fault::DSK_INVALID_SECTOR_NUMBER);
+            throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
         }
     }
 
     if (cnt != numSectors) {
-        throw DeviceError(fault::DSK_WRONG_SECTOR_COUNT);
+        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
     }
 
     // Do some consistency checking

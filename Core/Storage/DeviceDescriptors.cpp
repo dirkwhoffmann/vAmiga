@@ -125,22 +125,22 @@ GeometryDescriptor::checkCompatibility() const
         return;
     }
     if (cylinders == 0 || FORCE_HDR_UNKNOWN_GEOMETRY) {
-        throw DeviceError(fault::HDR_UNKNOWN_GEOMETRY);
+        throw DeviceError(DeviceError::HDR_UNKNOWN_GEOMETRY);
     }
     if (numBytes() > MB(504) || FORCE_HDR_TOO_LARGE) {
-        throw DeviceError(fault::HDR_TOO_LARGE);
+        throw DeviceError(DeviceError::HDR_TOO_LARGE);
     }
     if ((cylinders < cMin && heads > 1) || cylinders > cMax || FORCE_HDR_UNSUPPORTED_C) {
-        throw DeviceError(fault::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
     }
     if (heads < hMin || heads > hMax || FORCE_HDR_UNSUPPORTED_H) {
-        throw DeviceError(fault::HDR_UNSUPPORTED_HEAD_COUNT, heads);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_COUNT, heads);
     }
     if (sectors < sMin || sectors > sMax || FORCE_HDR_UNSUPPORTED_S) {
-        throw DeviceError(fault::HDR_UNSUPPORTED_SEC_COUNT, sectors);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_COUNT, sectors);
     }
     if (bsize != 512 || FORCE_HDR_UNSUPPORTED_B) {
-        throw DeviceError(fault::HDR_UNSUPPORTED_BSIZE);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);
     }
 }
 
@@ -205,13 +205,13 @@ void PartitionDescriptor::checkCompatibility(const GeometryDescriptor &geo) cons
     auto bsize = 4 * sizeBlock;
     
     if (bsize != 512) {
-        throw DeviceError(fault::HDR_UNSUPPORTED_BSIZE, std::to_string(bsize));
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE, std::to_string(bsize));
     }
     if (lowCyl > highCyl) {
-        throw DeviceError(fault::HDR_CORRUPTED_PTABLE);
+        throw DeviceError(DeviceError::HDR_CORRUPTED_PTABLE);
     }
     if (isize(highCyl) >= geo.cylinders) {
-        throw DeviceError(fault::HDR_CORRUPTED_PTABLE);
+        throw DeviceError(DeviceError::HDR_CORRUPTED_PTABLE);
     }
 }
 

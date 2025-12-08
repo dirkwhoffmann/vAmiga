@@ -12,6 +12,7 @@
 #include "EADFEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
+#include "DeviceError.h"
 
 namespace vamiga {
 
@@ -49,7 +50,7 @@ EADFFactory::make(const class FloppyDisk &disk)
 std::unique_ptr<EADFFile>
 EADFFactory::make(const class FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
+    if (drive.disk == nullptr) throw DeviceError(DeviceError::DSK_MISSING);
     return make(*drive.disk);
 }
 

@@ -17,40 +17,40 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 {
     switch (code)
     {
-        case fault::DSK_MISSING:
+        case DSK_MISSING:
             set_msg("No disk in drive.");
             break;
 
-        case fault::DSK_INCOMPATIBLE:
+        case DSK_INCOMPATIBLE:
             set_msg("This disk is not compatible with the selected drive.");
             break;
 
-        case fault::DSK_INVALID_DIAMETER:
+        case DSK_INVALID_DIAMETER:
             set_msg("Invalid disk diameter.");
             break;
 
-        case fault::DSK_INVALID_DENSITY:
+        case DSK_INVALID_DENSITY:
             set_msg("Invalid disk density.");
             break;
 
-        case fault::DSK_INVALID_LAYOUT:
+        case DSK_INVALID_LAYOUT:
             set_msg("The disk density and disk diameter do not match.");
             break;
 
-        case fault::DSK_WRONG_SECTOR_COUNT:
+        case DSK_WRONG_SECTOR_COUNT:
             set_msg("Unable to decode the MFM bit stream (wrong sector count).");
             break;
 
-        case fault::DSK_INVALID_SECTOR_NUMBER:
+        case DSK_INVALID_SECTOR_NUMBER:
             set_msg("Unable to decode the MFM bit stream (invalid sector number).");
             break;
 
-        case fault::HDR_TOO_LARGE:
+        case HDR_TOO_LARGE:
             set_msg(string("vAmiga supports hard drives with a maximum capacity of ") +
                     "504 MB.");
             break;
 
-        case fault::HDR_UNSUPPORTED_CYL_COUNT:
+        case HDR_UNSUPPORTED_CYL_COUNT:
             set_msg(string("The geometry of this drive is not supported. ") +
                     "vAmiga supports hard drives with " +
                     "at least " + std::to_string(HDR_C_MIN) + " and " +
@@ -58,7 +58,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
                     "This drive has " + s + " cylinders.");
             break;
 
-        case fault::HDR_UNSUPPORTED_HEAD_COUNT:
+        case HDR_UNSUPPORTED_HEAD_COUNT:
             set_msg(string("The geometry of this drive is not supported. ") +
                     "vAmiga supports hard drives with " +
                     "at least " + std::to_string(HDR_H_MIN) + " and " +
@@ -66,7 +66,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
                     "The drive has " + s + " heads.");
             break;
 
-        case fault::HDR_UNSUPPORTED_SEC_COUNT:
+        case HDR_UNSUPPORTED_SEC_COUNT:
             set_msg(string("The geometry of this drive is not supported. ") +
                     "vAmiga only supports hard drives with " +
                     "at least " + std::to_string(HDR_S_MIN) + " and " +
@@ -74,40 +74,39 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
                     "The drive stores " + s + " sectors per track.");
             break;
 
-        case fault::HDR_UNSUPPORTED_BSIZE:
+        case HDR_UNSUPPORTED_BSIZE:
             set_msg(string("The geometry of this drive is not supported. ") +
                     "vAmiga only supports hard drives with a " +
                     "block size of 512 bytes. " +
                     "The drive stores " + s + " bytes per block.");
             break;
 
-        case fault::HDR_UNKNOWN_GEOMETRY:
+        case HDR_UNKNOWN_GEOMETRY:
             set_msg("vAmiga failed to derive to geometry of this drive.");
             break;
 
-        case fault::HDR_UNMATCHED_GEOMETRY:
+        case HDR_UNMATCHED_GEOMETRY:
             set_msg("The drive geometry doesn't match the hard drive capacity.");
             break;
 
-        case fault::HDR_UNPARTITIONED:
+        case HDR_UNPARTITIONED:
             set_msg("The hard drive has no partitions.");
             break;
 
-        case fault::HDR_CORRUPTED_PTABLE:
+        case HDR_CORRUPTED_PTABLE:
             set_msg("Invalid partition table.");
             break;
 
-        case fault::HDR_CORRUPTED_FSH:
+        case HDR_CORRUPTED_FSH:
             set_msg("Invalid file system header block.");
             break;
 
-        case fault::HDR_UNSUPPORTED:
+        case HDR_UNSUPPORTED:
             set_msg("The hard drive is encoded in an unknown or unsupported format.");
             break;
 
         default:
-            set_msg(string("Error code ") + std::to_string((i64)fault()) +
-            " (" + fault::DeviceFaultEnum::key(fault()) + ").");
+            set_msg(string("Error code ") + std::to_string(payload) + " (" + errstr() + ").");
             break;
     }
 }

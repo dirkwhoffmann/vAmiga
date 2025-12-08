@@ -9,58 +9,51 @@
 
 #pragma once
 
-#include "utl/abilities/Reflectable.h"
+#include "BasicTypes.h"
 
 namespace vamiga {
 
-namespace fault {
+struct DeviceError : public Error {
 
-enum : long
-{
-    DEV_UNKNOWN,
+    static constexpr long DEV_OK                        = 0;
+    static constexpr long DEV_UNKNOWN                   = 1;
 
     // Floppy disks
-    DSK_MISSING,
-    DSK_INCOMPATIBLE,
-    DSK_INVALID_DIAMETER,
-    DSK_INVALID_DENSITY,
-    DSK_INVALID_LAYOUT,
-    DSK_WRONG_SECTOR_COUNT,
-    DSK_INVALID_SECTOR_NUMBER,
+    static constexpr long DSK_MISSING                   = 10;
+    static constexpr long DSK_INCOMPATIBLE              = 11;
+    static constexpr long DSK_INVALID_DIAMETER          = 12;
+    static constexpr long DSK_INVALID_DENSITY           = 13;
+    static constexpr long DSK_INVALID_LAYOUT            = 14;
+    static constexpr long DSK_WRONG_SECTOR_COUNT        = 15;
+    static constexpr long DSK_INVALID_SECTOR_NUMBER     = 16;
 
     // Hard disks
-    HDR_TOO_LARGE,
-    HDR_UNSUPPORTED_CYL_COUNT,
-    HDR_UNSUPPORTED_HEAD_COUNT,
-    HDR_UNSUPPORTED_SEC_COUNT,
-    HDR_UNSUPPORTED_BSIZE,
-    HDR_UNKNOWN_GEOMETRY,
-    HDR_UNMATCHED_GEOMETRY,
-    HDR_UNPARTITIONED,
-    HDR_CORRUPTED_PTABLE,
-    HDR_CORRUPTED_FSH,
-    HDR_CORRUPTED_LSEG,
-    HDR_UNSUPPORTED
-};
+    static constexpr long HDR_TOO_LARGE                 = 20;
+    static constexpr long HDR_UNSUPPORTED_CYL_COUNT     = 21;
+    static constexpr long HDR_UNSUPPORTED_HEAD_COUNT    = 22;
+    static constexpr long HDR_UNSUPPORTED_SEC_COUNT     = 23;
+    static constexpr long HDR_UNSUPPORTED_BSIZE         = 24;
+    static constexpr long HDR_UNKNOWN_GEOMETRY          = 25;
+    static constexpr long HDR_UNMATCHED_GEOMETRY        = 26;
+    static constexpr long HDR_UNPARTITIONED             = 27;
+    static constexpr long HDR_CORRUPTED_PTABLE          = 28;
+    static constexpr long HDR_CORRUPTED_FSH             = 29;
+    static constexpr long HDR_CORRUPTED_LSEG            = 30;
+    static constexpr long HDR_UNSUPPORTED               = 31;
 
-struct DeviceFaultEnum : Reflectable<DeviceFaultEnum, long>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = HDR_UNSUPPORTED;
+    const char *errstr() const noexcept override {
 
-    static const char *_key(long value)
-    {
-        switch (value) {
+        switch (payload) {
 
             case DEV_UNKNOWN:                 return "UNKNOWN";
 
-            case DSK_MISSING:                 return "DISK_MISSING";
-            case DSK_INCOMPATIBLE:            return "DISK_INCOMPATIBLE";
-            case DSK_INVALID_DIAMETER:        return "DISK_INVALID_DIAMETER";
-            case DSK_INVALID_DENSITY:         return "DISK_INVALID_DENSITY";
-            case DSK_INVALID_LAYOUT:          return "DISK_INVALID_LAYOUT";
-            case DSK_WRONG_SECTOR_COUNT:      return "DISK_WRONG_SECTOR_COUNT";
-            case DSK_INVALID_SECTOR_NUMBER:   return "DISK_INVALID_SECTOR_NUMBER";
+            case DSK_MISSING:                 return "DSK_MISSING";
+            case DSK_INCOMPATIBLE:            return "DSK_INCOMPATIBLE";
+            case DSK_INVALID_DIAMETER:        return "DSK_INVALID_DIAMETER";
+            case DSK_INVALID_DENSITY:         return "DSK_INVALID_DENSITY";
+            case DSK_INVALID_LAYOUT:          return "DSK_INVALID_LAYOUT";
+            case DSK_WRONG_SECTOR_COUNT:      return "DSK_WRONG_SECTOR_COUNT";
+            case DSK_INVALID_SECTOR_NUMBER:   return "DSK_INVALID_SECTOR_NUMBER";
 
             case HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
             case HDR_UNSUPPORTED_CYL_COUNT:   return "HDR_UNSUPPORTED_CYL_COUNT";
@@ -74,26 +67,18 @@ struct DeviceFaultEnum : Reflectable<DeviceFaultEnum, long>
             case HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
             case HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
             case HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
+
+            default:
+                return "???";
         }
-        return "???";
     }
 
-    static const char *help(long value)
-    {
-        return "";
-    }
-};
-
-}
-
-class DeviceError : public utl::Error
-{
 public:
 
-    DeviceError(long fault, const std::string &s = "");
-    DeviceError(long fault, const char *s) : DeviceError(fault, std::string(s)) { };
-    DeviceError(long fault, const std::filesystem::path &p) : DeviceError(fault, p.string()) { };
-    DeviceError(long fault, std::integral auto v) : DeviceError(fault, std::to_string(v)) { };
+    explicit DeviceError(long fault, const std::string &s = "");
+    explicit DeviceError(long fault, const char *s) : DeviceError(fault, std::string(s)) { };
+    explicit DeviceError(long fault, const std::filesystem::path &p) : DeviceError(fault, p.string()) { };
+    explicit DeviceError(long fault, std::integral auto v) : DeviceError(fault, std::to_string(v)) { };
 };
 
 }

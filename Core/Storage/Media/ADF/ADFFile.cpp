@@ -52,94 +52,13 @@ ADFFile::fileSize(Diameter diameter, Density density)
     DiameterEnum::validate(diameter);
     DensityEnum::validate(density);
 
-    if (diameter != Diameter::INCH_35) throw CoreError(CoreError::DISK_INVALID_DIAMETER);
+    if (diameter != Diameter::INCH_35) throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     
     if (density == Density::DD) return ADFSIZE_35_DD;
     if (density == Density::HD) return ADFSIZE_35_HD;
 
-    throw CoreError(CoreError::DISK_INVALID_DENSITY);
+    throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
 }
-
-/*
-void
-ADFFile::init(Diameter diameter, Density density)
-{
-    assert_enum(Diameter, diameter);
-    assert(data.empty());
-    
-    data.init(fileSize(diameter, density));
-}
-
-void
-ADFFile::init(const FloppyDiskDescriptor &descr)
-{
-    if (descr.diameter != Diameter::INCH_35) throw CoreError(CoreError::DISK_INVALID_DIAMETER);
-
-    switch (descr.density) {
-
-        case Density::DD:
-
-            switch (descr.cylinders) {
-
-                case 80: init(ADFSIZE_35_DD); break;
-                case 81: init(ADFSIZE_35_DD_81); break;
-                case 82: init(ADFSIZE_35_DD_82); break;
-                case 83: init(ADFSIZE_35_DD_83); break;
-                case 84: init(ADFSIZE_35_DD_84); break;
-
-                default:
-                    throw CoreError(CoreError::DISK_INVALID_LAYOUT);
-            }
-            break;
-
-        case Density::HD:
-
-            init(ADFSIZE_35_HD);
-            break;
-
-        default:
-            throw CoreError(CoreError::DISK_INVALID_DENSITY);
-    }
-}
-
-void
-ADFFile::init(const FloppyDisk &disk)
-{
-    init(disk.getDiameter(), disk.getDensity());
-    
-    assert(numTracks() == 160);
-    assert(numSectors() == 11 || numSectors() == 22);
-    
-    decodeDisk(disk);
-}
-
-void
-ADFFile::init(const FloppyDrive &drive)
-{
-    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
-    init(*drive.disk);
-}
-
-void
-ADFFile::init(const FileSystem &volume)
-{
-    switch (volume.blocks()) {
-
-        case 2 * 880:
-            init(Diameter::INCH_35, Density::DD);
-            break;
-            
-        case 4 * 880:
-            init(Diameter::INCH_35, Density::HD);
-            break;
-            
-        default:
-            throw CoreError(CoreError::FS_WRONG_CAPACITY);
-    }
-
-    volume.exporter.exportVolume(data.ptr, data.size);
-}
-*/
 
 void
 ADFFile::finalizeRead()
