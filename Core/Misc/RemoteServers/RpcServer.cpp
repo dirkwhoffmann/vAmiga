@@ -79,19 +79,19 @@ RpcServer::doProcess(const string &payload)
 
         // Check input format
         if (!request.contains("method")) {
-            throw AppException(RPC::INVALID_REQUEST, "Missing 'method'");
+            throw AppError(RPC::INVALID_REQUEST, "Missing 'method'");
         }
         if (!request.contains("params")) {
-            throw AppException(RPC::INVALID_REQUEST, "Missing 'params'");
+            throw AppError(RPC::INVALID_REQUEST, "Missing 'params'");
         }
         if (!request["method"].is_string()) {
-            throw AppException(RPC::INVALID_PARAMS, "'method' must be a string");
+            throw AppError(RPC::INVALID_PARAMS, "'method' must be a string");
         }
         if (!request["params"].is_string()) {
-            throw AppException(RPC::INVALID_PARAMS, "'params' must be a string");
+            throw AppError(RPC::INVALID_PARAMS, "'params' must be a string");
         }
         if (request["method"] != "retroshell") {
-            throw AppException(RPC::INVALID_PARAMS, "method  must be 'retroshell'");
+            throw AppError(RPC::INVALID_PARAMS, "method  must be 'retroshell'");
         }
 
         // Feed the command into the command queue
@@ -111,12 +111,12 @@ RpcServer::doProcess(const string &payload)
         };
         send(response.dump());
 
-    } catch (const AppException &e) {
+    } catch (const AppError &e) {
 
         json response = {
 
             {"jsonrpc", "2.0"},
-            {"error", {{"code", e.data()}, {"message", e.what()}}},
+            {"error", {{"code", e.payload}, {"message", e.what()}}},
             {"id", nullptr}
         };
         send(response.dump());

@@ -1052,7 +1052,6 @@
 		50A61446260CF25700A01428 /* JoystickTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JoystickTypes.h; sourceTree = "<group>"; };
 		50A61447260CF26100A01428 /* MouseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MouseTypes.h; sourceTree = "<group>"; };
 		50A61452260D113C00A01428 /* TODTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TODTypes.h; sourceTree = "<group>"; };
-		50A6145A260D14FE00A01428 /* AppErrorTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppErrorTypes.h; sourceTree = "<group>"; };
 		50A61470260DCA6200A01428 /* RomFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFileTypes.h; sourceTree = "<group>"; };
 		50A64B94257A63A600442964 /* BootBlockImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BootBlockImage.h; sourceTree = "<group>"; };
 		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
@@ -1394,7 +1393,6 @@
 				50DA83E02C160DCA001209AA /* Emulator.h */,
 				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
-				50A6145A260D14FE00A01428 /* AppErrorTypes.h */,
 				5039924625B219FC0084B808 /* AppError.h */,
 				50AE6F8425D71FBE0004AFBC /* AppError.cpp */,
 				507215B025EAF62B00787591 /* Aliases.h */,

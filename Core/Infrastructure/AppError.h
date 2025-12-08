@@ -10,20 +10,8 @@
 #pragma once
 
 #include "BasicTypes.h"
-#include "AppErrorTypes.h"
 
 namespace vamiga {
-
-class AppException : public utl::GenericException<i64> {
-public:
-
-    AppException(i64 d, const string &s) : utl::GenericException<i64>(d, s) { }
-    AppException(i64 d) : AppException(d, "") { }
-    AppException(const string &s) : AppException(0, s) { }
-    AppException() : AppException(0) { }
-
-    i64 data() const { return payload; }
-};
 
 struct AppError : public Error {
 
@@ -262,8 +250,6 @@ struct AppError : public Error {
     AppError(long fault, const fs::path &p) : AppError(fault, p.string()) { };
     AppError(long fault, std::integral auto v) : AppError(fault, std::to_string(v)) { };
     AppError(long fault) : AppError(fault, "") { }
-
-    // Fault fault() const { return Fault(payload); }
 };
 
 }
