@@ -284,7 +284,7 @@ HardDrive::checkOption(Opt opt, i64 value)
         case Opt::HDR_TYPE:
 
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             return;
 
@@ -294,7 +294,7 @@ HardDrive::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(Fault::OPT_UNSUPPORTED);
+            throw AppError(AppError::OPT_UNSUPPORTED);
     }
 }
 
@@ -306,7 +306,7 @@ HardDrive::setOption(Opt option, i64 value)
         case Opt::HDR_TYPE:
             
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             config.type = (HardDriveType)value;
             return;
@@ -598,7 +598,7 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 
     } else {
         
-        throw AppError(Fault::HDR_UNMATCHED_GEOMETRY);
+        throw AppError(AppError::HDR_UNMATCHED_GEOMETRY);
     }
 }
 

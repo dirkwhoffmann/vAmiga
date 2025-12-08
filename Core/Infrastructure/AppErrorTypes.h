@@ -7,6 +7,9 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+
+#if 0
+
 #pragma once
 
 #include "BasicTypes.h"
@@ -49,23 +52,6 @@ enum class Fault : long
     // Memory
     OUT_OF_MEMORY,        ///< Out of memory
 
-    // File IO
-    /*
-    DIR_NOT_FOUND,        ///< Directory does not exist
-    DIR_ACCESS_DENIED,    ///< File access denied
-    DIR_CANT_CREATE,      ///< Unable to create a directory
-    DIR_NOT_EMPTY,        ///< Directory is not empty
-    FILE_NOT_FOUND,       ///< File not found error
-    FILE_EXISTS,          ///< File already exists
-    FILE_IS_DIRECTORY,    ///< The file is a directory
-    FILE_ACCESS_DENIED,   ///< File access denied
-    FILE_TYPE_MISMATCH,   ///< File type mismatch
-    FILE_TYPE_UNSUPPORTED,///< Unsupported file type
-    FILE_CANT_READ,       ///< Can't read from file
-    FILE_CANT_WRITE,      ///< Can't write to file
-    FILE_CANT_CREATE,     ///< Can't create file
-    */
-    
     // Ram
     CHIP_RAM_MISSING,
     CHIP_RAM_LIMIT,
@@ -117,10 +103,7 @@ enum class Fault : long
     // Encrypted Roms
     MISSING_ROM_KEY,
     INVALID_ROM_KEY,
-    
-    // Recorder
-    REC_LAUNCH,
-    
+
     // Debugger
     REG_READ_ONLY,
     REG_WRITE_ONLY,
@@ -256,9 +239,7 @@ struct FaultEnum : Reflectable<FaultEnum, Fault>
 
             case Fault::MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case Fault::INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
-                
-            case Fault::REC_LAUNCH:                  return "REC_LAUNCH";
-                
+
             case Fault::REG_READ_ONLY:               return "REG_READ_ONLY";
             case Fault::REG_WRITE_ONLY:              return "REG_WRITE_ONLY";
             case Fault::REG_UNUSED:                  return "REG_UNUSED";
@@ -302,3 +283,4 @@ struct FaultEnum : Reflectable<FaultEnum, Fault>
 };
 
 }
+#endif

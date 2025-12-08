@@ -146,10 +146,10 @@ Agnus::checkOption(Opt opt, i64 value)
         case Opt::AGNUS_REVISION:
 
             if (!isPoweredOff()) {
-                throw AppError(Fault::OPT_LOCKED);
+                throw AppError(AppError::OPT_LOCKED);
             }
             if (!AgnusRevisionEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, AgnusRevisionEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, AgnusRevisionEnum::keyList());
             }
             return;
 
@@ -158,7 +158,7 @@ Agnus::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(Fault::OPT_UNSUPPORTED);
+            throw AppError(AppError::OPT_UNSUPPORTED);
     }
 }
 

@@ -35,15 +35,15 @@ RTC::checkOption(Opt option, i64 value)
         case Opt::RTC_MODEL:
 
             if (!isPoweredOff()) {
-                throw AppError(Fault::OPT_LOCKED);
+                throw AppError(AppError::OPT_LOCKED);
             }
             if (!RTCRevisionEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, RTCRevisionEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, RTCRevisionEnum::keyList());
             }
             return;
 
         default:
-            throw(Fault::OPT_UNSUPPORTED);
+            throw AppError(AppError::OPT_UNSUPPORTED);
     }
 }
 

@@ -72,7 +72,7 @@ EADFFile::init(FloppyDisk &disk)
 void
 EADFFile::init(FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw AppError(Fault::DISK_MISSING);
+    if (drive.disk == nullptr) throw AppError(AppError::DISK_MISSING);
     init(*drive.disk);
 }
 */
@@ -103,19 +103,19 @@ EADFFile::finalizeRead()
     if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
         
         warn("Only UAE-1ADF files are supported\n");
-        throw AppError(Fault::EXT_FACTOR5);
+        throw AppError(AppError::EXT_FACTOR5);
     }
     
     if (numTracks < 160 || numTracks > 168) {
 
         warn("Invalid number of tracks\n");
-        throw AppError(Fault::EXT_CORRUPTED);
+        throw AppError(AppError::EXT_CORRUPTED);
     }
 
     if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
         
         warn("File size mismatch\n");
-        throw AppError(Fault::EXT_CORRUPTED);
+        throw AppError(AppError::EXT_CORRUPTED);
     }
 
     for (isize i = 0; i < numTracks; i++) {
@@ -123,7 +123,7 @@ EADFFile::finalizeRead()
         if (typeOfTrack(i) != 0 && typeOfTrack(i) != 1) {
             
             warn("Unsupported track format\n");
-            throw AppError(Fault::EXT_INCOMPATIBLE);
+            throw AppError(AppError::EXT_INCOMPATIBLE);
         }
 
         if (typeOfTrack(i) == 0) {
@@ -131,20 +131,20 @@ EADFFile::finalizeRead()
             if (usedBitsForTrack(i) != 11 * 512 * 8) {
 
                 warn("Unsupported standard track size\n");
-                throw AppError(Fault::EXT_CORRUPTED);
+                throw AppError(AppError::EXT_CORRUPTED);
             }
         }
 
         if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
             
             warn("Corrupted length information\n");
-            throw AppError(Fault::EXT_CORRUPTED);
+            throw AppError(AppError::EXT_CORRUPTED);
         }
 
         if (usedBitsForTrack(i) % 8) {
             
             warn("Truncating track (bit count is not a multiple of 8)\n");
-            // throw AppError(Fault::EXT_INCOMPATIBLE);
+            // throw AppError(AppError::EXT_INCOMPATIBLE);
             W32BE(data.ptr + 12 + 12 * i + 8, usedBitsForTrack(i) & ~7);
         }
     }

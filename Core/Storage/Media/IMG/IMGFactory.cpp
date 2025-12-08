@@ -33,7 +33,7 @@ IMGFactory::make(Diameter dia, Density den)
     if (dia != Diameter::INCH_35 || den != Density::DD) {
 
         // We only support 3.5"DD disks at the moment
-        throw AppError(Fault::DISK_INVALID_LAYOUT);
+        throw AppError(AppError::DISK_INVALID_LAYOUT);
     }
 
     return make_unique<IMGFile>(9 * 160 * 512);
@@ -50,7 +50,7 @@ IMGFactory::make(const class FloppyDisk &disk)
 std::unique_ptr<IMGFile>
 IMGFactory::make(const class FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw AppError(Fault::DISK_MISSING);
+    if (drive.disk == nullptr) throw AppError(AppError::DISK_MISSING);
     return make(*drive.disk);
 }
 

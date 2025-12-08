@@ -47,12 +47,12 @@ Mouse::checkOption(Opt opt, i64 value)
         case Opt::MOUSE_VELOCITY:
 
             if (value < 0 || value > 255) {
-                throw AppError(Fault::OPT_INV_ARG, "0...255");
+                throw AppError(AppError::OPT_INV_ARG, "0...255");
             }
             return;
 
         default:
-            throw(Fault::OPT_UNSUPPORTED);
+            throw AppError(AppError::OPT_UNSUPPORTED);
     }
 }
 

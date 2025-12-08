@@ -107,17 +107,17 @@ FloppyDrive::checkOption(Opt opt, i64 value)
         case Opt::DRIVE_TYPE:
 
             if (!FloppyDriveTypeEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
             }
             if (value != i64(FloppyDriveType::DD_35) && value != i64(FloppyDriveType::HD_35)) {
-                throw AppError(Fault::OPT_UNSUPPORTED);
+                throw AppError(AppError::OPT_UNSUPPORTED);
             }
             return;
 
         case Opt::DRIVE_MECHANICS:
 
             if (!DriveMechanicsEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, DriveMechanicsEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, DriveMechanicsEnum::keyList());
             }
             return;
 
@@ -132,7 +132,7 @@ FloppyDrive::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(Fault::OPT_UNSUPPORTED);
+            throw AppError(AppError::OPT_UNSUPPORTED);
     }
 }
 
@@ -1020,7 +1020,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
     debug(DSK_DEBUG, "insertDisk <%ld> (%lld)\n", s, delay);
 
     // Only proceed if the provided disk is compatible with this drive
-    if (!isInsertable(*disk)) throw AppError(Fault::DISK_INCOMPATIBLE);
+    if (!isInsertable(*disk)) throw AppError(AppError::DISK_INCOMPATIBLE);
     
     // Get ownership of the disk
     diskToInsert = std::move(disk);
@@ -1051,7 +1051,7 @@ FloppyDrive::catchFile(const fs::path &path)
     
     // Seek the code section and read the first instruction word
     auto offset = descr.seek(HUNK_CODE);
-    if (!offset) throw AppError(Fault::HUNK_CORRUPTED);
+    if (!offset) throw AppError(AppError::HUNK_CORRUPTED);
     u16 instr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
     
     // Replace the first instruction word by a software trap
@@ -1110,7 +1110,7 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
     debug(DSK_DEBUG, "swapDisk()\n");
     
     // Only proceed if the provided disk is compatible with this drive
-    if (!isInsertable(*disk)) throw AppError(Fault::DISK_INCOMPATIBLE);
+    if (!isInsertable(*disk)) throw AppError(AppError::DISK_INCOMPATIBLE);
     
     // Determine delay (in pause mode, we insert immediately)
     auto delay = isRunning() ? config.diskSwapDelay : 0;

@@ -61,49 +61,49 @@ Monitor::checkOption(Opt opt, i64 value)
         case Opt::MON_PALETTE:
             
             if (!PaletteEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, PaletteEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, PaletteEnum::keyList());
             }
             return;
             
         case Opt::MON_ENHANCER:
             
             if (!UpscalerEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, UpscalerEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, UpscalerEnum::keyList());
             }
             return;
 
         case Opt::MON_UPSCALER:
             
             if (!UpscalerEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, UpscalerEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, UpscalerEnum::keyList());
             }
             return;
             
         case Opt::MON_DOTMASK:
             
             if (!DotmaskEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, DotmaskEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, DotmaskEnum::keyList());
             }
             return;
             
         case Opt::MON_SCANLINES:
             
             if (!ScanlinesEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, ScanlinesEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, ScanlinesEnum::keyList());
             }
             return;
 
         case Opt::MON_ZOOM:
             
             if (!ZoomEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, ZoomEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, ZoomEnum::keyList());
             }
             return;
 
         case Opt::MON_CENTER:
             
             if (!CenterEnum::isValid(value)) {
-                throw AppError(Fault::OPT_INV_ARG, CenterEnum::keyList());
+                throw AppError(AppError::OPT_INV_ARG, CenterEnum::keyList());
             }
             return;
 
@@ -112,7 +112,7 @@ Monitor::checkOption(Opt opt, i64 value)
         case Opt::MON_SATURATION:
             
             if (value < 0 || value > 100) {
-                throw AppError(Fault::OPT_INV_ARG, "0...100");
+                throw AppError(AppError::OPT_INV_ARG, "0...100");
             }
             return;
 
@@ -136,12 +136,12 @@ Monitor::checkOption(Opt opt, i64 value)
         case Opt::MON_FLICKER_WEIGHT:
             
             if (value < 0 || value > 1000) {
-                throw AppError(Fault::OPT_INV_ARG, "0...1000");
+                throw AppError(AppError::OPT_INV_ARG, "0...1000");
             }
             return;
             
         default:
-            throw AppError(Fault::OPT_UNSUPPORTED);
+            throw AppError(AppError::OPT_UNSUPPORTED);
     }
 }
 

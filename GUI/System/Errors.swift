@@ -44,12 +44,12 @@ public func warn(_ msg: String = "",
 
 final class AppError: Error {
 
-    let errorCode: Int // ErrorCode
+    let errorCode: Int
     let what: String
 
     init(_ exception: ExceptionWrapper) {
 
-        self.errorCode = exception.fault.rawValue
+        self.errorCode = exception.fault
         self.what = exception.what
     }
 

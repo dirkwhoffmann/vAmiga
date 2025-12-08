@@ -225,7 +225,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto addr = parseAddr(args.at("address"));
-                if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
+                if (IS_ODD(addr)) throw AppError(AppError::ADDR_UNALIGNED);
                 cpu.breakpoints.setAt(addr, parseNum(args, "ignores", 0));
             }
     });
@@ -330,7 +330,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto nr = parseNum(args, "vector");
-                if (nr < 0 || nr > 255) throw AppError(Fault::OPT_INV_ARG, "0...255");
+                if (nr < 0 || nr > 255) throw AppError(AppError::OPT_INV_ARG, "0...255");
                 cpu.catchpoints.setAt(u32(nr), parseNum(args, "ignores", 0));
             }
     });
@@ -346,7 +346,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto nr = parseNum(args, "interrupt");
-                if (nr < 1 || nr > 7) throw AppError(Fault::OPT_INV_ARG, "1...7");
+                if (nr < 1 || nr > 7) throw AppError(AppError::OPT_INV_ARG, "1...7");
                 cpu.catchpoints.setAt(u32(nr + 24), parseNum(args, "ignores", 0));
             }
     });
@@ -362,7 +362,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto nr = parseNum(args, "trap");
-                if (nr < 0 || nr > 15) throw AppError(Fault::OPT_INV_ARG, "0...15");
+                if (nr < 0 || nr > 15) throw AppError(AppError::OPT_INV_ARG, "0...15");
                 cpu.catchpoints.setAt(u32(nr + 32), parseNum(args, "ignores", 0));
             }
     });
@@ -416,7 +416,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto addr = parseAddr(args, "address");
-                if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
+                if (IS_ODD(addr)) throw AppError(AppError::ADDR_UNALIGNED);
                 copper.debugger.breakpoints.setAt(addr, parseNum(args, "ignores", 0));
             }
     });
@@ -470,7 +470,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto addr = parseAddr(args, "address");
-                if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
+                if (IS_ODD(addr)) throw AppError(AppError::ADDR_UNALIGNED);
                 copper.debugger.watchpoints.setAt(addr, parseNum(args, "ignores", 0));
             }
     });
@@ -1037,7 +1037,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 case 2: copper.debugger.disassemble(os, 2, true); break;
                     
                 default:
-                    throw AppError(Fault::OPT_INV_ARG, "1 or 2");
+                    throw AppError(AppError::OPT_INV_ARG, "1 or 2");
             }
         }
     });

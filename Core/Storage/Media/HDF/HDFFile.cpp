@@ -59,7 +59,7 @@ void
 HDFFile::init(const fs::path &path)
 {
     // Check size
-    if (isOversized(utl::getSizeOfFile(path))) throw AppError(Fault::HDR_TOO_LARGE);
+    if (isOversized(utl::getSizeOfFile(path))) throw AppError(AppError::HDR_TOO_LARGE);
     
     AnyFile::init(path);
 }
@@ -68,7 +68,7 @@ void
 HDFFile::init(const u8 *buf, isize len)
 {
     // Check size
-    if (isOversized(len)) throw AppError(Fault::HDR_TOO_LARGE);
+    if (isOversized(len)) throw AppError(AppError::HDR_TOO_LARGE);
 
     AnyFile::init(buf, len);
 }
@@ -194,10 +194,10 @@ HDFFile::getDriverDescriptor(isize driver) const
             auto lsegBlock = seekBlock(lsegRef);
             
             if (!lsegBlock || strcmp((const char *)lsegBlock, "LSEG")) {
-                throw AppError(Fault::HDR_CORRUPTED_LSEG);
+                throw AppError(AppError::HDR_CORRUPTED_LSEG);
             }
             if (i >= 1024) {
-                throw AppError(Fault::HDR_CORRUPTED_LSEG);
+                throw AppError(AppError::HDR_CORRUPTED_LSEG);
             }
             
             result.blocks.push_back(lsegRef);
