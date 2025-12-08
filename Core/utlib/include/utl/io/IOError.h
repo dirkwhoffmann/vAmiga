@@ -19,6 +19,7 @@ struct IOError : public Error {
     static constexpr long DIR_ACCESS_DENIED     = 1;
     static constexpr long DIR_CANT_CREATE       = 2;
     static constexpr long DIR_NOT_EMPTY         = 3;
+
     static constexpr long FILE_NOT_FOUND        = 4;
     static constexpr long FILE_EXISTS           = 5;
     static constexpr long FILE_IS_DIRECTORY     = 6;
@@ -29,14 +30,17 @@ struct IOError : public Error {
     static constexpr long FILE_CANT_WRITE       = 11;
     static constexpr long FILE_CANT_CREATE      = 12;
 
+    static constexpr long ZLIB_ERROR            = 20;
+
     const char *errstr() const noexcept override {
 
         switch (payload) {
-
+                
             case DIR_NOT_FOUND:         return "DIR_NOT_FOUND";
             case DIR_ACCESS_DENIED:     return "DIR_ACCESS_DENIED";
             case DIR_CANT_CREATE:       return "DIR_CANT_CREATE";
             case DIR_NOT_EMPTY:         return "DIR_NOT_EMPTY";
+                
             case FILE_NOT_FOUND:        return "FILE_NOT_FOUND";
             case FILE_EXISTS:           return "FILE_EXISTS";
             case FILE_IS_DIRECTORY:     return "FILE_IS_DIRECTORY";
@@ -46,8 +50,12 @@ struct IOError : public Error {
             case FILE_CANT_READ:        return "FILE_CANT_READ";
             case FILE_CANT_WRITE:       return "FILE_CANT_WRITE";
             case FILE_CANT_CREATE:      return "FILE_CANT_CREATE";
+                
+            case ZLIB_ERROR:            return "ZLIB_ERROR";
+                
+            default:
+                return "UNKNOWN";
         }
-        return "UNKNOWN_IO_FAULT";
     }
 
     explicit IOError(long fault, const std::string &msg = "") : Error(fault) {
@@ -104,6 +112,10 @@ struct IOError : public Error {
 
             case FILE_CANT_CREATE:
                 set_msg("Failed to create file \"" + msg + "\".");
+                break;
+
+            case ZLIB_ERROR:
+                set_msg(msg);
                 break;
 
             default:

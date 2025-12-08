@@ -364,6 +364,8 @@
 		50BCB9A82EE2F347000C53CF /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9A62EE2F344000C53CF /* Parser.cpp */; };
 		50BCB9AB2EE2FA11000C53CF /* DeviceError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */; };
 		50BCB9AC2EE2FA11000C53CF /* DeviceError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */; };
+		50BCB9C92EE73B65000C53CF /* MediaError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9C82EE73B62000C53CF /* MediaError.cpp */; };
+		50BCB9CA2EE73B65000C53CF /* MediaError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9C82EE73B62000C53CF /* MediaError.cpp */; };
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
 		50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CC6276D174200386540 /* GdbServer.cpp */; };
 		50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
@@ -1135,6 +1137,8 @@
 		50BCB9C42EE6BED6000C53CF /* IOError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOError.h; sourceTree = "<group>"; };
 		50BCB9C52EE6BF58000C53CF /* ParseError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseError.h; sourceTree = "<group>"; };
 		50BCB9C62EE72773000C53CF /* ServerError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerError.h; sourceTree = "<group>"; };
+		50BCB9C72EE73A2A000C53CF /* MediaError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaError.h; sourceTree = "<group>"; };
+		50BCB9C82EE73B62000C53CF /* MediaError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MediaError.cpp; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -2177,6 +2181,8 @@
 			children = (
 				50CF46492620432B00BB3B95 /* CMakeLists.txt */,
 				5099432C29C224BB00867E8F /* Media.h */,
+				50BCB9C72EE73A2A000C53CF /* MediaError.h */,
+				50BCB9C82EE73B62000C53CF /* MediaError.cpp */,
 				50985ABD2C418D370079CFC5 /* MediaFileTypes.h */,
 				50985ABA2C418D190079CFC5 /* MediaFile.h */,
 				50985AB92C418D190079CFC5 /* MediaFile.cpp */,
@@ -3060,6 +3066,7 @@
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
 				509D07732EDB920100355638 /* FileSystemLayer2.cpp in Sources */,
 				504FC7C92D31292200F0B733 /* Dashboard.swift in Sources */,
+				50BCB9CA2EE73B65000C53CF /* MediaError.cpp in Sources */,
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
@@ -3346,6 +3353,7 @@
 				509D07672EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
 				50FC04CD27DA19E900C3E566 /* HDFFile.cpp in Sources */,
 				50FC04EF27DA1A4500C3E566 /* RemoteManager.cpp in Sources */,
+				50BCB9C92EE73B65000C53CF /* MediaError.cpp in Sources */,
 				50FC049027DA196500C3E566 /* Denise.cpp in Sources */,
 				50FC04FC27DA1AA200C3E566 /* DiskController.cpp in Sources */,
 				50FC04A127DA197A00C3E566 /* SequencerInfo.cpp in Sources */,

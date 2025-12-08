@@ -238,7 +238,6 @@ extern debugflag FORCE_FS_WRONG_BSIZE;
 extern debugflag FORCE_FS_WRONG_CAPACITY;
 extern debugflag FORCE_FS_WRONG_DOS_TYPE;
 extern debugflag FORCE_DMS_CANT_CREATE;
-extern debugflag FORCE_ZLIB_ERROR;
 
 }
 

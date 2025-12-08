@@ -29,13 +29,15 @@ struct NewParseError : public Error {
         using namespace fault::parse;
 
         switch (payload) {
-
+                
             case PARSE_BOOL_ERROR:   return "PARSE_BOOL_ERROR";
             case PARSE_ON_OFF_ERROR: return "PARSE_ON_OFF_ERROR";
             case PARSE_NUM_ERROR:    return "PARSE_NUM_ERROR";
             case PARSE_ENUM_ERROR:   return "PARSE_ENUM_ERROR";
+                
+            default:
+                return "UNKNOWN";
         }
-        return "UNKNOWN_PARSE_FAULT";
     }
 
     NewParseError(long fault, const std::string &msg) : Error(fault) {

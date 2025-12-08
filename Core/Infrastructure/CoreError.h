@@ -54,31 +54,6 @@ struct CoreError : public Error {
     static constexpr long ROM_MISSING       = 504;
     static constexpr long AROS_NO_EXTROM    = 505;
 
-    // Floppy disks
-    /*
-    static constexpr long DISK_MISSING               = 600;
-    static constexpr long DISK_INCOMPATIBLE          = 601;
-    static constexpr long DISK_INVALID_DIAMETER      = 602;
-    static constexpr long DISK_INVALID_DENSITY       = 603;
-    static constexpr long DISK_INVALID_LAYOUT        = 604;
-    static constexpr long DISK_WRONG_SECTOR_COUNT    = 605;
-    static constexpr long DISK_INVALID_SECTOR_NUMBER = 606;
-
-    // Hard disks
-    static constexpr long HDR_TOO_LARGE              = 700;
-    static constexpr long HDR_UNSUPPORTED_CYL_COUNT  = 701;
-    static constexpr long HDR_UNSUPPORTED_HEAD_COUNT = 702;
-    static constexpr long HDR_UNSUPPORTED_SEC_COUNT  = 703;
-    static constexpr long HDR_UNSUPPORTED_BSIZE      = 704;
-    static constexpr long HDR_UNKNOWN_GEOMETRY       = 705;
-    static constexpr long HDR_UNMATCHED_GEOMETRY     = 706;
-    static constexpr long HDR_UNPARTITIONED          = 707;
-    static constexpr long HDR_CORRUPTED_PTABLE       = 708;
-    static constexpr long HDR_CORRUPTED_FSH          = 709;
-    static constexpr long HDR_CORRUPTED_LSEG         = 710;
-    static constexpr long HDR_UNSUPPORTED            = 711;
-    */
-    
     // Hard drive controller
     static constexpr long HDC_INIT                   = 800;
 
@@ -93,7 +68,6 @@ struct CoreError : public Error {
     static constexpr long EXT_FACTOR5                = 1001;
     static constexpr long EXT_INCOMPATIBLE           = 1002;
     static constexpr long EXT_CORRUPTED              = 1003;
-    static constexpr long ZLIB_ERROR                 = 1004;
 
     // Encrypted Roms
     static constexpr long MISSING_ROM_KEY            = 1104;
@@ -151,28 +125,6 @@ struct CoreError : public Error {
             case ROM_MISSING:                 return "ROM_MISSING";
             case AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
 
-                /*
-            case DISK_MISSING:                return "DISK_MISSING";
-            case DISK_INCOMPATIBLE:           return "DISK_INCOMPATIBLE";
-            case DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
-            case DISK_INVALID_DENSITY:        return "DISK_INVALID_DENSITY";
-            case DISK_INVALID_LAYOUT:         return "DISK_INVALID_LAYOUT";
-            case DISK_WRONG_SECTOR_COUNT:     return "DISK_WRONG_SECTOR_COUNT";
-            case DISK_INVALID_SECTOR_NUMBER:  return "DISK_INVALID_SECTOR_NUMBER";
-
-            case HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
-            case HDR_UNSUPPORTED_CYL_COUNT:   return "HDR_UNSUPPORTED_CYL_COUNT";
-            case HDR_UNSUPPORTED_HEAD_COUNT:  return "HDR_UNSUPPORTED_HEAD_COUNT";
-            case HDR_UNSUPPORTED_SEC_COUNT:   return "HDR_UNSUPPORTED_SEC_COUNT";
-            case HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
-            case HDR_UNKNOWN_GEOMETRY:        return "HDR_UNKNOWN_GEOMETRY";
-            case HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
-            case HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
-            case HDR_CORRUPTED_PTABLE:        return "HDR_CORRUPTED_PTABLE";
-            case HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
-            case HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
-            case HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
-            */
             case HDC_INIT:                    return "HDC_INIT";
 
             case SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
@@ -184,7 +136,6 @@ struct CoreError : public Error {
             case EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
             case EXT_CORRUPTED:               return "EXT_CORRUPTED";
-            case ZLIB_ERROR:                  return "ZLIB_ERROR";
 
             case MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
@@ -204,11 +155,11 @@ struct CoreError : public Error {
         return "???";
     }
 
-    CoreError(long fault, const string &s);
-    CoreError(long fault, const char *s) : CoreError(fault, string(s)) { };
-    CoreError(long fault, const fs::path &p) : CoreError(fault, p.string()) { };
-    CoreError(long fault, std::integral auto v) : CoreError(fault, std::to_string(v)) { };
-    CoreError(long fault) : CoreError(fault, "") { }
+    explicit CoreError(long fault, const string &s);
+    explicit CoreError(long fault, const char *s) : CoreError(fault, string(s)) { };
+    explicit CoreError(long fault, const fs::path &p) : CoreError(fault, p.string()) { };
+    explicit CoreError(long fault, std::integral auto v) : CoreError(fault, std::to_string(v)) { };
+    explicit CoreError(long fault) : CoreError(fault, "") { }
 };
 
 }

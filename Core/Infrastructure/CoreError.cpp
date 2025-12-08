@@ -261,11 +261,7 @@ CoreError::CoreError(long code, const string &s) : Error(code)
             set_msg("The disk encoder failed to extract the disk due to "
                     " corrupted or inconsistend file data.");
             break;
- 
-        case ZLIB_ERROR:
-            set_msg(s);
-            break;
-            
+
         case MISSING_ROM_KEY:
             set_msg("No \"rom.key\" file found.");
             break;

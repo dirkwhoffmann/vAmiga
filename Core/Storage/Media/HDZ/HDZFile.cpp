@@ -10,6 +10,7 @@
 #include "config.h"
 #include "HDZFile.h"
 #include "utl/chrono.h"
+#include "utl/io.h"
 #include "utl/support.h"
 
 namespace vamiga {
@@ -46,7 +47,7 @@ HDZFile::init(const class HDFFile &hdf)
         try {
             data.gzip();
         } catch (std::runtime_error &err) {
-            throw CoreError(CoreError::ZLIB_ERROR, err.what());
+            throw IOError(IOError::ZLIB_ERROR, err.what());
         }
     }
     
@@ -63,7 +64,7 @@ HDZFile::finalizeRead()
         try {
             data.gunzip();
         } catch (std::runtime_error &err) {
-            throw CoreError(CoreError::ZLIB_ERROR, err.what());
+            throw IOError(IOError::ZLIB_ERROR, err.what());
         }
     }
     

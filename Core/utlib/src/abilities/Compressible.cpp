@@ -9,6 +9,7 @@
 
 #include "utl/abilities/Compressible.h"
 #include "utl/support/Bytes.h"
+#include "utl/io/IOError.h"
 #include "lz4.h"
 
 #ifdef USE_ZLIB
@@ -105,7 +106,7 @@ Compressible::gunzip(u8 *buffer, isize len, std::vector<u8> &result, isize sizeE
             case Z_VERSION_ERROR:
 
                 inflateEnd(&zs);
-                throw std::runtime_error("Zlib error " + std::to_string(ret));
+                throw IOError(IOError::ZLIB_ERROR, "Zlib error " + std::to_string(ret));
 
             default:
                 break;
