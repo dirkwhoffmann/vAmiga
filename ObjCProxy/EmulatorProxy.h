@@ -56,16 +56,6 @@ using namespace vamiga;
 //
 
 typedef struct {
-
-    struct {
-        NSInteger CANT_READ;
-        NSInteger CANT_WRITE;
-        NSInteger CANT_CREATE;
-    } IO;
-
-} VAmigaFaults;
-
-typedef struct {
     
     struct {
         
@@ -131,7 +121,6 @@ typedef struct {
     
 } VAmigaConstants;
 
-extern const VAmigaFaults FAULT;
 extern const VAmigaConstants VAMIGA;
 
 NSString *EventSlotName(EventSlot slot);

@@ -14,8 +14,6 @@
 
 namespace utl {
 
-using namespace types;
-
 //
 // Formatters
 //

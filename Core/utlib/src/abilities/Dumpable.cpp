@@ -13,8 +13,6 @@
 
 namespace utl {
 
-using namespace utl::support;
-
 void
 Dumpable::hexdump(u8 *p, isize size, isize cols, isize pad) const
 {

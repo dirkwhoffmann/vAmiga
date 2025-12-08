@@ -9,11 +9,11 @@
 
 #include "config.h"
 #include "FileSystem.h"
+#include "utl/io.h"
 #include <fstream>
 
 namespace vamiga {
 
-namespace fault { using namespace utl::fault; }
 using namespace utl;
 
 bool
@@ -99,7 +99,7 @@ FSExporter::exportBlocks(Block first, Block last, const fs::path &path) const
     std::ofstream stream(path, std::ios::binary);
 
     if (!stream.is_open()) {
-        throw IOError(fault::io::FILE_CANT_CREATE, path);
+        throw IOError(IOError::FILE_CANT_CREATE, path);
     }
 
     for (Block i = first; i <= last; i++) {
@@ -109,7 +109,7 @@ FSExporter::exportBlocks(Block first, Block last, const fs::path &path) const
     }
 
     if (!stream) {
-        throw IOError(fault::io::FILE_CANT_WRITE, path);
+        throw IOError(IOError::FILE_CANT_WRITE, path);
     }
 }
 

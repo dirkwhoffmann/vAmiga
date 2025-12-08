@@ -13,8 +13,6 @@
 #include "utl/io.h"
 #include <fstream>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 void

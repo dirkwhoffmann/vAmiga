@@ -13,8 +13,6 @@
 #include "SerialPort.h"
 #include "utl/io.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)

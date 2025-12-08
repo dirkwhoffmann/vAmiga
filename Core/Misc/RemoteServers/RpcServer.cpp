@@ -14,8 +14,6 @@
 #include "utl/support.h"
 #include <thread>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 using nlohmann::json;

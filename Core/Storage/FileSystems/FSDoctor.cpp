@@ -16,8 +16,6 @@
 #include <unordered_set>
 #include <sstream>
 
-namespace utl { using namespace support; }
-
 //
 // Macros used inside the check() methods
 //

@@ -7,10 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "types/integers.h"
+#include "types/integers_.h"
 #include "types/Exception.h"
-
-namespace utl { using namespace types; }
 
 #include <filesystem>
 #include <optional>

@@ -11,8 +11,6 @@
 #include "DiskFile.h"
 #include "utl/support/Strings.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 u8

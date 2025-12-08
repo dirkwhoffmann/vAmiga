@@ -12,8 +12,6 @@
 #include "utl/io.h"
 #include <algorithm>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 FSStorage::FSStorage(FileSystem &fs) : FSExtension(fs), bsize(512) { };

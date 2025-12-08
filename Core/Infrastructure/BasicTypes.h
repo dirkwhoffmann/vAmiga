@@ -21,7 +21,6 @@
 namespace vamiga {
 
 using namespace utl;
-using namespace utl::types;
 
 /*
 // Signed integers

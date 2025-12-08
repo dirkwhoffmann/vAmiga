@@ -16,8 +16,6 @@
 #include <stack>
 #include <algorithm>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 bool

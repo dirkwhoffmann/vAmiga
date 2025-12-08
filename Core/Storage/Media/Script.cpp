@@ -13,8 +13,6 @@
 #include "utl/support/Strings.h"
 #include <sstream>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 bool

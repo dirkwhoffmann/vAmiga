@@ -17,8 +17,6 @@
 
 namespace vamiga {
 
-using namespace utl::concurrency;
-
 class PixelEngine final : public SubComponent {
 
     Descriptions descriptions = {{

@@ -12,8 +12,6 @@
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
-namespace utl { using namespace support; }
-
 extern "C" {
 unsigned short extractDMS(const unsigned char *in, size_t inSize,
                           unsigned char **out, size_t *outSize, int verbose);

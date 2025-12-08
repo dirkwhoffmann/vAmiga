@@ -37,4 +37,14 @@ struct GenericException : public Exception {
     void set_payload(T value) { _payload = std::move(value); }
 };
 
+class Error : public GenericException<long> {
+
+public:
+
+    Error(long d = 0, const std::string &s = "") : GenericException<long>(d, s) { }
+
+    virtual long fault() const { return _payload; }
+    virtual const char *errstr() const noexcept { return "GENERIC"; }
+};
+
 }

@@ -17,8 +17,6 @@
 #include <unordered_set>
 #include <sys/stat.h>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 FSString::FSString(const string &cpp, isize limit) : str(cpp), limit(limit)

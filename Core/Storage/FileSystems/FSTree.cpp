@@ -9,13 +9,12 @@
 
 #include "FSTree.h"
 #include "FileSystem.h"
-#include "utl/types/Error.h"
+#include "utl/io.h"
 #include <algorithm>
 #include <fstream>
 
 namespace vamiga {
 
-namespace fault { using namespace utl::fault; }
 using namespace utl;
 
 FSTree::FSTree(const FSBlock &top, const FSOpt &opt)
@@ -246,13 +245,13 @@ FSTree::saveFile(const fs::path &path, const FSOpt &opt) const
     // Open file
     std::ofstream stream(path, std::ios::binary);
     if (!stream.is_open()) {
-        throw IOError(fault::io::FILE_CANT_CREATE, path);
+        throw IOError(IOError::FILE_CANT_CREATE, path);
     }
 
     // Write data
     stream.write((const char *)buffer.ptr, buffer.size);
     if (!stream) {
-        throw IOError(fault::io::FILE_CANT_WRITE, path);
+        throw IOError(IOError::FILE_CANT_WRITE, path);
     }
 }
 

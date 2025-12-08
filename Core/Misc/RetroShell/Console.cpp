@@ -16,8 +16,6 @@
 #include <string>
 #include "utl/support.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 HistoryBuffer Console::historyBuffer;

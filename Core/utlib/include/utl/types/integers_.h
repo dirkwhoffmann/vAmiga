@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace utl::types {
+namespace utl {
 
 // Signed integers
 typedef signed char        i8;
@@ -26,10 +26,3 @@ typedef unsigned long long u64;
 typedef unsigned long      usize;
 
 }
-
-// Make types visible in subspaces
-namespace utl::animation   { using namespace utl::types; }
-namespace utl::chrono      { using namespace utl::types; }
-namespace utl::concurrency { using namespace utl::types; }
-namespace utl::storage     { using namespace utl::types; }
-namespace utl::support     { using namespace utl::types; }

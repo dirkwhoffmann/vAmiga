@@ -11,8 +11,6 @@
 #include "FileSystem.h"
 #include "utl/support.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 FSBlock &

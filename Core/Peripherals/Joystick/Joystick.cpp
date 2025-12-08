@@ -13,8 +13,6 @@
 #include "utl/io.h"
 #include <sstream>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid), port(pref)

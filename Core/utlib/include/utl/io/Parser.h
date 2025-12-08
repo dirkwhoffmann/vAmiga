@@ -10,7 +10,7 @@
 #pragma once
 
 #include "utl/types.h"
-#include "utl/types/Error.h"
+#include "utl/io/ParseError.h"
 #include "utl/abilities/Reflectable.h"
 
 #include <functional>

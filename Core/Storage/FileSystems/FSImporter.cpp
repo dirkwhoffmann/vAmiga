@@ -9,12 +9,11 @@
 
 #include "config.h"
 #include "FileSystem.h"
-#include "utl/types/Error.h"
+#include "utl/io.h"
 #include <fstream>
 
 namespace vamiga {
 
-namespace fault { using namespace utl::fault; }
 using namespace utl;
 
 void
@@ -65,7 +64,7 @@ FSImporter::import(FSBlock &top, const fs::path &path, bool recursive, bool cont
     // Get the directory item
     try { dir = fs::directory_entry(path); } catch (...) {
         // throw AppError(Fault::FILE_CANT_READ);
-        throw IOError(fault::io::FILE_CANT_READ, path);
+        throw IOError(IOError::FILE_CANT_READ, path);
     }
 
     if (dir.is_directory() && contents) {
@@ -134,14 +133,14 @@ FSImporter::importBlock(Block nr, const fs::path &path)
     std::ifstream stream(path, std::ios::binary);
 
     if (!stream.is_open()) {
-        throw IOError(fault::io::FILE_CANT_READ, path);
+        throw IOError(IOError::FILE_CANT_READ, path);
     }
 
     auto *data = fs.at(nr).data();
     stream.read((char *)data, traits.bsize);
 
     if (!stream) {
-        throw IOError(fault::io::FILE_CANT_READ, path);
+        throw IOError(IOError::FILE_CANT_READ, path);
     }
 }
 

@@ -16,8 +16,6 @@
 #include "utl/io.h"
 #include "utl/support.h"
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 bool

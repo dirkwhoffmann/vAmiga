@@ -13,8 +13,6 @@
 
 namespace vamiga {
 
-using namespace utl::support;
-
 Socket::Socket() : socket(INVALID_SOCKET)
 {
     debug(SCK_DEBUG, "Socket constructor\n");

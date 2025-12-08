@@ -15,8 +15,6 @@
 #include <algorithm>
 #include <fstream>
 
-namespace utl { using namespace support; }
-
 namespace vamiga {
 
 FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : fs(ref)

@@ -18,8 +18,6 @@
 
 namespace vamiga {
 
-using namespace utl::concurrency;
-
 /** Requests a state change from within the emulator.
  *  This exception is thrown inside the emulator core when the CPU stops
  *  execution in the middle of frame. This happens when a breakpoint or
