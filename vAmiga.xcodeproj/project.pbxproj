@@ -736,7 +736,6 @@
 		503FC4B92EE08B2B00637C95 /* Reflectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflectable.h; sourceTree = "<group>"; };
 		503FC4BD2EE091DC00637C95 /* Reflectable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Reflectable.cpp; sourceTree = "<group>"; };
 		503FC4C22EE092D900637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		503FC4C42EE092EE00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4C52EE093DD00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4C62EE0A95000637C95 /* Files.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Files.h; sourceTree = "<group>"; };
 		503FC4C82EE0A97D00637C95 /* Streams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Streams.h; sourceTree = "<group>"; };
@@ -1507,7 +1506,6 @@
 		503FC4B22EE048D800637C95 /* utl */ = {
 			isa = PBXGroup;
 			children = (
-				503FC4C42EE092EE00637C95 /* CMakeLists.txt */,
 				50BCB99C2EE2C33B000C53CF /* types.h */,
 				50BCB9902EE1C84C000C53CF /* abilities.h */,
 				50BCB9912EE1CC86000C53CF /* chrono.h */,

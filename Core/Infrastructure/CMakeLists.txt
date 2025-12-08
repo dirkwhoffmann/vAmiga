@@ -1,20 +1,9 @@
-target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_sources(VACore PRIVATE
-
-Emulator.cpp
-AppError.cpp
-CmdQueue.cpp
-Configurable.cpp
-CoreObject.cpp
-CoreComponent.cpp
-Defaults.cpp
-GuardList.cpp
-Host.cpp
-MsgQueue.cpp
-Option.cpp
-Serializable.cpp
-SubComponent.cpp
-Thread.cpp
-
+target_include_directories(VACore PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+file(GLOB VA_CORE_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+)
+
+target_sources(VACore PRIVATE ${VA_CORE_SOURCES})
