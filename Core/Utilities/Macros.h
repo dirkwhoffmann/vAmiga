@@ -17,19 +17,19 @@
 
 #ifdef _MSC_VER
 
-#define unreachable    __assume(false)
+#define unreachable_vm    __assume(false)
 #define likely(x)      (x)
 #define unlikely(x)    (x)
 
 #else
 
-#define unreachable    __builtin_unreachable()
+#define unreachable_vm    __builtin_unreachable()
 #define likely(x)      __builtin_expect(!!(x), 1)
 #define unlikely(x)    __builtin_expect(!!(x), 0)
 
 #endif
 
-#define fatalError     assert(false); unreachable
+#define fatalError     assert(false); unreachable_vm
 
 
 //

@@ -8,11 +8,18 @@
 #pragma once
 
 #ifdef _MSC_VER
-#define unreachable     __assume(false)
+
+#define unreachable_vm     __assume(false)
+
 #else
-#define unreachable     __builtin_unreachable()
+
+#define unreachable_vm     __builtin_unreachable()
+
 #endif
-#define fatalError      assert(false); unreachable
+
+
+
+#define fatalError      assert(false); unreachable_vm
 
 #if MOIRA_PRECISE_TIMING == true
 
