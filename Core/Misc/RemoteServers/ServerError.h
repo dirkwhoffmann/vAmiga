@@ -71,13 +71,7 @@ struct ServerError : public Error {
 
     explicit ServerError(long fault, const string &s = "") : Error(fault, s) {
 
-        switch (fault) {
-
-            default:
-
-                set_msg(string("ServerError ") + std::to_string(fault) + " (" + errstr() + ").");
-                break;
-        }
+        set_msg(string("ServerError ") + std::to_string(fault) + " (" + errstr() + ").");
     }
 };
 

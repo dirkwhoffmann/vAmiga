@@ -9,9 +9,11 @@
 
 #pragma once
 
-#include "BasicTypes.h"
+#include "utl/abilities/Reflectable.h"
 
 namespace vamiga {
+
+using namespace utl;
 
 //
 // Constants

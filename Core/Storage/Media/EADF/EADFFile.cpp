@@ -51,33 +51,6 @@ EADFFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-/*
-void
-EADFFile::init(FloppyDisk &disk)
-{
-    auto numTracks = disk.numTracks();
-    
-    auto length = 0;
-
-    length += 12;               // File header
-    length += 12 * numTracks;   // Track headers
-    
-    for (isize i = 0; i < numTracks; i++) {
-        length += disk.length.track[i];
-    }
-    
-    data.init(length);
-    decodeDisk(disk);
-}
-
-void
-EADFFile::init(FloppyDrive &drive)
-{
-    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
-    init(*drive.disk);
-}
-*/
-
 isize
 EADFFile::numCyls() const
 {
