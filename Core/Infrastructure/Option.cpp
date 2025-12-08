@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Option.h"
 #include "VAmigaTypes.h"
-#include "AppError.h"
+#include "CoreError.h"
 #include <sstream>
 
 namespace vamiga {

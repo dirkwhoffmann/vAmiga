@@ -10,7 +10,7 @@
 #pragma once
 
 #include "CoreObjectTypes.h"
-#include "AppError.h"
+#include "CoreError.h"
 #include "utl/abilities/Loggable.h"
 #include "utl/abilities/Reportable.h"
 

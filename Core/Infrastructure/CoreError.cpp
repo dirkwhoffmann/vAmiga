@@ -8,14 +8,14 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "AppError.h"
+#include "CoreError.h"
 #include "Constants.h"
 #include "Macros.h"
 #include "DeviceTypes.h"
 
 namespace vamiga {
 
-AppError::AppError(long code, const string &s) : Error(code)
+CoreError::CoreError(long code, const string &s) : Error(code)
 {
     // string _msg;
     

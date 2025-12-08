@@ -105,7 +105,7 @@ NSString *EventSlotName(EventSlot slot)
     return self;
 }
 
-- (void)save:(const AppError &)exception
+- (void)save:(const Error &)exception
 {
     fault = exception.fault();
     what = @(exception.what());
@@ -154,13 +154,13 @@ NSString *EventSlotName(EventSlot slot)
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self props]->load([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self props]->save([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)register:(NSString *)key value:(NSString *)value
@@ -514,7 +514,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom(*(MediaFile *)proxy->obj); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
@@ -523,13 +523,13 @@ NSString *EventSlotName(EventSlot slot)
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadRom(bytes, [data length]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)deleteExt
@@ -547,7 +547,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt(*(MediaFile *)proxy->obj); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
@@ -556,31 +556,31 @@ NSString *EventSlotName(EventSlot slot)
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadExt(bytes, [data length]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveRom([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveWom([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveExt([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (MemSrc)memSrc:(Accessor)accessor addr:(NSInteger)addr
@@ -1272,19 +1272,19 @@ NSString *EventSlotName(EventSlot slot)
             return [self drive]->insertBlankDisk(fs, bb, [name UTF8String]);
         }
     }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
     try { [self drive]->insertMedia(*(MediaFile *)proxy->obj, wp); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
     try { [self drive]->insert([url fileSystemRepresentation], wp); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)eject
@@ -1301,7 +1301,7 @@ NSString *EventSlotName(EventSlot slot)
         //Transfer ownership to ObjC via release
         return [MediaFileProxy make:disk.release()];
 
-    } catch (AppError &error) { [ex save:error]; }
+    } catch(Error &error) { [ex save:error]; }
 
     return nil;
 }
@@ -1366,7 +1366,7 @@ NSString *EventSlotName(EventSlot slot)
         auto dev = FileSystemFactory::fromMediaFile(*file);
         return [self make:dev.release()];
 
-    }  catch (AppError &error) {
+    }  catch(Error &error) {
 
         [ex save:error];
         return nil;
@@ -1383,7 +1383,7 @@ NSString *EventSlotName(EventSlot slot)
         auto dev = FileSystemFactory::fromMediaFile(*file);
         return [self make:dev.release()];
 
-    }  catch (AppError &error) {
+    }  catch(Error &error) {
 
         [ex save:error];
         return nil;
@@ -1547,7 +1547,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)export:(NSString *)path recursive:(BOOL)rec contents:(BOOL)con exception:(ExceptionWrapper *)ex
 {
     try { return [self fs]->exporter.exportFiles([path fileSystemRepresentation], rec, con); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)createUsageMap:(u8 *)buf length:(NSInteger)len
@@ -1695,7 +1695,7 @@ NSString *EventSlotName(EventSlot slot)
                    exception:(ExceptionWrapper *)ex
 {
     try { return [self make: MediaFile::make([path fileSystemRepresentation])]; }
-    catch (AppError &error) { [ex save:error]; return nil; }
+    catch(Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path
@@ -1703,7 +1703,7 @@ NSString *EventSlotName(EventSlot slot)
                    exception:(ExceptionWrapper *)ex
 {
     try { return [self make: MediaFile::make([path fileSystemRepresentation], type)]; }
-    catch (AppError &error) { [ex save:error]; return nil; }
+    catch(Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len
@@ -1711,7 +1711,7 @@ NSString *EventSlotName(EventSlot slot)
                      exception:(ExceptionWrapper *)ex
 {
     try { return [self make: MediaFile::make((u8 *)buf, len, type)]; }
-    catch (AppError &error) { [ex save:error]; return nil; }
+    catch(Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c
@@ -1729,7 +1729,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     auto drive = (FloppyDriveAPI *)proxy->obj;
     try { return [self make: MediaFile::make(*drive, type)]; }
-    catch (AppError &error) { [ex save:error]; return nil; }
+    catch(Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy
@@ -1738,7 +1738,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     auto drive = (HardDriveAPI *)proxy->obj;
     try { return [self make: MediaFile::make(*drive, type)]; }
-    catch (AppError &error) { [ex save:error]; return nil; }
+    catch(Error &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy
@@ -1747,7 +1747,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     auto fs = (FileSystem *)proxy->obj;
     try { return [self make: MediaFile::make(*fs, type)]; }
-    catch (AppError &error) { [ex save:error]; return nil; }
+    catch(Error &error) { [ex save:error]; return nil; }
 }
 
 - (FileType)type
@@ -1783,13 +1783,13 @@ NSString *EventSlotName(EventSlot slot)
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { [self file]->writeToFile(string([path fileSystemRepresentation])); }
-    catch (AppError &err) { [ex save:err]; }
+    catch(Error &err) { [ex save:err]; }
 }
 
 - (void)writeToFile:(NSString *)path partition:(NSInteger)part exception:(ExceptionWrapper *)ex
 {
     try { [self file]->writePartitionToFile(string([path fileSystemRepresentation]), part); }
-    catch (AppError &err) { [ex save:err]; }
+    catch(Error &err) { [ex save:err]; }
 }
 
 - (NSImage *)previewImage
@@ -1925,7 +1925,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     try {
         [self drive]->attach([url fileSystemRepresentation]);
-    }  catch (AppError &error) {
+    }  catch(Error &error) {
         [ex save:error];
     }
 }
@@ -1934,7 +1934,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     try {
         [self drive]->importFiles([url fileSystemRepresentation]);
-    } catch (AppError &error) {
+    } catch(Error &error) {
         [ex save:error];
     }
 }
@@ -1943,7 +1943,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     try {
         [self drive]->attach(*(MediaFile *)proxy->obj);
-    }  catch (AppError &error) {
+    }  catch(Error &error) {
         [ex save:error];
     }
 }
@@ -1953,7 +1953,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     try {
         [self drive]->attach(c, h, s, b);
-    }  catch (AppError &error) {
+    }  catch(Error &error) {
         [ex save:error];
     }
 }
@@ -1964,7 +1964,7 @@ NSString *EventSlotName(EventSlot slot)
 
     try {
         [self drive]->format(fs, str);
-    }  catch (AppError &error) {
+    }  catch(Error &error) {
         [ex save:error];
     }
 }
@@ -1973,7 +1973,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     try {
         [self drive]->changeGeometry(c, h, s, b);
-    }  catch (AppError &error) {
+    }  catch(Error &error) {
         [ex save:error];
     }
 }
@@ -2000,7 +2000,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 @end
@@ -2062,7 +2062,7 @@ NSString *EventSlotName(EventSlot slot)
 - (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self file]->writeToFile([path fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; return 0; }
+    catch(Error &error) { [ex save:error]; return 0; }
 }
 
 - (void)dealloc
@@ -2194,7 +2194,7 @@ NSString *EventSlotName(EventSlot slot)
         //Transfer ownership to ObjC via release
         return [MediaFileProxy make:snap.release()];
 
-    } catch (AppError &error) {
+    } catch(Error &error) {
 
         return nil;
     }
@@ -2203,31 +2203,31 @@ NSString *EventSlotName(EventSlot slot)
 - (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->loadSnapshot(*[proxy file]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)loadSnapshotFromUrl:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->loadSnapshot([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->saveSnapshot([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->loadWorkspace([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->saveWorkspace([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (BOOL)getMessage:(Message *)msg
@@ -2435,13 +2435,13 @@ NSString *EventSlotName(EventSlot slot)
 - (void)launch:(ExceptionWrapper *)ex
 {
     try { [self emu]->launch(); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)launch:(const void *)listener function:(Callback *)func exception:(ExceptionWrapper *)ex
 {
     try { [self emu]->launch(listener, func); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (NSInteger)get:(Opt)opt
@@ -2464,7 +2464,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
         [self emu]->set(opt, val);
         return true;
-    } catch (AppError &exception) {
+    } catch(Error &exception) {
         return false;
     }
 }
@@ -2474,7 +2474,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
         [self emu]->set(opt, val ? 1 : 0);
         return true;
-    } catch (AppError &exception) {
+    } catch(Error &exception) {
         return false;
     }
 }
@@ -2484,7 +2484,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
         [self emu]->set(opt, val, id);
         return true;
-    } catch (AppError &exception) {
+    } catch(Error &exception) {
         return false;
     }
 }
@@ -2494,7 +2494,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
         [self emu]->set(opt, val ? 1 : 0, id);
         return true;
-    } catch (AppError &exception) {
+    } catch(Error &exception) {
         return false;
     }
 }
@@ -2504,7 +2504,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
         [self emu]->set(opt, val, (long)id);
         return true;
-    } catch (AppError &exception) {
+    } catch(Error &exception) {
         return false;
     }
 }
@@ -2514,7 +2514,7 @@ NSString *EventSlotName(EventSlot slot)
     try {
         [self emu]->set(opt, val ? 1 : 0, (long)id);
         return true;
-    } catch (AppError &exception) {
+    } catch(Error &exception) {
         return false;
     }
 }
@@ -2532,7 +2532,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)isReady:(ExceptionWrapper *)ex
 {
     try { [self emu]->isReady(); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)powerOn
@@ -2548,7 +2548,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)run:(ExceptionWrapper *)ex
 {
     try { [self emu]->run(); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)pause
@@ -2619,7 +2619,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { [self emu]->exportConfig([url fileSystemRepresentation]); }
-    catch (AppError &error) { [ex save:error]; }
+    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)put:(Cmd)type

@@ -88,7 +88,7 @@ RemoteServer::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw AppError(AppError::OPT_UNSUPPORTED);
+            throw CoreError(CoreError::OPT_UNSUPPORTED);
     }
 }
 

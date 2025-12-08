@@ -40,7 +40,7 @@ SerialPort::checkOption(Opt opt, i64 value)
         case Opt::SER_DEVICE:
 
             if (!SerialPortDeviceEnum::isValid(value)) {
-                throw AppError(AppError::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
+                throw CoreError(CoreError::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
             }
             return;
 
@@ -49,7 +49,7 @@ SerialPort::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw AppError(AppError::OPT_UNSUPPORTED);
+            throw CoreError(CoreError::OPT_UNSUPPORTED);
     }
 }
 
@@ -61,7 +61,7 @@ SerialPort::setOption(Opt option, i64 value)
         case Opt::SER_DEVICE:
             
             if (!SerialPortDeviceEnum::isValid(value)) {
-                throw AppError(AppError::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
+                throw CoreError(CoreError::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
             }
             
             config.device = (SerialPortDevice)value;

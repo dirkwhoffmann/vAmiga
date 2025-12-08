@@ -49,7 +49,7 @@ EADFFactory::make(const class FloppyDisk &disk)
 std::unique_ptr<EADFFile>
 EADFFactory::make(const class FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw AppError(AppError::DISK_MISSING);
+    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
     return make(*drive.disk);
 }
 

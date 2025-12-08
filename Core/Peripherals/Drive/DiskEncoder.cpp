@@ -13,7 +13,7 @@
 #include "ADFFactory.h"
 #include "IMGFactory.h"
 #include "STFactory.h"
-#include "AppError.h"
+#include "CoreError.h"
 
 namespace vamiga {
 
@@ -25,10 +25,10 @@ void
 DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
 {
     if (disk.getDiameter() != adf.getDiameter()) {
-        throw AppError(AppError::DISK_INVALID_DIAMETER);
+        throw CoreError(CoreError::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != adf.getDensity()) {
-        throw AppError(AppError::DISK_INVALID_DENSITY);
+        throw CoreError(CoreError::DISK_INVALID_DENSITY);
     }
 
     isize tracks = adf.numTracks();
@@ -177,7 +177,7 @@ DiskEncoder::decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t)
     if (nr != sectors) {
 
         warn("Found %ld sectors, expected %ld. Aborting.\n", nr, sectors);
-        throw AppError(AppError::DISK_WRONG_SECTOR_COUNT);
+        throw CoreError(CoreError::DISK_WRONG_SECTOR_COUNT);
     }
 
     // Decode all sectors
@@ -200,7 +200,7 @@ DiskEncoder::decodeSector(ADFFile &adf, u8 *dst, const u8 *src)
     u8 sector = info[2];
     if (sector >= adf.numSectors()) {
         warn("Invalid sector number %d. Aborting.\n", sector);
-        throw AppError(AppError::DISK_INVALID_SECTOR_NUMBER);
+        throw CoreError(CoreError::DISK_INVALID_SECTOR_NUMBER);
     }
 
     // Skip sector header
@@ -219,10 +219,10 @@ void DiskEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
     if (ADF_DEBUG) fprintf(stderr, "Decoding Amiga disk with %ld tracks\n", tracks);
 
     if (disk.getDiameter() != adf.getDiameter()) {
-        throw AppError(AppError::DISK_INVALID_DIAMETER);
+        throw CoreError(CoreError::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != adf.getDensity()) {
-        throw AppError(AppError::DISK_INVALID_DENSITY);
+        throw CoreError(CoreError::DISK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -241,10 +241,10 @@ void
 DiskEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
 {
     if (disk.getDiameter() != img.getDiameter()) {
-        throw AppError(AppError::DISK_INVALID_DIAMETER);
+        throw CoreError(CoreError::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != img.getDensity()) {
-        throw AppError(AppError::DISK_INVALID_DENSITY);
+        throw CoreError(CoreError::DISK_INVALID_DENSITY);
     }
 
     isize tracks = img.numTracks();
@@ -270,10 +270,10 @@ DiskEncoder::decode(class IMGFile &img, const FloppyDisk &disk)
     if (IMG_DEBUG) fprintf(stderr, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (disk.getDiameter() != img.getDiameter()) {
-        throw AppError(AppError::DISK_INVALID_DIAMETER);
+        throw CoreError(CoreError::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != img.getDensity()) {
-        throw AppError(AppError::DISK_INVALID_DENSITY);
+        throw CoreError(CoreError::DISK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -424,12 +424,12 @@ DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
             cnt++;
 
         } else {
-            throw AppError(AppError::DISK_INVALID_SECTOR_NUMBER);
+            throw CoreError(CoreError::DISK_INVALID_SECTOR_NUMBER);
         }
     }
 
     if (cnt != numSectors) {
-        throw AppError(AppError::DISK_WRONG_SECTOR_COUNT);
+        throw CoreError(CoreError::DISK_WRONG_SECTOR_COUNT);
     }
 
     // Do some consistency checking
@@ -456,10 +456,10 @@ void
 DiskEncoder::encode(const class STFile &img, FloppyDisk &disk)
 {
     if (disk.getDiameter() != img.getDiameter()) {
-        throw AppError(AppError::DISK_INVALID_DIAMETER);
+        throw CoreError(CoreError::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != img.getDensity()) {
-        throw AppError(AppError::DISK_INVALID_DENSITY);
+        throw CoreError(CoreError::DISK_INVALID_DENSITY);
     }
 
     isize tracks = img.numTracks();
@@ -485,10 +485,10 @@ DiskEncoder::decode(class STFile &img, const FloppyDisk &disk)
     if (IMG_DEBUG) fprintf(stderr, "Decoding Atari ST disk (%ld tracks)\n", tracks);
 
     if (disk.getDiameter() != img.getDiameter()) {
-        throw AppError(AppError::DISK_INVALID_DIAMETER);
+        throw CoreError(CoreError::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != img.getDensity()) {
-        throw AppError(AppError::DISK_INVALID_DENSITY);
+        throw CoreError(CoreError::DISK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -639,12 +639,12 @@ DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, Track t)
             cnt++;
 
         } else {
-            throw AppError(AppError::DISK_INVALID_SECTOR_NUMBER);
+            throw CoreError(CoreError::DISK_INVALID_SECTOR_NUMBER);
         }
     }
 
     if (cnt != numSectors) {
-        throw AppError(AppError::DISK_WRONG_SECTOR_COUNT);
+        throw CoreError(CoreError::DISK_WRONG_SECTOR_COUNT);
     }
 
     // Do some consistency checking

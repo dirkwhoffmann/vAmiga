@@ -149,40 +149,40 @@ Memory::checkOption(Opt opt, i64 value)
         case Opt::MEM_CHIP_RAM:
 
             if (!isPoweredOff()) {
-                throw AppError(AppError::OPT_LOCKED);
+                throw CoreError(CoreError::OPT_LOCKED);
             }
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
-                throw AppError(AppError::OPT_INV_ARG, "256, 512, 1024, 2048");
+                throw CoreError(CoreError::OPT_INV_ARG, "256, 512, 1024, 2048");
             }
             return;
 
         case Opt::MEM_SLOW_RAM:
 
             if (!isPoweredOff()) {
-                throw AppError(AppError::OPT_LOCKED);
+                throw CoreError(CoreError::OPT_LOCKED);
             }
             if ((value % 256) != 0 || value > 1536) {
-                throw AppError(AppError::OPT_INV_ARG, "0, 256, 512, ..., 1536");
+                throw CoreError(CoreError::OPT_INV_ARG, "0, 256, 512, ..., 1536");
             }
             return;
 
         case Opt::MEM_FAST_RAM:
 
             if (!isPoweredOff()) {
-                throw AppError(AppError::OPT_LOCKED);
+                throw CoreError(CoreError::OPT_LOCKED);
             }
             if ((value % 64) != 0 || value > 8192) {
-                throw AppError(AppError::OPT_INV_ARG, "0, 64, 128, ..., 8192");
+                throw CoreError(CoreError::OPT_INV_ARG, "0, 64, 128, ..., 8192");
             }
             return;
 
         case Opt::MEM_EXT_START:
 
             if (!isPoweredOff()) {
-                throw AppError(AppError::OPT_LOCKED);
+                throw CoreError(CoreError::OPT_LOCKED);
             }
             if (value != 0xE0 && value != 0xF0) {
-                throw AppError(AppError::OPT_INV_ARG, "E0, F0");
+                throw CoreError(CoreError::OPT_INV_ARG, "E0, F0");
             }
             return;
 
@@ -195,26 +195,26 @@ Memory::checkOption(Opt opt, i64 value)
         case Opt::MEM_BANKMAP:
 
             if (!BankMapEnum::isValid(value)) {
-                throw AppError(AppError::OPT_INV_ARG, BankMapEnum::keyList());
+                throw CoreError(CoreError::OPT_INV_ARG, BankMapEnum::keyList());
             }
             return;
 
         case Opt::MEM_UNMAPPING_TYPE:
 
             if (!UnmappedMemoryEnum::isValid(value)) {
-                throw AppError(AppError::OPT_INV_ARG, UnmappedMemoryEnum::keyList());
+                throw CoreError(CoreError::OPT_INV_ARG, UnmappedMemoryEnum::keyList());
             }
             return;
 
         case Opt::MEM_RAM_INIT_PATTERN:
 
             if (!RamInitPatternEnum::isValid(value)) {
-                throw AppError(AppError::OPT_INV_ARG, RamInitPatternEnum::keyList());
+                throw CoreError(CoreError::OPT_INV_ARG, RamInitPatternEnum::keyList());
             }
             return;
 
         default:
-            throw AppError(AppError::OPT_UNSUPPORTED);
+            throw CoreError(CoreError::OPT_UNSUPPORTED);
     }
 }
 
@@ -387,12 +387,12 @@ Memory::operator << (SerReader &worker)
     << fastSize;
 
     // Check the integrity of the new values before allocating memory
-    if (romSize > KB(512)) throw AppError(AppError::SNAP_CORRUPTED);
-    if (womSize > KB(256)) throw AppError(AppError::SNAP_CORRUPTED);
-    if (extSize > KB(512)) throw AppError(AppError::SNAP_CORRUPTED);
-    if (chipSize > MB(2)) throw AppError(AppError::SNAP_CORRUPTED);
-    if (slowSize > KB(1792)) throw AppError(AppError::SNAP_CORRUPTED);
-    if (fastSize > MB(8)) throw AppError(AppError::SNAP_CORRUPTED);
+    if (romSize > KB(512)) throw CoreError(CoreError::SNAP_CORRUPTED);
+    if (womSize > KB(256)) throw CoreError(CoreError::SNAP_CORRUPTED);
+    if (extSize > KB(512)) throw CoreError(CoreError::SNAP_CORRUPTED);
+    if (chipSize > MB(2)) throw CoreError(CoreError::SNAP_CORRUPTED);
+    if (slowSize > KB(1792)) throw CoreError(CoreError::SNAP_CORRUPTED);
+    if (fastSize > MB(8)) throw CoreError(CoreError::SNAP_CORRUPTED);
 
     // Allocate ROM space
     if (config.saveRoms) {
@@ -479,16 +479,16 @@ Memory::_isReady() const
     bool hasAros = traits.vendor == RomVendor::AROS;
 
     if (!hasRom || FORCE_ROM_MISSING) {
-        throw AppError(AppError::ROM_MISSING);
+        throw CoreError(CoreError::ROM_MISSING);
     }
     if (!chip || FORCE_CHIP_RAM_MISSING) {
-        throw AppError(AppError::CHIP_RAM_MISSING);
+        throw CoreError(CoreError::CHIP_RAM_MISSING);
     }
     if ((hasAros && !ext) || FORCE_AROS_NO_EXTROM) {
-        throw AppError(AppError::AROS_NO_EXTROM);
+        throw CoreError(CoreError::AROS_NO_EXTROM);
     }
     if ((hasAros && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
-        throw AppError(AppError::AROS_RAM_LIMIT);
+        throw CoreError(CoreError::AROS_RAM_LIMIT);
     }
 }
 
@@ -754,7 +754,7 @@ Memory::loadExt(const u8 *buf, isize len)
 void
 Memory::saveRom(const fs::path &path) const
 {
-    if (rom == nullptr) throw AppError(AppError::ROM_MISSING);
+    if (rom == nullptr) throw CoreError(CoreError::ROM_MISSING);
 
     RomFile file(rom, config.romSize);
     file.writeToFile(path);
@@ -763,7 +763,7 @@ Memory::saveRom(const fs::path &path) const
 void
 Memory::saveWom(const fs::path &path) const
 {
-    if (wom == nullptr) throw AppError(AppError::ROM_MISSING);
+    if (wom == nullptr) throw CoreError(CoreError::ROM_MISSING);
 
     RomFile file(wom, config.womSize);
     file.writeToFile(path);
@@ -772,7 +772,7 @@ Memory::saveWom(const fs::path &path) const
 void
 Memory::saveExt(const fs::path &path) const
 {
-    if (ext == nullptr) throw AppError(AppError::ROM_MISSING);
+    if (ext == nullptr) throw CoreError(CoreError::ROM_MISSING);
 
     RomFile file(ext, config.extSize);
     file.writeToFile(path);

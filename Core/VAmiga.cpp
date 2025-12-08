@@ -2320,7 +2320,7 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
         // Restore the saved state
         amiga->loadSnapshot(snapshot);
         
-    } catch (AppError &) {
+    } catch(Error &) {
         
         /* If we reach this point, the emulator has been put into an
          * inconsistent state due to corrupted snapshot data. We cannot

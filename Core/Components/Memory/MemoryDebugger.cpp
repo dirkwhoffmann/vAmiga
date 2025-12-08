@@ -133,7 +133,7 @@ i64
 MemoryDebugger::memSearch(const string &pattern, u32 addr, isize align)
 {
     // Check alignment
-    if (align != 1 && IS_ODD(addr)) throw AppError(AppError::ADDR_UNALIGNED);
+    if (align != 1 && IS_ODD(addr)) throw CoreError(CoreError::ADDR_UNALIGNED);
 
     if (isize length = isize(pattern.length()); length > 0) {
 
@@ -165,7 +165,7 @@ MemoryDebugger::read(u32 addr, isize sz)
     u32 result;
     
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw AppError(AppError::ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw CoreError(CoreError::ADDR_UNALIGNED);
     
     switch (sz) {
             
@@ -184,7 +184,7 @@ isize
 MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
 {
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw AppError(AppError::ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw CoreError(CoreError::ADDR_UNALIGNED);
     
     for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
         
@@ -364,16 +364,16 @@ MemoryDebugger::isUnused(Reg reg) const
 u16
 MemoryDebugger::readCs(Reg reg) const
 {
-    if (isUnused(reg)) throw AppError(AppError::REG_UNUSED, RegEnum::key(reg));
-    if (isWritable(reg)) throw AppError(AppError::REG_WRITE_ONLY, RegEnum::key(reg));
+    if (isUnused(reg)) throw CoreError(CoreError::REG_UNUSED, RegEnum::key(reg));
+    if (isWritable(reg)) throw CoreError(CoreError::REG_WRITE_ONLY, RegEnum::key(reg));
 
     return mem.peekCustom16(u32(reg) << 1);
 }
 void
 MemoryDebugger::writeCs(Reg reg, u16 value)
 {
-    if (isUnused(reg)) throw AppError(AppError::REG_UNUSED, RegEnum::key(reg));
-    if (isReadable(reg)) throw AppError(AppError::REG_READ_ONLY, RegEnum::key(reg));
+    if (isUnused(reg)) throw CoreError(CoreError::REG_UNUSED, RegEnum::key(reg));
+    if (isReadable(reg)) throw CoreError(CoreError::REG_READ_ONLY, RegEnum::key(reg));
 
     return mem.pokeCustom16<Accessor::CPU>(u32(reg) << 1, value);
 }

@@ -902,7 +902,7 @@ Console::describe(std::ostream &ss, const std::exception &e, isize line, const s
         ss << "Syntax error\n";
         return;
     }
-    if (auto err = dynamic_cast<const AppError *>(&e)) {
+    if (auto err = dynamic_cast<const CoreError *>(&e)) {
         
         ss << err->what();
         ss << '\n';

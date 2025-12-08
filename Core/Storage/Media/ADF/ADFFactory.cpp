@@ -57,7 +57,7 @@ ADFFactory::make(const GeometryDescriptor &descr)
             break;
     }
 
-    throw AppError(AppError::DISK_INVALID_LAYOUT);
+    throw CoreError(CoreError::DISK_INVALID_LAYOUT);
 }
 
 /*
@@ -109,7 +109,7 @@ ADFFactory::make(const class FloppyDisk &disk)
 std::unique_ptr<ADFFile>
 ADFFactory::make(const class FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw AppError(AppError::DISK_MISSING);
+    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
     return make(*drive.disk);
 }
 

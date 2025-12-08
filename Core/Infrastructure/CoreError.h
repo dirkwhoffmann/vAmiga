@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-struct AppError : public Error {
+struct CoreError : public Error {
 
     static constexpr long OK                =   0; ///< No error
     static constexpr long UNKNOWN           =   1; ///< Unclassified error condition
@@ -245,11 +245,11 @@ struct AppError : public Error {
         return "???";
     }
 
-    AppError(long fault, const string &s);
-    AppError(long fault, const char *s) : AppError(fault, string(s)) { };
-    AppError(long fault, const fs::path &p) : AppError(fault, p.string()) { };
-    AppError(long fault, std::integral auto v) : AppError(fault, std::to_string(v)) { };
-    AppError(long fault) : AppError(fault, "") { }
+    CoreError(long fault, const string &s);
+    CoreError(long fault, const char *s) : CoreError(fault, string(s)) { };
+    CoreError(long fault, const fs::path &p) : CoreError(fault, p.string()) { };
+    CoreError(long fault, std::integral auto v) : CoreError(fault, std::to_string(v)) { };
+    CoreError(long fault) : CoreError(fault, "") { }
 };
 
 }

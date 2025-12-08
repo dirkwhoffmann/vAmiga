@@ -52,12 +52,12 @@ ADFFile::fileSize(Diameter diameter, Density density)
     DiameterEnum::validate(diameter);
     DensityEnum::validate(density);
 
-    if (diameter != Diameter::INCH_35) throw AppError(AppError::DISK_INVALID_DIAMETER);
+    if (diameter != Diameter::INCH_35) throw CoreError(CoreError::DISK_INVALID_DIAMETER);
     
     if (density == Density::DD) return ADFSIZE_35_DD;
     if (density == Density::HD) return ADFSIZE_35_HD;
 
-    throw AppError(AppError::DISK_INVALID_DENSITY);
+    throw CoreError(CoreError::DISK_INVALID_DENSITY);
 }
 
 /*
@@ -73,7 +73,7 @@ ADFFile::init(Diameter diameter, Density density)
 void
 ADFFile::init(const FloppyDiskDescriptor &descr)
 {
-    if (descr.diameter != Diameter::INCH_35) throw AppError(AppError::DISK_INVALID_DIAMETER);
+    if (descr.diameter != Diameter::INCH_35) throw CoreError(CoreError::DISK_INVALID_DIAMETER);
 
     switch (descr.density) {
 
@@ -88,7 +88,7 @@ ADFFile::init(const FloppyDiskDescriptor &descr)
                 case 84: init(ADFSIZE_35_DD_84); break;
 
                 default:
-                    throw AppError(AppError::DISK_INVALID_LAYOUT);
+                    throw CoreError(CoreError::DISK_INVALID_LAYOUT);
             }
             break;
 
@@ -98,7 +98,7 @@ ADFFile::init(const FloppyDiskDescriptor &descr)
             break;
 
         default:
-            throw AppError(AppError::DISK_INVALID_DENSITY);
+            throw CoreError(CoreError::DISK_INVALID_DENSITY);
     }
 }
 
@@ -116,7 +116,7 @@ ADFFile::init(const FloppyDisk &disk)
 void
 ADFFile::init(const FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw AppError(AppError::DISK_MISSING);
+    if (drive.disk == nullptr) throw CoreError(CoreError::DISK_MISSING);
     init(*drive.disk);
 }
 
@@ -134,7 +134,7 @@ ADFFile::init(const FileSystem &volume)
             break;
             
         default:
-            throw AppError(AppError::FS_WRONG_CAPACITY);
+            throw CoreError(CoreError::FS_WRONG_CAPACITY);
     }
 
     volume.exporter.exportVolume(data.ptr, data.size);

@@ -46,7 +46,7 @@ GuardList::hit() const
 void
 GuardList::setAt(u32 target, isize ignores)
 {
-    if (guards.isSetAt(target)) throw AppError(AppError::GUARD_ALREADY_SET, target);
+    if (guards.isSetAt(target)) throw CoreError(CoreError::GUARD_ALREADY_SET, target);
     guards.setAt(target, ignores);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -55,7 +55,7 @@ GuardList::setAt(u32 target, isize ignores)
 void
 GuardList::moveTo(isize nr, u32 newTarget)
 {
-    if (!guards.guardNr(nr)) throw AppError(AppError::GUARD_NOT_FOUND, nr);
+    if (!guards.guardNr(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.replace(nr, newTarget);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -64,7 +64,7 @@ GuardList::moveTo(isize nr, u32 newTarget)
 void
 GuardList::ignore(long nr, long count)
 {
-    if (!guards.guardNr(nr)) throw AppError(AppError::GUARD_NOT_FOUND, nr);
+    if (!guards.guardNr(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.ignore(nr, count);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -73,7 +73,7 @@ GuardList::ignore(long nr, long count)
 void
 GuardList::remove(isize nr)
 {
-    if (!guards.isSet(nr)) throw AppError(AppError::GUARD_NOT_FOUND, nr);
+    if (!guards.isSet(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.remove(nr);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -82,7 +82,7 @@ GuardList::remove(isize nr)
 void
 GuardList::removeAt(u32 target)
 {
-    if (!guards.isSetAt(target)) throw AppError(AppError::GUARD_NOT_FOUND, target);
+    if (!guards.isSetAt(target)) throw CoreError(CoreError::GUARD_NOT_FOUND, target);
     guards.removeAt(target);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -99,7 +99,7 @@ GuardList::removeAll()
 void
 GuardList::enable(isize nr)
 {
-    if (!guards.isSet(nr)) throw AppError(AppError::GUARD_NOT_FOUND, nr);
+    if (!guards.isSet(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.enable(nr);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -108,7 +108,7 @@ GuardList::enable(isize nr)
 void
 GuardList::enableAt(u32 target)
 {
-    if (!guards.isSetAt(target)) throw AppError(AppError::GUARD_NOT_FOUND, target);
+    if (!guards.isSetAt(target)) throw CoreError(CoreError::GUARD_NOT_FOUND, target);
     guards.enableAt(target);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -125,7 +125,7 @@ GuardList::enableAll()
 void
 GuardList::disable(isize nr)
 {
-    if (!guards.isSet(nr)) throw AppError(AppError::GUARD_NOT_FOUND, nr);
+    if (!guards.isSet(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.disable(nr);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);
@@ -134,7 +134,7 @@ GuardList::disable(isize nr)
 void
 GuardList::disableAt(u32 target)
 {
-    if (!guards.isSetAt(target)) throw AppError(AppError::GUARD_NOT_FOUND, target);
+    if (!guards.isSetAt(target)) throw CoreError(CoreError::GUARD_NOT_FOUND, target);
     guards.disableAt(target);
     update();
     amiga.msgQueue.put(Msg::GUARD_UPDATED);

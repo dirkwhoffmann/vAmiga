@@ -43,7 +43,7 @@ Emulator::~Emulator()
 void
 Emulator::launch(const void *listener, Callback *func)
 {
-    if (FORCE_LAUNCH_ERROR) throw AppError(AppError::LAUNCH);
+    if (FORCE_LAUNCH_ERROR) throw CoreError(CoreError::LAUNCH);
 
     // Connect the listener to the message queue of the main instance
     if (listener && func) { main.msgQueue.setListener(listener, func); }
@@ -61,7 +61,7 @@ Emulator::initialize()
     baseTime = utl::Time::now();
 
     // Make sure this function is only called once
-    if (isInitialized()) throw AppError(AppError::LAUNCH, "The emulator is already initialized.");
+    if (isInitialized()) throw CoreError(CoreError::LAUNCH, "The emulator is already initialized.");
 
     // Initialize all components
     main.initialize();
@@ -542,7 +542,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case DebugFlag::GDB_DEBUG:        return GDB_DEBUG;
             
         default:
-            throw AppError(AppError::OPT_UNSUPPORTED,
+            throw CoreError(CoreError::OPT_UNSUPPORTED,
                         "Unhandled debug variable: " + string(DebugFlagEnum::key(flag)));
     }
     
@@ -692,7 +692,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case DebugFlag::GDB_DEBUG:        GDB_DEBUG = val; break;
             
         default:
-            throw AppError(AppError::OPT_UNSUPPORTED,
+            throw CoreError(CoreError::OPT_UNSUPPORTED,
                         "Unhandled debug variable: " + string(DebugFlagEnum::key(flag)));
     }
     

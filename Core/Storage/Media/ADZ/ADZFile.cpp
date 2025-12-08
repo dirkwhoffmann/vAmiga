@@ -27,7 +27,7 @@ ADZFile::init(const class ADFFile &adf)
         try {
             data.gzip();
         } catch (std::runtime_error &err) {
-            throw AppError(AppError::ZLIB_ERROR, err.what());
+            throw CoreError(CoreError::ZLIB_ERROR, err.what());
         }
     }
     
@@ -61,7 +61,7 @@ ADZFile::finalizeRead()
     try {
         data.gunzip();
     } catch (std::runtime_error &err) {
-        throw AppError(AppError::ZLIB_ERROR, err.what());
+        throw CoreError(CoreError::ZLIB_ERROR, err.what());
     }
     
     debug(ADF_DEBUG, "Restored %ld bytes.\n", data.size);

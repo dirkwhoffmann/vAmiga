@@ -207,7 +207,7 @@ NavigatorConsole::parseBlock(const string &argv)
         return nr;
     }
     
-    throw AppError(AppError::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
+    throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
 }
 
 Block
@@ -226,7 +226,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
         if (!fs.isInitialized()) {
             throw FSError(fault::FS_UNINITIALIZED);
         } else {
-            throw AppError(AppError::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
+            throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
         }
     }
     return nr;

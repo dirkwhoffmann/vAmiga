@@ -79,19 +79,19 @@ RpcServer::doProcess(const string &payload)
 
         // Check input format
         if (!request.contains("method")) {
-            throw AppError(RPC::INVALID_REQUEST, "Missing 'method'");
+            throw CoreError(RPC::INVALID_REQUEST, "Missing 'method'");
         }
         if (!request.contains("params")) {
-            throw AppError(RPC::INVALID_REQUEST, "Missing 'params'");
+            throw CoreError(RPC::INVALID_REQUEST, "Missing 'params'");
         }
         if (!request["method"].is_string()) {
-            throw AppError(RPC::INVALID_PARAMS, "'method' must be a string");
+            throw CoreError(RPC::INVALID_PARAMS, "'method' must be a string");
         }
         if (!request["params"].is_string()) {
-            throw AppError(RPC::INVALID_PARAMS, "'params' must be a string");
+            throw CoreError(RPC::INVALID_PARAMS, "'params' must be a string");
         }
         if (request["method"] != "retroshell") {
-            throw AppError(RPC::INVALID_PARAMS, "method  must be 'retroshell'");
+            throw CoreError(RPC::INVALID_PARAMS, "method  must be 'retroshell'");
         }
 
         // Feed the command into the command queue
@@ -111,7 +111,7 @@ RpcServer::doProcess(const string &payload)
         };
         send(response.dump());
 
-    } catch (const AppError &e) {
+    } catch (const CoreError &e) {
 
         json response = {
 
@@ -158,7 +158,7 @@ RpcServer::didExecute(const InputLine& input, std::stringstream &ss, std::except
     }
 
     // For application errors, use the fault identifier
-    if (const auto *error = dynamic_cast<const AppError *>(&exc)) {
+    if (const auto *error = dynamic_cast<const CoreError *>(&exc)) {
         code = i64(error->fault());
     }
 

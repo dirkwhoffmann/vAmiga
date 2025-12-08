@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
             std::cout << what << std::endl;
         }
 
-    } catch (vamiga::AppError &e) {
+    } catch (vamiga::CoreError &e) {
 
         std::cout << "Emulator Error: " << e.what() << std::endl;
 
