@@ -131,11 +131,11 @@ NSString *EventSlotName(EventSlot slot);
 
 @interface ExceptionWrapper : NSObject {
     
-    Fault fault;
+    long fault;
     NSString *what;
 }
 
-@property Fault fault;
+@property long fault;
 @property NSString *what;
 
 @end

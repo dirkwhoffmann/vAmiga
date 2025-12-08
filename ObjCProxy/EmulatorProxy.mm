@@ -99,7 +99,7 @@ NSString *EventSlotName(EventSlot slot)
 
     if (self = [super init]) {
         
-        fault = Fault::OK;
+        fault = 0; // Fault::OK;
         what = @"";
     }
     return self;

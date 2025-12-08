@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-AppError::AppError(Fault code, const string &s) : utl::GenericException<Fault>(code)
+AppError::AppError(Fault code, const string &s) : Error((long)code)
 {
     // string _msg;
     
@@ -449,8 +449,7 @@ AppError::AppError(Fault code, const string &s) : utl::GenericException<Fault>(c
              */
             
         default:
-            set_msg(string("Error code ") + std::to_string((i64)fault()) +
-            " (" + FaultEnum::key(fault()) + ").");
+            set_msg(string("CoreError ") + std::to_string((long)code) + " (" + errstr() + ").");
             break;
     }
 }

@@ -28,7 +28,7 @@ struct NewParseError : public Error {
 
         using namespace fault::parse;
 
-        switch (_payload) {
+        switch (payload) {
 
             case PARSE_BOOL_ERROR:   return "PARSE_BOOL_ERROR";
             case PARSE_ON_OFF_ERROR: return "PARSE_ON_OFF_ERROR";

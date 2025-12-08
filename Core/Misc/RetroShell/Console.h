@@ -35,24 +35,24 @@ public:
     virtual void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) = 0; // DEPRECATED
 };
 
-struct TooFewArgumentsError : public utl::ParseError {
+struct TooFewArgumentsError : public ParseError {
     using ParseError::ParseError;
 };
 
-struct TooManyArgumentsError : public utl::ParseError {
+struct TooManyArgumentsError : public ParseError {
     using ParseError::ParseError;
 };
 
-struct UnknownFlagError : public utl::ParseError {
+struct UnknownFlagError : public ParseError {
     using ParseError::ParseError;
 };
 
-struct UnknownKeyValueError : public utl::ParseError {
+struct UnknownKeyValueError : public ParseError {
     using ParseError::ParseError;
 };
 
-struct ScriptInterruption: AppException {
-    using AppException::AppException;
+struct ScriptInterruption: Exception {
+    using Exception::Exception;
 };
 
 class HistoryBuffer {

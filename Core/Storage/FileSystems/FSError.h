@@ -115,7 +115,7 @@ public:
     FSError(long fault, std::integral auto v) : FSError(fault, std::to_string(v)) { };
     // FSError(FSFault fault) : FSError(fault, "") { }
 
-    // FSFault fault() const { return FSFault(_payload); }
+    // FSFault fault() const { return FSFault(payload); }
 };
 
 }

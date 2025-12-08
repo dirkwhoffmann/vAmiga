@@ -23,12 +23,18 @@ public:
     AppException(const string &s) : AppException(0, s) { }
     AppException() : AppException(0) { }
 
-    i64 data() const { return _payload; }
+    i64 data() const { return payload; }
 };
 
-struct AppError : public utl::GenericException<Fault>
-{
-public:
+struct AppError : public Error {
+
+    const char *errstr() const noexcept override {
+
+        switch (payload) {
+            default:
+                return "AppError";
+        }
+    }
 
     AppError(Fault fault, const string &s);
     AppError(Fault fault, const char *s) : AppError(fault, string(s)) { };
@@ -36,7 +42,7 @@ public:
     AppError(Fault fault, std::integral auto v) : AppError(fault, std::to_string(v)) { };
     AppError(Fault fault) : AppError(fault, "") { }
 
-    Fault fault() const { return Fault(_payload); }
+    // Fault fault() const { return Fault(payload); }
 };
 
 }

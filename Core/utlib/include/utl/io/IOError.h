@@ -31,7 +31,7 @@ struct IOError : public Error {
 
     const char *errstr() const noexcept override {
 
-        switch (_payload) {
+        switch (payload) {
 
             case DIR_NOT_FOUND:         return "DIR_NOT_FOUND";
             case DIR_ACCESS_DENIED:     return "DIR_ACCESS_DENIED";
