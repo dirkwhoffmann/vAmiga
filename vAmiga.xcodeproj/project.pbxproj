@@ -1135,6 +1135,7 @@
 		50BCB9C32EE573FE000C53CF /* Backed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Backed.h; sourceTree = "<group>"; };
 		50BCB9C42EE6BED6000C53CF /* IOError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOError.h; sourceTree = "<group>"; };
 		50BCB9C52EE6BF58000C53CF /* ParseError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParseError.h; sourceTree = "<group>"; };
+		50BCB9C62EE72773000C53CF /* ServerError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerError.h; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -2557,6 +2558,7 @@
 			isa = PBXGroup;
 			children = (
 				50AD9048276DCB470011ECCB /* CMakeLists.txt */,
+				50BCB9C62EE72773000C53CF /* ServerError.h */,
 				505C83FA2773A61D001F8159 /* RemoteManagerTypes.h */,
 				505C83F827739ED0001F8159 /* RemoteManager.h */,
 				505C83F727739ED0001F8159 /* RemoteManager.cpp */,

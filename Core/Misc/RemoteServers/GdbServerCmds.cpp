@@ -130,7 +130,7 @@ GdbServer::process <'v', GdbCmd::Cont> (string arg)
         return;
     }
     
-    throw CoreError(CoreError::GDB_INVALID_FORMAT);
+    throw ServerError(ServerError::GDB_INVALID_FORMAT);
 }
 
 template <> void
@@ -160,7 +160,7 @@ GdbServer::process <'v'> (string cmd)
         return;
     }
 
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "v");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "v");
 }
 
 template <> void
@@ -219,7 +219,7 @@ GdbServer::process <'q'> (string cmd)
         return;
     }
     
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "q");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "q");
 }
 
 template <> void
@@ -233,7 +233,7 @@ GdbServer::process <'Q'> (string cmd)
         return;
     }
     
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "Q");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "Q");
 }
 
 template <> void
@@ -253,7 +253,7 @@ GdbServer::process <'s'> (string cmd)
 template <> void
 GdbServer::process <'n'> (string cmd)
 {
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "n");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "n");
 }
 
 template <> void
@@ -265,7 +265,7 @@ GdbServer::process <'H'> (string cmd)
 template <> void
 GdbServer::process <'G'> (string cmd)
 {
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "G");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "G");
 }
 
 template <> void
@@ -290,13 +290,13 @@ GdbServer::process <'?'> (string cmd)
 template <> void
 GdbServer::process <'!'> (string cmd)
 {
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "!");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "!");
 }
 
 template <> void
 GdbServer::process <'k'> (string cmd)
 {
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "k");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "k");
 }
 
 template <> void
@@ -321,14 +321,14 @@ GdbServer::process <'m'> (string cmd)
 
     } else {
 
-        throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "m");
+        throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "m");
     }
 }
 
 template <> void
 GdbServer::process <'M'> (string cmd)
 {
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "M");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "M");
 }
 
 template <> void
@@ -342,7 +342,7 @@ GdbServer::process <'p'> (string cmd)
 template <> void
 GdbServer::process <'P'> (string cmd)
 {
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "P");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "P");
 }
 
 template <> void
@@ -354,7 +354,7 @@ GdbServer::process <'c'> (string cmd)
 template <> void
 GdbServer::process <'D'> (string cmd)
 {
-    throw CoreError(CoreError::GDB_UNSUPPORTED_CMD, "D");
+    throw ServerError(ServerError::GDB_UNSUPPORTED_CMD, "D");
 }
 
 template <> void
@@ -376,7 +376,7 @@ GdbServer::process <'Z'> (string cmd)
 
     } else {
 
-        throw CoreError(CoreError::GDB_INVALID_FORMAT, "Z");
+        throw ServerError(ServerError::GDB_INVALID_FORMAT, "Z");
     }
 }
 
@@ -399,7 +399,7 @@ GdbServer::process <'z'> (string cmd)
 
     } else {
 
-        throw CoreError(CoreError::GDB_INVALID_FORMAT, "z");
+        throw ServerError(ServerError::GDB_INVALID_FORMAT, "z");
     }
 }
 
@@ -409,7 +409,7 @@ GdbServer::process(string package)
     debug(SRV_DEBUG, "process(%s)\n", package.c_str());
     
     // Check if the previous package has been rejected
-    if (package[0] == '-') throw CoreError(CoreError::GDB_NO_ACK);
+    if (package[0] == '-') throw ServerError(ServerError::GDB_NO_ACK);
 
     // Strip off the acknowledgment symbol if present
     if (package[0] == '+') package.erase(0,1);
@@ -439,13 +439,13 @@ GdbServer::process(string package)
             } else {
                 
                 if (ackMode) connection.send("-");
-                throw CoreError(CoreError::GDB_INVALID_CHECKSUM);
+                throw ServerError(ServerError::GDB_INVALID_CHECKSUM);
             }
             
             return;
         }
         
-        throw CoreError(CoreError::GDB_INVALID_FORMAT);
+        throw ServerError(ServerError::GDB_INVALID_FORMAT);
     }
 }
 
@@ -475,7 +475,7 @@ GdbServer::process(char cmd, string package)
         case 'z' : process <'z'> (package); break;
             
         default:
-            throw CoreError(CoreError::GDB_UNRECOGNIZED_CMD, string(1, cmd));
+            throw ServerError(ServerError::GDB_UNRECOGNIZED_CMD, string(1, cmd));
     }
 }
 

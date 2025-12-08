@@ -10,6 +10,7 @@
 #pragma once
 
 #include "RemoteServerTypes.h"
+#include "ServerError.h"
 #include "SubComponent.h"
 #include "Socket.h"
 #include "Thread.h"
