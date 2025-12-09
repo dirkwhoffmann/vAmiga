@@ -1139,6 +1139,7 @@
 		50BCB9C62EE72773000C53CF /* ServerError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerError.h; sourceTree = "<group>"; };
 		50BCB9C72EE73A2A000C53CF /* MediaError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaError.h; sourceTree = "<group>"; };
 		50BCB9C82EE73B62000C53CF /* MediaError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MediaError.cpp; sourceTree = "<group>"; };
+		50BCB9CB2EE861EA000C53CF /* Mailbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mailbox.h; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -1605,6 +1606,7 @@
 		503FC4E02EE16FE000637C95 /* storage */ = {
 			isa = PBXGroup;
 			children = (
+				50BCB9CB2EE861EA000C53CF /* Mailbox.h */,
 				503FC4DE2EE16FCA00637C95 /* Buffer.h */,
 				503FC4F32EE1BCFB00637C95 /* RingBuffer.h */,
 			);

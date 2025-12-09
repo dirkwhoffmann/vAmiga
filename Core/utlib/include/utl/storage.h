@@ -9,3 +9,4 @@
 
 #include "storage/Buffer.h"
 #include "storage/RingBuffer.h"
+#include "storage/Mailbox.h"

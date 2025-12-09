@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "utl/concurrency/ReentrantMutex.h"
+#include "utl/concurrency/AutoMutex.h"
 
 namespace utl {
 
