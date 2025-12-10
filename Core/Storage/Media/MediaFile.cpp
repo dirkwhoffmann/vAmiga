@@ -12,6 +12,7 @@
 #include "Media.h"
 #include "FileFactories.h"
 #include "utl/io.h"
+#include <typeindex>
 
 namespace vamiga {
 
@@ -32,6 +33,26 @@ MediaFile::type(const fs::path &path)
     if (EXEFile::isCompatible(path))   return FileType::EXE;
     if (RomFile::isCompatible(path))   return FileType::ROM;
     if (fs::is_directory(path))        return FileType::DIR;
+
+    return FileType::UNKNOWN;
+}
+
+FileType
+MediaFile::type(const AnyFile &file)
+{
+    if (dynamic_cast<const Workspace *>(&file)) return FileType::WORKSPACE;
+    if (dynamic_cast<const Snapshot *>(&file))  return FileType::SNAPSHOT;
+    if (dynamic_cast<const Script *>(&file))    return FileType::SCRIPT;
+    if (dynamic_cast<const ADFFile *>(&file))   return FileType::ADF;
+    if (dynamic_cast<const ADZFile *>(&file))   return FileType::ADZ;
+    if (dynamic_cast<const EADFFile *>(&file))  return FileType::EADF;
+    if (dynamic_cast<const HDFFile *>(&file))   return FileType::HDF;
+    if (dynamic_cast<const HDZFile *>(&file))   return FileType::HDZ;
+    if (dynamic_cast<const IMGFile *>(&file))   return FileType::IMG;
+    if (dynamic_cast<const STFile *>(&file))    return FileType::ST;
+    if (dynamic_cast<const DMSFile *>(&file))   return FileType::DMS;
+    if (dynamic_cast<const EXEFile *>(&file))   return FileType::EXE;
+    if (dynamic_cast<const RomFile *>(&file))   return FileType::ROM;
 
     return FileType::UNKNOWN;
 }
@@ -127,6 +148,12 @@ MediaFile::make(HardDriveAPI &drive, FileType type)
         default:
             return nullptr;
     }
+}
+
+FileType
+MediaFile::type() const
+{
+    return type(*file);
 }
 
 std::pair <isize,isize>

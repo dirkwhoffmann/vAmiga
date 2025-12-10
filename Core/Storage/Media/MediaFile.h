@@ -35,8 +35,9 @@ public:
 
 public:
 
-    // Determines the type of an arbitrary file on disk
+    // Determines the type of a media file
     static FileType type(const fs::path &path);
+    static FileType type(const AnyFile &file);
 
     // Factory methods (TODO: Return unique_ptr)
     static MediaFile *make(const fs::path &path);
@@ -54,7 +55,7 @@ public:
 public:
 
     // Returns the media type of this file
-    FileType type() const { return file->type(); }
+    FileType type() const;
 
     // Returns the size of this file
     isize getSize() const { return file->getSize(); }

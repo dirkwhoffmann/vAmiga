@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FloppyDisk.h"
 #include "Media.h"
+#include "MediaFile.h"
 #include "DeviceError.h"
 #include "utl/io.h"
 
@@ -284,7 +285,8 @@ FloppyDisk::encodeDisk(const FloppyFile &file)
     // Start with an unformatted disk
     clearDisk();
 
-    switch (file.type()) {
+    switch (MediaFile::type(file)) {
+    // switch (file.type()) {
 
         case FileType::ADF:  ADFEncoder::encode(dynamic_cast<const ADFFile &>(file), *this); break;
         case FileType::ADZ:  ADZEncoder::encode(dynamic_cast<const ADZFile &>(file), *this); break;

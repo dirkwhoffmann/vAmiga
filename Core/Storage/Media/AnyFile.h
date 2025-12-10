@@ -52,7 +52,7 @@ public:
     //
 
     // Returns the media type of this file
-    virtual FileType type() const { return FileType::UNKNOWN; }
+    [[deprecated]] virtual FileType type() const { return FileType::UNKNOWN; }
 
     
     //

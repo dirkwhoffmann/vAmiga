@@ -2029,7 +2029,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (FileType)type
 {
-    return [self file]->type();
+    return MediaFile::type(*[self file]);
 }
 
 - (NSURL *)path
