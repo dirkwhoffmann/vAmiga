@@ -38,14 +38,11 @@ public:
     RomFile(const fs::path &path) { init(path); }
     RomFile(const u8 *buf, isize len) { init(buf, len); }
 
-    // const char *objectName() const override { return "ROM"; }
-
-
+    
     //
     // Methods from AnyFile
     //
 
-    FileType type() const override { return FileType::ROM; }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
 

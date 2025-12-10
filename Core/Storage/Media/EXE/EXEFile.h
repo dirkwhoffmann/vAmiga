@@ -42,7 +42,6 @@ public:
     // Methods from AnyFile
     //
     
-    FileType type() const override { return FileType::EXE; }
     u64 fnv64() const override { return adf.fnv64(); }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }

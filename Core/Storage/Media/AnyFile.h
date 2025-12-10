@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "MediaFileTypes.h"
 #include "utl/abilities.h"
 #include "utl/storage.h"
 #include <sstream>
@@ -17,7 +16,7 @@
 
 namespace vamiga {
 
-using utl::Buffer;
+using namespace utl;
 
 class AnyFile : public Dumpable, public Loggable {
 
@@ -45,14 +44,6 @@ public:
     void init(const fs::path &path);
 
     explicit operator bool() const { return data.ptr != nullptr; }
-
-
-    //
-    // General
-    //
-
-    // Returns the media type of this file
-    [[deprecated]] virtual FileType type() const { return FileType::UNKNOWN; }
 
     
     //

@@ -1142,6 +1142,7 @@
 		50BCB9CB2EE861EA000C53CF /* Mailbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mailbox.h; sourceTree = "<group>"; };
 		50BCBDCF2EE9581C000C53CF /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		50BCBDD02EE9587C000C53CF /* Literals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Literals.h; sourceTree = "<group>"; };
+		50BCBDD12EE984DC000C53CF /* HDFFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFileTypes.h; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -1725,6 +1726,7 @@
 			isa = PBXGroup;
 			children = (
 				505A19452EDDF6CF000BB9C2 /* CMakeLists.txt */,
+				50BCBDD12EE984DC000C53CF /* HDFFileTypes.h */,
 				50E79D382EDC48BB0052277E /* HDFFactory.h */,
 				50E79D392EDC48C40052277E /* HDFFactory.cpp */,
 				50EAD99B256E76820053F9AC /* HDFFile.h */,

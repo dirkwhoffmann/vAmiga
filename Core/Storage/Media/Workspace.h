@@ -35,19 +35,9 @@ private:
     
     
     //
-    // Methods from CoreObject
-    //
-    
-public:
-    
-    // const char *objectName() const override { return "Workspace"; }
-    
-    
-    //
     // Methods from AnyFile
     //
     
-    FileType type() const override { return FileType::WORKSPACE; }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
     u64 fnv64() const override { return 0; }

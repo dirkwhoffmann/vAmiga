@@ -38,14 +38,11 @@ public:
 
     void init(const class HDFFile &hdf);
 
-    // const char *objectName() const override { return "HDZ"; }
 
-    
     //
     // Methods from AnyFile
     //
     
-    FileType type() const override { return FileType::HDZ; }
     u64 fnv64() const override { return hdf.fnv64(); }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }

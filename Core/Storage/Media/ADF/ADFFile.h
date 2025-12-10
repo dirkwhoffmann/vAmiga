@@ -49,15 +49,6 @@ public:
 
     
     //
-    // Methods from CoreObject
-    //
-
-public:
-    
-    // const char *objectName() const override { return "ADF"; }
-
-    
-    //
     // Methods from AnyFile
     //
     
@@ -65,7 +56,6 @@ public:
     
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
-    FileType type() const override { return FileType::ADF; }
     void finalizeRead() override;
     
     //

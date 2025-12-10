@@ -33,16 +33,13 @@ public:
     Script(const fs::path &path) { init(path); }
     Script(const u8 *buf, isize len) { init(buf, len); }
 
-    // const char *objectName() const override { return "Script"; }
-
-    
+     
     //
     // Methods from AnyFile
     //
     
 public:
     
-    FileType type() const override { return FileType::SCRIPT; }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
 };

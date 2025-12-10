@@ -9,12 +9,14 @@
 
 #pragma once
 
+#include "HDFFileTypes.h"
 #include "DiskFile.h"
 #include "FSDescriptor.h"
 
 namespace vamiga {
 
 class FloppyDisk;
+
 
 class HDFFile : public DiskFile {
     
@@ -54,17 +56,6 @@ public:
     void init(const fs::path &path);
     void init(const u8 *buf, isize len);
 
-    // const char *objectName() const override { return "HDF"; }
-
-    
-    //
-    // Methods from AnyFile
-    //
-    
-public:
-    
-    FileType type() const override { return FileType::HDF; }
-    
 
     //
     // Methods from DiskFile

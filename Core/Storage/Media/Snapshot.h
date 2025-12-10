@@ -71,14 +71,11 @@ public:
     Snapshot(Amiga &amiga);
     Snapshot(Amiga &amiga, Compressor compressor);
     
-    // const char *objectName() const override { return "Snapshot"; }
-    
     
     //
     // Methods from AnyFile
     //
     
-    FileType type() const override { return FileType::SNAPSHOT; }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
     void finalizeRead() override;

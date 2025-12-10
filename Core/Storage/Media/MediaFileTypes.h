@@ -10,6 +10,7 @@
 #pragma once
 
 #include "RomFileTypes.h"
+#include "HDFFileTypes.h"
 
 namespace vamiga {
 
@@ -103,13 +104,5 @@ typedef struct
     isize bytes;
 }
 DiskInfo;
-
-typedef struct
-{
-    isize partitions;
-    isize drivers;
-    bool hasRDB;
-}
-HDFInfo;
 
 }
