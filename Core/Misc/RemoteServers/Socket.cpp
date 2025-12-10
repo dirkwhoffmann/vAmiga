@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Socket.h"
 #include "ServerError.h"
-#include "utl/support/Bytes.h"
+#include "utl/support/Bits.h"
 
 namespace vamiga {
 

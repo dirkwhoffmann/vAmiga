@@ -9,15 +9,23 @@
 
 #include "types/Integers.h"
 #include "types/Exception.h"
-#include "types/Literals.h"
+#include "hints.h"
 
 #include <filesystem>
-#include <optional>
-#include <string>
-#include <vector>
-
 namespace fs = std::filesystem;
 
+#include <functional>
+using std::function;
+
+#include<memory>
+using std::unique_ptr;
+using std::make_unique;
+
+#include <optional>
 using std::optional;
+
+#include <string>
 using std::string;
+
+#include <vector>
 using std::vector;

@@ -9,31 +9,21 @@
 
 #pragma once
 
-#include "utl/common.h"
-#include <mutex>
+#include "utl/types/Integers.h"
 
 namespace utl {
 
-class Mutex
-{
-    std::mutex mutex;
-
-public:
-
-    void lock() { mutex.lock(); }
-    void unlock() { mutex.unlock(); }
-    bool tryLock() { return mutex.try_lock(); }
-};
-
-class ReentrantMutex
-{
-    std::recursive_mutex mutex;
-
-public:
-
-    void lock() { mutex.lock(); }
-    void unlock() { mutex.unlock(); }
-    bool tryLock() { return mutex.try_lock(); }
-};
+constexpr isize operator"" _B(unsigned long long v) {
+    return static_cast<isize>(v);
+}
+constexpr isize operator"" _KB(unsigned long long v) {
+    return static_cast<isize>(v) << 10;
+}
+constexpr isize operator"" _MB(unsigned long long v) {
+    return static_cast<isize>(v) << 20;
+}
+constexpr isize operator"" _GB(unsigned long long v) {
+    return static_cast<isize>(v) << 30;
+}
 
 }

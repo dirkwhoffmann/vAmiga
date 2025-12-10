@@ -8,6 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "utl/abilities/Reportable.h"
+#include <ostream>
+#include <iomanip>
 
 namespace utl {
 

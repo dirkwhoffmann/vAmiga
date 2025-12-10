@@ -9,9 +9,7 @@
 
 #pragma once
 
-#include "utl/types.h"
 #include "utl/abilities/Synchronizable.h"
-#include <functional>
 
 namespace utl::wrappers {
 

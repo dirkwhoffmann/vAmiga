@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "utl/types.h"
 #include "utl/abilities/Compressible.h"
 #include "utl/abilities/Hashable.h"
 #include "utl/abilities/Dumpable.h"

@@ -7,5 +7,6 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "support/Bytes.h"
+#include "support/Bits.h"
 #include "support/Strings.h"
+#include <algorithm>

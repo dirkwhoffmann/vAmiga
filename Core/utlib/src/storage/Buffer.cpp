@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "utl/storage/Buffer.h"
-#include "utl/support/Bytes.h"
+#include "utl/support/Bits.h"
 #include "utl/abilities/Dumpable.h"
 #include <cassert>
 #include <cstring>
