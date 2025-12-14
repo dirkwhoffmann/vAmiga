@@ -91,6 +91,8 @@
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503E869E2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
 		503E869F2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
+		503E86A22EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
+		503E86A32EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
 		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
@@ -735,6 +737,8 @@
 		5039924625B219FC0084B808 /* CoreError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreError.h; sourceTree = "<group>"; };
 		503E869C2EEE9D5C00ED891D /* BlockStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockStorage.h; sourceTree = "<group>"; };
 		503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockStorage.cpp; sourceTree = "<group>"; };
+		503E86A02EEEBBE800ED891D /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
+		503E86A12EEEBBEF00ED891D /* Device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Device.cpp; sourceTree = "<group>"; };
 		503FC4B02EE00FE400637C95 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		503FC4B42EE04C2B00637C95 /* Integers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Integers.h; sourceTree = "<group>"; };
 		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
@@ -1507,6 +1511,8 @@
 		503E869B2EEE9D5300ED891D /* Devices */ = {
 			isa = PBXGroup;
 			children = (
+				503E86A02EEEBBE800ED891D /* Device.h */,
+				503E86A12EEEBBEF00ED891D /* Device.cpp */,
 				503E869C2EEE9D5C00ED891D /* BlockStorage.h */,
 				503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */,
 			);
@@ -3024,6 +3030,7 @@
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				503FC4F22EE1BA7C00637C95 /* Clock.cpp in Sources */,
 				505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */,
+				503E86A32EEEBBF100ED891D /* Device.cpp in Sources */,
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
 				5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
@@ -3334,6 +3341,7 @@
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
 				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50E79D3E2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
+				503E86A22EEEBBF100ED891D /* Device.cpp in Sources */,
 				50BCB9AB2EE2FA11000C53CF /* DeviceError.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,

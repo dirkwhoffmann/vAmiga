@@ -17,6 +17,8 @@ using namespace utl;
 
 class BlockStorage {
 
+    friend class Device;
+    
     // Number of blocks in this storage
     isize capacity = 0;
 
