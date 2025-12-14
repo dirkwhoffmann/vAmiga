@@ -58,13 +58,25 @@ class Device : public BlockView {
 
 public:
 
+    Device(const GeometryDescriptor &desc) { init(desc); }
+
     void init(const GeometryDescriptor &desc);
+    void init(const class ADFFile &adf);
+    void init(const class HDFFile &hdf);
+
+private:
+
+    void importBlock(isize nr, const u8 *data);
+
+public:
 
     isize capacity() const override { return geometry.numBlocks(); }
     isize bsize() const override { return geometry.bsize; }
     void freeBlock(isize nr) override;
     Buffer<u8> *readBlock(isize nr) override;
     Buffer<u8> *ensureBlock(isize nr) override;
+
+
 };
 
 }

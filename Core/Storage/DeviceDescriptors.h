@@ -127,12 +127,10 @@ struct PartitionDescriptor : SerializableStruct
     // Computed values
     isize numCylinders() const { return highCyl - lowCyl + 1; }
     isize numBlocks() const { return numCylinders() * heads * sectors; }
+    GeometryDescriptor geometry() const;
 
     // Returns the physical block number for a logical partition block
-    isize translate(isize block) {
-        assert(block >= 0 && block < numBlocks());
-        return lowCyl * heads * sectors + block;
-    }
+    isize translate(isize block);
 
     // Prints debug information
     void dump() const;

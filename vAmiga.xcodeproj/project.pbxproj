@@ -93,7 +93,6 @@
 		503E869F2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
 		503E86A22EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
 		503E86A32EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
-		503E86A52EEF15A800ED891D /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 503E86A42EEF15A300ED891D /* CMakeLists.txt */; };
 		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
@@ -2895,7 +2894,6 @@
 				50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */,
 				506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
-				503E86A52EEF15A800ED891D /* CMakeLists.txt in Resources */,
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
 				501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */,

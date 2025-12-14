@@ -24,12 +24,11 @@ using utl::DumpOpt;
 
 struct FSBlock : Loggable {
 
-    // The storage this block belongs to
-    class FSStorage &storage;
-    // class BlockStorage &blockStorage;
-
     // The file system this block belongs to (DEPRECATED)
     class FileSystem *fs = nullptr;
+
+    // The storage this block belongs to
+    class FSStorage &storage;
 
     // The type of this block
     FSBlockType type = FSBlockType::UNKNOWN;

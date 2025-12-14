@@ -157,6 +157,19 @@ PartitionDescriptor::PartitionDescriptor(const GeometryDescriptor &geo)
     highCyl     = u32(geo.upperCyl());
 }
 
+GeometryDescriptor
+PartitionDescriptor::geometry() const {
+
+    return GeometryDescriptor(numCylinders(), heads, sectors, sizeBlock * 4);
+}
+
+isize
+PartitionDescriptor::translate(isize block)
+{
+    assert(block >= 0 && block < numBlocks());
+    return lowCyl * heads * sectors + block;
+}
+
 void
 PartitionDescriptor::dump() const
 {

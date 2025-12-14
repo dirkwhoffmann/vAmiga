@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "Device.h"
+#include "Media.h"
 
 namespace vamiga {
 
@@ -51,6 +52,43 @@ Device::init(const GeometryDescriptor &desc)
 
     // Adjust capacity
     blocks.resize(capacity());
+}
+
+void
+Device::init(const class ADFFile &adf)
+{
+    auto geometry = adf.getGeometry();
+    init(geometry);
+
+    for (isize i = 0; i < capacity(); i++) {
+        importBlock(i, adf.data.ptr + i * geometry.bsize);
+    }
+}
+
+void
+Device::init(const class HDFFile &hdf)
+{
+    auto geometry = hdf.getGeometry();
+    init(geometry);
+
+    // Import all blocks
+    for (isize i = 0; i < capacity(); i++) {
+        importBlock(i, hdf.data.ptr + i * geometry.bsize);
+    }
+
+    // Import partition layout
+    partitions.reserve(hdf.numPartitions());
+    for (isize i = 0; i < hdf.numPartitions(); i++) {
+        partitions.emplace_back(Partition(*this, hdf.getPartitionDescriptor(i)));
+    }
+}
+
+void
+Device::importBlock(isize nr, const u8 *data)
+{
+    if (auto *block = ensureBlock(nr)) {
+        block->init(data, bsize());
+    }
 }
 
 void
