@@ -26,6 +26,7 @@ struct FSBlock : Loggable {
 
     // The storage this block belongs to
     class FSStorage &storage;
+    // class BlockStorage &blockStorage;
 
     // The file system this block belongs to (DEPRECATED)
     class FileSystem *fs = nullptr;
@@ -35,11 +36,6 @@ struct FSBlock : Loggable {
 
     // The sector number of this block
     Block nr = 0;
-    
-private:
-
-    // Block data
-    u8 *bdata = nullptr;
 
     
     //

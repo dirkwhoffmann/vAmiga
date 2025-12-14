@@ -18,7 +18,6 @@ FSStorage::FSStorage(FileSystem &fs) : FSExtension(fs), bsize(512) { };
 FSStorage::FSStorage(FileSystem &fs, isize capacity, isize bsize) : FSStorage(fs)
 {
     init(capacity, bsize);
-    storage.init(capacity, bsize);
 }
 
 FSStorage::~FSStorage()
@@ -37,6 +36,9 @@ FSStorage::init(isize capacity, isize bsize)
 {
     this->capacity = capacity;
     this->bsize = bsize;
+
+    // Init the physical block storage
+    storage.init(capacity, bsize);
 
     // Remove all existing blocks
     blocks.clear();

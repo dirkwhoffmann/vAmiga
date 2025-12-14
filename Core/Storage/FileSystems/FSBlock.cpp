@@ -25,7 +25,7 @@ FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : fs(ref), storage(re
 
 FSBlock::~FSBlock()
 {
-    if (bdata) delete [] bdata;
+
 }
 
 void
@@ -37,8 +37,7 @@ FSBlock::init(FSBlockType t)
     if (type == FSBlockType::EMPTY) return;
 
     // Allocate memory
-    delete [] (bdata);
-    bdata = new u8[bsize()]();
+    auto *bdata = data();
 
     // Initialize
     switch (type) {
@@ -495,10 +494,12 @@ FSBlock::addr32(isize nr)
 u8 *
 FSBlock::data()
 {
-    // Allocate memory if needed
-    if (!bdata) bdata = new u8[bsize()]();
+    auto *buffer = storage.storage.ensureBlock(nr);
 
-    return bdata;
+    assert(buffer);
+    assert(buffer->ptr);
+
+    return buffer->ptr;
 }
 
 const u8 *
@@ -709,7 +710,7 @@ FSBlock::hexDump(std::ostream &os, const DumpOpt &opt)
 
     } else {
 
-        Dumpable::dump(os, opt, bdata, bsize());
+        Dumpable::dump(os, opt, data(), bsize());
     }
 }
 
@@ -748,9 +749,10 @@ FSBlock::importBlock(const u8 *src, isize size)
     assert(src);
     assert(size == bsize());
 
-    if (bdata) {
+    auto *bdata = data();
 
-        std::memcpy(bdata, src, size);
+    if (bdata) {
+        std::memcpy(data(), src, size);
     }
 }
 
@@ -760,9 +762,10 @@ FSBlock::exportBlock(u8 *dst, isize size) const
     assert(dst);
     assert(size == bsize());
 
-    // Export the block
+    auto *bdata = data();
+
     if (bdata) {
-        std::memcpy(dst, bdata, size);
+        std::memcpy(dst, data(), size);
     } else {
         std::memset(dst, 0, size);
     }
@@ -1550,14 +1553,14 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
     debug(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
     
     if (id != BootBlockId::NONE) {
-        
+
         // Read boot block image from the database
         auto image = BootBlockImage(id);
-        
+
         if (page == 0) {
-            image.write(bdata + 4, 4, 511); // Write 508 bytes (skip header)
+            image.write(data() + 4, 4, 511); // Write 508 bytes (skip header)
         } else {
-            image.write(bdata, 512, 1023);  // Write 512 bytes
+            image.write(data(), 512, 1023);  // Write 512 bytes
         }
     }
 }
@@ -1824,7 +1827,8 @@ isize
 FSBlock::writeData(std::ostream &os, isize size) const
 {
     isize count = std::min(dsize(), size);
-    
+    auto *bdata = data();
+
     switch (type) {
             
         case FSBlockType::DATA_OFS:
@@ -1908,7 +1912,8 @@ isize
 FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count) const
 {
     count = std::min(dsize(), count);
-    
+    auto *bdata = data();
+
     switch (type) {
             
         case FSBlockType::DATA_OFS:
@@ -1982,7 +1987,8 @@ isize
 FSBlock::overwriteData(Buffer<u8> &buf, isize offset, isize count)
 {
     count = std::min(dsize(), count);
-    
+    auto *bdata = data();
+
     switch (type) {
             
         case FSBlockType::DATA_OFS:

@@ -20,6 +20,8 @@ namespace vamiga {
 
 class FSStorage final : public FSExtension {
 
+    friend class FSBlock;
+    
 private:
 
     // The physical block storage
