@@ -93,6 +93,7 @@
 		503E869F2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
 		503E86A22EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
 		503E86A32EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
+		503E86A52EEF15A800ED891D /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 503E86A42EEF15A300ED891D /* CMakeLists.txt */; };
 		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
@@ -739,6 +740,7 @@
 		503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockStorage.cpp; sourceTree = "<group>"; };
 		503E86A02EEEBBE800ED891D /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		503E86A12EEEBBEF00ED891D /* Device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Device.cpp; sourceTree = "<group>"; };
+		503E86A42EEF15A300ED891D /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4B02EE00FE400637C95 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		503FC4B42EE04C2B00637C95 /* Integers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Integers.h; sourceTree = "<group>"; };
 		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
@@ -1511,6 +1513,7 @@
 		503E869B2EEE9D5300ED891D /* Devices */ = {
 			isa = PBXGroup;
 			children = (
+				503E86A42EEF15A300ED891D /* CMakeLists.txt */,
 				503E86A02EEEBBE800ED891D /* Device.h */,
 				503E86A12EEEBBEF00ED891D /* Device.cpp */,
 				503E869C2EEE9D5C00ED891D /* BlockStorage.h */,
@@ -2892,6 +2895,7 @@
 				50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */,
 				506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
+				503E86A52EEF15A800ED891D /* CMakeLists.txt in Resources */,
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
 				501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */,

@@ -7,5 +7,6 @@ DeviceError.cpp
 
 )
 
+add_subdirectory(Devices)
 add_subdirectory(FileSystems)
 add_subdirectory(Media)
