@@ -24,7 +24,7 @@ using utl::DumpOpt;
 
 struct FSBlock : Loggable {
 
-    friend class FSDoctor;
+    // friend class FSDoctor;
     
     // The file system this block belongs to
     class FileSystem *fs = nullptr;

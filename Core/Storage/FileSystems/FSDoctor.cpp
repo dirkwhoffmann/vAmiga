@@ -94,6 +94,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
     using namespace utl;
 
     FSBlock &p = fs.at(nr);
+    auto *bdata = p.data();
 
     os << tab("Block");
     os << dec(nr) << std::endl;
@@ -116,7 +117,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
         case FSBlockType::BOOT:
 
             os << tab("Header");
-            for (isize i = 0; i < 8; i++) os << hex(p.bdata[i]) << " ";
+            for (isize i = 0; i < 8; i++) os << hex(bdata[i]) << " ";
             os << std::endl;
             break;
 
@@ -235,7 +236,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
         os << tab("Hash table");
         for (isize i = 0, j = 0; i < p.hashTableSize(); i++) {
 
-            if (Block ref = p.read32(p.bdata + 24 + 4 * i); ref) {
+            if (Block ref = p.read32(bdata + 24 + 4 * i); ref) {
 
                 if (j++) os << std::endl << tab();
                 os << std::setfill(' ') << std::setw(2) << i << " -> ";
