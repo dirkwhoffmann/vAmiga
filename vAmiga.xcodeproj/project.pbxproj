@@ -89,6 +89,8 @@
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
+		503E869E2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
+		503E869F2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
 		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
@@ -731,6 +733,8 @@
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* CoreError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreError.h; sourceTree = "<group>"; };
+		503E869C2EEE9D5C00ED891D /* BlockStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockStorage.h; sourceTree = "<group>"; };
+		503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockStorage.cpp; sourceTree = "<group>"; };
 		503FC4B02EE00FE400637C95 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		503FC4B42EE04C2B00637C95 /* Integers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Integers.h; sourceTree = "<group>"; };
 		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
@@ -1500,6 +1504,15 @@
 			path = Agnus;
 			sourceTree = "<group>";
 		};
+		503E869B2EEE9D5300ED891D /* Devices */ = {
+			isa = PBXGroup;
+			children = (
+				503E869C2EEE9D5C00ED891D /* BlockStorage.h */,
+				503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */,
+			);
+			path = Devices;
+			sourceTree = "<group>";
+		};
 		503FC4B12EE00FF900637C95 /* utlib */ = {
 			isa = PBXGroup;
 			children = (
@@ -2225,6 +2238,7 @@
 		509E76342EDDF53600608FA7 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				503E869B2EEE9D5300ED891D /* Devices */,
 				509E76382EDDF57400608FA7 /* CMakeLists.txt */,
 				505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */,
 				50BCB9A92EE2F9FF000C53CF /* DeviceError.h */,
@@ -3130,6 +3144,7 @@
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
+				503E869E2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50DAED232D2D17660044B922 /* DashboardDataProvider.swift in Sources */,
 				5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */,
@@ -3332,6 +3347,7 @@
 				50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */,
 				50FC04F227DA1A4A00C3E566 /* RegressionTester.cpp in Sources */,
 				50FC04B927DA19B200C3E566 /* Drive.cpp in Sources */,
+				503E869F2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */,
 				509E76092EDCCC3B00608FA7 /* EXEFactory.cpp in Sources */,
 				50FC04EE27DA1A4500C3E566 /* GdbServer.cpp in Sources */,
 				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,

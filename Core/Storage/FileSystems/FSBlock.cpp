@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : fs(ref)
+FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : fs(ref), storage(ref->storage)
 {
     this->nr = nr;
     init(t);

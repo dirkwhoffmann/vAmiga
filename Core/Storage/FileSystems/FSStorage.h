@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "BlockStorage.h"
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSExtension.h"
@@ -21,8 +22,8 @@ class FSStorage final : public FSExtension {
 
 private:
 
-    // Reference to the owner of this storage
-    // class FileSystem *fs = nullptr;
+    // The physical block storage
+    BlockStorage storage;
 
     // File system capacity in blocks
     isize capacity {};

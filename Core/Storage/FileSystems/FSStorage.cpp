@@ -18,6 +18,7 @@ FSStorage::FSStorage(FileSystem &fs) : FSExtension(fs), bsize(512) { };
 FSStorage::FSStorage(FileSystem &fs, isize capacity, isize bsize) : FSStorage(fs)
 {
     init(capacity, bsize);
+    storage.init(capacity, bsize);
 }
 
 FSStorage::~FSStorage()
