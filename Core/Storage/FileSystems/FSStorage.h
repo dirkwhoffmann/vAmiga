@@ -13,6 +13,7 @@
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSExtension.h"
+#include "Device.h"
 #include <iostream>
 #include <ranges>
 
@@ -21,10 +22,15 @@ namespace vamiga {
 class FSStorage final : public FSExtension {
 
     friend struct FSBlock;
-    
+
+public: // MAKE PRIVATE ASAP
+
+    // The physical block device
+    // Device *device = nullptr;
+
 private:
 
-    // The physical block storage
+    // The physical block storage (DEPRECATED)
     BlockStorage storage;
 
     // File system capacity in blocks

@@ -132,7 +132,7 @@ public:
     FileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
     FileSystem(const FSDescriptor &layout, u8 *buf, isize len) : FileSystem() { init(layout, buf, len); }
     FileSystem(const FSDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
-    FileSystem(const FileSystem&) = delete;
+    FileSystem(const FileSystem &fs) = delete;
     virtual ~FileSystem() = default;
 
     void init(isize capacity, isize bsize = 512);

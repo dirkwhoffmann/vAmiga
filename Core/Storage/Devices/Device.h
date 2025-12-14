@@ -70,6 +70,8 @@ private:
 
 public:
 
+    const GeometryDescriptor &getGeometry() const { return geometry; }
+
     isize capacity() const override { return geometry.numBlocks(); }
     isize bsize() const override { return geometry.bsize; }
     void freeBlock(isize nr) override;
