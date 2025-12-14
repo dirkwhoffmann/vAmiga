@@ -72,6 +72,7 @@ class HardDrive;
 class FileSystem : public Loggable {
 
     friend struct FSBlock;
+    friend class  FSStorage;
     friend class  FSExtension;
     friend class  FSDoctor;
     friend class  FSAllocator;
@@ -81,6 +82,9 @@ class FileSystem : public Loggable {
 
     // Static file system properties
     FSTraits traits;
+
+    // The physical block storage (DEPRECATED)
+    BlockStorage device;
 
 
     //

@@ -494,7 +494,7 @@ FSBlock::addr32(isize nr)
 u8 *
 FSBlock::data()
 {
-    auto *buffer = storage.storage.ensureBlock(nr);
+    auto *buffer = storage.fs.device.ensureBlock(nr);
 
     assert(buffer);
     assert(buffer->ptr);

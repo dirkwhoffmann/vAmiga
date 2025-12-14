@@ -31,7 +31,7 @@ public: // MAKE PRIVATE ASAP
 private:
 
     // The physical block storage (DEPRECATED)
-    BlockStorage storage;
+    // BlockStorage storage;
 
     // File system capacity in blocks
     isize capacity {};
