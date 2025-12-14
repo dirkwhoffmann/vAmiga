@@ -12,11 +12,11 @@
 #include "HDFFileTypes.h"
 #include "DiskFile.h"
 #include "FSDescriptor.h"
+#include "utl/types.h"
 
 namespace vamiga {
 
 class FloppyDisk;
-
 
 class HDFFile : public DiskFile {
     
@@ -35,7 +35,7 @@ public:
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
     
-    static bool isOversized(isize size) { return size > MB(504); }
+    static bool isOversized(isize size) { return size > 504_MB; }
 
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }

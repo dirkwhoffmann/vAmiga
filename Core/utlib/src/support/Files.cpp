@@ -7,8 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#include "utl/common.h"
 #include "utl/io.h"
-#include "utl/hints.h"
 #include <fstream>
 #include <cassert>
 #include <sys/stat.h>

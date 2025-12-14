@@ -37,12 +37,12 @@ FileSystemFactory::fromMediaFile(const MediaFile &file, isize part)
 
         case FileType::ADF:
 
-            return fromADF(dynamic_cast<const ADFFile &>(file));
+            return fromADF(dynamic_cast<const ADFFile &>(*file.file));
             break;
 
         case FileType::HDF:
 
-            return fromHDF(dynamic_cast<const HDFFile &>(file), part);
+            return fromHDF(dynamic_cast<const HDFFile &>(*file.file), part);
             break;
 
         default:

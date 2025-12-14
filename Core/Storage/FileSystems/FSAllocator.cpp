@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "FileSystem.h"
+#include "utl/support.h"
 #include <bit>
 
 namespace vamiga {

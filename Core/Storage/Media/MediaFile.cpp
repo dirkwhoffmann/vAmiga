@@ -215,7 +215,7 @@ MediaFile::getDiskInfo() const
 
     try {
 
-        auto &disk = dynamic_cast<const DiskFile &>(*this);
+        auto &disk = dynamic_cast<const DiskFile &>(*file);
 
         result.cyls = disk.numCyls();
         result.heads = disk.numHeads();
@@ -240,7 +240,7 @@ MediaFile::getFloppyDiskInfo() const
 
     try {
 
-        auto &disk = dynamic_cast<const FloppyFile &>(*this);
+        auto &disk = dynamic_cast<const FloppyFile &>(*file);
 
         result.dos = disk.getDos();
         result.diameter = disk.getDiameter();
