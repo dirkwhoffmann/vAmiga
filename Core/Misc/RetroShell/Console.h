@@ -433,8 +433,9 @@ class DebuggerConsole final : public Console
 
 class NavigatorConsole final : public Console
 {
-    FileSystem fs;
-    
+    unique_ptr<Device> dev;
+    unique_ptr<FileSystem> fs;
+
     using Console::Console;
     
     //

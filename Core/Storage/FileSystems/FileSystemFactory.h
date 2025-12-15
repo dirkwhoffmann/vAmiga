@@ -21,14 +21,14 @@ class FileSystemFactory {
 public:
 
     // Create a new filesystem (returns by value)
-    static std::unique_ptr<FileSystem> fromADF(const ADFFile &adf);
-    static std::unique_ptr<FileSystem> fromHDF(const HDFFile &hdf, isize part = 0);
-    static std::unique_ptr<FileSystem> fromMediaFile(const MediaFile &file, isize part = 0);
-    static std::unique_ptr<FileSystem> fromFloppyDrive(const FloppyDrive &df);
-    static std::unique_ptr<FileSystem> fromHardDrive(const HardDrive &hd, isize part = 0);
-    static std::unique_ptr<FileSystem> createEmpty(isize capacity, isize blockSize = 512);
-    static std::unique_ptr<FileSystem> createFromDescriptor(const FSDescriptor &, const fs::path &path = {});
-    static std::unique_ptr<FileSystem> createLowLevel(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
+    static std::unique_ptr<FileSystem> fromADF(Device &dev, const ADFFile &adf);
+    static std::unique_ptr<FileSystem> fromHDF(Device &dev, const HDFFile &hdf, isize part = 0);
+    static std::unique_ptr<FileSystem> fromMediaFile(Device &dev, const MediaFile &file, isize part = 0);
+    static std::unique_ptr<FileSystem> fromFloppyDrive(Device &dev, const FloppyDrive &df);
+    static std::unique_ptr<FileSystem> fromHardDrive(Device &dev, const HardDrive &hd, isize part = 0);
+    static std::unique_ptr<FileSystem> createEmpty(Device &dev, isize capacity, isize blockSize = 512);
+    static std::unique_ptr<FileSystem> createFromDescriptor(Device &dev, const FSDescriptor &, const fs::path &path = {});
+    static std::unique_ptr<FileSystem> createLowLevel(Device &dev, Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
 
     // Initialize an existing filesystem
     static void initFromADF(FileSystem &fs, const ADFFile &adf);

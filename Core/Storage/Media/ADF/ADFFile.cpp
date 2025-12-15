@@ -207,13 +207,16 @@ ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
 
     // Only proceed if a file system is given
     if (fs == FSFormat::NODOS) return;
-    
-    // Get a device descriptor for this ADF
+
+    // Create an empty floppy disk
+    Device device(getGeometry());
+
+    // Get a file system descriptor for this ADF
     auto descriptor = getFileSystemDescriptor();
     descriptor.dos = fs;
-    
-    // Create an empty file system
-    FileSystem volume(descriptor);
+
+    // Create a file system
+    FileSystem volume(device, descriptor);
     volume.setName(FSName(name));
     
     // Write boot code

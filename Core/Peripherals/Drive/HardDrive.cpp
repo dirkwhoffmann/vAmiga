@@ -368,7 +368,8 @@ HardDrive::isBootable()
 {
     try {
 
-        auto fs = FileSystemFactory::fromHardDrive(*this);
+        auto dev = make_unique<Device>(getGeometry());
+        auto fs = FileSystemFactory::fromHardDrive(*dev, *this);
 
         if (fs->exists("s/startup-sequence")) {
 
@@ -465,8 +466,9 @@ HardDrive::_dump(Category category, std::ostream &os) const
     if (category == Category::Volumes) {
 
         for (isize i = 0; i < isize(ptable.size()); i++) {
-            
-            auto fs = FileSystemFactory::fromHardDrive(*this, i);
+
+            auto dev = make_unique<Device>(getGeometry());
+            auto fs = FileSystemFactory::fromHardDrive(*dev, *this, i);
             i == 0 ? fs->dumpInfo(os) : fs->dumpState(os);
         }
         
@@ -475,7 +477,8 @@ HardDrive::_dump(Category category, std::ostream &os) const
             os << std::endl;
             os << tab("Partition");
             os << dec(i) << std::endl;
-            auto fs = FileSystemFactory::fromHardDrive(*this, i);
+            auto dev = make_unique<Device>(getGeometry());
+            auto fs = FileSystemFactory::fromHardDrive(*dev, *this, i);
             fs->dumpProps(os);
         }
     }
@@ -566,16 +569,19 @@ HardDrive::format(FSFormat fsType, string name)
 
     if (fsType != FSFormat::NODOS) {
         
-        // Create a device descriptor matching this drive
+        // Create a file system descriptor matching this drive
         auto layout = FSDescriptor(geometry, fsType);
 
+        // Create an empty device
+        auto dev = Device(geometry);
+
         // Create an empty file system
-        auto fs = FileSystem(layout);
-        
+        auto fs = FileSystem(dev, layout);
+
         // Name the file system
         fs.setName(name);
         
-        // Copy the file system over
+        // Initialize the hard drive with the created file system
         init(fs);
     }
 }
@@ -762,9 +768,12 @@ HardDrive::importFolder(const fs::path &path)
                 
         // Create a device descriptor matching this drive
         FSDescriptor layout(geometry, traits.fsType);
-        
+
+        // Create an empty device
+        auto dev = Device(geometry);
+
         // Create a new file system
-        auto fs = FileSystem(layout);
+        auto fs = FileSystem(dev, layout);
         
         // Import all files
         fs.importer.import(fs.root(), path, true, true);

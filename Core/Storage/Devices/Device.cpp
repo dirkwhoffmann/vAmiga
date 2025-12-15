@@ -55,6 +55,12 @@ Device::init(const GeometryDescriptor &desc)
 }
 
 void
+Device::init(Diameter dia, Density den)
+{
+    init(GeometryDescriptor(dia, den));
+}
+
+void
 Device::init(const class ADFFile &adf)
 {
     auto geometry = adf.getGeometry();

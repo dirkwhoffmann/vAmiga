@@ -30,13 +30,13 @@ NavigatorConsole::prompt()
 {
     std::stringstream ss;
     
-    if (fs.isInitialized()) {
-        
-        auto &pwd = fs.pwd();
-        
+    if (fs && fs->isInitialized()) {
+
+        auto &pwd = fs->pwd();
+
         ss << "[" << std::to_string(pwd.nr) << "]";
         
-        auto fsName = fs.stat().name;
+        auto fsName = fs->stat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
         if (pwd.isDirectory()) ss << " " << pwd.absName();
     }
@@ -140,11 +140,13 @@ NavigatorConsole::autoComplete(Tokens &argv)
 string
 NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 {
+    if (!fs || !fs->isFormatted()) return input;
+
     bool absolute = !input.empty() && input[0] == '/';
     
     // Seek matching items
-    auto matches = fs.match(&fs.pwd(), input + "*");
-    
+    auto matches = fs->match(&fs->pwd(), input + "*");
+
     // Filter out unwanted items
     if (!matches.empty()) {
         matches.erase(std::remove_if(matches.begin(), matches.end(), [flags](const FSBlock *node) {
@@ -178,7 +180,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
      bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
      bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
      */
-    bool displayFiles = fs.isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
+    bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
     bool displayCmds  = true;
     
     if (displayCmds) {
@@ -190,7 +192,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     if (displayFiles) {
         
         // Seek matching items
-        auto matches = fs.match(&fs.pwd(), args.empty() ? "*" : args.back() + "*");
+        auto matches = fs->match(&fs->pwd(), args.empty() ? "*" : args.back() + "*");
         
         // List all nodes
         if (!matches.empty() && displayCmds) os << std::endl;
@@ -203,31 +205,28 @@ NavigatorConsole::parseBlock(const string &argv)
 {
     require::initialized(fs);
 
-    if (auto nr = Block(parseNum(argv)); fs.read(nr)) {
+    if (auto nr = Block(parseNum(argv)); fs->read(nr)) {
         return nr;
     }
     
-    throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
+    throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
 }
 
 Block
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, fs.pwd().nr);
+    return parseBlock(argv, token, fs->pwd().nr);
 }
 
 Block
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block fallback)
 {
+    require::initialized(fs);
+
     auto nr = argv.contains(token) ? Block(parseNum(argv.at(token))) : fallback;
     
-    if (!fs.read(nr)) {
-        
-        if (!fs.isInitialized()) {
-            throw FSError(fault::FS_UNINITIALIZED);
-        } else {
-            throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs.blocks()));
-        }
+    if (!fs->read(nr)) {
+        throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
     }
     return nr;
 }
@@ -235,18 +234,20 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
 FSBlock &
 NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 {
+    require::formatted(fs);
+
     assert(argv.contains(token));
-    
+
     try {
         // Try to find the directory by name
-        return fs.seek(fs.pwd(), argv.at(token));
-        
+        return fs->seek(fs->pwd(), argv.at(token));
+
     } catch (...) {
         
         try {
             // Treat the argument as a block number
-            return fs[parseBlock(argv.at(token))];
-            
+            return (*fs)[parseBlock(argv.at(token))];
+
         } catch (...) {
             
             // The item does not exist
@@ -264,55 +265,45 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token, FSBlock 
 FSBlock &
 NavigatorConsole::parseFile(const Arguments &argv, const string &token)
 {
-    return parseFile(argv, token, fs.pwd());
+    return parseFile(argv, token, fs->pwd());
 }
 
 FSBlock &
 NavigatorConsole::parseFile(const Arguments &argv, const string &token, FSBlock &fallback)
 {
-    if (!fs.isFormatted()) {
-        throw FSError(fault::FS_UNFORMATTED);
-    }
     auto &path = parsePath(argv, token, fallback);
-    
-    if (!path.isFile()) {
-        throw FSError(fault::FS_NOT_A_FILE, "Block " + std::to_string(path.nr));
-    }
+    require::file(path);
+
     return path;
 }
 
 FSBlock &
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
 {
-    return parseDirectory(argv, token, fs.pwd());
+    return parseDirectory(argv, token, fs->pwd());
 }
 
 FSBlock &
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback)
 {
-    if (!fs.isFormatted()) {
-        throw FSError(fault::FS_UNFORMATTED);
-    }
     auto &path = parsePath(argv, token, fallback);
-    
-    if (!path.isDirectory()) {
-        throw FSError(fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.nr));
-    }
+    require::directory(path);
+
     return path;
 }
 
 void
 NavigatorConsole::import(const FloppyDrive &dfn)
 {
-    FileSystemFactory::initFromFloppy(fs, dfn);
-    // fs.init(dfn);
+    require::initialized(fs);
+    FileSystemFactory::initFromFloppy(*fs, dfn);
 }
 
 void
 NavigatorConsole::import(const HardDrive &hdn, isize part)
 {
-    FileSystemFactory::initFromHardDrive(fs, hdn);
-    // fs.init(hdn, part);
+    require::initialized(fs);
+    FileSystemFactory::initFromHardDrive(*fs, hdn);
 }
 
 void
@@ -332,13 +323,15 @@ NavigatorConsole::importHd(isize n, isize part)
 void
 NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
 {
-    fs.importer.import(path, recursive, contents);
+    require::initialized(fs);
+    fs->importer.import(path, recursive, contents);
 }
 
 void
 NavigatorConsole::exportBlocks(fs::path path)
 {
-    fs.exporter.exportBlocks(path);
+    require::initialized(fs);
+    fs->exporter.exportBlocks(path);
 }
 
 FSBlock &
@@ -356,15 +349,15 @@ NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &
 FSBlock &
 NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
-    if (!fs.isFormatted()) throw FSError(fault::FS_UNFORMATTED);
+    require::formatted(fs);
 
     auto tokens = utl::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
     
-    auto *p = &fs.pwd();
+    auto *p = &fs->pwd();
     while (!tokens.empty()) {
         
-        auto *next = fs.seekPtr(p, FSName(tokens.front()));
+        auto *next = fs->seekPtr(p, FSName(tokens.front()));
         if (!next) break;
         
         tokens.erase(tokens.begin());
@@ -458,9 +451,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = rs::hidden,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            if (fs.isInitialized()) {
+            if (fs && fs->isInitialized()) {
 
-                fs.dumpInfo(os);
+                fs->dumpInfo(os);
 
             } else {
 
@@ -517,9 +510,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "create", "SD" },
         .chelp  = { "Create a file system for a single-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            fs.init(FSDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
-            fs.dumpInfo(os);
+
+            require::initialized(fs);
+            fs->init(FSDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
+            fs->dumpInfo(os);
         }
     });
     
@@ -528,9 +522,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "create", "DD" },
         .chelp  = { "Create a file system for a double-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            fs.init(FSDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
-            fs.dumpInfo(os);
+
+            require::initialized(fs);
+            fs->init(FSDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
+            fs->dumpInfo(os);
         }
     });
     
@@ -539,9 +534,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "create", "HD" },
         .chelp  = { "Create a file system for a high-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            fs.init(FSDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
-            fs.dumpInfo(os);
+
+            require::initialized(fs);
+            fs->init(FSDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
+            fs->dumpInfo(os);
         }
     });
     
@@ -559,9 +555,10 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 // Compute the number of needed blocks
                 auto blocks = (mb + 511) / 512;
-                
-                fs.init(FSDescriptor(blocks, FSFormat::NODOS));
-                fs.dumpInfo(os);
+
+                dev = make_unique<Device>(GeometryDescriptor(blocks));
+                fs = make_unique<FileSystem>(*dev, FSDescriptor(blocks, FSFormat::NODOS));
+                fs->dumpInfo(os);
             }
     });
     
@@ -582,8 +579,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                 isize b = 512;
                 
                 auto geometry = GeometryDescriptor(c, h, s, b);
-                fs.init(FSDescriptor(geometry, FSFormat::NODOS));
-                fs.dumpInfo(os);
+                dev = make_unique<Device>(geometry);
+                fs = make_unique<FileSystem>(*dev, FSDescriptor(geometry, FSFormat::NODOS));
+                fs->dumpInfo(os);
             }
     });
     
@@ -596,7 +594,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "name", "File system name" }, .flags = rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::initialized(fs);
+
                 // Determine the DOS type
                 auto type = FSFormat::NODOS;
                 auto dos = utl::uppercased(args.at("dos"));
@@ -608,8 +608,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
                 
                 // Format the device
-                fs.format(type, args.contains("name") ? args.at("name") : "New Disk");
-                fs.dumpInfo(os);
+                fs->format(type, args.contains("name") ? args.at("name") : "New Disk");
+                fs->dumpInfo(os);
             }
     });
     
@@ -631,7 +631,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 bool recursive = true;
                 bool contents = path.back() == '/';
                 
-                fs.importer.import(fs.pwd(), hostPath, recursive, contents);
+                fs->importer.import(fs->pwd(), hostPath, recursive, contents);
             }
     });
     
@@ -654,8 +654,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto n = values[0];
 
-                FileSystemFactory::initFromFloppy(fs, *df[n]);
-                fs.dumpInfo(os);
+                dev = make_unique<Device>(df[n]->diameter(), df[n]->density());
+                fs = FileSystemFactory::fromFloppyDrive(*dev, *df[n]);
+                fs->dumpInfo(os);
 
             }, .payload = {i}
         });
@@ -680,8 +681,10 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto n = values[0];
 
-                FileSystemFactory::initFromHardDrive(fs, *hd[n], 0);
-                fs.dumpInfo(os);
+                auto desc = hd[n]->getPartitionDescriptor(0);
+                dev = make_unique<Device>(desc.geometry());
+                fs = FileSystemFactory::fromHardDrive(*dev, *hd[n]);
+                fs->dumpInfo(os);
 
             }, .payload = {i}
         });
@@ -697,11 +700,13 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "File path" } },
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::initialized(fs);
+
                 auto path = host.makeAbsolute(args.at("path"));
-                auto nr = parseBlock(args, "nr", fs.pwd().nr);
-                
-                fs.importer.importBlock(nr, path);
+                auto nr = parseBlock(args, "nr", fs->pwd().nr);
+
+                fs->importer.importBlock(nr, path);
             }
     });
     
@@ -718,7 +723,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                 { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                    
+
+                    require::initialized(fs);
+
                     bool recursive = args.contains("r");
                     std::filesystem::remove_all("/export");
                     
@@ -726,15 +733,15 @@ NavigatorConsole::initCommands(RSCommand &root)
                         
                         auto &item = parsePath(args, "file");
                         auto name = item.cppName();
-                        if (name.empty()) name = fs.stat().name.cpp_str();
-                        fs.exporter.exportFiles(item, "/export", recursive, true);
+                        if (name.empty()) name = fs->stat().name.cpp_str();
+                        fs->exporter.exportFiles(item, "/export", recursive, true);
                         msgQueue.setPayload( { "/export", name } );
                         
                     } else {
                         
-                        fs.exporter.exportBlocks("/export");
-                        auto name = fs.stat().name.cpp_str();
-                        name += fs.getTraits().adf() ? ".adf" : ".hdf";
+                        fs->exporter.exportBlocks("/export");
+                        auto name = fs->stat().name.cpp_str();
+                        name += fs->getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );
                     }
                     
@@ -756,14 +763,16 @@ NavigatorConsole::initCommands(RSCommand &root)
                 { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                    
+
+                    require::formatted(fs);
+
                     auto &item = parsePath(args, "file");
                     bool recursive = args.contains("r");
                     bool contents = args.at("file").back() == '/';
                     
                     auto path = args.at("path");
                     auto hostPath = host.makeAbsolute(args.at("path"));
-                    fs.exporter.exportFiles(item, hostPath, recursive, contents);
+                    fs->exporter.exportFiles(item, hostPath, recursive, contents);
                 }
         });
     }
@@ -784,10 +793,12 @@ NavigatorConsole::initCommands(RSCommand &root)
             .chelp  = { "Export the file system to floppy drive" + std::to_string(i) },
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::initialized(fs);
+
                 auto n = values[0];
                 // df[n]->insertMediaFile(ADFFile(fs), false);
-                auto tmp = MediaFile(ADFFactory::make(fs));
+                auto tmp = MediaFile(ADFFactory::make(*fs));
                 df[n]->insertMediaFile(tmp, false);
 
             }, .payload = {i}
@@ -810,10 +821,12 @@ NavigatorConsole::initCommands(RSCommand &root)
             .chelp  = { "Export the file system to hard drive" + std::to_string(i) },
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::initialized(fs);
+
                 auto n = values[0];
-                hd[n]->init(fs);
-                
+                hd[n]->init(*fs);
+
             }, .payload = {i}
         });
     }
@@ -827,19 +840,21 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "File path" }, .flags = vAmigaDOS ? rs::disabled : 0 },
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                auto nr = parseBlock(args, "nr", fs.pwd().nr);
-                
+
+                require::initialized(fs);
+
+                auto nr = parseBlock(args, "nr", fs->pwd().nr);
+
                 if constexpr (vAmigaDOS) {
                     
-                    fs.exporter.exportBlock(nr, "blob");
+                    fs->exporter.exportBlock(nr, "blob");
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT);
                     
                 } else {
                     
                     auto path = host.makeAbsolute(args.at("path"));
-                    fs.exporter.exportBlock(nr, path);
+                    fs->exporter.exportBlock(nr, path);
                 }
             }
     });
@@ -855,9 +870,11 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "New working directory" }, .flags = rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                auto &path = parsePath(args, "path", fs.root());
-                fs.cd(path);
+
+                require::formatted(fs);
+
+                auto &path = parsePath(args, "path", fs->root());
+                fs->cd(path);
             }
     });
     
@@ -873,7 +890,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "r", "Display subdirectories" }, .flags = rs::flag }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::formatted(fs);
+
                 auto &path = parseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
@@ -974,15 +993,17 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "f", "Find files only" }, .flags = rs::flag },
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::formatted(fs);
+
                 auto pattern = FSPattern(args.at("name"));
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto s = args.contains("s");
                 
                 // Find all items matching the search pattern
-                auto matches = fs.find(pattern);
-                
+                auto matches = fs->find(pattern);
+
                 // Filter the result
                 matches.erase(std::remove_if(matches.begin(), matches.end(), [&](auto *node) {
                     return (d && !node->isDirectory()) || (f && !node->isFile());
@@ -1020,11 +1041,13 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "b", "Inspect the block storage" }, .flags = rs::flag },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::initialized(fs);
+
                 if (args.contains("b")) {
-                    fs.dumpBlocks(os);
+                    fs->dumpBlocks(os);
                 } else {
-                    fs.dumpInfo(os);
+                    fs->dumpInfo(os);
                 }
                 
             }
@@ -1041,10 +1064,10 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "v", "Verbose output" }, .flags = rs::flag },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::formatted(fs);
                 auto &file = parseFile(args, "path");
                 args.contains("v") ? file.dumpBlocks(os) : file.dumpInfo(os);
-                // file.dump(args.contains("v") ? Category::Blocks : Category::Info, os);
             }
     });
     
@@ -1057,9 +1080,10 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" }, .flags = rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::initialized(fs);
                 auto nr = parseBlock(args, "nr");
-                fs.doctor.dump(nr, os);
+                fs->doctor.dump(nr, os);
             }
     });
     
@@ -1084,8 +1108,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 require::formatted(fs);
-                fs.makeBootable(BootBlockId(values[0]));
-                
+                fs->makeBootable(BootBlockId(values[0]));
+
             },  .payload = { value }
         });
     }
@@ -1097,7 +1121,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             require::formatted(fs);
-            os << "Boot block: " << fs.bootStat().name << std::endl;
+            os << "Boot block: " << fs->bootStat().name << std::endl;
         }
     });
     
@@ -1108,7 +1132,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             require::formatted(fs);
-            fs.killVirus();
+            fs->killVirus();
         }
     });
     
@@ -1124,8 +1148,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                auto &file = parsePath(args, "path", fs.pwd());
+
+                require::formatted(fs);
+                auto &file = parsePath(args, "path", fs->pwd());
                 if (!file.isFile()) {
                     throw FSError(fault::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
@@ -1160,8 +1185,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                auto &file = parseFile(args, "path", fs.pwd());
+
+                require::formatted(fs);
+                auto &file = parseFile(args, "path", fs->pwd());
                 auto opt = parseDumpOpts(args);
                 
                 Buffer<u8> buffer;
@@ -1185,12 +1211,13 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                auto nr = parseBlock(args, "nr", fs.pwd().nr);
+
+                require::initialized(fs);
+                auto nr = parseBlock(args, "nr", fs->pwd().nr);
                 auto opt = parseDumpOpts(args);
                 
-                if (auto ptr = fs.read(nr); ptr) {
-                    
+                if (auto ptr = fs->read(nr); ptr) {
+
                     ptr->hexDump(os, opt);
                 }
             }
@@ -1209,22 +1236,24 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::initialized(fs);
+
                 bool strict = args.contains("s");
                 
                 if (args.contains("nr")) {
                     
                     auto nr = parseBlock(args, "nr");
                     
-                    if (args.contains("r")) fs.doctor.rectify(nr, strict);
-                    if (auto errors = fs.doctor.xray(nr, strict, os); !errors) {
+                    if (args.contains("r")) fs->doctor.rectify(nr, strict);
+                    if (auto errors = fs->doctor.xray(nr, strict, os); !errors) {
                         os << "No findings." << std::endl;
                     }
                     
                 } else {
                     
-                    if (args.contains("r")) fs.doctor.rectify(strict);
-                    if (auto errors = fs.doctor.xray(strict, os, args.contains("v")); !errors) {
+                    if (args.contains("r")) fs->doctor.rectify(strict);
+                    if (auto errors = fs->doctor.xray(strict, os, args.contains("v")); !errors) {
                         os << "No findings." << std::endl;
                     }
                 }
@@ -1242,7 +1271,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "name", "Name of the new directory" } },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::formatted(fs);
+
                 Tokens missing;
                 auto &path = matchPath(args.at("name"), missing);
                 
@@ -1251,7 +1282,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
                 auto *p = &path;
                 for (auto &it: missing) {
-                    if (p) p = &fs.mkdir(*p, FSName(it));
+                    if (p) p = &fs->mkdir(*p, FSName(it));
                 }
             }
     });
@@ -1266,7 +1297,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "target", "New name or target directory" } },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::formatted(fs);
+
                 auto &source = parsePath(args, "source");
                 
                 Tokens missing;
@@ -1285,15 +1318,15 @@ NavigatorConsole::initCommands(RSCommand &root)
                     if (path.isDirectory()) {
                         
                         debug(RSH_DEBUG, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
-                        fs.move(source, path);
+                        fs->move(source, path);
                     }
                     
                 } else if (missing.size() == 1) {
                     
                     debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
                           source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
-                    fs.move(source, path, missing.back());
-                    
+                    fs->move(source, path, missing.back());
+
                 } else {
                     
                     throw FSError(fault::FS_NOT_FOUND, missing.front());
@@ -1311,7 +1344,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "target", "New name or target directory" } },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::formatted(fs);
+
                 auto &source = parsePath(args, "source");
                 
                 Tokens missing;
@@ -1325,13 +1360,13 @@ NavigatorConsole::initCommands(RSCommand &root)
                     }
                     if (path.isDirectory()) {
                         
-                        fs.copy(source, path);
+                        fs->copy(source, path);
                     }
                     
                 } else if (missing.size() == 1) {
                     
-                    fs.copy(source, path, missing.back());
-                    
+                    fs->copy(source, path, missing.back());
+
                 } else {
                     
                     throw FSError(fault::FS_NOT_FOUND, missing.front());
@@ -1348,13 +1383,15 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "File to delete" } },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
+                require::formatted(fs);
+
                 auto &path = parsePath(args, "path");
                 
                 if (path.isFile()) {
                     
-                    fs.rm(path);
-                    
+                    fs->rm(path);
+
                 } else if (path.isDirectory()) {
                     throw FSError(fault::FS_NOT_A_FILE, args.at("path"));
                 } else {

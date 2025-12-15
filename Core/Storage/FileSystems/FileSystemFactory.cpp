@@ -17,32 +17,32 @@
 namespace vamiga {
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::fromADF(const ADFFile &adf) {
+FileSystemFactory::fromADF(Device &dev, const ADFFile &adf) {
 
     auto desc = adf.getFileSystemDescriptor();
-    return make_unique<FileSystem>(desc, adf.data.ptr, desc.numBlocks * 512);
+    return make_unique<FileSystem>(dev, desc, adf.data.ptr, desc.numBlocks * 512);
 }
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::fromHDF(const HDFFile &hdf, isize part)
+FileSystemFactory::fromHDF(Device &dev, const HDFFile &hdf, isize part)
 {
     auto desc = hdf.getFileSystemDescriptor(part);
-    return make_unique<FileSystem>(desc, hdf.partitionData(part), hdf.partitionSize(part));
+    return make_unique<FileSystem>(dev, desc, hdf.partitionData(part), hdf.partitionSize(part));
 }
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::fromMediaFile(const MediaFile &file, isize part)
+FileSystemFactory::fromMediaFile(Device &dev, const MediaFile &file, isize part)
 {
     switch (file.type()) {
 
         case FileType::ADF:
 
-            return fromADF(dynamic_cast<const ADFFile &>(*file.file));
+            return fromADF(dev, dynamic_cast<const ADFFile &>(*file.file));
             break;
 
         case FileType::HDF:
 
-            return fromHDF(dynamic_cast<const HDFFile &>(*file.file), part);
+            return fromHDF(dev, dynamic_cast<const HDFFile &>(*file.file), part);
             break;
 
         default:
@@ -51,37 +51,38 @@ FileSystemFactory::fromMediaFile(const MediaFile &file, isize part)
 }
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::fromFloppyDrive(const FloppyDrive &dfn)
+FileSystemFactory::fromFloppyDrive(Device &dev, const FloppyDrive &dfn)
 {
-    return fromADF(*ADFFactory::make(dfn));
+    return fromADF(dev, *ADFFactory::make(dfn));
 }
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::fromHardDrive(const HardDrive &hdn, isize part)
+FileSystemFactory::fromHardDrive(Device &dev, const HardDrive &hdn, isize part)
 {
-    return fromHDF(*HDFFactory::make(hdn), part);
+    return fromHDF(dev, *HDFFactory::make(hdn), part);
 }
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::createEmpty(isize capacity, isize blockSize)
+FileSystemFactory::createEmpty(Device &dev, isize capacity, isize blockSize)
 {
-    return make_unique<FileSystem>(capacity, blockSize);
+    return make_unique<FileSystem>(dev, capacity, blockSize);
 }
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::createFromDescriptor(const FSDescriptor &desc,
+FileSystemFactory::createFromDescriptor(Device &dev, const FSDescriptor &desc,
                                                    const fs::path &path)
 {
-    return make_unique<FileSystem>(desc, path);
+    return make_unique<FileSystem>(dev, desc, path);
 }
 
 std::unique_ptr<FileSystem>
-FileSystemFactory::createLowLevel(Diameter dia,
+FileSystemFactory::createLowLevel(Device &dev,
+                                  Diameter dia,
                                   Density den,
                                   FSFormat dos,
                                   const fs::path &path)
 {
-    return make_unique<FileSystem>(FSDescriptor(dia, den, dos), path);
+    return make_unique<FileSystem>(dev, FSDescriptor(dia, den, dos), path);
 }
 
 void

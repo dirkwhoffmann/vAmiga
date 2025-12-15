@@ -60,6 +60,7 @@
 #include "FSImporter.h"
 #include "FSExporter.h"
 #include "DeviceError.h"
+#include "Device.h"
 #include "utl/abilities/Loggable.h"
 
 namespace vamiga {
@@ -85,6 +86,9 @@ class FileSystem : public Loggable {
 
     // The physical block storage (DEPRECATED)
     BlockStorage device;
+
+    //
+    BlockView &dev;
 
 
     //
@@ -132,11 +136,11 @@ public:
 
 public:
 
-    FileSystem() { };
-    FileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
-    FileSystem(const FSDescriptor &layout, u8 *buf, isize len) : FileSystem() { init(layout, buf, len); }
-    FileSystem(const FSDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
-    FileSystem(const FileSystem &fs) = delete;
+    FileSystem(BlockView &device) : dev(device) { };
+    FileSystem(BlockView &device, isize capacity, isize bsize = 512) : FileSystem(device) { init(capacity, bsize); }
+    FileSystem(BlockView &device, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(device) { init(layout, buf, len); }
+    FileSystem(BlockView &device, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(device) { init(layout, path); }
+    FileSystem(BlockView &device, const FileSystem &fs) = delete;
     virtual ~FileSystem() = default;
 
     void init(isize capacity, isize bsize = 512);
@@ -466,7 +470,9 @@ private:
 namespace require {
 
     void initialized(const FileSystem &fs);
+    void initialized(unique_ptr<FileSystem> &fs);
     void formatted(const FileSystem &fs);
+    void formatted(unique_ptr<FileSystem> &fs);
     void file(const FSBlock &node);
     void directory(const FSBlock &block);
     void fileOrDirectory(const FSBlock &block);

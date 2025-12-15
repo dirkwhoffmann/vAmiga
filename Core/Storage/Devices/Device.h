@@ -59,8 +59,10 @@ class Device : public BlockView {
 public:
 
     Device(const GeometryDescriptor &desc) { init(desc); }
+    Device(Diameter dia, Density den) { init(dia, den); }
 
     void init(const GeometryDescriptor &desc);
+    void init(Diameter dia, Density den);
     void init(const class ADFFile &adf);
     void init(const class HDFFile &hdf);
 

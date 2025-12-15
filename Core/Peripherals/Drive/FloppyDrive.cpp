@@ -1036,7 +1036,8 @@ void
 FloppyDrive::catchFile(const fs::path &path)
 {
     // Extract the file system
-    auto fs = FileSystemFactory::fromFloppyDrive(*this);
+    auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
+    auto fs = FileSystemFactory::fromFloppyDrive(*dev, *this);
 
     // Seek file
     auto file = fs->seekPtr(&fs->root(), path);
@@ -1089,7 +1090,8 @@ FloppyDrive::insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path 
     
     
     // Create a file system and import the directory
-    auto volume = FileSystemFactory::createLowLevel(diameter(), density(), fs, path);
+    auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
+    auto volume = FileSystemFactory::createLowLevel(*dev, diameter(), density(), fs, path);
 
     // Make the volume bootable
     volume->makeBootable(bb);

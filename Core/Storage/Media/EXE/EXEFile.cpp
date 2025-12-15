@@ -48,7 +48,8 @@ EXEFile::finalizeRead()
     bool hd = data.size > 853000;
 
     // Create a new file system
-    auto volume = FileSystemFactory::createLowLevel(Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
+    auto dev = make_unique<Device>(Diameter::INCH_35, hd ? Density::HD : Density::DD);
+    auto volume = FileSystemFactory::createLowLevel(*dev, Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
     volume->setName(FSName("Disk"));
 
     // Make the volume bootable

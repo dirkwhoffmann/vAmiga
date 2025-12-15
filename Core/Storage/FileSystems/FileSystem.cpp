@@ -429,12 +429,25 @@ initialized(const FileSystem &fs)
 {
     if (!fs.isInitialized()) throw FSError(fault::FS_UNINITIALIZED);
 }
+void
+initialized(unique_ptr<FileSystem> &fs)
+{
+    if (!fs) throw FSError(fault::FS_UNINITIALIZED);
+    initialized(*fs);
+}
 
 void
 formatted(const FileSystem &fs)
 {
-    if (!fs.isInitialized()) throw FSError(fault::FS_UNINITIALIZED);
+    initialized(fs);
     if (!fs.isFormatted()) throw FSError(fault::FS_UNFORMATTED);
+}
+
+void
+formatted(unique_ptr<FileSystem> &fs)
+{
+    if (!fs) throw FSError(fault::FS_UNINITIALIZED);
+    formatted(*fs);
 }
 
 void
@@ -465,7 +478,6 @@ void
 emptyDirectory(const FSBlock &node)
 {
     directory(node);
-
     if (FSTree(node, { .recursive = false }).size() != 0) {
         throw FSError(fault::FS_DIR_NOT_EMPTY);
     }

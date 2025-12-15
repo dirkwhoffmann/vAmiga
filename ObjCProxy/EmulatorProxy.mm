@@ -1363,8 +1363,14 @@ NSString *EventSlotName(EventSlot slot)
         auto file = (MediaFile *)(proxy->obj);
         // auto dev = new FileSystem(*file);
         // auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file));
-        auto dev = FileSystemFactory::fromMediaFile(*file);
-        return [self make:dev.release()];
+
+        // TODO: REMOVE THIS FUNCTION AS IT LEAKS MEMORY
+        auto info = file->getDiskInfo();
+        auto geometry  = GeometryDescriptor(info.cyls, info.heads, info.sectors, info.bsize);
+        auto *dev = new Device(geometry);
+
+        auto fs = FileSystemFactory::fromMediaFile(*dev, *file);
+        return [self make:fs.release()];
 
     }  catch(Error &error) {
 
@@ -1380,8 +1386,14 @@ NSString *EventSlotName(EventSlot slot)
         auto file = (MediaFile *)(proxy->obj);
         // auto dev = new FileSystem(*file, nr);
         // auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file, nr));
-        auto dev = FileSystemFactory::fromMediaFile(*file);
-        return [self make:dev.release()];
+
+        // TODO: REMOVE THIS FUNCTION AS IT LEAKS MEMORY
+        auto info = file->getDiskInfo();
+        auto geometry  = GeometryDescriptor(info.cyls, info.heads, info.sectors, info.bsize);
+        auto *dev = new Device(geometry);
+
+        auto fs = FileSystemFactory::fromMediaFile(*dev, *file, nr);
+        return [self make:fs.release()];
 
     }  catch(Error &error) {
 
