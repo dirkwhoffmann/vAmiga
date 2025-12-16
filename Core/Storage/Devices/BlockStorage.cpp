@@ -7,6 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+/*
 #include "BlockStorage.h"
 
 namespace vamiga {
@@ -52,3 +53,4 @@ BlockStorage::ensureBlock(isize nr)
 }
 
 }
+*/

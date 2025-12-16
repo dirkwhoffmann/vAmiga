@@ -38,8 +38,9 @@ FSStorage::init(isize capacity, isize bsize)
     this->bsize = bsize;
 
     // Init the physical block storage
-    fs.device.init(capacity, bsize);
-
+    // fs.device.init(capacity, bsize);
+    assert(capacity == fs.dev.capacity());
+    
     // Remove all existing blocks
     blocks.clear();
 

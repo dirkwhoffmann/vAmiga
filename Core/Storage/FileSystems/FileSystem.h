@@ -84,10 +84,7 @@ class FileSystem : public Loggable {
     // Static file system properties
     FSTraits traits;
 
-    // The physical block storage (DEPRECATED)
-    BlockStorage device;
-
-    //
+    // The underlying block device
     BlockView &dev;
 
 
