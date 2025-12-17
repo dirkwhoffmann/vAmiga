@@ -4,12 +4,13 @@ target_sources(VACore PRIVATE
 
 BootBlockImage.cpp
 FileSystem.cpp
-FileSystemLayer0.cpp
 FileSystemLayer1.cpp
 FileSystemLayer2.cpp
+FileSystemLayer3.cpp
 FileSystemFactory.cpp
 FSAllocator.cpp
 FSBlock.cpp
+FSCache.cpp
 FSError.cpp
 FSExtension.cpp
 FSDescriptor.cpp
@@ -17,7 +18,6 @@ FSDoctor.cpp
 FSExporter.cpp
 FSImporter.cpp
 FSObjects.cpp
-FSStorage.cpp
 FSTree.cpp
 
 )

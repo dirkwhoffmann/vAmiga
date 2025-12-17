@@ -7,36 +7,28 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-/*
-#include "utl/storage.h"
-
 #pragma once
+
+#include "utl/storage.h"
 
 namespace vamiga {
 
 using namespace utl;
 
-class BlockStorage {
-
-    friend class Device;
-    
-    // Number of blocks in this storage
-    isize capacity = 0;
-
-    // Block size in bytes
-    isize bsize = 0;
-
-    // Data storage
-    std::vector<std::unique_ptr<Buffer<u8>>> blocks;
+class BlockDevice {
 
 public:
 
-    void init(isize capacity, isize bsize = 512);
+    virtual ~BlockDevice() = default;
 
-    void freeBlock(isize nr);
-    Buffer<u8> *readBlock(isize nr);
-    Buffer<u8> *ensureBlock(isize nr);
+    virtual isize capacity() const = 0;
+    virtual isize bsize() const = 0;
+    virtual void freeBlock(isize nr) = 0;
+    virtual Buffer<u8> *readBlock(isize nr) = 0;
+    virtual Buffer<u8> *ensureBlock(isize nr) = 0;
+    virtual void writeBlock(isize nr, const Buffer<u8> &) = 0;
+
+    bool inRange(isize nr) { return nr >= 0 && nr < capacity(); }
 };
 
 }
-*/

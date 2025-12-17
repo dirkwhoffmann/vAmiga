@@ -7,30 +7,14 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "BlockStorage.h"
-#include "DeviceDescriptors.h"
-
 #pragma once
+
+#include "BlockDevice.h"
+#include "DeviceDescriptors.h"
 
 namespace vamiga {
 
-class BlockView {
-
-public:
-
-    virtual ~BlockView() = default;
-
-    virtual isize capacity() const = 0;
-    virtual isize bsize() const = 0;
-    virtual void freeBlock(isize nr) = 0;
-    virtual Buffer<u8> *readBlock(isize nr) = 0;
-    virtual Buffer<u8> *ensureBlock(isize nr) = 0;
-    virtual void writeBlock(isize nr, const Buffer<u8> &) = 0;
-
-    bool inRange(isize nr) { return nr >= 0 && nr < capacity(); }
-};
-
-class Partition : public BlockView {
+class Partition : public BlockDevice {
 
     class Device &device;
     PartitionDescriptor descriptor {};
@@ -47,7 +31,7 @@ public:
     void writeBlock(isize nr, const Buffer<u8> &buffer) override;
 };
 
-class Device : public BlockView {
+class Device : public BlockDevice {
 
     // Physical geometry of this device
     GeometryDescriptor geometry;

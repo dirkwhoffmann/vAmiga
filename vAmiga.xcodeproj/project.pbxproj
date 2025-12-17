@@ -89,8 +89,8 @@
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
-		503E869E2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
-		503E869F2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */; };
+		503E869E2EEE9D6E00ED891D /* BlockDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockDevice.cpp */; };
+		503E869F2EEE9D6E00ED891D /* BlockDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockDevice.cpp */; };
 		503E86A22EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
 		503E86A32EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
 		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
@@ -151,8 +151,8 @@
 		505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83F727739ED0001F8159 /* RemoteManager.cpp */; };
 		505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83FB2773C9BA001F8159 /* SerServer.cpp */; };
 		505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505CEF5D26BD12430078FF52 /* DropZone.swift */; };
-		505DD69D2E0815B800D9E8B2 /* FSStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */; };
-		505DD69E2E0815B800D9E8B2 /* FSStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */; };
+		505DD69D2E0815B800D9E8B2 /* FSCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSCache.cpp */; };
+		505DD69E2E0815B800D9E8B2 /* FSCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSCache.cpp */; };
 		505F457A2E96A2B200418105 /* NSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505F45792E96A2A600418105 /* NSImage.swift */; };
 		505F457C2E96A34200418105 /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505F457B2E96A33F00418105 /* CGRect.swift */; };
 		505F45802E96A45000418105 /* CGImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505F457F2E96A44C00418105 /* CGImage.swift */; };
@@ -271,12 +271,12 @@
 		509D049A2EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
 		509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
 		509D07672EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
-		509D076C2EDB295200355638 /* FileSystemLayer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer0.cpp */; };
-		509D076D2EDB295200355638 /* FileSystemLayer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer0.cpp */; };
-		509D076F2EDB2A0900355638 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystemLayer1.cpp */; };
-		509D07702EDB2A0900355638 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystemLayer1.cpp */; };
-		509D07732EDB920100355638 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystemLayer2.cpp */; };
-		509D07742EDB920100355638 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystemLayer2.cpp */; };
+		509D076C2EDB295200355638 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer1.cpp */; };
+		509D076D2EDB295200355638 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer1.cpp */; };
+		509D076F2EDB2A0900355638 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */; };
+		509D07702EDB2A0900355638 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */; };
+		509D07732EDB920100355638 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */; };
+		509D07742EDB920100355638 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */; };
 		509D07772EDB993F00355638 /* PosixFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixFileSystem.cpp */; };
 		509D07782EDB993F00355638 /* PosixFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixFileSystem.cpp */; };
 		509D077B2EDBA43A00355638 /* ADFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D077A2EDBA43900355638 /* ADFFactory.cpp */; };
@@ -735,8 +735,8 @@
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* CoreError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreError.h; sourceTree = "<group>"; };
-		503E869C2EEE9D5C00ED891D /* BlockStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockStorage.h; sourceTree = "<group>"; };
-		503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockStorage.cpp; sourceTree = "<group>"; };
+		503E869C2EEE9D5C00ED891D /* BlockDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockDevice.h; sourceTree = "<group>"; };
+		503E869D2EEE9D6A00ED891D /* BlockDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockDevice.cpp; sourceTree = "<group>"; };
 		503E86A02EEEBBE800ED891D /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		503E86A12EEEBBEF00ED891D /* Device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Device.cpp; sourceTree = "<group>"; };
 		503E86A42EEF15A300ED891D /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -842,8 +842,8 @@
 		505C83FB2773C9BA001F8159 /* SerServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerServer.cpp; sourceTree = "<group>"; };
 		505C83FC2773C9BA001F8159 /* SerServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerServer.h; sourceTree = "<group>"; };
 		505CEF5D26BD12430078FF52 /* DropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropZone.swift; sourceTree = "<group>"; };
-		505DD69B2E0815AC00D9E8B2 /* FSStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSStorage.h; sourceTree = "<group>"; };
-		505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSStorage.cpp; sourceTree = "<group>"; };
+		505DD69B2E0815AC00D9E8B2 /* FSCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSCache.h; sourceTree = "<group>"; };
+		505DD69C2E0815B600D9E8B2 /* FSCache.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSCache.cpp; sourceTree = "<group>"; };
 		505F45792E96A2A600418105 /* NSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImage.swift; sourceTree = "<group>"; };
 		505F457B2E96A33F00418105 /* CGRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
 		505F457F2E96A44C00418105 /* CGImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImage.swift; sourceTree = "<group>"; };
@@ -1002,9 +1002,9 @@
 		509D049B2EDA472900355638 /* FSImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSImporter.h; sourceTree = "<group>"; };
 		509D07642EDAF09F00355638 /* FileSystemFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystemFactory.h; sourceTree = "<group>"; };
 		509D07652EDAF0A800355638 /* FileSystemFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemFactory.cpp; sourceTree = "<group>"; };
-		509D076B2EDB294700355638 /* FileSystemLayer0.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer0.cpp; sourceTree = "<group>"; };
-		509D076E2EDB2A0500355638 /* FileSystemLayer1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer1.cpp; sourceTree = "<group>"; };
-		509D07722EDB8CD200355638 /* FileSystemLayer2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer2.cpp; sourceTree = "<group>"; };
+		509D076B2EDB294700355638 /* FileSystemLayer1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer1.cpp; sourceTree = "<group>"; };
+		509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer2.cpp; sourceTree = "<group>"; };
+		509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer3.cpp; sourceTree = "<group>"; };
 		509D07752EDB992A00355638 /* PosixFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PosixFileSystem.h; sourceTree = "<group>"; };
 		509D07762EDB993E00355638 /* PosixFileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PosixFileSystem.cpp; sourceTree = "<group>"; };
 		509D07792EDBA42F00355638 /* ADFFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFactory.h; sourceTree = "<group>"; };
@@ -1515,8 +1515,8 @@
 				503E86A42EEF15A300ED891D /* CMakeLists.txt */,
 				503E86A02EEEBBE800ED891D /* Device.h */,
 				503E86A12EEEBBEF00ED891D /* Device.cpp */,
-				503E869C2EEE9D5C00ED891D /* BlockStorage.h */,
-				503E869D2EEE9D6A00ED891D /* BlockStorage.cpp */,
+				503E869C2EEE9D5C00ED891D /* BlockDevice.h */,
+				503E869D2EEE9D6A00ED891D /* BlockDevice.cpp */,
 			);
 			path = Devices;
 			sourceTree = "<group>";
@@ -1693,29 +1693,29 @@
 				509D07642EDAF09F00355638 /* FileSystemFactory.h */,
 				509D07652EDAF0A800355638 /* FileSystemFactory.cpp */,
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
+				5056507B25459C8800A79D27 /* FSObjects.h */,
+				5056507A25459C8800A79D27 /* FSObjects.cpp */,
 				503FC4B52EE06D0100637C95 /* FSError.h */,
 				503FC4B62EE06D0A00637C95 /* FSError.cpp */,
 				505C01092577A8C000F9E05C /* FSDescriptor.h */,
 				505C01082577A8C000F9E05C /* FSDescriptor.cpp */,
 				5029C6E527CA6209002F6CCC /* FileSystem.h */,
 				5029C6E427CA6209002F6CCC /* FileSystem.cpp */,
-				509D076B2EDB294700355638 /* FileSystemLayer0.cpp */,
-				509D076E2EDB2A0500355638 /* FileSystemLayer1.cpp */,
-				509D07722EDB8CD200355638 /* FileSystemLayer2.cpp */,
+				509D076B2EDB294700355638 /* FileSystemLayer1.cpp */,
+				509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */,
+				509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */,
 				509D07752EDB992A00355638 /* PosixFileSystem.h */,
 				509D07762EDB993E00355638 /* PosixFileSystem.cpp */,
-				5056507B25459C8800A79D27 /* FSObjects.h */,
-				5056507A25459C8800A79D27 /* FSObjects.cpp */,
-				509D04902EDA46E400355638 /* FSExtension.h */,
-				509D04912EDA46E400355638 /* FSExtension.cpp */,
+				505DD69B2E0815AC00D9E8B2 /* FSCache.h */,
+				505DD69C2E0815B600D9E8B2 /* FSCache.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
 				50565070254573E100A79D27 /* FSBlock.cpp */,
 				509D048C2EDA46D700355638 /* FSAllocator.h */,
 				509D048D2EDA46D700355638 /* FSAllocator.cpp */,
 				50A0F71A2E0E688800972CBC /* FSTree.h */,
 				50A0F71B2E0E688D00972CBC /* FSTree.cpp */,
-				505DD69B2E0815AC00D9E8B2 /* FSStorage.h */,
-				505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */,
+				509D04902EDA46E400355638 /* FSExtension.h */,
+				509D04912EDA46E400355638 /* FSExtension.cpp */,
 				50A0F71E2E11157D00972CBC /* FSDoctor.h */,
 				50A0F71F2E11158D00972CBC /* FSDoctor.cpp */,
 				509D049B2EDA472900355638 /* FSImporter.h */,
@@ -2958,7 +2958,7 @@
 				50650F4E2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				507201812E85197600BB8A58 /* OnboardingButton.swift in Sources */,
-				509D07702EDB2A0900355638 /* FileSystemLayer1.cpp in Sources */,
+				509D07702EDB2A0900355638 /* FileSystemLayer2.cpp in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
 				50157EED28257B7C000E9DDD /* Config.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
@@ -3070,8 +3070,8 @@
 				50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
-				509D076C2EDB295200355638 /* FileSystemLayer0.cpp in Sources */,
-				505DD69E2E0815B800D9E8B2 /* FSStorage.cpp in Sources */,
+				509D076C2EDB295200355638 /* FileSystemLayer1.cpp in Sources */,
+				505DD69E2E0815B800D9E8B2 /* FSCache.cpp in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				507C01AE2D25681400E29933 /* LogicView.swift in Sources */,
@@ -3095,7 +3095,7 @@
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
 				503FC4DA2EE157AE00637C95 /* Compressible.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
-				509D07732EDB920100355638 /* FileSystemLayer2.cpp in Sources */,
+				509D07732EDB920100355638 /* FileSystemLayer3.cpp in Sources */,
 				504FC7C92D31292200F0B733 /* Dashboard.swift in Sources */,
 				50BCB9CA2EE73B65000C53CF /* MediaError.cpp in Sources */,
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
@@ -3153,7 +3153,7 @@
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
-				503E869E2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */,
+				503E869E2EEE9D6E00ED891D /* BlockDevice.cpp in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50DAED232D2D17660044B922 /* DashboardDataProvider.swift in Sources */,
 				5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */,
@@ -3357,7 +3357,7 @@
 				50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */,
 				50FC04F227DA1A4A00C3E566 /* RegressionTester.cpp in Sources */,
 				50FC04B927DA19B200C3E566 /* Drive.cpp in Sources */,
-				503E869F2EEE9D6E00ED891D /* BlockStorage.cpp in Sources */,
+				503E869F2EEE9D6E00ED891D /* BlockDevice.cpp in Sources */,
 				509E76092EDCCC3B00608FA7 /* EXEFactory.cpp in Sources */,
 				50FC04EE27DA1A4500C3E566 /* GdbServer.cpp in Sources */,
 				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,
@@ -3396,7 +3396,7 @@
 				50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */,
 				503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */,
 				50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */,
-				509D076F2EDB2A0900355638 /* FileSystemLayer1.cpp in Sources */,
+				509D076F2EDB2A0900355638 /* FileSystemLayer2.cpp in Sources */,
 				50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */,
 				50FC04F127DA1A4500C3E566 /* GdbServerCmds.cpp in Sources */,
 				50FC04E927DA1A3700C3E566 /* OSDebuggerRead.cpp in Sources */,
@@ -3447,7 +3447,7 @@
 				50EF2236281595AA00440C4D /* Defaults.cpp in Sources */,
 				50FC048427DA190400C3E566 /* Thread.cpp in Sources */,
 				50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */,
-				509D07742EDB920100355638 /* FileSystemLayer2.cpp in Sources */,
+				509D07742EDB920100355638 /* FileSystemLayer3.cpp in Sources */,
 				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
@@ -3471,7 +3471,7 @@
 				503FC4E32EE17ED500637C95 /* Dumpable.cpp in Sources */,
 				50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */,
 				50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */,
-				505DD69D2E0815B800D9E8B2 /* FSStorage.cpp in Sources */,
+				505DD69D2E0815B800D9E8B2 /* FSCache.cpp in Sources */,
 				50FC04EB27DA1A4500C3E566 /* RshServer.cpp in Sources */,
 				50FC04E827DA1A3500C3E566 /* OSDebugger.cpp in Sources */,
 				50FC04F427DA1A8F00C3E566 /* AudioStream.cpp in Sources */,
@@ -3481,7 +3481,7 @@
 				50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */,
 				50FC04B027DA199600C3E566 /* Memory.cpp in Sources */,
 				50FC04D527DA1A0000C3E566 /* CommanderConsole.cpp in Sources */,
-				509D076D2EDB295200355638 /* FileSystemLayer0.cpp in Sources */,
+				509D076D2EDB295200355638 /* FileSystemLayer1.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

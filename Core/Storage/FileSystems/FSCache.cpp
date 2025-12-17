@@ -7,14 +7,14 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FSStorage.h"
+#include "FSCache.h"
 #include "FileSystem.h"
 #include "utl/io.h"
 #include <algorithm>
 
 namespace vamiga {
 
-FSStorage::FSStorage(FileSystem &fs, BlockView &dev) : FSExtension(fs), dev(dev) {
+FSCache::FSCache(FileSystem &fs, BlockDevice &dev) : FSExtension(fs), dev(dev) {
 
     capacity = dev.capacity();
     bsize    = dev.bsize();
@@ -41,24 +41,24 @@ FSStorage::FSStorage(FileSystem &fs, BlockView &dev) : FSExtension(fs), dev(dev)
     }
 };
 
-FSStorage::FSStorage(FileSystem &fs, BlockView &dev, isize capacity, isize bsize) : FSStorage(fs, dev)
+FSCache::FSCache(FileSystem &fs, BlockDevice &dev, isize capacity, isize bsize) : FSCache(fs, dev)
 {
     init(capacity, bsize);
 }
 
-FSStorage::~FSStorage()
+FSCache::~FSCache()
 {
     dealloc();
 }
 
 void
-FSStorage::dealloc()
+FSCache::dealloc()
 {
     blocks.clear();
 }
 
 void
-FSStorage::init(isize capacity, isize bsize)
+FSCache::init(isize capacity, isize bsize)
 {
     this->capacity = capacity;
     this->bsize = bsize;
@@ -75,7 +75,7 @@ FSStorage::init(isize capacity, isize bsize)
 }
 
 void
-FSStorage::dump(std::ostream &os) const
+FSCache::dump(std::ostream &os) const
 {
     using namespace utl;
 
@@ -84,7 +84,7 @@ FSStorage::dump(std::ostream &os) const
 }
 
 std::vector<Block>
-FSStorage::sortedKeys() const
+FSCache::sortedKeys() const
 {
     std::vector<Block> result;
     result.reserve(blocks.size());
@@ -96,27 +96,27 @@ FSStorage::sortedKeys() const
 }
 
 bool
-FSStorage::isEmpty(Block nr) const noexcept
+FSCache::isEmpty(Block nr) const noexcept
 {
     return getType(nr) == FSBlockType::EMPTY;
 }
 
 FSBlockType
-FSStorage::getType(Block nr) const noexcept
+FSCache::getType(Block nr) const noexcept
 {
     if (isize(nr) >= capacity) return FSBlockType::UNKNOWN;
     return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY;
 }
 
 void
-FSStorage::setType(Block nr, FSBlockType type)
+FSCache::setType(Block nr, FSBlockType type)
 {
     if (isize(nr) >= capacity) throw FSError(fault::FS_OUT_OF_RANGE);
     blocks.at(nr)->init(type);
 }
 
 FSBlock *
-FSStorage::read(Block nr) noexcept
+FSCache::read(Block nr) noexcept
 {
     if (nr >= size_t(capacity)) return nullptr;
 
@@ -130,13 +130,13 @@ FSStorage::read(Block nr) noexcept
 }
 
 const FSBlock *
-FSStorage::read(Block nr) const noexcept
+FSCache::read(Block nr) const noexcept
 {
-    return const_cast<const FSBlock *>(const_cast<FSStorage *>(this)->read(nr));
+    return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr));
 }
 
 FSBlock *
-FSStorage::read(Block nr, FSBlockType type) noexcept
+FSCache::read(Block nr, FSBlockType type) noexcept
 {
     if (auto *ptr = read(nr); ptr) {
 
@@ -146,7 +146,7 @@ FSStorage::read(Block nr, FSBlockType type) noexcept
 }
 
 FSBlock *
-FSStorage::read(Block nr, std::vector<FSBlockType> types) noexcept
+FSCache::read(Block nr, std::vector<FSBlockType> types) noexcept
 {
     if (auto *ptr = read(nr); ptr) {
 
@@ -156,19 +156,19 @@ FSStorage::read(Block nr, std::vector<FSBlockType> types) noexcept
 }
 
 const FSBlock *
-FSStorage::read(Block nr, FSBlockType type) const noexcept
+FSCache::read(Block nr, FSBlockType type) const noexcept
 {
-    return const_cast<const FSBlock *>(const_cast<FSStorage *>(this)->read(nr, type));
+    return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr, type));
 }
 
 const FSBlock *
-FSStorage::read(Block nr, std::vector<FSBlockType> types) const noexcept
+FSCache::read(Block nr, std::vector<FSBlockType> types) const noexcept
 {
-    return const_cast<const FSBlock *>(const_cast<FSStorage *>(this)->read(nr, types));
+    return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr, types));
 }
 
 FSBlock &
-FSStorage::at(Block nr)
+FSCache::at(Block nr)
 {
     if (auto *result = read(nr); result) return *result;
 
@@ -180,7 +180,7 @@ FSStorage::at(Block nr)
 }
 
 FSBlock &
-FSStorage::at(Block nr, FSBlockType type)
+FSCache::at(Block nr, FSBlockType type)
 {
     if (auto *result = read(nr, type); result) return *result;
 
@@ -194,7 +194,7 @@ FSStorage::at(Block nr, FSBlockType type)
 }
 
 FSBlock &
-FSStorage::at(Block nr, std::vector<FSBlockType> types)
+FSCache::at(Block nr, std::vector<FSBlockType> types)
 {
     if (auto *result = read(nr, types); result) return *result;
 
@@ -208,31 +208,31 @@ FSStorage::at(Block nr, std::vector<FSBlockType> types)
 }
 
 const FSBlock &
-FSStorage::at(Block nr) const
+FSCache::at(Block nr) const
 {
-    return const_cast<const FSBlock &>(const_cast<FSStorage *>(this)->at(nr));
+    return const_cast<const FSBlock &>(const_cast<FSCache *>(this)->at(nr));
 }
 
 const FSBlock &
-FSStorage::at(Block nr, FSBlockType type) const
+FSCache::at(Block nr, FSBlockType type) const
 {
-    return const_cast<const FSBlock &>(const_cast<FSStorage *>(this)->at(nr, type));
+    return const_cast<const FSBlock &>(const_cast<FSCache *>(this)->at(nr, type));
 }
 
 const FSBlock &
-FSStorage::at(Block nr, std::vector<FSBlockType> types) const
+FSCache::at(Block nr, std::vector<FSBlockType> types) const
 {
-    return const_cast<const FSBlock &>(const_cast<FSStorage *>(this)->at(nr, types));
+    return const_cast<const FSBlock &>(const_cast<FSCache *>(this)->at(nr, types));
 }
 
 void
-FSStorage::erase(Block nr)
+FSCache::erase(Block nr)
 {
     if (blocks.contains(nr)) { blocks.erase(nr); }
 }
 
 void
-FSStorage::flush(Block nr)
+FSCache::flush(Block nr)
 {
     if (dirty.contains(nr)) {
 
@@ -242,19 +242,19 @@ FSStorage::flush(Block nr)
 }
 
 void
-FSStorage::flush()
+FSCache::flush()
 {
     for (auto block: dirty) flush(block);
 }
 
 void
-FSStorage::updateChecksums() noexcept
+FSCache::updateChecksums() noexcept
 {
     for (auto &it : blocks) { it.second->updateChecksum(); }
 }
 
 void
-FSStorage::createUsageMap(u8 *buffer, isize len) const
+FSCache::createUsageMap(u8 *buffer, isize len) const
 {
     // Setup priorities
     i8 pri[12];
@@ -296,7 +296,7 @@ FSStorage::createUsageMap(u8 *buffer, isize len) const
 }
 
 void
-FSStorage::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
+FSCache::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
 {
     auto &unusedButAllocated = diagnosis.unusedButAllocated;
     auto &usedButUnallocated = diagnosis.usedButUnallocated;
@@ -323,7 +323,7 @@ FSStorage::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosi
 }
 
 void
-FSStorage::createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
+FSCache::createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
 {
     auto &blockErrors = diagnosis.blockErrors;
 

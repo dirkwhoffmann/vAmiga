@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "BlockStorage.h"
+#include "BlockDevice.h"
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSExtension.h"
@@ -20,14 +20,14 @@
 
 namespace vamiga {
 
-class FSStorage final : public FSExtension {
+class FSCache final : public FSExtension {
 
     friend struct FSBlock;
 
 private:
 
     // The physical block device
-    BlockView &dev;
+    BlockDevice &dev;
 
     // File system capacity in blocks
     isize capacity = 0;
@@ -48,9 +48,9 @@ private:
 
 public:
 
-    FSStorage(FileSystem &fs, BlockView &dev);
-    FSStorage(FileSystem &fs, BlockView &dev, isize capacity, isize bsize = 512);
-    virtual ~FSStorage();
+    FSCache(FileSystem &fs, BlockDevice &dev);
+    FSCache(FileSystem &fs, BlockDevice &dev, isize capacity, isize bsize = 512);
+    virtual ~FSCache();
 
     void init(isize capacity, isize bsize = 512);
 

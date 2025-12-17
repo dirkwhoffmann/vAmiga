@@ -14,10 +14,10 @@
 
 namespace vamiga {
 
-class DiskFile : public AnyFile, public BlockView {
+class DiskFile : public AnyFile, public BlockDevice {
 
     //
-    // Methods from BlockView
+    // Methods from BlockDevice
     //
 
 public:

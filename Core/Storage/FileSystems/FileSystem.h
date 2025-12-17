@@ -36,7 +36,7 @@
  *                      |                                \ /
  *                      V                                 |
  *            -----------------------           -----------------------
- * Layer 1:  |   Block cache layer   |  <--->  |       FSCache         |
+ * Layer 1:  |   Block cache layer   |  <--->  |   FSCache / FSBlock   |
  *            -----------------------           -----------------------
  *                      |                                / \
  *                      |                                \ /
@@ -88,7 +88,7 @@
 #include "FSDescriptor.h"
 #include "FSObjects.h"
 #include "FSTree.h"
-#include "FSStorage.h"
+#include "FSCache.h"
 #include "FSDoctor.h"
 #include "FSAllocator.h"
 #include "FSImporter.h"
@@ -107,7 +107,7 @@ class HardDrive;
 class FileSystem : public Loggable {
 
     friend struct FSBlock;
-    friend class  FSStorage;
+    friend class  FSCache;
     friend class  FSExtension;
     friend class  FSDoctor;
     friend class  FSAllocator;
@@ -123,15 +123,15 @@ class FileSystem : public Loggable {
     // Layer 0
     //
 
-    // Block storage
-    FSStorage storage; //  = FSStorage(*this);
+    // Gateway to the "physical" block device
+    FSCache storage;
 
     // Allocation and allocation map managenent
     FSAllocator allocator = FSAllocator(*this);
 
 
     //
-    // Layer 1
+    // Layer 2
     //
 
     // Location of the root block
@@ -143,7 +143,7 @@ class FileSystem : public Loggable {
 
 
     //
-    // Layer 2
+    // Layer 3
     //
 
     // Location of the current directory
@@ -164,14 +164,14 @@ public:
 
 public:
 
-    FileSystem(BlockView &dev);
-    FileSystem(BlockView &dev, isize capacity, isize bsize = 512) : FileSystem(dev) { init(capacity, bsize); }
-    FileSystem(BlockView &dev, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(dev) { init(layout, buf, len); }
-    FileSystem(BlockView &dev, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(dev) { init(layout, path); }
-    FileSystem(BlockView &dev, const FileSystem &fs) = delete;
+    FileSystem(BlockDevice &dev);
+    FileSystem(BlockDevice &dev, isize capacity, isize bsize = 512) : FileSystem(dev) { init(capacity, bsize); }
+    FileSystem(BlockDevice &dev, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(dev) { init(layout, buf, len); }
+    FileSystem(BlockDevice &dev, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(dev) { init(layout, path); }
+    FileSystem(BlockDevice &dev, const FileSystem &fs) = delete;
     virtual ~FileSystem() = default;
 
-    void init(BlockView &dev);
+    void init(BlockDevice &dev);
     void init(isize capacity, isize bsize = 512);
     void init(const FSDescriptor &layout, u8 *buf, isize len);
     void init(const FSDescriptor &layout, const fs::path &path = {});
@@ -218,7 +218,7 @@ public:
 
 
     // -------------------------------------------------------------------------
-    //                             Layer 0: Blocks
+    //                             Layer 1: Blocks
     // -------------------------------------------------------------------------
 
     //
@@ -236,7 +236,7 @@ public:
     bool isEmpty(Block nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
 
     // Predicts the file system based on stored data
-    static FSFormat predictDOS(BlockView &dev) noexcept;
+    static FSFormat predictDOS(BlockDevice &dev) noexcept;
     // FSFormat predictDOS() noexcept { return predictDOS(storage.dev); }
 
     // Predicts the type of a block based on the stored data
@@ -275,7 +275,7 @@ public:
 
 
     // -------------------------------------------------------------------------
-    //                             Layer 1: Nodes
+    //                             Layer 2: Nodes
     // -------------------------------------------------------------------------
 
     //
@@ -417,7 +417,7 @@ private:
 
 
     // -------------------------------------------------------------------------
-    //                           Layer 2: Paths
+    //                           Layer 3: Paths
     // -------------------------------------------------------------------------
 
     //

@@ -32,7 +32,7 @@ FSTraits::adf() const
     size == 1802240;      // 1760 KB (HD)
 }
 
-FileSystem::FileSystem(BlockView &dev) : storage(*this, dev)
+FileSystem::FileSystem(BlockDevice &dev) : storage(*this, dev)
 {
     auto layout = FSDescriptor(dev.capacity(), FileSystem::predictDOS(dev));
 

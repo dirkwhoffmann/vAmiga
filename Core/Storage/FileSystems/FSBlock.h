@@ -28,7 +28,7 @@ struct FSBlock : Loggable {
     class FileSystem *fs = nullptr;
 
     // The storage this block belongs to
-    class FSStorage &storage;
+    class FSCache &storage;
 
     // The type of this block
     FSBlockType type = FSBlockType::UNKNOWN;
