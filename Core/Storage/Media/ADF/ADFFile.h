@@ -10,12 +10,13 @@
 #pragma once
 
 #include "FloppyFile.h"
+#include "Device.h"
 
 namespace vamiga {
 
 class FileSystem;
 
-class ADFFile : public FloppyFile {
+class ADFFile : public FloppyFile, public BlockView {
 
 public:
 
@@ -81,7 +82,23 @@ public:
     const char *bootBlockName() const override;
     void killVirus() override;
 
-    
+    //
+    // Methods from BlockView
+    //
+
+public:
+
+    isize capacity() const override { return numBlocks(); }
+    isize bsize() const override { return 512; }
+    void freeBlock(isize nr) override { }
+    Buffer<u8> *readBlock(isize nr) override {
+        // REMOVE MEMORY LEAK AFTER TESTING
+        auto buf = new Buffer<u8>(512);
+        readSector(buf->ptr, nr);
+        return buf;
+    }
+    Buffer<u8> *ensureBlock(isize nr) override { return readBlock(nr); }
+
     //
     // Querying disk properties
     //

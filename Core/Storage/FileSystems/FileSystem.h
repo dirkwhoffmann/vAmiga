@@ -84,16 +84,13 @@ class FileSystem : public Loggable {
     // Static file system properties
     FSTraits traits;
 
-    // The underlying block device
-    BlockView &dev;
-
 
     //
     // Layer 0
     //
 
     // Block storage
-    FSStorage storage = FSStorage(*this);
+    FSStorage storage; //  = FSStorage(*this);
 
     // Allocation and allocation map managenent
     FSAllocator allocator = FSAllocator(*this);
@@ -133,13 +130,14 @@ public:
 
 public:
 
-    FileSystem(BlockView &device) : dev(device) { };
-    FileSystem(BlockView &device, isize capacity, isize bsize = 512) : FileSystem(device) { init(capacity, bsize); }
-    FileSystem(BlockView &device, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(device) { init(layout, buf, len); }
-    FileSystem(BlockView &device, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(device) { init(layout, path); }
-    FileSystem(BlockView &device, const FileSystem &fs) = delete;
+    FileSystem(BlockView &dev);
+    FileSystem(BlockView &dev, isize capacity, isize bsize = 512) : FileSystem(dev) { init(capacity, bsize); }
+    FileSystem(BlockView &dev, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(dev) { init(layout, buf, len); }
+    FileSystem(BlockView &dev, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(dev) { init(layout, path); }
+    FileSystem(BlockView &dev, const FileSystem &fs) = delete;
     virtual ~FileSystem() = default;
 
+    void init(BlockView &dev);
     void init(isize capacity, isize bsize = 512);
     void init(const FSDescriptor &layout, u8 *buf, isize len);
     void init(const FSDescriptor &layout, const fs::path &path = {});
@@ -203,7 +201,12 @@ public:
     bool is(Block nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
     bool isEmpty(Block nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
 
+    // Predicts the file system based on stored data
+    static FSFormat predictDOS(BlockView &dev) noexcept;
+    FSFormat predictDOS() noexcept { return predictDOS(storage.dev); }
+
     // Predicts the type of a block based on the stored data
+    static FSBlockType predictType(FSDescriptor &layout, Block nr, const u8 *buf) noexcept;
     FSBlockType predictType(Block nr, const u8 *buf) const noexcept;
 
 

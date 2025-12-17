@@ -26,7 +26,7 @@ class FSStorage final : public FSExtension {
 public: // MAKE PRIVATE ASAP
 
     // The physical block device
-    // Device *device = nullptr;
+    BlockView &dev;
 
 private:
 
@@ -49,8 +49,8 @@ private:
 
 public:
 
-    FSStorage(FileSystem &fs);
-    FSStorage(FileSystem &fs, isize capacity, isize bsize = 512);
+    FSStorage(FileSystem &fs, BlockView &dev);
+    FSStorage(FileSystem &fs, BlockView &dev, isize capacity, isize bsize = 512);
     virtual ~FSStorage();
 
     void init(isize capacity, isize bsize = 512);

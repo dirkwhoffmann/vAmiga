@@ -14,6 +14,7 @@
 #include "RSCommand.h"
 #include "TextStorage.h"
 #include "FileSystem.h"
+#include "ADFFile.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -433,8 +434,9 @@ class DebuggerConsole final : public Console
 
 class NavigatorConsole final : public Console
 {
-    unique_ptr<Device> dev;
+    unique_ptr<Device> dev; // DEPRECATED
     unique_ptr<FileSystem> fs;
+    unique_ptr<ADFFile> adf; // Experimental
 
     using Console::Console;
     

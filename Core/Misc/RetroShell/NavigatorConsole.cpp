@@ -654,8 +654,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto n = values[0];
 
+                adf = ADFFactory::make(*df[n]);
+                fs = make_unique<FileSystem>(*adf);
+                /*
                 dev = make_unique<Device>(df[n]->diameter(), df[n]->density());
                 fs = FileSystemFactory::fromFloppyDrive(*dev, *df[n]);
+                */
                 fs->dumpInfo(os);
 
             }, .payload = {i}

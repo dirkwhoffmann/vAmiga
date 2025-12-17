@@ -32,6 +32,49 @@ FSTraits::adf() const
     size == 1802240;      // 1760 KB (HD)
 }
 
+FileSystem::FileSystem(BlockView &dev) : storage(*this, dev)
+{
+    auto layout = FSDescriptor(dev.capacity(), FileSystem::predictDOS(dev));
+
+    // Copy layout parameters
+    traits.dos      = layout.dos;
+    traits.blocks   = layout.numBlocks;
+    traits.bytes    = layout.numBlocks * layout.bsize;
+    traits.bsize    = layout.bsize;
+    traits.reserved = layout.numReserved;
+    rootBlock       = layout.rootBlock;
+    bmBlocks        = layout.bmBlocks;
+    bmExtBlocks     = layout.bmExtBlocks;
+
+    /*
+    // Only proceed if the volume is formatted
+    if (layout.dos == FSFormat::NODOS) throw FSError(fault::FS_UNFORMATTED);
+
+    // Create all blocks
+    // storage.init(layout.numBlocks);
+
+    for (isize i = 0; i < layout.numBlocks; i++) {
+
+        auto *blk = storage.read(Block(i)); //  buf + i * traits.bsize;
+        auto *data = blk ? blk->data() : nullptr;
+        if (auto type = predictType((Block)i, data); type != FSBlockType::EMPTY) {
+
+            // Create new block
+            storage[i].init(type);
+
+            // Import block data
+            storage[i].importBlock(data, traits.bsize);
+        }
+    }
+    */
+
+    // Set the current directory to '/' (DEPRECATED)
+    current = rootBlock;
+
+    debug(FS_DEBUG, "Success\n");
+
+}
+
 void
 FileSystem::init(isize capacity, isize bsize)
 {

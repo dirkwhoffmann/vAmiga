@@ -14,8 +14,45 @@
 
 namespace vamiga {
 
-FSStorage::FSStorage(FileSystem &fs) : FSExtension(fs), bsize(512) { };
-FSStorage::FSStorage(FileSystem &fs, isize capacity, isize bsize) : FSStorage(fs)
+FSStorage::FSStorage(FileSystem &fs, BlockView &dev) : FSExtension(fs), dev(dev) {
+
+    capacity = dev.capacity();
+    bsize    = dev.bsize();
+
+    auto layout = FSDescriptor(capacity, FileSystem::predictDOS(dev));
+
+    // Check the consistency of the file system descriptor (optional)
+    layout.checkCompatibility();
+
+    // Only proceed if the volume is formatted
+    if (layout.dos == FSFormat::NODOS) return;
+
+    // Create all blocks
+    for (isize i = 0; i < layout.numBlocks; i++) {
+
+        if (auto *blk = storage.read(Block(i))) {
+
+            auto type = FileSystem::predictType(layout, Block(i), blk->data());
+            if (type == FSBlockType::EMPTY) continue;
+
+            // Create new block
+            storage[i].init(type);
+
+            // Import block data
+            // storage[i].importBlock(data, traits.bsize);
+
+            // Emulate some errors for debugging
+            /*
+             auto *data = storage[i].data();
+             for (isize i = 0; i < 20; i++) {
+             data[rand() % 512] = rand() & 0xFF;
+             }
+             */
+        }
+    }
+};
+
+FSStorage::FSStorage(FileSystem &fs, BlockView &dev, isize capacity, isize bsize) : FSStorage(fs, dev)
 {
     init(capacity, bsize);
 }
@@ -39,7 +76,7 @@ FSStorage::init(isize capacity, isize bsize)
 
     // Init the physical block storage
     // fs.device.init(capacity, bsize);
-    assert(capacity == fs.dev.capacity());
+    assert(capacity == dev.capacity());
     
     // Remove all existing blocks
     blocks.clear();
