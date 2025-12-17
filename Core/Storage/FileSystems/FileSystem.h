@@ -7,46 +7,80 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
-
 /* The FileSystem class represents an Amiga file system (OFS or FFS).
- * It models a logical volume that can be created from either an ADF or an HDF.
- * In the case of an HDF, each partition can be converted into an independent
- * file system instance.
+ * It models a logical volume that can be created on top of, e.g., an ADF file,
+ * an HDF file, or an MFM-encoded FloppyDisk. In the case of an HDF, the file
+ * system may span either the entire HDF or a single partition, only.
  *
  * The FileSystem class is organized as a layered architecture to separate
  * responsibilities and to enforce downward-only dependencies.
  *
- *  ---------------------
- * |     POSIX Layer     |    Layer 3:
- *  ---------------------
- *            |               Wraps a Layer-3 file system with all lower-level
- *            |               access functions hidden. It exposes a POSIX-like
- *            |               high-level API that provides operations such as
- *            |               open, close, read, write, and file handles.
- *            V
- *  -----------------------
- * | Path Resolution Layer |  Layer 2:
- *  -----------------------
- *            |               Resolves symbolic and relative paths into file
- *            |               system objects and canonicalizes paths. It depends
- *            |               only on the read/write layer.
- *            |
- *            V
- *  -----------------------
- * |       Node Layer      |  Layer 1:
- *  -----------------------
- *            |               Interprets storage blocks as files and directories
- *            |               according to OFS or FFS semantics. It allows the
- *            |               upper layers to create files, directories, and to
- *            |               modify metadata.
- *            V
- *  -----------------------
- * |  Block Storage Layer  |  Layer 0:
- *  -----------------------
- *                            Storage the actual block data.
+ *                  Layer view                         Class view
  *
+ *            -----------------------           -----------------------
+ * Layer 4:  |     POSIX layer       |  <--->  |    PosixFileSystem    |
+ *            -----------------------           -----------------------
+ *                      |                                 / \
+ *                      |                                 \ /
+ *                      V                                  |
+ *            -----------------------           -----------------------
+ * Layer 3:  |      Path layer       |  <--->  |                       |
+ *            -----------------------          |                       |
+ *                      |                      |                       |
+ *                      |                      |      FileSystem       |
+ *                      V                      |                       |
+ *            -----------------------          |                       |
+ * Layer 2:  |      Path layer       |  <--->  |                       |
+ *            -----------------------           -----------------------
+ *                      |                                / \
+ *                      |                                \ /
+ *                      V                                 |
+ *            -----------------------           -----------------------
+ * Layer 1:  |   Block cache layer   |  <--->  |       FSCache         |
+ *            -----------------------           -----------------------
+ *                      |                                / \
+ *                      |                                \ /
+ *                      V                                 |
+ *            -----------------------           -----------------------
+ * Layer 0:  |   "Physical" device   |  <--->  |      BlockDevice      |
+ *            -----------------------           -----------------------
+ *
+ *
+ * Notes:
+ *
+ *   POSIX layer:
+ *
+ *   The uppermost layer implements a POSIX-like file system interface. It
+ *   wraps a FileSystem instance and hides all lower-level access mechanisms.
+ *   This layer exposes a high-level API with POSIX-style semantics, including
+ *   operations such as open, close, read, write, and file-handle management.
+ *
+ *   Path Layer:
+ *
+ *   This layer is part of the FileSystem class. It resolves symbolic and
+ *   relative paths into canonical file system objects. This layer is
+ *   responsible for path normalization and name resolution.
+ *
+ *   Node Layer:
+ *
+ *   Interprets storage blocks as files and directories according to OFS or FFS
+ *   semantics. It provides primitives for creating and deleting files and
+ *   directories, as well as for accessing and modifying file metadata.
+ *
+ *   Block Cache Layer:
+ *
+ *   Bridges the node layer and the underlying block device. It manages cached
+ *   access to blocks and maintains block-level metadata to improve performance
+ *   and consistency.
+ *
+ *   Block Device Layer:
+ *
+ *   Provides access to the physical or virtual storage medium and stores the
+ *   actual data. Any object implementing the BlockDevice protocol can serve as
+ *   a backing store, including ADFFile, HDFFile, or FloppyDisk.
  */
+
+#pragma once
 
 #include "FSTypes.h"
 #include "FSError.h"
@@ -203,7 +237,7 @@ public:
 
     // Predicts the file system based on stored data
     static FSFormat predictDOS(BlockView &dev) noexcept;
-    FSFormat predictDOS() noexcept { return predictDOS(storage.dev); }
+    // FSFormat predictDOS() noexcept { return predictDOS(storage.dev); }
 
     // Predicts the type of a block based on the stored data
     static FSBlockType predictType(FSDescriptor &layout, Block nr, const u8 *buf) noexcept;
@@ -231,6 +265,9 @@ public:
     const FSBlock &at(Block nr) const;
     const FSBlock &at(Block nr, FSBlockType type) const;
     const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
+
+    // Writes back dirty cache blocks to the block device
+    void flush();
 
     // Operator overload
     FSBlock &operator[](size_t nr);

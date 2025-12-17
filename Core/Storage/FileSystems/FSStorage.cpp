@@ -30,24 +30,13 @@ FSStorage::FSStorage(FileSystem &fs, BlockView &dev) : FSExtension(fs), dev(dev)
     // Create all blocks
     for (isize i = 0; i < layout.numBlocks; i++) {
 
-        if (auto *blk = storage.read(Block(i))) {
+        if (auto *blk = dev.readBlock(Block(i))) {
 
-            auto type = FileSystem::predictType(layout, Block(i), blk->data());
+            auto type = FileSystem::predictType(layout, Block(i), blk->ptr);
             if (type == FSBlockType::EMPTY) continue;
 
             // Create new block
             storage[i].init(type);
-
-            // Import block data
-            // storage[i].importBlock(data, traits.bsize);
-
-            // Emulate some errors for debugging
-            /*
-             auto *data = storage[i].data();
-             for (isize i = 0; i < 20; i++) {
-             data[rand() % 512] = rand() & 0xFF;
-             }
-             */
         }
     }
 };
@@ -240,6 +229,22 @@ void
 FSStorage::erase(Block nr)
 {
     if (blocks.contains(nr)) { blocks.erase(nr); }
+}
+
+void
+FSStorage::flush(Block nr)
+{
+    if (dirty.contains(nr)) {
+
+        storage.at(nr).flush();
+        dirty.erase(nr);
+    }
+}
+
+void
+FSStorage::flush()
+{
+    for (auto block: dirty) flush(block);
 }
 
 void

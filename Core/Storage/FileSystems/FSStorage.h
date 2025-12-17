@@ -16,6 +16,7 @@
 #include "Device.h"
 #include <iostream>
 #include <ranges>
+#include <unordered_set>
 
 namespace vamiga {
 
@@ -23,24 +24,22 @@ class FSStorage final : public FSExtension {
 
     friend struct FSBlock;
 
-public: // MAKE PRIVATE ASAP
+private:
 
     // The physical block device
     BlockView &dev;
 
-private:
-
-    // The physical block storage (DEPRECATED)
-    // BlockStorage storage;
-
     // File system capacity in blocks
-    isize capacity {};
+    isize capacity = 0;
 
     // Size of a single block in bytes
-    isize bsize {};
+    isize bsize = 512;
 
-    // Block storage
+    // The block cache
     std::unordered_map<Block, std::unique_ptr<FSBlock>> blocks;
+
+    // Dirty blocks
+    std::unordered_set<Block> dirty;
 
 
     //
@@ -140,6 +139,14 @@ public:
     // Wipes out a block (makes it an empty block)
     void erase(Block nr);
 
+
+    //
+    // Accessing blocks
+    //
+
+    void markAsDirty(Block nr) { dirty.insert(nr); }
+    void flush(Block nr);
+    void flush();
 
     //
     // Maintainance

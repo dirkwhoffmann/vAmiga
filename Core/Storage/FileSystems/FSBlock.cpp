@@ -494,18 +494,34 @@ FSBlock::addr32(isize nr)
 u8 *
 FSBlock::data()
 {
-    auto *buffer = storage.dev.ensureBlock(nr);
+    if (dataCache.empty()) {
 
-    assert(buffer);
-    assert(buffer->ptr);
+        if (auto *buffer = storage.dev.ensureBlock(nr)) {
+            dataCache.init(*buffer);
+        } else {
+            dataCache.init(bsize());
+        }
+    }
 
-    return buffer->ptr;
+    assert(dataCache.size == bsize());
+    assert(dataCache.ptr);
+
+    return dataCache.ptr;
 }
 
 const u8 *
 FSBlock::data() const
 {
     return const_cast<const u8 *>(const_cast<FSBlock *>(this)->data());
+}
+
+void
+FSBlock::flush()
+{
+    if (!dataCache.empty()) {
+
+        storage.dev.writeBlock(nr, dataCache);
+    }
 }
 
 u32

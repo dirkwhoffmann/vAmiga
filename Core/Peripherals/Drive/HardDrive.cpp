@@ -568,7 +568,20 @@ HardDrive::format(FSFormat fsType, string name)
     if (!data.ptr) return;
 
     if (fsType != FSFormat::NODOS) {
-        
+
+        // Convert the drive to an HDF
+        auto hdf = HDFFactory::make(*this);
+
+        // Create a file system on top of the HDF
+        auto fs = FileSystem(*hdf);
+
+        // Format the file system
+        fs.format(fsType);
+
+        // Name the file system
+        fs.setName(name);
+
+        /*
         // Create a file system descriptor matching this drive
         auto layout = FSDescriptor(geometry, fsType);
 
@@ -583,6 +596,7 @@ HardDrive::format(FSFormat fsType, string name)
         
         // Initialize the hard drive with the created file system
         init(fs);
+        */
     }
 }
 

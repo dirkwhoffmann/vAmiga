@@ -14,16 +14,30 @@
 namespace vamiga {
 
 u8
+DiskFile::readByte(isize b, isize offset) const
+{
+    assert(offset < bsize());
+    return data[b * 512 + offset];
+}
+
+u8
 DiskFile::readByte(isize t, isize s, isize offset) const
 {
     return readByte(t * numSectors() + s, offset);
 }
 
-u8
-DiskFile::readByte(isize b, isize offset) const
+void
+DiskFile::readSector(u8 *dst, isize s) const
 {
-    assert(offset < 512);
-    return data[b * 512 + offset];
+    isize sectorSize = bsize();
+    isize offset = s * sectorSize;
+
+    assert(dst != nullptr);
+    assert(offset + sectorSize <= data.size);
+
+    for (isize i = 0; i < sectorSize; i++) {
+        dst[i] = data[offset + i];
+    }
 }
 
 void
@@ -33,17 +47,34 @@ DiskFile::readSector(u8 *dst, isize t, isize s) const
 }
 
 void
-DiskFile::readSector(u8 *dst, isize s) const
+DiskFile::writeByte(isize b, isize offset, u8 value)
 {
-    isize sectorSize = 512;
-    isize offset = s * sectorSize;
+    assert(offset < bsize());
+    data[b * 512 + offset] = value;
+}
 
-    assert(dst != nullptr);
-    assert(offset + sectorSize <= data.size);
+void
+DiskFile::writeByte(isize t, isize s, isize offset, u8 value)
+{
+    writeByte(t * numSectors() + s, offset, value);
 
-    for (isize i = 0; i < sectorSize; i++) {
-        dst[i] = data[offset + i];
+}
+
+void
+DiskFile::writeSector(isize b, const Buffer<u8> &buffer)
+{
+    isize offset = b * bsize();
+    assert(offset + bsize() <= data.size);
+
+    for (isize i = 0; i < bsize(); i++) {
+        data[offset + i] = buffer[i];
     }
+}
+
+void
+DiskFile::writeSector(isize t, isize s, const Buffer<u8> &buffer)
+{
+    writeSector(t * numSectors() + s, buffer);
 }
 
 string

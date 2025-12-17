@@ -36,7 +36,10 @@ struct FSBlock : Loggable {
     // The sector number of this block
     Block nr = 0;
 
-    
+    // Cached block data
+    Buffer<u8> dataCache;
+
+
     //
     // Constructing
     //
@@ -120,6 +123,9 @@ public:
     // Provides the data of a block
     u8 *data();
     const u8 *data() const;
+
+    // Writes back cache data to the block device
+    void flush();
 
     // Reads or writes a long word in Big Endian format
     static u32 read32(const u8 *p);

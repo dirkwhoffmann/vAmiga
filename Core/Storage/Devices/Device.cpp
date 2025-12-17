@@ -43,6 +43,12 @@ Partition::ensureBlock(isize nr)
 }
 
 void
+Partition::writeBlock(isize nr, const Buffer<u8> &buffer)
+{
+    device.writeBlock(descriptor.translate(nr), buffer);
+}
+
+void
 Device::init(const GeometryDescriptor &desc)
 {
     geometry = desc;
@@ -118,6 +124,15 @@ Device::ensureBlock(isize nr)
     // Create a new block
     blocks[nr] = std::make_unique<Buffer<u8>>(geometry.bsize);
     return blocks[nr].get();
+}
+
+void
+Device::writeBlock(isize nr, const Buffer<u8> &buffer)
+{
+    assert(buffer.size == bsize());
+
+    auto *block = ensureBlock(nr);
+    *block = buffer;
 }
 
 }

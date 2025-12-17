@@ -25,6 +25,7 @@ public:
     virtual void freeBlock(isize nr) = 0;
     virtual Buffer<u8> *readBlock(isize nr) = 0;
     virtual Buffer<u8> *ensureBlock(isize nr) = 0;
+    virtual void writeBlock(isize nr, const Buffer<u8> &) = 0;
 
     bool inRange(isize nr) { return nr >= 0 && nr < capacity(); }
 };
@@ -43,6 +44,7 @@ public:
     void freeBlock(isize nr) override;
     Buffer<u8> *readBlock(isize nr) override;
     Buffer<u8> *ensureBlock(isize nr) override;
+    void writeBlock(isize nr, const Buffer<u8> &buffer) override;
 };
 
 class Device : public BlockView {
@@ -79,8 +81,7 @@ public:
     void freeBlock(isize nr) override;
     Buffer<u8> *readBlock(isize nr) override;
     Buffer<u8> *ensureBlock(isize nr) override;
-
-
+    void writeBlock(isize nr, const Buffer<u8> &buffer) override;
 };
 
 }

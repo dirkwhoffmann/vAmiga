@@ -180,6 +180,12 @@ FileSystem::at(Block nr, std::vector<FSBlockType> types) const
     return storage.at(nr, types);
 }
 
+void
+FileSystem::flush()
+{
+    storage.flush();
+}
+
 FSBlock &
 FileSystem::operator[](size_t nr)
 {
