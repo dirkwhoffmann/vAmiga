@@ -30,7 +30,7 @@ NavigatorConsole::prompt()
 {
     std::stringstream ss;
     
-    if (fs && fs->isInitialized()) {
+    if (fs) {
 
         auto &pwd = fs->pwd();
 
@@ -203,8 +203,6 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 Block
 NavigatorConsole::parseBlock(const string &argv)
 {
-    require::initialized(fs);
-
     if (auto nr = Block(parseNum(argv)); fs->read(nr)) {
         return nr;
     }
@@ -221,8 +219,6 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 Block
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block fallback)
 {
-    require::initialized(fs);
-
     auto nr = argv.contains(token) ? Block(parseNum(argv.at(token))) : fallback;
     
     if (!fs->read(nr)) {
@@ -295,8 +291,6 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSB
 void
 NavigatorConsole::import(const FloppyDrive &dfn)
 {
-    require::initialized(fs);
-
     // Later: Directly mount the file system on top of the drive
 
     // Create a block device
@@ -314,7 +308,6 @@ NavigatorConsole::import(const HardDrive &hdn, isize part)
 {
     throw FSError(fault::FS_UNSUPPORTED);
     /*
-    require::initialized(fs);
     FileSystemFactory::initFromHardDrive(*fs, hdn);
     */
 }
@@ -336,14 +329,12 @@ NavigatorConsole::importHd(isize n, isize part)
 void
 NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
 {
-    require::initialized(fs);
     fs->importer.import(path, recursive, contents);
 }
 
 void
 NavigatorConsole::exportBlocks(fs::path path)
 {
-    require::initialized(fs);
     fs->exporter.exportBlocks(path);
 }
 
@@ -464,7 +455,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = rs::hidden,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            if (fs && fs->isInitialized()) {
+            if (fs) {
 
                 fs->dumpInfo(os);
 
@@ -525,7 +516,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a single-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            require::initialized(fs);
             fs->init(FSDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
             fs->dumpInfo(os);
         }
@@ -537,7 +527,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a double-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            require::initialized(fs);
             fs->init(FSDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
             fs->dumpInfo(os);
         }
@@ -549,7 +538,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a high-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            require::initialized(fs);
             fs->init(FSDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
             fs->dumpInfo(os);
         }
@@ -609,8 +597,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "name", "File system name" }, .flags = rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                require::initialized(fs);
 
                 // Determine the DOS type
                 auto type = FSFormat::NODOS;
@@ -722,8 +708,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                require::initialized(fs);
-
                 auto path = host.makeAbsolute(args.at("path"));
                 auto nr = parseBlock(args, "nr", fs->pwd().nr);
 
@@ -744,8 +728,6 @@ NavigatorConsole::initCommands(RSCommand &root)
                 { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                    require::initialized(fs);
 
                     bool recursive = args.contains("r");
                     std::filesystem::remove_all("/export");
@@ -815,8 +797,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                require::initialized(fs);
-
                 auto n = values[0];
                 // df[n]->insertMediaFile(ADFFile(fs), false);
                 auto tmp = MediaFile(ADFFactory::make(*fs));
@@ -843,8 +823,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                require::initialized(fs);
-
                 auto n = values[0];
                 hd[n]->init(*fs);
 
@@ -861,8 +839,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "File path" }, .flags = vAmigaDOS ? rs::disabled : 0 },
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                require::initialized(fs);
 
                 auto nr = parseBlock(args, "nr", fs->pwd().nr);
 
@@ -1063,8 +1039,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                require::initialized(fs);
-
                 if (args.contains("b")) {
                     fs->dumpBlocks(os);
                 } else {
@@ -1102,7 +1076,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                require::initialized(fs);
                 auto nr = parseBlock(args, "nr");
                 fs->doctor.dump(nr, os);
             }
@@ -1233,7 +1206,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                require::initialized(fs);
                 auto nr = parseBlock(args, "nr", fs->pwd().nr);
                 auto opt = parseDumpOpts(args);
                 
@@ -1257,8 +1229,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                require::initialized(fs);
 
                 bool strict = args.contains("s");
                 

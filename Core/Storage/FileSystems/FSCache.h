@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "BlockDevice.h"
+#include "BlockView.h"
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSExtension.h"
@@ -27,7 +27,7 @@ class FSCache final : public FSExtension {
 private:
 
     // The underlying block device
-    BlockDevice &dev;
+    BlockView &dev;
 
     // File system capacity in blocks
     isize capacity = 0;
@@ -48,7 +48,7 @@ private:
 
 public:
 
-    FSCache(FileSystem &fs, BlockDevice &dev);
+    FSCache(FileSystem &fs, BlockView &dev);
     // FSCache(FileSystem &fs, BlockDevice &dev, isize capacity, isize bsize = 512);
     virtual ~FSCache();
 

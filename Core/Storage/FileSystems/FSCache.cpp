@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-FSCache::FSCache(FileSystem &fs, BlockDevice &dev) : FSExtension(fs), dev(dev) {
+FSCache::FSCache(FileSystem &fs, BlockView &dev) : FSExtension(fs), dev(dev) {
 
     capacity = dev.capacity();
     bsize    = dev.bsize();
@@ -197,23 +197,17 @@ FSCache::read(Block nr, std::vector<FSBlockType> types) const noexcept
 FSBlock &
 FSCache::at(Block nr)
 {
-    if (auto *result = read(nr); result) return *result;
+    if (auto *result = read(nr)) return *result;
 
-    if (!fs.isInitialized()) {
-        throw FSError(fault::FS_UNINITIALIZED);
-    } else {
-        throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
-    }
+    throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
 }
 
 FSBlock &
 FSCache::at(Block nr, FSBlockType type)
 {
-    if (auto *result = read(nr, type); result) return *result;
+    if (auto *result = read(nr, type)) return *result;
 
-    if (!fs.isInitialized()) {
-        throw FSError(fault::FS_UNINITIALIZED);
-    } else if (read(nr)) {
+    if (read(nr)) {
         throw FSError(fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
     } else {
         throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
@@ -225,9 +219,7 @@ FSCache::at(Block nr, std::vector<FSBlockType> types)
 {
     if (auto *result = read(nr, types); result) return *result;
 
-    if (!fs.isInitialized()) {
-        throw FSError(fault::FS_UNINITIALIZED);
-    } else if (read(nr)) {
+    if (read(nr)) {
         throw FSError(fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
     } else {
         throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));

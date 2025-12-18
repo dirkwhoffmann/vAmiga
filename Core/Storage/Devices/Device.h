@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "BlockDevice.h"
+#include "BlockView.h"
 #include "DeviceDescriptors.h"
 
 namespace vamiga {
 
-class Partition : public BlockDevice {
+class Partition : public BlockView {
 
     class Device &device;
     PartitionDescriptor descriptor {};
@@ -31,7 +31,7 @@ public:
     void writeBlock(isize nr, const Buffer<u8> &buffer) override;
 };
 
-class Device : public BlockDevice {
+class Device : public BlockView {
 
     // Physical geometry of this device
     GeometryDescriptor geometry;

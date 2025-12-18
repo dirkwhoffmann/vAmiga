@@ -21,8 +21,6 @@ FileSystem::format(string name)
 void
 FileSystem::format(FSFormat dos, string name){
 
-    require::initialized(*this);
-
     // Assign the new DOS type
     traits.dos = dos;
     if (dos == FSFormat::NODOS) return;

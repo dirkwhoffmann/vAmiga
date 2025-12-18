@@ -14,13 +14,13 @@
 #include "FSTypes.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
-#include "BlockDevice.h"
+#include "BlockView.h"
 #include "utl/storage.h"
 #include "utl/wrappers.h"
 
 namespace vamiga {
 
-class HardDrive final : public Drive, public BlockDevice {
+class HardDrive final : public Drive, public BlockView {
 
     friend class HDFFile;
     friend class HDFFactory;

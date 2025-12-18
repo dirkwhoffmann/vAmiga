@@ -25,7 +25,7 @@ FileSystem::typeOf(Block nr, isize pos) const noexcept
 }
 
 FSFormat
-FileSystem::predictDOS(BlockDevice &dev) noexcept
+FileSystem::predictDOS(BlockView &dev) noexcept
 {
     if (auto *blk = dev.readBlock(0)) {
 

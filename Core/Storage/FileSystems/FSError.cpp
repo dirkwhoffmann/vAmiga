@@ -15,10 +15,6 @@ FSError::FSError(FSFault code, const string &s) : utl::Error(code)
 {
     switch (code)
     {
-        case fault::FS_UNINITIALIZED:
-            set_msg("No file system present.");
-            break;
-
         case fault::FS_INVALID_PATH:
             set_msg("Invalid path: " + s);
             break;

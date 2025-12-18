@@ -466,7 +466,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
     
     if (category == Category::Volumes) {
 
-        // REACTIVATE ASAP (when Partition implements the BlockDevice protocol)
+        // REACTIVATE ASAP (when Partition implements the BlockView protocol)
         /*
         for (isize i = 0; i < isize(ptable.size()); i++) {
 

@@ -32,7 +32,7 @@ FSTraits::adf() const
     size == 1802240;      // 1760 KB (HD)
 }
 
-FileSystem::FileSystem(BlockDevice &dev) : cache(*this, dev)
+FileSystem::FileSystem(BlockView &dev) : cache(*this, dev)
 {
     debug(FS_DEBUG, "Creating file system...\n");
 
@@ -53,135 +53,11 @@ FileSystem::FileSystem(BlockDevice &dev) : cache(*this, dev)
 
     if (FS_DEBUG) dumpState();
 
-    /*
-    // Only proceed if the volume is formatted
-    if (layout.dos == FSFormat::NODOS) throw FSError(fault::FS_UNFORMATTED);
-
-    // Create all blocks
-    // storage.init(layout.numBlocks);
-
-    for (isize i = 0; i < layout.numBlocks; i++) {
-
-        auto *blk = storage.read(Block(i)); //  buf + i * traits.bsize;
-        auto *data = blk ? blk->data() : nullptr;
-        if (auto type = predictType((Block)i, data); type != FSBlockType::EMPTY) {
-
-            // Create new block
-            storage[i].init(type);
-
-            // Import block data
-            storage[i].importBlock(data, traits.bsize);
-        }
-    }
-    */
-
     // Set the current directory to '/' (DEPRECATED)
     current = rootBlock;
 
     debug(FS_DEBUG, "Success\n");
 
-}
-
-void
-FileSystem::init(isize capacity, isize bsize)
-{
-    traits.blocks   = capacity;
-    traits.bytes    = capacity * bsize;
-    traits.bsize    = bsize;
-
-    cache.init(capacity);
-
-    if (isize(rootBlock) >= capacity) rootBlock = 0;
-    if (isize(current) >= capacity) current = 0;
-}
-
-void
-FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
-{
-    assert(buf);
-    assert(len == layout.numBlocks * 512);
-
-    debug(FS_DEBUG, "Importing %ld blocks from buffer...\n", layout.numBlocks);
-
-    // Check the consistency of the file system descriptor
-    layout.checkCompatibility();
-
-    // Only proceed if the volume is formatted
-    if (layout.dos == FSFormat::NODOS) throw FSError(fault::FS_UNFORMATTED);
-
-    // Copy layout parameters
-    traits.dos      = layout.dos;
-    traits.blocks   = layout.numBlocks;
-    traits.bytes    = layout.numBlocks * layout.bsize;
-    traits.bsize    = layout.bsize;
-    traits.reserved = layout.numReserved;
-    rootBlock       = layout.rootBlock;
-    bmBlocks        = layout.bmBlocks;
-    bmExtBlocks     = layout.bmExtBlocks;
-
-    // Create all blocks
-    cache.init(layout.numBlocks);
-
-    for (isize i = 0; i < layout.numBlocks; i++) {
-
-        const u8 *data = buf + i * traits.bsize;
-        if (auto type = predictType((Block)i, data); type != FSBlockType::EMPTY) {
-
-            // Create new block
-            cache[i].init(type);
-
-            // Import block data
-            cache[i].importBlock(data, traits.bsize);
-
-            // Emulate some errors for debugging
-            /*
-            auto *data = storage[i].data();
-            for (isize i = 0; i < 20; i++) {
-                data[rand() % 512] = rand() & 0xFF;
-            }
-            */
-        }
-    }
-
-    // Set the current directory to '/'
-    current = rootBlock;
-
-    debug(FS_DEBUG, "Success\n");
-}
-
-void
-FileSystem::init(const FSDescriptor &layout, const fs::path &path)
-{
-    if (FS_DEBUG) { layout.dump(); }
-
-    // Create all blocks
-    init(isize(layout.numBlocks));
-
-    // Copy layout parameters
-    traits.dos      = layout.dos;
-    traits.reserved = layout.numReserved;
-    rootBlock       = layout.rootBlock;
-    bmBlocks        = layout.bmBlocks;
-    bmExtBlocks     = layout.bmExtBlocks;
-
-    // Format the file system
-    format();
-
-    // Start allocating blocks at the middle of the disk
-    allocator.ap = rootBlock;
-
-    // Print some debug information
-    if (FS_DEBUG) { dumpState(); }
-
-    // Import files if a path is given
-    if (!path.empty()) {
-
-        // Add all files
-        importer.import(root(), path, true, true);
-
-        // Assign device name
-        setName(FSName(path.filename().string()));
-    }
 }
 
 bool
@@ -193,9 +69,6 @@ FileSystem::isInitialized() const noexcept
 bool
 FileSystem::isFormatted() const noexcept
 {
-    // Check if the file system is initialized
-    if (!isInitialized()) return false;
-
     // Check the DOS type
     if (traits.dos == FSFormat::NODOS) return false;
 
@@ -475,28 +348,14 @@ FileSystem::attr(const FSBlock &fhd) const
 namespace require {
 
 void
-initialized(const FileSystem &fs)
-{
-    if (!fs.isInitialized()) throw FSError(fault::FS_UNINITIALIZED);
-}
-void
-initialized(unique_ptr<FileSystem> &fs)
-{
-    if (!fs) throw FSError(fault::FS_UNINITIALIZED);
-    initialized(*fs);
-}
-
-void
 formatted(const FileSystem &fs)
 {
-    initialized(fs);
     if (!fs.isFormatted()) throw FSError(fault::FS_UNFORMATTED);
 }
 
 void
 formatted(unique_ptr<FileSystem> &fs)
 {
-    if (!fs) throw FSError(fault::FS_UNINITIALIZED);
     formatted(*fs);
 }
 

@@ -33,7 +33,6 @@ enum : long
     FS_EXISTS,
     FS_CANNOT_OPEN,
 
-    FS_UNINITIALIZED,
     FS_UNFORMATTED,
     FS_UNSUPPORTED,
     FS_READ_ONLY,
@@ -75,7 +74,6 @@ struct FSFaultEnum : Reflectable<FSFaultEnum, long>
             case FS_EXISTS:                   return "EXISTS";
             case FS_CANNOT_OPEN:              return "CANNOT_OPEN";
 
-            case FS_UNINITIALIZED:            return "UNINITIALIZED";
             case FS_UNFORMATTED:              return "UNFORMATTED";
             case FS_UNSUPPORTED:              return "UNSUPPORTED";
             case FS_READ_ONLY:                return "READ_ONLY";
@@ -110,12 +108,8 @@ class FSError : public utl::Error {
 public:
 
     FSError(long fault, const std::string &s = "");
-    // FSError(FSFault fault, const char *s) : FSError(fault, std::string(s)) { };
     FSError(long fault, const std::filesystem::path &p) : FSError(fault, p.string()) { };
     FSError(long fault, std::integral auto v) : FSError(fault, std::to_string(v)) { };
-    // FSError(FSFault fault) : FSError(fault, "") { }
-
-    // FSFault fault() const { return FSFault(payload); }
 };
 
 }

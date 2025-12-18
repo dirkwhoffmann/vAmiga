@@ -15,11 +15,11 @@ namespace vamiga {
 
 using namespace utl;
 
-class BlockDevice {
+class BlockView {
 
 public:
 
-    virtual ~BlockDevice() = default;
+    virtual ~BlockView() = default;
 
     virtual isize capacity() const = 0;
     virtual isize bsize() const = 0;

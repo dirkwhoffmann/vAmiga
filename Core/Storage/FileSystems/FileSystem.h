@@ -164,25 +164,15 @@ public:
 
 public:
 
-    FileSystem(BlockDevice &dev);
-
-    /*
-    [[deprecated]] FileSystem(BlockDevice &dev, isize capacity, isize bsize = 512) : FileSystem(dev) { init(capacity, bsize); }
-    [[deprecated]] FileSystem(BlockDevice &dev, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(dev) { init(layout, buf, len); }
-    [[deprecated]] FileSystem(BlockDevice &dev, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(dev) { init(layout, path); }
-    */
-    FileSystem(const FileSystem &fs) = delete;
+    FileSystem(BlockView &dev);
     virtual ~FileSystem() = default;
 
-    void init(BlockDevice &dev);
-    [[deprecated]] void init(isize capacity, isize bsize = 512);
-    [[deprecated]] void init(const FSDescriptor &layout, u8 *buf, isize len);
-    [[deprecated]] void init(const FSDescriptor &layout, const fs::path &path = {});
+    FileSystem(const FileSystem &fs) = delete;
+    FileSystem& operator=(const FileSystem&) = delete;
 
-    bool isInitialized() const noexcept;
+    [[deprecated]] bool isInitialized() const noexcept;
     bool isFormatted() const noexcept;
 
-    FileSystem& operator=(const FileSystem&) = delete;
 
 
     //
@@ -239,7 +229,7 @@ public:
     bool isEmpty(Block nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
 
     // Predicts the file system based on stored data
-    static FSFormat predictDOS(BlockDevice &dev) noexcept;
+    static FSFormat predictDOS(BlockView &dev) noexcept;
     // FSFormat predictDOS() noexcept { return predictDOS(storage.dev); }
 
     // Predicts the type of a block based on the stored data
@@ -509,8 +499,6 @@ private:
 
 namespace require {
 
-    void initialized(const FileSystem &fs);
-    void initialized(unique_ptr<FileSystem> &fs);
     void formatted(const FileSystem &fs);
     void formatted(unique_ptr<FileSystem> &fs);
     void file(const FSBlock &node);
