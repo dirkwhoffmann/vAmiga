@@ -26,7 +26,7 @@ class FSCache final : public FSExtension {
 
 private:
 
-    // The physical block device
+    // The underlying block device
     BlockDevice &dev;
 
     // File system capacity in blocks
@@ -35,7 +35,7 @@ private:
     // Size of a single block in bytes
     isize bsize = 512;
 
-    // The block cache
+    // Cached blocks
     std::unordered_map<Block, std::unique_ptr<FSBlock>> blocks;
 
     // Dirty blocks
@@ -49,10 +49,12 @@ private:
 public:
 
     FSCache(FileSystem &fs, BlockDevice &dev);
-    FSCache(FileSystem &fs, BlockDevice &dev, isize capacity, isize bsize = 512);
+    // FSCache(FileSystem &fs, BlockDevice &dev, isize capacity, isize bsize = 512);
     virtual ~FSCache();
 
-    void init(isize capacity, isize bsize = 512);
+    [[deprecated]] void init(isize capacity, isize bsize = 512);
+
+private:
 
     void dealloc();
 
@@ -115,6 +117,9 @@ public:
     // Gets or sets the block type
     FSBlockType getType(Block nr) const noexcept;
     void setType(Block nr, FSBlockType type);
+
+    // Caches a block (if not already cached)
+    FSBlock *cache(Block nr) noexcept;
 
     // Returns a block pointer or null if the block does not exist
     FSBlock *read(Block nr) noexcept;

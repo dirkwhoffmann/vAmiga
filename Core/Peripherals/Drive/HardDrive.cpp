@@ -779,7 +779,23 @@ HardDrive::importFolder(const fs::path &path)
 
         // Retrieve some information about the first partition
         auto traits = getPartitionTraits(0);
-                
+
+        // Create a file system on top of the drive
+        auto fs = FileSystem(*this);
+
+        // Import all files
+        fs.importer.import(fs.root(), path, true, true);
+
+        // Name the file system
+        fs.setName(traits.name);
+
+        // Write back
+        fs.flush();
+
+        /*
+        // Retrieve some information about the first partition
+        auto traits = getPartitionTraits(0);
+
         // Create a device descriptor matching this drive
         FSDescriptor layout(geometry, traits.fsType);
 
@@ -797,6 +813,7 @@ HardDrive::importFolder(const fs::path &path)
         
         // Copy the file system back to the disk
         init(fs);
+        */
     }
 }
 

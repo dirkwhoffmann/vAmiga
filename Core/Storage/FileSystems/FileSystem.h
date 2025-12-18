@@ -124,7 +124,7 @@ class FileSystem : public Loggable {
     //
 
     // Gateway to the "physical" block device
-    FSCache storage;
+    FSCache cache;
 
     // Allocation and allocation map managenent
     FSAllocator allocator = FSAllocator(*this);
@@ -165,16 +165,16 @@ public:
 public:
 
     FileSystem(BlockDevice &dev);
-    FileSystem(BlockDevice &dev, isize capacity, isize bsize = 512) : FileSystem(dev) { init(capacity, bsize); }
-    FileSystem(BlockDevice &dev, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(dev) { init(layout, buf, len); }
-    FileSystem(BlockDevice &dev, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(dev) { init(layout, path); }
-    FileSystem(BlockDevice &dev, const FileSystem &fs) = delete;
+    [[deprecated]] FileSystem(BlockDevice &dev, isize capacity, isize bsize = 512) : FileSystem(dev) { init(capacity, bsize); }
+    [[deprecated]] FileSystem(BlockDevice &dev, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(dev) { init(layout, buf, len); }
+    [[deprecated]] FileSystem(BlockDevice &dev, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(dev) { init(layout, path); }
+    FileSystem(const FileSystem &fs) = delete;
     virtual ~FileSystem() = default;
 
     void init(BlockDevice &dev);
-    void init(isize capacity, isize bsize = 512);
-    void init(const FSDescriptor &layout, u8 *buf, isize len);
-    void init(const FSDescriptor &layout, const fs::path &path = {});
+    [[deprecated]] void init(isize capacity, isize bsize = 512);
+    [[deprecated]] void init(const FSDescriptor &layout, u8 *buf, isize len);
+    [[deprecated]] void init(const FSDescriptor &layout, const fs::path &path = {});
 
     bool isInitialized() const noexcept;
     bool isFormatted() const noexcept;

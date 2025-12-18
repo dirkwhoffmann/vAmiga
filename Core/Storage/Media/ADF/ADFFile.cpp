@@ -198,16 +198,28 @@ ADFFile::killVirus()
 }
 
 void
-ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
+ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
-    FSFormatEnum::validate(fs);
+    FSFormatEnum::validate(dos);
 
     debug(ADF_DEBUG,
-          "Formatting disk (%ld, %s)\n", numBlocks(), FSFormatEnum::key(fs));
+          "Formatting disk (%ld, %s)\n", numBlocks(), FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given
-    if (fs == FSFormat::NODOS) return;
+    if (dos == FSFormat::NODOS) return;
 
+    // Create a file system on top of this file
+    auto fs = FileSystem(*this);
+
+    // Format the file system
+    fs.format(dos);
+    fs.setName(FSName(name));
+    fs.makeBootable(id);
+
+    // Update the underlying ADF
+    fs.flush();
+
+    /*
     // Create an empty floppy disk
     Device device(getGeometry());
 
@@ -224,6 +236,7 @@ ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
     
     // Export the file system to the ADF
     if (!volume.exporter.exportVolume(data.ptr, data.size)) throw FSError(fault::FS_UNKNOWN);
+    */
 }
 
 void

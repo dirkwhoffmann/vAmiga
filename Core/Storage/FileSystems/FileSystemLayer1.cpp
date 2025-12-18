@@ -15,13 +15,13 @@ namespace vamiga {
 FSBlockType
 FileSystem::typeOf(Block nr) const noexcept
 {
-    return storage.getType(nr);
+    return cache.getType(nr);
 }
 
 FSItemType
 FileSystem::typeOf(Block nr, isize pos) const noexcept
 {
-    return storage.read(nr) ? storage[nr].itemType(pos) : FSItemType::UNUSED;
+    return cache.read(nr) ? cache[nr].itemType(pos) : FSItemType::UNUSED;
 }
 
 FSFormat
@@ -29,7 +29,7 @@ FileSystem::predictDOS(BlockDevice &dev) noexcept
 {
     if (auto *blk = dev.readBlock(0)) {
 
-        if (strncmp((const char *)blk->ptr, "DOS", 3) == 0 || blk->ptr[3] <= 7) {
+        if (strncmp((const char *)blk->ptr, "DOS", 3) == 0 && blk->ptr[3] <= 7) {
             return FSFormat(blk->ptr[3]);
         }
     }
@@ -111,91 +111,91 @@ FileSystem::predictType(Block nr, const u8 *buf) const noexcept
 FSBlock *
 FileSystem::read(Block nr) noexcept
 {
-    return storage.read(nr);
+    return cache.read(nr);
 }
 
 FSBlock *
 FileSystem::read(Block nr, FSBlockType type) noexcept
 {
-    return storage.read(nr, type);
+    return cache.read(nr, type);
 }
 
 FSBlock *
 FileSystem::read(Block nr, std::vector<FSBlockType> types) noexcept
 {
-    return storage.read(nr, types);
+    return cache.read(nr, types);
 }
 
 const FSBlock *
 FileSystem::read(Block nr) const noexcept
 {
-    return storage.read(nr);
+    return cache.read(nr);
 }
 
 const FSBlock *
 FileSystem::read(Block nr, FSBlockType type) const noexcept
 {
-    return storage.read(nr, type);
+    return cache.read(nr, type);
 }
 
 const FSBlock *
 FileSystem::read(Block nr, std::vector<FSBlockType> types) const noexcept
 {
-    return storage.read(nr, types);
+    return cache.read(nr, types);
 }
 
 FSBlock &
 FileSystem::at(Block nr)
 {
-    return storage.at(nr);
+    return cache.at(nr);
 }
 
 FSBlock &
 FileSystem::at(Block nr, FSBlockType type)
 {
-    return storage.at(nr, type);
+    return cache.at(nr, type);
 }
 
 FSBlock &
 FileSystem::at(Block nr, std::vector<FSBlockType> types)
 {
-    return storage.at(nr, types);
+    return cache.at(nr, types);
 }
 
 const FSBlock &
 FileSystem::at(Block nr) const
 {
-    return storage.at(nr);
+    return cache.at(nr);
 }
 
 const FSBlock &
 FileSystem::at(Block nr, FSBlockType type) const
 {
-    return storage.at(nr, type);
+    return cache.at(nr, type);
 }
 
 const FSBlock &
 FileSystem::at(Block nr, std::vector<FSBlockType> types) const
 {
-    return storage.at(nr, types);
+    return cache.at(nr, types);
 }
 
 void
 FileSystem::flush()
 {
-    storage.flush();
+    cache.flush();
 }
 
 FSBlock &
 FileSystem::operator[](size_t nr)
 {
-    return storage[nr];
+    return cache[nr];
 }
 
 const FSBlock &
 FileSystem::operator[](size_t nr) const
 {
-    return storage[nr];
+    return cache[nr];
 }
 
 }

@@ -496,7 +496,8 @@ NavigatorConsole::initCommands(RSCommand &root)
     //
     // Importing and exporting
     //
-    
+
+    /*
     RSCommand::currentGroup = "Create";
     
     root.add({
@@ -584,6 +585,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 fs->dumpInfo(os);
             }
     });
+    */
     
     root.add({
         

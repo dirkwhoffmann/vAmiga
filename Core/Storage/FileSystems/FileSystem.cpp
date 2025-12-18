@@ -32,9 +32,14 @@ FSTraits::adf() const
     size == 1802240;      // 1760 KB (HD)
 }
 
-FileSystem::FileSystem(BlockDevice &dev) : storage(*this, dev)
+FileSystem::FileSystem(BlockDevice &dev) : cache(*this, dev)
 {
+    debug(FS_DEBUG, "Creating file system...\n");
+
     auto layout = FSDescriptor(dev.capacity(), FileSystem::predictDOS(dev));
+
+    // Check consistency (may throw)
+    layout.checkCompatibility();
 
     // Copy layout parameters
     traits.dos      = layout.dos;
@@ -45,6 +50,8 @@ FileSystem::FileSystem(BlockDevice &dev) : storage(*this, dev)
     rootBlock       = layout.rootBlock;
     bmBlocks        = layout.bmBlocks;
     bmExtBlocks     = layout.bmExtBlocks;
+
+    if (FS_DEBUG) dumpState();
 
     /*
     // Only proceed if the volume is formatted
@@ -82,7 +89,7 @@ FileSystem::init(isize capacity, isize bsize)
     traits.bytes    = capacity * bsize;
     traits.bsize    = bsize;
 
-    storage.init(capacity);
+    cache.init(capacity);
 
     if (isize(rootBlock) >= capacity) rootBlock = 0;
     if (isize(current) >= capacity) current = 0;
@@ -113,7 +120,7 @@ FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
     bmExtBlocks     = layout.bmExtBlocks;
 
     // Create all blocks
-    storage.init(layout.numBlocks);
+    cache.init(layout.numBlocks);
 
     for (isize i = 0; i < layout.numBlocks; i++) {
 
@@ -121,10 +128,10 @@ FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
         if (auto type = predictType((Block)i, data); type != FSBlockType::EMPTY) {
 
             // Create new block
-            storage[i].init(type);
+            cache[i].init(type);
 
             // Import block data
-            storage[i].importBlock(data, traits.bsize);
+            cache[i].importBlock(data, traits.bsize);
 
             // Emulate some errors for debugging
             /*
@@ -193,7 +200,7 @@ FileSystem::isFormatted() const noexcept
     if (traits.dos == FSFormat::NODOS) return false;
 
     // Check if the root block is present
-    if (!storage.read(rootBlock, FSBlockType::ROOT)) return false;
+    if (!cache.read(rootBlock, FSBlockType::ROOT)) return false;
 
     return true;
 }
@@ -375,23 +382,23 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
 void
 FileSystem::dumpBlocks(std::ostream &os) const noexcept
 {
-    storage.dump(os);
+    cache.dump(os);
 }
 
 FSStat
 FileSystem::stat() const noexcept
 {
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
+    auto *rb = cache.read(rootBlock, FSBlockType::ROOT);
 
     FSStat result = {
 
         .traits     = traits,
 
-        .freeBlocks = storage.freeBlocks(),
-        .freeBytes  = storage.freeBytes(),
-        .usedBlocks = storage.usedBlocks(),
-        .usedBytes  = storage.usedBytes(),
-        .fill       = double(100) * storage.usedBlocks() / storage.numBlocks(),
+        .freeBlocks = cache.freeBlocks(),
+        .freeBytes  = cache.freeBytes(),
+        .usedBlocks = cache.usedBlocks(),
+        .usedBytes  = cache.usedBytes(),
+        .fill       = double(100) * cache.usedBlocks() / cache.numBlocks(),
 
         .name       = rb ? rb->getName() : FSName(""),
         .bDate      = rb ? rb->getCreationDate() : FSTime(),
@@ -407,7 +414,7 @@ FileSystem::stat() const noexcept
 FSBootStat
 FileSystem::bootStat() const noexcept
 {
-    auto bb = BootBlockImage(storage[0].data(), storage[1].data());
+    auto bb = BootBlockImage(cache[0].data(), cache[1].data());
 
     FSBootStat result = {
 

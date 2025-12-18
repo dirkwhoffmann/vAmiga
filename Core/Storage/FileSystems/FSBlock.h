@@ -51,6 +51,7 @@ public:
     FSBlock(FSBlock&&) = delete;                  // Move constructor
     FSBlock& operator=(FSBlock&&) = delete;       // Move assignment
 
+    FSBlock(FileSystem *ref, Block nr);
     FSBlock(FileSystem *ref, Block nr, FSBlockType t);
     ~FSBlock();
 

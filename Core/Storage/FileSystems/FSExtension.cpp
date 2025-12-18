@@ -16,7 +16,7 @@ FSExtension::FSExtension(FileSystem& fs) :
 
 fs(fs),
 traits(fs.traits),
-storage(fs.storage),
+storage(fs.cache),
 doctor(fs.doctor)
 
 { }

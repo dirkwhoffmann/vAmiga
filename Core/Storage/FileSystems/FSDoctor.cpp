@@ -263,7 +263,7 @@ FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
 {
     diagnosis.blockErrors = {};
 
-    for (auto &it : fs.storage.sortedKeys()) {
+    for (auto &it : fs.cache.sortedKeys()) {
 
         if (auto errors = xray(it, strict); errors) {
 

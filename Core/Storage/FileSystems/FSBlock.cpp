@@ -17,9 +17,13 @@
 
 namespace vamiga {
 
-FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : fs(ref), storage(ref->storage)
+FSBlock::FSBlock(FileSystem *ref, Block nr) : fs(ref), storage(ref->cache)
 {
     this->nr = nr;
+}
+
+FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : FSBlock(ref, nr)
+{
     init(t);
 }
 
@@ -618,7 +622,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = fs->storage[1].data();
+    u8 *p = fs->cache[1].data();
 
     for (isize i = 0; i < bsize() / 4; i++) {
 

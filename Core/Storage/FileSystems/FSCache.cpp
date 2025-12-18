@@ -19,6 +19,9 @@ FSCache::FSCache(FileSystem &fs, BlockDevice &dev) : FSExtension(fs), dev(dev) {
     capacity = dev.capacity();
     bsize    = dev.bsize();
 
+    blocks.reserve(capacity);
+
+    /*
     auto layout = FSDescriptor(capacity, FileSystem::predictDOS(dev));
 
     // Check the consistency of the file system descriptor (optional)
@@ -39,12 +42,8 @@ FSCache::FSCache(FileSystem &fs, BlockDevice &dev) : FSExtension(fs), dev(dev) {
             storage[i].init(type);
         }
     }
+    */
 };
-
-FSCache::FSCache(FileSystem &fs, BlockDevice &dev, isize capacity, isize bsize) : FSCache(fs, dev)
-{
-    init(capacity, bsize);
-}
 
 FSCache::~FSCache()
 {
@@ -116,8 +115,35 @@ FSCache::setType(Block nr, FSBlockType type)
 }
 
 FSBlock *
+FSCache::cache(Block nr) noexcept
+{
+    if (isize(nr) >= capacity) return nullptr;
+
+    // Look up the block in the cache and return it if already present
+    // On a miss, reserve an entry with a placeholder value
+    auto [it, inserted] = blocks.try_emplace(nr, nullptr);
+    if (!inserted) return it->second.get();
+
+    // Create the block cache entry
+    auto block = std::make_unique<FSBlock>(&fs, nr);
+
+    // Read block data from the underlying block device
+    if (auto *buffer = dev.readBlock(nr)) block->dataCache.init(*buffer);
+
+    // Predict the block type based on its number and cached data
+    block->type = fs.predictType(nr, block->dataCache.ptr);
+
+    // Populate the reserved cache entry
+    it->second = std::move(block);
+    return it->second.get();
+}
+
+FSBlock *
 FSCache::read(Block nr) noexcept
 {
+    return cache(nr);
+
+    /*
     if (nr >= size_t(capacity)) return nullptr;
 
     // Create the block if it does not yet exist
@@ -127,6 +153,7 @@ FSCache::read(Block nr) noexcept
 
     // Return a block reference
     return blocks.at(nr).get();
+    */
 }
 
 const FSBlock *

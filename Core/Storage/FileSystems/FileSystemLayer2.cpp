@@ -23,6 +23,7 @@ FileSystem::format(FSFormat dos, string name){
 
     require::initialized(*this);
 
+    // Assign the new DOS type
     traits.dos = dos;
     if (dos == FSFormat::NODOS) return;
 
@@ -30,21 +31,23 @@ FileSystem::format(FSFormat dos, string name){
     assert(blocks() > 2);
     assert(rootBlock > 0);
 
-    // Trash all existing data
-    storage.init(blocks());
-
     // Create boot blocks
-    storage[0].init(FSBlockType::BOOT);
-    storage[1].init(FSBlockType::BOOT);
+    cache[0].init(FSBlockType::BOOT);
+    cache[1].init(FSBlockType::BOOT);
+
+    // Wipe out all other blocks
+    for (isize i = 2; i < traits.blocks; i++) {
+        cache[i].init(FSBlockType::EMPTY);
+    }
 
     // Create the root block
-    storage[rootBlock].init(FSBlockType::ROOT);
+    cache[rootBlock].init(FSBlockType::ROOT);
 
     // Create bitmap blocks
     for (auto& ref : bmBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
-        storage[ref].init(FSBlockType::BITMAP);
+        cache[ref].init(FSBlockType::BITMAP);
     }
 
     // Add bitmap extension blocks
@@ -52,29 +55,29 @@ FileSystem::format(FSFormat dos, string name){
     for (auto &ref : bmExtBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        storage[ref].init(FSBlockType::BITMAP_EXT);
-        storage[pred].setNextBmExtBlockRef(ref);
+        cache[ref].init(FSBlockType::BITMAP_EXT);
+        cache[pred].setNextBmExtBlockRef(ref);
         pred = ref;
     }
 
     // Add all bitmap block references
-    storage[rootBlock].addBitmapBlockRefs(bmBlocks);
+    cache[rootBlock].addBitmapBlockRefs(bmBlocks);
 
     // Mark free blocks as free in the bitmap block
     // TODO: SPEED THIS UP
     for (isize i = 0; i < blocks(); i++) {
-        if (storage.isEmpty(Block(i))) allocator.markAsFree(Block(i));
+        if (cache.isEmpty(Block(i))) allocator.markAsFree(Block(i));
     }
 
     // Set the volume name
     if (name != "") setName(name);
 
     // Rectify checksums
-    storage[0].updateChecksum();
-    storage[1].updateChecksum();
-    storage[rootBlock].updateChecksum();
-    for (auto& ref : bmBlocks) { storage[ref].updateChecksum(); }
-    for (auto& ref : bmExtBlocks) { storage[ref].updateChecksum(); }
+    cache[0].updateChecksum();
+    cache[1].updateChecksum();
+    cache[rootBlock].updateChecksum();
+    for (auto& ref : bmBlocks) { cache[ref].updateChecksum(); }
+    for (auto& ref : bmExtBlocks) { cache[ref].updateChecksum(); }
 
     // Set the current directory
     current = rootBlock;
@@ -83,7 +86,7 @@ FileSystem::format(FSFormat dos, string name){
 void
 FileSystem::setName(FSName name)
 {
-    if (auto *rb = storage.read(rootBlock, FSBlockType::ROOT); rb) {
+    if (auto *rb = cache.read(rootBlock, FSBlockType::ROOT); rb) {
 
         rb->setName(name);
         rb->updateChecksum();
@@ -93,17 +96,17 @@ FileSystem::setName(FSName name)
 void
 FileSystem::makeBootable(BootBlockId id)
 {
-    assert(storage.getType(0) == FSBlockType::BOOT);
-    assert(storage.getType(1) == FSBlockType::BOOT);
-    storage[0].writeBootBlock(id, 0);
-    storage[1].writeBootBlock(id, 1);
+    assert(cache.getType(0) == FSBlockType::BOOT);
+    assert(cache.getType(1) == FSBlockType::BOOT);
+    cache[0].writeBootBlock(id, 0);
+    cache[1].writeBootBlock(id, 1);
 }
 
 void
 FileSystem::killVirus()
 {
-    assert(storage.getType(0) == FSBlockType::BOOT);
-    assert(storage.getType(1) == FSBlockType::BOOT);
+    assert(cache.getType(0) == FSBlockType::BOOT);
+    assert(cache.getType(1) == FSBlockType::BOOT);
 
     if (bootStat().hasVirus) {
 
@@ -112,11 +115,11 @@ FileSystem::killVirus()
         traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
 
         if (id != BootBlockId::NONE) {
-            storage[0].writeBootBlock(id, 0);
-            storage[1].writeBootBlock(id, 1);
+            cache[0].writeBootBlock(id, 0);
+            cache[1].writeBootBlock(id, 1);
         } else {
-            std::memset(storage[0].data() + 4, 0, traits.bsize - 4);
-            std::memset(storage[1].data(), 0, traits.bsize);
+            std::memset(cache[0].data() + 4, 0, traits.bsize - 4);
+            std::memset(cache[1].data(), 0, traits.bsize);
         }
     }
 }
@@ -449,8 +452,8 @@ FileSystem::newUserDirBlock(const FSName &name)
 {
     Block nr = allocator.allocate();
 
-    storage[nr].init(FSBlockType::USERDIR);
-    storage[nr].setName(name);
+    cache[nr].init(FSBlockType::USERDIR);
+    cache[nr].setName(name);
     return at(nr);
 }
 
@@ -459,8 +462,8 @@ FileSystem::newFileHeaderBlock(const FSName &name)
 {
     Block nr = allocator.allocate();
 
-    storage[nr].init(FSBlockType::FILEHEADER);
-    storage[nr].setName(name);
+    cache[nr].init(FSBlockType::FILEHEADER);
+    cache[nr].setName(name);
     return at(nr);
 }
 
@@ -469,8 +472,8 @@ FileSystem::addFileListBlock(Block at, Block head, Block prev)
 {
     if (auto *prevBlock = read(prev); prevBlock) {
 
-        storage[at].init(FSBlockType::FILELIST);
-        storage[at].setFileHeaderRef(head);
+        cache[at].init(FSBlockType::FILELIST);
+        cache[at].setFileHeaderRef(head);
 
         prevBlock->setNextListBlockRef(at);
     }
@@ -481,9 +484,9 @@ FileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 {
     if (auto *prevBlock = read(prev); prevBlock) {
 
-        storage[at].init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
-        storage[at].setDataBlockNr((Block)id);
-        storage[at].setFileHeaderRef(head);
+        cache[at].init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
+        cache[at].setDataBlockNr((Block)id);
+        cache[at].setFileHeaderRef(head);
         prevBlock->setNextDataBlockRef(at);
     }
 }
@@ -529,7 +532,7 @@ FileSystem::reclaim(const FSBlock &node)
     if (node.isDirectory()) {
 
         // Remove user directory block
-        storage.erase(node.nr); allocator.markAsFree(node.nr);
+        cache.erase(node.nr); allocator.markAsFree(node.nr);
         return;
     }
 
@@ -540,9 +543,9 @@ FileSystem::reclaim(const FSBlock &node)
         auto listBlocks = collectListBlocks(node.nr);
 
         // Remove all blocks
-        storage.erase(node.nr); allocator.markAsFree(node.nr);
-        for (auto &it : dataBlocks) { storage.erase(it); allocator.markAsFree(it); }
-        for (auto &it : listBlocks) { storage.erase(it); allocator.markAsFree(it); }
+        cache.erase(node.nr); allocator.markAsFree(node.nr);
+        for (auto &it : dataBlocks) { cache.erase(it); allocator.markAsFree(it); }
+        for (auto &it : listBlocks) { cache.erase(it); allocator.markAsFree(it); }
         return;
     }
 
