@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "MediaFile.h"
 #include "Workspace.h"
 #include "Snapshot.h"
 #include "Script.h"

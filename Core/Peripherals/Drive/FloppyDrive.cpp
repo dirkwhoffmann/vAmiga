@@ -13,7 +13,6 @@
 #include "BootBlockImage.h"
 #include "DiskController.h"
 #include "Media.h"
-#include "FileSystemFactory.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"
 #include "OSDescriptors.h"
@@ -1035,12 +1034,18 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 void
 FloppyDrive::catchFile(const fs::path &path)
 {
+    // Export the drive to an ADF
+    auto adf = ADFFactory::make(*this);
+
+    // Mount file system on top of the ADF
+    auto fs = FileSystem(*adf);
+
     // Extract the file system
-    auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
-    auto fs = FileSystemFactory::fromFloppyDrive(*dev, *this);
+    // auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
+    // auto fs = FileSystemFactory::fromFloppyDrive(*dev, *this);
 
     // Seek file
-    auto file = fs->seekPtr(&fs->root(), path);
+    auto file = fs.seekPtr(&fs.root(), path);
     if (!file->isFile()) throw FSError(fault::FS_NOT_A_FILE, path.string());
 
     // Extract file
@@ -1064,7 +1069,7 @@ FloppyDrive::catchFile(const fs::path &path)
     file->overwriteData(buffer);
     
     // Convert the modified file system back to a disk
-    auto adf = ADFFactory::make(*fs); //  ADFFile(fs);
+    // auto adf = ADFFactory::make(*fs); //  ADFFile(fs);
 
     // Replace the old disk
     swapDisk(*adf);
@@ -1082,25 +1087,37 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 }
 
 void
-FloppyDrive::insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path &path)
+FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path &path)
 {
     debug(DSK_DEBUG,
           "insertNew(%s, %s, %s, %s)\n",
-          FSFormatEnum::key(fs), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
-    
-    
+          FSFormatEnum::key(dos), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
+
+
+    // Create a suitable ADF
+    auto adf = ADFFactory::make(GeometryDescriptor(diameter(), density()));
+
+    // Mount a file system on top of the ADF
+    auto fs = FileSystem(*adf);
+
+    // Format the file system
+    fs.format(dos);
+
+    // If a path is given, import files
+    if (!path.empty()) fs.importer.import(path);
+
     // Create a file system and import the directory
-    auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
-    auto volume = FileSystemFactory::createLowLevel(*dev, diameter(), density(), fs, path);
+    // auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
+    // auto fs = FileSystemFactory::createLowLevel(*dev, diameter(), density(), dos, path);
 
     // Make the volume bootable
-    volume->makeBootable(bb);
+    fs.makeBootable(bb);
 
     // Check file system consistency
-    if (FS_DEBUG) volume->doctor.xray(true, std::cout, false);
+    if (FS_DEBUG) fs.doctor.xray(true, std::cout, false);
 
     // Convert the file system into an ADF
-    auto adf = ADFFactory::make(*volume);
+    // auto adf = ADFFactory::make(*volume);
 
     // Insert the ADF
     swapDisk(*adf);

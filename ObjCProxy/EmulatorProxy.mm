@@ -11,7 +11,6 @@
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
 #import "Emulator.h"
-#import "FileSystemFactory.h"
 #include "utl/support/Strings.h"
 
 using namespace vamiga;
@@ -1356,34 +1355,32 @@ NSString *EventSlotName(EventSlot slot)
     return proxy;
 }
 
-+ (instancetype)makeWithMedia:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
-{
-    try {
-
-        auto file = (MediaFile *)(proxy->obj);
-        // auto dev = new FileSystem(*file);
-        // auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file));
-
-        // TODO: REMOVE THIS FUNCTION AS IT LEAKS MEMORY
-        auto info = file->getDiskInfo();
-        auto geometry  = GeometryDescriptor(info.cyls, info.heads, info.sectors, info.bsize);
-        auto *dev = new Device(geometry);
-
-        auto fs = FileSystemFactory::fromMediaFile(*dev, *file);
-        return [self make:fs.release()];
-
-    }  catch(Error &error) {
-
-        [ex save:error];
-        return nil;
-    }
-}
-
 + (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
 {
     try {
 
-        auto file = (MediaFile *)(proxy->obj);
+        auto *base = ((MediaFile *)(proxy->obj))->get();
+
+        if (auto* adf = dynamic_cast<ADFFile *>(base)) {
+
+            auto *fs = new FileSystem(*adf);
+            return [self make:fs];
+        }
+        if (auto* hdf = dynamic_cast<HDFFile *>(base)) {
+
+            auto *fs = new FileSystem(*hdf);
+            return [self make:fs];
+        }
+
+        throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+
+    } catch(Error &error) {
+
+        [ex save:error];
+        return nil;
+    }
+
+/*
         // auto dev = new FileSystem(*file, nr);
         // auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file, nr));
 
@@ -1400,6 +1397,7 @@ NSString *EventSlotName(EventSlot slot)
         [ex save:error];
         return nil;
     }
+*/
 }
 
 - (NSString *)name

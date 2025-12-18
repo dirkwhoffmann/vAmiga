@@ -10,8 +10,8 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
-#include "FileSystemFactory.h"
 #include "ADFFactory.h"
+#include "MediaFile.h"
 #include "HDFFile.h"
 #include "utl/chrono.h"
 #include "utl/support.h"
@@ -296,14 +296,27 @@ void
 NavigatorConsole::import(const FloppyDrive &dfn)
 {
     require::initialized(fs);
-    FileSystemFactory::initFromFloppy(*fs, dfn);
+
+    // Later: Directly mount the file system on top of the drive
+
+    // Create a block device
+    adf = ADFFactory::make(dfn);
+
+    // Create a file system on top
+    fs = make_unique<FileSystem>(*adf);
+
+
+    // FileSystemFactory::initFromFloppy(*fs, dfn);
 }
 
 void
 NavigatorConsole::import(const HardDrive &hdn, isize part)
 {
+    throw FSError(fault::FS_UNSUPPORTED);
+    /*
     require::initialized(fs);
     FileSystemFactory::initFromHardDrive(*fs, hdn);
+    */
 }
 
 void
@@ -667,7 +680,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             }, .payload = {i}
         });
     }
-    
+
+    /* UNCOMMENT THIS LATER...
     root.add({
         
         .tokens = { "import", "hd[n]" },
@@ -695,6 +709,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             }, .payload = {i}
         });
     }
+    */
     
     root.add({
         

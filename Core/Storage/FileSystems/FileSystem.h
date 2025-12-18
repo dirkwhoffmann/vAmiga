@@ -165,9 +165,12 @@ public:
 public:
 
     FileSystem(BlockDevice &dev);
+
+    /*
     [[deprecated]] FileSystem(BlockDevice &dev, isize capacity, isize bsize = 512) : FileSystem(dev) { init(capacity, bsize); }
     [[deprecated]] FileSystem(BlockDevice &dev, const FSDescriptor &layout, u8 *buf, isize len) : FileSystem(dev) { init(layout, buf, len); }
     [[deprecated]] FileSystem(BlockDevice &dev, const FSDescriptor &layout, const fs::path &path = {})  : FileSystem(dev) { init(layout, path); }
+    */
     FileSystem(const FileSystem &fs) = delete;
     virtual ~FileSystem() = default;
 

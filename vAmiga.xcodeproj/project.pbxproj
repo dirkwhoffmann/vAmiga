@@ -269,8 +269,6 @@
 		509D04982EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
 		509D04992EDA471900355638 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04952EDA471900355638 /* FSExporter.cpp */; };
 		509D049A2EDA471900355638 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D04962EDA471900355638 /* FSImporter.cpp */; };
-		509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
-		509D07672EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07652EDAF0A800355638 /* FileSystemFactory.cpp */; };
 		509D076C2EDB295200355638 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer1.cpp */; };
 		509D076D2EDB295200355638 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076B2EDB294700355638 /* FileSystemLayer1.cpp */; };
 		509D076F2EDB2A0900355638 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */; };
@@ -1000,8 +998,6 @@
 		509D04952EDA471900355638 /* FSExporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSExporter.cpp; sourceTree = "<group>"; };
 		509D04962EDA471900355638 /* FSImporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSImporter.cpp; sourceTree = "<group>"; };
 		509D049B2EDA472900355638 /* FSImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSImporter.h; sourceTree = "<group>"; };
-		509D07642EDAF09F00355638 /* FileSystemFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystemFactory.h; sourceTree = "<group>"; };
-		509D07652EDAF0A800355638 /* FileSystemFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemFactory.cpp; sourceTree = "<group>"; };
 		509D076B2EDB294700355638 /* FileSystemLayer1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer1.cpp; sourceTree = "<group>"; };
 		509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer2.cpp; sourceTree = "<group>"; };
 		509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer3.cpp; sourceTree = "<group>"; };
@@ -1690,8 +1686,6 @@
 			isa = PBXGroup;
 			children = (
 				50EFF1E726E25A5D00296065 /* CMakeLists.txt */,
-				509D07642EDAF09F00355638 /* FileSystemFactory.h */,
-				509D07652EDAF0A800355638 /* FileSystemFactory.cpp */,
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
@@ -3099,7 +3093,6 @@
 				504FC7C92D31292200F0B733 /* Dashboard.swift in Sources */,
 				50BCB9CA2EE73B65000C53CF /* MediaError.cpp in Sources */,
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
-				509D07662EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
 				509E760E2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
@@ -3384,7 +3377,6 @@
 				50FC048027DA190400C3E566 /* CoreComponent.cpp in Sources */,
 				509D07782EDB993F00355638 /* PosixFileSystem.cpp in Sources */,
 				5099432A29C2114C00867E8F /* Amiga.cpp in Sources */,
-				509D07672EDAF0AC00355638 /* FileSystemFactory.cpp in Sources */,
 				50FC04CD27DA19E900C3E566 /* HDFFile.cpp in Sources */,
 				50FC04EF27DA1A4500C3E566 /* RemoteManager.cpp in Sources */,
 				50BCB9C92EE73B65000C53CF /* MediaError.cpp in Sources */,

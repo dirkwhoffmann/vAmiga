@@ -10,7 +10,7 @@
 #include "config.h"
 #include "EXEFile.h"
 #include "ADFFactory.h"
-#include "FileSystemFactory.h"
+#include "FileSystem.h"
 #include "OSDescriptors.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
@@ -47,6 +47,42 @@ EXEFile::finalizeRead()
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
 
+    // Create a suitable ADF
+    adf = *ADFFactory::make(Diameter::INCH_35, hd ? Density::HD : Density::DD);
+
+    // Mount a file system on top of the ADF
+    auto fs = FileSystem(adf);
+    fs.setName(FSName("Disk"));
+
+    // Make the volume bootable
+    fs.makeBootable(BootBlockId::AMIGADOS_13);
+
+    // Start at the root directory
+    if (auto *dir = &fs.root(); dir) {
+
+        // Add the executable
+        fs.createFile(*dir, FSName("file"), data);
+
+        // Add a script directory
+        dir = &fs.mkdir(*dir, FSName("s"));
+
+        // Add a startup sequence
+        fs.createFile(*dir, "startup-sequence", "file");
+    }
+
+    // Finalize
+    fs.importer.updateChecksums();
+
+    // Print some debug information about the volume
+    if (FS_DEBUG) fs.dumpState();
+
+    // Check file system integrity
+    if (FS_DEBUG) fs.doctor.xray(true, std::cout, false);
+
+    // Write back
+    fs.flush();
+
+    /*
     // Create a new file system
     auto dev = make_unique<Device>(Diameter::INCH_35, hd ? Density::HD : Density::DD);
     auto volume = FileSystemFactory::createLowLevel(*dev, Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
@@ -80,6 +116,7 @@ EXEFile::finalizeRead()
     // Convert the volume into an ADF
     // adf.init(volume);
     adf = *ADFFactory::make(*volume);
+    */
 }
 
 }

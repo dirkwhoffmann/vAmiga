@@ -10,7 +10,6 @@
 #include "config.h"
 #include "HardDrive.h"
 #include "Emulator.h"
-#include "FileSystemFactory.h"
 #include "MediaFile.h"
 #include "HDFFactory.h"
 #include "HDZFactory.h"
@@ -368,10 +367,12 @@ HardDrive::isBootable()
 {
     try {
 
-        auto dev = make_unique<Device>(getGeometry());
-        auto fs = FileSystemFactory::fromHardDrive(*dev, *this);
+        auto fs = FileSystem(*this);
 
-        if (fs->exists("s/startup-sequence")) {
+        // auto dev = make_unique<Device>(getGeometry());
+        // auto fs = FileSystemFactory::fromHardDrive(*dev, *this);
+
+        if (fs.exists("s/startup-sequence")) {
 
             debug(HDR_DEBUG, "Bootable drive\n");
             return true;
@@ -465,6 +466,8 @@ HardDrive::_dump(Category category, std::ostream &os) const
     
     if (category == Category::Volumes) {
 
+        // REACTIVATE ASAP (when Partition implements the BlockDevice protocol)
+        /*
         for (isize i = 0; i < isize(ptable.size()); i++) {
 
             auto dev = make_unique<Device>(getGeometry());
@@ -481,6 +484,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
             auto fs = FileSystemFactory::fromHardDrive(*dev, *this, i);
             fs->dumpProps(os);
         }
+        */
     }
     
     if (category == Category::Partitions) {
