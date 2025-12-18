@@ -94,7 +94,7 @@
 #include "FSImporter.h"
 #include "FSExporter.h"
 #include "DeviceError.h"
-#include "Device.h"
+#include "BlockDevice.h"
 #include "utl/abilities/Loggable.h"
 
 namespace vamiga {
@@ -170,9 +170,7 @@ public:
     FileSystem(const FileSystem &fs) = delete;
     FileSystem& operator=(const FileSystem&) = delete;
 
-    [[deprecated]] bool isInitialized() const noexcept;
     bool isFormatted() const noexcept;
-
 
 
     //

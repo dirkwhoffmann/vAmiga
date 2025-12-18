@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FSDescriptor.h"
-#include "Device.h"
+#include "BlockDevice.h"
 #include "FSError.h"
 #include "utl/io.h"
 
@@ -25,10 +25,12 @@ FSDescriptor::FSDescriptor(Diameter dia, Density den, FSFormat dos)
     init(dia, den, dos);
 }
 
+/*
 FSDescriptor::FSDescriptor(const Device &device, FSFormat dos)
 {
     init(device.getGeometry(), dos);
 }
+*/
 
 FSDescriptor::FSDescriptor(const GeometryDescriptor &geometry, FSFormat dos)
 {

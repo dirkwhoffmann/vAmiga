@@ -13,7 +13,7 @@
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSExtension.h"
-#include "Device.h"
+#include "BlockDevice.h"
 #include <iostream>
 #include <ranges>
 #include <unordered_set>
@@ -26,7 +26,7 @@ class FSCache final : public FSExtension {
 
 private:
 
-    // The underlying block device
+    // The underlying "physical" device
     BlockView &dev;
 
     // File system capacity in blocks

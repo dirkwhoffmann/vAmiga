@@ -47,7 +47,7 @@ struct FSDescriptor {
     // Initializing
     FSDescriptor() { };
     FSDescriptor(isize numBlocks, FSFormat dos);
-    FSDescriptor(const class Device &device, FSFormat dos);
+    // FSDescriptor(const class Device &device, FSFormat dos);
     FSDescriptor(const GeometryDescriptor &geometry, FSFormat dos);
     FSDescriptor(const PartitionDescriptor &des);
     FSDescriptor(Diameter dia, Density den, FSFormat dos);

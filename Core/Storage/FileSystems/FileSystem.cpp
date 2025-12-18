@@ -61,12 +61,6 @@ FileSystem::FileSystem(BlockView &dev) : cache(*this, dev)
 }
 
 bool
-FileSystem::isInitialized() const noexcept
-{
-    return blocks() > 0;
-}
-
-bool
 FileSystem::isFormatted() const noexcept
 {
     // Check the DOS type

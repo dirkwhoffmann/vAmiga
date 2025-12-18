@@ -9,28 +9,83 @@
 
 #pragma once
 
-#include "BlockView.h"
-#include "DeviceDescriptors.h"
+#include "BlockVolume.h"
 
 namespace vamiga {
 
+class BlockDevice : public BlockView {
+
+    virtual isize numVolumes() const = 0;
+    virtual BlockVolume &volume(isize nr) = 0;
+};
+
+/*
+namespace brainstorm {
+
+class BlockView {
+
+public:
+
+    virtual ~BlockView() = default;
+
+    virtual isize capacity() const = 0;
+    virtual isize bsize() const = 0;
+
+    virtual void readBlock(isize nr, u8 *dst) = 0;
+    virtual void writeBlock(isize nr, const u8 *src) = 0;
+};
+
+class TrackView {
+
+public:
+
+    virtual ~TrackView() = default;
+
+    virtual isize numTracks() const = 0;
+
+    virtual void readTrack(isize nr, u8 *dst) = 0;
+    virtual void writeTrack(isize nr, const u8 *src) = 0;
+};
+
+class Volume : BlockView {
+
+    string name;
+    string description;
+};
+
+class Device : BlockView {
+
+    string name;
+    string description;
+
+    std::vector<Volume> volumes;
+};
+
+
+class BlockDevice : public Device, public BlockView {
+
+};
+
+class TrackDevice: public BlockView, public TrackView {
+
+    virtual isize numPartitions() = 0;
+    virtual class Partition &partition(isize nr) = 0;
+};
+
 class Partition : public BlockView {
 
-    class Device &device;
+    TrackDevice &device;
     PartitionDescriptor descriptor {};
 
 public:
 
-    Partition(Device &dev, const PartitionDescriptor &des) : device(dev), descriptor(des) { }
-
-    isize capacity() const override;
-    isize bsize() const override;
-    void freeBlock(isize nr) override;
-    Buffer<u8> *readBlock(isize nr) override;
-    Buffer<u8> *ensureBlock(isize nr) override;
-    void writeBlock(isize nr, const Buffer<u8> &buffer) override;
+    Partition(TrackDevice &dev, const PartitionDescriptor &des) : device(dev), descriptor(des) { }
 };
 
+}
+*/
+
+/*
 class Device : public BlockView {
 
     // Physical geometry of this device
@@ -67,5 +122,6 @@ public:
     Buffer<u8> *ensureBlock(isize nr) override;
     void writeBlock(isize nr, const Buffer<u8> &buffer) override;
 };
+*/
 
 }

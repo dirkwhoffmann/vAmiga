@@ -130,7 +130,7 @@ struct PartitionDescriptor : SerializableStruct
     GeometryDescriptor geometry() const;
 
     // Returns the physical block number for a logical partition block
-    isize translate(isize block);
+    isize translate(isize block) const noexcept;
 
     // Prints debug information
     void dump() const;

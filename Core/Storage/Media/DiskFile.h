@@ -10,7 +10,7 @@
 #pragma once
 
 #include "AnyFile.h"
-#include "Device.h"
+#include "BlockDevice.h"
 
 namespace vamiga {
 

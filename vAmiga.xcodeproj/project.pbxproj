@@ -91,8 +91,8 @@
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503E869E2EEE9D6E00ED891D /* BlockView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockView.cpp */; };
 		503E869F2EEE9D6E00ED891D /* BlockView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockView.cpp */; };
-		503E86A22EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
-		503E86A32EEEBBF100ED891D /* Device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* Device.cpp */; };
+		503E86A22EEEBBF100ED891D /* BlockDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */; };
+		503E86A32EEEBBF100ED891D /* BlockDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */; };
 		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
@@ -208,6 +208,8 @@
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
 		508AC36927B7F6FD006AD2E7 /* HdController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508AC36727B7F6FC006AD2E7 /* HdController.cpp */; };
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
+		508FDD9E2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */; };
+		508FDD9F2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
@@ -735,8 +737,8 @@
 		5039924625B219FC0084B808 /* CoreError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreError.h; sourceTree = "<group>"; };
 		503E869C2EEE9D5C00ED891D /* BlockView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockView.h; sourceTree = "<group>"; };
 		503E869D2EEE9D6A00ED891D /* BlockView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockView.cpp; sourceTree = "<group>"; };
-		503E86A02EEEBBE800ED891D /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
-		503E86A12EEEBBEF00ED891D /* Device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Device.cpp; sourceTree = "<group>"; };
+		503E86A02EEEBBE800ED891D /* BlockDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockDevice.h; sourceTree = "<group>"; };
+		503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockDevice.cpp; sourceTree = "<group>"; };
 		503E86A42EEF15A300ED891D /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4B02EE00FE400637C95 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		503FC4B42EE04C2B00637C95 /* Integers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Integers.h; sourceTree = "<group>"; };
@@ -925,6 +927,8 @@
 		508C6BCF23F7E77500D8938F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
+		508FDD9C2EF40D2B00FDBC32 /* BlockVolume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockVolume.h; sourceTree = "<group>"; };
+		508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockVolume.cpp; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508FDE7221EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1509,8 +1513,10 @@
 			isa = PBXGroup;
 			children = (
 				503E86A42EEF15A300ED891D /* CMakeLists.txt */,
-				503E86A02EEEBBE800ED891D /* Device.h */,
-				503E86A12EEEBBEF00ED891D /* Device.cpp */,
+				503E86A02EEEBBE800ED891D /* BlockDevice.h */,
+				503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */,
+				508FDD9C2EF40D2B00FDBC32 /* BlockVolume.h */,
+				508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */,
 				503E869C2EEE9D5C00ED891D /* BlockView.h */,
 				503E869D2EEE9D6A00ED891D /* BlockView.cpp */,
 			);
@@ -3026,7 +3032,7 @@
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
 				503FC4F22EE1BA7C00637C95 /* Clock.cpp in Sources */,
 				505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */,
-				503E86A32EEEBBF100ED891D /* Device.cpp in Sources */,
+				503E86A32EEEBBF100ED891D /* BlockDevice.cpp in Sources */,
 				50C8C44A2607396200F4E012 /* Layer.swift in Sources */,
 				5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
@@ -3229,6 +3235,7 @@
 				505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */,
 				501C514827C2AD8C00DF1DD5 /* DiskExporter.swift in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
+				508FDD9E2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */,
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				505F457A2E96A2B200418105 /* NSImage.swift in Sources */,
@@ -3291,6 +3298,7 @@
 				50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */,
 				50BCB9A82EE2F347000C53CF /* Parser.cpp in Sources */,
 				50672CC12946100F004113F5 /* DebuggerConsole.cpp in Sources */,
+				508FDD9F2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */,
 				501B001A2C63589500749664 /* GuardList.cpp in Sources */,
 				50FC04F627DA1A8F00C3E566 /* AudioPort.cpp in Sources */,
 				50FC04DA27DA1A0000C3E566 /* Console.cpp in Sources */,
@@ -3336,7 +3344,7 @@
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
 				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50E79D3E2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
-				503E86A22EEEBBF100ED891D /* Device.cpp in Sources */,
+				503E86A22EEEBBF100ED891D /* BlockDevice.cpp in Sources */,
 				50BCB9AB2EE2FA11000C53CF /* DeviceError.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,

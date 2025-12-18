@@ -164,7 +164,7 @@ PartitionDescriptor::geometry() const {
 }
 
 isize
-PartitionDescriptor::translate(isize block)
+PartitionDescriptor::translate(isize block) const noexcept
 {
     assert(block >= 0 && block < numBlocks());
     return lowCyl * heads * sectors + block;

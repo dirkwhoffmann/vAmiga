@@ -7,11 +7,12 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "Device.h"
+#include "BlockDevice.h"
 #include "Media.h"
 
 namespace vamiga {
 
+/*
 isize
 Partition::capacity() const
 {
@@ -134,5 +135,6 @@ Device::writeBlock(isize nr, const Buffer<u8> &buffer)
     auto *block = ensureBlock(nr);
     *block = buffer;
 }
+*/
 
 }
