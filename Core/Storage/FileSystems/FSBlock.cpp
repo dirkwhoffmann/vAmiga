@@ -625,7 +625,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = fs->cache[1].data();
+    auto *p = fs->cache[1].data();
 
     for (isize i = 0; i < bsize() / 4; i++) {
 

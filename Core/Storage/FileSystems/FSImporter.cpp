@@ -41,8 +41,8 @@ FSImporter::importVolume(const u8 *src, isize size)
         if (FSBlockType type = fs.predictType((Block)i, data); type != FSBlockType::EMPTY) {
 
             // Create new block
-            storage[i].init(type);
-            storage[i].importBlock(data, traits.bsize);
+            cache.modify(Block(i)).init(type);
+            cache.modify(Block(i)).importBlock(data, traits.bsize);
         }
     }
 
@@ -147,7 +147,7 @@ FSImporter::importBlock(Block nr, const fs::path &path)
 void
 FSImporter::updateChecksums() noexcept
 {
-    storage.updateChecksums();
+    cache.updateChecksums();
 }
 
 }

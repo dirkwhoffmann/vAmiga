@@ -738,25 +738,25 @@ FSDoctor::ascii(Block nr, isize offset, isize len) const noexcept
 {
     assert(offset + len <= traits.bsize);
 
-    return  utl::createAscii(storage[nr].data() + offset, len);
+    return  utl::createAscii(cache[nr].data() + offset, len);
 }
 
 void
 FSDoctor::createUsageMap(u8 *buffer, isize len) const
 {
-    storage.createUsageMap(buffer, len);
+    cache.createUsageMap(buffer, len);
 }
 
 void
 FSDoctor::createAllocationMap(u8 *buffer, isize len) const
 {
-    storage.createAllocationMap(buffer, len);
+    cache.createAllocationMap(buffer, len);
 }
 
 void
 FSDoctor::createHealthMap(u8 *buffer, isize len) const
 {
-    storage.createHealthMap(buffer, len);
+    cache.createHealthMap(buffer, len);
 }
 
 isize
@@ -768,7 +768,7 @@ FSDoctor::nextBlockOfType(FSBlockType type, Block after) const
 
     do {
         result = (result + 1) % fs.blocks();
-        if (storage.getType(Block(result)) == type) return result;
+        if (cache.getType(Block(result)) == type) return result;
 
     } while (result != isize(after));
 

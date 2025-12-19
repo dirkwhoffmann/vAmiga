@@ -332,7 +332,7 @@ FSCache::flush(Block nr)
 {
     if (dirty.contains(nr)) {
 
-        storage.at(nr).flush();
+        modify(nr).flush();
         dirty.erase(nr);
     }
 }
@@ -340,7 +340,7 @@ FSCache::flush(Block nr)
 void
 FSCache::flush()
 {
-    debug(FS_DEBUG, "Flushing %ld dirty blocks\n", dirty.size());
+    debug(FS_DEBUG, "Flushing %zd dirty blocks\n", dirty.size());
 
     for (auto block: dirty) flush(block);
 }

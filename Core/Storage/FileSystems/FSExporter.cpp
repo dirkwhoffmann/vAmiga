@@ -77,9 +77,9 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *
     std::memset(dst, 0, size);
 
     // Export all blocks
-    for (auto &block: storage.keys(first, last)) {
+    for (auto &block: cache.keys(first, last)) {
 
-        storage.read(block)->exportBlock(dst + (block - first) * traits.bsize, traits.bsize);
+        cache.read(block)->exportBlock(dst + (block - first) * traits.bsize, traits.bsize);
     }
 
     debug(FS_DEBUG, "Success\n");

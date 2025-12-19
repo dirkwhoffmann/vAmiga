@@ -159,7 +159,7 @@ public:
     */
 
     // Operator overload
-    FSBlock &operator[](size_t nr) { return at(Block(nr)); }
+    // FSBlock &operator[](size_t nr) { return at(Block(nr)); }
     const FSBlock &operator[](size_t nr) const { return fetch(Block(nr)); }
 
     // Wipes out a block (makes it an empty block)

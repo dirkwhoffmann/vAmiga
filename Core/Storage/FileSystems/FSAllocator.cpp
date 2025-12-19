@@ -61,7 +61,7 @@ FSAllocator::allocatable(isize count) const noexcept
 
     while (count > 0) {
 
-        if (storage.getType(Block(i)) == FSBlockType::EMPTY) {
+        if (cache.getType(Block(i)) == FSBlockType::EMPTY) {
             if (--count == 0) break;
         }
 
@@ -153,7 +153,7 @@ FSAllocator::allocate(isize count, std::vector<Block> &result, std::vector<Block
 void
 FSAllocator::deallocateBlock(Block nr)
 {
-    storage[nr].init(FSBlockType::EMPTY);
+    cache.modify(nr).init(FSBlockType::EMPTY);
     markAsFree(nr);
 }
 

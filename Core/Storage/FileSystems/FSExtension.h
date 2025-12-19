@@ -20,7 +20,7 @@ public:
 
     class FileSystem &fs;
     const FSTraits &traits;
-    class FSCache &storage;
+    class FSCache &cache;
     class FSDoctor &doctor;
 
     explicit FSExtension(FileSystem& fs);

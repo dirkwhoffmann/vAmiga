@@ -30,22 +30,22 @@ FileSystem::format(FSFormat dos, string name){
     assert(rootBlock > 0);
 
     // Create boot blocks
-    cache[0].init(FSBlockType::BOOT);
-    cache[1].init(FSBlockType::BOOT);
+    cache.modify(0).init(FSBlockType::BOOT);
+    cache.modify(1).init(FSBlockType::BOOT);
 
     // Wipe out all other blocks
     for (isize i = 2; i < traits.blocks; i++) {
-        cache[i].init(FSBlockType::EMPTY);
+        modify(Block(i)).init(FSBlockType::EMPTY);
     }
 
     // Create the root block
-    cache[rootBlock].init(FSBlockType::ROOT);
+    modify(rootBlock).init(FSBlockType::ROOT);
 
     // Create bitmap blocks
     for (auto& ref : bmBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
-        cache[ref].init(FSBlockType::BITMAP);
+        cache.modify(ref).init(FSBlockType::BITMAP);
     }
 
     // Add bitmap extension blocks
@@ -53,13 +53,13 @@ FileSystem::format(FSFormat dos, string name){
     for (auto &ref : bmExtBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        cache[ref].init(FSBlockType::BITMAP_EXT);
-        cache[pred].setNextBmExtBlockRef(ref);
+        modify(ref).init(FSBlockType::BITMAP_EXT);
+        modify(pred).setNextBmExtBlockRef(ref);
         pred = ref;
     }
 
     // Add all bitmap block references
-    cache[rootBlock].addBitmapBlockRefs(bmBlocks);
+    modify(rootBlock).addBitmapBlockRefs(bmBlocks);
 
     // Mark free blocks as free in the bitmap block
     // TODO: SPEED THIS UP
@@ -71,11 +71,11 @@ FileSystem::format(FSFormat dos, string name){
     if (name != "") setName(name);
 
     // Rectify checksums
-    cache[0].updateChecksum();
-    cache[1].updateChecksum();
-    cache[rootBlock].updateChecksum();
-    for (auto& ref : bmBlocks) { cache[ref].updateChecksum(); }
-    for (auto& ref : bmExtBlocks) { cache[ref].updateChecksum(); }
+    modify(0).updateChecksum();
+    modify(1).updateChecksum();
+    modify(rootBlock).updateChecksum();
+    for (auto& ref : bmBlocks) { modify(ref).updateChecksum(); }
+    for (auto& ref : bmExtBlocks) { modify(ref).updateChecksum(); }
 
     // Set the current directory
     current = rootBlock;
@@ -96,8 +96,8 @@ FileSystem::makeBootable(BootBlockId id)
 {
     assert(cache.getType(0) == FSBlockType::BOOT);
     assert(cache.getType(1) == FSBlockType::BOOT);
-    cache[0].writeBootBlock(id, 0);
-    cache[1].writeBootBlock(id, 1);
+    modify(0).writeBootBlock(id, 0);
+    modify(1).writeBootBlock(id, 1);
 }
 
 void
@@ -113,11 +113,11 @@ FileSystem::killVirus()
         traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
 
         if (id != BootBlockId::NONE) {
-            cache[0].writeBootBlock(id, 0);
-            cache[1].writeBootBlock(id, 1);
+            modify(0).writeBootBlock(id, 0);
+            modify(1).writeBootBlock(id, 1);
         } else {
-            std::memset(cache[0].data() + 4, 0, traits.bsize - 4);
-            std::memset(cache[1].data(), 0, traits.bsize);
+            std::memset(modify(0).data() + 4, 0, traits.bsize - 4);
+            std::memset(modify(1).data(), 0, traits.bsize);
         }
     }
 }
@@ -450,8 +450,8 @@ FileSystem::newUserDirBlock(const FSName &name)
 {
     Block nr = allocator.allocate();
 
-    cache[nr].init(FSBlockType::USERDIR);
-    cache[nr].setName(name);
+    modify(nr).init(FSBlockType::USERDIR);
+    modify(nr).setName(name);
     return at(nr);
 }
 
@@ -460,8 +460,8 @@ FileSystem::newFileHeaderBlock(const FSName &name)
 {
     Block nr = allocator.allocate();
 
-    cache[nr].init(FSBlockType::FILEHEADER);
-    cache[nr].setName(name);
+    modify(nr).init(FSBlockType::FILEHEADER);
+    modify(nr).setName(name);
     return at(nr);
 }
 
@@ -470,8 +470,8 @@ FileSystem::addFileListBlock(Block at, Block head, Block prev)
 {
     if (auto *prevBlock = read(prev); prevBlock) {
 
-        cache[at].init(FSBlockType::FILELIST);
-        cache[at].setFileHeaderRef(head);
+        modify(at).init(FSBlockType::FILELIST);
+        modify(at).setFileHeaderRef(head);
 
         prevBlock->setNextListBlockRef(at);
     }
@@ -482,9 +482,9 @@ FileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 {
     if (auto *prevBlock = read(prev); prevBlock) {
 
-        cache[at].init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
-        cache[at].setDataBlockNr((Block)id);
-        cache[at].setFileHeaderRef(head);
+        modify(at).init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
+        modify(at).setDataBlockNr((Block)id);
+        modify(at).setFileHeaderRef(head);
         prevBlock->setNextDataBlockRef(at);
     }
 }
