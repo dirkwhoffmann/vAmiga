@@ -79,7 +79,7 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *
     // Export all blocks
     for (auto &block: cache.keys(first, last)) {
 
-        cache.read(block)->exportBlock(dst + (block - first) * traits.bsize, traits.bsize);
+        cache.tryFetch(block)->exportBlock(dst + (block - first) * traits.bsize, traits.bsize);
     }
 
     debug(FS_DEBUG, "Success\n");
@@ -104,7 +104,7 @@ FSExporter::exportBlocks(Block first, Block last, const fs::path &path) const
 
     for (Block i = first; i <= last; i++) {
 
-        auto *data = fs.at(i).data();
+        auto *data = fs.fetch(i).data();
         stream.write((const char *)data, traits.bsize);
     }
 
@@ -124,7 +124,7 @@ FSExporter::exportBlocks(const fs::path &path) const
 void
 FSExporter::exportFiles(Block nr, const fs::path &path, bool recursive, bool contents) const
 {
-    const FSBlock *block = fs.read(nr);
+    auto *block = fs.tryFetch(nr);
     exportFiles(*block, path, recursive, contents);
 
 }

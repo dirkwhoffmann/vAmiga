@@ -152,7 +152,7 @@ PosixFileSystem::close(HandleRef ref)
     handles.erase(ref);
 
     // Attempt deletion after all references are gone
-    tryReclaim(fs.at(header));
+    tryReclaim(fs.fetch(header));
 }
 
 void
@@ -247,7 +247,7 @@ isize
 PosixFileSystem::lseek(HandleRef ref, isize offset, u16 whence)
 {
     auto &handle  = getHandle(ref);
-    auto &node    = fs.at(handle.headerBlock);
+    auto &node    = fs.fetch(handle.headerBlock);
     auto fileSize = isize(node.getFileSize());
 
     isize newOffset;
@@ -304,7 +304,7 @@ isize
 PosixFileSystem::read(HandleRef ref, std::span<u8> buffer)
 {
     auto &handle = getHandle(ref);
-    auto &node   = fs.at(handle.headerBlock);
+    auto &node   = fs.fetch(handle.headerBlock);
     auto &meta   = ensureMeta(node.nr);
 
     // Cache the file if necessary
@@ -329,7 +329,7 @@ isize
 PosixFileSystem::write(HandleRef ref, std::span<const u8> buffer)
 {
     auto &handle = getHandle(ref);
-    auto &node   = fs.at(handle.headerBlock);
+    auto &node   = fs.modify(handle.headerBlock);
     auto &meta   = ensureMeta(node.nr);
 
     // Cache the file if necessary

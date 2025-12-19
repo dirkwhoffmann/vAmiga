@@ -139,9 +139,9 @@ public:
 
 
 
-    FSBlock *read(Block nr) noexcept;
-    FSBlock *read(Block nr, FSBlockType type) noexcept;
-    FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
+    [[deprecated]] FSBlock *read(Block nr) noexcept;
+    [[deprecated]] FSBlock *read(Block nr, FSBlockType type) noexcept;
+    [[deprecated]] FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
     /*
     const FSBlock *read(Block nr) const noexcept;
     const FSBlock *read(Block nr, FSBlockType type) const noexcept;
@@ -149,9 +149,9 @@ public:
     */
 
     // Returns a reference to a stored block
-    FSBlock &at(Block nr);
-    FSBlock &at(Block nr, FSBlockType type);
-    FSBlock &at(Block nr, std::vector<FSBlockType> types);
+    [[deprecated]] FSBlock &at(Block nr);
+    [[deprecated]] FSBlock &at(Block nr, FSBlockType type);
+    [[deprecated]] FSBlock &at(Block nr, std::vector<FSBlockType> types);
     /*
     const FSBlock &at(Block nr) const;
     const FSBlock &at(Block nr, FSBlockType type) const;

@@ -136,7 +136,7 @@ FSImporter::importBlock(Block nr, const fs::path &path)
         throw IOError(IOError::FILE_CANT_READ, path);
     }
 
-    auto *data = fs.at(nr).data();
+    auto *data = fs.modify(nr).data();
     stream.read((char *)data, traits.bsize);
 
     if (!stream) {

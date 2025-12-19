@@ -87,7 +87,7 @@ FSAllocator::allocate()
         }
     }
 
-    fs.read(i)->init(FSBlockType::UNKNOWN); // ->type = FSBlockType::UNKNOWN;
+    fs.tryModify(i)->init(FSBlockType::UNKNOWN); // ->type = FSBlockType::UNKNOWN;
     markAsAllocated(i);
     ap = (i + 1) % numBlocks;
     return i;
@@ -127,7 +127,7 @@ FSAllocator::allocate(isize count, std::vector<Block> &result, std::vector<Block
 
         if (fs.isEmpty(i)) {
 
-            fs.read(i)->type = FSBlockType::UNKNOWN;
+            fs.tryModify(i)->type = FSBlockType::UNKNOWN;
             result.push_back(i);
             count--;
         }
@@ -248,8 +248,8 @@ FSAllocator::allocateFileBlocks(isize bytes,
     }
 
     // Rectify checksums
-    for (auto &it : fs.bmBlocks) fs.at(it).updateChecksum();
-    for (auto &it : fs.bmExtBlocks) fs.at(it).updateChecksum();
+    for (auto &it : fs.bmBlocks) fs.modify(it).updateChecksum();
+    for (auto &it : fs.bmExtBlocks) fs.modify(it).updateChecksum();
 }
 
 bool
@@ -282,7 +282,7 @@ FSAllocator::locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
-    FSBlock *bm = (bmNr < (isize)fs.bmBlocks.size()) ? fs.read(fs.bmBlocks[bmNr], FSBlockType::BITMAP) : nullptr;
+    auto *bm = (bmNr < (isize)fs.bmBlocks.size()) ? fs.tryModify(fs.bmBlocks[bmNr], FSBlockType::BITMAP) : nullptr;
     if (!bm) {
         debug(FS_DEBUG, "Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
         return nullptr;
@@ -352,7 +352,7 @@ FSAllocator::serializeBitmap() const
     isize j = 0;
     for (auto &it : fs.bmBlocks) {
 
-        if (auto *bm = fs.read(it, FSBlockType::BITMAP); bm) {
+        if (auto *bm = fs.tryFetch(it, FSBlockType::BITMAP)) {
 
             auto *data = bm->data();
             for (isize i = 4; i < traits.bsize; i += 4) {

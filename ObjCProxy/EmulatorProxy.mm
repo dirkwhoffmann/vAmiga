@@ -1526,7 +1526,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
-    if (auto *ptr = [self fs]->read(Block(block)); ptr && offset < 512) {
+    if (auto *ptr = [self fs]->tryFetch(Block(block)); ptr && offset < 512) {
         return ptr->data()[offset];
     }
     return 0;

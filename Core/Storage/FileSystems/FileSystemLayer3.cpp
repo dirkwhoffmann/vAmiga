@@ -17,7 +17,7 @@ FSBlock &
 FileSystem::parent(const FSBlock &node)
 {
     auto *ptr = parent(&node);
-    return ptr ? *ptr : at(node.nr);
+    return ptr ? *ptr : modify(node.nr);
 }
 
 const FSBlock &
@@ -29,7 +29,7 @@ FileSystem::parent(const FSBlock &node) const
 FSBlock *
 FileSystem::parent(const FSBlock *node) noexcept
 {
-    return node->isRoot() ? read(node->nr) : read(node->nr)->getParentDirBlock();
+    return node->isRoot() ? tryModify(node->nr) : tryModify(node->nr)->getParentDirBlock();
 }
 
 const FSBlock *
@@ -72,9 +72,9 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
     std::unordered_set<Block> visited;
 
     // Check for special tokens
-    if (name == "/")  return read(rootBlock);
-    if (name == "")   return read(root->nr);
-    if (name == ".")  return read(root->nr);
+    if (name == "/")  return tryModify(rootBlock);
+    if (name == "")   return tryModify(root->nr);
+    if (name == ".")  return tryModify(root->nr);
     if (name == "..") return parent(root);
 
     // TODO: USE SEARCHDIR
@@ -88,7 +88,7 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
         // Traverse the linked list until the item has been found
         while (ref && visited.find(ref) == visited.end())  {
 
-            auto *block = read(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
+            auto *block = tryModify(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
             if (block == nullptr) break;
 
             if (block->isNamed(name)) return block;
@@ -111,7 +111,7 @@ FileSystem::seekPtr(const FSBlock *root, const fs::path &name) noexcept
 {
     if (!root) return nullptr;
 
-    FSBlock *result = read(root->nr);
+    FSBlock *result = tryModify(root->nr);
     for (const auto &it : name) { if (result) { result = seekPtr(result, FSName(it)); } }
     return result;
 }
@@ -130,7 +130,7 @@ FileSystem::seekPtr(const FSBlock *root, const string &name) noexcept
     auto parts = utl::split(name, '/');
     if (!name.empty() && name[0] == '/') { parts.insert(parts.begin(), "/"); }
 
-    FSBlock *result = read(root->nr);
+    FSBlock *result = tryModify(root->nr);
     for (auto &it : parts) { if (result) { result = seekPtr(result, FSName(it)); } }
     return result;
 }
@@ -204,7 +204,7 @@ FileSystem::find(const FSBlock *root, const FSOpt &opt) const
 std::vector<Block>
 FileSystem::find(Block root, const FSOpt &opt) const
 {
-    return FSBlock::refs(find(read(root), opt));
+    return FSBlock::refs(find(tryFetch(root), opt));
 }
 
 std::vector<const FSBlock *>
@@ -280,7 +280,7 @@ FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
 std::vector<Block>
 FileSystem::find(Block root, const FSPattern &pattern) const
 {
-    return FSBlock::refs(find(read(root), pattern));
+    return FSBlock::refs(find(tryFetch(root), pattern));
 }
 
 std::vector<const FSBlock *>
@@ -349,7 +349,7 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 std::vector<Block>
 FileSystem::match(Block root, const FSPattern &pattern) const
 {
-    return FSBlock::refs(match(read(root), pattern));
+    return FSBlock::refs(match(tryFetch(root), pattern));
 }
 
 }

@@ -93,7 +93,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
 {
     using namespace utl;
 
-    FSBlock &p = fs.at(nr);
+    auto &p = fs.fetch(nr);
     auto *bdata = p.data();
 
     os << tab("Block");
@@ -242,7 +242,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
                 os << std::setfill(' ') << std::setw(2) << i << " -> ";
                 os << std::setfill(' ') << std::setw(4) << ref;
 
-                if (auto ptr = fs.read(ref); ptr) {
+                if (auto ptr = fs.tryFetch(ref)) {
                     os << " (" << ptr->getName().cpp_str() << ")";
                 }
             }
@@ -361,7 +361,7 @@ FSDoctor::xrayBitmap(std::ostream &os, bool strict)
 isize
 FSDoctor::xray(Block ref, bool strict) const
 {
-    return xray(fs.at(ref), strict);
+    return xray(fs.modify(ref), strict);
 }
 
 isize
@@ -385,7 +385,7 @@ FSDoctor::xray(FSBlock &node, bool strict) const
 FSBlockError
 FSDoctor::xray8(Block ref, isize pos, bool strict, optional<u8> &expected) const
 {
-    return xray8(fs.at(ref), pos, strict, expected);
+    return xray8(fs.modify(ref), pos, strict, expected);
 }
 
 
@@ -401,7 +401,7 @@ FSDoctor::xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) c
 FSBlockError
 FSDoctor::xray32(Block ref, isize pos, bool strict, optional<u32> &expected) const
 {
-    return xray32(fs.at(ref), pos, strict, expected);
+    return xray32(fs.modify(ref), pos, strict, expected);
 }
 
 FSBlockError
@@ -603,7 +603,7 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
 isize
 FSDoctor::xray(Block ref, bool strict, std::ostream &os) const
 {
-    return xray(fs.at(ref), strict, os);
+    return xray(fs.modify(ref), strict, os);
 }
 
 isize
@@ -695,7 +695,7 @@ FSDoctor::rectify(bool strict)
 void
 FSDoctor::rectify(Block ref, bool strict)
 {
-    rectify(fs.at(ref), strict);
+    rectify(fs.modify(ref), strict);
 }
 
 void

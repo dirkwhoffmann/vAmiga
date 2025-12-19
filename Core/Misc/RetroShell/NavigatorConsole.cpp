@@ -204,7 +204,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 Block
 NavigatorConsole::parseBlock(const string &argv)
 {
-    if (auto nr = Block(parseNum(argv)); fs->read(nr)) {
+    if (auto nr = Block(parseNum(argv)); fs->tryFetch(nr)) {
         return nr;
     }
     
@@ -222,7 +222,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
 {
     auto nr = argv.contains(token) ? Block(parseNum(argv.at(token))) : fallback;
     
-    if (!fs->read(nr)) {
+    if (!fs->tryFetch(nr)) {
         throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
     }
     return nr;
@@ -1207,7 +1207,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto nr = parseBlock(args, "nr", fs->pwd().nr);
                 auto opt = parseDumpOpts(args);
                 
-                if (auto ptr = fs->read(nr); ptr) {
+                if (auto *ptr = fs->tryModify(nr)) {
 
                     ptr->hexDump(os, opt);
                 }

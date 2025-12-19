@@ -84,7 +84,7 @@ FileSystem::format(FSFormat dos, string name){
 void
 FileSystem::setName(FSName name)
 {
-    if (auto *rb = cache.read(rootBlock, FSBlockType::ROOT); rb) {
+    if (auto *rb = tryModify(rootBlock, FSBlockType::ROOT); rb) {
 
         rb->setName(name);
         rb->updateChecksum();
@@ -161,7 +161,7 @@ FileSystem::searchdir(const FSBlock &at, const FSName &name)
     // Traverse the linked list until the item has been found
     while (ref && visited.find(ref) == visited.end())  {
 
-        auto *block = read(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
+        auto *block = tryModify(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
         if (block == nullptr) break;
 
         if (block->isNamed(name)) return block;
@@ -201,11 +201,11 @@ FileSystem::addToHashTable(const FSBlock &item)
 void
 FileSystem::addToHashTable(Block parent, Block ref)
 {
-    FSBlock *pp = read(parent);
+    FSBlock *pp = tryModify(parent);
     if (!pp) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (!pp->hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
-    FSBlock *pr = read(ref);
+    FSBlock *pr = tryModify(ref);
     if (!pr) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (!pr->isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
@@ -222,8 +222,8 @@ FileSystem::addToHashTable(Block parent, Block ref)
     } else {
 
         // Otherwise, put the reference at the end of the linked list
-        read(chain.back())->setNextHashRef(ref);
-        read(chain.back())->updateChecksum();
+        tryModify(chain.back())->setNextHashRef(ref);
+        tryModify(chain.back())->updateChecksum();
     }
 }
 
@@ -236,11 +236,11 @@ FileSystem::deleteFromHashTable(const FSBlock &item)
 void
 FileSystem::deleteFromHashTable(Block parent, Block ref)
 {
-    FSBlock *pp = read(parent);
+    FSBlock *pp = tryModify(parent);
     if (!pp) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (!pp->hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
-    FSBlock *pr = read(ref);
+    FSBlock *pr = tryModify(ref);
     if (!pr) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (!pr->isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
@@ -262,8 +262,8 @@ FileSystem::deleteFromHashTable(Block parent, Block ref)
 
         } else {
 
-            read(pred)->setNextHashRef(succ);
-            read(pred)->updateChecksum();
+            tryModify(pred)->setNextHashRef(succ);
+            tryModify(pred)->updateChecksum();
         }
     }
 }
@@ -426,7 +426,7 @@ FileSystem::replace(FSBlock &fhb,
         addDataBlock(dataBlocks[i], i + 1, fhb.nr, i == 0 ? fhb.nr : dataBlocks[i-1]);
 
         // Determine the list block managing this data block
-        FSBlock *lb = read((i < numRefs) ? fhb.nr : listBlocks[i / numRefs - 1]);
+        FSBlock *lb = tryModify((i < numRefs) ? fhb.nr : listBlocks[i / numRefs - 1]);
 
         // Link the data block
         lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
@@ -438,8 +438,8 @@ FileSystem::replace(FSBlock &fhb,
     }
 
     // Rectify checksums
-    for (auto &it : listBlocks) { at(it).updateChecksum(); }
-    for (auto &it : dataBlocks) { at(it).updateChecksum(); }
+    for (auto &it : listBlocks) { modify(it).updateChecksum(); }
+    for (auto &it : dataBlocks) { modify(it).updateChecksum(); }
     fhb.updateChecksum();
 
     return fhb;
@@ -452,7 +452,7 @@ FileSystem::newUserDirBlock(const FSName &name)
 
     modify(nr).init(FSBlockType::USERDIR);
     modify(nr).setName(name);
-    return at(nr);
+    return modify(nr);
 }
 
 FSBlock &
@@ -462,13 +462,13 @@ FileSystem::newFileHeaderBlock(const FSName &name)
 
     modify(nr).init(FSBlockType::FILEHEADER);
     modify(nr).setName(name);
-    return at(nr);
+    return modify(nr);
 }
 
 void
 FileSystem::addFileListBlock(Block at, Block head, Block prev)
 {
-    if (auto *prevBlock = read(prev); prevBlock) {
+    if (auto *prevBlock = tryModify(prev); prevBlock) {
 
         modify(at).init(FSBlockType::FILELIST);
         modify(at).setFileHeaderRef(head);
@@ -480,7 +480,7 @@ FileSystem::addFileListBlock(Block at, Block head, Block prev)
 void
 FileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 {
-    if (auto *prevBlock = read(prev); prevBlock) {
+    if (auto *prevBlock = tryModify(prev); prevBlock) {
 
         modify(at).init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
         modify(at).setDataBlockNr((Block)id);
@@ -492,7 +492,7 @@ FileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 isize
 FileSystem::addData(Block nr, const u8 *buf, isize size)
 {
-    FSBlock *block = read(nr);
+    auto *block = tryModify(nr);
     return block ? addData(*block, buf, size) : 0;
 }
 
@@ -556,7 +556,7 @@ FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSB
     std::vector<const FSBlock *> result;
     std::unordered_set<Block> visited;
 
-    for (auto block = read(node.nr); block != nullptr; block = next(block)) {
+    for (auto *block = tryFetch(node.nr); block != nullptr; block = next(block)) {
 
         // Break the loop if this block has been visited before
         if (visited.contains(block->nr)) break;
@@ -577,7 +577,7 @@ FileSystem::collect(const Block nr, std::function<const FSBlock *(FSBlock const 
     std::vector<Block> result;
     std::unordered_set<Block> visited;
 
-    for (auto block = read(nr); block; block = next(block)) {
+    for (auto *block = tryFetch(nr); block; block = next(block)) {
 
         // Break the loop if this block has been visited before
         if (visited.contains(block->nr)) break;
@@ -621,7 +621,7 @@ FileSystem::collectDataBlocks(Block ref) const
 {
     std::vector<Block> result;
 
-    if (auto *ptr = read(ref)) {
+    if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
     }
     return result;
@@ -643,7 +643,7 @@ FileSystem::collectListBlocks(const Block ref) const
 {
     std::vector<Block> result;
 
-    if (auto *ptr = read(ref)) {
+    if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
     }
     return result;
@@ -654,7 +654,7 @@ FileSystem::collectHashedBlocks(Block ref, isize bucket) const
 {
     std::vector<Block> result;
 
-    if (auto *ptr = read(ref)) {
+    if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectHashedBlocks(*ptr, bucket)) result.push_back(it->nr);
     }
     return result;
@@ -664,7 +664,7 @@ std::vector<const FSBlock *>
 FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
 {
     auto first = node.getHashRef((u32)bucket);
-    if (auto *ptr = read(first, { FSBlockType::USERDIR, FSBlockType::FILEHEADER }); ptr) {
+    if (auto *ptr = tryFetch(first, { FSBlockType::USERDIR, FSBlockType::FILEHEADER }); ptr) {
         return collect(*ptr, [&](auto *p) { return p->getNextHashBlock(); });
     } else {
         return {};
@@ -675,7 +675,7 @@ std::vector<Block>
 FileSystem::collectHashedBlocks(Block ref) const
 {
     std::vector<Block> result;
-    if (auto *ptr = read(ref)) {
+    if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectHashedBlocks(*ptr)) result.push_back(it->nr);
     }
     return result;

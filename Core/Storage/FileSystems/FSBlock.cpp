@@ -1261,7 +1261,7 @@ FSBlock *
 FSBlock::getParentDirBlock() const
 {
     Block nr = getParentDirRef();
-    return nr ? fs->read(nr) : nullptr;
+    return nr ? fs->tryModify(nr) : nullptr;
 }
 
 Block
@@ -1300,7 +1300,7 @@ FSBlock::setFileHeaderRef(Block ref)
 FSBlock *
 FSBlock::getFileHeaderBlock() const
 {
-    return fs->read(getFileHeaderRef(), FSBlockType::FILEHEADER);
+    return fs->tryModify(getFileHeaderRef(), FSBlockType::FILEHEADER);
 }
 
 Block
@@ -1338,7 +1338,7 @@ FSBlock *
 FSBlock::getNextHashBlock() const
 {
     Block nr = getNextHashRef();
-    return nr ? fs->read(nr) : nullptr;
+    return nr ? fs->tryModify(nr) : nullptr;
 }
 
 Block
@@ -1375,7 +1375,7 @@ FSBlock::setNextListBlockRef(Block ref)
 FSBlock *
 FSBlock::getNextListBlock() const
 {
-    return fs->read(getNextListBlockRef(), FSBlockType::FILELIST);
+    return fs->tryModify(getNextListBlockRef(), FSBlockType::FILELIST);
 }
 
 Block
@@ -1415,7 +1415,7 @@ FSBlock *
 FSBlock::getNextBmExtBlock() const
 {
     Block nr = getNextBmExtBlockRef();
-    return nr ? fs->read(nr, FSBlockType::BITMAP_EXT) : nullptr;
+    return nr ? fs->tryModify(nr, FSBlockType::BITMAP_EXT) : nullptr;
 }
 
 Block
@@ -1451,7 +1451,7 @@ FSBlock::setFirstDataBlockRef(Block ref)
 FSBlock *
 FSBlock::getFirstDataBlock() const
 {
-    if (auto *node = fs->read(getFirstDataBlockRef()); node->isData()) return node;
+    if (auto *node = fs->tryModify(getFirstDataBlockRef()); node->isData()) return node;
     return nullptr;
 }
 
@@ -1489,7 +1489,7 @@ FSBlock::setDataBlockRef(isize nr, Block ref)
 FSBlock *
 FSBlock::getDataBlock(isize nr) const
 {
-    if (auto *node = fs->read(getDataBlockRef(nr)); node->isData()) return node;
+    if (auto *node = fs->tryModify(getDataBlockRef(nr)); node->isData()) return node;
     return nullptr;
 }
 
@@ -1511,7 +1511,7 @@ FSBlock::setNextDataBlockRef(Block ref)
 FSBlock *
 FSBlock::getNextDataBlock() const
 {
-    if (auto *node = fs->read(getNextDataBlockRef()); node->isData()) return node;
+    if (auto *node = fs->tryModify(getNextDataBlockRef()); node->isData()) return node;
     return nullptr;
 }
 
@@ -1983,7 +1983,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
         for (isize i = 0; i < num; i++) {
 
             Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = fs->read(ref); dataBlock->isData()) { //} dataBlockPtr(ref)) {
+            if (FSBlock *dataBlock = fs->tryModify(ref); dataBlock->isData()) { //} dataBlockPtr(ref)) {
                 
                 isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;

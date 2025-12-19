@@ -310,7 +310,7 @@ FileSystem::bootBlockType() const noexcept
 FSAttr
 FileSystem::attr(Block nr) const
 {
-    return attr(at(nr));
+    return attr(fetch(nr));
 }
 
 FSAttr

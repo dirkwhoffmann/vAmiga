@@ -242,20 +242,20 @@ public:
 public:
 
     // Returns a block pointer or null if the block does not exist
-    FSBlock *read(Block nr) noexcept;
-    FSBlock *read(Block nr, FSBlockType type) noexcept;
-    FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
-    const FSBlock *read(Block nr) const noexcept;
-    const FSBlock *read(Block nr, FSBlockType type) const noexcept;
-    const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept;
+    [[deprecated]] FSBlock *read(Block nr) noexcept;
+    [[deprecated]] FSBlock *read(Block nr, FSBlockType type) noexcept;
+    [[deprecated]] FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
+    [[deprecated]] const FSBlock *read(Block nr) const noexcept;
+    [[deprecated]] const FSBlock *read(Block nr, FSBlockType type) const noexcept;
+    [[deprecated]] const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept;
 
     // Returns a reference to a stored block (throws on error)
-    FSBlock &at(Block nr);
-    FSBlock &at(Block nr, FSBlockType type);
-    FSBlock &at(Block nr, std::vector<FSBlockType> types);
-    const FSBlock &at(Block nr) const;
-    const FSBlock &at(Block nr, FSBlockType type) const;
-    const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
+    [[deprecated]] FSBlock &at(Block nr);
+    [[deprecated]] FSBlock &at(Block nr, FSBlockType type);
+    [[deprecated]] FSBlock &at(Block nr, std::vector<FSBlockType> types);
+    [[deprecated]] const FSBlock &at(Block nr) const;
+    [[deprecated]] const FSBlock &at(Block nr, FSBlockType type) const;
+    [[deprecated]] const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
 
     // Returns a pointer to a block with read permissions (maybe null)
     const FSBlock *tryFetch(Block nr) const noexcept { return cache.tryFetch(nr); }
@@ -438,8 +438,8 @@ private:
 public:
     
     // Returns the working directory
-    FSBlock &pwd() { return at(current); }
-    const FSBlock &pwd() const { return at(current); }
+    FSBlock &pwd() { return modify(current); }
+    const FSBlock &pwd() const { return fetch(current); }
 
     // Changes the working directory
     void cd(const FSName &name);
@@ -454,8 +454,8 @@ public:
 public:
 
     // Returns the root of the directory tree
-    FSBlock &root() { return at(rootBlock); }
-    const FSBlock &root() const { return at(rootBlock); }
+    FSBlock &root() { return modify(rootBlock); }
+    const FSBlock &root() const { return fetch(rootBlock); }
 
     // Returns the parent directory of an item
     FSBlock &parent(const FSBlock &block);
