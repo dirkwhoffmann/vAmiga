@@ -517,6 +517,12 @@ FSBlock::data() const
 }
 
 void
+FSBlock::invalidate()
+{
+    storage.markAsDirty(nr);
+}
+
+void
 FSBlock::flush()
 {
     if (!dataCache.empty()) {

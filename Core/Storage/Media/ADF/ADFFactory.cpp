@@ -40,9 +40,9 @@ ADFFactory::make(Diameter dia, Density den)
 std::unique_ptr<ADFFile>
 ADFFactory::make(const GeometryDescriptor &descr)
 {
-    auto blocks = descr.numBlocks();
+    auto bytes = descr.numBytes();
 
-    switch (blocks) {
+    switch (bytes) {
 
         case ADFFile::ADFSIZE_35_DD:
         case ADFFile::ADFSIZE_35_DD_81:
@@ -51,7 +51,7 @@ ADFFactory::make(const GeometryDescriptor &descr)
         case ADFFile::ADFSIZE_35_DD_84:
         case ADFFile::ADFSIZE_35_HD:
 
-            return std::make_unique<ADFFile>(blocks);
+            return std::make_unique<ADFFile>(bytes);
 
         default:
             break;

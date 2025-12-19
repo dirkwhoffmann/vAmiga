@@ -29,17 +29,11 @@ private:
     // The underlying volume
     Volume &dev;
 
-    // File system capacity in blocks
-    isize capacity = 0;
-
-    // Size of a single block in bytes
-    isize bsize = 512;
-
     // Cached blocks
-    std::unordered_map<Block, std::unique_ptr<FSBlock>> blocks;
+    mutable std::unordered_map<Block, std::unique_ptr<FSBlock>> blocks;
 
     // Dirty blocks
-    std::unordered_set<Block> dirty;
+    mutable std::unordered_set<Block> dirty;
 
 
     //
@@ -74,16 +68,16 @@ public:
 public:
 
     // Returns capacity information
-    isize numBlocks() const { return capacity; }
-    isize numBytes() const { return capacity * bsize; }
-    isize blockSize() const { return bsize; }
+    isize bsize() const { return dev.bsize(); }
+    isize capacity() const { return dev.capacity(); }
+    isize numBytes() const { return capacity() * bsize(); }
 
     // Reports usage information
-    isize freeBlocks() const { return numBlocks() - usedBlocks(); }
+    isize freeBlocks() const { return capacity() - usedBlocks(); }
     isize usedBlocks() const { return (isize)blocks.size(); }
-    isize freeBytes() const { return freeBlocks() * blockSize(); }
-    isize usedBytes() const { return usedBlocks() * blockSize(); }
-    double fillLevel() const { return numBlocks() ? double(100) * usedBlocks() / numBlocks() : 0; }
+    isize freeBytes() const { return freeBlocks() * bsize(); }
+    isize usedBytes() const { return usedBlocks() * bsize(); }
+    double fillLevel() const { return capacity() ? double(100) * usedBlocks() / capacity() : 0; }
     bool isEmpty() const { return usedBlocks() == 0; }
 
 
@@ -92,10 +86,12 @@ public:
     //
 
     // Returns an iterator for the block storage
+    /*
     std::unordered_map<Block, std::unique_ptr<FSBlock>>::iterator begin() { return blocks.begin(); }
     std::unordered_map<Block, std::unique_ptr<FSBlock>>::iterator end() { return blocks.end(); }
     std::unordered_map<Block, std::unique_ptr<FSBlock>>::const_iterator begin() const { return blocks.begin(); }
     std::unordered_map<Block, std::unique_ptr<FSBlock>>::const_iterator end() const { return blocks.end(); }
+    */
 
     // Returns a view for all keys
     auto keys() const { return std::views::keys(blocks); }
@@ -118,37 +114,52 @@ public:
     void setType(Block nr, FSBlockType type);
 
     // Caches a block (if not already cached)
-    FSBlock *cache(Block nr) noexcept;
+    FSBlock *cache(Block nr) const noexcept;
 
-    // Returns a block pointer or null if the block does not exist
+    // Returns a block pointer or null
+    const FSBlock *tryFetch(Block nr) const noexcept;
+    const FSBlock *tryFetch(Block nr, FSBlockType type) const noexcept;
+    const FSBlock *tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept;
+
+    // Returns a block reference (may throw)
+    const FSBlock &fetch(Block nr) const;
+    const FSBlock &fetch(Block nr, FSBlockType type) const;
+    const FSBlock &fetch(Block nr, std::vector<FSBlockType> types) const;
+
+
     FSBlock *read(Block nr) noexcept;
     FSBlock *read(Block nr, FSBlockType type) noexcept;
     FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
+    /*
     const FSBlock *read(Block nr) const noexcept;
     const FSBlock *read(Block nr, FSBlockType type) const noexcept;
     const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept;
+    */
 
     // Returns a reference to a stored block
     FSBlock &at(Block nr);
     FSBlock &at(Block nr, FSBlockType type);
     FSBlock &at(Block nr, std::vector<FSBlockType> types);
+    /*
     const FSBlock &at(Block nr) const;
     const FSBlock &at(Block nr, FSBlockType type) const;
     const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
+    */
 
     // Operator overload
     FSBlock &operator[](size_t nr) { return at(Block(nr)); }
-    const FSBlock &operator[](size_t nr) const { return at(Block(nr)); }
+    const FSBlock &operator[](size_t nr) const { return fetch(Block(nr)); }
 
     // Wipes out a block (makes it an empty block)
     void erase(Block nr);
 
 
     //
-    // Accessing blocks
+    // Caching
     //
 
     void markAsDirty(Block nr) { dirty.insert(nr); }
+
     void flush(Block nr);
     void flush();
 

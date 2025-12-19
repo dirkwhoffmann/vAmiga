@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,7 +31,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="567" height="262"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="567" height="262"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -82,7 +82,7 @@ DQ
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="biohazard" id="ekm-lV-scG"/>
                     </imageView>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ld-jG-eqj">
-                        <rect key="frame" x="168" y="188" width="76" height="16"/>
+                        <rect key="frame" x="167" y="187" width="76" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="File system:" id="gc3-ff-ssc">
                             <font key="font" metaFont="system"/>
@@ -91,7 +91,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UWG-a4-pwr">
-                        <rect key="frame" x="171" y="158" width="73" height="16"/>
+                        <rect key="frame" x="170" y="157" width="73" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Boot block:" id="2Qu-U5-9Ro">
                             <font key="font" metaFont="system"/>
@@ -100,7 +100,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bk4-pW-lcL">
-                        <rect key="frame" x="247" y="182" width="144" height="25"/>
+                        <rect key="frame" x="249" y="183" width="144" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="uZG-SW-zCC" id="QbF-ng-Wj5">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -118,7 +118,7 @@ DQ
                         </connections>
                     </popUpButton>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7h1-Go-WJE">
-                        <rect key="frame" x="182" y="218" width="62" height="16"/>
+                        <rect key="frame" x="181" y="217" width="62" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Capacity:" id="A3V-su-8Ka">
                             <font key="font" metaFont="system"/>
@@ -127,7 +127,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Te8-Jw-VT6">
-                        <rect key="frame" x="200" y="128" width="44" height="16"/>
+                        <rect key="frame" x="199" y="128" width="44" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Name:" id="c9h-fC-02z">
                             <font key="font" metaFont="system"/>
@@ -136,7 +136,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OhX-t4-1Nl">
-                        <rect key="frame" x="247" y="212" width="144" height="25"/>
+                        <rect key="frame" x="249" y="213" width="144" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="Lorem ipsum" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="BFP-74-zqx" id="G5N-8V-q7c">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -152,7 +152,7 @@ DQ
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CpZ-FY-Wlu">
-                        <rect key="frame" x="247" y="152" width="144" height="25"/>
+                        <rect key="frame" x="249" y="153" width="144" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="2d4-6U-5PB" id="jgQ-fj-CK2">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -174,7 +174,7 @@ DQ
                         </connections>
                     </popUpButton>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AdV-e1-wTY">
-                        <rect key="frame" x="416" y="218" width="65" height="16"/>
+                        <rect key="frame" x="416" y="217" width="65" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" enabled="NO" alignment="right" title="Cylinders:" id="vHR-e4-umT">
                             <font key="font" metaFont="system"/>
@@ -183,7 +183,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vmu-MR-emN">
-                        <rect key="frame" x="489" y="216" width="59" height="21"/>
+                        <rect key="frame" x="489" y="215" width="59" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="YTc-AX-HDQ">
                             <font key="font" metaFont="system"/>
@@ -192,7 +192,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ymh-8j-qfy">
-                        <rect key="frame" x="250" y="126" width="137" height="21"/>
+                        <rect key="frame" x="249" y="126" width="144" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="Empty" drawsBackground="YES" id="o5o-iR-Icb">
                             <font key="font" metaFont="system"/>
@@ -201,7 +201,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EZ2-lc-dFv">
-                        <rect key="frame" x="416" y="188" width="65" height="16"/>
+                        <rect key="frame" x="416" y="187" width="65" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" enabled="NO" alignment="right" title="Heads:" id="58K-CL-dF6">
                             <font key="font" metaFont="system"/>
@@ -210,7 +210,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MKB-kg-715">
-                        <rect key="frame" x="489" y="186" width="59" height="21"/>
+                        <rect key="frame" x="489" y="185" width="59" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="fv3-OX-GX5">
                             <font key="font" metaFont="system"/>
@@ -219,7 +219,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zFJ-kv-mai">
-                        <rect key="frame" x="416" y="158" width="65" height="16"/>
+                        <rect key="frame" x="416" y="157" width="65" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" enabled="NO" alignment="right" title="Sectors:" id="fAv-Bd-NeD">
                             <font key="font" metaFont="system"/>
@@ -228,7 +228,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rIf-rn-aW0">
-                        <rect key="frame" x="488" y="156" width="59" height="21"/>
+                        <rect key="frame" x="488" y="155" width="59" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="MRN-6I-6Nc">
                             <font key="font" metaFont="system"/>
@@ -237,7 +237,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SjR-gz-ebc">
-                        <rect key="frame" x="209" y="98" width="36" height="16"/>
+                        <rect key="frame" x="207" y="100" width="36" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Files:" id="2bB-Q4-9lY">
                             <font key="font" metaFont="system"/>
@@ -246,7 +246,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VUu-HE-1I5">
-                        <rect key="frame" x="250" y="70" width="305" height="14"/>
+                        <rect key="frame" x="250" y="73" width="305" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Path to import folder" id="yWS-RT-x0i">
                             <font key="font" metaFont="smallSystem"/>
@@ -255,7 +255,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a0p-kC-7pU">
-                        <rect key="frame" x="244" y="89" width="148" height="32"/>
+                        <rect key="frame" x="249" y="92" width="148" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Add folder..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yjm-UD-ANc">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

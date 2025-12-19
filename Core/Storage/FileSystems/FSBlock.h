@@ -125,7 +125,11 @@ public:
     u8 *data();
     const u8 *data() const;
 
-    // Writes back cache data to the block device
+
+    // Marks this block as dirty in the block cache
+    void invalidate();
+
+    // Writes the block back to the block device
     void flush();
 
     // Reads or writes a long word in Big Endian format

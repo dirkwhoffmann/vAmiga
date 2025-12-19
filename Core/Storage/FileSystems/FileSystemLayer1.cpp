@@ -21,7 +21,10 @@ FileSystem::typeOf(Block nr) const noexcept
 FSItemType
 FileSystem::typeOf(Block nr, isize pos) const noexcept
 {
-    return cache.read(nr) ? cache[nr].itemType(pos) : FSItemType::UNUSED;
+    if (auto *block = cache.tryFetch(nr)) {
+        return block->itemType(pos);
+    }
+    return FSItemType::UNUSED;
 }
 
 FSFormat
@@ -131,19 +134,19 @@ FileSystem::read(Block nr, std::vector<FSBlockType> types) noexcept
 const FSBlock *
 FileSystem::read(Block nr) const noexcept
 {
-    return cache.read(nr);
+    return cache.tryFetch(nr);
 }
 
 const FSBlock *
 FileSystem::read(Block nr, FSBlockType type) const noexcept
 {
-    return cache.read(nr, type);
+    return cache.tryFetch(nr, type);
 }
 
 const FSBlock *
 FileSystem::read(Block nr, std::vector<FSBlockType> types) const noexcept
 {
-    return cache.read(nr, types);
+    return cache.tryFetch(nr, types);
 }
 
 FSBlock &
@@ -167,19 +170,19 @@ FileSystem::at(Block nr, std::vector<FSBlockType> types)
 const FSBlock &
 FileSystem::at(Block nr) const
 {
-    return cache.at(nr);
+    return cache.fetch(nr);
 }
 
 const FSBlock &
 FileSystem::at(Block nr, FSBlockType type) const
 {
-    return cache.at(nr, type);
+    return cache.fetch(nr, type);
 }
 
 const FSBlock &
 FileSystem::at(Block nr, std::vector<FSBlockType> types) const
 {
-    return cache.at(nr, types);
+    return cache.fetch(nr, types);
 }
 
 void
@@ -197,7 +200,7 @@ FileSystem::operator[](size_t nr)
 const FSBlock &
 FileSystem::operator[](size_t nr) const
 {
-    return cache[nr];
+    return cache.fetch(Block(nr));
 }
 
 }

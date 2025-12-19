@@ -67,7 +67,7 @@ FileSystem::isFormatted() const noexcept
     if (traits.dos == FSFormat::NODOS) return false;
 
     // Check if the root block is present
-    if (!cache.read(rootBlock, FSBlockType::ROOT)) return false;
+    if (!cache.tryFetch(rootBlock, FSBlockType::ROOT)) return false;
 
     return true;
 }
@@ -255,7 +255,7 @@ FileSystem::dumpBlocks(std::ostream &os) const noexcept
 FSStat
 FileSystem::stat() const noexcept
 {
-    auto *rb = cache.read(rootBlock, FSBlockType::ROOT);
+    auto *rb = cache.tryFetch(rootBlock, FSBlockType::ROOT);
 
     FSStat result = {
 
@@ -265,7 +265,7 @@ FileSystem::stat() const noexcept
         .freeBytes  = cache.freeBytes(),
         .usedBlocks = cache.usedBlocks(),
         .usedBytes  = cache.usedBytes(),
-        .fill       = double(100) * cache.usedBlocks() / cache.numBlocks(),
+        .fill       = double(100) * cache.usedBlocks() / cache.capacity(),
 
         .name       = rb ? rb->getName() : FSName(""),
         .bDate      = rb ? rb->getCreationDate() : FSTime(),
@@ -331,13 +331,6 @@ FileSystem::attr(const FSBlock &fhd) const
 
     return result;
 }
-
-
-
-
-
-
-
 
 namespace require {
 

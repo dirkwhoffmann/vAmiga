@@ -7,6 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "FSCache.h"
 #include "FileSystem.h"
 #include "utl/io.h"
@@ -16,10 +17,7 @@ namespace vamiga {
 
 FSCache::FSCache(FileSystem &fs, Volume &dev) : FSExtension(fs), dev(dev) {
 
-    capacity = dev.capacity();
-    bsize = dev.bsize();
-
-    blocks.reserve(capacity);
+    blocks.reserve(capacity());
 };
 
 FSCache::~FSCache()
@@ -33,31 +31,12 @@ FSCache::dealloc()
     blocks.clear();
 }
 
-/*
-void
-FSCache::init(isize capacity, isize bsize)
-{
-    this->capacity = capacity;
-    this->bsize = bsize;
-
-    // Init the physical block storage
-    // fs.device.init(capacity, bsize);
-    assert(capacity == dev.capacity());
-    
-    // Remove all existing blocks
-    blocks.clear();
-
-    // Request a capacity change
-    blocks.reserve(capacity);
-}
-*/
-
 void
 FSCache::dump(std::ostream &os) const
 {
     using namespace utl;
 
-    os << tab("Capacity") << numBlocks() << " blocks (x " << bsize << " bytes)" << std::endl;
+    os << tab("Capacity") << capacity() << " blocks (x " << bsize() << " bytes)" << std::endl;
     os << tab("Hashed blocks") << blocks.size() << std::endl;
 }
 
@@ -82,21 +61,21 @@ FSCache::isEmpty(Block nr) const noexcept
 FSBlockType
 FSCache::getType(Block nr) const noexcept
 {
-    if (isize(nr) >= capacity) return FSBlockType::UNKNOWN;
+    if (isize(nr) >= capacity()) return FSBlockType::UNKNOWN;
     return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY;
 }
 
 void
 FSCache::setType(Block nr, FSBlockType type)
 {
-    if (isize(nr) >= capacity) throw FSError(FSError::FS_OUT_OF_RANGE);
+    if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
     blocks.at(nr)->init(type);
 }
 
 FSBlock *
-FSCache::cache(Block nr) noexcept
+FSCache::cache(Block nr) const noexcept
 {
-    if (isize(nr) >= capacity) return nullptr;
+    if (isize(nr) >= capacity()) return nullptr;
 
     // Look up the block in the cache and return it if already present
     // On a miss, reserve an entry with a placeholder value
@@ -105,7 +84,7 @@ FSCache::cache(Block nr) noexcept
 
     // Create the block cache entry
     auto block = std::make_unique<FSBlock>(&fs, nr);
-    block->dataCache.alloc(bsize);
+    block->dataCache.alloc(bsize());
 
     // Read block data from the underlying block device
     dev.readBlock(block->dataCache.ptr, nr);
@@ -118,29 +97,79 @@ FSCache::cache(Block nr) noexcept
     return it->second.get();
 }
 
+const FSBlock *
+FSCache::tryFetch(Block nr) const noexcept
+{
+    return cache(nr);
+}
+
+const FSBlock *
+FSCache::tryFetch(Block nr, FSBlockType type) const noexcept
+{
+    if (auto *ptr = tryFetch(nr); ptr) {
+
+        if (ptr->type == type) { return ptr; }
+    }
+    return nullptr;
+}
+
+const FSBlock *
+FSCache::tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept
+{
+    if (auto *ptr = tryFetch(nr); ptr) {
+
+        for (auto &type: types) if (ptr->type == type) { return ptr; }
+    }
+    return nullptr;
+}
+
+const FSBlock &
+FSCache::fetch(Block nr) const
+{
+    if (auto *result = tryFetch(nr)) return *result;
+
+    throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
+}
+
+const FSBlock &
+FSCache::fetch(Block nr, FSBlockType type) const
+{
+    if (auto *result = tryFetch(nr, type)) return *result;
+
+    if (tryFetch(nr)) {
+        throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+    } else {
+        throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
+    }
+}
+
+const FSBlock &
+FSCache::fetch(Block nr, std::vector<FSBlockType> types) const
+{
+    if (auto *result = tryFetch(nr, types); result) return *result;
+
+    if (tryFetch(nr)) {
+        throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+    } else {
+        throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
+    }
+}
+
+
+
 FSBlock *
 FSCache::read(Block nr) noexcept
 {
     return cache(nr);
-
-    /*
-    if (nr >= size_t(capacity)) return nullptr;
-
-    // Create the block if it does not yet exist
-    if (!blocks.contains(nr)) {
-        blocks.emplace(nr, std::make_unique<FSBlock>(&fs, nr, FSBlockType::EMPTY));
-    }
-
-    // Return a block reference
-    return blocks.at(nr).get();
-    */
 }
 
+/*
 const FSBlock *
 FSCache::read(Block nr) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr));
 }
+*/
 
 FSBlock *
 FSCache::read(Block nr, FSBlockType type) noexcept
@@ -162,6 +191,7 @@ FSCache::read(Block nr, std::vector<FSBlockType> types) noexcept
     return nullptr;
 }
 
+/*
 const FSBlock *
 FSCache::read(Block nr, FSBlockType type) const noexcept
 {
@@ -173,6 +203,7 @@ FSCache::read(Block nr, std::vector<FSBlockType> types) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr, types));
 }
+*/
 
 FSBlock &
 FSCache::at(Block nr)
@@ -206,6 +237,7 @@ FSCache::at(Block nr, std::vector<FSBlockType> types)
     }
 }
 
+/*
 const FSBlock &
 FSCache::at(Block nr) const
 {
@@ -223,6 +255,7 @@ FSCache::at(Block nr, std::vector<FSBlockType> types) const
 {
     return const_cast<const FSBlock &>(const_cast<FSCache *>(this)->at(nr, types));
 }
+*/
 
 void
 FSCache::erase(Block nr)
@@ -243,6 +276,8 @@ FSCache::flush(Block nr)
 void
 FSCache::flush()
 {
+    debug(FS_DEBUG, "Flushing %ld dirty blocks\n", dirty.size());
+
     for (auto block: dirty) flush(block);
 }
 
@@ -269,7 +304,7 @@ FSCache::createUsageMap(u8 *buffer, isize len) const
     pri[isize(FSBlockType::DATA_OFS)]     = 2;
     pri[isize(FSBlockType::DATA_FFS)]     = 2;
 
-    isize max = numBlocks();
+    isize max = capacity();
 
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = (u8)FSBlockType::UNKNOWN;
@@ -300,7 +335,7 @@ FSCache::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis)
     auto &unusedButAllocated = diagnosis.unusedButAllocated;
     auto &usedButUnallocated = diagnosis.usedButUnallocated;
 
-    isize max = numBlocks();
+    isize max = capacity();
 
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = 255;
@@ -326,7 +361,7 @@ FSCache::createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) con
 {
     auto &blockErrors = diagnosis.blockErrors;
 
-    isize max = numBlocks();
+    isize max = capacity();
 
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = 255;

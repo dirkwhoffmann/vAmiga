@@ -1118,8 +1118,8 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     // Check file system consistency
     if (FS_DEBUG) fs.doctor.xray(true, std::cout, false);
 
-    // Convert the file system into an ADF
-    // auto adf = ADFFactory::make(*volume);
+    // Force the ADF to update
+    fs.flush();
 
     // Insert the ADF
     swapDisk(*adf);
