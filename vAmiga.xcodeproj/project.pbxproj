@@ -929,6 +929,8 @@
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		508FDD9C2EF40D2B00FDBC32 /* BlockVolume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockVolume.h; sourceTree = "<group>"; };
 		508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockVolume.cpp; sourceTree = "<group>"; };
+		508FDDA02EF53BEF00FDBC32 /* primitives.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = primitives.h; sourceTree = "<group>"; };
+		508FDDA12EF53C5200FDBC32 /* Range.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508FDE7221EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1539,6 +1541,7 @@
 			children = (
 				50BCBDCF2EE9581C000C53CF /* common.h */,
 				50BCB99C2EE2C33B000C53CF /* types.h */,
+				508FDDA02EF53BEF00FDBC32 /* primitives.h */,
 				50BCB9902EE1C84C000C53CF /* abilities.h */,
 				50BCB9912EE1CC86000C53CF /* chrono.h */,
 				503FC4FB2EE1C49500637C95 /* concurrency.h */,
@@ -1548,6 +1551,7 @@
 				50BCB99A2EE229F6000C53CF /* support.h */,
 				50BCB9BB2EE447B3000C53CF /* wrappers.h */,
 				50BCB99B2EE2C32B000C53CF /* types */,
+				508FDDA22EF53C5D00FDBC32 /* primitives */,
 				503FC4BC2EE091B700637C95 /* abilities */,
 				503FC4E92EE1B96D00637C95 /* chrono */,
 				503FC4F82EE1C35100637C95 /* concurrency */,
@@ -2013,6 +2017,14 @@
 				50E2BE25240D417200155AE4 /* Moira */,
 			);
 			path = CPU;
+			sourceTree = "<group>";
+		};
+		508FDDA22EF53C5D00FDBC32 /* primitives */ = {
+			isa = PBXGroup;
+			children = (
+				508FDDA12EF53C5200FDBC32 /* Range.h */,
+			);
+			path = primitives;
 			sourceTree = "<group>";
 		};
 		508FDE5B21EA1FA40043D0E9 = {

@@ -11,34 +11,50 @@
 
 namespace vamiga {
 
+Volume::Volume(BlockDevice &device) : device(device)
+{
+    range = { 0, device.capacity() };
+}
+
+Volume::Volume(PartitionedDevice &pd, isize partition) : device(pd) {
+
+    range = pd.range(partition);
+}
+
 isize
-BlockVolume::bsize() const
+Volume::capacity() const
+{
+    return range.size();
+}
+
+isize
+Volume::bsize() const
 {
     return device.bsize();
 }
 
 void
-BlockVolume::freeBlock(isize nr)
+Volume::freeBlock(isize nr)
 {
-    if (inRange(nr)) device.freeBlock(translate(nr));
+    device.freeBlock(range.translate(nr));
 }
 
 Buffer<u8> *
-BlockVolume::readBlock(isize nr)
+Volume::readBlock(isize nr)
 {
-    return inRange(nr) ? device.readBlock(translate(nr)) : nullptr;
+    return device.readBlock(range.translate(nr));
 }
 
 Buffer<u8> *
-BlockVolume::ensureBlock(isize nr)
+Volume::ensureBlock(isize nr)
 {
-    return inRange(nr) ? device.ensureBlock(translate(nr)) : nullptr;
+    return device.ensureBlock(range.translate(nr));
 }
 
 void
-BlockVolume::writeBlock(isize nr, const Buffer<u8> &buffer)
+Volume::writeBlock(isize nr, const Buffer<u8> &buffer)
 {
-    if (inRange(nr)) device.writeBlock(translate(nr), buffer);
+    device.writeBlock(range.translate(nr), buffer);
 }
 
 }

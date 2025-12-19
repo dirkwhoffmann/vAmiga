@@ -9,40 +9,31 @@
 
 #pragma once
 
-#include "BlockView.h"
+#include "BlockDevice.h"
 #include "DeviceDescriptors.h"
 
 namespace vamiga {
 
-class BlockVolume : public BlockView {
+class Volume : public BlockView {
 
+    // The underlying block device
     class BlockView &device;
 
-    // Translates a logical block number into a physical block number
-    virtual isize translate(isize block) const = 0;
+    // Blocks belonging to this volume
+    Range<isize> range;
 
 public:
 
-    BlockVolume(BlockView &dev) : device(dev) { }
-
+    Volume(BlockDevice &d);
+    Volume(PartitionedDevice &d, isize partition = 0);
+    virtual ~Volume() = default;
+    
+    isize capacity() const override;
     isize bsize() const override;
     void freeBlock(isize nr) override;
     Buffer<u8> *readBlock(isize nr) override;
     Buffer<u8> *ensureBlock(isize nr) override;
     void writeBlock(isize nr, const Buffer<u8> &buffer) override;
-};
-
-class HardDrivePartition : public BlockVolume {
-
-    PartitionDescriptor descriptor {};
-
-    isize capacity() const override { return descriptor.numBlocks(); }
-    isize translate(isize block) const override { return descriptor.translate(block); }
-
-public:
-
-    HardDrivePartition(BlockView &dev, const PartitionDescriptor &des)
-    : BlockVolume(dev), descriptor(des) { }
 };
 
 }

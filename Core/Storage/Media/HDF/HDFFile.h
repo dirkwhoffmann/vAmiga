@@ -19,7 +19,7 @@ namespace vamiga {
 class FloppyDisk;
 
 class HDFFile : public DiskFile {
-    
+
 public:
     
     // Derived drive geometry

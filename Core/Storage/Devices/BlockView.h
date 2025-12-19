@@ -19,6 +19,7 @@ class BlockView {
 
 public:
 
+    BlockView() { }
     virtual ~BlockView() = default;
 
     virtual isize capacity() const = 0;
@@ -28,7 +29,7 @@ public:
     virtual Buffer<u8> *ensureBlock(isize nr) = 0;
     virtual void writeBlock(isize nr, const Buffer<u8> &) = 0;
 
-    bool inRange(isize nr) { return nr >= 0 && nr < capacity(); }
+    bool valid(isize nr) { return nr >= 0 && nr < capacity(); }
 };
 
 }
