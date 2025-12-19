@@ -14,20 +14,7 @@
 
 namespace vamiga {
 
-class DiskFile : public AnyFile, public BlockView {
-
-    //
-    // Methods from BlockDevice
-    //
-
-public:
-
-    isize capacity() const override { return numBlocks(); }
-    isize bsize() const override { return 512; }
-    void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
-    void writeBlock(const u8 *src, isize nr) override {
-        writeSector(nr, Buffer<u8>(src, bsize())); }
-
+class DiskFile : public AnyFile {
 
     //
     // Querying disk properties
@@ -38,7 +25,7 @@ public:
     virtual isize numCyls() const = 0;
     virtual isize numHeads() const = 0;
     virtual isize numSectors() const = 0;
-    // isize bsize() const { return 512; }
+    isize bsize() const { return 512; }
     isize numTracks() const { return numHeads() * numCyls(); }
     isize numBlocks() const { return numTracks() * numSectors(); }
     isize numBytes() const { return numBlocks() * bsize(); }

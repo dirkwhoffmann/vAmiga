@@ -20,7 +20,7 @@ namespace vamiga {
 
 class FloppyDisk;
 
-class FloppyFile : public DiskFile {
+class FloppyFile : public DiskFile, public BlockDevice {
 
     //
     // Initializing
@@ -31,6 +31,19 @@ public:
     // Gets or sets the file system for this disk
     virtual FSFormat getDos() const = 0;
     virtual void setDos(FSFormat dos) = 0;
+
+
+    //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize capacity() const override { return numBlocks(); }
+    isize bsize() const override { return 512; }
+    void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
+    void writeBlock(const u8 *src, isize nr) override {
+        writeSector(nr, Buffer<u8>(src, bsize())); }
 
 
     //

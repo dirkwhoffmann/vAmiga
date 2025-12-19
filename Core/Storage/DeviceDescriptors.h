@@ -11,6 +11,7 @@
 
 #include "DeviceTypes.h"
 #include "Serializable.h"
+#include "utl/primitives.h"
 
 namespace vamiga {
 
@@ -131,6 +132,9 @@ struct PartitionDescriptor : SerializableStruct
 
     // Returns the physical block number for a logical partition block
     isize translate(isize block) const noexcept;
+
+    // Returns the partition's block range in [lower; upper) format
+    Range<isize> range() const noexcept { return { translate(0), translate(numBlocks()) }; }
 
     // Prints debug information
     void dump() const;

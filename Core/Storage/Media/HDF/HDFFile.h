@@ -18,7 +18,7 @@ namespace vamiga {
 
 class FloppyDisk;
 
-class HDFFile : public DiskFile {
+class HDFFile : public DiskFile, public PartitionedDevice {
 
 public:
     
@@ -64,8 +64,23 @@ public:
     isize numCyls() const override;
     isize numHeads() const override;
     isize numSectors() const override;
-    
-    
+
+
+    //
+    // Methods from PartitionedDevice
+    //
+
+public:
+
+    isize capacity() const override { return numBlocks(); }
+    isize bsize() const override { return 512; }
+    void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
+    void writeBlock(const u8 *src, isize nr) override {
+        writeSector(nr, Buffer<u8>(src, bsize())); }
+    isize numPartitions() const override { return isize(ptable.size()); }
+    Range<isize> range(isize nr) const override { return ptable[nr].range(); }
+
+
     //
     // Providing descriptors
     //
@@ -114,7 +129,7 @@ public:
     isize numDrivers() const { return isize(drivers.size()); }
     
     // Returns the number of partitions
-    isize numPartitions() const { return isize(ptable.size()); }
+    // isize numPartitions() const { return isize(ptable.size()); }
 
     // Returns the byte count and the location of a certain partition
     isize partitionSize(isize nr) const;
