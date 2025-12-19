@@ -8,6 +8,7 @@ DebuggerConsole.cpp
 NavigatorConsole.cpp
 RetroShell.cpp
 RSCommand.cpp
+RSError.cpp
 TextStorage.cpp
 
 )

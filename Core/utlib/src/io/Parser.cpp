@@ -38,7 +38,7 @@ parseBool(const string& token)
     if (token == "1" || token == "true" || token == "yes") return true;
     if (token == "0" || token == "false" || token == "no") return false;
 
-    throw ParseBoolError(token);
+    throw NewParseError(NewParseError::PARSE_BOOL_ERROR, token);
 }
 
 bool
@@ -47,7 +47,7 @@ parseOnOff(const string& token)
     if (token == "on") return true;
     if (token == "off") return false;
 
-    throw ParseOnOffError(token);
+    throw NewParseError(NewParseError::PARSE_ON_OFF_ERROR, token);
 }
 
 long
@@ -73,8 +73,14 @@ parseNum(const string& token)
         base = 2;
     }
 
-    try { result = stol(_token, nullptr, base); }
-    catch (std::exception&) { throw ParseNumError(token); }
+    try {
+
+        result = stol(_token, nullptr, base);
+
+    } catch (std::exception&) {
+
+        throw NewParseError(NewParseError::PARSE_NUM_ERROR, token);
+    }
 
     return result;
 }
@@ -99,8 +105,14 @@ parseSeq(const string& token)
     for (unsigned int i = 0; i < _token.length(); i += 2) {
 
         std::string digits = _token.substr(i, 2);
-        try { result.push_back((char)stol(digits, nullptr, 16)); }
-        catch (std::exception&) { throw ParseNumError(token); }
+        try {
+
+            result.push_back((char)stol(digits, nullptr, 16));
+
+        } catch (std::exception&) {
+
+            throw NewParseError(NewParseError::PARSE_NUM_ERROR, token);
+        }
     }
 
     return result;

@@ -210,6 +210,8 @@
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		508FDD9E2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */; };
 		508FDD9F2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */; };
+		508FDDA52EF56DF200FDBC32 /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDDA42EF56DF100FDBC32 /* RSError.cpp */; };
+		508FDDA62EF56DF200FDBC32 /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDDA42EF56DF100FDBC32 /* RSError.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
@@ -931,6 +933,8 @@
 		508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockVolume.cpp; sourceTree = "<group>"; };
 		508FDDA02EF53BEF00FDBC32 /* primitives.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = primitives.h; sourceTree = "<group>"; };
 		508FDDA12EF53C5200FDBC32 /* Range.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
+		508FDDA32EF56DEA00FDBC32 /* RSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSError.h; sourceTree = "<group>"; };
+		508FDDA42EF56DF100FDBC32 /* RSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RSError.cpp; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508FDE7221EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2527,6 +2531,8 @@
 			isa = PBXGroup;
 			children = (
 				50CF46562620436A00BB3B95 /* CMakeLists.txt */,
+				508FDDA32EF56DEA00FDBC32 /* RSError.h */,
+				508FDDA42EF56DF100FDBC32 /* RSError.cpp */,
 				50AD904E276F61C40011ECCB /* RetroShellTypes.h */,
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
@@ -3267,6 +3273,7 @@
 				509E761B2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
+				508FDDA62EF56DF200FDBC32 /* RSError.cpp in Sources */,
 				50144E3D2E7BEA8D009E15B4 /* SidebarViewController.swift in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
@@ -3327,6 +3334,7 @@
 				50FC04A727DA198100C3E566 /* CopperDebugger.cpp in Sources */,
 				50FC04A027DA197A00C3E566 /* Sequencer.cpp in Sources */,
 				50FC048F27DA195D00C3E566 /* PaulaEvents.cpp in Sources */,
+				508FDDA52EF56DF200FDBC32 /* RSError.cpp in Sources */,
 				50FC04CF27DA19F600C3E566 /* FSDescriptor.cpp in Sources */,
 				509D04992EDA471900355638 /* FSExporter.cpp in Sources */,
 				509D049A2EDA471900355638 /* FSImporter.cpp in Sources */,

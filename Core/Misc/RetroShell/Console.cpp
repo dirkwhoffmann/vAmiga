@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Console.h"
+#include "RSError.h"
 #include "Emulator.h"
 #include "Option.h"
 #include <istream>
@@ -537,8 +538,8 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
     std::vector<string> std;
     
     // Check if a command handler is present
-    if (!cmd.callback)  { throw TooFewArgumentsError(cmd.fullName); }
-    
+    if (!cmd.callback) { throw RSError(RSError::TOO_MANY_ARGUMENTS, cmd.fullName); }
+
     // Sort input tokens by type
     for (usize i = 0; i < args.size(); i++) {
         
@@ -575,7 +576,7 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
                 }
             }
             if (!found && descr.isRequired()){
-                throw utl::ParseError("Missing flag " + keyStr);
+                throw RSError(RSError::MISSING_FLAG, keyStr);
             }
             continue;
         }
@@ -599,7 +600,7 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
                 }
             }
             if (!found && descr.isRequired()) {
-                throw utl::ParseError("Missing key-value pair " + descr.keyValueStr());
+                throw RSError(RSError::MISSING_KEY_VALUE, descr.keyValueStr());
             }
             continue;
         }
@@ -614,7 +615,7 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
                 
             } else if (descr.isRequired()) {
                 
-                throw TooFewArgumentsError(cmd.fullName);
+                throw RSError(RSError::TOO_FEW_ARGUMENTS, cmd.fullName);
             }
             continue;
         }
@@ -626,10 +627,10 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
     for (auto &it : map) debug(RSH_DEBUG, "arg['%s']='%s'\n", it.first.c_str(), it.second.c_str());
     
     // Check for invalid or extra arguments
-    if (!flags.empty()) { throw UnknownFlagError(flags.front()); }
-    if (!keyVal.empty()) { throw UnknownKeyValueError(keyVal.front()); }
-    if (!std.empty()) { throw TooManyArgumentsError(cmd.fullName); }
-    
+    if (!flags.empty()) { throw RSError(RSError::UNKNOWN_FLAG, flags.front()); }
+    if (!keyVal.empty()) { throw RSError(RSError::UNKNOWN_KEY_VALUE, keyVal.front()); }
+    if (!std.empty()) { throw RSError(RSError::TOO_MANY_ARGUMENTS, cmd.fullName); }
+
     return map;
 }
 
@@ -789,7 +790,7 @@ Console::exec(const InputLine& cmd)
         auto [c, args] = seekCommand(tokens);
 
         // Only proceed if a command has been found
-        if (c == &root) throw utl::ParseError(tokens[0]);
+        if (c == &root) throw RSError(RSError::SYNTAX_ERROR, tokens[0]);
 
         // Parse arguments
         Arguments parsedArgs = parse(*c, args);
@@ -844,8 +845,11 @@ Console::describe(std::ostream &ss, const std::exception &e, isize line, const s
     if (line) {
         ss << "Line " << line << ": " << cmd << '\n';
     }
+    ss << e.what();
+
     // ss << "Error: ";
-    
+
+    /*
     if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
         
         ss << err->what() << ": Too few arguments.";
@@ -908,8 +912,9 @@ Console::describe(std::ostream &ss, const std::exception &e, isize line, const s
         ss << '\n';
         return;
     }
-    
+
     ss << e.what();
+     */
 }
 
 void

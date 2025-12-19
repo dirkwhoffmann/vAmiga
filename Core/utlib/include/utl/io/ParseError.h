@@ -13,20 +13,14 @@
 
 namespace utl {
 
-namespace fault::parse {
-
-constexpr long PARSE_BOOL_ERROR   = 0;
-constexpr long PARSE_ON_OFF_ERROR = 1;
-constexpr long PARSE_NUM_ERROR    = 2;
-constexpr long PARSE_ENUM_ERROR   = 3;
-
-}
-
 struct NewParseError : public Error {
 
-    const char *errstr() const noexcept override {
+    static constexpr long PARSE_BOOL_ERROR   = 0;
+    static constexpr long PARSE_ON_OFF_ERROR = 1;
+    static constexpr long PARSE_NUM_ERROR    = 2;
+    static constexpr long PARSE_ENUM_ERROR   = 3;
 
-        using namespace fault::parse;
+    const char *errstr() const noexcept override {
 
         switch (payload) {
                 
@@ -44,19 +38,19 @@ struct NewParseError : public Error {
 
         switch (fault) {
 
-            case fault::parse::PARSE_BOOL_ERROR:
+            case PARSE_BOOL_ERROR:
                 set_msg(msg + " must be true or false.");
                 break;
 
-            case fault::parse::PARSE_ON_OFF_ERROR:
+            case PARSE_ON_OFF_ERROR:
                 set_msg(msg + " must be on or off.");
                 break;
 
-            case fault::parse::PARSE_NUM_ERROR:
+            case PARSE_NUM_ERROR:
                 set_msg(msg + " is not a number.");
                 break;
 
-            case fault::parse::PARSE_ENUM_ERROR:
+            case PARSE_ENUM_ERROR:
                 set_msg(msg + " is not a valid key.");
                 break;
 

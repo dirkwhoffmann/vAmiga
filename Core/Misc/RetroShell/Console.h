@@ -36,6 +36,7 @@ public:
     virtual void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) = 0; // DEPRECATED
 };
 
+/*
 struct TooFewArgumentsError : public ParseError {
     using ParseError::ParseError;
 };
@@ -51,10 +52,7 @@ struct UnknownFlagError : public ParseError {
 struct UnknownKeyValueError : public ParseError {
     using ParseError::ParseError;
 };
-
-struct ScriptInterruption: Exception {
-    using Exception::Exception;
-};
+*/
 
 class HistoryBuffer {
     
@@ -372,7 +370,7 @@ protected:
     // Creates a textual description of an error
     void describe(const std::exception &exc, isize line = 0, const string &cmd = "");
     void describe(std::ostream &os, const std::exception &exc, isize line = 0, const string &cmd = "");
-    
+
     
     //
     // Command handlers
