@@ -36,7 +36,7 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
 {
     debug(FS_DEBUG, "Creating file system...\n");
 
-    auto layout = FSDescriptor(vol.capacity(), FileSystem::predictDOS(vol));
+    auto layout = FSDescriptor(vol.capacity(), cache.predictDOS(vol));
 
     // Check consistency (may throw)
     layout.checkCompatibility();

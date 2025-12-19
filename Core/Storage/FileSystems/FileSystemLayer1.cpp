@@ -27,20 +27,6 @@ FileSystem::typeOf(Block nr, isize pos) const noexcept
     return FSItemType::UNUSED;
 }
 
-FSFormat
-FileSystem::predictDOS(BlockView &dev) noexcept
-{
-    Buffer<u8> data(dev.bsize());
-
-    // Analyze the signature of the first block
-    dev.readBlock(data.ptr, 0);
-    if (strncmp((const char *)data.ptr, "DOS", 3) == 0 && data.ptr[3] <= 7) {
-        return FSFormat(data.ptr[3]);
-    }
-
-    return FSFormat::NODOS;
-}
-
 FSBlockType
 FileSystem::predictType(FSDescriptor &layout, Block nr, const u8 *buf) noexcept
 {
@@ -111,78 +97,6 @@ FileSystem::predictType(Block nr, const u8 *buf) const noexcept
     }
     
     return FSBlockType::EMPTY;
-}
-
-FSBlock *
-FileSystem::read(Block nr) noexcept
-{
-    return cache.read(nr);
-}
-
-FSBlock *
-FileSystem::read(Block nr, FSBlockType type) noexcept
-{
-    return cache.read(nr, type);
-}
-
-FSBlock *
-FileSystem::read(Block nr, std::vector<FSBlockType> types) noexcept
-{
-    return cache.read(nr, types);
-}
-
-const FSBlock *
-FileSystem::read(Block nr) const noexcept
-{
-    return cache.tryFetch(nr);
-}
-
-const FSBlock *
-FileSystem::read(Block nr, FSBlockType type) const noexcept
-{
-    return cache.tryFetch(nr, type);
-}
-
-const FSBlock *
-FileSystem::read(Block nr, std::vector<FSBlockType> types) const noexcept
-{
-    return cache.tryFetch(nr, types);
-}
-
-FSBlock &
-FileSystem::at(Block nr)
-{
-    return cache.at(nr);
-}
-
-FSBlock &
-FileSystem::at(Block nr, FSBlockType type)
-{
-    return cache.at(nr, type);
-}
-
-FSBlock &
-FileSystem::at(Block nr, std::vector<FSBlockType> types)
-{
-    return cache.at(nr, types);
-}
-
-const FSBlock &
-FileSystem::at(Block nr) const
-{
-    return cache.fetch(nr);
-}
-
-const FSBlock &
-FileSystem::at(Block nr, FSBlockType type) const
-{
-    return cache.fetch(nr, type);
-}
-
-const FSBlock &
-FileSystem::at(Block nr, std::vector<FSBlockType> types) const
-{
-    return cache.fetch(nr, types);
 }
 
 void

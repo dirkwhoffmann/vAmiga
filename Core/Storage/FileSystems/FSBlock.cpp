@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-FSBlock::FSBlock(FileSystem *ref, Block nr) : fs(ref), storage(ref->cache)
+FSBlock::FSBlock(FileSystem *ref, Block nr) : fs(ref), cache(ref->cache)
 {
     this->nr = nr;
 }
@@ -501,7 +501,7 @@ FSBlock::data()
     if (dataCache.empty()) {
 
         dataCache.alloc(bsize());
-        storage.dev.readBlock(dataCache.ptr, nr);
+        cache.dev.readBlock(dataCache.ptr, nr);
     }
 
     assert(dataCache.size == bsize());
@@ -516,10 +516,17 @@ FSBlock::data() const
     return const_cast<const u8 *>(const_cast<FSBlock *>(this)->data());
 }
 
+FSBlock &
+FSBlock::mutate() const
+{
+    cache.markAsDirty(nr);
+    return const_cast<FSBlock &>(*this);
+}
+
 void
 FSBlock::invalidate()
 {
-    storage.markAsDirty(nr);
+    cache.markAsDirty(nr);
 }
 
 void
@@ -527,7 +534,7 @@ FSBlock::flush()
 {
     if (!dataCache.empty()) {
         
-        storage.dev.writeBlock(dataCache.ptr, nr);
+        cache.dev.writeBlock(dataCache.ptr, nr);
     }
 }
 

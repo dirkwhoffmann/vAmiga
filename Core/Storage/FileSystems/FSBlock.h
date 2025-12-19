@@ -28,7 +28,7 @@ struct FSBlock : Loggable {
     class FileSystem *fs = nullptr;
 
     // The storage this block belongs to
-    class FSCache &storage;
+    class FSCache &cache;
 
     // The type of this block
     FSBlockType type = FSBlockType::UNKNOWN;
@@ -125,6 +125,8 @@ public:
     u8 *data();
     const u8 *data() const;
 
+    // Grants write access for this block
+    FSBlock &mutate() const;
 
     // Marks this block as dirty in the block cache
     void invalidate();

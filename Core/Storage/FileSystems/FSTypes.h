@@ -16,7 +16,10 @@ namespace vamiga {
 using namespace utl;
 
 struct FSBlock;
-typedef u32 Block;
+
+using Block = u32;
+using BlockRef = const FSBlock &;
+
 typedef std::function<bool(const FSBlock &)> FSBlockFilter;
 typedef std::function<std::string(const FSBlock &)> FSBlockFormatter;
 typedef std::function<bool(const FSBlock &, const FSBlock &)> FSBlockSorter;

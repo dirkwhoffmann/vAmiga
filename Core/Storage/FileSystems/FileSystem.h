@@ -226,10 +226,6 @@ public:
     bool is(Block nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
     bool isEmpty(Block nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
 
-    // Predicts the file system based on stored data
-    static FSFormat predictDOS(BlockView &dev) noexcept;
-    // FSFormat predictDOS() noexcept { return predictDOS(storage.dev); }
-
     // Predicts the type of a block based on the stored data
     static FSBlockType predictType(FSDescriptor &layout, Block nr, const u8 *buf) noexcept;
     FSBlockType predictType(Block nr, const u8 *buf) const noexcept;
@@ -240,22 +236,6 @@ public:
     //
 
 public:
-
-    // Returns a block pointer or null if the block does not exist
-    [[deprecated]] FSBlock *read(Block nr) noexcept;
-    [[deprecated]] FSBlock *read(Block nr, FSBlockType type) noexcept;
-    [[deprecated]] FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
-    [[deprecated]] const FSBlock *read(Block nr) const noexcept;
-    [[deprecated]] const FSBlock *read(Block nr, FSBlockType type) const noexcept;
-    [[deprecated]] const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept;
-
-    // Returns a reference to a stored block (throws on error)
-    [[deprecated]] FSBlock &at(Block nr);
-    [[deprecated]] FSBlock &at(Block nr, FSBlockType type);
-    [[deprecated]] FSBlock &at(Block nr, std::vector<FSBlockType> types);
-    [[deprecated]] const FSBlock &at(Block nr) const;
-    [[deprecated]] const FSBlock &at(Block nr, FSBlockType type) const;
-    [[deprecated]] const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
 
     // Returns a pointer to a block with read permissions (maybe null)
     const FSBlock *tryFetch(Block nr) const noexcept { return cache.tryFetch(nr); }
@@ -273,9 +253,9 @@ public:
     FSBlock *tryModify(Block nr, std::vector<FSBlockType> types) noexcept { return cache.tryModify(nr, types); }
 
     // Returns a reference to a block with write permissions (may throw)
-    FSBlock &modify(Block nr) { return cache.modify(nr); }
-    FSBlock &modify(Block nr, FSBlockType type) { return cache.modify(nr, type); }
-    FSBlock &modify(Block nr, std::vector<FSBlockType> types) { return cache.modify(nr, types); }
+    [[deprecated]] FSBlock &modify(Block nr) { return cache.modify(nr); }
+    [[deprecated]] FSBlock &modify(Block nr, FSBlockType type) { return cache.modify(nr, type); }
+    [[deprecated]] FSBlock &modify(Block nr, std::vector<FSBlockType> types) { return cache.modify(nr, types); }
 
     // Writes back dirty cache blocks to the block device
     void flush();

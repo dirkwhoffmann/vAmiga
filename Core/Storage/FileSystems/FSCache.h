@@ -45,8 +45,6 @@ public:
     FSCache(FileSystem &fs, Volume &vol);
     virtual ~FSCache();
 
-    // [[deprecated]] void init(isize capacity, isize bsize = 512);
-
 private:
 
     void dealloc();
@@ -80,18 +78,14 @@ public:
     double fillLevel() const { return capacity() ? double(100) * usedBlocks() / capacity() : 0; }
     bool isEmpty() const { return usedBlocks() == 0; }
 
+    // Predicts the file system type based on stored data
+    static FSFormat predictDOS(BlockView &dev) noexcept;
+    FSFormat predictDOS() const noexcept { return predictDOS(dev); }
+
 
     //
     // Accessing blocks
     //
-
-    // Returns an iterator for the block storage
-    /*
-    std::unordered_map<Block, std::unique_ptr<FSBlock>>::iterator begin() { return blocks.begin(); }
-    std::unordered_map<Block, std::unique_ptr<FSBlock>>::iterator end() { return blocks.end(); }
-    std::unordered_map<Block, std::unique_ptr<FSBlock>>::const_iterator begin() const { return blocks.begin(); }
-    std::unordered_map<Block, std::unique_ptr<FSBlock>>::const_iterator end() const { return blocks.end(); }
-    */
 
     // Returns a view for all keys
     auto keys() const { return std::views::keys(blocks); }
@@ -136,30 +130,7 @@ public:
     FSBlock &modify(Block nr, FSBlockType type);
     FSBlock &modify(Block nr, std::vector<FSBlockType> types);
 
-
-
-
-    [[deprecated]] FSBlock *read(Block nr) noexcept;
-    [[deprecated]] FSBlock *read(Block nr, FSBlockType type) noexcept;
-    [[deprecated]] FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
-    /*
-    const FSBlock *read(Block nr) const noexcept;
-    const FSBlock *read(Block nr, FSBlockType type) const noexcept;
-    const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept;
-    */
-
-    // Returns a reference to a stored block
-    [[deprecated]] FSBlock &at(Block nr);
-    [[deprecated]] FSBlock &at(Block nr, FSBlockType type);
-    [[deprecated]] FSBlock &at(Block nr, std::vector<FSBlockType> types);
-    /*
-    const FSBlock &at(Block nr) const;
-    const FSBlock &at(Block nr, FSBlockType type) const;
-    const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
-    */
-
     // Operator overload
-    // FSBlock &operator[](size_t nr) { return at(Block(nr)); }
     const FSBlock &operator[](size_t nr) const { return fetch(Block(nr)); }
 
     // Wipes out a block (makes it an empty block)

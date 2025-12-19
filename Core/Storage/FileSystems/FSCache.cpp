@@ -40,6 +40,20 @@ FSCache::dump(std::ostream &os) const
     os << tab("Hashed blocks") << blocks.size() << std::endl;
 }
 
+FSFormat
+FSCache::predictDOS(BlockView &dev) noexcept
+{
+    Buffer<u8> data(dev.bsize());
+
+    // Analyze the signature of the first block
+    dev.readBlock(data.ptr, 0);
+    if (strncmp((const char *)data.ptr, "DOS", 3) == 0 && data.ptr[3] <= 7) {
+        return FSFormat(data.ptr[3]);
+    }
+
+    return FSFormat::NODOS;
+}
+
 std::vector<Block>
 FSCache::sortedKeys() const
 {
@@ -216,110 +230,6 @@ FSCache::modify(Block nr, std::vector<FSBlockType> types)
     if (auto *result = tryModify(nr, types); result) return *result;
     throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
 }
-
-
-
-
-
-FSBlock *
-FSCache::read(Block nr) noexcept
-{
-    return cache(nr);
-}
-
-/*
-const FSBlock *
-FSCache::read(Block nr) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr));
-}
-*/
-
-FSBlock *
-FSCache::read(Block nr, FSBlockType type) noexcept
-{
-    if (auto *ptr = read(nr); ptr) {
-
-        if (ptr->type == type) { return ptr; }
-    }
-    return nullptr;
-}
-
-FSBlock *
-FSCache::read(Block nr, std::vector<FSBlockType> types) noexcept
-{
-    if (auto *ptr = read(nr); ptr) {
-
-        for (auto &type: types) if (ptr->type == type) { return ptr; }
-    }
-    return nullptr;
-}
-
-/*
-const FSBlock *
-FSCache::read(Block nr, FSBlockType type) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr, type));
-}
-
-const FSBlock *
-FSCache::read(Block nr, std::vector<FSBlockType> types) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FSCache *>(this)->read(nr, types));
-}
-*/
-
-FSBlock &
-FSCache::at(Block nr)
-{
-    if (auto *result = read(nr)) return *result;
-
-    throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
-}
-
-FSBlock &
-FSCache::at(Block nr, FSBlockType type)
-{
-    if (auto *result = read(nr, type)) return *result;
-
-    if (read(nr)) {
-        throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
-    } else {
-        throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
-    }
-}
-
-FSBlock &
-FSCache::at(Block nr, std::vector<FSBlockType> types)
-{
-    if (auto *result = read(nr, types); result) return *result;
-
-    if (read(nr)) {
-        throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
-    } else {
-        throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
-    }
-}
-
-/*
-const FSBlock &
-FSCache::at(Block nr) const
-{
-    return const_cast<const FSBlock &>(const_cast<FSCache *>(this)->at(nr));
-}
-
-const FSBlock &
-FSCache::at(Block nr, FSBlockType type) const
-{
-    return const_cast<const FSBlock &>(const_cast<FSCache *>(this)->at(nr, type));
-}
-
-const FSBlock &
-FSCache::at(Block nr, std::vector<FSBlockType> types) const
-{
-    return const_cast<const FSBlock &>(const_cast<FSCache *>(this)->at(nr, types));
-}
-*/
 
 void
 FSCache::erase(Block nr)

@@ -1269,7 +1269,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 if (missing.empty()) {
                     throw(FSError(FSError::FS_EXISTS, args.at("name")));
                 }
-                auto *p = &path;
+                auto *p = &path.mutate();
                 for (auto &it: missing) {
                     if (p) p = &fs->mkdir(*p, FSName(it));
                 }
