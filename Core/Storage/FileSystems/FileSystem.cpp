@@ -344,7 +344,7 @@ namespace require {
 void
 formatted(const FileSystem &fs)
 {
-    if (!fs.isFormatted()) throw FSError(fault::FS_UNFORMATTED);
+    if (!fs.isFormatted()) throw FSError(FSError::FS_UNFORMATTED);
 }
 
 void
@@ -356,25 +356,25 @@ formatted(unique_ptr<FileSystem> &fs)
 void
 file(const FSBlock &node)
 {
-    if (!node.isFile()) throw FSError(fault::FS_NOT_A_FILE);
+    if (!node.isFile()) throw FSError(FSError::FS_NOT_A_FILE);
 }
 
 void
 fileOrDirectory(const FSBlock &node)
 {
-    if (!node.isRegular()) throw FSError(fault::FS_NOT_A_FILE_OR_DIRECTORY);
+    if (!node.isRegular()) throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY);
 }
 
 void
 directory(const FSBlock &node)
 {
-    if (!node.isDirectory()) throw FSError(fault::FS_NOT_A_DIRECTORY);
+    if (!node.isDirectory()) throw FSError(FSError::FS_NOT_A_DIRECTORY);
 }
 
 void
 notRoot(const FSBlock &node)
 {
-    if (node.isRoot()) throw FSError(fault::FS_INVALID_PATH);
+    if (node.isRoot()) throw FSError(FSError::FS_INVALID_PATH);
 }
 
 void
@@ -382,7 +382,7 @@ emptyDirectory(const FSBlock &node)
 {
     directory(node);
     if (FSTree(node, { .recursive = false }).size() != 0) {
-        throw FSError(fault::FS_DIR_NOT_EMPTY);
+        throw FSError(FSError::FS_DIR_NOT_EMPTY);
     }
 }
 
@@ -390,7 +390,7 @@ void
 notExist(const FSBlock &node, const FSName &name)
 {
     directory(node);
-    if (node.fs->searchdir(node, name) != nullptr) throw FSError(fault::FS_EXISTS);
+    if (node.fs->searchdir(node, name) != nullptr) throw FSError(FSError::FS_EXISTS);
 }
 
 }}

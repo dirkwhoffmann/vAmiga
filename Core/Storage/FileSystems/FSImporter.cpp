@@ -24,13 +24,13 @@ FSImporter::importVolume(const u8 *src, isize size)
     debug(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
-    if (size % traits.bsize != 0) throw FSError(fault::FS_WRONG_BSIZE);
+    if (size % traits.bsize != 0) throw FSError(FSError::FS_WRONG_BSIZE);
 
     // Only proceed if the source buffer contains the right amount of data
-    if (traits.bytes != size) throw FSError(fault::FS_WRONG_CAPACITY);
+    if (traits.bytes != size) throw FSError(FSError::FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    if (traits.dos == FSFormat::NODOS) throw FSError(fault::FS_UNSUPPORTED);
+    if (traits.dos == FSFormat::NODOS) throw FSError(FSError::FS_UNSUPPORTED);
 
     // Import all blocks
     for (isize i = 0; i < fs.blocks(); i++) {

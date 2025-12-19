@@ -46,7 +46,7 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size) const
     FSFault error;
     bool result = exportBlocks(first, last, dst, size, &error);
 
-    assert(result == (error == fault::FS_OK));
+    assert(result == (error == FSError::FS_OK));
     return result;
 }
 
@@ -63,13 +63,13 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *
 
     // Only proceed if the (predicted) block size matches
     if (size % traits.bsize != 0) {
-        if (err) *err = fault::FS_WRONG_BSIZE;
+        if (err) *err = FSError::FS_WRONG_BSIZE;
         return false;
     }
 
     // Only proceed if the source buffer contains the right amount of data
     if (count * traits.bsize != size) {
-        if (err) *err = fault::FS_WRONG_CAPACITY;
+        if (err) *err = FSError::FS_WRONG_CAPACITY;
         return false;
     }
 
@@ -83,7 +83,7 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *
     }
 
     debug(FS_DEBUG, "Success\n");
-    if (err) *err = fault::FS_OK;
+    if (err) *err = FSError::FS_OK;
     return true;
 }
 

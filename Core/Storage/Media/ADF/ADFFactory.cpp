@@ -95,7 +95,7 @@ ADFFactory::make(const FileSystem &volume)
             break;
 
         default:
-            throw FSError(fault::FS_WRONG_CAPACITY);
+            throw FSError(FSError::FS_WRONG_CAPACITY);
     }
 
     volume.exporter.exportVolume(adf->data.ptr, adf->data.size);

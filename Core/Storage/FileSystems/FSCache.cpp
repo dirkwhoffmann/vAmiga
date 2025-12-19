@@ -89,7 +89,7 @@ FSCache::getType(Block nr) const noexcept
 void
 FSCache::setType(Block nr, FSBlockType type)
 {
-    if (isize(nr) >= capacity) throw FSError(fault::FS_OUT_OF_RANGE);
+    if (isize(nr) >= capacity) throw FSError(FSError::FS_OUT_OF_RANGE);
     blocks.at(nr)->init(type);
 }
 
@@ -179,7 +179,7 @@ FSCache::at(Block nr)
 {
     if (auto *result = read(nr)) return *result;
 
-    throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
+    throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
 }
 
 FSBlock &
@@ -188,9 +188,9 @@ FSCache::at(Block nr, FSBlockType type)
     if (auto *result = read(nr, type)) return *result;
 
     if (read(nr)) {
-        throw FSError(fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+        throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
     } else {
-        throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
+        throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
     }
 }
 
@@ -200,9 +200,9 @@ FSCache::at(Block nr, std::vector<FSBlockType> types)
     if (auto *result = read(nr, types); result) return *result;
 
     if (read(nr)) {
-        throw FSError(fault::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+        throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
     } else {
-        throw FSError(fault::FS_OUT_OF_RANGE, std::to_string(nr));
+        throw FSError(FSError::FS_OUT_OF_RANGE, std::to_string(nr));
     }
 }
 

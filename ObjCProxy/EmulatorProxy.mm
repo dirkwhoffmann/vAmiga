@@ -1381,25 +1381,6 @@ NSString *EventSlotName(EventSlot slot)
         [ex save:error];
         return nil;
     }
-
-/*
-        // auto dev = new FileSystem(*file, nr);
-        // auto dev = new FileSystem(FileSystemFactory::fromMediaFile(*file, nr));
-
-        // TODO: REMOVE THIS FUNCTION AS IT LEAKS MEMORY
-        auto info = file->getDiskInfo();
-        auto geometry  = GeometryDescriptor(info.cyls, info.heads, info.sectors, info.bsize);
-        auto *dev = new Device(geometry);
-
-        auto fs = FileSystemFactory::fromMediaFile(*dev, *file, nr);
-        return [self make:fs.release()];
-
-    }  catch(Error &error) {
-
-        [ex save:error];
-        return nil;
-    }
-*/
 }
 
 - (NSString *)name

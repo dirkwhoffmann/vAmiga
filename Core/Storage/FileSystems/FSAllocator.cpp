@@ -83,7 +83,7 @@ FSAllocator::allocate()
         if ((i = (i + 1) % numBlocks) == ap) {
 
             debug(FS_DEBUG, "No more free blocks\n");
-            throw FSError(fault::FS_OUT_OF_SPACE);
+            throw FSError(FSError::FS_OUT_OF_SPACE);
         }
     }
 
@@ -139,7 +139,7 @@ FSAllocator::allocate(isize count, std::vector<Block> &result, std::vector<Block
         if (i == ap && count > 0) {
 
             debug(FS_DEBUG, "No more free blocks\n");
-            throw FSError(fault::FS_OUT_OF_SPACE);
+            throw FSError(FSError::FS_OUT_OF_SPACE);
         }
     }
 

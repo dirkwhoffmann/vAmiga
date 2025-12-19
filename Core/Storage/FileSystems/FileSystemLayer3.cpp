@@ -42,7 +42,7 @@ void
 FileSystem::cd(const FSName &name)
 {
     if (auto ptr = seekPtr(&pwd(), name); ptr) cd (*ptr);
-    throw FSError(fault::FS_NOT_FOUND, name.cpp_str());
+    throw FSError(FSError::FS_NOT_FOUND, name.cpp_str());
 }
 
 void
@@ -55,7 +55,7 @@ void
 FileSystem::cd(const string &path)
 {
     if (auto ptr = seekPtr(&pwd(), path); ptr) cd (*ptr);
-    throw FSError(fault::FS_NOT_FOUND, path);
+    throw FSError(FSError::FS_NOT_FOUND, path);
 }
 
 bool
@@ -145,7 +145,7 @@ FSBlock &
 FileSystem::seek(const FSBlock &root, const FSName &name)
 {
     if (auto *it = seekPtr(&root, name); it) return *it;
-    throw FSError(fault::FS_NOT_FOUND, name.cpp_str());
+    throw FSError(FSError::FS_NOT_FOUND, name.cpp_str());
 }
 
 const FSBlock &
@@ -158,7 +158,7 @@ FSBlock &
 FileSystem::seek(const FSBlock &root, const fs::path &name)
 {
     if (auto *it = seekPtr(&root, name); it) return *it;
-    throw FSError(fault::FS_NOT_FOUND, name.string());
+    throw FSError(FSError::FS_NOT_FOUND, name.string());
 }
 
 const FSBlock &
@@ -171,7 +171,7 @@ FSBlock &
 FileSystem::seek(const FSBlock &root, const string &name)
 {
     if (auto *it = seekPtr(&root, name); it) return *it;
-    throw FSError(fault::FS_NOT_FOUND, name);
+    throw FSError(FSError::FS_NOT_FOUND, name);
 }
 
 const FSBlock &
@@ -221,7 +221,7 @@ FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block
         if (opt.accept(*it)) result.push_back(*it);
 
         // Break the loop if this block has been visited before
-        if (visited.contains((*it)->nr)) throw FSError(fault::FS_HAS_CYCLES);
+        if (visited.contains((*it)->nr)) throw FSError(FSError::FS_HAS_CYCLES);
 
         // Remember the block as visited
         visited.insert((*it)->nr);

@@ -120,7 +120,7 @@ FSBlock::make(FileSystem *ref, Block nr, FSBlockType type)
             return new FSBlock(ref, nr, type);
 
         default:
-            throw FSError(fault::FS_WRONG_BLOCK_TYPE);
+            throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
     }
 }
 
@@ -150,7 +150,7 @@ FSBlock::objectName() const
         case FSBlockType::DATA_FFS:    return "FSBlock (FFF)";
 
         default:
-            throw FSError(fault::FS_WRONG_BLOCK_TYPE);
+            throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
     }
 }
 
@@ -797,7 +797,7 @@ FSBlock::exportBlock(const fs::path &path) const
         case FSBlockType::FILEHEADER: return exportFileHeaderBlock(path);
             
         default:
-            return fault::FS_OK;
+            return FSError::FS_OK;
     }
 }
 
@@ -809,9 +809,9 @@ FSBlock::exportUserDirBlock(const fs::path &path) const
     debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
-    if (!utl::createDirectory(filename)) return fault::FS_CANNOT_CREATE_DIR;
+    if (!utl::createDirectory(filename)) return FSError::FS_CANNOT_CREATE_DIR;
 
-    return fault::FS_OK;
+    return FSError::FS_OK;
 }
 
 FSFault
@@ -823,11 +823,11 @@ FSBlock::exportFileHeaderBlock(const fs::path &path) const
 
     // Open file
     std::ofstream file(filename, std::ofstream::binary);
-    if (!file.is_open()) return fault::FS_CANNOT_CREATE_FILE;
+    if (!file.is_open()) return FSError::FS_CANNOT_CREATE_FILE;
 
     // Write data
     writeData(file);
-    return fault::FS_OK;
+    return FSError::FS_OK;
 }
 
 bool
@@ -1867,7 +1867,7 @@ isize
 FSBlock::extractData(Buffer<u8> &buf) const
 {
     // Only call this function for file header blocks
-    if (type != FSBlockType::FILEHEADER) throw FSError(fault::FS_NOT_A_FILE);
+    if (type != FSBlockType::FILEHEADER) throw FSError(FSError::FS_NOT_A_FILE);
 
     isize bytesRemaining = getFileSize();
     isize bytesTotal = 0;

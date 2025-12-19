@@ -35,9 +35,9 @@ struct Range {
     }
 
     constexpr T translate(T offset) const {
-        if (offset < T{} || offset >= size())
-            throw std::out_of_range("Range offset out of bounds");
-        return lower + offset;
+
+        if (offset >= T{} && offset < size()) return lower + offset;
+        throw Error(offset, "Range offset out of bounds");
     }
 };
 
@@ -63,9 +63,9 @@ struct ClosedRange {
     }
 
     constexpr T translate(T offset) const {
-        if (offset < T{} || offset > size())
-            throw std::out_of_range("Range offset out of bounds");
-        return lower + offset;
+
+        if (offset >= T{} && offset <= size()) return lower + offset;
+        throw Error(offset, "Range offset out of bounds");
     }
 };
 

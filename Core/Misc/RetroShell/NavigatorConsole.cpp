@@ -247,7 +247,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
         } catch (...) {
             
             // The item does not exist
-            throw FSError(fault::FS_NOT_FOUND, argv.at(token));
+            throw FSError(FSError::FS_NOT_FOUND, argv.at(token));
         }
     }
 }
@@ -304,7 +304,7 @@ NavigatorConsole::import(const FloppyDrive &dfn)
 void
 NavigatorConsole::import(const HardDrive &hdn, isize part)
 {
-    throw FSError(fault::FS_UNSUPPORTED);
+    throw FSError(FSError::FS_UNSUPPORTED);
     /*
     FileSystemFactory::initFromHardDrive(*fs, hdn);
     */
@@ -1142,7 +1142,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 require::formatted(fs);
                 auto &file = parsePath(args, "path", fs->pwd());
                 if (!file.isFile()) {
-                    throw FSError(fault::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
+                    throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
                 
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
@@ -1265,7 +1265,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto &path = matchPath(args.at("name"), missing);
                 
                 if (missing.empty()) {
-                    throw(FSError(fault::FS_EXISTS, args.at("name")));
+                    throw(FSError(FSError::FS_EXISTS, args.at("name")));
                 }
                 auto *p = &path;
                 for (auto &it: missing) {
@@ -1300,7 +1300,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                     if (path.isFile()) {
                         
-                        throw FSError(fault::FS_EXISTS, args.at("target"));
+                        throw FSError(FSError::FS_EXISTS, args.at("target"));
                     }
                     if (path.isDirectory()) {
                         
@@ -1316,7 +1316,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 } else {
                     
-                    throw FSError(fault::FS_NOT_FOUND, missing.front());
+                    throw FSError(FSError::FS_NOT_FOUND, missing.front());
                 }
             }
     });
@@ -1343,7 +1343,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                     if (path.isFile()) {
                         
-                        throw FSError(fault::FS_EXISTS, args.at("target"));
+                        throw FSError(FSError::FS_EXISTS, args.at("target"));
                     }
                     if (path.isDirectory()) {
                         
@@ -1356,7 +1356,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 } else {
                     
-                    throw FSError(fault::FS_NOT_FOUND, missing.front());
+                    throw FSError(FSError::FS_NOT_FOUND, missing.front());
                 }
             }
     });
@@ -1380,7 +1380,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     fs->rm(path);
 
                 } else if (path.isDirectory()) {
-                    throw FSError(fault::FS_NOT_A_FILE, args.at("path"));
+                    throw FSError(FSError::FS_NOT_A_FILE, args.at("path"));
                 } else {
                     throw utl::ParseError("Not a file or directory");
                 }
