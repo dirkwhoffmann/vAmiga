@@ -30,10 +30,9 @@ public:
     
     isize capacity() const override;
     isize bsize() const override;
-    void freeBlock(isize nr) override;
-    Buffer<u8> *readBlock(isize nr) override;
-    Buffer<u8> *ensureBlock(isize nr) override;
-    void writeBlock(isize nr, const Buffer<u8> &buffer) override;
+    // void freeBlock(isize nr) override;
+    void readBlock(u8 *dst, isize nr) override;
+    void writeBlock(const u8 *src, isize nr) override;
 };
 
 }

@@ -34,27 +34,15 @@ Volume::bsize() const
 }
 
 void
-Volume::freeBlock(isize nr)
+Volume::readBlock(u8 *dst, isize nr)
 {
-    device.freeBlock(range.translate(nr));
-}
-
-Buffer<u8> *
-Volume::readBlock(isize nr)
-{
-    return device.readBlock(range.translate(nr));
-}
-
-Buffer<u8> *
-Volume::ensureBlock(isize nr)
-{
-    return device.ensureBlock(range.translate(nr));
+    device.readBlock(dst, range.translate(nr));
 }
 
 void
-Volume::writeBlock(isize nr, const Buffer<u8> &buffer)
+Volume::writeBlock(const u8 *src, isize nr)
 {
-    device.writeBlock(range.translate(nr), buffer);
+    device.writeBlock(src, range.translate(nr));
 }
 
 }

@@ -27,12 +27,14 @@ FileSystem::typeOf(Block nr, isize pos) const noexcept
 FSFormat
 FileSystem::predictDOS(BlockView &dev) noexcept
 {
-    if (auto *blk = dev.readBlock(0)) {
+    Buffer<u8> data(dev.bsize());
 
-        if (strncmp((const char *)blk->ptr, "DOS", 3) == 0 && blk->ptr[3] <= 7) {
-            return FSFormat(blk->ptr[3]);
-        }
+    // Analyze the signature of the first block
+    dev.readBlock(data.ptr, 0);
+    if (strncmp((const char *)data.ptr, "DOS", 3) == 0 && data.ptr[3] <= 7) {
+        return FSFormat(data.ptr[3]);
     }
+
     return FSFormat::NODOS;
 }
 

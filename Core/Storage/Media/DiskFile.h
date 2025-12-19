@@ -24,20 +24,10 @@ public:
 
     isize capacity() const override { return numBlocks(); }
     isize bsize() const override { return 512; }
-    void freeBlock(isize nr) override { }
-    Buffer<u8> *readBlock(isize nr) override {
+    void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
+    void writeBlock(const u8 *src, isize nr) override {
+        writeSector(nr, Buffer<u8>(src, bsize())); }
 
-        // REMOVE MEMORY LEAK AFTER TESTING
-        auto buf = new Buffer<u8>(bsize());
-        readSector(buf->ptr, nr);
-        return buf;
-    }
-    Buffer<u8> *ensureBlock(isize nr) override { return readBlock(nr); }
-    void writeBlock(isize nr, const Buffer<u8> &buffer) override {
-
-        assert(buffer.size == bsize());
-        writeSector(nr, buffer);
-    }
 
     //
     // Querying disk properties

@@ -500,11 +500,8 @@ FSBlock::data()
 {
     if (dataCache.empty()) {
 
-        if (auto *buffer = storage.dev.ensureBlock(nr)) {
-            dataCache.init(*buffer);
-        } else {
-            dataCache.init(bsize());
-        }
+        dataCache.alloc(bsize());
+        storage.dev.readBlock(dataCache.ptr, nr);
     }
 
     assert(dataCache.size == bsize());
@@ -523,8 +520,8 @@ void
 FSBlock::flush()
 {
     if (!dataCache.empty()) {
-
-        storage.dev.writeBlock(nr, dataCache);
+        
+        storage.dev.writeBlock(dataCache.ptr, nr);
     }
 }
 

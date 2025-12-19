@@ -17,32 +17,9 @@ namespace vamiga {
 FSCache::FSCache(FileSystem &fs, BlockView &dev) : FSExtension(fs), dev(dev) {
 
     capacity = dev.capacity();
-    bsize    = dev.bsize();
+    bsize = dev.bsize();
 
     blocks.reserve(capacity);
-
-    /*
-    auto layout = FSDescriptor(capacity, FileSystem::predictDOS(dev));
-
-    // Check the consistency of the file system descriptor (optional)
-    layout.checkCompatibility();
-
-    // Only proceed if the volume is formatted
-    if (layout.dos == FSFormat::NODOS) return;
-
-    // Create all blocks
-    for (isize i = 0; i < layout.numBlocks; i++) {
-
-        if (auto *blk = dev.readBlock(Block(i))) {
-
-            auto type = FileSystem::predictType(layout, Block(i), blk->ptr);
-            if (type == FSBlockType::EMPTY) continue;
-
-            // Create new block
-            storage[i].init(type);
-        }
-    }
-    */
 };
 
 FSCache::~FSCache()
@@ -126,9 +103,10 @@ FSCache::cache(Block nr) noexcept
 
     // Create the block cache entry
     auto block = std::make_unique<FSBlock>(&fs, nr);
+    block->dataCache.alloc(bsize);
 
     // Read block data from the underlying block device
-    if (auto *buffer = dev.readBlock(nr)) block->dataCache.init(*buffer);
+    dev.readBlock(block->dataCache.ptr, nr);
 
     // Predict the block type based on its number and cached data
     block->type = fs.predictType(nr, block->dataCache.ptr);

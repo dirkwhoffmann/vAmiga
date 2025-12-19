@@ -24,12 +24,8 @@ public:
 
     virtual isize capacity() const = 0;
     virtual isize bsize() const = 0;
-    virtual void freeBlock(isize nr) = 0;
-    virtual Buffer<u8> *readBlock(isize nr) = 0;
-    virtual Buffer<u8> *ensureBlock(isize nr) = 0;
-    virtual void writeBlock(isize nr, const Buffer<u8> &) = 0;
-
-    bool valid(isize nr) { return nr >= 0 && nr < capacity(); }
+    virtual void readBlock(u8 *dst, isize nr) = 0;
+    virtual void writeBlock(const u8 *src, isize nr) = 0;
 };
 
 }

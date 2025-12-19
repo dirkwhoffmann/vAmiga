@@ -291,22 +291,8 @@ public:
 
     isize capacity() const override { return geometry.numBlocks(); }
     isize bsize() const override { return geometry.bsize; }
-    void freeBlock(isize nr) override { }
-    Buffer<u8> *readBlock(isize nr) override {
-
-        // REMOVE MEMORY LEAK AFTER TESTING
-        if (nr > capacity()) return nullptr;
-        auto buf = new Buffer<u8>(bsize());
-        memcpy(buf->ptr, data.ptr + nr * bsize(), bsize());
-        return buf;
-    }
-    Buffer<u8> *ensureBlock(isize nr) override { return readBlock(nr); }
-    void writeBlock(isize nr, const Buffer<u8> &buffer) override {
-
-        if (nr > capacity()) return;
-        assert(buffer.size == bsize());
-        memcpy(data.ptr + nr * bsize(), data.ptr, bsize());
-    }
+    void readBlock(u8 *dst, isize nr) override { memcpy(dst, data.ptr + nr * bsize(), bsize()); }
+    void writeBlock(const u8 *src, isize nr) override { memcpy(data.ptr + nr * bsize(), src, bsize()); }
 
 
     //

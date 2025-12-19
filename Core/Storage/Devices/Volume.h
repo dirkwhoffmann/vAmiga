@@ -27,7 +27,7 @@ public:
 
     isize bsize() const override;
     void freeBlock(isize nr) override;
-    Buffer<u8> *readBlock(isize nr) override;
+    Buffer<u8> *deprecatedReadBlock(isize nr) override;
     Buffer<u8> *ensureBlock(isize nr) override;
     void writeBlock(isize nr, const Buffer<u8> &buffer) override;
 };
