@@ -116,15 +116,27 @@ public:
     // Caches a block (if not already cached)
     FSBlock *cache(Block nr) const noexcept;
 
-    // Returns a block pointer or null
+    // Returns a pointer to a block with read permissions (maybe null)
     const FSBlock *tryFetch(Block nr) const noexcept;
     const FSBlock *tryFetch(Block nr, FSBlockType type) const noexcept;
     const FSBlock *tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept;
 
-    // Returns a block reference (may throw)
+    // Returns a reference to a block with read permissions (may throw)
     const FSBlock &fetch(Block nr) const;
     const FSBlock &fetch(Block nr, FSBlockType type) const;
     const FSBlock &fetch(Block nr, std::vector<FSBlockType> types) const;
+
+    // Returns a pointer to a block with write permissions (maybe null)
+    FSBlock *tryModify(Block nr) noexcept;
+    FSBlock *tryModify(Block nr, FSBlockType type) noexcept;
+    FSBlock *tryModify(Block nr, std::vector<FSBlockType> types) noexcept;
+
+    // Returns a reference to a block with write permissions (may throw)
+    FSBlock &modify(Block nr);
+    FSBlock &modify(Block nr, FSBlockType type);
+    FSBlock &modify(Block nr, std::vector<FSBlockType> types);
+
+
 
 
     FSBlock *read(Block nr) noexcept;

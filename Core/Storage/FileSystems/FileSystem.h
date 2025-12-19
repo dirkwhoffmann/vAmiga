@@ -257,12 +257,32 @@ public:
     const FSBlock &at(Block nr, FSBlockType type) const;
     const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
 
+    // Returns a pointer to a block with read permissions (maybe null)
+    const FSBlock *tryFetch(Block nr) const noexcept { return cache.tryFetch(nr); }
+    const FSBlock *tryFetch(Block nr, FSBlockType type) const noexcept { return cache.tryFetch(nr, type); }
+    const FSBlock *tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept { return cache.tryFetch(nr, types); }
+
+    // Returns a reference to a block with read permissions (may throw)
+    const FSBlock &fetch(Block nr) const { return cache.fetch(nr); }
+    const FSBlock &fetch(Block nr, FSBlockType type) const { return cache.fetch(nr, type); }
+    const FSBlock &fetch(Block nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types); }
+
+    // Returns a pointer to a block with write permissions (maybe null)
+    FSBlock *tryModify(Block nr) noexcept { return cache.tryModify(nr); }
+    FSBlock *tryModify(Block nr, FSBlockType type) noexcept { return cache.tryModify(nr, type); }
+    FSBlock *tryModify(Block nr, std::vector<FSBlockType> types) noexcept { return cache.tryModify(nr, types); }
+
+    // Returns a reference to a block with write permissions (may throw)
+    FSBlock &modify(Block nr) { return cache.modify(nr); }
+    FSBlock &modify(Block nr, FSBlockType type) { return cache.modify(nr, type); }
+    FSBlock &modify(Block nr, std::vector<FSBlockType> types) { return cache.modify(nr, types); }
+
     // Writes back dirty cache blocks to the block device
     void flush();
 
     // Operator overload
-    FSBlock &operator[](size_t nr);
-    const FSBlock &operator[](size_t nr) const;
+    // FSBlock &operator[](size_t nr);
+    const FSBlock &operator[](size_t nr);
 
 
     // -------------------------------------------------------------------------

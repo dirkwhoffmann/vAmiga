@@ -155,6 +155,70 @@ FSCache::fetch(Block nr, std::vector<FSBlockType> types) const
     }
 }
 
+FSBlock *
+FSCache::tryModify(Block nr) noexcept
+{
+    markAsDirty(nr);
+    return cache(nr);
+}
+
+FSBlock *
+FSCache::tryModify(Block nr, FSBlockType type) noexcept
+{
+    if (auto *ptr = tryModify(nr); ptr) {
+
+        if (ptr->type == type) {
+
+            markAsDirty(nr);
+            return ptr;
+        }
+    }
+    return nullptr;
+}
+
+FSBlock *
+FSCache::tryModify(Block nr, std::vector<FSBlockType> types) noexcept
+{
+    if (auto *ptr = tryModify(nr); ptr) {
+
+        for (auto &type: types) {
+
+            if (ptr->type == type) {
+
+                markAsDirty(nr);
+                return ptr;
+            }
+        }
+    }
+    return nullptr;
+}
+
+FSBlock &
+FSCache::modify(Block nr)
+{
+    if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
+    if (auto *result = tryModify(nr)) return *result;
+    throw FSError(FSError::FS_UNKNOWN);
+}
+
+FSBlock &
+FSCache::modify(Block nr, FSBlockType type)
+{
+    if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
+    if (auto *result = tryModify(nr, type)) return *result;
+    throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+}
+
+FSBlock &
+FSCache::modify(Block nr, std::vector<FSBlockType> types)
+{
+    if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
+    if (auto *result = tryModify(nr, types); result) return *result;
+    throw FSError(FSError::FS_WRONG_BLOCK_TYPE, std::to_string(nr));
+}
+
+
+
 
 
 FSBlock *

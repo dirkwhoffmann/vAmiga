@@ -191,6 +191,7 @@ FileSystem::flush()
     cache.flush();
 }
 
+/*
 FSBlock &
 FileSystem::operator[](size_t nr)
 {
@@ -199,6 +200,13 @@ FileSystem::operator[](size_t nr)
 
 const FSBlock &
 FileSystem::operator[](size_t nr) const
+{
+    return cache.fetch(Block(nr));
+}
+*/
+
+const FSBlock &
+FileSystem::operator[](size_t nr)
 {
     return cache.fetch(Block(nr));
 }
