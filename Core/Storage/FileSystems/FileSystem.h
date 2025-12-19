@@ -94,7 +94,7 @@
 #include "FSImporter.h"
 #include "FSExporter.h"
 #include "DeviceError.h"
-#include "BlockDevice.h"
+#include "BlockVolume.h"
 #include "utl/abilities/Loggable.h"
 
 namespace vamiga {
@@ -164,7 +164,7 @@ public:
 
 public:
 
-    FileSystem(BlockView &dev);
+    FileSystem(Volume &vol);
     virtual ~FileSystem() = default;
 
     FileSystem(const FileSystem &fs) = delete;

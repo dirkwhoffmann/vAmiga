@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-FSCache::FSCache(FileSystem &fs, BlockView &dev) : FSExtension(fs), dev(dev) {
+FSCache::FSCache(FileSystem &fs, Volume &dev) : FSExtension(fs), dev(dev) {
 
     capacity = dev.capacity();
     bsize = dev.bsize();
@@ -33,6 +33,7 @@ FSCache::dealloc()
     blocks.clear();
 }
 
+/*
 void
 FSCache::init(isize capacity, isize bsize)
 {
@@ -49,6 +50,7 @@ FSCache::init(isize capacity, isize bsize)
     // Request a capacity change
     blocks.reserve(capacity);
 }
+*/
 
 void
 FSCache::dump(std::ostream &os) const

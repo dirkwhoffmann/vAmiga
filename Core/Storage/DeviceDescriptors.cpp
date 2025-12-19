@@ -158,7 +158,7 @@ PartitionDescriptor::PartitionDescriptor(const GeometryDescriptor &geo)
 }
 
 GeometryDescriptor
-PartitionDescriptor::geometry() const {
+PartitionDescriptor::geometry() const noexcept {
 
     return GeometryDescriptor(numCylinders(), heads, sectors, sizeBlock * 4);
 }

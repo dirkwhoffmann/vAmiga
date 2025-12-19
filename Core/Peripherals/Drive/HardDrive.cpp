@@ -367,7 +367,8 @@ HardDrive::isBootable()
 {
     try {
 
-        auto fs = FileSystem(*this);
+        auto vol = Volume(*this);
+        auto fs = FileSystem(vol);
 
         // auto dev = make_unique<Device>(getGeometry());
         // auto fs = FileSystemFactory::fromHardDrive(*dev, *this);
@@ -577,7 +578,8 @@ HardDrive::format(FSFormat fsType, string name)
         auto hdf = HDFFactory::make(*this);
 
         // Create a file system on top of the HDF
-        auto fs = FileSystem(*hdf);
+        auto vol = Volume(*hdf);
+        auto fs = FileSystem(vol);
 
         // Format the file system
         fs.format(fsType);
@@ -785,7 +787,8 @@ HardDrive::importFolder(const fs::path &path)
         auto traits = getPartitionTraits(0);
 
         // Create a file system on top of the drive
-        auto fs = FileSystem(*this);
+        auto vol = Volume(*this);
+        auto fs = FileSystem(vol);
 
         // Import all files
         fs.importer.import(fs.root(), path, true, true);

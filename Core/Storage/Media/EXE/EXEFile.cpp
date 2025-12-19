@@ -51,7 +51,10 @@ EXEFile::finalizeRead()
     adf = *ADFFactory::make(Diameter::INCH_35, hd ? Density::HD : Density::DD);
 
     // Mount a file system on top of the ADF
-    auto fs = FileSystem(adf);
+    auto vol = Volume(adf);
+    auto fs = FileSystem(vol);
+
+    // Name the file system
     fs.setName(FSName("Disk"));
 
     // Make the volume bootable

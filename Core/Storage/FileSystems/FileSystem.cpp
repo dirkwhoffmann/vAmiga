@@ -32,11 +32,11 @@ FSTraits::adf() const
     size == 1802240;      // 1760 KB (HD)
 }
 
-FileSystem::FileSystem(BlockView &dev) : cache(*this, dev)
+FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
 {
     debug(FS_DEBUG, "Creating file system...\n");
 
-    auto layout = FSDescriptor(dev.capacity(), FileSystem::predictDOS(dev));
+    auto layout = FSDescriptor(vol.capacity(), FileSystem::predictDOS(vol));
 
     // Check consistency (may throw)
     layout.checkCompatibility();

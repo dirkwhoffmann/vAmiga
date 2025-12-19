@@ -297,10 +297,8 @@ NavigatorConsole::import(const FloppyDrive &dfn)
     adf = ADFFactory::make(dfn);
 
     // Create a file system on top
-    fs = make_unique<FileSystem>(*adf);
-
-
-    // FileSystemFactory::initFromFloppy(*fs, dfn);
+    auto vol = Volume(*adf);
+    fs = make_unique<FileSystem>(vol);
 }
 
 void
@@ -656,11 +654,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto n = values[0];
 
                 adf = ADFFactory::make(*df[n]);
-                fs = make_unique<FileSystem>(*adf);
-                /*
-                dev = make_unique<Device>(df[n]->diameter(), df[n]->density());
-                fs = FileSystemFactory::fromFloppyDrive(*dev, *df[n]);
-                */
+                vol = make_unique<Volume>(*adf);
+                fs  = make_unique<FileSystem>(*vol);
+
                 fs->dumpInfo(os);
 
             }, .payload = {i}

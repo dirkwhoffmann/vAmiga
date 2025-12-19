@@ -208,8 +208,9 @@ ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
     // Only proceed if a file system is given
     if (dos == FSFormat::NODOS) return;
 
-    // Create a file system on top of this file
-    auto fs = FileSystem(*this);
+    // Create a file system
+    auto vol = Volume(*this);
+    auto fs = FileSystem(vol);
 
     // Format the file system
     fs.format(dos);

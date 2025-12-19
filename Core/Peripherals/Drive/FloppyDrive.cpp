@@ -1038,7 +1038,8 @@ FloppyDrive::catchFile(const fs::path &path)
     auto adf = ADFFactory::make(*this);
 
     // Mount file system on top of the ADF
-    auto fs = FileSystem(*adf);
+    auto vol = Volume(*adf);
+    auto fs = FileSystem(vol);
 
     // Extract the file system
     // auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
@@ -1098,7 +1099,8 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     auto adf = ADFFactory::make(GeometryDescriptor(diameter(), density()));
 
     // Mount a file system on top of the ADF
-    auto fs = FileSystem(*adf);
+    auto vol = Volume(*adf);
+    auto fs = FileSystem(vol);
 
     // Format the file system
     fs.format(dos);

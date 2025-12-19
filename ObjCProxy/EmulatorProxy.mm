@@ -1363,12 +1363,14 @@ NSString *EventSlotName(EventSlot slot)
 
         if (auto* adf = dynamic_cast<ADFFile *>(base)) {
 
-            auto *fs = new FileSystem(*adf);
+            auto *vol = new Volume(*adf); // MEMORY LEAK!
+            auto *fs = new FileSystem(*vol);
             return [self make:fs];
         }
         if (auto* hdf = dynamic_cast<HDFFile *>(base)) {
 
-            auto *fs = new FileSystem(*hdf);
+            auto *vol = new Volume(*hdf, nr); // MEMORY LEAK!
+            auto *fs = new FileSystem(*vol);
             return [self make:fs];
         }
 

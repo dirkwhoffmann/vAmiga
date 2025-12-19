@@ -126,15 +126,15 @@ struct PartitionDescriptor : SerializableStruct
     PartitionDescriptor(const GeometryDescriptor &geo);
 
     // Computed values
-    isize numCylinders() const { return highCyl - lowCyl + 1; }
-    isize numBlocks() const { return numCylinders() * heads * sectors; }
-    GeometryDescriptor geometry() const;
+    isize numCylinders() const noexcept { return highCyl - lowCyl + 1; }
+    isize numBlocks() const noexcept { return numCylinders() * heads * sectors; }
+    GeometryDescriptor geometry() const noexcept;
 
     // Returns the physical block number for a logical partition block
     isize translate(isize block) const noexcept;
 
     // Returns the partition's block range in [lower; upper) format
-    Range<isize> range() const noexcept { return { translate(0), translate(numBlocks()) }; }
+    Range<isize> range() const noexcept { return { translate(0), translate(0) + numBlocks() }; }
 
     // Prints debug information
     void dump() const;

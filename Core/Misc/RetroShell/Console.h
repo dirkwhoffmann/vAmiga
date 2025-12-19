@@ -434,9 +434,9 @@ class DebuggerConsole final : public Console
 
 class NavigatorConsole final : public Console
 {
-    // unique_ptr<Device> dev; // DEPRECATED
+    unique_ptr<ADFFile> adf;
+    unique_ptr<Volume> vol;
     unique_ptr<FileSystem> fs;
-    unique_ptr<ADFFile> adf; // Experimental
 
     using Console::Console;
     
