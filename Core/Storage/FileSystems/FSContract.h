@@ -19,20 +19,22 @@ struct FSRequire {
 
     const class FileSystem &fs;
 
-    void inRange(BlockNr nr);
-    void file(BlockNr nr);
-    void directory(BlockNr nr);
-    void fileOrDirectory(BlockNr nr);
-    void notRoot(BlockNr nr);
-    void emptyDirectory(BlockNr nr);
-    void notExist(BlockNr nr, const FSName &name);
+    void isFormatted() const;
+    void inRange(BlockNr nr) const;
+    void file(BlockNr nr) const;
+    void directory(BlockNr nr) const;
+    void fileOrDirectory(BlockNr nr) const;
+    void notRoot(BlockNr nr) const;
+    void emptyDirectory(BlockNr nr) const;
+    void notExist(BlockNr nr, const FSName &name) const;
 };
 
 struct FSEnsure {
 
     const class FileSystem &fs;
 
-    void inRange(BlockNr nr);
+    void isFormatted() const;
+    void inRange(BlockNr nr) const;
 };
 
 }

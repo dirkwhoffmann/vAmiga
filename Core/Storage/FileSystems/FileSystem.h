@@ -453,7 +453,7 @@ public:
 public:
 
     // Returns the root of the directory tree
-    BlockNr root() { return rootBlock; } // RENAME LATER TO root()
+    BlockNr root() const { return rootBlock; } // RENAME LATER TO root()
     [[deprecated]] FSBlock &deprecatedRoot() { return modify(rootBlock); } // DEPRECATED
     [[deprecated]] const FSBlock &deprecatedRoot() const { return fetch(rootBlock); }
 
@@ -514,7 +514,6 @@ private:
 
     std::vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
                                       std::unordered_set<BlockNr> &visited) const;
-    // std::vector<BlockNr> find(BlockNr top, const FSOpt &opt, std::unordered_set<BlockNr> &visited) const;
 
     std::vector<const FSBlock *> match(const FSBlock *top,
                                        std::vector<FSPattern> pattern) const;
@@ -525,6 +524,7 @@ private:
 // Argument checkers
 //
 
+/*
 namespace require {
 
 void formatted(const FileSystem &fs);
@@ -537,5 +537,6 @@ void notRoot(const FSBlock &block);
 void emptyDirectory(const FSBlock &block);
 void notExist(const FSBlock &dir, const FSName &name);
 }
+*/
 
 }

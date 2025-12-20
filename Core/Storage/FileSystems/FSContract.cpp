@@ -13,7 +13,15 @@
 namespace vamiga {
 
 void
-FSRequire::inRange(BlockNr nr)
+FSRequire::isFormatted() const
+{
+    if (!fs.isFormatted()) {
+        throw FSError(FSError::FS_UNFORMATTED);
+    }
+}
+
+void
+FSRequire::inRange(BlockNr nr) const
 {
     if (nr >= fs.getTraits().blocks) {
         throw FSError(FSError::FS_OUT_OF_RANGE);
@@ -21,7 +29,7 @@ FSRequire::inRange(BlockNr nr)
 }
 
 void
-FSRequire::file(BlockNr nr)
+FSRequire::file(BlockNr nr) const
 {
     inRange(nr);
     auto t = fs.typeOf(nr);
@@ -31,7 +39,7 @@ FSRequire::file(BlockNr nr)
 }
 
 void
-FSRequire::fileOrDirectory(BlockNr nr)
+FSRequire::fileOrDirectory(BlockNr nr) const
 {
     inRange(nr);
     auto t = fs.typeOf(nr);
@@ -41,7 +49,7 @@ FSRequire::fileOrDirectory(BlockNr nr)
 }
 
 void
-FSRequire::directory(BlockNr nr)
+FSRequire::directory(BlockNr nr) const
 {
     inRange(nr);
     auto t = fs.typeOf(nr);
@@ -51,7 +59,7 @@ FSRequire::directory(BlockNr nr)
 }
 
 void
-FSRequire::notRoot(BlockNr nr)
+FSRequire::notRoot(BlockNr nr) const
 {
     inRange(nr);
     auto t = fs.typeOf(nr);
@@ -61,7 +69,7 @@ FSRequire::notRoot(BlockNr nr)
 }
 
 void
-FSRequire::emptyDirectory(BlockNr nr)
+FSRequire::emptyDirectory(BlockNr nr) const
 {
     directory(nr);
     auto &node = fs.fetch(nr);
@@ -71,7 +79,7 @@ FSRequire::emptyDirectory(BlockNr nr)
 }
 
 void
-FSRequire::notExist(BlockNr nr, const FSName &name)
+FSRequire::notExist(BlockNr nr, const FSName &name) const
 {
     directory(nr);
     auto &node = fs.fetch(nr);
@@ -79,7 +87,13 @@ FSRequire::notExist(BlockNr nr, const FSName &name)
 }
 
 void
-FSEnsure::inRange(BlockNr nr)
+FSEnsure::isFormatted() const
+{
+    assert(fs.isFormatted());
+}
+
+void
+FSEnsure::inRange(BlockNr nr) const
 {
     assert(nr < fs.getTraits().blocks);
 }

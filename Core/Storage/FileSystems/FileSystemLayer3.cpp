@@ -254,13 +254,13 @@ FileSystem::seek(const FSBlock &root, const string &name) const
 std::vector<const FSBlock *>
 FileSystem::find(const FSOpt &opt) const
 {
-    return find(deprecatedPwd(), opt);
+    return find(fetch(pwd()), opt);
 }
 
 std::vector<const FSBlock *>
 FileSystem::find(const FSBlock &root, const FSOpt &opt) const
 {
-    require::fileOrDirectory(root);
+    require.fileOrDirectory(root.nr);
     return find(&root, opt);
 }
 
@@ -374,7 +374,7 @@ FileSystem::find(const FSPattern &pattern) const
     std::vector<BlockNr> result;
 
     // Determine the directory to start searching
-    auto &start = pattern.isAbsolute() ? deprecatedRoot() : deprecatedPwd();
+    auto &start = pattern.isAbsolute() ? fetch(root()) : fetch(pwd());
 
     // Seek all files matching the provided pattern
     return find(start, pattern);
@@ -405,9 +405,9 @@ std::vector<const FSBlock *>
 FileSystem::match(const FSPattern &pattern) const
 {
     if (pattern.isAbsolute()) {
-        return match(&deprecatedRoot(), pattern.splitted());
+        return match(&fetch(root()), pattern.splitted());
     } else {
-        return match(&deprecatedPwd(), pattern.splitted());
+        return match(&fetch(pwd()), pattern.splitted());
     }
 }
 
@@ -415,7 +415,7 @@ std::vector<const FSBlock *>
 FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
 {
     if (pattern.isAbsolute()) {
-        return match(&deprecatedRoot(), pattern.splitted());
+        return match(&fetch(root()), pattern.splitted());
     } else {
         return match(node, pattern.splitted());
     }
