@@ -39,32 +39,27 @@ FileSystem::parent(const FSBlock *node) const noexcept
 }
 
 void
-FileSystem::cd(const FSName &name)
-{
-    if (auto ptr = seekPtr(&deprecatedPwd(), name); ptr) cd(ptr->nr);
-    throw FSError(FSError::FS_NOT_FOUND, name.cpp_str());
-}
-
-void
 FileSystem::cd(BlockNr nr)
 {
     current = nr;
 }
 
 void
+FileSystem::cd(const FSName &name)
+{
+    cd(seek(pwd(), name));
+}
+
+void
 FileSystem::cd(const string &path)
 {
-    cd(seek(deprecatedPwd(), path).nr);
-    /*
-    if (auto ptr = seekPtr(&deprecatedPwd(), path); ptr) cd(ptr->nr);
-    throw FSError(FSError::FS_NOT_FOUND, path);
-    */
+    cd(seek(pwd(), path));
 }
 
 bool
-FileSystem::exists(const FSBlock &top, const fs::path &path) const
+FileSystem::exists(BlockNr top, const fs::path &path) const
 {
-    return seekPtr(&top, path) != nullptr;
+    return trySeek(top, path).has_value();
 }
 
 FSBlock *
@@ -104,7 +99,7 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
 }
 
 optional<BlockNr>
-FileSystem::trySeek(BlockNr top, const FSName &name)
+FileSystem::trySeek(BlockNr top, const FSName &name) const
 {
     auto &root = fetch(rootBlock);
     if (!root.isRoot()) return {};
@@ -128,7 +123,7 @@ FileSystem::trySeek(BlockNr top, const FSName &name)
         // Traverse the linked list until the item has been found
         while (ref && visited.find(ref) == visited.end())  {
 
-            auto *block = tryModify(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
+            auto *block = tryFetch(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
             if (block == nullptr) break;
 
             if (block->isNamed(name)) return block->nr;
@@ -142,16 +137,39 @@ FileSystem::trySeek(BlockNr top, const FSName &name)
 }
 
 optional<BlockNr>
-FileSystem::trySeek(BlockNr top, const fs::path &name)
+FileSystem::trySeek(BlockNr top, const fs::path &name) const
 {
     return trySeek(top, FSName(name));
 }
 
 optional<BlockNr>
-FileSystem::trySeek(BlockNr top, const string &name)
+FileSystem::trySeek(BlockNr top, const string &name) const
 {
     return trySeek(top, FSName(name));
 }
+
+BlockNr
+FileSystem::seek(BlockNr top, const FSName &name) const
+{
+    if (auto it = trySeek(top, name)) return *it;
+    throw FSError(FSError::FS_NOT_FOUND, name.cpp_str());
+}
+
+BlockNr
+FileSystem::seek(BlockNr top, const fs::path &name) const
+{
+    if (auto it = trySeek(top, name)) return *it;
+    throw FSError(FSError::FS_NOT_FOUND, name.string());
+}
+
+BlockNr
+FileSystem::seek(BlockNr top, const string &name) const
+{
+    if (auto it = trySeek(top, name)) return *it;
+    throw FSError(FSError::FS_NOT_FOUND, name);
+}
+
+
 
 const FSBlock *
 FileSystem::seekPtr(const FSBlock *root, const FSName &name) const noexcept

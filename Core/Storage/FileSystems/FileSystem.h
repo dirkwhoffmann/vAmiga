@@ -431,7 +431,7 @@ private:
 public:
 
     // Returns the working directory
-    BlockNr pwd() { return current; } // RENAME LATER TO pwd()
+    BlockNr pwd() const { return current; } // RENAME LATER TO pwd()
     [[deprecated]] FSBlock &deprecatedPwd() { return modify(current); } // TODO: DEPRECATE ASAP
     [[deprecated]] const FSBlock &deprecatedPwd() const { return fetch(current); } // TODO: DEPRECATE ASAP
 
@@ -459,28 +459,33 @@ public:
     const FSBlock *parent(const FSBlock *block) const noexcept;
 
     // Checks if a an item exists in the directory tree
-    bool exists(const FSBlock &top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(deprecatedPwd(), path); }
+    bool exists(BlockNr top, const fs::path &path) const;
+    bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock *seekPtr(const FSBlock *top, const FSName &name) noexcept;
-    FSBlock *seekPtr(const FSBlock *top, const fs::path &name) noexcept;
-    FSBlock *seekPtr(const FSBlock *top, const string &name) noexcept;
-    const FSBlock *seekPtr(const FSBlock *top, const FSName &name) const noexcept;
-    const FSBlock *seekPtr(const FSBlock *top, const fs::path &name) const noexcept;
-    const FSBlock *seekPtr(const FSBlock *top, const string &name) const noexcept;
+    [[deprecated]] FSBlock *seekPtr(const FSBlock *top, const FSName &name) noexcept;
+    [[deprecated]] FSBlock *seekPtr(const FSBlock *top, const fs::path &name) noexcept;
+    [[deprecated]] FSBlock *seekPtr(const FSBlock *top, const string &name) noexcept;
+    [[deprecated]] const FSBlock *seekPtr(const FSBlock *top, const FSName &name) const noexcept;
+    [[deprecated]] const FSBlock *seekPtr(const FSBlock *top, const fs::path &name) const noexcept;
+    [[deprecated]] const FSBlock *seekPtr(const FSBlock *top, const string &name) const noexcept;
 
-    optional<BlockNr> trySeek(BlockNr top, const FSName &name);
-    optional<BlockNr> trySeek(BlockNr top, const fs::path &name);
-    optional<BlockNr> trySeek(BlockNr top, const string &name);
+    optional<BlockNr> trySeek(BlockNr top, const FSName &name) const;
+    optional<BlockNr> trySeek(BlockNr top, const fs::path &name) const;
+    optional<BlockNr> trySeek(BlockNr top, const string &name) const;
+
+    BlockNr seek(BlockNr top, const FSName &name) const;
+    BlockNr seek(BlockNr top, const fs::path &name) const;
+    BlockNr seek(BlockNr top, const string &name) const;
+
 
     // Seeks an item in the directory tree
-    FSBlock &seek(const FSBlock &top, const FSName &name);
-    FSBlock &seek(const FSBlock &top, const fs::path &name);
-    FSBlock &seek(const FSBlock &top, const string &name);
-    const FSBlock &seek(const FSBlock &top, const FSName &name) const;
-    const FSBlock &seek(const FSBlock &top, const fs::path &name) const;
-    const FSBlock &seek(const FSBlock &top, const string &name) const;
+    [[deprecated]] FSBlock &seek(const FSBlock &top, const FSName &name);
+    [[deprecated]] FSBlock &seek(const FSBlock &top, const fs::path &name);
+    [[deprecated]] FSBlock &seek(const FSBlock &top, const string &name);
+    [[deprecated]] const FSBlock &seek(const FSBlock &top, const FSName &name) const;
+    [[deprecated]] const FSBlock &seek(const FSBlock &top, const fs::path &name) const;
+    [[deprecated]] const FSBlock &seek(const FSBlock &top, const string &name) const;
 
     // Seeks all items satisfying a predicate
     std::vector<const FSBlock *> find(const FSOpt &opt) const;
