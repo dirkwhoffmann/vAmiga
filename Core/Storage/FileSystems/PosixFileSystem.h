@@ -145,13 +145,13 @@ public:
 
 private:
 
-    void tryReclaim(const FSBlock &block);
+    void tryReclaim(BlockNr block);
 
     Handle &getHandle(HandleRef ref);
 
-    FSBlock &ensureFile(const fs::path &path);
-    FSBlock &ensureFileOrDirectory(const fs::path &path);
-    FSBlock &ensureDirectory(const fs::path &path);
+    BlockNr ensureFile(const fs::path &path);
+    BlockNr ensureFileOrDirectory(const fs::path &path);
+    BlockNr ensureDirectory(const fs::path &path);
 };
 
 }

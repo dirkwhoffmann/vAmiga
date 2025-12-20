@@ -321,6 +321,53 @@ FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block
     return result;
 }
 
+/*
+std::vector<BlockNr>
+FileSystem::find(BlockNr top, const FSOpt &opt, std::unordered_set<BlockNr> &visited) const
+{
+    std::vector<BlockNr> result;
+
+    // Collect all items in the hash table
+    auto hashedBlocks = collectHashedBlocks(top);
+
+    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
+
+        // Add item if accepted
+        if (opt.accept(fetch(*it))) result.push_back(*it);
+
+        // Break the loop if this block has been visited before
+        if (visited.contains(*it)) throw FSError(FSError::FS_HAS_CYCLES);
+
+        // Remember the block as visited
+        visited.insert(*it);
+    }
+
+    // Search subdirectories
+    if (opt.recursive) {
+
+        for (auto &it : hashedBlocks) {
+
+            if (fetch(it).isDirectory()) {
+
+                auto blocks = find(it, opt, visited);
+                result.insert(result.end(), blocks.begin(), blocks.end());
+            }
+        }
+    }
+
+    // Sort the result
+    if (opt.sort) {
+
+        std::sort(result.begin(), result.end(),
+                  [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
+    }
+
+    return result;
+}
+*/
+
+
+
 std::vector<const FSBlock *>
 FileSystem::find(const FSPattern &pattern) const
 {

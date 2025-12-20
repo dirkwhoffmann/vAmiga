@@ -45,20 +45,20 @@ PosixFileSystem::stat() const noexcept
 FSAttr
 PosixFileSystem::attr(const fs::path &path) const
 {
-    return fs.attr(fs.seek(fs.deprecatedRoot(), path));
+    return fs.attr(fs.seek(fs.root(), path));
 }
 
 void
 PosixFileSystem::mkdir(const fs::path &path)
 {
     auto parent = path.parent_path();
-    auto name   = path.filename();
+    auto name = path.filename();
 
     // Lookup destination directory
-    auto &node  = fs.seek(fs.deprecatedRoot(), parent);
+    auto node = fs.seek(fs.root(), parent);
 
     // Create directory
-    auto udb = fs.mkdir(node.nr, FSName(name));
+    auto udb = fs.mkdir(node, FSName(name));
 
     // Create meta info
     auto &info = ensureMeta(udb);
@@ -69,15 +69,15 @@ void
 PosixFileSystem::rmdir(const fs::path &path)
 {
     // Lookup directory
-    auto &node = fs.seek(fs.deprecatedRoot(), path);
+    auto node = fs.seek(fs.root(), path);
 
     // Only empty directories can be removed
-    require::emptyDirectory(node);
+    fs.require.emptyDirectory(node);
 
     if (auto *info = getMeta(node); info) {
 
         // Remove directory entry
-        fs.unlink(node.nr);
+        fs.unlink(node);
 
         // Decrement link count
         if (info->linkCount > 0) info->linkCount--;
@@ -152,18 +152,18 @@ PosixFileSystem::close(HandleRef ref)
     handles.erase(ref);
 
     // Attempt deletion after all references are gone
-    tryReclaim(fs.fetch(header));
+    tryReclaim(header);
 }
 
 void
 PosixFileSystem::unlink(const fs::path &path)
 {
-    auto &node = fs.seek(fs.deprecatedRoot(), path);
+    auto node = fs.seek(fs.root(), path);
 
     if (auto *info = getMeta(node); info) {
 
         // Remove directory entry
-        fs.unlink(node.nr);
+        fs.unlink(node);
 
         // Decrement link count
         if (info->linkCount > 0) info->linkCount--;
@@ -174,18 +174,17 @@ PosixFileSystem::unlink(const fs::path &path)
 }
 
 void
-PosixFileSystem::tryReclaim(const FSBlock &node)
+PosixFileSystem::tryReclaim(BlockNr node)
 {
     if (auto *info = getMeta(node); info) {
 
-        printf("tryReclaim: %ld %ld\n", info->linkCount, info->openCount());
         if (info->linkCount == 0 && info->openCount() == 0) {
 
             // Delete file
-            fs.reclaim(node.nr);
+            fs.reclaim(node);
 
             // Trash meta data
-            meta.erase(node.nr);
+            meta.erase(node);
         }
     }
 }
@@ -202,27 +201,27 @@ PosixFileSystem::getHandle(HandleRef ref)
     return it->second;
 }
 
-FSBlock &
+BlockNr
 PosixFileSystem::ensureFile(const fs::path &path)
 {
-    auto &node = fs.seek(fs.deprecatedRoot(), path);
-    require::file(node);
+    auto node = fs.seek(fs.root(), path);
+    fs.require.file(node);
     return node;
 }
 
-FSBlock &
+BlockNr
 PosixFileSystem::ensureFileOrDirectory(const fs::path &path)
 {
-    auto &node = fs.seek(fs.deprecatedRoot(), path);
-    require::fileOrDirectory(node);
+    auto node = fs.seek(fs.root(), path);
+    fs.require.fileOrDirectory(node);
     return node;
 }
 
-FSBlock &
+BlockNr
 PosixFileSystem::ensureDirectory(const fs::path &path)
 {
-    auto &node = fs.seek(fs.deprecatedRoot(), path);
-    require::directory(node);
+    auto node = fs.seek(fs.root(), path);
+    fs.require.directory(node);
     return node;
 }
 
@@ -233,10 +232,10 @@ PosixFileSystem::create(const fs::path &path)
     auto name   = path.filename();
 
     // Lookup destination directory
-    auto &node  = fs.seek(fs.deprecatedRoot(), parent);
+    auto node = fs.seek(fs.root(), parent);
 
     // Create file
-    auto fhb = fs.createFile(node.nr, FSName(name));
+    auto fhb = fs.createFile(node, FSName(name));
 
     // Create meta info
     auto &info = ensureMeta(fhb);
@@ -275,17 +274,18 @@ PosixFileSystem::move(const fs::path &oldPath, const fs::path &newPath)
 {
     auto newDir  = newPath.parent_path();
     auto newName = newPath.filename();
-    auto &src    = fs.seek(fs.deprecatedRoot(), oldPath);
-    auto &dst    = fs.seek(fs.deprecatedRoot(), newDir);
+    auto src     = fs.seek(fs.root(), oldPath);
+    auto dst     = fs.seek(fs.root(), newDir);
 
-    fs.move(src.nr, dst.nr, newName);
+    fs.move(src, dst, newName);
 }
 
 void
 PosixFileSystem::chmod(const fs::path &path, mode_t mode)
 {
-    auto &node = ensureFile(path);
-    u32 prot   = node.getProtectionBits();
+    auto &node = fs.fetch(ensureFile(path)).mutate();
+
+    u32 prot = node.getProtectionBits();
 
     if (mode & S_IRUSR) prot &= ~0x01; else prot |= 0x01;
     if (mode & S_IWUSR) prot &= ~0x02; else prot |= 0x02;
@@ -297,7 +297,7 @@ PosixFileSystem::chmod(const fs::path &path, mode_t mode)
 void
 PosixFileSystem::resize(const fs::path &path, isize size)
 {
-    fs.resize(ensureFile(path).nr, size);
+    fs.resize(ensureFile(path), size);
 }
 
 isize
@@ -329,11 +329,11 @@ isize
 PosixFileSystem::write(HandleRef ref, std::span<const u8> buffer)
 {
     auto &handle = getHandle(ref);
-    auto &node   = fs.modify(handle.headerBlock);
-    auto &meta   = ensureMeta(node.nr);
+//    auto &fhb    = fs.fetch(handle.headerBlock);
+    auto &meta   = ensureMeta(handle.headerBlock);
 
     // Cache the file if necessary
-    if (meta.cache.empty()) { node.extractData(meta.cache); }
+    if (meta.cache.empty()) { fs.fetch(handle.headerBlock).extractData(meta.cache); }
 
     // Determine the new file size
     auto newSize = std::max(meta.cache.size, handle.offset + (isize)buffer.size());
@@ -348,7 +348,7 @@ PosixFileSystem::write(HandleRef ref, std::span<const u8> buffer)
     std::memcpy(meta.cache.ptr + handle.offset, buffer.data(), count);
 
     // Write back
-    fs.replace(node.nr, meta.cache);
+    fs.replace(handle.headerBlock, meta.cache);
 
     return count;
 }

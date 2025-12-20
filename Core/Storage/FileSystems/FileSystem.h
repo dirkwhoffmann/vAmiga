@@ -218,7 +218,7 @@ public:
 
     // Returns information about file permissions
     FSAttr attr(BlockNr nr) const;
-    FSAttr attr(const FSBlock &fhd) const;
+    // FSAttr attr(const FSBlock &fhd) const;
 
 
     // -------------------------------------------------------------------------
@@ -514,6 +514,7 @@ private:
 
     std::vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
                                       std::unordered_set<BlockNr> &visited) const;
+    // std::vector<BlockNr> find(BlockNr top, const FSOpt &opt, std::unordered_set<BlockNr> &visited) const;
 
     std::vector<const FSBlock *> match(const FSBlock *top,
                                        std::vector<FSPattern> pattern) const;

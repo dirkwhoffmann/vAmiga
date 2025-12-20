@@ -310,14 +310,9 @@ FileSystem::bootBlockType() const noexcept
 FSAttr
 FileSystem::attr(BlockNr nr) const
 {
-    return attr(fetch(nr));
-}
-
-FSAttr
-FileSystem::attr(const FSBlock &fhd) const
-{
-    isize size = fhd.getFileSize();
-    isize blocks = allocator.requiredBlocks(size);
+    auto &fhd = fetch(nr);
+    auto size = fhd.getFileSize();
+    auto blocks = allocator.requiredBlocks(size);
 
     FSAttr result = {
 
