@@ -33,7 +33,7 @@ NavigatorConsole::prompt()
     
     if (fs) {
 
-        auto &pwd = fs->deprecatedPwd();
+        auto &pwd = fs->fetch(fs->pwd());
 
         ss << "[" << std::to_string(pwd.nr) << "]";
         
@@ -214,7 +214,7 @@ NavigatorConsole::parseBlock(const string &argv)
 BlockNr
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, fs->deprecatedPwd().nr);
+    return parseBlock(argv, token, fs->pwd());
 }
 
 BlockNr
@@ -237,14 +237,14 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return fs->seek(fs->deprecatedPwd(), argv.at(token)).nr;
+        return fs->seek(fs->pwd(), argv.at(token));
 
     } catch (...) {
         
         try {
             // Treat the argument as a block number
             // return (*fs)[parseBlock(argv.at(token))];
-            return fs->modify(parseBlock(argv.at(token))).nr;
+            return parseBlock(argv.at(token));
 
         } catch (...) {
             
@@ -338,19 +338,19 @@ NavigatorConsole::exportBlocks(fs::path path)
     fs->exporter.exportBlocks(path);
 }
 
-FSBlock &
+BlockNr
 NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound)
 {
     return matchPath(argv.at(token), notFound);
 }
 
-FSBlock &
-NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, FSBlock &fallback)
+BlockNr
+NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback)
 {
     return argv.contains(token) ? matchPath(argv, token, notFound) : fallback;
 }
 
-FSBlock &
+BlockNr
 NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
     require::formatted(fs);
@@ -358,18 +358,18 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto tokens = utl::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
     
-    auto *p = &fs->deprecatedPwd();
+    auto p = fs->pwd();
     while (!tokens.empty()) {
         
-        auto *next = fs->seekPtr(p, FSName(tokens.front()));
+        auto next = fs->trySeek(p, FSName(tokens.front()));
         if (!next) break;
-        
+
         tokens.erase(tokens.begin());
-        p = next;
+        p = *next;
     }
     notFound = tokens;
     
-    return *p;
+    return p;
 }
 
 DumpOpt
@@ -707,7 +707,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto path = host.makeAbsolute(args.at("path"));
-                auto nr = parseBlock(args, "nr", fs->deprecatedPwd().nr);
+                auto nr = parseBlock(args, "nr", fs->pwd());
 
                 fs->importer.importBlock(nr, path);
             }
@@ -1265,13 +1265,13 @@ NavigatorConsole::initCommands(RSCommand &root)
                 require::formatted(fs);
 
                 Tokens missing;
-                auto &path = matchPath(args.at("name"), missing);
+                auto path = matchPath(args.at("name"), missing);
                 
                 if (missing.empty()) {
                     throw(FSError(FSError::FS_EXISTS, args.at("name")));
                 }
 
-                auto p = path.nr;
+                auto p = path;
                 for (auto &it: missing) {
                     p = fs->mkdir(p, FSName(it));
                 }
@@ -1298,11 +1298,13 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &source = fs->fetch(parsePath(args, "source"));
+                auto sourceNr = parsePath(args, "source");
+                auto &source = fs->fetch(sourceNr);
 
                 Tokens missing;
-                auto &path = matchPath(args.at("target"), missing);
-                
+                auto pathNr = matchPath(args.at("target"), missing);
+                auto &path = fs->fetch(pathNr);
+
                 printf("%s -> '%s' {", source.absName().c_str(), path.absName().c_str());
                 for (auto &it : missing) printf(" %s", it.c_str());
                 printf(" }\n");
@@ -1316,14 +1318,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                     if (path.isDirectory()) {
                         
                         debug(RSH_DEBUG, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
-                        fs->move(source.nr, path.nr);
+                        fs->move(sourceNr, pathNr);
                     }
                     
                 } else if (missing.size() == 1) {
                     
                     debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
                           source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
-                    fs->move(source.nr, path.nr, missing.back());
+                    fs->move(sourceNr, pathNr, missing.back());
 
                 } else {
                     
@@ -1345,11 +1347,12 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &source = fs->fetch(parsePath(args, "source"));
+                auto sourceNr = parsePath(args, "source");
 
                 Tokens missing;
-                auto &path = matchPath(args.at("target"), missing);
-                
+                auto pathNr = matchPath(args.at("target"), missing);
+                auto &path = fs->fetch(pathNr);
+
                 if (missing.empty()) {
                     
                     if (path.isFile()) {
@@ -1358,12 +1361,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                     }
                     if (path.isDirectory()) {
                         
-                        fs->copy(source.nr, path.nr);
+                        fs->copy(sourceNr, pathNr);
                     }
                     
                 } else if (missing.size() == 1) {
                     
-                    fs->copy(source.nr, path.nr, missing.back());
+                    fs->copy(sourceNr, pathNr, missing.back());
 
                 } else {
                     

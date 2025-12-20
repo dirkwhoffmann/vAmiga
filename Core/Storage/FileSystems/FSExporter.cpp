@@ -124,14 +124,7 @@ FSExporter::exportBlocks(const fs::path &path) const
 void
 FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool contents) const
 {
-    auto *block = fs.tryFetch(nr);
-    exportFiles(*block, path, recursive, contents);
-
-}
-
-void
-FSExporter::exportFiles(const FSBlock &item, const fs::path &path, bool recursive, bool contents) const
-{
+    auto &item = fs.fetch(nr);
     fs::path hostPath;
 
     if (item.isDirectory()) {
@@ -152,7 +145,7 @@ FSExporter::exportFiles(const FSBlock &item, const fs::path &path, bool recursiv
 void
 FSExporter::exportFiles(const fs::path &path, bool recursive, bool contents) const
 {
-    exportFiles(fs.deprecatedPwd(), path, recursive, contents);
+    exportFiles(fs.pwd(), path, recursive, contents);
 }
 
 }

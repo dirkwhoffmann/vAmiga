@@ -291,7 +291,7 @@ FSDoctor::xrayBitmap(bool strict)
     std::unordered_set<BlockNr> used;
 
     // Extract the directory tree
-    auto tree = FSTree(fs.deprecatedRoot(), { .recursive = true });
+    auto tree = FSTree(fs.fetch(fs.root()), { .recursive = true });
 
     // Collect all used blocks
     tree.bfsWalk( [&](const FSTree &it) {
@@ -361,18 +361,13 @@ FSDoctor::xrayBitmap(std::ostream &os, bool strict)
 isize
 FSDoctor::xray(BlockNr ref, bool strict) const
 {
-    return xray(fs.modify(ref), strict);
-}
-
-isize
-FSDoctor::xray(FSBlock &node, bool strict) const
-{
+    auto &node = fs.fetch(ref);
     isize count = 0;
 
     for (isize i = 0; i < node.bsize(); i += 4) {
 
         std::optional<u32> expected;
-        if (auto error = xray32(node, i, strict, expected); error != FSBlockError::OK) {
+        if (auto error = xray32(ref, i, strict, expected); error != FSBlockError::OK) {
 
             count++;
             debug(FS_DEBUG, "Block %d [%ld]: %s\n", node.nr, i, FSBlockErrorEnum::key(error));
@@ -385,15 +380,9 @@ FSDoctor::xray(FSBlock &node, bool strict) const
 FSBlockError
 FSDoctor::xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const
 {
-    return xray8(fs.modify(ref), pos, strict, expected);
-}
-
-
-FSBlockError
-FSDoctor::xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const
-{
+    // auto &node = fs.fetch(ref);
     optional<u32> exp;
-    auto result = xray32(node, pos & ~3, strict, exp);
+    auto result = xray32(ref, pos & ~3, strict, exp);
     if (exp) expected = GET_BYTE(*exp, 3 - (pos & 3));
     return result;
 }
@@ -401,18 +390,12 @@ FSDoctor::xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) c
 FSBlockError
 FSDoctor::xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) const
 {
-    return xray32(fs.modify(ref), pos, strict, expected);
-}
-
-FSBlockError
-FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const
-{
     assert(pos % 4 == 0);
 
+    auto &node = fs.fetch(ref);
     isize word = pos / 4;
     isize sword = word - (node.bsize() / 4);
     u32 value = node.get32(word);
-    auto ref = node.nr;
 
     switch (node.type) {
 
@@ -603,12 +586,7 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
 isize
 FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
 {
-    return xray(fs.modify(ref), strict, os);
-}
-
-isize
-FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
-{
+    auto &node = fs.fetch(ref);
     isize errors = 0;
 
     std::stringstream ss;
@@ -647,7 +625,7 @@ FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
 
         optional<u32> expected;
 
-        if (auto fault = xray32(node, i, strict, expected); fault != FSBlockError::OK) {
+        if (auto fault = xray32(ref, i, strict, expected); fault != FSBlockError::OK) {
 
             auto *data = node.data();
             auto type = fs.typeOf(node.nr, i);
@@ -695,12 +673,7 @@ FSDoctor::rectify(bool strict)
 void
 FSDoctor::rectify(BlockNr ref, bool strict)
 {
-    rectify(fs.modify(ref), strict);
-}
-
-void
-FSDoctor::rectify(FSBlock &node, bool strict)
-{
+    auto &node = fs.fetch(ref);
     auto *mfs = dynamic_cast<FileSystem *>(&fs);
     if (!mfs) throw FSError(FSError::FS_READ_ONLY);
 
@@ -708,11 +681,13 @@ FSDoctor::rectify(FSBlock &node, bool strict)
 
         optional<u32> expected;
 
-        if (auto fault = xray32(node, i, strict, expected); fault != FSBlockError::OK) {
+        if (auto fault = xray32(ref, i, strict, expected); fault != FSBlockError::OK) {
 
             if (expected) {
-                auto *data = node.data();
-                node.write32(data + i, *expected);
+
+                auto &mutatableNode = node.mutate();
+                auto *data = mutatableNode.data();
+                mutatableNode.mutate().write32(data + i, *expected);
             }
         }
     }

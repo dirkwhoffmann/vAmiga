@@ -36,7 +36,7 @@ public:
 
     // Exports the volume to a buffer
     void exportFiles(BlockNr nr, const fs::path &path, bool recursive = true, bool contents = false) const;
-    void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
+    // void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
     void exportFiles(const fs::path &path, bool recursive = true, bool contents = false) const;
 };
 

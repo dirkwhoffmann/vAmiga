@@ -92,10 +92,10 @@ PosixFileSystem::readDir(const fs::path &path)
 {
     std::vector<FSName> result;
 
-    auto &node = fs.seek(fs.deprecatedRoot(), path);
+    auto node = fs.seek(fs.root(), path);
 
     // Extract the directory tree
-    FSTree tree(node, { .recursive = false });
+    FSTree tree(fs.fetch(node), { .recursive = false });
 
     // Walk the tree
     tree.bfsWalk( [&](const FSTree &it) {
@@ -109,7 +109,7 @@ HandleRef
 PosixFileSystem::open(const fs::path &path, u32 flags)
 {
     // Resolve path
-    auto &node = fs.seek(fs.deprecatedRoot(), path);
+    auto node = fs.seek(fs.root(), path);
 
     // Create a unique identifier
     auto ref = nextHandle++;
@@ -118,17 +118,17 @@ PosixFileSystem::open(const fs::path &path, u32 flags)
     handles[ref] = Handle {
 
         .id = ref,
-        .headerBlock = node.nr,
+        .headerBlock = node,
         .offset = 0,
         .flags = flags
     };
     auto &handle = handles[ref];
-    auto &info = ensureMeta(node.nr);
+    auto &info = ensureMeta(node);
     info.openHandles.insert(ref);
 
     // Evaluate flags
     if ((flags & O_TRUNC) && (flags & (O_WRONLY | O_RDWR))) {
-        fs.resize(node.nr, 0);
+        fs.resize(node, 0);
     }
     if (flags & O_APPEND) {
         handle.offset = lseek(ref, 0, SEEK_END);
