@@ -86,7 +86,7 @@ public:
 private:
 
     // Locates the allocation bit for a certain block
-    FSBlock *locateAllocationBit(BlockNr nr, isize *byte, isize *bit) noexcept;
+    // FSBlock *locateAllocationBit(BlockNr nr, isize *byte, isize *bit) noexcept;
     const FSBlock *locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept;
 
     // Translate the bitmap into to a vector with the n-th bit set iff the n-th block is free

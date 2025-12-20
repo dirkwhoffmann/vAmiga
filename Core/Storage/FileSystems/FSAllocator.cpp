@@ -87,7 +87,7 @@ FSAllocator::allocate()
         }
     }
 
-    fs.tryModify(i)->init(FSBlockType::UNKNOWN); // ->type = FSBlockType::UNKNOWN;
+    fs.fetch(i).mutate().init(FSBlockType::UNKNOWN);
     markAsAllocated(i);
     ap = (i + 1) % numBlocks;
     return i;
@@ -127,7 +127,7 @@ FSAllocator::allocate(isize count, std::vector<BlockNr> &result, std::vector<Blo
 
         if (fs.isEmpty(i)) {
 
-            fs.tryModify(i)->type = FSBlockType::UNKNOWN;
+            fs.fetch(i).mutate().type = FSBlockType::UNKNOWN;
             result.push_back(i);
             count--;
         }
@@ -268,8 +268,8 @@ FSAllocator::isUnallocated(BlockNr nr) const noexcept
     return bm ? GET_BIT(bm->data()[byte], bit) : false;
 }
 
-FSBlock *
-FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) noexcept
+const FSBlock *
+FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept
 {
     assert(isize(nr) < traits.blocks);
 
@@ -282,8 +282,14 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) noexcept
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
-    auto *bm = (bmNr < (isize)fs.bmBlocks.size()) ? fs.tryModify(fs.bmBlocks[bmNr], FSBlockType::BITMAP) : nullptr;
-    if (!bm) {
+    if (bmNr <= (isize)fs.bmBlocks.size()) {
+        debug(FS_DEBUG, "Bitmap block index %ld for block %d is out of range \n", bmNr, nr);
+        return nullptr;
+    }
+
+    auto &bm = fs.fetch(fs.bmBlocks[bmNr]);
+
+    if (!bm.is(FSBlockType::BITMAP)) {
         debug(FS_DEBUG, "Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
         return nullptr;
     }
@@ -307,14 +313,16 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) noexcept
     *byte = rByte;
     *bit = nr % 8;
 
-    return bm;
+    return &bm;
 }
 
+/*
 const FSBlock *
 FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FSAllocator *>(this)->locateAllocationBit(nr, byte, bit));
 }
+*/
 
 isize
 FSAllocator::numUnallocated() const noexcept
@@ -377,8 +385,10 @@ FSAllocator::setAllocationBit(BlockNr nr, bool value)
 {
     isize byte, bit;
 
-    if (FSBlock *bm = locateAllocationBit(nr, &byte, &bit)) {
-        REPLACE_BIT(bm->data()[byte], bit, value);
+    if (auto *bm = locateAllocationBit(nr, &byte, &bit)) {
+
+        auto *data = bm->mutate().data();
+        REPLACE_BIT(data[byte], bit, value);
     }
 }
 

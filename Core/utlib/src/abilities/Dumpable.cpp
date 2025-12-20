@@ -13,7 +13,7 @@
 namespace utl {
 
 void
-Dumpable::hexdump(u8 *p, isize size, isize cols, isize pad) const
+Dumpable::hexdump(const u8 *p, isize size, isize cols, isize pad) const
 {
     while (size) {
 
@@ -31,19 +31,19 @@ Dumpable::hexdump(u8 *p, isize size, isize cols, isize pad) const
 }
 
 void
-Dumpable::hexdump(u8 *p, isize size, isize cols) const
+Dumpable::hexdump(const u8 *p, isize size, isize cols) const
 {
     hexdump(p, size, cols, cols);
 }
 
 void
-Dumpable::hexdumpWords(u8 *p, isize size, isize cols) const
+Dumpable::hexdumpWords(const u8 *p, isize size, isize cols) const
 {
     hexdump(p, size, cols, 2);
 }
 
 void
-Dumpable::hexdumpLongwords(u8 *p, isize size, isize cols) const
+Dumpable::hexdumpLongwords(const u8 *p, isize size, isize cols) const
 {
     hexdump(p, size, cols, 4);
 }
@@ -188,7 +188,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
 }
 
 void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len)
+Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len)
 {
     auto read = [&](isize offset, isize bytes) {
 
@@ -206,7 +206,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len)
 }
 
 void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len, const char *fmt)
+Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len, const char *fmt)
 {
     auto read = [&](isize offset, isize bytes) {
 

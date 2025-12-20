@@ -171,7 +171,7 @@ private:
 
 public:
 
-    void hexDump(std::ostream &os, const DumpOpt &opt);
+    void hexDump(std::ostream &os, const DumpOpt &opt) const;
 
     // Experimental
     static string rangeString(const std::vector<BlockNr> &vec);

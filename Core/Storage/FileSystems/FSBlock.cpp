@@ -732,7 +732,7 @@ FSBlock::dumpStorage(std::ostream &os) const
 }
 
 void
-FSBlock::hexDump(std::ostream &os, const DumpOpt &opt)
+FSBlock::hexDump(std::ostream &os, const DumpOpt &opt) const
 {
     if (type == FSBlockType::EMPTY) {
 

@@ -194,7 +194,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
         
         // Seek matching items
         auto matches = fs->match(&fs->fetch(fs->pwd()), args.empty() ? "*" : args.back() + "*");
-        
+
         // List all nodes
         if (!matches.empty() && displayCmds) os << std::endl;
         FSTree(matches, { .sort = sort::dafa }).list(os, { .indent = 7 });
@@ -1208,11 +1208,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 auto nr = parseBlock(args, "nr", fs->pwd());
                 auto opt = parseDumpOpts(args);
-                
-                if (auto *ptr = fs->tryModify(nr)) {
 
-                    ptr->hexDump(os, opt);
-                }
+                fs->fetch(nr).hexDump(os, opt);
             }
     });
     
