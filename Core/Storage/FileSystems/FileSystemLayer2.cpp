@@ -339,7 +339,7 @@ FileSystem::rename(BlockNr item, const FSName &name)
     if (block.isRoot()) { setName(name); return; }
 
     // For regular items, relocate entry in the parent directory
-    move(item, (*block.getParentDirBlock()).nr, name);
+    move(item, block.getParentDirRef(), name);
 }
 
 void

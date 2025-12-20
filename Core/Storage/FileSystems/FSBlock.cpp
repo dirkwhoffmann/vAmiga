@@ -1264,11 +1264,11 @@ FSBlock::setParentDirRef(BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getParentDirBlock() const
 {
-    BlockNr nr = getParentDirRef();
-    return nr ? fs->tryModify(nr) : nullptr;
+    BlockNr ref = getParentDirRef();
+    return ref ? &fs->fetch(ref) : nullptr;
 }
 
 BlockNr
@@ -1304,10 +1304,14 @@ FSBlock::setFileHeaderRef(BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getFileHeaderBlock() const
 {
-    return fs->tryModify(getFileHeaderRef(), FSBlockType::FILEHEADER);
+    BlockNr ref = getFileHeaderRef();
+    if (auto &result = fs->fetch(ref); result.isFile()) {
+        return &result;
+    }
+    return nullptr;
 }
 
 BlockNr
@@ -1341,11 +1345,11 @@ FSBlock::setNextHashRef(BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getNextHashBlock() const
 {
-    BlockNr nr = getNextHashRef();
-    return nr ? fs->tryModify(nr) : nullptr;
+    BlockNr ref = getNextHashRef();
+    return ref ? &fs->fetch(ref) : nullptr;
 }
 
 BlockNr
@@ -1379,10 +1383,15 @@ FSBlock::setNextListBlockRef(BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getNextListBlock() const
 {
-    return fs->tryModify(getNextListBlockRef(), FSBlockType::FILELIST);
+    BlockNr ref = getNextListBlockRef();
+    if (auto &node = fs->fetch(ref); node.is(FSBlockType::FILELIST)) {
+        return &node;
+    }
+    return nullptr;
+    // return fs->tryModify(getNextListBlockRef(), FSBlockType::FILELIST);
 }
 
 BlockNr
@@ -1418,11 +1427,15 @@ FSBlock::setNextBmExtBlockRef(BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getNextBmExtBlock() const
 {
-    BlockNr nr = getNextBmExtBlockRef();
-    return nr ? fs->tryModify(nr, FSBlockType::BITMAP_EXT) : nullptr;
+    if (BlockNr ref = getNextBmExtBlockRef()) {
+        if (auto &node = fs->fetch(ref); node.is(FSBlockType::BITMAP_EXT)) {
+            return &node;
+        }
+    }
+    return nullptr;
 }
 
 BlockNr
@@ -1455,11 +1468,17 @@ FSBlock::setFirstDataBlockRef(BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getFirstDataBlock() const
 {
-    if (auto *node = fs->tryModify(getFirstDataBlockRef()); node->isData()) return node;
+    BlockNr ref = getFirstDataBlockRef();
+    if (auto &node = fs->fetch(ref); node.isData()) {
+        return &node;
+    }
     return nullptr;
+
+//    if (auto *node = fs->tryModify(getFirstDataBlockRef()); node->isData()) return node;
+//    return nullptr;
 }
 
 BlockNr
@@ -1493,11 +1512,17 @@ FSBlock::setDataBlockRef(isize nr, BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getDataBlock(isize nr) const
 {
-    if (auto *node = fs->tryModify(getDataBlockRef(nr)); node->isData()) return node;
+    BlockNr ref = getDataBlockRef(nr);
+    if (auto &node = fs->fetch(ref); node.isData()) {
+        return &node;
+    }
     return nullptr;
+
+    // if (auto *node = fs->tryModify(getDataBlockRef(nr)); node->isData()) return node;
+    // return nullptr;
 }
 
 BlockNr
@@ -1515,11 +1540,17 @@ FSBlock::setNextDataBlockRef(BlockNr ref)
     }
 }
 
-FSBlock *
+const FSBlock *
 FSBlock::getNextDataBlock() const
 {
-    if (auto *node = fs->tryModify(getNextDataBlockRef()); node->isData()) return node;
+    BlockNr ref = getNextDataBlockRef();
+    if (auto &node = fs->fetch(ref); node.isData()) {
+        return &node;
+    }
     return nullptr;
+
+    // if (auto *node = fs->tryModify(getNextDataBlockRef()); node->isData()) return node;
+    // return nullptr;
 }
 
 bool
@@ -1609,9 +1640,9 @@ FSBlock::addBitmapBlockRefs(std::vector<BlockNr> &refs)
     }
 
     // Record the remaining references in bitmap extension blocks
-    FSBlock *ext = getNextBmExtBlock();
+    auto *ext = getNextBmExtBlock();
     while (ext && it != refs.end()) {
-        ext->addBitmapBlockRefs(refs, it);
+        ext->mutate().addBitmapBlockRefs(refs, it);
         ext = getNextBmExtBlock();
     }
     return it == refs.end();
@@ -1979,8 +2010,8 @@ FSBlock::overwriteData(Buffer<u8> &buf)
     assert(buf.size == bytesRemaining);
     
     // Start here and iterate through all connected file list blocks
-    FSBlock *block = this;
-    
+    const FSBlock *block = this;
+
     while (block && blocksTotal < fs->blocks()) {
 
         blocksTotal++;
@@ -1990,9 +2021,9 @@ FSBlock::overwriteData(Buffer<u8> &buf)
         for (isize i = 0; i < num; i++) {
 
             BlockNr ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = fs->tryModify(ref); dataBlock->isData()) { //} dataBlockPtr(ref)) {
-                
-                isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);
+            if (auto &dataBlock = fs->fetch(ref); dataBlock.isData()) { //} dataBlockPtr(ref)) {
+
+                isize bytesWritten = dataBlock.mutate().overwriteData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
                 bytesRemaining -= bytesWritten;
                 
