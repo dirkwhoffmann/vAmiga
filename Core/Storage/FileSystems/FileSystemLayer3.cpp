@@ -54,8 +54,11 @@ FileSystem::cd(BlockNr nr)
 void
 FileSystem::cd(const string &path)
 {
+    cd(seek(deprecatedPwd(), path).nr);
+    /*
     if (auto ptr = seekPtr(&deprecatedPwd(), path); ptr) cd(ptr->nr);
     throw FSError(FSError::FS_NOT_FOUND, path);
+    */
 }
 
 bool
@@ -98,6 +101,56 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
         }
     }
     return nullptr;
+}
+
+optional<BlockNr>
+FileSystem::trySeek(BlockNr top, const FSName &name)
+{
+    auto &root = fetch(rootBlock);
+    if (!root.isRoot()) return {};
+
+    std::unordered_set<BlockNr> visited;
+
+    // Check for special tokens
+    if (name == "/")  return rootBlock;
+    if (name == "")   return fetch(rootBlock).nr;
+    if (name == ".")  return fetch(rootBlock).nr;
+    if (name == "..") return fetch(rootBlock).getParentDirRef();
+
+    // TODO: USE SEARCHDIR
+    // Only proceed if a hash table is present
+    if (root.hasHashTable()) {
+
+        // Compute the table position and read the item
+        u32 hash = name.hashValue(traits.dos) % root.hashTableSize();
+        u32 ref = root.getHashRef(hash);
+
+        // Traverse the linked list until the item has been found
+        while (ref && visited.find(ref) == visited.end())  {
+
+            auto *block = tryModify(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
+            if (block == nullptr) break;
+
+            if (block->isNamed(name)) return block->nr;
+
+            visited.insert(ref);
+            ref = block->getNextHashRef();
+        }
+    }
+
+    return { };
+}
+
+optional<BlockNr>
+FileSystem::trySeek(BlockNr top, const fs::path &name)
+{
+    return trySeek(top, FSName(name));
+}
+
+optional<BlockNr>
+FileSystem::trySeek(BlockNr top, const string &name)
+{
+    return trySeek(top, FSName(name));
 }
 
 const FSBlock *

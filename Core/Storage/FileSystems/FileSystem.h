@@ -470,7 +470,11 @@ public:
     const FSBlock *seekPtr(const FSBlock *top, const fs::path &name) const noexcept;
     const FSBlock *seekPtr(const FSBlock *top, const string &name) const noexcept;
 
-    // Seeks an item in the directory tree (returns nullptr if not found)
+    optional<BlockNr> trySeek(BlockNr top, const FSName &name);
+    optional<BlockNr> trySeek(BlockNr top, const fs::path &name);
+    optional<BlockNr> trySeek(BlockNr top, const string &name);
+
+    // Seeks an item in the directory tree
     FSBlock &seek(const FSBlock &top, const FSName &name);
     FSBlock &seek(const FSBlock &top, const fs::path &name);
     FSBlock &seek(const FSBlock &top, const string &name);
