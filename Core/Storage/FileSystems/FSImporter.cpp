@@ -38,11 +38,11 @@ FSImporter::importVolume(const u8 *src, isize size)
         const u8 *data = src + i * traits.bsize;
 
         // Determine the type of the new block
-        if (FSBlockType type = fs.predictType((Block)i, data); type != FSBlockType::EMPTY) {
+        if (FSBlockType type = fs.predictType((BlockNr)i, data); type != FSBlockType::EMPTY) {
 
             // Create new block
-            cache.modify(Block(i)).init(type);
-            cache.modify(Block(i)).importBlock(data, traits.bsize);
+            cache.modify(BlockNr(i)).init(type);
+            cache.modify(BlockNr(i)).importBlock(data, traits.bsize);
         }
     }
 
@@ -128,7 +128,7 @@ FSImporter::import(FSBlock &top, const fs::directory_entry &entry, bool recursiv
 }
 
 void
-FSImporter::importBlock(Block nr, const fs::path &path)
+FSImporter::importBlock(BlockNr nr, const fs::path &path)
 {
     std::ifstream stream(path, std::ios::binary);
 

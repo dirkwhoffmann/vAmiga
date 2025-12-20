@@ -1494,7 +1494,7 @@ NSString *EventSlotName(EventSlot slot)
     auto &errors = [self fs]->doctor.diagnosis.blockErrors;
 
     NSMutableArray<NSNumber *> *array = [NSMutableArray arrayWithCapacity:errors.size()];
-    for (Block value : errors) { [array addObject:@(value)]; }
+    for (BlockNr value : errors) { [array addObject:@(value)]; }
 
     return [array copy];
 }
@@ -1506,8 +1506,8 @@ NSString *EventSlotName(EventSlot slot)
     auto size = unusedButAllocated.size() + usedButUnallocated.size();
 
     NSMutableArray<NSNumber *> *array = [NSMutableArray arrayWithCapacity:size];
-    for (Block value : unusedButAllocated) { [array addObject:@(value)]; }
-    for (Block value : usedButUnallocated) { [array addObject:@(value)]; }
+    for (BlockNr value : unusedButAllocated) { [array addObject:@(value)]; }
+    for (BlockNr value : usedButUnallocated) { [array addObject:@(value)]; }
 
     return [array sortedArrayUsingSelector:@selector(compare:)];
 }
@@ -1526,7 +1526,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
-    if (auto *ptr = [self fs]->tryFetch(Block(block)); ptr && offset < 512) {
+    if (auto *ptr = [self fs]->tryFetch(BlockNr(block)); ptr && offset < 512) {
         return ptr->data()[offset];
     }
     return 0;
@@ -1534,7 +1534,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len
 {
-    return @([self fs]->doctor.ascii(Block(block), offset, len).c_str());
+    return @([self fs]->doctor.ascii(BlockNr(block), offset, len).c_str());
 }
 
 - (void)export:(NSString *)path recursive:(BOOL)rec contents:(BOOL)con exception:(ExceptionWrapper *)ex
@@ -1560,7 +1560,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after
 {
-    return [self fs]->doctor.nextBlockOfType(type, Block(after));
+    return [self fs]->doctor.nextBlockOfType(type, BlockNr(after));
 }
 
 - (void)rectifyAllocationMap

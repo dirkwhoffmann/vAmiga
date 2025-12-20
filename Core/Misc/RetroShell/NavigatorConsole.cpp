@@ -201,26 +201,26 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     }
 }
 
-Block
+BlockNr
 NavigatorConsole::parseBlock(const string &argv)
 {
-    if (auto nr = Block(parseNum(argv)); fs->tryFetch(nr)) {
+    if (auto nr = BlockNr(parseNum(argv)); fs->tryFetch(nr)) {
         return nr;
     }
     
     throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
 }
 
-Block
+BlockNr
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 {
     return parseBlock(argv, token, fs->pwd().nr);
 }
 
-Block
-NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block fallback)
+BlockNr
+NavigatorConsole::parseBlock(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    auto nr = argv.contains(token) ? Block(parseNum(argv.at(token))) : fallback;
+    auto nr = argv.contains(token) ? BlockNr(parseNum(argv.at(token))) : fallback;
     
     if (!fs->tryFetch(nr)) {
         throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));

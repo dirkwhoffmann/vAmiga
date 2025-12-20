@@ -34,7 +34,7 @@ struct FSBlock : Loggable {
     FSBlockType type = FSBlockType::UNKNOWN;
 
     // The sector number of this block
-    Block nr = 0;
+    BlockNr nr = 0;
 
     // Cached block data
     Buffer<u8> dataCache;
@@ -51,14 +51,14 @@ public:
     FSBlock(FSBlock&&) = delete;                  // Move constructor
     FSBlock& operator=(FSBlock&&) = delete;       // Move assignment
 
-    FSBlock(FileSystem *ref, Block nr);
-    FSBlock(FileSystem *ref, Block nr, FSBlockType t);
+    FSBlock(FileSystem *ref, BlockNr nr);
+    FSBlock(FileSystem *ref, BlockNr nr, FSBlockType t);
     ~FSBlock();
 
     void init(FSBlockType t);
 
-    static FSBlock *make(FileSystem *ref, Block nr, FSBlockType type);
-    static std::vector<Block> refs(const std::vector<const FSBlock *> blocks);
+    static FSBlock *make(FileSystem *ref, BlockNr nr, FSBlockType type);
+    static std::vector<BlockNr> refs(const std::vector<const FSBlock *> blocks);
 
 
     //
@@ -174,7 +174,7 @@ public:
     void hexDump(std::ostream &os, const DumpOpt &opt);
 
     // Experimental
-    static string rangeString(const std::vector<Block> &vec);
+    static string rangeString(const std::vector<BlockNr> &vec);
 
 
     //
@@ -264,42 +264,42 @@ public:
     //
 
     // Link to the parent directory block
-    Block getParentDirRef() const;
-    void setParentDirRef(Block ref);
+    BlockNr getParentDirRef() const;
+    void setParentDirRef(BlockNr ref);
     struct FSBlock *getParentDirBlock() const;
     
     // Link to the file header block
-    Block getFileHeaderRef() const;
-    void setFileHeaderRef(Block ref);
+    BlockNr getFileHeaderRef() const;
+    void setFileHeaderRef(BlockNr ref);
     FSBlock *getFileHeaderBlock() const;
 
     // Link to the next block with the same hash
-    Block getNextHashRef() const;
-    void setNextHashRef(Block ref);
+    BlockNr getNextHashRef() const;
+    void setNextHashRef(BlockNr ref);
     struct FSBlock *getNextHashBlock() const;
 
     // Link to the next extension block
-    Block getNextListBlockRef() const;
-    void setNextListBlockRef(Block ref);
+    BlockNr getNextListBlockRef() const;
+    void setNextListBlockRef(BlockNr ref);
     FSBlock *getNextListBlock() const;
     
     // Link to the next bitmap extension block
-    Block getNextBmExtBlockRef() const;
-    void setNextBmExtBlockRef(Block ref);
+    BlockNr getNextBmExtBlockRef() const;
+    void setNextBmExtBlockRef(BlockNr ref);
     FSBlock *getNextBmExtBlock() const;
     
     // Link to the first data block
-    Block getFirstDataBlockRef() const;
-    void setFirstDataBlockRef(Block ref);
+    BlockNr getFirstDataBlockRef() const;
+    void setFirstDataBlockRef(BlockNr ref);
     FSBlock *getFirstDataBlock() const;
 
-    Block getDataBlockRef(isize nr) const;
-    void setDataBlockRef(isize nr, Block ref);
+    BlockNr getDataBlockRef(isize nr) const;
+    void setDataBlockRef(isize nr, BlockNr ref);
     FSBlock *getDataBlock(isize nr) const;
 
     // Link to the next data block
-    Block getNextDataBlockRef() const;
-    void setNextDataBlockRef(Block ref);
+    BlockNr getNextDataBlockRef() const;
+    void setNextDataBlockRef(BlockNr ref);
     FSBlock *getNextDataBlock() const;
 
 
@@ -334,15 +334,15 @@ public:
     //
 
     // Adds bitmap block references to the root block or an extension block
-    bool addBitmapBlockRefs(std::vector<Block> &refs);
-    void addBitmapBlockRefs(std::vector<Block> &refs,
-                            std::vector<Block>::iterator &it);
-    
+    bool addBitmapBlockRefs(std::vector<BlockNr> &refs);
+    void addBitmapBlockRefs(std::vector<BlockNr> &refs,
+                            std::vector<BlockNr>::iterator &it);
+
     // Gets or sets a link to a bitmap block
     isize numBmBlockRefs() const;
-    Block getBmBlockRef(isize nr) const;
-    void setBmBlockRef(isize nr, Block ref);
-    std::vector<Block> getBmBlockRefs() const;
+    BlockNr getBmBlockRef(isize nr) const;
+    void setBmBlockRef(isize nr, BlockNr ref);
+    std::vector<BlockNr> getBmBlockRefs() const;
 
 
     //
@@ -360,10 +360,10 @@ public:
     isize getNumDataBlockRefs() const;
     void setNumDataBlockRefs(u32 val);
     void incNumDataBlockRefs();
-    std::vector<Block> getDataBlockRefs() const;
+    std::vector<BlockNr> getDataBlockRefs() const;
 
     // Adds a data block reference to this block
-    bool addDataBlockRef(Block ref);
+    bool addDataBlockRef(BlockNr ref);
     void addDataBlockRef(u32 first, u32 ref);
     
     // Gets or sets the number of data bytes stored in this block

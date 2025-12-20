@@ -19,7 +19,7 @@ using namespace utl;
 
 FSTree::FSTree(const FSBlock &top, const FSOpt &opt)
 {
-    std::unordered_set<Block> visited;
+    std::unordered_set<BlockNr> visited;
     init(top, opt, visited);
 };
 
@@ -30,7 +30,7 @@ FSTree::FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt) : nod
 }
 
 void
-FSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<Block> &visited)
+FSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<BlockNr> &visited)
 {
     auto &fs = *top.fs;
 

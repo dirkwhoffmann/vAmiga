@@ -24,18 +24,18 @@ public:
     bool exportVolume(u8 *dst, isize size, FSFault *error) const;
 
     // Exports a single block or a range of blocks to a buffer
-    bool exportBlock(Block nr, u8 *dst, isize size) const;
-    bool exportBlock(Block nr, u8 *dst, isize size, FSFault *error) const;
-    bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
-    bool exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *error) const;
+    bool exportBlock(BlockNr nr, u8 *dst, isize size) const;
+    bool exportBlock(BlockNr nr, u8 *dst, isize size, FSFault *error) const;
+    bool exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size) const;
+    bool exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size, FSFault *error) const;
 
     // Exports a single block or a range of blocks to a file
-    void exportBlock(Block nr, const fs::path &path) const;
-    void exportBlocks(Block first, Block last, const fs::path &path) const;
+    void exportBlock(BlockNr nr, const fs::path &path) const;
+    void exportBlocks(BlockNr first, BlockNr last, const fs::path &path) const;
     void exportBlocks(const fs::path &path) const;
 
     // Exports the volume to a buffer
-    void exportFiles(Block nr, const fs::path &path, bool recursive = true, bool contents = false) const;
+    void exportFiles(BlockNr nr, const fs::path &path, bool recursive = true, bool contents = false) const;
     void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
     void exportFiles(const fs::path &path, bool recursive = true, bool contents = false) const;
 };

@@ -17,14 +17,14 @@ PosixFileSystem::PosixFileSystem(FileSystem &fs) : fs(fs)
 }
 
 NodeMeta *
-PosixFileSystem::getMeta(Block nr)
+PosixFileSystem::getMeta(BlockNr nr)
 {
     auto it = meta.find(nr);
     return it == meta.end() ? nullptr : &it->second;
 }
 
 NodeMeta &
-PosixFileSystem::ensureMeta(Block nr)
+PosixFileSystem::ensureMeta(BlockNr nr)
 {
     auto [it, inserted] = meta.try_emplace(nr);
     return it->second;

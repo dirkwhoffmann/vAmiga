@@ -142,13 +142,13 @@ ADFFile::getFileSystemDescriptor() const
     FSDescriptor result;
     
     // Determine the root block location
-    Block root = data.size < ADFSIZE_35_HD ? 880 : 1760;
+    BlockNr root = data.size < ADFSIZE_35_HD ? 880 : 1760;
 
     // Determine the bitmap block location
-    Block bitmap = FSBlock::read32(data.ptr + root * 512 + 316);
-    
+    BlockNr bitmap = FSBlock::read32(data.ptr + root * 512 + 316);
+
     // Assign a default location if the bitmap block reference is invalid
-    if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
+    if (bitmap == 0 || bitmap >= (BlockNr)numBlocks()) bitmap = root + 1;
 
     // Setup the descriptor
     result.numBlocks = numBlocks();

@@ -26,7 +26,7 @@ struct FSTree {
     FSTree(const FSBlock &path, const FSOpt &opt);
     FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt);
 
-    void init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited);
+    void init(const FSBlock &path, const FSOpt &opt, std::unordered_set<BlockNr> &visited);
 
     bool empty() const { return node == nullptr; }
     isize size() const;

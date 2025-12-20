@@ -39,7 +39,7 @@ private:
 
 public:
 
-    void dump(Block nr, std::ostream &os);
+    void dump(BlockNr nr, std::ostream &os);
 
 
     //
@@ -53,15 +53,15 @@ public:
     isize xray(bool strict, std::ostream &os, bool verbose);
 
     // Scans a single block and returns the number of errors
-    isize xray(Block ref, bool strict) const;
-    isize xray(Block ref, bool strict, std::ostream &os) const;
+    isize xray(BlockNr ref, bool strict) const;
+    isize xray(BlockNr ref, bool strict, std::ostream &os) const;
     isize xray(FSBlock &node, bool strict) const;
     isize xray(FSBlock &node, bool strict, std::ostream &os) const;
 
     // Checks the integrity of a certain byte or long word in this block
-    FSBlockError xray8(Block ref, isize pos, bool strict, optional<u8> &expected) const;
+    FSBlockError xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const;
     FSBlockError xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const;
-    FSBlockError xray32(Block ref, isize pos, bool strict, optional<u32> &expected) const;
+    FSBlockError xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) const;
     FSBlockError xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
 
     // Checks the allocation table. Returns the number of errors. Stores details in 'diagnosis'
@@ -72,7 +72,7 @@ public:
     void rectify(bool strict);
 
     // Rectifies a single block
-    void rectify(Block ref, bool strict);
+    void rectify(BlockNr ref, bool strict);
     void rectify(FSBlock &node, bool strict);
 
     // Rectifies the allocation table
@@ -86,7 +86,7 @@ public:
 public:
 
     // Returns a portion of the block as an ASCII dump
-    string ascii(Block nr, isize offset, isize len) const noexcept;
+    string ascii(BlockNr nr, isize offset, isize len) const noexcept;
 
     // Returns a block summary for creating the block usage image
     void createUsageMap(u8 *buffer, isize len) const;
@@ -98,7 +98,7 @@ public:
     void createHealthMap(u8 *buffer, isize len) const;
 
     // Searches the block list for a block of a specific type
-    isize nextBlockOfType(FSBlockType type, Block after) const;
+    isize nextBlockOfType(FSBlockType type, BlockNr after) const;
 };
 
 }

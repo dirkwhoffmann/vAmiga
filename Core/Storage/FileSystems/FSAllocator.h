@@ -18,7 +18,7 @@ class FSAllocator final : public FSExtension {
 public:
 
     // Allocation pointer (selects the block to allocate next)
-    Block ap = 0;
+    BlockNr ap = 0;
 
     using FSExtension::FSExtension;
 
@@ -49,20 +49,20 @@ public:
     [[nodiscard]] bool allocatable(isize count) const noexcept;
 
     // Seeks a free block and marks it as allocated
-    Block allocate();
+    BlockNr allocate();
 
     // Allocates multiple blocks
-    void allocate(isize count, std::vector<Block> &result, std::vector<Block> prealloc = {});
+    void allocate(isize count, std::vector<BlockNr> &result, std::vector<BlockNr> prealloc = {});
 
     // Deallocates a block
-    void deallocateBlock(Block nr);
+    void deallocateBlock(BlockNr nr);
 
     // Allocates multiple blocks
-    void deallocateBlocks(const std::vector<Block> &nrs);
+    void deallocateBlocks(const std::vector<BlockNr> &nrs);
 
     // Allocates all blocks needed for a file
     void allocateFileBlocks(isize bytes,
-                            std::vector<Block> &listBlocks, std::vector<Block> &dataBlocks);
+                            std::vector<BlockNr> &listBlocks, std::vector<BlockNr> &dataBlocks);
 
     //
     // Managing the block allocation bitmap
@@ -71,23 +71,23 @@ public:
 public:
 
     // Checks if a block is allocated or unallocated
-    [[nodiscard]] bool isUnallocated(Block nr) const noexcept;
-    [[nodiscard]] bool isAllocated(Block nr) const noexcept { return !isUnallocated(nr); }
+    [[nodiscard]] bool isUnallocated(BlockNr nr) const noexcept;
+    [[nodiscard]] bool isAllocated(BlockNr nr) const noexcept { return !isUnallocated(nr); }
 
     // Returns the number of allocated or unallocated blocks
     [[nodiscard]] isize numUnallocated() const noexcept;
     [[nodiscard]] isize numAllocated() const noexcept;
 
     // Marks a block as allocated or free
-    void markAsAllocated(Block nr) { setAllocationBit(nr, 0); }
-    void markAsFree(Block nr) { setAllocationBit(nr, 1); }
-    void setAllocationBit(Block nr, bool value);
+    void markAsAllocated(BlockNr nr) { setAllocationBit(nr, 0); }
+    void markAsFree(BlockNr nr) { setAllocationBit(nr, 1); }
+    void setAllocationBit(BlockNr nr, bool value);
 
 private:
 
     // Locates the allocation bit for a certain block
-    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept;
-    const FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept;
+    FSBlock *locateAllocationBit(BlockNr nr, isize *byte, isize *bit) noexcept;
+    const FSBlock *locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept;
 
     // Translate the bitmap into to a vector with the n-th bit set iff the n-th block is free
     std::vector<u32> serializeBitmap() const;

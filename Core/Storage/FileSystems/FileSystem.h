@@ -135,11 +135,11 @@ class FileSystem : public Loggable {
     //
 
     // Location of the root block
-    Block rootBlock = 0;
+    BlockNr rootBlock = 0;
 
     // Location of bitmap blocks and extended bitmap blocks
-    std::vector<Block> bmBlocks;
-    std::vector<Block> bmExtBlocks;
+    std::vector<BlockNr> bmBlocks;
+    std::vector<BlockNr> bmExtBlocks;
 
 
     //
@@ -147,7 +147,7 @@ class FileSystem : public Loggable {
     //
 
     // Location of the current directory
-    Block current = 0;
+    BlockNr current = 0;
 
 
 public:
@@ -204,7 +204,7 @@ public:
     FSBootStat bootStat() const noexcept;
 
     // Returns information about file permissions
-    FSAttr attr(Block nr) const;
+    FSAttr attr(BlockNr nr) const;
     FSAttr attr(const FSBlock &fhd) const;
 
 
@@ -219,16 +219,16 @@ public:
 public:
 
     // Returns the type of a certain block or a block item
-    FSBlockType typeOf(Block nr) const noexcept;
-    FSItemType typeOf(Block nr, isize pos) const noexcept;
+    FSBlockType typeOf(BlockNr nr) const noexcept;
+    FSItemType typeOf(BlockNr nr, isize pos) const noexcept;
 
     // Convenience wrappers
-    bool is(Block nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
-    bool isEmpty(Block nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
+    bool is(BlockNr nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
+    bool isEmpty(BlockNr nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
 
     // Predicts the type of a block based on the stored data
-    static FSBlockType predictType(FSDescriptor &layout, Block nr, const u8 *buf) noexcept;
-    FSBlockType predictType(Block nr, const u8 *buf) const noexcept;
+    static FSBlockType predictType(FSDescriptor &layout, BlockNr nr, const u8 *buf) noexcept;
+    FSBlockType predictType(BlockNr nr, const u8 *buf) const noexcept;
 
 
     //
@@ -238,24 +238,24 @@ public:
 public:
 
     // Returns a pointer to a block with read permissions (maybe null)
-    const FSBlock *tryFetch(Block nr) const noexcept { return cache.tryFetch(nr); }
-    const FSBlock *tryFetch(Block nr, FSBlockType type) const noexcept { return cache.tryFetch(nr, type); }
-    const FSBlock *tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept { return cache.tryFetch(nr, types); }
+    const FSBlock *tryFetch(BlockNr nr) const noexcept { return cache.tryFetch(nr); }
+    const FSBlock *tryFetch(BlockNr nr, FSBlockType type) const noexcept { return cache.tryFetch(nr, type); }
+    const FSBlock *tryFetch(BlockNr nr, std::vector<FSBlockType> types) const noexcept { return cache.tryFetch(nr, types); }
 
     // Returns a reference to a block with read permissions (may throw)
-    const FSBlock &fetch(Block nr) const { return cache.fetch(nr); }
-    const FSBlock &fetch(Block nr, FSBlockType type) const { return cache.fetch(nr, type); }
-    const FSBlock &fetch(Block nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types); }
+    const FSBlock &fetch(BlockNr nr) const { return cache.fetch(nr); }
+    const FSBlock &fetch(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type); }
+    const FSBlock &fetch(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types); }
 
     // Returns a pointer to a block with write permissions (maybe null)
-    FSBlock *tryModify(Block nr) noexcept { return cache.tryModify(nr); }
-    FSBlock *tryModify(Block nr, FSBlockType type) noexcept { return cache.tryModify(nr, type); }
-    FSBlock *tryModify(Block nr, std::vector<FSBlockType> types) noexcept { return cache.tryModify(nr, types); }
+    FSBlock *tryModify(BlockNr nr) noexcept { return cache.tryModify(nr); }
+    FSBlock *tryModify(BlockNr nr, FSBlockType type) noexcept { return cache.tryModify(nr, type); }
+    FSBlock *tryModify(BlockNr nr, std::vector<FSBlockType> types) noexcept { return cache.tryModify(nr, types); }
 
     // Returns a reference to a block with write permissions (may throw)
-    [[deprecated]] FSBlock &modify(Block nr) { return cache.modify(nr); }
-    [[deprecated]] FSBlock &modify(Block nr, FSBlockType type) { return cache.modify(nr, type); }
-    [[deprecated]] FSBlock &modify(Block nr, std::vector<FSBlockType> types) { return cache.modify(nr, types); }
+    [[deprecated]] FSBlock &modify(BlockNr nr) { return cache.modify(nr); }
+    [[deprecated]] FSBlock &modify(BlockNr nr, FSBlockType type) { return cache.modify(nr, type); }
+    [[deprecated]] FSBlock &modify(BlockNr nr, std::vector<FSBlockType> types) { return cache.modify(nr, types); }
 
     // Writes back dirty cache blocks to the block device
     void flush();
@@ -313,11 +313,11 @@ private:
 
     // Adds a hash-table entry for a given item
     void addToHashTable(const FSBlock &item);
-    void addToHashTable(Block parent, Block ref);
+    void addToHashTable(BlockNr parent, BlockNr ref);
 
     // Removes the hash-table entry for a given item
     void deleteFromHashTable(const FSBlock &item);
-    void deleteFromHashTable(Block parent, Block ref);
+    void deleteFromHashTable(BlockNr parent, BlockNr ref);
 
 
     //
@@ -357,8 +357,8 @@ private:
     // Main replace function
     FSBlock &replace(FSBlock &fhb,
                      const u8 *buf, isize size,
-                     std::vector<Block> listBlocks = {},
-                     std::vector<Block> dataBlocks = {});
+                     std::vector<BlockNr> listBlocks = {},
+                     std::vector<BlockNr> dataBlocks = {});
 
 
     //
@@ -377,11 +377,11 @@ private:
     FSBlock &newFileHeaderBlock(const FSName &name);
 
     // Adds a new block of a certain kind
-    void addFileListBlock(Block at, Block head, Block prev);
-    void addDataBlock(Block at, isize id, Block head, Block prev);
+    void addFileListBlock(BlockNr at, BlockNr head, BlockNr prev);
+    void addDataBlock(BlockNr at, isize id, BlockNr head, BlockNr prev);
 
     // Adds bytes to a data block
-    isize addData(Block nr, const u8 *buf, isize size);
+    isize addData(BlockNr nr, const u8 *buf, isize size);
     isize addData(FSBlock &block, const u8 *buf, isize size);
 
 
@@ -394,17 +394,17 @@ private:
     // Follows a linked list and collects all blocks
     using BlockIterator = std::function<const FSBlock *(const FSBlock *)>;
     std::vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const;
-    std::vector<Block> collect(const Block nr, BlockIterator succ) const;
+    std::vector<BlockNr> collect(const BlockNr nr, BlockIterator succ) const;
 
     // Collects blocks of a certain type
     std::vector<const FSBlock *> collectDataBlocks(const FSBlock &block) const;
     std::vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
     std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
     std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
-    std::vector<Block> collectDataBlocks(Block nr) const;
-    std::vector<Block> collectListBlocks(Block nr) const;
-    std::vector<Block> collectHashedBlocks(Block nr, isize bucket) const;
-    std::vector<Block> collectHashedBlocks(Block nr) const;
+    std::vector<BlockNr> collectDataBlocks(BlockNr nr) const;
+    std::vector<BlockNr> collectListBlocks(BlockNr nr) const;
+    std::vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
+    std::vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
 
 
     // -------------------------------------------------------------------------
@@ -467,24 +467,24 @@ public:
     std::vector<const FSBlock *> find(const FSOpt &opt) const;
     std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
     std::vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
-    std::vector<Block> find(Block root, const FSOpt &opt) const;
+    std::vector<BlockNr> find(BlockNr root, const FSOpt &opt) const;
 
     // Seeks all items with a pattern-matching name
     std::vector<const FSBlock *> find(const FSPattern &pattern) const;
     std::vector<const FSBlock *> find(const FSBlock *top, const FSPattern &pattern) const;
     std::vector<const FSBlock *> find(const FSBlock &top, const FSPattern &pattern) const;
-    std::vector<Block> find(Block root, const FSPattern &pattern) const;
+    std::vector<BlockNr> find(BlockNr root, const FSPattern &pattern) const;
 
     // Collects all items with a pattern-matching path
     std::vector<const FSBlock *> match(const FSPattern &pattern) const;
     std::vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
     std::vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
-    std::vector<Block> match(Block root, const FSPattern &pattern) const;
+    std::vector<BlockNr> match(BlockNr root, const FSPattern &pattern) const;
 
 private:
 
     std::vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
-                                      std::unordered_set<Block> &visited) const;
+                                      std::unordered_set<BlockNr> &visited) const;
 
     std::vector<const FSBlock *> match(const FSBlock *top,
                                        std::vector<FSPattern> pattern) const;

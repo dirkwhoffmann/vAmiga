@@ -69,7 +69,7 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
 {
     if (!root) return nullptr;
 
-    std::unordered_set<Block> visited;
+    std::unordered_set<BlockNr> visited;
 
     // Check for special tokens
     if (name == "/")  return tryModify(rootBlock);
@@ -197,18 +197,18 @@ std::vector<const FSBlock *>
 FileSystem::find(const FSBlock *root, const FSOpt &opt) const
 {
     if (!root) return {};
-    std::unordered_set<Block> visited;
+    std::unordered_set<BlockNr> visited;
     return find(root, opt, visited);
 }
 
-std::vector<Block>
-FileSystem::find(Block root, const FSOpt &opt) const
+std::vector<BlockNr>
+FileSystem::find(BlockNr root, const FSOpt &opt) const
 {
     return FSBlock::refs(find(tryFetch(root), opt));
 }
 
 std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block> &visited) const
+FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<BlockNr> &visited) const
 {
     std::vector<const FSBlock *> result;
 
@@ -253,7 +253,7 @@ FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block
 std::vector<const FSBlock *>
 FileSystem::find(const FSPattern &pattern) const
 {
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
 
     // Determine the directory to start searching
     auto &start = pattern.isAbsolute() ? root() : pwd();
@@ -277,8 +277,8 @@ FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
     });
 }
 
-std::vector<Block>
-FileSystem::find(Block root, const FSPattern &pattern) const
+std::vector<BlockNr>
+FileSystem::find(BlockNr root, const FSPattern &pattern) const
 {
     return FSBlock::refs(find(tryFetch(root), pattern));
 }
@@ -346,8 +346,8 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
     return result;
 }
 
-std::vector<Block>
-FileSystem::match(Block root, const FSPattern &pattern) const
+std::vector<BlockNr>
+FileSystem::match(BlockNr root, const FSPattern &pattern) const
 {
     return FSBlock::refs(match(tryFetch(root), pattern));
 }

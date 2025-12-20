@@ -30,10 +30,10 @@ private:
     Volume &dev;
 
     // Cached blocks
-    mutable std::unordered_map<Block, std::unique_ptr<FSBlock>> blocks;
+    mutable std::unordered_map<BlockNr, std::unique_ptr<FSBlock>> blocks;
 
     // Dirty blocks
-    mutable std::unordered_set<Block> dirty;
+    mutable std::unordered_set<BlockNr> dirty;
 
 
     //
@@ -91,59 +91,59 @@ public:
     auto keys() const { return std::views::keys(blocks); }
 
     // Returns a view for all keys in a particular range
-    auto keys(Block min, Block max) const {
-        
-        auto in_range = [=](Block key) { return key >= min && key <= max; };
+    auto keys(BlockNr min, BlockNr max) const {
+
+        auto in_range = [=](BlockNr key) { return key >= min && key <= max; };
         return std::views::keys(blocks) | std::views::filter(in_range);
     }
 
     // Returns a vector with all keys in sorted order
-    std::vector<Block> sortedKeys() const;
+    std::vector<BlockNr> sortedKeys() const;
 
     // Checks if a block is empty
-    bool isEmpty(Block nr) const noexcept;
+    bool isEmpty(BlockNr nr) const noexcept;
 
     // Gets or sets the block type
-    FSBlockType getType(Block nr) const noexcept;
-    void setType(Block nr, FSBlockType type);
+    FSBlockType getType(BlockNr nr) const noexcept;
+    void setType(BlockNr nr, FSBlockType type);
 
     // Caches a block (if not already cached)
-    FSBlock *cache(Block nr) const noexcept;
+    FSBlock *cache(BlockNr nr) const noexcept;
 
     // Returns a pointer to a block with read permissions (maybe null)
-    const FSBlock *tryFetch(Block nr) const noexcept;
-    const FSBlock *tryFetch(Block nr, FSBlockType type) const noexcept;
-    const FSBlock *tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept;
+    const FSBlock *tryFetch(BlockNr nr) const noexcept;
+    const FSBlock *tryFetch(BlockNr nr, FSBlockType type) const noexcept;
+    const FSBlock *tryFetch(BlockNr nr, std::vector<FSBlockType> types) const noexcept;
 
     // Returns a reference to a block with read permissions (may throw)
-    const FSBlock &fetch(Block nr) const;
-    const FSBlock &fetch(Block nr, FSBlockType type) const;
-    const FSBlock &fetch(Block nr, std::vector<FSBlockType> types) const;
+    const FSBlock &fetch(BlockNr nr) const;
+    const FSBlock &fetch(BlockNr nr, FSBlockType type) const;
+    const FSBlock &fetch(BlockNr nr, std::vector<FSBlockType> types) const;
 
     // Returns a pointer to a block with write permissions (maybe null)
-    FSBlock *tryModify(Block nr) noexcept;
-    FSBlock *tryModify(Block nr, FSBlockType type) noexcept;
-    FSBlock *tryModify(Block nr, std::vector<FSBlockType> types) noexcept;
+    FSBlock *tryModify(BlockNr nr) noexcept;
+    FSBlock *tryModify(BlockNr nr, FSBlockType type) noexcept;
+    FSBlock *tryModify(BlockNr nr, std::vector<FSBlockType> types) noexcept;
 
     // Returns a reference to a block with write permissions (may throw)
-    FSBlock &modify(Block nr);
-    FSBlock &modify(Block nr, FSBlockType type);
-    FSBlock &modify(Block nr, std::vector<FSBlockType> types);
+    FSBlock &modify(BlockNr nr);
+    FSBlock &modify(BlockNr nr, FSBlockType type);
+    FSBlock &modify(BlockNr nr, std::vector<FSBlockType> types);
 
     // Operator overload
-    const FSBlock &operator[](size_t nr) const { return fetch(Block(nr)); }
+    const FSBlock &operator[](size_t nr) const { return fetch(BlockNr(nr)); }
 
     // Wipes out a block (makes it an empty block)
-    void erase(Block nr);
+    void erase(BlockNr nr);
 
 
     //
     // Caching
     //
 
-    void markAsDirty(Block nr) { dirty.insert(nr); }
+    void markAsDirty(BlockNr nr) { dirty.insert(nr); }
 
-    void flush(Block nr);
+    void flush(BlockNr nr);
     void flush();
 
     //

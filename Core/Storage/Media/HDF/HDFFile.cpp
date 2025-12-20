@@ -252,20 +252,20 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     i64 rootKey = (result.numReserved + highKey) / 2;
     
     // Add partition
-    result.rootBlock = (Block)rootKey;
+    result.rootBlock = (BlockNr)rootKey;
 
     // Seek bitmap blocks
-    Block ref = Block(rootKey);
+    BlockNr ref = BlockNr(rootKey);
     isize cnt = 25;
     isize offset = 512 - 49 * 4;
     
-    while (ref && ref < (Block)result.numBlocks) {
+    while (ref && ref < (BlockNr)result.numBlocks) {
 
         const u8 *p = dptr + (ref * 512) + offset;
 
         // Collect all references to bitmap blocks stored in this block
         for (isize i = 0; i < cnt; i++, p += 4) {
-            if (Block bmb = FSBlock::read32(p)) {
+            if (BlockNr bmb = FSBlock::read32(p)) {
                 if (isize(bmb) < result.numBlocks) {
                     result.bmBlocks.push_back(bmb);
                 }

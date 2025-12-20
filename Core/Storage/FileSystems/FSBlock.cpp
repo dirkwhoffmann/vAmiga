@@ -17,12 +17,12 @@
 
 namespace vamiga {
 
-FSBlock::FSBlock(FileSystem *ref, Block nr) : fs(ref), cache(ref->cache)
+FSBlock::FSBlock(FileSystem *ref, BlockNr nr) : fs(ref), cache(ref->cache)
 {
     this->nr = nr;
 }
 
-FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : FSBlock(ref, nr)
+FSBlock::FSBlock(FileSystem *ref, BlockNr nr, FSBlockType t) : FSBlock(ref, nr)
 {
     init(t);
 }
@@ -102,7 +102,7 @@ FSBlock::init(FSBlockType t)
 }
 
 FSBlock *
-FSBlock::make(FileSystem *ref, Block nr, FSBlockType type)
+FSBlock::make(FileSystem *ref, BlockNr nr, FSBlockType type)
 {
     switch (type) {
 
@@ -124,10 +124,10 @@ FSBlock::make(FileSystem *ref, Block nr, FSBlockType type)
     }
 }
 
-std::vector<Block>
+std::vector<BlockNr>
 FSBlock::refs(const std::vector<const FSBlock *> blocks)
 {
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
     for (auto &it : blocks) { if (it) result.push_back(it->nr); }
     return result;
 }
@@ -745,12 +745,12 @@ FSBlock::hexDump(std::ostream &os, const DumpOpt &opt)
 }
 
 string
-FSBlock::rangeString(const std::vector<Block> &vec)
+FSBlock::rangeString(const std::vector<BlockNr> &vec)
 {
     if (vec.empty()) return "";
 
     // Create a sorted copy
-    std::vector<Block> v = vec;
+    std::vector<BlockNr> v = vec;
     std::sort(v.begin(), v.end());
 
     // Replicate the last element to get the last interval right
@@ -1233,7 +1233,7 @@ FSBlock::setChecksum(u32 val)
     }
 }
 
-Block
+BlockNr
 FSBlock::getParentDirRef() const
 {
     switch (type) {
@@ -1249,7 +1249,7 @@ FSBlock::getParentDirRef() const
 }
 
 void
-FSBlock::setParentDirRef(Block ref)
+FSBlock::setParentDirRef(BlockNr ref)
 {
     switch (type) {
 
@@ -1267,11 +1267,11 @@ FSBlock::setParentDirRef(Block ref)
 FSBlock *
 FSBlock::getParentDirBlock() const
 {
-    Block nr = getParentDirRef();
+    BlockNr nr = getParentDirRef();
     return nr ? fs->tryModify(nr) : nullptr;
 }
 
-Block
+BlockNr
 FSBlock::getFileHeaderRef() const
 {
     switch (type) {
@@ -1285,7 +1285,7 @@ FSBlock::getFileHeaderRef() const
 }
 
 void
-FSBlock::setFileHeaderRef(Block ref)
+FSBlock::setFileHeaderRef(BlockNr ref)
 {
     switch (type) {
 
@@ -1310,7 +1310,7 @@ FSBlock::getFileHeaderBlock() const
     return fs->tryModify(getFileHeaderRef(), FSBlockType::FILEHEADER);
 }
 
-Block
+BlockNr
 FSBlock::getNextHashRef() const
 {
     switch (type) {
@@ -1326,7 +1326,7 @@ FSBlock::getNextHashRef() const
 }
 
 void
-FSBlock::setNextHashRef(Block ref)
+FSBlock::setNextHashRef(BlockNr ref)
 {
     switch (type) {
 
@@ -1344,11 +1344,11 @@ FSBlock::setNextHashRef(Block ref)
 FSBlock *
 FSBlock::getNextHashBlock() const
 {
-    Block nr = getNextHashRef();
+    BlockNr nr = getNextHashRef();
     return nr ? fs->tryModify(nr) : nullptr;
 }
 
-Block
+BlockNr
 FSBlock::getNextListBlockRef() const
 {
     switch (type) {
@@ -1364,7 +1364,7 @@ FSBlock::getNextListBlockRef() const
 }
 
 void
-FSBlock::setNextListBlockRef(Block ref)
+FSBlock::setNextListBlockRef(BlockNr ref)
 {
     switch (type) {
 
@@ -1385,7 +1385,7 @@ FSBlock::getNextListBlock() const
     return fs->tryModify(getNextListBlockRef(), FSBlockType::FILELIST);
 }
 
-Block
+BlockNr
 FSBlock::getNextBmExtBlockRef() const
 {
     switch (type) {
@@ -1399,7 +1399,7 @@ FSBlock::getNextBmExtBlockRef() const
 }
 
 void
-FSBlock::setNextBmExtBlockRef(Block ref)
+FSBlock::setNextBmExtBlockRef(BlockNr ref)
 {
     switch (type) {
             
@@ -1421,11 +1421,11 @@ FSBlock::setNextBmExtBlockRef(Block ref)
 FSBlock *
 FSBlock::getNextBmExtBlock() const
 {
-    Block nr = getNextBmExtBlockRef();
+    BlockNr nr = getNextBmExtBlockRef();
     return nr ? fs->tryModify(nr, FSBlockType::BITMAP_EXT) : nullptr;
 }
 
-Block
+BlockNr
 FSBlock::getFirstDataBlockRef() const
 {
     switch (type) {
@@ -1441,7 +1441,7 @@ FSBlock::getFirstDataBlockRef() const
 }
 
 void
-FSBlock::setFirstDataBlockRef(Block ref)
+FSBlock::setFirstDataBlockRef(BlockNr ref)
 {
     switch (type) {
 
@@ -1462,7 +1462,7 @@ FSBlock::getFirstDataBlock() const
     return nullptr;
 }
 
-Block
+BlockNr
 FSBlock::getDataBlockRef(isize nr) const
 {
     switch (type) {
@@ -1478,7 +1478,7 @@ FSBlock::getDataBlockRef(isize nr) const
 }
 
 void
-FSBlock::setDataBlockRef(isize nr, Block ref)
+FSBlock::setDataBlockRef(isize nr, BlockNr ref)
 {
     switch (type) {
             
@@ -1500,14 +1500,14 @@ FSBlock::getDataBlock(isize nr) const
     return nullptr;
 }
 
-Block
+BlockNr
 FSBlock::getNextDataBlockRef() const
 {
     return type == FSBlockType::DATA_OFS ? get32(4) : 0;
 }
 
 void
-FSBlock::setNextDataBlockRef(Block ref)
+FSBlock::setNextDataBlockRef(BlockNr ref)
 {
     if (type == FSBlockType::DATA_OFS) {
 
@@ -1560,15 +1560,15 @@ FSBlock::hashValue() const
 }
 
 u32
-FSBlock::getHashRef(Block nr) const
+FSBlock::getHashRef(BlockNr nr) const
 {
-    return (nr < (Block)hashTableSize()) ? get32(6 + nr) : 0;
+    return (nr < (BlockNr)hashTableSize()) ? get32(6 + nr) : 0;
 }
 
 void
-FSBlock::setHashRef(Block nr, u32 ref)
+FSBlock::setHashRef(BlockNr nr, u32 ref)
 {
-    if (nr < (Block)hashTableSize()) {
+    if (nr < (BlockNr)hashTableSize()) {
 
         set32(6 + nr, ref);
     }
@@ -1596,7 +1596,7 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
 }
 
 bool
-FSBlock::addBitmapBlockRefs(std::vector<Block> &refs)
+FSBlock::addBitmapBlockRefs(std::vector<BlockNr> &refs)
 {
     assert(type == FSBlockType::ROOT);
     
@@ -1618,8 +1618,8 @@ FSBlock::addBitmapBlockRefs(std::vector<Block> &refs)
 }
 
 void
-FSBlock::addBitmapBlockRefs(std::vector<Block> &refs,
-                            std::vector<Block>::iterator &it)
+FSBlock::addBitmapBlockRefs(std::vector<BlockNr> &refs,
+                            std::vector<BlockNr>::iterator &it)
 {
     assert(type == FSBlockType::BITMAP_EXT);
     
@@ -1644,7 +1644,7 @@ FSBlock::numBmBlockRefs() const
     }
 }
 
-Block
+BlockNr
 FSBlock::getBmBlockRef(isize nr) const
 {
     switch (type) {
@@ -1663,7 +1663,7 @@ FSBlock::getBmBlockRef(isize nr) const
 }
 
 void
-FSBlock::setBmBlockRef(isize nr, Block ref)
+FSBlock::setBmBlockRef(isize nr, BlockNr ref)
 {
     switch (type) {
             
@@ -1682,14 +1682,14 @@ FSBlock::setBmBlockRef(isize nr, Block ref)
     }
 }
 
-std::vector<Block>
+std::vector<BlockNr>
 FSBlock::getBmBlockRefs() const
 {
     isize maxRefs =
     type == FSBlockType::ROOT ? 25 :
     type == FSBlockType::BITMAP_EXT ? (bsize() / 4) - 1 : 0;
 
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
     for (isize i = 0; i < maxRefs; i++) {
         if (auto ref = getBmBlockRef(i); ref) result.push_back(ref);
     }
@@ -1775,12 +1775,12 @@ FSBlock::incNumDataBlockRefs()
     }
 }
 
-std::vector<Block>
+std::vector<BlockNr>
 FSBlock::getDataBlockRefs() const
 {
     isize maxRefs = getNumDataBlockRefs();
 
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
     for (isize i = 0; i < maxRefs; i++) {
         if (auto ref = getDataBlockRef(i); ref) result.push_back(ref);
     }
@@ -1989,7 +1989,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
         isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
 
-            Block ref = block->getDataBlockRef(i);
+            BlockNr ref = block->getDataBlockRef(i);
             if (FSBlock *dataBlock = fs->tryModify(ref); dataBlock->isData()) { //} dataBlockPtr(ref)) {
                 
                 isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);

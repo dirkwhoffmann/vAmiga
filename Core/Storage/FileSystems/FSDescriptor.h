@@ -38,11 +38,11 @@ struct FSDescriptor {
     FSFormat dos = FSFormat::NODOS;
 
     // Location of the root block
-    Block rootBlock = 0;
-    
+    BlockNr rootBlock = 0;
+
     // References to all bitmap blocks and bitmap extension blocks
-    std::vector<Block> bmBlocks;
-    std::vector<Block> bmExtBlocks;
+    std::vector<BlockNr> bmBlocks;
+    std::vector<BlockNr> bmExtBlocks;
     
     // Initializing
     FSDescriptor() { };

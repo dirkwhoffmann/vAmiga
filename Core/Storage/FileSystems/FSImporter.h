@@ -27,7 +27,7 @@ public:
     void import(FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false);
 
     // Imports a single block
-    void importBlock(Block nr, const fs::path &path);
+    void importBlock(BlockNr nr, const fs::path &path);
 
     // Updates the checksums of all blocks
     void updateChecksums() noexcept;

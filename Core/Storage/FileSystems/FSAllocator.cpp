@@ -56,12 +56,12 @@ FSAllocator::requiredBlocks(isize fileSize) const noexcept
 bool
 FSAllocator::allocatable(isize count) const noexcept
 {
-    Block i = ap;
+    BlockNr i = ap;
     isize capacity = fs.blocks();
 
     while (count > 0) {
 
-        if (cache.getType(Block(i)) == FSBlockType::EMPTY) {
+        if (cache.getType(BlockNr(i)) == FSBlockType::EMPTY) {
             if (--count == 0) break;
         }
 
@@ -72,11 +72,11 @@ FSAllocator::allocatable(isize count) const noexcept
     return true;
 }
 
-Block
+BlockNr
 FSAllocator::allocate()
 {
     auto numBlocks = fs.blocks();
-    Block i = ap;
+    BlockNr i = ap;
 
     while (!fs.isEmpty(i)) {
 
@@ -94,7 +94,7 @@ FSAllocator::allocate()
 }
 
 void
-FSAllocator::allocate(isize count, std::vector<Block> &result, std::vector<Block> prealloc)
+FSAllocator::allocate(isize count, std::vector<BlockNr> &result, std::vector<BlockNr> prealloc)
 {
     /* Allocate multiple blocks and return them in `result`.
      *
@@ -122,7 +122,7 @@ FSAllocator::allocate(isize count, std::vector<Block> &result, std::vector<Block
     }
 
     // Step 2: Allocate remaining blocks from free space
-    Block i = ap;
+    BlockNr i = ap;
     while (count > 0) {
 
         if (fs.isEmpty(i)) {
@@ -151,22 +151,22 @@ FSAllocator::allocate(isize count, std::vector<Block> &result, std::vector<Block
 }
 
 void
-FSAllocator::deallocateBlock(Block nr)
+FSAllocator::deallocateBlock(BlockNr nr)
 {
     cache.modify(nr).init(FSBlockType::EMPTY);
     markAsFree(nr);
 }
 
 void
-FSAllocator::deallocateBlocks(const std::vector<Block> &nrs)
+FSAllocator::deallocateBlocks(const std::vector<BlockNr> &nrs)
 {
-    for (Block nr : nrs) { deallocateBlock(nr); }
+    for (BlockNr nr : nrs) { deallocateBlock(nr); }
 }
 
 void
 FSAllocator::allocateFileBlocks(isize bytes,
-                                std::vector<Block> &listBlocks,
-                                std::vector<Block> &dataBlocks)
+                                std::vector<BlockNr> &listBlocks,
+                                std::vector<BlockNr> &dataBlocks)
 {
     /* This function takes a file size and two lists:
 
@@ -179,7 +179,7 @@ FSAllocator::allocateFileBlocks(isize bytes,
         are allocated and appended to the respective lists.
     */
 
-    auto freeSurplus = [&](std::vector<Block> &blocks, usize count) {
+    auto freeSurplus = [&](std::vector<BlockNr> &blocks, usize count) {
 
         if (blocks.size() > count) {
 
@@ -253,7 +253,7 @@ FSAllocator::allocateFileBlocks(isize bytes,
 }
 
 bool
-FSAllocator::isUnallocated(Block nr) const noexcept
+FSAllocator::isUnallocated(BlockNr nr) const noexcept
 {
     assert(isize(nr) < traits.blocks);
 
@@ -269,7 +269,7 @@ FSAllocator::isUnallocated(Block nr) const noexcept
 }
 
 FSBlock *
-FSAllocator::locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept
+FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) noexcept
 {
     assert(isize(nr) < traits.blocks);
 
@@ -311,7 +311,7 @@ FSAllocator::locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept
 }
 
 const FSBlock *
-FSAllocator::locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept
+FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FSAllocator *>(this)->locateAllocationBit(nr, byte, bit));
 }
@@ -325,7 +325,7 @@ FSAllocator::numUnallocated() const noexcept
     if (FS_DEBUG) {
 
         isize count = 0;
-        for (isize i = 0; i < fs.blocks(); i++) { if (isUnallocated(Block(i))) count++; }
+        for (isize i = 0; i < fs.blocks(); i++) { if (isUnallocated(BlockNr(i))) count++; }
         debug(true, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
         assert(count == result);
     }
@@ -373,7 +373,7 @@ FSAllocator::serializeBitmap() const
 }
 
 void
-FSAllocator::setAllocationBit(Block nr, bool value)
+FSAllocator::setAllocationBit(BlockNr nr, bool value)
 {
     isize byte, bit;
 

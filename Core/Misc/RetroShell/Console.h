@@ -462,9 +462,9 @@ class NavigatorConsole final : public Console
     // Parsing input
     //
     
-    Block parseBlock(const string &arg);
-    Block parseBlock(const Arguments &argv, const string &token);
-    Block parseBlock(const Arguments &argv, const string &token, Block fallback);
+    BlockNr parseBlock(const string &arg);
+    BlockNr parseBlock(const Arguments &argv, const string &token);
+    BlockNr parseBlock(const Arguments &argv, const string &token, BlockNr fallback);
     FSBlock &parsePath(const Arguments &argv, const string &token);
     FSBlock &parsePath(const Arguments &argv, const string &token, FSBlock &fallback);
     FSBlock &parseFile(const Arguments &argv, const string &token);

@@ -20,7 +20,7 @@ struct Handle {
     isize id = 0;
 
     // File header block
-    Block headerBlock = 0;
+    BlockNr headerBlock = 0;
 
     // I/O offset
     isize offset = 0;
@@ -51,7 +51,7 @@ class PosixFileSystem {
     FileSystem &fs;
 
     // Metadata for nodes indexed by block number
-    std::unordered_map<Block, NodeMeta> meta;
+    std::unordered_map<BlockNr, NodeMeta> meta;
 
     // Active file handles
     std::unordered_map<HandleRef, Handle> handles;
@@ -83,11 +83,11 @@ public:
 private:
 
     // Returns a pointer to the meta struct (may be nullptr)
-    NodeMeta *getMeta(Block nr);
+    NodeMeta *getMeta(BlockNr nr);
     NodeMeta *getMeta(const FSBlock &block) { return getMeta(block.nr); }
 
     // Returns a reference to the meta struct (on-the-fly creation)
-    NodeMeta &ensureMeta(Block nr);
+    NodeMeta &ensureMeta(BlockNr nr);
     NodeMeta &ensureMeta(const FSBlock &block) { return ensureMeta(block.nr); }
     NodeMeta &ensureMeta(HandleRef ref);
 

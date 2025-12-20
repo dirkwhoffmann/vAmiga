@@ -54,7 +54,7 @@ FSDescriptor::init(isize numBlocks, FSFormat dos)
     // Determine the location of the root block
     isize highKey = numBlocks - 1;
     isize rootKey = (numReserved + highKey) / 2; 
-    rootBlock = Block(rootKey);
+    rootBlock = BlockNr(rootKey);
 
     assert(rootKey == numBlocks / 2);
 
@@ -65,12 +65,12 @@ FSDescriptor::init(isize numBlocks, FSFormat dos)
 
     // Add bitmap blocks
     for (isize i = 0; i < neededBlocks; i++) {
-        bmBlocks.push_back(Block(bmKey++));
+        bmBlocks.push_back(BlockNr(bmKey++));
     }
     
     // Add bitmap extension blocks (the first 25 references are stored in the root block)
     for (; neededBlocks - 25 > 0; neededBlocks -= 127) {
-        bmExtBlocks.push_back(Block(bmKey++));
+        bmExtBlocks.push_back(BlockNr(bmKey++));
     }
 }
 

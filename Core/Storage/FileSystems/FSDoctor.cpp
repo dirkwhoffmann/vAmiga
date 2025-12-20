@@ -89,7 +89,7 @@ expected = u32((fs.traits.bsize / 4) - 56); return FSBlockError::INVALID_HASHTAB
 namespace vamiga {
 
 void
-FSDoctor::dump(Block nr, std::ostream &os)
+FSDoctor::dump(BlockNr nr, std::ostream &os)
 {
     using namespace utl;
 
@@ -236,7 +236,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
         os << tab("Hash table");
         for (isize i = 0, j = 0; i < p.hashTableSize(); i++) {
 
-            if (Block ref = p.read32(bdata + 24 + 4 * i); ref) {
+            if (BlockNr ref = p.read32(bdata + 24 + 4 * i); ref) {
 
                 if (j++) os << std::endl << tab();
                 os << std::setfill(' ') << std::setw(2) << i << " -> ";
@@ -278,7 +278,7 @@ FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
                 os << errors << (errors == 1 ? " anomaly" : " anomalies") << std::endl;
             }
 
-            diagnosis.blockErrors.push_back(Block(it));
+            diagnosis.blockErrors.push_back(BlockNr(it));
         }
     }
 
@@ -288,7 +288,7 @@ FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
 isize
 FSDoctor::xrayBitmap(bool strict)
 {
-    std::unordered_set<Block> used;
+    std::unordered_set<BlockNr> used;
 
     // Extract the directory tree
     auto tree = FSTree(fs.root(), { .recursive = true });
@@ -312,18 +312,18 @@ FSDoctor::xrayBitmap(bool strict)
     // Check all blocks (ignoring the first two boot blocks)
     for (isize i = 2, capacity = fs.blocks(); i < capacity; i++) {
 
-        bool allocated = fs.allocator.isAllocated(Block(i));
-        bool contained = used.contains(Block(i));
+        bool allocated = fs.allocator.isAllocated(BlockNr(i));
+        bool contained = used.contains(BlockNr(i));
 
         if (allocated && !contained) {
 
-            diagnosis.unusedButAllocated.push_back(Block(i));
-            diagnosis.bitmapErrors[Block(i)] = 1;
+            diagnosis.unusedButAllocated.push_back(BlockNr(i));
+            diagnosis.bitmapErrors[BlockNr(i)] = 1;
 
         } else if (!allocated && contained) {
 
-            diagnosis.usedButUnallocated.push_back(Block(i));
-            diagnosis.bitmapErrors[Block(i)] = 2;
+            diagnosis.usedButUnallocated.push_back(BlockNr(i));
+            diagnosis.bitmapErrors[BlockNr(i)] = 2;
         }
     }
 
@@ -359,7 +359,7 @@ FSDoctor::xrayBitmap(std::ostream &os, bool strict)
 }
 
 isize
-FSDoctor::xray(Block ref, bool strict) const
+FSDoctor::xray(BlockNr ref, bool strict) const
 {
     return xray(fs.modify(ref), strict);
 }
@@ -383,7 +383,7 @@ FSDoctor::xray(FSBlock &node, bool strict) const
 }
 
 FSBlockError
-FSDoctor::xray8(Block ref, isize pos, bool strict, optional<u8> &expected) const
+FSDoctor::xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const
 {
     return xray8(fs.modify(ref), pos, strict, expected);
 }
@@ -399,7 +399,7 @@ FSDoctor::xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) c
 }
 
 FSBlockError
-FSDoctor::xray32(Block ref, isize pos, bool strict, optional<u32> &expected) const
+FSDoctor::xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) const
 {
     return xray32(fs.modify(ref), pos, strict, expected);
 }
@@ -601,7 +601,7 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
 }
 
 isize
-FSDoctor::xray(Block ref, bool strict, std::ostream &os) const
+FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
 {
     return xray(fs.modify(ref), strict, os);
 }
@@ -693,7 +693,7 @@ FSDoctor::rectify(bool strict)
 }
 
 void
-FSDoctor::rectify(Block ref, bool strict)
+FSDoctor::rectify(BlockNr ref, bool strict)
 {
     rectify(fs.modify(ref), strict);
 }
@@ -726,15 +726,15 @@ FSDoctor::rectifyBitmap(bool strict)
     xrayBitmap(strict);
 
     for (auto &it : diagnosis.unusedButAllocated) {
-        allocator.markAsFree(Block(it));
+        allocator.markAsFree(BlockNr(it));
     }
     for (auto &it : diagnosis.usedButUnallocated) {
-        allocator.markAsAllocated(Block(it));
+        allocator.markAsAllocated(BlockNr(it));
     }
 }
 
 string
-FSDoctor::ascii(Block nr, isize offset, isize len) const noexcept
+FSDoctor::ascii(BlockNr nr, isize offset, isize len) const noexcept
 {
     assert(offset + len <= traits.bsize);
 
@@ -760,7 +760,7 @@ FSDoctor::createHealthMap(u8 *buffer, isize len) const
 }
 
 isize
-FSDoctor::nextBlockOfType(FSBlockType type, Block after) const
+FSDoctor::nextBlockOfType(FSBlockType type, BlockNr after) const
 {
     assert(isize(after) < traits.blocks);
 
@@ -768,7 +768,7 @@ FSDoctor::nextBlockOfType(FSBlockType type, Block after) const
 
     do {
         result = (result + 1) % fs.blocks();
-        if (cache.getType(Block(result)) == type) return result;
+        if (cache.getType(BlockNr(result)) == type) return result;
 
     } while (result != isize(after));
 

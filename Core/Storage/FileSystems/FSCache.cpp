@@ -54,10 +54,10 @@ FSCache::predictDOS(BlockView &dev) noexcept
     return FSFormat::NODOS;
 }
 
-std::vector<Block>
+std::vector<BlockNr>
 FSCache::sortedKeys() const
 {
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
     result.reserve(blocks.size());
 
     for (const auto& [key, _] : blocks) result.push_back(key);
@@ -67,27 +67,27 @@ FSCache::sortedKeys() const
 }
 
 bool
-FSCache::isEmpty(Block nr) const noexcept
+FSCache::isEmpty(BlockNr nr) const noexcept
 {
     return getType(nr) == FSBlockType::EMPTY;
 }
 
 FSBlockType
-FSCache::getType(Block nr) const noexcept
+FSCache::getType(BlockNr nr) const noexcept
 {
     if (isize(nr) >= capacity()) return FSBlockType::UNKNOWN;
     return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY;
 }
 
 void
-FSCache::setType(Block nr, FSBlockType type)
+FSCache::setType(BlockNr nr, FSBlockType type)
 {
     if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
     blocks.at(nr)->init(type);
 }
 
 FSBlock *
-FSCache::cache(Block nr) const noexcept
+FSCache::cache(BlockNr nr) const noexcept
 {
     if (isize(nr) >= capacity()) return nullptr;
 
@@ -112,13 +112,13 @@ FSCache::cache(Block nr) const noexcept
 }
 
 const FSBlock *
-FSCache::tryFetch(Block nr) const noexcept
+FSCache::tryFetch(BlockNr nr) const noexcept
 {
     return cache(nr);
 }
 
 const FSBlock *
-FSCache::tryFetch(Block nr, FSBlockType type) const noexcept
+FSCache::tryFetch(BlockNr nr, FSBlockType type) const noexcept
 {
     if (auto *ptr = tryFetch(nr); ptr) {
 
@@ -128,7 +128,7 @@ FSCache::tryFetch(Block nr, FSBlockType type) const noexcept
 }
 
 const FSBlock *
-FSCache::tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept
+FSCache::tryFetch(BlockNr nr, std::vector<FSBlockType> types) const noexcept
 {
     if (auto *ptr = tryFetch(nr); ptr) {
 
@@ -138,7 +138,7 @@ FSCache::tryFetch(Block nr, std::vector<FSBlockType> types) const noexcept
 }
 
 const FSBlock &
-FSCache::fetch(Block nr) const
+FSCache::fetch(BlockNr nr) const
 {
     if (auto *result = tryFetch(nr)) return *result;
 
@@ -146,7 +146,7 @@ FSCache::fetch(Block nr) const
 }
 
 const FSBlock &
-FSCache::fetch(Block nr, FSBlockType type) const
+FSCache::fetch(BlockNr nr, FSBlockType type) const
 {
     if (auto *result = tryFetch(nr, type)) return *result;
 
@@ -158,7 +158,7 @@ FSCache::fetch(Block nr, FSBlockType type) const
 }
 
 const FSBlock &
-FSCache::fetch(Block nr, std::vector<FSBlockType> types) const
+FSCache::fetch(BlockNr nr, std::vector<FSBlockType> types) const
 {
     if (auto *result = tryFetch(nr, types); result) return *result;
 
@@ -170,14 +170,14 @@ FSCache::fetch(Block nr, std::vector<FSBlockType> types) const
 }
 
 FSBlock *
-FSCache::tryModify(Block nr) noexcept
+FSCache::tryModify(BlockNr nr) noexcept
 {
     markAsDirty(nr);
     return cache(nr);
 }
 
 FSBlock *
-FSCache::tryModify(Block nr, FSBlockType type) noexcept
+FSCache::tryModify(BlockNr nr, FSBlockType type) noexcept
 {
     if (auto *ptr = tryModify(nr); ptr) {
 
@@ -191,7 +191,7 @@ FSCache::tryModify(Block nr, FSBlockType type) noexcept
 }
 
 FSBlock *
-FSCache::tryModify(Block nr, std::vector<FSBlockType> types) noexcept
+FSCache::tryModify(BlockNr nr, std::vector<FSBlockType> types) noexcept
 {
     if (auto *ptr = tryModify(nr); ptr) {
 
@@ -208,7 +208,7 @@ FSCache::tryModify(Block nr, std::vector<FSBlockType> types) noexcept
 }
 
 FSBlock &
-FSCache::modify(Block nr)
+FSCache::modify(BlockNr nr)
 {
     if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (auto *result = tryModify(nr)) return *result;
@@ -216,7 +216,7 @@ FSCache::modify(Block nr)
 }
 
 FSBlock &
-FSCache::modify(Block nr, FSBlockType type)
+FSCache::modify(BlockNr nr, FSBlockType type)
 {
     if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (auto *result = tryModify(nr, type)) return *result;
@@ -224,7 +224,7 @@ FSCache::modify(Block nr, FSBlockType type)
 }
 
 FSBlock &
-FSCache::modify(Block nr, std::vector<FSBlockType> types)
+FSCache::modify(BlockNr nr, std::vector<FSBlockType> types)
 {
     if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (auto *result = tryModify(nr, types); result) return *result;
@@ -232,13 +232,13 @@ FSCache::modify(Block nr, std::vector<FSBlockType> types)
 }
 
 void
-FSCache::erase(Block nr)
+FSCache::erase(BlockNr nr)
 {
     if (blocks.contains(nr)) { blocks.erase(nr); }
 }
 
 void
-FSCache::flush(Block nr)
+FSCache::flush(BlockNr nr)
 {
     if (dirty.contains(nr)) {
 
@@ -289,9 +289,9 @@ FSCache::createUsageMap(u8 *buffer, isize len) const
     // Mark all used blocks
     for (auto &it : blocks) {
 
-        auto i = Block(it.first);
+        auto i = BlockNr(it.first);
 
-        auto val = u8(getType(Block(i)));
+        auto val = u8(getType(BlockNr(i)));
         auto pos = i * (len - 1) / (max - 1);
         if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
         if (pri[buffer[pos]] == pri[val] && pos > 0 && buffer[pos-1] != val) buffer[pos] = val;
@@ -318,7 +318,7 @@ FSCache::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis)
     for (isize i = 0; i < max; i++) buffer[i * (len - 1) / (max - 1)] = 0;
 
     // Mark all used blocks
-    for (auto &it : blocks) { if (!isEmpty(Block(it.first))) buffer[it.first * (len - 1) / (max - 1)] = 1; }
+    for (auto &it : blocks) { if (!isEmpty(BlockNr(it.first))) buffer[it.first * (len - 1) / (max - 1)] = 1; }
 
     // Mark all erroneous blocks
     for (auto &it : unusedButAllocated) buffer[it * (len - 1) / (max - 1)] = 2;
@@ -344,7 +344,7 @@ FSCache::createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) con
     for (isize i = 0; i < max; i++) buffer[i * (len - 1) / (max - 1)] = 0;
 
     // Mark all used blocks
-    for (auto &it : blocks) { if (!isEmpty(Block(it.first))) buffer[it.first * (len - 1) / (max - 1)] = 1; }
+    for (auto &it : blocks) { if (!isEmpty(BlockNr(it.first))) buffer[it.first * (len - 1) / (max - 1)] = 1; }
 
     // Mark all erroneous blocks
     for (auto &it : blockErrors) buffer[it * (len - 1) / (max - 1)] = 2;

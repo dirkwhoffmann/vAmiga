@@ -19,29 +19,29 @@ using namespace utl;
 bool
 FSExporter::exportVolume(u8 *dst, isize size) const
 {
-    return exportBlocks(0, (Block)(fs.blocks() - 1), dst, size);
+    return exportBlocks(0, (BlockNr)(fs.blocks() - 1), dst, size);
 }
 
 bool
 FSExporter::exportVolume(u8 *dst, isize size, FSFault *err) const
 {
-    return exportBlocks(0, (Block)(fs.blocks() - 1), dst, size, err);
+    return exportBlocks(0, (BlockNr)(fs.blocks() - 1), dst, size, err);
 }
 
 bool
-FSExporter::exportBlock(Block nr, u8 *dst, isize size) const
+FSExporter::exportBlock(BlockNr nr, u8 *dst, isize size) const
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
 bool
-FSExporter::exportBlock(Block nr, u8 *dst, isize size, FSFault *error) const
+FSExporter::exportBlock(BlockNr nr, u8 *dst, isize size, FSFault *error) const
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
 
 bool
-FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size) const
+FSExporter::exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size) const
 {
     FSFault error;
     bool result = exportBlocks(first, last, dst, size, &error);
@@ -51,9 +51,9 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size) const
 }
 
 bool
-FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *err) const
+FSExporter::exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size, FSFault *err) const
 {
-    assert(last < (Block)fs.blocks());
+    assert(last < (BlockNr)fs.blocks());
     assert(first <= last);
     assert(dst);
 
@@ -88,13 +88,13 @@ FSExporter::exportBlocks(Block first, Block last, u8 *dst, isize size, FSFault *
 }
 
 void
-FSExporter::exportBlock(Block nr, const fs::path &path) const
+FSExporter::exportBlock(BlockNr nr, const fs::path &path) const
 {
     exportBlocks(nr, nr, path);
 }
 
 void
-FSExporter::exportBlocks(Block first, Block last, const fs::path &path) const
+FSExporter::exportBlocks(BlockNr first, BlockNr last, const fs::path &path) const
 {
     std::ofstream stream(path, std::ios::binary);
 
@@ -102,7 +102,7 @@ FSExporter::exportBlocks(Block first, Block last, const fs::path &path) const
         throw IOError(IOError::FILE_CANT_CREATE, path);
     }
 
-    for (Block i = first; i <= last; i++) {
+    for (BlockNr i = first; i <= last; i++) {
 
         auto *data = fs.fetch(i).data();
         stream.write((const char *)data, traits.bsize);
@@ -117,12 +117,12 @@ void
 FSExporter::exportBlocks(const fs::path &path) const
 {
     if (traits.blocks) {
-        exportBlocks(0, Block(traits.blocks - 1), path);
+        exportBlocks(0, BlockNr(traits.blocks - 1), path);
     }
 }
 
 void
-FSExporter::exportFiles(Block nr, const fs::path &path, bool recursive, bool contents) const
+FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool contents) const
 {
     auto *block = fs.tryFetch(nr);
     exportFiles(*block, path, recursive, contents);

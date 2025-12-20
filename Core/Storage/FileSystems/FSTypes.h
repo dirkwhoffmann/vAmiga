@@ -17,7 +17,7 @@ using namespace utl;
 
 struct FSBlock;
 
-using Block = u32;
+using BlockNr = u32;
 using BlockRef = const FSBlock &;
 
 typedef std::function<bool(const FSBlock &)> FSBlockFilter;
@@ -464,13 +464,13 @@ struct FSTraits
 typedef struct
 {
     // Block errors
-    std::vector<Block> blockErrors;
+    std::vector<BlockNr> blockErrors;
 
     // Bitmap errors
-    std::vector<Block> usedButUnallocated;
-    std::vector<Block> unusedButAllocated;
+    std::vector<BlockNr> usedButUnallocated;
+    std::vector<BlockNr> unusedButAllocated;
 
-    std::unordered_map<Block,isize> bitmapErrors; // DEPRECATED
+    std::unordered_map<BlockNr,isize> bitmapErrors; // DEPRECATED
 }
 FSDiagnosis;
 

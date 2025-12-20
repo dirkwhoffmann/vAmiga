@@ -35,7 +35,7 @@ FileSystem::format(FSFormat dos, string name){
 
     // Wipe out all other blocks
     for (isize i = 2; i < traits.blocks; i++) {
-        modify(Block(i)).init(FSBlockType::EMPTY);
+        modify(BlockNr(i)).init(FSBlockType::EMPTY);
     }
 
     // Create the root block
@@ -49,7 +49,7 @@ FileSystem::format(FSFormat dos, string name){
     }
 
     // Add bitmap extension blocks
-    Block pred = rootBlock;
+    BlockNr pred = rootBlock;
     for (auto &ref : bmExtBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
@@ -64,7 +64,7 @@ FileSystem::format(FSFormat dos, string name){
     // Mark free blocks as free in the bitmap block
     // TODO: SPEED THIS UP
     for (isize i = 0; i < blocks(); i++) {
-        if (cache.isEmpty(Block(i))) allocator.markAsFree(Block(i));
+        if (cache.isEmpty(BlockNr(i))) allocator.markAsFree(BlockNr(i));
     }
 
     // Set the volume name
@@ -149,7 +149,7 @@ FileSystem::rmdir(FSBlock &at)
 FSBlock *
 FileSystem::searchdir(const FSBlock &at, const FSName &name)
 {
-    std::unordered_set<Block> visited;
+    std::unordered_set<BlockNr> visited;
 
     // Only proceed if a hash table is present
     if (!at.hasHashTable()) return nullptr;
@@ -199,7 +199,7 @@ FileSystem::addToHashTable(const FSBlock &item)
 }
 
 void
-FileSystem::addToHashTable(Block parent, Block ref)
+FileSystem::addToHashTable(BlockNr parent, BlockNr ref)
 {
     FSBlock *pp = tryModify(parent);
     if (!pp) throw FSError(FSError::FS_OUT_OF_RANGE);
@@ -234,7 +234,7 @@ FileSystem::deleteFromHashTable(const FSBlock &item)
 }
 
 void
-FileSystem::deleteFromHashTable(Block parent, Block ref)
+FileSystem::deleteFromHashTable(BlockNr parent, BlockNr ref)
 {
     FSBlock *pp = tryModify(parent);
     if (!pp) throw FSError(FSError::FS_OUT_OF_RANGE);
@@ -397,8 +397,8 @@ FileSystem::replace(FSBlock &at, const Buffer<u8> &data)
 FSBlock &
 FileSystem::replace(FSBlock &fhb,
                        const u8 *buf, isize size,
-                       std::vector<Block> listBlocks,
-                       std::vector<Block> dataBlocks)
+                       std::vector<BlockNr> listBlocks,
+                       std::vector<BlockNr> dataBlocks)
 {
     // Number of data block references held in a file header or list block
     const isize numRefs = ((traits.bsize / 4) - 56);
@@ -448,7 +448,7 @@ FileSystem::replace(FSBlock &fhb,
 FSBlock &
 FileSystem::newUserDirBlock(const FSName &name)
 {
-    Block nr = allocator.allocate();
+    BlockNr nr = allocator.allocate();
 
     modify(nr).init(FSBlockType::USERDIR);
     modify(nr).setName(name);
@@ -458,7 +458,7 @@ FileSystem::newUserDirBlock(const FSName &name)
 FSBlock &
 FileSystem::newFileHeaderBlock(const FSName &name)
 {
-    Block nr = allocator.allocate();
+    BlockNr nr = allocator.allocate();
 
     modify(nr).init(FSBlockType::FILEHEADER);
     modify(nr).setName(name);
@@ -466,7 +466,7 @@ FileSystem::newFileHeaderBlock(const FSName &name)
 }
 
 void
-FileSystem::addFileListBlock(Block at, Block head, Block prev)
+FileSystem::addFileListBlock(BlockNr at, BlockNr head, BlockNr prev)
 {
     if (auto *prevBlock = tryModify(prev); prevBlock) {
 
@@ -478,19 +478,19 @@ FileSystem::addFileListBlock(Block at, Block head, Block prev)
 }
 
 void
-FileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
+FileSystem::addDataBlock(BlockNr at, isize id, BlockNr head, BlockNr prev)
 {
     if (auto *prevBlock = tryModify(prev); prevBlock) {
 
         modify(at).init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
-        modify(at).setDataBlockNr((Block)id);
+        modify(at).setDataBlockNr((BlockNr)id);
         modify(at).setFileHeaderRef(head);
         prevBlock->setNextDataBlockRef(at);
     }
 }
 
 isize
-FileSystem::addData(Block nr, const u8 *buf, isize size)
+FileSystem::addData(BlockNr nr, const u8 *buf, isize size)
 {
     auto *block = tryModify(nr);
     return block ? addData(*block, buf, size) : 0;
@@ -554,7 +554,7 @@ std::vector<const FSBlock *>
 FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSBlock *)> next) const
 {
     std::vector<const FSBlock *> result;
-    std::unordered_set<Block> visited;
+    std::unordered_set<BlockNr> visited;
 
     for (auto *block = tryFetch(node.nr); block != nullptr; block = next(block)) {
 
@@ -571,11 +571,11 @@ FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSB
     return result;
 }
 
-std::vector<Block>
-FileSystem::collect(const Block nr, std::function<const FSBlock *(FSBlock const *)> next) const
+std::vector<BlockNr>
+FileSystem::collect(const BlockNr nr, std::function<const FSBlock *(FSBlock const *)> next) const
 {
-    std::vector<Block> result;
-    std::unordered_set<Block> visited;
+    std::vector<BlockNr> result;
+    std::unordered_set<BlockNr> visited;
 
     for (auto *block = tryFetch(nr); block; block = next(block)) {
 
@@ -616,10 +616,10 @@ FileSystem::collectDataBlocks(const FSBlock &node) const
     return result;
 }
 
-std::vector<Block>
-FileSystem::collectDataBlocks(Block ref) const
+std::vector<BlockNr>
+FileSystem::collectDataBlocks(BlockNr ref) const
 {
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
 
     if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
@@ -638,10 +638,10 @@ FileSystem::collectListBlocks(const FSBlock &node) const
     return result;
 }
 
-std::vector<Block>
-FileSystem::collectListBlocks(const Block ref) const
+std::vector<BlockNr>
+FileSystem::collectListBlocks(const BlockNr ref) const
 {
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
 
     if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
@@ -649,10 +649,10 @@ FileSystem::collectListBlocks(const Block ref) const
     return result;
 }
 
-std::vector<Block>
-FileSystem::collectHashedBlocks(Block ref, isize bucket) const
+std::vector<BlockNr>
+FileSystem::collectHashedBlocks(BlockNr ref, isize bucket) const
 {
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
 
     if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectHashedBlocks(*ptr, bucket)) result.push_back(it->nr);
@@ -671,10 +671,10 @@ FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
     }
 }
 
-std::vector<Block>
-FileSystem::collectHashedBlocks(Block ref) const
+std::vector<BlockNr>
+FileSystem::collectHashedBlocks(BlockNr ref) const
 {
-    std::vector<Block> result;
+    std::vector<BlockNr> result;
     if (auto *ptr = tryFetch(ref)) {
         for (auto &it: collectHashedBlocks(*ptr)) result.push_back(it->nr);
     }
