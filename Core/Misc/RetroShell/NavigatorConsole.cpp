@@ -1315,14 +1315,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                     if (path.isDirectory()) {
                         
                         debug(RSH_DEBUG, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
-                        fs->move(source, path);
+                        fs->move(source.nr, path.nr);
                     }
                     
                 } else if (missing.size() == 1) {
                     
                     debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
                           source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
-                    fs->move(source, path, missing.back());
+                    fs->move(source.nr, path.nr, missing.back());
 
                 } else {
                     
@@ -1357,12 +1357,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                     }
                     if (path.isDirectory()) {
                         
-                        fs->copy(source, path);
+                        fs->copy(source.nr, path.nr);
                     }
                     
                 } else if (missing.size() == 1) {
                     
-                    fs->copy(source, path, missing.back());
+                    fs->copy(source.nr, path.nr, missing.back());
 
                 } else {
                     
@@ -1386,7 +1386,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto &path = parsePath(args, "path");
                 
                 if (path.isFile()) {
-                    fs->rm(path);
+                    fs->rm(path.nr);
                 } else if (path.isDirectory()) {
                     throw FSError(FSError::FS_NOT_A_FILE, args.at("path"));
                 } else {

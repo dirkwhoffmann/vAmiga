@@ -88,6 +88,8 @@
 		50357BB6239123B2007E7563 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB5239123B2007E7563 /* Renderer.swift */; };
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
+		50392FAC2EF6AC0000DAE17A /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */; };
+		50392FAD2EF6AC0000DAE17A /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503E869E2EEE9D6E00ED891D /* BlockView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockView.cpp */; };
 		503E869F2EEE9D6E00ED891D /* BlockView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockView.cpp */; };
@@ -734,6 +736,8 @@
 		50357BB723912929007E7563 /* RendererSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererSetup.swift; sourceTree = "<group>"; };
 		50384C8421FC6B66006E7748 /* Snapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Snapshot.cpp; sourceTree = "<group>"; };
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
+		50392FAA2EF6ABF800DAE17A /* FSContract.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSContract.h; sourceTree = "<group>"; };
+		50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSContract.cpp; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* CoreError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreError.h; sourceTree = "<group>"; };
@@ -1705,6 +1709,8 @@
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
 				503FC4B52EE06D0100637C95 /* FSError.h */,
 				503FC4B62EE06D0A00637C95 /* FSError.cpp */,
+				50392FAA2EF6ABF800DAE17A /* FSContract.h */,
+				50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */,
 				505C01092577A8C000F9E05C /* FSDescriptor.h */,
 				505C01082577A8C000F9E05C /* FSDescriptor.cpp */,
 				5029C6E527CA6209002F6CCC /* FileSystem.h */,
@@ -3107,6 +3113,7 @@
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				50E79D3B2EDC48C50052277E /* HDFFactory.cpp in Sources */,
 				500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */,
+				50392FAC2EF6AC0000DAE17A /* FSContract.cpp in Sources */,
 				5012DCE02D5B33C200233B6A /* HDZFile.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* MyWindowDelegate.swift in Sources */,
 				50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */,
@@ -3349,6 +3356,7 @@
 				50FC049F27DA197A00C3E566 /* SequencerBpl.cpp in Sources */,
 				9C47C0322D6215B100E57B41 /* lz4.c in Sources */,
 				50FC04BA27DA19B200C3E566 /* FloppyDisk.cpp in Sources */,
+				50392FAD2EF6AC0000DAE17A /* FSContract.cpp in Sources */,
 				509E762E2EDDC93600608FA7 /* EXEEncoder.cpp in Sources */,
 				50FC04A927DA198E00C3E566 /* FastBlitter.cpp in Sources */,
 				506D57BF2EC4BE6800E21501 /* RpcServer.cpp in Sources */,

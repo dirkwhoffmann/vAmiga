@@ -281,17 +281,17 @@ FileSystem::deleteFromHashTable(BlockNr parent, BlockNr ref)
     }
 }
 
-FSBlock &
-FileSystem::createFile(FSBlock &at, const FSName &name)
+BlockNr
+FileSystem::createFile(BlockNr at, const FSName &name)
 {
-    require::directory(at);
+    require.directory(at);
 
     FSBlock &fhb = newFileHeaderBlock(name);
 
     try {
 
-        link(at.nr, fhb.nr);
-        return fhb;
+        link(at, fhb.nr);
+        return fhb.nr;
 
     } catch(...) {
 
@@ -300,94 +300,96 @@ FileSystem::createFile(FSBlock &at, const FSName &name)
     }
 }
 
-FSBlock &
-FileSystem::createFile(FSBlock &at, const FSName &name, const u8 *buf, isize size)
+BlockNr
+FileSystem::createFile(BlockNr at, const FSName &name, const u8 *buf, isize size)
 {
     // Create an empty file
-    auto &fhb = createFile(at, name);
+    auto fhb = createFile(at, name);
 
     // Add data
     return replace(fhb, buf, size);
 }
 
-FSBlock &
-FileSystem::createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf)
+BlockNr
+FileSystem::createFile(BlockNr at, const FSName &name, const Buffer<u8> &buf)
 {
     return createFile(at, name, buf.ptr, buf.size);
 }
 
-FSBlock &
-FileSystem::createFile(FSBlock &top, const FSName &name, const string &str)
+BlockNr
+FileSystem::createFile(BlockNr top, const FSName &name, const string &str)
 {
     return createFile(top, name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 void
-FileSystem::rm(const FSBlock &node)
+FileSystem::rm(BlockNr node)
 {
     // Remove the file from its parent directory
-    unlink(node.nr);
+    unlink(node);
 
     // Reclaim all associated storage blocks
     reclaim(node);
 }
 
 void
-FileSystem::rename(FSBlock &item, const FSName &name)
+FileSystem::rename(BlockNr item, const FSName &name)
 {
+    auto &block = fetch(item);
+
     // Renaming the root updates the file system name
-    if (item.isRoot()) { setName(name); return; }
+    if (block.isRoot()) { setName(name); return; }
 
     // For regular items, relocate entry in the parent directory
-    move(item, *item.getParentDirBlock(), name);
+    move(item, (*block.getParentDirBlock()).nr, name);
 }
 
 void
-FileSystem::move(FSBlock &item, FSBlock &dest)
+FileSystem::move(BlockNr item, BlockNr dest)
 {
-    move (item, dest, item.name());
+    move (item, dest, fetch(item).name());
 }
 
 void
-FileSystem::move(FSBlock &item, FSBlock &dest, const FSName &name)
+FileSystem::move(BlockNr item, BlockNr dest, const FSName &name)
 {
-    require::fileOrDirectory(item);
-    require::notExist(dest, name);
+    require.fileOrDirectory(item);
+    require.notExist(dest, name);
 
     // Detach the item from its current parent
-    unlink(item.nr);
+    unlink(item);
 
     // Apply new name if provided
-    item.setName(name);
+    fetch(item).mutate().setName(name);
 
     // Insert into the destination directory
-    link(dest.nr, item.nr);
+    link(dest, item);
 }
 
 void
-FileSystem::copy(const FSBlock &item, FSBlock &dest)
+FileSystem::copy(BlockNr item, BlockNr dest)
 {
-    copy(item, dest, item.cppName());
+    copy(item, dest, fetch(item).cppName());
 }
 
 void
-FileSystem::copy(const FSBlock &item, FSBlock &dest, const FSName &name)
+FileSystem::copy(BlockNr item, BlockNr dest, const FSName &name)
 {
-    require::file(item);
-    require::directory(dest);
+    require.file(item);
+    require.directory(dest);
 
     // Read source file
-    Buffer<u8> buffer; item.extractData(buffer);
+    Buffer<u8> buffer; fetch(item).extractData(buffer);
 
     // Create file at destination
     createFile(dest, name, buffer);
 }
 
 void
-FileSystem::resize(FSBlock &at, isize size)
+FileSystem::resize(BlockNr at, isize size)
 {
     // Extract file data
-    Buffer<u8> buffer; at.extractData(buffer);
+    Buffer<u8> buffer; fetch(at).extractData(buffer);
 
     // Adjust size (pads with zero when growing)
     buffer.resize(size, 0);
@@ -397,32 +399,34 @@ FileSystem::resize(FSBlock &at, isize size)
 }
 
 void
-FileSystem::replace(FSBlock &at, const Buffer<u8> &data)
+FileSystem::replace(BlockNr at, const Buffer<u8> &data)
 {
     // Collect all blocks occupied by this file
-    auto listBlocks = collectListBlocks(at.nr);
-    auto dataBlocks = collectDataBlocks(at.nr);
+    auto listBlocks = collectListBlocks(at);
+    auto dataBlocks = collectDataBlocks(at);
 
     // Update the file contents
     replace(at, data.ptr, data.size, listBlocks, dataBlocks);
 }
 
-FSBlock &
-FileSystem::replace(FSBlock &fhb,
-                       const u8 *buf, isize size,
-                       std::vector<BlockNr> listBlocks,
-                       std::vector<BlockNr> dataBlocks)
+BlockNr
+FileSystem::replace(BlockNr fhb,
+                    const u8 *buf, isize size,
+                    std::vector<BlockNr> listBlocks,
+                    std::vector<BlockNr> dataBlocks)
 {
+    auto &fhbNode = fetch(fhb).mutate();
+
     // Number of data block references held in a file header or list block
     const isize numRefs = ((traits.bsize / 4) - 56);
 
     // Start with a clean reference area
-    fhb.setNextListBlockRef(0);
-    fhb.setNextDataBlockRef(0);
-    for (isize i = 0; i < numRefs; i++) fhb.setDataBlockRef(i, 0);
+    fhbNode.setNextListBlockRef(0);
+    fhbNode.setNextDataBlockRef(0);
+    for (isize i = 0; i < numRefs; i++) fhbNode.setDataBlockRef(i, 0);
 
     // Set file size
-    fhb.setFileSize(u32(size));
+    fhbNode.setFileSize(u32(size));
 
     // Allocate blocks
     allocator.allocateFileBlocks(size, listBlocks, dataBlocks);
@@ -430,16 +434,16 @@ FileSystem::replace(FSBlock &fhb,
     for (usize i = 0; i < listBlocks.size(); i++) {
 
         // Add a list block
-        addFileListBlock(listBlocks[i], fhb.nr, i == 0 ? fhb.nr : listBlocks[i-1]);
+        addFileListBlock(listBlocks[i], fhb, i == 0 ? fhb : listBlocks[i-1]);
     }
 
     for (isize i = 0; i < (isize)dataBlocks.size(); i++) {
 
         // Add a data block
-        addDataBlock(dataBlocks[i], i + 1, fhb.nr, i == 0 ? fhb.nr : dataBlocks[i-1]);
+        addDataBlock(dataBlocks[i], i + 1, fhb, i == 0 ? fhb : dataBlocks[i-1]);
 
         // Determine the list block managing this data block
-        FSBlock *lb = tryModify((i < numRefs) ? fhb.nr : listBlocks[i / numRefs - 1]);
+        FSBlock *lb = tryModify((i < numRefs) ? fhb : listBlocks[i / numRefs - 1]);
 
         // Link the data block
         lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
@@ -451,9 +455,9 @@ FileSystem::replace(FSBlock &fhb,
     }
 
     // Rectify checksums
-    for (auto &it : listBlocks) { modify(it).updateChecksum(); }
-    for (auto &it : dataBlocks) { modify(it).updateChecksum(); }
-    fhb.updateChecksum();
+    for (auto &it : listBlocks) { fetch(it).mutate().updateChecksum(); }
+    for (auto &it : dataBlocks) { fetch(it).mutate().updateChecksum(); }
+    fhbNode.updateChecksum();
 
     return fhb;
 }
@@ -463,9 +467,11 @@ FileSystem::newUserDirBlock(const FSName &name)
 {
     BlockNr nr = allocator.allocate();
 
-    modify(nr).init(FSBlockType::USERDIR);
-    modify(nr).setName(name);
-    return modify(nr);
+    auto &node = fetch(nr).mutate();
+    node.init(FSBlockType::USERDIR);
+    node.setName(name);
+
+    return node;
 }
 
 FSBlock &
@@ -473,9 +479,11 @@ FileSystem::newFileHeaderBlock(const FSName &name)
 {
     BlockNr nr = allocator.allocate();
 
-    modify(nr).init(FSBlockType::FILEHEADER);
-    modify(nr).setName(name);
-    return modify(nr);
+    auto &node = fetch(nr).mutate();
+    node.init(FSBlockType::FILEHEADER);
+    node.setName(name);
+
+    return node;
 }
 
 void

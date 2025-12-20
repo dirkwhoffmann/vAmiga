@@ -10,6 +10,7 @@ FileSystemLayer3.cpp
 FSAllocator.cpp
 FSBlock.cpp
 FSCache.cpp
+FSContract.cpp
 FSError.cpp
 FSExtension.cpp
 FSDescriptor.cpp

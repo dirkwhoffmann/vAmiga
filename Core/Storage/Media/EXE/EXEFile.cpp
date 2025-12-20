@@ -67,13 +67,13 @@ EXEFile::finalizeRead()
     auto dir = fs.root();
 
     // Add the executable
-    fs.createFile(fs.modify(dir), FSName("file"), data);
+    fs.createFile(dir, FSName("file"), data);
 
     // Add a script directory
     dir = fs.mkdir(dir, FSName("s"));
 
     // Add a startup sequence
-    fs.createFile(fs.modify(dir), "startup-sequence", "file");
+    fs.createFile(dir, "startup-sequence", "file");
 
     /*
     if (auto *dir = &fs.deprecatedRoot(); dir) {

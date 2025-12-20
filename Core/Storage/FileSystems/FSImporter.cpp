@@ -107,9 +107,9 @@ FSImporter::import(FSBlock &top, const fs::directory_entry &entry, bool recursiv
 
         Buffer<u8> buffer(entry.path());
         if (buffer) {
-            fs.createFile(top, fsname, buffer.ptr, buffer.size);
+            fs.createFile(top.nr, fsname, buffer.ptr, buffer.size);
         } else {
-            fs.createFile(top, fsname);
+            fs.createFile(top.nr, fsname);
         }
 
     } else {

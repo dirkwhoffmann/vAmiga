@@ -9,16 +9,11 @@
 
 #pragma once
 
-#include "FSTypes.h"
-// #include "utl/abilities/Reflectable.h"
+#include "utl/abilities/Reflectable.h"
 
 namespace vamiga {
 
 using namespace utl;
-
-//
-// Exceptions
-//
 
 using FSFault = long;
 
@@ -97,48 +92,8 @@ struct FSError : public Error {
     }
 
     explicit FSError(long fault, const std::string &msg = "");
-    /*
-    explicit FSError(long fault, const std::string &msg = "") : Error(fault) {
-
-        switch (fault) {
-                
-            case FS_INVALID_HANDLE:
-                set_msg("Invalid file handle: " + msg);
-                break;
-                
-            default:
-                set_msg("FSError " + std::to_string(fault) + " (" + errstr() + ")");
-        }
-    }
-    */
-
     explicit FSError(long fault, const char *str) : FSError(fault, string(str)) { }
     explicit FSError(long fault, const fs::path &path) : FSError(fault, path.string()) { }
-};
-
-
-//
-// Contracts
-//
-
-struct FSRequire {
-
-    const class FileSystem &fs;
-
-    void inRange(BlockNr nr);
-    void file(BlockNr nr);
-    void directory(BlockNr nr);
-    void fileOrDirectory(BlockNr nr);
-    void notRoot(BlockNr nr);
-    void emptyDirectory(BlockNr nr);
-    // void notExist(BlockNr nr, const FSName &name);
-};
-
-struct FSEnsure {
-
-    const class FileSystem &fs;
-
-    void inRange(BlockNr nr);
 };
 
 }

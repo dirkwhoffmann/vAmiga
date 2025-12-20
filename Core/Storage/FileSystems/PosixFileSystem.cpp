@@ -128,7 +128,7 @@ PosixFileSystem::open(const fs::path &path, u32 flags)
 
     // Evaluate flags
     if ((flags & O_TRUNC) && (flags & (O_WRONLY | O_RDWR))) {
-        fs.resize(node, 0);
+        fs.resize(node.nr, 0);
     }
     if (flags & O_APPEND) {
         handle.offset = lseek(ref, 0, SEEK_END);
@@ -236,7 +236,7 @@ PosixFileSystem::create(const fs::path &path)
     auto &node  = fs.seek(fs.deprecatedRoot(), parent);
 
     // Create file
-    auto &fhb = fs.createFile(node, FSName(name));
+    auto fhb = fs.createFile(node.nr, FSName(name));
 
     // Create meta info
     auto &info = ensureMeta(fhb);
@@ -278,7 +278,7 @@ PosixFileSystem::move(const fs::path &oldPath, const fs::path &newPath)
     auto &src    = fs.seek(fs.deprecatedRoot(), oldPath);
     auto &dst    = fs.seek(fs.deprecatedRoot(), newDir);
 
-    fs.move(src, dst, newName);
+    fs.move(src.nr, dst.nr, newName);
 }
 
 void
@@ -297,7 +297,7 @@ PosixFileSystem::chmod(const fs::path &path, mode_t mode)
 void
 PosixFileSystem::resize(const fs::path &path, isize size)
 {
-    fs.resize(ensureFile(path), size);
+    fs.resize(ensureFile(path).nr, size);
 }
 
 isize
@@ -348,7 +348,7 @@ PosixFileSystem::write(HandleRef ref, std::span<const u8> buffer)
     std::memcpy(meta.cache.ptr + handle.offset, buffer.data(), count);
 
     // Write back
-    fs.replace(node, meta.cache);
+    fs.replace(node.nr, meta.cache);
 
     return count;
 }

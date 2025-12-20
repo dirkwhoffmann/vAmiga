@@ -85,6 +85,7 @@
 #include "FSTypes.h"
 #include "FSError.h"
 #include "FSBlock.h"
+#include "FSContract.h"
 #include "FSDescriptor.h"
 #include "FSObjects.h"
 #include "FSTree.h"
@@ -335,38 +336,38 @@ private:
 public:
 
     // Creates a new file
-    FSBlock &createFile(FSBlock &at, const FSName &name);
-    FSBlock &createFile(FSBlock &at, const FSName &name, const u8 *buf, isize size);
-    FSBlock &createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf);
-    FSBlock &createFile(FSBlock &at, const FSName &name, const string &str);
+    BlockNr createFile(BlockNr at, const FSName &name);
+    BlockNr createFile(BlockNr at, const FSName &name, const u8 *buf, isize size);
+    BlockNr createFile(BlockNr at, const FSName &name, const Buffer<u8> &buf);
+    BlockNr createFile(BlockNr at, const FSName &name, const string &str);
 
     // Delete a file
-    void rm(const FSBlock &at);
+    void rm(BlockNr at);
 
     // Renames a file or directory
-    void rename(FSBlock &item, const FSName &name);
+    void rename(BlockNr item, const FSName &name);
 
     // Moves a file or directory to another location
-    void move(FSBlock &item, FSBlock &dest);
-    void move(FSBlock &item, FSBlock &dest, const FSName &name);
+    void move(BlockNr item, BlockNr dest);
+    void move(BlockNr item, BlockNr dest, const FSName &name);
 
     // Copies a file
-    void copy(const FSBlock &item, FSBlock &dest);
-    void copy(const FSBlock &item, FSBlock &dest, const FSName &name);
+    void copy(BlockNr item, BlockNr dest);
+    void copy(BlockNr item, BlockNr dest, const FSName &name);
 
     // Shrinks or expands an existing file (pad with 0)
-    void resize(FSBlock &at, isize size);
+    void resize(BlockNr at, isize size);
 
     // Replaces the cotents of an existing file
-    void replace(FSBlock &at, const Buffer<u8> &data);
+    void replace(BlockNr at, const Buffer<u8> &data);
 
 private:
 
     // Main replace function
-    FSBlock &replace(FSBlock &fhb,
-                     const u8 *buf, isize size,
-                     std::vector<BlockNr> listBlocks = {},
-                     std::vector<BlockNr> dataBlocks = {});
+    BlockNr replace(BlockNr fhb,
+                    const u8 *buf, isize size,
+                    std::vector<BlockNr> listBlocks = {},
+                    std::vector<BlockNr> dataBlocks = {});
 
 
     //
