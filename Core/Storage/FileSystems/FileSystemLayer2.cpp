@@ -128,7 +128,7 @@ FileSystem::mkdir(BlockNr at, const FSName &name)
     require.directory(at);
 
     // Error out if the file already exists
-    if (searchdir(fetch(at), name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
+    if (searchdir(at, name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
 
     FSBlock &block = newUserDirBlock(name);
     block.setParentDirRef(at);
@@ -146,47 +146,54 @@ FileSystem::rmdir(BlockNr at)
     reclaim(at);
 }
 
-FSBlock *
-FileSystem::searchdir(const FSBlock &at, const FSName &name)
+optional<BlockNr>
+FileSystem::searchdir(BlockNr at, const FSName &name)
 {
     std::unordered_set<BlockNr> visited;
 
     // Only proceed if a hash table is present
-    if (!at.hasHashTable()) return nullptr;
+    auto &top = fetch(at);
+    if (!top.hasHashTable()) return {};
 
     // Compute the table position and read the item
-    u32 hash = name.hashValue(traits.dos) % at.hashTableSize();
-    u32 ref = at.getHashRef(hash);
+    u32 hash = name.hashValue(traits.dos) % top.hashTableSize();
+    u32 ref = top.getHashRef(hash);
 
     // Traverse the linked list until the item has been found
     while (ref && visited.find(ref) == visited.end())  {
 
-        auto *block = tryModify(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
+        auto *block = tryFetch(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
         if (block == nullptr) break;
 
-        if (block->isNamed(name)) return block;
+        if (block->isNamed(name)) return block->nr;
 
         visited.insert(ref);
         ref = block->getNextHashRef();
     }
 
-    return nullptr;
+    return {};
 }
 
 void
-FileSystem::link(FSBlock &at, FSBlock &fhb)
+FileSystem::link(BlockNr at, BlockNr fhb)
 {
-    require::notExist(at, fhb.name());
+    require.directory(at);
 
-    // Wire
-    fhb.setParentDirRef(at.nr);
-    addToHashTable(at.nr, fhb.nr);
+    // Read the file heade block
+    auto &fhbBlk = fetch(fhb);
+
+    // Only proceed if the file does not yet exist
+    if (searchdir(at, fhbBlk.name())) throw FSError(FSError::FS_EXISTS);
+
+    // Wire up
+    fhbBlk.mutate().setParentDirRef(at);
+    addToHashTable(at, fhb);
 }
 
 void
-FileSystem::unlink(const FSBlock &node)
+FileSystem::unlink(BlockNr node)
 {
-    require::fileOrDirectory(node);
+    require.fileOrDirectory(node);
 
     // Unwire
     deleteFromHashTable(node);
@@ -283,7 +290,7 @@ FileSystem::createFile(FSBlock &at, const FSName &name)
 
     try {
 
-        link(at, fhb);
+        link(at.nr, fhb.nr);
         return fhb;
 
     } catch(...) {
@@ -319,7 +326,7 @@ void
 FileSystem::rm(const FSBlock &node)
 {
     // Remove the file from its parent directory
-    unlink(node);
+    unlink(node.nr);
 
     // Reclaim all associated storage blocks
     reclaim(node);
@@ -348,13 +355,13 @@ FileSystem::move(FSBlock &item, FSBlock &dest, const FSName &name)
     require::notExist(dest, name);
 
     // Detach the item from its current parent
-    unlink(item);
+    unlink(item.nr);
 
     // Apply new name if provided
     item.setName(name);
 
     // Insert into the destination directory
-    link(dest, item);
+    link(dest.nr, item.nr);
 }
 
 void

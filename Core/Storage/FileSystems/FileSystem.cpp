@@ -383,7 +383,7 @@ void
 notExist(const FSBlock &node, const FSName &name)
 {
     directory(node);
-    if (node.fs->searchdir(node, name) != nullptr) throw FSError(FSError::FS_EXISTS);
+    if (node.fs->searchdir(node.nr, name)) throw FSError(FSError::FS_EXISTS);
 }
 
 }}

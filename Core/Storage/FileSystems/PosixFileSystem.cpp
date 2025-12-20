@@ -77,7 +77,7 @@ PosixFileSystem::rmdir(const fs::path &path)
     if (auto *info = getMeta(node); info) {
 
         // Remove directory entry
-        fs.unlink(node);
+        fs.unlink(node.nr);
 
         // Decrement link count
         if (info->linkCount > 0) info->linkCount--;
@@ -163,7 +163,7 @@ PosixFileSystem::unlink(const fs::path &path)
     if (auto *info = getMeta(node); info) {
 
         // Remove directory entry
-        fs.unlink(node);
+        fs.unlink(node.nr);
 
         // Decrement link count
         if (info->linkCount > 0) info->linkCount--;

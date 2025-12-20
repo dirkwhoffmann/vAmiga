@@ -308,13 +308,13 @@ public:
     void rmdir(BlockNr at);
 
     // Looks up a directory item
-    FSBlock *searchdir(const FSBlock &at, const FSName &name);
+    optional<BlockNr> searchdir(BlockNr at, const FSName &name);
 
     // Creates a directory entry
-    void link(FSBlock &at, FSBlock &fhb);
+    void link(BlockNr at, BlockNr fhb);
 
     // Removes a directory entry
-    void unlink(const FSBlock &fhb);
+    void unlink(BlockNr fhb);
 
 private:
 
