@@ -465,12 +465,12 @@ class NavigatorConsole final : public Console
     BlockNr parseBlock(const string &arg);
     BlockNr parseBlock(const Arguments &argv, const string &token);
     BlockNr parseBlock(const Arguments &argv, const string &token, BlockNr fallback);
-    FSBlock &parsePath(const Arguments &argv, const string &token);
-    FSBlock &parsePath(const Arguments &argv, const string &token, FSBlock &fallback);
-    FSBlock &parseFile(const Arguments &argv, const string &token);
-    FSBlock &parseFile(const Arguments &argv, const string &token, FSBlock &fallback);
-    FSBlock &parseDirectory(const Arguments &argv, const string &token);
-    FSBlock &parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback);
+    BlockNr parsePath(const Arguments &argv, const string &token);
+    BlockNr parsePath(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr parseFile(const Arguments &argv, const string &token);
+    BlockNr parseFile(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr parseDirectory(const Arguments &argv, const string &token);
+    BlockNr parseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
     
     DumpOpt parseDumpOpts(const Arguments &argv);
 

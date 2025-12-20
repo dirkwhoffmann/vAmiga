@@ -182,7 +182,7 @@ PosixFileSystem::tryReclaim(const FSBlock &node)
         if (info->linkCount == 0 && info->openCount() == 0) {
 
             // Delete file
-            fs.reclaim(node);
+            fs.reclaim(node.nr);
 
             // Trash meta data
             meta.erase(node.nr);

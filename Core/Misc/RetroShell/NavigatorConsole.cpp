@@ -228,7 +228,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, BlockNr
     return nr;
 }
 
-FSBlock &
+BlockNr
 NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 {
     require::formatted(fs);
@@ -237,14 +237,14 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return fs->seek(fs->deprecatedPwd(), argv.at(token));
+        return fs->seek(fs->deprecatedPwd(), argv.at(token)).nr;
 
     } catch (...) {
         
         try {
             // Treat the argument as a block number
             // return (*fs)[parseBlock(argv.at(token))];
-            return fs->modify(parseBlock(argv.at(token)));
+            return fs->modify(parseBlock(argv.at(token))).nr;
 
         } catch (...) {
             
@@ -254,38 +254,38 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
     }
 }
 
-FSBlock &
-NavigatorConsole::parsePath(const Arguments &argv, const string &token, FSBlock &fallback)
+BlockNr
+NavigatorConsole::parsePath(const Arguments &argv, const string &token, BlockNr fallback)
 {
     return argv.contains(token) ? parsePath(argv, token) : fallback;
 }
 
-FSBlock &
+BlockNr
 NavigatorConsole::parseFile(const Arguments &argv, const string &token)
 {
-    return parseFile(argv, token, fs->deprecatedPwd());
+    return parseFile(argv, token, fs->pwd());
 }
 
-FSBlock &
-NavigatorConsole::parseFile(const Arguments &argv, const string &token, FSBlock &fallback)
+BlockNr
+NavigatorConsole::parseFile(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    auto &path = parsePath(argv, token, fallback);
-    require::file(path);
+    auto path = parsePath(argv, token, fallback);
+    fs->require.file(path);
 
     return path;
 }
 
-FSBlock &
+BlockNr
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
 {
-    return parseDirectory(argv, token, fs->deprecatedPwd());
+    return parseDirectory(argv, token, fs->pwd());
 }
 
-FSBlock &
-NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback)
+BlockNr
+NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    auto &path = parsePath(argv, token, fallback);
-    require::directory(path);
+    auto path = parsePath(argv, token, fallback);
+    fs->require.directory(path);
 
     return path;
 }
@@ -732,8 +732,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                     if (args.contains("file")) {
                         
-                        auto &item = parsePath(args, "file");
-                        auto name = item.cppName();
+                        auto item = parsePath(args, "file");
+                        // auto &item = fs->fetch(itemNr);
+                        auto name = fs->fetch(item).cppName();
                         if (name.empty()) name = fs->stat().name.cpp_str();
                         fs->exporter.exportFiles(item, "/export", recursive, true);
                         msgQueue.setPayload( { "/export", name } );
@@ -767,13 +768,13 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                     require::formatted(fs);
 
-                    auto &item = parsePath(args, "file");
+                    auto itemNr = parsePath(args, "file");
                     bool recursive = args.contains("r");
                     bool contents = args.at("file").back() == '/';
                     
                     auto path = args.at("path");
                     auto hostPath = host.makeAbsolute(args.at("path"));
-                    fs->exporter.exportFiles(item, hostPath, recursive, contents);
+                    fs->exporter.exportFiles(itemNr, hostPath, recursive, contents);
                 }
         });
     }
@@ -838,7 +839,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                auto nr = parseBlock(args, "nr", fs->deprecatedPwd().nr);
+                auto nr = parseBlock(args, "nr", fs->pwd());
 
                 if constexpr (vAmigaDOS) {
                     
@@ -868,7 +869,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &path = parsePath(args, "path", fs->deprecatedRoot());
+                auto path = parsePath(args, "path", fs->root());
                 fs->cd(path);
             }
     });
@@ -888,7 +889,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &path = parseDirectory(args, "path");
+                auto path = parseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
@@ -921,7 +922,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         }
                 };
                 
-                FSTree(path, opt).list(os, opt2);
+                FSTree(fs->fetch(path), opt).list(os, opt2);
             }
     });
     
@@ -939,7 +940,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                auto &path = parseDirectory(args, "path");
+                auto path = parseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
@@ -973,7 +974,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         }
                 };
                 
-                FSTree(path, opt).list(os, opt);
+                FSTree(fs->fetch(path), opt).list(os, opt);
             }
     });
     
@@ -1059,7 +1060,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 require::formatted(fs);
-                auto &file = parseFile(args, "path");
+                auto &file = fs->fetch(parseFile(args, "path"));
                 args.contains("v") ? file.dumpBlocks(os) : file.dumpInfo(os);
             }
     });
@@ -1142,7 +1143,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 require::formatted(fs);
-                auto &file = parsePath(args, "path", fs->deprecatedPwd());
+                auto &file = fs->fetch(parsePath(args, "path", fs->pwd()));
                 if (!file.isFile()) {
                     throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
@@ -1179,7 +1180,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 require::formatted(fs);
-                auto &file = parseFile(args, "path", fs->deprecatedPwd());
+                auto &file = fs->fetch(parseFile(args, "path", fs->pwd()));
                 auto opt = parseDumpOpts(args);
                 
                 Buffer<u8> buffer;
@@ -1204,7 +1205,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                auto nr = parseBlock(args, "nr", fs->deprecatedPwd().nr);
+                auto nr = parseBlock(args, "nr", fs->pwd());
                 auto opt = parseDumpOpts(args);
                 
                 if (auto *ptr = fs->tryModify(nr)) {
@@ -1297,8 +1298,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &source = parsePath(args, "source");
-                
+                auto &source = fs->fetch(parsePath(args, "source"));
+
                 Tokens missing;
                 auto &path = matchPath(args.at("target"), missing);
                 
@@ -1344,8 +1345,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &source = parsePath(args, "source");
-                
+                auto &source = fs->fetch(parsePath(args, "source"));
+
                 Tokens missing;
                 auto &path = matchPath(args.at("target"), missing);
                 
@@ -1383,8 +1384,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &path = parsePath(args, "path");
-                
+                auto &path = fs->fetch(parsePath(args, "path"));
+
                 if (path.isFile()) {
                     fs->rm(path.nr);
                 } else if (path.isDirectory()) {

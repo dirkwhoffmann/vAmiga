@@ -119,13 +119,18 @@ class FileSystem : public Loggable {
     // Static file system properties
     FSTraits traits;
 
+public:
+
     // Contracts
     FSRequire require = FSRequire(*this);
+    FSEnsure ensure = FSEnsure(*this);
 
 
     //
     // Layer 0: Blocks
     //
+
+private:
 
     // Gateway to the "physical" block device
     FSCache cache;
@@ -378,7 +383,6 @@ public:
 
     // Frees the blocks of a deleted directory or file
     void reclaim(BlockNr fhb);
-    void reclaim(const FSBlock &fhb);
 
 private:
 
@@ -392,7 +396,6 @@ private:
 
     // Adds bytes to a data block
     isize addData(BlockNr nr, const u8 *buf, isize size);
-    isize addData(FSBlock &block, const u8 *buf, isize size);
 
 
     //
@@ -433,8 +436,8 @@ public:
     [[deprecated]] const FSBlock &deprecatedPwd() const { return fetch(current); } // TODO: DEPRECATE ASAP
 
     // Changes the working directory
+    void cd(BlockNr nr);
     void cd(const FSName &name);
-    void cd(const FSBlock &path);
     void cd(const string &path);
 
 

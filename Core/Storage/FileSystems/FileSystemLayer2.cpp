@@ -513,13 +513,7 @@ FileSystem::addDataBlock(BlockNr at, isize id, BlockNr head, BlockNr prev)
 isize
 FileSystem::addData(BlockNr nr, const u8 *buf, isize size)
 {
-    auto *block = tryModify(nr);
-    return block ? addData(*block, buf, size) : 0;
-}
-
-isize
-FileSystem::addData(FSBlock &block, const u8 *buf, isize size)
-{
+    auto &block = fetch(nr).mutate();
     isize count = 0;
 
     switch (block.type) {
@@ -548,12 +542,8 @@ FileSystem::addData(FSBlock &block, const u8 *buf, isize size)
 void
 FileSystem::reclaim(BlockNr fhb)
 {
-    reclaim(fetch(fhb));
-}
+    auto &node = fetch(fhb);
 
-void
-FileSystem::reclaim(const FSBlock &node)
-{
     if (node.isDirectory()) {
 
         // Remove user directory block

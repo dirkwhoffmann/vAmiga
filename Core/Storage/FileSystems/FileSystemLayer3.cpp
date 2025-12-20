@@ -41,20 +41,20 @@ FileSystem::parent(const FSBlock *node) const noexcept
 void
 FileSystem::cd(const FSName &name)
 {
-    if (auto ptr = seekPtr(&deprecatedPwd(), name); ptr) cd (*ptr);
+    if (auto ptr = seekPtr(&deprecatedPwd(), name); ptr) cd(ptr->nr);
     throw FSError(FSError::FS_NOT_FOUND, name.cpp_str());
 }
 
 void
-FileSystem::cd(const FSBlock &path)
+FileSystem::cd(BlockNr nr)
 {
-    current = path.nr;
+    current = nr;
 }
 
 void
 FileSystem::cd(const string &path)
 {
-    if (auto ptr = seekPtr(&deprecatedPwd(), path); ptr) cd (*ptr);
+    if (auto ptr = seekPtr(&deprecatedPwd(), path); ptr) cd(ptr->nr);
     throw FSError(FSError::FS_NOT_FOUND, path);
 }
 
