@@ -33,7 +33,7 @@ NavigatorConsole::prompt()
     
     if (fs) {
 
-        auto &pwd = fs->pwd();
+        auto &pwd = fs->deprecatedPwd();
 
         ss << "[" << std::to_string(pwd.nr) << "]";
         
@@ -146,7 +146,7 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
     bool absolute = !input.empty() && input[0] == '/';
     
     // Seek matching items
-    auto matches = fs->match(&fs->pwd(), input + "*");
+    auto matches = fs->match(&fs->deprecatedPwd(), input + "*");
 
     // Filter out unwanted items
     if (!matches.empty()) {
@@ -193,7 +193,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     if (displayFiles) {
         
         // Seek matching items
-        auto matches = fs->match(&fs->pwd(), args.empty() ? "*" : args.back() + "*");
+        auto matches = fs->match(&fs->deprecatedPwd(), args.empty() ? "*" : args.back() + "*");
         
         // List all nodes
         if (!matches.empty() && displayCmds) os << std::endl;
@@ -214,7 +214,7 @@ NavigatorConsole::parseBlock(const string &argv)
 BlockNr
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, fs->pwd().nr);
+    return parseBlock(argv, token, fs->deprecatedPwd().nr);
 }
 
 BlockNr
@@ -237,7 +237,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return fs->seek(fs->pwd(), argv.at(token));
+        return fs->seek(fs->deprecatedPwd(), argv.at(token));
 
     } catch (...) {
         
@@ -263,7 +263,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token, FSBlock 
 FSBlock &
 NavigatorConsole::parseFile(const Arguments &argv, const string &token)
 {
-    return parseFile(argv, token, fs->pwd());
+    return parseFile(argv, token, fs->deprecatedPwd());
 }
 
 FSBlock &
@@ -278,7 +278,7 @@ NavigatorConsole::parseFile(const Arguments &argv, const string &token, FSBlock 
 FSBlock &
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
 {
-    return parseDirectory(argv, token, fs->pwd());
+    return parseDirectory(argv, token, fs->deprecatedPwd());
 }
 
 FSBlock &
@@ -358,7 +358,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto tokens = utl::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
     
-    auto *p = &fs->pwd();
+    auto *p = &fs->deprecatedPwd();
     while (!tokens.empty()) {
         
         auto *next = fs->seekPtr(p, FSName(tokens.front()));
@@ -632,7 +632,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 bool recursive = true;
                 bool contents = path.back() == '/';
                 
-                fs->importer.import(fs->pwd(), hostPath, recursive, contents);
+                fs->importer.import(fs->deprecatedPwd(), hostPath, recursive, contents);
             }
     });
     
@@ -707,7 +707,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto path = host.makeAbsolute(args.at("path"));
-                auto nr = parseBlock(args, "nr", fs->pwd().nr);
+                auto nr = parseBlock(args, "nr", fs->deprecatedPwd().nr);
 
                 fs->importer.importBlock(nr, path);
             }
@@ -838,7 +838,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                auto nr = parseBlock(args, "nr", fs->pwd().nr);
+                auto nr = parseBlock(args, "nr", fs->deprecatedPwd().nr);
 
                 if constexpr (vAmigaDOS) {
                     
@@ -868,7 +868,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 require::formatted(fs);
 
-                auto &path = parsePath(args, "path", fs->root());
+                auto &path = parsePath(args, "path", fs->deprecatedRoot());
                 fs->cd(path);
             }
     });
@@ -1142,7 +1142,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 require::formatted(fs);
-                auto &file = parsePath(args, "path", fs->pwd());
+                auto &file = parsePath(args, "path", fs->deprecatedPwd());
                 if (!file.isFile()) {
                     throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
@@ -1179,7 +1179,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 require::formatted(fs);
-                auto &file = parseFile(args, "path", fs->pwd());
+                auto &file = parseFile(args, "path", fs->deprecatedPwd());
                 auto opt = parseDumpOpts(args);
                 
                 Buffer<u8> buffer;
@@ -1204,7 +1204,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                auto nr = parseBlock(args, "nr", fs->pwd().nr);
+                auto nr = parseBlock(args, "nr", fs->deprecatedPwd().nr);
                 auto opt = parseDumpOpts(args);
                 
                 if (auto *ptr = fs->tryModify(nr)) {
@@ -1269,10 +1269,18 @@ NavigatorConsole::initCommands(RSCommand &root)
                 if (missing.empty()) {
                     throw(FSError(FSError::FS_EXISTS, args.at("name")));
                 }
+
+                auto p = path.nr;
+                for (auto &it: missing) {
+                    p = fs->mkdir(p, FSName(it));
+                }
+                
+                /*
                 auto *p = &path.mutate();
                 for (auto &it: missing) {
                     if (p) p = &fs->mkdir(*p, FSName(it));
                 }
+                */
             }
     });
     

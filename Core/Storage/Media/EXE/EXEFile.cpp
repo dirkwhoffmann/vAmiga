@@ -54,6 +54,9 @@ EXEFile::finalizeRead()
     auto vol = Volume(adf);
     auto fs = FileSystem(vol);
 
+    // Format the file system
+    fs.format(FSFormat::OFS);
+
     // Name the file system
     fs.setName(FSName("Disk"));
 
@@ -61,7 +64,19 @@ EXEFile::finalizeRead()
     fs.makeBootable(BootBlockId::AMIGADOS_13);
 
     // Start at the root directory
-    if (auto *dir = &fs.root(); dir) {
+    auto dir = fs.root();
+
+    // Add the executable
+    fs.createFile(fs.modify(dir), FSName("file"), data);
+
+    // Add a script directory
+    dir = fs.mkdir(dir, FSName("s"));
+
+    // Add a startup sequence
+    fs.createFile(fs.modify(dir), "startup-sequence", "file");
+
+    /*
+    if (auto *dir = &fs.deprecatedRoot(); dir) {
 
         // Add the executable
         fs.createFile(*dir, FSName("file"), data);
@@ -72,6 +87,7 @@ EXEFile::finalizeRead()
         // Add a startup sequence
         fs.createFile(*dir, "startup-sequence", "file");
     }
+    */
 
     // Finalize
     fs.importer.updateChecksums();

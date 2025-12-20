@@ -122,25 +122,25 @@ FileSystem::killVirus()
     }
 }
 
-FSBlock &
-FileSystem::mkdir(FSBlock &at, const FSName &name)
+BlockNr
+FileSystem::mkdir(BlockNr at, const FSName &name)
 {
-    require::directory(at);
+    require.directory(at);
 
     // Error out if the file already exists
-    if (searchdir(at, name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
+    if (searchdir(fetch(at), name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
 
     FSBlock &block = newUserDirBlock(name);
-    block.setParentDirRef(at.nr);
-    addToHashTable(at.nr, block.nr);
+    block.setParentDirRef(at);
+    addToHashTable(at, block.nr);
 
-    return block;
+    return block.nr;
 }
 
 void
-FileSystem::rmdir(FSBlock &at)
+FileSystem::rmdir(BlockNr at)
 {
-    require::emptyDirectory(at);
+    require.emptyDirectory(at);
 
     deleteFromHashTable(at);
     reclaim(at);
@@ -231,6 +231,12 @@ void
 FileSystem::deleteFromHashTable(const FSBlock &item)
 {
     deleteFromHashTable(item.getParentDirRef(), item.nr);
+}
+
+void
+FileSystem::deleteFromHashTable(BlockNr item)
+{
+    deleteFromHashTable(fetch(item).getParentDirRef(), item);
 }
 
 void
@@ -522,6 +528,12 @@ FileSystem::addData(FSBlock &block, const u8 *buf, isize size)
     }
 
     return count;
+}
+
+void
+FileSystem::reclaim(BlockNr fhb)
+{
+    reclaim(fetch(fhb));
 }
 
 void

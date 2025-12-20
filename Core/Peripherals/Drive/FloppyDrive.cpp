@@ -1046,7 +1046,7 @@ FloppyDrive::catchFile(const fs::path &path)
     // auto fs = FileSystemFactory::fromFloppyDrive(*dev, *this);
 
     // Seek file
-    auto file = fs.seekPtr(&fs.root(), path);
+    auto file = fs.seekPtr(&fs.deprecatedRoot(), path);
     if (!file->isFile()) throw FSError(FSError::FS_NOT_A_FILE, path.string());
 
     // Extract file

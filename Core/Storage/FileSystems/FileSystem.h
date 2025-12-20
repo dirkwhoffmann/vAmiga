@@ -118,9 +118,12 @@ class FileSystem : public Loggable {
     // Static file system properties
     FSTraits traits;
 
+    // Contracts
+    FSRequire require = FSRequire(*this);
+
 
     //
-    // Layer 0
+    // Layer 0: Blocks
     //
 
     // Gateway to the "physical" block device
@@ -131,7 +134,7 @@ class FileSystem : public Loggable {
 
 
     //
-    // Layer 2
+    // Layer 1: Nodes
     //
 
     // Location of the root block
@@ -143,12 +146,16 @@ class FileSystem : public Loggable {
 
 
     //
-    // Layer 3
+    // Layer 2: Paths
     //
 
     // Location of the current directory
     BlockNr current = 0;
 
+
+    //
+    // Layer 3: Services
+    //
 
 public:
 
@@ -295,10 +302,10 @@ public:
     //
 
     // Creates a new directory
-    FSBlock &mkdir(FSBlock &at, const FSName &name);
+    BlockNr mkdir(BlockNr at, const FSName &name);
 
     // Removes an empty directory
-    void rmdir(FSBlock &at);
+    void rmdir(BlockNr at);
 
     // Looks up a directory item
     FSBlock *searchdir(const FSBlock &at, const FSName &name);
@@ -317,6 +324,7 @@ private:
 
     // Removes the hash-table entry for a given item
     void deleteFromHashTable(const FSBlock &item);
+    void deleteFromHashTable(BlockNr item);
     void deleteFromHashTable(BlockNr parent, BlockNr ref);
 
 
@@ -368,6 +376,7 @@ private:
 public:
 
     // Frees the blocks of a deleted directory or file
+    void reclaim(BlockNr fhb);
     void reclaim(const FSBlock &fhb);
 
 private:
@@ -416,10 +425,11 @@ private:
     //
 
 public:
-    
+
     // Returns the working directory
-    FSBlock &pwd() { return modify(current); }
-    const FSBlock &pwd() const { return fetch(current); }
+    BlockNr pwd() { return current; } // RENAME LATER TO pwd()
+    [[deprecated]] FSBlock &deprecatedPwd() { return modify(current); } // TODO: DEPRECATE ASAP
+    [[deprecated]] const FSBlock &deprecatedPwd() const { return fetch(current); } // TODO: DEPRECATE ASAP
 
     // Changes the working directory
     void cd(const FSName &name);
@@ -434,8 +444,9 @@ public:
 public:
 
     // Returns the root of the directory tree
-    FSBlock &root() { return modify(rootBlock); }
-    const FSBlock &root() const { return fetch(rootBlock); }
+    BlockNr root() { return rootBlock; } // RENAME LATER TO root()
+    [[deprecated]] FSBlock &deprecatedRoot() { return modify(rootBlock); } // DEPRECATED
+    [[deprecated]] const FSBlock &deprecatedRoot() const { return fetch(rootBlock); }
 
     // Returns the parent directory of an item
     FSBlock &parent(const FSBlock &block);
@@ -445,7 +456,7 @@ public:
 
     // Checks if a an item exists in the directory tree
     bool exists(const FSBlock &top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(pwd(), path); }
+    bool exists(const fs::path &path) const { return exists(deprecatedPwd(), path); }
 
     // Seeks an item in the directory tree (returns nullptr if not found)
     FSBlock *seekPtr(const FSBlock *top, const FSName &name) noexcept;
@@ -497,14 +508,15 @@ private:
 
 namespace require {
 
-    void formatted(const FileSystem &fs);
-    void formatted(unique_ptr<FileSystem> &fs);
-    void file(const FSBlock &node);
-    void directory(const FSBlock &block);
-    void fileOrDirectory(const FSBlock &block);
-    void notRoot(const FSBlock &block);
-    void emptyDirectory(const FSBlock &block);
-    void notExist(const FSBlock &dir, const FSName &name);
+void formatted(const FileSystem &fs);
+void formatted(unique_ptr<FileSystem> &fs);
+
+void file(const FSBlock &node);
+void directory(const FSBlock &block);
+void fileOrDirectory(const FSBlock &block);
+void notRoot(const FSBlock &block);
+void emptyDirectory(const FSBlock &block);
+void notExist(const FSBlock &dir, const FSName &name);
 }
 
 }

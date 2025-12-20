@@ -791,7 +791,7 @@ HardDrive::importFolder(const fs::path &path)
         auto fs = FileSystem(vol);
 
         // Import all files
-        fs.importer.import(fs.root(), path, true, true);
+        fs.importer.import(fs.deprecatedRoot(), path, true, true);
 
         // Name the file system
         fs.setName(traits.name);

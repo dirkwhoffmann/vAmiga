@@ -53,7 +53,7 @@ FSImporter::importVolume(const u8 *src, isize size)
 void
 FSImporter::import(const fs::path &path, bool recursive, bool contents)
 {
-    import(fs.pwd(), path, recursive, contents);
+    import(fs.deprecatedPwd(), path, recursive, contents);
 }
 
 void
@@ -117,12 +117,13 @@ FSImporter::import(FSBlock &top, const fs::directory_entry &entry, bool recursiv
         debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
-        auto &subdir = fs.mkdir(top, fsname);
+        auto subdir = fs.mkdir(top.nr, fsname);
+        // auto &subdir = fs.mkdir(top, fsname);
 
         // Import all items
         for (const auto& it : fs::directory_iterator(entry)) {
 
-            if (it.is_regular_file() || recursive) import(subdir, it, recursive);
+            if (it.is_regular_file() || recursive) import(fs.modify(subdir), it, recursive);
         }
     }
 }

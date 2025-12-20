@@ -45,7 +45,7 @@ PosixFileSystem::stat() const noexcept
 FSAttr
 PosixFileSystem::attr(const fs::path &path) const
 {
-    return fs.attr(fs.seek(fs.root(), path));
+    return fs.attr(fs.seek(fs.deprecatedRoot(), path));
 }
 
 void
@@ -55,10 +55,10 @@ PosixFileSystem::mkdir(const fs::path &path)
     auto name   = path.filename();
 
     // Lookup destination directory
-    auto &node  = fs.seek(fs.root(), parent);
+    auto &node  = fs.seek(fs.deprecatedRoot(), parent);
 
     // Create directory
-    auto &udb = fs.mkdir(node, FSName(name));
+    auto udb = fs.mkdir(node.nr, FSName(name));
 
     // Create meta info
     auto &info = ensureMeta(udb);
@@ -69,7 +69,7 @@ void
 PosixFileSystem::rmdir(const fs::path &path)
 {
     // Lookup directory
-    auto &node = fs.seek(fs.root(), path);
+    auto &node = fs.seek(fs.deprecatedRoot(), path);
 
     // Only empty directories can be removed
     require::emptyDirectory(node);
@@ -92,7 +92,7 @@ PosixFileSystem::readDir(const fs::path &path)
 {
     std::vector<FSName> result;
 
-    auto &node = fs.seek(fs.root(), path);
+    auto &node = fs.seek(fs.deprecatedRoot(), path);
 
     // Extract the directory tree
     FSTree tree(node, { .recursive = false });
@@ -109,7 +109,7 @@ HandleRef
 PosixFileSystem::open(const fs::path &path, u32 flags)
 {
     // Resolve path
-    auto &node = fs.seek(fs.root(), path);
+    auto &node = fs.seek(fs.deprecatedRoot(), path);
 
     // Create a unique identifier
     auto ref = nextHandle++;
@@ -158,7 +158,7 @@ PosixFileSystem::close(HandleRef ref)
 void
 PosixFileSystem::unlink(const fs::path &path)
 {
-    auto &node = fs.seek(fs.root(), path);
+    auto &node = fs.seek(fs.deprecatedRoot(), path);
 
     if (auto *info = getMeta(node); info) {
 
@@ -205,7 +205,7 @@ PosixFileSystem::getHandle(HandleRef ref)
 FSBlock &
 PosixFileSystem::ensureFile(const fs::path &path)
 {
-    auto &node = fs.seek(fs.root(), path);
+    auto &node = fs.seek(fs.deprecatedRoot(), path);
     require::file(node);
     return node;
 }
@@ -213,7 +213,7 @@ PosixFileSystem::ensureFile(const fs::path &path)
 FSBlock &
 PosixFileSystem::ensureFileOrDirectory(const fs::path &path)
 {
-    auto &node = fs.seek(fs.root(), path);
+    auto &node = fs.seek(fs.deprecatedRoot(), path);
     require::fileOrDirectory(node);
     return node;
 }
@@ -221,7 +221,7 @@ PosixFileSystem::ensureFileOrDirectory(const fs::path &path)
 FSBlock &
 PosixFileSystem::ensureDirectory(const fs::path &path)
 {
-    auto &node = fs.seek(fs.root(), path);
+    auto &node = fs.seek(fs.deprecatedRoot(), path);
     require::directory(node);
     return node;
 }
@@ -233,7 +233,7 @@ PosixFileSystem::create(const fs::path &path)
     auto name   = path.filename();
 
     // Lookup destination directory
-    auto &node  = fs.seek(fs.root(), parent);
+    auto &node  = fs.seek(fs.deprecatedRoot(), parent);
 
     // Create file
     auto &fhb = fs.createFile(node, FSName(name));
@@ -275,8 +275,8 @@ PosixFileSystem::move(const fs::path &oldPath, const fs::path &newPath)
 {
     auto newDir  = newPath.parent_path();
     auto newName = newPath.filename();
-    auto &src    = fs.seek(fs.root(), oldPath);
-    auto &dst    = fs.seek(fs.root(), newDir);
+    auto &src    = fs.seek(fs.deprecatedRoot(), oldPath);
+    auto &dst    = fs.seek(fs.deprecatedRoot(), newDir);
 
     fs.move(src, dst, newName);
 }

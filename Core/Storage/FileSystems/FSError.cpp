@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "FSError.h"
+#include "FileSystem.h"
 
 namespace vamiga {
 
@@ -103,6 +104,70 @@ FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
             set_msg("FSError " + std::to_string(fault) + " (" + errstr() + ")");
             break;
     }
+}
+
+void
+FSRequire::inRange(BlockNr nr)
+{
+    if (nr >= fs.getTraits().blocks) {
+        throw FSError(FSError::FS_OUT_OF_RANGE);
+    }
+}
+
+void
+FSRequire::file(BlockNr nr)
+{
+    inRange(nr);
+    auto t = fs.typeOf(nr);
+    if (t != FSBlockType::FILEHEADER) {
+        throw FSError(FSError::FS_NOT_A_FILE);
+    }
+}
+
+void
+FSRequire::fileOrDirectory(BlockNr nr)
+{
+    inRange(nr);
+    auto t = fs.typeOf(nr);
+    if (t != FSBlockType::ROOT && t != FSBlockType::USERDIR && t != FSBlockType::FILEHEADER) {
+        throw FSError(FSError::FS_NOT_A_FILE);
+    }
+}
+
+void
+FSRequire::directory(BlockNr nr)
+{
+    inRange(nr);
+    auto t = fs.typeOf(nr);
+    if (t != FSBlockType::ROOT && t != FSBlockType::USERDIR) {
+        throw FSError(FSError::FS_NOT_A_DIRECTORY);
+    }
+}
+
+void
+FSRequire::notRoot(BlockNr nr)
+{
+    inRange(nr);
+    auto t = fs.typeOf(nr);
+    if (t == FSBlockType::ROOT) {
+        throw FSError(FSError::FS_INVALID_PATH);
+    }
+}
+
+void
+FSRequire::emptyDirectory(BlockNr nr)
+{
+    directory(nr);
+    auto &node = fs.fetch(nr);
+    if (FSTree(node, { .recursive = false }).size() != 0) {
+        throw FSError(FSError::FS_DIR_NOT_EMPTY);
+    }
+}
+
+void
+FSEnsure::inRange(BlockNr nr)
+{
+    assert(nr < fs.getTraits().blocks);
 }
 
 }

@@ -291,7 +291,7 @@ FSDoctor::xrayBitmap(bool strict)
     std::unordered_set<BlockNr> used;
 
     // Extract the directory tree
-    auto tree = FSTree(fs.root(), { .recursive = true });
+    auto tree = FSTree(fs.deprecatedRoot(), { .recursive = true });
 
     // Collect all used blocks
     tree.bfsWalk( [&](const FSTree &it) {

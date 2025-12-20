@@ -91,7 +91,7 @@ public:
     string cppName() const;
     string absName() const;
     string relName() const;
-    string relName(const FSBlock &top) const;
+    string relName(BlockNr top) const;
 
     // Experimental
     string acabsName() const;

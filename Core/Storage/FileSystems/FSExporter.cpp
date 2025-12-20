@@ -152,7 +152,7 @@ FSExporter::exportFiles(const FSBlock &item, const fs::path &path, bool recursiv
 void
 FSExporter::exportFiles(const fs::path &path, bool recursive, bool contents) const
 {
-    exportFiles(fs.pwd(), path, recursive, contents);
+    exportFiles(fs.deprecatedPwd(), path, recursive, contents);
 }
 
 }

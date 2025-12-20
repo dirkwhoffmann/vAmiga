@@ -232,7 +232,7 @@ FSBlock::acrelName() const
 }
 
 string
-FSBlock::relName(const FSBlock &top) const
+FSBlock::relName(BlockNr top) const
 {
     string result;
 
@@ -240,7 +240,7 @@ FSBlock::relName(const FSBlock &top) const
 
     for (auto &it : nodes) {
 
-        if (it == &top) break;
+        if (it->nr == top) break;
         auto name = it->cppName();
         result = name + "/" + result;
     }
