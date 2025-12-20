@@ -19,7 +19,7 @@ FileSystem::format(string name)
 }
 
 void
-FileSystem::format(FSFormat dos, string name){
+FileSystem::format(FSFormat dos, string name) {
 
     // Assign the new DOS type
     traits.dos = dos;
@@ -35,11 +35,11 @@ FileSystem::format(FSFormat dos, string name){
 
     // Wipe out all other blocks
     for (isize i = 2; i < traits.blocks; i++) {
-        modify(BlockNr(i)).init(FSBlockType::EMPTY);
+        (*this)[i].mutate().init(FSBlockType::EMPTY);
     }
 
     // Create the root block
-    modify(rootBlock).init(FSBlockType::ROOT);
+    (*this)[rootBlock].mutate().init(FSBlockType::ROOT);
 
     // Create bitmap blocks
     for (auto& ref : bmBlocks) {
@@ -53,13 +53,13 @@ FileSystem::format(FSFormat dos, string name){
     for (auto &ref : bmExtBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        modify(ref).init(FSBlockType::BITMAP_EXT);
-        modify(pred).setNextBmExtBlockRef(ref);
+        (*this)[ref].mutate().init(FSBlockType::BITMAP_EXT);
+        (*this)[pred].mutate().setNextBmExtBlockRef(ref);
         pred = ref;
     }
 
     // Add all bitmap block references
-    modify(rootBlock).addBitmapBlockRefs(bmBlocks);
+    (*this)[rootBlock].mutate().addBitmapBlockRefs(bmBlocks);
 
     // Mark free blocks as free in the bitmap block
     // TODO: SPEED THIS UP
@@ -71,11 +71,11 @@ FileSystem::format(FSFormat dos, string name){
     if (name != "") setName(name);
 
     // Rectify checksums
-    modify(0).updateChecksum();
-    modify(1).updateChecksum();
-    modify(rootBlock).updateChecksum();
-    for (auto& ref : bmBlocks) { modify(ref).updateChecksum(); }
-    for (auto& ref : bmExtBlocks) { modify(ref).updateChecksum(); }
+    fetch(0).mutate().updateChecksum();
+    fetch(1).mutate().updateChecksum();
+    (*this)[rootBlock].mutate().updateChecksum();
+    for (auto& ref : bmBlocks) { (*this)[ref].mutate().updateChecksum(); }
+    for (auto& ref : bmExtBlocks) { (*this)[ref].mutate().updateChecksum(); }
 
     // Set the current directory
     current = rootBlock;
@@ -96,8 +96,8 @@ FileSystem::makeBootable(BootBlockId id)
 {
     assert(cache.getType(0) == FSBlockType::BOOT);
     assert(cache.getType(1) == FSBlockType::BOOT);
-    modify(0).writeBootBlock(id, 0);
-    modify(1).writeBootBlock(id, 1);
+    fetch(0).mutate().writeBootBlock(id, 0);
+    fetch(1).mutate().writeBootBlock(id, 1);
 }
 
 void
@@ -113,11 +113,11 @@ FileSystem::killVirus()
         traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
 
         if (id != BootBlockId::NONE) {
-            modify(0).writeBootBlock(id, 0);
-            modify(1).writeBootBlock(id, 1);
+            fetch(0).mutate().writeBootBlock(id, 0);
+            fetch(1).mutate().writeBootBlock(id, 1);
         } else {
-            std::memset(modify(0).data() + 4, 0, traits.bsize - 4);
-            std::memset(modify(1).data(), 0, traits.bsize);
+            std::memset(fetch(0).mutate().data() + 4, 0, traits.bsize - 4);
+            std::memset(fetch(1).mutate().data(), 0, traits.bsize);
         }
     }
 }
@@ -491,8 +491,8 @@ FileSystem::addFileListBlock(BlockNr at, BlockNr head, BlockNr prev)
 {
     if (auto *prevBlock = tryModify(prev); prevBlock) {
 
-        modify(at).init(FSBlockType::FILELIST);
-        modify(at).setFileHeaderRef(head);
+        fetch(at).mutate().init(FSBlockType::FILELIST);
+        fetch(at).mutate().setFileHeaderRef(head);
 
         prevBlock->setNextListBlockRef(at);
     }
@@ -503,9 +503,9 @@ FileSystem::addDataBlock(BlockNr at, isize id, BlockNr head, BlockNr prev)
 {
     if (auto *prevBlock = tryModify(prev); prevBlock) {
 
-        modify(at).init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
-        modify(at).setDataBlockNr((BlockNr)id);
-        modify(at).setFileHeaderRef(head);
+        fetch(at).mutate().init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
+        fetch(at).mutate().setDataBlockNr((BlockNr)id);
+        fetch(at).mutate().setFileHeaderRef(head);
         prevBlock->setNextDataBlockRef(at);
     }
 }

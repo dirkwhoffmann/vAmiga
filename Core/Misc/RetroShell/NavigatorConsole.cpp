@@ -632,7 +632,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 bool recursive = true;
                 bool contents = path.back() == '/';
                 
-                fs->importer.import(fs->deprecatedPwd(), hostPath, recursive, contents);
+                fs->importer.import(fs->pwd(), hostPath, recursive, contents);
             }
     });
     

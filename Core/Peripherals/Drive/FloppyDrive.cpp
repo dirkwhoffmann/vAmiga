@@ -1046,13 +1046,14 @@ FloppyDrive::catchFile(const fs::path &path)
     // auto fs = FileSystemFactory::fromFloppyDrive(*dev, *this);
 
     // Seek file
-    auto file = fs.seekPtr(&fs.deprecatedRoot(), path);
-    if (!file->isFile()) throw FSError(FSError::FS_NOT_A_FILE, path.string());
+    auto blockNr = fs.trySeek(fs.root(), path);
+    if (!blockNr.has_value()) throw FSError(FSError::FS_NOT_A_FILE, path.string());
 
     // Extract file
     Buffer<u8> buffer;
-    file->extractData(buffer);
-    
+    auto &file = fs.fetch(*blockNr).mutate();
+    file.extractData(buffer);
+
     // Parse hunks
     auto descr = ProgramUnitDescriptor(buffer);
     
@@ -1067,12 +1068,10 @@ FloppyDrive::catchFile(const fs::path &path)
     buffer[*offset + 9] = LO_BYTE(trap);
     
     // Write the modification back to the file system
-    file->overwriteData(buffer);
-    
-    // Convert the modified file system back to a disk
-    // auto adf = ADFFactory::make(*fs); //  ADFFile(fs);
+    file.overwriteData(buffer);
 
     // Replace the old disk
+    fs.flush();
     swapDisk(*adf);
 }
 

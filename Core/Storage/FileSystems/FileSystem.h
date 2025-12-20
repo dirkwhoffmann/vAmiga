@@ -260,6 +260,11 @@ public:
     const FSBlock &fetch(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type); }
     const FSBlock &fetch(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types); }
 
+    // Returns a reference to a block with write permissions (may throw)
+    FSBlock &mutate(BlockNr nr) const { return cache.fetch(nr).mutate(); }
+    FSBlock &mutate(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type).mutate(); }
+    FSBlock &mutate(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types).mutate(); }
+
     // Returns a pointer to a block with write permissions (maybe null)
     FSBlock *tryModify(BlockNr nr) noexcept { return cache.tryModify(nr); }
     FSBlock *tryModify(BlockNr nr, FSBlockType type) noexcept { return cache.tryModify(nr, type); }
@@ -453,10 +458,10 @@ public:
     [[deprecated]] const FSBlock &deprecatedRoot() const { return fetch(rootBlock); }
 
     // Returns the parent directory of an item
-    FSBlock &parent(const FSBlock &block);
-    FSBlock *parent(const FSBlock *block) noexcept;
-    const FSBlock &parent(const FSBlock &block) const;
-    const FSBlock *parent(const FSBlock *block) const noexcept;
+    [[deprecated]] FSBlock &parent(const FSBlock &block);
+    [[deprecated]] FSBlock *parent(const FSBlock *block) noexcept;
+    [[deprecated]] const FSBlock &parent(const FSBlock &block) const;
+    [[deprecated]] const FSBlock *parent(const FSBlock *block) const noexcept;
 
     // Checks if a an item exists in the directory tree
     bool exists(BlockNr top, const fs::path &path) const;

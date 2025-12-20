@@ -53,11 +53,11 @@ FSImporter::importVolume(const u8 *src, isize size)
 void
 FSImporter::import(const fs::path &path, bool recursive, bool contents)
 {
-    import(fs.deprecatedPwd(), path, recursive, contents);
+    import(fs.pwd(), path, recursive, contents);
 }
 
 void
-FSImporter::import(FSBlock &top, const fs::path &path, bool recursive, bool contents)
+FSImporter::import(BlockNr top, const fs::path &path, bool recursive, bool contents)
 {
     fs::directory_entry dir;
 
@@ -86,7 +86,7 @@ FSImporter::import(FSBlock &top, const fs::path &path, bool recursive, bool cont
 }
 
 void
-FSImporter::import(FSBlock &top, const fs::directory_entry &entry, bool recursive)
+FSImporter::import(BlockNr top, const fs::directory_entry &entry, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
 
@@ -107,9 +107,9 @@ FSImporter::import(FSBlock &top, const fs::directory_entry &entry, bool recursiv
 
         Buffer<u8> buffer(entry.path());
         if (buffer) {
-            fs.createFile(top.nr, fsname, buffer.ptr, buffer.size);
+            fs.createFile(top, fsname, buffer.ptr, buffer.size);
         } else {
-            fs.createFile(top.nr, fsname);
+            fs.createFile(top, fsname);
         }
 
     } else {
@@ -117,13 +117,13 @@ FSImporter::import(FSBlock &top, const fs::directory_entry &entry, bool recursiv
         debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
-        auto subdir = fs.mkdir(top.nr, fsname);
+        auto subdir = fs.mkdir(top, fsname);
         // auto &subdir = fs.mkdir(top, fsname);
 
         // Import all items
         for (const auto& it : fs::directory_iterator(entry)) {
 
-            if (it.is_regular_file() || recursive) import(fs.modify(subdir), it, recursive);
+            if (it.is_regular_file() || recursive) import(subdir, it, recursive);
         }
     }
 }
@@ -137,8 +137,8 @@ FSImporter::importBlock(BlockNr nr, const fs::path &path)
         throw IOError(IOError::FILE_CANT_READ, path);
     }
 
-    auto *data = fs.modify(nr).data();
-    stream.read((char *)data, traits.bsize);
+    auto &block = fs.fetch(nr).mutate();
+    stream.read((char *)block.data(), traits.bsize);
 
     if (!stream) {
         throw IOError(IOError::FILE_CANT_READ, path);

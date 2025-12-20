@@ -24,7 +24,7 @@ public:
 
     // Imports files and folders from the host file system
     void import(const fs::path &path, bool recursive = true, bool contents = false);
-    void import(FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false);
+    void import(BlockNr top, const fs::path &path, bool recursive = true, bool contents = false);
 
     // Imports a single block
     void importBlock(BlockNr nr, const fs::path &path);
@@ -34,7 +34,7 @@ public:
 
 private:
 
-    void import(FSBlock &top, const fs::directory_entry &dir, bool recursive);
+    void import(BlockNr top, const fs::directory_entry &dir, bool recursive);
 };
 
 }

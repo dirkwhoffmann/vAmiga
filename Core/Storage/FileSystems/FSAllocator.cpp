@@ -248,8 +248,8 @@ FSAllocator::allocateFileBlocks(isize bytes,
     }
 
     // Rectify checksums
-    for (auto &it : fs.bmBlocks) fs.modify(it).updateChecksum();
-    for (auto &it : fs.bmExtBlocks) fs.modify(it).updateChecksum();
+    for (auto &it : fs.bmBlocks) fs[it].mutate().updateChecksum();
+    for (auto &it : fs.bmExtBlocks) fs[it].mutate().updateChecksum();
 }
 
 bool
