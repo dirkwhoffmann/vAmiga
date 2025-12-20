@@ -84,10 +84,11 @@ FileSystem::format(FSFormat dos, string name) {
 void
 FileSystem::setName(FSName name)
 {
-    if (auto *rb = tryModify(rootBlock, FSBlockType::ROOT); rb) {
+    if (auto &rb = fetch(rootBlock); rb.is(FSBlockType::ROOT)) {
+    // if (auto *rb = tryModify(rootBlock, FSBlockType::ROOT); rb) {
 
-        rb->setName(name);
-        rb->updateChecksum();
+        rb.mutate().setName(name);
+        rb.mutate().updateChecksum();
     }
 }
 
@@ -208,29 +209,28 @@ FileSystem::addToHashTable(const FSBlock &item)
 void
 FileSystem::addToHashTable(BlockNr parent, BlockNr ref)
 {
-    FSBlock *pp = tryModify(parent);
-    if (!pp) throw FSError(FSError::FS_OUT_OF_RANGE);
-    if (!pp->hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
+    auto &pp = fetch(parent);
+    if (!pp.hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
-    FSBlock *pr = tryModify(ref);
-    if (!pr) throw FSError(FSError::FS_OUT_OF_RANGE);
-    if (!pr->isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
+    auto &pr = fetch(ref);
+    if (!pr.isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
     // Read the linked list from the proper hash-table bucket
-    u32 hash = pr->hashValue() % pp->hashTableSize();
-    auto chain = collectHashedBlocks(pp->nr, hash);
+    u32 hash = pr.hashValue() % pp.hashTableSize();
+    auto chain = collectHashedBlocks(pp.nr, hash);
 
     if (chain.empty()) {
 
         // If the bucket is empty, make the reference the first entry
-        pp->setHashRef(hash, ref);
-        pp->updateChecksum();
+        pp.mutate().setHashRef(hash, ref);
+        pp.mutate().updateChecksum();
 
     } else {
 
         // Otherwise, put the reference at the end of the linked list
-        tryModify(chain.back())->setNextHashRef(ref);
-        tryModify(chain.back())->updateChecksum();
+        auto &back = fetch(chain.back());
+        back.mutate().setNextHashRef(ref);
+        back.mutate().updateChecksum();
     }
 }
 
@@ -249,17 +249,15 @@ FileSystem::deleteFromHashTable(BlockNr item)
 void
 FileSystem::deleteFromHashTable(BlockNr parent, BlockNr ref)
 {
-    FSBlock *pp = tryModify(parent);
-    if (!pp) throw FSError(FSError::FS_OUT_OF_RANGE);
-    if (!pp->hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
+    auto &pp = fetch(parent);
+    if (!pp.hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
-    FSBlock *pr = tryModify(ref);
-    if (!pr) throw FSError(FSError::FS_OUT_OF_RANGE);
-    if (!pr->isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
+    auto &pr = fetch(ref);
+    if (!pr.isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
     // Read the linked list from the proper hash-table bucket
-    u32 hash = pr->hashValue() % pp->hashTableSize();
-    auto chain = collectHashedBlocks(pp->nr, hash);
+    u32 hash = pr.hashValue() % pp.hashTableSize();
+    auto chain = collectHashedBlocks(pp.nr, hash);
 
     // Find the element
     if (auto it = std::find(chain.begin(), chain.end(), ref); it != chain.end()) {
@@ -270,13 +268,13 @@ FileSystem::deleteFromHashTable(BlockNr parent, BlockNr ref)
         // Remove the element from the list
         if (!pred) {
 
-            pp->setHashRef(hash, succ);
-            pp->updateChecksum();
+            pp.mutate().setHashRef(hash, succ);
+            pp.mutate().updateChecksum();
 
         } else {
 
-            tryModify(pred)->setNextHashRef(succ);
-            tryModify(pred)->updateChecksum();
+            fetch(pred).mutate().setNextHashRef(succ);
+            fetch(pred).mutate().updateChecksum();
         }
     }
 }
@@ -443,10 +441,10 @@ FileSystem::replace(BlockNr fhb,
         addDataBlock(dataBlocks[i], i + 1, fhb, i == 0 ? fhb : dataBlocks[i-1]);
 
         // Determine the list block managing this data block
-        FSBlock *lb = tryModify((i < numRefs) ? fhb : listBlocks[i / numRefs - 1]);
+        auto &lb = fetch((i < numRefs) ? fhb : listBlocks[i / numRefs - 1]);
 
         // Link the data block
-        lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
+        lb.mutate().addDataBlockRef(dataBlocks[0], dataBlocks[i]);
 
         // Add data bytes
         isize written = addData(dataBlocks[i], buf, size);
@@ -489,25 +487,26 @@ FileSystem::newFileHeaderBlock(const FSName &name)
 void
 FileSystem::addFileListBlock(BlockNr at, BlockNr head, BlockNr prev)
 {
-    if (auto *prevBlock = tryModify(prev); prevBlock) {
+    auto &node = fetch(at).mutate();
+    auto &prevNode = fetch(prev).mutate();
 
-        fetch(at).mutate().init(FSBlockType::FILELIST);
-        fetch(at).mutate().setFileHeaderRef(head);
+    node.init(FSBlockType::FILELIST);
+    node.setFileHeaderRef(head);
 
-        prevBlock->setNextListBlockRef(at);
-    }
+    prevNode.setNextListBlockRef(at);
 }
 
 void
 FileSystem::addDataBlock(BlockNr at, isize id, BlockNr head, BlockNr prev)
 {
-    if (auto *prevBlock = tryModify(prev); prevBlock) {
+    auto &node = fetch(at).mutate();
+    auto &prevNode = fetch(prev).mutate();
 
-        fetch(at).mutate().init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
-        fetch(at).mutate().setDataBlockNr((BlockNr)id);
-        fetch(at).mutate().setFileHeaderRef(head);
-        prevBlock->setNextDataBlockRef(at);
-    }
+    node.init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
+    node.setDataBlockNr((BlockNr)id);
+    node.setFileHeaderRef(head);
+
+    prevNode.setNextDataBlockRef(at);
 }
 
 isize

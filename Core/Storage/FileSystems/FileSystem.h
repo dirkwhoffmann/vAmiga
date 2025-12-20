@@ -261,19 +261,14 @@ public:
     const FSBlock &fetch(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types); }
 
     // Returns a reference to a block with write permissions (may throw)
-    FSBlock &mutate(BlockNr nr) const { return cache.fetch(nr).mutate(); }
-    FSBlock &mutate(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type).mutate(); }
-    FSBlock &mutate(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types).mutate(); }
+    // FSBlock &mutate(BlockNr nr) const { return cache.fetch(nr).mutate(); }
+//    FSBlock &mutate(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type).mutate(); }
+//    FSBlock &mutate(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types).mutate(); }
 
     // Returns a pointer to a block with write permissions (maybe null)
-    FSBlock *tryModify(BlockNr nr) noexcept { return cache.tryModify(nr); }
-    FSBlock *tryModify(BlockNr nr, FSBlockType type) noexcept { return cache.tryModify(nr, type); }
-    FSBlock *tryModify(BlockNr nr, std::vector<FSBlockType> types) noexcept { return cache.tryModify(nr, types); }
-
-    // Returns a reference to a block with write permissions (may throw)
-    [[deprecated]] FSBlock &modify(BlockNr nr) { return cache.modify(nr); }
-    [[deprecated]] FSBlock &modify(BlockNr nr, FSBlockType type) { return cache.modify(nr, type); }
-    [[deprecated]] FSBlock &modify(BlockNr nr, std::vector<FSBlockType> types) { return cache.modify(nr, types); }
+    [[deprecated]] FSBlock *tryModify(BlockNr nr) noexcept { return cache.tryModify(nr); }
+    [[deprecated]] FSBlock *tryModify(BlockNr nr, FSBlockType type) noexcept { return cache.tryModify(nr, type); }
+    [[deprecated]] FSBlock *tryModify(BlockNr nr, std::vector<FSBlockType> types) noexcept { return cache.tryModify(nr, types); }
 
     // Writes back dirty cache blocks to the block device
     void flush();
@@ -436,9 +431,7 @@ private:
 public:
 
     // Returns the working directory
-    BlockNr pwd() const { return current; } // RENAME LATER TO pwd()
-    [[deprecated]] FSBlock &deprecatedPwd() { return modify(current); } // TODO: DEPRECATE ASAP
-    [[deprecated]] const FSBlock &deprecatedPwd() const { return fetch(current); } // TODO: DEPRECATE ASAP
+    BlockNr pwd() const { return current; }
 
     // Changes the working directory
     void cd(BlockNr nr);
@@ -453,15 +446,7 @@ public:
 public:
 
     // Returns the root of the directory tree
-    BlockNr root() const { return rootBlock; } // RENAME LATER TO root()
-    [[deprecated]] FSBlock &deprecatedRoot() { return modify(rootBlock); } // DEPRECATED
-    [[deprecated]] const FSBlock &deprecatedRoot() const { return fetch(rootBlock); }
-
-    // Returns the parent directory of an item
-    [[deprecated]] FSBlock &parent(const FSBlock &block);
-    [[deprecated]] FSBlock *parent(const FSBlock *block) noexcept;
-    [[deprecated]] const FSBlock &parent(const FSBlock &block) const;
-    [[deprecated]] const FSBlock *parent(const FSBlock *block) const noexcept;
+    BlockNr root() const { return rootBlock; }
 
     // Checks if a an item exists in the directory tree
     bool exists(BlockNr top, const fs::path &path) const;
@@ -518,25 +503,5 @@ private:
     std::vector<const FSBlock *> match(const FSBlock *top,
                                        std::vector<FSPattern> pattern) const;
 };
-
-
-//
-// Argument checkers
-//
-
-/*
-namespace require {
-
-void formatted(const FileSystem &fs);
-void formatted(unique_ptr<FileSystem> &fs);
-
-void file(const FSBlock &node);
-void directory(const FSBlock &block);
-void fileOrDirectory(const FSBlock &block);
-void notRoot(const FSBlock &block);
-void emptyDirectory(const FSBlock &block);
-void notExist(const FSBlock &dir, const FSName &name);
-}
-*/
 
 }

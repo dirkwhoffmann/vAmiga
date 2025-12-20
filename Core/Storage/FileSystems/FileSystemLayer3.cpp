@@ -13,31 +13,6 @@
 
 namespace vamiga {
 
-FSBlock &
-FileSystem::parent(const FSBlock &node)
-{
-    auto *ptr = parent(&node);
-    return ptr ? *ptr : modify(node.nr);
-}
-
-const FSBlock &
-FileSystem::parent(const FSBlock &node) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->parent(node));
-}
-
-FSBlock *
-FileSystem::parent(const FSBlock *node) noexcept
-{
-    return node->isRoot() ? tryModify(node->nr) : tryModify(node->nr)->getParentDirBlock();
-}
-
-const FSBlock *
-FileSystem::parent(const FSBlock *node) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->parent(node));
-}
-
 void
 FileSystem::cd(BlockNr nr)
 {
@@ -60,42 +35,6 @@ bool
 FileSystem::exists(BlockNr top, const fs::path &path) const
 {
     return trySeek(top, path).has_value();
-}
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
-{
-    if (!root) return nullptr;
-
-    std::unordered_set<BlockNr> visited;
-
-    // Check for special tokens
-    if (name == "/")  return tryModify(rootBlock);
-    if (name == "")   return tryModify(root->nr);
-    if (name == ".")  return tryModify(root->nr);
-    if (name == "..") return parent(root);
-
-    // TODO: USE SEARCHDIR
-    // Only proceed if a hash table is present
-    if (root->hasHashTable()) {
-
-        // Compute the table position and read the item
-        u32 hash = name.hashValue(traits.dos) % root->hashTableSize();
-        u32 ref = root->getHashRef(hash);
-
-        // Traverse the linked list until the item has been found
-        while (ref && visited.find(ref) == visited.end())  {
-
-            auto *block = tryModify(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
-            if (block == nullptr) break;
-
-            if (block->isNamed(name)) return block;
-
-            visited.insert(ref);
-            ref = block->getNextHashRef();
-        }
-    }
-    return nullptr;
 }
 
 optional<BlockNr>
@@ -167,88 +106,6 @@ FileSystem::seek(BlockNr top, const string &name) const
 {
     if (auto it = trySeek(top, name)) return *it;
     throw FSError(FSError::FS_NOT_FOUND, name);
-}
-
-
-
-const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const FSName &name) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
-}
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const fs::path &name) noexcept
-{
-    if (!root) return nullptr;
-
-    FSBlock *result = tryModify(root->nr);
-    for (const auto &it : name) { if (result) { result = seekPtr(result, FSName(it)); } }
-    return result;
-}
-
-const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const fs::path &name) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
-}
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const string &name) noexcept
-{
-    if (!root) return nullptr;
-
-    auto parts = utl::split(name, '/');
-    if (!name.empty() && name[0] == '/') { parts.insert(parts.begin(), "/"); }
-
-    FSBlock *result = tryModify(root->nr);
-    for (auto &it : parts) { if (result) { result = seekPtr(result, FSName(it)); } }
-    return result;
-}
-
-const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const string &name) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
-}
-
-FSBlock &
-FileSystem::seek(const FSBlock &root, const FSName &name)
-{
-    if (auto *it = seekPtr(&root, name); it) return *it;
-    throw FSError(FSError::FS_NOT_FOUND, name.cpp_str());
-}
-
-const FSBlock &
-FileSystem::seek(const FSBlock &root, const FSName &name) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
-}
-
-FSBlock &
-FileSystem::seek(const FSBlock &root, const fs::path &name)
-{
-    if (auto *it = seekPtr(&root, name); it) return *it;
-    throw FSError(FSError::FS_NOT_FOUND, name.string());
-}
-
-const FSBlock &
-FileSystem::seek(const FSBlock &root, const fs::path &name) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
-}
-
-FSBlock &
-FileSystem::seek(const FSBlock &root, const string &name)
-{
-    if (auto *it = seekPtr(&root, name); it) return *it;
-    throw FSError(FSError::FS_NOT_FOUND, name);
-}
-
-const FSBlock &
-FileSystem::seek(const FSBlock &root, const string &name) const
-{
-    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
 }
 
 std::vector<const FSBlock *>

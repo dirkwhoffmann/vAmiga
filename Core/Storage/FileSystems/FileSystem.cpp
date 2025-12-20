@@ -67,9 +67,7 @@ FileSystem::isFormatted() const noexcept
     if (traits.dos == FSFormat::NODOS) return false;
 
     // Check if the root block is present
-    if (!cache.tryFetch(rootBlock, FSBlockType::ROOT)) return false;
-
-    return true;
+    return fetch(rootBlock).is(FSBlockType::ROOT);
 }
 
 /*
@@ -255,7 +253,7 @@ FileSystem::dumpBlocks(std::ostream &os) const noexcept
 FSStat
 FileSystem::stat() const noexcept
 {
-    auto *rb = cache.tryFetch(rootBlock, FSBlockType::ROOT);
+    auto &rb = fetch(rootBlock);
 
     FSStat result = {
 
@@ -267,9 +265,9 @@ FileSystem::stat() const noexcept
         .usedBytes  = cache.usedBytes(),
         .fill       = double(100) * cache.usedBlocks() / cache.capacity(),
 
-        .name       = rb ? rb->getName() : FSName(""),
-        .bDate      = rb ? rb->getCreationDate() : FSTime(),
-        .mDate      = rb ? rb->getModificationDate() : FSTime(),
+        .name       = rb.isRoot() ? rb.getName() : FSName(""),
+        .bDate      = rb.isRoot() ? rb.getCreationDate() : FSTime(),
+        .mDate      = rb.isRoot() ? rb.getModificationDate() : FSTime(),
 
         .reads      = 0, // Not yet supported
         .writes     = 0, // Not yet supported
