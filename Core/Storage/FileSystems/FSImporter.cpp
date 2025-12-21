@@ -41,8 +41,9 @@ FSImporter::importVolume(const u8 *src, isize size)
         if (FSBlockType type = fs.predictType((BlockNr)i, data); type != FSBlockType::EMPTY) {
 
             // Create new block
-            cache.modify(BlockNr(i)).init(type);
-            cache.modify(BlockNr(i)).importBlock(data, traits.bsize);
+            auto &block = fs.fetch(BlockNr(i)).mutate();
+            block.init(type);
+            block.importBlock(data, traits.bsize);
         }
     }
 

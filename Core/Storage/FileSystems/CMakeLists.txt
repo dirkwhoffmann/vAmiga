@@ -12,12 +12,13 @@ FSBlock.cpp
 FSCache.cpp
 FSContract.cpp
 FSError.cpp
-FSExtension.cpp
 FSDescriptor.cpp
 FSDoctor.cpp
 FSExporter.cpp
 FSImporter.cpp
 FSObjects.cpp
+FSService.cpp
 FSTree.cpp
+FSWalker.cpp
 
 )

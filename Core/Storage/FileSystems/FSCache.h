@@ -12,7 +12,7 @@
 #include "BlockView.h"
 #include "FSTypes.h"
 #include "FSBlock.h"
-#include "FSExtension.h"
+#include "FSService.h"
 #include "BlockVolume.h"
 #include <iostream>
 #include <ranges>
@@ -20,7 +20,7 @@
 
 namespace vamiga {
 
-class FSCache final : public FSExtension {
+class FSCache final : public FSService {
 
     friend struct FSBlock;
 

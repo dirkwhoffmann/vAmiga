@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-FSCache::FSCache(FileSystem &fs, Volume &dev) : FSExtension(fs), dev(dev) {
+FSCache::FSCache(FileSystem &fs, Volume &dev) : FSService(fs), dev(dev) {
 
     blocks.reserve(capacity());
 };

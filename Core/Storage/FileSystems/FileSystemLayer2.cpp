@@ -121,11 +121,11 @@ FileSystem::mkdir(BlockNr at, const FSName &name)
     // Error out if the file already exists
     if (searchdir(at, name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
 
-    FSBlock &block = newUserDirBlock(name);
-    block.setParentDirRef(at);
-    addToHashTable(at, block.nr);
+    auto udb = newUserDirBlock(name);
+    fetch(udb).mutate().setParentDirRef(at);
+    addToHashTable(at, udb);
 
-    return block.nr;
+    return udb;
 }
 
 void
@@ -256,16 +256,16 @@ FileSystem::createFile(BlockNr at, const FSName &name)
 {
     require.directory(at);
 
-    FSBlock &fhb = newFileHeaderBlock(name);
+    auto  fhb = newFileHeaderBlock(name);
 
     try {
 
-        link(at, fhb.nr);
-        return fhb.nr;
+        link(at, fhb);
+        return fhb;
 
     } catch(...) {
 
-        allocator.deallocateBlock(fhb.nr);
+        allocator.deallocateBlock(fhb);
         throw;
     }
 }
@@ -447,7 +447,7 @@ FileSystem::replace(BlockNr fhb,
     return fhb;
 }
 
-FSBlock &
+BlockNr
 FileSystem::newUserDirBlock(const FSName &name)
 {
     BlockNr nr = allocator.allocate();
@@ -456,10 +456,10 @@ FileSystem::newUserDirBlock(const FSName &name)
     node.init(FSBlockType::USERDIR);
     node.setName(name);
 
-    return node;
+    return nr;
 }
 
-FSBlock &
+BlockNr
 FileSystem::newFileHeaderBlock(const FSName &name)
 {
     BlockNr nr = allocator.allocate();
@@ -468,7 +468,7 @@ FileSystem::newFileHeaderBlock(const FSName &name)
     node.init(FSBlockType::FILEHEADER);
     node.setName(name);
 
-    return node;
+    return nr;
 }
 
 void

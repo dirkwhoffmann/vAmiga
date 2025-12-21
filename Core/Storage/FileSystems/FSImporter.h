@@ -9,15 +9,15 @@
 
 #pragma once
 
-#include "FSExtension.h"
+#include "FSService.h"
 
 namespace vamiga {
 
-class FSImporter final : public FSExtension {
+class FSImporter final : public FSService {
 
 public:
 
-    using FSExtension::FSExtension;
+    using FSService::FSService;
 
     // Imports the volume from a buffer compatible with the ADF or HDF format
     void importVolume(const u8 *src, isize size);

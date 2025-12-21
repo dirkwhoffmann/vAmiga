@@ -248,8 +248,8 @@ FSAllocator::allocateFileBlocks(isize bytes,
     }
 
     // Rectify checksums
-    for (auto &it : fs.bmBlocks) fs[it].mutate().updateChecksum();
-    for (auto &it : fs.bmExtBlocks) fs[it].mutate().updateChecksum();
+    for (auto &it : fs.getBmBlocks()) fs[it].mutate().updateChecksum();
+    for (auto &it : fs.getBmExtBlocks()) fs[it].mutate().updateChecksum();
 }
 
 bool
@@ -273,6 +273,8 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noex
 {
     assert(isize(nr) < traits.blocks);
 
+    auto &bmBlocks = fs.getBmBlocks();
+
     // The first two blocks are always allocated and not part of the map
     if (nr < 2) return nullptr;
     nr -= 2;
@@ -282,12 +284,12 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noex
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
-    if (bmNr <= (isize)fs.bmBlocks.size()) {
+    if (bmNr <= (isize)bmBlocks.size()) {
         debug(FS_DEBUG, "Bitmap block index %ld for block %d is out of range \n", bmNr, nr);
         return nullptr;
     }
 
-    auto &bm = fs.fetch(fs.bmBlocks[bmNr]);
+    auto &bm = fs.fetch(bmBlocks[bmNr]);
 
     if (!bm.is(FSBlockType::BITMAP)) {
         debug(FS_DEBUG, "Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
@@ -358,7 +360,7 @@ FSAllocator::serializeBitmap() const
 
     // Iterate through all bitmap blocks
     isize j = 0;
-    for (auto &it : fs.bmBlocks) {
+    for (auto &it : fs.getBmBlocks()) {
 
         if (auto *bm = fs.tryFetch(it, FSBlockType::BITMAP)) {
 

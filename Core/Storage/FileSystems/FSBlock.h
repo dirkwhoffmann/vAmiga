@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FSExtension.h"
+#include "FSService.h"
 #include "FSTypes.h"
 #include "FSError.h"
 #include "FSObjects.h"

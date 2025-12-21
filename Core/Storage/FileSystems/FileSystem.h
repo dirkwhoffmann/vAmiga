@@ -114,10 +114,8 @@ class HardDrive;
 class FileSystem : public Loggable {
 
     friend struct FSBlock;
-    friend class  FSCache;
-    friend class  FSExtension;
+    friend class  FSService;
     friend class  FSDoctor;
-    friend class  FSAllocator;
     friend struct FSHashTable;
     friend struct FSTree;
 
@@ -387,8 +385,8 @@ public:
 private:
 
     // Creates a new block of a certain kind
-    FSBlock &newUserDirBlock(const FSName &name);
-    FSBlock &newFileHeaderBlock(const FSName &name);
+    BlockNr newUserDirBlock(const FSName &name);
+    BlockNr newFileHeaderBlock(const FSName &name);
 
     // Adds a new block of a certain kind
     void addFileListBlock(BlockNr at, BlockNr head, BlockNr prev);
@@ -448,6 +446,10 @@ public:
     // Returns the root of the directory tree
     BlockNr root() const { return rootBlock; }
 
+    // Returns the locations of the bitmap and bitmap extension blocks
+    const vector<BlockNr> &getBmBlocks() const { return bmBlocks; }
+    const vector<BlockNr> &getBmExtBlocks() const { return bmExtBlocks; }
+
     // Checks if a an item exists in the directory tree
     bool exists(BlockNr top, const fs::path &path) const;
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
@@ -460,6 +462,7 @@ public:
     BlockNr seek(BlockNr top, const fs::path &name) const;
     BlockNr seek(BlockNr top, const string &name) const;
 
+    // TODO: MOVE TO CRAWLER
     // Seeks all items satisfying a predicate
     vector<const FSBlock *> find(const FSOpt &opt) const;
     vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
