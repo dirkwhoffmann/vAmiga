@@ -12,13 +12,9 @@
 
 namespace vamiga {
 
-FSService::FSService(FileSystem& fs) :
+FSService::FSService(FileSystem& fs) : fs(fs), traits(fs.getTraits())
+{
 
-fs(fs),
-traits(fs.getTraits()),
-cache(fs.cache),
-doctor(fs.doctor)
-
-{ }
+}
 
 }

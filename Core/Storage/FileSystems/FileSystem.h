@@ -114,9 +114,6 @@ class HardDrive;
 class FileSystem : public Loggable {
 
     friend struct FSBlock;
-    friend class  FSService;
-    friend class  FSDoctor;
-    friend struct FSHashTable;
     friend struct FSTree;
 
     // Static file system properties
@@ -171,7 +168,7 @@ public:
     // Service components
     FSImporter importer = FSImporter(*this);
     FSExporter exporter = FSExporter(*this);
-    FSDoctor doctor = FSDoctor(*this);
+    FSDoctor doctor = FSDoctor(*this, allocator);
 
 
     //
@@ -188,6 +185,18 @@ public:
     FileSystem& operator=(const FileSystem &) = delete;
     FileSystem& operator=(FileSystem &&) = delete;
 
+
+    //
+    // Accessing sub components
+    //
+
+    /*
+public:
+
+    const FSCache &getCache() const { return cache; }
+    const FSAllocator &getAllocator() const { return allocator; }
+     */
+    
 
     //
     // Printing debug information
@@ -400,6 +409,13 @@ private:
     // Traversing linked lists
     //
 
+public:
+    
+    vector<BlockNr> collectDataBlocks(BlockNr nr) const;
+    vector<BlockNr> collectListBlocks(BlockNr nr) const;
+    vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
+    vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
+
 private:
 
     // Follows a linked list and collects all blocks
@@ -412,10 +428,6 @@ private:
     vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
     vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
     vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
-    vector<BlockNr> collectDataBlocks(BlockNr nr) const;
-    vector<BlockNr> collectListBlocks(BlockNr nr) const;
-    vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
-    vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
 
 
     // -------------------------------------------------------------------------

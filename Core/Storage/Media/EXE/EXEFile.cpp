@@ -64,7 +64,7 @@ EXEFile::finalizeRead()
     fs.createFile(fs.mkdir(fs.root(), FSName("s")), FSName("startup-sequence"), "file");
 
     // Finalize
-    fs.importer.updateChecksums();
+    // fs.importer.updateChecksums();
     fs.flush();
 
     if (FS_DEBUG) {

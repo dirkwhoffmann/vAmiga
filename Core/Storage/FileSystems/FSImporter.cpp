@@ -80,10 +80,10 @@ FSImporter::import(BlockNr top, const fs::path &path, bool recursive, bool conte
     }
 
     // Rectify the checksums of all blocks
-    fs.importer.updateChecksums();
+    // fs.importer.updateChecksums();
 
     // Verify the result
-    if (FS_DEBUG) doctor.xray(true, std::cout, false);
+    if (FS_DEBUG) fs.doctor.xray(true, std::cout, false);
 }
 
 void
@@ -144,12 +144,6 @@ FSImporter::importBlock(BlockNr nr, const fs::path &path)
     if (!stream) {
         throw IOError(IOError::FILE_CANT_READ, path);
     }
-}
-
-void
-FSImporter::updateChecksums() noexcept
-{
-    cache.updateChecksums();
 }
 
 }

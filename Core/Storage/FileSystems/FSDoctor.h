@@ -15,12 +15,14 @@ namespace vamiga {
 
 class FSDoctor final : public FSService {
 
+    class FSAllocator &allocator;
+
 public:
 
     // Result of the latest examination
     FSDiagnosis diagnosis;
 
-    using FSService::FSService;
+    explicit FSDoctor(FileSystem& fs, FSAllocator &a);
 
 
     //
