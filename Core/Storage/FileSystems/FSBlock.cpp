@@ -161,6 +161,12 @@ FSBlock::is(FSBlockType type) const
 }
 
 bool
+FSBlock::isEmpty() const
+{
+    return type == FSBlockType::EMPTY;
+}
+
+bool
 FSBlock::isRoot() const
 {
     return type == FSBlockType::ROOT;

@@ -60,16 +60,6 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
 
 }
 
-bool
-FileSystem::isFormatted() const noexcept
-{
-    // Check the DOS type
-    if (traits.dos == FSFormat::NODOS) return false;
-
-    // Check if the root block is present
-    return fetch(rootBlock).is(FSBlockType::ROOT);
-}
-
 /*
 void
 FileSystem::_dump(Category category, std::ostream &os) const noexcept
@@ -248,6 +238,16 @@ void
 FileSystem::dumpBlocks(std::ostream &os) const noexcept
 {
     cache.dump(os);
+}
+
+bool
+FileSystem::isFormatted() const noexcept
+{
+    // Check the DOS type
+    if (traits.dos == FSFormat::NODOS) return false;
+
+    // Check if the root block is present
+    return fetch(rootBlock).is(FSBlockType::ROOT);
 }
 
 FSStat

@@ -15,35 +15,41 @@
  * The FileSystem class is organized as a layered architecture to separate
  * responsibilities and to enforce downward-only dependencies.
  *
- *                  Layer view                         Class view
+ *          <-- Layer view --->     <-------------  Class view  -------------->
  *
- *            -----------------------           -----------------------
- * Layer 4:  |     POSIX layer       |  <--->  |    PosixFileSystem    |
- *            -----------------------           -----------------------
- *                      |                                 / \
- *                      |                                 \ /
- *                      V                                  |
- *            -----------------------           -----------------------
- * Layer 3:  |      Path layer       |  <--->  |                       |
- *            -----------------------          |                       |
- *                      |                      |                       |
- *                      |                      |      FileSystem       |
- *                      V                      |                       |
- *            -----------------------          |                       |
- * Layer 2:  |      Path layer       |  <--->  |                       |
- *            -----------------------           -----------------------
- *                      |                                / \
- *                      |                                \ /
- *                      V                                 |
- *            -----------------------           -----------------------
- * Layer 1:  |   Block cache layer   |  <--->  |   FSCache / FSBlock   |
- *            -----------------------           -----------------------
- *                      |                                / \
- *                      |                                \ /
- *                      V                                 |
- *            -----------------------           -----------------------
- * Layer 0:  |   "Physical" device   |  <--->  |      BlockDevice      |
- *            -----------------------           -----------------------
+ *           -----------------       -----------------
+ * Layer 5: |    POSIX API    |<--->| PosixFileSystem |
+ *           -----------------       -----------------
+ *           |  |  |                        / \
+ *           |  |  |                        \ /
+ *           |  |  V                         |
+ *           |  |  -----------               |               -----------------
+ * Layer 4:  |  | | Services  |..............|..............|                 |
+ *           |  |  -----------               |              |    FSImporter   |
+ *           |  |  |         |               |              |                 |
+ *           |  |  |         |       ----------------- /\   |    FSExporter   |
+ *           |  V  V         |      |                 |  ---|                 |
+ *           |  -----------  |      |                 |\/   |    FSCrawler    |
+ * Layer 3:  | |   Paths   |.|......|                 |     |                 |
+ *           |  -----------  |      |                 |     |    FSDoctor     |
+ *           |  |            |      |   FileSystem    |     |                 |
+ *           |  |            |      |                 |      -----------------
+ *           V  V            V      |                 |
+ *           -----------------      |                 |
+ * Layer 2: |     Nodes       |.....|                 |
+ *           -----------------       -----------------
+ *                   |                      / \
+ *                   |                      \ /
+ *                   V                       |
+ *           -----------------       -----------------
+ * Layer 1: |   Block cache   |.....| FSCache/FSBlock |
+ *           -----------------       -----------------
+ *                   |                      / \
+ *                   |                      \ /
+ *                   V                       |
+ *           -----------------       -----------------
+ * Layer 0: |  Block device   |.....|     Volume      |
+ *           -----------------       -----------------
  *
  *
  * Notes:
@@ -113,7 +119,6 @@ class FileSystem : public Loggable {
     friend class  FSDoctor;
     friend class  FSAllocator;
     friend struct FSHashTable;
-    friend struct FSPartition;
     friend struct FSTree;
 
     // Static file system properties
@@ -132,7 +137,7 @@ public:
 
 private:
 
-    // Gateway to the "physical" block device
+    // Gateway to the underlying block device
     FSCache cache;
 
     // Allocation and allocation map managenent
@@ -165,10 +170,10 @@ private:
 
 public:
 
-    //Subcomponents
-    FSDoctor doctor = FSDoctor(*this);
+    // Service components
     FSImporter importer = FSImporter(*this);
     FSExporter exporter = FSExporter(*this);
+    FSDoctor doctor = FSDoctor(*this);
 
 
     //
@@ -180,10 +185,10 @@ public:
     FileSystem(Volume &vol);
     virtual ~FileSystem() = default;
 
-    FileSystem(const FileSystem &fs) = delete;
-    FileSystem& operator=(const FileSystem&) = delete;
-
-    bool isFormatted() const noexcept;
+    FileSystem(const FileSystem &) = delete;
+    FileSystem(FileSystem &&) = delete;
+    FileSystem& operator=(const FileSystem &) = delete;
+    FileSystem& operator=(FileSystem &&) = delete;
 
 
     //
@@ -210,6 +215,9 @@ public:
     isize bytes() const noexcept { return traits.bytes; }
     isize bsize() const noexcept { return traits.bsize; }
 
+    // Checks whether the file system is formatted
+    bool isFormatted() const noexcept;
+
     // Returns usage information and root metadata
     FSStat stat() const noexcept;
 
@@ -218,7 +226,6 @@ public:
 
     // Returns information about file permissions
     FSAttr attr(BlockNr nr) const;
-    // FSAttr attr(const FSBlock &fhd) const;
 
 
     // -------------------------------------------------------------------------
@@ -232,15 +239,20 @@ public:
 public:
 
     // Returns the type of a certain block or a block item
-    FSBlockType typeOf(BlockNr nr) const noexcept;
-    FSItemType typeOf(BlockNr nr, isize pos) const noexcept;
+    FSBlockType typeOf(BlockNr nr) const { return fetch(nr).type; }
+    FSItemType typeOf(BlockNr nr, isize pos) const { return fetch(nr).itemType(pos); }
 
     // Convenience wrappers
-    bool is(BlockNr nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
-    bool isEmpty(BlockNr nr) const noexcept { return is(nr, FSBlockType::EMPTY); }
+    bool is(BlockNr nr, FSBlockType type) const { return fetch(nr).is(type); }
+    bool isEmpty(BlockNr nr) const { return fetch(nr).isEmpty(); }
+    bool isRoot(BlockNr nr) const { return fetch(nr).isRoot(); }
+    bool isFile(BlockNr nr) const { return fetch(nr).isFile(); }
+    bool isDirectory(BlockNr nr) const { return fetch(nr).isDirectory(); }
+    bool isRegular(BlockNr nr) const { return fetch(nr).isRegular(); }
+    bool isData(BlockNr nr) const { return fetch(nr).isData(); }
 
     // Predicts the type of a block based on the stored data
-    static FSBlockType predictType(FSDescriptor &layout, BlockNr nr, const u8 *buf) noexcept;
+    // static FSBlockType predictType(FSDescriptor &layout, BlockNr nr, const u8 *buf) noexcept;
     FSBlockType predictType(BlockNr nr, const u8 *buf) const noexcept;
 
 

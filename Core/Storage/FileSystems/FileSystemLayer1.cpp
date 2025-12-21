@@ -12,19 +12,17 @@
 
 namespace vamiga {
 
+/*
 FSBlockType
-FileSystem::typeOf(BlockNr nr) const noexcept
+FileSystem::typeOf(BlockNr nr) const
 {
-    return cache.getType(nr);
+    return fetch(nr).type;
 }
 
 FSItemType
-FileSystem::typeOf(BlockNr nr, isize pos) const noexcept
+FileSystem::typeOf(BlockNr nr, isize pos) const
 {
-    if (auto *block = cache.tryFetch(nr)) {
-        return block->itemType(pos);
-    }
-    return FSItemType::UNUSED;
+    return fetch(nr).itemType(pos);
 }
 
 FSBlockType
@@ -62,6 +60,7 @@ FileSystem::predictType(FSDescriptor &layout, BlockNr nr, const u8 *buf) noexcep
 
     return FSBlockType::EMPTY;
 }
+*/
 
 FSBlockType
 FileSystem::predictType(BlockNr nr, const u8 *buf) const noexcept
