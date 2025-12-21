@@ -367,7 +367,7 @@ FileSystem::move(BlockNr item, BlockNr dest, const FSName &name)
 void
 FileSystem::copy(BlockNr item, BlockNr dest)
 {
-    copy(item, dest, fetch(item).cppName());
+    copy(item, dest, fetch(item).name());
 }
 
 void

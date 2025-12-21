@@ -260,21 +260,10 @@ public:
     const FSBlock &fetch(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type); }
     const FSBlock &fetch(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types); }
 
-    // Returns a reference to a block with write permissions (may throw)
-    // FSBlock &mutate(BlockNr nr) const { return cache.fetch(nr).mutate(); }
-//    FSBlock &mutate(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type).mutate(); }
-//    FSBlock &mutate(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types).mutate(); }
-
-    // Returns a pointer to a block with write permissions (maybe null)
-    [[deprecated]] FSBlock *tryModify(BlockNr nr) noexcept { return cache.tryModify(nr); }
-    [[deprecated]] FSBlock *tryModify(BlockNr nr, FSBlockType type) noexcept { return cache.tryModify(nr, type); }
-    [[deprecated]] FSBlock *tryModify(BlockNr nr, std::vector<FSBlockType> types) noexcept { return cache.tryModify(nr, types); }
-
     // Writes back dirty cache blocks to the block device
     void flush();
 
     // Operator overload
-    // FSBlock &operator[](size_t nr);
     const FSBlock &operator[](size_t nr);
 
 
@@ -452,14 +441,6 @@ public:
     bool exists(BlockNr top, const fs::path &path) const;
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
-    // Seeks an item in the directory tree (returns nullptr if not found)
-    [[deprecated]] FSBlock *seekPtr(const FSBlock *top, const FSName &name) noexcept;
-    [[deprecated]] FSBlock *seekPtr(const FSBlock *top, const fs::path &name) noexcept;
-    [[deprecated]] FSBlock *seekPtr(const FSBlock *top, const string &name) noexcept;
-    [[deprecated]] const FSBlock *seekPtr(const FSBlock *top, const FSName &name) const noexcept;
-    [[deprecated]] const FSBlock *seekPtr(const FSBlock *top, const fs::path &name) const noexcept;
-    [[deprecated]] const FSBlock *seekPtr(const FSBlock *top, const string &name) const noexcept;
-
     optional<BlockNr> trySeek(BlockNr top, const FSName &name) const;
     optional<BlockNr> trySeek(BlockNr top, const fs::path &name) const;
     optional<BlockNr> trySeek(BlockNr top, const string &name) const;
@@ -467,15 +448,6 @@ public:
     BlockNr seek(BlockNr top, const FSName &name) const;
     BlockNr seek(BlockNr top, const fs::path &name) const;
     BlockNr seek(BlockNr top, const string &name) const;
-
-
-    // Seeks an item in the directory tree
-    [[deprecated]] FSBlock &seek(const FSBlock &top, const FSName &name);
-    [[deprecated]] FSBlock &seek(const FSBlock &top, const fs::path &name);
-    [[deprecated]] FSBlock &seek(const FSBlock &top, const string &name);
-    [[deprecated]] const FSBlock &seek(const FSBlock &top, const FSName &name) const;
-    [[deprecated]] const FSBlock &seek(const FSBlock &top, const fs::path &name) const;
-    [[deprecated]] const FSBlock &seek(const FSBlock &top, const string &name) const;
 
     // Seeks all items satisfying a predicate
     std::vector<const FSBlock *> find(const FSOpt &opt) const;

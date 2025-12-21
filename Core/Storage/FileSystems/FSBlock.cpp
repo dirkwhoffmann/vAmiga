@@ -198,13 +198,13 @@ FSBlock::isData() const
 FSName
 FSBlock::name() const
 {
-    return isRoot() ? "" : getName();
+    return isRoot() ? FSName("") : getName();
 }
 
 string
 FSBlock::cppName() const
 {
-    return isRoot() ? "" : getName().cpp_str();
+    return isRoot() ? string("") : getName().cpp_str();
 }
 
 string

@@ -1323,7 +1323,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                     debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
                           source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
-                    fs->move(sourceNr, pathNr, missing.back());
+                    fs->move(sourceNr, pathNr, FSName(missing.back()));
 
                 } else {
                     
@@ -1364,7 +1364,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     
                 } else if (missing.size() == 1) {
                     
-                    fs->copy(sourceNr, pathNr, missing.back());
+                    fs->copy(sourceNr, pathNr, FSName(missing.back()));
 
                 } else {
                     

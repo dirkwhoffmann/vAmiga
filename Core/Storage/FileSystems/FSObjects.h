@@ -52,11 +52,11 @@ struct FSName : FSString {
     static string unsanitize(const fs::path &filename);
 
     // Constructors
-    FSName(const string &cpp);
-    FSName(const char *c);
-    FSName(const u8 *bcpl);
-    FSName(const fs::path &path);
-    FSName(const std::map<string,string> map, const string &cpp, const string fallback);
+    explicit FSName(const string &cpp);
+    explicit FSName(const char *c);
+    explicit FSName(const u8 *bcpl);
+    explicit FSName(const fs::path &path);
+    explicit FSName(const std::map<string,string> map, const string &cpp, const string fallback);
 
     fs::path path() const { return sanitize(str); }
 };
@@ -134,7 +134,7 @@ struct FSStat {
 struct FSBootStat {
 
     // Name of the boot block
-    FSName name;
+    string name;
 
     // Boot block type
     BootBlockType type;

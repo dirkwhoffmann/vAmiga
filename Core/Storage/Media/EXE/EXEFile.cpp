@@ -43,99 +43,38 @@ EXEFile::isCompatible(const Buffer<u8> &buf)
 
 void
 EXEFile::finalizeRead()
-{    
+{
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
 
     // Create a suitable ADF
     adf = *ADFFactory::make(Diameter::INCH_35, hd ? Density::HD : Density::DD);
 
-    // Mount a file system on top of the ADF
+    // Mount a file system on top of it
     auto vol = Volume(adf);
     auto fs = FileSystem(vol);
 
-    // Format the file system
+    // Format the file system and make it bootable
     fs.format(FSFormat::OFS);
-
-    // Name the file system
     fs.setName(FSName("Disk"));
-
-    // Make the volume bootable
     fs.makeBootable(BootBlockId::AMIGADOS_13);
 
-    // Start at the root directory
-    auto dir = fs.root();
-
-    // Add the executable
-    fs.createFile(dir, FSName("file"), data);
-
-    // Add a script directory
-    dir = fs.mkdir(dir, FSName("s"));
-
-    // Add a startup sequence
-    fs.createFile(dir, "startup-sequence", "file");
-
-    /*
-    if (auto *dir = &fs.deprecatedRoot(); dir) {
-
-        // Add the executable
-        fs.createFile(*dir, FSName("file"), data);
-
-        // Add a script directory
-        dir = &fs.mkdir(*dir, FSName("s"));
-
-        // Add a startup sequence
-        fs.createFile(*dir, "startup-sequence", "file");
-    }
-    */
+    // Add the executable, a script directory, and a script
+    fs.createFile(fs.root(), FSName("file"), data);
+    fs.createFile(fs.mkdir(fs.root(), FSName("s")), FSName("startup-sequence"), "file");
 
     // Finalize
     fs.importer.updateChecksums();
-
-    // Print some debug information about the volume
-    if (FS_DEBUG) fs.dumpState();
-
-    // Check file system integrity
-    if (FS_DEBUG) fs.doctor.xray(true, std::cout, false);
-
-    // Write back
     fs.flush();
 
-    /*
-    // Create a new file system
-    auto dev = make_unique<Device>(Diameter::INCH_35, hd ? Density::HD : Density::DD);
-    auto volume = FileSystemFactory::createLowLevel(*dev, Diameter::INCH_35, hd ? Density::HD : Density::DD, FSFormat::OFS);
-    volume->setName(FSName("Disk"));
+    if (FS_DEBUG) {
 
-    // Make the volume bootable
-    volume->makeBootable(BootBlockId::AMIGADOS_13);
+        // Print some debug information about the volume
+        fs.dumpState();
 
-    // Start at the root directory
-    if (auto *dir = &volume->root(); dir) {
-
-        // Add the executable
-        volume->createFile(*dir, FSName("file"), data);
-
-        // Add a script directory
-        dir = &volume->mkdir(*dir, FSName("s"));
-
-        // Add a startup sequence
-        volume->createFile(*dir, "startup-sequence", "file");
+        // Check file system integrity
+        if (FS_DEBUG) fs.doctor.xray(true, std::cout, false);
     }
-
-    // Finalize
-    volume->importer.updateChecksums();
-
-    // Print some debug information about the volume
-    if (FS_DEBUG) volume->dumpState();
-
-    // Check file system integrity
-    if (FS_DEBUG) volume->doctor.xray(true, std::cout, false);
-
-    // Convert the volume into an ADF
-    // adf.init(volume);
-    adf = *ADFFactory::make(*volume);
-    */
 }
 
 }

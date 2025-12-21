@@ -23,7 +23,7 @@ FSRequire::isFormatted() const
 void
 FSRequire::inRange(BlockNr nr) const
 {
-    if (nr >= fs.getTraits().blocks) {
+    if (isize(nr) >= fs.getTraits().blocks) {
         throw FSError(FSError::FS_OUT_OF_RANGE);
     }
 }
@@ -95,7 +95,7 @@ FSEnsure::isFormatted() const
 void
 FSEnsure::inRange(BlockNr nr) const
 {
-    assert(nr < fs.getTraits().blocks);
+    assert(isize(nr) < fs.getTraits().blocks);
 }
 
 }

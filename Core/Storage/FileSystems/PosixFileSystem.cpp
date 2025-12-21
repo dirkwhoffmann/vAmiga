@@ -277,7 +277,7 @@ PosixFileSystem::move(const fs::path &oldPath, const fs::path &newPath)
     auto src     = fs.seek(fs.root(), oldPath);
     auto dst     = fs.seek(fs.root(), newDir);
 
-    fs.move(src, dst, newName);
+    fs.move(src, dst, FSName(newName));
 }
 
 void
