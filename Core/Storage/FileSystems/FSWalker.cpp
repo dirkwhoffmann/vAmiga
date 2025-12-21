@@ -17,51 +17,47 @@ FSTree
 FSTreeBuilder::build(const FSBlock &root, const FSTreeBuildOptions &opt)
 {
     std::unordered_set<BlockNr> visited;
-    return buildRec(root, opt, visited);
+    return buildRec(root, opt, 0, visited);
 }
 
 FSTree
 FSTreeBuilder::buildRec(const FSBlock &node, const FSTreeBuildOptions &opt,
-                        std::unordered_set<BlockNr> &visited)
+                        isize depth, std::unordered_set<BlockNr> &visited)
 {
     auto& fs = *node.fs;
 
-    fs.require.fileOrDirectory(node.nr);
+    // Ensure the node is a user directory block or a file header block
+    // fs.require.fileOrDirectory(node.nr);
 
-    // Cycle detection
-    if (!visited.insert(node.nr).second) {
-        throw FSError(FSError::FS_HAS_CYCLES);
-    }
+    // Check for cycles
+    if (!visited.insert(node.nr).second) throw FSError(FSError::FS_HAS_CYCLES);
 
-    FSTree tree;
-    tree.nr = node.nr;
+    // Create a tree for the top-level node
+    FSTree tree { .nr = node.nr };
 
-    if (!node.isDirectory() || !opt.recursive) {
-        return tree;
-    }
+    if (node.isDirectory() && depth < opt.depth) {
 
-    // Collect children
-    auto children = fs.collectHashedBlocks(node.nr);
+        // Collect
+        auto children = fs.collectHashedBlocks(node.nr);
 
-    // Filter
-    std::vector<const FSBlock *> accepted;
-    for (auto &ref : children) {
-        auto &child = fs.fetch(ref);
-        if (opt.accept(child)) {
-            accepted.push_back(&child);
+        // Filter
+        std::vector<const FSBlock *> accepted;
+        for (auto &ref : children) {
+            auto &child = fs.fetch(ref);
+            if (opt.accept(child)) accepted.push_back(&child);
         }
-    }
 
-    // Sort
-    if (opt.sort) {
-        std::sort(accepted.begin(), accepted.end(), [&](auto *a, auto *b) {
-            return opt.sort(*a, *b);
-        });
-    }
+        // Sort
+        if (opt.sort) {
+            std::sort(accepted.begin(), accepted.end(), [&](auto *a, auto *b) {
+                return opt.sort(*a, *b);
+            });
+        }
 
-    // Recurse
-    for (auto *child : accepted) {
-        tree.children.push_back(buildRec(*child, opt, visited));
+        // Recurse
+        for (auto *child : accepted) {
+            tree.children.push_back(buildRec(*child, opt, depth + 1, visited));
+        }
     }
 
     return tree;

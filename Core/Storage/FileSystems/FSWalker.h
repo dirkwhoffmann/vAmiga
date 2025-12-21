@@ -18,10 +18,10 @@ enum class TraversalOrder { DFS, BFS };
 
 struct FSTree {
 
-    BlockNr nr;
+    BlockNr nr = 0;
     std::vector<FSTree> children;
 
-    FSTree() : nr(0) {}
+//    FSTree() : nr(0) {}
 
     // Range helpers
     auto dfs() const { return Range<TraversalOrder::DFS>(*this); }
@@ -128,8 +128,11 @@ struct FSTreeBuildOptions {
     // Sort siblings
     std::function<bool(const FSBlock&, const FSBlock&)> sort;
 
+    // Recursion depth
+    isize depth = 255;
+
     // Recurse into subdirectories
-    bool recursive = true;
+    // bool recursive = true;
 };
 
 class FSTreeBuilder {
@@ -142,6 +145,7 @@ private:
 
     static FSTree buildRec(const FSBlock &node,
                            const FSTreeBuildOptions &opt,
+                           isize depth,
                            std::unordered_set<BlockNr> &visited);
 };
 

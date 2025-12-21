@@ -905,7 +905,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 };
                 */
                 buildopt.sort = sort::dafa;
-                buildopt.recursive = true;
+                buildopt.depth = r ? 256 : 1;
 
                 FSTree tree = fs->build(path, buildopt);
 
