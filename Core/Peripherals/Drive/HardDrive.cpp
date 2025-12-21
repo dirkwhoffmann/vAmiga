@@ -333,7 +333,7 @@ HardDrive::connect()
         
         debug(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
-        format(FSFormat::OFS, defaultName());
+        format(FSFormat::OFS, FSName(defaultName()));
     }
 }
 
@@ -560,7 +560,7 @@ HardDrive::defaultName(isize partition) const
 }
 
 void
-HardDrive::format(FSFormat fsType, string name)
+HardDrive::format(FSFormat fsType, FSName name)
 {
     if (HDR_DEBUG) {
 
@@ -794,7 +794,7 @@ HardDrive::importFolder(const fs::path &path)
         fs.importer.import(fs.root(), path, true, true);
 
         // Name the file system
-        fs.setName(traits.name);
+        fs.setName(FSName(traits.name));
 
         // Write back
         fs.flush();

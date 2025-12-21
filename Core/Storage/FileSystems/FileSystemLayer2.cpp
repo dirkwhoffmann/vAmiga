@@ -13,13 +13,7 @@
 namespace vamiga {
 
 void
-FileSystem::format(string name)
-{
-    format(traits.dos);
-}
-
-void
-FileSystem::format(FSFormat dos, string name) {
+FileSystem::format(FSFormat dos) {
 
     // Assign the new DOS type
     traits.dos = dos;
@@ -67,9 +61,6 @@ FileSystem::format(FSFormat dos, string name) {
         if (cache.isEmpty(BlockNr(i))) allocator.markAsFree(BlockNr(i));
     }
 
-    // Set the volume name
-    if (name != "") setName(name);
-
     // Rectify checksums
     fetch(0).mutate().updateChecksum();
     fetch(1).mutate().updateChecksum();
@@ -82,10 +73,9 @@ FileSystem::format(FSFormat dos, string name) {
 }
 
 void
-FileSystem::setName(FSName name)
+FileSystem::setName(const FSName &name)
 {
-    if (auto &rb = fetch(rootBlock); rb.is(FSBlockType::ROOT)) {
-    // if (auto *rb = tryModify(rootBlock, FSBlockType::ROOT); rb) {
+    if (auto &rb = fetch(rootBlock); rb.isRoot()) {
 
         rb.mutate().setName(name);
         rb.mutate().updateChecksum();
@@ -201,12 +191,6 @@ FileSystem::unlink(BlockNr node)
 }
 
 void
-FileSystem::addToHashTable(const FSBlock &item)
-{
-    addToHashTable(item.getParentDirRef(), item.nr);
-}
-
-void
 FileSystem::addToHashTable(BlockNr parent, BlockNr ref)
 {
     auto &pp = fetch(parent);
@@ -235,25 +219,13 @@ FileSystem::addToHashTable(BlockNr parent, BlockNr ref)
 }
 
 void
-FileSystem::deleteFromHashTable(const FSBlock &item)
+FileSystem::deleteFromHashTable(BlockNr ref)
 {
-    deleteFromHashTable(item.getParentDirRef(), item.nr);
-}
-
-void
-FileSystem::deleteFromHashTable(BlockNr item)
-{
-    deleteFromHashTable(fetch(item).getParentDirRef(), item);
-}
-
-void
-FileSystem::deleteFromHashTable(BlockNr parent, BlockNr ref)
-{
-    auto &pp = fetch(parent);
-    if (!pp.hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
-
     auto &pr = fetch(ref);
     if (!pr.isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
+
+    auto &pp = fetch(pr.getParentDirRef());
+    if (!pp.hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr.hashValue() % pp.hashTableSize();
@@ -305,7 +277,10 @@ FileSystem::createFile(BlockNr at, const FSName &name, const u8 *buf, isize size
     auto fhb = createFile(at, name);
 
     // Add data
-    return replace(fhb, buf, size);
+    replace(fhb, buf, size);
+
+    // Return the number of the file header block
+    return fhb;
 }
 
 BlockNr
@@ -397,14 +372,26 @@ FileSystem::resize(BlockNr at, isize size)
 }
 
 void
-FileSystem::replace(BlockNr at, const Buffer<u8> &data)
+FileSystem::replace(BlockNr at, const u8 *buf, isize size)
 {
     // Collect all blocks occupied by this file
     auto listBlocks = collectListBlocks(at);
     auto dataBlocks = collectDataBlocks(at);
 
     // Update the file contents
-    replace(at, data.ptr, data.size, listBlocks, dataBlocks);
+    replace(at, buf, size, listBlocks, dataBlocks);
+}
+
+void
+FileSystem::replace(BlockNr at, const Buffer<u8> &data)
+{
+    replace(at, data.ptr, data.size);
+}
+
+void
+FileSystem::replace(BlockNr at, const string &str)
+{
+    replace(at, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 BlockNr

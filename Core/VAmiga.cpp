@@ -1335,7 +1335,7 @@ void
 HardDriveAPI::format(FSFormat fs, const string &name)
 {
     VAMIGA_PUBLIC_SUSPEND
-    drive->format(fs, name);
+    drive->format(fs, FSName(name));
 }
 
 void

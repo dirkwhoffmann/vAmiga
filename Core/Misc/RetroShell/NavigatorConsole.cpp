@@ -609,7 +609,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
                 
                 // Format the device
-                fs->format(type, args.contains("name") ? args.at("name") : "New Disk");
+                auto name = args.contains("name") ? args.at("name") : "New Disk";
+                fs->format(type);
+                fs->setName(FSName(name));
                 fs->dumpInfo(os);
             }
     });

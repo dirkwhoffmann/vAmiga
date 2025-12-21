@@ -12,6 +12,7 @@
 #include "HardDriveTypes.h"
 #include "HdControllerTypes.h"
 #include "FSTypes.h"
+#include "FSObjects.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
 #include "BlockDevice.h"
@@ -359,7 +360,7 @@ public:
     string defaultName(isize partition = 0) const;
 
     // Formats the disk
-    void format(FSFormat fs, string name);
+    void format(FSFormat fs, FSName name);
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512);

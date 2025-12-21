@@ -152,8 +152,8 @@ private:
     BlockNr rootBlock = 0;
 
     // Location of bitmap blocks and extended bitmap blocks
-    std::vector<BlockNr> bmBlocks;
-    std::vector<BlockNr> bmExtBlocks;
+    vector<BlockNr> bmBlocks;
+    vector<BlockNr> bmExtBlocks;
 
 
     //
@@ -252,7 +252,6 @@ public:
     bool isData(BlockNr nr) const { return fetch(nr).isData(); }
 
     // Predicts the type of a block based on the stored data
-    // static FSBlockType predictType(FSDescriptor &layout, BlockNr nr, const u8 *buf) noexcept;
     FSBlockType predictType(BlockNr nr, const u8 *buf) const noexcept;
 
 
@@ -264,19 +263,19 @@ public:
 
     // Returns a pointer to a block with read permissions (maybe null)
     const FSBlock *tryFetch(BlockNr nr) const noexcept { return cache.tryFetch(nr); }
-    const FSBlock *tryFetch(BlockNr nr, FSBlockType type) const noexcept { return cache.tryFetch(nr, type); }
-    const FSBlock *tryFetch(BlockNr nr, std::vector<FSBlockType> types) const noexcept { return cache.tryFetch(nr, types); }
+    const FSBlock *tryFetch(BlockNr nr, FSBlockType t) const noexcept { return cache.tryFetch(nr, t); }
+    const FSBlock *tryFetch(BlockNr nr, vector<FSBlockType> ts) const noexcept { return cache.tryFetch(nr, ts); }
 
     // Returns a reference to a block with read permissions (may throw)
     const FSBlock &fetch(BlockNr nr) const { return cache.fetch(nr); }
-    const FSBlock &fetch(BlockNr nr, FSBlockType type) const { return cache.fetch(nr, type); }
-    const FSBlock &fetch(BlockNr nr, std::vector<FSBlockType> types) const { return cache.fetch(nr, types); }
+    const FSBlock &fetch(BlockNr nr, FSBlockType t) const { return cache.fetch(nr, t); }
+    const FSBlock &fetch(BlockNr nr, vector<FSBlockType> ts) const { return cache.fetch(nr, ts); }
 
     // Writes back dirty cache blocks to the block device
     void flush();
 
-    // Operator overload
-    const FSBlock &operator[](size_t nr);
+    // Operator overload for fetch
+    const FSBlock &operator[](size_t nr) { return cache.fetch(BlockNr(nr)); }
 
 
     // -------------------------------------------------------------------------
@@ -289,18 +288,19 @@ public:
 
 public:
 
-    // Formats the volume
-    void format(string name = "");
-    void format(FSFormat dos, string name = "");
+    // Formats the volume with a specific DOS type
+    void format(FSFormat dos);
+
+    // Reformats the volume with the existing DOS type
+    void format() { format(traits.dos); }
 
     // Assigns the volume name
-    void setName(FSName name);
-    void setName(string name) { setName(FSName(name)); }
+    void setName(const FSName &name);
 
     // Installs a boot block
     void makeBootable(BootBlockId id);
 
-    // Removes a boot block virus from the current partition (if any)
+    // Removes a boot block virus (if any)
     void killVirus();
 
 
@@ -317,22 +317,19 @@ public:
     // Looks up a directory item
     optional<BlockNr> searchdir(BlockNr at, const FSName &name);
 
-    // Creates a directory entry
+    // Creates a new directory entry
     void link(BlockNr at, BlockNr fhb);
 
-    // Removes a directory entry
+    // Removes an existing directory entry
     void unlink(BlockNr fhb);
 
 private:
 
     // Adds a hash-table entry for a given item
-    void addToHashTable(const FSBlock &item);
     void addToHashTable(BlockNr parent, BlockNr ref);
 
     // Removes the hash-table entry for a given item
-    void deleteFromHashTable(const FSBlock &item);
     void deleteFromHashTable(BlockNr item);
-    void deleteFromHashTable(BlockNr parent, BlockNr ref);
 
 
     //
@@ -365,15 +362,17 @@ public:
     void resize(BlockNr at, isize size);
 
     // Replaces the cotents of an existing file
+    void replace(BlockNr at, const u8 *buf, isize size);
     void replace(BlockNr at, const Buffer<u8> &data);
+    void replace(BlockNr at, const string &str);
 
 private:
 
     // Main replace function
     BlockNr replace(BlockNr fhb,
                     const u8 *buf, isize size,
-                    std::vector<BlockNr> listBlocks = {},
-                    std::vector<BlockNr> dataBlocks = {});
+                    vector<BlockNr> listBlocks,
+                    vector<BlockNr> dataBlocks);
 
 
     //
@@ -407,18 +406,18 @@ private:
 
     // Follows a linked list and collects all blocks
     using BlockIterator = std::function<const FSBlock *(const FSBlock *)>;
-    std::vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const;
-    std::vector<BlockNr> collect(const BlockNr nr, BlockIterator succ) const;
+    vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const;
+    vector<BlockNr> collect(const BlockNr nr, BlockIterator succ) const;
 
     // Collects blocks of a certain type
-    std::vector<const FSBlock *> collectDataBlocks(const FSBlock &block) const;
-    std::vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
-    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
-    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
-    std::vector<BlockNr> collectDataBlocks(BlockNr nr) const;
-    std::vector<BlockNr> collectListBlocks(BlockNr nr) const;
-    std::vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
-    std::vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
+    vector<const FSBlock *> collectDataBlocks(const FSBlock &block) const;
+    vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
+    vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
+    vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
+    vector<BlockNr> collectDataBlocks(BlockNr nr) const;
+    vector<BlockNr> collectListBlocks(BlockNr nr) const;
+    vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
+    vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
 
 
     // -------------------------------------------------------------------------
@@ -462,30 +461,30 @@ public:
     BlockNr seek(BlockNr top, const string &name) const;
 
     // Seeks all items satisfying a predicate
-    std::vector<const FSBlock *> find(const FSOpt &opt) const;
-    std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
-    std::vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
-    std::vector<BlockNr> find(BlockNr root, const FSOpt &opt) const;
+    vector<const FSBlock *> find(const FSOpt &opt) const;
+    vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
+    vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
+    vector<BlockNr> find(BlockNr root, const FSOpt &opt) const;
 
     // Seeks all items with a pattern-matching name
-    std::vector<const FSBlock *> find(const FSPattern &pattern) const;
-    std::vector<const FSBlock *> find(const FSBlock *top, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> find(const FSBlock &top, const FSPattern &pattern) const;
-    std::vector<BlockNr> find(BlockNr root, const FSPattern &pattern) const;
+    vector<const FSBlock *> find(const FSPattern &pattern) const;
+    vector<const FSBlock *> find(const FSBlock *top, const FSPattern &pattern) const;
+    vector<const FSBlock *> find(const FSBlock &top, const FSPattern &pattern) const;
+    vector<BlockNr> find(BlockNr root, const FSPattern &pattern) const;
 
     // Collects all items with a pattern-matching path
-    std::vector<const FSBlock *> match(const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
-    std::vector<BlockNr> match(BlockNr root, const FSPattern &pattern) const;
+    vector<const FSBlock *> match(const FSPattern &pattern) const;
+    vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
+    vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
+    vector<BlockNr> match(BlockNr root, const FSPattern &pattern) const;
 
 private:
 
-    std::vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
+    vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
                                       std::unordered_set<BlockNr> &visited) const;
 
-    std::vector<const FSBlock *> match(const FSBlock *top,
-                                       std::vector<FSPattern> pattern) const;
+    vector<const FSBlock *> match(const FSBlock *top,
+                                       vector<FSPattern> pattern) const;
 };
 
 }
