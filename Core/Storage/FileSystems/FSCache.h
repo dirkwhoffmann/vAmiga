@@ -151,23 +151,7 @@ public:
     //
 
     // Updates the checksums in all blocks
-    void updateChecksums() noexcept;
-
-
-    //
-    // GUI helper functions
-    //
-
-public:
-
-    // Returns a block summary for creating the block usage image
-    [[deprecated]] void createUsageMap(u8 *buffer, isize len) const;
-
-    // Returns a usage summary for creating the block allocation image
-    [[deprecated]] void createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis = {}) const;
-
-    // Returns a block summary for creating the diagnose image
-    [[deprecated]] void createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis = {}) const;
+    [[deprecated]] void updateChecksums() noexcept;
 };
 
 }

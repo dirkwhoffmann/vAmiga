@@ -100,6 +100,7 @@
 #include "FSAllocator.h"
 #include "FSImporter.h"
 #include "FSExporter.h"
+#include "FSWalker.h"
 #include "DeviceError.h"
 #include "BlockVolume.h"
 #include "utl/abilities/Loggable.h"
@@ -449,7 +450,17 @@ public:
     BlockNr seek(BlockNr top, const fs::path &name) const;
     BlockNr seek(BlockNr top, const string &name) const;
 
-    // TODO: MOVE TO CRAWLER
+
+    //
+    // *** Services layer ***
+    //
+
+public:
+    
+    // Experimental
+    FSTree build(BlockNr root, const FSTreeBuildOptions &opt = {});
+
+    // DEPRECATES
     // Seeks all items satisfying a predicate
     vector<const FSBlock *> find(const FSOpt &opt) const;
     vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;

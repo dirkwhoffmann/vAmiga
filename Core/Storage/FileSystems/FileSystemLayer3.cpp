@@ -108,6 +108,12 @@ FileSystem::seek(BlockNr top, const string &name) const
     throw FSError(FSError::FS_NOT_FOUND, name);
 }
 
+FSTree
+FileSystem::build(BlockNr root, const FSTreeBuildOptions &opt)
+{
+    return FSTreeBuilder::build(fetch(root), opt); 
+}
+
 std::vector<const FSBlock *>
 FileSystem::find(const FSOpt &opt) const
 {

@@ -895,7 +895,28 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
-                
+
+                // Experimental
+                FSTreeBuildOptions buildopt;
+                buildopt.accept = [](const FSBlock& b) { return true; };
+                /*
+                buildopt.sort = [](const FSBlock& a, const FSBlock& b) {
+                    return a.name() < b.name();
+                };
+                */
+                buildopt.sort = sort::dafa;
+                buildopt.recursive = true;
+
+                FSTree tree = fs->build(path, buildopt);
+
+                /*
+                for (const auto &node : tree.dfs()) {
+
+                    auto &block = fs->fetch(node.nr);
+                    os << "*" << block.cppName() + (block.isDirectory() ? " (dir)" : "\t") << "\n";
+                }
+                */
+
                 FSOpt opt = {
                     
                     .recursive = r,
@@ -923,7 +944,10 @@ NavigatorConsole::initCommands(RSCommand &root)
                             return node.cppName() + (node.isDirectory() ? " (dir)" : "\t");
                         }
                 };
-                
+
+                FSTreePrinter::list(*fs, tree, os, opt2);
+
+
                 OldFSTree(fs->fetch(path), opt).list(os, opt2);
             }
     });
