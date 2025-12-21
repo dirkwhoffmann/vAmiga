@@ -94,7 +94,7 @@
 #include "FSContract.h"
 #include "FSDescriptor.h"
 #include "FSObjects.h"
-#include "FSTree.h"
+#include "OldFSTree.h"
 #include "FSCache.h"
 #include "FSDoctor.h"
 #include "FSAllocator.h"
@@ -106,31 +106,16 @@
 
 namespace vamiga {
 
-class ADFFile;
-class HDFFile;
-class FloppyDrive;
-class HardDrive;
-
 class FileSystem : public Loggable {
 
     friend struct FSBlock;
-    friend struct FSTree;
+    friend struct OldFSTree;
 
-    // Static file system properties
+    // Immutable file system properties
     FSTraits traits;
 
-public:
 
-    // Contracts
-    FSRequire require = FSRequire(*this);
-    FSEnsure ensure = FSEnsure(*this);
-
-
-    //
-    // Layer 0: Blocks
-    //
-
-private:
+    // Block layer
 
     // Gateway to the underlying block device
     FSCache cache;
@@ -139,9 +124,7 @@ private:
     FSAllocator allocator = FSAllocator(*this);
 
 
-    //
-    // Layer 1: Nodes
-    //
+    // Node layer
 
     // Location of the root block
     BlockNr rootBlock = 0;
@@ -151,24 +134,28 @@ private:
     vector<BlockNr> bmExtBlocks;
 
 
-    //
-    // Layer 2: Paths
-    //
+    // Path layer
 
     // Location of the current directory
     BlockNr current = 0;
 
 
-    //
-    // Layer 3: Services
-    //
+    // Service layer
 
 public:
 
-    // Service components
+    // Block import
     FSImporter importer = FSImporter(*this);
+
+    // Block export
     FSExporter exporter = FSExporter(*this);
+
+    // Error checking, rectification
     FSDoctor doctor = FSDoctor(*this, allocator);
+
+    // Contracts
+    FSRequire require = FSRequire(*this);
+    FSEnsure ensure = FSEnsure(*this);
 
 
     //
@@ -185,18 +172,6 @@ public:
     FileSystem& operator=(const FileSystem &) = delete;
     FileSystem& operator=(FileSystem &&) = delete;
 
-
-    //
-    // Accessing sub components
-    //
-
-    /*
-public:
-
-    const FSCache &getCache() const { return cache; }
-    const FSAllocator &getAllocator() const { return allocator; }
-     */
-    
 
     //
     // Printing debug information
@@ -216,7 +191,7 @@ public:
 
 public:
 
-    // Returns static file system properties
+    // Queries immutable file system properties
     const FSTraits &getTraits() const noexcept { return traits; }
     isize blocks() const noexcept { return traits.blocks; }
     isize bytes() const noexcept { return traits.bytes; }
@@ -235,9 +210,9 @@ public:
     FSAttr attr(BlockNr nr) const;
 
 
-    // -------------------------------------------------------------------------
-    //                             Layer 1: Blocks
-    // -------------------------------------------------------------------------
+    //
+    // *** Block layer ***
+    //
 
     //
     // Querying block properties
@@ -285,9 +260,9 @@ public:
     const FSBlock &operator[](size_t nr) { return cache.fetch(BlockNr(nr)); }
 
 
-    // -------------------------------------------------------------------------
-    //                             Layer 2: Nodes
-    // -------------------------------------------------------------------------
+    //
+    // *** Node layer ***
+    //
 
     //
     // Formatting
@@ -430,9 +405,9 @@ private:
     vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
 
 
-    // -------------------------------------------------------------------------
-    //                           Layer 3: Paths
-    // -------------------------------------------------------------------------
+    //
+    // *** Path layer ***
+    //
 
     //
     // Managing the working directory

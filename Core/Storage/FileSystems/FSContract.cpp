@@ -73,7 +73,7 @@ FSRequire::emptyDirectory(BlockNr nr) const
 {
     directory(nr);
     auto &node = fs.fetch(nr);
-    if (FSTree(node, { .recursive = false }).size() != 0) {
+    if (OldFSTree(node, { .recursive = false }).size() != 0) {
         throw FSError(FSError::FS_DIR_NOT_EMPTY);
     }
 }

@@ -296,10 +296,10 @@ FSDoctor::xrayBitmap(bool strict)
     std::unordered_set<BlockNr> used;
 
     // Extract the directory tree
-    auto tree = FSTree(fs.fetch(fs.root()), { .recursive = true });
+    auto tree = OldFSTree(fs.fetch(fs.root()), { .recursive = true });
 
     // Collect all used blocks
-    tree.bfsWalk( [&](const FSTree &it) {
+    tree.bfsWalk( [&](const OldFSTree &it) {
 
         used.insert(it.node->nr);
 

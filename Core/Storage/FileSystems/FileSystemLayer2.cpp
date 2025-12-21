@@ -554,12 +554,12 @@ FileSystem::reclaim(BlockNr fhb)
 }
 
 std::vector<const FSBlock *>
-FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSBlock *)> next) const
+FileSystem::collect(const FSBlock &node, BlockIterator succ) const
 {
     std::vector<const FSBlock *> result;
     std::unordered_set<BlockNr> visited;
 
-    for (auto *block = tryFetch(node.nr); block != nullptr; block = next(block)) {
+    for (auto *block = tryFetch(node.nr); block != nullptr; block = succ(block)) {
 
         // Break the loop if this block has been visited before
         if (visited.contains(block->nr)) break;
@@ -575,12 +575,12 @@ FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSB
 }
 
 std::vector<BlockNr>
-FileSystem::collect(const BlockNr nr, std::function<const FSBlock *(FSBlock const *)> next) const
+FileSystem::collect(const BlockNr nr, BlockIterator succ) const
 {
     std::vector<BlockNr> result;
     std::unordered_set<BlockNr> visited;
 
-    for (auto *block = tryFetch(nr); block; block = next(block)) {
+    for (auto *block = tryFetch(nr); block; block = succ(block)) {
 
         // Break the loop if this block has been visited before
         if (visited.contains(block->nr)) break;

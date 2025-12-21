@@ -197,7 +197,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 
         // List all nodes
         if (!matches.empty() && displayCmds) os << std::endl;
-        FSTree(matches, { .sort = sort::dafa }).list(os, { .indent = 7 });
+        OldFSTree(matches, { .sort = sort::dafa }).list(os, { .indent = 7 });
     }
 }
 
@@ -924,7 +924,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         }
                 };
                 
-                FSTree(fs->fetch(path), opt).list(os, opt2);
+                OldFSTree(fs->fetch(path), opt).list(os, opt2);
             }
     });
     
@@ -976,7 +976,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         }
                 };
                 
-                FSTree(fs->fetch(path), opt).list(os, opt);
+                OldFSTree(fs->fetch(path), opt).list(os, opt);
             }
     });
     

@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FSTree.h"
+#include "OldFSTree.h"
 #include "FileSystem.h"
 #include "utl/io.h"
 #include <algorithm>
@@ -17,20 +17,20 @@ namespace vamiga {
 
 using namespace utl;
 
-FSTree::FSTree(const FSBlock &top, const FSOpt &opt)
+OldFSTree::OldFSTree(const FSBlock &top, const FSOpt &opt)
 {
     std::unordered_set<BlockNr> visited;
     init(top, opt, visited);
 };
 
-FSTree::FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt) : node(nullptr)
+OldFSTree::OldFSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt) : node(nullptr)
 {
     for (auto &it : nodes) addChild(it);
     sort(opt.sort);
 }
 
 void
-FSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<BlockNr> &visited)
+OldFSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<BlockNr> &visited)
 {
     auto &fs = *top.fs;
 
@@ -64,7 +64,7 @@ FSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<BlockNr> &
 }
 
 isize
-FSTree::size() const
+OldFSTree::size() const
 {
     isize result = 1;
     for (auto &it : children) result += it.size();
@@ -72,7 +72,7 @@ FSTree::size() const
 }
 
 fs::path
-FSTree::hostName() const
+OldFSTree::hostName() const
 {
     if (!node) return {};
     return FSName::sanitize(node->name().cpp_str());
@@ -80,7 +80,7 @@ FSTree::hostName() const
 
 
 void
-FSTree::dfsWalk(std::function<void(const FSTree &)> func)
+OldFSTree::dfsWalk(std::function<void(const OldFSTree &)> func)
 {
     if (!empty()) {
 
@@ -90,7 +90,7 @@ FSTree::dfsWalk(std::function<void(const FSTree &)> func)
 }
 
 void
-FSTree::bfsWalk(std::function<void(const FSTree &)> func)
+OldFSTree::bfsWalk(std::function<void(const OldFSTree &)> func)
 {
     if (!empty()) {
 
@@ -100,7 +100,7 @@ FSTree::bfsWalk(std::function<void(const FSTree &)> func)
 }
 
 void
-FSTree::bfsWalkRec(std::function<void(const FSTree &)> func)
+OldFSTree::bfsWalkRec(std::function<void(const OldFSTree &)> func)
 {
     if (!empty()) {
         
@@ -110,16 +110,16 @@ FSTree::bfsWalkRec(std::function<void(const FSTree &)> func)
 }
 
 void
-FSTree::sort(std::function<bool(const FSBlock &,const FSBlock &)> sort)
+OldFSTree::sort(std::function<bool(const FSBlock &,const FSBlock &)> sort)
 {
     if (sort == nullptr) return;
 
-    auto comperator = [sort](const FSTree &b1, const FSTree &b2) { return sort(*b1.node, *b2.node); };
+    auto comperator = [sort](const OldFSTree &b1, const OldFSTree &b2) { return sort(*b1.node, *b2.node); };
     std::sort(children.begin(), children.end(), comperator);
 }
 
 void
-FSTree::list(std::ostream &os, const FSOpt &opt) const
+OldFSTree::list(std::ostream &os, const FSOpt &opt) const
 {
     auto options = opt;
 
@@ -134,7 +134,7 @@ FSTree::list(std::ostream &os, const FSOpt &opt) const
 }
 
 void
-FSTree::listRec(std::ostream &os, const FSOpt &opt) const
+OldFSTree::listRec(std::ostream &os, const FSOpt &opt) const
 {
     if (opt.recursive) {
 
@@ -157,7 +157,7 @@ FSTree::listRec(std::ostream &os, const FSOpt &opt) const
 }
 
 void
-FSTree::listItems(std::ostream &os, const FSOpt &opt) const
+OldFSTree::listItems(std::ostream &os, const FSOpt &opt) const
 {
     // Collect all displayed strings
     std::vector<string> strs;
@@ -190,7 +190,7 @@ FSTree::listItems(std::ostream &os, const FSOpt &opt) const
 }
 
 void
-FSTree::save(const fs::path &path, const FSOpt &opt) const
+OldFSTree::save(const fs::path &path, const FSOpt &opt) const
 {
     if (isDirectory()) {
 
@@ -220,7 +220,7 @@ FSTree::save(const fs::path &path, const FSOpt &opt) const
 }
 
 void
-FSTree::saveDir(const fs::path &path, const FSOpt &opt) const
+OldFSTree::saveDir(const fs::path &path, const FSOpt &opt) const
 {
     // Save files
     for (auto &it : children) {
@@ -236,7 +236,7 @@ FSTree::saveDir(const fs::path &path, const FSOpt &opt) const
 }
 
 void
-FSTree::saveFile(const fs::path &path, const FSOpt &opt) const
+OldFSTree::saveFile(const fs::path &path, const FSOpt &opt) const
 {
     // Get data
     Buffer<u8> buffer; node->extractData(buffer);

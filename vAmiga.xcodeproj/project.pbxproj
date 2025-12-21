@@ -320,8 +320,8 @@
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
 		509F41EA243B0FF700AD0FE4 /* ScreenshotViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
-		50A0F71C2E0E689000972CBC /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* FSTree.cpp */; };
-		50A0F71D2E0E689000972CBC /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* FSTree.cpp */; };
+		50A0F71C2E0E689000972CBC /* OldFSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */; };
+		50A0F71D2E0E689000972CBC /* OldFSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */; };
 		50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
@@ -1059,8 +1059,8 @@
 		509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotViewer.swift; sourceTree = "<group>"; };
 		509F7F1B21EDEA0200A530E4 /* RomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomFile.cpp; sourceTree = "<group>"; };
 		509F7F1C21EDEA0200A530E4 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
-		50A0F71A2E0E688800972CBC /* FSTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTree.h; sourceTree = "<group>"; };
-		50A0F71B2E0E688D00972CBC /* FSTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSTree.cpp; sourceTree = "<group>"; };
+		50A0F71A2E0E688800972CBC /* OldFSTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OldFSTree.h; sourceTree = "<group>"; };
+		50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OldFSTree.cpp; sourceTree = "<group>"; };
 		50A0F71E2E11157D00972CBC /* FSDoctor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDoctor.h; sourceTree = "<group>"; };
 		50A0F71F2E11158D00972CBC /* FSDoctor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDoctor.cpp; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
@@ -1730,8 +1730,8 @@
 				50565070254573E100A79D27 /* FSBlock.cpp */,
 				509D048C2EDA46D700355638 /* FSAllocator.h */,
 				509D048D2EDA46D700355638 /* FSAllocator.cpp */,
-				50A0F71A2E0E688800972CBC /* FSTree.h */,
-				50A0F71B2E0E688D00972CBC /* FSTree.cpp */,
+				50A0F71A2E0E688800972CBC /* OldFSTree.h */,
+				50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */,
 				509D04902EDA46E400355638 /* FSService.h */,
 				509D04912EDA46E400355638 /* FSService.cpp */,
 				50392FAE2EF8051A00DAE17A /* FSWalker.h */,
@@ -3194,7 +3194,7 @@
 				501D686028085131000BB5E9 /* Defaults.cpp in Sources */,
 				5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */,
 				502023EA27B6BDEA00820DB6 /* ZorroBoard.cpp in Sources */,
-				50A0F71C2E0E689000972CBC /* FSTree.cpp in Sources */,
+				50A0F71C2E0E689000972CBC /* OldFSTree.cpp in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				509D04972EDA471900355638 /* FSExporter.cpp in Sources */,
 				509D04982EDA471900355638 /* FSImporter.cpp in Sources */,
@@ -3435,7 +3435,7 @@
 				50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */,
 				50FC04F127DA1A4500C3E566 /* GdbServerCmds.cpp in Sources */,
 				50FC04E927DA1A3700C3E566 /* OSDebuggerRead.cpp in Sources */,
-				50A0F71D2E0E689000972CBC /* FSTree.cpp in Sources */,
+				50A0F71D2E0E689000972CBC /* OldFSTree.cpp in Sources */,
 				509E75FF2EDCCC0700608FA7 /* IMGFactory.cpp in Sources */,
 				50FC04AC27DA198E00C3E566 /* BlitterEvents.cpp in Sources */,
 				50FC04AB27DA198E00C3E566 /* Blitter.cpp in Sources */,

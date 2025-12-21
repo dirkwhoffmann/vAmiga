@@ -293,7 +293,7 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 
     // Get all directory items
     // auto items = traverse(*root, { .recursive = false} );
-    auto items = FSTree(*root, { .recursive = false} );
+    auto items = OldFSTree(*root, { .recursive = false} );
 
     // Extract the first pattern
     auto pattern = patterns.front(); patterns.erase(patterns.begin());

@@ -72,7 +72,7 @@ PosixFileSystem::rmdir(const fs::path &path)
     auto node = fs.seek(fs.root(), path);
 
     // Only empty directories can be removed
-    fs.require.emptyDirectory(node);
+    require.emptyDirectory(node);
 
     if (auto *info = getMeta(node); info) {
 
@@ -95,10 +95,10 @@ PosixFileSystem::readDir(const fs::path &path)
     auto node = fs.seek(fs.root(), path);
 
     // Extract the directory tree
-    FSTree tree(fs.fetch(node), { .recursive = false });
+    OldFSTree tree(fs.fetch(node), { .recursive = false });
 
     // Walk the tree
-    tree.bfsWalk( [&](const FSTree &it) {
+    tree.bfsWalk( [&](const OldFSTree &it) {
         result.push_back(it.node->getName());
     });
 
@@ -205,7 +205,7 @@ BlockNr
 PosixFileSystem::ensureFile(const fs::path &path)
 {
     auto node = fs.seek(fs.root(), path);
-    fs.require.file(node);
+    require.file(node);
     return node;
 }
 
@@ -213,7 +213,7 @@ BlockNr
 PosixFileSystem::ensureFileOrDirectory(const fs::path &path)
 {
     auto node = fs.seek(fs.root(), path);
-    fs.require.fileOrDirectory(node);
+    require.fileOrDirectory(node);
     return node;
 }
 
@@ -221,7 +221,7 @@ BlockNr
 PosixFileSystem::ensureDirectory(const fs::path &path)
 {
     auto node = fs.seek(fs.root(), path);
-    fs.require.directory(node);
+    require.directory(node);
     return node;
 }
 

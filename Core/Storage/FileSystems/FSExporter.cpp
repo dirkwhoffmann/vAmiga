@@ -138,7 +138,7 @@ FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool c
     }
 
     debug(FS_DEBUG, "Exporting %s to %s\n", item.absName().c_str(), hostPath.string().c_str());
-    FSTree tree(item, { .recursive = recursive });
+    OldFSTree tree(item, { .recursive = recursive });
     tree.save(hostPath, { .recursive = recursive });
 }
 

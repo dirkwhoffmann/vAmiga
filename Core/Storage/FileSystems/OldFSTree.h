@@ -16,15 +16,15 @@
 
 namespace vamiga {
 
-struct FSTree {
+struct OldFSTree {
 
     const FSBlock *node;
-    std::vector<FSTree> children;
+    std::vector<OldFSTree> children;
 
-    FSTree() : node(nullptr) {}
-    FSTree(const FSBlock *node) : node(node) {}
-    FSTree(const FSBlock &path, const FSOpt &opt);
-    FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt);
+    OldFSTree() : node(nullptr) {}
+    OldFSTree(const FSBlock *node) : node(node) {}
+    OldFSTree(const FSBlock &path, const FSOpt &opt);
+    OldFSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt);
 
     void init(const FSBlock &path, const FSOpt &opt, std::unordered_set<BlockNr> &visited);
 
@@ -32,7 +32,7 @@ struct FSTree {
     isize size() const;
 
     // Add a child
-    void addChild(const FSBlock *node) { if (node) children.push_back(FSTree(node)); }
+    void addChild(const FSBlock *node) { if (node) children.push_back(OldFSTree(node)); }
 
     // Analyzes the node
     bool isFile() const { return node->isFile(); }
@@ -42,9 +42,9 @@ struct FSTree {
     fs::path hostName() const;
 
     // Traverses the tree and applies a function at each node
-    void bfsWalk(std::function<void(const FSTree &)>);
-    void bfsWalkRec(std::function<void(const FSTree &)>);
-    void dfsWalk(std::function<void(const FSTree &)>);
+    void bfsWalk(std::function<void(const OldFSTree &)>);
+    void bfsWalkRec(std::function<void(const OldFSTree &)>);
+    void dfsWalk(std::function<void(const OldFSTree &)>);
 
     // Sorts the children using a custom comparator
     void sort(std::function<bool(const FSBlock &,const FSBlock &)>);
