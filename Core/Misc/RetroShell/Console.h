@@ -480,14 +480,17 @@ class NavigatorConsole final : public Console
     BlockNr matchPath(const string &path, Tokens &notFound);
     
 public:
-    
+
     // Imports the file system from a floppy drive or hard drive
     void import(const FloppyDrive &dfn);
     void import(const HardDrive &hdn, isize part);
     void importDf(isize n);
     void importHd(isize n, isize part);
     void import(const fs::path &path, bool recursive = true, bool contents = false);
-    
+
+    // Throws an exception if no file system has been imported
+    void requireFS();
+
     // Exports the file system
     void exportBlocks(fs::path path);
 };

@@ -205,5 +205,5 @@ class Console: Layer {
         emu?.retroShell.executeScript(script)
         isDirty = true
     }
-    */
+     */
 }

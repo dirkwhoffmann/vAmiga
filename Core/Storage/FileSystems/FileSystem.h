@@ -298,7 +298,7 @@ public:
     void rmdir(BlockNr at);
 
     // Looks up a directory item
-    optional<BlockNr> searchdir(BlockNr at, const FSName &name);
+    optional<BlockNr> searchdir(BlockNr at, const FSName &name) const;
 
     // Creates a new directory entry
     void link(BlockNr at, BlockNr fhb);
@@ -386,7 +386,7 @@ private:
     //
 
 public:
-    
+
     vector<BlockNr> collectDataBlocks(BlockNr nr) const;
     vector<BlockNr> collectListBlocks(BlockNr nr) const;
     vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
@@ -421,8 +421,8 @@ public:
 
     // Changes the working directory
     void cd(BlockNr nr);
-    void cd(const FSName &name);
     void cd(const string &path);
+    void cd(const fs::path &path);
 
 
     //
@@ -442,11 +442,15 @@ public:
     bool exists(BlockNr top, const fs::path &path) const;
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
-    optional<BlockNr> trySeek(BlockNr top, const FSName &name) const;
+    // TODO: MOVE TO NODE LAYER (WITH A DIFFERENT NAME) AS IT DOES NOT TRAVERSE PATHS
+    [[deprecated]] optional<BlockNr> trySeek(BlockNr top, const FSName &name) const;
+
     optional<BlockNr> trySeek(BlockNr top, const fs::path &name) const;
     optional<BlockNr> trySeek(BlockNr top, const string &name) const;
 
-    BlockNr seek(BlockNr top, const FSName &name) const;
+    // TODO: MOVE TO NODE LAYER (WITH A DIFFERENT NAME) AS IT DOES NOT TRAVERSE PATHS
+    [[deprecated]] BlockNr seek(BlockNr top, const FSName &name) const;
+
     BlockNr seek(BlockNr top, const fs::path &name) const;
     BlockNr seek(BlockNr top, const string &name) const;
 
@@ -456,36 +460,26 @@ public:
     //
 
 public:
-    
-    // Experimental
-    FSTree build(BlockNr root, const FSTreeBuildOptions &opt = {});
 
-    // DEPRECATES
-    // Seeks all items satisfying a predicate
-    vector<const FSBlock *> find(const FSOpt &opt) const;
-    vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
-    vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
-    vector<BlockNr> find(BlockNr root, const FSOpt &opt) const;
-
-    // Seeks all items with a pattern-matching name
-    vector<const FSBlock *> find(const FSPattern &pattern) const;
-    vector<const FSBlock *> find(const FSBlock *top, const FSPattern &pattern) const;
-    vector<const FSBlock *> find(const FSBlock &top, const FSPattern &pattern) const;
-    vector<BlockNr> find(BlockNr root, const FSPattern &pattern) const;
+    // Build a directory tree
+    FSTree build(BlockNr root, const FSTreeBuildOptions &opt = {}) const;
 
     // Collects all items with a pattern-matching path
-    vector<const FSBlock *> match(const FSPattern &pattern) const;
-    vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
-    vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
-    vector<BlockNr> match(BlockNr root, const FSPattern &pattern) const;
+    vector<const FSBlock *> newMatch(BlockNr top, const FSPattern &pattern) const;
+
+    // DEPRECATED
+    [[deprecated]] vector<const FSBlock *> match(const FSPattern &pattern) const;
+    [[deprecated]] vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
+    [[deprecated]] vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
+    [[deprecated]] vector<BlockNr> match(BlockNr root, const FSPattern &pattern) const;
 
 private:
 
-    vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
-                                      std::unordered_set<BlockNr> &visited) const;
-
-    vector<const FSBlock *> match(const FSBlock *top,
+    vector<const FSBlock *> newMatch(const FSBlock *top,
                                        vector<FSPattern> pattern) const;
+
+    [[deprecated]] vector<const FSBlock *> match(const FSBlock *top,
+                                                 vector<FSPattern> patterns) const;
 };
 
 }

@@ -138,7 +138,7 @@ FileSystem::rmdir(BlockNr at)
 }
 
 optional<BlockNr>
-FileSystem::searchdir(BlockNr at, const FSName &name)
+FileSystem::searchdir(BlockNr at, const FSName &name) const
 {
     std::unordered_set<BlockNr> visited;
 

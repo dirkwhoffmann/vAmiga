@@ -19,14 +19,22 @@ FileSystem::cd(BlockNr nr)
     current = nr;
 }
 
+/*
 void
 FileSystem::cd(const FSName &name)
 {
     cd(seek(pwd(), name));
 }
+*/
 
 void
 FileSystem::cd(const string &path)
+{
+    cd(seek(pwd(), path));
+}
+
+void
+FileSystem::cd(const fs::path &path)
 {
     cd(seek(pwd(), path));
 }
@@ -76,15 +84,39 @@ FileSystem::trySeek(BlockNr top, const FSName &name) const
 }
 
 optional<BlockNr>
-FileSystem::trySeek(BlockNr top, const fs::path &name) const
+FileSystem::trySeek(BlockNr top, const fs::path &path) const
 {
-    return trySeek(top, FSName(name));
+    BlockNr current = top; // path.is_absolute() ? rootBlock : top;
+
+    printf("Path '%s' -> ", path.c_str());
+    for (const auto &component : path) { printf("'%s' ", component.c_str()); }
+    printf("\n");
+
+    for (const auto &component : path) {
+
+        printf("Seeking '%s' in '%s'\n", component.c_str(), fetch(current).absName().c_str());
+
+        // Check for special tokens
+        if (component == "/" ) { current = rootBlock; continue; }
+        if (component == ""  ) { continue; }
+        if (component == "." ) { continue; }
+        if (component == "..") { current = fetch(current).getParentDirRef(); continue; }
+
+        auto next = searchdir(current, FSName(component));
+        if (!next) { printf("%s not found", FSName(component).c_str());  return { }; }
+
+        printf("Found %d\n", *next);
+
+        current = *next;
+    }
+
+    return current;
 }
 
 optional<BlockNr>
 FileSystem::trySeek(BlockNr top, const string &name) const
 {
-    return trySeek(top, FSName(name));
+    return trySeek(top, fs::path(name));
 }
 
 BlockNr
@@ -109,159 +141,59 @@ FileSystem::seek(BlockNr top, const string &name) const
 }
 
 FSTree
-FileSystem::build(BlockNr root, const FSTreeBuildOptions &opt)
+FileSystem::build(BlockNr root, const FSTreeBuildOptions &opt) const
 {
     return FSTreeBuilder::build(fetch(root), opt); 
 }
 
-std::vector<const FSBlock *>
-FileSystem::find(const FSOpt &opt) const
+vector<const FSBlock *>
+FileSystem::newMatch(BlockNr top, const FSPattern &pattern) const
 {
-    return find(fetch(pwd()), opt);
+    if (pattern.isAbsolute()) {
+        return newMatch(&fetch(root()), pattern.splitted());
+    } else {
+        return newMatch(&fetch(pwd()), pattern.splitted());
+    }
 }
 
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock &root, const FSOpt &opt) const
-{
-    require.fileOrDirectory(root.nr);
-    return find(&root, opt);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSOpt &opt) const
-{
-    if (!root) return {};
-    std::unordered_set<BlockNr> visited;
-    return find(root, opt, visited);
-}
-
-std::vector<BlockNr>
-FileSystem::find(BlockNr root, const FSOpt &opt) const
-{
-    return FSBlock::refs(find(tryFetch(root), opt));
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<BlockNr> &visited) const
+vector<const FSBlock *>
+FileSystem::newMatch(const FSBlock *top, vector<FSPattern> patterns) const
 {
     std::vector<const FSBlock *> result;
 
-    // Collect all items in the hash table
-    auto hashedBlocks = collectHashedBlocks(*root);
+    if (patterns.empty()) return {};
 
-    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
+    // Get all directory items
+    auto items = build(top->nr, { .accept = accept::all, .sort = sort::none, .depth = 1 });
 
-        // Add item if accepted
-        if (opt.accept(*it)) result.push_back(*it);
+    // Extract the first pattern
+    auto pattern = patterns.front(); patterns.erase(patterns.begin());
 
-        // Break the loop if this block has been visited before
-        if (visited.contains((*it)->nr)) throw FSError(FSError::FS_HAS_CYCLES);
+    if (patterns.empty()) {
 
-        // Remember the block as visited
-        visited.insert((*it)->nr);
-    }
+        // Collect all matching items
+        for (auto &item : items.children) {
 
-    // Search subdirectories
-    if (opt.recursive) {
+            auto &node = fetch(item.nr);
+            if (pattern.match(node.cppName())) {
+                result.push_back(&node);
+            }
+        }
 
-        for (auto &it : hashedBlocks) {
+    } else {
 
-            if (it->isDirectory()) {
+        // Continue by searching all matching subdirectories
+        for (auto &item : items.children) {
 
-                auto blocks = find(it, opt, visited);
-                result.insert(result.end(), blocks.begin(), blocks.end());
+            auto &node = fetch(item.nr);
+            if (node.isDirectory() && pattern.match(node.cppName())) {
+                auto subdirItems = newMatch(&node, patterns);
+                result.insert(result.end(), subdirItems.begin(), subdirItems.end());
             }
         }
     }
 
-    // Sort the result
-    if (opt.sort) {
-
-        std::sort(result.begin(), result.end(),
-                  [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
-    }
-
     return result;
-}
-
-/*
-std::vector<BlockNr>
-FileSystem::find(BlockNr top, const FSOpt &opt, std::unordered_set<BlockNr> &visited) const
-{
-    std::vector<BlockNr> result;
-
-    // Collect all items in the hash table
-    auto hashedBlocks = collectHashedBlocks(top);
-
-    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
-
-        // Add item if accepted
-        if (opt.accept(fetch(*it))) result.push_back(*it);
-
-        // Break the loop if this block has been visited before
-        if (visited.contains(*it)) throw FSError(FSError::FS_HAS_CYCLES);
-
-        // Remember the block as visited
-        visited.insert(*it);
-    }
-
-    // Search subdirectories
-    if (opt.recursive) {
-
-        for (auto &it : hashedBlocks) {
-
-            if (fetch(it).isDirectory()) {
-
-                auto blocks = find(it, opt, visited);
-                result.insert(result.end(), blocks.begin(), blocks.end());
-            }
-        }
-    }
-
-    // Sort the result
-    if (opt.sort) {
-
-        std::sort(result.begin(), result.end(),
-                  [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
-    }
-
-    return result;
-}
-*/
-
-
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSPattern &pattern) const
-{
-    std::vector<BlockNr> result;
-
-    // Determine the directory to start searching
-    auto &start = pattern.isAbsolute() ? fetch(root()) : fetch(pwd());
-
-    // Seek all files matching the provided pattern
-    return find(start, pattern);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock &root, const FSPattern &pattern) const
-{
-    return find(&root, pattern);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
-{
-    return find(root, {
-        .recursive = true,
-        .filter = [&](const FSBlock &item) { return pattern.match(item.cppName()); }
-    });
-}
-
-std::vector<BlockNr>
-FileSystem::find(BlockNr root, const FSPattern &pattern) const
-{
-    return FSBlock::refs(find(tryFetch(root), pattern));
 }
 
 std::vector<const FSBlock *>

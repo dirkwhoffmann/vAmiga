@@ -142,35 +142,92 @@ NavigatorConsole::autoComplete(Tokens &argv)
 string
 NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 {
+    // Disable completion if no file system is present
     if (!fs || !fs->isFormatted()) return input;
 
-    bool absolute = !input.empty() && input[0] == '/';
-    
-    // Seek matching items
-    auto matches = fs->match(&fs->fetch(fs->pwd()), input + "*");
+    auto path = fs::path(input);
+    auto dir  = path.parent_path();
+    auto file = path.filename();
 
-    // Filter out unwanted items
-    if (!matches.empty()) {
-        matches.erase(std::remove_if(matches.begin(), matches.end(), [flags](const FSBlock *node) {
-            
-            return
-            (!(flags & rs::acdir) && node->isDirectory()) ||
-            (!(flags & rs::acfile) && node->isFile());
-            
-        }), matches.end());
+    printf("autoCompleteFilename: path: '%s' dir: '%s' file: '%s' (%d)\n", path.c_str(), dir.c_str(), file.c_str(), path.is_absolute());
+
+    // Lookup the parent path
+    if (auto parent = fs->trySeek(path.is_absolute() ? fs->root() : fs->pwd(), dir)) {
+
+        printf("Found parent: %d\n", *parent);
+
+        // Find all matching items
+        FSPattern pattern = FSPattern(file.string() + "*");
+        auto tree = fs->build(*parent, {
+            .accept = accept::pattern(pattern),
+            .sort   = sort::alpha,
+            .depth  = 1
+        });
+
+        printf("Found %zd items:\n", tree.children.size());
+
+        // Case 1: The completion was unique
+        if (tree.children.size() == 1) {
+
+            auto &node = fs->fetch(tree.children[0].nr);
+            auto name = node.absName();
+            return node.isDirectory() ? name + '/' : name;
+        }
+
+        // Case 2: Multiple files match
+        std::vector<string> names;
+        for (auto &it : tree.children) {
+
+            auto name = dir / fs->fetch(it.nr).name().path();
+            names.push_back(name.string());
+            printf("File: %s\n", name.string().c_str());
+        }
+
+        // Auto-complete all common characters
+        auto completed = utl::commonPrefix(names, false);
+
+        printf("Completed: %s\n", completed.c_str());
+
+        return completed;
     }
-    
-    // Extract names
-    std::vector<string> names;
-    for (auto &it : matches) {
-        names.push_back(absolute ? it->acabsName(): it->acrelName());
-    }
-    
-    // Auto-complete all common characters
-    auto completed = utl::commonPrefix(names, false);
-    
-    return completed;
+
+    return input;
 }
+
+/*
+ string
+ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
+ {
+     if (!fs || !fs->isFormatted()) return input;
+
+     bool absolute = !input.empty() && input[0] == '/';
+
+     // Seek matching items
+     auto matches = fs->match(&fs->fetch(fs->pwd()), input + "*");
+
+     // Filter out unwanted items
+     if (!matches.empty()) {
+         matches.erase(std::remove_if(matches.begin(), matches.end(), [flags](const FSBlock *node) {
+
+             return
+             (!(flags & rs::acdir) && node->isDirectory()) ||
+             (!(flags & rs::acfile) && node->isFile());
+
+         }), matches.end());
+     }
+
+     // Extract names
+     std::vector<string> names;
+     for (auto &it : matches) {
+         names.push_back(absolute ? it->acabsName(): it->acrelName());
+     }
+
+     // Auto-complete all common characters
+     auto completed = utl::commonPrefix(names, false);
+
+     return completed;
+ }
+*/
 
 void
 NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
@@ -334,6 +391,12 @@ NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
 }
 
 void
+NavigatorConsole::requireFS()
+{
+    if (!fs) throw FSError(FSError::FS_UNKNOWN, "No file system present");
+}
+
+void
 NavigatorConsole::exportBlocks(fs::path path)
 {
     fs->exporter.exportBlocks(path);
@@ -362,7 +425,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto p = fs->pwd();
     while (!tokens.empty()) {
         
-        auto next = fs->trySeek(p, FSName(tokens.front()));
+        auto next = fs->trySeek(p, tokens.front());
         if (!next) break;
 
         tokens.erase(tokens.begin());
@@ -890,6 +953,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                requireFS();
                 fs->require.isFormatted();
 
                 auto path = parseDirectory(args, "path");

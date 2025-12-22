@@ -445,6 +445,11 @@ inline std::function<bool(const FSBlock &)> directories = [](const FSBlock &b)
     return b.isDirectory();
 };
 
+inline std::function<bool(const FSBlock &)> pattern(const FSPattern &p)
+{
+    return [p](const FSBlock &b) { return p.match(b.name()); };
+};
+
 }
 
 }
