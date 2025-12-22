@@ -59,65 +59,6 @@ NavigatorConsole::didDeactivate()
 
 }
 
-
-/*
-void
-NavigatorConsole::welcome()
-{
-    if (vAmigaDOS) {
-        
-        storage << "File System Navigator ";
-        *this << Amiga::build() << '\n';
-        *this << '\n';
-        
-        *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-        *this << "https://github.com/vAmigaDOS/vAmigaDOS" << '\n';
-        *this << '\n';
-        
-    } else {
-        
-        Console::welcome();
-    }
-}
-*/
-
-/*
-void
-NavigatorConsole::summary()
-{
-    std::stringstream ss;
-    
-    if (fs.isInitialized()) {
-        
-        fs.dump(Category::Info, ss);
-        
-        *this << vspace{1};
-        string line;
-        while(std::getline(ss, line)) { *this << "    " << line << '\n'; }
-        *this << vspace{1};
-        
-    } else {
-        
-        *this << vspace{1};
-        *this << "    No file system present.\n";
-        *this << "    Use the 'import' command to load one.";
-        *this << vspace{1};
-    }
-}
-
-void
-NavigatorConsole::printHelp(isize tab)
-{
-    Console::printHelp(tab);
-}
-
-void
-NavigatorConsole::pressReturn(bool shift)
-{
-    Console::pressReturn(shift);
-}
-*/
-
 void
 NavigatorConsole::autoComplete(Tokens &argv)
 {
@@ -142,7 +83,6 @@ NavigatorConsole::autoComplete(Tokens &argv)
 string
 NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 {
-    // Disable completion if no file system is present
     if (!fs || !fs->isFormatted()) return input;
 
     auto path = fs::path(input);
@@ -151,6 +91,38 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 
     printf("autoCompleteFilename: path: '%s' dir: '%s' file: '%s' (%d)\n", path.c_str(), dir.c_str(), file.c_str(), path.is_absolute());
 
+    // Find all matching items
+    auto matches = fs->tryMatch(dir / (file.string() + "*"));
+
+    for (auto &it : matches) {
+        printf("   Match: %s\n", fs->fetch(it).name().c_str());
+    }
+
+    // Case 1: The completion was unique
+    if (matches.size() == 1) {
+
+        auto &node = fs->fetch(matches[0]);
+        auto name = dir / node.name().cpp_str();
+        return name.string() + (node.isDirectory() ? "/" : "");
+    }
+
+    // Case 2: Multiple files match
+    std::vector<string> names;
+    for (auto &it : matches) {
+
+        auto name = dir / fs->fetch(it).name().cpp_str();
+        names.push_back(name.string());
+        printf("File: %s\n", name.string().c_str());
+    }
+
+    // Auto-complete all common characters
+    auto completed = utl::commonPrefix(names, false);
+
+    printf("Completed: %s\n", completed.c_str());
+
+    return completed;
+
+    /*
     // Lookup the parent path
     if (auto parent = fs->trySeek(dir)) {
 
@@ -192,6 +164,7 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
     }
 
     return input;
+    */
 }
 
 void

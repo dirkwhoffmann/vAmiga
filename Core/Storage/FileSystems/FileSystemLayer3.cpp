@@ -60,7 +60,7 @@ FileSystem::tryMatch(const fs::path &path) const
 {
     vector<BlockNr> currentSet { pwd() };
 
-    printf("Path '%s' -> ", path.c_str());
+    printf("tryMatch '%s' -> ", path.c_str());
     for (const auto &component : path) {
         printf("'%s' ", component.c_str());
     }
@@ -101,7 +101,7 @@ FileSystem::tryMatch(const fs::path &path) const
 
             auto matches = searchdir(blk, FSPattern(component));
             for (auto m : matches) {
-                printf("    Found %d\n", m);
+                printf("    Found %d (%s)\n", m, fetch(m).absName().c_str());
                 nextSet.push_back(m);
             }
         }

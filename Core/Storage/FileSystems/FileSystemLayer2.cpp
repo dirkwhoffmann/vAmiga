@@ -172,8 +172,8 @@ FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
     auto items = collectHashedBlocks(fetch(at));
 
     // Filter out matching items
-    auto match = [pattern](const FSBlock *b) { return pattern.match(b->name()); };
-    items.erase(std::remove_if(items.begin(), items.end(), match), items.end());
+    auto unmatch = [pattern](const FSBlock *b) { return !pattern.match(b->name()); };
+    items.erase(std::remove_if(items.begin(), items.end(), unmatch), items.end());
 
     // Return block numbers
     std::vector<BlockNr> result;
