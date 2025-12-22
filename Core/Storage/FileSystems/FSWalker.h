@@ -11,6 +11,7 @@
 
 #include "FSService.h"
 #include <unordered_set>
+#include <limits>
 
 namespace vamiga {
 
@@ -129,7 +130,7 @@ struct FSTreeBuildOptions {
     std::function<bool(const FSBlock&, const FSBlock&)> sort;
 
     // Recursion depth
-    isize depth = 255;
+    isize depth = 1;
 
     // Recurse into subdirectories
     // bool recursive = true;

@@ -14,20 +14,20 @@
 namespace vamiga {
 
 FSTree
-FSTreeBuilder::build(const FSBlock &root, const FSTreeBuildOptions &opt)
+FSTreeBuilder::build(const FSBlock &root,
+                     const FSTreeBuildOptions &opt)
 {
     std::unordered_set<BlockNr> visited;
     return buildRec(root, opt, 0, visited);
 }
 
 FSTree
-FSTreeBuilder::buildRec(const FSBlock &node, const FSTreeBuildOptions &opt,
-                        isize depth, std::unordered_set<BlockNr> &visited)
+FSTreeBuilder::buildRec(const FSBlock &node,
+                        const FSTreeBuildOptions &opt,
+                        isize depth,
+                        std::unordered_set<BlockNr> &visited)
 {
     auto& fs = *node.fs;
-
-    // Ensure the node is a user directory block or a file header block
-    // fs.require.fileOrDirectory(node.nr);
 
     // Check for cycles
     if (!visited.insert(node.nr).second) throw FSError(FSError::FS_HAS_CYCLES);
@@ -35,7 +35,7 @@ FSTreeBuilder::buildRec(const FSBlock &node, const FSTreeBuildOptions &opt,
     // Create a tree for the top-level node
     FSTree tree { .nr = node.nr };
 
-    if (node.isDirectory() && depth < opt.depth) {
+    if (node.isDirectory() && depth != opt.depth) {
 
         // Collect
         auto children = fs.collectHashedBlocks(node.nr);

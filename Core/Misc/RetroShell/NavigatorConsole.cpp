@@ -896,26 +896,37 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto f = args.contains("f");
                 auto r = args.contains("r");
 
-                // Experimental
-                FSTreeBuildOptions buildopt;
-                buildopt.accept = [](const FSBlock& b) { return true; };
-                /*
-                buildopt.sort = [](const FSBlock& a, const FSBlock& b) {
-                    return a.name() < b.name();
-                };
-                */
-                buildopt.sort = sort::dafa;
-                buildopt.depth = r ? 256 : 1;
+                // Collect all directories to print
+                FSTreeBuildOptions o;
+                o.accept = accept::directories; // [](const FSBlock& b) { return true; };
+                o.sort   = sort::alpha;
+                o.depth  = r ? 512 : 0;
+                FSTree tree = fs->build(path, o);
 
-                FSTree tree = fs->build(path, buildopt);
-
-                /*
+                // For all directories...
                 for (const auto &node : tree.dfs()) {
 
-                    auto &block = fs->fetch(node.nr);
-                    os << "*" << block.cppName() + (block.isDirectory() ? " (dir)" : "\t") << "\n";
+                    os << "\nDirectory " << fs->fetch(node.nr).absName() << ":\n\n";
+                    // Print directory items
+                    FSTreeBuildOptions o1;
+                    o1.accept = accept::directories;
+                    o1.sort   = sort::alpha;
+                    o1.depth  = 1;
+                    FSTree dirs = fs->build(node.nr, o1);
+                    for (const auto &node : dirs.children) {
+                        os << fs->fetch(node.nr).cppName() << " (dir)\n";
+                    }
+
+                    // Print file items
+                    FSTreeBuildOptions o2;
+                    o2.accept = accept::files;
+                    o2.sort   = sort::alpha;
+                    o2.depth  = 1;
+                    FSTree files = fs->build(node.nr, o2);
+                    for (const auto &node : files.children) {
+                        os << fs->fetch(node.nr).cppName() << " (file)\n";
+                    }
                 }
-                */
 
                 FSOpt opt = {
                     
@@ -945,7 +956,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         }
                 };
 
-                FSTreePrinter::list(*fs, tree, os, opt2);
+                // FSTreePrinter::list(*fs, tree, os, opt2);
 
 
                 OldFSTree(fs->fetch(path), opt).list(os, opt2);

@@ -399,19 +399,38 @@ typedef FSBlock* BlockPtr;
 
 namespace sort {
 
-inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSBlock &b1, const FSBlock &b2) {
-
+inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSBlock &b1, const FSBlock &b2)
+{
     if ( b1.isDirectory() && !b2.isDirectory()) return true;
     if (!b1.isDirectory() &&  b2.isDirectory()) return false;
     return b1.getName() < b2.getName();
 };
 
-inline std::function<bool(const FSBlock &, const FSBlock &)> alpha = [](const FSBlock &b1, const FSBlock &b2) {
-
+inline std::function<bool(const FSBlock &, const FSBlock &)> alpha = [](const FSBlock &b1, const FSBlock &b2)
+{
     return b1.getName() < b2.getName();
 };
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;
+
+}
+
+namespace accept {
+
+inline std::function<bool(const FSBlock &)> all = [](const FSBlock &b1)
+{
+    return true;
+};
+
+inline std::function<bool(const FSBlock &)> files = [](const FSBlock &b)
+{
+    return b.isFile();
+};
+
+inline std::function<bool(const FSBlock &)> directories = [](const FSBlock &b)
+{
+    return b.isDirectory();
+};
 
 }
 
