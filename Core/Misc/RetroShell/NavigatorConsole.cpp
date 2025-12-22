@@ -16,6 +16,7 @@
 #include "HDFFile.h"
 #include "utl/chrono.h"
 #include "utl/support.h"
+#include "utl/io.h"
 #include <regex>
 
 namespace vamiga {
@@ -896,70 +897,68 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto f = args.contains("f");
                 auto r = args.contains("r");
 
-                // Collect all directories to print
-                FSTreeBuildOptions o;
-                o.accept = accept::directories; // [](const FSBlock& b) { return true; };
-                o.sort   = sort::alpha;
-                o.depth  = r ? 512 : 0;
-                FSTree tree = fs->build(path, o);
+                // Collect the directories to print
+                FSTree tree = fs->build(path, {
+                    .accept = accept::directories,
+                    .sort   = sort::alpha,
+                    .depth  = r ? 512 : 0
+                });
 
-                // For all directories...
+                // For each directory...
                 for (const auto &node : tree.dfs()) {
 
-                    os << "\nDirectory " << fs->fetch(node.nr).absName() << ":\n\n";
-                    // Print directory items
-                    FSTreeBuildOptions o1;
-                    o1.accept = accept::directories;
-                    o1.sort   = sort::alpha;
-                    o1.depth  = 1;
-                    FSTree dirs = fs->build(node.nr, o1);
-                    for (const auto &node : dirs.children) {
-                        os << fs->fetch(node.nr).cppName() << " (dir)\n";
+                    // Print header
+                    if (node.nr != tree.nr) os << "\n";
+                    os << "Directory " << fs->fetch(node.nr).absName() << ":\n\n";
+
+                    if (!f) {
+
+                        // Collect directory items
+                        FSTree items = fs->build(node.nr, {
+                            .accept = accept::directories,
+                            .sort   = sort::alpha,
+                            .depth  = 1
+                        });
+
+                        // Extract names
+                        vector<string> names;
+                        for (const auto &node : items.children) {
+                            names.push_back(fs->fetch(node.nr).cppName() + " (dir)");
+                        }
+
+                        // Print names
+                        Formatter::printTable(os, names, {
+                            .columns = {
+                                { .align = 'l', .width = 0  }
+                            }
+                        });
                     }
 
-                    // Print file items
-                    FSTreeBuildOptions o2;
-                    o2.accept = accept::files;
-                    o2.sort   = sort::alpha;
-                    o2.depth  = 1;
-                    FSTree files = fs->build(node.nr, o2);
-                    for (const auto &node : files.children) {
-                        os << fs->fetch(node.nr).cppName() << " (file)\n";
+                    if (!d) {
+
+                        // Collect file items
+                        FSTree items = fs->build(node.nr, {
+                            .accept = accept::files,
+                            .sort   = sort::alpha,
+                            .depth  = 1
+                        });
+
+                        // Extract names
+                        vector<string> names;
+                        for (const auto &node : items.children) {
+                            names.push_back(fs->fetch(node.nr).cppName());
+                        }
+
+                        // Print names
+                        Formatter::printTable(os, names, {
+                            .columns = {
+                                { .align = 'l', .width = 35 },
+                                { .align = 'l', .width = 0  }
+                            },
+                            .layout = Formatter::Layout::RowMajor
+                        });
                     }
                 }
-
-                FSOpt opt = {
-                    
-                    .recursive = r,
-                    .sort = sort::dafa,
-                    .filter = [&](const FSBlock &item) {
-                        
-                        return true;
-                    },
-                        .formatter = [&](const FSBlock &node) {
-                            
-                            return node.cppName() + (node.isDirectory() ? " (dir)" : "\t");
-                        }
-                };
-                
-                FSOpt opt2 = {
-                    
-                    .recursive = r,
-                    .sort = sort::dafa,
-                    .filter = [&](const FSBlock &item) {
-                        
-                        return (!d || item.isDirectory()) && (!f || item.isFile());
-                    },
-                        .formatter = [&](const FSBlock &node) {
-                            
-                            return node.cppName() + (node.isDirectory() ? " (dir)" : "\t");
-                        }
-                };
-
-                // FSTreePrinter::list(*fs, tree, os, opt2);
-
-
-                OldFSTree(fs->fetch(path), opt).list(os, opt2);
             }
     });
     

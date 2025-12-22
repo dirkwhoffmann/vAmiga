@@ -124,16 +124,12 @@ struct FSTreeBuildOptions {
 
     // Accept / reject a node
     std::function<bool(const FSBlock &)> accept = [](const FSBlock &) { return true; };
-    // std::function<bool(BlockNr)> acceptRef = [](BlockNr) { return true; }
 
     // Sort siblings
     std::function<bool(const FSBlock&, const FSBlock&)> sort;
 
     // Recursion depth
     isize depth = 1;
-
-    // Recurse into subdirectories
-    // bool recursive = true;
 };
 
 class FSTreeBuilder {

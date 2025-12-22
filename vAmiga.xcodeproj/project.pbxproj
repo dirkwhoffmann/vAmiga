@@ -92,6 +92,8 @@
 		50392FAD2EF6AC0000DAE17A /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */; };
 		50392FB02EF8052200DAE17A /* FSWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAF2EF8052000DAE17A /* FSWalker.cpp */; };
 		50392FB12EF8052200DAE17A /* FSWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAF2EF8052000DAE17A /* FSWalker.cpp */; };
+		50392FB42EF9857F00DAE17A /* Formatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FB32EF9857900DAE17A /* Formatter.cpp */; };
+		50392FB52EF9857F00DAE17A /* Formatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FB32EF9857900DAE17A /* Formatter.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503E869E2EEE9D6E00ED891D /* BlockView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockView.cpp */; };
 		503E869F2EEE9D6E00ED891D /* BlockView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E869D2EEE9D6A00ED891D /* BlockView.cpp */; };
@@ -742,6 +744,8 @@
 		50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSContract.cpp; sourceTree = "<group>"; };
 		50392FAE2EF8051A00DAE17A /* FSWalker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSWalker.h; sourceTree = "<group>"; };
 		50392FAF2EF8052000DAE17A /* FSWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSWalker.cpp; sourceTree = "<group>"; };
+		50392FB22EF9306100DAE17A /* Formatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Formatter.h; sourceTree = "<group>"; };
+		50392FB32EF9857900DAE17A /* Formatter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Formatter.cpp; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5039924225B2164E0084B808 /* MyDocumentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDocumentController.swift; sourceTree = "<group>"; };
 		5039924625B219FC0084B808 /* CoreError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreError.h; sourceTree = "<group>"; };
@@ -2577,6 +2581,7 @@
 				50BCB9C42EE6BED6000C53CF /* IOError.h */,
 				50BCB9C52EE6BF58000C53CF /* ParseError.h */,
 				503FC4C62EE0A95000637C95 /* Files.h */,
+				50392FB22EF9306100DAE17A /* Formatter.h */,
 				50BCB9A52EE2F335000C53CF /* Parser.h */,
 				503FC4C82EE0A97D00637C95 /* Streams.h */,
 			);
@@ -2604,6 +2609,7 @@
 		50BCB9BC2EE45C2D000C53CF /* io */ = {
 			isa = PBXGroup;
 			children = (
+				50392FB32EF9857900DAE17A /* Formatter.cpp */,
 				50BCB9A62EE2F344000C53CF /* Parser.cpp */,
 			);
 			path = io;
@@ -3225,6 +3231,7 @@
 				50E1D2C826CCF97C001FE199 /* ChronoExtensions.swift in Sources */,
 				505F457C2E96A34200418105 /* CGRect.swift in Sources */,
 				50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */,
+				50392FB52EF9857F00DAE17A /* Formatter.cpp in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AnyFile.cpp in Sources */,
@@ -3377,6 +3384,7 @@
 				50FC04EA27DA1A3900C3E566 /* OSDebuggerDump.cpp in Sources */,
 				50650F4F2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
+				50392FB42EF9857F00DAE17A /* Formatter.cpp in Sources */,
 				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50E79D3E2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
 				503E86A22EEEBBF100ED891D /* BlockDevice.cpp in Sources */,

@@ -134,6 +134,23 @@ commonPrefix(const std::vector<string> &vec, bool caseSensitive)
     return result;
 }
 
+string
+padString(const string &s, isize width, char align)
+{
+    isize pad = width - isize(s.length());
+    if (pad <= 0) return s;
+
+    switch (align) {
+
+        case 'l': return s + string(pad, ' ');
+        case 'r': return string(pad, ' ') + s;
+        case 'c': return string(pad/2, ' ') + s + string(pad - pad/2, ' ');
+
+        default:
+            fatalError;
+    }
+}
+
 std::vector<string>
 split(const string &s, char delimiter)
 {

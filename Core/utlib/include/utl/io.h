@@ -8,5 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "io/Files.h"
+#include "io/Formatter.h"
 #include "io/Parser.h"
 #include "io/Streams.h"
