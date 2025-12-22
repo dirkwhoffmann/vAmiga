@@ -963,7 +963,7 @@ NavigatorConsole::initCommands(RSCommand &root)
     });
     
     root.add({
-        
+
         .tokens = { "list" },
         .chelp  = { "List specified information about directories and files" },
         .flags  = rs::acdir,
@@ -975,42 +975,61 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "k", "Display keys (start blocks)" }, .flags = rs::flag },
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
+
                 auto path = parseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
                 auto k = args.contains("k");
                 auto s = args.contains("s");
-                
-                FSOpt opt = {
-                    
-                    .recursive = r,
-                    .sort = s ? sort::alpha : sort::none,
-                    .filter = [&](const FSBlock &item) {
-                        
-                        return (!d || item.isDirectory()) && (!f || item.isFile());
-                    },
-                        .formatter = [&](const FSBlock &node) {
-                            
-                            std::stringstream ss;
-                            ss << std::left << std::setw(25) << node.cppName();
-                            
-                            if (k) { ss << std::right << std::setw(9) << ("[" + std::to_string(node.nr) + "] "); }
-                            
-                            if (node.isDirectory()) {
-                                ss << std::right << std::setw(7) << "Dir";
-                            } else {
-                                ss << std::right << std::setw(7) << std::to_string(node.getFileSize());
-                            }
-                            ss << " " << node.getProtectionBitString();
-                            ss << " " << node.getCreationDate().str();
-                            
-                            return ss.str();
-                        }
+
+                // Formats the output for a single item
+                auto formatted = [&](BlockNr nr) {
+
+                    auto &node = fs->fetch(nr);
+
+                    std::stringstream ss;
+                    ss << std::left << std::setw(25) << node.cppName();
+
+                    if (k) { ss << std::right << std::setw(9) << ("[" + std::to_string(node.nr) + "] "); }
+
+                    if (node.isDirectory()) {
+                        ss << std::right << std::setw(7) << "Dir";
+                    } else {
+                        ss << std::right << std::setw(7) << std::to_string(node.getFileSize());
+                    }
+                    ss << " " << node.getProtectionBitString();
+                    ss << " " << node.getCreationDate().str();
+
+                    return ss.str();
                 };
-                
-                OldFSTree(fs->fetch(path), opt).list(os, opt);
+
+                // Collect the directories to print
+                FSTree tree = fs->build(path, {
+                    .accept = accept::directories,
+                    .sort   = s ? sort::alpha : sort::none,
+                    .depth  = r ? 512 : 0
+                });
+
+                // For each directory...
+                for (const auto &node : tree.dfs()) {
+
+                    // Print header
+                    if (node.nr != tree.nr) os << "\n";
+                    os << "Directory " << fs->fetch(node.nr).absName() << ":\n\n";
+
+                    // Collect items
+                    FSTree items = fs->build(node.nr, {
+                        .accept = f ? accept::files : d ? accept::directories : accept::all,
+                        .sort   = sort::alpha,
+                        .depth  = 1
+                    });
+
+                    // Print items
+                    for (auto &it : items.children) {
+                        os << formatted(it.nr) << "\n";
+                    }
+                }
             }
     });
     

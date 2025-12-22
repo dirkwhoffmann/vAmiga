@@ -18,7 +18,7 @@ FSExporter.cpp
 FSImporter.cpp
 FSObjects.cpp
 FSService.cpp
-FSTree.cpp
+OldFSTree.cpp
 FSWalker.cpp
 
 )
