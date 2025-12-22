@@ -299,6 +299,7 @@ public:
 
     // Looks up a directory item
     optional<BlockNr> searchdir(BlockNr at, const FSName &name) const;
+    vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
 
     // Creates a new directory entry
     void link(BlockNr at, BlockNr fhb);
@@ -441,12 +442,15 @@ public:
     // Checks if a an item exists in the directory tree
     bool exists(const fs::path &path) const;
 
-    // Resolves a path
+    // Resolves a path by name
     optional<BlockNr> trySeek(const fs::path &path) const;
     optional<BlockNr> trySeek(const string &path) const { return trySeek(fs::path(path)); }
-
     BlockNr seek(const fs::path &path) const;
     BlockNr seek(const string &path) const { return seek(fs::path(path)); }
+
+    // Resolves a path by a regular expression
+    vector<BlockNr> tryMatch(const fs::path &path) const;
+    vector<BlockNr> tryMatch(const string &path) const { return tryMatch(fs::path(path)); }
 
 
     //

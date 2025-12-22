@@ -55,26 +55,67 @@ FileSystem::trySeek(const fs::path &path) const
     return current;
 }
 
-/*
 vector<BlockNr>
-FileSystem::trySeek(const FSPattern &pattern) const
+FileSystem::tryMatch(const fs::path &path) const
 {
-    auto tree = build(top, {
+    vector<BlockNr> currentSet { pwd() };
 
-        .accept = accept::pattern(pattern),
-        .sort   = sort::none,
-        .depth  = 1
-    });
-
-    vector<BlockNr> result;
-    result.reserve(tree.children.size());
-
-    for (const auto &child : tree.children) {
-        result.push_back(child.nr);
+    printf("Path '%s' -> ", path.c_str());
+    for (const auto &component : path) {
+        printf("'%s' ", component.c_str());
     }
-    return result;
+    printf("\n");
+
+    for (const auto &component : path) {
+
+        vector<BlockNr> nextSet;
+
+        printf("Component '%s'\n", component.c_str());
+
+        // Absolute path reset
+        if (component == "/") {
+            currentSet = { rootBlock };
+            continue;
+        }
+
+        // Skip no-ops
+        if (component == "" || component == ".") {
+            continue;
+        }
+
+        // Parent traversal
+        if (component == "..") {
+            for (auto blk : currentSet) {
+                nextSet.push_back(fetch(blk).getParentDirRef());
+            }
+            currentSet = std::move(nextSet);
+            continue;
+        }
+
+        // Pattern-based lookup
+        for (auto blk : currentSet) {
+
+            printf("  Seeking '%s' in '%s'\n",
+                   component.c_str(),
+                   fetch(blk).absName().c_str());
+
+            auto matches = searchdir(blk, FSPattern(component));
+            for (auto m : matches) {
+                printf("    Found %d\n", m);
+                nextSet.push_back(m);
+            }
+        }
+
+        if (nextSet.empty()) {
+            printf("No matches for '%s'\n", component.c_str());
+            return {};
+        }
+
+        currentSet = std::move(nextSet);
+    }
+
+    return currentSet;
 }
-*/
 
 BlockNr
 FileSystem::seek(const fs::path &name) const

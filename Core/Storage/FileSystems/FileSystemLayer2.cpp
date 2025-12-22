@@ -165,6 +165,22 @@ FileSystem::searchdir(BlockNr at, const FSName &name) const
     return {};
 }
 
+vector<BlockNr>
+FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
+{
+    // Gather all items
+    auto items = collectHashedBlocks(fetch(at));
+
+    // Filter out matching items
+    auto match = [pattern](const FSBlock *b) { return pattern.match(b->name()); };
+    items.erase(std::remove_if(items.begin(), items.end(), match), items.end());
+
+    // Return block numbers
+    std::vector<BlockNr> result;
+    for (auto &it : items) result.push_back(it->nr);
+    return result;
+}
+
 void
 FileSystem::link(BlockNr at, BlockNr fhb)
 {
