@@ -1034,7 +1034,7 @@ NavigatorConsole::initCommands(RSCommand &root)
     });
     
     root.add({
-        
+
         .tokens = { "find" },
         .chelp  = { "Find files or directories" },
         .flags  = rs::ac,
@@ -1051,33 +1051,47 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto s = args.contains("s");
-                
-                // Find all items matching the search pattern
-                auto matches = fs->find(pattern);
 
-                // Filter the result
-                matches.erase(std::remove_if(matches.begin(), matches.end(), [&](auto *node) {
-                    return (d && !node->isDirectory()) || (f && !node->isFile());
-                }), matches.end());
-                
-                
+                // Determine the start node
+                auto start = fs->pwd();
+
+                // Build a directory tree
+                FSTree tree = fs->build(start, {
+                    .accept = accept::all,
+                    .sort   = sort::none,
+                    .depth  = 512
+                });
+
+                // Traverse the tree and find matches
+                vector<const FSBlock *> matching;
+                for (const auto &node : tree.bfs()) {
+
+                    auto &block = fs->fetch(node.nr);
+
+                    if (!pattern.match(block.cppName())) continue;
+                    if (d && !block.isDirectory())       continue;
+                    if (f && !block.isFile())            continue;
+
+                    matching.push_back(&block);
+                }
+
+                // Print the result
                 if (s) {
-                    
+
                     int tab = 0;
-                    
-                    std::sort(matches.begin(), matches.end(),
-                              [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
-                    
-                    for (auto &it : matches) {
+
+                    std::sort(matching.begin(), matching.end(), sort::alphaPtr);
+
+                    for (auto &it : matching) {
                         tab = std::max(int(it->cppName().size()), tab);
                     }
-                    for (auto &it : matches) {
+                    for (auto &it : matching) {
                         os << std::setw(tab) << std::left << it->cppName() << " : " << it->absName() << '\n';
                     }
-                    
+
                 } else {
-                    
-                    for (auto &it : matches) { os << it->absName() << '\n'; }
+
+                    for (auto &it : matching) { os << it->absName() << '\n'; }
                 }
             }
     });

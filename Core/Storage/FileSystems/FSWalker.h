@@ -12,6 +12,7 @@
 #include "FSService.h"
 #include <unordered_set>
 #include <limits>
+#include <deque>
 
 namespace vamiga {
 

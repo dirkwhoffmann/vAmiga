@@ -268,7 +268,7 @@ FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
 {
     diagnosis.blockErrors = {};
 
-    for (BlockNr nr = 0; nr < traits.blocks; nr++) {
+    for (BlockNr nr = 0; isize(nr) < traits.blocks; nr++) {
 
         if (auto errors = xray(nr, strict)) {
 
