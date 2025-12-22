@@ -40,47 +40,9 @@ FileSystem::cd(const fs::path &path)
 }
 
 bool
-FileSystem::exists(BlockNr top, const fs::path &path) const
+FileSystem::exists(const fs::path &path) const
 {
-    return trySeek(top, path).has_value();
-}
-
-optional<BlockNr>
-FileSystem::trySeek(BlockNr top, const FSName &name) const
-{
-    auto &root = fetch(rootBlock);
-    if (!root.isRoot()) return {};
-
-    std::unordered_set<BlockNr> visited;
-
-    // Check for special tokens
-    if (name == "/")  return rootBlock;
-    if (name == "")   return fetch(rootBlock).nr;
-    if (name == ".")  return fetch(rootBlock).nr;
-    if (name == "..") return fetch(rootBlock).getParentDirRef();
-
-    // TODO: USE SEARCHDIR
-    // Only proceed if a hash table is present
-    if (root.hasHashTable()) {
-
-        // Compute the table position and read the item
-        u32 hash = name.hashValue(traits.dos) % root.hashTableSize();
-        u32 ref = root.getHashRef(hash);
-
-        // Traverse the linked list until the item has been found
-        while (ref && visited.find(ref) == visited.end())  {
-
-            auto *block = tryFetch(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
-            if (block == nullptr) break;
-
-            if (block->isNamed(name)) return block->nr;
-
-            visited.insert(ref);
-            ref = block->getNextHashRef();
-        }
-    }
-
-    return { };
+    return trySeek(pwd(), path).has_value();
 }
 
 optional<BlockNr>
@@ -119,11 +81,23 @@ FileSystem::trySeek(BlockNr top, const string &name) const
     return trySeek(top, fs::path(name));
 }
 
-BlockNr
-FileSystem::seek(BlockNr top, const FSName &name) const
+vector<BlockNr>
+FileSystem::trySeek(BlockNr top, const FSPattern &pattern) const
 {
-    if (auto it = trySeek(top, name)) return *it;
-    throw FSError(FSError::FS_NOT_FOUND, name.cpp_str());
+    auto tree = build(top, {
+
+        .accept = accept::pattern(pattern),
+        .sort   = sort::none,
+        .depth  = 1
+    });
+
+    vector<BlockNr> result;
+    result.reserve(tree.children.size());
+
+    for (const auto &child : tree.children) {
+        result.push_back(child.nr);
+    }
+    return result;
 }
 
 BlockNr

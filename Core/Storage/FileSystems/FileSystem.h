@@ -439,17 +439,12 @@ public:
     const vector<BlockNr> &getBmExtBlocks() const { return bmExtBlocks; }
 
     // Checks if a an item exists in the directory tree
-    bool exists(BlockNr top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(pwd(), path); }
+    bool exists(const fs::path &path) const;
 
-    // TODO: MOVE TO NODE LAYER (WITH A DIFFERENT NAME) AS IT DOES NOT TRAVERSE PATHS
-    [[deprecated]] optional<BlockNr> trySeek(BlockNr top, const FSName &name) const;
-
-    optional<BlockNr> trySeek(BlockNr top, const fs::path &name) const;
-    optional<BlockNr> trySeek(BlockNr top, const string &name) const;
-
-    // TODO: MOVE TO NODE LAYER (WITH A DIFFERENT NAME) AS IT DOES NOT TRAVERSE PATHS
-    [[deprecated]] BlockNr seek(BlockNr top, const FSName &name) const;
+    // Resolves a path
+    optional<BlockNr> trySeek(BlockNr top, const fs::path &path) const;
+    optional<BlockNr> trySeek(BlockNr top, const string &path) const;
+    vector<BlockNr>   trySeek(BlockNr top, const FSPattern &pattern) const;
 
     BlockNr seek(BlockNr top, const fs::path &name) const;
     BlockNr seek(BlockNr top, const string &name) const;
