@@ -1046,7 +1046,7 @@ FloppyDrive::catchFile(const fs::path &path)
     // auto fs = FileSystemFactory::fromFloppyDrive(*dev, *this);
 
     // Seek file
-    auto blockNr = fs.trySeek(fs.root(), path);
+    auto blockNr = fs.trySeek(path);
     if (!blockNr.has_value()) throw FSError(FSError::FS_NOT_A_FILE, path.string());
 
     // Extract file

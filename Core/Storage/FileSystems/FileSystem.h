@@ -421,8 +421,8 @@ public:
 
     // Changes the working directory
     void cd(BlockNr nr);
-    void cd(const string &path);
-    void cd(const fs::path &path);
+    void cd(const string &path) { cd(seek(path)); }
+    void cd(const fs::path &path) { cd(seek(path)); }
 
 
     //
@@ -442,12 +442,11 @@ public:
     bool exists(const fs::path &path) const;
 
     // Resolves a path
-    optional<BlockNr> trySeek(BlockNr top, const fs::path &path) const;
-    optional<BlockNr> trySeek(BlockNr top, const string &path) const;
-    vector<BlockNr>   trySeek(BlockNr top, const FSPattern &pattern) const;
+    optional<BlockNr> trySeek(const fs::path &path) const;
+    optional<BlockNr> trySeek(const string &path) const { return trySeek(fs::path(path)); }
 
-    BlockNr seek(BlockNr top, const fs::path &name) const;
-    BlockNr seek(BlockNr top, const string &name) const;
+    BlockNr seek(const fs::path &path) const;
+    BlockNr seek(const string &path) const { return seek(fs::path(path)); }
 
 
     //

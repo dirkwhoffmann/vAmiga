@@ -152,7 +152,7 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
     printf("autoCompleteFilename: path: '%s' dir: '%s' file: '%s' (%d)\n", path.c_str(), dir.c_str(), file.c_str(), path.is_absolute());
 
     // Lookup the parent path
-    if (auto parent = fs->trySeek(path.is_absolute() ? fs->root() : fs->pwd(), dir)) {
+    if (auto parent = fs->trySeek(dir)) {
 
         printf("Found parent: %d\n", *parent);
 
@@ -193,41 +193,6 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 
     return input;
 }
-
-/*
- string
- NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
- {
-     if (!fs || !fs->isFormatted()) return input;
-
-     bool absolute = !input.empty() && input[0] == '/';
-
-     // Seek matching items
-     auto matches = fs->match(&fs->fetch(fs->pwd()), input + "*");
-
-     // Filter out unwanted items
-     if (!matches.empty()) {
-         matches.erase(std::remove_if(matches.begin(), matches.end(), [flags](const FSBlock *node) {
-
-             return
-             (!(flags & rs::acdir) && node->isDirectory()) ||
-             (!(flags & rs::acfile) && node->isFile());
-
-         }), matches.end());
-     }
-
-     // Extract names
-     std::vector<string> names;
-     for (auto &it : matches) {
-         names.push_back(absolute ? it->acabsName(): it->acrelName());
-     }
-
-     // Auto-complete all common characters
-     auto completed = utl::commonPrefix(names, false);
-
-     return completed;
- }
-*/
 
 void
 NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
@@ -295,7 +260,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return fs->seek(fs->pwd(), argv.at(token));
+        return fs->seek(argv.at(token));
 
     } catch (...) {
         
@@ -425,7 +390,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto p = fs->pwd();
     while (!tokens.empty()) {
         
-        auto next = fs->trySeek(p, tokens.front());
+        auto next = fs->trySeek(tokens.front());
         if (!next) break;
 
         tokens.erase(tokens.begin());

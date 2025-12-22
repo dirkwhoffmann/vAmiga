@@ -19,36 +19,16 @@ FileSystem::cd(BlockNr nr)
     current = nr;
 }
 
-/*
-void
-FileSystem::cd(const FSName &name)
-{
-    cd(seek(pwd(), name));
-}
-*/
-
-void
-FileSystem::cd(const string &path)
-{
-    cd(seek(pwd(), path));
-}
-
-void
-FileSystem::cd(const fs::path &path)
-{
-    cd(seek(pwd(), path));
-}
-
 bool
 FileSystem::exists(const fs::path &path) const
 {
-    return trySeek(pwd(), path).has_value();
+    return trySeek(path).has_value();
 }
 
 optional<BlockNr>
-FileSystem::trySeek(BlockNr top, const fs::path &path) const
+FileSystem::trySeek(const fs::path &path) const
 {
-    BlockNr current = top; // path.is_absolute() ? rootBlock : top;
+    BlockNr current = pwd();
 
     printf("Path '%s' -> ", path.c_str());
     for (const auto &component : path) { printf("'%s' ", component.c_str()); }
@@ -75,14 +55,9 @@ FileSystem::trySeek(BlockNr top, const fs::path &path) const
     return current;
 }
 
-optional<BlockNr>
-FileSystem::trySeek(BlockNr top, const string &name) const
-{
-    return trySeek(top, fs::path(name));
-}
-
+/*
 vector<BlockNr>
-FileSystem::trySeek(BlockNr top, const FSPattern &pattern) const
+FileSystem::trySeek(const FSPattern &pattern) const
 {
     auto tree = build(top, {
 
@@ -99,19 +74,13 @@ FileSystem::trySeek(BlockNr top, const FSPattern &pattern) const
     }
     return result;
 }
+*/
 
 BlockNr
-FileSystem::seek(BlockNr top, const fs::path &name) const
+FileSystem::seek(const fs::path &name) const
 {
-    if (auto it = trySeek(top, name)) return *it;
+    if (auto it = trySeek(name)) return *it;
     throw FSError(FSError::FS_NOT_FOUND, name.string());
-}
-
-BlockNr
-FileSystem::seek(BlockNr top, const string &name) const
-{
-    if (auto it = trySeek(top, name)) return *it;
-    throw FSError(FSError::FS_NOT_FOUND, name);
 }
 
 FSTree
