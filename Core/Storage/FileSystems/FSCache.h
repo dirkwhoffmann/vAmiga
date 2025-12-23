@@ -145,13 +145,6 @@ public:
 
     void flush(BlockNr nr);
     void flush();
-
-    //
-    // Maintainance
-    //
-
-    // Updates the checksums in all blocks
-    [[deprecated]] void updateChecksums() noexcept;
 };
 
 }

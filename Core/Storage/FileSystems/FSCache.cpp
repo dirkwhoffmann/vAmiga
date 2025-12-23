@@ -260,10 +260,4 @@ FSCache::flush()
     for (auto block: toFlush) { printf("Flushing block %d\n", block); flush(block); }
 }
 
-void
-FSCache::updateChecksums() noexcept
-{
-    for (auto &it : blocks) { it.second->updateChecksum(); }
-}
-
 }

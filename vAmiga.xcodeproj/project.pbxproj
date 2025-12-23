@@ -2272,13 +2272,13 @@
 		509E76342EDDF53600608FA7 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				503E869B2EEE9D5300ED891D /* Devices */,
 				509E76382EDDF57400608FA7 /* CMakeLists.txt */,
 				505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */,
 				50BCB9A92EE2F9FF000C53CF /* DeviceError.h */,
 				50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */,
 				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
 				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
+				503E869B2EEE9D5300ED891D /* Devices */,
 				5056506925440FDE00A79D27 /* FileSystems */,
 				508FE06621EA31E50043D0E9 /* Media */,
 			);

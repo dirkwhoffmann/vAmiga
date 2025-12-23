@@ -53,103 +53,12 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
 
     if (FS_DEBUG) dumpState();
 
-    // Set the current directory to '/' (DEPRECATED)
+    // Set the current directory to '/'
     current = rootBlock;
 
     debug(FS_DEBUG, "Success\n");
 
 }
-
-/*
-void
-FileSystem::_dump(Category category, std::ostream &os) const noexcept
-{
-    using namespace util;
-
-    auto stat = getStat();
-
-    switch (category) {
-
-        case Category::Info:
-
-            os << "Type   Size             Used    Free    Full  Name" << std::endl;
-            [[fallthrough]];
-
-        case Category::State:
-        {
-            auto size = std::to_string(stat.numBlocks) + " (x " + std::to_string(traits.bsize) + ")";
-
-            if (isFormatted()) {
-
-                os << std::setw(5) << std::left << ("DOS" + std::to_string(isize(traits.dos)));
-                os << "  ";
-                os << std::setw(15) << std::left << std::setfill(' ') << size;
-                os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << stat.usedBlocks;
-                os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << stat.freeBlocks;
-                os << "  ";
-                os << std::setw(3) << std::right << std::setfill(' ') << isize(stat.fill);
-                os << "%  ";
-                os << stat.name.c_str() << std::endl;
-
-            } else {
-
-                os << std::setw(5) << std::left << "NODOS";
-                os << "  ";
-                os << std::setw(15) << std::left << std::setfill(' ') << size;
-                os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << "--";
-                os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << "--";
-                os << "  ";
-                os << std::setw(3) << std::left << std::setfill(' ') << "--";
-                os << "   ";
-                os << "--" << std::endl;
-            }
-            break;
-        }
-        case Category::Properties:
-        {
-            os << tab("Name");
-            os << stat.name.cpp_str() << std::endl;
-            os << tab("Created");
-            os << stat.bDate.str() << std::endl;
-            os << tab("Modified");
-            os << stat.mDate.str() << std::endl;
-            os << tab("Boot block");
-            os << getBootBlockName() << std::endl;
-            os << tab("Capacity");
-            os << util::byteCountAsString(stat.numBlocks * traits.bsize) << std::endl;
-            os << tab("Block size");
-            os << dec(traits.bsize) << " Bytes" << std::endl;
-            os << tab("Blocks");
-            os << dec(stat.numBlocks) << std::endl;
-            os << tab("Used");
-            os << dec(stat.usedBlocks);
-            os << tab("Free");
-            os << dec(stat.freeBlocks);
-            os << " (" <<  std::fixed << std::setprecision(2) << stat.fill << "%)" << std::endl;
-            os << tab("Root block");
-            os << dec(rootBlock) << std::endl;
-            os << tab("Bitmap blocks");
-            for (auto& it : bmBlocks) { os << dec(it) << " "; }
-            os << std::endl;
-            os << util::tab("Extension blocks");
-            for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
-            os << std::endl;
-            break;
-        }
-        case Category::Blocks:
-
-            storage.dump(Category::Blocks, os);
-            break;
-
-        default:
-            break;
-    }
-}
-*/
 
 void
 FileSystem::dumpInfo(std::ostream &os) const noexcept
