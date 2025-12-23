@@ -23,8 +23,6 @@ struct FSTree {
     BlockNr nr = 0;
     std::vector<FSTree> children;
 
-//    FSTree() : nr(0) {}
-
     // Range helpers
     auto dfs() const { return Range<TraversalOrder::DFS>(*this); }
     auto bfs() const { return Range<TraversalOrder::BFS>(*this); }
@@ -145,26 +143,6 @@ private:
                            const FSTreeBuildOptions &opt,
                            isize depth,
                            std::unordered_set<BlockNr> &visited);
-};
-
-class FSTreePrinter {
-
-public:
-
-    static void list(const FileSystem& fs,
-                     const FSTree& tree,
-                     std::ostream& os,
-                     const FSOpt& opt = {});
-
-    static void listRec(const FileSystem& fs,
-                        const FSTree& tree,
-                        std::ostream& os,
-                        const FSOpt& opt);
-
-    static void listItems(const FileSystem& fs,
-                          const FSTree& tree,
-                          std::ostream& os,
-                          const FSOpt& opt);
 };
 
 }

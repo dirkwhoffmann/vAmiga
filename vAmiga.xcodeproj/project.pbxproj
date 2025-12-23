@@ -90,8 +90,8 @@
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		50392FAC2EF6AC0000DAE17A /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */; };
 		50392FAD2EF6AC0000DAE17A /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */; };
-		50392FB02EF8052200DAE17A /* FSWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAF2EF8052000DAE17A /* FSWalker.cpp */; };
-		50392FB12EF8052200DAE17A /* FSWalker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAF2EF8052000DAE17A /* FSWalker.cpp */; };
+		50392FB02EF8052200DAE17A /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAF2EF8052000DAE17A /* FSTree.cpp */; };
+		50392FB12EF8052200DAE17A /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FAF2EF8052000DAE17A /* FSTree.cpp */; };
 		50392FB42EF9857F00DAE17A /* Formatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FB32EF9857900DAE17A /* Formatter.cpp */; };
 		50392FB52EF9857F00DAE17A /* Formatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50392FB32EF9857900DAE17A /* Formatter.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
@@ -322,8 +322,6 @@
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
 		509F41EA243B0FF700AD0FE4 /* ScreenshotViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
-		50A0F71C2E0E689000972CBC /* OldFSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */; };
-		50A0F71D2E0E689000972CBC /* OldFSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */; };
 		50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
@@ -742,8 +740,8 @@
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		50392FAA2EF6ABF800DAE17A /* FSContract.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSContract.h; sourceTree = "<group>"; };
 		50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSContract.cpp; sourceTree = "<group>"; };
-		50392FAE2EF8051A00DAE17A /* FSWalker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSWalker.h; sourceTree = "<group>"; };
-		50392FAF2EF8052000DAE17A /* FSWalker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSWalker.cpp; sourceTree = "<group>"; };
+		50392FAE2EF8051A00DAE17A /* FSTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTree.h; sourceTree = "<group>"; };
+		50392FAF2EF8052000DAE17A /* FSTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSTree.cpp; sourceTree = "<group>"; };
 		50392FB22EF9306100DAE17A /* Formatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Formatter.h; sourceTree = "<group>"; };
 		50392FB32EF9857900DAE17A /* Formatter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Formatter.cpp; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
@@ -1063,8 +1061,6 @@
 		509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotViewer.swift; sourceTree = "<group>"; };
 		509F7F1B21EDEA0200A530E4 /* RomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomFile.cpp; sourceTree = "<group>"; };
 		509F7F1C21EDEA0200A530E4 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
-		50A0F71A2E0E688800972CBC /* OldFSTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OldFSTree.h; sourceTree = "<group>"; };
-		50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OldFSTree.cpp; sourceTree = "<group>"; };
 		50A0F71E2E11157D00972CBC /* FSDoctor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDoctor.h; sourceTree = "<group>"; };
 		50A0F71F2E11158D00972CBC /* FSDoctor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDoctor.cpp; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
@@ -1734,12 +1730,10 @@
 				50565070254573E100A79D27 /* FSBlock.cpp */,
 				509D048C2EDA46D700355638 /* FSAllocator.h */,
 				509D048D2EDA46D700355638 /* FSAllocator.cpp */,
-				50A0F71A2E0E688800972CBC /* OldFSTree.h */,
-				50A0F71B2E0E688D00972CBC /* OldFSTree.cpp */,
 				509D04902EDA46E400355638 /* FSService.h */,
 				509D04912EDA46E400355638 /* FSService.cpp */,
-				50392FAE2EF8051A00DAE17A /* FSWalker.h */,
-				50392FAF2EF8052000DAE17A /* FSWalker.cpp */,
+				50392FAE2EF8051A00DAE17A /* FSTree.h */,
+				50392FAF2EF8052000DAE17A /* FSTree.cpp */,
 				50A0F71E2E11157D00972CBC /* FSDoctor.h */,
 				50A0F71F2E11158D00972CBC /* FSDoctor.cpp */,
 				509D049B2EDA472900355638 /* FSImporter.h */,
@@ -3108,7 +3102,7 @@
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				509D076C2EDB295200355638 /* FileSystemLayer1.cpp in Sources */,
 				505DD69E2E0815B800D9E8B2 /* FSCache.cpp in Sources */,
-				50392FB12EF8052200DAE17A /* FSWalker.cpp in Sources */,
+				50392FB12EF8052200DAE17A /* FSTree.cpp in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				507C01AE2D25681400E29933 /* LogicView.swift in Sources */,
@@ -3200,7 +3194,6 @@
 				501D686028085131000BB5E9 /* Defaults.cpp in Sources */,
 				5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */,
 				502023EA27B6BDEA00820DB6 /* ZorroBoard.cpp in Sources */,
-				50A0F71C2E0E689000972CBC /* OldFSTree.cpp in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				509D04972EDA471900355638 /* FSExporter.cpp in Sources */,
 				509D04982EDA471900355638 /* FSImporter.cpp in Sources */,
@@ -3443,7 +3436,6 @@
 				50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */,
 				50FC04F127DA1A4500C3E566 /* GdbServerCmds.cpp in Sources */,
 				50FC04E927DA1A3700C3E566 /* OSDebuggerRead.cpp in Sources */,
-				50A0F71D2E0E689000972CBC /* OldFSTree.cpp in Sources */,
 				509E75FF2EDCCC0700608FA7 /* IMGFactory.cpp in Sources */,
 				50FC04AC27DA198E00C3E566 /* BlitterEvents.cpp in Sources */,
 				50FC04AB27DA198E00C3E566 /* Blitter.cpp in Sources */,
@@ -3473,7 +3465,7 @@
 				50DA83E62C161961001209AA /* VAmiga.cpp in Sources */,
 				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
 				503FC4DC2EE157B700637C95 /* Hashable.cpp in Sources */,
-				50392FB02EF8052200DAE17A /* FSWalker.cpp in Sources */,
+				50392FB02EF8052200DAE17A /* FSTree.cpp in Sources */,
 				507C01BB2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,
 				509E76222EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */,

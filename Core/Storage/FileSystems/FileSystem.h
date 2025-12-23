@@ -94,13 +94,12 @@
 #include "FSContract.h"
 #include "FSDescriptor.h"
 #include "FSObjects.h"
-#include "OldFSTree.h"
 #include "FSCache.h"
 #include "FSDoctor.h"
 #include "FSAllocator.h"
 #include "FSImporter.h"
 #include "FSExporter.h"
-#include "FSWalker.h"
+#include "FSTree.h"
 #include "DeviceError.h"
 #include "BlockVolume.h"
 #include "utl/abilities/Loggable.h"
@@ -212,7 +211,7 @@ public:
 
 
     //
-    // *** Block layer ***
+    // B L O C K   L A Y E R
     //
 
     //
@@ -262,7 +261,7 @@ public:
 
 
     //
-    // *** Node layer ***
+    // N O D E   L A Y E R
     //
 
     //
@@ -412,7 +411,7 @@ private:
 
 
     //
-    // *** Path layer ***
+    // P A T H   L A Y E R
     //
 
     //
@@ -467,34 +466,13 @@ public:
 
 
     //
-    // *** Services layer ***
+    // S E R V I C E   L A Y E R
     //
 
 public:
 
-    // Build a directory tree
+    // Builds a directory tree with traversal capabilities
     FSTree build(BlockNr root, const FSTreeBuildOptions &opt = {}) const;
-
-    // Collects all items with a pattern-matching path
-    vector<const FSBlock *> newMatch(BlockNr top, const FSPattern &pattern) const;
-
-    // DEPRECATED
-    /*
-    [[deprecated]] vector<const FSBlock *> match(const FSPattern &pattern) const;
-    [[deprecated]] vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
-    [[deprecated]] vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
-    [[deprecated]] vector<BlockNr> match(BlockNr root, const FSPattern &pattern) const;
-     */
-
-private:
-
-    vector<const FSBlock *> newMatch(const FSBlock *top,
-                                       vector<FSPattern> pattern) const;
-
-    /*
-    [[deprecated]] vector<const FSBlock *> match(const FSBlock *top,
-                                                 vector<FSPattern> patterns) const;
-     */
 };
 
 }

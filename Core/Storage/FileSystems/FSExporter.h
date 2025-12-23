@@ -10,7 +10,7 @@
 #pragma once
 
 #include "FSService.h"
-#include "FSWalker.h"
+#include "FSTree.h"
 
 namespace vamiga {
 
