@@ -92,6 +92,12 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
     printf("autoCompleteFilename: path: '%s' dir: '%s' file: '%s' (%d)\n", path.c_str(), dir.c_str(), file.c_str(), path.is_absolute());
 
     // Find all matching items
+    auto m = fs->tryResolvePattern(input + "*");
+
+    for (auto &it : m) {
+        printf("   Resolved: %s\n", fs->fetch(it).name().c_str());
+    }
+
     auto matches = fs->tryMatch(dir / (file.string() + "*"));
 
     for (auto &it : matches) {
@@ -332,6 +338,13 @@ void
 NavigatorConsole::requireFS()
 {
     if (!fs) throw FSError(FSError::FS_UNKNOWN, "No file system present");
+}
+
+void
+NavigatorConsole::requireFormattedFS()
+{
+    requireFS();
+    fs->require.isFormatted();
 }
 
 void
@@ -1097,7 +1110,107 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
             }
     });
-    
+
+    root.add({
+
+        .tokens = { "resolve" },
+        .chelp  = { "Resolves a path name" },
+        .flags  = rs::ac,
+        .args   = {
+            { .name = { "name", "Search pattern" } },
+            // { .name = { "d", "Find directories only" }, .flags = rs::flag },
+            // { .name = { "f", "Find files only" }, .flags = rs::flag },
+            { .name = { "s", "Sort output" }, .flags = rs::flag } },
+            .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
+
+                // auto pattern = FSPattern(args.at("name"));
+                // auto d = args.contains("d");
+                // auto f = args.contains("f");
+                auto s = args.contains("s");
+
+                // Determine the start node
+                // auto start = fs->pwd();
+
+                // Build a directory tree
+                /*
+                FSTree tree = fs->build(start, {
+                    .accept = accept::all,
+                    .sort   = sort::none,
+                    .depth  = 512
+                });
+                */
+
+                // Traverse the tree and find matches
+                vector <BlockNr> matches = fs->resolvePattern(args.at("name"));
+
+                // Filter matches
+                vector <const FSBlock *> matching;
+                for (auto nr : matches) {
+
+                    auto &block = fs->fetch(nr);
+
+                    // if (d && !block.isDirectory())       continue;
+                    // if (f && !block.isFile())            continue;
+
+                    matching.push_back(&block);
+                }
+
+                // Print the result
+                if (s) {
+
+                    int tab = 0;
+
+                    std::sort(matching.begin(), matching.end(), sort::alphaPtr);
+
+                    for (auto &it : matching) {
+                        tab = std::max(int(it->cppName().size()), tab);
+                    }
+                    for (auto &it : matching) {
+                        os << std::setw(tab) << std::left << it->cppName() << " : " << it->absName() << '\n';
+                    }
+
+                } else {
+
+                    for (auto &it : matching) { os << it->absName() << '\n'; }
+                }
+
+                /*
+                vector<const FSBlock *> matching;
+                for (const auto &node : tree.bfs()) {
+
+                    auto &block = fs->fetch(node.nr);
+
+                    if (!pattern.match(block.cppName())) continue;
+                    if (d && !block.isDirectory())       continue;
+                    if (f && !block.isFile())            continue;
+
+                    matching.push_back(&block);
+                }
+
+                // Print the result
+                if (s) {
+
+                    int tab = 0;
+
+                    std::sort(matching.begin(), matching.end(), sort::alphaPtr);
+
+                    for (auto &it : matching) {
+                        tab = std::max(int(it->cppName().size()), tab);
+                    }
+                    for (auto &it : matching) {
+                        os << std::setw(tab) << std::left << it->cppName() << " : " << it->absName() << '\n';
+                    }
+
+                } else {
+
+                    for (auto &it : matching) { os << it->absName() << '\n'; }
+                }
+                */
+            }
+    });
+
     RSCommand::currentGroup = "Inspect";
     
     root.add({

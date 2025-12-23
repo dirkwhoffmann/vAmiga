@@ -488,8 +488,9 @@ public:
     void importHd(isize n, isize part);
     void import(const fs::path &path, bool recursive = true, bool contents = false);
 
-    // Throws an exception if no file system has been imported
+    // Throws an exception if the file system fails to match the condition
     void requireFS();
+    void requireFormattedFS();
 
     // Exports the file system
     void exportBlocks(fs::path path);

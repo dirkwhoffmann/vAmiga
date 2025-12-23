@@ -26,6 +26,117 @@ FileSystem::exists(const fs::path &path) const
 }
 
 optional<BlockNr>
+FileSystem::tryResolve(const FSPath &path) const
+{
+    try {
+
+        BlockNr current = path.absolute() ? root() : pwd();
+
+        printf("FSPath '%s' -> ", path.cpp_str().c_str());
+        for (const auto &c : path) { printf("'%s' ", c.cpp_str().c_str()); }
+        printf("\n");
+
+        for (const auto &p : path) {
+
+            printf("Seeking '%s' in '%s'\n", p.cpp_str().c_str(), fetch(current).absName().c_str());
+
+            // Check for special tokens
+            if (p == "." ) { continue; }
+            if (p == "..") { current = fetch(current).getParentDirRef(); continue; }
+
+            auto next = searchdir(current, p);
+            if (!next) { printf("%s not found", p.cpp_str().c_str());  return { }; }
+
+            printf("Found %d\n", *next);
+            current = *next;
+        }
+        return current;
+
+    } catch (...) { return { }; }
+}
+
+BlockNr
+FileSystem::resolve(const FSPath &path) const
+{
+    if (auto it = tryResolve(path)) return *it;
+    throw FSError(FSError::FS_NOT_FOUND, path.cpp_str());
+}
+
+vector<BlockNr>
+FileSystem::resolvePattern(BlockNr top, const vector<FSPattern> &patterns)
+{
+    vector<BlockNr> currentSet { top };
+
+    for (const auto &pattern : patterns) {
+
+        vector<BlockNr> nextSet;
+
+        printf("Pattern '%s'\n", pattern.glob.c_str());
+
+        // No-ops
+        if (pattern.glob == "" || pattern.glob == ".") {
+            continue;
+        }
+
+        // Root traversal
+        if (pattern.glob == ":" || pattern.glob == "/") {
+            currentSet = { root() };
+            continue;
+        }
+
+        // Parent traversal
+        if (pattern.glob == "..") {
+            for (auto blk : currentSet) {
+                nextSet.push_back(fetch(blk).getParentDirRef());
+            }
+            currentSet = std::move(nextSet);
+            continue;
+        }
+
+        // Pattern-based lookup
+        for (auto blk : currentSet) {
+
+            printf("  Seeking '%s' in '%s'\n",
+                   pattern.glob.c_str(),
+                   fetch(blk).absName().c_str());
+
+            auto matches = searchdir(blk, pattern);
+            for (auto m : matches) {
+                printf("    Found %d (%s)\n", m, fetch(m).absName().c_str());
+                nextSet.push_back(m);
+            }
+        }
+
+        if (nextSet.empty()) {
+            printf("No matches for '%s'\n", pattern.glob.c_str());
+            return {};
+        }
+
+        currentSet = std::move(nextSet);
+    }
+
+    return currentSet;
+}
+
+vector<BlockNr>
+FileSystem::resolvePattern(const string &path)
+{
+    return resolvePattern(pwd(), FSPattern(path).splitted());
+}
+
+vector<BlockNr>
+FileSystem::tryResolvePattern(BlockNr top, const vector<FSPattern> &patterns)
+{
+    try { return resolvePattern(top, patterns); } catch (...) { return {}; }
+}
+
+vector<BlockNr>
+FileSystem::tryResolvePattern(const string &path)
+{
+    try { return resolvePattern(path); } catch (...) { return {}; }
+}
+
+optional<BlockNr>
 FileSystem::trySeek(const fs::path &path) const
 {
     BlockNr current = pwd();

@@ -21,23 +21,23 @@ namespace vamiga {
 
 FSString::FSString(const string &cpp, isize limit) : str(cpp), limit(limit)
 {
-    
+
 }
 
 FSString::FSString(const char *c, isize limit) : limit(limit)
 {
     assert(c != nullptr);
-    
+
     str.assign(c, strnlen(c, limit));
 }
 
 FSString::FSString(const u8 *bcpl, isize limit) : limit(limit)
 {
     assert(bcpl != nullptr);
-    
+
     auto length = (isize)bcpl[0];
     auto firstChar = (const char *)(bcpl + 1);
-    
+
     str.assign(firstChar, std::min(length, limit));
 }
 
@@ -58,18 +58,18 @@ FSString::operator== (const FSString &rhs) const
 }
 
 /*
-u32
-FSString::hashValue() const
-{
-    u32 result = (u32)length();
-    for (auto c : str) {
-        
-        result = (result * 13 + (u32)capital(c)) & 0x7FF;
-    }
+ u32
+ FSString::hashValue() const
+ {
+ u32 result = (u32)length();
+ for (auto c : str) {
 
-    return result;
-}
-*/
+ result = (result * 13 + (u32)capital(c)) & 0x7FF;
+ }
+
+ return result;
+ }
+ */
 
 u32
 FSString::hashValue(FSFormat dos) const
@@ -87,7 +87,7 @@ void
 FSString::write(u8 *p)
 {
     assert(p != nullptr);
-        
+
     // Write name as a BCPL string (first byte is string length)
     *p++ = (u8)length();
     for (auto c : str) { *p++ = c; }
@@ -176,10 +176,10 @@ FSName::sanitize(const string &filename)
     if (isReserved(result)) result = "__" + result;
 
     /*
-    if (filename != result) {
-        printf("sanitize: %s -> %s\n", filename.c_str(), result.c_str());
-    }
-    */
+     if (filename != result) {
+     printf("sanitize: %s -> %s\n", filename.c_str(), result.c_str());
+     }
+     */
 
     return fs::path(result);
 }
@@ -252,12 +252,103 @@ FSName::unsanitize(const fs::path &filename)
     }
 
     /*
-    if (filename.string() != result) {
-        printf("unsanitize: %s -> %s\n", filename.string().c_str(), result.c_str());
-    }
-    */
+     if (filename.string() != result) {
+     printf("unsanitize: %s -> %s\n", filename.string().c_str(), result.c_str());
+     }
+     */
 
     return result;
+}
+
+FSPath::FSPath(const string &s)
+{
+    // Extract the volume identifier (if any)
+    auto vec = split(s, ':');
+
+    switch (vec.size()) {
+
+        case 1: // Relative path
+
+            volume = {};
+            for (auto &it : split(vec[0], '/')) {
+                if (!it.empty()) components.push_back(FSName(it));
+            }
+            break;
+
+        case 2: // Absolute path
+
+            volume = FSName(vec[0]);
+            for (auto &it : split(vec[1], '/')) {
+                if (!it.empty()) components.push_back(FSName(it));
+            }
+            break;
+
+        default:
+
+            throw FSError(FSError::FS_INVALID_PATH, s);
+    }
+}
+
+FSPath::FSPath(const fs::path &path)
+{
+    for (const auto &p : path) {
+
+        if (p == path.root_path()) {
+
+            volume = FSName("");
+            continue;
+        }
+        components.emplace_back(FSName(p));
+    }
+}
+
+string
+FSPath::cpp_str() const
+{
+    string result;
+
+    for (const auto &p : components) {
+        result += (result.empty() ? "" : "/") + p.cpp_str();
+    }
+    return (absolute() ? ":" : "") + result;
+}
+
+FSName
+FSPath::filename() const
+{
+    return components.empty() ? FSName("") : components.back();
+}
+
+FSPath
+FSPath::parentPath() const
+{
+    FSPath result = *this;
+
+    if (!result.components.empty()) {
+        result.components.pop_back();
+    }
+
+    return result;
+}
+
+FSPath &
+FSPath::operator/=(const FSName &name)
+{
+    components.push_back(name);
+    return *this;
+}
+
+FSPath &
+FSPath::operator/=(const FSPath &other)
+{
+    // If other is absolute, replace the entire path
+    if (other.absolute()) { *this = other; return *this; }
+
+    components.insert(components.end(),
+                      other.components.begin(),
+                      other.components.end());
+
+    return *this;
 }
 
 FSPattern::FSPattern(const string glob) : glob(glob)
@@ -296,12 +387,40 @@ std::vector<FSPattern>
 FSPattern::splitted() const
 {
     std::vector<FSPattern> result;
-    std::vector<string> parts;
 
+    // Extract the volume identifier (if any)
+    auto vec = split(glob, ':');
+
+    switch (vec.size()) {
+
+        case 1: // Relative path
+
+            for (auto &it : split(vec[0], '/')) {
+                if (!it.empty()) result.push_back(FSPattern(it));
+            }
+            break;
+
+        case 2: // Absolute path
+
+            result.push_back(FSPattern(vec[0] + ":"));
+            for (auto &it : split(vec[1], '/')) {
+                if (!it.empty()) result.push_back(FSPattern(it));
+            }
+            break;
+
+        default:
+
+            throw FSError(FSError::FS_INVALID_PATH, glob);
+    }
+
+    return result;
+    /*
+    std::vector<string> parts;
     for (auto &it : utl::split(utl::trim(glob, "/"), '/')) {
         result.push_back(FSPattern(it));
     }
     return result;
+    */
 }
 
 bool

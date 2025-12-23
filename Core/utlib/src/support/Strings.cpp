@@ -154,12 +154,19 @@ padString(const string &s, isize width, char align)
 std::vector<string>
 split(const string &s, char delimiter)
 {
-    std::stringstream ss(s);
-    std::vector<std::string> result;
-    string substr;
+    std::vector<string> result;
+    string::size_type start = 0;
 
-    while(std::getline(ss, substr, delimiter)) {
-        result.push_back(substr);
+    for (;;) {
+
+        auto pos = s.find(delimiter, start);
+        if (pos == string::npos) {
+
+            result.emplace_back(s.substr(start));
+            break;
+        }
+        result.emplace_back(s.substr(start, pos - start));
+        start = pos + 1;
     }
 
     return result;

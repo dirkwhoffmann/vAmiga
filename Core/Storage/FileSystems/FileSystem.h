@@ -448,8 +448,20 @@ public:
     BlockNr seek(const fs::path &path) const;
     BlockNr seek(const string &path) const { return seek(fs::path(path)); }
 
+    // Resolves a path by name
+    optional<BlockNr> tryResolve(const FSPath &path) const;
+    optional<BlockNr> tryResolve(const string &path) const { return tryResolve(FSPath(path)); }
+    BlockNr resolve(const FSPath &path) const;
+    BlockNr resolve(const string &path) const { return resolve(FSPath(path)); }
+
+    vector<BlockNr> resolvePattern(BlockNr top, const vector<FSPattern> &patterns);
+    vector<BlockNr> resolvePattern(const string &path);
+
+    vector<BlockNr> tryResolvePattern(BlockNr top, const vector<FSPattern> &patterns);
+    vector<BlockNr> tryResolvePattern(const string &path);
+
     // Resolves a path by a regular expression
-    vector<BlockNr> tryMatch(const fs::path &path) const;
+    [[deprecated]] vector<BlockNr> tryMatch(const fs::path &path) const;
     vector<BlockNr> tryMatch(const string &path) const { return tryMatch(fs::path(path)); }
 
 

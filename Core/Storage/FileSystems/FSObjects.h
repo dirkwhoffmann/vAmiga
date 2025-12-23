@@ -52,6 +52,7 @@ struct FSName : FSString {
     static string unsanitize(const fs::path &filename);
 
     // Constructors
+    explicit FSName() : FSName("") { }
     explicit FSName(const string &cpp);
     explicit FSName(const char *c);
     explicit FSName(const u8 *bcpl);
@@ -59,6 +60,31 @@ struct FSName : FSString {
     explicit FSName(const std::map<string,string> map, const string &cpp, const string fallback);
 
     fs::path path() const { return sanitize(str); }
+};
+
+struct FSPath {
+
+    using component_type = FSName;
+
+    optional<FSName> volume;
+    vector<FSName>   components;
+
+    explicit FSPath(const string &cpp);
+    explicit FSPath(const fs::path &path);
+
+    string cpp_str() const;
+
+    bool empty() const { return !volume.has_value() && components.empty(); }
+    bool absolute() const { return volume.has_value(); }
+
+    FSName filename() const;
+    FSPath parentPath() const;
+
+    FSPath &operator/=(const FSName &);
+    FSPath &operator/=(const FSPath &);
+
+    auto begin() const { return components.begin(); }
+    auto end() const { return components.end(); }
 };
 
 struct FSComment : FSString {
