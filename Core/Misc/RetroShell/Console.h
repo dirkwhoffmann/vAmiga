@@ -475,9 +475,9 @@ class NavigatorConsole final : public Console
     DumpOpt parseDumpOpts(const Arguments &argv);
 
     // Experimental
-    [[deprecated]] BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound);
-    [[deprecated]] BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
-    [[deprecated]] BlockNr matchPath(const string &path, Tokens &notFound);
+    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound);
+    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
+    BlockNr matchPath(const string &path, Tokens &notFound);
     
 public:
 

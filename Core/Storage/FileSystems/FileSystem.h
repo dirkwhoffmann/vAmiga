@@ -422,8 +422,8 @@ public:
 
     // Changes the working directory
     void cd(BlockNr nr);
-    void cd(const string &path) { cd(seek(path)); }
-    void cd(const fs::path &path) { cd(seek(path)); }
+    void cd(const string &path) { cd(resolve(path)); }
+    void cd(const fs::path &path) { cd(resolve(path)); }
 
 
     //
@@ -443,10 +443,10 @@ public:
     bool exists(const fs::path &path) const;
 
     // Resolves a path by name
-    optional<BlockNr> trySeek(const fs::path &path) const;
-    optional<BlockNr> trySeek(const string &path) const { return trySeek(fs::path(path)); }
-    BlockNr seek(const fs::path &path) const;
-    BlockNr seek(const string &path) const { return seek(fs::path(path)); }
+    [[deprecated]] optional<BlockNr> trySeek(const fs::path &path) const;
+    [[deprecated]] optional<BlockNr> trySeek(const string &path) const { return trySeek(fs::path(path)); }
+    [[deprecated]] BlockNr seek(const fs::path &path) const;
+    [[deprecated]] BlockNr seek(const string &path) const { return seek(fs::path(path)); }
 
     // Resolves a path by name
     optional<BlockNr> tryResolve(const FSPath &path) const;
@@ -454,15 +454,11 @@ public:
     BlockNr resolve(const FSPath &path) const;
     BlockNr resolve(const string &path) const { return resolve(FSPath(path)); }
 
+    // Resolves a path by a regular expression
+    [[deprecated]] vector<BlockNr> tryResolvePattern(BlockNr top, const vector<FSPattern> &patterns);
+    [[deprecated]] vector<BlockNr> tryResolvePattern(const string &path);
     vector<BlockNr> resolvePattern(BlockNr top, const vector<FSPattern> &patterns);
     vector<BlockNr> resolvePattern(const string &path);
-
-    vector<BlockNr> tryResolvePattern(BlockNr top, const vector<FSPattern> &patterns);
-    vector<BlockNr> tryResolvePattern(const string &path);
-
-    // Resolves a path by a regular expression
-    [[deprecated]] vector<BlockNr> tryMatch(const fs::path &path) const;
-    vector<BlockNr> tryMatch(const string &path) const { return tryMatch(fs::path(path)); }
 
 
     //

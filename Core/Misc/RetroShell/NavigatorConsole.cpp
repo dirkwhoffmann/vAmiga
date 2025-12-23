@@ -91,7 +91,7 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
         auto dir  = path.parentPath();
 
         // Find all matching items
-        auto matches = fs->tryResolvePattern(input + "*");
+        auto matches = fs->resolvePattern(input + "*");
 
         // Case 1: The completion was unique
         if (matches.size() == 1) {
@@ -121,72 +121,77 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 void
 NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 {
-    auto [cmd, args] = seekCommand(argv);
-    
-    // Determine the kind of help to display
-    bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
-    bool displayCmds  = true;
-    
-    if (displayCmds) {
-        
-        // Display the standard command help
-        Console::help(os, argv, tabs);
-    }
-    
-    if (displayFiles) {
-        
-        // Find matching items
-        auto matches = fs->tryResolvePattern(args.empty() ? "*" : args.back() + "*");
+    try {
 
-        // Extract names
-        vector<string> dirs, files;
-        for (auto &it : matches) {
+        auto [cmd, args] = seekCommand(argv);
 
-            auto &block = fs->fetch(it);
-            auto name = block.name().cpp_str();
+        // Determine the kind of help to display
+        bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
+        bool displayCmds  = true;
 
-            if (block.isDirectory()) {
-                dirs.push_back(name + " (dir)");
-            } else {
-                files.push_back(name);
+        if (displayCmds) {
+
+            // Display the standard command help
+            Console::help(os, argv, tabs);
+        }
+
+        if (displayFiles) {
+
+            // Find matching items
+            auto matches = fs->resolvePattern(args.empty() ? "*" : args.back() + "*");
+
+            // Extract names
+            vector<string> dirs, files;
+            for (auto &it : matches) {
+
+                auto &block = fs->fetch(it);
+                auto name = block.name().cpp_str();
+
+                if (block.isDirectory()) {
+                    dirs.push_back(name + " (dir)");
+                } else {
+                    files.push_back(name);
+                }
+            }
+
+            // Sort
+            auto ciLess = [](const std::string &a, const std::string &b) {
+                return std::lexicographical_compare(
+                                                    a.begin(), a.end(),
+                                                    b.begin(), b.end(),
+                                                    [](unsigned char x, unsigned char y) {
+                                                        return std::tolower(x) < std::tolower(y);
+                                                    }
+                                                    );
+            };
+
+            std::sort(dirs.begin(), dirs.end(), ciLess);
+            std::sort(files.begin(), files.end(), ciLess);
+
+            // Print
+            if (!matches.empty() && displayCmds) {
+
+                os << std::endl;
+                Formatter::printTable(os, dirs, {
+                    .columns = {
+                        { .align = 'l', .width = 35 }
+                    },
+                        .layout = Formatter::Layout::RowMajor,
+                        .inset  = string(7, ' ')
+                });
+                Formatter::printTable(os, files, {
+                    .columns = {
+                        { .align = 'l', .width = 35 },
+                        { .align = 'l', .width = 35 }
+                    },
+                        .layout = Formatter::Layout::RowMajor,
+                        .inset  = string(7, ' ')
+                });
             }
         }
 
-        // Sort
-        auto ciLess = [](const std::string &a, const std::string &b) {
-            return std::lexicographical_compare(
-                a.begin(), a.end(),
-                b.begin(), b.end(),
-                [](unsigned char x, unsigned char y) {
-                    return std::tolower(x) < std::tolower(y);
-                }
-            );
-        };
-
-        std::sort(dirs.begin(), dirs.end(), ciLess);
-        std::sort(files.begin(), files.end(), ciLess);
-
-        // Print
-        if (!matches.empty() && displayCmds) {
-
-            os << std::endl;
-            Formatter::printTable(os, dirs, {
-                .columns = {
-                    { .align = 'l', .width = 35 }
-                },
-                .layout = Formatter::Layout::RowMajor,
-                .inset  = string(7, ' ')
-            });
-            Formatter::printTable(os, files, {
-                .columns = {
-                    { .align = 'l', .width = 35 },
-                    { .align = 'l', .width = 35 }
-                },
-                .layout = Formatter::Layout::RowMajor,
-                .inset  = string(7, ' ')
-            });
-        }
     }
+    catch (...) { }
 }
 
 BlockNr
@@ -225,7 +230,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return fs->seek(argv.at(token));
+        return fs->resolve(argv.at(token));
 
     } catch (...) {
         
@@ -362,7 +367,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto p = fs->pwd();
     while (!tokens.empty()) {
         
-        auto next = fs->trySeek(tokens.front());
+        auto next = fs->tryResolve(tokens.front());
         if (!next) break;
 
         tokens.erase(tokens.begin());
