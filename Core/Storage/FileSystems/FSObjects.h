@@ -71,6 +71,7 @@ struct FSPath {
 
     explicit FSPath(const string &cpp);
     explicit FSPath(const fs::path &path);
+    explicit FSPath(const char *str) : FSPath(string(str)) { };
 
     string cpp_str() const;
 

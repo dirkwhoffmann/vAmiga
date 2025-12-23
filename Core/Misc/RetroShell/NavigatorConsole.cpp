@@ -91,7 +91,7 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
         auto dir  = path.parentPath();
 
         // Find all matching items
-        auto matches = fs->resolvePattern(input + "*");
+        auto matches = fs->match(input + "*");
 
         // Case 1: The completion was unique
         if (matches.size() == 1) {
@@ -138,7 +138,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
         if (displayFiles) {
 
             // Find matching items
-            auto matches = fs->resolvePattern(args.empty() ? "*" : args.back() + "*");
+            auto matches = fs->match(args.empty() ? "*" : args.back() + "*");
 
             // Extract names
             vector<string> dirs, files;
@@ -230,7 +230,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return fs->resolve(argv.at(token));
+        return fs->seek(argv.at(token));
 
     } catch (...) {
         
@@ -367,7 +367,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto p = fs->pwd();
     while (!tokens.empty()) {
         
-        auto next = fs->tryResolve(tokens.front());
+        auto next = fs->trySeek(tokens.front());
         if (!next) break;
 
         tokens.erase(tokens.begin());
@@ -1127,7 +1127,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 requireFormattedFS();
 
                 // Find matches
-                vector <BlockNr> matches = fs->resolvePattern(args.at("name"));
+                vector <BlockNr> matches = fs->match(args.at("name"));
 
                 // Print the result
                 for (auto &it : matches) { os << fs->fetch(it).absName() << '\n'; }

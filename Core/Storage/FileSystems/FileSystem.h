@@ -422,8 +422,8 @@ public:
 
     // Changes the working directory
     void cd(BlockNr nr);
-    void cd(const string &path) { cd(resolve(path)); }
-    void cd(const fs::path &path) { cd(resolve(path)); }
+    void cd(const string &path) { cd(seek(path)); }
+    void cd(const fs::path &path) { cd(seek(path)); }
 
 
     //
@@ -440,25 +440,26 @@ public:
     const vector<BlockNr> &getBmExtBlocks() const { return bmExtBlocks; }
 
     // Checks if a an item exists in the directory tree
-    bool exists(const fs::path &path) const;
+    bool exists(const FSPath &path) const { return trySeek(path).has_value(); }
+    bool exists(const char *path) const { return trySeek(path).has_value(); }
+    bool exists(const string &path) const { return trySeek(path).has_value(); }
+    bool exists(const fs::path &path) const { return trySeek(path).has_value(); }
 
     // Resolves a path by name
-    [[deprecated]] optional<BlockNr> trySeek(const fs::path &path) const;
-    [[deprecated]] optional<BlockNr> trySeek(const string &path) const { return trySeek(fs::path(path)); }
-    [[deprecated]] BlockNr seek(const fs::path &path) const;
-    [[deprecated]] BlockNr seek(const string &path) const { return seek(fs::path(path)); }
+    optional<BlockNr> trySeek(const FSPath &path) const;
+    optional<BlockNr> trySeek(const char *path) const { return trySeek(FSPath(path)); }
+    optional<BlockNr> trySeek(const string &path) const { return trySeek(FSPath(path)); }
+    optional<BlockNr> trySeek(const fs::path &path) const { return trySeek(FSPath(path)); }
 
-    // Resolves a path by name
-    optional<BlockNr> tryResolve(const FSPath &path) const;
-    optional<BlockNr> tryResolve(const string &path) const { return tryResolve(FSPath(path)); }
-    BlockNr resolve(const FSPath &path) const;
-    BlockNr resolve(const string &path) const { return resolve(FSPath(path)); }
+    // Resolves a path by name (may throw)
+    BlockNr seek(const FSPath &path) const;
+    BlockNr seek(const char *path) const { return seek(FSPath(path)); }
+    BlockNr seek(const string &path) const { return seek(FSPath(path)); }
+    BlockNr seek(const fs::path &path) const { return seek(FSPath(path)); }
 
     // Resolves a path by a regular expression
-    [[deprecated]] vector<BlockNr> tryResolvePattern(BlockNr top, const vector<FSPattern> &patterns);
-    [[deprecated]] vector<BlockNr> tryResolvePattern(const string &path);
-    vector<BlockNr> resolvePattern(BlockNr top, const vector<FSPattern> &patterns);
-    vector<BlockNr> resolvePattern(const string &path);
+    vector<BlockNr> match(BlockNr top, const vector<FSPattern> &patterns);
+    vector<BlockNr> match(const string &path);
 
 
     //

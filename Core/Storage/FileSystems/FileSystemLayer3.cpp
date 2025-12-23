@@ -19,14 +19,8 @@ FileSystem::cd(BlockNr nr)
     current = nr;
 }
 
-bool
-FileSystem::exists(const fs::path &path) const
-{
-    return tryResolve(path).has_value();
-}
-
 optional<BlockNr>
-FileSystem::tryResolve(const FSPath &path) const
+FileSystem::trySeek(const FSPath &path) const
 {
     try {
 
@@ -56,14 +50,14 @@ FileSystem::tryResolve(const FSPath &path) const
 }
 
 BlockNr
-FileSystem::resolve(const FSPath &path) const
+FileSystem::seek(const FSPath &path) const
 {
-    if (auto it = tryResolve(path)) return *it;
+    if (auto it = trySeek(path)) return *it;
     throw FSError(FSError::FS_NOT_FOUND, path.cpp_str());
 }
 
 vector<BlockNr>
-FileSystem::resolvePattern(BlockNr top, const vector<FSPattern> &patterns)
+FileSystem::match(BlockNr top, const vector<FSPattern> &patterns)
 {
     vector<BlockNr> currentSet { top };
 
@@ -117,58 +111,9 @@ FileSystem::resolvePattern(BlockNr top, const vector<FSPattern> &patterns)
 }
 
 vector<BlockNr>
-FileSystem::resolvePattern(const string &path)
+FileSystem::match(const string &path)
 {
-    return resolvePattern(pwd(), FSPattern(path).splitted());
-}
-
-vector<BlockNr>
-FileSystem::tryResolvePattern(BlockNr top, const vector<FSPattern> &patterns)
-{
-    try { return resolvePattern(top, patterns); } catch (...) { return {}; }
-}
-
-vector<BlockNr>
-FileSystem::tryResolvePattern(const string &path)
-{
-    try { return resolvePattern(path); } catch (...) { return {}; }
-}
-
-optional<BlockNr>
-FileSystem::trySeek(const fs::path &path) const
-{
-    BlockNr current = pwd();
-
-    printf("Path '%s' -> ", path.c_str());
-    for (const auto &component : path) { printf("'%s' ", component.c_str()); }
-    printf("\n");
-
-    for (const auto &component : path) {
-
-        printf("Seeking '%s' in '%s'\n", component.c_str(), fetch(current).absName().c_str());
-
-        // Check for special tokens
-        if (component == "/" ) { current = rootBlock; continue; }
-        if (component == ""  ) { continue; }
-        if (component == "." ) { continue; }
-        if (component == "..") { current = fetch(current).getParentDirRef(); continue; }
-
-        auto next = searchdir(current, FSName(component));
-        if (!next) { printf("%s not found", FSName(component).c_str());  return { }; }
-
-        printf("Found %d\n", *next);
-
-        current = *next;
-    }
-
-    return current;
-}
-
-BlockNr
-FileSystem::seek(const fs::path &name) const
-{
-    if (auto it = trySeek(name)) return *it;
-    throw FSError(FSError::FS_NOT_FOUND, name.string());
+    return match(pwd(), FSPattern(path).splitted());
 }
 
 FSTree
