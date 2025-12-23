@@ -351,6 +351,22 @@ FSPath::operator/=(const FSPath &other)
     return *this;
 }
 
+FSPath
+FSPath::operator/(const FSName &rhs) const
+{
+    FSPath copy = *this;
+    copy /= rhs;
+    return copy;
+}
+
+FSPath
+FSPath::operator/(const FSPath &rhs) const
+{
+    FSPath copy = *this;
+    copy /= rhs;
+    return copy;
+}
+
 FSPattern::FSPattern(const string glob) : glob(glob)
 {
     // Create regex string

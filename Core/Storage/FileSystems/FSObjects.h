@@ -82,6 +82,8 @@ struct FSPath {
 
     FSPath &operator/=(const FSName &);
     FSPath &operator/=(const FSPath &);
+    FSPath operator/(const FSName &rhs) const;
+    FSPath operator/(const FSPath &rhs) const;
 
     auto begin() const { return components.begin(); }
     auto end() const { return components.end(); }

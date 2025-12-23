@@ -199,6 +199,14 @@ splitLast(const vector<string> &vec)
 }
 
 string
+concat(const string &s1, const string &s2, char delim)
+{
+    if (s1.empty()) return s2;
+    if (s2.empty()) return s1;
+    return s1.back() == delim ? s1 + s2 : s1 + delim + s2;
+}
+
+string
 concat(const std::vector<string> &s, const string &delim, const string &ldelim, const string &rdelim)
 {
     string result;

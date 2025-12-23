@@ -83,94 +83,39 @@ NavigatorConsole::autoComplete(Tokens &argv)
 string
 NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 {
-    if (!fs || !fs->isFormatted()) return input;
+    try {
 
-    auto path = fs::path(input);
-    auto dir  = path.parent_path();
-    auto file = path.filename();
+        requireFormattedFS();
 
-    printf("autoCompleteFilename: path: '%s' dir: '%s' file: '%s' (%d)\n", path.c_str(), dir.c_str(), file.c_str(), path.is_absolute());
-
-    // Find all matching items
-    auto m = fs->tryResolvePattern(input + "*");
-
-    for (auto &it : m) {
-        printf("   Resolved: %s\n", fs->fetch(it).name().c_str());
-    }
-
-    auto matches = fs->tryMatch(dir / (file.string() + "*"));
-
-    for (auto &it : matches) {
-        printf("   Match: %s\n", fs->fetch(it).name().c_str());
-    }
-
-    // Case 1: The completion was unique
-    if (matches.size() == 1) {
-
-        auto &node = fs->fetch(matches[0]);
-        auto name = dir / node.name().cpp_str();
-        return name.string() + (node.isDirectory() ? "/" : "");
-    }
-
-    // Case 2: Multiple files match
-    std::vector<string> names;
-    for (auto &it : matches) {
-
-        auto name = dir / fs->fetch(it).name().cpp_str();
-        names.push_back(name.string());
-        printf("File: %s\n", name.string().c_str());
-    }
-
-    // Auto-complete all common characters
-    auto completed = utl::commonPrefix(names, false);
-
-    printf("Completed: %s\n", completed.c_str());
-
-    return completed;
-
-    /*
-    // Lookup the parent path
-    if (auto parent = fs->trySeek(dir)) {
-
-        printf("Found parent: %d\n", *parent);
+        auto path = FSPath(input);
+        auto dir  = path.parentPath();
 
         // Find all matching items
-        FSPattern pattern = FSPattern(file.string() + "*");
-        auto tree = fs->build(*parent, {
-            .accept = accept::pattern(pattern),
-            .sort   = sort::alpha,
-            .depth  = 1
-        });
-
-        printf("Found %zd items:\n", tree.children.size());
+        auto matches = fs->tryResolvePattern(input + "*");
 
         // Case 1: The completion was unique
-        if (tree.children.size() == 1) {
+        if (matches.size() == 1) {
 
-            auto &node = fs->fetch(tree.children[0].nr);
-            auto name = node.absName();
-            return node.isDirectory() ? name + '/' : name;
+            auto &node = fs->fetch(matches[0]);
+            auto name = dir / node.name();
+            return name.cpp_str() + (node.isDirectory() ? "/" : "");
         }
 
         // Case 2: Multiple files match
         std::vector<string> names;
-        for (auto &it : tree.children) {
+        for (auto &it : matches) {
 
-            auto name = dir / fs->fetch(it.nr).name().path();
-            names.push_back(name.string());
-            printf("File: %s\n", name.string().c_str());
+            auto name = dir / fs->fetch(it).name();
+            names.push_back(name.cpp_str());
         }
 
         // Auto-complete all common characters
-        auto completed = utl::commonPrefix(names, false);
+        return utl::commonPrefix(names, false);
 
-        printf("Completed: %s\n", completed.c_str());
+    } catch (...) {
 
-        return completed;
+        return input;
     }
-
-    return input;
-    */
 }
 
 void
@@ -335,13 +280,13 @@ NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
 }
 
 void
-NavigatorConsole::requireFS()
+NavigatorConsole::requireFS() const
 {
     if (!fs) throw FSError(FSError::FS_UNKNOWN, "No file system present");
 }
 
 void
-NavigatorConsole::requireFormattedFS()
+NavigatorConsole::requireFormattedFS() const
 {
     requireFS();
     fs->require.isFormatted();
@@ -613,6 +558,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                requireFS();
+
                 // Determine the DOS type
                 auto type = FSFormat::NODOS;
                 auto dos = utl::uppercased(args.at("dos"));
@@ -642,7 +589,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto path = args.at("path");
                 auto hostPath = host.makeAbsolute(args.at("path"));
@@ -723,6 +670,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                requireFS();
+
                 auto path = host.makeAbsolute(args.at("path"));
                 auto nr = parseBlock(args, "nr", fs->pwd());
 
@@ -743,6 +692,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    requireFormattedFS();
 
                     bool recursive = args.contains("r");
                     std::filesystem::remove_all("/export");
@@ -783,7 +734,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    fs->require.isFormatted();
+                    requireFormattedFS();
 
                     auto itemNr = parsePath(args, "file");
                     bool recursive = args.contains("r");
@@ -813,8 +764,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                requireFormattedFS();
+
                 auto n = values[0];
-                // df[n]->insertMediaFile(ADFFile(fs), false);
                 auto tmp = MediaFile(ADFFactory::make(*fs));
                 df[n]->insertMediaFile(tmp, false);
 
@@ -839,6 +791,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                requireFormattedFS();
+
                 auto n = values[0];
                 hd[n]->init(*fs);
 
@@ -855,6 +809,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "File path" }, .flags = vAmigaDOS ? rs::disabled : 0 },
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
 
                 auto nr = parseBlock(args, "nr", fs->pwd());
 
@@ -884,7 +840,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto path = parsePath(args, "path", fs->root());
                 fs->cd(path);
@@ -904,8 +860,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFS();
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto path = parseDirectory(args, "path");
                 auto d = args.contains("d");
@@ -991,6 +946,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                requireFormattedFS();
+
                 auto path = parseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
@@ -1060,7 +1017,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto pattern = FSPattern(args.at("name"));
                 auto d = args.contains("d");
@@ -1118,96 +1075,16 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = rs::ac,
         .args   = {
             { .name = { "name", "Search pattern" } },
-            // { .name = { "d", "Find directories only" }, .flags = rs::flag },
-            // { .name = { "f", "Find files only" }, .flags = rs::flag },
-            { .name = { "s", "Sort output" }, .flags = rs::flag } },
+        },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFormattedFS();
 
-                // auto pattern = FSPattern(args.at("name"));
-                // auto d = args.contains("d");
-                // auto f = args.contains("f");
-                auto s = args.contains("s");
-
-                // Determine the start node
-                // auto start = fs->pwd();
-
-                // Build a directory tree
-                /*
-                FSTree tree = fs->build(start, {
-                    .accept = accept::all,
-                    .sort   = sort::none,
-                    .depth  = 512
-                });
-                */
-
-                // Traverse the tree and find matches
+                // Find matches
                 vector <BlockNr> matches = fs->resolvePattern(args.at("name"));
 
-                // Filter matches
-                vector <const FSBlock *> matching;
-                for (auto nr : matches) {
-
-                    auto &block = fs->fetch(nr);
-
-                    // if (d && !block.isDirectory())       continue;
-                    // if (f && !block.isFile())            continue;
-
-                    matching.push_back(&block);
-                }
-
                 // Print the result
-                if (s) {
-
-                    int tab = 0;
-
-                    std::sort(matching.begin(), matching.end(), sort::alphaPtr);
-
-                    for (auto &it : matching) {
-                        tab = std::max(int(it->cppName().size()), tab);
-                    }
-                    for (auto &it : matching) {
-                        os << std::setw(tab) << std::left << it->cppName() << " : " << it->absName() << '\n';
-                    }
-
-                } else {
-
-                    for (auto &it : matching) { os << it->absName() << '\n'; }
-                }
-
-                /*
-                vector<const FSBlock *> matching;
-                for (const auto &node : tree.bfs()) {
-
-                    auto &block = fs->fetch(node.nr);
-
-                    if (!pattern.match(block.cppName())) continue;
-                    if (d && !block.isDirectory())       continue;
-                    if (f && !block.isFile())            continue;
-
-                    matching.push_back(&block);
-                }
-
-                // Print the result
-                if (s) {
-
-                    int tab = 0;
-
-                    std::sort(matching.begin(), matching.end(), sort::alphaPtr);
-
-                    for (auto &it : matching) {
-                        tab = std::max(int(it->cppName().size()), tab);
-                    }
-                    for (auto &it : matching) {
-                        os << std::setw(tab) << std::left << it->cppName() << " : " << it->absName() << '\n';
-                    }
-
-                } else {
-
-                    for (auto &it : matching) { os << it->absName() << '\n'; }
-                }
-                */
+                for (auto &it : matches) { os << fs->fetch(it).absName() << '\n'; }
             }
     });
 
@@ -1243,7 +1120,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto &file = fs->fetch(parseFile(args, "path"));
                 args.contains("v") ? file.dumpBlocks(os) : file.dumpInfo(os);
@@ -1259,6 +1136,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" }, .flags = rs::opt },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
 
                 auto nr = parseBlock(args, "nr");
                 fs->doctor.dump(nr, os);
@@ -1285,7 +1164,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             .chelp  = { BootBlockIdEnum::help(BootBlockId(value)) },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                fs->require.isFormatted();
+                requireFormattedFS();
+
                 fs->makeBootable(BootBlockId(values[0]));
 
             },  .payload = { value }
@@ -1297,8 +1177,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "boot", "scan" },
         .chelp  = { "Scan a boot block for viruses" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            fs->require.isFormatted();
+
+            requireFormattedFS();
+
             os << "Boot block: " << fs->bootStat().name << std::endl;
         }
     });
@@ -1309,7 +1190,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Kills a boot block virus" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            fs->require.isFormatted();
+            requireFormattedFS();
+
             fs->killVirus();
         }
     });
@@ -1327,7 +1209,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
+
                 auto &file = fs->fetch(parsePath(args, "path", fs->pwd()));
                 if (!file.isFile()) {
                     throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
@@ -1364,7 +1247,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
+
                 auto &file = fs->fetch(parseFile(args, "path", fs->pwd()));
                 auto opt = parseDumpOpts(args);
                 
@@ -1390,6 +1274,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                requireFormattedFS();
+
                 auto nr = parseBlock(args, "nr", fs->pwd());
                 auto opt = parseDumpOpts(args);
 
@@ -1410,6 +1296,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
 
                 bool strict = args.contains("s");
                 
@@ -1444,7 +1332,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 Tokens missing;
                 auto path = matchPath(args.at("name"), missing);
@@ -1478,7 +1366,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto sourceNr = parsePath(args, "source");
                 auto &source = fs->fetch(sourceNr);
@@ -1527,7 +1415,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto sourceNr = parsePath(args, "source");
 
@@ -1567,7 +1455,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                fs->require.isFormatted();
+                requireFormattedFS();
 
                 auto &path = fs->fetch(parsePath(args, "path"));
 

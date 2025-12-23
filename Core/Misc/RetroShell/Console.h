@@ -489,8 +489,8 @@ public:
     void import(const fs::path &path, bool recursive = true, bool contents = false);
 
     // Throws an exception if the file system fails to match the condition
-    void requireFS();
-    void requireFormattedFS();
+    void requireFS() const;
+    void requireFormattedFS() const;
 
     // Exports the file system
     void exportBlocks(fs::path path);

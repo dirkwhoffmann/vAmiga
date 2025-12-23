@@ -70,12 +70,20 @@ string padString(const string &s, isize width, char align = 'l');
 
 
 //
-// Splitting and concatenating
+// Splitting
 //
 
 std::vector<string> split(const string &s, char delim);
 std::vector<string> split(const std::vector<string> &vec, char delim);
 std::pair<vector<string>, string> splitLast(const vector<string> &vec);
+
+
+//
+// Joining
+//
+
+string concat(const string &s1, const string &s2, char delim);
+
 string concat(const std::vector<string> &s,
               const string &delim = " ", const string &ldelim = "", const string &rdelim = "");
 
