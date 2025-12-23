@@ -7,6 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #include "OldFSTree.h"
 #include "FileSystem.h"
 #include "utl/io.h"
@@ -255,3 +257,4 @@ OldFSTree::saveFile(const fs::path &path, const FSOpt &opt) const
 }
 
 }
+#endif

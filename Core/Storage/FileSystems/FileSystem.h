@@ -291,15 +291,19 @@ public:
     // Managing directories
     //
 
+    // Returns the number of items in a directory or the items themselves
+    isize numItems(BlockNr at) const;
+    vector<BlockNr> getItems(BlockNr at) const;
+
+    // Looks up a specific directory item
+    optional<BlockNr> searchdir(BlockNr at, const FSName &name) const;
+    vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
+
     // Creates a new directory
     BlockNr mkdir(BlockNr at, const FSName &name);
 
     // Removes an empty directory
     void rmdir(BlockNr at);
-
-    // Looks up a directory item
-    optional<BlockNr> searchdir(BlockNr at, const FSName &name) const;
-    vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
 
     // Creates a new directory entry
     void link(BlockNr at, BlockNr fhb);
@@ -475,18 +479,22 @@ public:
     vector<const FSBlock *> newMatch(BlockNr top, const FSPattern &pattern) const;
 
     // DEPRECATED
+    /*
     [[deprecated]] vector<const FSBlock *> match(const FSPattern &pattern) const;
     [[deprecated]] vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
     [[deprecated]] vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
     [[deprecated]] vector<BlockNr> match(BlockNr root, const FSPattern &pattern) const;
+     */
 
 private:
 
     vector<const FSBlock *> newMatch(const FSBlock *top,
                                        vector<FSPattern> pattern) const;
 
+    /*
     [[deprecated]] vector<const FSBlock *> match(const FSBlock *top,
                                                  vector<FSPattern> patterns) const;
+     */
 };
 
 }

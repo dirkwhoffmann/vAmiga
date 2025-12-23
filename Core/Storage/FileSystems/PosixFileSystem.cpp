@@ -92,6 +92,13 @@ PosixFileSystem::readDir(const fs::path &path)
 {
     std::vector<FSName> result;
 
+    for (auto &it : fs.getItems(fs.seek(path))) {
+        result.push_back(fs.fetch(it).name());
+    }
+
+    return result;
+
+    /*
     auto node = fs.seek(path);
 
     // Extract the directory tree
@@ -103,6 +110,7 @@ PosixFileSystem::readDir(const fs::path &path)
     });
 
     return result;
+    */
 }
 
 HandleRef

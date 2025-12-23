@@ -296,21 +296,24 @@ FSDoctor::xrayBitmap(bool strict)
     std::unordered_set<BlockNr> used;
 
     // Extract the directory tree
-    auto tree = OldFSTree(fs.fetch(fs.root()), { .recursive = true });
+    // auto tree = OldFSTree(fs.fetch(fs.root()), { .recursive = true });
+    auto tree = fs.build(fs.root(), { .depth = 512 });
 
     // Collect all used blocks
-    tree.bfsWalk( [&](const OldFSTree &it) {
+    // tree.bfsWalk( [&](const OldFSTree &it) {
+    for (auto &it : tree.dfs()) {
 
-        used.insert(it.node->nr);
+        used.insert(it.nr);
+        auto &node = fs.fetch(it.nr);
 
-        if (it.node->isFile()) {
+        if (node.isFile()) {
 
-            auto listBlocks = fs.collectListBlocks(it.node->nr);
-            auto dataBlocks = fs.collectDataBlocks(it.node->nr);
+            auto listBlocks = fs.collectListBlocks(it.nr);
+            auto dataBlocks = fs.collectDataBlocks(it.nr);
             used.insert(listBlocks.begin(), listBlocks.end());
             used.insert(dataBlocks.begin(), dataBlocks.end());
         }
-    });
+    }
     used.insert(fs.getBmBlocks().begin(), fs.getBmBlocks().end());
     used.insert(fs.getBmExtBlocks().begin(), fs.getBmExtBlocks().end());
 

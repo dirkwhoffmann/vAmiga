@@ -101,7 +101,8 @@ struct FSPattern {
     string glob;
     std::regex regex;
 
-    FSPattern(const string str);
+    explicit FSPattern(const string str);
+    explicit FSPattern(const char *str) : FSPattern(string(str)) { };
 
     std::vector<FSPattern> splitted() const;
     bool isAbsolute() const { return !glob.empty() && glob[0] == '/'; }

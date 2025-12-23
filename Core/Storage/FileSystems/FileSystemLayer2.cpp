@@ -113,28 +113,22 @@ FileSystem::killVirus()
     }
 }
 
-BlockNr
-FileSystem::mkdir(BlockNr at, const FSName &name)
+isize
+FileSystem::numItems(BlockNr at) const
 {
-    require.directory(at);
-
-    // Error out if the file already exists
-    if (searchdir(at, name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
-
-    auto udb = newUserDirBlock(name);
-    fetch(udb).mutate().setParentDirRef(at);
-    addToHashTable(at, udb);
-
-    return udb;
+    return (isize)collectHashedBlocks(fetch(at)).size();
 }
 
-void
-FileSystem::rmdir(BlockNr at)
+vector<BlockNr>
+FileSystem::getItems(BlockNr at) const
 {
-    require.emptyDirectory(at);
+    // Gather all items
+    auto items = collectHashedBlocks(fetch(at));
 
-    deleteFromHashTable(at);
-    reclaim(at);
+    // Return block numbers
+    std::vector<BlockNr> result;
+    for (auto &it : items) result.push_back(it->nr);
+    return result;
 }
 
 optional<BlockNr>
@@ -165,20 +159,55 @@ FileSystem::searchdir(BlockNr at, const FSName &name) const
     return {};
 }
 
+BlockNr
+FileSystem::mkdir(BlockNr at, const FSName &name)
+{
+    require.directory(at);
+
+    // Error out if the file already exists
+    if (searchdir(at, name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
+
+    auto udb = newUserDirBlock(name);
+    fetch(udb).mutate().setParentDirRef(at);
+    addToHashTable(at, udb);
+
+    return udb;
+}
+
+void
+FileSystem::rmdir(BlockNr at)
+{
+    require.emptyDirectory(at);
+
+    deleteFromHashTable(at);
+    reclaim(at);
+}
+
 vector<BlockNr>
 FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
 {
-    // Gather all items
+    // Start with all items
+    auto items = getItems(at);
+
+    // Filter out non-matching items
+    auto unmatch = [&](const BlockNr nr) { return !pattern.match(fetch(nr).name()); };
+    items.erase(std::remove_if(items.begin(), items.end(), unmatch), items.end());
+
+    return items;
+
+    /*
     auto items = collectHashedBlocks(fetch(at));
 
     // Filter out matching items
-    auto unmatch = [pattern](const FSBlock *b) { return !pattern.match(b->name()); };
-    items.erase(std::remove_if(items.begin(), items.end(), unmatch), items.end());
-
+    if (pattern.glob != "*") {
+        auto unmatch = [pattern](const FSBlock *b) { return !pattern.match(b->name()); };
+        items.erase(std::remove_if(items.begin(), items.end(), unmatch), items.end());
+    }
     // Return block numbers
     std::vector<BlockNr> result;
     for (auto &it : items) result.push_back(it->nr);
     return result;
+    */
 }
 
 void

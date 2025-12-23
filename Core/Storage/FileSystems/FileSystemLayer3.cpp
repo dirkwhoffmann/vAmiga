@@ -172,6 +172,7 @@ FileSystem::newMatch(const FSBlock *top, vector<FSPattern> patterns) const
     return result;
 }
 
+/*
 std::vector<const FSBlock *>
 FileSystem::match(const FSPattern &pattern) const
 {
@@ -240,5 +241,6 @@ FileSystem::match(BlockNr root, const FSPattern &pattern) const
 {
     return FSBlock::refs(match(tryFetch(root), pattern));
 }
+*/
 
 }
