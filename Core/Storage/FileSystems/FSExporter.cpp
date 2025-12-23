@@ -139,7 +139,7 @@ FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool c
 
     debug(FS_DEBUG, "Exporting %s to %s\n", item.absName().c_str(), hostPath.string().c_str());
 
-    auto newTree = fs.build(nr, { .depth = recursive ? 256 : 1 });
+    auto newTree = fs.build(nr, { .depth = recursive ? MAX_ISIZE : 1 });
     save(newTree, hostPath, recursive);
 }
 

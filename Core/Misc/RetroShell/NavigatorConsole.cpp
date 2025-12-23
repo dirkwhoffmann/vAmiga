@@ -917,7 +917,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 FSTree tree = fs->build(path, {
                     .accept = accept::directories,
                     .sort   = sort::alpha,
-                    .depth  = r ? 512 : 0
+                    .depth  = r ? MAX_ISIZE : 0
                 });
 
                 // For each directory...
@@ -1026,7 +1026,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 FSTree tree = fs->build(path, {
                     .accept = accept::directories,
                     .sort   = s ? sort::alpha : sort::none,
-                    .depth  = r ? 512 : 0
+                    .depth  = r ? MAX_ISIZE : 0
                 });
 
                 // For each directory...
@@ -1077,7 +1077,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 FSTree tree = fs->build(start, {
                     .accept = accept::all,
                     .sort   = sort::none,
-                    .depth  = 512
+                    .depth  = MAX_ISIZE
                 });
 
                 // Traverse the tree and find matches

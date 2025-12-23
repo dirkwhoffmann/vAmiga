@@ -26,22 +26,15 @@ FileSystem::trySeek(const FSPath &path) const
 
         BlockNr current = path.absolute() ? root() : pwd();
 
-        printf("FSPath '%s' -> ", path.cpp_str().c_str());
-        for (const auto &c : path) { printf("'%s' ", c.cpp_str().c_str()); }
-        printf("\n");
-
         for (const auto &p : path) {
-
-            printf("Seeking '%s' in '%s'\n", p.cpp_str().c_str(), fetch(current).absName().c_str());
 
             // Check for special tokens
             if (p == "." ) { continue; }
             if (p == "..") { current = fetch(current).getParentDirRef(); continue; }
 
             auto next = searchdir(current, p);
-            if (!next) { printf("%s not found", p.cpp_str().c_str());  return { }; }
+            if (!next) return { };
 
-            printf("Found %d\n", *next);
             current = *next;
         }
         return current;

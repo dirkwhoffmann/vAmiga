@@ -35,7 +35,7 @@ FSTreeBuilder::buildRec(const FSBlock &node,
     // Create a tree for the top-level node
     FSTree tree { .nr = node.nr };
 
-    if (node.isDirectory() && depth != opt.depth) {
+    if (node.isDirectory() && depth < opt.depth) {
 
         // Collect
         auto children = fs.collectHashedBlocks(node.nr);

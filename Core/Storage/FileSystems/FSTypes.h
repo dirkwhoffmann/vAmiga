@@ -18,23 +18,6 @@ using namespace utl;
 struct FSBlock;
 
 using BlockNr = u32;
-using BlockRef = const FSBlock &;
-
-typedef std::function<bool(const FSBlock &)> FSBlockFilter;
-typedef std::function<std::string(const FSBlock &)> FSBlockFormatter;
-typedef std::function<bool(const FSBlock &, const FSBlock &)> FSBlockSorter;
-
-struct FSOpt
-{
-    bool recursive = false;
-    isize indent = 0;
-    FSBlockSorter sort;
-    FSBlockFilter filter;
-    FSBlockFormatter formatter;
-
-    bool accept(const FSBlock &b) const { return filter ? filter(b) : true; }
-    bool accept(const FSBlock *b) const { return b ? (filter ? filter(*b) : true) : false; }
-};
 
 enum class FSFormat : long
 {
