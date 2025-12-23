@@ -104,10 +104,27 @@ NSString *EventSlotName(EventSlot slot)
     return self;
 }
 
+/*
 - (void)save:(const Error &)exception
 {
     fault = exception.fault();
     what = @(exception.what());
+}
+*/
+
+- (void)save:(const std::exception &)exception
+{
+    if (auto *error = dynamic_cast<const Error *>(&exception)) {
+
+        fault = error->fault();
+        what = @(error->what());
+
+    } else {
+
+        // Uncatched C++ error (this is a bug)
+        fault = 666;
+        what = @(exception.what());
+    }
 }
 
 @end
@@ -1540,7 +1557,7 @@ NSString *EventSlotName(EventSlot slot)
 - (void)export:(NSString *)path recursive:(BOOL)rec contents:(BOOL)con exception:(ExceptionWrapper *)ex
 {
     try { return [self fs]->exporter.exportFiles([path fileSystemRepresentation], rec, con); }
-    catch(Error &error) { [ex save:error]; }
+    catch(std::exception &error) { [ex save:error]; }
 }
 
 - (void)createUsageMap:(u8 *)buf length:(NSInteger)len

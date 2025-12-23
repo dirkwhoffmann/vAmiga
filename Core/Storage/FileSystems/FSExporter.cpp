@@ -138,14 +138,90 @@ FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool c
     }
 
     debug(FS_DEBUG, "Exporting %s to %s\n", item.absName().c_str(), hostPath.string().c_str());
-    OldFSTree tree(item, { .recursive = recursive });
-    tree.save(hostPath, { .recursive = recursive });
+
+    auto newTree = fs.build(nr, { .depth = recursive ? 256 : 1 });
+    save(newTree, hostPath, recursive);
 }
 
 void
 FSExporter::exportFiles(const fs::path &path, bool recursive, bool contents) const
 {
     exportFiles(fs.pwd(), path, recursive, contents);
+}
+
+void
+FSExporter::save(const FSTree &tree, const fs::path &path, bool recursive) const
+{
+    auto &node = fs.fetch(tree.nr);
+
+    if (node.isDirectory()) {
+
+        if (fs::exists(path)) {
+
+            if (!fs::is_directory(path)) {
+                throw FSError(FSError::FS_NOT_A_DIRECTORY, path.string());
+            }
+            if (!fs::is_empty(path)) {
+                throw FSError(FSError::FS_DIR_NOT_EMPTY, path.string());
+            }
+
+        } else {
+
+            fs::create_directories(path);
+        }
+        saveDir(tree, path, recursive);
+    }
+
+    if (node.isFile()) {
+
+        if (fs::exists(path)) {
+            throw FSError(FSError::FS_EXISTS, path.string());
+        }
+        saveFile(tree, path, recursive);
+    }
+}
+
+void
+FSExporter::saveDir(const FSTree &tree, const fs::path &path, bool recursive) const
+{
+    // Save files
+    for (auto &it : tree.children) {
+
+        auto &node = fs.fetch(it.nr);
+        if (!node.isFile()) continue;
+        node.exportBlock(path / node.name().path());
+    }
+
+    if (!recursive) return;
+
+    // Save directories
+    for (auto &it : tree.children) {
+
+        auto &node = fs.fetch(it.nr);
+        if (!node.isDirectory()) continue;
+        save(it, path / node.name().path(), recursive);
+    }
+}
+
+void
+FSExporter::saveFile(const FSTree &tree, const fs::path &path, bool recursive) const
+{
+    auto &node = fs.fetch(tree.nr);
+
+    // Get data
+    Buffer<u8> buffer; node.extractData(buffer);
+
+    // Open file
+    std::ofstream stream(path, std::ios::binary);
+    if (!stream.is_open()) {
+        throw IOError(IOError::FILE_CANT_CREATE, path);
+    }
+
+    // Write data
+    stream.write((const char *)buffer.ptr, buffer.size);
+    if (!stream) {
+        throw IOError(IOError::FILE_CANT_WRITE, path);
+    }
 }
 
 }

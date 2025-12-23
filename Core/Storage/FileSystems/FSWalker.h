@@ -150,6 +150,7 @@ private:
 class FSTreePrinter {
 
 public:
+
     static void list(const FileSystem& fs,
                      const FSTree& tree,
                      std::ostream& os,
@@ -164,12 +165,6 @@ public:
                           const FSTree& tree,
                           std::ostream& os,
                           const FSOpt& opt);
-};
-
-
-
-class FSWalker final : public FSService {
-
 };
 
 }

@@ -21,10 +21,10 @@ struct OldFSTree {
     const FSBlock *node;
     std::vector<OldFSTree> children;
 
-    OldFSTree() : node(nullptr) {}
-    OldFSTree(const FSBlock *node) : node(node) {}
-    OldFSTree(const FSBlock &path, const FSOpt &opt);
-    OldFSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt);
+    [[deprecated]]     OldFSTree() : node(nullptr) {}
+    [[deprecated]]     OldFSTree(const FSBlock *node) : node(node) {}
+    [[deprecated]]     OldFSTree(const FSBlock &path, const FSOpt &opt);
+    [[deprecated]]     OldFSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt);
 
     void init(const FSBlock &path, const FSOpt &opt, std::unordered_set<BlockNr> &visited);
 

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FSService.h"
+#include "FSWalker.h"
 
 namespace vamiga {
 
@@ -38,6 +39,13 @@ public:
     void exportFiles(BlockNr nr, const fs::path &path, bool recursive = true, bool contents = false) const;
     // void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
     void exportFiles(const fs::path &path, bool recursive = true, bool contents = false) const;
+
+private:
+
+    // Exports a tree to the host file system
+    void save(const FSTree &tree, const fs::path &path, bool recursive = true) const;
+    void saveFile(const FSTree &tree, const fs::path &path, bool recursive = true) const;
+    void saveDir(const FSTree &tree, const fs::path &path, bool recursive = true) const;
 };
 
 }
