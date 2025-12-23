@@ -31,6 +31,7 @@ public:
 
         vector<ColumnFormat> columns = { };
         Layout layout                = Layout::ColMajor;
+        string inset                 = "";
         string separator             = " ";
     };
 

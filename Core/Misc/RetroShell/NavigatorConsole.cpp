@@ -124,10 +124,6 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     auto [cmd, args] = seekCommand(argv);
     
     // Determine the kind of help to display
-    /*
-     bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
-     bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
-     */
     bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
     bool displayCmds  = true;
     
@@ -139,12 +135,57 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     
     if (displayFiles) {
         
-        // Seek matching items
-        auto matches = fs->match(&fs->fetch(fs->pwd()), args.empty() ? "*" : args.back() + "*");
+        // Find matching items
+        auto matches = fs->tryResolvePattern(args.empty() ? "*" : args.back() + "*");
 
-        // List all nodes
-        if (!matches.empty() && displayCmds) os << std::endl;
-        OldFSTree(matches, { .sort = sort::dafa }).list(os, { .indent = 7 });
+        // Extract names
+        vector<string> dirs, files;
+        for (auto &it : matches) {
+
+            auto &block = fs->fetch(it);
+            auto name = block.name().cpp_str();
+
+            if (block.isDirectory()) {
+                dirs.push_back(name + " (dir)");
+            } else {
+                files.push_back(name);
+            }
+        }
+
+        // Sort
+        auto ciLess = [](const std::string &a, const std::string &b) {
+            return std::lexicographical_compare(
+                a.begin(), a.end(),
+                b.begin(), b.end(),
+                [](unsigned char x, unsigned char y) {
+                    return std::tolower(x) < std::tolower(y);
+                }
+            );
+        };
+
+        std::sort(dirs.begin(), dirs.end(), ciLess);
+        std::sort(files.begin(), files.end(), ciLess);
+
+        // Print
+        if (!matches.empty() && displayCmds) {
+
+            os << std::endl;
+            Formatter::printTable(os, dirs, {
+                .columns = {
+                    { .align = 'l', .width = 35 }
+                },
+                .layout = Formatter::Layout::RowMajor,
+                .inset  = string(7, ' ')
+            });
+            Formatter::printTable(os, files, {
+                .columns = {
+                    { .align = 'l', .width = 35 },
+                    { .align = 'l', .width = 35 }
+                },
+                .layout = Formatter::Layout::RowMajor,
+                .inset  = string(7, ' ')
+            });
+        }
     }
 }
 

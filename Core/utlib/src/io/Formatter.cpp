@@ -22,7 +22,6 @@ Formatter::printTable(std::ostream& os, const vector<string> &cells, const strin
 {
     TableFormat tf;
     for (auto c : fmt) {
-        printf("*** %c\n", c);
         if (c) tf.columns.push_back(ColumnFormat { .align = c });
     }
     printTable(os, cells, tf);
@@ -37,8 +36,6 @@ Formatter::printTable(std::ostream& os, const vector<string> &cells, const Table
     auto cols  = isize(fmt.columns.size());
     auto rows  = (items + cols - 1) / cols;
 
-    printf("items = %ld, cols = %ld, rows = %ld\n", items, cols, rows);
-    
     // Maps a row / column index to the item number
     auto index = [&](isize r, isize c) -> isize {
 
@@ -72,6 +69,9 @@ Formatter::printTable(std::ostream& os, const vector<string> &cells, const Table
 
     // Print the table
     for (isize r = 0; r < rows; r++) {
+
+        os << fmt.inset;
+        
         for (isize c = 0; c < cols; c++) {
             if (auto i = index(r,c); i < items) {
 
