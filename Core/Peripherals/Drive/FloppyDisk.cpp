@@ -38,14 +38,14 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
 }
 
 void
-FloppyDisk::init(const class FloppyFile &file, bool wp)
+FloppyDisk::init(const class FloppyDiskImage &file, bool wp)
 {
     init(file.getDiameter(), file.getDensity(), wp);
     encodeDisk(file);
 }
 
 void
-FloppyDisk::init(unique_ptr<FloppyFile> file, bool wp)
+FloppyDisk::init(unique_ptr<FloppyDiskImage> file, bool wp)
 {
     init(*file, wp);
 }
@@ -278,7 +278,7 @@ FloppyDisk::clearTrack(Track t, u8 value1, u8 value2)
 }
 
 void
-FloppyDisk::encodeDisk(const FloppyFile &file)
+FloppyDisk::encodeDisk(const FloppyDiskImage &file)
 {
     assert(file.getDiameter() == getDiameter());
 

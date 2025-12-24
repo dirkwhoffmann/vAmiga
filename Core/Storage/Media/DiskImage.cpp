@@ -8,26 +8,26 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "DiskFile.h"
+#include "DiskImage.h"
 #include "utl/support/Strings.h"
 
 namespace vamiga {
 
 u8
-DiskFile::readByte(isize b, isize offset) const
+DiskImage::readByte(isize b, isize offset) const
 {
     assert(offset < bsize());
     return data[b * 512 + offset];
 }
 
 u8
-DiskFile::readByte(isize t, isize s, isize offset) const
+DiskImage::readByte(isize t, isize s, isize offset) const
 {
     return readByte(t * numSectors() + s, offset);
 }
 
 void
-DiskFile::readSector(u8 *dst, isize s) const
+DiskImage::readSector(u8 *dst, isize s) const
 {
     isize sectorSize = bsize();
     isize offset = s * sectorSize;
@@ -41,27 +41,27 @@ DiskFile::readSector(u8 *dst, isize s) const
 }
 
 void
-DiskFile::readSector(u8 *dst, isize t, isize s) const
+DiskImage::readSector(u8 *dst, isize t, isize s) const
 {
     readSector(dst, t * numSectors() + s);
 }
 
 void
-DiskFile::writeByte(isize b, isize offset, u8 value)
+DiskImage::writeByte(isize b, isize offset, u8 value)
 {
     assert(offset < bsize());
     data[b * 512 + offset] = value;
 }
 
 void
-DiskFile::writeByte(isize t, isize s, isize offset, u8 value)
+DiskImage::writeByte(isize t, isize s, isize offset, u8 value)
 {
     writeByte(t * numSectors() + s, offset, value);
 
 }
 
 void
-DiskFile::writeSector(isize b, const Buffer<u8> &buffer)
+DiskImage::writeSector(isize b, const Buffer<u8> &buffer)
 {
     isize offset = b * bsize();
     assert(offset + bsize() <= data.size);
@@ -72,13 +72,13 @@ DiskFile::writeSector(isize b, const Buffer<u8> &buffer)
 }
 
 void
-DiskFile::writeSector(isize t, isize s, const Buffer<u8> &buffer)
+DiskImage::writeSector(isize t, isize s, const Buffer<u8> &buffer)
 {
     writeSector(t * numSectors() + s, buffer);
 }
 
 string
-DiskFile::describeGeometry()
+DiskImage::describeGeometry()
 {
     return
     std::to_string(numCyls()) + " - " +
@@ -87,13 +87,13 @@ DiskFile::describeGeometry()
 }
 
 string
-DiskFile::describeCapacity()
+DiskImage::describeCapacity()
 {
     return utl::byteCountAsString(numBytes());
 }
 
 string
-DiskFile::hexdump(isize b, isize offset, isize len) const
+DiskImage::hexdump(isize b, isize offset, isize len) const
 {
     string result;
     auto p = data.ptr + b * bsize();
@@ -106,19 +106,19 @@ DiskFile::hexdump(isize b, isize offset, isize len) const
 }
 
 string
-DiskFile::hexdump(isize t, isize s, isize offset, isize len) const
+DiskImage::hexdump(isize t, isize s, isize offset, isize len) const
 {
     return hexdump(t * numSectors() + s, offset, len);
 }
 
 string
-DiskFile::hexdump(isize c, isize h, isize s, isize offset, isize len) const
+DiskImage::hexdump(isize c, isize h, isize s, isize offset, isize len) const
 {
     return hexdump(c * numHeads() + h, s, offset, len);
 }
 
 string
-DiskFile::asciidump(isize b, isize offset, isize len) const
+DiskImage::asciidump(isize b, isize offset, isize len) const
 {
     string result;
     auto p = data.ptr + b * bsize() + offset;
@@ -131,13 +131,13 @@ DiskFile::asciidump(isize b, isize offset, isize len) const
 }
 
 string
-DiskFile::asciidump(isize t, isize s, isize offset, isize len) const
+DiskImage::asciidump(isize t, isize s, isize offset, isize len) const
 {
     return asciidump(t * numSectors() + s, offset, len);
 }
 
 string
-DiskFile::asciidump(isize c, isize h, isize s, isize offset, isize len) const
+DiskImage::asciidump(isize c, isize h, isize s, isize offset, isize len) const
 {
     return asciidump(c * numHeads() + h, s, offset, len);
 }

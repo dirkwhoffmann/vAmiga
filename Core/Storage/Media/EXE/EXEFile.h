@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-class EXEFile : public FloppyFile {
+class EXEFile : public FloppyDiskImage {
 
     ADFFile adf;
 
@@ -49,7 +49,7 @@ public:
     
     
     //
-    // Methods from DiskFile
+    // Methods from DiskImage
     //
 
     isize numCyls() const override { return adf.numCyls(); }
@@ -58,7 +58,7 @@ public:
 
     
     //
-    // Methods from FloppyFile
+    // Methods from FloppyDiskImage
     //
     
     FSFormat getDos() const override { return adf.getDos(); }

@@ -19,10 +19,10 @@
 
 namespace vamiga {
 
-std::unique_ptr<FloppyFile>
+std::unique_ptr<FloppyDiskImage>
 FloppyFactory::make(const fs::path &path)
 {
-    std::unique_ptr<FloppyFile> result;
+    std::unique_ptr<FloppyDiskImage> result;
 
     switch (MediaFile::type(path)) {
 

@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "FloppyFile.h"
+#include "FloppyDiskImage.h"
 
 namespace vamiga {
 
-class STFile : public FloppyFile {
+class STFile : public FloppyDiskImage {
 
 public:
 
@@ -46,7 +46,7 @@ public:
 
 
     //
-    // Methods from DiskFile
+    // Methods from DiskImage
     //
 
     isize numCyls() const override;
@@ -55,7 +55,7 @@ public:
 
 
     //
-    // Methods from FloppyFile
+    // Methods from FloppyDiskImage
     //
 
     FSFormat getDos() const override { return FSFormat::NODOS; }

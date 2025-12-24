@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-class ADZFile : public FloppyFile {
+class ADZFile : public FloppyDiskImage {
 
     friend class ADZEncoder;
     
@@ -52,7 +52,7 @@ public:
 
     
     //
-    // Methods from DiskFile
+    // Methods from DiskImage
     //
 
     isize numCyls() const override { return adf.numCyls(); }
@@ -61,7 +61,7 @@ public:
 
     
     //
-    // Methods from FloppyFile
+    // Methods from FloppyDiskImage
     //
     
     FSFormat getDos() const override { return adf.getDos(); }

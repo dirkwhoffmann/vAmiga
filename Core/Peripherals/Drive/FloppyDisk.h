@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-class FloppyFile;
+class FloppyDiskImage;
 
 /* MFM encoded disk data of a standard 3.5" DD disk:
  *
@@ -105,7 +105,7 @@ public:
     
     FloppyDisk() = default;
     FloppyDisk(Diameter dia, Density den, bool wp = false) { init(dia, den, wp); }
-    FloppyDisk(const FloppyFile &file, bool wp = false) { init(file, wp); }
+    FloppyDisk(const FloppyDiskImage &file, bool wp = false) { init(file, wp); }
     FloppyDisk(SerReader &reader, Diameter dia, Density den, bool wp = false) {
         init(reader, dia, den, wp); }
     ~FloppyDisk();
@@ -113,8 +113,8 @@ public:
 private:
     
     void init(Diameter dia, Density den, bool wp);
-    void init(const class FloppyFile &file, bool wp);
-    void init(unique_ptr<FloppyFile> file, bool wp);
+    void init(const class FloppyDiskImage &file, bool wp);
+    void init(unique_ptr<FloppyDiskImage> file, bool wp);
     void init(SerReader &reader, Diameter dia, Density den, bool wp);
 
     
@@ -249,7 +249,7 @@ public:
 public:
     
     // Encodes a disk
-    void encodeDisk(const class FloppyFile &file);
+    void encodeDisk(const class FloppyDiskImage &file);
 
     // Shifts the tracks agains each other
     void shiftTracks(isize offset);

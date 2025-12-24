@@ -369,7 +369,7 @@ public:
 public:
 
     bool isInsertable(Diameter t, Density d) const;
-    bool isInsertable(const FloppyFile &file) const;
+    bool isInsertable(const FloppyDiskImage &file) const;
     bool isInsertable(const FloppyDisk &disk) const;
 
     // Inserts a new disk with an optional delay
@@ -384,7 +384,7 @@ public:
 
     // Replaces the current disk (recommended way to insert disks)
     void swapDisk(std::unique_ptr<FloppyDisk> disk);
-    void swapDisk(class FloppyFile &file);
+    void swapDisk(class FloppyDiskImage &file);
     void swapDisk(const fs::path &path);
 
     // Replaces the current disk with a factory-fresh disk

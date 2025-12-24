@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include "FloppyFile.h"
+#include "FloppyDiskImage.h"
 
 namespace vamiga {
 
 class FileSystem;
 
-class ADFFile : public FloppyFile {
+class ADFFile : public FloppyDiskImage {
 
 public:
 
@@ -59,7 +59,7 @@ public:
     void finalizeRead() override;
     
     //
-    // Methods from DiskFile
+    // Methods from DiskImage
     //
 
     isize numCyls() const override;
@@ -68,7 +68,7 @@ public:
 
     
     //
-    // Methods from FloppyFile
+    // Methods from FloppyDiskImage
     //
     
 public:

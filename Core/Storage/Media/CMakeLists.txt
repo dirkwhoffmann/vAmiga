@@ -5,8 +5,9 @@ target_sources(VACore PRIVATE
 MediaError.cpp
 MediaFile.cpp
 AnyFile.cpp
-DiskFile.cpp
-FloppyFile.cpp
+DiskImage.cpp
+FloppyDiskImage.cpp
+HardDiskImage.cpp
 FloppyFactory.cpp
 Snapshot.cpp
 Script.cpp

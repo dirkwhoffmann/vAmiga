@@ -379,6 +379,8 @@
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
 		50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CC6276D174200386540 /* GdbServer.cpp */; };
 		50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
+		50BF4B2F2EFBF7D000F1B9F2 /* HardDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */; };
+		50BF4B302EFBF7D000F1B9F2 /* HardDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */; };
 		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -409,7 +411,7 @@
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
-		50E1B0A627CE7164005E41DA /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskFile.cpp */; };
+		50E1B0A627CE7164005E41DA /* DiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskImage.cpp */; };
 		50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */; };
 		50E1D2C426CCF8C9001FE199 /* FileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */; };
 		50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C526CCF942001FE199 /* FontExtensions.swift */; };
@@ -462,7 +464,7 @@
 		50F6EEBE21F4F61F0091155D /* FloppyDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */; };
 		50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
-		50FAC77525160BBF00E47421 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
+		50FAC77525160BBF00E47421 /* FloppyDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */; };
 		50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC047427DA108500C3E566 /* Headless.cpp */; };
 		50FC048027DA190400C3E566 /* CoreComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* CoreComponent.cpp */; };
 		50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
@@ -532,8 +534,8 @@
 		50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50FC04C927DA19E900C3E566 /* EADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EADFFile.cpp */; };
-		50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskFile.cpp */; };
-		50FC04CB27DA19E900C3E566 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
+		50FC04CA27DA19E900C3E566 /* DiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskImage.cpp */; };
+		50FC04CB27DA19E900C3E566 /* FloppyDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */; };
 		50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */; };
 		50FC04CD27DA19E900C3E566 /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
 		50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
@@ -1170,6 +1172,8 @@
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
 		50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServerCmds.cpp; sourceTree = "<group>"; };
+		50BF4B2D2EFBF7C600F1B9F2 /* HardDiskImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDiskImage.h; sourceTree = "<group>"; };
+		50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardDiskImage.cpp; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -1230,8 +1234,8 @@
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
 		50DF2C9F2269135800795256 /* SpriteTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteTableView.swift; sourceTree = "<group>"; };
 		50DFA84027F350680009C216 /* DiagBoardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagBoardTypes.h; sourceTree = "<group>"; };
-		50E1B0A427CE7164005E41DA /* DiskFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskFile.cpp; sourceTree = "<group>"; };
-		50E1B0A527CE7164005E41DA /* DiskFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskFile.h; sourceTree = "<group>"; };
+		50E1B0A427CE7164005E41DA /* DiskImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImage.cpp; sourceTree = "<group>"; };
+		50E1B0A527CE7164005E41DA /* DiskImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskImage.h; sourceTree = "<group>"; };
 		50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatatypeExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C526CCF942001FE199 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
@@ -1332,8 +1336,8 @@
 		50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
 		50FAC76E2515EBED00E47421 /* IMGFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGFile.cpp; sourceTree = "<group>"; };
 		50FAC76F2515EBED00E47421 /* IMGFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFile.h; sourceTree = "<group>"; };
-		50FAC77325160BBF00E47421 /* FloppyFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFile.cpp; sourceTree = "<group>"; };
-		50FAC77425160BBF00E47421 /* FloppyFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFile.h; sourceTree = "<group>"; };
+		50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyDiskImage.cpp; sourceTree = "<group>"; };
+		50FAC77425160BBF00E47421 /* FloppyDiskImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDiskImage.h; sourceTree = "<group>"; };
 		50FC046D27DA0FA500C3E566 /* Headless */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Headless; sourceTree = BUILT_PRODUCTS_DIR; };
 		50FC047427DA108500C3E566 /* Headless.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Headless.cpp; sourceTree = "<group>"; };
 		50FC050027DA205D00C3E566 /* Headless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Headless.h; sourceTree = "<group>"; };
@@ -2249,10 +2253,12 @@
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
 				50FCCA7B262AAAEA00398342 /* Script.h */,
 				50FCCA7A262AAAEA00398342 /* Script.cpp */,
-				50E1B0A527CE7164005E41DA /* DiskFile.h */,
-				50E1B0A427CE7164005E41DA /* DiskFile.cpp */,
-				50FAC77425160BBF00E47421 /* FloppyFile.h */,
-				50FAC77325160BBF00E47421 /* FloppyFile.cpp */,
+				50E1B0A527CE7164005E41DA /* DiskImage.h */,
+				50E1B0A427CE7164005E41DA /* DiskImage.cpp */,
+				50FAC77425160BBF00E47421 /* FloppyDiskImage.h */,
+				50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */,
+				50BF4B2D2EFBF7C600F1B9F2 /* HardDiskImage.h */,
+				50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */,
 				509E76302EDDD6D200608FA7 /* FloppyFactory.h */,
 				509E76312EDDD6D900608FA7 /* FloppyFactory.cpp */,
 				5009B7F5255702C00037288E /* Rom */,
@@ -3162,6 +3168,7 @@
 				501C36322C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				505A13212C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
+				50BF4B2F2EFBF7D000F1B9F2 /* HardDiskImage.cpp in Sources */,
 				507C01AC2D24269000E29933 /* InspectorToolbar.swift in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
@@ -3261,7 +3268,7 @@
 				50EAD99C256E76820053F9AC /* HDFFile.h in Sources */,
 				506D57BB2EC4B84D00E21501 /* RangeField.swift in Sources */,
 				50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */,
-				50FAC77525160BBF00E47421 /* FloppyFile.cpp in Sources */,
+				50FAC77525160BBF00E47421 /* FloppyDiskImage.cpp in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				500B0D2D2E7DF5BA008FC5E1 /* SettingsOutlineView.swift in Sources */,
 				505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */,
@@ -3280,7 +3287,7 @@
 				50AFEBBA278EF5FD00F422D5 /* Sequencer.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
-				50E1B0A627CE7164005E41DA /* DiskFile.cpp in Sources */,
+				50E1B0A627CE7164005E41DA /* DiskImage.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				509E762B2EDDC66900608FA7 /* DMSEncoder.cpp in Sources */,
 				5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */,
@@ -3386,6 +3393,7 @@
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
+				50BF4B302EFBF7D000F1B9F2 /* HardDiskImage.cpp in Sources */,
 				503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */,
 				501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
 				504CC8C22D5A819F00C2AC9A /* ADZFile.cpp in Sources */,
@@ -3400,7 +3408,7 @@
 				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,
 				5020B38F295336E5009732AC /* Host.cpp in Sources */,
 				505A13402C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
-				50FC04CB27DA19E900C3E566 /* FloppyFile.cpp in Sources */,
+				50FC04CB27DA19E900C3E566 /* FloppyDiskImage.cpp in Sources */,
 				50FC04B627DA19A900C3E566 /* RamExpansion.cpp in Sources */,
 				50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */,
 				50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */,
@@ -3496,7 +3504,7 @@
 				50FC04C327DA19DA00C3E566 /* AnyFile.cpp in Sources */,
 				50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */,
 				503FC4CB2EE0AB0D00637C95 /* Files.cpp in Sources */,
-				50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */,
+				50FC04CA27DA19E900C3E566 /* DiskImage.cpp in Sources */,
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,

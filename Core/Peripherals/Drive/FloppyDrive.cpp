@@ -963,7 +963,7 @@ FloppyDrive::isInsertable(Diameter t, Density d) const
 }
 
 bool
-FloppyDrive::isInsertable(const FloppyFile &file) const
+FloppyDrive::isInsertable(const FloppyDiskImage &file) const
 {
     return isInsertable(file.getDiameter(), file.getDensity());
 }
@@ -1151,7 +1151,7 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
 }
 
 void
-FloppyDrive::swapDisk(class FloppyFile &file)
+FloppyDrive::swapDisk(class FloppyDiskImage &file)
 {
     swapDisk(std::make_unique<FloppyDisk>(file));
 }
@@ -1162,7 +1162,7 @@ FloppyDrive::swapDisk(const fs::path &path)
     if (!fs::is_directory(path)) {
 
         auto file = FloppyFactory::make(path);
-        // std::unique_ptr<FloppyFile> file(FloppyFile::make(path));
+        // std::unique_ptr<FloppyDiskImage> file(FloppyDiskImage::make(path));
         swapDisk(*file);
         return;
     }
@@ -1186,7 +1186,7 @@ FloppyDrive::swapDisk(const fs::path &path)
 void
 FloppyDrive::insertMediaFile(const MediaFile &file, bool wp)
 {
-    if (const auto *adf = dynamic_cast<const FloppyFile *>(file.get())) {
+    if (const auto *adf = dynamic_cast<const FloppyDiskImage *>(file.get())) {
 
         swapDisk(std::make_unique<FloppyDisk>(*adf, wp));
         return;

@@ -2089,9 +2089,9 @@ NSString *EventSlotName(EventSlot slot)
 
 @implementation DiskFileProxy
 
-- (DiskFile *)file
+- (DiskImage *)file
 {
-    return (DiskFile *)obj;
+    return (DiskImage *)obj;
 }
 
 - (NSInteger)numCyls

@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class DiskFile : public AnyFile {
+class DiskImage : public AnyFile {
 
     //
     // Querying disk properties

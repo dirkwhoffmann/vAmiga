@@ -38,7 +38,7 @@ namespace vamiga {
  * and won't be.
  */
 
-class EADFFile : public FloppyFile {
+class EADFFile : public FloppyDiskImage {
 
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
@@ -87,7 +87,7 @@ public:
     
     
     //
-    // Methods from DiskFile
+    // Methods from DiskImage
     //
 
     isize numCyls() const override;
@@ -96,7 +96,7 @@ public:
     
     
     //
-    // Methods from FloppyFile
+    // Methods from FloppyDiskImage
     //
     
     FSFormat getDos() const override;

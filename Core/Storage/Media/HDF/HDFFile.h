@@ -10,7 +10,7 @@
 #pragma once
 
 #include "HDFFileTypes.h"
-#include "DiskFile.h"
+#include "HardDiskImage.h"
 #include "FSDescriptor.h"
 #include "utl/types.h"
 
@@ -18,7 +18,7 @@ namespace vamiga {
 
 class FloppyDisk;
 
-class HDFFile : public DiskFile, public PartitionedDevice {
+class HDFFile : public HardDiskImage, public PartitionedDevice {
 
 public:
     
@@ -58,7 +58,7 @@ public:
 
 
     //
-    // Methods from DiskFile
+    // Methods from DiskImage
     //
 
     isize numCyls() const override;

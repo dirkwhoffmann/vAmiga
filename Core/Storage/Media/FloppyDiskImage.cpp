@@ -8,12 +8,12 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FloppyFile.h"
+#include "FloppyDiskImage.h"
 
 namespace vamiga {
 
 GeometryDescriptor
-FloppyFile::getGeometry() const
+FloppyDiskImage::getGeometry() const
 {
     return GeometryDescriptor(numCyls(), numHeads(), numSectors(), bsize());
 }
