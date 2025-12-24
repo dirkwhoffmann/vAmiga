@@ -21,7 +21,7 @@
 
 namespace vamiga {
 
-class HardDrive final : public Drive, public PartitionedDevice {
+class HardDrive final : public Drive, public BlockDevice {
 
     friend class HDFFile;
     friend class HDFFactory;
@@ -285,7 +285,7 @@ public:
 
 
     //
-    // Methods from PartitionedDevice
+    // Methods from BlockDevice
     //
 
 public:
@@ -294,8 +294,8 @@ public:
     isize bsize() const override { return geometry.bsize; }
     void readBlock(u8 *dst, isize nr) override { memcpy(dst, data.ptr + nr * bsize(), bsize()); }
     void writeBlock(const u8 *src, isize nr) override { memcpy(data.ptr + nr * bsize(), src, bsize()); }
-    isize numPartitions() const override { return isize(ptable.size()); }
-    Range<isize> range(isize nr) const override { return ptable[nr].range(); }
+    // isize numPartitions() const override { return isize(ptable.size()); }
+    // Range<isize> range(isize nr) const override { return ptable[nr].range(); }
 
     //
     // Methods from Configurable
@@ -331,7 +331,7 @@ public:
     const GeometryDescriptor &getGeometry() const { return geometry; }
 
     // Returns the number of partitions
-    // isize numPartitions() const { return isize(ptable.size()); }
+    isize numPartitions() const { return isize(ptable.size()); }
 
     // Returns the number of loadable file system drivers
     isize numDrivers() const { return isize(drivers.size()); }

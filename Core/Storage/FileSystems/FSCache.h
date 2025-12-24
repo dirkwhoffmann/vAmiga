@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "BlockView.h"
+#include "BlockDevice.h"
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "FSService.h"
@@ -79,7 +79,7 @@ public:
     bool isEmpty() const { return usedBlocks() == 0; }
 
     // Predicts the file system type based on stored data
-    static FSFormat predictDOS(BlockView &dev) noexcept;
+    static FSFormat predictDOS(BlockDevice &dev) noexcept;
     FSFormat predictDOS() const noexcept { return predictDOS(dev); }
 
 

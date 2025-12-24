@@ -9,26 +9,31 @@
 
 #pragma once
 
-#include "BlockView.h"
+#include "BlockDevice.h"
 #include "utl/primitives.h"
 
 namespace vamiga {
 
 using namespace utl;
 
-class BlockDevice : public BlockView {
-
-    using BlockView::BlockView;
-};
-
-class PartitionedDevice : public BlockDevice {
+class BlockDevice {
 
 public:
+    
+    BlockDevice() { }
+    virtual ~BlockDevice() = default;
 
-    virtual isize numPartitions() const = 0;
-    virtual Range<isize> range(isize partition) const = 0;
+    // Returns the number of blocks
+    virtual isize capacity() const = 0;
 
-    using BlockDevice::BlockDevice;
+    // Returns the block size in bytes
+    virtual isize bsize() const = 0;
+
+    // Reads a block
+    virtual void readBlock(u8 *dst, isize nr) = 0;
+
+    // Writes a block
+    virtual void writeBlock(const u8 *src, isize nr) = 0;
 };
 
 }

@@ -464,11 +464,10 @@ HardDrive::_dump(Category category, std::ostream &os) const
         os << tab("Controller Revision");
         os << controllerRevision << std::endl;
     }
-    
+
+    /*
     if (category == Category::Volumes) {
 
-        // REACTIVATE ASAP (when Partition implements the BlockView protocol)
-        /*
         for (isize i = 0; i < isize(ptable.size()); i++) {
 
             auto dev = make_unique<Device>(getGeometry());
@@ -485,8 +484,8 @@ HardDrive::_dump(Category category, std::ostream &os) const
             auto fs = FileSystemFactory::fromHardDrive(*dev, *this, i);
             fs->dumpProps(os);
         }
-        */
     }
+    */
     
     if (category == Category::Partitions) {
         

@@ -41,7 +41,7 @@ FSCache::dump(std::ostream &os) const
 }
 
 FSFormat
-FSCache::predictDOS(BlockView &dev) noexcept
+FSCache::predictDOS(BlockDevice &dev) noexcept
 {
     Buffer<u8> data(dev.bsize());
 

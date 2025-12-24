@@ -13,12 +13,12 @@ namespace vamiga {
 
 Volume::Volume(BlockDevice &device) : device(device)
 {
-    range = { 0, device.capacity() };
+    this->range = { 0, device.capacity() };
 }
 
-Volume::Volume(PartitionedDevice &pd, isize partition) : device(pd) {
+Volume::Volume(BlockDevice &device, Range<isize> range) : device(device) {
 
-    range = pd.range(partition);
+    this->range = range;
 }
 
 isize

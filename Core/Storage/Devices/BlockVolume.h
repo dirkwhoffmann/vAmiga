@@ -14,10 +14,10 @@
 
 namespace vamiga {
 
-class Volume : public BlockView {
+class Volume : public BlockDevice {
 
     // The underlying block device
-    class BlockView &device;
+    class BlockDevice &device;
 
     // Blocks belonging to this volume
     Range<isize> range;
@@ -25,7 +25,7 @@ class Volume : public BlockView {
 public:
 
     Volume(BlockDevice &d);
-    Volume(PartitionedDevice &d, isize partition = 0);
+    Volume(BlockDevice &d, Range<isize> partition);
     virtual ~Volume() = default;
     
     isize capacity() const override;

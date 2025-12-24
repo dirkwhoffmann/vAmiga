@@ -18,7 +18,7 @@ namespace vamiga {
 
 class FloppyDisk;
 
-class HDFFile : public HardDiskImage, public PartitionedDevice {
+class HDFFile : public HardDiskImage, public BlockDevice {
 
 public:
     
@@ -67,7 +67,7 @@ public:
 
 
     //
-    // Methods from PartitionedDevice
+    // Methods from BlockDevice
     //
 
 public:
@@ -77,8 +77,6 @@ public:
     void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
     void writeBlock(const u8 *src, isize nr) override {
         writeSector(nr, Buffer<u8>(src, bsize())); }
-    isize numPartitions() const override { return isize(ptable.size()); }
-    Range<isize> range(isize nr) const override { return ptable[nr].range(); }
 
 
     //
@@ -121,17 +119,15 @@ public:
 
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
-
-    // Returns true if this image contains a user directory block
-    // bool hasUserDir() const;
     
     // Returns the number of loadable file system drivers
     isize numDrivers() const { return isize(drivers.size()); }
     
     // Returns the number of partitions
-    // isize numPartitions() const { return isize(ptable.size()); }
+    isize numPartitions() const { return isize(ptable.size()); }
 
     // Returns the byte count and the location of a certain partition
+    Range<isize> range(isize nr) const { return ptable[nr].range(); }
     isize partitionSize(isize nr) const;
     isize partitionOffset(isize nr) const;
     u8 *partitionData(isize nr) const;
