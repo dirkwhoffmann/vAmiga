@@ -15,9 +15,9 @@
 
 namespace vamiga {
 
-FSCache::FSCache(FileSystem &fs, Volume &dev) : FSService(fs), dev(dev) {
+FSCache::FSCache(FileSystem &fs, Volume &v) : FSService(fs), dev(v) {
 
-    blocks.reserve(capacity());
+    blocks.reserve(v.capacity());
 };
 
 FSCache::~FSCache()

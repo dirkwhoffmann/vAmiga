@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FSTree.h"
 #include "FileSystem.h"
+#include <algorithm>
 
 namespace vamiga {
 

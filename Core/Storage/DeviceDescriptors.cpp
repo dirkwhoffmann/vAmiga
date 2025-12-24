@@ -12,6 +12,7 @@
 #include "DeviceError.h"
 #include "FSTypes.h"
 #include "utl/io.h"
+#include "utl/types/Literals.h"
 #include <algorithm>
 
 namespace vamiga {

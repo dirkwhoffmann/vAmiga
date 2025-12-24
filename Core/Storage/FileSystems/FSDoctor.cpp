@@ -592,8 +592,8 @@ FSDoctor::xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) c
 isize
 FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
 {
-    auto &node = fs.fetch(ref);
-    isize errors = 0;
+    auto &node   = fs.fetch(ref);
+    auto errors  = isize(0);
 
     std::stringstream ss;
 
@@ -680,8 +680,6 @@ void
 FSDoctor::rectify(BlockNr ref, bool strict)
 {
     auto &node = fs.fetch(ref);
-    auto *mfs = dynamic_cast<FileSystem *>(&fs);
-    if (!mfs) throw FSError(FSError::FS_READ_ONLY);
 
     for (isize i = 0; i < traits.bsize / 4; i += 4) {
 

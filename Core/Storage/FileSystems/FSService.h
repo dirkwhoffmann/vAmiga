@@ -19,7 +19,7 @@ class FSService : public Loggable {
 public:
 
     class FileSystem &fs;
-    const struct FSTraits &traits;
+    const FSTraits &traits;
 
     explicit FSService(FileSystem& fs);
 };

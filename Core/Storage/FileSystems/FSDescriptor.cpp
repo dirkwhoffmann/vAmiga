@@ -12,6 +12,7 @@
 #include "BlockDevice.h"
 #include "FSError.h"
 #include "utl/io.h"
+#include "utl/types/Literals.h"
 
 namespace vamiga {
 
@@ -124,7 +125,7 @@ FSDescriptor::dump(std::ostream &os) const
 void
 FSDescriptor::checkCompatibility() const
 {
-    if (numBytes() > MB(504) || FORCE_FS_WRONG_CAPACITY) {
+    if (numBytes() > 504_MB || FORCE_FS_WRONG_CAPACITY) {
         throw FSError(FSError::FS_WRONG_CAPACITY);
     }
     if (bsize != 512 || FORCE_FS_WRONG_BSIZE) {

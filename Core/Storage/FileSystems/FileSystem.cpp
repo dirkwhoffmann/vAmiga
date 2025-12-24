@@ -57,7 +57,6 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     current = rootBlock;
 
     debug(FS_DEBUG, "Success\n");
-
 }
 
 void
