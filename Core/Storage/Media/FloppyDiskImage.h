@@ -20,7 +20,7 @@ namespace vamiga {
 
 class FloppyDisk;
 
-class FloppyDiskImage : public DiskImage, public BlockDevice {
+class FloppyDiskImage : public DiskImage {
 
     //
     // Initializing

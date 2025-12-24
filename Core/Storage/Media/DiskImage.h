@@ -14,23 +14,34 @@
 
 namespace vamiga {
 
-class DiskImage : public AnyFile {
+class DiskImage : public AnyFile, public BlockDevice {
 
     //
-    // Querying disk properties
+    // Querying disk capacity
     //
     
 public:
 
     virtual isize numCyls() const = 0;
     virtual isize numHeads() const = 0;
+    // virtual isize numSectors(isize track) const = 0;
     virtual isize numSectors() const = 0;
-    isize bsize() const { return 512; }
     isize numTracks() const { return numHeads() * numCyls(); }
-    isize numBlocks() const { return numTracks() * numSectors(); }
+    isize numBlocks() const { return capacity(); }
     isize numBytes() const { return numBlocks() * bsize(); }
 
-    
+
+    //
+    // Mapping layout parameters ([c]ylinders, [h]eads, [s]ectors)
+    //
+
+public:
+
+    virtual isize trackOf(isize c, isize h) { return c * numHeads() + h; }
+    virtual isize cylOf(isize t) { return t / numHeads(); }
+    virtual isize headOf(isize t) { return t % numHeads(); }
+
+
     //
     // Reading data
     //

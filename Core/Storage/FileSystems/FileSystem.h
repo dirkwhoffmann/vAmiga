@@ -101,7 +101,7 @@
 #include "FSExporter.h"
 #include "FSTree.h"
 #include "DeviceError.h"
-#include "BlockVolume.h"
+#include "Volume.h"
 #include "utl/abilities/Loggable.h"
 
 namespace vamiga {

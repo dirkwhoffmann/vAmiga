@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "BlockVolume.h"
+#include "Volume.h"
 
 namespace vamiga {
 

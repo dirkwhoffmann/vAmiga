@@ -212,8 +212,8 @@
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
 		508AC36927B7F6FD006AD2E7 /* HdController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508AC36727B7F6FC006AD2E7 /* HdController.cpp */; };
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
-		508FDD9E2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */; };
-		508FDD9F2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */; };
+		508FDD9E2EF40D3200FDBC32 /* Volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* Volume.cpp */; };
+		508FDD9F2EF40D3200FDBC32 /* Volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* Volume.cpp */; };
 		508FDDA52EF56DF200FDBC32 /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDDA42EF56DF100FDBC32 /* RSError.cpp */; };
 		508FDDA62EF56DF200FDBC32 /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDDA42EF56DF100FDBC32 /* RSError.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
@@ -937,8 +937,8 @@
 		508C6BCF23F7E77500D8938F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
-		508FDD9C2EF40D2B00FDBC32 /* BlockVolume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockVolume.h; sourceTree = "<group>"; };
-		508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockVolume.cpp; sourceTree = "<group>"; };
+		508FDD9C2EF40D2B00FDBC32 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
+		508FDD9D2EF40D3000FDBC32 /* Volume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Volume.cpp; sourceTree = "<group>"; };
 		508FDDA02EF53BEF00FDBC32 /* primitives.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = primitives.h; sourceTree = "<group>"; };
 		508FDDA12EF53C5200FDBC32 /* Range.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		508FDDA32EF56DEA00FDBC32 /* RSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSError.h; sourceTree = "<group>"; };
@@ -1529,8 +1529,8 @@
 				503E86A42EEF15A300ED891D /* CMakeLists.txt */,
 				503E86A02EEEBBE800ED891D /* BlockDevice.h */,
 				503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */,
-				508FDD9C2EF40D2B00FDBC32 /* BlockVolume.h */,
-				508FDD9D2EF40D3000FDBC32 /* BlockVolume.cpp */,
+				508FDD9C2EF40D2B00FDBC32 /* Volume.h */,
+				508FDD9D2EF40D3000FDBC32 /* Volume.cpp */,
 			);
 			path = Devices;
 			sourceTree = "<group>";
@@ -3267,7 +3267,7 @@
 				505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */,
 				501C514827C2AD8C00DF1DD5 /* DiskExporter.swift in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
-				508FDD9E2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */,
+				508FDD9E2EF40D3200FDBC32 /* Volume.cpp in Sources */,
 				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				505F457A2E96A2B200418105 /* NSImage.swift in Sources */,
@@ -3331,7 +3331,7 @@
 				50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */,
 				50BCB9A82EE2F347000C53CF /* Parser.cpp in Sources */,
 				50672CC12946100F004113F5 /* DebuggerConsole.cpp in Sources */,
-				508FDD9F2EF40D3200FDBC32 /* BlockVolume.cpp in Sources */,
+				508FDD9F2EF40D3200FDBC32 /* Volume.cpp in Sources */,
 				501B001A2C63589500749664 /* GuardList.cpp in Sources */,
 				50FC04F627DA1A8F00C3E566 /* AudioPort.cpp in Sources */,
 				50FC04DA27DA1A0000C3E566 /* Console.cpp in Sources */,

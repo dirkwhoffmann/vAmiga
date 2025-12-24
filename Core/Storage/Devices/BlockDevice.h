@@ -23,11 +23,11 @@ public:
     BlockDevice() { }
     virtual ~BlockDevice() = default;
 
-    // Returns the number of blocks
-    virtual isize capacity() const = 0;
-
-    // Returns the block size in bytes
+    // Block size in bytes
     virtual isize bsize() const = 0;
+
+    // Number of blocks
+    virtual isize capacity() const = 0;
 
     // Reads a block
     virtual void readBlock(u8 *dst, isize nr) = 0;

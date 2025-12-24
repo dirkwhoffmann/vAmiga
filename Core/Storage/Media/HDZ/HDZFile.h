@@ -50,14 +50,26 @@ public:
 
     
     //
-    // Methods from DiskFile
+    // Methods from DiskImage
     //
 
     isize numCyls() const override { return hdf.numCyls(); }
     isize numHeads() const override { return hdf.numHeads(); }
     isize numSectors() const override { return hdf.numSectors(); }
-    
-    
+
+
+    //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize capacity() const override { return hdf.numBlocks(); }
+    isize bsize() const override { return hdf.bsize(); }
+    void readBlock(u8 *dst, isize nr) override { hdf.readBlock(dst, nr); }
+    void writeBlock(const u8 *src, isize nr) override { hdf.writeBlock(src, nr); }
+
+
     //
     // Serializing
     //
