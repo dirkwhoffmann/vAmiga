@@ -51,7 +51,7 @@ namespace utl {
  */
 
 void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)> read)
+Dumpable::dump(std::ostream &os, const DumpOpt &opt, DataProvider reader)
 {
     string fmt;
 
@@ -62,11 +62,11 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
     if (opt.ascii)  fmt += "|" + repeat("%c", opt.columns * opt.size) + "|";
     fmt += "\n";
 
-    dump(os, opt, read, fmt.c_str());
+    dump(os, opt, reader, fmt.c_str());
 }
 
 void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)> read, const char *fmt)
+Dumpable::dump(std::ostream &os, const DumpOpt &opt, DataProvider reader, const char *fmt)
 {
     bool ctrl = false;
     isize ccnt = 0, bcnt = 0;
@@ -96,7 +96,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
     };
 
     // Continue as long as data is available
-    while (read(bcnt, 1) != -1 && read(ccnt, 1) != -1) {
+    while (reader(bcnt, 1) != -1 && reader(ccnt, 1) != -1) {
 
         // Rewind to the beginning of the format string
         const char *p = fmt;
@@ -122,7 +122,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
                 }
                 case 'a': // Character
                 {
-                    if (auto val = read(ccnt, 1); val != -1) {
+                    if (auto val = reader(ccnt, 1); val != -1) {
                         ss << (val == '\n' || isprint(int(val)) ? (char)val : ' ');
                         ccnt += 1;
                     } else {
@@ -132,7 +132,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
                 }
                 case 'c': // Character
                 {
-                    if (auto val = read(ccnt, 1); val != -1) {
+                    if (auto val = reader(ccnt, 1); val != -1) {
                         ss << (isprint(int(val)) ? (char)val : '.');
                         ccnt += 1;
                     } else {
@@ -142,7 +142,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
                 }
                 case 'b': case '1': // Byte
                 {
-                    auto val = read(bcnt, 1);
+                    auto val = reader(bcnt, 1);
                     out(val, 1);
                     bcnt += 1;
                     break;
@@ -150,14 +150,14 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
                 case 'w': case '2': // Word
 
                 {
-                    auto val = read(bcnt, 2);
+                    auto val = reader(bcnt, 2);
                     out(val, 2);
                     bcnt += 2;
                     break;
                 }
                 case 'l': case '4': // Long
                 {
-                    auto val = read(bcnt, 4);
+                    auto val = reader(bcnt, 4);
                     out(val, 4);
                     bcnt += 4;
                     break;
@@ -190,12 +190,6 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
 }
 
 void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len)
-{
-    dump(os, opt, buf, len, nullptr);
-}
-
-void
 Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len, const char *fmt)
 {
     auto read = [&](isize offset, isize bytes) {
@@ -212,5 +206,13 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len, c
 
     fmt ? dump(os, opt, read, fmt) : dump(os, opt, read);
 }
+
+/*
+void
+Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::span<u8> span, const char *fmt)
+{
+    dump(os, opt, span.data(), span.size(), fmt);
+}
+*/
 
 }

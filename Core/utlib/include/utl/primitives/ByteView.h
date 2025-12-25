@@ -9,14 +9,14 @@
 
 #pragma once
 
-#include "utl/common.h"
+#include "utl/abilities/Dumpable.h"
 #include <span>
 #include <cstdint>
 #include <cassert>
 
 namespace utl {
 
-class ByteView {
+class ByteView : public Dumpable {
 
     std::span<const u8> span{};
 
@@ -47,6 +47,21 @@ public:
     constexpr isize size() const { return (isize)span.size(); }
     constexpr bool empty() const { return span.empty(); }
     constexpr std::span<const u8> bytes() const { return span; }
+
+    /*
+    void dump(std::ostream &os, DumpOpt opt) override {
+
+        dump(os, opt, 0, size());
+    };
+
+    void dump(std::ostream &os, DumpOpt opt, isize offset, isize length) override {
+
+        offset = std::clamp(offset, isize(0), size());
+        length = std::clamp(length, isize(0), size() - offset);
+
+        Dumpable::dump(os, opt, span.subspan(offset, length));
+    };
+    */
 
     class iterator {
 

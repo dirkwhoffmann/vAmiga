@@ -1261,18 +1261,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                 if (!file.isFile()) {
                     throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
-                
+
+                auto t     = args.contains("t");
+                auto l     = args.contains("l");
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
-                
+
                 Buffer<u8> buffer;
                 file.extractData(buffer);
-                
-                buffer.type(os, {
-                    
-                    .lines = lines,
-                    .tail = args.contains("t"),
-                    .nr = args.contains("l")
-                });
+                buffer.dump(os, DumpOpt { .lines = lines, .tail = t, .nr = l }, "%a");
             }
     });
     

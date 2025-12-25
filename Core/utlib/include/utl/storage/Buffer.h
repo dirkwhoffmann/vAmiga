@@ -31,6 +31,23 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     Allocator& operator= (const Allocator&);
     ~Allocator() { dealloc(); }
 
+    //
+    // Methods from Hashable
+    //
+
+
+    //
+    // Methods from Dumpable
+    //
+
+    std::span<const u8> dumpSource() override { return std::span<const u8>((u8 *)ptr, size); }
+
+
+    //
+    // Methods
+    //
+
+
     // Queries the buffer state
     isize bytesize() const { return size * sizeof(T); }
     bool empty() const { return size == 0; }
@@ -70,12 +87,12 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     u32 crc32() const { return ptr ? Hashable::crc32((u8 *)ptr, bytesize()) : 0; }
 
     // Pretty-printing the buffer contents
-    void dump(std::ostream &os, DumpOpt opt) { Dumpable::dump(os, opt, ptr, size); }
-    void dump(std::ostream &os, DumpOpt opt, const char *fmt) { Dumpable::dump(os, opt, ptr, size, fmt); }
-    void ascDump(std::ostream &os) { dump(os, { .columns = 64, .offset = true, .ascii = true }); }
-    void hexDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .nr = true }); }
-    void memDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .offset = true, .ascii = true }); }
-    void type(std::ostream &os, DumpOpt opt) { dump(os, opt, "%a"); }
+    [[deprecated]] void dump(std::ostream &os, DumpOpt opt) { Dumpable::dump(os, opt, ptr, size); }
+    [[deprecated]] void dump(std::ostream &os, DumpOpt opt, const char *fmt) { Dumpable::dump(os, opt, ptr, size, fmt); }
+    [[deprecated]] void ascDump(std::ostream &os) { dump(os, { .columns = 64, .offset = true, .ascii = true }); }
+    [[deprecated]] void hexDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .nr = true }); }
+    [[deprecated]] void memDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .offset = true, .ascii = true }); }
+    [[deprecated]] void type(std::ostream &os, DumpOpt opt) { dump(os, opt, "%a"); }
 
     // Compresses or uncompresses a buffer
     void gzip(isize offset = 0) {

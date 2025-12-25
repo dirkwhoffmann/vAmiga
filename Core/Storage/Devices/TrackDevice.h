@@ -103,7 +103,6 @@ public:
     void writeBlock(const u8 *src, isize c, isize h, isize s) { writeBlock(src, CHS{c,h,s}); }
     void writeBlock(const u8 *src, TS ts) { writeBlock(src, bindex(ts)); }
     void writeBlock(const u8 *src, isize t, isize s) { writeBlock(src, TS{t,s}); }
-
 };
 
 }

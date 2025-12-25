@@ -7,7 +7,9 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "TrackDevice.h"
+#include <algorithm>
 
 namespace vamiga {
 
