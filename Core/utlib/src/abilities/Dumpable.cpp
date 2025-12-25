@@ -12,41 +12,43 @@
 
 namespace utl {
 
-void
-Dumpable::hexdump(const u8 *p, isize size, isize cols, isize pad) const
-{
-    while (size) {
+/*
+ void
+ Dumpable::hexdump(const u8 *p, isize size, isize cols, isize pad) const
+ {
+ while (size) {
 
-        isize cnt = std::min(size, cols);
-        for (isize x = 0; x < cnt; x++) {
-            fprintf(stderr, "%02X %s", p[x], ((x + 1) % pad) == 0 ? " " : "");
-        }
+ isize cnt = std::min(size, cols);
+ for (isize x = 0; x < cnt; x++) {
+ fprintf(stderr, "%02X %s", p[x], ((x + 1) % pad) == 0 ? " " : "");
+ }
 
-        size -= cnt;
-        p += cnt;
+ size -= cnt;
+ p += cnt;
 
-        fprintf(stderr, "\n");
-    }
-    fprintf(stderr, "\n");
-}
+ fprintf(stderr, "\n");
+ }
+ fprintf(stderr, "\n");
+ }
 
-void
-Dumpable::hexdump(const u8 *p, isize size, isize cols) const
-{
-    hexdump(p, size, cols, cols);
-}
+ void
+ Dumpable::hexdump(const u8 *p, isize size, isize cols) const
+ {
+ hexdump(p, size, cols, cols);
+ }
 
-void
-Dumpable::hexdumpWords(const u8 *p, isize size, isize cols) const
-{
-    hexdump(p, size, cols, 2);
-}
+ void
+ Dumpable::hexdumpWords(const u8 *p, isize size, isize cols) const
+ {
+ hexdump(p, size, cols, 2);
+ }
 
-void
-Dumpable::hexdumpLongwords(const u8 *p, isize size, isize cols) const
-{
-    hexdump(p, size, cols, 4);
-}
+ void
+ Dumpable::hexdumpLongwords(const u8 *p, isize size, isize cols) const
+ {
+ hexdump(p, size, cols, 4);
+ }
+ */
 
 void
 Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)> read)
@@ -190,19 +192,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,i
 void
 Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len)
 {
-    auto read = [&](isize offset, isize bytes) {
-
-        isize value = 0;
-
-        while (bytes-- > 0) {
-
-            if (offset >= len) return isize(-1);
-            value = value << 8 | buf[offset++];
-        }
-        return value;
-    };
-
-    dump(os, opt, read);
+    dump(os, opt, buf, len, nullptr);
 }
 
 void
@@ -220,7 +210,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len, c
         return value;
     };
 
-    dump(os, opt, read, fmt);
+    fmt ? dump(os, opt, read, fmt) : dump(os, opt, read);
 }
 
 }

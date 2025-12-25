@@ -1,0 +1,125 @@
+// -----------------------------------------------------------------------------
+// This file is part of utlib - A lightweight utility library
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
+//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
+
+#pragma once
+
+
+#include "utl/primitives/ByteView.h"
+
+namespace utl {
+
+class BitView {
+
+    std::span<const u8> span_{};
+    isize bitCount_ = 0;
+
+public:
+
+    constexpr BitView() = default;
+    constexpr BitView(const u8* data, isize bitCount) {
+
+        span_     = std::span(data, (bitCount + 7) / 8);
+        bitCount_ = bitCount;
+
+        assert(bitCount_ >= 0);
+        assert(isize(span_.size()) * 8 >= bitCount_);
+    }
+
+    constexpr BitView(std::span<const u8> bytes, isize bitCount) {
+
+        span_     = bytes;
+        bitCount_ = bitCount;
+
+        assert(bitCount_ >= 0);
+        assert(isize(span_.size()) * 8 >= bitCount_);
+    }
+
+    constexpr BitView(const ByteView& view) {
+
+        span_     = view.bytes();
+        bitCount_ = view.size() * 8;
+
+        assert(bitCount_ >= 0);
+        assert(isize(span_.size()) * 8 >= bitCount_);
+    }
+
+    constexpr bool operator[](isize i) const {
+
+        assert(i >= 0 && i < bitCount_);
+        return (span_[i >> 3] >> (7 - (i & 7))) & 1;
+    }
+
+    constexpr isize size() const { return bitCount_; }
+    constexpr bool empty() const { return bitCount_ == 0; }
+    constexpr std::span<const u8> bytes() const { return span_; }
+
+    class iterator {
+
+        const BitView* view_;
+        isize pos_;
+
+    public:
+
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type        = bool;
+        using difference_type   = isize;
+        using pointer           = void;     // Proxy-free
+        using reference         = bool;     // Returned by value
+
+        constexpr iterator(const BitView* view, isize pos) : view_(view), pos_(pos) {}
+
+        // Dereference
+        constexpr reference operator*() const { return (*view_)[pos_]; }
+
+        // Increment / Decrement
+        constexpr iterator& operator++() { ++pos_; return *this; }
+        constexpr iterator& operator--() { --pos_; return *this; }
+
+        // Random access
+        constexpr reference operator[](difference_type n) const { return *(*this + n); }
+
+    private:
+
+        friend constexpr iterator operator+(const iterator& it, difference_type n) {
+            return iterator(it.view_, it.pos_ + n);
+        }
+        friend constexpr iterator operator+(difference_type n, const iterator& it) {
+            return iterator(it.view_, it.pos_ + n);
+        }
+        friend constexpr iterator operator-(const iterator& it, difference_type n) {
+            return iterator(it.view_, it.pos_ - n);
+        }
+        friend constexpr difference_type operator-(const iterator& lhs, const iterator& rhs) {
+            assert(lhs.view_ == rhs.view_); return lhs.pos_ - rhs.pos_;
+        }
+        friend constexpr bool operator==(const iterator& lhs, const iterator& rhs) {
+            return lhs.view_ == rhs.view_ && lhs.pos_ == rhs.pos_;
+        }
+        friend constexpr bool operator!=(const iterator& lhs, const iterator& rhs) {
+            return !(lhs == rhs);
+        }
+        friend constexpr bool operator<(const iterator& lhs, const iterator& rhs) {
+            assert(lhs.view_ == rhs.view_); return lhs.pos_ < rhs.pos_;
+        }
+        friend constexpr bool operator<=(const iterator& lhs, const iterator& rhs) {
+            return !(rhs < lhs);
+        }
+        friend constexpr bool operator>(const iterator& lhs, const iterator& rhs) {
+            return rhs < lhs;
+        }
+        friend constexpr bool operator>=(const iterator& lhs, const iterator& rhs) {
+            return !(lhs < rhs);
+        }
+    };
+
+    constexpr iterator begin() const { return iterator(this, 0); }
+    constexpr iterator end()   const { return iterator(this, size()); }
+};
+
+}

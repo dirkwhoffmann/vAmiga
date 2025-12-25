@@ -11,6 +11,7 @@
 
 #include "utl/common.h"
 #include <sstream>
+#include <cstring>
 
 namespace utl {
 

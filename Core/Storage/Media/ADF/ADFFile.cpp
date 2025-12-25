@@ -240,10 +240,12 @@ ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
     */
 }
 
+/*
 void
 ADFFile::dumpSector(Sector s) const
 {
     Dumpable::hexdump(data.ptr + 512 * s, 512);
 }
+*/
 
 }

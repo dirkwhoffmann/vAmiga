@@ -227,6 +227,7 @@ Allocator<T>::patch(const char *seq, const char *subst)
     if (ptr) replace((char *)ptr, bytesize(), seq, subst);
 }
 
+/*
 template <class T> void
 Allocator<T>::dump(std::ostream &os, DumpOpt opt)
 {
@@ -262,6 +263,7 @@ Allocator<T>::type(std::ostream &os, DumpOpt opt)
 {
     dump(os, opt, "%a");
 }
+*/
 
 template <class T> void
 Allocator<T>::compress(std::function<void(u8 *, isize, vector<u8> &)> algo, isize offset)

@@ -99,15 +99,6 @@ public:
 public:
     
     void formatDisk(FSFormat fs, BootBlockId id, string name);
-
-    
-    //
-    // Debugging
-    //
-
-public:
-    
-    void dumpSector(Sector s) const;
 };
 
 }

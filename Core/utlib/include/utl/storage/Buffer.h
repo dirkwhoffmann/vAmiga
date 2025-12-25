@@ -12,8 +12,10 @@
 #include "utl/abilities/Compressible.h"
 #include "utl/abilities/Hashable.h"
 #include "utl/abilities/Dumpable.h"
-
+#include "utl/primitives/BitView.h"
 #include <ostream>
+#include <type_traits>
+
 
 namespace utl {
 
@@ -68,12 +70,12 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     u32 crc32() const { return ptr ? Hashable::crc32((u8 *)ptr, bytesize()) : 0; }
 
     // Pretty-printing the buffer contents
-    void dump(std::ostream &os, DumpOpt opt);
-    void dump(std::ostream &os, DumpOpt opt, const char *fmt);
-    void ascDump(std::ostream &os);
-    void hexDump(std::ostream &os);
-    void memDump(std::ostream &os);
-    void type(std::ostream &os, DumpOpt opt);
+    void dump(std::ostream &os, DumpOpt opt) { Dumpable::dump(os, opt, ptr, size); }
+    void dump(std::ostream &os, DumpOpt opt, const char *fmt) { Dumpable::dump(os, opt, ptr, size, fmt); }
+    void ascDump(std::ostream &os) { dump(os, { .columns = 64, .offset = true, .ascii = true }); }
+    void hexDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .nr = true }); }
+    void memDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .offset = true, .ascii = true }); }
+    void type(std::ostream &os, DumpOpt opt) { dump(os, opt, "%a"); }
 
     // Compresses or uncompresses a buffer
     void gzip(isize offset = 0) {
