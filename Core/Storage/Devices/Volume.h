@@ -11,6 +11,7 @@
 
 #include "BlockDevice.h"
 #include "DeviceDescriptors.h"
+#include "utl/primitives.h"
 
 namespace vamiga {
 

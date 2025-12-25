@@ -2116,7 +2116,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)numSectors
 {
-    return [self file]->numSectors();
+    return [self file]->numSectors(0);
 }
 
 - (NSInteger)numBlocks
@@ -2131,7 +2131,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (void)readSector:(NSInteger)b destination:(unsigned char *)buf
 {
-    [self file]->readSector(buf, b);
+    [self file]->readBlock(buf, b);
 }
 
 - (NSString *) describeGeometry

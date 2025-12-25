@@ -49,12 +49,22 @@ public:
     
     
     //
-    // Methods from DiskImage
+    // Methods from BlockDevice
+    //
+
+    isize bsize() const override { return adf.bsize(); }
+    isize capacity() const override { return adf.capacity(); }
+    void readBlock(u8 *dst, isize nr) override { adf.readBlock(dst, nr); }
+    void writeBlock(const u8 *src, isize nr) override { adf.writeBlock(src, nr); };
+
+
+    //
+    // Methods from TrackDevice
     //
 
     isize numCyls() const override { return adf.numCyls(); }
     isize numHeads() const override { return adf.numHeads(); }
-    isize numSectors() const override { return adf.numSectors(); }
+    isize numSectors(isize t) const override { return adf.numSectors(t); }
 
     
     //
@@ -68,8 +78,8 @@ public:
     BootBlockType bootBlockType() const override { return adf.bootBlockType(); }
     const char *bootBlockName() const override { return adf.bootBlockName(); }
     void killVirus() override { adf.killVirus(); }
-    void readSector(u8 *target, isize s) const override { return adf.readSector(target, s); }
-    void readSector(u8 *target, isize t, isize s) const override { return adf.readSector(target, t, s); }
+    // void readSector(u8 *target, isize s) const override { return adf.readSector(target, s); }
+    // void readSector(u8 *target, isize t, isize s) const override { return adf.readSector(target, t, s); }
 };
 
 }

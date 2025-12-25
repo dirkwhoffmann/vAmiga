@@ -92,9 +92,9 @@ public:
 
     isize numCyls() const override;
     isize numHeads() const override;
-    isize numSectors() const override;
-    
-    
+    isize numSectors(isize) const override { return numSectors(); }
+    isize numSectors() const;
+
     //
     // Methods from FloppyDiskImage
     //
@@ -103,11 +103,13 @@ public:
     void setDos(FSFormat dos) override { };
     Diameter getDiameter() const override;
     Density getDensity() const override;
-    
+
+    /*
     u8 readByte(isize b, isize offset) const override { return 0; }
     u8 readByte(isize t, isize s, isize offset) const override { return 0; }
     void readSector(u8 *dst, isize b) const override { }
     void readSector(u8 *dst, isize t, isize s) const override { }
+    */
     
 
     // Scanning the raw data

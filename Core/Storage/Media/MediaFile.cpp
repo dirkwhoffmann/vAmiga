@@ -219,7 +219,7 @@ MediaFile::getDiskInfo() const
 
         result.cyls = disk.numCyls();
         result.heads = disk.numHeads();
-        result.sectors = disk.numSectors();
+        result.sectors = disk.numSectors(0); // TODO: SECTOR COUNTS MAY VARY
         result.bsize = disk.bsize();
         result.tracks = disk.numTracks();
         result.blocks = disk.numBlocks();
@@ -300,7 +300,7 @@ void
 MediaFile::readSector(u8 *dst, isize b) const
 {
     if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        disk->readSector(dst, b);
+        const_cast<DiskImage *>(disk)->readBlock(dst, b);
     }
 }
 
@@ -308,7 +308,7 @@ void
 MediaFile::readSector(u8 *dst, isize t, isize s) const
 {
     if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        disk->readSector(dst, t, s);
+        const_cast<DiskImage *>(disk)->readBlock(dst, disk->bindex(DiskImage::TS{t,s}));
     }
 }
 

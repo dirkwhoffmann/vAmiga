@@ -63,21 +63,23 @@ public:
 
     isize numCyls() const override;
     isize numHeads() const override;
-    isize numSectors() const override;
+    isize numSectors(isize) const override { return numSectors(); }
+    isize numSectors() const;
 
 
     //
-    // Methods from BlockDevice
+    // Methods from TrackDevice
     //
 
 public:
 
+    /*
     isize bsize() const override { return 512; }
     isize capacity() const override { return data.size / bsize(); }
     void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
     void writeBlock(const u8 *src, isize nr) override {
         writeSector(nr, Buffer<u8>(src, bsize())); }
-
+     */
 
     //
     // Providing descriptors

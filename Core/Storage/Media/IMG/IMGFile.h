@@ -53,8 +53,9 @@ public:
 
     isize numCyls() const override;
     isize numHeads() const override;
-    isize numSectors() const override;
-    
+    isize numSectors(isize) const override { return numSectors(); }
+    isize numSectors() const;
+
     
     //
     // Methods from FloppyDiskImage

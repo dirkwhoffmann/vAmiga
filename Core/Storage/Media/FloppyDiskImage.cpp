@@ -15,7 +15,7 @@ namespace vamiga {
 GeometryDescriptor
 FloppyDiskImage::getGeometry() const
 {
-    return GeometryDescriptor(numCyls(), numHeads(), numSectors(), bsize());
+    return GeometryDescriptor(numCyls(), numHeads(), numSectors(0), bsize());
 }
 
 }

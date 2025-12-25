@@ -39,11 +39,13 @@ public:
 
 public:
 
+    /*
     isize capacity() const override { return numBlocks(); }
     isize bsize() const override { return 512; }
     void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
     void writeBlock(const u8 *src, isize nr) override {
         writeSector(nr, Buffer<u8>(src, bsize())); }
+    */
 
 
     //

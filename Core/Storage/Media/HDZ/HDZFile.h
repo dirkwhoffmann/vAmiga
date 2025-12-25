@@ -55,7 +55,7 @@ public:
 
     isize numCyls() const override { return hdf.numCyls(); }
     isize numHeads() const override { return hdf.numHeads(); }
-    isize numSectors() const override { return hdf.numSectors(); }
+    isize numSectors(isize t) const override { return hdf.numSectors(t); }
 
 
     //

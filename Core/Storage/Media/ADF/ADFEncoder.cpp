@@ -46,7 +46,7 @@ ADFEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
 void
 ADFEncoder::encodeTrack(const ADFFile &adf, FloppyDisk &disk, Track t)
 {
-    isize sectors = adf.numSectors();
+    isize sectors = adf.numSectors(t);
     if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga track %ld with %ld sectors\n", t, sectors);
 
     // Format track
@@ -163,7 +163,7 @@ ADFEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
 void
 ADFEncoder::decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t)
 {
-    long sectors = adf.numSectors();
+    long sectors = adf.numSectors(t);
 
     if (ADF_DEBUG) fprintf(stderr, "Decoding track %ld\n", t);
 

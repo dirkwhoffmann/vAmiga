@@ -9,19 +9,20 @@
 
 #pragma once
 
-#include "utl/common.h"
+#include "BlockDevice.h"
 
 namespace vamiga {
 
 using namespace utl;
 
-class BlockDevice {
+class TrackDevice : public BlockDevice {
 
 public:
-    
-    BlockDevice() { }
-    virtual ~BlockDevice() = default;
 
+    TrackDevice() { }
+    virtual ~TrackDevice() = default;
+
+    /*
     // Block size in bytes
     virtual isize bsize() const = 0;
 
@@ -32,7 +33,8 @@ public:
     virtual void readBlock(u8 *dst, isize nr) = 0;
 
     // Writes a block
-    virtual void writeBlock(const u8 *src, isize nr) = 0;
+    virtual void writeBlock(const u8 *src, isize nr) = 0;+
+    */
 };
 
 }
