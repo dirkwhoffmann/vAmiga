@@ -11,11 +11,11 @@
 
 #include "DiskImageTypes.h"
 #include "AnyFile.h"
-#include "BlockDevice.h"
+#include "TrackDevice.h"
 
 namespace vamiga {
 
-class DiskImage : public AnyFile, public BlockDevice {
+class DiskImage : public AnyFile, public TrackDevice {
 
 public:
 
@@ -85,28 +85,35 @@ public:
 
 
     //
-    // Methods from TrackDevice
+    // Methods from LinearDevice
+    //
+
+    isize size() const override { return data.size; }
+    void read(u8 *dst, isize offset, isize count) override;
+    void write(const u8 *src, isize offset, isize count) override;
+
+
+    //
+    // Methods from BlockDevice
     //
     
 public:
 
     isize bsize() const override { return 512; }
-    isize capacity() const override { return data.size / bsize(); }
-    void readBlock(u8 *dst, isize nr) override;
-    void writeBlock(const u8 *src, isize nr) override;
 
 
-    // Reads a single byte
-    [[deprecated]] virtual u8 readByte(isize b, isize offset) const; // TODO: MOVE to BlockDevice
-    [[deprecated]] virtual u8 readByte(isize t, isize s, isize offset) const;
+    //
+    // Methods from TrackDevice
+    //
+
 
     // Reads a single sector
     // [[deprecated]] virtual void readSector(u8 *dst, isize b) const;
     [[deprecated]] virtual void readSector(u8 *dst, isize t, isize s) const;
 
     // Write a single byte
-    [[deprecated]] virtual void writeByte(isize b, isize offset, u8 value);
-    [[deprecated]] virtual void writeByte(isize t, isize s, isize offset, u8 value);
+    // [[deprecated]] virtual void writeByte(isize b, isize offset, u8 value);
+    // [[deprecated]] virtual void writeByte(isize t, isize s, isize offset, u8 value);
 
     // Writes a single sector
     // [[deprecated]] virtual void writeSector(isize b, const Buffer<u8> &buffer);

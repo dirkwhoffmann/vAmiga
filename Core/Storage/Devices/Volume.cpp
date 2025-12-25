@@ -16,21 +16,29 @@ Volume::Volume(BlockDevice &device) : device(device)
     this->range = { 0, device.capacity() };
 }
 
-Volume::Volume(BlockDevice &device, Range<isize> range) : device(device) {
-
+Volume::Volume(BlockDevice &device, Range<isize> range) : device(device)
+{
     this->range = range;
 }
 
-isize
-Volume::capacity() const
+void
+Volume::read(u8 *dst, isize offset, isize count)
 {
-    return range.size();
+    if(offset < 0 || count < 0 || offset + count > range.size() * bsize()) {
+        throw Error(offset, "Range out of bounds");
+    }
+
+    device.read(dst, range.translate(0) * bsize() + offset, count);
 }
 
-isize
-Volume::bsize() const
+void
+Volume::write(const u8 *src, isize offset, isize count)
 {
-    return device.bsize();
+    if(offset < 0 || count < 0 || offset + count > range.size() * bsize()) {
+        throw Error(offset, "Range out of bounds");
+    }
+
+    device.write(src, range.translate(0) * bsize() + offset, count);
 }
 
 void

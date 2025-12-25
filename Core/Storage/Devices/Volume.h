@@ -28,10 +28,27 @@ public:
     Volume(BlockDevice &d);
     Volume(BlockDevice &d, Range<isize> partition);
     virtual ~Volume() = default;
+
+
+    //
+    // Methods from LinearDevice
+    //
+
+public:
+
+    isize size() const override { return capacity() * bsize(); }
+    void read(u8 *dst, isize offset, isize count) override;
+    void write(const u8 *src, isize offset, isize count) override;
+
     
-    isize capacity() const override;
-    isize bsize() const override;
-    // void freeBlock(isize nr) override;
+    //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize capacity() const override { return range.size(); }
+    isize bsize() const override { return device.bsize(); }
     void readBlock(u8 *dst, isize nr) override;
     void writeBlock(const u8 *src, isize nr) override;
 };

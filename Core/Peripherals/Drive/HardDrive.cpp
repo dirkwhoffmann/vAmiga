@@ -501,6 +501,20 @@ HardDrive::_dump(Category category, std::ostream &os) const
     }
 }
 
+void
+HardDrive::read(u8 *dst, isize offset, isize count)
+{
+    assert(offset + count <= data.size);
+    memcpy((void *)dst, (void *)(data.ptr + offset), count);
+}
+
+void
+HardDrive::write(const u8 *src, isize offset, isize count)
+{
+    assert(offset + count <= data.size);
+    memcpy((void *)(data.ptr + offset), (void *)src, count);
+}
+
 bool
 HardDrive::isConnected() const
 {

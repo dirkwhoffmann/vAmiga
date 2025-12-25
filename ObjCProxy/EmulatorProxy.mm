@@ -2126,7 +2126,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset
 {
-    return [self file]->readByte(b, offset);
+    return [self file]->readByte(b * 512 + offset);
 }
 
 - (void)readSector:(NSInteger)b destination:(unsigned char *)buf

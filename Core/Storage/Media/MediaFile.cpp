@@ -282,7 +282,7 @@ u8
 MediaFile::readByte(isize b, isize offset) const
 {
     if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->readByte(b, offset);
+        return const_cast<DiskImage *>(disk)->readByte(b * disk->bsize());
     }
     return 0;
 }
@@ -291,7 +291,7 @@ u8
 MediaFile::readByte(isize t, isize s, isize offset) const
 {
     if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->readByte(t, s, offset);
+        return const_cast<DiskImage *>(disk)->readByte(disk->bindex(DiskImage::TS{t,s}));
     }
     return 0;
 }

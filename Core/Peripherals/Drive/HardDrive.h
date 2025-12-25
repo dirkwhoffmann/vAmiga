@@ -15,13 +15,13 @@
 #include "FSObjects.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
-#include "BlockDevice.h"
+#include "TrackDevice.h"
 #include "utl/storage.h"
 #include "utl/wrappers.h"
 
 namespace vamiga {
 
-class HardDrive final : public Drive, public BlockDevice {
+class HardDrive final : public Drive, public TrackDevice {
 
     friend class HDFFile;
     friend class HDFFactory;
@@ -285,19 +285,6 @@ public:
 
 
     //
-    // Methods from BlockDevice
-    //
-
-public:
-
-    isize capacity() const override { return geometry.numBlocks(); }
-    isize bsize() const override { return geometry.bsize; }
-    void readBlock(u8 *dst, isize nr) override { memcpy(dst, data.ptr + nr * bsize(), bsize()); }
-    void writeBlock(const u8 *src, isize nr) override { memcpy(data.ptr + nr * bsize(), src, bsize()); }
-    // isize numPartitions() const override { return isize(ptable.size()); }
-    // Range<isize> range(isize nr) const override { return ptable[nr].range(); }
-
-    //
     // Methods from Configurable
     //
 
@@ -314,7 +301,33 @@ private:
     void connect();
     void disconnect();
 
-    
+
+    //
+    // Methods from LinearDevice
+    //
+
+public:
+
+    isize size() const override { return data.size; }
+    void read(u8 *dst, isize offset, isize count) override;
+    void write(const u8 *src, isize offset, isize count) override;
+
+
+    //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize bsize() const override { return geometry.bsize; }
+
+
+    //
+    // Methods from TrackDevice
+    //
+
+
+
     //
     // Analyzing
     //

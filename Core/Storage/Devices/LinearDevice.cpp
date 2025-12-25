@@ -7,28 +7,23 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "BlockDevice.h"
+#include "config.h"
+#include "LinearDevice.h"
 
 namespace vamiga {
 
-isize
-BlockDevice::capacity() const
+u8
+LinearDevice::readByte(isize offset)
 {
-    return size() / bsize();
+    u8 value;
+    read(&value, offset, 1);
+    return value;
 }
 
 void
-BlockDevice::readBlock(u8 *dst, isize nr)
+LinearDevice::writeByte(u8 value, isize offset)
 {
-    assert(0 <= nr && nr < capacity());
-    read(dst, nr * bsize(), bsize());
-}
-
-void
-BlockDevice::writeBlock(const u8 *src, isize nr)
-{
-    assert(0 <= nr && nr < capacity());
-    write(src, nr * bsize(), bsize());
+    write(&value, offset, 1);
 }
 
 }

@@ -381,6 +381,8 @@
 		50BF4B302EFBF7D000F1B9F2 /* HardDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */; };
 		50BF4B342EFD1A0800F1B9F2 /* TrackDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */; };
 		50BF4B352EFD1A0800F1B9F2 /* TrackDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */; };
+		50BF4B382EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
+		50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
 		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -1175,6 +1177,8 @@
 		50BF4B312EFC1E1800F1B9F2 /* DiskImageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskImageTypes.h; sourceTree = "<group>"; };
 		50BF4B322EFD19FF00F1B9F2 /* TrackDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrackDevice.h; sourceTree = "<group>"; };
 		50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrackDevice.cpp; sourceTree = "<group>"; };
+		50BF4B362EFD244100F1B9F2 /* LinearDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinearDevice.h; sourceTree = "<group>"; };
+		50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinearDevice.cpp; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -1532,6 +1536,8 @@
 			isa = PBXGroup;
 			children = (
 				503E86A42EEF15A300ED891D /* CMakeLists.txt */,
+				50BF4B362EFD244100F1B9F2 /* LinearDevice.h */,
+				50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */,
 				503E86A02EEEBBE800ED891D /* BlockDevice.h */,
 				503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */,
 				50BF4B322EFD19FF00F1B9F2 /* TrackDevice.h */,
@@ -3089,6 +3095,7 @@
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				50001C652593230200D1FC91 /* DeviceDatabase.swift in Sources */,
 				50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */,
+				50BF4B382EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,
 				50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */,
 				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
@@ -3511,6 +3518,7 @@
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
 				509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */,
+				50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,
 				5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */,
 				505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,

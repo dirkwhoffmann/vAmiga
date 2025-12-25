@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include "utl/common.h"
+#include "LinearDevice.h"
 
 namespace vamiga {
 
 using namespace utl;
 
-class BlockDevice {
+class BlockDevice : public LinearDevice {
 
 public:
     
@@ -26,13 +26,13 @@ public:
     virtual isize bsize() const = 0;
 
     // Number of blocks
-    virtual isize capacity() const = 0;
+    virtual isize capacity() const;
 
     // Reads a block
-    virtual void readBlock(u8 *dst, isize nr) = 0;
+    virtual void readBlock(u8 *dst, isize nr);
 
     // Writes a block
-    virtual void writeBlock(const u8 *src, isize nr) = 0;
+    virtual void writeBlock(const u8 *src, isize nr);
 };
 
 }

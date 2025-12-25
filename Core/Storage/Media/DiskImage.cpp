@@ -17,6 +17,20 @@ using CHS = DiskImage::CHS;
 using TS  = DiskImage::TS;
 
 void
+DiskImage::read(u8 *dst, isize offset, isize count)
+{
+    assert(offset + count <= data.size);
+    memcpy((void *)dst, (void *)(data.ptr + offset), count);
+}
+
+void
+DiskImage::write(const u8 *src, isize offset, isize count)
+{
+    assert(offset + count <= data.size);
+    memcpy((void *)(data.ptr + offset), (void *)src, count);
+}
+
+void
 DiskImage::buildTrackMap() const
 {
     track2block.clear();
@@ -103,40 +117,6 @@ DiskImage::bindex(TS ts) const
     return track2block[ts.track] + ts.sector;
 }
 
-
-u8
-DiskImage::readByte(isize b, isize offset) const
-{
-    assert(0 <= b && b < capacity());
-    assert(0 <= offset && offset < bsize());
-
-    return data[b * bsize() + offset];
-}
-
-u8
-DiskImage::readByte(isize t, isize s, isize offset) const
-{
-    return readByte(bindex(TS{t,s}), offset);
-}
-
-
-void
-DiskImage::readBlock(u8 *dst, isize nr)
-{
-    assert(0 <= nr && nr < capacity());
-
-    memcpy((void *)dst, (void *)(data.ptr + nr * bsize()), bsize());
-}
-
-void
-DiskImage::writeBlock(const u8 *dst, isize nr)
-{
-    assert(0 <= nr && nr < capacity());
-    assert(nr * bsize() + bsize() <= data.size);
-
-    memcpy((void *)dst, (void *)(data.ptr + nr * bsize()), bsize());
-}
-
 /*
 void
 DiskImage::readSector(u8 *dst, isize s) const
@@ -161,6 +141,7 @@ DiskImage::readSector(u8 *dst, isize t, isize s) const
     memcpy((void *)dst, (void *)(data.ptr + boffset(TS{t,s})), bsize());
 }
 
+/*
 void
 DiskImage::writeByte(isize b, isize offset, u8 value)
 {
@@ -173,6 +154,7 @@ DiskImage::writeByte(isize t, isize s, isize offset, u8 value)
     writeByte(bindex(TS{t,s}), offset, value);
 
 }
+*/
 
 /*
 void
