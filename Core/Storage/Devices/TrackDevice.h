@@ -17,24 +17,75 @@ using namespace utl;
 
 class TrackDevice : public BlockDevice {
 
+    // Maps a track to its first block
+    mutable std::vector<isize> track2block;
+
 public:
+
+    struct CHS {
+
+        isize cylinder;
+        isize head;
+        isize sector;
+    };
+
+    struct TS {
+
+        isize track;
+        isize sector;
+    };
 
     TrackDevice() { }
     virtual ~TrackDevice() = default;
 
-    /*
-    // Block size in bytes
-    virtual isize bsize() const = 0;
+private:
 
-    // Number of blocks
-    virtual isize capacity() const = 0;
+    // Sets up the track map
+    void buildTrackMap() const;
 
-    // Reads a block
-    virtual void readBlock(u8 *dst, isize nr) = 0;
+    // Maps a block to its track
+    isize block2track(isize b) const;
 
-    // Writes a block
-    virtual void writeBlock(const u8 *src, isize nr) = 0;+
-    */
+
+    //
+    // Querying capacity information
+    //
+
+public:
+
+    virtual isize numCyls() const = 0;
+    virtual isize numHeads() const = 0;
+    virtual isize numSectors(isize t) const = 0;
+
+    isize numSectors(isize c, isize h) const { return numSectors(c * numHeads() + h); }
+    isize numTracks() const { return numHeads() * numCyls(); }
+    isize numBlocks() const { return capacity(); }
+    isize numBytes() const { return capacity() * bsize(); }
+
+
+    //
+    // Mapping [c]ylinders, [h]eads, [s]ectors, [b]locks
+    //
+
+public:
+
+    // Translates to cylinder/head/sector format
+    CHS chs(isize b) const;
+    CHS chs(isize t, isize s) const;
+    CHS chs(TS ts) const { return chs(ts.track, ts.sector); }
+
+    // Translates to track/sector format
+    TS ts(isize b) const;
+    TS ts(isize c, isize h, isize s) const;
+    TS ts(CHS chs) const { return ts(chs.cylinder, chs.head, chs.sector); }
+
+    // Translates to block numbers
+    isize bindex(CHS chs) const;
+    isize bindex(TS ts) const;
+
+    // Translates to byte offsets
+    isize boffset(CHS chs) const { return bindex(chs) * bsize(); }
+    isize boffset(TS ts) const { return bindex(ts) * bsize(); }
 };
 
 }

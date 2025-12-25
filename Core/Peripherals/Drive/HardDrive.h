@@ -326,6 +326,9 @@ public:
     // Methods from TrackDevice
     //
 
+    isize numCyls() const override { return geometry.cylinders; }
+    isize numHeads() const override { return geometry.heads; }
+    isize numSectors(isize t) const override { return geometry.sectors; }
 
 
     //
