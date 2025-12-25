@@ -18,35 +18,35 @@ namespace utl {
 
 class ByteView {
 
-    std::span<const u8> span_{};
+    std::span<const u8> span{};
 
 public:
 
     constexpr ByteView() = default;
     constexpr ByteView(const u8* data, isize size) {
 
-        span_ = std::span(data, size_t(size));
+        span = std::span(data, size_t(size));
     }
 
     constexpr ByteView(std::span<const u8> bytes) {
 
-        span_ = bytes;
+        span = bytes;
     }
 
     constexpr const u8 &operator[](isize i) const {
 
-        assert(i >= 0 && i < isize(span_.size()));
-        return span_[i];
+        assert(i >= 0 && i < isize(span.size()));
+        return span[i];
     }
 
     constexpr operator std::span<const u8>() const {
 
-        return span_;
+        return span;
     }
 
-    constexpr isize size() const { return (isize)span_.size(); }
-    constexpr bool empty() const { return span_.empty(); }
-    constexpr std::span<const u8> bytes() const { return span_; }
+    constexpr isize size() const { return (isize)span.size(); }
+    constexpr bool empty() const { return span.empty(); }
+    constexpr std::span<const u8> bytes() const { return span; }
 
     class iterator {
 

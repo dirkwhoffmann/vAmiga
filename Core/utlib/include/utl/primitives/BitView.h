@@ -16,48 +16,48 @@ namespace utl {
 
 class BitView {
 
-    std::span<const u8> span_{};
-    isize bitCount_ = 0;
+    std::span<const u8> span{}; // Data
+    isize length = 0;           // Length in bits
 
 public:
 
     constexpr BitView() = default;
     constexpr BitView(const u8* data, isize bitCount) {
 
-        span_     = std::span(data, (bitCount + 7) / 8);
-        bitCount_ = bitCount;
+        span     = std::span(data, (bitCount + 7) / 8);
+        length = bitCount;
 
-        assert(bitCount_ >= 0);
-        assert(isize(span_.size()) * 8 >= bitCount_);
+        assert(length >= 0);
+        assert(isize(span.size()) * 8 >= length);
     }
 
     constexpr BitView(std::span<const u8> bytes, isize bitCount) {
 
-        span_     = bytes;
-        bitCount_ = bitCount;
+        span     = bytes;
+        length = bitCount;
 
-        assert(bitCount_ >= 0);
-        assert(isize(span_.size()) * 8 >= bitCount_);
+        assert(length >= 0);
+        assert(isize(span.size()) * 8 >= length);
     }
 
     constexpr BitView(const ByteView& view) {
 
-        span_     = view.bytes();
-        bitCount_ = view.size() * 8;
+        span     = view.bytes();
+        length = view.size() * 8;
 
-        assert(bitCount_ >= 0);
-        assert(isize(span_.size()) * 8 >= bitCount_);
+        assert(length >= 0);
+        assert(isize(span.size()) * 8 >= length);
     }
 
     constexpr bool operator[](isize i) const {
 
-        assert(i >= 0 && i < bitCount_);
-        return (span_[i >> 3] >> (7 - (i & 7))) & 1;
+        assert(i >= 0 && i < length);
+        return (span[i >> 3] >> (7 - (i & 7))) & 1;
     }
 
-    constexpr isize size() const { return bitCount_; }
-    constexpr bool empty() const { return bitCount_ == 0; }
-    constexpr std::span<const u8> bytes() const { return span_; }
+    constexpr isize size() const { return length; }
+    constexpr bool empty() const { return length == 0; }
+    constexpr std::span<const u8> bytes() const { return span; }
 
     class iterator {
 

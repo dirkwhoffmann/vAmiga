@@ -86,6 +86,24 @@ public:
     // Translates to byte offsets
     isize boffset(CHS chs) const { return bindex(chs) * bsize(); }
     isize boffset(TS ts) const { return bindex(ts) * bsize(); }
+
+
+    //
+    // Accessing blocks
+    //
+
+    using BlockDevice::readBlock;
+    void readBlock(u8 *dst, CHS chs) { readBlock(dst, bindex(chs)); }
+    void readBlock(u8 *dst, isize c, isize h, isize s) { readBlock(dst, CHS{c,h,s}); }
+    void readBlock(u8 *dst, TS ts) { readBlock(dst, bindex(ts)); }
+    void readBlock(u8 *dst, isize t, isize s) { readBlock(dst, TS{t,s}); }
+
+    using BlockDevice::writeBlock;
+    void writeBlock(const u8 *src, CHS chs) { writeBlock(src, bindex(chs)); }
+    void writeBlock(const u8 *src, isize c, isize h, isize s) { writeBlock(src, CHS{c,h,s}); }
+    void writeBlock(const u8 *src, TS ts) { writeBlock(src, bindex(ts)); }
+    void writeBlock(const u8 *src, isize t, isize s) { writeBlock(src, TS{t,s}); }
+
 };
 
 }
