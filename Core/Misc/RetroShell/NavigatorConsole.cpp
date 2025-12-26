@@ -383,11 +383,9 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
 {
     DumpOpt opt; DumpFmt fmt;
 
-    auto lines = argv.contains("lines") ? parseNum(argv.at("lines")) : -1;
     auto a = argv.contains("a");
     auto o = argv.contains("o");
     auto d = argv.contains("d");
-    auto t = argv.contains("t");
     auto w = argv.contains("w");
     auto l = argv.contains("l");
     auto size = l ? 'l' : w ? 'w' : 'b';
@@ -401,22 +399,22 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
     }
     if (o) {
 
-        opt = { .base = 8, .lines = lines, .tail = t };
+        opt = { .base = 8 };
         fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
 
     } else if (d) {
 
-        opt = { .base = 10, .lines = lines, .tail = t };
+        opt = { .base = 10 };
         fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
 
     } else if (a) {
 
-        opt = { .base = 0, .lines = lines, .tail = t };
+        opt = { .base = 0 };
         fmt = { .size = size, .columns = 64, .offset = true, .ascii = true };
 
     } else {
 
-        opt = { .base = 16, .lines = lines, .tail = t };
+        opt = { .base = 16 };
         fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
     }
 
@@ -1266,11 +1264,17 @@ NavigatorConsole::initCommands(RSCommand &root)
                 requireFormattedFS();
 
                 auto &file = fs->fetch(parseFile(args, "path", fs->pwd()));
-                auto opt = parseDumpOpts(args);
-                
+                auto opt   = parseDumpOpts(args);
+                auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
+                auto t     = args.contains("t");
+
                 Buffer<u8> buffer;
                 file.extractData(buffer);
-                buffer.dump(os, opt.first, opt.second);
+
+                std::stringstream ss;
+                buffer.dump(ss, opt.first, opt.second);
+
+                t ? tail(ss, os, lines) : head(ss, os, lines);
             }
     });
     
@@ -1292,10 +1296,15 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
-                auto nr = parseBlock(args, "nr", fs->pwd());
-                auto opt = parseDumpOpts(args);
+                auto nr    = parseBlock(args, "nr", fs->pwd());
+                auto opt   = parseDumpOpts(args);
+                auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
+                auto t     = args.contains("t");
 
-                fs->fetch(nr).dump(os, opt.first, opt.second);
+                std::stringstream ss;
+                fs->fetch(nr).dump(ss, opt.first, opt.second);
+
+                t ? tail(ss, os, lines) : head(ss, os, lines);
             }
     });
     

@@ -16,15 +16,14 @@ namespace utl {
 
 struct DumpOpt
 {
-    isize base;     // 8 (Oct)  | 10 (Dec)  | 16 (Hex)
-    isize lines;    // number (number of output lines)
-    bool  tail;     // true ( list from top) | false (list from bottom)
+    isize base;         // 8 (Oct)  | 10 (Dec)  | 16 (Hex)
 };
 
 struct DumpFmt
 {
-    char   size;         // Value format 'b' = Byte, 'w' = Word, 'l' = 'Long'
+    char   size;        // 'b' (Byte) | 'w' (Word) | 'l' (Long)
     isize  columns;     // Number of data columns
+    isize  groups;      // Number of groups to split columns into
     bool   nr;          // Add a column showing the current line number
     bool   offset;      // Add a column showing the current buffer offset
     bool   ascii;       // Add an ASCII column
@@ -36,7 +35,7 @@ class Dumpable {
 
 public:
 
-    using DataProvider = std::function<isize(isize,isize)>;
+    using DataProvider = std::function<optional<isize>(isize,isize)>;
 
     virtual ~Dumpable() = default;
 
@@ -53,23 +52,23 @@ public:
         dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false }, reader);
     }
     static void memDump(std::ostream &os, DataProvider reader) {
-        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false }, reader);
+        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = true }, reader);
     }
     static void ascDump(std::ostream &os, DataProvider reader) {
-        dump(os, { }, { .columns = 64, .offset = true, .ascii = true }, reader);
+        dump(os, { .base = 0 }, { .columns = 64, .offset = true, .ascii = true }, reader);
     }
     static void txtDump(std::ostream &os, DataProvider reader) {
-        dump(os, { }, "%a", reader);
+        dump(os, { .base = 0 }, "%a", reader);
     }
 
     // The data source (must be provided by the subclass)
     virtual DataProvider dataProvider() const = 0;
 
     // Instance methods
-    void dump(std::ostream &os, DumpOpt opt, const DumpFmt &fmt) const {
+    void dump(std::ostream &os, const DumpOpt &opt, const DumpFmt &fmt) const {
         dump(os, opt, fmt, dataProvider());
     };
-    void dump(std::ostream &os, DumpOpt opt, const string &fmt) const {
+    void dump(std::ostream &os, const DumpOpt &opt, const string &fmt) const {
         dump(os, opt, fmt, dataProvider());
     };
     void hexDump(std::ostream &os) const { hexDump(os, dataProvider()); }

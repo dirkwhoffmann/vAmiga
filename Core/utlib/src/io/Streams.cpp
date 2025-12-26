@@ -9,8 +9,34 @@
 
 #include "utl/support.h"
 #include "utl/io.h"
+#include <deque>
 
 namespace utl {
+
+void head(std::istream &in, std::ostream &out, isize lines)
+{
+    string s;
+    while (lines-- > 0 && std::getline(in, s)) {
+        out << s << '\n';
+    }
+}
+
+void tail(std::istream &in, std::ostream &out, isize lines)
+{
+    std::deque<string> buf;
+    string s;
+
+    while (std::getline(in, s)) {
+
+        if (buf.size() == static_cast<size_t>(lines))
+            buf.pop_front();
+        buf.push_back(s);
+    }
+
+    for (auto &l : buf) {
+        out << l << '\n';
+    }
+}
 
 std::ostream &
 dec::operator()(std::ostream &os) const

@@ -15,6 +15,14 @@
 namespace utl {
 
 //
+// Extracting lines
+//
+
+void head(std::istream &in, std::ostream &out, isize lines);
+void tail(std::istream &in, std::ostream &out, isize lines);
+
+
+//
 // Formatters
 //
 

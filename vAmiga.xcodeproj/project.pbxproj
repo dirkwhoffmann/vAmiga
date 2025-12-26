@@ -1653,7 +1653,6 @@
 			children = (
 				50BCB9972EE1DB07000C53CF /* Bits.cpp */,
 				503FC4C92EE0AB0500637C95 /* Files.cpp */,
-				503FC4CC2EE0AB1000637C95 /* Streams.cpp */,
 				503FC4E52EE1B36000637C95 /* Strings.cpp */,
 			);
 			path = support;
@@ -2623,6 +2622,7 @@
 			children = (
 				50392FB32EF9857900DAE17A /* Formatter.cpp */,
 				50BCB9A62EE2F344000C53CF /* Parser.cpp */,
+				503FC4CC2EE0AB1000637C95 /* Streams.cpp */,
 			);
 			path = io;
 			sourceTree = "<group>";
