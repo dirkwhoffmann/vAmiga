@@ -45,7 +45,16 @@ public:
 
     explicit operator bool() const { return data.ptr != nullptr; }
 
-    
+
+    //
+    // Methods from Dumpable
+    //
+
+    Dumpable::DataProvider dataProvider() const override {
+        return Dumpable::dataProvider(data.ptr, data.size);
+    }
+
+
     //
     // Data management
     //

@@ -27,28 +27,40 @@ struct DumpOpt
     bool  ascii;    //
 };
 
+struct DumpFmt
+{
+    char   size;         // Value format 'b' = Byte, 'w' = Word, 'l' = 'Long'
+    isize  columns;     // Number of data columns
+    bool   nr;          // Add a column showing the current line number
+    bool   offset;      // Add a column showing the current buffer offset
+    bool   ascii;       // Add an ASCII column
+
+    string fmt() const; // Translates options to a format string
+};
+
 class Dumpable {
 
-    // Data provider (subclass must override)
-    virtual std::span<const u8> dumpSource() { return std::span<const u8>(); }
-
 public:
+
+    using DataProvider = std::function<isize(isize,isize)>;
+
+    // Derived classes must provide access to their data
+    virtual DataProvider dataProvider() const = 0;
 
     virtual ~Dumpable() = default;
 
     // Class methods
-    using DataProvider = std::function<isize(isize,isize)>;
     static DataProvider dataProvider(const u8 *buf, isize len);
     static DataProvider dataProvider(std::span<const u8> span);
 
-    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt);
-    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt, const char *fmt);
+    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt, const DumpFmt &fmt);
+    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt, const string &fmt);
 
 
 
     // Instance methods
     void dump(std::ostream &os, DumpOpt opt, const char *fmt = nullptr) {
-        dump(os, dataProvider(dumpSource()), opt, fmt);
+        dump(os, dataProvider(), opt, fmt);
     };
     void ascDump(std::ostream &os) {
         dump(os, { .columns = 64, .offset = true, .ascii = true });

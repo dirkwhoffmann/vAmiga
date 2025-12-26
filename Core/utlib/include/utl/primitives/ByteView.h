@@ -48,6 +48,13 @@ public:
     constexpr bool empty() const { return span.empty(); }
     constexpr std::span<const u8> bytes() const { return span; }
 
+    //
+    // Methods from Dumpable
+    //
+
+    Dumpable::DataProvider dataProvider() const override { return Dumpable::dataProvider(span); }
+
+
     /*
     void dump(std::ostream &os, DumpOpt opt) override {
 
@@ -62,6 +69,10 @@ public:
         Dumpable::dump(os, opt, span.subspan(offset, length));
     };
     */
+
+    //
+    // Iterator
+    //
 
     class iterator {
 

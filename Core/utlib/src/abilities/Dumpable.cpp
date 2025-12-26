@@ -12,7 +12,25 @@
 
 namespace utl {
 
-/*
+string
+DumpFmt::fmt() const
+{
+    string fmt;
+
+    // Setup placeholders
+    string s1 = size == 'l' ? "%l "      : size == 'w' ? "%w "  : "%b ";
+    string s2 = size == 'l' ? "%c%c%c%c" : size == 'w' ? "%c%c" : "%c";
+
+    // Assemble the format string
+    if (nr)      fmt += "%n: ";
+    if (offset)  fmt += "%p:  ";
+    if (columns) fmt += repeat(s1, columns / 2) + " " + repeat(s1, columns / 2) + " ";
+    if (ascii)   fmt += "|" + repeat(s2, columns) + "|";
+    fmt += "\n";
+
+    return fmt;
+}
+    /*
  void
  Dumpable::hexdump(const u8 *p, isize size, isize cols, isize pad) const
  {
@@ -51,8 +69,9 @@ namespace utl {
  */
 
 void
-Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt)
+Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const DumpFmt &fmt)
 {
+    /*
     string fmt;
 
     // Assemble the format string
@@ -63,10 +82,12 @@ Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt)
     fmt += "\n";
 
     dump(os, reader, opt, fmt.c_str());
+    */
+    dump(os, reader, opt, fmt.fmt());
 }
 
 void
-Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const char *fmt)
+Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const string &fmt)
 {
     bool ctrl = false;
     isize ccnt = 0, bcnt = 0;
@@ -99,7 +120,7 @@ Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const 
     while (reader(bcnt, 1) != -1 && reader(ccnt, 1) != -1) {
 
         // Rewind to the beginning of the format string
-        const char *p = fmt;
+        const char *p = fmt.c_str();
 
         // Print one line of data
         while ((c = *p++) != '\0') {
