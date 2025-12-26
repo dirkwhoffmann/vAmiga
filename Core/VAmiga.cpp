@@ -1780,13 +1780,6 @@ RetroShellAPI::execScript(const string &contents)
 }
 
 void
-RetroShellAPI::execScript(const MediaFile &file)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->asyncExecScript(file);
-}
-
-void
 RetroShellAPI::import(const FloppyDrive &dfn)
 {
     VAMIGA_PUBLIC_SUSPEND

@@ -23,9 +23,9 @@ using namespace utl;
 enum class FileType : long
 {
     UNKNOWN,
-    WORKSPACE,
+    // WORKSPACE,
     SNAPSHOT,
-    SCRIPT,
+    // SCRIPT,
     ADF,
     ADZ,
     EADF,
@@ -49,9 +49,9 @@ struct FileTypeEnum : utl::Reflectable<FileTypeEnum, FileType>
         switch (value) {
                 
             case FileType::UNKNOWN:      return "UNKNOWN";
-            case FileType::WORKSPACE:    return "WORKSPACE";
+            // case FileType::WORKSPACE:    return "WORKSPACE";
             case FileType::SNAPSHOT:     return "SNAPSHOT";
-            case FileType::SCRIPT:       return "SCRIPT";
+            // case FileType::SCRIPT:       return "SCRIPT";
             case FileType::ADF:          return "ADF";
             case FileType::ADZ:          return "ADZ";
             case FileType::EADF:         return "EADF";
@@ -71,9 +71,9 @@ struct FileTypeEnum : utl::Reflectable<FileTypeEnum, FileType>
         switch (value) {
                 
             case FileType::UNKNOWN:      return "Unknown";
-            case FileType::WORKSPACE:    return "Emulation Environment";
+            // case FileType::WORKSPACE:    return "Emulation Environment";
             case FileType::SNAPSHOT:     return "Snapshot";
-            case FileType::SCRIPT:       return "RetroShell Script";
+            // case FileType::SCRIPT:       return "RetroShell Script";
             case FileType::ADF:          return "Amiga Disk File";
             case FileType::ADZ:          return "Compressed Amiga Disk File";
             case FileType::EADF:         return "Extended Amiga Disk File";

@@ -139,25 +139,6 @@ RetroShell::asyncExecScript(const string &contents)
 }
 
 void
-RetroShell::asyncExecScript(const MediaFile &file)
-{
-    string s;
-    
-    switch (file.type()) {
-            
-        case FileType::SCRIPT:
-            
-            s = string((char *)file.getData(), file.getSize());
-            asyncExecScript(s);
-            break;
-            
-        default:
-            
-            throw IOError(IOError::FILE_TYPE_MISMATCH);
-    }
-}
-
-void
 RetroShell::abortScript()
 {
     {   SYNCHRONIZED

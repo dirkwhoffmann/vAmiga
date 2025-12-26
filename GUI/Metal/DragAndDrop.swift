@@ -130,7 +130,8 @@ extension MetalView {
         let type = FileType(url: dropUrl)
         switch type {
             
-        case .WORKSPACE, .SNAPSHOT, .SCRIPT:
+        // case .WORKSPACE, .SNAPSHOT, .SCRIPT:
+        case .SNAPSHOT:
             break
             
         case .ADF, .ADZ, .DIR, .DMS, .EADF, .EXE, .HDF, .HDZ, .IMG, .ST:

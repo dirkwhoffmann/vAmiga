@@ -312,14 +312,14 @@ class MediaManager {
         
         switch type {
             
-        case .WORKSPACE:
-            try mydocument.processWorkspaceFile(url: url)
-            
+        // case .WORKSPACE:
+        //    try mydocument.processWorkspaceFile(url: url)
+
         case .SNAPSHOT:
             try mydocument.processSnapshotFile(url: url)
             
-        case .SCRIPT:
-            try mydocument.processScriptFile(url: url)
+        // case .SCRIPT:
+        //    try mydocument.processScriptFile(url: url)
             
         case .HDF, .HDZ:
             try mount(hd: n, url: url, options: options)
