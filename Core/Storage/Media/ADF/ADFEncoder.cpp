@@ -108,7 +108,7 @@ ADFEncoder::encodeSector(const ADFFile &adf, FloppyDisk &disk, Track t, Sector s
 
     // Data
     u8 bytes[512];
-    adf.readSector(bytes, t, s);
+    adf.readBlock(bytes, t, s);
     FloppyDisk::encodeOddEven(&p[64], bytes, sizeof(bytes));
 
     // Block checksum

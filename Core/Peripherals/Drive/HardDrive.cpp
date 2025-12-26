@@ -502,7 +502,7 @@ HardDrive::_dump(Category category, std::ostream &os) const
 }
 
 void
-HardDrive::read(u8 *dst, isize offset, isize count)
+HardDrive::read(u8 *dst, isize offset, isize count) const
 {
     assert(offset + count <= data.size);
     memcpy((void *)dst, (void *)(data.ptr + offset), count);

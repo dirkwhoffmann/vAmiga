@@ -57,7 +57,7 @@ public:
 
     isize bsize() const override { return adf.bsize(); }
     isize capacity() const override { return adf.capacity(); }
-    void readBlock(u8 *dst, isize nr) override { adf.readBlock(dst, nr); }
+    void readBlock(u8 *dst, isize nr) const override { adf.readBlock(dst, nr); }
     void writeBlock(const u8 *src, isize nr) override { adf.writeBlock(src, nr); };
 
 

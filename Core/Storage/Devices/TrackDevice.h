@@ -92,11 +92,13 @@ public:
     // Accessing blocks
     //
 
+public:
+    
     using BlockDevice::readBlock;
-    void readBlock(u8 *dst, CHS chs) { readBlock(dst, bindex(chs)); }
-    void readBlock(u8 *dst, isize c, isize h, isize s) { readBlock(dst, CHS{c,h,s}); }
-    void readBlock(u8 *dst, TS ts) { readBlock(dst, bindex(ts)); }
-    void readBlock(u8 *dst, isize t, isize s) { readBlock(dst, TS{t,s}); }
+    void readBlock(u8 *dst, CHS chs) const { readBlock(dst, bindex(chs)); }
+    void readBlock(u8 *dst, isize c, isize h, isize s) const { readBlock(dst, CHS{c,h,s}); }
+    void readBlock(u8 *dst, TS ts) const { readBlock(dst, bindex(ts)); }
+    void readBlock(u8 *dst, isize t, isize s) const { readBlock(dst, TS{t,s}); }
 
     using BlockDevice::writeBlock;
     void writeBlock(const u8 *src, CHS chs) { writeBlock(src, bindex(chs)); }

@@ -22,7 +22,7 @@ class DiskImage : public AnyFile, public TrackDevice {
     //
 
     isize size() const override { return data.size; }
-    void read(u8 *dst, isize offset, isize count) override;
+    void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
 
 
@@ -42,15 +42,7 @@ public:
 
     // Reads a single sector
     // [[deprecated]] virtual void readSector(u8 *dst, isize b) const;
-    [[deprecated]] virtual void readSector(u8 *dst, isize t, isize s) const;
-
-    // Write a single byte
-    // [[deprecated]] virtual void writeByte(isize b, isize offset, u8 value);
-    // [[deprecated]] virtual void writeByte(isize t, isize s, isize offset, u8 value);
-
-    // Writes a single sector
-    // [[deprecated]] virtual void writeSector(isize b, const Buffer<u8> &buffer);
-    // [[deprecated]] virtual void writeSector(isize t, isize s, const Buffer<u8> &buffer);
+    // [[deprecated]] virtual void readSector(u8 *dst, isize t, isize s) const;
 
 
     //

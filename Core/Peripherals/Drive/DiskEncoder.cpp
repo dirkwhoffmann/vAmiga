@@ -116,7 +116,7 @@ DiskEncoder::encodeSector(const ADFFile &adf, FloppyDisk &disk, Track t, Sector 
 
     // Data
     u8 bytes[512];
-    adf.readSector(bytes, t, s);
+    adf.readBlock(bytes, t, s);
     FloppyDisk::encodeOddEven(&p[64], bytes, sizeof(bytes));
 
     // Block checksum
@@ -353,7 +353,7 @@ DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector 
     buf[59] = 0xFB;
 
     // Write DATA
-    img.readSector(&buf[60], t, s);
+    img.readBlock(&buf[60], t, s);
 
     // Compute and write CRC
     crc = Hashable::crc16(&buf[56], 516);
@@ -568,7 +568,7 @@ DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, Track t, Sector s
     buf[59] = 0xFB;
 
     // Write DATA
-    img.readSector(&buf[60], t, s);
+    img.readBlock(&buf[60], t, s);
 
     // Compute and write CRC
     crc = Hashable::crc16(&buf[56], 516);

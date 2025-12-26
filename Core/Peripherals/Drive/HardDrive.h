@@ -309,7 +309,7 @@ private:
 public:
 
     isize size() const override { return data.size; }
-    void read(u8 *dst, isize offset, isize count) override;
+    void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
 
 

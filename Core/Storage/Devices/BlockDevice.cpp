@@ -18,7 +18,7 @@ BlockDevice::capacity() const
 }
 
 void
-BlockDevice::readBlock(u8 *dst, isize nr)
+BlockDevice::readBlock(u8 *dst, isize nr) const
 {
     assert(0 <= nr && nr < capacity());
     read(dst, nr * bsize(), bsize());

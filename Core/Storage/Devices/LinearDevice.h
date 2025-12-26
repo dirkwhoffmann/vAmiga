@@ -26,13 +26,13 @@ public:
     virtual isize size() const = 0;
 
     // Reads a sequence of bytes starting at byte offset
-    virtual void read(u8 *dst, isize offset, isize count) = 0;
+    virtual void read(u8 *dst, isize offset, isize count) const = 0;
 
     // Writes a sequence of bytes starting at byte offset
     virtual void write(const u8 *src, isize offset, isize count) = 0;
 
     // Reads a single byte
-    virtual u8 readByte(isize offset);
+    virtual u8 readByte(isize offset) const;
 
     // Writes a single byte
     virtual void writeByte(u8 value, isize offset);

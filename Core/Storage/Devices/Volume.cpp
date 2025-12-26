@@ -22,7 +22,7 @@ Volume::Volume(BlockDevice &device, Range<isize> range) : device(device)
 }
 
 void
-Volume::read(u8 *dst, isize offset, isize count)
+Volume::read(u8 *dst, isize offset, isize count) const
 {
     if(offset < 0 || count < 0 || offset + count > range.size() * bsize()) {
         throw Error(offset, "Range out of bounds");
@@ -42,7 +42,7 @@ Volume::write(const u8 *src, isize offset, isize count)
 }
 
 void
-Volume::readBlock(u8 *dst, isize nr)
+Volume::readBlock(u8 *dst, isize nr) const
 {
     device.readBlock(dst, range.translate(nr));
 }

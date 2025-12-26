@@ -108,7 +108,7 @@ IMGEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s
     buf[59] = 0xFB;
 
     // Write DATA
-    img.readSector(&buf[60], t, s);
+    img.readBlock(&buf[60], t, s);
 
     // Compute and write CRC
     crc = Hashable::crc16(&buf[56], 516);

@@ -23,6 +23,21 @@ Hashable::fnvIt64(u64 prv, u64 val)
     return (prv ^ val) * 0x100000001b3;
 }
 
+u64
+Hashable::hash(const u8 *addr, isize size, HashAlgorithm algorithm)
+{
+    switch (algorithm) {
+
+        case HashAlgorithm::FNV32: return fnv32(addr, size);
+        case HashAlgorithm::FNV64: return fnv64(addr, size);
+        case HashAlgorithm::CRC16: return crc16(addr, size);
+        case HashAlgorithm::CRC32: return crc32(addr, size);
+
+        default:
+            fatalError;
+    }
+}
+
 u32
 Hashable::fnv32(const u8 *addr, isize size)
 {

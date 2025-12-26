@@ -29,7 +29,7 @@ public:
     virtual isize capacity() const;
 
     // Reads a block
-    virtual void readBlock(u8 *dst, isize nr);
+    virtual void readBlock(u8 *dst, isize nr) const;
 
     // Writes a block
     virtual void writeBlock(const u8 *src, isize nr);

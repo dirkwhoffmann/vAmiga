@@ -55,21 +55,6 @@ public:
     Dumpable::DataProvider dataProvider() const override { return Dumpable::dataProvider(span); }
 
 
-    /*
-    void dump(std::ostream &os, DumpOpt opt) override {
-
-        dump(os, opt, 0, size());
-    };
-
-    void dump(std::ostream &os, DumpOpt opt, isize offset, isize length) override {
-
-        offset = std::clamp(offset, isize(0), size());
-        length = std::clamp(length, isize(0), size() - offset);
-
-        Dumpable::dump(os, opt, span.subspan(offset, length));
-    };
-    */
-
     //
     // Iterator
     //

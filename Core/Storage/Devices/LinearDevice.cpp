@@ -13,7 +13,7 @@
 namespace vamiga {
 
 u8
-LinearDevice::readByte(isize offset)
+LinearDevice::readByte(isize offset) const
 {
     u8 value;
     read(&value, offset, 1);
