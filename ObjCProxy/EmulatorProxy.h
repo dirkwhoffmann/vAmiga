@@ -49,6 +49,7 @@ using namespace vamiga;
 @class RetroShellProxy;
 @class RtcProxy;
 @class SerialPortProxy;
+@class SnapshotProxy;
 @class VideoPortProxy;
 
 //
@@ -404,8 +405,10 @@ NSString *EventSlotName(EventSlot slot);
 @property NSInteger autoInspectionMask;
 @property (readonly) NSString *stateString;
 
-- (MediaFileProxy *) takeSnapshot:(Compressor)compressor;
-- (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (MediaFileProxy *) deprecatedTakeSnapshot:(Compressor)compressor __attribute__((deprecated));
+- (SnapshotProxy *) takeSnapshot:(Compressor)compressor;
+- (void)deprecatedLoadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex __attribute__((deprecated));
+- (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadSnapshotFromUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
@@ -894,7 +897,7 @@ NSString *EventSlotName(EventSlot slot);
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c;
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c __attribute__((deprecated("Don't use")));
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
@@ -942,6 +945,30 @@ NSString *EventSlotName(EventSlot slot);
 
 - (void)setPath:(NSString *)path;
 - (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
+
+@end
+
+
+//
+// Snapshot
+//
+
+@interface SnapshotProxy : AnyFileProxy
+{
+    NSImage *preview;
+}
+
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c;
+
+@property (readonly) NSInteger size;
+@property (readonly) u64 fnv;
+@property (readonly) Compressor compressor;
+@property (readonly) BOOL compressed;
+
+@property (readonly) u8 *data;
+
+@property (readonly, strong) NSImage *previewImage;
+@property (readonly) time_t timeStamp;
 
 @end
 

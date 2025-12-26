@@ -2281,6 +2281,13 @@ VAmiga::put(const Command &cmd)
 //
 
 std::unique_ptr<MediaFile>
+AmigaAPI::deprecatedTakeSnapshot(Compressor compressor, isize delay, bool repeat)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    return amiga->deprecatedTakeSnapshot(compressor, delay, repeat);
+}
+
+std::unique_ptr<Snapshot>
 AmigaAPI::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -2325,7 +2332,32 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
         throw;
     }
 }
- 
+
+void
+AmigaAPI::loadSnapshot(const Snapshot &snapshot)
+{
+    VAMIGA_PUBLIC_SUSPEND
+
+    emu->markAsDirty();
+
+    try {
+
+        // Restore the saved state
+        amiga->loadSnapshot(snapshot);
+
+    } catch(Error &) {
+
+        /* If we reach this point, the emulator has been put into an
+         * inconsistent state due to corrupted snapshot data. We cannot
+         * continue emulation, because it would likely crash the
+         * application. Because we cannot revert to the old state either,
+         * we perform a hard reset to eliminate the inconsistency.
+         */
+        emu->put(Cmd::HARD_RESET);
+        throw;
+    }
+}
+
 void
 AmigaAPI::loadSnapshot(const fs::path &path)
 {

@@ -1145,7 +1145,7 @@ Amiga::clearFlag(u32 flag)
 }
 
 unique_ptr<MediaFile>
-Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
+Amiga::deprecatedTakeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
     if (delay != 0) {
 
@@ -1163,6 +1163,25 @@ Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
     return make_unique<MediaFile>(std::move(result));
 }
 
+unique_ptr<Snapshot>
+Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
+{
+    if (delay != 0) {
+
+        i64 payload = (i64)compressor << 24 | repeat << 16 | delay;
+        agnus.scheduleRel<SLOT_SNP>(Amiga::sec(delay), SNP_TAKE, payload);
+        return nullptr;
+    }
+
+    // Take the snapshot
+    auto result = make_unique<Snapshot>(*this);
+
+    // Compress the snapshot if requested
+    result->compress(compressor);
+
+    return result;
+}
+
 void
 Amiga::serviceSnpEvent(EventID eventId)
 {
@@ -1170,7 +1189,7 @@ Amiga::serviceSnpEvent(EventID eventId)
     if (objid != 0) { agnus.cancel<SLOT_SNP>(); return; }
 
     // Take snapshot and hand it over to the GUI
-    auto snapshot = takeSnapshot(Compressor(agnus.data[SLOT_SNP] >> 24));
+    auto snapshot = deprecatedTakeSnapshot(Compressor(agnus.data[SLOT_SNP] >> 24));
     msgQueue.put( Message { .type = Msg::SNAPSHOT_TAKEN, .snapshot = { snapshot.release() } } );
 
     // Schedule the next event
@@ -1211,6 +1230,30 @@ Amiga::loadSnapshot(const MediaFile &file)
 
         // Restore the saved state (may throw)
         load(snapshot.getData());
+
+        // Inform the GUI
+        msgQueue.put(Msg::SNAPSHOT_RESTORED);
+        msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
+
+    } catch (const std::bad_cast &) {
+
+        throw IOError(IOError::FILE_TYPE_MISMATCH);
+    }
+}
+
+void
+Amiga::loadSnapshot(const Snapshot &snapshot)
+{
+    try {
+
+        // Make a copy so we can modify the snapshot
+        Snapshot snap(snapshot);
+
+        // Uncompress the snapshot
+        snap.uncompress();
+
+        // Restore the saved state (may throw)
+        load(snap.getData());
 
         // Inform the GUI
         msgQueue.put(Msg::SNAPSHOT_RESTORED);

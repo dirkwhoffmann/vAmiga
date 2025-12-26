@@ -12,6 +12,7 @@
 #include "VAmigaTypes.h"
 #include "CoreError.h"
 #include "MediaFile.h"
+#include "Snapshot.h"
 
 namespace vamiga {
 
@@ -103,13 +104,15 @@ public:
      *  @note   The function transfers the ownership to the caller. It is
      *          his responsibility of the caller to free the object.
      */
-    std::unique_ptr<MediaFile> takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
+    [[deprecated]] std::unique_ptr<MediaFile> deprecatedTakeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
+    std::unique_ptr<Snapshot> takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
 
     /** @brief  Loads a snapshot.
      *
      *  @param  snapshot    Reference to a snapshot
      */
     void loadSnapshot(const MediaFile &snapshot);
+    void loadSnapshot(const Snapshot &snapshot);
 
     /** @brief  Loads a snapshot
      *

@@ -1727,7 +1727,7 @@ NSString *EventSlotName(EventSlot slot)
 + (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c
 {
     auto amiga = (VAmiga *)proxy->obj;
-    auto snap = amiga->amiga.takeSnapshot(c);
+    auto snap = amiga->amiga.deprecatedTakeSnapshot(c);
 
     //Transfer ownership to ObjC via release
     return [self make:snap.release()];
@@ -2084,6 +2084,91 @@ NSString *EventSlotName(EventSlot slot)
 
 
 //
+// Snapshot
+//
+
+@implementation SnapshotProxy
+
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c
+{
+    auto amiga = (VAmiga *)proxy->obj;
+    auto snap = amiga->amiga.takeSnapshot(c);
+
+    //Transfer ownership to ObjC via release
+    return [self make:snap.release()];
+}
+
+- (Snapshot *)file
+{
+    return (Snapshot *)obj;
+}
+
+- (NSInteger)size
+{
+    return [self file]->getSize();
+}
+
+- (u64)fnv
+{
+    return [self file]->fnv64();
+}
+
+- (Compressor)compressor
+{
+    return [self file]->compressor();
+}
+
+- (BOOL)compressed
+{
+    return [self file]->isCompressed();
+}
+
+- (u8 *)data
+{
+    return [self file]->getData();
+}
+
+- (NSImage *)previewImage
+{
+    // Return cached image (if any)
+    if (preview) { return preview; }
+
+    // Get dimensions and data
+    auto size = [self file]->previewImageSize();
+    auto data = (unsigned char *)[self file]->previewImageData();
+
+    // Create preview image
+    if (data) {
+
+        NSBitmapImageRep *rep = [[NSBitmapImageRep alloc]
+                                 initWithBitmapDataPlanes: &data
+                                 pixelsWide:size.first
+                                 pixelsHigh:size.second
+                                 bitsPerSample:8
+                                 samplesPerPixel:4
+                                 hasAlpha:true
+                                 isPlanar:false
+                                 colorSpaceName:NSCalibratedRGBColorSpace
+                                 bytesPerRow:4*size.first
+                                 bitsPerPixel:32];
+
+        preview = [[NSImage alloc] initWithSize:[rep size]];
+        [preview addRepresentation:rep];
+
+        // image.makeGlossy()
+    }
+    return preview;
+}
+
+- (time_t)timeStamp
+{
+    return [self file]->timestamp();
+}
+
+@end
+
+
+//
 // DiskFileProxy
 //
 
@@ -2195,11 +2280,11 @@ NSString *EventSlotName(EventSlot slot)
     return @(ss.str().c_str());
 }
 
-- (MediaFileProxy *) takeSnapshot:(Compressor)compressor
+- (MediaFileProxy *) deprecatedTakeSnapshot:(Compressor)compressor __attribute__((deprecated))
 {
     try {
 
-        auto snap = [self amiga]->takeSnapshot(compressor);
+        auto snap = [self amiga]->deprecatedTakeSnapshot(compressor);
 
         //Transfer ownership to ObjC via release
         return [MediaFileProxy make:snap.release()];
@@ -2210,7 +2295,28 @@ NSString *EventSlotName(EventSlot slot)
     }
 }
 
-- (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
+- (SnapshotProxy *) takeSnapshot:(Compressor)compressor
+{
+    try {
+
+        auto snap = [self amiga]->takeSnapshot(compressor);
+
+        //Transfer ownership to ObjC via release
+        return [SnapshotProxy make:snap.release()];
+
+    } catch(Error &error) {
+
+        return nil;
+    }
+}
+
+- (void)deprecatedLoadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try { [self amiga]->loadSnapshot(*[proxy file]); }
+    catch(Error &error) { [ex save:error]; }
+}
+
+- (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->loadSnapshot(*[proxy file]); }
     catch(Error &error) { [ex save:error]; }
