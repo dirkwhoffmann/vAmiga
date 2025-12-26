@@ -742,11 +742,11 @@ FSBlock::hexDump(std::ostream &os, const DumpOpt &opt) const
 {
     if (type == FSBlockType::EMPTY) {
 
-        Dumpable::dump(os, opt, [&](isize offset, isize bytes) { return offset < bsize() ? 0 : -1; } );
+        Dumpable::dump(os, [&](isize offset, isize bytes) { return offset < bsize() ? 0 : -1; }, opt );
 
     } else {
 
-        Dumpable::dump(os, opt, data(), bsize());
+        Dumpable::dump(os, Dumpable::dataProvider(data(), bsize()), opt);
     }
 }
 

@@ -16,15 +16,15 @@ namespace utl {
 
 struct DumpOpt
 {
-    isize base;
-    isize size;
-    isize prefix;
-    isize columns;
-    isize lines;
-    bool  tail;
-    bool  nr;
-    bool  offset;
-    bool  ascii;
+    isize base;     // 8 (Oct)  | 10 (Dec)  | 16 (Hex)
+    isize size;     // 1 (Byte) |  2 (Word) |  4 (Long)
+    // [[deprecated]] isize prefix;   //
+    isize columns;  // number (Auto-synthesized columns if fmt is nullptr)
+    isize lines;    // number (number of output lines)
+    bool  tail;     // true ( list from top) | false (list from bottom)
+    bool  nr;       // Add line numbers
+    bool  offset;   // Add an offset column
+    bool  ascii;    //
 };
 
 class Dumpable {
@@ -38,14 +38,17 @@ public:
 
     // Class methods
     using DataProvider = std::function<isize(isize,isize)>;
-    static void dump(std::ostream &os, const DumpOpt &opt, DataProvider);
-    static void dump(std::ostream &os, const DumpOpt &opt, DataProvider, const char *fmt);
-    static void dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len, const char *fmt = nullptr);
-    static void dump(std::ostream &os, const DumpOpt &opt, std::span<const u8> span, const char *fmt = nullptr);
+    static DataProvider dataProvider(const u8 *buf, isize len);
+    static DataProvider dataProvider(std::span<const u8> span);
+
+    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt);
+    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt, const char *fmt);
+
+
 
     // Instance methods
     void dump(std::ostream &os, DumpOpt opt, const char *fmt = nullptr) {
-        dump(os, opt, dumpSource(), fmt);
+        dump(os, dataProvider(dumpSource()), opt, fmt);
     };
     void ascDump(std::ostream &os) {
         dump(os, { .columns = 64, .offset = true, .ascii = true });

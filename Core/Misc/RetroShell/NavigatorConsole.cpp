@@ -400,7 +400,7 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
         
         .base = 8,
         .size = size,
-        .prefix = 2,
+        // .prefix = 2,
         .columns = 16 / size,
         .lines = lines,
         .tail = t,
@@ -411,7 +411,7 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
         
         .base = 10,
         .size = size,
-        .prefix = 2,
+        // .prefix = 2,
         .columns = 16 / size,
         .lines = lines,
         .tail = t,
@@ -422,7 +422,7 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
         
         .base = 0,
         .size = size,
-        .prefix = 2,
+        // .prefix = 2,
         .columns = 64,
         .lines = lines,
         .tail = t,
@@ -433,7 +433,7 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
         
         .base = 16,
         .size = size,
-        .prefix = 2,
+        // .prefix = 2,
         .columns = 16 / size,
         .lines = lines,
         .tail = t,

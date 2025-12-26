@@ -87,8 +87,8 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     u32 crc32() const { return ptr ? Hashable::crc32((u8 *)ptr, bytesize()) : 0; }
 
     // Pretty-printing the buffer contents
-    [[deprecated]] void dump(std::ostream &os, DumpOpt opt) { Dumpable::dump(os, opt, ptr, size); }
-    [[deprecated]] void dump(std::ostream &os, DumpOpt opt, const char *fmt) { Dumpable::dump(os, opt, ptr, size, fmt); }
+    [[deprecated]] void dump(std::ostream &os, DumpOpt opt) { Dumpable::dump(os, Dumpable::dataProvider(ptr, size), opt); }
+    [[deprecated]] void dump(std::ostream &os, DumpOpt opt, const char *fmt) { Dumpable::dump(os, Dumpable::dataProvider(ptr, size), opt, fmt); }
     [[deprecated]] void ascDump(std::ostream &os) { dump(os, { .columns = 64, .offset = true, .ascii = true }); }
     [[deprecated]] void hexDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .nr = true }); }
     [[deprecated]] void memDump(std::ostream &os) { dump(os, { .base = 16, .columns = 64, .offset = true, .ascii = true }); }

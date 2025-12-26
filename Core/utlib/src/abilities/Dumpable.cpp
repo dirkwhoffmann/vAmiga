@@ -51,7 +51,7 @@ namespace utl {
  */
 
 void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, DataProvider reader)
+Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt)
 {
     string fmt;
 
@@ -62,11 +62,11 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, DataProvider reader)
     if (opt.ascii)  fmt += "|" + repeat("%c", opt.columns * opt.size) + "|";
     fmt += "\n";
 
-    dump(os, opt, reader, fmt.c_str());
+    dump(os, reader, opt, fmt.c_str());
 }
 
 void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, DataProvider reader, const char *fmt)
+Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const char *fmt)
 {
     bool ctrl = false;
     isize ccnt = 0, bcnt = 0;
@@ -189,10 +189,10 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, DataProvider reader, const 
     }
 }
 
-void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len, const char *fmt)
+Dumpable::DataProvider
+Dumpable::dataProvider(const u8 *buf, isize len)
 {
-    auto read = [&](isize offset, isize bytes) {
+    return [buf, len](isize offset, isize bytes) {
 
         isize value = 0;
 
@@ -203,16 +203,12 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, const u8 *buf, isize len, c
         }
         return value;
     };
-
-    fmt ? dump(os, opt, read, fmt) : dump(os, opt, read);
 }
 
-/*
-void
-Dumpable::dump(std::ostream &os, const DumpOpt &opt, std::span<u8> span, const char *fmt)
+Dumpable::DataProvider
+Dumpable::dataProvider(std::span<const u8> span)
 {
-    dump(os, opt, span.data(), span.size(), fmt);
+    return dataProvider(span.data(), span.size());
 }
-*/
 
 }
