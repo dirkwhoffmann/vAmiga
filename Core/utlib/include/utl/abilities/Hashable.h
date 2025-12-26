@@ -24,23 +24,23 @@ public:
     //
 
     // Returns the FNV-1a seed value
-    static consteval u32 fnvInit32() { return 0x811c9dc5; }
-    static consteval u64 fnvInit64() { return 0xcbf29ce484222325; }
+    [[nodiscard]] static consteval u32 fnvInit32() { return 0x811c9dc5; }
+    [[nodiscard]] static consteval u64 fnvInit64() { return 0xcbf29ce484222325; }
 
     // Performs a single iteration of the FNV-1a hash algorithm
-    static u32 fnvIt32(u32 prv, u32 val);
-    static u64 fnvIt64(u64 prv, u64 val);
+    [[nodiscard]] static u32 fnvIt32(u32 prv, u32 val);
+    [[nodiscard]] static u64 fnvIt64(u64 prv, u64 val);
 
     // Computes a checksum for a given buffer
-    static u64 hash(const u8 *addr, isize size, HashAlgorithm algorithm);
+    [[nodiscard]] static u64 hash(const u8 *addr, isize size, HashAlgorithm algorithm);
 
     // Computes a FNV-1a checksum for a given buffer
-    static u32 fnv32(const u8 *addr, isize size);
-    static u64 fnv64(const u8 *addr, isize size);
+    [[nodiscard]] static u32 fnv32(const u8 *addr, isize size);
+    [[nodiscard]] static u64 fnv64(const u8 *addr, isize size);
 
     // Computes a CRC checksum for a given buffer
-    static u16 crc16(const u8 *addr, isize size);
-    static u32 crc32(const u8 *addr, isize size);
+    [[nodiscard]] static u16 crc16(const u8 *addr, isize size);
+    [[nodiscard]] static u32 crc32(const u8 *addr, isize size);
 
     //
     // Instance methods
@@ -49,15 +49,15 @@ public:
     virtual ~Hashable() = default;
 
     // Main entry point (provided by the subclass)
-    virtual u64 hash(HashAlgorithm algorithm) = 0;
+    [[nodiscard]] virtual u64 hash(HashAlgorithm algorithm) const = 0;
 
     // Wrapper functions
-    u32 fnv32() { return (u32)hash(HashAlgorithm::FNV32); }
-    u64 fnv64() { return (u64)hash(HashAlgorithm::FNV64); }
+    [[nodiscard]] u32 fnv32() const { return (u32)hash(HashAlgorithm::FNV32); }
+    [[nodiscard]] u64 fnv64() const { return (u64)hash(HashAlgorithm::FNV64); }
 
     // Computes a CRC checksum for a given buffer
-    u16 crc16() { return (u16)hash(HashAlgorithm::CRC16); }
-    u32 crc32() { return (u32)hash(HashAlgorithm::CRC32); }
+    [[nodiscard]] u16 crc16() const { return (u16)hash(HashAlgorithm::CRC16); }
+    [[nodiscard]] u32 crc32() const { return (u32)hash(HashAlgorithm::CRC32); }
 };
 
 }

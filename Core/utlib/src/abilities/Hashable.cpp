@@ -69,6 +69,8 @@ Hashable::fnv64(const u8 *addr, isize size)
 u16
 Hashable::crc16(const u8 *addr, isize size)
 {
+    if (addr == nullptr || size == 0) return 0;
+
     u8 x;
     u16 crc = 0xFFFF;
 
@@ -83,22 +85,22 @@ Hashable::crc16(const u8 *addr, isize size)
 u32
 Hashable::crc32(const u8 *addr, isize size)
 {
-    auto crc32forByte = [&](u32 r) {
-
-        for(int j = 0; j < 8; ++j)
-            r = (r & 1? 0: (u32)0xEDB88320L) ^ r >> 1;
-        return r ^ (u32)0xFF000000L;
-    };
-
     if (addr == nullptr || size == 0) return 0;
 
-    u32 result = 0;
-
-    // Setup lookup table
-    u32 table[256];
-    for(u32 i = 0; i < 256; i++) table[i] = crc32forByte(i);
+    // Compute CRC-32 table
+    static const std::array<u32, 256> table = []{
+        std::array<u32, 256> t{};
+        for (u32 i = 0; i < 256; ++i) {
+            u32 r = i;
+            for (int j = 0; j < 8; ++j)
+                r = (r & 1 ? 0 : 0xEDB88320) ^ (r >> 1);
+            t[i] = r ^ 0xFF000000;
+        }
+        return t;
+    }();
 
     // Compute CRC-32 checksum
+    u32 result = 0;
     for(isize i = 0; i < size; i++)
         result = table[(u8)result ^ addr[i]] ^ result >> 8;
 

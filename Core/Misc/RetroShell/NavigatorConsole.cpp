@@ -940,8 +940,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                         // Extract names
                         vector<string> names;
-                        for (const auto &node : items.children) {
-                            names.push_back(fs->fetch(node.nr).cppName());
+                        for (const auto &child : items.children) {
+                            names.push_back(fs->fetch(child.nr).cppName());
                         }
 
                         // Print names
