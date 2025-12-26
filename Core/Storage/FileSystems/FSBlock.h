@@ -22,7 +22,7 @@ namespace vamiga {
 using utl::Buffer;
 using utl::DumpOpt;
 
-struct FSBlock : Loggable, Dumpable {
+struct FSBlock : Loggable, Hashable, Dumpable {
 
     // The file system this block belongs to (DEPRECATED)
     class FileSystem *fs = nullptr;
@@ -59,6 +59,16 @@ public:
 
     static FSBlock *make(FileSystem *ref, BlockNr nr, FSBlockType type);
     static std::vector<BlockNr> refs(const std::vector<const FSBlock *> blocks);
+
+
+    //
+    // Methods from Hashable
+    //
+
+    u64 hash(HashAlgorithm algorithm) const override {
+
+        return dataCache.empty() ? 0 : dataCache.hash(algorithm);
+    }
 
 
     //

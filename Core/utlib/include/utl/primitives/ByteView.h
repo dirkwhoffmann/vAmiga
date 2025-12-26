@@ -16,7 +16,7 @@
 
 namespace utl {
 
-class ByteView : public Dumpable {
+class ByteView : public Hashable, public Dumpable {
 
     std::span<const u8> span{};
 
@@ -49,10 +49,21 @@ public:
     constexpr std::span<const u8> bytes() const { return span; }
 
     //
+    // Methods from Hashable
+    //
+
+    u64 hash(HashAlgorithm algorithm) const override {
+        return Hashable::hash(span.data(), span.size(), algorithm);
+    }
+
+
+    //
     // Methods from Dumpable
     //
 
-    Dumpable::DataProvider dataProvider() const override { return Dumpable::dataProvider(span); }
+    Dumpable::DataProvider dataProvider() const override {
+        return Dumpable::dataProvider(span);
+    }
 
 
     //

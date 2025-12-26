@@ -87,10 +87,12 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     void patch(const char *seq, const char *subst);
 
     // Computes a checksum of a certain kind
+    /*
     u32 fnv32() const { return ptr ? Hashable::fnv32((u8 *)ptr, bytesize()) : 0; }
     u64 fnv64() const { return ptr ? Hashable::fnv64((u8 *)ptr, bytesize()) : 0; }
     u16 crc16() const { return ptr ? Hashable::crc16((u8 *)ptr, bytesize()) : 0; }
     u32 crc32() const { return ptr ? Hashable::crc32((u8 *)ptr, bytesize()) : 0; }
+    */
 
     // Compresses or uncompresses a buffer
     void gzip(isize offset = 0) {

@@ -18,7 +18,7 @@ namespace vamiga {
 
 using namespace utl;
 
-class AnyFile : public Dumpable, public Loggable {
+class AnyFile : public Hashable, public Dumpable, public Loggable {
 
 public:
     
@@ -47,11 +47,24 @@ public:
 
 
     //
+    // Methods from Hashable
+    //
+
+public:
+
+    u64 hash(HashAlgorithm algorithm) const override {
+        return data.hash(algorithm);
+    }
+
+
+    //
     // Methods from Dumpable
     //
 
+public:
+
     Dumpable::DataProvider dataProvider() const override {
-        return Dumpable::dataProvider(data.ptr, data.size);
+        return data.dataProvider();
     }
 
 
