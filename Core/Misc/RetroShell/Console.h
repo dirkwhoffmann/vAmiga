@@ -472,7 +472,7 @@ class NavigatorConsole final : public Console
     BlockNr parseDirectory(const Arguments &argv, const string &token);
     BlockNr parseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
     
-    DumpOpt parseDumpOpts(const Arguments &argv);
+    std::pair<DumpOpt,DumpFmt> parseDumpOpts(const Arguments &argv);
 
     // Experimental
     BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound);

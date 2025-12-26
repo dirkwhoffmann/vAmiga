@@ -324,12 +324,5 @@ INSTANTIATE_ALLOCATOR(bool)
 
 template void Allocator<u8>::compress(std::function<void (u8 *, isize, std::vector<u8> &)>, isize);
 template void Allocator<u8>::uncompress(std::function<void (u8 *, isize, std::vector<u8> &, isize)>, isize, isize);
-template void Allocator<u8>::dump(std::ostream &os, DumpOpt opt);
-template void Allocator<u8>::dump(std::ostream &os, DumpOpt opt, const char *fmt);
-template void Allocator<u8>::ascDump(std::ostream &os);
-template void Allocator<u8>::hexDump(std::ostream &os);
-template void Allocator<u8>::memDump(std::ostream &os);
-// template void Allocator<u8>::txtDump(std::ostream &os);
-template void Allocator<u8>::type(std::ostream &os, DumpOpt opt);
 
 }

@@ -22,7 +22,7 @@ namespace vamiga {
 using utl::Buffer;
 using utl::DumpOpt;
 
-struct FSBlock : Loggable {
+struct FSBlock : Loggable, Dumpable {
 
     // The file system this block belongs to (DEPRECATED)
     class FileSystem *fs = nullptr;
@@ -59,6 +59,20 @@ public:
 
     static FSBlock *make(FileSystem *ref, BlockNr nr, FSBlockType type);
     static std::vector<BlockNr> refs(const std::vector<const FSBlock *> blocks);
+
+
+    //
+    // Methods from Dumpable
+    //
+
+    Dumpable::DataProvider dataProvider() const override {
+
+        if (dataCache.empty()) {
+            return [&](isize offset, isize bytes) { return offset < bsize() ? 0 : -1; };
+        } else {
+            return dataCache.dataProvider();
+        }
+    }
 
 
     //
@@ -172,7 +186,7 @@ private:
 
 public:
 
-    void hexDump(std::ostream &os, const DumpOpt &opt) const;
+    // void hexDump(std::ostream &os, const DumpOpt &opt) const;
 
     // Experimental
     static string rangeString(const std::vector<BlockNr> &vec);

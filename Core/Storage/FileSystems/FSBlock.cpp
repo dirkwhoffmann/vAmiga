@@ -737,6 +737,7 @@ FSBlock::dumpStorage(std::ostream &os) const
     fs->doctor.dump(nr, os);
 }
 
+/*
 void
 FSBlock::hexDump(std::ostream &os, const DumpOpt &opt) const
 {
@@ -749,6 +750,7 @@ FSBlock::hexDump(std::ostream &os, const DumpOpt &opt) const
         Dumpable::dump(os, Dumpable::dataProvider(data(), bsize()), opt, DumpFmt{});
     }
 }
+*/
 
 string
 FSBlock::rangeString(const std::vector<BlockNr> &vec)

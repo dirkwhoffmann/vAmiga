@@ -24,25 +24,25 @@ namespace vamiga {
 void
 NavigatorConsole::_pause()
 {
-    
+
 }
 
 string
 NavigatorConsole::prompt()
 {
     std::stringstream ss;
-    
+
     if (fs) {
 
         auto &pwd = fs->fetch(fs->pwd());
 
         ss << "[" << std::to_string(pwd.nr) << "]";
-        
+
         auto fsName = fs->stat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
         if (pwd.isDirectory()) ss << " " << pwd.absName();
     }
-    
+
     ss << "> ";
     return ss.str();
 }
@@ -64,17 +64,17 @@ NavigatorConsole::autoComplete(Tokens &argv)
 {
     // Only proceed if there is anything to complete
     if (argv.empty()) return;
-    
+
     if (auto [cmd, remaining] = seekCommand(argv); remaining.size() > 0) {
-        
+
         // First, try to auto-complete the last token with a command name
         if (remaining.size() != 1 || !cmd->autoComplete(argv.back())) {
-            
+
             // If that didn't work, try to auto-complete with a file name
             try {
                 auto prefix = autoCompleteFilename(argv.back(), cmd->flags);
                 if (prefix.size() > argv.back().size()) argv.back() = prefix;
-                
+
             } catch (...) { }
         }
     }
@@ -200,7 +200,7 @@ NavigatorConsole::parseBlock(const string &argv)
     if (auto nr = BlockNr(parseNum(argv)); fs->tryFetch(nr)) {
         return nr;
     }
-    
+
     throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
 }
 
@@ -214,7 +214,7 @@ BlockNr
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token, BlockNr fallback)
 {
     auto nr = argv.contains(token) ? BlockNr(parseNum(argv.at(token))) : fallback;
-    
+
     if (!fs->tryFetch(nr)) {
         throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
     }
@@ -233,14 +233,14 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
         return fs->seek(argv.at(token));
 
     } catch (...) {
-        
+
         try {
             // Treat the argument as a block number
             // return (*fs)[parseBlock(argv.at(token))];
             return parseBlock(argv.at(token));
 
         } catch (...) {
-            
+
             // The item does not exist
             throw FSError(FSError::FS_NOT_FOUND, argv.at(token));
         }
@@ -301,8 +301,8 @@ NavigatorConsole::import(const HardDrive &hdn, isize part)
 {
     throw FSError(FSError::FS_UNSUPPORTED);
     /*
-    FileSystemFactory::initFromHardDrive(*fs, hdn);
-    */
+     FileSystemFactory::initFromHardDrive(*fs, hdn);
+     */
 }
 
 void
@@ -363,10 +363,10 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 
     auto tokens = utl::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
-    
+
     auto p = fs->pwd();
     while (!tokens.empty()) {
-        
+
         auto next = fs->trySeek(tokens.front());
         if (!next) break;
 
@@ -374,13 +374,15 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
         p = *next;
     }
     notFound = tokens;
-    
+
     return p;
 }
 
-DumpOpt
+std::pair<DumpOpt,DumpFmt>
 NavigatorConsole::parseDumpOpts(const Arguments &argv)
 {
+    DumpOpt opt; DumpFmt fmt;
+
     auto lines = argv.contains("lines") ? parseNum(argv.at("lines")) : -1;
     auto a = argv.contains("a");
     auto o = argv.contains("o");
@@ -388,58 +390,37 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
     auto t = argv.contains("t");
     auto w = argv.contains("w");
     auto l = argv.contains("l");
-    auto size = l ? 4 : w ? 2 : 1;
-    
+    auto size = l ? 'l' : w ? 'w' : 'b';
+    auto columns = l ? 4 : w ? 8 : 16;
+
     if ((int)a + (int)o + (int)d > 1) {
         throw RSError(RSError::GENERIC, "Flags -a, -o, -d are mutually exclusive");
     }
     if ((int)a + (int)w + (int)l > 1) {
         throw RSError(RSError::GENERIC, "Flags -a, -w, -l are mutually exclusive");
     }
-    if (o) return {
-        
-        .base = 8,
-        .size = size,
-        // .prefix = 2,
-        .columns = 16 / size,
-        .lines = lines,
-        .tail = t,
-        .offset = true,
-        .ascii = true
-    };
-    if (d) return {
-        
-        .base = 10,
-        .size = size,
-        // .prefix = 2,
-        .columns = 16 / size,
-        .lines = lines,
-        .tail = t,
-        .offset = true,
-        .ascii = true
-    };
-    if (a) return {
-        
-        .base = 0,
-        .size = size,
-        // .prefix = 2,
-        .columns = 64,
-        .lines = lines,
-        .tail = t,
-        .offset = true,
-        .ascii = true
-    };
-    return {
-        
-        .base = 16,
-        .size = size,
-        // .prefix = 2,
-        .columns = 16 / size,
-        .lines = lines,
-        .tail = t,
-        .offset = true,
-        .ascii = true
-    };
+    if (o) {
+
+        opt = { .base = 8, .lines = lines, .tail = t };
+        fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
+
+    } else if (d) {
+
+        opt = { .base = 10, .lines = lines, .tail = t };
+        fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
+
+    } else if (a) {
+
+        opt = { .base = 0, .lines = lines, .tail = t };
+        fmt = { .size = size, .columns = 64, .offset = true, .ascii = true };
+
+    } else {
+
+        opt = { .base = 16, .lines = lines, .tail = t };
+        fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
+    }
+
+    return { opt, fmt };
 }
 
 void
@@ -1296,7 +1277,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 Buffer<u8> buffer;
                 file.extractData(buffer);
-                buffer.dump(os, opt);
+                buffer.dump(os, opt.first, opt.second);
             }
     });
     
@@ -1321,7 +1302,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto nr = parseBlock(args, "nr", fs->pwd());
                 auto opt = parseDumpOpts(args);
 
-                fs->fetch(nr).hexDump(os, opt);
+                fs->fetch(nr).dump(os, opt.first, opt.second);
             }
     });
     

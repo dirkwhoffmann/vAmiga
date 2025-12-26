@@ -19,7 +19,7 @@ struct DumpOpt
     isize base;     // 8 (Oct)  | 10 (Dec)  | 16 (Hex)
     isize size;     // 1 (Byte) |  2 (Word) |  4 (Long)
     // [[deprecated]] isize prefix;   //
-    isize columns;  // number (Auto-synthesized columns if fmt is nullptr)
+    // isize columns;  // number (Auto-synthesized columns if fmt is nullptr)
     isize lines;    // number (number of output lines)
     bool  tail;     // true ( list from top) | false (list from bottom)
     bool  nr;       // Add line numbers
@@ -57,19 +57,24 @@ public:
     static void dump(std::ostream &os, DataProvider, const DumpOpt &opt, const string &fmt);
 
 
-
     // Instance methods
-    void dump(std::ostream &os, DumpOpt opt, const char *fmt = nullptr) {
+    void dump(std::ostream &os, DumpOpt opt, const DumpFmt &fmt) const {
         dump(os, dataProvider(), opt, fmt);
     };
-    void ascDump(std::ostream &os) {
-        dump(os, { .columns = 64, .offset = true, .ascii = true });
+    void dump(std::ostream &os, DumpOpt opt, const string &fmt) const {
+        dump(os, dataProvider(), opt, fmt);
+    };
+    void hexDump(std::ostream &os) const {
+        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false });
     }
-    void hexDump(std::ostream &os) {
-        dump(os, { .base = 16, .columns = 64, .nr = true });
+    void memDump(std::ostream &os) const {
+        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false });
     }
-    void memDump(std::ostream &os) {
-        dump(os, { .base = 16, .columns = 64, .offset = true, .ascii = true });
+    void ascDump(std::ostream &os) const {
+        dump(os, { }, { .columns = 64, .offset = true, .ascii = true });
+    }
+    void txtDump(std::ostream &os) const {
+        dump(os, { }, "%a");
     }
 };
 
