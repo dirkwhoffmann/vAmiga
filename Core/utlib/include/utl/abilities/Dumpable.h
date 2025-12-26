@@ -17,14 +17,8 @@ namespace utl {
 struct DumpOpt
 {
     isize base;     // 8 (Oct)  | 10 (Dec)  | 16 (Hex)
-    isize size;     // 1 (Byte) |  2 (Word) |  4 (Long)
-    // [[deprecated]] isize prefix;   //
-    // isize columns;  // number (Auto-synthesized columns if fmt is nullptr)
     isize lines;    // number (number of output lines)
     bool  tail;     // true ( list from top) | false (list from bottom)
-    bool  nr;       // Add line numbers
-    bool  offset;   // Add an offset column
-    bool  ascii;    //
 };
 
 struct DumpFmt
@@ -44,38 +38,44 @@ public:
 
     using DataProvider = std::function<isize(isize,isize)>;
 
-    // Derived classes must provide access to their data
-    virtual DataProvider dataProvider() const = 0;
-
     virtual ~Dumpable() = default;
 
-    // Class methods
+    // Data reader factories
     static DataProvider dataProvider(const u8 *buf, isize len);
     static DataProvider dataProvider(std::span<const u8> span);
 
-    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt, const DumpFmt &fmt);
-    static void dump(std::ostream &os, DataProvider, const DumpOpt &opt, const string &fmt);
+    // The main dump routines
+    static void dump(std::ostream &os, const DumpOpt &opt, const DumpFmt &fmt, DataProvider reader);
+    static void dump(std::ostream &os, const DumpOpt &opt, const string &fmt, DataProvider reader);
 
+    // Convenience wrappers
+    static void hexDump(std::ostream &os, DataProvider reader) {
+        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false }, reader);
+    }
+    static void memDump(std::ostream &os, DataProvider reader) {
+        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false }, reader);
+    }
+    static void ascDump(std::ostream &os, DataProvider reader) {
+        dump(os, { }, { .columns = 64, .offset = true, .ascii = true }, reader);
+    }
+    static void txtDump(std::ostream &os, DataProvider reader) {
+        dump(os, { }, "%a", reader);
+    }
+
+    // The data source (must be provided by the subclass)
+    virtual DataProvider dataProvider() const = 0;
 
     // Instance methods
     void dump(std::ostream &os, DumpOpt opt, const DumpFmt &fmt) const {
-        dump(os, dataProvider(), opt, fmt);
+        dump(os, opt, fmt, dataProvider());
     };
     void dump(std::ostream &os, DumpOpt opt, const string &fmt) const {
-        dump(os, dataProvider(), opt, fmt);
+        dump(os, opt, fmt, dataProvider());
     };
-    void hexDump(std::ostream &os) const {
-        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false });
-    }
-    void memDump(std::ostream &os) const {
-        dump(os, { .base = 16 }, { .columns = 16, .offset = true, .ascii = false });
-    }
-    void ascDump(std::ostream &os) const {
-        dump(os, { }, { .columns = 64, .offset = true, .ascii = true });
-    }
-    void txtDump(std::ostream &os) const {
-        dump(os, { }, "%a");
-    }
+    void hexDump(std::ostream &os) const { hexDump(os, dataProvider()); }
+    void memDump(std::ostream &os) const { memDump(os, dataProvider()); }
+    void ascDump(std::ostream &os) const { ascDump(os, dataProvider()); }
+    void txtDump(std::ostream &os) const { txtDump(os, dataProvider()); }
 };
 
 }

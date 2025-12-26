@@ -30,67 +30,18 @@ DumpFmt::fmt() const
 
     return fmt;
 }
-    /*
- void
- Dumpable::hexdump(const u8 *p, isize size, isize cols, isize pad) const
- {
- while (size) {
-
- isize cnt = std::min(size, cols);
- for (isize x = 0; x < cnt; x++) {
- fprintf(stderr, "%02X %s", p[x], ((x + 1) % pad) == 0 ? " " : "");
- }
-
- size -= cnt;
- p += cnt;
-
- fprintf(stderr, "\n");
- }
- fprintf(stderr, "\n");
- }
-
- void
- Dumpable::hexdump(const u8 *p, isize size, isize cols) const
- {
- hexdump(p, size, cols, cols);
- }
-
- void
- Dumpable::hexdumpWords(const u8 *p, isize size, isize cols) const
- {
- hexdump(p, size, cols, 2);
- }
-
- void
- Dumpable::hexdumpLongwords(const u8 *p, isize size, isize cols) const
- {
- hexdump(p, size, cols, 4);
- }
- */
 
 void
-Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const DumpFmt &fmt)
+Dumpable::dump(std::ostream &os, const DumpOpt &opt, const DumpFmt &fmt, DataProvider reader)
 {
-    /*
-    string fmt;
-
-    // Assemble the format string
-    auto s = opt.size == 4 ? "%l " : opt.size == 2 ? "%w " : "%b ";
-    if (opt.offset) fmt += "%p:  ";
-    if (opt.base)   fmt += repeat(s, opt.columns / 2) + " " + repeat(s, opt.columns / 2) + " ";
-    if (opt.ascii)  fmt += "|" + repeat("%c", opt.columns * opt.size) + "|";
-    fmt += "\n";
-
-    dump(os, reader, opt, fmt.c_str());
-    */
-    dump(os, reader, opt, fmt.fmt());
+    dump(os, opt, fmt.fmt(), reader);
 }
 
 void
-Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const string &fmt)
+Dumpable::dump(std::ostream &os, const DumpOpt &opt, const string &fmt, DataProvider reader)
 {
     bool ctrl = false;
-    isize ccnt = 0, bcnt = 0;
+    int ccnt = 0, bcnt = 0, lcnt = 0, wcnt = 0;
     char c;
 
     std::stringstream ss;
@@ -127,18 +78,28 @@ Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const 
 
             if (!ctrl) {
 
-                if (c == '%') { ctrl = true; } else {
-                    if (c == '\n') { ss << std::endl; } else { ss << c; }
-                }
+                if (c == '%') { ctrl = true; wcnt = 0; }
+                else if (c == '\n') { ss << std::endl; lcnt++; }
+                else { ss << c; }
+                continue;
+            }
+
+            if (c >= '0' && c <= '9') {
+
+                wcnt = 10 * wcnt + (c - '0');
                 continue;
             }
 
             switch (c) {
 
-                case 'p': // Offset
+                case 'n': // Line number
+                {
+                    ss << std::setw(wcnt) << std::setfill(' ') << std::dec << lcnt;
+                    break;
+                }
+                case 'p': // Buffer offset
                 {
                     out(std::max(bcnt, ccnt), 4, 16);
-                    // ss << std::setw(5) << std::setfill(' ') << std::dec << std::max(bcnt, ccnt);
                     break;
                 }
                 case 'a': // Character
@@ -201,11 +162,11 @@ Dumpable::dump(std::ostream &os, DataProvider reader, const DumpOpt &opt, const 
     if (opt.lines >= 0) count = std::min(count, opt.lines);
     isize start = opt.tail ? isize(output.size()) - count : 0;
     isize end = opt.tail ? isize(output.size()) : count;
-    int tab = (int)std::to_string(end).size();
+    // int tab = (int)std::to_string(end).size();
 
     // Write the requested number of lines
     for (isize i = start; i < end; i++) {
-        if (opt.nr) os << std::right << std::setw(tab) << std::to_string(i) << ": ";
+        // if (opt.nr) os << std::right << std::setw(tab) << std::to_string(i) << ": ";
         os << output[i] << '\n';
     }
 }

@@ -1229,10 +1229,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Print the contents of a file" },
         .flags  = rs::ac,
         .args   = {
-            { .name = { "path", "File path" }, .flags = rs::opt },
-            { .name = { "l", "Display a line number in each row" }, .flags = rs::flag },
-            { .name = { "t", "Display the last part" }, .flags = rs::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
+            { .name = { "path", "File path" }, .flags = rs::opt }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1243,13 +1240,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                     throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
 
-                auto t     = args.contains("t");
-                auto l     = args.contains("l");
-                auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
-
                 Buffer<u8> buffer;
                 file.extractData(buffer);
-                buffer.dump(os, DumpOpt { .lines = lines, .tail = t, .nr = l }, "%a");
+                buffer.txtDump(os);
             }
     });
     
