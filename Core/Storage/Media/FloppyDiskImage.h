@@ -10,11 +10,8 @@
 #pragma once
 
 #include "DiskImage.h"
-#include "BootBlockImage.h"
-#include "FloppyDiskTypes.h"
-#include "DeviceDescriptors.h"
-#include "FSTypes.h"
 #include "DeviceTypes.h"
+#include "FSTypes.h"
 
 namespace vamiga {
 
@@ -23,6 +20,9 @@ class FloppyDisk;
 class FloppyDiskImage : public DiskImage {
 
 public:
+
+    // Floppy disk factory
+    static std::unique_ptr<FloppyDiskImage> make(const fs::path &path);
 
     // Returns the predicted file system of this disk
     virtual FSFormat getDos() const = 0;

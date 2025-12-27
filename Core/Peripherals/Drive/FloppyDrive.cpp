@@ -1161,8 +1161,7 @@ FloppyDrive::swapDisk(const fs::path &path)
 {
     if (!fs::is_directory(path)) {
 
-        auto file = FloppyFactory::make(path);
-        // std::unique_ptr<FloppyDiskImage> file(FloppyDiskImage::make(path));
+        auto file = FloppyDiskImage::make(path);
         swapDisk(*file);
         return;
     }

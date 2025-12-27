@@ -8,7 +8,6 @@ AnyFile.cpp
 DiskImage.cpp
 FloppyDiskImage.cpp
 HardDiskImage.cpp
-FloppyFactory.cpp
 Snapshot.cpp
 Script.cpp
 Workspace.cpp

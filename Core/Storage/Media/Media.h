@@ -17,7 +17,6 @@
 #include "DiskImage.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
-#include "FloppyFactory.h"
 #include "ADFFactory.h"
 #include "ADZFactory.h"
 #include "EADFFactory.h"
