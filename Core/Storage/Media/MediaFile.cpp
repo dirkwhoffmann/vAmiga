@@ -271,7 +271,7 @@ u8
 MediaFile::readByte(isize b, isize offset) const
 {
     if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return const_cast<DiskImage *>(disk)->readByte(b * disk->bsize());
+        return const_cast<DiskImage *>(disk)->readByte(b * disk->bsize() + offset);
     }
     return 0;
 }
@@ -280,7 +280,7 @@ u8
 MediaFile::readByte(isize t, isize s, isize offset) const
 {
     if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return const_cast<DiskImage *>(disk)->readByte(disk->bindex(DiskImage::TS{t,s}));
+        return const_cast<DiskImage *>(disk)->readByte(disk->bindex(DiskImage::TS{t,s}) + offset);
     }
     return 0;
 }
@@ -301,59 +301,4 @@ MediaFile::readSector(u8 *dst, isize t, isize s) const
     }
 }
 
-string
-MediaFile::hexdump(isize b, isize offset, isize len) const
-{
-    if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->hexdump(b, offset, len);
-    }
-    return "";
 }
-
-string
-MediaFile::hexdump(isize t, isize s, isize offset, isize len) const
-{
-    if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->hexdump(t, s, offset, len);
-    }
-    return "";
-}
-
-string
-MediaFile::hexdump(isize c, isize h, isize s, isize offset, isize len) const
-{
-    if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->hexdump(c, h, offset, len);
-    }
-    return "";
-}
-
-string
-MediaFile::asciidump(isize b, isize offset, isize len) const
-{
-    if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->asciidump(b, offset, len);
-    }
-    return "";
-}
-
-string
-MediaFile::asciidump(isize t, isize s, isize offset, isize len) const
-{
-    if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->asciidump(t, s, offset, len);
-    }
-    return "";
-}
-
-string
-MediaFile::asciidump(isize c, isize h, isize s, isize offset, isize len) const
-{
-    if (auto *disk = dynamic_cast<const DiskImage *>(file.get())) {
-        return disk->asciidump(c, h, s, offset, len);
-    }
-    return "";
-}
-
-}
-

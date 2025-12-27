@@ -922,8 +922,6 @@ NSString *EventSlotName(EventSlot slot);
 
 - (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset;
 - (void)readSector:(NSInteger)b destination:(unsigned char *)buf;
-
-- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 - (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 
 @end
@@ -986,13 +984,9 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly) NSInteger bsize;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
-@property (readonly) NSString *describeGeometry;
-@property (readonly) NSString *describeCapacity;
 
 - (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset;
 - (void)readSector:(NSInteger)b destination:(unsigned char *)buf;
-
-- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 - (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 
 @end

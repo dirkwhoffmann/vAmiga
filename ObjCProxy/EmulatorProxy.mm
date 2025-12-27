@@ -1864,14 +1864,20 @@ NSString *EventSlotName(EventSlot slot)
     [self file]->readSector(buf, b);
 }
 
-- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
-{
-    return @([self file]->hexdump(b, offset, len).c_str());
-}
-
 - (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
 {
-    return @([self file]->asciidump(b, offset, len).c_str());
+    if (auto *file = dynamic_cast<DiskImage *>([self file]->file.get())) {
+
+        string result;
+        auto p = file->data.ptr + b * file->bsize() + offset;
+
+        for (isize i = 0; i < len; i++) {
+            result += isprint(int(p[i])) ? char(p[i]) : '.';
+        }
+
+        return @(result.c_str());
+    }
+    return @"";
 }
 
 @end
@@ -2219,24 +2225,16 @@ NSString *EventSlotName(EventSlot slot)
     [self file]->readBlock(buf, b);
 }
 
-- (NSString *) describeGeometry
-{
-    return @([self file]->describeGeometry().c_str());
-}
-
-- (NSString *) describeCapacity
-{
-    return @([self file]->describeCapacity().c_str());
-}
-
-- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
-{
-    return @([self file]->hexdump(b, offset, len).c_str());
-}
-
 - (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
 {
-    return @([self file]->asciidump(b, offset, len).c_str());
+    string result;
+    auto p = [self file]->data.ptr + b * [self file]->bsize() + offset;
+
+    for (isize i = 0; i < len; i++) {
+        result += isprint(int(p[i])) ? char(p[i]) : '.';
+    }
+
+    return @(result.c_str());
 }
 
 @end

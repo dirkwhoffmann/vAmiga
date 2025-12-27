@@ -111,17 +111,7 @@ public:
     virtual void readSector(u8 *dst, isize b) const;
     virtual void readSector(u8 *dst, isize t, isize s) const;
 
-    // Generates a hex dump for some sector data
-    virtual string hexdump(isize b, isize offset, isize len) const;
-    virtual string hexdump(isize t, isize s, isize offset, isize len) const;
-    virtual string hexdump(isize c, isize h, isize s, isize offset, isize len) const;
-
-    // Generates an ASCII dump for some sector data
-    virtual string asciidump(isize b, isize offset, isize len) const;
-    virtual string asciidump(isize t, isize s, isize offset, isize len) const;
-    virtual string asciidump(isize c, isize h, isize s, isize offset, isize len) const;
-
-
+    
     //
     // Serializing
     //
