@@ -41,13 +41,26 @@ public:
     // Methods from AnyFile
     //
 
+public:
+
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
 
 
     //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize bsize() const override { return 512; }
+
+
+    //
     // Methods from DiskImage
     //
+
+public:
 
     isize numCyls() const override;
     isize numHeads() const override;
@@ -58,6 +71,8 @@ public:
     // Methods from FloppyDiskImage
     //
 
+public:
+    
     FSFormat getDos() const override { return FSFormat::NODOS; }
     void setDos(FSFormat dos) override { };
     Diameter getDiameter() const override { return Diameter::INCH_35; }

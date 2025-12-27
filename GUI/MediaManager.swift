@@ -315,8 +315,8 @@ class MediaManager {
         // case .WORKSPACE:
         //    try mydocument.processWorkspaceFile(url: url)
 
-        case .SNAPSHOT:
-            try mydocument.processSnapshotFile(url: url)
+        // case .SNAPSHOT:
+        //    try mydocument.processSnapshotFile(url: url)
             
         // case .SCRIPT:
         //    try mydocument.processScriptFile(url: url)

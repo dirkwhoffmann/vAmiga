@@ -131,8 +131,7 @@ extension MetalView {
         switch type {
             
         // case .WORKSPACE, .SNAPSHOT, .SCRIPT:
-        case .SNAPSHOT:
-            break
+        //    break
             
         case .ADF, .ADZ, .DIR, .DMS, .EADF, .EXE, .HDF, .HDZ, .IMG, .ST:
             if zone == nil { return false }

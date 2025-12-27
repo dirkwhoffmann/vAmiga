@@ -44,8 +44,8 @@ class MyDocument: NSDocument {
     
     // Snapshots
     static let maxSnapshots: Int = 16
-    private(set) var snapshots = ManagedArray<MediaFileProxy>(maxCount: maxSnapshots)
-    
+    private(set) var snapshots = ManagedArray<SnapshotProxy>(maxCount: maxSnapshots)
+
     //
     // Initializing
     //
@@ -239,7 +239,7 @@ class MyDocument: NSDocument {
     }
 
     @discardableResult
-    func appendSnapshot(file: MediaFileProxy) -> Bool {
+    func appendSnapshot(file: SnapshotProxy) -> Bool {
         
         // Remove the oldest entry if applicable
         if snapshots.full && pref.snapshotAutoDelete { snapshots.remove(at: 0) }

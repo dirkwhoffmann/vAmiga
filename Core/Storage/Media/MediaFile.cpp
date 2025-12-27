@@ -19,9 +19,6 @@ namespace vamiga {
 FileType
 MediaFile::type(const fs::path &path)
 {
-    // if (Workspace::isCompatible(path)) return FileType::WORKSPACE;
-    if (Snapshot::isCompatible(path))  return FileType::SNAPSHOT;
-    // if (Script::isCompatible(path))    return FileType::SCRIPT;
     if (ADFFile::isCompatible(path))   return FileType::ADF;
     if (ADZFile::isCompatible(path))   return FileType::ADZ;
     if (EADFFile::isCompatible(path))  return FileType::EADF;
@@ -40,9 +37,6 @@ MediaFile::type(const fs::path &path)
 FileType
 MediaFile::type(const AnyFile &file)
 {
-    // if (dynamic_cast<const Workspace *>(&file)) return FileType::WORKSPACE;
-    if (dynamic_cast<const Snapshot *>(&file))  return FileType::SNAPSHOT;
-    // if (dynamic_cast<const Script *>(&file))    return FileType::SCRIPT;
     if (dynamic_cast<const ADFFile *>(&file))   return FileType::ADF;
     if (dynamic_cast<const ADZFile *>(&file))   return FileType::ADZ;
     if (dynamic_cast<const EADFFile *>(&file))  return FileType::EADF;
@@ -68,9 +62,6 @@ MediaFile::make(const fs::path &path, FileType type)
 {
     switch (type) {
 
-        // case FileType::WORKSPACE:    return new MediaFile(make_unique<Workspace>(path));
-        case FileType::SNAPSHOT:     return new MediaFile(make_unique<Snapshot>(path));
-        // case FileType::SCRIPT:       return new MediaFile(make_unique<Script>(path));
         case FileType::ADF:          return new MediaFile(ADFFactory::make(path));
         case FileType::ADZ:          return new MediaFile(ADZFactory::make(path));
         case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(path));
@@ -92,8 +83,6 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
 {
     switch (type) {
 
-        case FileType::SNAPSHOT:     return new MediaFile(make_unique<Snapshot>(buf, len));
-        // case FileType::SCRIPT:       return new MediaFile(make_unique<Script>(buf, len));
         case FileType::ADF:          return new MediaFile(ADFFactory::make(buf, len));
         case FileType::ADZ:          return new MediaFile(ADZFactory::make(buf, len));
         case FileType::EADF:         return new MediaFile(make_unique<EADFFile>(buf, len));

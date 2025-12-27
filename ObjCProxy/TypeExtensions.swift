@@ -111,11 +111,11 @@ extension FileType {
     }
 
     static var all: [FileType] {
-        return [ .SNAPSHOT, .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
+        return [ .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
     }
 
     static var draggable: [FileType] {
-        return [ .SNAPSHOT, .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
+        return [ .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
     }
 }
 

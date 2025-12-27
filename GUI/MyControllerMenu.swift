@@ -261,7 +261,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
-        guard let snapshot = emu?.amiga.deprecatedTakeSnapshot(pref.snapshotCompressor) else {
+        guard let snapshot = emu?.amiga.takeSnapshot(pref.snapshotCompressor) else {
             
             NSSound.beep()
             return

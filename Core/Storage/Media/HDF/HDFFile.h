@@ -58,13 +58,12 @@ public:
 
 
     //
-    // Methods from DiskImage
+    // Methods from BlockDevice
     //
 
-    isize numCyls() const override;
-    isize numHeads() const override;
-    isize numSectors(isize) const override { return numSectors(); }
-    isize numSectors() const;
+public:
+
+    isize bsize() const override { return 512; }
 
 
     //
@@ -73,17 +72,17 @@ public:
 
 public:
 
-    /*
-    isize bsize() const override { return 512; }
-    isize capacity() const override { return data.size / bsize(); }
-    void readBlock(u8 *dst, isize nr) override { readSector(dst, nr); }
-    void writeBlock(const u8 *src, isize nr) override {
-        writeSector(nr, Buffer<u8>(src, bsize())); }
-     */
+    isize numCyls() const override;
+    isize numHeads() const override;
+    isize numSectors(isize) const override { return numSectors(); }
+    isize numSectors() const;
+
 
     //
     // Providing descriptors
     //
+
+public:
     
     GeometryDescriptor getGeometryDescriptor() const;
     PartitionDescriptor getPartitionDescriptor(isize part = 0) const;

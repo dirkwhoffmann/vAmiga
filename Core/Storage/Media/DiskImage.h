@@ -32,7 +32,7 @@ class DiskImage : public AnyFile, public TrackDevice {
     
 public:
 
-    isize bsize() const override { return 512; }
+    // isize bsize() const override { return 512; }
 
 
     //

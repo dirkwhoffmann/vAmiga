@@ -48,8 +48,19 @@ public:
     
     
     //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize bsize() const override { return 512; }
+
+
+    //
     // Methods from DiskImage
     //
+
+public:
 
     isize numCyls() const override;
     isize numHeads() const override;

@@ -15,7 +15,7 @@ extension MyController {
     func restoreSnapshot(item: Int) throws {
         
         if let snapshot = mydocument.snapshots.element(at: item) {
-            try emu?.amiga.deprecatedLoadSnapshot(snapshot)
+            try emu?.amiga.loadSnapshot(snapshot)
         }
     }
     

@@ -591,7 +591,7 @@ extension MyController {
             
         case .SNAPSHOT_TAKEN:
             let ptr = msg.snapshot.snapshot
-            let proxy = MediaFileProxy.init(ptr)!
+            let proxy = SnapshotProxy.init(ptr)!
             if !mydocument.appendSnapshot(file: proxy) {
                 NSSound.beep()
             }
