@@ -32,6 +32,7 @@ public:
         
     // Returns the size of an ADF file of a given disk type in bytes
     static isize fileSize(Diameter diameter, Density density);
+    static isize fileSize(Diameter diameter, Density density, isize tracks);
 
     
     //

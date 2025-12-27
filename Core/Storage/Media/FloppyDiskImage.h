@@ -34,13 +34,6 @@ public:
 
 
     //
-    // Methods from BlockDevice
-    //
-
-public:
-
-
-    //
     // Querying disk properties
     //
 
@@ -49,14 +42,14 @@ public:
     // Informs about the disk type
     virtual Diameter getDiameter() const = 0;
     virtual Density getDensity() const = 0;
-    virtual GeometryDescriptor getGeometry() const;
+
     bool isSD() { return getDensity() == Density::SD; }
     bool isDD() { return getDensity() == Density::DD; }
     bool isHD() { return getDensity() == Density::HD; }
 
 
     //
-    // Managing the boot blocks
+    // Managing boot blocks
     //
 
     virtual BootBlockType bootBlockType() const { return BootBlockType::STANDARD; }

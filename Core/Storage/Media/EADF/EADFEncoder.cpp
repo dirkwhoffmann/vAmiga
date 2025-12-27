@@ -19,11 +19,14 @@ EADFEncoder::encode(const EADFFile &eadf, FloppyDisk &disk)
 {
     assert(!eadf.data.empty());
 
-    isize tracks = eadf.storedTracks();
+    isize tracks   = eadf.storedTracks();
+    auto  diameter = eadf.getDiameter();
+    auto  density  = eadf.getDensity();
+
     if (MFM_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    auto adf = ADFFactory::make(eadf.getGeometry()); // getDescriptor());
+    auto adf = ADFFactory::make(ADFFile::fileSize(diameter, density, tracks));
 
     // Wipe out all data
     disk.clearDisk(0);

@@ -49,15 +49,40 @@ ADFFile::isCompatible(const Buffer<u8> &buf)
 isize
 ADFFile::fileSize(Diameter diameter, Density density)
 {
+    return fileSize(diameter, density, 80);
+}
+
+isize
+ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
+{
     DiameterEnum::validate(diameter);
     DensityEnum::validate(density);
 
     if (diameter != Diameter::INCH_35) throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
-    
-    if (density == Density::DD) return ADFSIZE_35_DD;
-    if (density == Density::HD) return ADFSIZE_35_HD;
 
-    throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    switch (density) {
+
+        case Density::DD:
+
+            switch (tracks) {
+
+                case 80: return ADFSIZE_35_DD;
+                case 81: return ADFSIZE_35_DD_81;
+                case 82: return ADFSIZE_35_DD_82;
+                case 83: return ADFSIZE_35_DD_83;
+                case 84: return ADFSIZE_35_DD_84;
+
+                default:
+                    throw (DeviceError(DeviceError::DSK_INVALID_LAYOUT));
+            }
+
+        case Density::HD:
+
+            return ADFSIZE_35_HD;
+
+        default:
+            throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
 }
 
 void
