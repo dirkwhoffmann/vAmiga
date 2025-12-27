@@ -92,7 +92,6 @@ public:
     Density getDensity() const override;
     BootBlockType bootBlockType() const override;
     const char *bootBlockName() const override;
-    void killVirus() override;
 
     
     //

@@ -199,30 +199,6 @@ ADFFile::bootBlockName() const
 }
 
 void
-ADFFile::killVirus()
-{
-    debug(ADF_DEBUG, "Overwriting boot block virus with ");
-    
-    if (isOFSVolumeType(getDos())) {
-
-        debug(ADF_DEBUG, "a standard OFS bootblock\n");
-        BootBlockImage bb = BootBlockImage(BootBlockId::AMIGADOS_13);
-        bb.write(data.ptr + 4, 4, 1023);
-
-    } else if (isFFSVolumeType(getDos())) {
-
-        debug(ADF_DEBUG, "a standard FFS bootblock\n");
-        BootBlockImage bb = BootBlockImage(BootBlockId::AMIGADOS_20);
-        bb.write(data.ptr + 4, 4, 1023);
-
-    } else {
-
-        debug(ADF_DEBUG, "zeroes\n");
-        std::memset(data.ptr + 4, 0, 1020);
-    }
-}
-
-void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
     FSFormatEnum::validate(dos);

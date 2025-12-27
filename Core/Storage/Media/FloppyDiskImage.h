@@ -55,7 +55,6 @@ public:
     virtual BootBlockType bootBlockType() const { return BootBlockType::STANDARD; }
     virtual const char *bootBlockName() const { return ""; }
     bool hasVirus() const { return bootBlockType() == BootBlockType::VIRUS; }
-    virtual void killVirus() { };
 };
 
 }

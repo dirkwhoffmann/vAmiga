@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "utl/abilities/Hashable.h"
+#include <array>
 
 namespace utl {
 
