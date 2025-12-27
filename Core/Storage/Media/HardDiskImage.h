@@ -15,6 +15,9 @@ namespace vamiga {
 
 class HardDiskImage : public DiskImage {
 
+    // Hard disk factory
+    static std::unique_ptr<HardDiskImage> make(const fs::path &path);
+
 };
 
 }

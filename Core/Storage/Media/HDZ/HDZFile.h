@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-class HDZFile : public DiskImage {
+class HDZFile : public HardDiskImage {
 
 public:
 

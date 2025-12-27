@@ -176,7 +176,7 @@ FloppyDisk::writeBit(Cylinder c, Head h, isize offset, bool value) {
 }
 
 u8
-FloppyDisk::readByte(Track t, isize offset) const
+FloppyDisk::read8(Track t, isize offset) const
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -185,7 +185,7 @@ FloppyDisk::readByte(Track t, isize offset) const
 }
 
 u8
-FloppyDisk::readByte(Cylinder c, Head h, isize offset) const
+FloppyDisk::read8(Cylinder c, Head h, isize offset) const
 {
     assert(c < numCyls());
     assert(h < numHeads());
@@ -195,7 +195,7 @@ FloppyDisk::readByte(Cylinder c, Head h, isize offset) const
 }
 
 void
-FloppyDisk::writeByte(Track t, isize offset, u8 value)
+FloppyDisk::write8(Track t, isize offset, u8 value)
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -205,7 +205,7 @@ FloppyDisk::writeByte(Track t, isize offset, u8 value)
 }
 
 void
-FloppyDisk::writeByte(Cylinder c, Head h, isize offset, u8 value)
+FloppyDisk::write8(Cylinder c, Head h, isize offset, u8 value)
 {
     assert(c < numCyls());
     assert(h < numHeads());

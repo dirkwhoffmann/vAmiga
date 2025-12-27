@@ -12,6 +12,7 @@
 #include "FloppyDiskTypes.h"
 #include "DriveTypes.h"
 #include "CoreComponent.h"
+#include "TrackDevice.h"
 
 namespace vamiga {
 
@@ -52,8 +53,8 @@ class FloppyDiskImage;
  *    - a disk usually occupies 84 * 2 * 12.664 =  2.127.552 MFM bytes
  */
 
-class FloppyDisk : public CoreObject {
-    
+class FloppyDisk : public CoreObject, public TrackDevice {
+
     friend class FloppyDrive;
     friend class ADFEncoder;
     friend class EADFEncoder;
@@ -62,13 +63,6 @@ class FloppyDisk : public CoreObject {
     friend class DiskEncoder;
 
     friend class EADFFactory;
-    /*
-    friend class ADFFile; // TODO: REMOVE
-    friend class EADFFile; // TODO: REMOVE
-    friend class EADFFactory; // TODO: REMOVE
-    friend class IMGFile; // TODO: REMOVE
-    friend class STFile; // TODO: REMOVE 
-    */
 
 public:
 
@@ -140,8 +134,42 @@ private:
     
     const char *objectName() const override { return "Disk"; }
     void _dump(Category category, std::ostream &os) const override;
-    
-    
+
+
+    //
+    // Methods from LinearDevice
+    //
+
+    isize size() const override { fatalError; }
+    void read(u8 *dst, isize offset, isize count) const override { fatalError; }
+    void write(const u8 *src, isize offset, isize count) override  { fatalError; }
+
+
+    //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize capacity() const override { return numCyls() * numHeads() * numSectors(0); }
+    isize bsize() const override { return 512; }
+    void readBlock(u8 *dst, isize nr) const override { fatalError; }
+    void writeBlock(const u8 *src, isize nr) override { fatalError; }
+
+
+    //
+    // Methods from TrackDevice
+    //
+
+    isize numCyls() const override { return diameter == Diameter::INCH_525 ? 42 : 84; }
+    isize numHeads() const override { return 2; }
+    isize numSectors(isize t) const override { return density == Density::DD ? 11 : 22; }
+
+    // isize numCyls() const { return diameter == Diameter::INCH_525 ? 42 : 84; }
+    // isize numHeads() const { return 2; }
+    // isize numTracks() const { return diameter == Diameter::INCH_525 ? 84 : 168; }
+
+
     //
     // Serializing
     //
@@ -186,11 +214,13 @@ public:
     
     Diameter getDiameter() const { return diameter; }
     Density getDensity() const { return density; }
-    
+
+    /*
     isize numCyls() const { return diameter == Diameter::INCH_525 ? 42 : 84; }
     isize numHeads() const { return 2; }
     isize numTracks() const { return diameter == Diameter::INCH_525 ? 84 : 168; }
-    
+    */
+
     bool isWriteProtected() const { return flags & long(DiskFlags::PROTECTED); }
     void setWriteProtection(bool value) { value ? flags |= long(DiskFlags::PROTECTED) : flags &= ~long(DiskFlags::PROTECTED); }
 
@@ -216,12 +246,12 @@ public:
     void writeBit(Cylinder c, Head h, isize offset, bool value);
 
     // Reads a byte from disk
-    u8 readByte(Track t, isize offset) const;
-    u8 readByte(Cylinder c, Head h, isize offset) const;
+    u8 read8(Track t, isize offset) const;
+    u8 read8(Cylinder c, Head h, isize offset) const;
     
     // Writes a byte to disk
-    void writeByte(Track t, isize offset, u8 value);
-    void writeByte(Cylinder c, Head h, isize offset, u8 value);
+    void write8(Track t, isize offset, u8 value);
+    void write8(Cylinder c, Head h, isize offset, u8 value);
     
     
     //

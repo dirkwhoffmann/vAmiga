@@ -713,7 +713,7 @@ FloppyDrive::readByte() const
     if (agnus.clock < latestStepCompleted) return u8(amiga.random() & 0x55);
 
     // Case 3: Normal operation
-    return disk->readByte(head.cylinder, head.head, head.offset);
+    return disk->read8(head.cylinder, head.head, head.offset);
 }
 
 u8
@@ -737,7 +737,7 @@ void
 FloppyDrive::writeByte(u8 value)
 {
     if (disk) {
-        disk->writeByte(head.cylinder, head.head, head.offset, value);
+        disk->write8(head.cylinder, head.head, head.offset, value);
     }
 }
 
