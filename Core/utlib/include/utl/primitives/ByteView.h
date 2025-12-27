@@ -16,22 +16,29 @@
 
 namespace utl {
 
-class ByteView : public Hashable, public Dumpable {
+template<typename T>
+class BaseByteView : public Hashable, public Dumpable {
 
-    std::span<const u8> span{};
+    static_assert(std::is_same_v<T, u8> || std::is_same_v<T, const u8>);
+
+    std::span<T> span{};
 
 public:
 
-    constexpr ByteView() = default;
-    constexpr ByteView(const u8* data, isize size) {
+    constexpr BaseByteView() = default;
+    constexpr BaseByteView(const u8* data, isize size) {
 
         span = std::span(data, size_t(size));
     }
 
-    constexpr ByteView(std::span<const u8> bytes) {
+    constexpr BaseByteView(std::span<T> bytes) {
 
         span = bytes;
     }
+
+    constexpr BaseByteView(const BaseByteView<u8>& other)
+            requires std::is_const_v<T>
+        : span(other.bytes()) {}
 
     constexpr const u8 &operator[](isize i) const {
 
@@ -72,7 +79,7 @@ public:
 
     class iterator {
 
-        const ByteView* view_;
+        const BaseByteView* view_;
         isize pos_;
 
     public:
@@ -80,10 +87,10 @@ public:
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = u8;
         using difference_type   = isize;
-        using pointer           = void;     // Proxy-free
-        using reference         = const u8; // Returned by value
+        using pointer           = void;
+        using reference         = std::conditional_t<std::is_const_v<T>, const u8, u8>;
 
-        constexpr iterator(const ByteView* view, isize pos) : view_(view), pos_(pos) {
+        constexpr iterator(const BaseByteView* view, isize pos) : view_(view), pos_(pos) {
 
             assert(view_);
             assert(!view_->empty());
@@ -143,7 +150,7 @@ public:
 
     class cyclic_iterator {
 
-        const ByteView* view_;
+        const BaseByteView* view_;
         isize pos_;
 
     public:
@@ -151,10 +158,10 @@ public:
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = u8;
         using difference_type   = isize;
-        using pointer           = void;     // Proxy-free
-        using reference         = const u8; // Returned by value
+        using pointer           = void;
+        using reference         = std::conditional_t<std::is_const_v<T>, const u8, u8>;
 
-        constexpr cyclic_iterator(const ByteView* view, isize pos = 0) : view_(view), pos_(pos) {
+        constexpr cyclic_iterator(const BaseByteView* view, isize pos = 0) : view_(view), pos_(pos) {
 
             assert(view_);
             assert(!view_->empty());
@@ -207,5 +214,8 @@ public:
         }
     };
 };
+
+using ByteView        = BaseByteView<const u8>;
+using MutableByteView = BaseByteView<u8>;
 
 }

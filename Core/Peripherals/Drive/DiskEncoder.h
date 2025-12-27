@@ -16,6 +16,13 @@ namespace vamiga {
 class DiskEncoder {
 
     //
+    // General MFM
+    //
+
+//    static void encodeSector(ByteView &track, isize offset, Track t, Sector s, span<const u8> data);
+
+
+    //
     // ADF
     //
 
