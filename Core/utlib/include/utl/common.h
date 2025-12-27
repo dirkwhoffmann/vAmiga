@@ -24,6 +24,9 @@ using std::make_unique;
 #include <optional>
 using std::optional;
 
+#include <span>
+using std::span;
+
 #include <string>
 using std::string;
 

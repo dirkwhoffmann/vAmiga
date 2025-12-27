@@ -103,4 +103,38 @@ TrackDevice::bindex(TS ts) const
     return track2block[ts.track] + ts.sector;
 }
 
+void
+TrackDevice::readTrack(u8 *dst, isize nr) const
+{
+    auto blocks = numSectors(nr);
+    auto *ptr   = dst;
+
+    for (isize i = 0; i < blocks; ++i, ptr += bsize())
+        readBlock(ptr, i);
+}
+
+void
+TrackDevice::readTrack(span<u8> dst, isize nr) const
+{
+    assert((isize)dst.size() >= numSectors(nr) * bsize());
+    readTrack(dst.data(), nr);
+}
+
+void
+TrackDevice::writeTrack(const u8 *src, isize nr)
+{
+    auto blocks = numSectors(nr);
+    auto *ptr   = src;
+
+    for (isize i = 0; i < blocks; ++i, ptr += bsize())
+        writeBlock(ptr, i);
+}
+
+void
+TrackDevice::writeTrack(span<const u8> src, isize nr)
+{
+    assert((isize)src.size() >= numSectors(nr) * bsize());
+    writeTrack(src.data(), nr);
+}
+
 }

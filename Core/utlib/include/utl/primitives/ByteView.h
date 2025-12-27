@@ -53,7 +53,7 @@ public:
     //
 
     u64 hash(HashAlgorithm algorithm) const override {
-        return Hashable::hash(span.data(), span.size(), algorithm);
+        return Hashable::hash(span.data(), (isize)span.size(), algorithm);
     }
 
 
@@ -83,7 +83,11 @@ public:
         using pointer           = void;     // Proxy-free
         using reference         = const u8; // Returned by value
 
-        constexpr iterator(const ByteView* view, isize pos) : view_(view), pos_(pos) {}
+        constexpr iterator(const ByteView* view, isize pos) : view_(view), pos_(pos) {
+
+            assert(view_);
+            assert(!view_->empty());
+        }
 
         // Dereference
         constexpr reference operator*() const { return (*view_)[pos_]; }
@@ -131,6 +135,77 @@ public:
 
     constexpr iterator begin() const { return iterator(this, 0); }
     constexpr iterator end()   const { return iterator(this, size()); }
+
+
+    //
+    // Cyclic iterator
+    //
+
+    class cyclic_iterator {
+
+        const ByteView* view_;
+        isize pos_;
+
+    public:
+
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type        = u8;
+        using difference_type   = isize;
+        using pointer           = void;     // Proxy-free
+        using reference         = const u8; // Returned by value
+
+        constexpr cyclic_iterator(const ByteView* view, isize pos = 0) : view_(view), pos_(pos) {
+
+            assert(view_);
+            assert(!view_->empty());
+        }
+
+        // Dereference with wrap
+        constexpr reference operator*() const
+        {
+            auto n = view_->size();
+            auto i = pos_ % n;
+            if (i < 0) i += n;
+            return (*view_)[i];
+        }
+
+        // Increment / Decrement
+        constexpr cyclic_iterator& operator++() { ++pos_; return *this; }
+        constexpr cyclic_iterator& operator--() { --pos_; return *this; }
+
+        // Random access
+        constexpr reference operator[](difference_type n) const { return *(*this + n); }
+
+    private:
+
+        friend constexpr cyclic_iterator operator+(const cyclic_iterator& it, difference_type n) {
+            return cyclic_iterator(it.view_, it.pos_ + n);
+        }
+        friend constexpr cyclic_iterator operator-(const cyclic_iterator& it, difference_type n) {
+            return cyclic_iterator(it.view_, it.pos_ - n);
+        }
+        friend constexpr difference_type operator-(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
+            assert(lhs.view_ == rhs.view_); return lhs.pos_ - rhs.pos_;
+        }
+        friend constexpr bool operator==(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
+            return lhs.view_ == rhs.view_ && lhs.pos_ == rhs.pos_;
+        }
+        friend constexpr bool operator!=(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
+            return !(lhs == rhs);
+        }
+        friend constexpr bool operator<(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
+            assert(lhs.view_ == rhs.view_); return lhs.pos_ < rhs.pos_;
+        }
+        friend constexpr bool operator<=(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
+            return !(rhs < lhs);
+        }
+        friend constexpr bool operator>(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
+            return rhs < lhs;
+        }
+        friend constexpr bool operator>=(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
+            return !(lhs < rhs);
+        }
+    };
 };
 
 }

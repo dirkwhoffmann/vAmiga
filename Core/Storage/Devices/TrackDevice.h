@@ -93,18 +93,34 @@ public:
     //
 
 public:
-    
+
+    // Reads a block
     using BlockDevice::readBlock;
     void readBlock(u8 *dst, CHS chs) const { readBlock(dst, bindex(chs)); }
     void readBlock(u8 *dst, isize c, isize h, isize s) const { readBlock(dst, CHS{c,h,s}); }
     void readBlock(u8 *dst, TS ts) const { readBlock(dst, bindex(ts)); }
     void readBlock(u8 *dst, isize t, isize s) const { readBlock(dst, TS{t,s}); }
 
+    // Writes a block
     using BlockDevice::writeBlock;
     void writeBlock(const u8 *src, CHS chs) { writeBlock(src, bindex(chs)); }
     void writeBlock(const u8 *src, isize c, isize h, isize s) { writeBlock(src, CHS{c,h,s}); }
     void writeBlock(const u8 *src, TS ts) { writeBlock(src, bindex(ts)); }
     void writeBlock(const u8 *src, isize t, isize s) { writeBlock(src, TS{t,s}); }
+
+
+    //
+    // Accessing tracks
+    //
+
+    // Reads a track
+    virtual void readTrack(u8 *dst, isize nr) const;
+    void readTrack(span<u8> dst, isize nr) const;
+
+    // Writes a track
+    virtual void writeTrack(const u8 *src, isize nr);
+    void writeTrack(span<const u8> src, isize nr);
+
 };
 
 }

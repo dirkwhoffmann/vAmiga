@@ -18,7 +18,7 @@ using namespace utl;
 class BlockDevice : public LinearDevice {
 
 public:
-    
+
     BlockDevice() { }
     virtual ~BlockDevice() = default;
 
@@ -33,6 +33,10 @@ public:
 
     // Writes a block
     virtual void writeBlock(const u8 *src, isize nr);
+
+    // Safety wrappers
+    void readBlock(span<u8> dst, isize nr) const;
+    void writeBlock(span<const u8> src, isize nr);
 };
 
 }

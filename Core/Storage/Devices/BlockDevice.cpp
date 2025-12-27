@@ -31,4 +31,18 @@ BlockDevice::writeBlock(const u8 *src, isize nr)
     write(src, nr * bsize(), bsize());
 }
 
+void
+BlockDevice::readBlock(span<u8> dst, isize nr) const
+{
+    assert(bsize() <= (isize)dst.size());
+    readBlock(dst.data(), nr);
+}
+
+void
+BlockDevice::writeBlock(span<const u8> src, isize nr)
+{
+    assert(bsize() <= (isize)src.size());
+    writeBlock(src.data(), nr);
+}
+
 }

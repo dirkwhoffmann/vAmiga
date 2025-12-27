@@ -99,6 +99,30 @@ FloppyDisk::_dump(Category category, std::ostream &os) const
     }
 }
 
+void
+FloppyDisk::readBlock(u8 *dst, isize nr) const
+{
+    fatalError;
+}
+
+void
+FloppyDisk::writeBlock(const u8 *src, isize nr)
+{
+    fatalError;
+}
+
+void
+FloppyDisk::readTrack(u8 *dst, isize nr) const
+{
+    fatalError;
+}
+
+void
+FloppyDisk::writeTrack(const u8 *src, isize nr)
+{
+    fatalError;
+}
+
 bool
 FloppyDisk::isValidHeadPos(Track t, isize offset) const
 {

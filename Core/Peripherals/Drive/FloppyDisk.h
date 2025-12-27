@@ -153,17 +153,21 @@ public:
 
     isize capacity() const override { return numCyls() * numHeads() * numSectors(0); }
     isize bsize() const override { return 512; }
-    void readBlock(u8 *dst, isize nr) const override { fatalError; }
-    void writeBlock(const u8 *src, isize nr) override { fatalError; }
+    void readBlock(u8 *dst, isize nr) const override;
+    void writeBlock(const u8 *src, isize nr) override;
 
 
     //
     // Methods from TrackDevice
     //
 
+public:
+    
     isize numCyls() const override { return diameter == Diameter::INCH_525 ? 42 : 84; }
     isize numHeads() const override { return 2; }
     isize numSectors(isize t) const override { return density == Density::DD ? 11 : 22; }
+    void readTrack(u8 *dst, isize nr) const override;
+    void writeTrack(const u8 *src, isize nr) override;
 
     // isize numCyls() const { return diameter == Diameter::INCH_525 ? 42 : 84; }
     // isize numHeads() const { return 2; }
