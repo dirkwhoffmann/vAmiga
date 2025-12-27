@@ -11,6 +11,7 @@
 #include "VAmiga.h"
 #include "Media.h"
 #include "FileFactories.h"
+#include "BootBlockImage.h"
 #include "utl/io.h"
 #include <typeindex>
 
@@ -230,13 +231,14 @@ MediaFile::getFloppyDiskInfo() const
     try {
 
         auto &disk = dynamic_cast<const FloppyDiskImage &>(*file);
+        auto bb = BootBlockImage(disk.data.ptr);
 
-        result.dos = disk.getDos();
-        result.diameter = disk.getDiameter();
-        result.density = disk.getDensity();
-        result.bootBlockType = disk.bootBlockType();
-        result.bootBlockName = disk.bootBlockName();
-        result.hasVirus = disk.hasVirus();
+        result.dos           = disk.getDos();
+        result.diameter      = disk.getDiameter();
+        result.density       = disk.getDensity();
+        result.bootBlockType = bb.type;
+        result.bootBlockName = bb.name;
+        result.hasVirus      = bb.type == BootBlockType::VIRUS;
 
         return result;
 

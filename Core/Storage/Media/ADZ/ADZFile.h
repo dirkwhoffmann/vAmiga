@@ -44,6 +44,8 @@ public:
     //
     // Methods from AnyFile
     //
+
+public:
     
     u64 fnv64() const override { return adf.fnv64(); }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
@@ -55,6 +57,8 @@ public:
     // Methods from BlockDevice
     //
 
+public:
+
     isize bsize() const override { return adf.bsize(); }
     isize capacity() const override { return adf.capacity(); }
     void readBlock(u8 *dst, isize nr) const override { adf.readBlock(dst, nr); }
@@ -65,6 +69,8 @@ public:
     // Methods from TrackDevice
     //
 
+public:
+    
     isize numCyls() const override { return adf.numCyls(); }
     isize numHeads() const override { return adf.numHeads(); }
     isize numSectors(isize t) const override { return adf.numSectors(t); }
@@ -73,15 +79,12 @@ public:
     //
     // Methods from FloppyDiskImage
     //
-    
+
+public:
+
     FSFormat getDos() const override { return adf.getDos(); }
-    void setDos(FSFormat dos) override { adf.setDos(dos); }
     Diameter getDiameter() const override { return adf.getDiameter(); }
     Density getDensity() const override { return adf.getDensity(); }
-    BootBlockType bootBlockType() const override { return adf.bootBlockType(); }
-    const char *bootBlockName() const override { return adf.bootBlockName(); }
-    // void readSector(u8 *target, isize s) const override { return adf.readSector(target, s); }
-    // void readSector(u8 *target, isize t, isize s) const override { return adf.readSector(target, t, s); }
 };
 
 }

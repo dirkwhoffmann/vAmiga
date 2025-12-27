@@ -73,7 +73,6 @@ public:
     //
 
     FSFormat getDos() const override { return FSFormat::NODOS; }
-    void setDos(FSFormat dos) override { };
     Diameter getDiameter() const override { return Diameter::INCH_35; }
     Density getDensity() const override { return Density::DD; }
 };

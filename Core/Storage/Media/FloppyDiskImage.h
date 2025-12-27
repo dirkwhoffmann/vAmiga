@@ -22,39 +22,19 @@ class FloppyDisk;
 
 class FloppyDiskImage : public DiskImage {
 
-    //
-    // Initializing
-    //
-
 public:
 
-    // Gets or sets the file system for this disk
+    // Returns the predicted file system of this disk
     virtual FSFormat getDos() const = 0;
-    virtual void setDos(FSFormat dos) = 0;
 
-
-    //
-    // Querying disk properties
-    //
-
-public:
-
-    // Informs about the disk type
+    // Returns the disk diameter and density
     virtual Diameter getDiameter() const = 0;
     virtual Density getDensity() const = 0;
 
+    // Convenience wrappers
     bool isSD() { return getDensity() == Density::SD; }
     bool isDD() { return getDensity() == Density::DD; }
     bool isHD() { return getDensity() == Density::HD; }
-
-
-    //
-    // Managing boot blocks
-    //
-
-    virtual BootBlockType bootBlockType() const { return BootBlockType::STANDARD; }
-    virtual const char *bootBlockName() const { return ""; }
-    bool hasVirus() const { return bootBlockType() == BootBlockType::VIRUS; }
-};
+ };
 
 }

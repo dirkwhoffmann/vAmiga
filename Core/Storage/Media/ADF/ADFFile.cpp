@@ -138,17 +138,6 @@ ADFFile::getDos() const
     return (FSFormat)data[3];
 }
 
-void
-ADFFile::setDos(FSFormat dos)
-{
-    if (dos == FSFormat::NODOS) {
-        std::memset(data.ptr, 0, 4);
-    } else {
-        std::memcpy(data.ptr, "DOS", 3);
-        data[3] = (u8)dos;
-    }
-}
-
 Diameter
 ADFFile::getDiameter() const
 {
@@ -184,18 +173,6 @@ ADFFile::getFileSystemDescriptor() const
     result.bmBlocks.push_back(bitmap);
     
     return result;
-}
-
-BootBlockType
-ADFFile::bootBlockType() const
-{
-    return BootBlockImage(data.ptr).type;
-}
-
-const char *
-ADFFile::bootBlockName() const
-{
-    return BootBlockImage(data.ptr).name;
 }
 
 void

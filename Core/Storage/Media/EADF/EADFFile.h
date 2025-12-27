@@ -105,7 +105,6 @@ public:
 public:
 
     FSFormat getDos() const override;
-    void setDos(FSFormat dos) override { };
     Diameter getDiameter() const override;
     Density getDensity() const override;
 
