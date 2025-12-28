@@ -19,7 +19,98 @@
 namespace vamiga {
 
 void
-DiskEncoder::encodeTrack(MutableByteView track, Track t, span<const u8> src)
+DiskEncoder::encodeMFM(u8 *dst, const u8 *src, isize count)
+{
+    for(isize i = 0; i < count; i++) {
+
+        auto mfm =
+        ((src[i] & 0b10000000) << 7) |
+        ((src[i] & 0b01000000) << 6) |
+        ((src[i] & 0b00100000) << 5) |
+        ((src[i] & 0b00010000) << 4) |
+        ((src[i] & 0b00001000) << 3) |
+        ((src[i] & 0b00000100) << 2) |
+        ((src[i] & 0b00000010) << 1) |
+        ((src[i] & 0b00000001) << 0);
+
+        dst[2*i+0] = HI_BYTE(mfm);
+        dst[2*i+1] = LO_BYTE(mfm);
+    }
+}
+
+void
+DiskEncoder::decodeMFM(u8 *dst, const u8 *src, isize count)
+{
+    for(isize i = 0; i < count; i++) {
+
+        u16 mfm = HI_LO(src[2*i], src[2*i+1]);
+
+        auto decoded =
+        ((mfm & 0b0100000000000000) >> 7) |
+        ((mfm & 0b0001000000000000) >> 6) |
+        ((mfm & 0b0000010000000000) >> 5) |
+        ((mfm & 0b0000000100000000) >> 4) |
+        ((mfm & 0b0000000001000000) >> 3) |
+        ((mfm & 0b0000000000010000) >> 2) |
+        ((mfm & 0b0000000000000100) >> 1) |
+        ((mfm & 0b0000000000000001) >> 0);
+
+        dst[i] = (u8)decoded;
+    }
+}
+
+void
+DiskEncoder::encodeOddEven(u8 *dst, const u8 *src, isize count)
+{
+    // Encode odd bits
+    for(isize i = 0; i < count; i++)
+        dst[i] = (src[i] >> 1) & 0x55;
+
+    // Encode even bits
+    for(isize i = 0; i < count; i++)
+        dst[i + count] = src[i] & 0x55;
+}
+
+void
+DiskEncoder::decodeOddEven(u8 *dst, const u8 *src, isize count)
+{
+    // Decode odd bits
+    for(isize i = 0; i < count; i++)
+        dst[i] = (u8)((src[i] & 0x55) << 1);
+
+    // Decode even bits
+    for(isize i = 0; i < count; i++)
+        dst[i] |= src[i + count] & 0x55;
+}
+
+void
+DiskEncoder::addClockBits(u8 *dst, isize count)
+{
+    for (isize i = 0; i < count; i++) {
+        dst[i] = addClockBits(dst[i], dst[i-1]);
+    }
+}
+
+u8
+DiskEncoder::addClockBits(u8 value, u8 previous)
+{
+    // Clear all previously set clock bits
+    value &= 0x55;
+
+    // Compute clock bits (clock bit values are inverted)
+    u8 lShifted = (u8)(value << 1);
+    u8 rShifted = (u8)(value >> 1 | previous << 7);
+    u8 cBitsInv = (u8)(lShifted | rShifted);
+
+    // Reverse the computed clock bits
+    u8 cBits = cBitsInv ^ 0xAA;
+
+    // Return original value with the clock bits added
+    return value | cBits;
+}
+
+void
+DiskEncoder::encodeTrack(MutableByteView track, Track t, ByteView src)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize ssize = 1088;                      // MFM sector size in bytes
@@ -40,7 +131,7 @@ DiskEncoder::encodeTrack(MutableByteView track, Track t, span<const u8> src)
 }
 
 void
-DiskEncoder::encodeSector(MutableByteView track, isize offset, Track t, Sector s, span<const u8> data)
+DiskEncoder::encodeSector(MutableByteView track, isize offset, Track t, Sector s, ByteView data)
 {
     const isize bsize = 512;   // Block size in bytes
     const isize ssize = 1088;  // MFM sector size in bytes
@@ -75,14 +166,14 @@ DiskEncoder::encodeSector(MutableByteView track, isize offset, Track t, Sector s
 
     // Track and sector information
     u8 info[4] = { 0xFF, (u8)t, (u8)s, (u8)(11 - s) };
-    FloppyDisk::encodeOddEven(&it[8], info, sizeof(info));
+    encodeOddEven(&it[8], info, sizeof(info));
 
     // Unused area
     for (isize i = 16; i < 48; i++)
         it[i] = 0xAA;
 
     // Data
-    FloppyDisk::encodeOddEven(&it[64], data);
+    encodeOddEven(&it[64], data.data(), bsize);
 
     // Block checksum
     u8 bcheck[4] = { 0, 0, 0, 0 };
@@ -92,7 +183,7 @@ DiskEncoder::encodeSector(MutableByteView track, isize offset, Track t, Sector s
         bcheck[2] ^= it[i+2];
         bcheck[3] ^= it[i+3];
     }
-    FloppyDisk::encodeOddEven(&it[48], bcheck, sizeof(bcheck));
+    encodeOddEven(&it[48], bcheck, sizeof(bcheck));
 
     // Data checksum
     u8 dcheck[4] = { 0, 0, 0, 0 };
@@ -102,16 +193,16 @@ DiskEncoder::encodeSector(MutableByteView track, isize offset, Track t, Sector s
         dcheck[2] ^= it[i+2];
         dcheck[3] ^= it[i+3];
     }
-    FloppyDisk::encodeOddEven(&it[56], dcheck, sizeof(bcheck));
+    encodeOddEven(&it[56], dcheck, sizeof(bcheck));
 
     // Add clock bits
     for(isize i = 8; i < ssize + 1; i++) {
-        it[i] = FloppyDisk::addClockBits(it[i], it[i-1]);
+        it[i] = addClockBits(it[i], it[i-1]);
     }
 }
 
 void
-DiskEncoder::decodeTrack(ByteView track, Track t, span<u8> dst)
+DiskEncoder::decodeTrack(ByteView track, Track t, MutableByteView dst)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
@@ -152,7 +243,7 @@ DiskEncoder::decodeTrack(ByteView track, Track t, span<u8> dst)
 }
 
 void
-DiskEncoder::decodeSector(ByteView track, isize offset, Track t, Sector s, span<u8> dst)
+DiskEncoder::decodeSector(ByteView track, isize offset, Track t, Sector s, MutableByteView dst)
 {
     const isize bsize = 512;
 
@@ -161,7 +252,7 @@ DiskEncoder::decodeSector(ByteView track, isize offset, Track t, Sector s, span<
 
     // Decode sector info
     u8 info[4];
-    FloppyDisk::decodeOddEven(info, &track[offset], 4);
+    decodeOddEven(info, &track[offset], 4);
 
     // Only proceed if the sector number is valid
     u8 sector = info[2];
@@ -172,9 +263,10 @@ DiskEncoder::decodeSector(ByteView track, isize offset, Track t, Sector s, span<
 
     // Skip sector header
     auto *data = &track[offset + 56];
+    // auto data = track.subspan(offset + 56, 2 * bsize);
 
     // Decode sector data
-    FloppyDisk::decodeOddEven(dst.data(), data, bsize);
+    decodeOddEven(dst.data(), data, bsize);
 }
 
 //
@@ -262,7 +354,7 @@ DiskEncoder::decodeSector(ADFFile &adf, u8 *dst, const u8 *src)
 
     // Decode sector info
     u8 info[4];
-    FloppyDisk::decodeOddEven(info, src, 4);
+    decodeOddEven(info, src, 4);
 
     // Only proceed if the sector number is valid
     u8 sector = info[2];
@@ -275,7 +367,7 @@ DiskEncoder::decodeSector(ADFFile &adf, u8 *dst, const u8 *src)
     src += 56;
 
     // Decode sector data
-    FloppyDisk::decodeOddEven(dst + sector * 512, src, 512);
+    decodeOddEven(dst + sector * 512, src, 512);
 }
 
 
@@ -436,8 +528,8 @@ DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector 
     u8 *p = disk.data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
-    FloppyDisk::encodeMFM(p, buf, sizeof(buf));
-    FloppyDisk::addClockBits(p, 2 * sizeof(buf));
+    encodeMFM(p, buf, sizeof(buf));
+    addClockBits(p, 2 * sizeof(buf));
 
     // Remove certain clock bits in IDAM block
     p[2*12+1] &= 0xDF;
@@ -481,7 +573,7 @@ DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
 
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        FloppyDisk::decodeMFM((u8 *)&chrn, &src[i], 4);
+        decodeMFM((u8 *)&chrn, &src[i], 4);
         if (IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
 
         if (chrn.r >= 1 && chrn.r <= numSectors) {
@@ -514,7 +606,7 @@ DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
 void
 DiskEncoder::decodeSector(IMGFile &img, u8 *dst, const u8 *src)
 {
-    FloppyDisk::decodeMFM(dst, src, 512);
+    decodeMFM(dst, src, 512);
 }
 
 
@@ -651,8 +743,8 @@ DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, Track t, Sector s
     u8 *p = disk.data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
-    FloppyDisk::encodeMFM(p, buf, sizeof(buf));
-    FloppyDisk::addClockBits(p, 2 * sizeof(buf));
+    encodeMFM(p, buf, sizeof(buf));
+    addClockBits(p, 2 * sizeof(buf));
 
     // Remove certain clock bits in IDAM block
     p[2*12+1] &= 0xDF;
@@ -696,7 +788,7 @@ DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, Track t)
 
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        FloppyDisk::decodeMFM((u8 *)&chrn, &src[i], 4);
+        decodeMFM((u8 *)&chrn, &src[i], 4);
         if (IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
 
         if (chrn.r >= 1 && chrn.r <= numSectors) {
@@ -729,7 +821,7 @@ DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, Track t)
 void
 DiskEncoder::decodeSector(STFile &img, u8 *dst, const u8 *src)
 {
-    FloppyDisk::decodeMFM(dst, src, 512);
+    decodeMFM(dst, src, 512);
 }
 
 

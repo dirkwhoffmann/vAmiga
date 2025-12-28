@@ -10,6 +10,7 @@
 #include "config.h"
 #include "IMGEncoder.h"
 #include "IMGFactory.h"
+#include "DiskEncoder.h"
 #include "DeviceError.h"
 
 namespace vamiga {
@@ -122,8 +123,8 @@ IMGEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s
     u8 *p = disk.data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
-    FloppyDisk::encodeMFM(p, buf, sizeof(buf));
-    FloppyDisk::addClockBits(p, 2 * sizeof(buf));
+    DiskEncoder::encodeMFM(p, buf, sizeof(buf));
+    DiskEncoder::addClockBits(p, 2 * sizeof(buf));
 
     // Remove certain clock bits in IDAM block
     p[2*12+1] &= 0xDF;
@@ -188,7 +189,7 @@ IMGEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
 
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        FloppyDisk::decodeMFM((u8 *)&chrn, &src[i], 4);
+        DiskEncoder::decodeMFM((u8 *)&chrn, &src[i], 4);
         if (IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
 
         if (chrn.r >= 1 && chrn.r <= numSectors) {
@@ -221,7 +222,7 @@ IMGEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
 void
 IMGEncoder::decodeSector(IMGFile &img, u8 *dst, const u8 *src)
 {
-    FloppyDisk::decodeMFM(dst, src, 512);
+    DiskEncoder::decodeMFM(dst, src, 512);
 }
 
 }

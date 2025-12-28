@@ -21,41 +21,43 @@ class BaseByteView : public Hashable, public Dumpable {
 
     static_assert(std::is_same_v<T, u8> || std::is_same_v<T, const u8>);
 
-    std::span<T> span{};
+    std::span<T> sp{};
 
 public:
 
     constexpr BaseByteView() = default;
     constexpr BaseByteView(T* data, isize size) {
 
-        span = std::span(data, size_t(size));
+        sp = std::span(data, size_t(size));
     }
 
     constexpr BaseByteView(std::span<T> bytes) {
 
-        span = bytes;
+        sp = bytes;
     }
 
     constexpr BaseByteView(const BaseByteView<u8>& other)
             requires std::is_const_v<T>
-        : span(other.bytes()) {}
+        : sp(other.span()) {}
 
     constexpr T &operator[](isize i) const {
 
-        assert(i >= 0 && i < isize(span.size()));
-        return span[i];
+        assert(i >= 0 && i < isize(sp.size()));
+        return sp[i];
     }
 
     constexpr operator std::span<T>() const {
 
-        return span;
+        return sp;
     }
 
-    constexpr isize size() const { return (isize)span.size(); }
-    constexpr bool empty() const { return span.empty(); }
-    constexpr std::span<const u8> bytes() const { return span; }
+    constexpr isize size() const { return (isize)sp.size(); }
+    constexpr bool empty() const { return sp.empty(); }
+    constexpr T *data() const { return sp.data(); }
+    constexpr std::span<T> span() const { return sp; }
+    constexpr std::span<T> subspan(isize o, isize c) const { return sp.subspan(o, c); }
     constexpr void clear(u8 value = 0) const requires (!std::is_const_v<T>) {
-        for (auto &b : span) { b = value; }
+        for (auto &b : sp) { b = value; }
     }
 
     //
@@ -63,7 +65,7 @@ public:
     //
 
     u64 hash(HashAlgorithm algorithm) const override {
-        return Hashable::hash(span.data(), (isize)span.size(), algorithm);
+        return Hashable::hash(sp.data(), (isize)sp.size(), algorithm);
     }
 
 
@@ -72,7 +74,7 @@ public:
     //
 
     Dumpable::DataProvider dataProvider() const override {
-        return Dumpable::dataProvider(span);
+        return Dumpable::dataProvider(sp);
     }
 
 

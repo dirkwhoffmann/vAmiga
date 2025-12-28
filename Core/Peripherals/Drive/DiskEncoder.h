@@ -16,16 +16,32 @@ namespace vamiga {
 class DiskEncoder {
 
     //
-    // Generic MFM
+    // MFM
     //
 
 public:
-    
-    static void encodeTrack(MutableByteView track, Track t, span<const u8> src);
-    static void encodeSector(MutableByteView track, isize offset, Track t, Sector s, span<const u8> src);
 
-    static void decodeTrack(ByteView track, Track t, span<u8> dst);
-    static void decodeSector(ByteView track, isize offset, Track t, Sector s, span<u8> dst);
+    static void encodeMFM(u8 *dst, const u8 *src, isize count);
+    static void decodeMFM(u8 *dst, const u8 *src, isize count);
+
+    static void encodeOddEven(u8 *dst, const u8 *src, isize count);
+    static void decodeOddEven(u8 *dst, const u8 *src, isize count);
+
+    static void addClockBits(u8 *dst, isize count);
+    static u8 addClockBits(u8 value, u8 previous);
+
+
+    //
+    // Amiga tracks
+    //
+
+public:
+
+    static void encodeTrack(MutableByteView track, Track t, ByteView src);
+    static void encodeSector(MutableByteView track, isize offset, Track t, Sector s, ByteView src);
+
+    static void decodeTrack(ByteView track, Track t, MutableByteView dst);
+    static void decodeSector(ByteView track, isize offset, Track t, Sector s, MutableByteView dst);
 
 
     //
