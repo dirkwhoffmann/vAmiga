@@ -10,14 +10,14 @@
 #include "config.h"
 #include "DMSEncoder.h"
 #include "DMSFile.h"
-#include "ADFEncoder.h"
+#include "DiskEncoder.h"
 
 namespace vamiga {
 
 void
 DMSEncoder::encode(const class DMSFile &source, FloppyDisk &target)
 {
-    ADFEncoder::encode(source.getADF(), target);
+    DiskEncoder::encode(source.getADF(), target);
 }
 
 }

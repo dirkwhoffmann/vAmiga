@@ -9,14 +9,14 @@
 
 #include "config.h"
 #include "ADZEncoder.h"
-#include "ADFEncoder.h"
+#include "DiskEncoder.h"
 
 namespace vamiga {
 
 void
 ADZEncoder::encode(const ADZFile &adz, FloppyDisk &disk)
 {
-    ADFEncoder::encode(adz.adf, disk);
+    DiskEncoder::encode(adz.adf, disk);
 }
 
 }

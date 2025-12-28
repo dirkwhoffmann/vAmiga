@@ -11,12 +11,14 @@
 #include "ADFEncoder.h"
 #include "ADFFactory.h"
 #include "DeviceError.h"
+#include "DiskEncoder.h"
 
 namespace vamiga {
 
 void
 ADFEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
 {
+
     if (disk.getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
@@ -47,17 +49,41 @@ void
 ADFEncoder::encodeTrack(const ADFFile &adf, FloppyDisk &disk, Track t)
 {
     isize sectors = adf.numSectors(t);
-    if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga track %ld with %ld sectors\n", t, sectors);
+    if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga track %ld with %ld sectors (%d bytes)\n", t, sectors, disk.length.track[t]);
+
+    printf("Encoding Amiga track %ld with %ld sectors (%d bytes)\n", t, sectors, disk.length.track[t]);
 
     // Format track
     disk.clearTrack(t, 0xAA);
 
     // Encode all sectors
-    for (Sector s = 0; s < sectors; s++) encodeSector(adf, disk, t, s);
+    // for (Sector s = 0; s < sectors; s++) encodeSector(adf, disk, t, s);
+
+    // Encode all sectors
+    for (Sector s = 0; s < sectors; s++) { encodeSector(adf, disk, t, s); }
 
     // Rectify the first clock bit (where the buffer wraps over)
     if (disk.readBit(t, disk.length.track[t] * 8 - 1)) {
         disk.writeBit(t, 0, 0);
+    }
+
+    // REMOVE ASAP
+    {
+        // Make a copy of the track
+        u8 copy[30*1088];
+        for (isize j = 0; j < disk.length.track[t]; ++j) { copy[j] = disk.data.track[t][j]; }
+
+        // printf("1:"); for (isize j = 0; j < 6540; ++j) { printf("%02X ", copy[j]); } printf("\n");
+        auto bv = disk.byteView(t);
+        DiskEncoder::encodeTrack(bv, t, adf.byteView(t));
+
+        // printf("2:"); for (isize j = 0; j < 6540; ++j) { printf("%02X ", disk.data.track[t][j]); } printf("\n");
+        for (isize j = 0; j < disk.length.track[t]; j++) {
+            if (copy[j] != disk.data.track[t][j]) {
+                printf("MISMATCH %ld %x %x (%d)\n", j, copy[j], disk.data.track[t][j], disk.length.track[t]);
+                // assert(copy[j] == disk.data.track[t][j]);
+            }
+        }
     }
 
     // Compute a debug checksum

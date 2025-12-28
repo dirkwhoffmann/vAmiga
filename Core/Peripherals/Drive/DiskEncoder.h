@@ -19,7 +19,10 @@ class DiskEncoder {
     // General MFM
     //
 
-//    static void encodeSector(ByteView &track, isize offset, Track t, Sector s, span<const u8> data);
+public:
+    
+    static void encodeTrack(const MutableByteView &track, Track t, span<const u8> data);
+    static void encodeSector(const MutableByteView &track, isize offset, Track t, Sector s, span<const u8> data);
 
 
     //

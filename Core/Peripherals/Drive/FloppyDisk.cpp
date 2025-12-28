@@ -12,6 +12,7 @@
 #include "Media.h"
 #include "MediaFile.h"
 #include "DeviceError.h"
+#include "DiskEncoder.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -21,17 +22,17 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
 {
     diameter = dia;
     density = den;
-    
+
     u32 trackLength = 0;
-    
+
     if (dia == Diameter::INCH_35  && den == Density::DD) trackLength = 12668;
     if (dia == Diameter::INCH_35  && den == Density::HD) trackLength = 24636;
     if (dia == Diameter::INCH_525 && den == Density::DD) trackLength = 12668;
-    
+
     if (trackLength == 0 || FORCE_DISK_INVALID_LAYOUT) {
         throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
     }
-    
+
     for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
     clearDisk();
     setWriteProtection(wp);
@@ -68,7 +69,7 @@ FloppyDisk::_dump(Category category, std::ostream &os) const
     using namespace utl;
 
     if (category == Category::State) {
-        
+
         os << tab("Type");
         os << DiameterEnum::key(diameter) << std::endl;
         os << tab("Density");
@@ -157,6 +158,31 @@ u64
 FloppyDisk::checksum(Cylinder c, Head h) const
 {
     return checksum(c * numHeads() + h);
+}
+
+
+ByteView
+FloppyDisk::byteView(Track t) const
+{
+    return ByteView(data.track[t], length.track[t]);
+}
+
+ByteView
+FloppyDisk::byteView(Track t, Sector s) const
+{
+    return ByteView(data.track[t] + s * 1088, 1088);
+}
+
+MutableByteView
+FloppyDisk::byteView(Track t)
+{
+    return MutableByteView(data.track[t], length.track[t]);
+}
+
+MutableByteView
+FloppyDisk::byteView(Track t, Sector s)
+{
+    return MutableByteView(data.track[t] + s * 1088, 1088);
 }
 
 u8
@@ -312,7 +338,7 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &file)
     switch (MediaFile::type(file)) {
     // switch (file.type()) {
 
-        case FileType::ADF:  ADFEncoder::encode(dynamic_cast<const ADFFile &>(file), *this); break;
+        case FileType::ADF:  DiskEncoder::encode(dynamic_cast<const ADFFile &>(file), *this); break;
         case FileType::ADZ:  ADZEncoder::encode(dynamic_cast<const ADZFile &>(file), *this); break;
         case FileType::EADF: EADFEncoder::encode(dynamic_cast<const EADFFile &>(file), *this); break;
         case FileType::IMG:  IMGEncoder::encode(dynamic_cast<const IMGFile &>(file), *this); break;
@@ -396,6 +422,18 @@ FloppyDisk::encodeOddEven(u8 *dst, const u8 *src, isize count)
 }
 
 void
+FloppyDisk::encodeOddEven(u8 *dst, span<const u8>src)
+{
+    // Encode odd bits
+    for(usize i = 0; i < src.size(); ++i)
+        dst[i] = (src[i] >> 1) & 0x55;
+
+    // Encode even bits
+    for(usize i = 0; i < src.size(); ++i)
+        dst[i + src.size()] = src[i] & 0x55;
+}
+
+void
 FloppyDisk::decodeOddEven(u8 *dst, const u8 *src, isize count)
 {
     // Decode odd bits
@@ -405,6 +443,18 @@ FloppyDisk::decodeOddEven(u8 *dst, const u8 *src, isize count)
     // Decode even bits
     for(isize i = 0; i < count; i++)
         dst[i] |= src[i + count] & 0x55;
+}
+
+void
+FloppyDisk::decodeOddEven(u8 *dst, span<const u8>src)
+{
+    // Decode odd bits
+    for(usize i = 0; i < src.size(); ++i)
+        dst[i] = (u8)((src[i] & 0x55) << 1);
+
+    // Decode even bits
+    for(usize i = 0; i < src.size(); ++i)
+        dst[i] |= src[i + src.size()] & 0x55;
 }
 
 void

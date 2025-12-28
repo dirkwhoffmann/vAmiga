@@ -169,10 +169,6 @@ public:
     void readTrack(u8 *dst, isize nr) const override;
     void writeTrack(const u8 *src, isize nr) override;
 
-    // isize numCyls() const { return diameter == Diameter::INCH_525 ? 42 : 84; }
-    // isize numHeads() const { return 2; }
-    // isize numTracks() const { return diameter == Diameter::INCH_525 ? 84 : 168; }
-
 
     //
     // Serializing
@@ -219,12 +215,6 @@ public:
     Diameter getDiameter() const { return diameter; }
     Density getDensity() const { return density; }
 
-    /*
-    isize numCyls() const { return diameter == Diameter::INCH_525 ? 42 : 84; }
-    isize numHeads() const { return 2; }
-    isize numTracks() const { return diameter == Diameter::INCH_525 ? 84 : 168; }
-    */
-
     bool isWriteProtected() const { return flags & long(DiskFlags::PROTECTED); }
     void setWriteProtection(bool value) { value ? flags |= long(DiskFlags::PROTECTED) : flags &= ~long(DiskFlags::PROTECTED); }
 
@@ -236,7 +226,18 @@ public:
     void setFlag(DiskFlags flag) { setFlag(flag, true); }
     void clearFlag(DiskFlags flag) { setFlag(flag, false); }
 
-    
+
+    //
+    // Accessing tracks and sectors
+    //
+
+    ByteView byteView(Track t) const;
+    ByteView byteView(Track t, Sector s) const;
+    MutableByteView byteView(Track t);
+    MutableByteView byteView(Track t, Sector s);
+
+
+
     //
     // Reading and writing
     //
@@ -299,7 +300,10 @@ public:
     static void decodeMFM(u8 *dst, const u8 *src, isize count);
     
     static void encodeOddEven(u8 *dst, const u8 *src, isize count);
+    static void encodeOddEven(u8 *dst, span<const u8> src);
+
     static void decodeOddEven(u8 *dst, const u8 *src, isize count);
+    static void decodeOddEven(u8 *dst, span<const u8> src);
 
     static void addClockBits(u8 *dst, isize count);
     static u8 addClockBits(u8 value, u8 previous);

@@ -26,7 +26,7 @@ class BaseByteView : public Hashable, public Dumpable {
 public:
 
     constexpr BaseByteView() = default;
-    constexpr BaseByteView(const u8* data, isize size) {
+    constexpr BaseByteView(T* data, isize size) {
 
         span = std::span(data, size_t(size));
     }
@@ -40,7 +40,7 @@ public:
             requires std::is_const_v<T>
         : span(other.bytes()) {}
 
-    constexpr const u8 &operator[](isize i) const {
+    constexpr T &operator[](isize i) const {
 
         assert(i >= 0 && i < isize(span.size()));
         return span[i];
@@ -54,6 +54,9 @@ public:
     constexpr isize size() const { return (isize)span.size(); }
     constexpr bool empty() const { return span.empty(); }
     constexpr std::span<const u8> bytes() const { return span; }
+    constexpr void clear(u8 value = 0) const requires (!std::is_const_v<T>) {
+        for (auto &b : span) { b = value; }
+    }
 
     //
     // Methods from Hashable
@@ -88,7 +91,7 @@ public:
         using value_type        = u8;
         using difference_type   = isize;
         using pointer           = void;
-        using reference         = std::conditional_t<std::is_const_v<T>, const u8, u8>;
+        using reference         = std::conditional_t<std::is_const_v<T>, const u8&, u8&>;
 
         constexpr iterator(const BaseByteView* view, isize pos) : view_(view), pos_(pos) {
 
@@ -159,7 +162,7 @@ public:
         using value_type        = u8;
         using difference_type   = isize;
         using pointer           = void;
-        using reference         = std::conditional_t<std::is_const_v<T>, const u8, u8>;
+        using reference         = std::conditional_t<std::is_const_v<T>, const u8&, u8&>;
 
         constexpr cyclic_iterator(const BaseByteView* view, isize pos = 0) : view_(view), pos_(pos) {
 
@@ -213,6 +216,10 @@ public:
             return !(lhs < rhs);
         }
     };
+
+    constexpr cyclic_iterator cyclic_begin(isize pos) const {
+        return cyclic_iterator(this, pos);
+    }
 };
 
 using ByteView        = BaseByteView<const u8>;

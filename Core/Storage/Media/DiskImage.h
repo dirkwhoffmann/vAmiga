@@ -24,6 +24,18 @@ class DiskImage : public AnyFile, public TrackDevice {
     isize size() const override { return data.size; }
     void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
+
+
+    //
+    // Obtaining views on tracks and sectors
+    //
+
+public:
+    
+    ByteView byteView(Track t) const;
+    ByteView byteView(Track t, Sector s) const;
+    MutableByteView byteView(Track t);
+    MutableByteView byteView(Track t, Sector s);
 };
 
 }

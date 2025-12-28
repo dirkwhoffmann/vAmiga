@@ -30,4 +30,28 @@ DiskImage::write(const u8 *src, isize offset, isize count)
     memcpy((void *)(data.ptr + offset), (void *)src, count);
 }
 
+ByteView
+DiskImage::byteView(Track t) const
+{
+    return ByteView(data.ptr + boffset(TS{t,0}), numSectors(t) * bsize());
+}
+
+ByteView
+DiskImage::byteView(Track t, Sector s) const
+{
+    return ByteView(data.ptr + boffset(TS{t,s}), bsize());
+}
+
+MutableByteView
+DiskImage::byteView(Track t)
+{
+    return MutableByteView(data.ptr + boffset(TS{t,0}), numSectors(t) * bsize());
+}
+
+MutableByteView
+DiskImage::byteView(Track t, Sector s)
+{
+    return MutableByteView(data.ptr + boffset(TS{t,s}), bsize());
+}
+
 }

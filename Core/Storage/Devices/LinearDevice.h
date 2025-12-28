@@ -10,6 +10,7 @@
 #pragma once
 
 #include "utl/common.h"
+#include "DeviceTypes.h"
 
 namespace vamiga {
 

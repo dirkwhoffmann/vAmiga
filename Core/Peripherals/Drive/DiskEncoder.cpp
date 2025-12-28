@@ -18,6 +18,100 @@
 
 namespace vamiga {
 
+void
+DiskEncoder::encodeTrack(const MutableByteView &track, Track t, span<const u8> data)
+{
+    const isize bsize = 512;                    // Block size in bytes
+    const isize ssize = 1088;                   // Encoded sector size in bytes
+    const isize sectors = data.size() / bsize;  // Number of sectors to encode
+
+    assert(data.size() % bsize == 0);
+
+    if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga track %ld with %ld sectors\n", t, sectors);
+
+    // Format track
+    track.clear(0xAA);
+
+    // Encode all sectors
+    for (Sector s = 0; s < sectors; s++) {
+        encodeSector(track, s * ssize, t, s, data.subspan(s * bsize, 512));
+    }
+
+    // Compute a debug checksum
+    if (ADF_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n", t, track.fnv32());
+}
+
+void
+DiskEncoder::encodeSector(const MutableByteView &track, isize offset, Track t, Sector s, span<const u8> data)
+{
+    assert(data.size() == 512);
+
+    if (ADF_DEBUG) fprintf(stderr, "Encoding sector %ld\n", s);
+
+    // Block header layout:
+    //
+    //                         Start  Size   Value
+    //     Bytes before SYNC   00      4     0xAA 0xAA 0xAA 0xAA
+    //     SYNC mark           04      4     0x44 0x89 0x44 0x89
+    //     Track & sector info 08      8     Odd/Even encoded
+    //     Unused area         16     32     0xAA
+    //     Block checksum      48      8     Odd/Even encoded
+    //     Data checksum       56      8     Odd/Even encoded
+
+    auto it = track.cyclic_begin(offset);
+
+    // Bytes before SYNC
+    it[0] = (it[-1] & 1) ? 0x2A : 0xAA;
+    it[1] = 0xAA;
+    it[2] = 0xAA;
+    it[3] = 0xAA;
+
+    // SYNC mark
+    u16 sync = 0x4489;
+    it[4] = HI_BYTE(sync);
+    it[5] = LO_BYTE(sync);
+    it[6] = HI_BYTE(sync);
+    it[7] = LO_BYTE(sync);
+
+    // Track and sector information
+    u8 info[4] = { 0xFF, (u8)t, (u8)s, (u8)(11 - s) };
+    FloppyDisk::encodeOddEven(&it[8], info, sizeof(info));
+
+    // Unused area
+    for (isize i = 16; i < 48; i++)
+        it[i] = 0xAA;
+
+    // Data
+    FloppyDisk::encodeOddEven(&it[64], data);
+
+    // Block checksum
+    u8 bcheck[4] = { 0, 0, 0, 0 };
+    for(isize i = 8; i < 48; i += 4) {
+        bcheck[0] ^= it[i];
+        bcheck[1] ^= it[i+1];
+        bcheck[2] ^= it[i+2];
+        bcheck[3] ^= it[i+3];
+    }
+    FloppyDisk::encodeOddEven(&it[48], bcheck, sizeof(bcheck));
+
+    // Data checksum
+    u8 dcheck[4] = { 0, 0, 0, 0 };
+    for(isize i = 64; i < 1088; i += 4) {
+        dcheck[0] ^= it[i];
+        dcheck[1] ^= it[i+1];
+        dcheck[2] ^= it[i+2];
+        dcheck[3] ^= it[i+3];
+    }
+    FloppyDisk::encodeOddEven(&it[56], dcheck, sizeof(bcheck));
+
+    // Add clock bits
+    for(isize i = 8; i < 1088 + 1; i++) {
+        it[i] = FloppyDisk::addClockBits(it[i], it[i-1]);
+    }
+    // (it[1087] & 1) ? it[1088] &= 0x7F : it[1088] |= 0x80;
+}
+
+
 //
 // ADF
 //
@@ -39,7 +133,9 @@ DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
     disk.clearDisk();
 
     // Encode all tracks
-    for (Track t = 0; t < tracks; t++) encodeTrack(adf, disk, t);
+    for (Track t = 0; t < tracks; t++) {
+        encodeTrack(disk.byteView(t), t, adf.byteView(t));
+    }
 
     // In debug mode, also run the decoder
     if (ADF_DEBUG) {
@@ -61,7 +157,20 @@ DiskEncoder::encodeTrack(const ADFFile &adf, FloppyDisk &disk, Track t)
     disk.clearTrack(t, 0xAA);
 
     // Encode all sectors
-    for (Sector s = 0; s < sectors; s++) encodeSector(adf, disk, t, s);
+    for (Sector s = 0; s < sectors; s++) {
+
+        encodeSector(adf, disk, t, s);
+
+        // REMOVE ASAP
+        u8 q[1088];
+        u8 adfbytes[512];
+        adf.readBlock(adfbytes, t, s);
+        auto mbv = MutableByteView(q, 1088);
+        encodeSector(mbv, 0, t, s, span<const u8>(adfbytes,512));
+        for (isize j = 0; j < 1088; j++) {
+            assert((disk.data.track[t] + (s * 1088))[j] == q[j]);
+        }
+    }
 
     // Rectify the first clock bit (where the buffer wraps over)
     if (disk.readBit(t, disk.length.track[t] * 8 - 1)) {
@@ -665,3 +774,4 @@ DiskEncoder::decodeSector(STFile &img, u8 *dst, const u8 *src)
 
 
 }
+

@@ -18,7 +18,7 @@ class ADFEncoder {
 
 public:
 
-    static void encode(const ADFFile &source, FloppyDisk &target);
+    [[deprecated]] static void encode(const ADFFile &source, FloppyDisk &target);
     static void decode(ADFFile &target, const FloppyDisk &source);
 
 private:
