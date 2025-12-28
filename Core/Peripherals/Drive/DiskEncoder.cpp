@@ -210,42 +210,47 @@ DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
     if (ADF_DEBUG) fprintf(stderr, "Decoding track %ld\n", t);
     assert(dst.size() % bsize == 0);
 
-    // Seek all sync marks
-    std::vector<isize> sectorStart(count);
-    isize nr = 0; isize index = 0;
+    // Find all sync marks
     auto it = track.cyclic_begin();
+    std::vector<isize> syncMarks;
+    syncMarks.reserve(count);
 
-    while (index < track.size() + 8 && nr < count) {
+    constexpr isize syncMarkLen = 4;
+    for (isize i = 0; i < track.size() + syncMarkLen; ++i, ++it) {
 
         // Scan MFM stream for $4489 $4489
-        if (it[index++] != 0x44) continue;
-        if (it[index++] != 0x89) continue;
-        if (it[index++] != 0x44) continue;
-        if (it[index++] != 0x89) continue;
+        if (it[0] != 0x44) continue;
+        if (it[1] != 0x89) continue;
+        if (it[2] != 0x44) continue;
+        if (it[3] != 0x89) continue;
 
         // Make sure it's not a DOS track
-        if (it[index+1] == 0x89) continue;
+        if (it[5] == 0x89) continue;
 
-        sectorStart[nr++] = index;
+        syncMarks.push_back(it.offset());
     }
 
-    if (ADF_DEBUG) fprintf(stderr, "Found %ld sectors (expected %ld)\n", nr, count);
+    if (ADF_DEBUG) fprintf(stderr, "Found %zd sectors (expected %ld)\n", syncMarks.size(), count);
 
-    if (nr != count) {
+    // Check that the track contains the proper amount of sync marks
+    if (isize(syncMarks.size()) != count) {
 
-        warn("Found %ld sectors, expected %ld. Aborting.\n", nr, count);
+        warn("Found %zd sectors, expected %ld. Aborting.\n", syncMarks.size(), count);
         throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
     }
 
     // Decode all sectors
     for (SectorNr s = 0; s < count; s++)
-        decodeAmigaSector(track, sectorStart[s], dst);
+        decodeAmigaSector(track, syncMarks[s], dst);
 }
 
 void
 DiskEncoder::decodeAmigaSector(ByteView track, isize offset, MutableByteView dst)
 {
     const isize bsize = 512;
+
+    // Skip sync mark
+    offset += 4;
 
     // Decode sector info
     u8 info[4]; decodeOddEven(info, &track[offset], 4);
