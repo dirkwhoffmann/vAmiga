@@ -16,13 +16,16 @@ namespace vamiga {
 class DiskEncoder {
 
     //
-    // General MFM
+    // Generic MFM
     //
 
 public:
     
-    static void encodeTrack(const MutableByteView &track, Track t, span<const u8> data);
-    static void encodeSector(const MutableByteView &track, isize offset, Track t, Sector s, span<const u8> data);
+    static void encodeTrack(MutableByteView track, Track t, span<const u8> src);
+    static void encodeSector(MutableByteView track, isize offset, Track t, Sector s, span<const u8> src);
+
+    static void decodeTrack(ByteView track, Track t, span<u8> dst);
+    static void decodeSector(ByteView track, isize offset, Track t, Sector s, span<u8> dst);
 
 
     //
@@ -36,8 +39,8 @@ public:
 
 private:
 
-    static void encodeTrack(const ADFFile &adf, FloppyDisk &disk, Track t);
-    static void encodeSector(const ADFFile &adf, FloppyDisk &disk, Track t, Sector s);
+    // [[deprecated]] static void encodeTrack(const ADFFile &adf, FloppyDisk &disk, Track t);
+    // [[deprecated]] static void encodeSector(const ADFFile &adf, FloppyDisk &disk, Track t, Sector s);
 
     static void decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t);
     static void decodeSector(ADFFile &adf, u8 *dst, const u8 *src);

@@ -46,7 +46,7 @@ public:
         return span[i];
     }
 
-    constexpr operator std::span<const u8>() const {
+    constexpr operator std::span<T>() const {
 
         return span;
     }
@@ -217,7 +217,7 @@ public:
         }
     };
 
-    constexpr cyclic_iterator cyclic_begin(isize pos) const {
+    constexpr cyclic_iterator cyclic_begin(isize pos = 0) const {
         return cyclic_iterator(this, pos);
     }
 };
