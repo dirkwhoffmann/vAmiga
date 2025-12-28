@@ -29,7 +29,7 @@ IMGEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
     if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
 
     // Encode all tracks
-    for (Track t = 0; t < tracks; t++) encodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; t++) encodeTrack(img, disk, t);
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
@@ -41,7 +41,7 @@ IMGEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
 }
 
 void
-IMGEncoder::encodeTrack(const IMGFile &img, FloppyDisk &disk, Track t)
+IMGEncoder::encodeTrack(const IMGFile &img, FloppyDisk &disk, TrackNr t)
 {
     isize sectors = img.numSectors();
     if (IMG_DEBUG) fprintf(stderr, "Encoding DOS track %ld with %ld sectors\n", t, sectors);
@@ -63,14 +63,14 @@ IMGEncoder::encodeTrack(const IMGFile &img, FloppyDisk &disk, Track t)
     p += 80;                                        // GAP
 
     // Encode all sectors
-    for (Sector s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
+    for (SectorNr s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
 
     // Compute a checksum for debugging
     if (IMG_DEBUG) fprintf(stderr, "Track %ld checksum = %llx\n", t, disk.checksum(t));
 }
 
 void
-IMGEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s)
+IMGEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, SectorNr s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
 
@@ -155,11 +155,11 @@ IMGEncoder::decode(class IMGFile &img, const FloppyDisk &disk)
     const_cast<FloppyDisk &>(disk).repeatTracks();
 
     // Decode all tracks
-    for (Track t = 0; t < tracks; t++) decodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; t++) decodeTrack(img, disk, t);
 }
 
 void
-IMGEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
+IMGEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, TrackNr t)
 {
     assert(t < disk.numTracks());
 
@@ -214,7 +214,7 @@ IMGEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
     for (isize i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
 
     // Decode all sectors
-    for (Sector s = 0; s < numSectors; s++, dst += 512) {
+    for (SectorNr s = 0; s < numSectors; s++, dst += 512) {
         decodeSector(img, dst, src + sectorStart[s]);
     }
 }

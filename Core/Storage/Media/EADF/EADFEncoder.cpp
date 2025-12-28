@@ -32,17 +32,17 @@ EADFEncoder::encode(const EADFFile &eadf, FloppyDisk &disk)
     disk.clearDisk(0);
 
     // Encode all standard tracks
-    for (Track t = 0; t < tracks; t++) encodeStandardTrack(eadf, *adf, t);
+    for (TrackNr t = 0; t < tracks; t++) encodeStandardTrack(eadf, *adf, t);
 
     // Convert the ADF to a disk
     disk.encodeDisk(*adf);
 
     // Encode all extended tracks
-    for (Track t = 0; t < tracks; t++) encodeExtendedTrack(eadf, disk, t);
+    for (TrackNr t = 0; t < tracks; t++) encodeExtendedTrack(eadf, disk, t);
 }
 
 void
-EADFEncoder::encodeStandardTrack(const EADFFile &eadf, ADFFile &adf, Track t)
+EADFEncoder::encodeStandardTrack(const EADFFile &eadf, ADFFile &adf, TrackNr t)
 {
     if (eadf.typeOfTrack(t) == 0) {
 
@@ -57,7 +57,7 @@ EADFEncoder::encodeStandardTrack(const EADFFile &eadf, ADFFile &adf, Track t)
 }
 
 void
-EADFEncoder::encodeExtendedTrack(const EADFFile &eadf, FloppyDisk &disk, Track t)
+EADFEncoder::encodeExtendedTrack(const EADFFile &eadf, FloppyDisk &disk, TrackNr t)
 {
     if (eadf.typeOfTrack(t) == 1) {
 
@@ -94,7 +94,7 @@ EADFEncoder::decode(EADFFile &eadf, const FloppyDisk &disk)
     p += 12;
 
     // Track headers
-    for (Track t = 0; t < numTracks; t++, p += 12) {
+    for (TrackNr t = 0; t < numTracks; t++, p += 12) {
 
         auto bytes = disk.length.track[t];
         auto bits = 8 * bytes;
@@ -121,7 +121,7 @@ EADFEncoder::decode(EADFFile &eadf, const FloppyDisk &disk)
     }
 
     // Track headers
-    for (Track t = 0; t < numTracks; t++) {
+    for (TrackNr t = 0; t < numTracks; t++) {
 
         auto bytes = disk.length.track[t];
 

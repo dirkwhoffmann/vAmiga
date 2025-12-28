@@ -32,10 +32,10 @@ class DiskImage : public AnyFile, public TrackDevice {
 
 public:
     
-    ByteView byteView(Track t) const;
-    ByteView byteView(Track t, Sector s) const;
-    MutableByteView byteView(Track t);
-    MutableByteView byteView(Track t, Sector s);
+    ByteView byteView(TrackNr t) const;
+    ByteView byteView(TrackNr t, SectorNr s) const;
+    MutableByteView byteView(TrackNr t);
+    MutableByteView byteView(TrackNr t, SectorNr s);
 };
 
 }

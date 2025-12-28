@@ -110,7 +110,7 @@ DiskEncoder::addClockBits(u8 value, u8 previous)
 }
 
 void
-DiskEncoder::encodeTrack(MutableByteView track, Track t, ByteView src)
+DiskEncoder::encodeAmigaTrack(MutableByteView track, TrackNr t, ByteView src)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize ssize = 1088;                      // MFM sector size in bytes
@@ -123,15 +123,15 @@ DiskEncoder::encodeTrack(MutableByteView track, Track t, ByteView src)
     track.clear(0xAA);
 
     // Encode all sectors
-    for (Sector s = 0; s < count; s++)
-        encodeSector(track, s * ssize, t, s, src.subspan(s * bsize, bsize));
+    for (SectorNr s = 0; s < count; s++)
+        encodeAmigaSector(track, s * ssize, t, s, src.subspan(s * bsize, bsize));
 
     // Compute a debug checksum
     if (ADF_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n", t, track.fnv32());
 }
 
 void
-DiskEncoder::encodeSector(MutableByteView track, isize offset, Track t, Sector s, ByteView data)
+DiskEncoder::encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
 {
     const isize bsize = 512;   // Block size in bytes
     const isize ssize = 1088;  // MFM sector size in bytes
@@ -202,7 +202,7 @@ DiskEncoder::encodeSector(MutableByteView track, isize offset, Track t, Sector s
 }
 
 void
-DiskEncoder::decodeTrack(ByteView track, Track t, MutableByteView dst)
+DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
@@ -238,12 +238,12 @@ DiskEncoder::decodeTrack(ByteView track, Track t, MutableByteView dst)
     }
 
     // Decode all sectors
-    for (Sector s = 0; s < count; s++)
-        decodeSector(track, sectorStart[s], t, s, dst.subspan(s * bsize, bsize));
+    for (SectorNr s = 0; s < count; s++)
+        decodeAmigaSector(track, sectorStart[s], t, s, dst.subspan(s * bsize, bsize));
 }
 
 void
-DiskEncoder::decodeSector(ByteView track, isize offset, Track t, Sector s, MutableByteView dst)
+DiskEncoder::decodeAmigaSector(ByteView track, isize offset, TrackNr t, SectorNr s, MutableByteView dst)
 {
     const isize bsize = 512;
 
@@ -290,8 +290,8 @@ DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
     disk.clearDisk();
 
     // Encode all tracks
-    for (Track t = 0; t < tracks; t++) {
-        encodeTrack(disk.byteView(t), t, adf.byteView(t));
+    for (TrackNr t = 0; t < tracks; t++) {
+        encodeAmigaTrack(disk.byteView(t), t, adf.byteView(t));
     }
 
     // In debug mode, also run the decoder
@@ -303,73 +303,6 @@ DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
         adf->writeToFile(tmp);
     }
 }
-
-void
-DiskEncoder::decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t)
-{
-    long sectors = adf.numSectors();
-
-    if (ADF_DEBUG) fprintf(stderr, "Decoding track %ld\n", t);
-
-    auto *src = disk.data.track[t];
-    auto *dst = adf.data.ptr + t * sectors * 512;
-
-    // Seek all sync marks
-    std::vector<isize> sectorStart(sectors);
-    isize nr = 0; usize index = 0;
-
-    while (index < sizeof(disk.data.track[t]) && nr < sectors) {
-
-        // Scan MFM stream for $4489 $4489
-        if (src[index++] != 0x44) continue;
-        if (src[index++] != 0x89) continue;
-        if (src[index++] != 0x44) continue;
-        if (src[index++] != 0x89) continue;
-
-        // Make sure it's not a DOS track
-        if (src[index + 1] == 0x89) continue;
-
-        sectorStart[nr++] = index;
-    }
-
-    if (ADF_DEBUG) fprintf(stderr, "Found %ld sectors (expected %ld)\n", nr, sectors);
-
-    if (nr != sectors) {
-
-        warn("Found %ld sectors, expected %ld. Aborting.\n", nr, sectors);
-        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
-    }
-
-    // Decode all sectors
-    for (Sector s = 0; s < sectors; s++) {
-        decodeSector(adf, dst, src + sectorStart[s]);
-    }
-}
-
-void
-DiskEncoder::decodeSector(ADFFile &adf, u8 *dst, const u8 *src)
-{
-    assert(dst != nullptr);
-    assert(src != nullptr);
-
-    // Decode sector info
-    u8 info[4];
-    decodeOddEven(info, src, 4);
-
-    // Only proceed if the sector number is valid
-    u8 sector = info[2];
-    if (sector >= adf.numSectors()) {
-        warn("Invalid sector number %d. Aborting.\n", sector);
-        throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
-    }
-
-    // Skip sector header
-    src += 56;
-
-    // Decode sector data
-    decodeOddEven(dst + sector * 512, src, 512);
-}
-
 
 void DiskEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
 {
@@ -391,8 +324,8 @@ void DiskEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
 
     // Decode all tracks
     // for (Track t = 0; t < tracks; t++) decodeTrack(adf, disk, t);
-    for (Track t = 0; t < tracks; t++)
-        decodeTrack(disk.byteView(t), t, adf.byteView(t));
+    for (TrackNr t = 0; t < tracks; t++)
+        decodeAmigaTrack(disk.byteView(t), t, adf.byteView(t));
 }
 
 //
@@ -413,7 +346,7 @@ DiskEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
     if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
 
     // Encode all tracks
-    for (Track t = 0; t < tracks; t++) encodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; t++) encodeTrack(img, disk, t);
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
@@ -442,11 +375,11 @@ DiskEncoder::decode(class IMGFile &img, const FloppyDisk &disk)
     const_cast<FloppyDisk &>(disk).repeatTracks();
 
     // Decode all tracks
-    for (Track t = 0; t < tracks; t++) decodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; t++) decodeTrack(img, disk, t);
 }
 
 void
-DiskEncoder::encodeTrack(const IMGFile &img, FloppyDisk &disk, Track t)
+DiskEncoder::encodeTrack(const IMGFile &img, FloppyDisk &disk, TrackNr t)
 {
     isize sectors = img.numSectors();
     if (IMG_DEBUG) fprintf(stderr, "Encoding DOS track %ld with %ld sectors\n", t, sectors);
@@ -468,14 +401,14 @@ DiskEncoder::encodeTrack(const IMGFile &img, FloppyDisk &disk, Track t)
     p += 80;                                        // GAP
 
     // Encode all sectors
-    for (Sector s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
+    for (SectorNr s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
 
     // Compute a checksum for debugging
     if (IMG_DEBUG) fprintf(stderr, "Track %ld checksum = %llx\n", t, disk.checksum(t));
 }
 
 void
-DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s)
+DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, SectorNr s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
 
@@ -543,7 +476,7 @@ DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector 
 }
 
 void
-DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
+DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, TrackNr t)
 {
     assert(t < disk.numTracks());
 
@@ -598,7 +531,7 @@ DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t)
     for (isize i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
 
     // Decode all sectors
-    for (Sector s = 0; s < numSectors; s++, dst += 512) {
+    for (SectorNr s = 0; s < numSectors; s++, dst += 512) {
         decodeSector(img, dst, src + sectorStart[s]);
     }
 }
@@ -628,7 +561,7 @@ DiskEncoder::encode(const class STFile &img, FloppyDisk &disk)
     if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
 
     // Encode all tracks
-    for (Track t = 0; t < tracks; t++) encodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; t++) encodeTrack(img, disk, t);
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
@@ -657,11 +590,11 @@ DiskEncoder::decode(class STFile &img, const FloppyDisk &disk)
     const_cast<FloppyDisk &>(disk).repeatTracks();
 
     // Decode all tracks
-    for (Track t = 0; t < tracks; t++) decodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; t++) decodeTrack(img, disk, t);
 }
 
 void
-DiskEncoder::encodeTrack(const STFile &img, FloppyDisk &disk, Track t)
+DiskEncoder::encodeTrack(const STFile &img, FloppyDisk &disk, TrackNr t)
 {
     isize sectors = img.numSectors();
     if (IMG_DEBUG) fprintf(stderr, "Encoding Atari ST track %ld with %ld sectors\n", t, sectors);
@@ -683,14 +616,14 @@ DiskEncoder::encodeTrack(const STFile &img, FloppyDisk &disk, Track t)
     p += 80;                                        // GAP
 
     // Encode all sectors
-    for (Sector s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
+    for (SectorNr s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
 
     // Compute a checksum for debugging
     if (IMG_DEBUG) fprintf(stderr, "Track %ld checksum = %llx\n", t, disk.checksum(t));
 }
 
 void
-DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, Track t, Sector s)
+DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, TrackNr t, SectorNr s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
 
@@ -758,7 +691,7 @@ DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, Track t, Sector s
 }
 
 void
-DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, Track t)
+DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, TrackNr t)
 {
     assert(t < disk.numTracks());
 
@@ -813,7 +746,7 @@ DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, Track t)
     for (isize i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
 
     // Decode all sectors
-    for (Sector s = 0; s < numSectors; s++, dst += 512) {
+    for (SectorNr s = 0; s < numSectors; s++, dst += 512) {
         decodeSector(img, dst, src + sectorStart[s]);
     }
 }

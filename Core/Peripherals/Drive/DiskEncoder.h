@@ -37,11 +37,11 @@ public:
 
 public:
 
-    static void encodeTrack(MutableByteView track, Track t, ByteView src);
-    static void encodeSector(MutableByteView track, isize offset, Track t, Sector s, ByteView src);
+    static void encodeAmigaTrack(MutableByteView track, TrackNr t, ByteView src);
+    static void encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 
-    static void decodeTrack(ByteView track, Track t, MutableByteView dst);
-    static void decodeSector(ByteView track, isize offset, Track t, Sector s, MutableByteView dst);
+    static void decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst);
+    static void decodeAmigaSector(ByteView track, isize offset, TrackNr t, SectorNr s, MutableByteView dst);
 
 
     //
@@ -52,14 +52,6 @@ public:
 
     static void encode(const class ADFFile &source, FloppyDisk &target);
     static void decode(class ADFFile &target, const FloppyDisk &source);
-
-private:
-
-    // [[deprecated]] static void encodeTrack(const ADFFile &adf, FloppyDisk &disk, Track t);
-    // [[deprecated]] static void encodeSector(const ADFFile &adf, FloppyDisk &disk, Track t, Sector s);
-
-    static void decodeTrack(ADFFile &adf, const class FloppyDisk &disk, Track t);
-    static void decodeSector(ADFFile &adf, u8 *dst, const u8 *src);
 
 
     //
@@ -73,10 +65,10 @@ public:
 
 private:
 
-    static void encodeTrack(const IMGFile &img, FloppyDisk &disk, Track t);
-    static void encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s);
+    static void encodeTrack(const IMGFile &img, FloppyDisk &disk, TrackNr t);
+    static void encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, SectorNr s);
 
-    static void decodeTrack(IMGFile &img, const class FloppyDisk &disk, Track t);
+    static void decodeTrack(IMGFile &img, const class FloppyDisk &disk, TrackNr t);
     static void decodeSector(IMGFile &img, u8 *dst, const u8 *src);
 
 
@@ -91,10 +83,10 @@ public:
 
 private:
 
-    static void encodeTrack(const STFile &img, FloppyDisk &disk, Track t);
-    static void encodeSector(const STFile &img, FloppyDisk &disk, Track t, Sector s);
+    static void encodeTrack(const STFile &img, FloppyDisk &disk, TrackNr t);
+    static void encodeSector(const STFile &img, FloppyDisk &disk, TrackNr t, SectorNr s);
 
-    static void decodeTrack(STFile &img, const class FloppyDisk &disk, Track t);
+    static void decodeTrack(STFile &img, const class FloppyDisk &disk, TrackNr t);
     static void decodeSector(STFile &img, u8 *dst, const u8 *src);
 
 

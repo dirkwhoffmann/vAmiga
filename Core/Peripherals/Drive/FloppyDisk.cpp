@@ -125,13 +125,13 @@ FloppyDisk::writeTrack(const u8 *src, isize nr)
 }
 
 bool
-FloppyDisk::isValidHeadPos(Track t, isize offset) const
+FloppyDisk::isValidHeadPos(TrackNr t, isize offset) const
 {
     return isValidTrackNr(t) && offset >= 0 && offset < 8 * length.track[t];
 }
 
 bool
-FloppyDisk::isValidHeadPos(Cylinder c, Head h, isize offset) const
+FloppyDisk::isValidHeadPos(CylNr c, HeadNr h, isize offset) const
 {
     return isValidCylinderNr(c) && isValidHeadNr(h) && offset >= 0 && offset < 8 * length.cylinder[c][h];
 }
@@ -141,7 +141,7 @@ FloppyDisk::checksum() const
 {
     auto result = Hashable::fnvInit64();
 
-    for (Track t = 0; t < numTracks(); t++) {
+    for (TrackNr t = 0; t < numTracks(); t++) {
         result = Hashable::fnvIt64(result, checksum(t));
     }
 
@@ -149,44 +149,44 @@ FloppyDisk::checksum() const
 }
 
 u64
-FloppyDisk::checksum(Track t) const
+FloppyDisk::checksum(TrackNr t) const
 {
     return Hashable::fnv64(data.track[t], length.track[t]);
 }
 
 u64
-FloppyDisk::checksum(Cylinder c, Head h) const
+FloppyDisk::checksum(CylNr c, HeadNr h) const
 {
     return checksum(c * numHeads() + h);
 }
 
 
 ByteView
-FloppyDisk::byteView(Track t) const
+FloppyDisk::byteView(TrackNr t) const
 {
     return ByteView(data.track[t], length.track[t]);
 }
 
 ByteView
-FloppyDisk::byteView(Track t, Sector s) const
+FloppyDisk::byteView(TrackNr t, SectorNr s) const
 {
     return ByteView(data.track[t] + s * 1088, 1088);
 }
 
 MutableByteView
-FloppyDisk::byteView(Track t)
+FloppyDisk::byteView(TrackNr t)
 {
     return MutableByteView(data.track[t], length.track[t]);
 }
 
 MutableByteView
-FloppyDisk::byteView(Track t, Sector s)
+FloppyDisk::byteView(TrackNr t, SectorNr s)
 {
     return MutableByteView(data.track[t] + s * 1088, 1088);
 }
 
 u8
-FloppyDisk::readBit(Track t, isize offset) const
+FloppyDisk::readBit(TrackNr t, isize offset) const
 {
     assert(isValidHeadPos(t, offset));
 
@@ -194,7 +194,7 @@ FloppyDisk::readBit(Track t, isize offset) const
 }
 
 u8
-FloppyDisk::readBit(Cylinder c, Head h, isize offset) const
+FloppyDisk::readBit(CylNr c, HeadNr h, isize offset) const
 {
     assert(isValidHeadPos(c, h, offset));
 
@@ -202,7 +202,7 @@ FloppyDisk::readBit(Cylinder c, Head h, isize offset) const
 }
 
 void
-FloppyDisk::writeBit(Track t, isize offset, bool value) {
+FloppyDisk::writeBit(TrackNr t, isize offset, bool value) {
 
     assert(isValidHeadPos(t, offset));
 
@@ -214,7 +214,7 @@ FloppyDisk::writeBit(Track t, isize offset, bool value) {
 }
 
 void
-FloppyDisk::writeBit(Cylinder c, Head h, isize offset, bool value) {
+FloppyDisk::writeBit(CylNr c, HeadNr h, isize offset, bool value) {
 
     assert(isValidHeadPos(c, h, offset));
 
@@ -226,7 +226,7 @@ FloppyDisk::writeBit(Cylinder c, Head h, isize offset, bool value) {
 }
 
 u8
-FloppyDisk::read8(Track t, isize offset) const
+FloppyDisk::read8(TrackNr t, isize offset) const
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -235,7 +235,7 @@ FloppyDisk::read8(Track t, isize offset) const
 }
 
 u8
-FloppyDisk::read8(Cylinder c, Head h, isize offset) const
+FloppyDisk::read8(CylNr c, HeadNr h, isize offset) const
 {
     assert(c < numCyls());
     assert(h < numHeads());
@@ -245,7 +245,7 @@ FloppyDisk::read8(Cylinder c, Head h, isize offset) const
 }
 
 void
-FloppyDisk::write8(Track t, isize offset, u8 value)
+FloppyDisk::write8(TrackNr t, isize offset, u8 value)
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
@@ -255,7 +255,7 @@ FloppyDisk::write8(Track t, isize offset, u8 value)
 }
 
 void
-FloppyDisk::write8(Cylinder c, Head h, isize offset, u8 value)
+FloppyDisk::write8(CylNr c, HeadNr h, isize offset, u8 value)
 {
     assert(c < numCyls());
     assert(h < numHeads());
@@ -297,7 +297,7 @@ FloppyDisk::clearDisk(u8 value)
 }
 
 void
-FloppyDisk::clearTrack(Track t)
+FloppyDisk::clearTrack(TrackNr t)
 {
     assert(t < numTracks());
 
@@ -308,7 +308,7 @@ FloppyDisk::clearTrack(Track t)
 }
 
 void
-FloppyDisk::clearTrack(Track t, u8 value)
+FloppyDisk::clearTrack(TrackNr t, u8 value)
 {
     assert(t < numTracks());
 
@@ -318,7 +318,7 @@ FloppyDisk::clearTrack(Track t, u8 value)
 }
 
 void
-FloppyDisk::clearTrack(Track t, u8 value1, u8 value2)
+FloppyDisk::clearTrack(TrackNr t, u8 value1, u8 value2)
 {
     assert(t < numTracks());
 
@@ -358,7 +358,7 @@ FloppyDisk::shiftTracks(isize offset)
 
     u8 spare[2 * 32768];
 
-    for (Track t = 0; t < 168; t++) {
+    for (TrackNr t = 0; t < 168; t++) {
 
         isize len = length.track[t];
 
@@ -371,7 +371,7 @@ FloppyDisk::shiftTracks(isize offset)
 void
 FloppyDisk::repeatTracks()
 {
-    for (Track t = 0; t < 168; t++) {
+    for (TrackNr t = 0; t < 168; t++) {
         
         auto end = isize(length.track[t]);
         auto max = isize(sizeof(data.track[t]));
@@ -383,7 +383,7 @@ FloppyDisk::repeatTracks()
 }
 
 string
-FloppyDisk::readTrackBits(Track t) const
+FloppyDisk::readTrackBits(TrackNr t) const
 {
     assert(t < numTracks());
 
@@ -400,7 +400,7 @@ FloppyDisk::readTrackBits(Track t) const
 }
 
 string
-FloppyDisk::readTrackBits(Cylinder c, Head h) const
+FloppyDisk::readTrackBits(CylNr c, HeadNr h) const
 {
     return readTrackBits(2 * c + h);
 }

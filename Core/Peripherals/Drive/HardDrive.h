@@ -270,8 +270,8 @@ public:
 
     bool isConnected() const override;
 
-    Cylinder currentCyl() const override { return head.cylinder; }
-    Head currentHead() const override { return head.head; }
+    CylNr currentCyl() const override { return head.cylinder; }
+    HeadNr currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }
 
     bool getFlag(DiskFlags mask) const override;

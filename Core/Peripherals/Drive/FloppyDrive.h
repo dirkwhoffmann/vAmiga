@@ -214,8 +214,8 @@ public:
     
     bool isConnected() const override;
     
-    Cylinder currentCyl() const override { return head.cylinder; }
-    Head currentHead() const override { return head.head; }
+    CylNr currentCyl() const override { return head.cylinder; }
+    HeadNr currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }
 
     bool hasDisk() const override;
@@ -323,7 +323,7 @@ public:
     //
 
     // Selects the active drive head (0 = lower, 1 = upper)
-    void selectSide(Head h);
+    void selectSide(HeadNr h);
 
     // Reads a value from the drive head and optionally rotates the disk
     u8 readByte() const;
@@ -356,7 +356,7 @@ public:
     void step(isize dir);
 
     // Records a cylinder change (needed for diskPollingMode() to work)
-    void recordCylinder(Cylinder cylinder);
+    void recordCylinder(CylNr cylinder);
 
     // Returns true if the drive is in disk polling mode
     bool pollsForDisk() const;

@@ -197,13 +197,13 @@ private:
     static bool isValidTrackNr(isize value) { return value >= 0 && value < 168; }
     static bool isValidCylinderNr(isize value) { return value >= 0 && value < 84; }
     static bool isValidHeadNr(isize value) { return value >= 0 && value < 2; }
-    bool isValidHeadPos(Track t, isize offset) const;
-    bool isValidHeadPos(Cylinder c, Head h, isize offset) const;
+    bool isValidHeadPos(TrackNr t, isize offset) const;
+    bool isValidHeadPos(CylNr c, HeadNr h, isize offset) const;
 
     // Computes a debug checksum for a single track or the entire disk
     u64 checksum() const;
-    u64 checksum(Track t) const;
-    u64 checksum(Cylinder c, Head h) const;
+    u64 checksum(TrackNr t) const;
+    u64 checksum(CylNr c, HeadNr h) const;
 
 
     //
@@ -231,10 +231,10 @@ public:
     // Accessing tracks and sectors
     //
 
-    ByteView byteView(Track t) const;
-    ByteView byteView(Track t, Sector s) const;
-    MutableByteView byteView(Track t);
-    MutableByteView byteView(Track t, Sector s);
+    ByteView byteView(TrackNr t) const;
+    ByteView byteView(TrackNr t, SectorNr s) const;
+    MutableByteView byteView(TrackNr t);
+    MutableByteView byteView(TrackNr t, SectorNr s);
 
 
 
@@ -243,20 +243,20 @@ public:
     //
 
     // Reads a bit from disk
-    u8 readBit(Track t, isize offset) const;
-    u8 readBit(Cylinder c, Head h, isize offset) const;
+    u8 readBit(TrackNr t, isize offset) const;
+    u8 readBit(CylNr c, HeadNr h, isize offset) const;
 
     // Writes a bit to disk
-    void writeBit(Track t, isize offset, bool value);
-    void writeBit(Cylinder c, Head h, isize offset, bool value);
+    void writeBit(TrackNr t, isize offset, bool value);
+    void writeBit(CylNr c, HeadNr h, isize offset, bool value);
 
     // Reads a byte from disk
-    u8 read8(Track t, isize offset) const;
-    u8 read8(Cylinder c, Head h, isize offset) const;
+    u8 read8(TrackNr t, isize offset) const;
+    u8 read8(CylNr c, HeadNr h, isize offset) const;
     
     // Writes a byte to disk
-    void write8(Track t, isize offset, u8 value);
-    void write8(Cylinder c, Head h, isize offset, u8 value);
+    void write8(TrackNr t, isize offset, u8 value);
+    void write8(CylNr c, HeadNr h, isize offset, u8 value);
     
     
     //
@@ -272,9 +272,9 @@ public:
     void clearDisk(u8 value);
     
     // Initializes a single track with random data or a specific value
-    void clearTrack(Track t);
-    void clearTrack(Track t, u8 value);
-    void clearTrack(Track t, u8 value1, u8 value2);
+    void clearTrack(TrackNr t);
+    void clearTrack(TrackNr t, u8 value);
+    void clearTrack(TrackNr t, u8 value1, u8 value2);
     
     
     //
@@ -302,8 +302,8 @@ public:
     void repeatTracks();
     
     // Returns a textual representation of all bits of a track
-    string readTrackBits(Track t) const;
-    string readTrackBits(Cylinder c, Head h) const;
+    string readTrackBits(TrackNr t) const;
+    string readTrackBits(CylNr c, HeadNr h) const;
 };
 
 }

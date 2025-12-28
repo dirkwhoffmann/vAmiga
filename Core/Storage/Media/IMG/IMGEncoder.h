@@ -23,10 +23,10 @@ public:
 
 private:
 
-    static void encodeTrack(const IMGFile &img, FloppyDisk &disk, Track t);
-    static void encodeSector(const IMGFile &img, FloppyDisk &disk, Track t, Sector s);
+    static void encodeTrack(const IMGFile &img, FloppyDisk &disk, TrackNr t);
+    static void encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, SectorNr s);
 
-    static void decodeTrack(IMGFile &img, const FloppyDisk &disk, Track t);
+    static void decodeTrack(IMGFile &img, const FloppyDisk &disk, TrackNr t);
     static void decodeSector(IMGFile &img, u8 *dst, const u8 *src);
 };
 

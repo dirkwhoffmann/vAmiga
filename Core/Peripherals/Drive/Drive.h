@@ -45,8 +45,8 @@ public:
     virtual bool isConnected() const = 0;
 
     // Returns the current read/write position
-    virtual Cylinder currentCyl() const = 0;
-    virtual Head currentHead() const = 0;
+    virtual CylNr currentCyl() const = 0;
+    virtual HeadNr currentHead() const = 0;
     virtual isize currentOffset() const = 0;
 
     

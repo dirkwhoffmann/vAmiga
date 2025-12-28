@@ -57,8 +57,8 @@ struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
 
 typedef struct
 {
-    Cylinder cylinder;
-    Head head;
+    CylNr cylinder;
+    HeadNr head;
     isize offset;
 }
 DriveHead;

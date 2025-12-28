@@ -697,7 +697,7 @@ FloppyDrive::motorStopped() const
 }
 
 void
-FloppyDrive::selectSide(Head h)
+FloppyDrive::selectSide(HeadNr h)
 {
     assert(h == 0 || h == 1);
     head.head = h;
@@ -898,7 +898,7 @@ FloppyDrive::step(isize dir)
 }
 
 void
-FloppyDrive::recordCylinder(Cylinder cylinder)
+FloppyDrive::recordCylinder(CylNr cylinder)
 {
     cylinderHistory = (cylinderHistory & 0x00FF'FFFF'FFFF'FFFF) << 8 | cylinder;
 }

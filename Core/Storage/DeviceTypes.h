@@ -32,11 +32,11 @@ static const isize HDR_S_MAX =  63;
 // Aliases
 //
 
-// Block devices
-typedef isize Cylinder;
-typedef isize Head;
-typedef isize Sector;
-typedef isize Track;
+// Track devices
+typedef isize CylNr;
+typedef isize HeadNr;
+typedef isize SectorNr;
+typedef isize TrackNr;
 
 
 //
