@@ -4,6 +4,5 @@ target_sources(VACore PRIVATE
 
 ADFFile.cpp
 ADFFactory.cpp
-ADFEncoder.cpp
 
 )

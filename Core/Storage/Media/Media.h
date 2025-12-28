@@ -24,7 +24,6 @@
 #include "DMSFactory.h"
 #include "EXEFactory.h"
 #include "STFactory.h"
-#include "ADFEncoder.h"
 #include "ADZEncoder.h"
 #include "EADFEncoder.h"
 #include "IMGEncoder.h"

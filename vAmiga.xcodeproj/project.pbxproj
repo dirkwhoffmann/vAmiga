@@ -299,8 +299,6 @@
 		509E760F2EDCE3B500608FA7 /* EADFFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */; };
 		509E76122EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
 		509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
-		509E76162EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */; };
-		509E76172EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */; };
 		509E761A2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */; };
 		509E761B2EDDB8C100608FA7 /* ADZEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */; };
 		509E761E2EDDBA6800608FA7 /* EADFEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E761D2EDDBA6700608FA7 /* EADFEncoder.cpp */; };
@@ -1038,8 +1036,6 @@
 		509E760D2EDCE3B400608FA7 /* EADFFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EADFFactory.cpp; sourceTree = "<group>"; };
 		509E76102EDD74E400608FA7 /* DiskEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskEncoder.h; sourceTree = "<group>"; };
 		509E76112EDD74F700608FA7 /* DiskEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskEncoder.cpp; sourceTree = "<group>"; };
-		509E76142EDDB6E700608FA7 /* ADFEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFEncoder.h; sourceTree = "<group>"; };
-		509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFEncoder.cpp; sourceTree = "<group>"; };
 		509E76182EDDB8BA00608FA7 /* ADZEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADZEncoder.h; sourceTree = "<group>"; };
 		509E76192EDDB8C000608FA7 /* ADZEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADZEncoder.cpp; sourceTree = "<group>"; };
 		509E761C2EDDBA5A00608FA7 /* EADFEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EADFEncoder.h; sourceTree = "<group>"; };
@@ -1800,8 +1796,6 @@
 				505A19492EDDF715000BB9C2 /* CMakeLists.txt */,
 				509D07792EDBA42F00355638 /* ADFFactory.h */,
 				509D077A2EDBA43900355638 /* ADFFactory.cpp */,
-				509E76142EDDB6E700608FA7 /* ADFEncoder.h */,
-				509E76152EDDB6F500608FA7 /* ADFEncoder.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
 			);
@@ -3226,7 +3220,6 @@
 				9C47C0332D6215B100E57B41 /* lz4.c in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				50210B2027CB6A41001193AA /* Drive.cpp in Sources */,
-				509E76172EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				50E79D3F2EDC48CF0052277E /* HDZFactory.cpp in Sources */,
@@ -3468,7 +3461,6 @@
 				503FC4D42EE0D8A500637C95 /* Loggable.cpp in Sources */,
 				50E79D372EDC37D80052277E /* ADZFactory.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
-				509E76162EDDB6F600608FA7 /* ADFEncoder.cpp in Sources */,
 				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,
 				50BCB9942EE1D88E000C53CF /* Buffer.cpp in Sources */,
 				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,

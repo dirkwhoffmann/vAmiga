@@ -10,7 +10,7 @@
 #include "config.h"
 #include "EADFFile.h"
 #include "ADFFactory.h"
-#include "ADFEncoder.h"
+#include "DiskEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "FileSystem.h"
@@ -134,7 +134,7 @@ EADFFile::finalizeRead()
         // Convert the disk to a standard ADF
         
         adf = *ADFFactory::make(numTracks * 11 * 512);
-        ADFEncoder::decode(adf, disk);
+        DiskEncoder::decode(adf, disk);
 
     } catch (...) { }
 }
