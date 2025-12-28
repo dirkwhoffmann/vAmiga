@@ -239,34 +239,75 @@ DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
 
     // Decode all sectors
     for (SectorNr s = 0; s < count; s++)
-        decodeAmigaSector(track, sectorStart[s], t, s, dst.subspan(s * bsize, bsize));
+        decodeAmigaSector(track, sectorStart[s], dst);
 }
 
 void
-DiskEncoder::decodeAmigaSector(ByteView track, isize offset, TrackNr t, SectorNr s, MutableByteView dst)
+DiskEncoder::decodeAmigaSector(ByteView track, isize offset, MutableByteView dst)
 {
     const isize bsize = 512;
 
-    if (ADF_DEBUG) fprintf(stderr, "Decoding sector %ld\n", s);
-    assert(dst.size() == bsize);
-
     // Decode sector info
-    u8 info[4];
-    decodeOddEven(info, &track[offset], 4);
+    u8 info[4]; decodeOddEven(info, &track[offset], 4);
 
-    // Only proceed if the sector number is valid
-    u8 sector = info[2];
-    if (sector != s) {
-        warn("Invalid sector number %d. Aborting.\n", sector);
+    // Extract the sector number
+    auto secNr = SectorNr(info[2]);
+
+    if (ADF_DEBUG) fprintf(stderr, "Decoding sector %ld\n", secNr);
+
+    // Check that the sector number is valid
+    if (secNr * bsize + bsize > dst.size()) {
+
+        warn("Invalid sector number %ld. Aborting.\n", secNr);
         throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
     }
 
-    // Skip sector header
-    auto *data = &track[offset + 56];
-    // auto data = track.subspan(offset + 56, 2 * bsize);
+    // Determine the destination address
+    auto *secData = dst.data() + secNr * bsize;
+
+    // Determine the source address (adding 56 skips the sector header)
+    auto *mfmData = &track[offset + 56];
 
     // Decode sector data
-    decodeOddEven(dst.data(), data, bsize);
+    decodeOddEven(secData, mfmData, bsize);
+}
+
+optional<isize>
+DiskEncoder::trySeekSector(ByteView track, SectorNr s, isize offset)
+{
+    constexpr isize syncMarkLen = 4;
+
+    // Search through all sync marks...
+    auto it = track.cyclic_begin(offset);
+
+   for (isize i = 0; i < track.size() + syncMarkLen; ++i, ++it) {
+
+        // Scan MFM stream for $4489 $4489
+        if (it[0] != 0x44) continue;
+        if (it[1] != 0x89) continue;
+        if (it[2] != 0x44) continue;
+        if (it[3] != 0x89) continue;
+
+        // Make sure it's not a DOS track
+        if (it[4] == 0x89) continue;
+
+        // Decode track & sector info
+        u8 info[4]; decodeOddEven(info, &it[4], 4);
+
+        // Check if the sector number matches
+        if (info[2] == s) return it.offset();
+    }
+
+    return {};
+}
+
+isize
+DiskEncoder::seekSector(ByteView track, SectorNr s, isize offset)
+{
+    if (auto result = trySeekSector(track, s, offset))
+        return *result;
+
+    throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
 }
 
 //

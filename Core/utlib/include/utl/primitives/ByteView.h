@@ -13,6 +13,7 @@
 #include <span>
 #include <cstdint>
 #include <cassert>
+#include <type_traits>
 
 namespace utl {
 
@@ -28,6 +29,7 @@ public:
     constexpr BaseByteView() = default;
     constexpr BaseByteView(T* data, isize size) {
 
+        assert(size >= 0);
         sp = std::span(data, size_t(size));
     }
 
@@ -51,13 +53,24 @@ public:
         return sp;
     }
 
-    constexpr isize size() const { return (isize)sp.size(); }
-    constexpr bool empty() const { return sp.empty(); }
-    constexpr T *data() const { return sp.data(); }
-    constexpr std::span<T> span() const { return sp; }
-    constexpr std::span<T> subspan(isize o, isize c) const { return sp.subspan(o, c); }
+    constexpr isize size() const {
+        return (isize)sp.size();
+    }
+    constexpr bool empty() const {
+        return sp.empty();
+    }
+    constexpr T *data() const {
+        return sp.data();
+    }
+    constexpr std::span<T> span() const {
+        return sp;
+    }
+    constexpr std::span<T> subspan(isize o, isize c) const {
+        assert(o >= 0 && c >= 0);
+        return sp.subspan(o, c);
+    }
     constexpr void clear(u8 value = 0) const requires (!std::is_const_v<T>) {
-        for (auto &b : sp) { b = value; }
+        for (auto &b : sp) b = value;
     }
 
     //
@@ -75,6 +88,71 @@ public:
 
     Dumpable::DataProvider dataProvider() const override {
         return Dumpable::dataProvider(sp);
+    }
+
+
+    //
+    // Word and long word access
+    //
+
+    constexpr u16 readBE16(isize offset) const {
+        assert(offset >= 0 && offset + 2 <= size());
+        const u8* p = data() + offset;
+        return u16(p[0] << 8) | u16(p[1]);
+    }
+
+    constexpr u16 readLE16(isize offset) const {
+        assert(offset >= 0 && offset + 2 <= size());
+        const u8* p = data() + offset;
+        return u16(p[1] << 8) | u16(p[0]);
+    }
+
+    constexpr u32 readBE32(isize offset) const {
+        assert(offset >= 0 && offset + 4 <= size());
+        const u8* p = data() + offset;
+        return u32(p[0] << 24) | u32(p[1] << 16) | u32(p[2] << 8) | u32(p[3]);
+    }
+
+    constexpr u32 readLE32(isize offset) const {
+        assert(offset >= 0 && offset + 4 <= size());
+        const u8* p = data() + offset;
+        return u32(p[3] << 24) | u32(p[2] << 16) | u32(p[1] << 8) | u32(p[0]);
+    }
+
+    constexpr void writeBE16(isize offset, u16 value) const
+    requires (!std::is_const_v<T>) {
+        assert(offset >= 0 && offset + 2 <= size());
+        u8* p = data() + offset;
+        p[0] = u8(value >> 8);
+        p[1] = u8(value);
+    }
+
+    constexpr void writeLE16(isize offset, u16 value) const
+    requires (!std::is_const_v<T>) {
+        assert(offset >= 0 && offset + 2 <= size());
+        u8* p = data() + offset;
+        p[0] = u8(value);
+        p[1] = u8(value >> 8);
+    }
+
+    constexpr void writeBE32(isize offset, u32 value) const
+    requires (!std::is_const_v<T>) {
+        assert(offset >= 0 && offset + 4 <= size());
+        u8* p = data() + offset;
+        p[0] = u8(value >> 24);
+        p[1] = u8(value >> 16);
+        p[2] = u8(value >>  8);
+        p[3] = u8(value);
+    }
+
+    constexpr void writeLE32(isize offset, u32 value) const
+        requires (!std::is_const_v<T>) {
+        assert(offset >= 0 && offset + 4 <= size());
+        u8* p = data() + offset;
+        p[0] = u8(value);
+        p[1] = u8(value >>  8);
+        p[2] = u8(value >> 16);
+        p[3] = u8(value >> 24);
     }
 
 
@@ -98,7 +176,6 @@ public:
         constexpr iterator(const BaseByteView* view, isize pos) : view_(view), pos_(pos) {
 
             assert(view_);
-            assert(!view_->empty());
         }
 
         // Dereference
@@ -160,7 +237,7 @@ public:
 
     public:
 
-        using iterator_category = std::random_access_iterator_tag;
+        using iterator_category = std::input_iterator_tag;
         using value_type        = u8;
         using difference_type   = isize;
         using pointer           = void;
@@ -172,13 +249,17 @@ public:
             assert(!view_->empty());
         }
 
-        // Dereference with wrap
-        constexpr reference operator*() const
-        {
+        constexpr isize offset() const {
+
             auto n = view_->size();
             auto i = pos_ % n;
-            if (i < 0) i += n;
-            return (*view_)[i];
+            return i < 0 ? i + n : i;
+        }
+
+        // Dereference with wrap
+        constexpr reference operator*() const {
+
+            return (*view_)[offset()];
         }
 
         // Increment / Decrement
