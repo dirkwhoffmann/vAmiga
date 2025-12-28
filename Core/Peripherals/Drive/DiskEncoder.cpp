@@ -193,7 +193,7 @@ DiskEncoder::encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, S
         dcheck[2] ^= it[i+2];
         dcheck[3] ^= it[i+3];
     }
-    encodeOddEven(&it[56], dcheck, sizeof(bcheck));
+    encodeOddEven(&it[56], dcheck, sizeof(dcheck));
 
     // Add clock bits
     for(isize i = 8; i < ssize + 1; i++) {
@@ -224,7 +224,7 @@ DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
         if (it[index++] != 0x89) continue;
 
         // Make sure it's not a DOS track
-        if (it[index + 1] == 0x89) continue;
+        if (it[index+1] == 0x89) continue;
 
         sectorStart[nr++] = index;
     }
@@ -289,7 +289,7 @@ DiskEncoder::trySeekSector(ByteView track, SectorNr s, isize offset)
         if (it[3] != 0x89) continue;
 
         // Make sure it's not a DOS track
-        if (it[4] == 0x89) continue;
+        if (it[5] == 0x89) continue;
 
         // Decode track & sector info
         u8 info[4]; decodeOddEven(info, &it[4], 4);
