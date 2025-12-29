@@ -80,16 +80,8 @@ private:
         u8 cylinder[84][2][32768];
         u8 track[168][32768];
     } data;
-    
-    // Length of each track in bytes
-    /*
-    union {
-        i32 cylinder[84][2];
-        i32 track[168];
-    } length;
-    */
 
-    // Experimental
+    // Bit views on top of the disk data
     MutableBitView track[168] {};
 
     // Disk state
@@ -201,12 +193,6 @@ private:
     // Performing sanity checks
     //
 
-    static bool isValidTrackNr(isize value) { return value >= 0 && value < 168; }
-    static bool isValidCylinderNr(isize value) { return value >= 0 && value < 84; }
-    static bool isValidHeadNr(isize value) { return value >= 0 && value < 2; }
-    bool isValidHeadPos(TrackNr t, isize offset) const;
-    bool isValidHeadPos(CylNr c, HeadNr h, isize offset) const;
-
     // Computes a debug checksum for a single track or the entire disk
     u64 checksum() const;
     u64 checksum(TrackNr t) const;
@@ -238,31 +224,26 @@ public:
     // Accessing tracks and sectors
     //
 
+    BitView bitView(TrackNr t) const;
+    BitView bitView(TrackNr t, SectorNr s) const;
+    MutableBitView bitView(TrackNr t);
+    MutableBitView bitView(TrackNr t, SectorNr s);
+
+    // DEPRECATED
     ByteView byteView(TrackNr t) const;
     ByteView byteView(TrackNr t, SectorNr s) const;
     MutableByteView byteView(TrackNr t);
     MutableByteView byteView(TrackNr t, SectorNr s);
 
 
-
     //
     // Reading and writing
     //
 
-    // Reads a bit from disk
-    // u8 readBit(TrackNr t, isize offset) const;
-    // u8 readBit(CylNr c, HeadNr h, isize offset) const;
-
-    // Writes a bit to disk
-    // void writeBit(TrackNr t, isize offset, bool value);
-    // void writeBit(CylNr c, HeadNr h, isize offset, bool value);
-
     // Reads a byte from disk
-    // u8 read8(TrackNr t, isize offset) const;
     u8 read8(CylNr c, HeadNr h, isize offset) const;
     
     // Writes a byte to disk
-    // void write8(TrackNr t, isize offset, u8 value);
     void write8(CylNr c, HeadNr h, isize offset, u8 value);
     
     
@@ -302,8 +283,6 @@ public:
     //
     
 public:
-    
- 
     
     // Repeats the MFM data inside the track buffer to ease decoding (DEPRECATED)
     void repeatTracks();

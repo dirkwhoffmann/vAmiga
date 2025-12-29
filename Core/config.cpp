@@ -90,7 +90,7 @@ debugflag ALIGN_HEAD      = 0;
 debugflag DSK_CHECKSUM    = 0;
 debugflag DSKREG_DEBUG    = 0;
 debugflag DSK_DEBUG       = 0;
-debugflag MFM_DEBUG       = 0;
+debugflag MFM_DEBUG       = 1;
 debugflag FS_DEBUG        = 0;
 
 // Hard Drives
@@ -125,7 +125,7 @@ debugflag HDR_DEBUG       = 0;
 debugflag DBD_DEBUG       = 0;
 
 // Media types
-debugflag ADF_DEBUG       = 1;
+debugflag ADF_DEBUG       = 0;
 debugflag HDF_DEBUG       = 0;
 debugflag DMS_DEBUG       = 0;
 debugflag IMG_DEBUG       = 0;
@@ -139,7 +139,7 @@ debugflag KEY_DEBUG       = 0;
 debugflag RSH_DEBUG       = 0;
 debugflag REC_DEBUG       = 0;
 debugflag SCK_DEBUG       = 0;
-debugflag SRV_DEBUG       = 1;
+debugflag SRV_DEBUG       = 0;
 debugflag GDB_DEBUG       = 0;
 
 

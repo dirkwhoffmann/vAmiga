@@ -46,6 +46,9 @@ public:
     static optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
     static isize seekSector(ByteView track, SectorNr s, isize offset = 0);
 
+    // Computes a map from sector numbers to byte offsets
+    static std::unordered_map<isize, isize> seekSectors(ByteView track);
+
 
     //
     // ADF

@@ -40,11 +40,21 @@ public:
         assert(isize(sp.size()) * 8 >= len);
     }
 
-    // Allow const-view from mutable-view
+    // Allows const-view from mutable-view
     constexpr BaseBitView(const BaseBitView<u8>& other)
         requires std::is_const_v<T>
     : sp(other.bytes()), len(other.size())
     {}
+
+    // Provides a byte-level view
+    constexpr auto byteView() const
+    {
+        if constexpr (std::is_const_v<decltype(*this)>) {
+            return ByteView(sp);
+        } else {
+            return MutableByteView(sp);
+        }
+    }
 
     // Reads a single bit
     constexpr bool operator[](isize i) const

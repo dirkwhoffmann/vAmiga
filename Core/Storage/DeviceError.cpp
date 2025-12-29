@@ -17,6 +17,18 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 {
     switch (code)
     {
+        case DEV_SEEK_ERR:
+            set_msg("Seek error: " + s);
+            break;
+
+        case DEV_READ_ERR:
+            set_msg("Read error: " + s);
+            break;
+
+        case DEV_WRITE_ERR:
+            set_msg("Write error: " + s);
+            break;
+
         case DSK_MISSING:
             set_msg("No disk in drive.");
             break;

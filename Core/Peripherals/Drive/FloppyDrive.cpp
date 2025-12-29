@@ -69,7 +69,7 @@ FloppyDrive::_initialize()
 
 void
 FloppyDrive::_didReset(bool hard)
-{    
+{
     if (hard) assert(diskToInsert == nullptr);
 }
 
@@ -77,7 +77,7 @@ i64
 FloppyDrive::getOption(Opt option) const
 {
     switch (option) {
-            
+
         case Opt::DRIVE_CONNECT:         return (i64)config.connected;
         case Opt::DRIVE_TYPE:            return (i64)config.type;
         case Opt::DRIVE_MECHANICS:       return (i64)config.mechanics;
@@ -206,11 +206,11 @@ Diameter
 FloppyDrive::diameter() const
 {
     switch(config.type) {
-            
+
         case FloppyDriveType::DD_35:    return Diameter::INCH_35;
         case FloppyDriveType::HD_35:    return Diameter::INCH_35;
         case FloppyDriveType::DD_525:   return Diameter::INCH_525;
-            
+
         default:
             fatalError;
     }
@@ -220,11 +220,11 @@ Density
 FloppyDrive::density() const
 {
     switch(config.type) {
-            
+
         case FloppyDriveType::DD_35:    return Density::DD;
         case FloppyDriveType::HD_35:    return Density::HD;
         case FloppyDriveType::DD_525:   return Density::SD;
-            
+
         default:
             fatalError;
     }
@@ -245,7 +245,7 @@ FloppyDrive::cacheInfo() const
     info.hasUnprotectedDisk = hasUnprotectedDisk();
     info.motor = getMotor();
     info.writing = isWriting();
-    
+
     return info;
 }
 
@@ -255,7 +255,7 @@ FloppyDrive::_dump(Category category, std::ostream &os) const
     using namespace utl;
 
     if (category == Category::Config) {
-        
+
         dumpConfig(os);
 
         os << std::endl;
@@ -272,9 +272,9 @@ FloppyDrive::_dump(Category category, std::ostream &os) const
         os << tab("Head settle time");
         os << dec(AS_MSEC(getHeadSettleTime())) << " msec" << std::endl;
     }
-    
+
     if (category == Category::State) {
-        
+
         os << tab("Nr");
         os << dec(objid) << std::endl;
         os << tab("dskchange");
@@ -410,7 +410,7 @@ FloppyDrive::operator << (SerWriter &worker)
         auto diameter = disk->getDiameter();
         auto density = disk->getDensity();
         worker << diameter << density;
-        
+
         // Write the disk's state
         disk->serialize(worker);
     }
@@ -440,13 +440,13 @@ FloppyDrive::hasProtectedDisk() const
     return hasDisk() ? disk->isWriteProtected() : false;
 }
 
-bool 
+bool
 FloppyDrive::getFlag(DiskFlags mask) const
 {
     return disk ? disk->getFlag(mask) : false;
 }
 
-void 
+void
 FloppyDrive::setFlag(DiskFlags mask, bool value)
 {
     if (disk) disk->setFlag(mask, value);
@@ -462,18 +462,102 @@ void
 FloppyDrive::setProtectionFlag(bool value)
 {
     if (disk) {
-        
+
         if (value && !disk->isWriteProtected()) {
-            
+
             disk->setWriteProtection(true);
             msgQueue.put(Msg::DISK_PROTECTED, true);
         }
         if (!value && disk->isWriteProtected()) {
-            
+
             disk->setWriteProtection(false);
             msgQueue.put(Msg::DISK_PROTECTED, false);
         }
     }
+}
+
+isize
+FloppyDrive::size() const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    return disk->size();
+}
+
+void
+FloppyDrive::read(u8 *dst, isize offset, isize count) const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    disk->read(dst, offset, count);
+}
+
+void
+FloppyDrive::write(const u8 *src, isize offset, isize count)
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    disk->write(src, offset, count);
+}
+
+isize
+FloppyDrive::capacity() const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    return disk->capacity();
+}
+
+isize
+FloppyDrive::bsize() const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    return disk->bsize();
+}
+
+void
+FloppyDrive::readBlock(u8 *dst, isize nr) const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    disk->readBlock(dst, nr);
+}
+
+void
+FloppyDrive::writeBlock(const u8 *src, isize nr)
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    disk->writeBlock(src, nr);
+}
+
+isize
+FloppyDrive::numCyls() const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    return disk->numCyls();
+}
+
+isize
+FloppyDrive::numHeads() const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    return disk->numHeads();
+}
+
+isize
+FloppyDrive::numSectors(isize t) const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    return disk->numSectors(t);
+}
+
+void
+FloppyDrive::readTrack(u8 *dst, isize nr) const
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    disk->readTrack(dst, nr);
+}
+
+void
+FloppyDrive::writeTrack(const u8 *src, isize nr)
+{
+    if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
+    disk->writeTrack(src, nr);
 }
 
 u32
@@ -947,6 +1031,15 @@ FloppyDrive::pollsForDisk() const
     return false;
     */
 }
+
+/*
+FloppyDisk&
+FloppyDrive::getDisk()
+{
+    if (disk) return disk;
+    throw DeviceError(DeviceError::DSK_MISSING);
+}
+*/
 
 bool
 FloppyDrive::isInsertable(Diameter t, Density d) const

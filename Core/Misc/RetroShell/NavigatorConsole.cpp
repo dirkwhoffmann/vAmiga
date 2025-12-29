@@ -602,7 +602,39 @@ NavigatorConsole::initCommands(RSCommand &root)
                 fs->dumpInfo(os);
             }
     });
-    
+
+    root.add({
+
+        .tokens = { "mount" },
+        .ghelp  = { "Mounts an Amiga device" }
+    });
+
+    root.add({
+
+        .tokens = { "mount", "df[n]" },
+        .ghelp  = { "Mount floppy drive n" },
+        .chelp  = { "mount { df0 | df1 | df1 | df2 }" },
+        .flags  = vAmigaDOS ? rs::disabled : 0
+    });
+
+    for (isize i = 0; i < 4; i++) {
+
+        root.add({
+
+            .tokens = { "mount", "df" + std::to_string(i) },
+            .chelp  = { "Mount floppy drive" + std::to_string(i) },
+            .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                vol = make_unique<Volume>(*df[values[0]]);
+                fs  = make_unique<FileSystem>(*vol);
+
+                fs->dumpInfo(os);
+
+            }, .payload = {i}
+        });
+    }
+
     root.add({
         
         .tokens = { "import" },

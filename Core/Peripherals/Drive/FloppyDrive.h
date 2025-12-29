@@ -21,7 +21,7 @@
 
 namespace vamiga {
 
-class FloppyDrive final : public Drive {
+class FloppyDrive final : public Drive, public TrackDevice {
 
     friend class DiskController;
 
@@ -207,6 +207,23 @@ public:
 
 
     //
+    // Methods from Configurable
+    //
+
+public:
+
+    const FloppyDriveConfig &getConfig() const { return config; }
+    const Options &getOptions() const override { return options; }
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
+
+    // Queries disk type parameters
+    Diameter diameter() const;
+    Density density() const;
+
+
+    //
     // Methods from Drive
     //
     
@@ -228,24 +245,43 @@ public:
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
 
-    
+
     //
-    // Methods from Configurable
+    // Methods from LinearDevice
     //
 
 public:
-    
-    const FloppyDriveConfig &getConfig() const { return config; }
-    const Options &getOptions() const override { return options; }
-    i64 getOption(Opt option) const override;
-    void checkOption(Opt opt, i64 value) override;
-    void setOption(Opt option, i64 value) override;
-    
-    // Queries disk type parameters
-    Diameter diameter() const;
-    Density density() const;
 
-    
+    isize size() const override;
+    void read(u8 *dst, isize offset, isize count) const override;
+    void write(const u8 *src, isize offset, isize count) override;
+
+
+    //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize capacity() const override;
+    isize bsize() const override;
+    void readBlock(u8 *dst, isize nr) const override;
+    void writeBlock(const u8 *src, isize nr) override;
+
+
+    //
+    // Methods from TrackDevice
+    //
+
+public:
+
+    isize numCyls() const override;
+    isize numHeads() const override;
+    isize numSectors(isize t) const override;
+    void readTrack(u8 *dst, isize nr) const override;
+    void writeTrack(const u8 *src, isize nr) override;
+
+
     //
     // Analyzing
     //
@@ -367,6 +403,9 @@ public:
     //
 
 public:
+
+    // Returns the current disk (throws if no disk is present)
+    // FloppyDisk& getDisk();
 
     bool isInsertable(Diameter t, Density d) const;
     bool isInsertable(const FloppyDiskImage &file) const;

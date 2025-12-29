@@ -17,15 +17,6 @@
 
 namespace vamiga {
 
-/*
-FloppyDisk::FloppyDisk()
-{
-    for (isize i = 0; i < 84; ++i) {
-        track[i] = MutableByteView(data.track[168], 0);
-    }
-}
-*/
-
 void
 FloppyDisk::init(Diameter dia, Density den, bool wp)
 {
@@ -115,13 +106,33 @@ FloppyDisk::_dump(Category category, std::ostream &os) const
 void
 FloppyDisk::readBlock(u8 *dst, isize nr) const
 {
-    fatalError;
+    debug(MFM_DEBUG, "readBlock: %ld\n", nr);
+
+    auto [t,s]  = ts(nr);
+    auto tdata  = track[t].byteView();
+    auto offset = DiskEncoder::trySeekSector(tdata, s);
+
+    if (!offset)
+        throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
+
+    debug(MFM_DEBUG, "Found sector (%ld,%ld) at offset %ld\n", t, s, *offset);
+    DiskEncoder::decodeAmigaSector(tdata, *offset, std::span<u8>(dst, 512));
 }
 
 void
 FloppyDisk::writeBlock(const u8 *src, isize nr)
 {
-    fatalError;
+    debug(MFM_DEBUG, "writeBlock: %ld\n", nr);
+
+    auto [t,s]  = ts(nr);
+    auto tdata  = track[t].byteView();
+    auto offset = DiskEncoder::trySeekSector(tdata, s);
+
+    if (!offset)
+        throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
+
+    debug(MFM_DEBUG, "Found sector (%ld,%ld) at offset %ld\n", t, s, *offset);
+    DiskEncoder::encodeAmigaSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
 }
 
 void
@@ -134,20 +145,6 @@ void
 FloppyDisk::writeTrack(const u8 *src, isize nr)
 {
     fatalError;
-}
-
-bool
-FloppyDisk::isValidHeadPos(TrackNr t, isize offset) const
-{
-    return isValidTrackNr(t) && offset >= 0 && offset < track[t].size();
-}
-
-bool
-FloppyDisk::isValidHeadPos(CylNr c, HeadNr h, isize offset) const
-{
-    TrackNr t = 2 * c + h;
-
-    return isValidCylinderNr(c) && isValidHeadNr(h) && offset >= 0 && offset < track[t].size();
 }
 
 u64
@@ -174,6 +171,29 @@ FloppyDisk::checksum(CylNr c, HeadNr h) const
     return checksum(c * numHeads() + h);
 }
 
+BitView
+FloppyDisk::bitView(TrackNr t) const
+{
+    return BitView(data.track[t], track[t].size());
+}
+
+BitView
+FloppyDisk::bitView(TrackNr t, SectorNr s) const
+{
+    return BitView(data.track[t] + s * 1088 * 8, 1088 * 8);
+}
+
+MutableBitView
+FloppyDisk::bitView(TrackNr t)
+{
+    return MutableBitView(data.track[t], track[t].size());
+}
+
+MutableBitView
+FloppyDisk::bitView(TrackNr t, SectorNr s)
+{
+    return MutableBitView(data.track[t] + s * 1088 * 8, 1088 * 8);
+}
 
 ByteView
 FloppyDisk::byteView(TrackNr t) const
@@ -199,58 +219,6 @@ FloppyDisk::byteView(TrackNr t, SectorNr s)
     return MutableByteView(data.track[t] + s * 1088, 1088);
 }
 
-/*
-u8
-FloppyDisk::readBit(TrackNr t, isize offset) const
-{
-    assert(isValidHeadPos(t, offset));
-
-    return (data.track[t][offset / 8] & (0x80 >> (offset & 7))) != 0;
-}
-
-u8
-FloppyDisk::readBit(CylNr c, HeadNr h, isize offset) const
-{
-    assert(isValidHeadPos(c, h, offset));
-
-    return (data.cylinder[c][h][offset / 8] & (0x80 >> (offset & 7))) != 0;
-}
-
-void
-FloppyDisk::writeBit(TrackNr t, isize offset, bool value) {
-
-    assert(isValidHeadPos(t, offset));
-
-    if (value) {
-        data.track[t][offset / 8] |= (0x0080 >> (offset & 7));
-    } else {
-        data.track[t][offset / 8] &= (0xFF7F >> (offset & 7));
-    }
-}
-
-void
-FloppyDisk::writeBit(CylNr c, HeadNr h, isize offset, bool value) {
-
-    assert(isValidHeadPos(c, h, offset));
-
-    if (value) {
-        data.cylinder[h][c][offset / 8] |= (0x0080 >> (offset & 7));
-    } else {
-        data.cylinder[h][c][offset / 8] &= (0xFF7F >> (offset & 7));
-    }
-}
-
-u8
-FloppyDisk::read8(TrackNr t, isize offset) const
-{
-    assert(t < numTracks());
-    assert(offset < length.track[t]);
-    assert(length.track[t] * 8 == track[t].size() );
-
-    return data.track[t][offset];
-}
-*/
-
 u8
 FloppyDisk::read8(CylNr c, HeadNr h, isize offset) const
 {
@@ -261,19 +229,6 @@ FloppyDisk::read8(CylNr c, HeadNr h, isize offset) const
 
     return track[t].getByte(offset);
 }
-
-/*
-void
-FloppyDisk::write8(TrackNr t, isize offset, u8 value)
-{
-    assert(t < numTracks());
-    assert(offset < length.track[t]);
-    assert(length.track[t] * 8 == track[t].size() );
-
-    data.track[t][offset] = value;
-    setModified(true);
-}
-*/
 
 void
 FloppyDisk::write8(CylNr c, HeadNr h, isize offset, u8 value)
