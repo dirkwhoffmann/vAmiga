@@ -12,6 +12,7 @@
 #include "Macros.h"
 #include "utl/storage.h"
 #include "utl/abilities/Hashable.h"
+#include "utl/abilities/Streamable.h"
 #include "utl/support/Bits.h"
 
 #include <concepts>
@@ -19,10 +20,6 @@
 namespace vamiga {
 
 using utl::Hashable;
-
-struct SerializableStruct {
-
-};
 
 class Serializable {
 
@@ -244,7 +241,7 @@ public:
         return *this;
     }
 
-    template <std::derived_from<SerializableStruct> T>
+    template <std::derived_from<Streamable> T>
     SerCounter& operator<<(T &v)
     {
         v << *this;
@@ -377,7 +374,7 @@ public:
         return *this;
     }
 
-    template <std::derived_from<SerializableStruct> T>
+    template <std::derived_from<Streamable> T>
     SerChecker& operator<<(T &v)
     {
         v << *this;
@@ -525,7 +522,7 @@ public:
         return *this;
     }
 
-    template <std::derived_from<SerializableStruct> T>
+    template <std::derived_from<Streamable> T>
     SerReader& operator<<(T &v)
     {
         v << *this;
@@ -671,7 +668,7 @@ public:
         return *this;
     }
 
-    template <std::derived_from<SerializableStruct> T>
+    template <std::derived_from<Streamable> T>
     SerWriter& operator<<(T &v)
     {
         v << *this;
@@ -806,7 +803,8 @@ public:
         v = (E)0;
         return *this;
     }
-    template <std::derived_from<SerializableStruct> T>
+
+    template <std::derived_from<Streamable> T>
     SerResetter & operator<<(T &v)
     {
         v << *this;
@@ -838,13 +836,6 @@ void operator << (SerCounter  &worker) override { fn(worker); } \
 void operator << (SerResetter &worker) override { fn(worker); } \
 void operator << (SerReader   &worker) override { fn(worker); } \
 void operator << (SerWriter   &worker) override { fn(worker); }
-
-#define STRUCT_SERIALIZERS(fn) \
-void operator << (SerChecker  &worker) { fn(worker); } \
-void operator << (SerCounter  &worker) { fn(worker); } \
-void operator << (SerResetter &worker) { fn(worker); } \
-void operator << (SerReader   &worker) { fn(worker); } \
-void operator << (SerWriter   &worker) { fn(worker); }
 
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));

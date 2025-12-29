@@ -12,11 +12,11 @@
 #include "BeamTypes.h"
 #include "AmigaTypes.h"
 #include "Constants.h"
-#include "Serializable.h"
+#include "utl/abilities/Streamable.h"
 
 namespace vamiga {
 
-struct Beam : SerializableStruct
+struct Beam : Streamable
 {
     // The vertical and horizontal beam position
     isize v = 0;
@@ -42,13 +42,13 @@ struct Beam : SerializableStruct
 
 
     //
-    // Methods from Serializable
+    // Methods from Streamable
     //
 
 public:
 
-    template <class T>
-    void serialize(T& worker)
+    template <class W>
+    W& operator<<(W& worker)
     {
         worker
 
@@ -61,7 +61,8 @@ public:
         << lolToggle
         << type;
 
-    } STRUCT_SERIALIZERS(serialize);
+        return worker;
+    }
 
 
     //

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "utl/abilities/Dumpable.h"
+#include "utl/abilities/Hashable.h"
 #include <span>
 #include <cstdint>
 #include <cassert>

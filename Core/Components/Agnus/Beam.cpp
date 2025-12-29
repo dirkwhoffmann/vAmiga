@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Beam.h"
+#include "utl/support.h"
 
 namespace vamiga {
 

@@ -10,7 +10,7 @@
 #pragma once
 
 #include "BasicTypes.h"
-#include "Serializable.h"
+#include "utl/abilities/Streamable.h"
 
 namespace vamiga {
 
@@ -26,7 +26,7 @@ static constexpr u16 SIG_SHW            = 0b0010000000;
 static constexpr u16 SIG_RHW            = 0b0100000000;
 static constexpr u16 SIG_DONE           = 0b1000000000;
 
-struct DDFState : SerializableStruct
+struct DDFState : Streamable
 {
     bool bpv = false;
     bool bmapen = false;
@@ -61,9 +61,8 @@ struct DDFState : SerializableStruct
         return !(*this == rhs);
     }
 
-    /*
     template <class W>
-    void operator<<(W& worker)
+    W &operator<<(W& worker)
     {
         worker
 
@@ -78,28 +77,9 @@ struct DDFState : SerializableStruct
         << stopreq
         << bplcon0
         << cnt;
+
+        return worker;
     }
-    */
-
-    template <class T>
-    void serialize(T& worker)
-    {
-        worker
-
-        << bpv
-        << bmapen
-        << shw
-        << rhw
-        << bphstart
-        << bphstop
-        << bprun
-        << lastFu
-        << stopreq
-        << bplcon0
-        << cnt;
-
-    } STRUCT_SERIALIZERS(serialize);
-
 };
 
 }

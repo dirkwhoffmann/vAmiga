@@ -1173,6 +1173,7 @@
 		50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinearDevice.cpp; sourceTree = "<group>"; };
 		50BF4B3A2EFD5E7300F1B9F2 /* ByteView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ByteView.h; sourceTree = "<group>"; };
 		50BF4B3B2EFD618700F1B9F2 /* BitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BitView.h; sourceTree = "<group>"; };
+		50BF4B3C2F026C3E00F1B9F2 /* Streamable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Streamable.h; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -1598,6 +1599,7 @@
 				503FC4D22EE0D81E00637C95 /* Loggable.h */,
 				503FC4B92EE08B2B00637C95 /* Reflectable.h */,
 				50BCB99D2EE2C53D000C53CF /* Reportable.h */,
+				50BF4B3C2F026C3E00F1B9F2 /* Streamable.h */,
 				503FC4FC2EE1C75300637C95 /* Synchronizable.h */,
 				50EFB0CF2C18E01E0013B73C /* Wakeable.h */,
 			);

@@ -9,16 +9,18 @@
 
 #pragma once
 
-#include "Serializable.h"
+#include "utl/abilities/Streamable.h"
 
 namespace vamiga {
+
+using namespace utl;
 
 struct RgbColor;
 struct YuvColor;
 struct AmigaColor;
 struct GpuColor;
 
-struct RgbColor {
+struct RgbColor : Streamable {
 
     double r;
     double g;
@@ -81,7 +83,7 @@ struct YuvColor {
 // Amiga color (native Amiga RGB format)
 //
 
-struct AmigaColor : SerializableStruct
+struct AmigaColor : Streamable
 {
     u8 r;
     u8 g;
@@ -102,16 +104,15 @@ struct AmigaColor : SerializableStruct
 
 public:
 
-    template <class T>
-    void serialize(T& worker)
+    template <class W>
+    W& operator<<(W& worker)
     {
         worker
 
         << r << g << b;
 
-    } STRUCT_SERIALIZERS(serialize);
-
-
+        return worker;
+    }
 
     u16 rawValue() const { return u16(r << 8 | g << 4 | b); }
 

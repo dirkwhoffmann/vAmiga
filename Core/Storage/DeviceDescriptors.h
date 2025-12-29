@@ -10,12 +10,12 @@
 #pragma once
 
 #include "DeviceTypes.h"
-#include "Serializable.h"
+#include "utl/abilities/Streamable.h"
 #include "utl/primitives.h"
 
 namespace vamiga {
 
-struct GeometryDescriptor : SerializableStruct {
+struct GeometryDescriptor : Streamable {
 
     // Constants
     static constexpr isize cMin = HDR_C_MIN;
@@ -33,8 +33,8 @@ struct GeometryDescriptor : SerializableStruct {
     // Size of a sector in bytes
     isize bsize = 512;
 
-    template <class T>
-    void serialize(T& worker)
+    template <class W>
+    W& operator<<(W& worker)
     {
         worker
 
@@ -43,8 +43,8 @@ struct GeometryDescriptor : SerializableStruct {
         << sectors
         << bsize;
 
-    } STRUCT_SERIALIZERS(serialize);
-
+        return worker;
+    }
 
     // Returns a vector with compatible geometries for a given block count
     static std::vector<std::tuple<isize,isize,isize>> driveGeometries(isize numBlocks);
@@ -80,7 +80,7 @@ struct GeometryDescriptor : SerializableStruct {
     void checkCompatibility() const;
 };
 
-struct PartitionDescriptor : SerializableStruct
+struct PartitionDescriptor : Streamable
 {
     string name;
     u32 flags = 0;
@@ -98,8 +98,8 @@ struct PartitionDescriptor : SerializableStruct
     u32 bootPri = 0;
     u32 dosType = 0x444f5300;
 
-    template <class T>
-    void serialize(T& worker)
+    template <class W>
+    W& operator<<(W& worker)
     {
         worker
 
@@ -119,7 +119,8 @@ struct PartitionDescriptor : SerializableStruct
         << bootPri
         << dosType;
 
-    } STRUCT_SERIALIZERS(serialize);
+        return worker;
+    }
 
     // Initializers
     PartitionDescriptor() { };
@@ -144,7 +145,7 @@ struct PartitionDescriptor : SerializableStruct
     void checkCompatibility(const GeometryDescriptor &geo) const;
 };
 
-struct DriverDescriptor : SerializableStruct
+struct DriverDescriptor : Streamable
 {
     u32 dosType = 0;
     u32 dosVersion = 0;
@@ -152,8 +153,8 @@ struct DriverDescriptor : SerializableStruct
     std::vector<u32> blocks;
     u32 segList = 0;
 
-    template <class T>
-    void serialize(T& worker)
+    template <class W>
+    W& operator<<(W& worker)
     {
         worker
 
@@ -163,8 +164,8 @@ struct DriverDescriptor : SerializableStruct
         << blocks
         << segList;
 
-    } STRUCT_SERIALIZERS(serialize);
-
+        return worker;
+    }
 
     // Initializers
     DriverDescriptor() { };
