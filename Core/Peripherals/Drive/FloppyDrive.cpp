@@ -762,7 +762,7 @@ FloppyDrive::writeWordAndRotate(u16 value)
 void
 FloppyDrive::rotate()
 {
-    [[deprecated]] long oldLast = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
+    long oldLast = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
     long last = disk ? disk->track[head.track()].size() / 8 : 12668;
     assert(oldLast == last);
 

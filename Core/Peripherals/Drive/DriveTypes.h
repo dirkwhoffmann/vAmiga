@@ -59,7 +59,7 @@ struct DriveHead
 {
     CylNr cylinder;
     HeadNr head;
-    isize offset;
+    [[deprecated]] isize offset;
 
     isize track() const { return 2 * cylinder + head; }
 };

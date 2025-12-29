@@ -82,7 +82,7 @@ private:
     } data;
     
     // Length of each track in bytes
-    [[deprecated]] union {
+    union {
         i32 cylinder[84][2];
         i32 track[168];
     } length;
@@ -258,11 +258,11 @@ public:
     void writeBit(CylNr c, HeadNr h, isize offset, bool value);
 
     // Reads a byte from disk
-    u8 read8(TrackNr t, isize offset) const;
+    // u8 read8(TrackNr t, isize offset) const;
     u8 read8(CylNr c, HeadNr h, isize offset) const;
     
     // Writes a byte to disk
-    void write8(TrackNr t, isize offset, u8 value);
+    // void write8(TrackNr t, isize offset, u8 value);
     void write8(CylNr c, HeadNr h, isize offset, u8 value);
     
     
