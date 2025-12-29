@@ -763,13 +763,15 @@ void
 FloppyDrive::rotate()
 {
     long oldLast = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
-    long last = disk ? disk->track[head.track()].size() / 8 : 12668;
-    assert(oldLast == last);
+    long last = disk ? disk->track[head.track()].size() : 12668 * 8;
+    // assert(oldLast == last);
 
-    if (++head.offset >= last) {
+    head.offset += 8;
+
+    if (head.offset >= last) {
 
         // Start over at the beginning of the current cylinder
-        head.offset = 0;
+        head.offset %= 8;
 
         // If this drive is selected, we emulate a falling edge on the flag pin
         // of CIA B. This causes the CIA to trigger the INDEX interrupt if the
