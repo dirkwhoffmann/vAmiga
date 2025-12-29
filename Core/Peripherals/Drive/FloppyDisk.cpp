@@ -44,7 +44,7 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
 
     for (isize i = 0; i < 168; i++) {
 
-        track[i] = MutableByteView(data.track[i], trackLength);
+        track[i] = MutableBitView(data.track[i], trackLength * 8);
         length.track[i] = trackLength;
     }
     clearDisk();
@@ -140,14 +140,14 @@ FloppyDisk::writeTrack(const u8 *src, isize nr)
 bool
 FloppyDisk::isValidHeadPos(TrackNr t, isize offset) const
 {
-    assert(length.track[t] == track[t].size());
+    assert(length.track[t] * 8 == track[t].size() );
     return isValidTrackNr(t) && offset >= 0 && offset < 8 * length.track[t];
 }
 
 bool
 FloppyDisk::isValidHeadPos(CylNr c, HeadNr h, isize offset) const
 {
-    assert(length.cylinder[c][h] == track[2*c+h].size());
+    assert(length.cylinder[c][h] * 8 == track[2*c+h].size());
     return isValidCylinderNr(c) && isValidHeadNr(h) && offset >= 0 && offset < 8 * length.cylinder[c][h];
 }
 
@@ -166,7 +166,7 @@ FloppyDisk::checksum() const
 u64
 FloppyDisk::checksum(TrackNr t) const
 {
-    assert(length.track[t] == track[t].size());
+    assert(length.track[t] * 8 == track[t].size() );
     return Hashable::fnv64(data.track[t], length.track[t]);
 }
 
@@ -180,7 +180,7 @@ FloppyDisk::checksum(CylNr c, HeadNr h) const
 ByteView
 FloppyDisk::byteView(TrackNr t) const
 {
-    assert(length.track[t] == track[t].size());
+    assert(length.track[t] * 8 == track[t].size() );
     return ByteView(data.track[t], length.track[t]);
 }
 
@@ -193,7 +193,7 @@ FloppyDisk::byteView(TrackNr t, SectorNr s) const
 MutableByteView
 FloppyDisk::byteView(TrackNr t)
 {
-    assert(length.track[t] == track[t].size());
+    assert(length.track[t] * 8 == track[t].size() );
     return MutableByteView(data.track[t], length.track[t]);
 }
 
@@ -248,7 +248,7 @@ FloppyDisk::read8(TrackNr t, isize offset) const
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
-    assert(length.track[t] == track[t].size());
+    assert(length.track[t] * 8 == track[t].size() );
 
     return data.track[t][offset];
 }
@@ -259,7 +259,7 @@ FloppyDisk::read8(CylNr c, HeadNr h, isize offset) const
     assert(c < numCyls());
     assert(h < numHeads());
     assert(offset < length.cylinder[c][h]);
-    assert(length.cylinder[c][h] == track[2*c+h].size());
+    assert(length.cylinder[c][h] * 8 == track[2*c+h].size());
 
     return data.cylinder[c][h][offset];
 }
@@ -269,7 +269,7 @@ FloppyDisk::write8(TrackNr t, isize offset, u8 value)
 {
     assert(t < numTracks());
     assert(offset < length.track[t]);
-    assert(length.track[t] == track[t].size());
+    assert(length.track[t] * 8 == track[t].size() );
 
     data.track[t][offset] = value;
     setModified(true);
@@ -281,7 +281,7 @@ FloppyDisk::write8(CylNr c, HeadNr h, isize offset, u8 value)
     assert(c < numCyls());
     assert(h < numHeads());
     assert(offset < length.cylinder[c][h]);
-    assert(length.cylinder[c][h] == track[2*c+h].size());
+    assert(length.cylinder[c][h] * 8 == track[2*c+h].size());
 
     data.cylinder[c][h][offset] = value;
     setModified(true);
@@ -325,7 +325,7 @@ FloppyDisk::clearTrack(TrackNr t)
 
     srand(0);
     for (isize i = 0; i < length.track[t]; i++) {
-        assert(length.track[t] == track[t].size());
+        assert(length.track[t] * 8 == track[t].size() );
         data.track[t][i] = rand() & 0xFF;
     }
 }
@@ -346,7 +346,7 @@ FloppyDisk::clearTrack(TrackNr t, u8 value1, u8 value2)
     assert(t < numTracks());
 
     for (isize i = 0; i < length.track[t]; i++) {
-        assert(length.track[t] == track[t].size());
+        assert(length.track[t] * 8 == track[t].size() );
         data.track[t][i] = IS_ODD(i) ? value2 : value1;
     }
 }
@@ -385,7 +385,7 @@ FloppyDisk::shiftTracks(isize offset)
     for (TrackNr t = 0; t < 168; t++) {
 
         isize len = length.track[t];
-        assert(length.track[t] == track[t].size());
+        assert(length.track[t] * 8 == track[t].size() );
 
         memcpy(spare, data.track[t], len);
         memcpy(spare + len, data.track[t], len);
@@ -399,7 +399,7 @@ FloppyDisk::repeatTracks()
     for (TrackNr t = 0; t < 168; t++) {
         
         auto end = isize(length.track[t]);
-        assert(length.track[t] == track[t].size());
+        assert(length.track[t] * 8 == track[t].size() );
         auto max = isize(sizeof(data.track[t]));
 
         for (isize i = end, j = 0; i < max; i++, j++) {
@@ -415,7 +415,7 @@ FloppyDisk::readTrackBits(TrackNr t) const
 
     string result;
     result.reserve(length.track[t]);
-    assert(length.track[t] == track[t].size());
+    assert(length.track[t] * 8 == track[t].size() );
 
     for (isize i = 0; i < length.track[t]; i++) {
         for (isize j = 7; j >= 0; j--) {

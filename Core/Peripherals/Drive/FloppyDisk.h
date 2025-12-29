@@ -88,7 +88,7 @@ private:
     } length;
 
     // Experimental
-    MutableByteView track[168] {};
+    MutableBitView track[168] {};
 
     // Disk state
     long flags = 0;
@@ -126,7 +126,7 @@ public:
         CLONE(flags)
 
         for (isize i = 0; i < 168; ++i) {
-            track[i] = MutableByteView(track[i].data(), other.track[i].size());
+            track[i] = MutableBitView(track[i].data(), other.track[i].size());
         }
 
         return *this;

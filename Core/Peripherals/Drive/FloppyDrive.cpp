@@ -763,7 +763,7 @@ void
 FloppyDrive::rotate()
 {
     [[deprecated]] long oldLast = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
-    long last = disk ? disk->track[head.track()].size() : 12668;
+    long last = disk ? disk->track[head.track()].size() / 8 : 12668;
     assert(oldLast == last);
 
     if (++head.offset >= last) {
@@ -782,7 +782,7 @@ void
 FloppyDrive::findSyncMark()
 {
     [[deprecated]] long oldLength = disk->length.cylinder[head.cylinder][head.head];
-    long length = disk->track[head.track()].size();
+    long length = disk->track[head.track()].size() / 8;
     assert(oldLength == length);
 
     for (isize i = 0; i < length; i++) {

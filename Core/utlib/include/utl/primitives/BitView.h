@@ -134,7 +134,8 @@ public:
     constexpr isize size()  const { return len; }
     constexpr bool  empty() const { return len == 0; }
     constexpr std::span<T> bytes() const { return sp; }
-
+    constexpr T* data() const { return sp.data();}
+    
     // -----------------------------------------------------------------
     // Iterator (read-only bit iterator — by value, like std::vector<bool>)
     // -----------------------------------------------------------------
