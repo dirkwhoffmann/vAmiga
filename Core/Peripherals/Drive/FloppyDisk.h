@@ -82,10 +82,13 @@ private:
     } data;
     
     // Length of each track in bytes
-    union {
+    [[deprecated]] union {
         i32 cylinder[84][2];
         i32 track[168];
     } length;
+
+    // Experimental
+    MutableByteView track[168] {};
 
     // Disk state
     long flags = 0;
@@ -121,6 +124,10 @@ public:
         CLONE_ARRAY(data.raw)
         CLONE_ARRAY(length.track)
         CLONE(flags)
+
+        for (isize i = 0; i < 168; ++i) {
+            track[i] = MutableByteView(track[i].data(), other.track[i].size());
+        }
 
         return *this;
     }

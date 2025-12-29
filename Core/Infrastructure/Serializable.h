@@ -21,6 +21,7 @@ namespace vamiga {
 
 using utl::Hashable;
 
+/*
 class Serializable {
 
 public:
@@ -34,6 +35,7 @@ public:
     virtual void operator << (class SerReader &worker) = 0;
     virtual void operator << (class SerWriter &worker) = 0;
 };
+*/
 
 
 //
@@ -247,13 +249,6 @@ public:
         v << *this;
         return *this;
     }
-
-    template <std::derived_from<Serializable> T>
-    SerCounter& operator<<(T &v)
-    {
-        v << *this;
-        return *this;
-    }
 };
 
 
@@ -375,13 +370,6 @@ public:
     }
 
     template <std::derived_from<Streamable> T>
-    SerChecker& operator<<(T &v)
-    {
-        v << *this;
-        return *this;
-    }
-
-    template <std::derived_from<Serializable> T>
     SerChecker& operator<<(T &v)
     {
         v << *this;
@@ -529,13 +517,6 @@ public:
         return *this;
     }
 
-    template <std::derived_from<Serializable> T>
-    SerReader& operator<<(T &v)
-    {
-        v << *this;
-        return *this;
-    }
-
     void copy(void *dst, isize n)
     {
         std::memcpy(dst, (void *)ptr, n);
@@ -675,13 +656,6 @@ public:
         return *this;
     }
 
-    template <std::derived_from<Serializable> T>
-    SerWriter& operator<<(T &v)
-    {
-        v << *this;
-        return *this;
-    }
-
     void copy(const void *src, isize n)
     {
         std::memcpy((void *)ptr, src, n);
@@ -806,13 +780,6 @@ public:
 
     template <std::derived_from<Streamable> T>
     SerResetter & operator<<(T &v)
-    {
-        v << *this;
-        return *this;
-    }
-
-    template <std::derived_from<Serializable> T>
-    SerResetter& operator<<(T &v)
     {
         v << *this;
         return *this;

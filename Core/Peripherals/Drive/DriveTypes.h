@@ -55,12 +55,13 @@ struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
 // Structures
 //
 
-typedef struct
+struct DriveHead
 {
     CylNr cylinder;
     HeadNr head;
     isize offset;
-}
-DriveHead;
+
+    isize track() const { return 2 * cylinder + head; }
+};
 
 }

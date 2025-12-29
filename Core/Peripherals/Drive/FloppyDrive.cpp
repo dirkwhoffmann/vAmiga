@@ -359,13 +359,13 @@ FloppyDrive::operator << (SerCounter &worker)
 
     if (hasDisk()) {
 
-        // Write the disk type
         auto diameter = disk->getDiameter();
         auto density = disk->getDensity();
 
-        // Write the disk's state
+        // Write the disk type
         worker << diameter << density;
-        
+
+        // Write the disk
         disk->serialize(worker);
     }
 }
@@ -383,7 +383,11 @@ FloppyDrive::operator << (SerReader &worker)
 
         Diameter type;
         Density density;
+
+        // Read the disk type
         worker << type << density;
+
+        // Recreate the disk
         disk = std::make_unique<FloppyDisk>(worker, type, density);
 
     } else {
@@ -758,9 +762,12 @@ FloppyDrive::writeWordAndRotate(u16 value)
 void
 FloppyDrive::rotate()
 {
-    long last = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
+    [[deprecated]] long oldLast = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
+    long last = disk ? disk->track[head.track()].size() : 12668;
+    assert(oldLast == last);
+
     if (++head.offset >= last) {
-        
+
         // Start over at the beginning of the current cylinder
         head.offset = 0;
 
@@ -774,9 +781,12 @@ FloppyDrive::rotate()
 void
 FloppyDrive::findSyncMark()
 {
-    long length = disk->length.cylinder[head.cylinder][head.head];
+    [[deprecated]] long oldLength = disk->length.cylinder[head.cylinder][head.head];
+    long length = disk->track[head.track()].size();
+    assert(oldLength == length);
+
     for (isize i = 0; i < length; i++) {
-        
+
         if (readByteAndRotate() != 0x44) continue;
         if (readByteAndRotate() != 0x89) continue;
         break;
