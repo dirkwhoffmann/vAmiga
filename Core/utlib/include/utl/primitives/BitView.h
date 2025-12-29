@@ -14,182 +14,227 @@
 
 namespace utl {
 
-class BitView {
+template <typename T>
+class BaseBitView {
 
-    std::span<const u8> sp{}; // Data
-    isize len = 0;            // Length in bits
+    static_assert(std::is_same_v<T, u8> || std::is_same_v<T, const u8>);
+
+    std::span<T> sp{};   // underlying bytes
+    isize len = 0;       // number of bits
 
 public:
 
-    constexpr BitView() = default;
-    constexpr BitView(const u8* data, isize bitCount) {
+    constexpr BaseBitView() = default;
 
-        sp  = std::span(data, (bitCount + 7) / 8);
-        len = bitCount;
-
+    constexpr BaseBitView(T* data, isize bitCount)
+    : sp(data, (bitCount + 7) / 8), len(bitCount)
+    {
         assert(len >= 0);
         assert(isize(sp.size()) * 8 >= len);
     }
 
-    constexpr BitView(std::span<const u8> bytes, isize bitCount) {
-
-        sp  = bytes;
-        len = bitCount;
-
+    constexpr BaseBitView(std::span<T> bytes, isize bitCount)
+    : sp(bytes), len(bitCount)
+    {
         assert(len >= 0);
         assert(isize(sp.size()) * 8 >= len);
     }
 
-    constexpr BitView(const ByteView& view) {
+    // Allow const-view from mutable-view
+    constexpr BaseBitView(const BaseBitView<u8>& other)
+        requires std::is_const_v<T>
+    : sp(other.bytes()), len(other.size())
+    {}
 
-        sp  = view.span();
-        len = view.size() * 8;
-
-        assert(len >= 0);
-        assert(isize(sp.size()) * 8 >= len);
-    }
-
-    constexpr bool operator[](isize i) const {
-
+    // Reads a single bit
+    constexpr bool operator[](isize i) const
+    {
         assert(i >= 0 && i < len);
         return (sp[i >> 3] >> (7 - (i & 7))) & 1;
     }
 
-    constexpr isize size() const { return len; }
-    constexpr bool empty() const { return len == 0; }
-    constexpr std::span<const u8> bytes() const { return sp; }
+    constexpr u8 getByte(isize bitIndex) const
+    {
+        assert(len > 0);
+
+        // Fast path for a byte-aligned and byte-sized buffer
+        if (((bitIndex & 7) == 0) && ((len & 7) == 0)) {
+
+            const isize byteCount = len >> 3;
+            isize byteIndex = (bitIndex >> 3) % byteCount;
+            if (byteIndex < 0) byteIndex += byteCount;
+
+            return sp[byteIndex];
+        }
+
+        // Normalize start bit
+        isize pos = bitIndex % len;
+        if (pos < 0) pos += len;
+
+        u8 value = 0;
+
+        for (int b = 0; b < 8; ++b) {
+
+            isize i = pos + b;
+            if (i >= len) i -= len;
+
+            value <<= 1;
+            value |= (sp[i >> 3] >> (7 - (i & 7))) & 1;
+        }
+
+        return value;
+    }
+
+    // Writes a single bit
+    constexpr void set(isize i, bool value)
+    requires (!std::is_const_v<T>)
+    {
+        assert(i >= 0 && i < len);
+
+        auto& byte = sp[i >> 3];
+        auto  mask = u8(1 << (7 - (i & 7)));
+        value ? byte |= mask : byte &= ~mask;
+    }
+
+    // Writes a byte
+    constexpr void setByte(isize bitIndex, u8 value)
+    {
+        assert(len > 0);
+
+        // Fast path for a byte-aligned and byte-sized buffer
+        if (((bitIndex & 7) == 0) && ((len & 7) == 0)) {
+
+            const isize byteCount = len >> 3;
+            isize byteIndex = (bitIndex >> 3) % byteCount;
+            if (byteIndex < 0) byteIndex += byteCount;
+
+            sp[byteIndex] = value;
+            return;
+        }
+
+        // Normalize start bit
+        isize pos = bitIndex % len;
+        if (pos < 0) pos += len;
+
+        for (int b = 0; b < 8; ++b) {
+
+            isize i = pos + b;
+            if (i >= len) i -= len;
+
+            u8& byte = sp[i >> 3];
+            const u8 mask = u8(1 << (7 - (i & 7)));
+
+            if (value & (1 << (7 - b)))
+                byte |= mask;
+            else
+                byte &= ~mask;
+        }
+    }
+
+    constexpr isize size()  const { return len; }
+    constexpr bool  empty() const { return len == 0; }
+    constexpr std::span<T> bytes() const { return sp; }
+
+    // -----------------------------------------------------------------
+    // Iterator (read-only bit iterator — by value, like std::vector<bool>)
+    // -----------------------------------------------------------------
 
     class iterator {
 
-        const BitView* view_;
+        const BaseBitView* view_;
         isize pos_;
 
     public:
-
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = bool;
         using difference_type   = isize;
-        using pointer           = void;     // Proxy-free
-        using reference         = bool;     // Returned by value
+        using pointer           = void;
+        using reference         = bool;
 
-        constexpr iterator(const BitView* view, isize pos) : view_(view), pos_(pos) {
-
+        constexpr iterator(const BaseBitView* v, isize p)
+        : view_(v), pos_(p)
+        {
             assert(view_);
-            assert(!view_->empty());
         }
 
-        // Dereference
-        constexpr reference operator*() const { return (*view_)[pos_]; }
+        constexpr bool operator*() const { return (*view_)[pos_]; }
 
-        // Increment / Decrement
         constexpr iterator& operator++() { ++pos_; return *this; }
         constexpr iterator& operator--() { --pos_; return *this; }
 
-        // Random access
-        constexpr reference operator[](difference_type n) const { return *(*this + n); }
+        constexpr bool operator[](difference_type n) const {
+            return *(*this + n);
+        }
 
-    private:
-
-        friend constexpr iterator operator+(const iterator& it, difference_type n) {
-            return iterator(it.view_, it.pos_ + n);
+        friend constexpr iterator operator+(iterator it, difference_type n) {
+            it.pos_ += n; return it;
         }
-        friend constexpr iterator operator+(difference_type n, const iterator& it) {
-            return iterator(it.view_, it.pos_ + n);
+        friend constexpr iterator operator-(iterator it, difference_type n) {
+            it.pos_ -= n; return it;
         }
-        friend constexpr iterator operator-(const iterator& it, difference_type n) {
-            return iterator(it.view_, it.pos_ - n);
+        friend constexpr difference_type operator-(iterator a, iterator b) {
+            assert(a.view_ == b.view_); return a.pos_ - b.pos_;
         }
-        friend constexpr difference_type operator-(const iterator& lhs, const iterator& rhs) {
-            assert(lhs.view_ == rhs.view_); return lhs.pos_ - rhs.pos_;
-        }
-        friend constexpr bool operator==(const iterator& lhs, const iterator& rhs) {
-            return lhs.view_ == rhs.view_ && lhs.pos_ == rhs.pos_;
-        }
-        friend constexpr bool operator!=(const iterator& lhs, const iterator& rhs) {
-            return !(lhs == rhs);
-        }
-        friend constexpr bool operator<(const iterator& lhs, const iterator& rhs) {
-            assert(lhs.view_ == rhs.view_); return lhs.pos_ < rhs.pos_;
-        }
-        friend constexpr bool operator<=(const iterator& lhs, const iterator& rhs) {
-            return !(rhs < lhs);
-        }
-        friend constexpr bool operator>(const iterator& lhs, const iterator& rhs) {
-            return rhs < lhs;
-        }
-        friend constexpr bool operator>=(const iterator& lhs, const iterator& rhs) {
-            return !(lhs < rhs);
+        friend constexpr bool operator==(iterator a, iterator b) {
+            return a.view_ == b.view_ && a.pos_ == b.pos_;
         }
     };
 
     constexpr iterator begin() const { return iterator(this, 0); }
-    constexpr iterator end()   const { return iterator(this, size()); }
+    constexpr iterator end()   const { return iterator(this, len); }
+
+    // -----------------------------------------------------------------
+    // Cyclic iterator
+    // -----------------------------------------------------------------
 
     class cyclic_iterator {
 
-        const BitView* view_;
+        const BaseBitView* view_;
         isize pos_;
 
     public:
-
         using iterator_category = std::random_access_iterator_tag;
         using value_type        = bool;
         using difference_type   = isize;
-        using pointer           = void;     // Proxy-free
-        using reference         = bool;     // Returned by value
+        using pointer           = void;
+        using reference         = bool;
 
-        constexpr cyclic_iterator(const BitView* view, isize pos = 0) : view_(view), pos_(pos) {
-
+        constexpr cyclic_iterator(const BaseBitView* v, isize p = 0)
+        : view_(v), pos_(p)
+        {
             assert(view_);
             assert(!view_->empty());
         }
 
-        // Dereference (cyclic)
-        constexpr reference operator*() const
+        constexpr bool operator*() const
         {
-            const isize n = view_->size();
+            isize n = view_->size();
             isize i = pos_ % n;
             if (i < 0) i += n;
             return (*view_)[i];
         }
 
-        // Increment / Decrement
         constexpr cyclic_iterator& operator++() { ++pos_; return *this; }
         constexpr cyclic_iterator& operator--() { --pos_; return *this; }
 
-        // Random access
-        constexpr reference operator[](difference_type n) const { return *(*this + n); }
+        constexpr bool operator[](difference_type n) const {
+            return *(*this + n);
+        }
 
-    private:
+        constexpr isize offset() const { return pos_; }
 
-        friend constexpr cyclic_iterator operator+(const cyclic_iterator& it, difference_type n) {
-            return cyclic_iterator(it.view_, it.pos_ + n);
-        }
-        friend constexpr cyclic_iterator operator-(const cyclic_iterator& it, difference_type n) {
-            return cyclic_iterator(it.view_, it.pos_ - n);
-        }
-        friend constexpr difference_type operator-(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
-            assert(lhs.view_ == rhs.view_); return lhs.pos_ - rhs.pos_;
-        }
-        friend constexpr bool operator==(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
-            return lhs.view_ == rhs.view_ && lhs.pos_ == rhs.pos_;
-        }
-        friend constexpr bool operator!=(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
-            return !(lhs == rhs);
-        }
-        friend constexpr bool operator<(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
-            assert(lhs.view_ == rhs.view_); return lhs.pos_ < rhs.pos_;
-        }
-        friend constexpr bool operator<=(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
-            return !(rhs < lhs);
-        }
-        friend constexpr bool operator>(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
-            return rhs < lhs;
-        }
-        friend constexpr bool operator>=(const cyclic_iterator& lhs, const cyclic_iterator& rhs) {
-            return !(lhs < rhs);
+        friend constexpr cyclic_iterator operator+(cyclic_iterator it, difference_type n) {
+            it.pos_ += n; return it;
         }
     };
+
+    constexpr cyclic_iterator cyclic_begin(isize pos = 0) const {
+        return cyclic_iterator(this, pos);
+    }
 };
 
+using BitView        = BaseBitView<const u8>;
+using MutableBitView = BaseBitView<u8>;
+
 }
+
