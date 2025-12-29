@@ -762,9 +762,7 @@ FloppyDrive::writeWordAndRotate(u16 value)
 void
 FloppyDrive::rotate()
 {
-    long oldLast = disk ? disk->length.cylinder[head.cylinder][head.head] : 12668;
     long last = disk ? disk->track[head.track()].size() : 12668 * 8;
-    // assert(oldLast == last);
 
     head.offset += 8;
 
@@ -783,9 +781,7 @@ FloppyDrive::rotate()
 void
 FloppyDrive::findSyncMark()
 {
-    [[deprecated]] long oldLength = disk->length.cylinder[head.cylinder][head.head];
-    long length = disk->track[head.track()].size() / 8;
-    assert(oldLength == length);
+    long length = disk ? disk->track[head.track()].size() / 8 : 0;
 
     for (isize i = 0; i < length; i++) {
 

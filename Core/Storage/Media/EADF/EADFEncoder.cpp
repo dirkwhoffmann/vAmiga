@@ -67,7 +67,7 @@ EADFEncoder::encodeExtendedTrack(const EADFFile &eadf, FloppyDisk &disk, TrackNr
         assert(numBits % 8 == 0);
 
         std::memcpy(disk.data.track[t], eadf.trackData(t), size_t(numBits / 8));
-        disk.length.track[t] = i32(numBits / 8);
+        disk.track[t] = MutableBitView(disk.data.track[t], numBits);
     }
 }
 
@@ -96,7 +96,8 @@ EADFEncoder::decode(EADFFile &eadf, const FloppyDisk &disk)
     // Track headers
     for (TrackNr t = 0; t < numTracks; t++, p += 12) {
 
-        auto bytes = disk.length.track[t];
+        assert(disk.track[t].size() % 8 == 0);
+        auto bytes = disk.track[t].size() / 8;
         auto bits = 8 * bytes;
 
         // Reserved
@@ -123,7 +124,7 @@ EADFEncoder::decode(EADFFile &eadf, const FloppyDisk &disk)
     // Track headers
     for (TrackNr t = 0; t < numTracks; t++) {
 
-        auto bytes = disk.length.track[t];
+        auto bytes = disk.track[t].size() / 8;
 
         for (isize i = 0; i < bytes; i++, p++) {
             *p = disk.data.track[t][i];

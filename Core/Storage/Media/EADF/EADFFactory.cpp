@@ -38,8 +38,11 @@ EADFFactory::make(const class FloppyDisk &disk)
     length += 12;               // File header
     length += 12 * numTracks;   // Track headers
 
-    for (isize i = 0; i < numTracks; i++) {
-        length += disk.length.track[i];
+    for (isize t = 0; t < numTracks; t++) {
+
+        auto numBits = disk.track[t].size();
+        assert(numBits % 8 == 0);
+        length += numBits / 8;
     }
 
     auto eadf = make_unique<EADFFile>(length);

@@ -82,10 +82,12 @@ private:
     } data;
     
     // Length of each track in bytes
+    /*
     union {
         i32 cylinder[84][2];
         i32 track[168];
     } length;
+    */
 
     // Experimental
     MutableBitView track[168] {};
@@ -122,7 +124,6 @@ public:
         CLONE(diameter)
         CLONE(density)
         CLONE_ARRAY(data.raw)
-        CLONE_ARRAY(length.track)
         CLONE(flags)
 
         for (isize i = 0; i < 168; ++i) {
@@ -193,7 +194,6 @@ private:
         << diameter
         << density
         << data.raw
-        << length.track
         << flags;
     };
 
@@ -250,12 +250,12 @@ public:
     //
 
     // Reads a bit from disk
-    u8 readBit(TrackNr t, isize offset) const;
-    u8 readBit(CylNr c, HeadNr h, isize offset) const;
+    // u8 readBit(TrackNr t, isize offset) const;
+    // u8 readBit(CylNr c, HeadNr h, isize offset) const;
 
     // Writes a bit to disk
-    void writeBit(TrackNr t, isize offset, bool value);
-    void writeBit(CylNr c, HeadNr h, isize offset, bool value);
+    // void writeBit(TrackNr t, isize offset, bool value);
+    // void writeBit(CylNr c, HeadNr h, isize offset, bool value);
 
     // Reads a byte from disk
     // u8 read8(TrackNr t, isize offset) const;
