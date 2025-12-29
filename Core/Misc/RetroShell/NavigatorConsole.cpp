@@ -636,6 +636,33 @@ NavigatorConsole::initCommands(RSCommand &root)
     }
 
     root.add({
+
+        .tokens = { "unmount" },
+        .chelp  = { "Unmount the file system" },
+        .flags  = vAmigaDOS ? rs::disabled : 0,
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            requireFS();
+
+            fs->flush();
+            fs = nullptr;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "flush" },
+        .chelp  = { "Flush the file system cache" },
+        .flags  = vAmigaDOS ? rs::disabled : 0,
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            requireFS();
+
+            fs->flush();
+        }
+    });
+
+    root.add({
         
         .tokens = { "import" },
         .ghelp  = { "Import a file system" },

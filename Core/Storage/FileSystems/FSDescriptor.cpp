@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FSDescriptor.h"
 #include "BlockDevice.h"
+#include "ADFFile.h"
 #include "FSError.h"
 #include "utl/io.h"
 #include "utl/types/Literals.h"
@@ -53,16 +54,24 @@ FSDescriptor::init(isize numBlocks, FSFormat dos)
     this->dos = dos;
 
     // Determine the location of the root block
-    isize highKey = numBlocks - 1;
-    isize rootKey = (numReserved + highKey) / 2; 
-    rootBlock = BlockNr(rootKey);
+    if (numBlocks * 512 == ADFFile::ADFSIZE_35_DD_81 ||
+        numBlocks * 512 == ADFFile::ADFSIZE_35_DD_82 ||
+        numBlocks * 512 == ADFFile::ADFSIZE_35_DD_83 ||
+        numBlocks * 512 == ADFFile::ADFSIZE_35_DD_84) {
 
-    assert(rootKey == numBlocks / 2);
+        rootBlock = 880;
+
+    } else {
+
+        isize highKey = numBlocks - 1;
+        isize rootKey = (numReserved + highKey) / 2;
+        rootBlock = BlockNr(rootKey);
+    }
 
     // Determine the number of required bitmap blocks
     isize bitsPerBlock = (bsize - 4) * 8;
     isize neededBlocks = (numBlocks + bitsPerBlock - 1) / bitsPerBlock;
-    isize bmKey = rootKey + 1;
+    isize bmKey = rootBlock + 1;
 
     // Add bitmap blocks
     for (isize i = 0; i < neededBlocks; i++) {

@@ -109,7 +109,7 @@ Dumpable::dump(std::ostream &os, const DumpOpt &opt, const string &fmt, DataProv
     };
 
     // Continue as long as data is available
-    while (reader(bcnt, 1) != -1 && reader(ccnt, 1) != -1) {
+    while (reader(bcnt, 1).has_value() && reader(ccnt, 1).has_value()) {
 
         // Rewind to the beginning of the format string
         const char *p = fmt.c_str();

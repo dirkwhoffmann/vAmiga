@@ -283,7 +283,7 @@ DiskController::readByte()
     FloppyDrive *drive = getSelectedDrive();
 
     // Read a byte from the drive
-    incoming = drive ? drive->readByteAndRotate() : 0;
+    incoming = drive ? drive->read8AndRotate() : 0;
 
     // Set the byte ready flag (shows up in DSKBYT)
     incoming |= 0x8000;
@@ -343,7 +343,7 @@ DiskController::writeByte()
         u8 outgoing = readFifo();
 
         // Write byte to disk
-        if (drive) drive->writeByteAndRotate(outgoing);
+        if (drive) drive->write8AndRotate(outgoing);
     }
 }
 
@@ -466,7 +466,7 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
             while (!fifoIsEmpty()) {
                 
                 u8 value = readFifo();
-                if (drive) drive->writeByteAndRotate(value);
+                if (drive) drive->write8AndRotate(value);
             }
             setState(DriveDmaState::OFF);
             
@@ -529,7 +529,7 @@ DiskController::performTurboRead(FloppyDrive *drive)
     for (isize i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from disk
-        u16 word = drive->readWordAndRotate();
+        u16 word = drive->read16AndRotate();
         
         // Write word into memory
         if (DSK_CHECKSUM) {
@@ -570,7 +570,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
         agnus.dskpt += 2;
         
         // Write word to disk
-        drive->writeWordAndRotate(word);
+        drive->write16AndRotate(word);
     }
     
     debug(DSK_CHECKSUM,

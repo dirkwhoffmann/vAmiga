@@ -362,14 +362,14 @@ public:
     void selectSide(HeadNr h);
 
     // Reads a value from the drive head and optionally rotates the disk
-    u8 readByte() const;
-    u8 readByteAndRotate();
-    u16 readWordAndRotate();
+    u8 read8() const;
+    u8 read8AndRotate();
+    u16 read16AndRotate();
 
     // Writes a value to the drive head and optionally rotates the disk
-    void writeByte(u8 value);
-    void writeByteAndRotate(u8 value);
-    void writeWordAndRotate(u16 value);
+    void write8(u8 value);
+    void write8AndRotate(u8 value);
+    void write16AndRotate(u16 value);
 
     // Emulate a disk rotation (moves head to the next byte)
     void rotate();

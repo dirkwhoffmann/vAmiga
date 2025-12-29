@@ -792,7 +792,7 @@ FloppyDrive::selectSide(HeadNr h)
 }
 
 u8
-FloppyDrive::readByte() const
+FloppyDrive::read8() const
 {
     // Case 1: No disk is inserted
     if (!disk) return 0xFF;
@@ -805,24 +805,24 @@ FloppyDrive::readByte() const
 }
 
 u8
-FloppyDrive::readByteAndRotate()
+FloppyDrive::read8AndRotate()
 {
-    u8 result = readByte();
+    u8 result = read8();
     if (motor) rotate();
     return result;
 }
 
 u16
-FloppyDrive::readWordAndRotate()
+FloppyDrive::read16AndRotate()
 {
-    u8 byte1 = readByteAndRotate();
-    u8 byte2 = readByteAndRotate();
+    u8 byte1 = read8AndRotate();
+    u8 byte2 = read8AndRotate();
     
     return HI_LO(byte1, byte2);
 }
 
 void
-FloppyDrive::writeByte(u8 value)
+FloppyDrive::write8(u8 value)
 {
     if (disk) {
         disk->write8(head.cylinder, head.head, head.offset, value);
@@ -830,17 +830,17 @@ FloppyDrive::writeByte(u8 value)
 }
 
 void
-FloppyDrive::writeByteAndRotate(u8 value)
+FloppyDrive::write8AndRotate(u8 value)
 {
-    writeByte(value);
+    write8(value);
     if (motor) rotate();
 }
 
 void
-FloppyDrive::writeWordAndRotate(u16 value)
+FloppyDrive::write16AndRotate(u16 value)
 {
-    writeByteAndRotate(HI_BYTE(value));
-    writeByteAndRotate(LO_BYTE(value));
+    write8AndRotate(HI_BYTE(value));
+    write8AndRotate(LO_BYTE(value));
 }
 
 void
@@ -869,8 +869,8 @@ FloppyDrive::findSyncMark()
 
     for (isize i = 0; i < length; i++) {
 
-        if (readByteAndRotate() != 0x44) continue;
-        if (readByteAndRotate() != 0x89) continue;
+        if (read8AndRotate() != 0x44) continue;
+        if (read8AndRotate() != 0x89) continue;
         break;
     }
 

@@ -213,6 +213,7 @@ DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
     // Find all sectors
     auto offsets = seekSectors(track);
 
+    /*
     for (isize i = 0; i < count; ++i) {
         if (!offsets.contains(i)) {
             warn("Sector %ld not found. Aborting.\n", i);
@@ -223,6 +224,7 @@ DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
         warn("Found %zd sectors, expected %ld. Aborting.\n", offsets.size(), count);
         throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
     }
+    */
 
     // Decode all sectors
     for (SectorNr s = 0; s < count; s++) {
@@ -235,41 +237,6 @@ DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
         auto *secData = dst.data() + s * bsize;
         decodeAmigaSector(track, offsets[s], span<u8>(secData, bsize));
     }
-
-/*
-    // Find all sync marks
-    auto it = track.cyclic_begin();
-    std::vector<isize> syncMarks;
-    syncMarks.reserve(count);
-
-    constexpr isize syncMarkLen = 4;
-    for (isize i = 0; i < track.size() + syncMarkLen; ++i, ++it) {
-
-        // Scan MFM stream for $4489 $4489
-        if (it[0] != 0x44) continue;
-        if (it[1] != 0x89) continue;
-        if (it[2] != 0x44) continue;
-        if (it[3] != 0x89) continue;
-
-        // Make sure it's not a DOS track
-        if (it[5] == 0x89) continue;
-
-        syncMarks.push_back(it.offset());
-    }
-
-    if (ADF_DEBUG) fprintf(stderr, "Found %zd sectors (expected %ld)\n", syncMarks.size(), count);
-
-    // Check that the track contains the proper amount of sync marks
-    if (isize(syncMarks.size()) != count) {
-
-        warn("Found %zd sectors, expected %ld. Aborting.\n", syncMarks.size(), count);
-        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
-    }
-
-    // Decode all sectors
-    for (SectorNr s = 0; s < count; s++)
-        decodeAmigaSector(track, syncMarks[s], dst);
-*/
 }
 
 void
@@ -280,36 +247,19 @@ DiskEncoder::decodeAmigaSector(ByteView track, isize offset, MutableByteView dst
 
     if (MFM_DEBUG) fprintf(stderr, "Decoding sector at offset %ld\n", offset);
 
-    // Skip sync mark
-    offset += 4;
+    // Skip sync mark + sector header
+    offset += 4 + 56;
 
-    /*
-    // Decode sector info
-    u8 info[4]; decodeOddEven(info, &track[offset], 4);
+    // Determine the source address
+    auto *mfmData = &track[offset];
 
-    // Extract the sector number
-    auto secNr = SectorNr(info[2]);
+    for (isize i = 0; i < 16; ++i) { printf("%0X ", mfmData[i]); } printf("\n");
 
-    if (MFM_DEBUG) fprintf(stderr, "Decoding sector %ld\n", secNr);
-    */
-
-    // Check that the sector number is valid
-    /*
-    if (secNr * bsize + bsize > dst.size()) {
-
-        warn("Invalid sector number %ld. Aborting.\n", secNr);
-        throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
-    }
-    */
-
-    // Determine the destination address
-    // auto *secData = dst.data() + secNr * bsize;
-
-    // Determine the source address (adding 56 skips the sector header)
-    auto *mfmData = &track[offset + 56];
 
     // Decode sector data
     decodeOddEven(dst.data(), mfmData, bsize);
+
+    for (isize i = 0; i < 8; ++i) { printf("%0X ", dst.data()[i]); } printf("\n");
 }
 
 optional<isize>
