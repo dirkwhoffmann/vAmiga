@@ -45,8 +45,7 @@ std::unique_ptr<IMGFile>
 IMGFactory::make(const class FloppyDisk &disk)
 {
     auto img = make(disk.getDiameter(), disk.getDensity());
-    // IMGEncoder::decode(*img, disk);
-    DiskEncoder::decode(*img, disk);
+    disk.decode(*img);
     return img;
 }
 

@@ -44,7 +44,7 @@ std::unique_ptr<STFile>
 STFactory::make(const class FloppyDisk &disk)
 {
     auto st = make(disk.getDiameter(), disk.getDensity());
-    DiskEncoder::decode(*st, disk);
+    disk.decode(*st);
     return st;
 }
 

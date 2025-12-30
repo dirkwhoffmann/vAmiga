@@ -9,43 +9,19 @@
 
 #pragma once
 
-#include "FloppyDisk.h"
+#include "DeviceTypes.h"
+#include "utl/primitives/BitView.h"
 
 namespace vamiga {
 
 class DiskEncoder {
 
-    //
-    // ADF
-    //
-
 public:
 
-    // TODO: MOVE TO FloppyDisk
-    static void encode(const class ADFFile &source, FloppyDisk &target);
-    static void decode(class ADFFile &target, const FloppyDisk &source);
+    virtual ~DiskEncoder() = default;
 
-
-    //
-    // IMG
-    //
-
-public:
-
-    // TODO: MOVE TO FloppyDisk
-    static void encode(const class IMGFile &source, FloppyDisk &target);
-    static void decode(class IMGFile &target, const FloppyDisk &source);
-
-
-    //
-    // ST
-    //
-
-public:
-
-    // TODO: MOVE TO FloppyDisk
-    static void encode(const class STFile &source, FloppyDisk &target);
-    static void decode(class STFile &target, const FloppyDisk &source);
+    virtual void encodeTrack(MutableByteView track, TrackNr t, ByteView src) = 0;
+    virtual void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) = 0;
 };
 
 }

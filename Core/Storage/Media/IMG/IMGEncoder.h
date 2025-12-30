@@ -16,20 +16,10 @@ namespace vamiga {
 
 class IMGEncoder {
 
-    /*
 public:
 
     static void encode(const IMGFile &source, FloppyDisk &target);
     static void decode(IMGFile &target, const FloppyDisk &source);
-
-private:
-
-    static void encodeTrack(const IMGFile &img, FloppyDisk &disk, TrackNr t);
-    static void encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, SectorNr s);
-
-    static void decodeTrack(IMGFile &img, const FloppyDisk &disk, TrackNr t);
-    static void decodeSector(IMGFile &img, u8 *dst, const u8 *src);
-    */
 };
 
 }

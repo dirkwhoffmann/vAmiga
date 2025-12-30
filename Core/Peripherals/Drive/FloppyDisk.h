@@ -270,9 +270,16 @@ public:
     //
     
 public:
-    
+
     // Encodes a disk
     void encodeDisk(const class FloppyDiskImage &file);
+
+    void encode(const class ADFFile &source);
+    void decode(class ADFFile &target) const;
+    void encode(const class IMGFile &source);
+    void decode(class IMGFile &target) const;
+    void encode(const class STFile &source);
+    void decode(class STFile &target) const;
 
     // Shifts the tracks agains each other
     void shiftTracks(isize offset);
@@ -285,8 +292,8 @@ public:
 public:
     
     // Repeats the MFM data inside the track buffer to ease decoding (DEPRECATED)
-    void repeatTracks();
-    
+    [[deprecated]] void repeatTracks();
+
     // Returns a textual representation of all bits of a track
     string readTrackBits(TrackNr t) const;
     string readTrackBits(CylNr c, HeadNr h) const;

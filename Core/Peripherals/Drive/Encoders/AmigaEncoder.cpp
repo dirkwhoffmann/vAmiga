@@ -13,6 +13,21 @@
 #include "MFM.h"
 #include "utl/support/Bits.h"
 
+/*
+ namespace vamiga {
+
+void
+AmigaEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src) {
+    ::vamiga::AmigaEncoder::encodeTrack(track, t, src);
+}
+void
+AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst) {
+    ::vamiga::AmigaEncoder::decodeTrack(track, t, dst);
+}
+
+}
+*/
+
 namespace vamiga::AmigaEncoder {
 
 void

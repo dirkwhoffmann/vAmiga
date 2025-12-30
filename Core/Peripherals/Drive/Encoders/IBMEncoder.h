@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "DeviceTypes.h"
-#include "utl/primitives/BitView.h"
+#include "DiskEncoder.h"
 
 namespace vamiga::IBMEncoder {
 
@@ -25,5 +24,11 @@ isize seekSector(ByteView track, SectorNr s, isize offset = 0);
 
 // Computes a map from sector numbers to byte offsets
 std::unordered_map<isize, isize> seekSectors(ByteView track);
+
+/*
+class IBMEncoder : public DiskEncoder {
+
+};
+*/
 
 }

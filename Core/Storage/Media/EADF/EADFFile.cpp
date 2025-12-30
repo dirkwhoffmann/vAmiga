@@ -134,7 +134,7 @@ EADFFile::finalizeRead()
         // Convert the disk to a standard ADF
         
         adf = *ADFFactory::make(numTracks * 11 * 512);
-        DiskEncoder::decode(adf, disk);
+        disk.decode(adf);
 
     } catch (...) { }
 }

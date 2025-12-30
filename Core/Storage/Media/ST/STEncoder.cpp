@@ -16,21 +16,19 @@
 
 namespace vamiga {
 
-/*
 void
-STEncoder::encode(const class STFile &source, FloppyDisk &target)
+STEncoder::encode(const class STFile &source, FloppyDisk &disk)
 {
     auto img = IMGFactory::make(source.data.ptr, source.data.size);
-    DiskEncoder::encode(*img, target);
+    disk.encode(*img);
 }
 
 void
-STEncoder::decode(class STFile &target, const FloppyDisk &source)
+STEncoder::decode(class STFile &target, const FloppyDisk &disk)
 {
     auto img = IMGFactory::make(target.data.ptr, target.data.size);
-    DiskEncoder::decode(*img, source);
+    disk.decode(*img);
     target.data = img->data;
 }
-*/
 
 };

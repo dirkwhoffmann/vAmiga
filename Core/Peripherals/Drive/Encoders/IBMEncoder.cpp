@@ -92,7 +92,7 @@ encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteVie
     buf[59] = 0xFB;
 
     // Write DATA
-    for (isize i = 0; i < 512; ++i) { buf[60 + i] = data[i]; }
+    for (isize i = 0; i < bsize; ++i) { buf[60 + i] = data[i]; }
 
     // Compute and write CRC
     crc = Hashable::crc16(&buf[56], 516);

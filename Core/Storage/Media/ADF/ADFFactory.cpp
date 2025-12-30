@@ -68,7 +68,7 @@ ADFFactory::make(const class FloppyDisk &disk)
     assert(adf->numTracks() == 160);
     assert(adf->numSectors() == 11 || adf->numSectors() == 22);
 
-    DiskEncoder::decode(*adf, disk);
+    disk.decode(*adf);
     return adf;
 }
 

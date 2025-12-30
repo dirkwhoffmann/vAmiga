@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FloppyDisk.h"
 #include "AmigaEncoder.h"
+#include "IBMEncoder.h"
 #include "Media.h"
 #include "MediaFile.h"
 #include "DeviceError.h"
@@ -316,17 +317,158 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &file)
     switch (MediaFile::type(file)) {
     // switch (file.type()) {
 
-        case FileType::ADF:  DiskEncoder::encode(dynamic_cast<const ADFFile &>(file), *this); break;
+        case FileType::ADF:  encode(dynamic_cast<const ADFFile &>(file)); break;
         case FileType::ADZ:  ADZEncoder::encode(dynamic_cast<const ADZFile &>(file), *this); break;
         case FileType::EADF: EADFEncoder::encode(dynamic_cast<const EADFFile &>(file), *this); break;
-        case FileType::IMG:  DiskEncoder::encode(dynamic_cast<const IMGFile &>(file), *this); break;
-        case FileType::ST:   DiskEncoder::encode(dynamic_cast<const STFile &>(file), *this); break;
+        case FileType::IMG:  IMGEncoder::encode(dynamic_cast<const IMGFile &>(file), *this); break;
+        case FileType::ST:   STEncoder::encode(dynamic_cast<const STFile &>(file), *this); break;
         case FileType::DMS:  DMSEncoder::encode(dynamic_cast<const DMSFile &>(file), *this); break;
         case FileType::EXE:  EXEEncoder::encode(dynamic_cast<const EXEFile &>(file), *this); break;
 
         default:
             throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
+}
+
+void
+FloppyDisk::encode(const ADFFile &adf)
+{
+    isize tracks = adf.numTracks();
+    if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
+
+    if (getDiameter() != adf.getDiameter()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
+    }
+    if (getDensity() != adf.getDensity()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
+
+    // Start with an unformatted disk
+    clearDisk();
+
+    // Encode all tracks
+    for (TrackNr t = 0; t < tracks; ++t)
+        AmigaEncoder::encodeTrack(byteView(t), t, adf.byteView(t));
+
+    // In debug mode, also run the decoder
+    if (ADF_DEBUG) {
+
+        string tmp = "/tmp/debug.adf";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        ADFFactory::make(*this)->writeToFile(tmp);
+    }
+}
+
+void
+FloppyDisk::decode(ADFFile &adf) const
+{
+    auto tracks = adf.numTracks();
+    if (ADF_DEBUG) fprintf(stderr, "Decoding Amiga disk with %ld tracks\n", tracks);
+
+    if (getDiameter() != adf.getDiameter()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
+    }
+    if (getDensity() != adf.getDensity()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
+
+    // Decode all tracks
+    for (TrackNr t = 0; t < tracks; ++t)
+        AmigaEncoder::decodeTrack(byteView(t), t, adf.byteView(t));
+}
+
+void
+FloppyDisk::encode(const class IMGFile &img)
+{
+    isize tracks = img.numTracks();
+    if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+
+    if (getDiameter() != img.getDiameter()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
+    }
+    if (getDensity() != img.getDensity()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
+
+    // Start with an unformatted disk
+    clearDisk();
+
+    // Encode all tracks
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::encodeTrack(byteView(t), t, img.byteView(t));
+
+    // In debug mode, also run the decoder
+    if (IMG_DEBUG) {
+
+        string tmp = "/tmp/debug.img";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        IMGFactory::make(*this)->writeToFile(tmp);
+    }
+}
+
+void
+FloppyDisk::decode(class IMGFile &img) const
+{
+    auto tracks = img.numTracks();
+    if (IMG_DEBUG) fprintf(stderr, "Decoding DOS disk (%ld tracks)\n", tracks);
+
+    if (getDiameter() != img.getDiameter()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
+    }
+    if (getDensity() != img.getDensity()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
+
+    // Decode all tracks
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::decodeTrack(byteView(t), t, img.byteView(t));
+}
+
+void
+FloppyDisk::encode(const class STFile &img)
+{
+    isize tracks = img.numTracks();
+    if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+
+    if (getDiameter() != img.getDiameter()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
+    }
+    if (getDensity() != img.getDensity()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
+
+    // Start with an unformatted disk
+    clearDisk();
+
+    // Encode all tracks
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::encodeTrack(byteView(t), t, img.byteView(t));
+
+    // In debug mode, also run the decoder
+    if (IMG_DEBUG) {
+
+        string tmp = "/tmp/debug.img";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        IMGFactory::make(*this)->writeToFile(tmp);
+    }
+}
+
+void
+FloppyDisk::decode(class STFile &img) const
+{
+    auto tracks = img.numTracks();
+    if (IMG_DEBUG) fprintf(stderr, "Decoding Atari ST disk (%ld tracks)\n", tracks);
+
+    if (getDiameter() != img.getDiameter()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
+    }
+    if (getDensity() != img.getDensity()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
+
+    // Decode all tracks
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::decodeTrack(byteView(t), t, img.byteView(t));
 }
 
 void
