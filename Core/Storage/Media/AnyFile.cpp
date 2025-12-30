@@ -67,11 +67,13 @@ AnyFile::init(const u8 *buf, isize len)
     readFromBuffer(buf, len);
 }
 
+/*
 string
 AnyFile::getSizeAsString() const
 {
     return utl::byteCountAsString(getSize());
 }
+*/
 
 void
 AnyFile::flash(u8 *buf, isize offset, isize len) const

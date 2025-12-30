@@ -86,8 +86,7 @@ class RomDropView: DropView {
 
         do {
             
-            let rom = try MediaFileProxy.make(with: url)
-            try emu.mem.loadRom(rom)
+            try emu.mem.loadRom(url)
 
             // Check if we should keep this Rom
             let hash = Int(emu.mem.romTraits.crc)
@@ -131,8 +130,7 @@ class ExtRomDropView: DropView {
 
         do {
             
-            let ext = try MediaFileProxy.make(with: url)
-            try emu.mem.loadExt(ext)
+            try emu.mem.loadExt(url)
             return true
 
         } catch {

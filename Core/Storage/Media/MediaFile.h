@@ -61,7 +61,7 @@ public:
     isize getSize() const { return file->getSize(); }
 
     // Returns a textual representation of the file size
-    string getSizeAsString() const { return file->getSizeAsString(); }
+    // [[deprecated]] string getSizeAsString() const { return file->getSizeAsString(); }
 
     // Returns a pointer to the wrapped file
     const AnyFile *get() const { return file.get(); }

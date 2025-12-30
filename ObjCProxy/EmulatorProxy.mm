@@ -527,11 +527,13 @@ NSString *EventSlotName(EventSlot slot)
     return MediaFile::type([url fileSystemRepresentation]) == FileType::ROM;
 }
 
+/*
 - (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom(*(MediaFile *)proxy->obj); }
     catch(Error &error) { [ex save:error]; }
 }
+*/
 
 - (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
 {
@@ -554,17 +556,12 @@ NSString *EventSlotName(EventSlot slot)
 }
 
 /*
-- (BOOL)isExt:(NSURL *)url
-{
-    return MediaFile::type([url fileSystemRepresentation]) == FileType::EXTENDED_ROM;
-}
-*/
-
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt(*(MediaFile *)proxy->obj); }
     catch(Error &error) { [ex save:error]; }
 }
+*/
 
 - (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
 {
@@ -2059,11 +2056,13 @@ NSString *EventSlotName(EventSlot slot)
     return [self file]->getSize();
 }
 
+/*
 - (NSString *)getSizeAsString
 {
     const string &str = [self file]->getSizeAsString();
     return @(str.c_str());
 }
+*/
 
 - (u64)fnv
 {

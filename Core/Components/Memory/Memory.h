@@ -328,7 +328,6 @@ private:
 public:
 
     MemInfo cacheInfo() const;
-    // MemMetrics cacheMetrics() const;
 
 private:
     
@@ -436,12 +435,12 @@ public:
     void eraseExt() { std::memset(ext, 0, config.extSize); }
     
     // Installs a Boot Rom or Kickstart Rom
-    void loadRom(class MediaFile &file);
+    void loadRom(class RomFile &file);
     void loadRom(const fs::path &path);
     void loadRom(const u8 *buf, isize len);
     
     // Installs a Kickstart expansion Rom
-    void loadExt(class MediaFile &file);
+    void loadExt(class RomFile &file);
     void loadExt(const fs::path &path);
     void loadExt(const u8 *buf, isize len);
 

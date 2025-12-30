@@ -676,80 +676,61 @@ Memory::extFingerprint() const
 }
 
 void
-Memory::loadRom(MediaFile &file)
+Memory::loadRom(RomFile &file)
 {
-    if (auto *romFile = dynamic_cast<RomFile *>(file.get())) {
+    // Decrypt Rom
+    if (file.isEncrypted()) file.decrypt();
 
-        // Decrypt Rom
-        if (romFile->isEncrypted()) romFile->decrypt();
+    // Allocate memory
+    allocRom((i32)file.data.size);
 
-        // Allocate memory
-        allocRom((i32)romFile->data.size);
+    // Load Rom
+    file.flash(rom);
 
-        // Load Rom
-        romFile->flash(rom);
+    // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
+    hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
 
-        // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
-        hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
+    // Remove extended Rom (if any)
+    deleteExt();
 
-        // Remove extended Rom (if any)
-        deleteExt();
-
-    } else {
-
-        throw IOError(IOError::FILE_TYPE_MISMATCH);
-    }
 }
 
 void
 Memory::loadRom(const fs::path &path)
 {
-    auto file = MediaFile::make(path, FileType::ROM);
-    loadRom(*file);
-    delete file;
+    RomFile file(path);
+    loadRom(file);
 }
 
 void
 Memory::loadRom(const u8 *buf, isize len)
 {
-    auto file = MediaFile::make(buf, len, FileType::ROM);
-    loadRom(*file);
-    delete file;
+    RomFile file(buf, len);
+    loadRom(file);
 }
 
 void
-Memory::loadExt(MediaFile &file)
+Memory::loadExt(RomFile &file)
 {
-    try {
+    // Allocate memory
+    allocExt((i32)file.data.size);
 
-        RomFile &extFile = dynamic_cast<RomFile &>(file);
-
-        // Allocate memory
-        allocExt((i32)extFile.data.size);
-
-        // Load Rom
-        file.flash(ext);
-
-    } catch (...) {
-
-        throw IOError(IOError::FILE_TYPE_MISMATCH);
-    }
+    // Load Rom
+    file.flash(ext);
 }
 
 void
 Memory::loadExt(const fs::path &path)
 {
-    auto file = MediaFile::make(path, FileType::ROM);
-    loadExt(*file);
-    delete file;
+    RomFile file(path);
+    loadExt(file);
 }
 
 void
 Memory::loadExt(const u8 *buf, isize len)
 {
-    auto file = MediaFile::make(buf, len, FileType::ROM);
-    loadExt(*file);
-    delete file;
+    RomFile file(buf, len);
+    loadExt(file);
 }
 
 void

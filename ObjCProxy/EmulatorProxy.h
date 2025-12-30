@@ -449,13 +449,12 @@ NSString *EventSlotName(EventSlot slot);
 
 - (void)deleteRom;
 - (BOOL)isRom:(NSURL *)url;
-- (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+// - (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 - (void)deleteExt;
-// - (BOOL)isExt:(NSURL *)url;
-- (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+// - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
@@ -938,7 +937,7 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly) FileType type;
 @property (readonly) NSURL *path;
 @property (readonly) NSInteger size;
-@property (readonly) NSString *getSizeAsString;
+// @property (readonly) NSString *getSizeAsString;
 @property (readonly) u64 fnv;
 
 - (void)setPath:(NSString *)path;

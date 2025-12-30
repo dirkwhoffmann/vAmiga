@@ -687,6 +687,7 @@ MemoryAPI::loadExt(const fs::path &path)
     emu->markAsDirty();
 }
 
+/*
 void
 MemoryAPI::loadRom(MediaFile &file)
 {
@@ -702,6 +703,7 @@ MemoryAPI::loadExt(MediaFile &file)
     mem->loadExt(file);
     emu->markAsDirty();
 }
+*/
 
 void
 MemoryAPI::loadRom(const u8 *buf, isize len)

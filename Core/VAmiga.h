@@ -557,8 +557,8 @@ public:
 
     /** @brief  Loads a ROM provided by a RomFile
      */
-    void loadRom(MediaFile &file);
-    void loadExt(MediaFile &file);
+    // void loadRom(MediaFile &file);
+    // void loadExt(MediaFile &file);
 
     /** @brief  Loads a ROM provided by a memory buffer
      */

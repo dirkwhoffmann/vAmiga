@@ -76,10 +76,8 @@ public:
 
     virtual isize getSize() const { return data.size; }
     virtual u8 *getData() const { return data.ptr; }
-    // virtual u64 fnv64() const { return data.fnv64(); }
-    // virtual u32 crc32() const { return data.crc32(); }
 
-    string getSizeAsString() const;
+    // string getSizeAsString() const;
 
     
     //
