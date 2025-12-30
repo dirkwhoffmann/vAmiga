@@ -15,99 +15,9 @@
 #include "STFactory.h"
 #include "CoreError.h"
 #include "DeviceError.h"
+#include "MFM.h"
 
 namespace vamiga {
-
-void
-DiskEncoder::encodeMFM(u8 *dst, const u8 *src, isize count)
-{
-    for(isize i = 0; i < count; i++) {
-
-        auto mfm =
-        ((src[i] & 0b10000000) << 7) |
-        ((src[i] & 0b01000000) << 6) |
-        ((src[i] & 0b00100000) << 5) |
-        ((src[i] & 0b00010000) << 4) |
-        ((src[i] & 0b00001000) << 3) |
-        ((src[i] & 0b00000100) << 2) |
-        ((src[i] & 0b00000010) << 1) |
-        ((src[i] & 0b00000001) << 0);
-
-        dst[2*i+0] = HI_BYTE(mfm);
-        dst[2*i+1] = LO_BYTE(mfm);
-    }
-}
-
-void
-DiskEncoder::decodeMFM(u8 *dst, const u8 *src, isize count)
-{
-    for(isize i = 0; i < count; i++) {
-
-        u16 mfm = HI_LO(src[2*i], src[2*i+1]);
-
-        auto decoded =
-        ((mfm & 0b0100000000000000) >> 7) |
-        ((mfm & 0b0001000000000000) >> 6) |
-        ((mfm & 0b0000010000000000) >> 5) |
-        ((mfm & 0b0000000100000000) >> 4) |
-        ((mfm & 0b0000000001000000) >> 3) |
-        ((mfm & 0b0000000000010000) >> 2) |
-        ((mfm & 0b0000000000000100) >> 1) |
-        ((mfm & 0b0000000000000001) >> 0);
-
-        dst[i] = (u8)decoded;
-    }
-}
-
-void
-DiskEncoder::encodeOddEven(u8 *dst, const u8 *src, isize count)
-{
-    // Encode odd bits
-    for(isize i = 0; i < count; i++)
-        dst[i] = (src[i] >> 1) & 0x55;
-
-    // Encode even bits
-    for(isize i = 0; i < count; i++)
-        dst[i + count] = src[i] & 0x55;
-}
-
-void
-DiskEncoder::decodeOddEven(u8 *dst, const u8 *src, isize count)
-{
-    // Decode odd bits
-    for(isize i = 0; i < count; i++)
-        dst[i] = (u8)((src[i] & 0x55) << 1);
-
-    // Decode even bits
-    for(isize i = 0; i < count; i++)
-        dst[i] |= src[i + count] & 0x55;
-}
-
-void
-DiskEncoder::addClockBits(u8 *dst, isize count)
-{
-    for (isize i = 0; i < count; i++) {
-        dst[i] = addClockBits(dst[i], dst[i-1]);
-    }
-}
-
-u8
-DiskEncoder::addClockBits(u8 value, u8 previous)
-{
-    // Clear all previously set clock bits
-    value &= 0x55;
-
-    // Compute clock bits (clock bit values are inverted)
-    u8 lShifted = (u8)(value << 1);
-    u8 rShifted = (u8)(value >> 1 | previous << 7);
-    u8 cBitsInv = (u8)(lShifted | rShifted);
-
-    // Reverse the computed clock bits
-    u8 cBits = cBitsInv ^ 0xAA;
-
-    // Return original value with the clock bits added
-    return value | cBits;
-}
 
 void
 DiskEncoder::encodeAmigaTrack(MutableByteView track, TrackNr t, ByteView src)
@@ -166,14 +76,14 @@ DiskEncoder::encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, S
 
     // Track and sector information
     u8 info[4] = { 0xFF, (u8)t, (u8)s, (u8)(11 - s) };
-    encodeOddEven(&it[8], info, sizeof(info));
+    MFM::encodeOddEven(&it[8], info, sizeof(info));
 
     // Unused area
     for (isize i = 16; i < 48; i++)
         it[i] = 0xAA;
 
     // Data
-    encodeOddEven(&it[64], data.data(), bsize);
+    MFM::encodeOddEven(&it[64], data.data(), bsize);
 
     // Block checksum
     u8 bcheck[4] = { 0, 0, 0, 0 };
@@ -183,7 +93,7 @@ DiskEncoder::encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, S
         bcheck[2] ^= it[i+2];
         bcheck[3] ^= it[i+3];
     }
-    encodeOddEven(&it[48], bcheck, sizeof(bcheck));
+    MFM::encodeOddEven(&it[48], bcheck, sizeof(bcheck));
 
     // Data checksum
     u8 dcheck[4] = { 0, 0, 0, 0 };
@@ -193,11 +103,11 @@ DiskEncoder::encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, S
         dcheck[2] ^= it[i+2];
         dcheck[3] ^= it[i+3];
     }
-    encodeOddEven(&it[56], dcheck, sizeof(dcheck));
+    MFM::encodeOddEven(&it[56], dcheck, sizeof(dcheck));
 
     // Add clock bits
     for(isize i = 8; i < ssize + 1; i++) {
-        it[i] = addClockBits(it[i], it[i-1]);
+        it[i] = MFM::addClockBits(it[i], it[i-1]);
     }
 }
 
@@ -212,19 +122,6 @@ DiskEncoder::decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
 
     // Find all sectors
     auto offsets = seekSectors(track);
-
-    /*
-    for (isize i = 0; i < count; ++i) {
-        if (!offsets.contains(i)) {
-            warn("Sector %ld not found. Aborting.\n", i);
-            throw DeviceError(DeviceError::DEV_SEEK_ERR);
-        }
-    }
-    if (isize(offsets.size()) != count) {
-        warn("Found %zd sectors, expected %ld. Aborting.\n", offsets.size(), count);
-        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
-    }
-    */
 
     // Decode all sectors
     for (SectorNr s = 0; s < count; s++) {
@@ -253,13 +150,8 @@ DiskEncoder::decodeAmigaSector(ByteView track, isize offset, MutableByteView dst
     // Determine the source address
     auto *mfmData = &track[offset];
 
-    for (isize i = 0; i < 16; ++i) { printf("%0X ", mfmData[i]); } printf("\n");
-
-
     // Decode sector data
-    decodeOddEven(dst.data(), mfmData, bsize);
-
-    for (isize i = 0; i < 8; ++i) { printf("%0X ", dst.data()[i]); } printf("\n");
+    MFM::decodeOddEven(dst.data(), mfmData, bsize);
 }
 
 optional<isize>
@@ -282,7 +174,7 @@ DiskEncoder::trySeekSector(ByteView track, SectorNr s, isize offset)
         if (it[5] == 0x89) continue;
 
         // Decode track & sector info
-        u8 info[4]; decodeOddEven(info, &it[4], 4);
+        u8 info[4]; MFM::decodeOddEven(info, &it[4], 4);
 
         // Check if the sector number matches
         if (info[2] == s) return it.offset();
@@ -321,7 +213,7 @@ DiskEncoder::seekSectors(ByteView track)
         if (it[5] == 0x89) continue;
 
         // Decode track & sector info (info[2] = sector number)
-        u8 info[4]; decodeOddEven(info, &it[4], 4);
+        u8 info[4]; MFM::decodeOddEven(info, &it[4], 4);
 
         // Record the offset
         result[info[2]] = it.offset();
@@ -358,10 +250,9 @@ DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
     // In debug mode, also run the decoder
     if (ADF_DEBUG) {
 
-        auto adf = ADFFactory::make(disk);
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        adf->writeToFile(tmp);
+        ADFFactory::make(disk)->writeToFile(tmp);
     }
 }
 
@@ -379,12 +270,7 @@ void DiskEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
-    // Make the MFM stream scannable beyond the track end
-    // TODO: THINK ABOUT OF DECODING WITHOUT MODIFYING THE DISK
-    // const_cast<FloppyDisk &>(disk).repeatTracks();
-
     // Decode all tracks
-    // for (Track t = 0; t < tracks; t++) decodeTrack(adf, disk, t);
     for (TrackNr t = 0; t < tracks; t++)
         decodeAmigaTrack(disk.byteView(t), t, adf.byteView(t));
 }
@@ -522,8 +408,8 @@ DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, Secto
     u8 *p = disk.data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
-    encodeMFM(p, buf, sizeof(buf));
-    addClockBits(p, 2 * sizeof(buf));
+    MFM::encodeMFM(p, buf, sizeof(buf));
+    MFM::addClockBits(p, 2 * sizeof(buf));
 
     // Remove certain clock bits in IDAM block
     p[2*12+1] &= 0xDF;
@@ -567,7 +453,7 @@ DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, TrackNr t)
 
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        decodeMFM((u8 *)&chrn, &src[i], 4);
+        MFM::decodeMFM((u8 *)&chrn, &src[i], 4);
         if (IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
 
         if (chrn.r >= 1 && chrn.r <= numSectors) {
@@ -600,7 +486,7 @@ DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, TrackNr t)
 void
 DiskEncoder::decodeSector(IMGFile &img, u8 *dst, const u8 *src)
 {
-    decodeMFM(dst, src, 512);
+    MFM::decodeMFM(dst, src, 512);
 }
 
 
@@ -737,8 +623,8 @@ DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, TrackNr t, Sector
     u8 *p = disk.data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
-    encodeMFM(p, buf, sizeof(buf));
-    addClockBits(p, 2 * sizeof(buf));
+    MFM::encodeMFM(p, buf, sizeof(buf));
+    MFM::addClockBits(p, 2 * sizeof(buf));
 
     // Remove certain clock bits in IDAM block
     p[2*12+1] &= 0xDF;
@@ -782,7 +668,7 @@ DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, TrackNr t)
 
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        decodeMFM((u8 *)&chrn, &src[i], 4);
+        MFM::decodeMFM((u8 *)&chrn, &src[i], 4);
         if (IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
 
         if (chrn.r >= 1 && chrn.r <= numSectors) {
@@ -815,7 +701,7 @@ DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, TrackNr t)
 void
 DiskEncoder::decodeSector(STFile &img, u8 *dst, const u8 *src)
 {
-    decodeMFM(dst, src, 512);
+    MFM::decodeMFM(dst, src, 512);
 }
 
 

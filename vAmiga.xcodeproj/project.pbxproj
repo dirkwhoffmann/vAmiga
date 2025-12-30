@@ -379,6 +379,14 @@
 		50BF4B352EFD1A0800F1B9F2 /* TrackDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */; };
 		50BF4B382EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
 		50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
+		50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
+		50BF4B422F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
+		50BF4B452F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */; };
+		50BF4B462F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */; };
+		50BF4B492F03D72800F1B9F2 /* MFM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B482F03D72700F1B9F2 /* MFM.cpp */; };
+		50BF4B4A2F03D72800F1B9F2 /* MFM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B482F03D72700F1B9F2 /* MFM.cpp */; };
+		50BF4B4D2F03D73000F1B9F2 /* GCR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B4C2F03D73000F1B9F2 /* GCR.cpp */; };
+		50BF4B4E2F03D73000F1B9F2 /* GCR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B4C2F03D73000F1B9F2 /* GCR.cpp */; };
 		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -1174,6 +1182,15 @@
 		50BF4B3A2EFD5E7300F1B9F2 /* ByteView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ByteView.h; sourceTree = "<group>"; };
 		50BF4B3B2EFD618700F1B9F2 /* BitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BitView.h; sourceTree = "<group>"; };
 		50BF4B3C2F026C3E00F1B9F2 /* Streamable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Streamable.h; sourceTree = "<group>"; };
+		50BF4B3E2F03D66600F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50BF4B3F2F03D6AB00F1B9F2 /* AmigaEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaEncoder.h; sourceTree = "<group>"; };
+		50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaEncoder.cpp; sourceTree = "<group>"; };
+		50BF4B432F03D6EA00F1B9F2 /* IBMEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IBMEncoder.h; sourceTree = "<group>"; };
+		50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IBMEncoder.cpp; sourceTree = "<group>"; };
+		50BF4B472F03D72000F1B9F2 /* MFM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MFM.h; sourceTree = "<group>"; };
+		50BF4B482F03D72700F1B9F2 /* MFM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MFM.cpp; sourceTree = "<group>"; };
+		50BF4B4B2F03D72B00F1B9F2 /* GCR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCR.h; sourceTree = "<group>"; };
+		50BF4B4C2F03D73000F1B9F2 /* GCR.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GCR.cpp; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -2354,8 +2371,7 @@
 				50D52442227878E900F8959D /* FloppyDiskTypes.h */,
 				50F6EEB721F4F5C60091155D /* FloppyDisk.h */,
 				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,
-				509E76102EDD74E400608FA7 /* DiskEncoder.h */,
-				509E76112EDD74F700608FA7 /* DiskEncoder.cpp */,
+				50BF4B3D2F03D65600F1B9F2 /* Encoders */,
 			);
 			path = Drive;
 			sourceTree = "<group>";
@@ -2656,6 +2672,24 @@
 				50E98B4F275A124900AA0CB9 /* Socket.cpp */,
 			);
 			path = RemoteServers;
+			sourceTree = "<group>";
+		};
+		50BF4B3D2F03D65600F1B9F2 /* Encoders */ = {
+			isa = PBXGroup;
+			children = (
+				50BF4B3E2F03D66600F1B9F2 /* CMakeLists.txt */,
+				509E76102EDD74E400608FA7 /* DiskEncoder.h */,
+				509E76112EDD74F700608FA7 /* DiskEncoder.cpp */,
+				50BF4B3F2F03D6AB00F1B9F2 /* AmigaEncoder.h */,
+				50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */,
+				50BF4B432F03D6EA00F1B9F2 /* IBMEncoder.h */,
+				50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */,
+				50BF4B472F03D72000F1B9F2 /* MFM.h */,
+				50BF4B482F03D72700F1B9F2 /* MFM.cpp */,
+				50BF4B4B2F03D72B00F1B9F2 /* GCR.h */,
+				50BF4B4C2F03D73000F1B9F2 /* GCR.cpp */,
+			);
+			path = Encoders;
 			sourceTree = "<group>";
 		};
 		50C8C44C2607409B00F4E012 /* Layers */ = {
@@ -3005,6 +3039,7 @@
 				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,
 				505C010A2577A8C000F9E05C /* FSDescriptor.cpp in Sources */,
 				509E76032EDCCC1B00608FA7 /* STFactory.cpp in Sources */,
+				50BF4B492F03D72800F1B9F2 /* MFM.cpp in Sources */,
 				504CC8C12D5A819F00C2AC9A /* ADZFile.cpp in Sources */,
 				509D07772EDB993F00355638 /* PosixFileSystem.cpp in Sources */,
 				509E75FE2EDCCC0700608FA7 /* IMGFactory.cpp in Sources */,
@@ -3042,11 +3077,13 @@
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
+				50BF4B4D2F03D73000F1B9F2 /* GCR.cpp in Sources */,
 				502B303828469CF600673377 /* Beam.cpp in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
 				50AFEBBE278EF6CB00F422D5 /* SequencerInfo.cpp in Sources */,
+				50BF4B452F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */,
 				50DE553A2E874647001789C9 /* MyToolbarItems.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
@@ -3075,6 +3112,7 @@
 				5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */,
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
 				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
+				50BF4B422F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */,
 				50AE6EDD24D93DC4000AA367 /* CopperRegs.cpp in Sources */,
 				50BCB9A32EE2CD3D000C53CF /* Reportable.cpp in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
@@ -3367,6 +3405,7 @@
 				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
 				50985ABC2C418D190079CFC5 /* MediaFile.cpp in Sources */,
 				50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */,
+				50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */,
 				50FC04DD27DA1A1400C3E566 /* tables.c in Sources */,
 				50FC049F27DA197A00C3E566 /* SequencerBpl.cpp in Sources */,
 				9C47C0322D6215B100E57B41 /* lz4.c in Sources */,
@@ -3394,6 +3433,7 @@
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
+				50BF4B4E2F03D73000F1B9F2 /* GCR.cpp in Sources */,
 				50BF4B302EFBF7D000F1B9F2 /* HardDiskImage.cpp in Sources */,
 				503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */,
 				501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
@@ -3408,6 +3448,7 @@
 				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,
 				5020B38F295336E5009732AC /* Host.cpp in Sources */,
 				505A13402C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
+				50BF4B4A2F03D72800F1B9F2 /* MFM.cpp in Sources */,
 				50FC04CB27DA19E900C3E566 /* FloppyDiskImage.cpp in Sources */,
 				50FC04B627DA19A900C3E566 /* RamExpansion.cpp in Sources */,
 				50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */,
@@ -3491,6 +3532,7 @@
 				50FC048427DA190400C3E566 /* Thread.cpp in Sources */,
 				50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */,
 				509D07742EDB920100355638 /* FileSystemLayer3.cpp in Sources */,
+				50BF4B462F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */,
 				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
