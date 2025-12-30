@@ -22,7 +22,7 @@ class AnyFile : public Hashable, public Dumpable, public Loggable {
 
 public:
     
-    // Physical location of this file
+    // The location of this file
     fs::path path;
 
     // The raw data of this file
@@ -35,7 +35,7 @@ public:
     
 public:
 
-    virtual ~AnyFile();
+    virtual ~AnyFile() = default;
 
     void init(isize len);
     void init(const u8 *buf, isize len);
@@ -76,8 +76,8 @@ public:
 
     virtual isize getSize() const { return data.size; }
     virtual u8 *getData() const { return data.ptr; }
-    virtual u64 fnv64() const { return data.fnv64(); }
-    virtual u32 crc32() const { return data.crc32(); }
+    // virtual u64 fnv64() const { return data.fnv64(); }
+    // virtual u32 crc32() const { return data.crc32(); }
 
     string getSizeAsString() const;
 

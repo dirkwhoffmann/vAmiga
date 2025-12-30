@@ -175,7 +175,7 @@ IBMEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
         for (usize j = 0; j < sizeof(data); j++) data[j] = *(it++);
 
         // Decode the block
-        MFM::decodeMFM(dst.data(), data, 512);
+        MFM::decodeMFM(dst.data(), data, bsize);
 
         return;
     }

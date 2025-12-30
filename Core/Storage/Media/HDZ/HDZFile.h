@@ -40,10 +40,23 @@ public:
 
 
     //
+    // Methods from Hashable
+    //
+
+public:
+
+    u64 hash(HashAlgorithm algorithm) const override {
+        return hdf.hash(algorithm);
+    }
+
+
+    //
     // Methods from AnyFile
     //
     
-    u64 fnv64() const override { return hdf.fnv64(); }
+
+public:
+
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
     void finalizeRead() override;
@@ -52,6 +65,8 @@ public:
     //
     // Methods from DiskImage
     //
+
+public:
 
     isize numCyls() const override { return hdf.numCyls(); }
     isize numHeads() const override { return hdf.numHeads(); }

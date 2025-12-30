@@ -67,11 +67,6 @@ AnyFile::init(const u8 *buf, isize len)
     readFromBuffer(buf, len);
 }
 
-AnyFile::~AnyFile()
-{
-
-}
-
 string
 AnyFile::getSizeAsString() const
 {
