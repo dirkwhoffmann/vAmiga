@@ -84,7 +84,7 @@ Snapshot::Snapshot(Amiga &amiga, Compressor compressor) : Snapshot(amiga)
 }
 
 void
-Snapshot::finalizeRead()
+Snapshot::didLoad()
 {
     if (FORCE_SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
     if (FORCE_SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);

@@ -21,6 +21,7 @@
 #include "Script.h"
 #include "utl/io.h"
 #include "utl/support.h"
+#include <fstream>
 
 namespace vamiga {
 
@@ -69,7 +70,7 @@ AnyFile::init(const u8 *buf, isize len)
 
     // Copy data
     std::memcpy(data.ptr, buf, data.size);
-    finalizeRead();
+    didLoad();
 }
 
 void
@@ -80,6 +81,36 @@ AnyFile::copy(u8 *buf, isize offset, isize len) const
     assert(len >= 0 && offset + len <= data.size);
 
     std::memcpy(buf + offset, data.ptr, len);
+}
+
+ByteView
+AnyFile::view(isize offset) const
+{
+    return view(offset, data.size - offset);
+}
+
+ByteView
+AnyFile::view(isize offset, isize len) const
+{
+    assert(offset >= 0 && offset < data.size);
+    assert(len >= 0 && offset + len <= data.size);
+
+    return ByteView(data.ptr + offset, len);
+}
+
+MutableByteView
+AnyFile::view(isize offset)
+{
+    return view(offset, data.size - offset);
+}
+
+MutableByteView
+AnyFile::view(isize offset, isize len)
+{
+    assert(offset >= 0 && offset < data.size);
+    assert(len >= 0 && offset + len <= data.size);
+
+    return MutableByteView(data.ptr + offset, len);
 }
 
 void

@@ -54,7 +54,7 @@ EADFFile::numSectors() const
 }
 
 void
-EADFFile::finalizeRead()
+EADFFile::didLoad()
 {
     isize numTracks = storedTracks();
     

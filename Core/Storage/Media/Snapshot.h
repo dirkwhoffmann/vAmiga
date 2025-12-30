@@ -75,7 +75,7 @@ public:
     //
     
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    void finalizeRead() override;
+    void didLoad() override;
     
     
     //

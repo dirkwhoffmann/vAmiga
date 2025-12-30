@@ -43,7 +43,7 @@ ADZFile::isCompatible(const fs::path &path)
 }
 
 void
-ADZFile::finalizeRead()
+ADZFile::didLoad()
 {
     debug(ADF_DEBUG, "Decompressing %ld bytes...\n", data.size);
     

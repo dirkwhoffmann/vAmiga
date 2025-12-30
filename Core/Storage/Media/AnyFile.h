@@ -11,13 +11,13 @@
 
 #include "utl/abilities.h"
 #include "utl/storage.h"
-#include <sstream>
-#include <fstream>
+#include <iostream>
 
 namespace vamiga {
 
 using namespace utl;
 
+// Base class for all file-backed binary formats
 class AnyFile : public Hashable, public Dumpable, public Loggable {
 
 public:
@@ -67,14 +67,29 @@ public:
 
 
     //
-    // Accessing
+    // Querying meta information
     //
-    
+
 public:
 
     isize getSize() const { return data.size; }
     u8* getData() const { return data.ptr; }
     bool empty() const { return data.empty(); }
+
+    // Returns meta-information about the file
+    virtual std::vector<string> describe() const { return {}; }
+
+
+    //
+    // Accessing data
+    //
+
+public:
+
+    ByteView view(isize offset = 0) const;
+    ByteView view(isize offset, isize len) const;
+    MutableByteView view(isize offset = 0);
+    MutableByteView view(isize offset, isize len);
 
     // Copies the file contents into a buffer
     virtual void copy(u8 *dst, isize offset, isize len) const;
@@ -82,27 +97,29 @@ public:
 
 
     //
-    // Serializing
+    // Importing
+    //
+
+    // Returns true if path points to a compatible file
+    virtual bool isCompatiblePath(const fs::path &path) const { return true; }
+
+
+    //
+    // Exporting
     //
     
 public:
 
-    virtual bool isCompatiblePath(const fs::path &path) const = 0;
-
     isize writeToStream(std::ostream &stream) const;
     isize writeToFile(const fs::path &path) const;
-    // isize writeToBuffer(u8 *buf) const;
-    // isize writeToBuffer(Buffer<u8> &buffer) const;
 
     isize writeToStream(std::ostream &stream, isize offset, isize len) const;
     isize writeToFile(const fs::path &path, isize offset, isize len) const;
-    // isize writeToBuffer(u8 *buf, isize offset, isize len) const;
-    // isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const;
 
 private:
     
-    // Delegation methods
-    virtual void finalizeRead() { };
+    // Called at the end of init()
+    virtual void didLoad() {};
 };
 
 }

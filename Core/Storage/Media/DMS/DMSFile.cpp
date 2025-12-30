@@ -32,7 +32,7 @@ DMSFile::isCompatible(const fs::path &path)
 }
 
 void
-DMSFile::finalizeRead()
+DMSFile::didLoad()
 {
     u8* adfData = nullptr;
     size_t adfSize = 0;

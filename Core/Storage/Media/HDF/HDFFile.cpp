@@ -27,7 +27,7 @@ HDFFile::isCompatible(const fs::path &path)
 }
 
 void
-HDFFile::finalizeRead()
+HDFFile::didLoad()
 {        
     // Retrieve geometry and partition information
     geometry = getGeometryDescriptor();

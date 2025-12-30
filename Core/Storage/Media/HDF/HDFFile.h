@@ -36,7 +36,7 @@ public:
     static bool isOversized(isize size) { return size > 504_MB; }
 
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    void finalizeRead() override;
+    void didLoad() override;
     
     
     //

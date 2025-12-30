@@ -46,7 +46,7 @@ EXEFile::isCompatible(const u8 *buf, isize len)
 */
 
 void
-EXEFile::finalizeRead()
+EXEFile::didLoad()
 {
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;

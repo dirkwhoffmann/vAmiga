@@ -82,7 +82,7 @@ ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 }
 
 void
-ADFFile::finalizeRead()
+ADFFile::didLoad()
 {
     // Add some empty cylinders if the file contains less than 80
     if (data.size < ADFSIZE_35_DD) data.resize(ADFSIZE_35_DD, 0);

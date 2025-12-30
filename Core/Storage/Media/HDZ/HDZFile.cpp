@@ -43,7 +43,7 @@ HDZFile::init(const class HDFFile &hdf)
 }
 
 void
-HDZFile::finalizeRead()
+HDZFile::didLoad()
 {
     debug(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
         
