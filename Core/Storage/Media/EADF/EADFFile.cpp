@@ -50,7 +50,7 @@ EADFFile::numHeads() const
 isize
 EADFFile::numSectors() const
 {
-    return adf ? adf.numSectors() : 0;
+    return adf.empty() ? 0 : adf.numSectors();
 }
 
 void
@@ -126,7 +126,7 @@ EADFFile::finalizeRead()
 FSFormat
 EADFFile::getDos() const
 {
-    return adf ? adf.getDos() : FSFormat::NODOS;
+    return adf.empty() ? FSFormat::NODOS : adf.getDos();
 }
 
 Diameter

@@ -22,7 +22,7 @@ class AnyFile : public Hashable, public Dumpable, public Loggable {
 
 public:
     
-    // The location of this file
+    // The location of this file (may be empty)
     fs::path path;
 
     // The raw data of this file
@@ -42,8 +42,6 @@ public:
     void init(const Buffer<u8> &buffer);
     void init(const string &str);
     void init(const fs::path &path);
-
-    explicit operator bool() const { return data.ptr != nullptr; }
 
 
     //
@@ -74,19 +72,13 @@ public:
     
 public:
 
-    virtual isize getSize() const { return data.size; }
-    virtual u8 *getData() const { return data.ptr; }
-
-    
-    //
-    // Flashing
-    //
-
-public:
+    isize getSize() const { return data.size; }
+    u8* getData() const { return data.ptr; }
+    bool empty() const { return data.empty(); }
 
     // Copies the file contents into a buffer
-    virtual void flash(u8 *buf, isize offset, isize len) const;
-    virtual void flash(u8 *buf, isize offset = 0) const;
+    virtual void copy(u8 *dst, isize offset, isize len) const;
+    virtual void copy(u8 *dst, isize offset = 0) const;
 
 
     //
@@ -96,19 +88,16 @@ public:
 public:
 
     virtual bool isCompatiblePath(const fs::path &path) const = 0;
-    
-    isize readFromBuffer(const u8 *buf, isize len);
-    isize readFromBuffer(const Buffer<u8> &buffer);
 
     isize writeToStream(std::ostream &stream) const;
     isize writeToFile(const fs::path &path) const;
-    isize writeToBuffer(u8 *buf) const;
-    isize writeToBuffer(Buffer<u8> &buffer) const;
+    // isize writeToBuffer(u8 *buf) const;
+    // isize writeToBuffer(Buffer<u8> &buffer) const;
 
     isize writeToStream(std::ostream &stream, isize offset, isize len) const;
     isize writeToFile(const fs::path &path, isize offset, isize len) const;
-    isize writeToBuffer(u8 *buf, isize offset, isize len) const;
-    isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const;
+    // isize writeToBuffer(u8 *buf, isize offset, isize len) const;
+    // isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const;
 
 private:
     

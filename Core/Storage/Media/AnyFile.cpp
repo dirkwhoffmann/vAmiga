@@ -61,35 +61,6 @@ AnyFile::init(const fs::path &path)
 
 void
 AnyFile::init(const u8 *buf, isize len)
-{    
-    assert(buf);
-    // if (!isCompatibleBuffer(buf, len)) throw IOError(IOError::FILE_TYPE_MISMATCH);
-    readFromBuffer(buf, len);
-}
-
-void
-AnyFile::flash(u8 *buf, isize offset, isize len) const
-{
-    assert(buf);
-    std::memcpy(buf + offset, data.ptr, len);
-}
-
-void
-AnyFile::flash(u8 *buf, isize offset) const
-{
-    flash (buf, offset, data.size);
-}
-
-/*
-bool
-AnyFile::isCompatibleBuffer(const Buffer<u8> &buffer)
-{
-    return isCompatibleBuffer(buffer.ptr, buffer.size);
-}
-*/
-
-isize
-AnyFile::readFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
 
@@ -99,14 +70,22 @@ AnyFile::readFromBuffer(const u8 *buf, isize len)
     // Copy data
     std::memcpy(data.ptr, buf, data.size);
     finalizeRead();
-    
-    return data.size;
 }
 
-isize
-AnyFile::readFromBuffer(const Buffer<u8> &buffer)
+void
+AnyFile::copy(u8 *buf, isize offset, isize len) const
 {
-    return readFromBuffer(buffer.ptr, buffer.size);
+    assert(buf);
+    assert(offset >= 0 && offset < data.size);
+    assert(len >= 0 && offset + len <= data.size);
+
+    std::memcpy(buf + offset, data.ptr, len);
+}
+
+void
+AnyFile::copy(u8 *buf, isize offset) const
+{
+    copy (buf, offset, data.size);
 }
 
 isize
@@ -138,6 +117,7 @@ AnyFile::writeToFile(const fs::path &path, isize offset, isize len) const
     return result;
 }
 
+/*
 isize
 AnyFile::writeToBuffer(u8 *buf, isize offset, isize len) const
 {
@@ -156,6 +136,7 @@ AnyFile::writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const
     buffer.alloc(len);
     return writeToBuffer(buffer.ptr, offset, len);
 }
+*/
 
 isize
 AnyFile::writeToStream(std::ostream &stream) const
@@ -169,6 +150,7 @@ AnyFile::writeToFile(const fs::path &path) const
     return writeToFile(path, 0, data.size);
 }
 
+/*
 isize
 AnyFile::writeToBuffer(u8 *buf) const
 {
@@ -180,5 +162,6 @@ AnyFile::writeToBuffer(Buffer<u8> &buffer) const
 {
     return writeToBuffer(buffer, 0, data.size);
 }
+*/
 
 }

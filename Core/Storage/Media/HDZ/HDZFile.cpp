@@ -72,8 +72,8 @@ HDZFile::writePartitionToFile(const fs::path &path, isize nr) const
     auto size = hdf.partitionSize(nr);
 
     // Write the partition into a buffer
-    Buffer<u8> partition;
-    hdf.writeToBuffer(partition, offset, size);
+    Buffer<u8> partition(hdf.data.ptr + offset, size);
+    // hdf.writeToBuffer(partition, offset, size);
 
     // Compress the partition
     partition.gzip();

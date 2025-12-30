@@ -45,7 +45,7 @@ DMSFile::finalizeRead()
     }
     
     if (adfData) free(adfData);
-    if (!adf) throw MediaError(MediaError::DMS_CANT_CREATE);
+    if (adf.empty()) throw MediaError(MediaError::DMS_CANT_CREATE);
 }
 
 }

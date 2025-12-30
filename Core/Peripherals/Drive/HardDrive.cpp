@@ -208,7 +208,7 @@ HardDrive::init(const HDFFile &hdf)
     }
     
     // Copy over all blocks
-    hdf.flash(data.ptr, 0, numBytes);
+    hdf.copy(data.ptr, 0, numBytes);
         
     // Print some debug information
     debug(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());

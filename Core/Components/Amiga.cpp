@@ -1229,7 +1229,7 @@ Amiga::loadSnapshot(const MediaFile &file)
         snapshot.uncompress();
 
         // Restore the saved state (may throw)
-        load(snapshot.getData());
+        load(snapshot.getData() + sizeof(SnapshotHeader));
 
         // Inform the GUI
         msgQueue.put(Msg::SNAPSHOT_RESTORED);
@@ -1253,7 +1253,7 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
         snap.uncompress();
 
         // Restore the saved state (may throw)
-        load(snap.getData());
+        load(snap.getData()+ sizeof(SnapshotHeader));
 
         // Inform the GUI
         msgQueue.put(Msg::SNAPSHOT_RESTORED);

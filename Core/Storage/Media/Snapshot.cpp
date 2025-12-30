@@ -74,7 +74,7 @@ Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
     }
     {   utl::StopWatch(SNP_DEBUG, "Saving state...");
         
-        amiga.save(getData());
+        amiga.save(getData() + sizeof(SnapshotHeader));
     }
 }
 

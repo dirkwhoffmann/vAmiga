@@ -2133,7 +2133,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (u8 *)data
 {
-    return [self file]->getData();
+    return [self file]->getData()+ sizeof(SnapshotHeader);
 }
 
 - (NSImage *)previewImage

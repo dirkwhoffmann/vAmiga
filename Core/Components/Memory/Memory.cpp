@@ -685,7 +685,7 @@ Memory::loadRom(RomFile &file)
     allocRom((i32)file.data.size);
 
     // Load Rom
-    file.flash(rom);
+    file.copy(rom);
 
     // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
     hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
@@ -716,7 +716,7 @@ Memory::loadExt(RomFile &file)
     allocExt((i32)file.data.size);
 
     // Load Rom
-    file.flash(ext);
+    file.copy(ext);
 }
 
 void
