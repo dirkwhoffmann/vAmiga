@@ -13,10 +13,12 @@
 #include "MFM.h"
 #include "utl/support/Bits.h"
 
-namespace vamiga::IBMEncoder {
+namespace vamiga {
+
+namespace Encoder { IBMEncoder ibm; }
 
 void
-encodeTrack(MutableByteView track, TrackNr t, ByteView src)
+IBMEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize ssize = 1300;                      // MFM sector size in bytes
@@ -50,7 +52,7 @@ encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 }
 
 void
-encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
+IBMEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
 {
     const isize bsize = 512;   // Block size in bytes
 
@@ -121,7 +123,7 @@ encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteVie
 }
 
 void
-decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
+IBMEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
@@ -145,7 +147,7 @@ decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
 }
 
 void
-decodeSector(ByteView track, isize offset, MutableByteView dst)
+IBMEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
 {
     const isize bsize = 512;
     assert(dst.size() == bsize);
@@ -182,7 +184,7 @@ decodeSector(ByteView track, isize offset, MutableByteView dst)
 }
 
 optional<isize>
-trySeekSector(ByteView track, SectorNr s, isize offset)
+IBMEncoder::trySeekSector(ByteView track, SectorNr s, isize offset)
 {
     constexpr isize syncMarkLen = 8;
 
@@ -210,7 +212,7 @@ trySeekSector(ByteView track, SectorNr s, isize offset)
 }
 
 isize
-seekSector(ByteView track, SectorNr s, isize offset)
+IBMEncoder::seekSector(ByteView track, SectorNr s, isize offset)
 {
     if (auto result = trySeekSector(track, s, offset))
         return *result;
@@ -220,7 +222,7 @@ seekSector(ByteView track, SectorNr s, isize offset)
 }
 
 std::unordered_map<isize, isize>
-seekSectors(ByteView track)
+IBMEncoder::seekSectors(ByteView track)
 {
     constexpr isize numSectors  = 9;
     constexpr isize syncMarkLen = 8;

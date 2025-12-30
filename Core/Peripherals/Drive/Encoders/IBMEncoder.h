@@ -11,24 +11,25 @@
 
 #include "DiskEncoder.h"
 
-namespace vamiga::IBMEncoder {
+namespace vamiga {
 
-void encodeTrack(MutableByteView track, TrackNr t, ByteView src);
-void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
-
-void decodeTrack(ByteView track, TrackNr t, MutableByteView dst);
-void decodeSector(ByteView track, isize offset, MutableByteView dst);
-
-optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
-isize seekSector(ByteView track, SectorNr s, isize offset = 0);
-
-// Computes a map from sector numbers to byte offsets
-std::unordered_map<isize, isize> seekSectors(ByteView track);
-
-/*
 class IBMEncoder : public DiskEncoder {
 
+public:
+
+    void encodeTrack(MutableByteView track, TrackNr t, ByteView src) override;
+    void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
+
+    void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
+    void decodeSector(ByteView track, isize offset, MutableByteView dst);
+
+    optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
+    isize seekSector(ByteView track, SectorNr s, isize offset = 0);
+
+    // Computes a map from sector numbers to byte offsets
+    std::unordered_map<isize, isize> seekSectors(ByteView track);
 };
-*/
+
+namespace Encoder { extern IBMEncoder ibm; }
 
 }

@@ -13,25 +13,12 @@
 #include "MFM.h"
 #include "utl/support/Bits.h"
 
-/*
- namespace vamiga {
+namespace vamiga {
+
+namespace Encoder { AmigaEncoder amiga; }
 
 void
-AmigaEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src) {
-    ::vamiga::AmigaEncoder::encodeTrack(track, t, src);
-}
-void
-AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst) {
-    ::vamiga::AmigaEncoder::decodeTrack(track, t, dst);
-}
-
-}
-*/
-
-namespace vamiga::AmigaEncoder {
-
-void
-encodeTrack(MutableByteView track, TrackNr t, ByteView src)
+AmigaEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize ssize = 1088;                      // MFM sector size in bytes
@@ -52,7 +39,7 @@ encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 }
 
 void
-encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
+AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
 {
     const isize bsize = 512;   // Block size in bytes
     const isize ssize = 1088;  // MFM sector size in bytes
@@ -123,7 +110,7 @@ encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteVie
 }
 
 void
-decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
+AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
@@ -146,7 +133,7 @@ decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
 }
 
 void
-decodeSector(ByteView track, isize offset, MutableByteView dst)
+AmigaEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
 {
     const isize bsize = 512;
     assert(dst.size() == bsize);
@@ -164,7 +151,7 @@ decodeSector(ByteView track, isize offset, MutableByteView dst)
 }
 
 optional<isize>
-trySeekSector(ByteView track, SectorNr s, isize offset)
+AmigaEncoder::trySeekSector(ByteView track, SectorNr s, isize offset)
 {
     constexpr isize syncMarkLen = 4;
 
@@ -193,7 +180,7 @@ trySeekSector(ByteView track, SectorNr s, isize offset)
 }
 
 isize
-seekSector(ByteView track, SectorNr s, isize offset)
+AmigaEncoder::seekSector(ByteView track, SectorNr s, isize offset)
 {
     if (auto result = trySeekSector(track, s, offset))
         return *result;
@@ -202,7 +189,7 @@ seekSector(ByteView track, SectorNr s, isize offset)
 }
 
 std::unordered_map<isize, isize>
-seekSectors(ByteView track)
+AmigaEncoder::seekSectors(ByteView track)
 {
     constexpr isize syncMarkLen = 4;
     std::unordered_map<isize, isize> result;

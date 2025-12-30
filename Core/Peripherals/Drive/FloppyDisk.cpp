@@ -112,13 +112,13 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
 
     auto [t,s]  = ts(nr);
     auto tdata  = track[t].byteView();
-    auto offset = AmigaEncoder::trySeekSector(tdata, s);
+    auto offset = Encoder::amiga.trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    AmigaEncoder::decodeSector(tdata, *offset, std::span<u8>(dst, 512));
+    Encoder::amiga.decodeSector(tdata, *offset, std::span<u8>(dst, 512));
 }
 
 void
@@ -128,13 +128,13 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
 
     auto [t,s]  = ts(nr);
     auto tdata  = track[t].byteView();
-    auto offset = AmigaEncoder::trySeekSector(tdata, s);
+    auto offset = Encoder::amiga.trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    AmigaEncoder::encodeSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
+    Encoder::amiga.encodeSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
 }
 
 void
@@ -348,7 +348,7 @@ FloppyDisk::encode(const ADFFile &adf)
 
     // Encode all tracks
     for (TrackNr t = 0; t < tracks; ++t)
-        AmigaEncoder::encodeTrack(byteView(t), t, adf.byteView(t));
+        Encoder::amiga.encodeTrack(byteView(t), t, adf.byteView(t));
 
     // In debug mode, also run the decoder
     if (ADF_DEBUG) {
@@ -374,7 +374,7 @@ FloppyDisk::decode(ADFFile &adf) const
 
     // Decode all tracks
     for (TrackNr t = 0; t < tracks; ++t)
-        AmigaEncoder::decodeTrack(byteView(t), t, adf.byteView(t));
+        Encoder::amiga.decodeTrack(byteView(t), t, adf.byteView(t));
 }
 
 void
@@ -395,7 +395,7 @@ FloppyDisk::encode(const class IMGFile &img)
 
     // Encode all tracks
     for (TrackNr t = 0; t < tracks; ++t)
-        IBMEncoder::encodeTrack(byteView(t), t, img.byteView(t));
+        Encoder::ibm.encodeTrack(byteView(t), t, img.byteView(t));
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
@@ -421,7 +421,7 @@ FloppyDisk::decode(class IMGFile &img) const
 
     // Decode all tracks
     for (TrackNr t = 0; t < tracks; ++t)
-        IBMEncoder::decodeTrack(byteView(t), t, img.byteView(t));
+        Encoder::ibm.decodeTrack(byteView(t), t, img.byteView(t));
 }
 
 void
@@ -442,7 +442,7 @@ FloppyDisk::encode(const class STFile &img)
 
     // Encode all tracks
     for (TrackNr t = 0; t < tracks; ++t)
-        IBMEncoder::encodeTrack(byteView(t), t, img.byteView(t));
+        Encoder::ibm.encodeTrack(byteView(t), t, img.byteView(t));
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
@@ -468,7 +468,7 @@ FloppyDisk::decode(class STFile &img) const
 
     // Decode all tracks
     for (TrackNr t = 0; t < tracks; ++t)
-        IBMEncoder::decodeTrack(byteView(t), t, img.byteView(t));
+        Encoder::ibm.decodeTrack(byteView(t), t, img.byteView(t));
 }
 
 void

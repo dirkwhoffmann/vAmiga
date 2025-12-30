@@ -13,34 +13,23 @@
 
 namespace vamiga {
 
-namespace AmigaEncoder {
-
-void encodeTrack(MutableByteView track, TrackNr t, ByteView src);
-void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
-
-void decodeTrack(ByteView track, TrackNr t, MutableByteView dst);
-void decodeSector(ByteView track, isize offset, MutableByteView dst);
-
-optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
-isize seekSector(ByteView track, SectorNr s, isize offset = 0);
-
-// Computes a map from sector numbers to byte offsets
-std::unordered_map<isize, isize> seekSectors(ByteView track);
-
-}
-
-/*
 class AmigaEncoder : public DiskEncoder {
 
-    ~AmigaEncoder() = default;
+public:
 
-    void encodeTrack(MutableByteView track, TrackNr t, ByteView src) override {
-        ::vamiga::AmigaEncoder::encodeTrack(track, t, src);
-    }
-    void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override {
-        ::vamiga::AmigaEncoder::decodeTrack(track, t, dst);
-    }
+    void encodeTrack(MutableByteView track, TrackNr t, ByteView src);
+    void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
+
+    void decodeTrack(ByteView track, TrackNr t, MutableByteView dst);
+    void decodeSector(ByteView track, isize offset, MutableByteView dst);
+
+    optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
+    isize seekSector(ByteView track, SectorNr s, isize offset = 0);
+
+    // Computes a map from sector numbers to byte offsets
+    std::unordered_map<isize, isize> seekSectors(ByteView track);
 };
-*/
+
+namespace Encoder { extern AmigaEncoder amiga; }
 
 }
