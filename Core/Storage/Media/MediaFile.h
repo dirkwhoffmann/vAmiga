@@ -118,12 +118,12 @@ public:
 
 public:
 
-    // virtual isize readFromBuffer(const u8 *buf, isize len) { return file->readFromBuffer(buf, len); }
-
-    // virtual isize writeToStream(std::ostream &stream) const { return file->writeToStream(stream); }
-    virtual isize writeToFile(const fs::path &path) const { return file->writeToFile(path); }
-    virtual isize writePartitionToFile(const fs::path &path, isize partition) const { return file->writePartitionToFile(path, partition); }
-    // virtual isize writeToBuffer(u8 *buf) const { return file->writeToBuffer(buf); }
+    virtual isize writeToFile(const fs::path &path) const {
+        return file->writeToFile(path);
+    }
+    virtual isize writeToFile(const fs::path &path, isize offset, isize length) const {
+        return file->writeToFile(path, offset, length);
+    }
 };
 
 }

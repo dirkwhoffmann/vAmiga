@@ -1793,9 +1793,12 @@ NSString *EventSlotName(EventSlot slot)
     catch(Error &err) { [ex save:err]; }
 }
 
-- (void)writeToFile:(NSString *)path partition:(NSInteger)part exception:(ExceptionWrapper *)ex
+- (void)writeToFile:(NSString *)path
+             offset:(NSInteger)offset
+             length:(NSInteger)length
+          exception:(ExceptionWrapper *)ex
 {
-    try { [self file]->writePartitionToFile(string([path fileSystemRepresentation]), part); }
+    try { [self file]->writeToFile(string([path fileSystemRepresentation], offset, length)); }
     catch(Error &err) { [ex save:err]; }
 }
 

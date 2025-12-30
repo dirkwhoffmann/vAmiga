@@ -169,12 +169,6 @@ AnyFile::writeToFile(const fs::path &path) const
     return writeToFile(path, 0, data.size);
 }
 
-isize 
-AnyFile::writePartitionToFile(const fs::path &path, isize partition) const
-{
-    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
-}
-
 isize
 AnyFile::writeToBuffer(u8 *buf) const
 {

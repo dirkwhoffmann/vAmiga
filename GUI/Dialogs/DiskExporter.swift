@@ -411,8 +411,13 @@ class DiskExporter: DialogController {
 
                 if let nr = partition {
 
+                    let lower = hdn?.partitionTraits(nr).lowerCyl ?? 0
+                    let upper = hdn?.partitionTraits(nr).upperCyl ?? 0
+
                     debug(.media, "Exporting partiton \(nr) to \(url)")
-                    try hdf?.writeToFile(url: url, partition: nr)
+                    try hdf?.writeToFile(url: url,
+                                         offset: lower * 512,
+                                         length: (upper - lower + 1) * 512)
 
                 } else {
 
@@ -424,9 +429,13 @@ class DiskExporter: DialogController {
 
                 if let nr = partition {
 
-                    debug(.media, "Exporting partiton \(nr) to \(url)")
-                    try hdz?.writeToFile(url: url, partition: nr)
+                    let lower = hdn?.partitionTraits(nr).lowerCyl ?? 0
+                    let upper = hdn?.partitionTraits(nr).upperCyl ?? 0
 
+                    debug(.media, "Exporting partiton \(nr) to \(url)")
+                    try hdf?.writeToFile(url: url,
+                                         offset: lower * 512,
+                                         length: (upper - lower + 1) * 512)
                 } else {
 
                     debug(.media, "Exporting entire hard disk to \(url)")

@@ -909,8 +909,13 @@ NSString *EventSlotName(EventSlot slot);
 
 @property (readonly) u8 *data;
 
-- (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-- (void)writeToFile:(NSString *)path partition:(NSInteger)part exception:(ExceptionWrapper *)ex;
+- (void)writeToFile:(NSString *)path
+          exception:(ExceptionWrapper *)ex;
+
+- (void)writeToFile:(NSString *)path
+             offset:(NSInteger)offset
+             length:(NSInteger)length
+          exception:(ExceptionWrapper *)ex;
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;

@@ -126,10 +126,10 @@ extension MediaFileProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
 
-    func writeToFile(url: URL, partition: Int) throws {
+    func writeToFile(url: URL, offset: Int, length: Int) throws {
 
         let exception = ExceptionWrapper()
-        write(toFile: url.path, partition: partition, exception: exception)
+        write(toFile: url.path, offset: offset, length: length, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
     }
 

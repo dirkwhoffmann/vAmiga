@@ -99,17 +99,16 @@ public:
     
     isize readFromBuffer(const u8 *buf, isize len);
     isize readFromBuffer(const Buffer<u8> &buffer);
-    
+
+    isize writeToStream(std::ostream &stream) const;
+    isize writeToFile(const fs::path &path) const;
+    isize writeToBuffer(u8 *buf) const;
+    isize writeToBuffer(Buffer<u8> &buffer) const;
+
     isize writeToStream(std::ostream &stream, isize offset, isize len) const;
     isize writeToFile(const fs::path &path, isize offset, isize len) const;
     isize writeToBuffer(u8 *buf, isize offset, isize len) const;
     isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const;
-
-    isize writeToStream(std::ostream &stream) const;
-    isize writeToFile(const fs::path &path) const;
-    isize writePartitionToFile(const fs::path &path, isize partition) const;
-    isize writeToBuffer(u8 *buf) const;
-    isize writeToBuffer(Buffer<u8> &buffer) const;
 
 private:
     
