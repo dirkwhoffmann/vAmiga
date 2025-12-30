@@ -10,9 +10,6 @@
 #include "config.h"
 #include "IMGEncoder.h"
 #include "IMGFactory.h"
-#include "DiskEncoder.h"
-#include "DeviceError.h"
-#include "MFM.h"
 
 namespace vamiga {
 

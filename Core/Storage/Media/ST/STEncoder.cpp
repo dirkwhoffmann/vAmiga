@@ -9,9 +9,6 @@
 
 #include "config.h"
 #include "STEncoder.h"
-#include "STFactory.h"
-#include "DiskEncoder.h"
-#include "IMGEncoder.h"
 #include "IMGFactory.h"
 
 namespace vamiga {
