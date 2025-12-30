@@ -63,17 +63,9 @@ void
 AnyFile::init(const u8 *buf, isize len)
 {    
     assert(buf);
-    if (!isCompatibleBuffer(buf, len)) throw IOError(IOError::FILE_TYPE_MISMATCH);
+    // if (!isCompatibleBuffer(buf, len)) throw IOError(IOError::FILE_TYPE_MISMATCH);
     readFromBuffer(buf, len);
 }
-
-/*
-string
-AnyFile::getSizeAsString() const
-{
-    return utl::byteCountAsString(getSize());
-}
-*/
 
 void
 AnyFile::flash(u8 *buf, isize offset, isize len) const
@@ -88,11 +80,13 @@ AnyFile::flash(u8 *buf, isize offset) const
     flash (buf, offset, data.size);
 }
 
+/*
 bool
 AnyFile::isCompatibleBuffer(const Buffer<u8> &buffer)
 {
     return isCompatibleBuffer(buffer.ptr, buffer.size);
 }
+*/
 
 isize
 AnyFile::readFromBuffer(const u8 *buf, isize len)

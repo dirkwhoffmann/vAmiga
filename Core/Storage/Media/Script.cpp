@@ -23,16 +23,4 @@ Script::isCompatible(const fs::path &path)
     return suffix == ".RETROSH";
 }
 
-bool
-Script::isCompatible(const u8 *buf, isize len)
-{
-    return true;
-}
-
-bool
-Script::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
-}
-
 }

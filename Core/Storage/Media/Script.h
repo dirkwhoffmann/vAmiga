@@ -20,9 +20,7 @@ class Script : public AnyFile {
 public:
     
     static bool isCompatible(const fs::path &path);
-    static bool isCompatible(const u8 *buf, isize len);
-    static bool isCompatible(const Buffer<u8> &buffer);
-    
+
     
     //
     // Initializing
@@ -41,7 +39,6 @@ public:
 public:
     
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
 };
 
 }

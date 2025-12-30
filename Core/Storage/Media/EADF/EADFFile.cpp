@@ -35,22 +35,6 @@ EADFFile::isCompatible(const fs::path &path)
     return false;
 }
 
-bool
-EADFFile::isCompatible(const u8 *buf, isize len)
-{
-    for (auto &header : extAdfHeaders) {
-
-        if (utl::matchingBufferHeader(buf, header)) return true;
-    }
-    return false;
-}
-
-bool
-EADFFile::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
-}
-
 isize
 EADFFile::numCyls() const
 {

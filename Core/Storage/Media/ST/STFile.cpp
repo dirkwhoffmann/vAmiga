@@ -21,18 +21,14 @@ STFile::isCompatible(const fs::path &path)
     return suffix == ".ST";
 }
 
+/*
 bool
 STFile::isCompatible(const u8 *buf, isize len)
 {
     // There are no magic bytes. We can only check the buffer size
     return len == STSIZE_35_DD;
 }
-
-bool
-STFile::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
-}
+*/
 
 isize
 STFile::numCyls() const

@@ -23,20 +23,12 @@ namespace vamiga {
 bool
 DMSFile::isCompatible(const fs::path &path)
 {
+    // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    return suffix == ".DMS";
-}
+    if (suffix != ".DMS") return false;
 
-bool
-DMSFile::isCompatible(const u8 *buf, isize len)
-{
-    return utl::matchingBufferHeader(buf, "DMS!");
-}
-
-bool
-DMSFile::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
+    // Check magic bytes
+    return utl::matchingFileHeader(path, "DMS!");
 }
 
 void

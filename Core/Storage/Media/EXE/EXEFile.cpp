@@ -20,10 +20,19 @@ namespace vamiga {
 bool
 EXEFile::isCompatible(const fs::path &path)
 {
+    // Check file size
     auto suffix = utl::uppercased(path.extension().string());
-    return suffix == ".EXE";
+    if (suffix != ".EXE") return false;
+
+    // Only accept files fitting on a HD disk
+    if (utl::getSizeOfFile(path) > 1710000) return false;
+
+    // Check header signature
+    u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
+    return utl::matchingFileHeader(path, signature, sizeof(signature));
 }
 
+/*
 bool
 EXEFile::isCompatible(const u8 *buf, isize len)
 {
@@ -34,12 +43,7 @@ EXEFile::isCompatible(const u8 *buf, isize len)
 
     return utl::matchingBufferHeader(buf, signature, sizeof(signature));
 }
-
-bool
-EXEFile::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
-}
+*/
 
 void
 EXEFile::finalizeRead()

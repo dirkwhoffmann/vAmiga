@@ -28,12 +28,13 @@ public:
 
     static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
-    static bool isCompatible(const Buffer<u8> &buffer);
 
 
     //
     // Initializing
     //
+
+public:
 
     RomFile(const fs::path &path) { init(path); }
     RomFile(const u8 *buf, isize len) { init(buf, len); }
@@ -43,14 +44,17 @@ public:
     // Methods from AnyFile
     //
 
+public:
+
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
 
 
     //
     // Decrypting
     //
 
+public:
+    
     // Returns true iff the Rom was encrypted at the time it was loaded
     bool wasEncrypted() { return romKeyPath != ""; }
 

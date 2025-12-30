@@ -69,7 +69,7 @@ public:
 
 
     //
-    // Data management
+    // Accessing
     //
     
 public:
@@ -77,12 +77,12 @@ public:
     virtual isize getSize() const { return data.size; }
     virtual u8 *getData() const { return data.ptr; }
 
-    // string getSizeAsString() const;
-
     
     //
     // Flashing
     //
+
+public:
 
     // Copies the file contents into a buffer
     virtual void flash(u8 *buf, isize offset, isize len) const;
@@ -96,8 +96,7 @@ public:
 public:
 
     virtual bool isCompatiblePath(const fs::path &path) const = 0;
-    virtual bool isCompatibleBuffer(const u8 *buf, isize len) const = 0;
-    bool isCompatibleBuffer(const Buffer<u8> &buffer);
+    
     isize readFromBuffer(const u8 *buf, isize len);
     isize readFromBuffer(const Buffer<u8> &buffer);
     

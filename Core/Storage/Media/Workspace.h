@@ -18,10 +18,7 @@ class Workspace : public AnyFile {
 public:
     
     static bool isCompatible(const fs::path &path);
-    static bool isCompatible(const u8 *buf, isize len) { return false; }
-    static bool isCompatible(const Buffer<u8> &buffer) { return false; }
-    static bool isCompatible(std::istream &stream) { return false; }
-    
+
     
     //
     // Initializing
@@ -39,7 +36,6 @@ private:
     //
     
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
 };
 
 }

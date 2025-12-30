@@ -80,6 +80,11 @@ const u8 RomFile::encrRomHeaders[1][11] = {
 bool
 RomFile::isCompatible(const fs::path &path)
 {
+    // Check suffix
+    auto suffix = utl::uppercased(path.extension().string());
+    if (suffix != ".ROM" && suffix != ".BIN") return false;
+
+    // Check file size
     auto size = utl::getSizeOfFile(path);
     
     const std::vector<isize> allowedSizes = {
@@ -94,7 +99,7 @@ RomFile::isCompatible(const fs::path &path)
         if (size == allowed) {
             
             Buffer<u8> buffer(path);
-            return isCompatible(buffer);
+            return isCompatible(buffer.ptr, buffer.size);
         }
     }
     
@@ -140,12 +145,6 @@ RomFile::isCompatible(const u8 *buf, isize length)
     }
 
     return ALLOW_ALL_ROMS;
-}
-
-bool
-RomFile::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
 }
 
 bool

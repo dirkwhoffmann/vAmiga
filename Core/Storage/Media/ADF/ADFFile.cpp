@@ -27,6 +27,7 @@ ADFFile::isCompatible(const fs::path &path)
     return !EADFFile::isCompatible(path);
 }
 
+/*
 bool
 ADFFile::isCompatible(const u8 *buf, isize len)
 {
@@ -39,12 +40,7 @@ ADFFile::isCompatible(const u8 *buf, isize len)
     // Check some more limits
     return len <= ADFSIZE_35_DD_84 || len == ADFSIZE_35_HD;
 }
-
-bool
-ADFFile::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
-}
+*/
 
 isize
 ADFFile::fileSize(Diameter diameter, Density density)

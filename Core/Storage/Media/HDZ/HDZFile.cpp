@@ -22,18 +22,6 @@ HDZFile::isCompatible(const fs::path &path)
     return suffix == ".HDZ";
 }
 
-bool
-HDZFile::isCompatible(const u8 *buf, isize len)
-{
-    return true;
-}
-
-bool
-HDZFile::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
-}
-
 void
 HDZFile::init(const class HDFFile &hdf)
 {

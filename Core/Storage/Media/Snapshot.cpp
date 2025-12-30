@@ -49,19 +49,6 @@ Snapshot::isCompatible(const fs::path &path)
     return suffix == ".VASNAP" && utl::matchingFileHeader(path, "VASNAP");
 }
 
-bool
-Snapshot::isCompatible(const u8 *buf, isize len)
-{
-    if (len < isize(sizeof(SnapshotHeader))) return false;
-    return utl::matchingBufferHeader(buf, "VASNAP");
-}
-
-bool
-Snapshot::isCompatible(const Buffer<u8> &buf)
-{
-    return isCompatible(buf.ptr, buf.size);
-}
-
 Snapshot::Snapshot(isize capacity)
 {
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };

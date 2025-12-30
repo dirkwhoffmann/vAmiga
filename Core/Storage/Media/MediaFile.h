@@ -95,8 +95,8 @@ public:
     HDFInfo getHDFInfo() const;
 
     // Flashes the contents of the file into a buffer
-    void flash(u8 *buf, isize offset, isize len) { file->flash(buf, offset, len); }
-    void flash(u8 *buf, isize offset = 0) { file->flash(buf, offset); }
+    // void flash(u8 *buf, isize offset, isize len) { file->flash(buf, offset, len); }
+    // void flash(u8 *buf, isize offset = 0) { file->flash(buf, offset); }
 
 
     //
@@ -118,12 +118,12 @@ public:
 
 public:
 
-    virtual isize readFromBuffer(const u8 *buf, isize len) { return file->readFromBuffer(buf, len); }
+    // virtual isize readFromBuffer(const u8 *buf, isize len) { return file->readFromBuffer(buf, len); }
 
-    virtual isize writeToStream(std::ostream &stream) const { return file->writeToStream(stream); }
+    // virtual isize writeToStream(std::ostream &stream) const { return file->writeToStream(stream); }
     virtual isize writeToFile(const fs::path &path) const { return file->writeToFile(path); }
     virtual isize writePartitionToFile(const fs::path &path, isize partition) const { return file->writePartitionToFile(path, partition); }
-    virtual isize writeToBuffer(u8 *buf) const { return file->writeToBuffer(buf); }
+    // virtual isize writeToBuffer(u8 *buf) const { return file->writeToBuffer(buf); }
 };
 
 }
