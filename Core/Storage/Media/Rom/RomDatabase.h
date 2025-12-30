@@ -506,6 +506,13 @@ static std::vector<RomTraits> roms = {
         .model      = "",
         .vendor     = RomVendor::EMUTOS
     },{
+        .crc        = CRC32_EMUTOS14,
+        .title      = "EmuTOS Kickstart replacement",
+        .revision   = "Version 1.4",
+        .released   = "June 2025",
+        .model      = "",
+        .vendor     = RomVendor::EMUTOS
+    },{
         .crc        = CRC32_DIAG11,
         .title      = "Amiga DiagROM",
         .revision   = "Version 1.1",
