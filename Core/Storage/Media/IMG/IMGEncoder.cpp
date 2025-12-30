@@ -16,6 +16,24 @@
 
 namespace vamiga {
 
+/*
+void
+IMGEncoder::encode(const class IMGFile &source, FloppyDisk &target)
+{
+    auto img = IMGFactory::make(source.data.ptr, source.data.size);
+    IMGEncoder::encode(*img, target);
+}
+
+void
+IMGEncoder::decode(class IMGFile &target, const FloppyDisk &source)
+{
+    auto img = IMGFactory::make(target.data.ptr, target.data.size);
+    IMGEncoder::decode(*img, source);
+    target.data = img->data;
+}
+*/
+
+/*
 void
 IMGEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
 {
@@ -39,6 +57,8 @@ IMGEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
         if (IMG_DEBUG) fprintf(stderr, "Saving image to /tmp/debug.img for debugging\n");
         tmp->writeToFile("/tmp/tmp.img");
     }
+
+    disk.byteView(0,0).hexDump();
 }
 
 void
@@ -225,5 +245,6 @@ IMGEncoder::decodeSector(IMGFile &img, u8 *dst, const u8 *src)
 {
     MFM::decodeMFM(dst, src, 512);
 }
+*/
 
 }

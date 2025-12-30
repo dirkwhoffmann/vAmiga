@@ -117,7 +117,7 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    AmigaEncoder::decodeAmigaSector(tdata, *offset, std::span<u8>(dst, 512));
+    AmigaEncoder::decodeSector(tdata, *offset, std::span<u8>(dst, 512));
 }
 
 void
@@ -133,7 +133,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    AmigaEncoder::encodeAmigaSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
+    AmigaEncoder::encodeSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
 }
 
 void
@@ -319,8 +319,8 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &file)
         case FileType::ADF:  DiskEncoder::encode(dynamic_cast<const ADFFile &>(file), *this); break;
         case FileType::ADZ:  ADZEncoder::encode(dynamic_cast<const ADZFile &>(file), *this); break;
         case FileType::EADF: EADFEncoder::encode(dynamic_cast<const EADFFile &>(file), *this); break;
-        case FileType::IMG:  IMGEncoder::encode(dynamic_cast<const IMGFile &>(file), *this); break;
-        case FileType::ST:   STEncoder::encode(dynamic_cast<const STFile &>(file), *this); break;
+        case FileType::IMG:  DiskEncoder::encode(dynamic_cast<const IMGFile &>(file), *this); break;
+        case FileType::ST:   DiskEncoder::encode(dynamic_cast<const STFile &>(file), *this); break;
         case FileType::DMS:  DMSEncoder::encode(dynamic_cast<const DMSFile &>(file), *this); break;
         case FileType::EXE:  EXEEncoder::encode(dynamic_cast<const EXEFile &>(file), *this); break;
 

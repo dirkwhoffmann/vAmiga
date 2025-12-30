@@ -14,12 +14,14 @@
 
 namespace vamiga {
 
+/*
 class STEncoder {
 
 public:
 
-    static void encode(const STFile &source, FloppyDisk &target);
-    static void decode(STFile &target, const FloppyDisk &source);
+    [[deprecated]] static void encode(const STFile &source, FloppyDisk &target);
+    [[deprecated]] static void decode(STFile &target, const FloppyDisk &source);
 };
+*/
 
 }

@@ -11,6 +11,7 @@
 
 #include "utl/abilities/Dumpable.h"
 #include "utl/abilities/Hashable.h"
+#include "utl/support/Bits.h"
 #include <span>
 #include <cstdint>
 #include <cassert>
@@ -71,7 +72,16 @@ public:
         return sp.subspan(o, c);
     }
     constexpr void clear(u8 value = 0) const requires (!std::is_const_v<T>) {
-        for (auto &b : sp) b = value;
+        for (usize i = 0; i < sp.size(); ++i) sp[i] = value;
+    }
+    template<std::size_t N>
+    constexpr void clear(const std::array<u8, N>& values) const
+    requires (!std::is_const_v<T>) {
+        for (usize i = 0; i < sp.size(); ++i) sp[i] = values[i % N];
+    }
+    constexpr void clear(const vector<u8>& values) const
+    requires (!std::is_const_v<T>) {
+        for (usize i = 0; i < sp.size(); ++i) sp[i] = values[i % values.size()];
     }
 
     //
@@ -264,8 +274,18 @@ public:
         }
 
         // Increment / Decrement
-        constexpr cyclic_iterator& operator++() { ++pos_; return *this; }
-        constexpr cyclic_iterator& operator--() { --pos_; return *this; }
+        constexpr cyclic_iterator& operator++() {
+            ++pos_; return *this;
+        }
+        constexpr cyclic_iterator& operator--() {
+            --pos_; return *this;
+        }
+        constexpr cyclic_iterator operator++(int) {
+            auto tmp = *this; ++(*this); return tmp;
+        }
+        constexpr cyclic_iterator operator--(int) {
+            auto tmp = *this; ++(*this); return tmp;
+        }
 
         // Random access
         constexpr reference operator[](difference_type n) const { return *(*this + n); }
@@ -301,7 +321,7 @@ public:
         }
     };
 
-    constexpr cyclic_iterator cyclic_begin(isize pos = 0) const {
+    constexpr cyclic_iterator cyclic_begin(isize pos = 0) {
         return cyclic_iterator(this, pos);
     }
 };

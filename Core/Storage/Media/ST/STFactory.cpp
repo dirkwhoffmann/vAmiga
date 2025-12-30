@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "STFactory.h"
-#include "STEncoder.h"
+#include "DiskEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "DeviceError.h"
@@ -44,7 +44,7 @@ std::unique_ptr<STFile>
 STFactory::make(const class FloppyDisk &disk)
 {
     auto st = make(disk.getDiameter(), disk.getDensity());
-    STEncoder::decode(*st, disk);
+    DiskEncoder::decode(*st, disk);
     return st;
 }
 

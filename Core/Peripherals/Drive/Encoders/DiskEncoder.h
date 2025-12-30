@@ -21,6 +21,7 @@ class DiskEncoder {
 
 public:
 
+    // TODO: MOVE TO FloppyDisk
     static void encode(const class ADFFile &source, FloppyDisk &target);
     static void decode(class ADFFile &target, const FloppyDisk &source);
 
@@ -31,16 +32,9 @@ public:
 
 public:
 
+    // TODO: MOVE TO FloppyDisk
     static void encode(const class IMGFile &source, FloppyDisk &target);
     static void decode(class IMGFile &target, const FloppyDisk &source);
-
-private:
-
-    static void encodeTrack(const IMGFile &img, FloppyDisk &disk, TrackNr t);
-    static void encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, SectorNr s);
-
-    static void decodeTrack(IMGFile &img, const class FloppyDisk &disk, TrackNr t);
-    static void decodeSector(IMGFile &img, u8 *dst, const u8 *src);
 
 
     //
@@ -49,18 +43,9 @@ private:
 
 public:
 
+    // TODO: MOVE TO FloppyDisk
     static void encode(const class STFile &source, FloppyDisk &target);
     static void decode(class STFile &target, const FloppyDisk &source);
-
-private:
-
-    static void encodeTrack(const STFile &img, FloppyDisk &disk, TrackNr t);
-    static void encodeSector(const STFile &img, FloppyDisk &disk, TrackNr t, SectorNr s);
-
-    static void decodeTrack(STFile &img, const class FloppyDisk &disk, TrackNr t);
-    static void decodeSector(STFile &img, u8 *dst, const u8 *src);
-
-
 };
 
 }

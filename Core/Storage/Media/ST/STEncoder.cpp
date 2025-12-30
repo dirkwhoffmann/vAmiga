@@ -10,24 +10,27 @@
 #include "config.h"
 #include "STEncoder.h"
 #include "STFactory.h"
+#include "DiskEncoder.h"
 #include "IMGEncoder.h"
 #include "IMGFactory.h"
 
 namespace vamiga {
 
+/*
 void
 STEncoder::encode(const class STFile &source, FloppyDisk &target)
 {
     auto img = IMGFactory::make(source.data.ptr, source.data.size);
-    IMGEncoder::encode(*img, target);
+    DiskEncoder::encode(*img, target);
 }
 
 void
 STEncoder::decode(class STFile &target, const FloppyDisk &source)
 {
     auto img = IMGFactory::make(target.data.ptr, target.data.size);
-    IMGEncoder::decode(*img, source);
+    DiskEncoder::decode(*img, source);
     target.data = img->data;
 }
+*/
 
 };

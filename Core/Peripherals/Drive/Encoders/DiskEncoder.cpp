@@ -10,6 +10,7 @@
 #include "config.h"
 #include "DiskEncoder.h"
 #include "AmigaEncoder.h"
+#include "IBMEncoder.h"
 #include "FloppyDisk.h"
 #include "ADFFactory.h"
 #include "IMGFactory.h"
@@ -27,6 +28,9 @@ namespace vamiga {
 void
 DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
 {
+    isize tracks = adf.numTracks();
+    if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
+
     if (disk.getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
@@ -34,16 +38,12 @@ DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
-    isize tracks = adf.numTracks();
-    if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
-
     // Start with an unformatted disk
     disk.clearDisk();
 
     // Encode all tracks
-    for (TrackNr t = 0; t < tracks; t++) {
-        AmigaEncoder::encodeAmigaTrack(disk.byteView(t), t, adf.byteView(t));
-    }
+    for (TrackNr t = 0; t < tracks; ++t)
+        AmigaEncoder::encodeTrack(disk.byteView(t), t, adf.byteView(t));
 
     // In debug mode, also run the decoder
     if (ADF_DEBUG) {
@@ -56,9 +56,7 @@ DiskEncoder::encode(const ADFFile &adf, FloppyDisk &disk)
 
 void DiskEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
 {
-    if (ADF_DEBUG) fprintf(stderr, "ADFFile::decodeDisk\n");
-    long tracks = adf.numTracks();
-
+    auto tracks = adf.numTracks();
     if (ADF_DEBUG) fprintf(stderr, "Decoding Amiga disk with %ld tracks\n", tracks);
 
     if (disk.getDiameter() != adf.getDiameter()) {
@@ -69,8 +67,8 @@ void DiskEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
     }
 
     // Decode all tracks
-    for (TrackNr t = 0; t < tracks; t++)
-        AmigaEncoder::decodeAmigaTrack(disk.byteView(t), t, adf.byteView(t));
+    for (TrackNr t = 0; t < tracks; ++t)
+        AmigaEncoder::decodeTrack(disk.byteView(t), t, adf.byteView(t));
 }
 
 //
@@ -80,6 +78,9 @@ void DiskEncoder::decode(ADFFile &adf, const class FloppyDisk &disk)
 void
 DiskEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
 {
+    isize tracks = img.numTracks();
+    if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+
     if (disk.getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
@@ -87,26 +88,26 @@ DiskEncoder::encode(const class IMGFile &img, FloppyDisk &disk)
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
-    isize tracks = img.numTracks();
-    if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+    // Start with an unformatted disk
+    disk.clearDisk();
 
     // Encode all tracks
-    for (TrackNr t = 0; t < tracks; t++) encodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::encodeTrack(disk.byteView(t), t, img.byteView(t));
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
 
-        auto tmp = IMGFactory::make(disk);
-        if (IMG_DEBUG) fprintf(stderr, "Saving image to /tmp/debug.img for debugging\n");
-        tmp->writeToFile("/tmp/tmp.img");
+        string tmp = "/tmp/debug.img";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        IMGFactory::make(disk)->writeToFile(tmp);
     }
 }
 
 void
 DiskEncoder::decode(class IMGFile &img, const FloppyDisk &disk)
 {
-    long tracks = img.numTracks();
-
+    auto tracks = img.numTracks();
     if (IMG_DEBUG) fprintf(stderr, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (disk.getDiameter() != img.getDiameter()) {
@@ -116,185 +117,22 @@ DiskEncoder::decode(class IMGFile &img, const FloppyDisk &disk)
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
-    // Make the MFM stream scannable beyond the track end
-    const_cast<FloppyDisk &>(disk).repeatTracks();
-
     // Decode all tracks
-    for (TrackNr t = 0; t < tracks; t++) decodeTrack(img, disk, t);
-}
-
-void
-DiskEncoder::encodeTrack(const IMGFile &img, FloppyDisk &disk, TrackNr t)
-{
-    isize sectors = img.numSectors();
-    if (IMG_DEBUG) fprintf(stderr, "Encoding DOS track %ld with %ld sectors\n", t, sectors);
-
-    u8 *p = disk.data.track[t];
-
-    // Clear track
-    disk.clearTrack(t, 0x92, 0x54);
-
-    // Encode track header
-    p += 82;                                        // GAP
-    for (isize i = 0; i < 24; i++) { p[i] = 0xAA; } // SYNC
-    p += 24;
-    p[0] = 0x52; p[1] = 0x24;                       // IAM
-    p[2] = 0x52; p[3] = 0x24;
-    p[4] = 0x52; p[5] = 0x24;
-    p[6] = 0x55; p[7] = 0x52;
-    p += 8;
-    p += 80;                                        // GAP
-
-    // Encode all sectors
-    for (SectorNr s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
-
-    // Compute a checksum for debugging
-    if (IMG_DEBUG) fprintf(stderr, "Track %ld checksum = %llx\n", t, disk.checksum(t));
-}
-
-void
-DiskEncoder::encodeSector(const IMGFile &img, FloppyDisk &disk, TrackNr t, SectorNr s)
-{
-    u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
-
-    if (IMG_DEBUG) fprintf(stderr, "  Encoding DOS sector %ld\n", s);
-
-    // Write SYNC
-    for (isize i = 0; i < 12; i++) { buf[i] = 0x00; }
-
-    // Write IDAM
-    buf[12] = 0xA1;
-    buf[13] = 0xA1;
-    buf[14] = 0xA1;
-    buf[15] = 0xFE;
-
-    // Write CHRN
-    buf[16] = (u8)(t / 2);
-    buf[17] = (u8)(t % 2);
-    buf[18] = (u8)(s + 1);
-    buf[19] = 2;
-
-    // Compute and write CRC
-    u16 crc = Hashable::crc16(&buf[12], 8);
-    buf[20] = HI_BYTE(crc);
-    buf[21] = LO_BYTE(crc);
-
-    // Write GAP
-    for (isize i = 22; i < 44; i++) { buf[i] = 0x4E; }
-
-    // Write SYNC
-    for (isize i = 44; i < 56; i++) { buf[i] = 0x00; }
-
-    // Write DATA AM
-    buf[56] = 0xA1;
-    buf[57] = 0xA1;
-    buf[58] = 0xA1;
-    buf[59] = 0xFB;
-
-    // Write DATA
-    img.readBlock(&buf[60], t, s);
-
-    // Compute and write CRC
-    crc = Hashable::crc16(&buf[56], 516);
-    buf[572] = HI_BYTE(crc);
-    buf[573] = LO_BYTE(crc);
-
-    // Write GAP
-    for (usize i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
-
-    // Determine the start of this sector
-    u8 *p = disk.data.track[t] + 194 + s * 1300;
-
-    // Create the MFM data stream
-    MFM::encodeMFM(p, buf, sizeof(buf));
-    MFM::addClockBits(p, 2 * sizeof(buf));
-
-    // Remove certain clock bits in IDAM block
-    p[2*12+1] &= 0xDF;
-    p[2*13+1] &= 0xDF;
-    p[2*14+1] &= 0xDF;
-
-    // Remove certain clock bits in DATA AM block
-    p[2*56+1] &= 0xDF;
-    p[2*57+1] &= 0xDF;
-    p[2*58+1] &= 0xDF;
-}
-
-void
-DiskEncoder::decodeTrack(IMGFile &img, const class FloppyDisk &disk, TrackNr t)
-{
-    assert(t < disk.numTracks());
-
-    long numSectors = 9;
-    auto *src = disk.data.track[t];
-    auto *dst = img.data.ptr + t * numSectors * 512;
-
-    if (IMG_DEBUG) fprintf(stderr, "Decoding DOS track %ld\n", t);
-
-    // Determine the start of all sectors contained in this track
-    std::vector <isize> sectorStart(numSectors);
-    for (isize i = 0; i < numSectors; i++) {
-        sectorStart[i] = 0;
-    }
-    isize cnt = 0;
-    for (usize i = 0; i < sizeof(disk.data.track[t]) - 16;) {
-
-        // Seek IDAM block
-        if (src[i++] != 0x44) continue;
-        if (src[i++] != 0x89) continue;
-        if (src[i++] != 0x44) continue;
-        if (src[i++] != 0x89) continue;
-        if (src[i++] != 0x44) continue;
-        if (src[i++] != 0x89) continue;
-        if (src[i++] != 0x55) continue;
-        if (src[i++] != 0x54) continue;
-
-        // Decode CHRN block
-        struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        MFM::decodeMFM((u8 *)&chrn, &src[i], 4);
-        if (IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
-
-        if (chrn.r >= 1 && chrn.r <= numSectors) {
-
-            // Break the loop once we see the same sector twice
-            if (sectorStart[chrn.r - 1] != 0) {
-                break;
-            }
-            sectorStart[chrn.r - 1] = i + 88;
-            cnt++;
-
-        } else {
-            throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
-        }
-    }
-
-    if (cnt != numSectors) {
-        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
-    }
-
-    // Do some consistency checking
-    for (isize i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
-
-    // Decode all sectors
-    for (SectorNr s = 0; s < numSectors; s++, dst += 512) {
-        decodeSector(img, dst, src + sectorStart[s]);
-    }
-}
-
-void
-DiskEncoder::decodeSector(IMGFile &img, u8 *dst, const u8 *src)
-{
-    MFM::decodeMFM(dst, src, 512);
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::decodeTrack(disk.byteView(t), t, img.byteView(t));
 }
 
 
 //
-// ST (TODO: REUSE IMG CODE)
+// ST
 //
 
 void
 DiskEncoder::encode(const class STFile &img, FloppyDisk &disk)
 {
+    isize tracks = img.numTracks();
+    if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+
     if (disk.getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
@@ -302,26 +140,28 @@ DiskEncoder::encode(const class STFile &img, FloppyDisk &disk)
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
-    isize tracks = img.numTracks();
-    if (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+    // Start with an unformatted disk
+    disk.clearDisk();
 
     // Encode all tracks
-    for (TrackNr t = 0; t < tracks; t++) encodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::encodeTrack(disk.byteView(t), t, img.byteView(t));
 
     // In debug mode, also run the decoder
     if (IMG_DEBUG) {
 
-        auto tmp = IMGFactory::make(disk);
-        if (IMG_DEBUG) fprintf(stderr, "Saving image to /tmp/debug.img for debugging\n");
-        tmp->writeToFile("/tmp/tmp.img");
+        string tmp = "/tmp/debug.img";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        IMGFactory::make(disk)->writeToFile(tmp);
     }
+
+    disk.byteView(0,0).hexDump();
 }
 
 void
 DiskEncoder::decode(class STFile &img, const FloppyDisk &disk)
 {
-    long tracks = img.numTracks();
-
+    auto tracks = img.numTracks();
     if (IMG_DEBUG) fprintf(stderr, "Decoding Atari ST disk (%ld tracks)\n", tracks);
 
     if (disk.getDiameter() != img.getDiameter()) {
@@ -331,177 +171,9 @@ DiskEncoder::decode(class STFile &img, const FloppyDisk &disk)
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
-    // Make the MFM stream scannable beyond the track end
-    const_cast<FloppyDisk &>(disk).repeatTracks();
-
     // Decode all tracks
-    for (TrackNr t = 0; t < tracks; t++) decodeTrack(img, disk, t);
+    for (TrackNr t = 0; t < tracks; ++t)
+        IBMEncoder::decodeTrack(disk.byteView(t), t, img.byteView(t));
 }
 
-void
-DiskEncoder::encodeTrack(const STFile &img, FloppyDisk &disk, TrackNr t)
-{
-    isize sectors = img.numSectors();
-    if (IMG_DEBUG) fprintf(stderr, "Encoding Atari ST track %ld with %ld sectors\n", t, sectors);
-
-    u8 *p = disk.data.track[t];
-
-    // Clear track
-    disk.clearTrack(t, 0x92, 0x54);
-
-    // Encode track header
-    p += 82;                                        // GAP
-    for (isize i = 0; i < 24; i++) { p[i] = 0xAA; } // SYNC
-    p += 24;
-    p[0] = 0x52; p[1] = 0x24;                       // IAM
-    p[2] = 0x52; p[3] = 0x24;
-    p[4] = 0x52; p[5] = 0x24;
-    p[6] = 0x55; p[7] = 0x52;
-    p += 8;
-    p += 80;                                        // GAP
-
-    // Encode all sectors
-    for (SectorNr s = 0; s < sectors; s++) encodeSector(img, disk, t, s);
-
-    // Compute a checksum for debugging
-    if (IMG_DEBUG) fprintf(stderr, "Track %ld checksum = %llx\n", t, disk.checksum(t));
 }
-
-void
-DiskEncoder::encodeSector(const STFile &img, FloppyDisk &disk, TrackNr t, SectorNr s)
-{
-    u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
-
-    if (IMG_DEBUG) fprintf(stderr, "  Encoding Atari ST sector %ld\n", s);
-
-    // Write SYNC
-    for (isize i = 0; i < 12; i++) { buf[i] = 0x00; }
-
-    // Write IDAM
-    buf[12] = 0xA1;
-    buf[13] = 0xA1;
-    buf[14] = 0xA1;
-    buf[15] = 0xFE;
-
-    // Write CHRN
-    buf[16] = (u8)(t / 2);
-    buf[17] = (u8)(t % 2);
-    buf[18] = (u8)(s + 1);
-    buf[19] = 2;
-
-    // Compute and write CRC
-    u16 crc = Hashable::crc16(&buf[12], 8);
-    buf[20] = HI_BYTE(crc);
-    buf[21] = LO_BYTE(crc);
-
-    // Write GAP
-    for (isize i = 22; i < 44; i++) { buf[i] = 0x4E; }
-
-    // Write SYNC
-    for (isize i = 44; i < 56; i++) { buf[i] = 0x00; }
-
-    // Write DATA AM
-    buf[56] = 0xA1;
-    buf[57] = 0xA1;
-    buf[58] = 0xA1;
-    buf[59] = 0xFB;
-
-    // Write DATA
-    img.readBlock(&buf[60], t, s);
-
-    // Compute and write CRC
-    crc = Hashable::crc16(&buf[56], 516);
-    buf[572] = HI_BYTE(crc);
-    buf[573] = LO_BYTE(crc);
-
-    // Write GAP
-    for (usize i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
-
-    // Determine the start of this sector
-    u8 *p = disk.data.track[t] + 194 + s * 1300;
-
-    // Create the MFM data stream
-    MFM::encodeMFM(p, buf, sizeof(buf));
-    MFM::addClockBits(p, 2 * sizeof(buf));
-
-    // Remove certain clock bits in IDAM block
-    p[2*12+1] &= 0xDF;
-    p[2*13+1] &= 0xDF;
-    p[2*14+1] &= 0xDF;
-
-    // Remove certain clock bits in DATA AM block
-    p[2*56+1] &= 0xDF;
-    p[2*57+1] &= 0xDF;
-    p[2*58+1] &= 0xDF;
-}
-
-void
-DiskEncoder::decodeTrack(STFile &img, const class FloppyDisk &disk, TrackNr t)
-{
-    assert(t < disk.numTracks());
-
-    long numSectors = 9;
-    auto *src = disk.data.track[t];
-    auto *dst = img.data.ptr + t * numSectors * 512;
-
-    if (IMG_DEBUG) fprintf(stderr, "Decoding Atari ST track %ld\n", t);
-
-    // Determine the start of all sectors contained in this track
-    std::vector <isize> sectorStart(numSectors);
-    for (isize i = 0; i < numSectors; i++) {
-        sectorStart[i] = 0;
-    }
-    isize cnt = 0;
-    for (usize i = 0; i < sizeof(disk.data.track[t]) - 16;) {
-
-        // Seek IDAM block
-        if (src[i++] != 0x44) continue;
-        if (src[i++] != 0x89) continue;
-        if (src[i++] != 0x44) continue;
-        if (src[i++] != 0x89) continue;
-        if (src[i++] != 0x44) continue;
-        if (src[i++] != 0x89) continue;
-        if (src[i++] != 0x55) continue;
-        if (src[i++] != 0x54) continue;
-
-        // Decode CHRN block
-        struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        MFM::decodeMFM((u8 *)&chrn, &src[i], 4);
-        if (IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
-
-        if (chrn.r >= 1 && chrn.r <= numSectors) {
-
-            // Break the loop once we see the same sector twice
-            if (sectorStart[chrn.r - 1] != 0) {
-                break;
-            }
-            sectorStart[chrn.r - 1] = i + 88;
-            cnt++;
-
-        } else {
-            throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
-        }
-    }
-
-    if (cnt != numSectors) {
-        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
-    }
-
-    // Do some consistency checking
-    for (isize i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
-
-    // Decode all sectors
-    for (SectorNr s = 0; s < numSectors; s++, dst += 512) {
-        decodeSector(img, dst, src + sectorStart[s]);
-    }
-}
-
-void
-DiskEncoder::decodeSector(STFile &img, u8 *dst, const u8 *src)
-{
-    MFM::decodeMFM(dst, src, 512);
-}
-
-
-}
-

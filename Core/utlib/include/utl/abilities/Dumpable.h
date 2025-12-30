@@ -11,6 +11,7 @@
 
 #include "utl/common.h"
 #include <span>
+#include <iostream>
 
 namespace utl {
 
@@ -71,10 +72,10 @@ public:
     void dump(std::ostream &os, const DumpOpt &opt, const string &fmt) const {
         dump(os, opt, fmt, dataProvider());
     };
-    void hexDump(std::ostream &os) const { hexDump(os, dataProvider()); }
-    void memDump(std::ostream &os) const { memDump(os, dataProvider()); }
-    void ascDump(std::ostream &os) const { ascDump(os, dataProvider()); }
-    void txtDump(std::ostream &os) const { txtDump(os, dataProvider()); }
+    void hexDump(std::ostream &os = std::cout) const { hexDump(os, dataProvider()); }
+    void memDump(std::ostream &os = std::cout) const { memDump(os, dataProvider()); }
+    void ascDump(std::ostream &os = std::cout) const { ascDump(os, dataProvider()); }
+    void txtDump(std::ostream &os = std::cout) const { txtDump(os, dataProvider()); }
 };
 
 }

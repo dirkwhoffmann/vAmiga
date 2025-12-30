@@ -14,13 +14,11 @@
 
 namespace vamiga::AmigaEncoder {
 
-// using namespace utl;
+void encodeTrack(MutableByteView track, TrackNr t, ByteView src);
+void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 
-void encodeAmigaTrack(MutableByteView track, TrackNr t, ByteView src);
-void encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
-
-void decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst);
-void decodeAmigaSector(ByteView track, isize offset, MutableByteView dst);
+void decodeTrack(ByteView track, TrackNr t, MutableByteView dst);
+void decodeSector(ByteView track, isize offset, MutableByteView dst);
 
 optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
 isize seekSector(ByteView track, SectorNr s, isize offset = 0);

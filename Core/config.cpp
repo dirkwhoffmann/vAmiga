@@ -128,7 +128,7 @@ debugflag DBD_DEBUG       = 0;
 debugflag ADF_DEBUG       = 0;
 debugflag HDF_DEBUG       = 0;
 debugflag DMS_DEBUG       = 0;
-debugflag IMG_DEBUG       = 0;
+debugflag IMG_DEBUG       = 1;
 
 // Other components
 debugflag RTC_DEBUG       = 0;

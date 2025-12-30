@@ -10,6 +10,7 @@
 #include "config.h"
 #include "IMGFactory.h"
 #include "IMGEncoder.h"
+#include "DiskEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "DeviceError.h"
@@ -44,7 +45,8 @@ std::unique_ptr<IMGFile>
 IMGFactory::make(const class FloppyDisk &disk)
 {
     auto img = make(disk.getDiameter(), disk.getDensity());
-    IMGEncoder::decode(*img, disk);
+    // IMGEncoder::decode(*img, disk);
+    DiskEncoder::decode(*img, disk);
     return img;
 }
 

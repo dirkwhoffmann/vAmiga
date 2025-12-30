@@ -16,7 +16,7 @@
 namespace vamiga::AmigaEncoder {
 
 void
-encodeAmigaTrack(MutableByteView track, TrackNr t, ByteView src)
+encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize ssize = 1088;                      // MFM sector size in bytes
@@ -30,19 +30,19 @@ encodeAmigaTrack(MutableByteView track, TrackNr t, ByteView src)
 
     // Encode all sectors
     for (SectorNr s = 0; s < count; s++)
-        encodeAmigaSector(track, s * ssize, t, s, src.subspan(s * bsize, bsize));
+        encodeSector(track, s * ssize, t, s, src.subspan(s * bsize, bsize));
 
     // Compute a debug checksum
     if (ADF_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n", t, track.fnv32());
 }
 
 void
-encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
+encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
 {
     const isize bsize = 512;   // Block size in bytes
     const isize ssize = 1088;  // MFM sector size in bytes
 
-    if (ADF_DEBUG) fprintf(stderr, "Encoding sector %ld\n", s);
+    if (ADF_DEBUG) fprintf(stderr, "Encoding Amiga sector %ld\n", s);
     assert(data.size() == bsize);
 
     // Block header layout:
@@ -108,12 +108,12 @@ encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, By
 }
 
 void
-decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
+decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
 {
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
 
-    if (ADF_DEBUG) fprintf(stderr, "Decoding track %ld\n", t);
+    if (ADF_DEBUG) fprintf(stderr, "Decoding Amiga track %ld\n", t);
     assert(dst.size() % bsize == 0);
 
     // Find all sectors
@@ -126,17 +126,17 @@ decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst)
             throw DeviceError(DeviceError::DEV_SEEK_ERR);
 
         auto *secData = dst.data() + s * bsize;
-        decodeAmigaSector(track, offsets[s], span<u8>(secData, bsize));
+        decodeSector(track, offsets[s], span<u8>(secData, bsize));
     }
 }
 
 void
-decodeAmigaSector(ByteView track, isize offset, MutableByteView dst)
+decodeSector(ByteView track, isize offset, MutableByteView dst)
 {
     const isize bsize = 512;
     assert(dst.size() == bsize);
 
-    if (MFM_DEBUG) fprintf(stderr, "Decoding sector at offset %ld\n", offset);
+    if (MFM_DEBUG) fprintf(stderr, "Decoding Amiga sector at offset %ld\n", offset);
 
     // Skip sync mark + sector header
     offset += 4 + 56;
