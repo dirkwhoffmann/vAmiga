@@ -16,33 +16,6 @@ namespace vamiga {
 class DiskEncoder {
 
     //
-    // MFM
-    //
-
-public:
-
-
-
-    //
-    // Amiga tracks
-    //
-
-public:
-
-    static void encodeAmigaTrack(MutableByteView track, TrackNr t, ByteView src);
-    static void encodeAmigaSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
-
-    static void decodeAmigaTrack(ByteView track, TrackNr t, MutableByteView dst);
-    static void decodeAmigaSector(ByteView track, isize offset, MutableByteView dst);
-
-    static optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
-    static isize seekSector(ByteView track, SectorNr s, isize offset = 0);
-
-    // Computes a map from sector numbers to byte offsets
-    static std::unordered_map<isize, isize> seekSectors(ByteView track);
-
-
-    //
     // ADF
     //
 

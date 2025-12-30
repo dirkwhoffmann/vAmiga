@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "FloppyDisk.h"
+#include "AmigaEncoder.h"
 #include "Media.h"
 #include "MediaFile.h"
 #include "DeviceError.h"
@@ -110,13 +111,13 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
 
     auto [t,s]  = ts(nr);
     auto tdata  = track[t].byteView();
-    auto offset = DiskEncoder::trySeekSector(tdata, s);
+    auto offset = AmigaEncoder::trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    DiskEncoder::decodeAmigaSector(tdata, *offset, std::span<u8>(dst, 512));
+    AmigaEncoder::decodeAmigaSector(tdata, *offset, std::span<u8>(dst, 512));
 }
 
 void
@@ -126,13 +127,13 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
 
     auto [t,s]  = ts(nr);
     auto tdata  = track[t].byteView();
-    auto offset = DiskEncoder::trySeekSector(tdata, s);
+    auto offset = AmigaEncoder::trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    DiskEncoder::encodeAmigaSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
+    AmigaEncoder::encodeAmigaSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
 }
 
 void
