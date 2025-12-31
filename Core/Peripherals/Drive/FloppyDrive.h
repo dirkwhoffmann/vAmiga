@@ -11,6 +11,7 @@
 
 #include "FloppyDriveTypes.h"
 #include "AgnusTypes.h"
+#include "ImageTypes.h"
 #include "FSTypes.h"
 #include "Drive.h"
 #include "FloppyDisk.h"
@@ -404,9 +405,6 @@ public:
 
 public:
 
-    // Returns the current disk (throws if no disk is present)
-    // FloppyDisk& getDisk();
-
     bool isInsertable(Diameter t, Density d) const;
     bool isInsertable(const FloppyDiskImage &file) const;
     bool isInsertable(const FloppyDisk &disk) const;
@@ -419,7 +417,7 @@ public:
     void ejectDisk(Cycle delay = 0);
 
     // Exports the current disk
-    std::unique_ptr<MediaFile> exportDisk(FileType type);
+    [[deprecated]] std::unique_ptr<MediaFile> exportDisk(FileType type);
 
     // Replaces the current disk (recommended way to insert disks)
     void swapDisk(std::unique_ptr<FloppyDisk> disk);
@@ -434,7 +432,18 @@ private:
     template <EventSlot s> void ejectDisk(Cycle delay);
     template <EventSlot s> void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay);
 
- 
+
+    //
+    // Exporting data
+    //
+
+public:
+    
+    void writeToFile(const fs::path& path) const;
+    void writeToFile(const fs::path& path, ImageFormat fmt) const;
+
+    std::unique_ptr<FloppyDiskImage> exportDisk(ImageFormat fmt) const;
+
     //
     // Debugging
     //

@@ -1318,21 +1318,11 @@ ImageInfo scan(const fs::path &url)
     [self drive]->ejectDisk();
 }
 
-/*
-- (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex
+- (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try {
-
-        auto disk = [self drive]->exportDisk(type);
-
-        //Transfer ownership to ObjC via release
-        return [MediaFileProxy make:disk.release()];
-
-    } catch(Error &error) { [ex save:error]; }
-
-    return nil;
+    try { [self drive]->writeToFile([url fileSystemRepresentation]); }
+    catch(Error &error) { [ex save:error]; }
 }
-*/
 
 - (NSString *)readTrackBits:(NSInteger)track
 {
@@ -2056,14 +2046,6 @@ ImageInfo scan(const fs::path &url)
     return [self file]->getSize();
 }
 
-/*
-- (NSString *)getSizeAsString
-{
-    const string &str = [self file]->getSizeAsString();
-    return @(str.c_str());
-}
-*/
-
 - (u64)fnv
 {
     return [self file]->fnv64();
@@ -2177,11 +2159,38 @@ ImageInfo scan(const fs::path &url)
 // DiskFileProxy
 //
 
-@implementation DiskFileProxy
+@implementation DiskImageProxy
 
 - (DiskImage *)file
 {
     return (DiskImage *)obj;
+}
+
+- (NSURL *)path
+{
+    auto nsPath = @([self file]->path.c_str());
+    return [NSURL fileURLWithPath:nsPath];
+}
+
+- (NSInteger)size
+{
+    return [self file]->getSize();
+}
+
+- (u64)fnv
+{
+    return [self file]->fnv64();
+}
+
+- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
+{
+    try { return [self file]->writeToFile([path fileSystemRepresentation]); }
+    catch(Error &error) { [ex save:error]; return 0; }
+}
+
+- (NSInteger)bsize
+{
+    return [self file]->bsize();
 }
 
 - (NSInteger)numCyls
@@ -2192,11 +2201,6 @@ ImageInfo scan(const fs::path &url)
 - (NSInteger)numHeads
 {
     return [self file]->numHeads();
-}
-
-- (NSInteger)bsize
-{
-    return [self file]->bsize();
 }
 
 - (NSInteger)numTracks
@@ -2214,26 +2218,85 @@ ImageInfo scan(const fs::path &url)
     return [self file]->numBlocks();
 }
 
-- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset
+@end
+
+
+//
+// DiskFileProxy
+//
+
+@implementation FloppyDiskImageProxy
+
+- (FloppyDiskImage *)image
 {
-    return [self file]->readByte(b * 512 + offset);
+    return (FloppyDiskImage *)obj;
 }
 
-- (void)readSector:(NSInteger)b destination:(unsigned char *)buf
++ (instancetype)make:(void *)file
 {
-    [self file]->readBlock(buf, b);
+    return file ? [[self alloc] initWith:file] : nil;
 }
 
-- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
+                         type:(ImageFormat)fmt
+                    exception:(ExceptionWrapper *)ex
 {
-    string result;
-    auto p = [self file]->data.ptr + b * [self file]->bsize() + offset;
+    auto drive = (FloppyDriveAPI *)proxy->obj;
+    try { return [self make: drive->drive->exportDisk(fmt).release()]; }
+    catch(Error &error) { [ex save:error]; return nil; }
+}
 
-    for (isize i = 0; i < len; i++) {
-        result += isprint(int(p[i])) ? char(p[i]) : '.';
-    }
+- (Diameter)diameter
+{
+    return [self image]->getDiameter();
+}
 
-    return @(result.c_str());
+- (Density)density
+{
+    return [self image]->getDensity();
+}
+
+- (BOOL)isSD
+{
+    return [self image]->isSD();
+}
+
+- (BOOL)isDD
+{
+    return [self image]->isDD();
+}
+
+- (BOOL)isHD
+{
+    return [self image]->isHD();
+}
+
+@end
+
+
+//
+// HardDiskImageProxy
+//
+
+@implementation HardDiskImageProxy
+
+- (HardDiskImage *)image
+{
+    return (HardDiskImage *)obj;
+}
+
++ (instancetype)make:(void *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
++ (instancetype)makeWithDrive:(HardDriveProxy *)proxy
+                         type:(ImageFormat)fmt
+                    exception:(ExceptionWrapper *)ex
+{
+    auto drive = (FloppyDriveAPI *)proxy->obj;
+    try { return [self make: drive->drive->exportDisk(fmt).release()]; }
+    catch(Error &error) { [ex save:error]; return nil; }
 }
 
 @end

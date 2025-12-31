@@ -730,8 +730,7 @@ ImageInfo scan(const fs::path &url);
 // - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)eject;
-// - (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex;
-
+- (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (NSString *)readTrackBits:(NSInteger)track;
 
 @end
@@ -942,7 +941,6 @@ ImageInfo scan(const fs::path &url);
 @property (readonly) FileType type;
 @property (readonly) NSURL *path;
 @property (readonly) NSInteger size;
-// @property (readonly) NSString *getSizeAsString;
 @property (readonly) u64 fnv;
 
 - (void)setPath:(NSString *)path;
@@ -976,21 +974,54 @@ ImageInfo scan(const fs::path &url);
 
 
 //
-// DiskFileProxy (DEPRECATED)
+// DiskImageProxy
 //
 
-@interface DiskFileProxy : AnyFileProxy {
-}
+@interface DiskImageProxy : Proxy { }
 
+@property (readonly) NSURL *path;
+@property (readonly) NSInteger size;
+@property (readonly) u64 fnv;
+
+- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
+
+@property (readonly) NSInteger bsize;
 @property (readonly) NSInteger numCyls;
 @property (readonly) NSInteger numHeads;
 @property (readonly) NSInteger numTracks;
-@property (readonly) NSInteger bsize;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
 
-- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset;
-- (void)readSector:(NSInteger)b destination:(unsigned char *)buf;
-- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
+@end
+
+
+//
+// FloppyDiskImageProxy
+//
+
+@interface FloppyDiskImageProxy : DiskImageProxy { }
+
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
+                         type:(ImageFormat)fmt
+                    exception:(ExceptionWrapper *)ex;
+
+@property (readonly) Diameter diameter;
+@property (readonly) Density density;
+@property (readonly) bool isSD;
+@property (readonly) bool isDD;
+@property (readonly) bool isHD;
+
+@end
+
+
+//
+// FloppyDiskImageProxy
+//
+
+@interface HardDiskImageProxy : DiskImageProxy { }
+
++ (instancetype)makeWithDrive:(HardDriveProxy *)proxy
+                         type:(ImageFormat)fmt
+                    exception:(ExceptionWrapper *)ex;
 
 @end

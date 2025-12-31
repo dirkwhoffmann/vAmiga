@@ -1214,6 +1214,13 @@ FloppyDriveAPI::ejectDisk()
     drive->ejectDisk();
 }
 
+void
+FloppyDriveAPI::writeToFile(const std::filesystem::path& path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->writeToFile(path);
+}
+
 string
 FloppyDriveAPI::readTrackBits(isize track)
 {

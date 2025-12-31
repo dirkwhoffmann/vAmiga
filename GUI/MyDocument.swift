@@ -266,7 +266,23 @@ class MyDocument: NSDocument {
     //
     
     func export(drive nr: Int, to url: URL) throws {
-        
+
+        guard let dfn = emu?.df(nr) else { return }
+
+        let ext = url.pathExtension.uppercased();
+        if !["ADF", "IMG", "IMA"].contains(ext) {
+
+            warn("Invalid path extension")
+            return
+        }
+
+        try dfn.writeToFile(url: url)
+        dfn.setFlag(.MODIFIED, value: false)
+        mm.noteNewRecentlyExportedDiskURL(url, df: nr)
+
+        debug(.media, "Disk exported successfully")
+
+        /*
         guard let dfn = emu?.df(nr) else { return }
         
         var file: MediaFileProxy?
@@ -285,6 +301,7 @@ class MyDocument: NSDocument {
         mm.noteNewRecentlyExportedDiskURL(url, df: nr)
         
         debug(.media, "Disk exported successfully")
+        */
     }
     
     func export(hardDrive nr: Int, to url: URL) throws {

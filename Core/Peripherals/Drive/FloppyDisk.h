@@ -11,6 +11,7 @@
 
 #include "FloppyDiskTypes.h"
 #include "DriveTypes.h"
+#include "ImageTypes.h"
 #include "CoreComponent.h"
 #include "TrackDevice.h"
 
@@ -285,7 +286,15 @@ public:
     // Shifts the tracks agains each other
     void shiftTracks(isize offset);
 
-    
+
+    //
+    // Exporting data
+    //
+
+    void writeToFile(const fs::path& path) const;
+    void writeToFile(const fs::path& path, ImageFormat fmt) const;
+
+
     //
     // Working with MFM encoded data streams
     //

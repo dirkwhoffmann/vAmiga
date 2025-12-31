@@ -38,8 +38,8 @@ public:
     void readBlock(span<u8> dst, isize nr) const;
     void writeBlock(span<const u8> src, isize nr);
 
-    // Exports all blocks or a selected range to a file
-    void exportBlocks(const fs::path& path) const;
+    // Exports a single block or a block range to a file
+    void exportBlock(const fs::path& path, isize nr) const;
     void exportBlocks(const fs::path& path, Range<isize> range) const;
 };
 

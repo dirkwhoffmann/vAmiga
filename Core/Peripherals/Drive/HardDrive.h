@@ -12,9 +12,11 @@
 #include "HardDriveTypes.h"
 #include "HdControllerTypes.h"
 #include "FSTypes.h"
+#include "ImageTypes.h"
 #include "FSObjects.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
+#include "HardDiskImage.h"
 #include "TrackDevice.h"
 #include "utl/storage.h"
 #include "utl/wrappers.h"
@@ -417,10 +419,13 @@ public:
     // Imports files from a folder (deletes existing files)
     void importFolder(const fs::path &path);
     
-    // Exports the disk in HDF format
+    // Exports the disk to a file
     void writeToFile(const fs::path &path);
 
-    
+    // Exports the disk to a HardDiskImage
+    std::unique_ptr<HardDiskImage> exportDisk(ImageFormat fmt) const;
+
+
     //
     // Scheduling and serving events
     //

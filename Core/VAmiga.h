@@ -725,17 +725,22 @@ public:
      *  @param  path   Path to the media file.
      *  @param  wp      Write-protection status of the disk.
      */
-    void insert(const std::filesystem::path &path, bool wp);
+    void insert(const std::filesystem::path& path, bool wp);
 
     /** @brief  Inserts a disk created from a file system.
      *  @param  fs      A file system wrapper object.
      *  @param  wp      Write-protection status of the disk.
      */
-    void insertFileSystem(const class FileSystem &fs, bool wp);
+    void insertFileSystem(const class FileSystem& fs, bool wp);
 
     /** @brief  Ejects the current disk.
      */
     void ejectDisk();
+
+    /** @brief  Exports the current disk to a file.
+     *  @param  path   Path to the destination file.
+     */
+    void writeToFile(const std::filesystem::path& path);
 
     /** @brief  Creates a textual bit representation of a track's data
      */

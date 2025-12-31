@@ -846,6 +846,19 @@ HardDrive::writeToFile(const fs::path &path)
     }
 }
 
+std::unique_ptr<HardDiskImage>
+HardDrive::exportDisk(ImageFormat fmt) const
+{
+    switch (fmt) {
+
+        case ImageFormat::HDF: return Codec::makeHDF(*this);
+        // case ImageFormat::HDZ: return Codec::makeHDZ(*this);
+
+        default:
+            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+    }
+}
+
 void
 HardDrive::scheduleIdleEvent()
 {

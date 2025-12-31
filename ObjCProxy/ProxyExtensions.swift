@@ -401,16 +401,12 @@ extension FloppyDriveProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
 
-    /*
-    func exportDisk(type: FileType) throws -> MediaFileProxy? {
+    func writeToFile(url: URL) throws {
 
         let exception = ExceptionWrapper()
-        let result = exportDisk(type, exception: exception)
+        write(toFile: url, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
-
-        return result;
     }
-    */
 }
 
 extension HardDriveProxy {
