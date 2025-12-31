@@ -48,6 +48,7 @@
 // Media
 #include "Media/MediaFileTypes.h"
 #include "RetroVault/FileSystems/Amiga/FSTypes.h"
+#include "RetroVault/Images/ImageTypes.h"
 
 // Miscellaneous
 #include "Misc/LogicAnalyzer/LogicAnalyzerTypes.h"

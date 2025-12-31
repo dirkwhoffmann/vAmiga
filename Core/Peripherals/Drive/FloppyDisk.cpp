@@ -119,7 +119,7 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    Encoder::amiga.decodeSector(tdata, *offset, std::span<u8>(dst, 512));
+    Encoder::amiga.decodeSector(tdata, *offset, MutableByteView(std::span<u8>(dst, 512)));
 }
 
 void
@@ -135,7 +135,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
     debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    Encoder::amiga.encodeSector(tdata, *offset, t, s, std::span<const u8>(src, 512));
+    Encoder::amiga.encodeSector(tdata, *offset, t, s, ByteView(std::span<const u8>(src, 512)));
 }
 
 void

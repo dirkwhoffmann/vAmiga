@@ -10,6 +10,7 @@
 #pragma once
 
 #include "utl/common.h"
+#include "utl/primitives/Range.h"
 #include "DeviceTypes.h"
 
 namespace vamiga {
@@ -37,6 +38,10 @@ public:
 
     // Writes a single byte
     virtual void writeByte(u8 value, isize offset);
+
+    // Exports all bytes or a selected range to a file
+    void exportBytes(const fs::path& path) const;
+    void exportBytes(const fs::path& path, Range<isize> range) const;
 };
 
 }

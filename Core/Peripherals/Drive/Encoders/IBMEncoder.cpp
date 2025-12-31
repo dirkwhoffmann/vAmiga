@@ -45,7 +45,7 @@ IBMEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 
     // Encode all sectors
     for (SectorNr s = 0; s < count; s++)
-        encodeSector(track, 194 + s * ssize, t, s, src.subspan(s * bsize, bsize));
+        encodeSector(track, 194 + s * ssize, t, s, ByteView(src.subspan(s * bsize, bsize)));
 
     // Compute a debug checksum
     if (IMG_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n", t, track.fnv32());
@@ -142,7 +142,7 @@ IBMEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
                               "Sector " + std::to_string(s) + " not found");
 
         auto *secData = dst.data() + s * bsize;
-        decodeSector(track, offsets[s], span<u8>(secData, bsize));
+        decodeSector(track, offsets[s], MutableByteView(span<u8>(secData, bsize)));
     }
 }
 

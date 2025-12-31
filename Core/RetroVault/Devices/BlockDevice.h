@@ -37,6 +37,10 @@ public:
     // Safety wrappers
     void readBlock(span<u8> dst, isize nr) const;
     void writeBlock(span<const u8> src, isize nr);
+
+    // Exports all blocks or a selected range to a file
+    void exportBlocks(const fs::path& path) const;
+    void exportBlocks(const fs::path& path, Range<isize> range) const;
 };
 
 }

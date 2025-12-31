@@ -12,10 +12,12 @@
 #include "utl/abilities/Dumpable.h"
 #include "utl/abilities/Hashable.h"
 #include "utl/support/Bits.h"
-#include <span>
+#include "utl/io.h"
 #include <cstdint>
 #include <cassert>
+#include <fstream>
 #include <type_traits>
+#include <span>
 
 namespace utl {
 
@@ -35,15 +37,15 @@ public:
         sp = std::span(data, size_t(size));
     }
 
-    constexpr BaseByteView(std::span<T> bytes) {
+    constexpr explicit BaseByteView(std::span<T> bytes) {
 
         sp = bytes;
     }
 
     constexpr BaseByteView(const BaseByteView<u8>& other)
-            requires std::is_const_v<T>
+            // requires std::is_const_v<T>
         : sp(other.span()) {}
-
+    
     constexpr T &operator[](isize i) const {
 
         assert(i >= 0 && i < isize(sp.size()));
@@ -164,6 +166,30 @@ public:
         p[1] = u8(value >>  8);
         p[2] = u8(value >> 16);
         p[3] = u8(value >> 24);
+    }
+
+
+    //
+    // File I/O
+    //
+
+    isize writeToStream(std::ostream &stream) const
+    {
+        stream.write((char *)sp.data(), size());
+        return size();
+    }
+
+    isize writeToFile(const fs::path &path) const
+    {
+        if (utl::isDirectory(path))
+            throw IOError(IOError::FILE_IS_DIRECTORY);
+
+        std::ofstream stream(path, std::ofstream::binary);
+
+        if (!stream.is_open())
+            throw IOError(IOError::FILE_CANT_WRITE, path);
+
+        return writeToStream(stream);
     }
 
 

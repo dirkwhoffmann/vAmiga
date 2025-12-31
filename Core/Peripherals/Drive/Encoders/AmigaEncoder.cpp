@@ -32,7 +32,7 @@ AmigaEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 
     // Encode all sectors
     for (SectorNr s = 0; s < count; s++)
-        encodeSector(track, s * ssize, t, s, src.subspan(s * bsize, bsize));
+        encodeSector(track, s * ssize, t, s, ByteView(src.subspan(s * bsize, bsize)));
 
     // Compute a debug checksum
     if (ADF_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n", t, track.fnv32());
@@ -128,7 +128,7 @@ AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
             throw DeviceError(DeviceError::DEV_SEEK_ERR);
 
         auto *secData = dst.data() + s * bsize;
-        decodeSector(track, offsets[s], span<u8>(secData, bsize));
+        decodeSector(track, offsets[s], MutableByteView(span<u8>(secData, bsize)));
     }
 }
 

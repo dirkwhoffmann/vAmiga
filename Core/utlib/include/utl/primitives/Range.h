@@ -23,7 +23,11 @@ struct Range {
     T lower{}, upper{};
 
     constexpr bool valid() const noexcept {
-        return lower <= upper;
+        return lower >= 0 && lower <= upper;
+    }
+
+    constexpr bool inside(isize min, isize max) const noexcept {
+        return lower >= min && lower <= upper && upper <= max;
     }
 
     constexpr bool contains(T value) const noexcept {

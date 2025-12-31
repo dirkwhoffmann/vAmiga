@@ -12,6 +12,7 @@
 #import "VAmiga.h"
 #import "Emulator.h"
 #import "MediaFile.h"
+#import "DiskImage.h"
 #import "utl/support/Strings.h"
 
 using namespace vamiga;
@@ -89,7 +90,16 @@ NSString *EventSlotName(EventSlot slot)
 {
     return @(EventSlotEnum::help(slot));
 }
- 
+
+ImageInfo scan(const fs::path &url)
+{
+    if (auto info = DiskImage::scan(url)) {
+        return *info;
+    } else {
+        return { ImageType::UNKNOWN, ImageFormat::UNKNOWN };
+    }
+}
+
 @implementation ExceptionWrapper
 
 @synthesize fault;

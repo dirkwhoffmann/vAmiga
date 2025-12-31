@@ -58,6 +58,8 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     isize bytesize() const { return size * sizeof(T); }
     bool empty() const { return size == 0; }
     explicit operator bool() const { return !empty(); }
+    ByteView byteView() const { return ByteView(ptr, size); }
+
 
     // Initializers
     void alloc(isize elements);

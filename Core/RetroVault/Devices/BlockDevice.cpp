@@ -45,4 +45,16 @@ BlockDevice::writeBlock(span<const u8> src, isize nr)
     writeBlock(src.data(), nr);
 }
 
+void
+BlockDevice::exportBlocks(const fs::path& path) const
+{
+
+}
+
+void
+BlockDevice::exportBlocks(const fs::path& path, Range<isize> range) const
+{
+
+}
+
 }

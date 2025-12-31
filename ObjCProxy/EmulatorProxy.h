@@ -125,6 +125,8 @@ typedef struct {
 extern const VAmigaConstants VAMIGA;
 
 NSString *EventSlotName(EventSlot slot);
+ImageInfo scan(const fs::path &url);
+
 
 //
 // Exception wrapper
