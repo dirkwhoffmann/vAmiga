@@ -27,13 +27,12 @@ public:
     //
     
 public:
-    
-    using AnyFile::init;
-    
+
     HDZFile(const fs::path &path) { init(path); }
     HDZFile(const u8 *buf, isize len) { init(buf, len); }
     HDZFile(const class HDFFile &hdf) { init(hdf); }
 
+    using AnyImage::init;
     void init(const class HDFFile &hdf);
 
 

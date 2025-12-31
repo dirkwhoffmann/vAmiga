@@ -40,7 +40,7 @@ public:
     
 public:
     
-    using AnyFile::init;
+    using AnyImage::init;
     
     ADFFile() { }
     ADFFile(const fs::path &path) { init(path); }

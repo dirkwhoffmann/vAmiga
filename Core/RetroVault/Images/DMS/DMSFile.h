@@ -13,12 +13,12 @@
 
 namespace vamiga {
 
-class EXEFile : public FloppyDiskImage {
+class DMSFile : public FloppyDiskImage {
+
+public:
 
     ADFFile adf;
 
-public:
-    
     static bool isCompatible(const fs::path &path);
 
     
@@ -27,13 +27,12 @@ public:
     //
     
 public:
-    
-    using AnyFile::init;
-    
-    EXEFile(const fs::path &path) { init(path); }
-    EXEFile(const u8 *buf, isize len) { init(buf, len); }
-    
-    // const char *objectName() const override { return "EXE"; }
+
+    DMSFile(const fs::path &path) { init(path); }
+    DMSFile(const u8 *buf, isize len) { init(buf, len); }
+
+    using AnyImage::init;
+
     const ADFFile &getADF() const { return adf; }
 
 
@@ -53,11 +52,11 @@ public:
     //
 
 public:
-
+    
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     void didLoad() override;
-    
-    
+
+
     //
     // Methods from BlockDevice
     //
@@ -80,13 +79,13 @@ public:
     isize numHeads() const override { return adf.numHeads(); }
     isize numSectors(isize t) const override { return adf.numSectors(t); }
 
-    
+
     //
     // Methods from FloppyDiskImage
     //
 
 public:
-    
+
     FSFormat getDos() const override { return adf.getDos(); }
     Diameter getDiameter() const override { return adf.getDiameter(); }
     Density getDensity() const override { return adf.getDensity(); }

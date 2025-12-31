@@ -57,11 +57,11 @@ public:
 
 public:
 
-    using AnyFile::init;
-    
     EADFFile(const fs::path &path) { init(path); }
     EADFFile(isize len) { init(len); }
     EADFFile(const u8 *buf, isize len) { init(buf, len); }
+
+    using AnyImage::init;
 
     
     //

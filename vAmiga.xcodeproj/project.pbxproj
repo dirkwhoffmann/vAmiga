@@ -285,12 +285,8 @@
 		509D07742EDB920100355638 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */; };
 		509D07772EDB993F00355638 /* PosixFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixFileSystem.cpp */; };
 		509D07782EDB993F00355638 /* PosixFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixFileSystem.cpp */; };
-		509E75FE2EDCCC0700608FA7 /* IMGFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E75FD2EDCCC0600608FA7 /* IMGFactory.cpp */; };
-		509E75FF2EDCCC0700608FA7 /* IMGFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E75FD2EDCCC0600608FA7 /* IMGFactory.cpp */; };
 		509E76122EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
 		509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
-		509E76222EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */; };
-		509E76232EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -371,6 +367,8 @@
 		50BF4B522F04705500F1B9F2 /* D64File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B502F04705000F1B9F2 /* D64File.cpp */; };
 		50BF4B622F05078500F1B9F2 /* Codecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B612F05078200F1B9F2 /* Codecs.cpp */; };
 		50BF4B632F05078500F1B9F2 /* Codecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B612F05078200F1B9F2 /* Codecs.cpp */; };
+		50BF4B6B2F055BFF00F1B9F2 /* AnyImage.h in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B6A2F055BF600F1B9F2 /* AnyImage.h */; };
+		50BF4B6D2F055C0700F1B9F2 /* AnyImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */; };
 		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -1008,12 +1006,8 @@
 		509D07752EDB992A00355638 /* PosixFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PosixFileSystem.h; sourceTree = "<group>"; };
 		509D07762EDB993E00355638 /* PosixFileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PosixFileSystem.cpp; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
-		509E75FC2EDCCBFF00608FA7 /* IMGFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFactory.h; sourceTree = "<group>"; };
-		509E75FD2EDCCC0600608FA7 /* IMGFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGFactory.cpp; sourceTree = "<group>"; };
 		509E76102EDD74E400608FA7 /* DiskEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskEncoder.h; sourceTree = "<group>"; };
 		509E76112EDD74F700608FA7 /* DiskEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskEncoder.cpp; sourceTree = "<group>"; };
-		509E76202EDDBF9800608FA7 /* IMGEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGEncoder.h; sourceTree = "<group>"; };
-		509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGEncoder.cpp; sourceTree = "<group>"; };
 		509E76382EDDF57400608FA7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -1132,7 +1126,6 @@
 		50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServerCmds.cpp; sourceTree = "<group>"; };
 		50BF4B2D2EFBF7C600F1B9F2 /* HardDiskImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardDiskImage.h; sourceTree = "<group>"; };
 		50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardDiskImage.cpp; sourceTree = "<group>"; };
-		50BF4B312EFC1E1800F1B9F2 /* DiskImageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskImageTypes.h; sourceTree = "<group>"; };
 		50BF4B322EFD19FF00F1B9F2 /* TrackDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrackDevice.h; sourceTree = "<group>"; };
 		50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrackDevice.cpp; sourceTree = "<group>"; };
 		50BF4B362EFD244100F1B9F2 /* LinearDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinearDevice.h; sourceTree = "<group>"; };
@@ -1154,6 +1147,11 @@
 		50BF4B542F04708B00F1B9F2 /* CMakeLists.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMakeLists.h; sourceTree = "<group>"; };
 		50BF4B602F05077B00F1B9F2 /* Codecs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Codecs.h; sourceTree = "<group>"; };
 		50BF4B612F05078200F1B9F2 /* Codecs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Codecs.cpp; sourceTree = "<group>"; };
+		50BF4B662F055B6A00F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50BF4B682F055B7D00F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50BF4B6A2F055BF600F1B9F2 /* AnyImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnyImage.h; sourceTree = "<group>"; };
+		50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AnyImage.cpp; sourceTree = "<group>"; };
+		50BF4B6F2F055CA600F1B9F2 /* CmakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CmakeLists.txt; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -1504,6 +1502,11 @@
 			isa = PBXGroup;
 			children = (
 				503E86A42EEF15A300ED891D /* CMakeLists.txt */,
+				505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */,
+				50BCB9A92EE2F9FF000C53CF /* DeviceError.h */,
+				50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */,
+				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
+				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
 				50BF4B362EFD244100F1B9F2 /* LinearDevice.h */,
 				50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */,
 				503E86A02EEEBBE800ED891D /* BlockDevice.h */,
@@ -1683,46 +1686,13 @@
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
-		5056506925440FDE00A79D27 /* FileSystems */ = {
+		5056506925440FDE00A79D27 /* FS */ = {
 			isa = PBXGroup;
 			children = (
-				50EFF1E726E25A5D00296065 /* CMakeLists.txt */,
-				5083CF572546A22E00A28EF8 /* FSTypes.h */,
-				5056507B25459C8800A79D27 /* FSObjects.h */,
-				5056507A25459C8800A79D27 /* FSObjects.cpp */,
-				503FC4B52EE06D0100637C95 /* FSError.h */,
-				503FC4B62EE06D0A00637C95 /* FSError.cpp */,
-				50392FAA2EF6ABF800DAE17A /* FSContract.h */,
-				50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */,
-				505C01092577A8C000F9E05C /* FSDescriptor.h */,
-				505C01082577A8C000F9E05C /* FSDescriptor.cpp */,
-				5029C6E527CA6209002F6CCC /* FileSystem.h */,
-				5029C6E427CA6209002F6CCC /* FileSystem.cpp */,
-				509D076B2EDB294700355638 /* FileSystemLayer1.cpp */,
-				509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */,
-				509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */,
-				509D07752EDB992A00355638 /* PosixFileSystem.h */,
-				509D07762EDB993E00355638 /* PosixFileSystem.cpp */,
-				505DD69B2E0815AC00D9E8B2 /* FSCache.h */,
-				505DD69C2E0815B600D9E8B2 /* FSCache.cpp */,
-				50565071254573E100A79D27 /* FSBlock.h */,
-				50565070254573E100A79D27 /* FSBlock.cpp */,
-				509D048C2EDA46D700355638 /* FSAllocator.h */,
-				509D048D2EDA46D700355638 /* FSAllocator.cpp */,
-				509D04902EDA46E400355638 /* FSService.h */,
-				509D04912EDA46E400355638 /* FSService.cpp */,
-				50392FAE2EF8051A00DAE17A /* FSTree.h */,
-				50392FAF2EF8052000DAE17A /* FSTree.cpp */,
-				50A0F71E2E11157D00972CBC /* FSDoctor.h */,
-				50A0F71F2E11158D00972CBC /* FSDoctor.cpp */,
-				509D049B2EDA472900355638 /* FSImporter.h */,
-				509D04962EDA471900355638 /* FSImporter.cpp */,
-				509D04942EDA471900355638 /* FSExporter.h */,
-				509D04952EDA471900355638 /* FSExporter.cpp */,
-				50A64B94257A63A600442964 /* BootBlockImage.h */,
-				50A64B95257A63A600442964 /* BootBlockImage.cpp */,
+				50BF4B662F055B6A00F1B9F2 /* CMakeLists.txt */,
+				50BF4B652F055B6100F1B9F2 /* Amiga */,
 			);
-			path = FileSystems;
+			path = FS;
 			sourceTree = "<group>";
 		};
 		5058A916281C774600C223C9 /* Extensions */ = {
@@ -1795,10 +1765,6 @@
 			isa = PBXGroup;
 			children = (
 				505A194F2EDDF77B000BB9C2 /* CMakeLists.txt */,
-				509E75FC2EDCCBFF00608FA7 /* IMGFactory.h */,
-				509E75FD2EDCCC0600608FA7 /* IMGFactory.cpp */,
-				509E76202EDDBF9800608FA7 /* IMGEncoder.h */,
-				509E76212EDDBF9F00608FA7 /* IMGEncoder.cpp */,
 				50FAC76F2515EBED00E47421 /* IMGFile.h */,
 				50FAC76E2515EBED00E47421 /* IMGFile.cpp */,
 			);
@@ -2176,6 +2142,7 @@
 				506436E329C1D90B00768528 /* Components */,
 				505B801D23FE628F002407FE /* Ports */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
+				50BF4B642F055ADF00F1B9F2 /* RetroVault */,
 				509E76342EDDF53600608FA7 /* Storage */,
 				506436E129C1D82500768528 /* ThirdParty */,
 				50E98B52275A125700AA0CB9 /* Misc */,
@@ -2201,24 +2168,7 @@
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
 				50FCCA7B262AAAEA00398342 /* Script.h */,
 				50FCCA7A262AAAEA00398342 /* Script.cpp */,
-				50BF4B312EFC1E1800F1B9F2 /* DiskImageTypes.h */,
-				50E1B0A527CE7164005E41DA /* DiskImage.h */,
-				50E1B0A427CE7164005E41DA /* DiskImage.cpp */,
-				50FAC77425160BBF00E47421 /* FloppyDiskImage.h */,
-				50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */,
-				50BF4B2D2EFBF7C600F1B9F2 /* HardDiskImage.h */,
-				50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */,
 				5009B7F5255702C00037288E /* Rom */,
-				505A193C2EDDF5ED000BB9C2 /* HDF */,
-				505A193D2EDDF5FB000BB9C2 /* HDZ */,
-				505A193E2EDDF60B000BB9C2 /* ADF */,
-				505A193F2EDDF618000BB9C2 /* ADZ */,
-				505A19402EDDF622000BB9C2 /* EADF */,
-				505A19412EDDF62A000BB9C2 /* IMG */,
-				505A19422EDDF632000BB9C2 /* ST */,
-				505A19432EDDF63C000BB9C2 /* DMS */,
-				505A19442EDDF647000BB9C2 /* EXE */,
-				50BF4B532F04706900F1B9F2 /* D64 */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -2227,13 +2177,6 @@
 			isa = PBXGroup;
 			children = (
 				509E76382EDDF57400608FA7 /* CMakeLists.txt */,
-				505A19572EDE0BAB000BB9C2 /* DeviceTypes.h */,
-				50BCB9A92EE2F9FF000C53CF /* DeviceError.h */,
-				50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */,
-				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
-				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
-				503E869B2EEE9D5300ED891D /* Devices */,
-				5056506925440FDE00A79D27 /* FileSystems */,
 				508FE06621EA31E50043D0E9 /* Media */,
 			);
 			path = Storage;
@@ -2634,6 +2577,85 @@
 			path = D64;
 			sourceTree = "<group>";
 		};
+		50BF4B642F055ADF00F1B9F2 /* RetroVault */ = {
+			isa = PBXGroup;
+			children = (
+				50BF4B682F055B7D00F1B9F2 /* CMakeLists.txt */,
+				50BF4B6E2F055C1200F1B9F2 /* Images */,
+				503E869B2EEE9D5300ED891D /* Devices */,
+				5056506925440FDE00A79D27 /* FS */,
+			);
+			path = RetroVault;
+			sourceTree = "<group>";
+		};
+		50BF4B652F055B6100F1B9F2 /* Amiga */ = {
+			isa = PBXGroup;
+			children = (
+				50EFF1E726E25A5D00296065 /* CMakeLists.txt */,
+				5083CF572546A22E00A28EF8 /* FSTypes.h */,
+				5056507B25459C8800A79D27 /* FSObjects.h */,
+				5056507A25459C8800A79D27 /* FSObjects.cpp */,
+				503FC4B52EE06D0100637C95 /* FSError.h */,
+				503FC4B62EE06D0A00637C95 /* FSError.cpp */,
+				50392FAA2EF6ABF800DAE17A /* FSContract.h */,
+				50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */,
+				505C01092577A8C000F9E05C /* FSDescriptor.h */,
+				505C01082577A8C000F9E05C /* FSDescriptor.cpp */,
+				5029C6E527CA6209002F6CCC /* FileSystem.h */,
+				5029C6E427CA6209002F6CCC /* FileSystem.cpp */,
+				509D076B2EDB294700355638 /* FileSystemLayer1.cpp */,
+				509D076E2EDB2A0500355638 /* FileSystemLayer2.cpp */,
+				509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */,
+				509D07752EDB992A00355638 /* PosixFileSystem.h */,
+				509D07762EDB993E00355638 /* PosixFileSystem.cpp */,
+				505DD69B2E0815AC00D9E8B2 /* FSCache.h */,
+				505DD69C2E0815B600D9E8B2 /* FSCache.cpp */,
+				50565071254573E100A79D27 /* FSBlock.h */,
+				50565070254573E100A79D27 /* FSBlock.cpp */,
+				509D048C2EDA46D700355638 /* FSAllocator.h */,
+				509D048D2EDA46D700355638 /* FSAllocator.cpp */,
+				509D04902EDA46E400355638 /* FSService.h */,
+				509D04912EDA46E400355638 /* FSService.cpp */,
+				50392FAE2EF8051A00DAE17A /* FSTree.h */,
+				50392FAF2EF8052000DAE17A /* FSTree.cpp */,
+				50A0F71E2E11157D00972CBC /* FSDoctor.h */,
+				50A0F71F2E11158D00972CBC /* FSDoctor.cpp */,
+				509D049B2EDA472900355638 /* FSImporter.h */,
+				509D04962EDA471900355638 /* FSImporter.cpp */,
+				509D04942EDA471900355638 /* FSExporter.h */,
+				509D04952EDA471900355638 /* FSExporter.cpp */,
+				50A64B94257A63A600442964 /* BootBlockImage.h */,
+				50A64B95257A63A600442964 /* BootBlockImage.cpp */,
+			);
+			path = Amiga;
+			sourceTree = "<group>";
+		};
+		50BF4B6E2F055C1200F1B9F2 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				50BF4B6F2F055CA600F1B9F2 /* CmakeLists.txt */,
+				50BF4B6A2F055BF600F1B9F2 /* AnyImage.h */,
+				50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */,
+				50E1B0A527CE7164005E41DA /* DiskImage.h */,
+				50E1B0A427CE7164005E41DA /* DiskImage.cpp */,
+				50FAC77425160BBF00E47421 /* FloppyDiskImage.h */,
+				50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */,
+				50BF4B2D2EFBF7C600F1B9F2 /* HardDiskImage.h */,
+				50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */,
+				505A193C2EDDF5ED000BB9C2 /* HDF */,
+				505A193D2EDDF5FB000BB9C2 /* HDZ */,
+				505A193E2EDDF60B000BB9C2 /* ADF */,
+				505A193F2EDDF618000BB9C2 /* ADZ */,
+				505A19402EDDF622000BB9C2 /* EADF */,
+				505A19412EDDF62A000BB9C2 /* IMG */,
+				505A19422EDDF632000BB9C2 /* ST */,
+				505A19432EDDF63C000BB9C2 /* DMS */,
+				505A19442EDDF647000BB9C2 /* EXE */,
+				50BF4B532F04706900F1B9F2 /* D64 */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		50C8C44C2607409B00F4E012 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2983,7 +3005,6 @@
 				50BF4B492F03D72800F1B9F2 /* MFM.cpp in Sources */,
 				504CC8C12D5A819F00C2AC9A /* ADZFile.cpp in Sources */,
 				509D07772EDB993F00355638 /* PosixFileSystem.cpp in Sources */,
-				509E75FE2EDCCC0700608FA7 /* IMGFactory.cpp in Sources */,
 				506B471D256396BC009FEFC3 /* VolumeInspector.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */,
@@ -3014,6 +3035,7 @@
 				50BCB9992EE1DB0A000C53CF /* Bits.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
+				50BF4B6B2F055BFF00F1B9F2 /* AnyImage.h in Sources */,
 				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				50BF4B4D2F03D73000F1B9F2 /* GCR.cpp in Sources */,
 				502B303828469CF600673377 /* Beam.cpp in Sources */,
@@ -3259,6 +3281,7 @@
 				50AFEBBA278EF5FD00F422D5 /* Sequencer.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
+				50BF4B6D2F055C0700F1B9F2 /* AnyImage.cpp in Sources */,
 				50E1B0A627CE7164005E41DA /* DiskImage.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */,
@@ -3269,7 +3292,6 @@
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
-				509E76232EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */,
 				501D20122E7FEE19007B1242 /* RomSettings.swift in Sources */,
 				506407CF2D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
@@ -3409,7 +3431,6 @@
 				50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */,
 				50FC04F127DA1A4500C3E566 /* GdbServerCmds.cpp in Sources */,
 				50FC04E927DA1A3700C3E566 /* OSDebuggerRead.cpp in Sources */,
-				509E75FF2EDCCC0700608FA7 /* IMGFactory.cpp in Sources */,
 				50FC04AC27DA198E00C3E566 /* BlitterEvents.cpp in Sources */,
 				50FC04AB27DA198E00C3E566 /* Blitter.cpp in Sources */,
 				50FC049C27DA197500C3E566 /* Agnus.cpp in Sources */,
@@ -3438,7 +3459,6 @@
 				50392FB02EF8052200DAE17A /* FSTree.cpp in Sources */,
 				507C01BB2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,
-				509E76222EDDBFA000608FA7 /* IMGEncoder.cpp in Sources */,
 				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
 				50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,

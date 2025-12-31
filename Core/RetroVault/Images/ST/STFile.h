@@ -13,28 +13,27 @@
 
 namespace vamiga {
 
-class IMGFile : public FloppyDiskImage {
-    
+class STFile : public FloppyDiskImage {
+
 public:
 
-    static constexpr isize IMGSIZE_35_DD = 737280;  // 720 KB PC disk
-    
+    static constexpr isize STSIZE_35_DD = 737280;  // 720 KB Atari ST disk
+
     static bool isCompatible(const fs::path &path);
 
-    
+
     //
     // Initializing
     //
-    
-public:
-    
-    using AnyFile::init;
-    
-    IMGFile(const fs::path &path) { init(path); }
-    IMGFile(isize len) { init(len); }
-    IMGFile(const u8 *buf, isize len) { init(buf, len); }
-    IMGFile(Diameter dia, Density den) { init(dia, den); }
 
+public:
+
+    STFile(const fs::path &path) { init(path); }
+    STFile(isize len) { init(len); }
+    STFile(const u8 *buf, isize len) { init(buf, len); }
+    STFile(Diameter dia, Density den) { init(dia, den); }
+
+    using AnyImage::init;
     void init(Diameter dia, Density den);
 
 
@@ -45,8 +44,8 @@ public:
 public:
 
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    
-    
+
+
     //
     // Methods from BlockDevice
     //
@@ -72,6 +71,8 @@ public:
     // Methods from FloppyDiskImage
     //
 
+public:
+    
     FSFormat getDos() const override { return FSFormat::NODOS; }
     Diameter getDiameter() const override { return Diameter::INCH_35; }
     Density getDensity() const override { return Density::DD; }

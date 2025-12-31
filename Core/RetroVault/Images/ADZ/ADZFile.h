@@ -27,13 +27,12 @@ public:
     //
     
 public:
-    
-    using AnyFile::init;
-    
+
     ADZFile(const fs::path &path) { init(path); }
     ADZFile(const u8 *buf, isize len) { init(buf, len); }
     ADZFile(const class ADFFile &adf) { init(adf); }
-    
+
+    using AnyImage::init;
     void init(const class ADFFile &adf);
     
 

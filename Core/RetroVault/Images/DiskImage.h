@@ -9,13 +9,12 @@
 
 #pragma once
 
-#include "DiskImageTypes.h"
-#include "AnyFile.h"
+#include "AnyImage.h"
 #include "TrackDevice.h"
 
 namespace vamiga {
 
-class DiskImage : public AnyFile, public TrackDevice {
+class DiskImage : public AnyImage, public TrackDevice {
 
     //
     // Methods from LinearDevice
@@ -32,7 +31,7 @@ class DiskImage : public AnyFile, public TrackDevice {
 
 public:
 
-    using AnyFile::byteView;
+    using AnyImage::byteView;
     ByteView byteView(TrackNr t) const;
     ByteView byteView(TrackNr t, SectorNr s) const;
     MutableByteView byteView(TrackNr t);
