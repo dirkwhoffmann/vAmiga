@@ -25,7 +25,7 @@ public:
     static std::unique_ptr<FloppyDiskImage> make(const fs::path &path);
 
     // Returns the predicted file system of this disk
-    virtual FSFormat getDos() const = 0;
+    [[deprecated]] virtual FSFormat getDos() const = 0;
 
     // Returns the disk diameter and density
     virtual Diameter getDiameter() const = 0;

@@ -15,46 +15,45 @@ namespace vamiga {
 
 class FileSystem;
 
-class ADFFile : public FloppyDiskImage {
+class D64File : public FloppyDiskImage {
 
 public:
 
-    static constexpr isize ADFSIZE_35_DD    = 901120;   //  880 KB
-    static constexpr isize ADFSIZE_35_DD_81 = 912384;   //  891 KB (+ 1 cyl)
-    static constexpr isize ADFSIZE_35_DD_82 = 923648;   //  902 KB (+ 2 cyls)
-    static constexpr isize ADFSIZE_35_DD_83 = 934912;   //  913 KB (+ 3 cyls)
-    static constexpr isize ADFSIZE_35_DD_84 = 946176;   //  924 KB (+ 4 cyls)
-    static constexpr isize ADFSIZE_35_HD    = 1802240;  // 1760 KB
-    
+    // D64 files come in six different sizes
+    static constexpr isize D64_683_SECTORS     = 174848;
+    static constexpr isize D64_683_SECTORS_ECC = 175531;
+    static constexpr isize D64_768_SECTORS     = 196608;
+    static constexpr isize D64_768_SECTORS_ECC = 197376;
+    static constexpr isize D64_802_SECTORS     = 205312;
+    static constexpr isize D64_802_SECTORS_ECC = 206114;
+
     static bool isCompatible(const fs::path &path);
 
-    // Returns the size of an ADF file of a given disk type in bytes
-    static isize fileSize(Diameter diameter, Density density);
-    static isize fileSize(Diameter diameter, Density density, isize tracks);
+    // Error information stored in the D64 archive
+    // u8 errors[802];
 
-    
+
     //
     // Initializing
     //
-    
-public:
-    
-    using AnyFile::init;
-    
-    ADFFile() { }
-    ADFFile(const fs::path &path) { init(path); }
-    ADFFile(isize len) { init(len); }
-    ADFFile(const u8 *buf, isize len) { init(buf, len); }
 
-    
+public:
+
+    using AnyFile::init;
+
+    D64File();
+    D64File(const fs::path &path) { init(path); }
+    D64File(isize len) { init(len); }
+    D64File(const u8 *buf, isize len) { init(buf, len); }
+
+
     //
     // Methods from AnyFile
     //
-    
+
 public:
-    
+
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    void didLoad() override;
 
 
     //
@@ -63,7 +62,7 @@ public:
 
 public:
 
-    isize bsize() const override { return 512; }
+    isize bsize() const override { return 256; }
 
 
     //
@@ -71,7 +70,7 @@ public:
     //
 
 public:
-    
+
     isize numCyls() const override;
     isize numHeads() const override;
     isize numSectors(isize) const override { return numSectors(); }
@@ -81,31 +80,38 @@ public:
     //
     // Methods from FloppyDiskImage
     //
-    
+
 public:
-    
-    FSFormat getDos() const override;
+
+    // FSFormat getDos() const override;
     Diameter getDiameter() const override;
     Density getDensity() const override;
 
-    
+
     //
     // Querying disk properties
     //
-    
-public:
-    
-    // Returns a file system descriptor for this volume
-    struct FSDescriptor getFileSystemDescriptor() const;
 
-    
+public:
+
+    // Returns true if the file contains error correction codes
+    bool hasEcc() const;
+
+    // Returns the error correction codes (if any)
+    optional<std::span<const u8>> ecc() const;
+
+
+    // Returns a file system descriptor for this volume
+    // struct FSDescriptor getFileSystemDescriptor() const;
+
+
     //
     // Formatting
     //
 
 public:
-    
-    void formatDisk(FSFormat fs, BootBlockId id, string name);
+
+    // void formatDisk(FSFormat fs, BootBlockId id, string name);
 };
 
 }

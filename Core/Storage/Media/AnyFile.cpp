@@ -84,13 +84,13 @@ AnyFile::copy(u8 *buf, isize offset, isize len) const
 }
 
 ByteView
-AnyFile::view(isize offset) const
+AnyFile::byteView(isize offset) const
 {
-    return view(offset, data.size - offset);
+    return byteView(offset, data.size - offset);
 }
 
 ByteView
-AnyFile::view(isize offset, isize len) const
+AnyFile::byteView(isize offset, isize len) const
 {
     assert(offset >= 0 && offset < data.size);
     assert(len >= 0 && offset + len <= data.size);
@@ -99,13 +99,13 @@ AnyFile::view(isize offset, isize len) const
 }
 
 MutableByteView
-AnyFile::view(isize offset)
+AnyFile::byteView(isize offset)
 {
-    return view(offset, data.size - offset);
+    return byteView(offset, data.size - offset);
 }
 
 MutableByteView
-AnyFile::view(isize offset, isize len)
+AnyFile::byteView(isize offset, isize len)
 {
     assert(offset >= 0 && offset < data.size);
     assert(len >= 0 && offset + len <= data.size);

@@ -86,10 +86,10 @@ public:
 
 public:
 
-    ByteView view(isize offset = 0) const;
-    ByteView view(isize offset, isize len) const;
-    MutableByteView view(isize offset = 0);
-    MutableByteView view(isize offset, isize len);
+    ByteView byteView(isize offset = 0) const;
+    ByteView byteView(isize offset, isize len) const;
+    MutableByteView byteView(isize offset = 0);
+    MutableByteView byteView(isize offset, isize len);
 
     // Copies the file contents into a buffer
     virtual void copy(u8 *dst, isize offset, isize len) const;

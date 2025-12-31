@@ -31,7 +31,8 @@ class DiskImage : public AnyFile, public TrackDevice {
     //
 
 public:
-    
+
+    using AnyFile::byteView;
     ByteView byteView(TrackNr t) const;
     ByteView byteView(TrackNr t, SectorNr s) const;
     MutableByteView byteView(TrackNr t);

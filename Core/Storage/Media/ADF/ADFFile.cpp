@@ -12,6 +12,7 @@
 #include "BootBlockImage.h"
 #include "EADFFile.h"
 #include "FileSystem.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 
 namespace vamiga {
@@ -19,18 +20,13 @@ namespace vamiga {
 bool
 ADFFile::isCompatible(const fs::path &path)
 {
-    // Check the suffix
+    // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
     if (suffix != ".ADF") return false;
-    
-    // Make sure it's not an extended ADF
-    return !EADFFile::isCompatible(path);
-}
 
-/*
-bool
-ADFFile::isCompatible(const u8 *buf, isize len)
-{
+    // Get file size
+    auto len = utl::getSizeOfFile(path);
+
     // Some ADFs contain an additional byte at the end. Ignore it.
     len &= ~1;
 
@@ -38,9 +34,11 @@ ADFFile::isCompatible(const u8 *buf, isize len)
     if (len % 11264) return false;
 
     // Check some more limits
-    return len <= ADFSIZE_35_DD_84 || len == ADFSIZE_35_HD;
+    if (len > ADFSIZE_35_DD_84 && len != ADFSIZE_35_HD) return false;
+
+    // Make sure it's not an extended ADF
+    return !EADFFile::isCompatible(path);
 }
-*/
 
 isize
 ADFFile::fileSize(Diameter diameter, Density density)
@@ -193,33 +191,6 @@ ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 
     // Update the underlying ADF
     fs.flush();
-
-    /*
-    // Create an empty floppy disk
-    Device device(getGeometry());
-
-    // Get a file system descriptor for this ADF
-    auto descriptor = getFileSystemDescriptor();
-    descriptor.dos = fs;
-
-    // Create a file system
-    FileSystem volume(device, descriptor);
-    volume.setName(FSName(name));
-    
-    // Write boot code
-    volume.makeBootable(id);
-    
-    // Export the file system to the ADF
-    if (!volume.exporter.exportVolume(data.ptr, data.size)) throw FSError(FSError::FS_UNKNOWN);
-    */
 }
-
-/*
-void
-ADFFile::dumpSector(Sector s) const
-{
-    Dumpable::hexdump(data.ptr + 512 * s, 512);
-}
-*/
 
 }
