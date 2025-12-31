@@ -14,22 +14,25 @@
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 D64File::isCompatible(const fs::path &path)
 {
     // Check suffix
-    if (utl::uppercased(path.extension().string()) != ".D64") return false;
+    if (utl::uppercased(path.extension().string()) != ".D64") return {};
 
     // Check file size
     auto len = utl::getSizeOfFile(path);
 
-    return
+    bool match =
     len == D64_683_SECTORS ||
     len == D64_683_SECTORS_ECC ||
     len == D64_768_SECTORS ||
     len == D64_768_SECTORS_ECC ||
     len == D64_802_SECTORS ||
     len == D64_802_SECTORS_ECC;
+    if (!match) return {};
+
+    return {{ ImageType::FLOPPY, ImageFormat::D64 }};
 }
 
 isize

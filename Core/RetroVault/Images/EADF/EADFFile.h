@@ -48,7 +48,7 @@ class EADFFile : public FloppyDiskImage {
     
 public:
 
-    static bool isCompatible(const fs::path &path);
+    static optional<ImageInfo> isCompatible(const fs::path &path);
 
 
     //
@@ -80,7 +80,7 @@ public:
     
 public:
     
-    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path).has_value(); }
     void didLoad() override;
     
     

@@ -16,12 +16,12 @@
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 ADFFile::isCompatible(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    if (suffix != ".ADF") return false;
+    if (suffix != ".ADF") return {};
 
     // Get file size
     auto len = utl::getSizeOfFile(path);
@@ -30,13 +30,15 @@ ADFFile::isCompatible(const fs::path &path)
     len &= ~1;
 
     // The size must be a multiple of the cylinder size
-    if (len % 11264) return false;
+    if (len % 11264) return {};
 
     // Check some more limits
-    if (len > ADFSIZE_35_DD_84 && len != ADFSIZE_35_HD) return false;
+    if (len > ADFSIZE_35_DD_84 && len != ADFSIZE_35_HD) return {};
 
     // Make sure it's not an extended ADF
-    return !EADFFile::isCompatible(path);
+    if (EADFFile::isCompatible(path)) return {};
+
+    return {{ ImageType::FLOPPY, ImageFormat::ADF }};
 }
 
 isize

@@ -16,16 +16,18 @@
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 IMGFile::isCompatible(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    if (suffix != ".IMG") return false;
+    if (suffix != ".IMG") return {};
 
     // Check file size
     auto size = utl::getSizeOfFile(path);
-    return size == IMGSIZE_35_DD;
+    if (size != IMGSIZE_35_DD) return {};
+
+    return {{ ImageType::FLOPPY, ImageFormat::IMG }};
 }
 
 void

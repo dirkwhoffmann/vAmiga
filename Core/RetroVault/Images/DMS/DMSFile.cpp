@@ -20,15 +20,17 @@ unsigned short extractDMS(const unsigned char *in, size_t inSize,
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 DMSFile::isCompatible(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    if (suffix != ".DMS") return false;
+    if (suffix != ".DMS") return {};
 
     // Check magic bytes
-    return utl::matchingFileHeader(path, "DMS!");
+    if (!utl::matchingFileHeader(path, "DMS!")) return {};
+
+    return {{ ImageType::FLOPPY, ImageFormat::DMS }};
 }
 
 void

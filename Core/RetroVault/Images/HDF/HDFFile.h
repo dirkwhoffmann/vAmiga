@@ -12,7 +12,7 @@
 #include "HDFFileTypes.h"
 #include "HardDiskImage.h"
 #include "FSDescriptor.h"
-#include "utl/types.h"
+#include "utl/common.h"
 
 namespace vamiga {
 
@@ -31,11 +31,13 @@ public:
     // Included device drivers
     std::vector <DriverDescriptor> drivers;
 
-    static bool isCompatible(const fs::path &path);
+    static optional<ImageInfo> isCompatible(const fs::path &path);
 
     static bool isOversized(isize size) { return size > 504_MB; }
 
-    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override {
+        return isCompatible(path).has_value();
+    }
     void didLoad() override;
     
     

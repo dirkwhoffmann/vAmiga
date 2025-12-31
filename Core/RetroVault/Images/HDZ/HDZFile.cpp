@@ -15,11 +15,13 @@
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 HDZFile::isCompatible(const fs::path &path)
 {
     auto suffix = utl::uppercased(path.extension().string());
-    return suffix == ".HDZ";
+    if (suffix != ".HDZ") return {};
+
+    return {{ ImageType::HARDDISK, ImageFormat::HDZ }};
 }
 
 void

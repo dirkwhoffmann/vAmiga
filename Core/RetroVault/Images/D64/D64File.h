@@ -27,7 +27,7 @@ public:
     static constexpr isize D64_802_SECTORS     = 205312;
     static constexpr isize D64_802_SECTORS_ECC = 206114;
 
-    static bool isCompatible(const fs::path &path);
+    static optional<ImageInfo> isCompatible(const fs::path &path);
 
     // Error information stored in the D64 archive
     // u8 errors[802];
@@ -63,7 +63,7 @@ public:
 
 public:
 
-    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path).has_value(); }
 
 
     //

@@ -19,11 +19,13 @@
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 HDFFile::isCompatible(const fs::path &path)
 {
     auto suffix = utl::uppercased(path.extension().string());
-    return suffix == ".HDF";
+    if (suffix != ".HDF") return {};
+
+    return {{ ImageType::HARDDISK, ImageFormat::HDF }};
 }
 
 void

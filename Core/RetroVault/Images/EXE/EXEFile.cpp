@@ -16,19 +16,21 @@
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 EXEFile::isCompatible(const fs::path &path)
 {
     // Check file size
     auto suffix = utl::uppercased(path.extension().string());
-    if (suffix != ".EXE") return false;
+    if (suffix != ".EXE") return {};
 
     // Only accept files fitting on a HD disk
-    if (utl::getSizeOfFile(path) > 1710000) return false;
+    if (utl::getSizeOfFile(path) > 1710000) return {};
 
     // Check header signature
     u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
-    return utl::matchingFileHeader(path, signature, sizeof(signature));
+    if (!utl::matchingFileHeader(path, signature, sizeof(signature))) return {};
+
+    return {{ ImageType::FLOPPY, ImageFormat::EXE }};
 }
 
 void

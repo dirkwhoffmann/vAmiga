@@ -25,6 +25,8 @@ public:
 
     virtual optional<ImageInfo> validateURL(const fs::path& url) const noexcept { return {}; }
 
+    static optional<ImageInfo> scan(fs::path url);
+
 
     //
     // Methods from LinearDevice

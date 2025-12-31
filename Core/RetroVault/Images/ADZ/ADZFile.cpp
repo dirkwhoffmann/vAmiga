@@ -35,11 +35,13 @@ ADZFile::init(const class ADFFile &adf)
     debug(HDF_DEBUG, "Compressed ADF size: %ld bytes.\n", data.size);
 }
 
-bool
+optional<ImageInfo>
 ADZFile::isCompatible(const fs::path &path)
 {
     auto suffix = utl::uppercased(path.extension().string());
-    return suffix == ".ADZ";
+    if (suffix != ".ADZ") return {};
+
+    return {{ ImageType::FLOPPY, ImageFormat::ADZ }};
 }
 
 void

@@ -24,14 +24,15 @@ const std::vector<string> EADFFile::extAdfHeaders =
     "UAE-1ADF"
 };
 
-bool
+optional<ImageInfo>
 EADFFile::isCompatible(const fs::path &path)
 {
     for (auto &header : extAdfHeaders) {
 
-        if (utl::matchingFileHeader(path, header)) return true;
+        if (utl::matchingFileHeader(path, header))
+            return {{ ImageType::FLOPPY, ImageFormat::EADF }};
     }
-    return false;
+    return {};
 }
 
 isize

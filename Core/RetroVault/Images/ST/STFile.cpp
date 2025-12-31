@@ -16,16 +16,18 @@
 
 namespace vamiga {
 
-bool
+optional<ImageInfo>
 STFile::isCompatible(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    if (suffix != ".ST") return false;
+    if (suffix != ".ST") return {};
 
     // Check file size
     auto size = utl::getSizeOfFile(path);
-    return size == STSIZE_35_DD;
+    if (size != STSIZE_35_DD) return {};
+
+    return {{ ImageType::FLOPPY, ImageFormat::ST }};
 }
 
 void
