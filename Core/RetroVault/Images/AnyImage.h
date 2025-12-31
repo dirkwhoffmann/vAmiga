@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AnyFile.h" // REMOVE ASAP
+#include "ImageTypes.h"
 #include "utl/abilities.h"
 #include "utl/storage.h"
 #include <iostream>

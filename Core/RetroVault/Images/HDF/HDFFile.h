@@ -52,6 +52,18 @@ public:
     void init(const fs::path &path);
     void init(const u8 *buf, isize len);
 
+//    optional<ImageInfo> validateURL(const fs::path& url) override;
+
+
+    //
+    // Methods from AnyImage
+    //
+
+public:
+
+    ImageType type() const noexcept override { return ImageType::HARDDISK; }
+    ImageFormat format() const noexcept override { return ImageFormat::HDF; }
+
 
     //
     // Methods from BlockDevice

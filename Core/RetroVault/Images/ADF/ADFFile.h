@@ -41,7 +41,7 @@ public:
 public:
     
     using AnyImage::init;
-    
+
     ADFFile() { }
     ADFFile(const fs::path &path) { init(path); }
     ADFFile(isize len) { init(len); }
@@ -53,6 +53,16 @@ public:
     void init(Diameter dia, Density den);
     void init(const GeometryDescriptor &descr);
     void init(const class FileSystem &volume);
+
+
+    //
+    // Methods from AnyImage
+    //
+
+public:
+
+    ImageType type() const noexcept override { return ImageType::FLOPPY; }
+    ImageFormat format() const noexcept override { return ImageFormat::ADF; }
 
 
     //

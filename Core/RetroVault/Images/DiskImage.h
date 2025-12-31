@@ -16,9 +16,21 @@ namespace vamiga {
 
 class DiskImage : public AnyImage, public TrackDevice {
 
+public:
+
+    // Returns meta-data about this image (TODO: MOVE TO AnyImage later)
+    virtual ImageType type() const noexcept = 0;
+    virtual ImageFormat format() const noexcept = 0;
+    ImageInfo info() const noexcept { return { type(), format() }; }
+
+    virtual optional<ImageInfo> validateURL(const fs::path& url) const noexcept { return {}; }
+
+
     //
     // Methods from LinearDevice
     //
+
+public:
 
     isize size() const override { return data.size; }
     void read(u8 *dst, isize offset, isize count) const override;

@@ -63,7 +63,17 @@ public:
 
     using AnyImage::init;
 
-    
+
+    //
+    // Methods from AnyImage
+    //
+
+public:
+
+    ImageType type() const noexcept override { return ImageType::FLOPPY; }
+    ImageFormat format() const noexcept override { return ImageFormat::EADF; }
+
+
     //
     // Methods from AnyFile
     //

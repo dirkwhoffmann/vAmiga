@@ -48,9 +48,18 @@ public:
 
 
     //
+    // Methods from AnyImage
+    //
+
+public:
+
+    ImageType type() const noexcept override { return ImageType::HARDDISK; }
+    ImageFormat format() const noexcept override { return ImageFormat::HDZ; }
+
+
+    //
     // Methods from AnyFile
     //
-    
 
 public:
 

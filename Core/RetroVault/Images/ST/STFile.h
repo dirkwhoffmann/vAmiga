@@ -38,6 +38,16 @@ public:
 
 
     //
+    // Methods from AnyImage
+    //
+
+public:
+
+    ImageType type() const noexcept override { return ImageType::FLOPPY; }
+    ImageFormat format() const noexcept override { return ImageFormat::ST; }
+
+
+    //
     // Methods from AnyFile
     //
 

@@ -314,15 +314,7 @@ extension EmulatorProxy {
 
 extension MemProxy {
 
-    /*
-    func loadRom(_ proxy: MediaFileProxy) throws {
 
-        let exception = ExceptionWrapper()
-        loadRom(proxy, exception: exception)
-        if exception.fault != 0 { throw AppError(exception) }
-    }
-    */
-    
     func loadRom(buffer: Data) throws {
 
         let exception = ExceptionWrapper()
@@ -336,15 +328,6 @@ extension MemProxy {
         loadRom(fromFile: url, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
     }
-
-    /*
-    func loadExt(_ proxy: MediaFileProxy) throws {
-
-        let exception = ExceptionWrapper()
-        loadExt(proxy, exception: exception)
-        if exception.fault != 0 { throw AppError(exception) }
-    }
-    */
 
     func loadExt(buffer: Data) throws {
 

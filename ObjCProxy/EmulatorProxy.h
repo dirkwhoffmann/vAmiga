@@ -974,7 +974,7 @@ NSString *EventSlotName(EventSlot slot);
 
 
 //
-// DiskFileProxy
+// DiskFileProxy (DEPRECATED)
 //
 
 @interface DiskFileProxy : AnyFileProxy {
