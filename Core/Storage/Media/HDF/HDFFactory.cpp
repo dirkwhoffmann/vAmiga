@@ -25,15 +25,4 @@ HDFFactory::make(const u8 *buf, isize len)
     return std::make_unique<HDFFile>(buf, len);
 }
 
-std::unique_ptr<HDFFile>
-HDFFactory::make(const class HardDrive &drive)
-{
-    auto hdf = std::make_unique<HDFFile>(drive.data.ptr, drive.data.size);
-
-    // Overwrite the predicted geometry with the precise one
-    hdf->geometry = drive.getGeometry();
-
-    return hdf;
-}
-
 }

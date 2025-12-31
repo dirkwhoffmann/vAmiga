@@ -19,7 +19,6 @@ public:
 
     static std::unique_ptr<HDFFile> make(const fs::path &path);
     static std::unique_ptr<HDFFile> make(const u8 *buf, isize len);
-    static std::unique_ptr<HDFFile> make(const class HardDrive &hd);
 };
 
 }

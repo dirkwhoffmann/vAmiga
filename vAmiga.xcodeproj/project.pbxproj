@@ -389,6 +389,8 @@
 		50BF4B4E2F03D73000F1B9F2 /* GCR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B4C2F03D73000F1B9F2 /* GCR.cpp */; };
 		50BF4B512F04705500F1B9F2 /* D64File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B502F04705000F1B9F2 /* D64File.cpp */; };
 		50BF4B522F04705500F1B9F2 /* D64File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B502F04705000F1B9F2 /* D64File.cpp */; };
+		50BF4B622F05078500F1B9F2 /* Codecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B612F05078200F1B9F2 /* Codecs.cpp */; };
+		50BF4B632F05078500F1B9F2 /* Codecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B612F05078200F1B9F2 /* Codecs.cpp */; };
 		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -1196,6 +1198,8 @@
 		50BF4B4F2F04704300F1B9F2 /* D64File.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = D64File.h; sourceTree = "<group>"; };
 		50BF4B502F04705000F1B9F2 /* D64File.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = D64File.cpp; sourceTree = "<group>"; };
 		50BF4B542F04708B00F1B9F2 /* CMakeLists.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMakeLists.h; sourceTree = "<group>"; };
+		50BF4B602F05077B00F1B9F2 /* Codecs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Codecs.h; sourceTree = "<group>"; };
+		50BF4B612F05078200F1B9F2 /* Codecs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Codecs.cpp; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -2377,6 +2381,8 @@
 				50D52442227878E900F8959D /* FloppyDiskTypes.h */,
 				50F6EEB721F4F5C60091155D /* FloppyDisk.h */,
 				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,
+				50BF4B602F05077B00F1B9F2 /* Codecs.h */,
+				50BF4B612F05078200F1B9F2 /* Codecs.cpp */,
 				50BF4B3D2F03D65600F1B9F2 /* Encoders */,
 			);
 			path = Drive;
@@ -3182,6 +3188,7 @@
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
+				50BF4B622F05078500F1B9F2 /* Codecs.cpp in Sources */,
 				50E79D3B2EDC48C50052277E /* HDFFactory.cpp in Sources */,
 				500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */,
 				50392FAC2EF6AC0000DAE17A /* FSContract.cpp in Sources */,
@@ -3451,6 +3458,7 @@
 				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
 				50BF4B4E2F03D73000F1B9F2 /* GCR.cpp in Sources */,
+				50BF4B632F05078500F1B9F2 /* Codecs.cpp in Sources */,
 				50BF4B302EFBF7D000F1B9F2 /* HardDiskImage.cpp in Sources */,
 				503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */,
 				501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */,

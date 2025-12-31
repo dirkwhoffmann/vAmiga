@@ -14,10 +14,5 @@
 
 namespace vamiga {
 
-void
-DMSEncoder::encode(const class DMSFile &source, FloppyDisk &disk)
-{
-    disk.encode(source.getADF());
-}
 
 }

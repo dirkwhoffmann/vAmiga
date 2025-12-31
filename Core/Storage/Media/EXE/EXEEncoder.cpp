@@ -14,10 +14,5 @@
 
 namespace vamiga {
 
-void
-EXEEncoder::encode(const class EXEFile &source, FloppyDisk &disk)
-{
-    disk.encode(source.getADF());
-}
 
 }

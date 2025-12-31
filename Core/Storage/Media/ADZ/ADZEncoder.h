@@ -18,7 +18,6 @@ class ADZEncoder {
 
 public:
 
-    static void encode(const ADZFile &source, FloppyDisk &target);
 };
 
 }

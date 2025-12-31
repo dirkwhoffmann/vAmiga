@@ -13,10 +13,4 @@
 
 namespace vamiga {
 
-void
-ADZEncoder::encode(const ADZFile &adz, FloppyDisk &disk)
-{
-    disk.encode(adz.adf);
-}
-
 }

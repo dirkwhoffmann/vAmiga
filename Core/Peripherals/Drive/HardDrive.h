@@ -23,8 +23,8 @@ namespace vamiga {
 
 class HardDrive final : public Drive, public TrackDevice {
 
+    friend class Codec;
     friend class HDFFile;
-    friend class HDFFactory;
     friend class HdController;
 
     Descriptions descriptions = {

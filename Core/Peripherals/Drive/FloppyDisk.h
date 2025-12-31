@@ -56,11 +56,12 @@ class FloppyDiskImage;
 class FloppyDisk : public CoreObject, public TrackDevice {
 
     friend class FloppyDrive;
-    friend class ADFEncoder;
-    friend class EADFEncoder;
-    friend class IMGEncoder;
-    friend class STEncoder;
-    friend class DiskEncoder;
+    friend class Codec;
+    // friend class ADFEncoder;
+    // friend class EADFEncoder;
+    // friend class IMGEncoder;
+    // friend class STEncoder;
+    // friend class DiskEncoder;
 
     friend class EADFFactory;
 

@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Amiga.h"
 #include "MediaFile.h"
-#include "FileFactories.h"
+#include "Codecs.h"
 #include "Emulator.h"
 #include "Option.h"
 #include "Media.h"
@@ -323,12 +323,12 @@ Amiga::saveWorkspace(const fs::path &path)
                 
                 if (config.compressWorkspaces) {
 
-                    auto adz = ADZFactory::make(drive);
+                    auto adz = Codec::makeADZ(drive);
                     adz->writeToFile(path / file);
 
                 } else {
 
-                    auto adf = ADFFactory::make(drive);
+                    auto adf = Codec::makeADF(drive);
                     adf->writeToFile(path / file);
                 }
                 drive.markDiskAsUnmodified();
@@ -354,13 +354,13 @@ Amiga::saveWorkspace(const fs::path &path)
                 
                 if (config.compressWorkspaces) {
 
-                    auto hdz = HDZFactory::make(drive);
+                    auto hdz = Codec::makeHDZ(drive);
                     hdz->writeToFile(path / file);
                     // HDZFile(HDFFile(drive)).writeToFile(path / file);
 
                 } else {
 
-                    auto hdf = HDFFactory::make(drive);
+                    auto hdf = Codec::makeHDF(drive);
                     hdf->writeToFile(path / file);
                     // HDFFile(drive).writeToFile(path / file);
                 }

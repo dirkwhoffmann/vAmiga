@@ -11,8 +11,7 @@
 #include "HardDrive.h"
 #include "Emulator.h"
 #include "MediaFile.h"
-#include "HDFFactory.h"
-#include "HDZFactory.h"
+#include "Codecs.h"
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "utl/io.h"
@@ -588,7 +587,7 @@ HardDrive::format(FSFormat fsType, FSName name)
     if (fsType != FSFormat::NODOS) {
 
         // Convert the drive to an HDF
-        auto hdf = HDFFactory::make(*this);
+        auto hdf = Codec::makeHDF(*this);
 
         // Create a file system on top of the HDF
         auto vol = Volume(*hdf);
@@ -842,7 +841,7 @@ HardDrive::writeToFile(const fs::path &path)
 {
     if (!path.empty()) {
 
-        auto hdf = HDFFactory::make(*this);
+        auto hdf = Codec::makeHDF(*this);
         hdf->writeToFile(path);
     }
 }

@@ -11,8 +11,9 @@
 #include "Console.h"
 #include "RSError.h"
 #include "Emulator.h"
-#include "ADFFactory.h"
+#include "Codecs.h"
 #include "MediaFile.h"
+#include "ADFFactory.h"
 #include "HDFFile.h"
 #include "utl/chrono.h"
 #include "utl/support.h"
@@ -289,7 +290,7 @@ NavigatorConsole::import(const FloppyDrive &dfn)
     // Later: Directly mount the file system on top of the drive
 
     // Create a block device
-    adf = ADFFactory::make(dfn);
+    adf = Codec::makeADF(dfn);
 
     // Create a file system on top
     auto vol = Volume(*adf);
@@ -703,7 +704,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto n = values[0];
 
-                adf = ADFFactory::make(*df[n]);
+                adf = Codec::makeADF(*df[n]);
                 vol = make_unique<Volume>(*adf);
                 fs  = make_unique<FileSystem>(*vol);
 

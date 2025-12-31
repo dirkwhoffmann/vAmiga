@@ -20,8 +20,6 @@ public:
     static std::unique_ptr<STFile> make(const fs::path &path);
     static std::unique_ptr<STFile> make(const u8 *buf, isize len);
     static std::unique_ptr<STFile> make(Diameter dia, Density den);
-    static std::unique_ptr<STFile> make(const class FloppyDisk &disk);
-    static std::unique_ptr<STFile> make(const class FloppyDrive &drive);
 };
 
 }

@@ -11,6 +11,7 @@
 #include "VAmiga.h"
 #include "Emulator.h"
 #include "FileFactories.h"
+#include "Codecs.h"
 #include "GuardList.h"
 #include "utl/concurrency.h"
 
@@ -1358,7 +1359,7 @@ std::unique_ptr<MediaFile>
 HardDriveAPI::createHDF()
 {
     VAMIGA_PUBLIC_SUSPEND
-    return make_unique<MediaFile>(HDFFactory::make(*drive));
+    return make_unique<MediaFile>(Codec::makeHDF(*drive));
 }
 
 

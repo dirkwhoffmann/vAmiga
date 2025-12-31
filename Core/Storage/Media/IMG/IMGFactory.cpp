@@ -41,19 +41,4 @@ IMGFactory::make(Diameter dia, Density den)
     return make_unique<IMGFile>(9 * 160 * 512);
 }
 
-std::unique_ptr<IMGFile>
-IMGFactory::make(const class FloppyDisk &disk)
-{
-    auto img = make(disk.getDiameter(), disk.getDensity());
-    disk.decode(*img);
-    return img;
-}
-
-std::unique_ptr<IMGFile>
-IMGFactory::make(const class FloppyDrive &drive)
-{
-    if (drive.disk == nullptr) throw DeviceError(DeviceError::DSK_MISSING);
-    return make(*drive.disk);
-}
-
 }

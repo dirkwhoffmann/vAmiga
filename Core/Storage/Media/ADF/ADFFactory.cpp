@@ -61,25 +61,6 @@ ADFFactory::make(const GeometryDescriptor &descr)
 }
 
 std::unique_ptr<ADFFile>
-ADFFactory::make(const class FloppyDisk &disk)
-{
-    auto adf = make(disk.getDiameter(), disk.getDensity());
-
-    assert(adf->numTracks() == 160);
-    assert(adf->numSectors() == 11 || adf->numSectors() == 22);
-
-    disk.decode(*adf);
-    return adf;
-}
-
-std::unique_ptr<ADFFile>
-ADFFactory::make(const class FloppyDrive &drive)
-{
-    if (drive.disk == nullptr) throw DeviceError(DeviceError::DSK_MISSING);
-    return make(*drive.disk);
-}
-
-std::unique_ptr<ADFFile>
 ADFFactory::make(const FileSystem &volume)
 {
     std::unique_ptr<ADFFile> adf;

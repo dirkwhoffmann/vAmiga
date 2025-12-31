@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FloppyDisk.h"
 #include "AmigaEncoder.h"
+#include "Codecs.h"
 #include "IBMEncoder.h"
 #include "Media.h"
 #include "MediaFile.h"
@@ -318,12 +319,12 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &file)
     // switch (file.type()) {
 
         case FileType::ADF:  encode(dynamic_cast<const ADFFile &>(file)); break;
-        case FileType::ADZ:  ADZEncoder::encode(dynamic_cast<const ADZFile &>(file), *this); break;
-        case FileType::EADF: EADFEncoder::encode(dynamic_cast<const EADFFile &>(file), *this); break;
-        case FileType::IMG:  IMGEncoder::encode(dynamic_cast<const IMGFile &>(file), *this); break;
-        case FileType::ST:   STEncoder::encode(dynamic_cast<const STFile &>(file), *this); break;
-        case FileType::DMS:  DMSEncoder::encode(dynamic_cast<const DMSFile &>(file), *this); break;
-        case FileType::EXE:  EXEEncoder::encode(dynamic_cast<const EXEFile &>(file), *this); break;
+        case FileType::ADZ:  Codec::encodeADZ(dynamic_cast<const ADZFile &>(file), *this); break;
+        case FileType::EADF: Codec::encodeEADF(dynamic_cast<const EADFFile &>(file), *this); break;
+        case FileType::IMG:  Codec::encodeIMG(dynamic_cast<const IMGFile &>(file), *this); break;
+        case FileType::ST:   Codec::encodeST(dynamic_cast<const STFile &>(file), *this); break;
+        case FileType::DMS:  Codec::encodeDMS(dynamic_cast<const DMSFile &>(file), *this); break;
+        case FileType::EXE:  Codec::encodeEXE(dynamic_cast<const EXEFile &>(file), *this); break;
 
         default:
             throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
@@ -355,7 +356,7 @@ FloppyDisk::encode(const ADFFile &adf)
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        ADFFactory::make(*this)->writeToFile(tmp);
+        Codec::makeADF(*this)->writeToFile(tmp);
     }
 }
 
@@ -402,7 +403,7 @@ FloppyDisk::encode(const class IMGFile &img)
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        IMGFactory::make(*this)->writeToFile(tmp);
+        Codec::makeIMG(*this)->writeToFile(tmp);
     }
 }
 
@@ -449,7 +450,7 @@ FloppyDisk::encode(const class STFile &img)
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        IMGFactory::make(*this)->writeToFile(tmp);
+        Codec::makeIMG(*this)->writeToFile(tmp);
     }
 }
 

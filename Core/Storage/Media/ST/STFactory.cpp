@@ -40,19 +40,4 @@ STFactory::make(Diameter dia, Density den)
     return make_unique<STFile>(9 * 160 * 512);
 }
 
-std::unique_ptr<STFile>
-STFactory::make(const class FloppyDisk &disk)
-{
-    auto st = make(disk.getDiameter(), disk.getDensity());
-    disk.decode(*st);
-    return st;
-}
-
-std::unique_ptr<STFile>
-STFactory::make(const class FloppyDrive &drive)
-{
-    if (drive.disk == nullptr) throw DeviceError(DeviceError::DSK_MISSING);
-    return make(*drive.disk);
-}
-
 }

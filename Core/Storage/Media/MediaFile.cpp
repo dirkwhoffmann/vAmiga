@@ -11,6 +11,7 @@
 #include "VAmiga.h"
 #include "Media.h"
 #include "FileFactories.h"
+#include "Codecs.h"
 #include "BootBlockImage.h"
 #include "utl/io.h"
 #include <typeindex>
@@ -117,10 +118,10 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FileType::ADF:          return new MediaFile(ADFFactory::make(drive.getDisk()));
-        case FileType::ADZ:          return new MediaFile(ADZFactory::make(drive.getDisk()));
-        case FileType::EADF:         return new MediaFile(EADFFactory::make(drive.getDisk()));
-        case FileType::IMG:          return new MediaFile(IMGFactory::make(drive.getDisk()));
+        case FileType::ADF:          return new MediaFile(Codec::makeADF(drive.getDisk()));
+        case FileType::ADZ:          return new MediaFile(Codec::makeADZ(drive.getDisk()));
+        case FileType::EADF:         return new MediaFile(Codec::makeEADF(drive.getDisk()));
+        case FileType::IMG:          return new MediaFile(Codec::makeIMG(drive.getDisk()));
 
         default:
             return nullptr;
@@ -132,8 +133,8 @@ MediaFile::make(HardDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FileType::HDF:      return new MediaFile(HDFFactory::make(drive.getDrive()));
-        case FileType::HDZ:      return new MediaFile(HDZFactory::make(drive.getDrive()));
+        case FileType::HDF:      return new MediaFile(Codec::makeHDF(drive.getDrive()));
+        case FileType::HDZ:      return new MediaFile(Codec::makeHDZ(drive.getDrive()));
 
         default:
             return nullptr;

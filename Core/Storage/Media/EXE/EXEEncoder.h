@@ -18,7 +18,6 @@ class EXEEncoder {
 
 public:
 
-    static void encode(const EXEFile &source, FloppyDisk &target);
 };
 
 }

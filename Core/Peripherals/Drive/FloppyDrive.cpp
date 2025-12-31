@@ -11,6 +11,7 @@
 #include "FloppyDrive.h"
 #include "Amiga.h"
 #include "BootBlockImage.h"
+#include "Codecs.h"
 #include "DiskController.h"
 #include "Media.h"
 #include "MsgQueue.h"
@@ -1103,9 +1104,9 @@ FloppyDrive::exportDisk(FileType type)
 {
     switch (type) {
 
-        case FileType::ADF:      return make_unique<MediaFile>(ADFFactory::make(*this));
-        case FileType::EADF:     return make_unique<MediaFile>(EADFFactory::make(*this));
-        case FileType::IMG:      return make_unique<MediaFile>(IMGFactory::make(*this));
+        case FileType::ADF:      return make_unique<MediaFile>(Codec::makeADF(*this));
+        case FileType::EADF:     return make_unique<MediaFile>(Codec::makeEADF(*this));
+        case FileType::IMG:      return make_unique<MediaFile>(Codec::makeIMG(*this));
 
         default:
             throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
@@ -1136,7 +1137,7 @@ void
 FloppyDrive::catchFile(const fs::path &path)
 {
     // Export the drive to an ADF
-    auto adf = ADFFactory::make(*this);
+    auto adf = Codec::makeADF(*this);
 
     // Mount file system on top of the ADF
     auto vol = Volume(*adf);

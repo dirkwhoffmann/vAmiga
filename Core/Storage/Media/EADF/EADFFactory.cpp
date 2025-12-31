@@ -28,33 +28,4 @@ EADFFactory::make(const u8 *buf, isize len)
     return std::make_unique<EADFFile>(buf, len);
 }
 
-std::unique_ptr<EADFFile>
-EADFFactory::make(const class FloppyDisk &disk)
-{
-    auto numTracks = disk.numTracks();
-
-    auto length = 0;
-
-    length += 12;               // File header
-    length += 12 * numTracks;   // Track headers
-
-    for (isize t = 0; t < numTracks; t++) {
-
-        auto numBits = disk.track[t].size();
-        assert(numBits % 8 == 0);
-        length += numBits / 8;
-    }
-
-    auto eadf = make_unique<EADFFile>(length);
-    EADFEncoder::decode(*eadf, disk);
-    return eadf;
-}
-
-std::unique_ptr<EADFFile>
-EADFFactory::make(const class FloppyDrive &drive)
-{
-    if (drive.disk == nullptr) throw DeviceError(DeviceError::DSK_MISSING);
-    return make(*drive.disk);
-}
-
 }

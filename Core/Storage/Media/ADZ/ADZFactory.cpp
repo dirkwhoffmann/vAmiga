@@ -40,16 +40,4 @@ ADZFactory::make(const std::unique_ptr<ADFFile>& adf)
     return make(*adf);
 }
 
-std::unique_ptr<ADZFile>
-ADZFactory::make(const class FloppyDisk &disk)
-{
-    return make(ADFFactory::make(disk));
-}
-
-std::unique_ptr<ADZFile>
-ADZFactory::make(const class FloppyDrive &drive)
-{
-    return make(ADFFactory::make(drive));
-}
-
 }

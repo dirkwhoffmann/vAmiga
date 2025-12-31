@@ -18,8 +18,6 @@ class STEncoder {
 
 public:
 
-    static void encode(const STFile &source, FloppyDisk &target);
-    static void decode(STFile &target, const FloppyDisk &source);
 };
 
 }

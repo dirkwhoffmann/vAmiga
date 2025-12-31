@@ -22,8 +22,6 @@ public:
     static std::unique_ptr<ADFFile> make(const u8 *buf, isize len);
     static std::unique_ptr<ADFFile> make(Diameter dia, Density den);
     static std::unique_ptr<ADFFile> make(const GeometryDescriptor &descr);
-    static std::unique_ptr<ADFFile> make(const class FloppyDisk &disk);
-    static std::unique_ptr<ADFFile> make(const class FloppyDrive &drive);
     static std::unique_ptr<ADFFile> make(const class FileSystem &volume);
 };
 

@@ -18,7 +18,6 @@ class DMSEncoder {
 
 public:
 
-    static void encode(const DMSFile &source, FloppyDisk &target);
 };
 
 }
