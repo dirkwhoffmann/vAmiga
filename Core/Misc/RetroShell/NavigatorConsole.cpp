@@ -13,7 +13,6 @@
 #include "Emulator.h"
 #include "Codecs.h"
 #include "MediaFile.h"
-#include "ADFFactory.h"
 #include "HDFFile.h"
 #include "utl/chrono.h"
 #include "utl/support.h"

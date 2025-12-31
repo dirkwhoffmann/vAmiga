@@ -10,7 +10,6 @@
 #include "config.h"
 #include "VAmiga.h"
 #include "Media.h"
-#include "FileFactories.h"
 #include "Codecs.h"
 #include "BootBlockImage.h"
 #include "utl/io.h"

@@ -8,8 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "STFactory.h"
+#include "STFile.h"
 #include "FloppyDisk.h"
+#include "DeviceError.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 
 namespace vamiga {
@@ -17,18 +19,26 @@ namespace vamiga {
 bool
 STFile::isCompatible(const fs::path &path)
 {
+    // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    return suffix == ".ST";
+    if (suffix != ".ST") return false;
+
+    // Check file size
+    auto size = utl::getSizeOfFile(path);
+    return size == STSIZE_35_DD;
 }
 
-/*
-bool
-STFile::isCompatible(const u8 *buf, isize len)
+void
+STFile::init(Diameter dia, Density den)
 {
-    // There are no magic bytes. We can only check the buffer size
-    return len == STSIZE_35_DD;
+    if (dia != Diameter::INCH_35 || den != Density::DD) {
+
+        // We only support 3.5"DD disks at the moment
+        throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
+    }
+
+    init(9 * 160 * 512);
 }
-*/
 
 isize
 STFile::numCyls() const

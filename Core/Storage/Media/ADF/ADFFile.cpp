@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "ADFFactory.h"
 #include "BootBlockImage.h"
 #include "EADFFile.h"
 #include "FileSystem.h"

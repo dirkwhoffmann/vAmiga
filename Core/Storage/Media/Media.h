@@ -17,19 +17,6 @@
 #include "DiskImage.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
-#include "ADFFactory.h"
-#include "ADZFactory.h"
-#include "EADFFactory.h"
-#include "IMGFactory.h"
-#include "DMSFactory.h"
-#include "EXEFactory.h"
-#include "STFactory.h"
-#include "ADZEncoder.h"
-#include "EADFEncoder.h"
-#include "IMGEncoder.h"
-#include "DMSEncoder.h"
-#include "EXEEncoder.h"
-#include "STEncoder.h"
 
 /* All media files are organized in the class hierarchy displayed below.
  * MediaFile is a wrapper class which is referenced in the public API. Below

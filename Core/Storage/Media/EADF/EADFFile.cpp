@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "EADFFile.h"
-#include "ADFFactory.h"
 #include "DiskEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"

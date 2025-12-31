@@ -7,6 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+/*
 #include "config.h"
 #include "IMGFactory.h"
 #include "IMGEncoder.h"
@@ -42,3 +43,4 @@ IMGFactory::make(Diameter dia, Density den)
 }
 
 }
+*/

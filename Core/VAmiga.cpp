@@ -10,7 +10,6 @@
 #include "config.h"
 #include "VAmiga.h"
 #include "Emulator.h"
-#include "FileFactories.h"
 #include "Codecs.h"
 #include "GuardList.h"
 #include "utl/concurrency.h"

@@ -8,8 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "IMGFactory.h"
+#include "IMGFile.h"
 #include "FloppyDrive.h"
+#include "DeviceError.h"
+#include "utl/io.h"
 #include "utl/support/Strings.h"
 
 namespace vamiga {
@@ -17,18 +19,26 @@ namespace vamiga {
 bool
 IMGFile::isCompatible(const fs::path &path)
 {
+    // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    return suffix == ".IMG";
+    if (suffix != ".IMG") return false;
+
+    // Check file size
+    auto size = utl::getSizeOfFile(path);
+    return size == IMGSIZE_35_DD;
 }
 
-/*
-bool
-IMGFile::isCompatible(const u8 *buf, isize len)
+void
+IMGFile::init(Diameter dia, Density den)
 {
-    // There are no magic bytes. We can only check the buffer size
-    return len == IMGSIZE_35_DD;
+    if (dia != Diameter::INCH_35 || den != Density::DD) {
+
+        // We only support 3.5"DD disks at the moment
+        throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
+    }
+
+    init(9 * 160 * 512);
 }
-*/
 
 isize
 IMGFile::numCyls() const

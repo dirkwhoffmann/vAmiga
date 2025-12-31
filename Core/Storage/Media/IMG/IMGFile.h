@@ -33,6 +33,9 @@ public:
     IMGFile(const fs::path &path) { init(path); }
     IMGFile(isize len) { init(len); }
     IMGFile(const u8 *buf, isize len) { init(buf, len); }
+    IMGFile(Diameter dia, Density den) { init(dia, den); }
+
+    void init(Diameter dia, Density den);
 
 
     //

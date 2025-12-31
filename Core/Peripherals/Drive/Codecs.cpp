@@ -9,15 +9,6 @@
 
 #include "config.h"
 #include "Codecs.h"
-#include "ADFFactory.h"
-#include "ADZFactory.h"
-#include "EADFFactory.h"
-#include "HDFFactory.h"
-#include "HDZFactory.h"
-#include "IMGFactory.h"
-#include "STFactory.h"
-#include "DMSFactory.h"
-#include "EXEFactory.h"
 #include "DiskEncoder.h"
 #include "FileSystem.h"
 #include "FloppyDisk.h"
@@ -89,7 +80,7 @@ Codec::makeEADF(const FloppyDrive &drive)
 std::unique_ptr<IMGFile>
 Codec::makeIMG(const FloppyDisk &disk)
 {
-    auto img = IMGFactory::make(disk.getDiameter(), disk.getDensity());
+    auto img = make_unique<IMGFile>(disk.getDiameter(), disk.getDensity());
     disk.decode(*img);
     return img;
 }
@@ -155,7 +146,7 @@ Codec::encodeEADF(const EADFFile &eadf, FloppyDisk &disk)
 std::unique_ptr<STFile>
 Codec::makeST(const FloppyDisk &disk)
 {
-    auto st = STFactory::make(disk.getDiameter(), disk.getDensity());
+    auto st = make_unique<STFile>(disk.getDiameter(), disk.getDensity());
     disk.decode(*st);
     return st;
 }
@@ -263,31 +254,31 @@ Codec::decodeEADF(EADFFile &eadf, const FloppyDisk &disk)
 void
 Codec::encodeIMG(const class IMGFile &source, FloppyDisk &disk)
 {
-    auto img = IMGFactory::make(source.data.ptr, source.data.size);
-    disk.encode(*img);
+    IMGFile img(source.data.ptr, source.data.size);
+    disk.encode(img);
 }
 
 void
 Codec::decodeIMG(class IMGFile &target, const FloppyDisk &disk)
 {
-    auto img = IMGFactory::make(target.data.ptr, target.data.size);
-    disk.decode(*img);
-    target.data = img->data;
+    IMGFile img(target.data.ptr, target.data.size);
+    disk.decode(img);
+    target.data = img.data;
 }
 
 void
 Codec::encodeST(const class STFile &source, FloppyDisk &disk)
 {
-    auto img = IMGFactory::make(source.data.ptr, source.data.size);
-    disk.encode(*img);
+    IMGFile img(source.data.ptr, source.data.size);
+    disk.encode(img);
 }
 
 void
 Codec::decodeST(class STFile &target, const FloppyDisk &disk)
 {
-    auto img = IMGFactory::make(target.data.ptr, target.data.size);
-    disk.decode(*img);
-    target.data = img->data;
+    IMGFile img(target.data.ptr, target.data.size);
+    disk.decode(img);
+    target.data = img.data;
 }
 
 void
