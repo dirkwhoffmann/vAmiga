@@ -11,7 +11,6 @@
 
 #include "VAmigaTypes.h"
 #include "CoreError.h"
-#include "MediaFile.h"
 #include "Snapshot.h"
 
 namespace vamiga {
@@ -104,14 +103,12 @@ public:
      *  @note   The function transfers the ownership to the caller. It is
      *          his responsibility of the caller to free the object.
      */
-    [[deprecated]] std::unique_ptr<MediaFile> deprecatedTakeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
     std::unique_ptr<Snapshot> takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
 
     /** @brief  Loads a snapshot.
      *
      *  @param  snapshot    Reference to a snapshot
      */
-    [[deprecated]] void loadSnapshot(const MediaFile &snapshot);
     void loadSnapshot(const Snapshot &snapshot);
 
     /** @brief  Loads a snapshot
@@ -725,10 +722,9 @@ public:
     void insertBlankDisk(FSFormat fstype, BootBlockId id, string name, const std::filesystem::path &path = {});
 
     /** @brief  Inserts a disk created from a media file.
-     *  @param  file    A media file wrapper object.
+     *  @param  path   Path to the media file.
      *  @param  wp      Write-protection status of the disk.
      */
-    [[deprecated]] void insertMedia(MediaFile &file, bool wp);
     void insert(const std::filesystem::path &path, bool wp);
 
     /** @brief  Inserts a disk created from a file system.
@@ -740,8 +736,6 @@ public:
     /** @brief  Ejects the current disk.
      */
     void ejectDisk();
-
-    [[deprecated]] std::unique_ptr<MediaFile> exportDisk(FileType type);
 
     /** @brief  Creates a textual bit representation of a track's data
      */
@@ -835,11 +829,6 @@ public:
      */
     void attach(const std::filesystem::path &path);
 
-    /** @brief  Attaches a hard drive provided by a media file.
-     *  @param  file    A media file wrapper object.
-     */
-    [[deprecated]] void attach(const MediaFile &file);
-
     /** @brief  Attaches a hard drive with a particular geometry.
      *  @param  c       Number of cylinders
      *  @param  h       Number of heads
@@ -856,10 +845,6 @@ public:
     /** @brief  Exports the hard drive to an HDF file on disk
      */
     void writeToFile(const std::filesystem::path &path);
-
-    /** @brief  Converts the hard drive to an HDF media file
-     */
-    [[deprecated]] std::unique_ptr<MediaFile> createHDF();
 };
 
 

@@ -406,7 +406,6 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly) NSString *stateString;
 
 - (SnapshotProxy *) takeSnapshot:(Compressor)compressor;
-- (void)deprecatedLoadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex __attribute__((deprecated));
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadSnapshotFromUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;

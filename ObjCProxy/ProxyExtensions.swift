@@ -9,14 +9,6 @@
 
 extension AmigaProxy {
 
-    @available(*, deprecated, message: "Use loadSnapshot instead")
-    func deprecatedLoadSnapshot(_ proxy: MediaFileProxy) throws {
-
-        let exception = ExceptionWrapper()
-        deprecatedLoadSnapshot(proxy, exception: exception)
-        if exception.fault != 0 { throw AppError(exception) }
-    }
-
     func loadSnapshot(_ proxy: SnapshotProxy) throws {
 
         let exception = ExceptionWrapper()

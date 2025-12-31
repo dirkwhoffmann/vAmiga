@@ -1199,14 +1199,6 @@ FloppyDriveAPI::insertBlankDisk(FSFormat fstype, BootBlockId bb, string name, co
 }
 
 void
-FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    drive->insertMediaFile(file, wp);
-    emu->markAsDirty();
-}
-
-void
 FloppyDriveAPI::insert(const fs::path &path, bool wp)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -1220,13 +1212,6 @@ FloppyDriveAPI::ejectDisk()
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->ejectDisk();
-}
-
-std::unique_ptr<MediaFile>
-FloppyDriveAPI::exportDisk(FileType type)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return drive->exportDisk(type);
 }
 
 string
@@ -1318,13 +1303,6 @@ HardDriveAPI::attach(const fs::path &path)
     drive->init(path.string());
 }
 
-void 
-HardDriveAPI::attach(const MediaFile &file)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    drive->init(file);
-}
-
 void
 HardDriveAPI::attach(isize c, isize h, isize s, isize b)
 {
@@ -1352,13 +1330,6 @@ HardDriveAPI::writeToFile(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->writeToFile(path);
-}
-
-std::unique_ptr<MediaFile>
-HardDriveAPI::createHDF()
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return make_unique<MediaFile>(Codec::makeHDF(*drive));
 }
 
 
@@ -2282,13 +2253,6 @@ VAmiga::put(const Command &cmd)
 // AmigaAPI
 //
 
-std::unique_ptr<MediaFile>
-AmigaAPI::deprecatedTakeSnapshot(Compressor compressor, isize delay, bool repeat)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return amiga->deprecatedTakeSnapshot(compressor, delay, repeat);
-}
-
 std::unique_ptr<Snapshot>
 AmigaAPI::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
@@ -2308,31 +2272,6 @@ AmigaAPI::saveWorkspace(const fs::path &path) const
 {
     VAMIGA_PUBLIC_SUSPEND
     amiga->saveWorkspace(path);
-}
-
-void
-AmigaAPI::loadSnapshot(const MediaFile &snapshot)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    
-    emu->markAsDirty();
-    
-    try {
-        
-        // Restore the saved state
-        amiga->loadSnapshot(snapshot);
-        
-    } catch(Error &) {
-        
-        /* If we reach this point, the emulator has been put into an
-         * inconsistent state due to corrupted snapshot data. We cannot
-         * continue emulation, because it would likely crash the
-         * application. Because we cannot revert to the old state either,
-         * we perform a hard reset to eliminate the inconsistency.
-         */
-        emu->put(Cmd::HARD_RESET);
-        throw;
-    }
 }
 
 void

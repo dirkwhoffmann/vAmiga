@@ -11,7 +11,8 @@
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
 #import "Emulator.h"
-#include "utl/support/Strings.h"
+#import "MediaFile.h"
+#import "utl/support/Strings.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;
@@ -2279,12 +2280,6 @@ NSString *EventSlotName(EventSlot slot)
 
         return nil;
     }
-}
-
-- (void)deprecatedLoadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
-{
-    try { [self amiga]->loadSnapshot(*[proxy file]); }
-    catch(Error &error) { [ex save:error]; }
 }
 
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
