@@ -29,7 +29,7 @@ namespace vamiga {
 std::unique_ptr<ADFFile>
 Codec::makeADF(const class FloppyDisk &disk)
 {
-    auto adf = ADFFactory::make(disk.getDiameter(), disk.getDensity());
+    auto adf = make_unique<ADFFile>(disk.getDiameter(), disk.getDensity());
 
     assert(adf->numTracks() == 160);
     assert(adf->numSectors() == 11 || adf->numSectors() == 22);
@@ -48,13 +48,13 @@ Codec::makeADF(const class FloppyDrive &drive)
 std::unique_ptr<ADZFile>
 Codec::makeADZ(const FloppyDisk &disk)
 {
-    return ADZFactory::make(makeADF(disk));
+    return make_unique<ADZFile>(*Codec::makeADF(disk));
 }
 
 std::unique_ptr<ADZFile>
 Codec::makeADZ(const FloppyDrive &drive)
 {
-    return ADZFactory::make(makeADF(drive));
+    return makeADZ(*drive.disk);
 }
 
 std::unique_ptr<EADFFile>
@@ -115,7 +115,7 @@ Codec::makeHDF(const HardDrive &drive)
 std::unique_ptr<HDZFile>
 Codec::makeHDZ(const class HardDrive &hd)
 {
-    return HDZFactory::make(*Codec::makeHDF(hd));
+    return make_unique<HDZFile>(*Codec::makeHDF(hd));
 }
 
 
@@ -137,7 +137,7 @@ Codec::encodeEADF(const EADFFile &eadf, FloppyDisk &disk)
     if (MFM_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    auto adf = ADFFactory::make(ADFFile::fileSize(diameter, density, tracks));
+    auto adf = make_unique<ADFFile>(ADFFile::fileSize(diameter, density, tracks));
 
     // Wipe out all data
     disk.clearDisk(0);

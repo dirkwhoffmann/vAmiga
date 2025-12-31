@@ -1197,10 +1197,10 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
 
 
     // Create a suitable ADF
-    auto adf = ADFFactory::make(GeometryDescriptor(diameter(), density()));
+    auto adf = ADFFile(GeometryDescriptor(diameter(), density()));
 
     // Mount a file system on top of the ADF
-    auto vol = Volume(*adf);
+    auto vol = Volume(adf);
     auto fs = FileSystem(vol);
 
     // Format the file system
@@ -1223,7 +1223,7 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     fs.flush();
 
     // Insert the ADF
-    swapDisk(*adf);
+    swapDisk(adf);
 }
 
 void

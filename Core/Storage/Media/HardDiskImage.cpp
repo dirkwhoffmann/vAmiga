@@ -9,8 +9,8 @@
 
 #include "config.h"
 #include "HardDiskImage.h"
-#include "HDFFactory.h"
-#include "HDZFactory.h"
+#include "HDFFile.h"
+#include "HDZFile.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -18,10 +18,8 @@ namespace vamiga {
 std::unique_ptr<HardDiskImage>
 HardDiskImage::make(const fs::path &path)
 {
-    std::unique_ptr<HardDiskImage> result;
-
-    if (HDFFile::isCompatible(path))   return HDFFactory::make(path);
-    if (HDZFile::isCompatible(path))   return HDZFactory::make(path);
+    if (HDFFile::isCompatible(path)) return make_unique<HDFFile>(path);
+    if (HDZFile::isCompatible(path)) return make_unique<HDZFile>(path);
 
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }

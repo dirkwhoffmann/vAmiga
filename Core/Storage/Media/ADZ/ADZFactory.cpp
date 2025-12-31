@@ -7,6 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+/*
 #include "config.h"
 #include "ADZFactory.h"
 #include "ADFFactory.h"
@@ -41,3 +42,4 @@ ADZFactory::make(const std::unique_ptr<ADFFile>& adf)
 }
 
 }
+*/

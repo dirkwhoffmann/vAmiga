@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FloppyDiskImage.h"
+#include "DeviceDescriptors.h"
 
 namespace vamiga {
 
@@ -45,8 +46,15 @@ public:
     ADFFile(const fs::path &path) { init(path); }
     ADFFile(isize len) { init(len); }
     ADFFile(const u8 *buf, isize len) { init(buf, len); }
+    ADFFile(Diameter dia, Density den) { init(dia, den); }
+    ADFFile(const GeometryDescriptor &descr) { init(descr); }
+    ADFFile(const class FileSystem &volume) { init(volume); }
 
-    
+    void init(Diameter dia, Density den);
+    void init(const GeometryDescriptor &descr);
+    void init(const class FileSystem &volume);
+
+
     //
     // Methods from AnyFile
     //

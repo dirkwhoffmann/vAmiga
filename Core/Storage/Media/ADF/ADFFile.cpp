@@ -80,6 +80,53 @@ ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 }
 
 void
+ADFFile::init(Diameter dia, Density den)
+{
+    DiameterEnum::validate(dia);
+    DensityEnum::validate(den);
+
+    init(ADFFile::fileSize(dia, den));
+}
+
+void
+ADFFile::init(const GeometryDescriptor &descr)
+{
+    auto bytes = descr.numBytes();
+
+    switch (bytes) {
+
+        case ADFFile::ADFSIZE_35_DD:
+        case ADFFile::ADFSIZE_35_DD_81:
+        case ADFFile::ADFSIZE_35_DD_82:
+        case ADFFile::ADFSIZE_35_DD_83:
+        case ADFFile::ADFSIZE_35_DD_84:
+        case ADFFile::ADFSIZE_35_HD:
+
+            init(bytes);
+
+        default:
+            break;
+    }
+
+    throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
+}
+
+void
+ADFFile::init(const FileSystem &volume)
+{
+    switch (volume.blocks()) {
+
+        case 2 * 880: init(Diameter::INCH_35, Density::DD); break;
+        case 4 * 880: init(Diameter::INCH_35, Density::HD); break;
+
+        default:
+            throw FSError(FSError::FS_WRONG_CAPACITY);
+    }
+
+    volume.exporter.exportVolume(data.ptr, data.size);
+}
+
+void
 ADFFile::didLoad()
 {
     // Add some empty cylinders if the file contains less than 80

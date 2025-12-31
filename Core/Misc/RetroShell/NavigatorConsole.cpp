@@ -852,7 +852,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 requireFormattedFS();
 
                 auto n = values[0];
-                auto tmp = MediaFile(ADFFactory::make(*fs));
+                auto tmp = MediaFile(make_unique<ADFFile>(*fs));
                 df[n]->insertMediaFile(tmp, false);
 
             }, .payload = {i}

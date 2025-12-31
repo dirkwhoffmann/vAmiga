@@ -117,7 +117,7 @@ EADFFile::didLoad()
 
         // Convert the disk to a standard ADF
         
-        adf = *ADFFactory::make(numTracks * 11 * 512);
+        adf = ADFFile(numTracks * 11 * 512);
         disk.decode(adf);
 
     } catch (...) { }
