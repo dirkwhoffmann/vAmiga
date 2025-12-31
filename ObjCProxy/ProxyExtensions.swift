@@ -412,13 +412,6 @@ extension MemProxy {
 
 extension FloppyDriveProxy {
 
-    func swap(file: MediaFileProxy) throws {
-
-        let exception = ExceptionWrapper()
-        insertMedia(file, protected: false, exception: exception)
-        if exception.fault != 0 { throw AppError(exception) }
-    }
-
     func swap(url: URL) throws {
 
         let exception = ExceptionWrapper()
@@ -433,6 +426,7 @@ extension FloppyDriveProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
 
+    /*
     func exportDisk(type: FileType) throws -> MediaFileProxy? {
 
         let exception = ExceptionWrapper()
@@ -441,6 +435,7 @@ extension FloppyDriveProxy {
 
         return result;
     }
+    */
 }
 
 extension HardDriveProxy {
@@ -449,13 +444,6 @@ extension HardDriveProxy {
 
         let exception = ExceptionWrapper()
         attachFile(url, exception: exception)
-        if exception.fault != 0 { throw AppError(exception) }
-    }
-
-    func attach(file: MediaFileProxy) throws {
-
-        let exception = ExceptionWrapper()
-        attach(file, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
     }
 

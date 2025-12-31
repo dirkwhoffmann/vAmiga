@@ -1008,7 +1008,6 @@
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509E76102EDD74E400608FA7 /* DiskEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskEncoder.h; sourceTree = "<group>"; };
 		509E76112EDD74F700608FA7 /* DiskEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskEncoder.cpp; sourceTree = "<group>"; };
-		509E76382EDDF57400608FA7 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -1686,13 +1685,13 @@
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
-		5056506925440FDE00A79D27 /* FS */ = {
+		5056506925440FDE00A79D27 /* FileSystems */ = {
 			isa = PBXGroup;
 			children = (
 				50BF4B662F055B6A00F1B9F2 /* CMakeLists.txt */,
 				50BF4B652F055B6100F1B9F2 /* Amiga */,
 			);
-			path = FS;
+			path = FileSystems;
 			sourceTree = "<group>";
 		};
 		5058A916281C774600C223C9 /* Extensions */ = {
@@ -2143,7 +2142,7 @@
 				505B801D23FE628F002407FE /* Ports */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				50BF4B642F055ADF00F1B9F2 /* RetroVault */,
-				509E76342EDDF53600608FA7 /* Storage */,
+				508FE06621EA31E50043D0E9 /* Media */,
 				506436E129C1D82500768528 /* ThirdParty */,
 				50E98B52275A125700AA0CB9 /* Misc */,
 			);
@@ -2171,15 +2170,6 @@
 				5009B7F5255702C00037288E /* Rom */,
 			);
 			path = Media;
-			sourceTree = "<group>";
-		};
-		509E76342EDDF53600608FA7 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				509E76382EDDF57400608FA7 /* CMakeLists.txt */,
-				508FE06621EA31E50043D0E9 /* Media */,
-			);
-			path = Storage;
 			sourceTree = "<group>";
 		};
 		509F7F1521ED141F00A530E4 /* Inspector */ = {
@@ -2583,7 +2573,7 @@
 				50BF4B682F055B7D00F1B9F2 /* CMakeLists.txt */,
 				50BF4B6E2F055C1200F1B9F2 /* Images */,
 				503E869B2EEE9D5300ED891D /* Devices */,
-				5056506925440FDE00A79D27 /* FS */,
+				5056506925440FDE00A79D27 /* FileSystems */,
 			);
 			path = RetroVault;
 			sourceTree = "<group>";

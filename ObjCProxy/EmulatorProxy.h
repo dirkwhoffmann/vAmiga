@@ -405,7 +405,6 @@ NSString *EventSlotName(EventSlot slot);
 @property NSInteger autoInspectionMask;
 @property (readonly) NSString *stateString;
 
-- (MediaFileProxy *) deprecatedTakeSnapshot:(Compressor)compressor __attribute__((deprecated));
 - (SnapshotProxy *) takeSnapshot:(Compressor)compressor;
 - (void)deprecatedLoadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex __attribute__((deprecated));
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
@@ -727,10 +726,10 @@ NSString *EventSlotName(EventSlot slot);
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)insertBlankDisk:(FSFormat)fs bootBlock:(BootBlockId)bb name:(NSString *)name url:(NSURL *)url exception:(ExceptionWrapper *)ex;
-- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
+// - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)eject;
-- (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex;
+// - (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex;
 
 - (NSString *)readTrackBits:(NSInteger)track;
 
@@ -768,7 +767,7 @@ NSString *EventSlotName(EventSlot slot);
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
-- (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+// - (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)importFiles:(NSURL *)url exception:(ExceptionWrapper *)ex;
@@ -896,7 +895,7 @@ NSString *EventSlotName(EventSlot slot);
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c __attribute__((deprecated("Don't use")));
+//+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c __attribute__((deprecated("Don't use")));
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;

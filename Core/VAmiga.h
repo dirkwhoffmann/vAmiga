@@ -111,7 +111,7 @@ public:
      *
      *  @param  snapshot    Reference to a snapshot
      */
-    void loadSnapshot(const MediaFile &snapshot);
+    [[deprecated]] void loadSnapshot(const MediaFile &snapshot);
     void loadSnapshot(const Snapshot &snapshot);
 
     /** @brief  Loads a snapshot
@@ -555,11 +555,6 @@ public:
     void loadRom(const std::filesystem::path &path);
     void loadExt(const std::filesystem::path &path);
 
-    /** @brief  Loads a ROM provided by a RomFile
-     */
-    // void loadRom(MediaFile &file);
-    // void loadExt(MediaFile &file);
-
     /** @brief  Loads a ROM provided by a memory buffer
      */
     void loadRom(const u8 *buf, isize len);
@@ -733,7 +728,7 @@ public:
      *  @param  file    A media file wrapper object.
      *  @param  wp      Write-protection status of the disk.
      */
-    void insertMedia(MediaFile &file, bool wp);
+    [[deprecated]] void insertMedia(MediaFile &file, bool wp);
     void insert(const std::filesystem::path &path, bool wp);
 
     /** @brief  Inserts a disk created from a file system.
@@ -746,7 +741,7 @@ public:
      */
     void ejectDisk();
 
-    std::unique_ptr<MediaFile> exportDisk(FileType type);
+    [[deprecated]] std::unique_ptr<MediaFile> exportDisk(FileType type);
 
     /** @brief  Creates a textual bit representation of a track's data
      */
@@ -843,7 +838,7 @@ public:
     /** @brief  Attaches a hard drive provided by a media file.
      *  @param  file    A media file wrapper object.
      */
-    void attach(const MediaFile &file);
+    [[deprecated]] void attach(const MediaFile &file);
 
     /** @brief  Attaches a hard drive with a particular geometry.
      *  @param  c       Number of cylinders
@@ -864,7 +859,7 @@ public:
 
     /** @brief  Converts the hard drive to an HDF media file
      */
-    std::unique_ptr<MediaFile> createHDF();
+    [[deprecated]] std::unique_ptr<MediaFile> createHDF();
 };
 
 

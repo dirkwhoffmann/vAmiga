@@ -1288,11 +1288,13 @@ NSString *EventSlotName(EventSlot slot)
     catch(Error &error) { [ex save:error]; }
 }
 
+/*
 - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
     try { [self drive]->insertMedia(*(MediaFile *)proxy->obj, wp); }
     catch(Error &error) { [ex save:error]; }
 }
+*/
 
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
@@ -1305,6 +1307,7 @@ NSString *EventSlotName(EventSlot slot)
     [self drive]->ejectDisk();
 }
 
+/*
 - (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex
 {
     try {
@@ -1318,6 +1321,7 @@ NSString *EventSlotName(EventSlot slot)
 
     return nil;
 }
+*/
 
 - (NSString *)readTrackBits:(NSInteger)track
 {
@@ -1721,15 +1725,6 @@ NSString *EventSlotName(EventSlot slot)
     catch(Error &error) { [ex save:error]; return nil; }
 }
 
-+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c
-{
-    auto amiga = (VAmiga *)proxy->obj;
-    auto snap = amiga->amiga.deprecatedTakeSnapshot(c);
-
-    //Transfer ownership to ObjC via release
-    return [self make:snap.release()];
-}
-
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
                          type:(FileType)type
                     exception:(ExceptionWrapper *)ex
@@ -1951,15 +1946,6 @@ NSString *EventSlotName(EventSlot slot)
     try {
         [self drive]->importFiles([url fileSystemRepresentation]);
     } catch(Error &error) {
-        [ex save:error];
-    }
-}
-
-- (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
-{
-    try {
-        [self drive]->attach(*(MediaFile *)proxy->obj);
-    }  catch(Error &error) {
         [ex save:error];
     }
 }
@@ -2278,21 +2264,6 @@ NSString *EventSlotName(EventSlot slot)
     std::stringstream ss;
     [self amiga]->dump(Category::Trace, ss);
     return @(ss.str().c_str());
-}
-
-- (MediaFileProxy *) deprecatedTakeSnapshot:(Compressor)compressor __attribute__((deprecated))
-{
-    try {
-
-        auto snap = [self amiga]->deprecatedTakeSnapshot(compressor);
-
-        //Transfer ownership to ObjC via release
-        return [MediaFileProxy make:snap.release()];
-
-    } catch(Error &error) {
-
-        return nil;
-    }
 }
 
 - (SnapshotProxy *) takeSnapshot:(Compressor)compressor

@@ -65,7 +65,7 @@ add_subdirectory(Components)
 add_subdirectory(Misc)
 add_subdirectory(Peripherals)
 add_subdirectory(Ports)
-add_subdirectory(Storage)
+add_subdirectory(RetroVault)
 add_subdirectory(ThirdParty)
 
 # Add libraries

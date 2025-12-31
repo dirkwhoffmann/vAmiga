@@ -46,8 +46,8 @@
 #include "Peripherals/Monitor/MonitorTypes.h"
 
 // Media
-#include "Storage/Media/MediaFileTypes.h"
-#include "RetroVault/FS/Amiga/FSTypes.h"
+#include "Media/MediaFileTypes.h"
+#include "RetroVault/FileSystems/Amiga/FSTypes.h"
 
 // Miscellaneous
 #include "Misc/LogicAnalyzer/LogicAnalyzerTypes.h"
