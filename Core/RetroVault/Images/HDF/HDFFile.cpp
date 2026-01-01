@@ -231,9 +231,6 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     // Set the number of reserved blocks
     result.numReserved = 2;
 
-    // Set the DOS revision
-    result.dos = dos(first);
-
     // Only proceed if the hard drive is formatted
     if (dos(first) == FSFormat::NODOS) return result;
     

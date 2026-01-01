@@ -120,6 +120,43 @@ struct ImageFormatEnum : utl::Reflectable<ImageFormatEnum, ImageFormat>
     }
 };
 
+enum class FSFamily : long
+{
+    UNKNOWN,
+    AMIGA,
+    CBM,
+    DOS
+};
+
+struct FSFamilyEnum : utl::Reflectable<FSFamilyEnum, FSFamily>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(FSFamily::DOS);
+
+    static const char *_key(FSFamily value)
+    {
+        switch (value) {
+
+            case FSFamily::UNKNOWN:    return "UNKNOWN";
+            case FSFamily::AMIGA:      return "AMIGA";
+            case FSFamily::CBM:        return "CBM";
+            case FSFamily::DOS:        return "DOS";
+        }
+        return "???";
+    }
+    static const char *help(FSFamily value)
+    {
+        switch (value) {
+
+            case FSFamily::UNKNOWN:    return "Unknown";
+            case FSFamily::AMIGA:      return "Amiga File System";
+            case FSFamily::CBM:        return "CBM File System";
+            case FSFamily::DOS:        return "DOS File System";
+        }
+        return "???";
+    }
+};
+
 
 //
 // Structures

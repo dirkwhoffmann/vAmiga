@@ -170,16 +170,6 @@ ADFFile::numSectors() const
     }
 }
 
-FSFormat
-ADFFile::getDos() const
-{
-    if (strncmp((const char *)data.ptr, "DOS", 3) || data[3] > 7) {
-        return FSFormat::NODOS;
-    }
-
-    return (FSFormat)data[3];
-}
-
 Diameter
 ADFFile::getDiameter() const
 {
@@ -210,7 +200,6 @@ ADFFile::getFileSystemDescriptor() const
     result.numBlocks = numBlocks();
     result.bsize = 512;
     result.numReserved = 2;
-    result.dos = getDos();
     result.rootBlock = root;
     result.bmBlocks.push_back(bitmap);
     

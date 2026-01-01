@@ -52,6 +52,15 @@ public:
 
 
     //
+    // Methods from DiskImage
+    //
+
+public:
+
+    FSFamily fsFamily() const noexcept override { return FSFamily::DOS; }
+
+
+    //
     // Methods from BlockDevice
     //
 
@@ -76,7 +85,6 @@ public:
     // Methods from FloppyDiskImage
     //
 
-    FSFormat getDos() const override { return FSFormat::NODOS; }
     Diameter getDiameter() const override { return Diameter::INCH_35; }
     Density getDensity() const override { return Density::DD; }
 };

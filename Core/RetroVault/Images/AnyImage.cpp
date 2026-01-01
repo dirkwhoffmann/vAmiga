@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "AnyImage.h"
-#include "Snapshot.h"
 #include "ADFFile.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
@@ -17,8 +16,6 @@
 #include "DMSFile.h"
 #include "EXEFile.h"
 #include "HDFFile.h"
-#include "RomFile.h"
-#include "Script.h"
 #include "utl/io.h"
 #include "utl/support.h"
 #include <fstream>
@@ -30,6 +27,20 @@ AnyImage::about(const fs::path& url)
 {
     if (auto info = DiskImage::about(url)) return info;
     return {};
+}
+
+std::unique_ptr<AnyImage>
+AnyImage::tryMake(const fs::path& path)
+{
+    if (auto img = DiskImage::tryMake(path)) return img;
+    return nullptr;
+}
+
+std::unique_ptr<AnyImage>
+AnyImage::make(const fs::path& path)
+{
+    if (auto img = tryMake(path)) return img;
+    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
 void

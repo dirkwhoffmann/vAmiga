@@ -36,13 +36,15 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
 {
     debug(FS_DEBUG, "Creating file system...\n");
 
-    auto layout = FSDescriptor(vol.capacity(), cache.predictDOS(vol));
+    auto layout = FSDescriptor(vol.capacity());
 
     // Check consistency (may throw)
     layout.checkCompatibility();
 
+    // Predict the file system
+    traits.dos = cache.predictDOS(vol);
+
     // Copy layout parameters
-    traits.dos      = layout.dos;
     traits.blocks   = layout.numBlocks;
     traits.bytes    = layout.numBlocks * layout.bsize;
     traits.bsize    = layout.bsize;

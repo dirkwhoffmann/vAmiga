@@ -72,6 +72,15 @@ public:
 
 
     //
+    // Methods from DiskImage
+    //
+
+public:
+
+    FSFamily fsFamily() const noexcept override { return FSFamily::AMIGA; }
+
+
+    //
     // Methods from BlockDevice
     //
 
@@ -98,7 +107,6 @@ public:
     
 public:
     
-    FSFormat getDos() const override;
     Diameter getDiameter() const override;
     Density getDensity() const override;
 

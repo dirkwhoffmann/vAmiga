@@ -37,7 +37,7 @@ FloppyDiskImage::about(const fs::path& url)
 }
 
 std::unique_ptr<FloppyDiskImage>
-FloppyDiskImage::make(const fs::path &path)
+FloppyDiskImage::tryMake(const fs::path &path)
 {
     std::unique_ptr<FloppyDiskImage> result;
 
@@ -49,6 +49,13 @@ FloppyDiskImage::make(const fs::path &path)
     if (DMSFile::about(path).has_value())  return make_unique<DMSFile>(path);
     if (EXEFile::about(path).has_value())  return make_unique<EXEFile>(path);
 
+    return nullptr;
+}
+
+std::unique_ptr<FloppyDiskImage>
+FloppyDiskImage::make(const fs::path &path)
+{
+    if (auto img = tryMake(path)) return img;
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 

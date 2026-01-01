@@ -123,12 +123,6 @@ EADFFile::didLoad()
     } catch (...) { }
 }
 
-FSFormat
-EADFFile::getDos() const
-{
-    return adf.empty() ? FSFormat::NODOS : adf.getDos();
-}
-
 Diameter
 EADFFile::getDiameter() const
 {

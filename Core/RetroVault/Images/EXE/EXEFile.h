@@ -62,8 +62,17 @@ public:
     ImageFormat format() const noexcept override { return ImageFormat::EXE; }
 
     void didLoad() override;
-    
-    
+
+
+    //
+    // Methods from DiskImage
+    //
+
+public:
+
+    FSFamily fsFamily() const noexcept override { return FSFamily::AMIGA; }
+
+
     //
     // Methods from BlockDevice
     //
@@ -93,7 +102,6 @@ public:
 
 public:
     
-    FSFormat getDos() const override { return adf.getDos(); }
     Diameter getDiameter() const override { return adf.getDiameter(); }
     Density getDensity() const override { return adf.getDensity(); }
 };

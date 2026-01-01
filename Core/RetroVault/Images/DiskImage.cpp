@@ -28,12 +28,28 @@ using CHS = TrackDevice::CHS;
 using TS  = TrackDevice::TS;
 
 optional<ImageInfo>
-DiskImage::about(const fs::path& url)
+DiskImage::about(const fs::path& path)
 {
-    if (auto info = FloppyDiskImage::about(url)) return info;
-    if (auto info = HardDiskImage::about(url))   return info;
+    if (auto info = FloppyDiskImage::about(path)) return info;
+    if (auto info = HardDiskImage::about(path))   return info;
 
     return {};
+}
+
+std::unique_ptr<DiskImage>
+DiskImage::tryMake(const fs::path& path)
+{
+    if (auto img = FloppyDiskImage::make(path)) return img;
+    if (auto img = HardDiskImage::make(path))   return img;
+
+    return nullptr;
+}
+
+std::unique_ptr<DiskImage>
+DiskImage::make(const fs::path& path)
+{
+    if (auto img = tryMake(path)) return img;
+    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
 void

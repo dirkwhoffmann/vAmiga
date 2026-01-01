@@ -31,6 +31,10 @@ public:
     // Analyzes the type and format of the specified file
     static optional<ImageInfo> about(const fs::path& url);
 
+    // Image factory
+    static std::unique_ptr<AnyImage> tryMake(const fs::path& path);
+    static std::unique_ptr<AnyImage> make(const fs::path& path);
+
 
     //
     // Initializing
@@ -103,11 +107,6 @@ public:
     // Copies the file contents into a buffer
     virtual void copy(u8 *dst, isize offset, isize len) const;
     virtual void copy(u8 *dst, isize offset = 0) const;
-
-
-    //
-    // Importing
-    //
 
 
     //

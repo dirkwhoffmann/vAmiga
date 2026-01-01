@@ -17,26 +17,19 @@
 
 namespace vamiga {
 
-FSDescriptor::FSDescriptor(isize numBlocks, FSFormat dos)
+FSDescriptor::FSDescriptor(isize numBlocks)
 {
-    init(numBlocks, dos);
+    init(numBlocks);
 }
 
-FSDescriptor::FSDescriptor(Diameter dia, Density den, FSFormat dos)
+FSDescriptor::FSDescriptor(Diameter dia, Density den)
 {
-    init(dia, den, dos);
+    init(dia, den);
 }
 
-/*
-FSDescriptor::FSDescriptor(const Device &device, FSFormat dos)
+FSDescriptor::FSDescriptor(const GeometryDescriptor &geometry)
 {
-    init(device.getGeometry(), dos);
-}
-*/
-
-FSDescriptor::FSDescriptor(const GeometryDescriptor &geometry, FSFormat dos)
-{
-    init(geometry, dos);
+    init(geometry);
 }
 
 FSDescriptor::FSDescriptor(const PartitionDescriptor &des)
@@ -46,12 +39,11 @@ FSDescriptor::FSDescriptor(const PartitionDescriptor &des)
 
 
 void
-FSDescriptor::init(isize numBlocks, FSFormat dos)
+FSDescriptor::init(isize numBlocks)
 {
     // Copy parameters
     this->numBlocks = numBlocks;
     this->numReserved = 2;
-    this->dos = dos;
 
     // Determine the location of the root block
     if (numBlocks * 512 == ADFFile::ADFSIZE_35_DD_81 ||
@@ -85,22 +77,22 @@ FSDescriptor::init(isize numBlocks, FSFormat dos)
 }
 
 void
-FSDescriptor::init(const GeometryDescriptor &geometry, FSFormat dos)
+FSDescriptor::init(const GeometryDescriptor &geometry)
 {
-    init(geometry.numBlocks(), dos);
+    init(geometry.numBlocks());
 }
 
 void
 FSDescriptor::init(const PartitionDescriptor &des)
 {
 
-    init(des.numBlocks(), dos);
+    init(des.numBlocks());
 }
 
 void
-FSDescriptor::init(Diameter dia, Density den, FSFormat dos)
+FSDescriptor::init(Diameter dia, Density den)
 {
-    init(GeometryDescriptor(dia, den), dos);
+    init(GeometryDescriptor(dia, den));
 }
 
 
@@ -121,8 +113,6 @@ FSDescriptor::dump(std::ostream &os) const
     os << dec(bsize) << std::endl;
     os << tab("Reserved");
     os << dec(numReserved) << std::endl;
-    os << tab("DOS version");
-    os << FSFormatEnum::key(dos) << std::endl;
     os << tab("Root block");
     os << dec(rootBlock) << std::endl;
     os << tab("Bitmap blocks");
@@ -139,9 +129,6 @@ FSDescriptor::checkCompatibility() const
     }
     if (bsize != 512 || FORCE_FS_WRONG_BSIZE) {
         throw FSError(FSError::FS_WRONG_BSIZE);
-    }
-    if (!FSFormatEnum::isValid(dos) || FORCE_FS_WRONG_DOS_TYPE) {
-        throw FSError(FSError::FS_WRONG_DOS_TYPE);
     }
     if (isize(rootBlock) >= numBlocks) {
         throw FSError(FSError::FS_OUT_OF_RANGE);

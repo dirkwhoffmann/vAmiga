@@ -62,6 +62,15 @@ public:
 
 
     //
+    // Methods from DiskImage
+    //
+
+public:
+
+    FSFamily fsFamily() const noexcept override { return FSFamily::AMIGA; }
+
+
+    //
     // Methods from AnyFile
     //
 

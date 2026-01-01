@@ -34,9 +34,6 @@ struct FSDescriptor {
     // Number of reserved blocks
     isize numReserved = 0;
 
-    // File system type
-    FSFormat dos = FSFormat::NODOS;
-
     // Location of the root block
     BlockNr rootBlock = 0;
 
@@ -46,16 +43,15 @@ struct FSDescriptor {
     
     // Initializing
     FSDescriptor() { };
-    FSDescriptor(isize numBlocks, FSFormat dos);
-    // FSDescriptor(const class Device &device, FSFormat dos);
-    FSDescriptor(const GeometryDescriptor &geometry, FSFormat dos);
+    FSDescriptor(isize numBlocks);
+    FSDescriptor(const GeometryDescriptor &geometry);
     FSDescriptor(const PartitionDescriptor &des);
-    FSDescriptor(Diameter dia, Density den, FSFormat dos);
+    FSDescriptor(Diameter dia, Density den);
     
-    void init(isize numBlocks, FSFormat dos);
-    void init(const GeometryDescriptor &geometry, FSFormat dos);
+    void init(isize numBlocks);
+    void init(const GeometryDescriptor &geometry);
     void init(const PartitionDescriptor &des);
-    void init(Diameter type, Density density, FSFormat dos);
+    void init(Diameter type, Density density);
 
     // Computed values
     isize numBytes() const { return numBlocks * bsize; }

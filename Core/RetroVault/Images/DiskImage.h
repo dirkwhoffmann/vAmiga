@@ -19,6 +19,8 @@ class DiskImage : public AnyImage, public TrackDevice {
 public:
 
     static optional<ImageInfo> about(const fs::path& url);
+    static std::unique_ptr<DiskImage> tryMake(const fs::path& path);
+    static std::unique_ptr<DiskImage> make(const fs::path& path);
 
 
     //
@@ -30,6 +32,14 @@ public:
     isize size() const override { return data.size; }
     void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
+
+
+    //
+    // Querying meta information
+    //
+
+    // Returns the predicted file system family of this image
+    virtual FSFamily fsFamily() const noexcept = 0;
 
 
     //

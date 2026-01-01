@@ -25,11 +25,18 @@ HardDiskImage::about(const fs::path& url)
 }
 
 std::unique_ptr<HardDiskImage>
-HardDiskImage::make(const fs::path &path)
+HardDiskImage::tryMake(const fs::path &path)
 {
     if (HDFFile::about(path).has_value()) return make_unique<HDFFile>(path);
     if (HDZFile::about(path).has_value()) return make_unique<HDZFile>(path);
 
+    return nullptr;
+}
+
+std::unique_ptr<HardDiskImage>
+HardDiskImage::make(const fs::path &path)
+{
+    if (auto img = tryMake(path)) return img;
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
