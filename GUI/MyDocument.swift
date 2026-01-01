@@ -281,54 +281,23 @@ class MyDocument: NSDocument {
         mm.noteNewRecentlyExportedDiskURL(url, df: nr)
 
         debug(.media, "Disk exported successfully")
-
-        /*
-        guard let dfn = emu?.df(nr) else { return }
-        
-        var file: MediaFileProxy?
-        switch url.pathExtension.uppercased() {
-        case "ADF":
-            file = try MediaFileProxy.make(with: dfn, type: .ADF)
-        case "IMG", "IMA":
-            file = try MediaFileProxy.make(with: dfn, type: .IMG)
-        default:
-            warn("Invalid path extension")
-            return
-        }
-        
-        try export(fileProxy: file!, to: url)
-        dfn.setFlag(.MODIFIED, value: false)
-        mm.noteNewRecentlyExportedDiskURL(url, df: nr)
-        
-        debug(.media, "Disk exported successfully")
-        */
     }
     
     func export(hardDrive nr: Int, to url: URL) throws {
         
         guard let hdn = emu?.hd(nr) else { return }
-        
-        var file: MediaFileProxy?
-        
-        switch url.pathExtension.uppercased() {
-        case "HDF":
-            file = try MediaFileProxy.make(with: hdn, type: .HDF)
-        default:
+
+        let ext = url.pathExtension.uppercased();
+        if !["HDF"].contains(ext) {
+
             warn("Invalid path extension")
             return
         }
-        
-        try export(fileProxy: file!, to: url)
-        
+
+        try hdn.writeToFile(url: url)
         hdn.setFlag(.MODIFIED, value: false)
         mm.noteNewRecentlyExportedHdrURL(url, hd: nr)
-        
+
         debug(.media, "Hard Drive exported successfully")
-    }
-    
-    func export(fileProxy: MediaFileProxy, to url: URL) throws {
-        
-        debug(.media, "Exporting to \(url)")
-        try fileProxy.writeToFile(url: url)
     }
 }

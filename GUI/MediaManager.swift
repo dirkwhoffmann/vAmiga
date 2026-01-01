@@ -262,76 +262,9 @@ class MediaManager {
     }
     
     //
-    // Creating media files from URLs
-    //
-
-    /*
-    static func createFileProxy(from url: URL, type: FileType) throws -> MediaFileProxy {
-        
-        return try createFileProxy(from: url, allowedTypes: [type])
-    }
-    
-    static func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy {
-        
-        debug(.media, "Reading file \(url.lastPathComponent)")
-        
-        // Iterate through all allowed file types
-        for type in allowedTypes {
-            
-            do {
-                return try MediaFileProxy.make(with: url, type: type)
-            } catch let error as AppError {
-                if error.errorCode != .FILE_TYPE_MISMATCH { throw error }
-            }
-        }
-        
-        // None of the allowed types matched the file
-        throw AppError(.FILE_TYPE_MISMATCH,
-                       "The type of this file is not known to the emulator.")
-    }
-    */
-
-    //
     // Mouting media files
     //
-    
-    func mount(url: URL,
-               allowedTypes types: [FileType] = FileType.all,
-               drive n: Int = 0,
-               options: [Option] = [.remember]) throws {
-        
-        debug(.media, "url = \(url) types = \(types)")
-        
-        let type = MediaFileProxy.type(of: url)
-        if !types.contains(type) {
-            
-            //throw AppError(.FILE_TYPE_MISMATCH,
-            //               "The type of this file is not known to the emulator.")
-            throw AppError("The type of this file is not known to the emulator.")
-        }
-        
-        switch type {
-            
-        // case .WORKSPACE:
-        //    try mydocument.processWorkspaceFile(url: url)
 
-        // case .SNAPSHOT:
-        //    try mydocument.processSnapshotFile(url: url)
-            
-        // case .SCRIPT:
-        //    try mydocument.processScriptFile(url: url)
-            
-        case .HDF, .HDZ:
-            try mount(hd: n, url: url, options: options)
-            
-        case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST, .DIR:
-            try mount(df: n, url: url, options: options)
-            
-        default:
-            break
-        }
-    }
-    
     func mount(df n: Int, url: URL, options: [Option] = [.remember]) throws {
         
         guard let emu = emu else { return }

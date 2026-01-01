@@ -546,13 +546,11 @@ extension MyController: NSMenuItemValidation {
     func insertRecentDiskAction(df n: Int, slot: Int) {
         
         debug(.media, "insertRecentDiskAction(df: \(n), slot: \(slot))")
-        
-        let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
-        
+                
         if let url = MediaManager.getRecentlyInsertedDiskURL(slot) {
             
             do {
-                try self.mm.mount(url: url, allowedTypes: types, drive: n)
+                try self.mm.mount(df: n, url: url)
             } catch {
                 self.showAlert(.cantInsert, error: error)
             }

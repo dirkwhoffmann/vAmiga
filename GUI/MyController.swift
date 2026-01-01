@@ -367,8 +367,12 @@ extension MyController {
                 renderer.canvas.open(delay: delay)
                 
                 if let url = mydocument.launchURL {
-                    
-                    try? mm.mount(url: url, options: [.remember, .force])
+
+                    if url.isFloppyDiskImage || url.hasDirectoryPath {
+                        try? mm.mount(df: 0, url: url, options: [.remember, .force])
+                    } else if url.isHardDiskImage {
+                        try? mm.mount(hd: 0, url: url, options: [.remember, .force])
+                    }
                     mydocument.launchURL = nil
                 }
                 

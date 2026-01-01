@@ -90,8 +90,8 @@ class DropZone: Layer {
 
         guard let emu = emu else { return }
 
-        isFloppyImage = FloppyDiskImageProxy.about(url).format != .UNKNOWN
-        isHardDiskImage = HardDiskImageProxy.about(url).format != .UNKNOWN
+        isFloppyImage = url.isFloppyDiskImage
+        isHardDiskImage = url.isHardDiskImage
         isDirectory = url.hasDirectoryPath
 
         if (isFloppyImage) {
@@ -232,14 +232,20 @@ class DropZone: Layer {
     override func layerDidClose() {
         
         guard let url = metal.dropUrl else { return }
-        guard let type = metal.dropType else { return }
-        
+
         do {
-            
+
             if let nr = metal.dropZone {
-                try mm.mount(url: url, allowedTypes: [type], drive: nr)
+
+                if isHardDiskImage {
+                    try mm.mount(hd: nr, url: url, options: [.remember])
+                } else {
+                    try mm.mount(df: nr, url: url, options: [.remember])
+                }
+
             } else {
-                try mm.mount(url: url, allowedTypes: [type])
+
+                // No non-disk types supported yet
             }
             
         } catch {

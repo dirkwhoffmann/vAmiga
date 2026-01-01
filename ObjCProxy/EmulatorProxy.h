@@ -1028,9 +1028,9 @@ ImageInfo scan(const fs::path &url);
 
 @property (readonly) Diameter diameter;
 @property (readonly) Density density;
-@property (readonly) bool isSD;
-@property (readonly) bool isDD;
-@property (readonly) bool isHD;
+@property (readonly) BOOL isSD;
+@property (readonly) BOOL isDD;
+@property (readonly) BOOL isHD;
 
 @end
 

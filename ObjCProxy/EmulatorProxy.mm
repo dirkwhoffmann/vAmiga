@@ -2358,17 +2358,17 @@ ImageInfo scan(const fs::path &url)
 
 - (BOOL)isSD
 {
-    return (BOOL)[self image]->isSD();
+    return [self image]->isSD();
 }
 
 - (BOOL)isDD
 {
-    return (BOOL)[self image]->isDD();
+    return [self image]->isDD();
 }
 
 - (BOOL)isHD
 {
-    return (BOOL)[self image]->isHD();
+    return [self image]->isHD();
 }
 
 @end
