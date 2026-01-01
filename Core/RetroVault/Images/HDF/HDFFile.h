@@ -68,15 +68,6 @@ public:
 
 
     //
-    // Methods from BlockDevice
-    //
-
-public:
-
-    isize bsize() const override { return 512; }
-
-
-    //
     // Methods from TrackDevice
     //
 
@@ -86,6 +77,25 @@ public:
     isize numHeads() const override;
     isize numSectors(isize) const override { return numSectors(); }
     isize numSectors() const;
+
+
+    //
+    // Methods from HardDiskImage
+    //
+
+public:
+
+    isize numPartitions() const override { return isize(ptable.size()); }
+    Range<isize> partition(isize nr) const override { return ptable[nr].range(); }
+
+
+    //
+    // Methods from BlockDevice
+    //
+
+public:
+
+    isize bsize() const override { return 512; }
 
 
     //
@@ -135,10 +145,10 @@ public:
     isize numDrivers() const { return isize(drivers.size()); }
     
     // Returns the number of partitions
-    isize numPartitions() const { return isize(ptable.size()); }
+    // isize numPartitions() const { return isize(ptable.size()); }
 
     // Returns the byte count and the location of a certain partition
-    Range<isize> range(isize nr) const { return ptable[nr].range(); }
+    // Range<isize> range(isize nr) const { return ptable[nr].range(); }
     isize partitionSize(isize nr) const;
     isize partitionOffset(isize nr) const;
     u8 *partitionData(isize nr) const;

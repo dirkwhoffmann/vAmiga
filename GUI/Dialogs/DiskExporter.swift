@@ -46,10 +46,10 @@ class DiskExporter: DialogController {
     var partition: Int?
 
     // Number of available partitions
-    var numPartitions: Int { return hdf?.hdfInfo.partitions ?? 1 }
+    var numPartitions: Int { return hdf?.numPartitions ?? 1 }
 
     // Results of the different decoders
-    var hdf: MediaFileProxy?
+    var hdf: HardDiskImageProxy?
     var hdz: MediaFileProxy?
     var adf: MediaFileProxy?
     var adz: MediaFileProxy?
@@ -84,7 +84,7 @@ class DiskExporter: DialogController {
         hdn = emu.hd(nr)
 
         // Run the HDF decoder
-        hdf = try? MediaFileProxy.make(with: hdn!, type: .HDF)
+        hdf = try? HardDiskImageProxy.make(with: hdn!, format: .HDF)
 
         // Run the HDZ decoder
         hdz = try? MediaFileProxy.make(with: hdn!, type: .HDZ)
@@ -129,7 +129,7 @@ class DiskExporter: DialogController {
 
         addItem("Entire disk", tag: -1)
 
-        if hdf?.hdfInfo.hasRDB == true {
+        if numPartitions > 1 {
 
             for i in 1...numPartitions {
                 addItem("Partition \(i)", tag: i - 1)
@@ -228,14 +228,14 @@ class DiskExporter: DialogController {
     
     func updateHardDiskInfo() {
 
-        let info = hdf!.hdfInfo
+//        let info = hdf!.hdfInfo
 
-        let num = info.partitions
+        let num =  hdf!.numPartitions
         let s = num == 1 ? "" : "s"
         
         if partition == nil {
             
-            if info.hasRDB {
+            if num > 1 {
                 info1.stringValue = "RDB hard drive with \(num) partition\(s)"
             } else {
                 info1.stringValue = "Standard hard drive"
@@ -411,13 +411,8 @@ class DiskExporter: DialogController {
 
                 if let nr = partition {
 
-                    let lower = hdn?.partitionTraits(nr).lowerCyl ?? 0
-                    let upper = hdn?.partitionTraits(nr).upperCyl ?? 0
-
                     debug(.media, "Exporting partiton \(nr) to \(url)")
-                    try hdf?.writeToFile(url: url,
-                                         offset: lower * 512,
-                                         length: (upper - lower + 1) * 512)
+                    try hdf?.writePartitionToFile(url: url, partition: nr)
 
                 } else {
 
@@ -429,13 +424,9 @@ class DiskExporter: DialogController {
 
                 if let nr = partition {
 
-                    let lower = hdn?.partitionTraits(nr).lowerCyl ?? 0
-                    let upper = hdn?.partitionTraits(nr).upperCyl ?? 0
-
                     debug(.media, "Exporting partiton \(nr) to \(url)")
-                    try hdf?.writeToFile(url: url,
-                                         offset: lower * 512,
-                                         length: (upper - lower + 1) * 512)
+                    try hdf?.writePartitionToFile(url: url, partition: nr)
+
                 } else {
 
                     debug(.media, "Exporting entire hard disk to \(url)")

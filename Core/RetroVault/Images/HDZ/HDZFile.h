@@ -79,6 +79,16 @@ public:
 
 
     //
+    // Methods from HardDiskImage
+    //
+
+public:
+
+    isize numPartitions() const override { return isize(hdf.ptable.size()); }
+    Range<isize> partition(isize nr) const override { return hdf.ptable[nr].range(); }
+
+
+    //
     // Methods from BlockDevice
     //
 

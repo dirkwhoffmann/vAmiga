@@ -1382,13 +1382,41 @@ ImageInfo scan(const fs::path &url)
 
         if (auto* adf = dynamic_cast<ADFFile *>(base)) {
 
+            auto *vol = new Volume(*adf); // TODO: REMOVE MEMORY LEAK!
+            auto *fs = new FileSystem(*vol);
+            return [self make:fs];
+        }
+        if (auto* hdf = dynamic_cast<HDFFile *>(base)) {
+
+            auto *vol = new Volume(*hdf, hdf->partition(nr)); // TODO: REMOVE MEMORY LEAK!
+            auto *fs = new FileSystem(*vol);
+            return [self make:fs];
+        }
+
+        throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+
+    } catch(Error &error) {
+
+        [ex save:error];
+        return nil;
+    }
+}
+
++ (instancetype)makeWithDrive:(HardDiskImageProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
+{
+    try {
+
+        auto *base = ((MediaFile *)(proxy->obj))->get();
+
+        if (auto* adf = dynamic_cast<ADFFile *>(base)) {
+
             auto *vol = new Volume(*adf); // MEMORY LEAK!
             auto *fs = new FileSystem(*vol);
             return [self make:fs];
         }
         if (auto* hdf = dynamic_cast<HDFFile *>(base)) {
 
-            auto *vol = new Volume(*hdf, hdf->range(nr)); // MEMORY LEAK!
+            auto *vol = new Volume(*hdf, hdf->partition(nr)); // MEMORY LEAK!
             auto *fs = new FileSystem(*vol);
             return [self make:fs];
         }
@@ -2182,10 +2210,25 @@ ImageInfo scan(const fs::path &url)
     return [self file]->fnv64();
 }
 
-- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
+- (NSInteger)writeToFile:(NSURL *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self file]->writeToFile([path fileSystemRepresentation]); }
     catch(Error &error) { [ex save:error]; return 0; }
+}
+
+- (ImageType)type
+{
+    return [self file]->type();
+}
+
+- (ImageFormat)format
+{
+    return [self file]->format();
+}
+
+-(ImageInfo)info
+{
+    return [self file]->info();
 }
 
 - (NSInteger)bsize
@@ -2291,12 +2334,33 @@ ImageInfo scan(const fs::path &url)
 }
 
 + (instancetype)makeWithDrive:(HardDriveProxy *)proxy
-                         type:(ImageFormat)fmt
+                       format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex
 {
     auto drive = (FloppyDriveAPI *)proxy->obj;
     try { return [self make: drive->drive->exportDisk(fmt).release()]; }
     catch(Error &error) { [ex save:error]; return nil; }
+}
+
+- (NSInteger)writeToFile:(NSURL *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
+{
+    try { return [self image]->writePartitionToFile([path fileSystemRepresentation], nr); }
+    catch(Error &error) { [ex save:error]; return 0; }
+}
+
+- (NSInteger)numPartitions
+{
+    return [self image]->numPartitions();
+}
+
+- (NSInteger)lowerCyl:(NSInteger)partition
+{
+    return [self image]->partition(partition).lower;
+}
+
+- (NSInteger)upperCyl:(NSInteger)partition
+{
+    return [self image]->partition(partition).upper;
 }
 
 @end

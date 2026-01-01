@@ -252,12 +252,12 @@ extension MakeWithDrive {
     }
 }
 
-extension MakeWithHardDrive {
-    
-    static func make(with hdr: HardDriveProxy) throws -> Self {
-        
+extension HardDiskImageProxy {
+
+    static func make(with hdr: HardDriveProxy, format: ImageFormat) throws -> Self {
+
         let exc = ExceptionWrapper()
-        let obj = make(withHardDrive: hdr, exception: exc)
+        let obj = make(withDrive: hdr, format: format,  exception: exc)
         if exc.fault != 0 { throw AppError(exc) }
         return obj!
     }
@@ -446,7 +446,7 @@ extension HardDriveProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
 
-    func writeToFile(_ url: URL) throws {
+    func writeToFile(url: URL) throws {
 
         let exception = ExceptionWrapper()
         write(toFile: url, exception: exception)
@@ -467,12 +467,89 @@ extension AnyFileProxy {
     }
 }
 
+extension DiskImageProxy {
+
+    @discardableResult
+    func writeToFile(url: URL) throws -> Int {
+
+        let exception = ExceptionWrapper()
+        let result = write(toFile: url, exception: exception)
+        if exception.fault != 0 { throw AppError(exception) }
+
+        return result
+    }
+}
+
+extension FloppyDiskImageProxy {
+
+    func icon(protected: Bool = false) -> NSImage {
+
+        var name = ""
+
+        switch format {
+
+        case .ADF, .ADZ, .EADF, .IMG:
+
+            name = (density == .HD ? "hd" : "dd") + (format == .IMG ? "_dos" : "_adf")
+            // (format == .IMG ? "_dos" : info.dos == .NODOS ? "_other" : "_adf")
+
+        default:
+
+            name = ""
+        }
+
+        if protected { name += "_protected" }
+        return NSImage(named: name)!
+    }
+}
+
+extension HardDiskImageProxy {
+
+    func icon(protected: Bool = false) -> NSImage {
+
+        var name = ""
+
+        switch format {
+
+        case .HDF, .HDZ:
+
+            name = "hdf"
+
+        default:
+
+            name = ""
+        }
+
+        if protected { name += "_protected" }
+        return NSImage(named: name)!
+    }
+
+    @discardableResult
+    func writePartitionToFile(url: URL, partition nr: Int) throws -> Int {
+
+        let exception = ExceptionWrapper()
+        let result = write(toFile: url, partition: nr, exception: exception)
+        if exception.fault != 0 { throw AppError(exception) }
+
+        return result
+    }
+}
+
 extension FileSystemProxy {
 
     static func make(with file: MediaFileProxy, partition: Int = 0) throws -> FileSystemProxy {
 
         let exception = ExceptionWrapper()
         let result = FileSystemProxy.make(withMedia: file, partition: partition, exception: exception)
+        if exception.fault != 0 { throw AppError(exception) }
+
+        return result!
+    }
+
+    static func make(with file: HardDiskImageProxy, partition: Int = 0) throws -> FileSystemProxy {
+
+        let exception = ExceptionWrapper()
+        let result = FileSystemProxy.make(withImage: file, partition: partition, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
 
         return result!

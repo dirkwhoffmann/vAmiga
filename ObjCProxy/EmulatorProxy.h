@@ -33,8 +33,10 @@ using namespace vamiga;
 @class DiskControllerProxy;
 @class DiskFileProxy;
 @class DmaDebuggerProxy;
+@class FloppyDiskImageProxy;
 @class FloppyDriveProxy;
 @class GuardsProxy;
+@class HardDiskImageProxy;
 @class HardDriveProxy;
 @class HdControllerProxy;
 @class JoystickProxy;
@@ -449,12 +451,10 @@ ImageInfo scan(const fs::path &url);
 
 - (void)deleteRom;
 - (BOOL)isRom:(NSURL *)url;
-// - (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 - (void)deleteExt;
-// - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
@@ -785,6 +785,7 @@ ImageInfo scan(const fs::path &url);
 @interface FileSystemProxy : Proxy { }
 
 + (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithImage:(HardDiskImageProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 
 @property (readonly) NSString *name;
 @property (readonly) NSString *creationDate;
@@ -872,7 +873,12 @@ ImageInfo scan(const fs::path &url);
 @end
 
 @protocol MakeWithHardDrive <NSObject>
-+ (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
+// + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
+
++ (instancetype)makeWithDrive:(HardDriveProxy *)proxy
+                         type:(ImageFormat)fmt
+                    exception:(ExceptionWrapper *)ex;
+
 @end
 
 @protocol MakeWithFileSystem <NSObject>
@@ -983,7 +989,11 @@ ImageInfo scan(const fs::path &url);
 @property (readonly) NSInteger size;
 @property (readonly) u64 fnv;
 
-- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
+- (NSInteger)writeToFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
+
+@property (readonly) ImageType type;
+@property (readonly) ImageFormat format;
+@property (readonly) ImageInfo info;
 
 @property (readonly) NSInteger bsize;
 @property (readonly) NSInteger numCyls;
@@ -1015,13 +1025,19 @@ ImageInfo scan(const fs::path &url);
 
 
 //
-// FloppyDiskImageProxy
+// HardDiskImageProxy
 //
 
-@interface HardDiskImageProxy : DiskImageProxy { }
+@interface HardDiskImageProxy : DiskImageProxy <MakeWithHardDrive> { }
 
 + (instancetype)makeWithDrive:(HardDriveProxy *)proxy
-                         type:(ImageFormat)fmt
+                       format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex;
+
+- (NSInteger)writeToFile:(NSURL *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
+
+@property (readonly) NSInteger numPartitions;
+- (NSInteger)lowerCyl:(NSInteger)partition;
+- (NSInteger)upperCyl:(NSInteger)partition;
 
 @end

@@ -24,4 +24,18 @@ HardDiskImage::make(const fs::path &path)
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
+isize
+HardDiskImage::writePartitionToStream(std::ostream &stream, isize nr) const
+{
+    auto range = partition(nr);
+    return writeToStream(stream, range.lower, range.size());
+}
+
+isize
+HardDiskImage::writePartitionToFile(const fs::path &path, isize nr) const
+{
+    auto range = partition(nr);
+    return writeToFile(path, range.lower, range.size());
+}
+
 }

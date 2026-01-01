@@ -15,9 +15,18 @@ namespace vamiga {
 
 class HardDiskImage : public DiskImage {
 
+public:
+    
     // Hard disk factory
     static std::unique_ptr<HardDiskImage> make(const fs::path &path);
 
+    // Informs about the contained partitions
+    virtual isize numPartitions() const = 0;
+    virtual Range<isize> partition(isize nr) const = 0;
+
+    // Exports a single partition
+    isize writePartitionToStream(std::ostream &stream, isize nr) const;
+    isize writePartitionToFile(const fs::path &path, isize nr) const;
 };
 
 }
