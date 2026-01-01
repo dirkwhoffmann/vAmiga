@@ -36,8 +36,13 @@ class DropZone: Layer {
     var targetAlpha = [unselected, unselected, unselected, unselected]
     var maxAlpha = [0.0, 0.0, 0.0, 0.0]
     
-    var type: FileType?
-    
+    // var type: FileType? // DEPRECATED
+
+    // URL properties
+    var isFloppyImage: Bool = false
+    var isHardDiskImage: Bool = false
+    var isDirectory: Bool = false
+
     // Image pool
     var dfDisabled: NSImage { return NSImage(named: "dropZoneDisabled")! }
     var dfEmpty: NSImage { return NSImage(named: "dropZoneEmpty")! }
@@ -63,34 +68,69 @@ class DropZone: Layer {
     private func zoneImage(zone: Int) -> NSImage? {
         
         guard let emu = emu else { return nil }
-        
-        let isHD = [.HDF,.HDZ].contains(type)
-        
+
         if !enabled[zone] {
-            return isHD ? hdDisabled : dfDisabled
+            return isHardDiskImage ? hdDisabled : dfDisabled
         } else if emu.df(zone)!.info.hasDisk {
-            return isHD ? hdInUse : dfInUse
+            return isHardDiskImage ? hdInUse : dfInUse
         } else {
-            return isHD ? hdEmpty : dfEmpty
+            return isHardDiskImage ? hdEmpty : dfEmpty
         }
     }
     
     private func labelImage(zone: Int) -> NSImage? {
-        
-        let isHD = [.HDF, .HDZ].contains(type)
-        
-        var name = "drop" + (isHD ? "Hd" : "Df") + "\(zone)"
+
+        var name = "drop" + (isHardDiskImage ? "Hd" : "Df") + "\(zone)"
         if !enabled[zone] { name += "_disabled" }
         
         return NSImage(named: name)!
     }
-    
+
+    func open(url: URL, delay: Double) {
+
+        guard let emu = emu else { return }
+
+        isFloppyImage = FloppyDiskImageProxy.about(url).format != .UNKNOWN
+        isHardDiskImage = HardDiskImageProxy.about(url).format != .UNKNOWN
+        isDirectory = url.hasDirectoryPath
+
+        if (isFloppyImage) {
+
+            enabled = [ emu.df0.info.isConnected,
+                        emu.df1.info.isConnected,
+                        emu.df2.info.isConnected,
+                        emu.df3.info.isConnected ]
+
+        } else if (isHardDiskImage) {
+
+            enabled = [ true,
+                        emu.hd1.info.isConnected,
+                        emu.hd2.info.isConnected,
+                        emu.hd3.info.isConnected ]
+
+        } else {
+
+            enabled = [false, false, false, false]
+        }
+
+        // Assign zone images
+        for i in 0...3 { zones[i].image = zoneImage(zone: i) }
+        for i in 0...3 { labels[i].image = labelImage(zone: i) }
+
+        // Hide all drop zones if none is enabled
+        hideAll = !enabled[0] && !enabled[1] && !enabled[2] && !enabled[3]
+
+        open(delay: delay)
+        resize()
+    }
+
+    /*
     func open(type: FileType, delay: Double) {
         
         guard let emu = emu else { return }
         
         self.type = type
-        
+
         switch type {
             
         case .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR:
@@ -119,7 +159,8 @@ class DropZone: Layer {
         open(delay: delay)
         resize()
     }
-    
+    */
+
     override func update(frames: Int64) {
         
         super.update(frames: frames)
@@ -154,7 +195,7 @@ class DropZone: Layer {
             if isIn && !inside[i] {
                 
                 inside[i] = true
-                zones[i].image = type == .HDF ? hdSelected : dfSelected
+                zones[i].image = isHardDiskImage ? hdSelected : dfSelected
                 targetAlpha[i] = DropZone.selected
             }
             

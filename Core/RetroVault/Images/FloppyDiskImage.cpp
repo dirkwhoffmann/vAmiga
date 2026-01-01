@@ -16,9 +16,25 @@
 #include "EXEFile.h"
 #include "IMGFile.h"
 #include "STFile.h"
+#include "D64File.h"
 #include "utl/io.h"
 
 namespace vamiga {
+
+optional<ImageInfo>
+FloppyDiskImage::about(const fs::path& url)
+{
+    if (auto info = ADFFile::isCompatible(url))  return info;
+    if (auto info = ADZFile::isCompatible(url))  return info;
+    if (auto info = EADFFile::isCompatible(url)) return info;
+    if (auto info = IMGFile::isCompatible(url))  return info;
+    if (auto info = STFile::isCompatible(url))   return info;
+    if (auto info = DMSFile::isCompatible(url))  return info;
+    if (auto info = EXEFile::isCompatible(url))  return info;
+    if (auto info = D64File::isCompatible(url))  return info;
+
+    return {};
+}
 
 std::unique_ptr<FloppyDiskImage>
 FloppyDiskImage::make(const fs::path &path)

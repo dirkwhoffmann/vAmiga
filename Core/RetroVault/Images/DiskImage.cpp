@@ -30,16 +30,8 @@ using TS  = TrackDevice::TS;
 optional<ImageInfo>
 DiskImage::about(const fs::path& url)
 {
-    if (auto info = ADFFile::isCompatible(url))  return info;
-    if (auto info = ADZFile::isCompatible(url))  return info;
-    if (auto info = EADFFile::isCompatible(url)) return info;
-    if (auto info = HDFFile::isCompatible(url))  return info;
-    if (auto info = HDZFile::isCompatible(url))  return info;
-    if (auto info = IMGFile::isCompatible(url))  return info;
-    if (auto info = STFile::isCompatible(url))   return info;
-    if (auto info = DMSFile::isCompatible(url))  return info;
-    if (auto info = EXEFile::isCompatible(url))  return info;
-    if (auto info = D64File::isCompatible(url))  return info;
+    if (auto info = FloppyDiskImage::about(url)) return info;
+    if (auto info = HardDiskImage::about(url))   return info;
 
     return {};
 }

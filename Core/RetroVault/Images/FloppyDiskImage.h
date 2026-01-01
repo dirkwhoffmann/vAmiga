@@ -21,6 +21,8 @@ class FloppyDiskImage : public DiskImage {
 
 public:
 
+    static optional<ImageInfo> about(const fs::path& url);
+    
     // Floppy disk factory
     static std::unique_ptr<FloppyDiskImage> make(const fs::path &path);
 

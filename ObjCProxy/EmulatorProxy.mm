@@ -2206,15 +2206,6 @@ ImageInfo scan(const fs::path &url)
 
 @implementation DiskImageProxy
 
-+ (ImageFormat)typeOfUrl:(NSURL *)url
-{
-    if (auto about = DiskImage::about([url fileSystemRepresentation])) {
-        return about->format;
-    } else {
-        return ImageFormat::UNKNOWN;
-    }
-}
-
 + (ImageInfo)about:(NSURL *)url
 {
     if (auto about = DiskImage::about([url fileSystemRepresentation])) {
@@ -2327,6 +2318,15 @@ ImageInfo scan(const fs::path &url)
 
 @implementation FloppyDiskImageProxy
 
++ (ImageInfo)about:(NSURL *)url
+{
+    if (auto about = FloppyDiskImage::about([url fileSystemRepresentation])) {
+        return *about;
+    } else {
+        return { ImageType::UNKNOWN, ImageFormat::UNKNOWN };
+    }
+}
+
 - (FloppyDiskImage *)image
 {
     return (FloppyDiskImage *)obj;
@@ -2379,6 +2379,15 @@ ImageInfo scan(const fs::path &url)
 //
 
 @implementation HardDiskImageProxy
+
++ (ImageInfo)about:(NSURL *)url
+{
+    if (auto about = HardDiskImage::about([url fileSystemRepresentation])) {
+        return *about;
+    } else {
+        return { ImageType::UNKNOWN, ImageFormat::UNKNOWN };
+    }
+}
 
 - (HardDiskImage *)image
 {

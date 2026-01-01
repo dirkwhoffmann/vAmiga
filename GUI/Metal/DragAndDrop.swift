@@ -41,14 +41,10 @@ extension MetalView {
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
                 // Unpack the file if it is compressed
-                dropUrl = url // url.unpacked(maxSize: 2048 * 1024)
+                dropUrl = url
 
-                // Analyze the file type
-                let type = MediaFileProxy.type(of: dropUrl)
-                // let type = DiskImageProxy.about(dropUrl).format
-                
                 // Open the drop zone layer
-                parent.renderer.dropZone.open(type: type, delay: 0.25)
+                parent.renderer.dropZone.open(url: url, delay: 0.25)
             }
 
             return NSDragOperation.copy

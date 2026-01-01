@@ -15,6 +15,15 @@
 
 namespace vamiga {
 
+optional<ImageInfo>
+HardDiskImage::about(const fs::path& url)
+{
+    if (auto info = HDFFile::isCompatible(url))  return info;
+    if (auto info = HDZFile::isCompatible(url))  return info;
+
+    return {};
+}
+
 std::unique_ptr<HardDiskImage>
 HardDiskImage::make(const fs::path &path)
 {

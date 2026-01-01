@@ -988,7 +988,6 @@ ImageInfo scan(const fs::path &url);
 
 @interface DiskImageProxy : Proxy { }
 
-+ (ImageFormat)typeOfUrl:(NSURL *)url;
 + (ImageInfo)about:(NSURL *)url;
 
 @property (readonly) NSURL *path;
@@ -1021,6 +1020,8 @@ ImageInfo scan(const fs::path &url);
 
 @interface FloppyDiskImageProxy : DiskImageProxy <MakeWithDrive> { }
 
++ (ImageInfo)about:(NSURL *)url;
+
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
                        format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex;
@@ -1039,6 +1040,8 @@ ImageInfo scan(const fs::path &url);
 //
 
 @interface HardDiskImageProxy : DiskImageProxy <MakeWithHardDrive> { }
+
++ (ImageInfo)about:(NSURL *)url;
 
 + (instancetype)makeWithDrive:(HardDriveProxy *)proxy
                        format:(ImageFormat)fmt
