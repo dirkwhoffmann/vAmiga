@@ -27,7 +27,7 @@ public:
     static constexpr isize ADFSIZE_35_DD_84 = 946176;   //  924 KB (+ 4 cyls)
     static constexpr isize ADFSIZE_35_HD    = 1802240;  // 1760 KB
     
-    static optional<ImageInfo> isCompatible(const fs::path &path);
+    static optional<ImageInfo> about(const fs::path &path);
 
     // Returns the size of an ADF file of a given disk type in bytes
     static isize fileSize(Diameter diameter, Density density);
@@ -61,17 +61,13 @@ public:
 
 public:
 
+    bool validateURL(const fs::path& path) const noexcept override {
+        return about(path).has_value();
+    }
+
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::ADF; }
 
-
-    //
-    // Methods from AnyFile
-    //
-    
-public:
-    
-    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path).has_value(); }
     void didLoad() override;
 
 

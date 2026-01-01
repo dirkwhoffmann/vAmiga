@@ -25,7 +25,7 @@ const std::vector<string> EADFFile::extAdfHeaders =
 };
 
 optional<ImageInfo>
-EADFFile::isCompatible(const fs::path &path)
+EADFFile::about(const fs::path &path)
 {
     for (auto &header : extAdfHeaders) {
 

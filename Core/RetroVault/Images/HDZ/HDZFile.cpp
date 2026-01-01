@@ -16,7 +16,7 @@
 namespace vamiga {
 
 optional<ImageInfo>
-HDZFile::isCompatible(const fs::path &path)
+HDZFile::about(const fs::path &path)
 {
     auto suffix = utl::uppercased(path.extension().string());
     if (suffix != ".HDZ") return {};

@@ -27,10 +27,7 @@ public:
     static constexpr isize D64_802_SECTORS     = 205312;
     static constexpr isize D64_802_SECTORS_ECC = 206114;
 
-    static optional<ImageInfo> isCompatible(const fs::path &path);
-
-    // Error information stored in the D64 archive
-    // u8 errors[802];
+    static optional<ImageInfo> about(const fs::path &path);
 
 
     //
@@ -39,7 +36,7 @@ public:
 
 public:
 
-    using AnyFile::init;
+    using AnyImage::init;
 
     D64File();
     D64File(const fs::path &path) { init(path); }
@@ -53,17 +50,12 @@ public:
 
 public:
 
+    bool validateURL(const fs::path& path) const noexcept override {
+        return about(path).has_value();
+    }
+    
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::D64; }
-
-
-    //
-    // Methods from AnyFile
-    //
-
-public:
-
-    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path).has_value(); }
 
 
     //

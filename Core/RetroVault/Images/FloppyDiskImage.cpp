@@ -24,14 +24,14 @@ namespace vamiga {
 optional<ImageInfo>
 FloppyDiskImage::about(const fs::path& url)
 {
-    if (auto info = ADFFile::isCompatible(url))  return info;
-    if (auto info = ADZFile::isCompatible(url))  return info;
-    if (auto info = EADFFile::isCompatible(url)) return info;
-    if (auto info = IMGFile::isCompatible(url))  return info;
-    if (auto info = STFile::isCompatible(url))   return info;
-    if (auto info = DMSFile::isCompatible(url))  return info;
-    if (auto info = EXEFile::isCompatible(url))  return info;
-    if (auto info = D64File::isCompatible(url))  return info;
+    if (auto info = ADFFile::about(url))  return info;
+    if (auto info = ADZFile::about(url))  return info;
+    if (auto info = EADFFile::about(url)) return info;
+    if (auto info = IMGFile::about(url))  return info;
+    if (auto info = STFile::about(url))   return info;
+    if (auto info = DMSFile::about(url))  return info;
+    if (auto info = EXEFile::about(url))  return info;
+    if (auto info = D64File::about(url))  return info;
 
     return {};
 }
@@ -41,13 +41,13 @@ FloppyDiskImage::make(const fs::path &path)
 {
     std::unique_ptr<FloppyDiskImage> result;
 
-    if (ADFFile::isCompatible(path))   return make_unique<ADFFile>(path);
-    if (ADZFile::isCompatible(path))   return make_unique<ADZFile>(path);
-    if (EADFFile::isCompatible(path))  return make_unique<EADFFile>(path);
-    if (IMGFile::isCompatible(path))   return make_unique<IMGFile>(path);
-    if (STFile::isCompatible(path))    return make_unique<STFile>(path);
-    if (DMSFile::isCompatible(path))   return make_unique<DMSFile>(path);
-    if (EXEFile::isCompatible(path))   return make_unique<EXEFile>(path);
+    if (ADFFile::about(path).has_value())  return make_unique<ADFFile>(path);
+    if (ADZFile::about(path).has_value())  return make_unique<ADZFile>(path);
+    if (EADFFile::about(path).has_value()) return make_unique<EADFFile>(path);
+    if (IMGFile::about(path).has_value())  return make_unique<IMGFile>(path);
+    if (STFile::about(path).has_value())   return make_unique<STFile>(path);
+    if (DMSFile::about(path).has_value())  return make_unique<DMSFile>(path);
+    if (EXEFile::about(path).has_value())  return make_unique<EXEFile>(path);
 
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }

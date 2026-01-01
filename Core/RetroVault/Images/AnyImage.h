@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "AnyFile.h" // REMOVE ASAP
 #include "ImageTypes.h"
 #include "utl/abilities.h"
 #include "utl/storage.h"
@@ -19,12 +18,6 @@ namespace vamiga {
 
 using namespace utl;
 
-// REMOVE ASAP
-using AnyImage = AnyFile;
-
-/*
-
-// Base class for all disk images
 class AnyImage : public Hashable, public Dumpable, public Loggable {
 
 public:
@@ -34,6 +27,9 @@ public:
 
     // The raw data of this file
     Buffer<u8> data;
+
+    // Analyzes the type and format of the specified file
+    static optional<ImageInfo> about(const fs::path& url);
 
 
     //
@@ -49,6 +45,9 @@ public:
     void init(const Buffer<u8> &buffer);
     void init(const string &str);
     void init(const fs::path &path);
+
+    // Checks if the URL points to an image of the same type
+    virtual bool validateURL(const fs::path& url) const noexcept = 0;
 
 
     //
@@ -79,12 +78,15 @@ public:
 
 public:
 
+    virtual ImageType type() const noexcept = 0;
+    virtual ImageFormat format() const noexcept = 0;
+    ImageInfo info() const noexcept { return { type(), format() }; }
+
+    virtual std::vector<string> describe() const { return {}; }
+
     isize getSize() const { return data.size; }
     u8* getData() const { return data.ptr; }
     bool empty() const { return data.empty(); }
-
-    // Returns meta-information about the file
-    virtual std::vector<string> describe() const { return {}; }
 
 
     //
@@ -107,9 +109,6 @@ public:
     // Importing
     //
 
-    // Returns true if path points to a compatible file
-    virtual bool isCompatiblePath(const fs::path &path) const { return true; }
-
 
     //
     // Exporting
@@ -128,6 +127,5 @@ private:
     // Called at the end of init()
     virtual void didLoad() {};
 };
-*/
 
 }

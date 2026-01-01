@@ -20,13 +20,6 @@ public:
 
     static optional<ImageInfo> about(const fs::path& url);
 
-    // Returns meta-data about this image (TODO: MOVE TO AnyImage later)
-    virtual ImageType type() const noexcept = 0;
-    virtual ImageFormat format() const noexcept = 0;
-    ImageInfo info() const noexcept { return { type(), format() }; }
-
-    virtual optional<ImageInfo> validateURL(const fs::path& url) const noexcept { return {}; }
-
 
     //
     // Methods from LinearDevice

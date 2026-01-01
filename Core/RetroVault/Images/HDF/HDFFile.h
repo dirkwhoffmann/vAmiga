@@ -31,13 +31,10 @@ public:
     // Included device drivers
     std::vector <DriverDescriptor> drivers;
 
-    static optional<ImageInfo> isCompatible(const fs::path &path);
+    static optional<ImageInfo> about(const fs::path &path);
 
     static bool isOversized(isize size) { return size > 504_MB; }
 
-    bool isCompatiblePath(const fs::path &path) const override {
-        return isCompatible(path).has_value();
-    }
     void didLoad() override;
     
     
@@ -54,8 +51,6 @@ public:
     void init(const fs::path &path);
     void init(const u8 *buf, isize len);
 
-//    optional<ImageInfo> validateURL(const fs::path& url) override;
-
 
     //
     // Methods from AnyImage
@@ -63,6 +58,10 @@ public:
 
 public:
 
+    bool validateURL(const fs::path& path) const noexcept override {
+        return about(path).has_value();
+    }
+    
     ImageType type() const noexcept override { return ImageType::HARDDISK; }
     ImageFormat format() const noexcept override { return ImageFormat::HDF; }
 

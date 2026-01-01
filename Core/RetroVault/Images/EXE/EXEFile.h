@@ -19,7 +19,7 @@ class EXEFile : public FloppyDiskImage {
 
 public:
     
-    static optional<ImageInfo> isCompatible(const fs::path &path);
+    static optional<ImageInfo> about(const fs::path &path);
 
     
     //
@@ -54,17 +54,13 @@ public:
 
 public:
 
+    bool validateURL(const fs::path& path) const noexcept override {
+        return about(path).has_value();
+    }
+    
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::EXE; }
 
-
-    //
-    // Methods from AnyFile
-    //
-
-public:
-
-    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path).has_value(); }
     void didLoad() override;
     
     

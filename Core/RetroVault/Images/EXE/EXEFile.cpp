@@ -17,7 +17,7 @@
 namespace vamiga {
 
 optional<ImageInfo>
-EXEFile::isCompatible(const fs::path &path)
+EXEFile::about(const fs::path &path)
 {
     // Check file size
     auto suffix = utl::uppercased(path.extension().string());

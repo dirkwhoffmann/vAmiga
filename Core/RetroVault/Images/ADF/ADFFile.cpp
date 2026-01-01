@@ -17,7 +17,7 @@
 namespace vamiga {
 
 optional<ImageInfo>
-ADFFile::isCompatible(const fs::path &path)
+ADFFile::about(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
@@ -36,7 +36,7 @@ ADFFile::isCompatible(const fs::path &path)
     if (len > ADFSIZE_35_DD_84 && len != ADFSIZE_35_HD) return {};
 
     // Make sure it's not an extended ADF
-    if (EADFFile::isCompatible(path)) return {};
+    if (EADFFile::about(path)) return {};
 
     return {{ ImageType::FLOPPY, ImageFormat::ADF }};
 }

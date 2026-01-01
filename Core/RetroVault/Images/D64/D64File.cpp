@@ -15,7 +15,7 @@
 namespace vamiga {
 
 optional<ImageInfo>
-D64File::isCompatible(const fs::path &path)
+D64File::about(const fs::path &path)
 {
     // Check suffix
     if (utl::uppercased(path.extension().string()) != ".D64") return {};

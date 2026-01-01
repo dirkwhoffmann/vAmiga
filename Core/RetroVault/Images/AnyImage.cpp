@@ -7,7 +7,6 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-/*
 #include "config.h"
 #include "AnyImage.h"
 #include "Snapshot.h"
@@ -25,6 +24,13 @@
 #include <fstream>
 
 namespace vamiga {
+
+optional<ImageInfo>
+AnyImage::about(const fs::path& url)
+{
+    if (auto info = DiskImage::about(url)) return info;
+    return {};
+}
 
 void
 AnyImage::init(isize len)
@@ -52,7 +58,7 @@ AnyImage::init(const fs::path &path)
     if (!stream.is_open()) {
         throw IOError(IOError::FILE_NOT_FOUND, path);
     }
-    if (!isCompatiblePath(path)) {
+    if (!validateURL(path)) {
         throw IOError(IOError::FILE_TYPE_MISMATCH, path);
     }
     std::ostringstream sstr(std::ios::binary);
@@ -162,4 +168,3 @@ AnyImage::writeToFile(const fs::path &path) const
 }
 
 }
-*/

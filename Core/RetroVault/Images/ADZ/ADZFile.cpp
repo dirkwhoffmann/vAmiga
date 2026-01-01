@@ -36,7 +36,7 @@ ADZFile::init(const class ADFFile &adf)
 }
 
 optional<ImageInfo>
-ADZFile::isCompatible(const fs::path &path)
+ADZFile::about(const fs::path &path)
 {
     auto suffix = utl::uppercased(path.extension().string());
     if (suffix != ".ADZ") return {};

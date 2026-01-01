@@ -18,8 +18,8 @@ namespace vamiga {
 optional<ImageInfo>
 HardDiskImage::about(const fs::path& url)
 {
-    if (auto info = HDFFile::isCompatible(url))  return info;
-    if (auto info = HDZFile::isCompatible(url))  return info;
+    if (auto info = HDFFile::about(url)) return info;
+    if (auto info = HDZFile::about(url)) return info;
 
     return {};
 }
@@ -27,8 +27,8 @@ HardDiskImage::about(const fs::path& url)
 std::unique_ptr<HardDiskImage>
 HardDiskImage::make(const fs::path &path)
 {
-    if (HDFFile::isCompatible(path)) return make_unique<HDFFile>(path);
-    if (HDZFile::isCompatible(path)) return make_unique<HDZFile>(path);
+    if (HDFFile::about(path).has_value()) return make_unique<HDFFile>(path);
+    if (HDZFile::about(path).has_value()) return make_unique<HDZFile>(path);
 
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }

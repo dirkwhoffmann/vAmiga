@@ -21,7 +21,7 @@ unsigned short extractDMS(const unsigned char *in, size_t inSize,
 namespace vamiga {
 
 optional<ImageInfo>
-DMSFile::isCompatible(const fs::path &path)
+DMSFile::about(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());

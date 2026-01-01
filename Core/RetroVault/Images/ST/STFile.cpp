@@ -17,7 +17,7 @@
 namespace vamiga {
 
 optional<ImageInfo>
-STFile::isCompatible(const fs::path &path)
+STFile::about(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());

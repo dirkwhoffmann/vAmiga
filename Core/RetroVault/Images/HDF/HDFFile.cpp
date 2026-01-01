@@ -20,7 +20,7 @@
 namespace vamiga {
 
 optional<ImageInfo>
-HDFFile::isCompatible(const fs::path &path)
+HDFFile::about(const fs::path &path)
 {
     auto suffix = utl::uppercased(path.extension().string());
     if (suffix != ".HDF") return {};
@@ -52,7 +52,7 @@ HDFFile::init(const fs::path &path)
     // Check size
     if (isOversized(utl::getSizeOfFile(path))) throw DeviceError(DeviceError::HDR_TOO_LARGE);
     
-    AnyFile::init(path);
+    AnyImage::init(path);
 }
 
 void
@@ -61,7 +61,7 @@ HDFFile::init(const u8 *buf, isize len)
     // Check size
     if (isOversized(len)) throw DeviceError(DeviceError::HDR_TOO_LARGE);
 
-    AnyFile::init(buf, len);
+    AnyImage::init(buf, len);
 }
 
 isize
