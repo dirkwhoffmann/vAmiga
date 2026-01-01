@@ -50,11 +50,11 @@ class DiskExporter: DialogController {
 
     // Results of the different decoders
     var hdf: HardDiskImageProxy?
-    var hdz: MediaFileProxy?
-    var adf: MediaFileProxy?
-    var adz: MediaFileProxy?
-    var ext: MediaFileProxy?
-    var img: MediaFileProxy?
+    var hdz: HardDiskImageProxy?
+    var adf: FloppyDiskImageProxy?
+    var adz: FloppyDiskImageProxy?
+    var ext: FloppyDiskImageProxy?
+    var img: FloppyDiskImageProxy?
     var vol: FileSystemProxy?
     
     func showSheet(diskDrive nr: Int) {
@@ -62,16 +62,16 @@ class DiskExporter: DialogController {
         dfn = emu.df(nr)
 
         // Run the ADF decoder
-        adf = try? MediaFileProxy.make(with: dfn!, type: .ADF)
+        adf = try? FloppyDiskImageProxy.make(with: dfn!, format: .ADF)
 
         // Run the ADZ decoder
-        adz = try? MediaFileProxy.make(with: dfn!, type: .ADZ)
-        
+        adz = try? FloppyDiskImageProxy.make(with: dfn!, format: .ADZ)
+
         // Run the extended ADF decoder
-        ext = try? MediaFileProxy.make(with: dfn!, type: .EADF)
+        ext = try? FloppyDiskImageProxy.make(with: dfn!, format: .EADF)
 
         // Run the DOS decoder
-        img = try? MediaFileProxy.make(with: dfn!, type: .IMG)
+        img = try? FloppyDiskImageProxy.make(with: dfn!, format: .IMG)
 
         // Select the export partition
         select(partition: 0)
@@ -87,7 +87,7 @@ class DiskExporter: DialogController {
         hdf = try? HardDiskImageProxy.make(with: hdn!, format: .HDF)
 
         // Run the HDZ decoder
-        hdz = try? MediaFileProxy.make(with: hdn!, type: .HDZ)
+        hdz = try? HardDiskImageProxy.make(with: hdn!, format: .HDZ)
 
         // Select the export partition
         select(partition: numPartitions == 1 ? 0 : nil)
@@ -256,7 +256,7 @@ class DiskExporter: DialogController {
     func updateFloppyDiskInfo() {
 
         if adf != nil {
-            info1.stringValue = adf!.typeInfo + ", " + adf!.layoutInfo
+            info1.stringValue = "Amiga Floppy Disk" // adf!.typeInfo + ", " + adf!.layoutInfo
         } else {
             info1.stringValue = ""
         }
@@ -360,27 +360,32 @@ class DiskExporter: DialogController {
             case Format.adf:
                 
                 debug(.media, "Exporting ADF")
-                try parent.mydocument.export(fileProxy: adf!, to: url)
+                try adf!.writeToFile(url: url)
+                // try parent.mydocument.export(fileProxy: adf!, to: url)
 
             case Format.adz:
                 
                 debug(.media, "Exporting ADZ")
-                try parent.mydocument.export(fileProxy: adz!, to: url)
+                try adz!.writeToFile(url: url)
+                // try parent.mydocument.export(fileProxy: adz!, to: url)
 
             case Format.ext:
                 
                 debug(.media, "Exporting Extended ADF")
-                try parent.mydocument.export(fileProxy: ext!, to: url)
+                try ext!.writeToFile(url: url)
+                // try parent.mydocument.export(fileProxy: ext!, to: url)
 
             case Format.img:
                 
                 debug(.media, "Exporting IMG")
-                try parent.mydocument.export(fileProxy: img!, to: url)
+                try img!.writeToFile(url: url)
+                // try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.ima:
                 
                 debug(.media, "Exporting IMA")
-                try parent.mydocument.export(fileProxy: img!, to: url)
+                try img!.writeToFile(url: url)
+                // try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.vol:
                 

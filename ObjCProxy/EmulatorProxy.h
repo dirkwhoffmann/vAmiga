@@ -785,6 +785,7 @@ ImageInfo scan(const fs::path &url);
 @interface FileSystemProxy : Proxy { }
 
 + (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithImage:(FloppyDiskImageProxy *)proxy exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithImage:(HardDiskImageProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 
 @property (readonly) NSString *name;
@@ -869,14 +870,16 @@ ImageInfo scan(const fs::path &url);
 @end
 
 @protocol MakeWithDrive <NSObject>
-+ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
+
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
+                       format:(ImageFormat)fmt
+                    exception:(ExceptionWrapper *)ex;
 @end
 
 @protocol MakeWithHardDrive <NSObject>
-// + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 + (instancetype)makeWithDrive:(HardDriveProxy *)proxy
-                         type:(ImageFormat)fmt
+                       format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex;
 
 @end
@@ -1009,10 +1012,10 @@ ImageInfo scan(const fs::path &url);
 // FloppyDiskImageProxy
 //
 
-@interface FloppyDiskImageProxy : DiskImageProxy { }
+@interface FloppyDiskImageProxy : DiskImageProxy <MakeWithDrive> { }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
-                         type:(ImageFormat)fmt
+                        format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex;
 
 @property (readonly) Diameter diameter;

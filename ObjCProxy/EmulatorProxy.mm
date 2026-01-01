@@ -1402,11 +1402,11 @@ ImageInfo scan(const fs::path &url)
     }
 }
 
-+ (instancetype)makeWithDrive:(HardDiskImageProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
++ (instancetype)makeWithImage:(FloppyDiskImageProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try {
 
-        auto *base = ((MediaFile *)(proxy->obj))->get();
+        auto *base = (FloppyDiskImage *)proxy->obj;
 
         if (auto* adf = dynamic_cast<ADFFile *>(base)) {
 
@@ -1414,6 +1414,23 @@ ImageInfo scan(const fs::path &url)
             auto *fs = new FileSystem(*vol);
             return [self make:fs];
         }
+
+        throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+
+    } catch(Error &error) {
+
+        [ex save:error];
+        return nil;
+    }
+}
+
+
++ (instancetype)makeWithImage:(HardDiskImageProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
+{
+    try {
+
+        auto *base = (HardDiskImage *)proxy->obj;
+
         if (auto* hdf = dynamic_cast<HDFFile *>(base)) {
 
             auto *vol = new Volume(*hdf, hdf->partition(nr)); // MEMORY LEAK!
@@ -2281,7 +2298,7 @@ ImageInfo scan(const fs::path &url)
 }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
-                         type:(ImageFormat)fmt
+                       format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex
 {
     auto drive = (FloppyDriveAPI *)proxy->obj;

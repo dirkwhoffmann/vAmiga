@@ -243,15 +243,27 @@ extension MakeWithFile {
 
 extension MakeWithDrive {
     
-    static func make(with drive: FloppyDriveProxy) throws -> Self {
-        
+    static func make(with drive: FloppyDriveProxy, format: ImageFormat) throws -> Self {
+
         let exc = ExceptionWrapper()
-        let obj = make(withDrive: drive, exception: exc)
+        let obj = make(withDrive: drive, format: format, exception: exc)
         if exc.fault != 0 { throw AppError(exc) }
         return obj!
     }
 }
 
+extension MakeWithHardDrive {
+
+    static func make(with drive: HardDriveProxy, format: ImageFormat) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(withDrive: drive, format: format,  exception: exc)
+        if exc.fault != 0 { throw AppError(exc) }
+        return obj!
+    }
+}
+
+/*
 extension HardDiskImageProxy {
 
     static func make(with hdr: HardDriveProxy, format: ImageFormat) throws -> Self {
@@ -262,6 +274,7 @@ extension HardDiskImageProxy {
         return obj!
     }
 }
+*/
 
 extension MakeWithFileSystem {
     
@@ -541,6 +554,15 @@ extension FileSystemProxy {
 
         let exception = ExceptionWrapper()
         let result = FileSystemProxy.make(withMedia: file, partition: partition, exception: exception)
+        if exception.fault != 0 { throw AppError(exception) }
+
+        return result!
+    }
+
+    static func make(with file: FloppyDiskImageProxy) throws -> FileSystemProxy {
+
+        let exception = ExceptionWrapper()
+        let result = FileSystemProxy.make(withImage: file, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
 
         return result!
