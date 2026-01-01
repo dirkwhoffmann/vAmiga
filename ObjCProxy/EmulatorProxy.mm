@@ -11,8 +11,8 @@
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
 #import "Emulator.h"
-#import "MediaFile.h"
 #import "DiskImage.h"
+#import "RomFile.h"
 #import "utl/support/Strings.h"
 
 using namespace vamiga;
@@ -535,7 +535,7 @@ ImageInfo scan(const fs::path &url)
 
 - (BOOL)isRom:(NSURL *)url
 {
-    return MediaFile::type([url fileSystemRepresentation]) == FileType::ROM;
+    return RomFile::isCompatible([url fileSystemRepresentation]);
 }
 
 - (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
@@ -1814,6 +1814,7 @@ ImageInfo scan(const fs::path &url)
     return file ? [[self alloc] initWith:file] : nil;
 }
 
+/*
 + (FileType)typeOfUrl:(NSURL *)url
 {
     return MediaFile::type([url fileSystemRepresentation]);
@@ -1823,6 +1824,7 @@ ImageInfo scan(const fs::path &url)
 {
     return MediaFile::type(*[self file]);
 }
+*/
 
 - (NSURL *)path
 {

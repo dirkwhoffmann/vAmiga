@@ -109,9 +109,11 @@ extension EventSlot: CustomStringConvertible {
 
 extension FileType {
 
+    /*
     init?(url: URL?) {
         self = url == nil ? .UNKNOWN : AnyFileProxy.type(of: url)
     }
+    */
 
     static var all: [FileType] {
         return [ .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]

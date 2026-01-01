@@ -198,6 +198,7 @@ extension URL {
         }
     }
 
+    var isDiskImage: Bool { DiskImageProxy.about(self).format != .UNKNOWN }
     var isFloppyDiskImage: Bool { FloppyDiskImageProxy.about(self).format != .UNKNOWN }
     var isHardDiskImage: Bool { HardDiskImageProxy.about(self).format != .UNKNOWN }
 }

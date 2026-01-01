@@ -21,7 +21,7 @@ extension MetalView {
         
         dropZone = nil
         dropUrl = nil
-        dropType = nil
+        // dropType = nil
         
         let pasteBoard = sender.draggingPasteboard
         guard let type = pasteBoard.availableType(from: acceptedTypes()) else {
@@ -115,8 +115,8 @@ extension MetalView {
 
     func performUrlDrag(_ sender: NSDraggingInfo) -> Bool {
                 
-        if dropUrl == nil { return false }
-        
+        guard let url = dropUrl else { return false }
+
         // Check drop zones
         var zone: Int?
         for i in 0...3 {
@@ -124,21 +124,11 @@ extension MetalView {
         }
 
         // Check file types
-        let type = FileType(url: dropUrl)
-        switch type {
-            
-        // case .WORKSPACE, .SNAPSHOT, .SCRIPT:
-        //    break
-            
-        case .ADF, .ADZ, .DIR, .DMS, .EADF, .EXE, .HDF, .HDZ, .IMG, .ST:
-            if zone == nil { return false }
-            
-        default:
-            return false
-        }
+        if !url.isDiskImage && !url.hasDirectoryPath { return false }
+        if zone == nil { return false }
 
         dropZone = zone
-        dropType = type
+        // dropType = type
         return true
     }
             

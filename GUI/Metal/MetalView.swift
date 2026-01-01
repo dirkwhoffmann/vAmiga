@@ -41,7 +41,7 @@ class MetalView: MTKView {
     // Temporary storage of the properties of a dragged in file
     var dropZone: Int?
     var dropUrl: URL?
-    var dropType: FileType?
+    // var dropType: FileType?
     
     required public init(coder: NSCoder) {
     
