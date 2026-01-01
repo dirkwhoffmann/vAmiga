@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "MediaFileTypes.h"
 #include "DeviceTypes.h"
 #include "Aliases.h"
 

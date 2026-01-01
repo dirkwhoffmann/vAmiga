@@ -260,8 +260,6 @@
 		50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */ = {isa = PBXBuildFile; fileRef = 50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
 		50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50984B63263A9B5100E37184 /* RegressionTester.cpp */; };
-		50985ABB2C418D190079CFC5 /* MediaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50985AB92C418D190079CFC5 /* MediaFile.cpp */; };
-		50985ABC2C418D190079CFC5 /* MediaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50985AB92C418D190079CFC5 /* MediaFile.cpp */; };
 		5099432A29C2114C00867E8F /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
 		509C365A260B1766004F160A /* RSCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* RSCommand.cpp */; };
 		509C365E260B177E004F160A /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C365C260B177E004F160A /* Console.cpp */; };
@@ -979,8 +977,6 @@
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
 		50984B63263A9B5100E37184 /* RegressionTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RegressionTester.cpp; sourceTree = "<group>"; };
 		50984B64263A9B5100E37184 /* RegressionTester.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegressionTester.h; sourceTree = "<group>"; };
-		50985AB92C418D190079CFC5 /* MediaFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MediaFile.cpp; sourceTree = "<group>"; };
-		50985ABA2C418D190079CFC5 /* MediaFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaFile.h; sourceTree = "<group>"; };
 		50985ABD2C418D370079CFC5 /* MediaFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaFileTypes.h; sourceTree = "<group>"; };
 		5099432B29C2116500867E8F /* VAmiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmiga.h; sourceTree = "<group>"; };
 		5099432C29C224BB00867E8F /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
@@ -2158,8 +2154,6 @@
 				50BCB9C72EE73A2A000C53CF /* MediaError.h */,
 				50BCB9C82EE73B62000C53CF /* MediaError.cpp */,
 				50985ABD2C418D370079CFC5 /* MediaFileTypes.h */,
-				50985ABA2C418D190079CFC5 /* MediaFile.h */,
-				50985AB92C418D190079CFC5 /* MediaFile.cpp */,
 				508FE06421EA318D0043D0E9 /* AnyFile.h */,
 				508FE06321EA318D0043D0E9 /* AnyFile.cpp */,
 				5068EA312D4B5BED00B44FB5 /* Workspace.h */,
@@ -3269,7 +3263,6 @@
 				508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */,
 				5020B38E295336E5009732AC /* Host.cpp in Sources */,
 				50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */,
-				50985ABB2C418D190079CFC5 /* MediaFile.cpp in Sources */,
 				50AFEBBA278EF5FD00F422D5 /* Sequencer.cpp in Sources */,
 				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
@@ -3345,7 +3338,6 @@
 				50FC04B727DA19A900C3E566 /* ZorroBoard.cpp in Sources */,
 				50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */,
 				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
-				50985ABC2C418D190079CFC5 /* MediaFile.cpp in Sources */,
 				50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */,
 				50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */,
 				50FC04DD27DA1A1400C3E566 /* tables.c in Sources */,

@@ -11,7 +11,6 @@
 #include "RetroShell.h"
 #include "RSError.h"
 #include "Emulator.h"
-#include "MediaFile.h"
 #include "utl/io.h"
 #include <istream>
 #include <sstream>

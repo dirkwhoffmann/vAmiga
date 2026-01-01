@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "Amiga.h"
-#include "MediaFile.h"
 #include "Codecs.h"
 #include "Emulator.h"
 #include "Option.h"

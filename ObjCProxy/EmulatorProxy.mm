@@ -1814,18 +1814,6 @@ ImageInfo scan(const fs::path &url)
     return file ? [[self alloc] initWith:file] : nil;
 }
 
-/*
-+ (FileType)typeOfUrl:(NSURL *)url
-{
-    return MediaFile::type([url fileSystemRepresentation]);
-}
-
-- (FileType)type
-{
-    return MediaFile::type(*[self file]);
-}
-*/
-
 - (NSURL *)path
 {
     auto nsPath = @([self file]->path.c_str());

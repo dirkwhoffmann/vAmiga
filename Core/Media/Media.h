@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "MediaFile.h"
 #include "Workspace.h"
 #include "Snapshot.h"
 #include "Script.h"
@@ -18,22 +17,14 @@
 #include "HDFFile.h"
 #include "HDZFile.h"
 
-/* All media files are organized in the class hierarchy displayed below.
- * MediaFile is a wrapper class which is referenced in the public API. Below
- * the public API, three abstract classes are involed: AnyFile, DiskImage,
- * and FloppyDiskImage. AnyFile provides basic functionalities for reading and
- * writing files, streams, and buffers. DiskImage provides an abstract interface
- * for accessing files that represent hard disks and floppy disks. FloppyDiskImage
- * is the base class of all floppy disk file formats.
+/* All media files are organized in the class hierarchy displayed below. AnyFile
+ * provides basic functionalities for reading and writing files, streams, and
+ * buffers. DiskImage provides an abstract interface for accessing files that
+ * represent hard disks and floppy disks. FloppyDiskImage is the base class of
+ * all floppy disk file formats.
  *
  *  -----------
- * | MediaFile |     Public API
- *  -----------
- *       |
- *   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- *       |
- *  -----------
- * |  AnyFile  |      Internal classes
+ * |  AnyFile  |
  *  -----------
  *       |
  *       |--------------------------------------------

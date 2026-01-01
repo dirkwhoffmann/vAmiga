@@ -14,7 +14,6 @@
 #include "Codecs.h"
 #include "IBMEncoder.h"
 #include "Media.h"
-#include "MediaFile.h"
 #include "DeviceError.h"
 #include "DiskEncoder.h"
 #include "utl/io.h"

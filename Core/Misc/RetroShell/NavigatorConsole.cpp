@@ -12,7 +12,6 @@
 #include "RSError.h"
 #include "Emulator.h"
 #include "Codecs.h"
-#include "MediaFile.h"
 #include "HDFFile.h"
 #include "utl/chrono.h"
 #include "utl/support.h"
