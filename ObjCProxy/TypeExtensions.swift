@@ -34,7 +34,6 @@ typealias DiskControllerInfo = vamiga.DiskControllerInfo
 typealias EventSlot = vamiga.EventSlot
 typealias EventSlotEnum = vamiga.EventSlotEnum
 typealias EventSlotInfo = vamiga.EventSlotInfo
-typealias FileType = vamiga.FileType
 typealias FloppyDriveInfo = vamiga.FloppyDriveInfo
 typealias FloppyDriveType = vamiga.FloppyDriveType
 typealias FSBlockError = vamiga.FSBlockError
@@ -105,23 +104,6 @@ extension Compressor: CustomStringConvertible {
 extension EventSlot: CustomStringConvertible {
 
     public var description: String { return EventSlotName(self) }
-}
-
-extension FileType {
-
-    /*
-    init?(url: URL?) {
-        self = url == nil ? .UNKNOWN : AnyFileProxy.type(of: url)
-    }
-    */
-
-    static var all: [FileType] {
-        return [ .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
-    }
-
-    static var draggable: [FileType] {
-        return [ .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
-    }
 }
 
 extension FSVolumeType: CustomStringConvertible {

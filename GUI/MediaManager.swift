@@ -237,8 +237,8 @@ class MediaManager {
         }
     }
     
-    func noteNewRecentlyOpenedURL(_ url: URL, type: FileType) {
-        
+    func noteNewRecentlyOpenedURL(_ url: URL, type: ImageFormat) {
+
         switch type {
             
         case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: MediaManager.noteNewRecentlyInsertedDiskURL(url)
@@ -249,7 +249,7 @@ class MediaManager {
         }
     }
     
-    func noteNewRecentlyExportedURL(_ url: URL, nr: Int, type: FileType) {
+    func noteNewRecentlyExportedURL(_ url: URL, nr: Int, type: ImageFormat) {
         
         switch type {
             

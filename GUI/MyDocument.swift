@@ -215,7 +215,7 @@ class MyDocument: NSDocument {
         self.updateChangeCount(.changeCleared)
         
         // Scan directory for additional media files
-        let supportedTypes: [String : FileType] =
+        let supportedTypes: [String : ImageFormat] =
         ["adf": .ADF, "adz": .ADZ, "dms": .DMS, "exe": .EXE, "img": .IMG, "hdf": .HDF, "hdz": .HDZ, "st": .ST]
         let exclude = ["df0", "df1", "df2", "df3", "hd0", "hd1", "hd2", "hd3"]
         

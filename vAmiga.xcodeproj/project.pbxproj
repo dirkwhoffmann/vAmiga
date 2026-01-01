@@ -977,7 +977,6 @@
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
 		50984B63263A9B5100E37184 /* RegressionTester.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RegressionTester.cpp; sourceTree = "<group>"; };
 		50984B64263A9B5100E37184 /* RegressionTester.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegressionTester.h; sourceTree = "<group>"; };
-		50985ABD2C418D370079CFC5 /* MediaFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaFileTypes.h; sourceTree = "<group>"; };
 		5099432B29C2116500867E8F /* VAmiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmiga.h; sourceTree = "<group>"; };
 		5099432C29C224BB00867E8F /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
 		509C3658260B1766004F160A /* RSCommand.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RSCommand.cpp; sourceTree = "<group>"; };
@@ -2153,7 +2152,6 @@
 				5099432C29C224BB00867E8F /* Media.h */,
 				50BCB9C72EE73A2A000C53CF /* MediaError.h */,
 				50BCB9C82EE73B62000C53CF /* MediaError.cpp */,
-				50985ABD2C418D370079CFC5 /* MediaFileTypes.h */,
 				508FE06421EA318D0043D0E9 /* AnyFile.h */,
 				508FE06321EA318D0043D0E9 /* AnyFile.cpp */,
 				5068EA312D4B5BED00B44FB5 /* Workspace.h */,

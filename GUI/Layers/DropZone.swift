@@ -36,8 +36,6 @@ class DropZone: Layer {
     var targetAlpha = [unselected, unselected, unselected, unselected]
     var maxAlpha = [0.0, 0.0, 0.0, 0.0]
     
-    // var type: FileType? // DEPRECATED
-
     // URL properties
     var isFloppyImage: Bool = false
     var isHardDiskImage: Bool = false
@@ -123,43 +121,6 @@ class DropZone: Layer {
         open(delay: delay)
         resize()
     }
-
-    /*
-    func open(type: FileType, delay: Double) {
-        
-        guard let emu = emu else { return }
-        
-        self.type = type
-
-        switch type {
-            
-        case .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR:
-            enabled = [ emu.df0.info.isConnected,
-                        emu.df1.info.isConnected,
-                        emu.df2.info.isConnected,
-                        emu.df3.info.isConnected ]
-            
-        case .HDF, .HDZ:
-            enabled = [ true,
-                        emu.hd1.info.isConnected,
-                        emu.hd2.info.isConnected,
-                        emu.hd3.info.isConnected ]
-            
-        default:
-            enabled = [false, false, false, false]
-        }
-        
-        // Assign zone images
-        for i in 0...3 { zones[i].image = zoneImage(zone: i) }
-        for i in 0...3 { labels[i].image = labelImage(zone: i) }
-        
-        // Hide all drop zones if none is enabled
-        hideAll = !enabled[0] && !enabled[1] && !enabled[2] && !enabled[3]
-        
-        open(delay: delay)
-        resize()
-    }
-    */
 
     override func update(frames: Int64) {
         
