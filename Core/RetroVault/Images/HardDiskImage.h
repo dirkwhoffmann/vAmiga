@@ -18,8 +18,10 @@ class HardDiskImage : public DiskImage {
 public:
 
     static optional<ImageInfo> about(const fs::path& url);
-    static std::unique_ptr<HardDiskImage> tryMake(const fs::path &path);
-    static std::unique_ptr<HardDiskImage> make(const fs::path &path);
+    static unique_ptr<HardDiskImage> tryMake(const fs::path &path);
+    static unique_ptr<HardDiskImage> make(const fs::path &path);
+
+    using DiskImage::DiskImage;
 
     // Informs about the contained partitions
     virtual isize numPartitions() const = 0;

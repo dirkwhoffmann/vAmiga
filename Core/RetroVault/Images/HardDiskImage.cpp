@@ -24,7 +24,7 @@ HardDiskImage::about(const fs::path& url)
     return {};
 }
 
-std::unique_ptr<HardDiskImage>
+unique_ptr<HardDiskImage>
 HardDiskImage::tryMake(const fs::path &path)
 {
     if (HDFFile::about(path).has_value()) return make_unique<HDFFile>(path);
@@ -33,7 +33,7 @@ HardDiskImage::tryMake(const fs::path &path)
     return nullptr;
 }
 
-std::unique_ptr<HardDiskImage>
+unique_ptr<HardDiskImage>
 HardDiskImage::make(const fs::path &path)
 {
     if (auto img = tryMake(path)) return img;

@@ -36,10 +36,10 @@ FloppyDiskImage::about(const fs::path& url)
     return {};
 }
 
-std::unique_ptr<FloppyDiskImage>
+unique_ptr<FloppyDiskImage>
 FloppyDiskImage::tryMake(const fs::path &path)
 {
-    std::unique_ptr<FloppyDiskImage> result;
+    unique_ptr<FloppyDiskImage> result;
 
     if (ADFFile::about(path).has_value())  return make_unique<ADFFile>(path);
     if (ADZFile::about(path).has_value())  return make_unique<ADZFile>(path);
@@ -52,11 +52,37 @@ FloppyDiskImage::tryMake(const fs::path &path)
     return nullptr;
 }
 
-std::unique_ptr<FloppyDiskImage>
+unique_ptr<FloppyDiskImage>
 FloppyDiskImage::make(const fs::path &path)
 {
     if (auto img = tryMake(path)) return img;
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+}
+
+string
+FloppyDiskImage::getDiameterStr() const noexcept
+{
+    switch (getDiameter()) {
+
+        case Diameter::INCH_35:  return "3.5\"";
+        case Diameter::INCH_525: return "5.25\"";
+        case Diameter::INCH_8:   return "8\"";
+    }
+
+    return "???";
+}
+
+string
+FloppyDiskImage::getDensityStr() const noexcept
+{
+    switch (getDensity()) {
+
+        case Density::SD: return "SD";
+        case Density::DD: return "DD";
+        case Density::HD: return "HD";
+    }
+
+    return "???";
 }
 
 }

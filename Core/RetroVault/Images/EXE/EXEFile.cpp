@@ -33,6 +33,18 @@ EXEFile::about(const fs::path &path)
     return {{ ImageType::FLOPPY, ImageFormat::EXE }};
 }
 
+std::vector<string>
+EXEFile::describe() const noexcept
+{
+    return {
+        "Amiga Floppy Disk",
+        std::format("{} {}",
+                    getDiameterStr(), getDensityStr()),
+        std::format("{} Cylinders, {} Sides, {} Sectors",
+                    numCyls(), numHeads(), numSectors(0))
+    };
+}
+
 void
 EXEFile::didLoad()
 {

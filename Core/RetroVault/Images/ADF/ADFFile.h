@@ -40,16 +40,16 @@ public:
     
 public:
     
-    using AnyImage::init;
+    explicit ADFFile() { }
+    explicit ADFFile(isize len) { init(len); }
+    explicit ADFFile(const u8 *buf, isize len) { init(len); }
+    explicit ADFFile(const Buffer<u8>& buffer) { init(buffer); }
+    explicit ADFFile(const fs::path& path) { init(path); }
+    explicit ADFFile(Diameter dia, Density den) { init(dia, den); }
+    explicit ADFFile(const GeometryDescriptor &descr) { init(descr); }
+    explicit ADFFile(const class FileSystem &volume) { init(volume); }
 
-    ADFFile() { }
-    ADFFile(const fs::path &path) { init(path); }
-    ADFFile(isize len) { init(len); }
-    ADFFile(const u8 *buf, isize len) { init(buf, len); }
-    ADFFile(Diameter dia, Density den) { init(dia, den); }
-    ADFFile(const GeometryDescriptor &descr) { init(descr); }
-    ADFFile(const class FileSystem &volume) { init(volume); }
-
+    using FloppyDiskImage::init;
     void init(Diameter dia, Density den);
     void init(const GeometryDescriptor &descr);
     void init(const class FileSystem &volume);
@@ -67,7 +67,8 @@ public:
 
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::ADF; }
-
+    std::vector<string> describe() const noexcept override;
+    
     void didLoad() override;
 
 
@@ -95,10 +96,10 @@ public:
 
 public:
     
-    isize numCyls() const override;
-    isize numHeads() const override;
-    isize numSectors(isize) const override { return numSectors(); }
-    isize numSectors() const;
+    isize numCyls() const noexcept override;
+    isize numHeads() const noexcept override;
+    isize numSectors(isize) const noexcept override { return numSectors(); }
+    isize numSectors() const noexcept;
 
 
     //
@@ -107,8 +108,8 @@ public:
     
 public:
     
-    Diameter getDiameter() const override;
-    Density getDensity() const override;
+    Diameter getDiameter() const noexcept override;
+    Density getDensity() const noexcept override;
 
     
     //
@@ -118,7 +119,7 @@ public:
 public:
     
     // Returns a file system descriptor for this volume
-    struct FSDescriptor getFileSystemDescriptor() const;
+    struct FSDescriptor getFileSystemDescriptor() const noexcept;
 
     
     //

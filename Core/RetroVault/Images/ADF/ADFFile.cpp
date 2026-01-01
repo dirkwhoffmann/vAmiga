@@ -127,6 +127,18 @@ ADFFile::init(const FileSystem &volume)
     volume.exporter.exportVolume(data.ptr, data.size);
 }
 
+std::vector<string>
+ADFFile::describe() const noexcept
+{
+    return {
+        "Amiga Floppy Disk",
+        std::format("{} {}",
+                    getDiameterStr(), getDensityStr()),
+        std::format("{} Cylinders, {} Sides, {} Sectors",
+                    numCyls(), numHeads(), numSectors())
+    };
+}
+
 void
 ADFFile::didLoad()
 {
@@ -135,7 +147,7 @@ ADFFile::didLoad()
 }
 
 isize
-ADFFile::numCyls() const
+ADFFile::numCyls() const noexcept
 {
     switch(data.size & ~1) {
             
@@ -152,13 +164,13 @@ ADFFile::numCyls() const
 }
 
 isize
-ADFFile::numHeads() const
+ADFFile::numHeads() const noexcept
 {
     return 2;
 }
 
 isize
-ADFFile::numSectors() const
+ADFFile::numSectors() const noexcept
 {
     switch (getDensity()) {
             
@@ -171,19 +183,19 @@ ADFFile::numSectors() const
 }
 
 Diameter
-ADFFile::getDiameter() const
+ADFFile::getDiameter() const noexcept
 {
     return Diameter::INCH_35;
 }
 
 Density
-ADFFile::getDensity() const
+ADFFile::getDensity() const noexcept
 {
     return (data.size & ~1) == ADFSIZE_35_HD ? Density::HD : Density::DD;
 }
 
 FSDescriptor
-ADFFile::getFileSystemDescriptor() const
+ADFFile::getFileSystemDescriptor() const noexcept
 {
     FSDescriptor result;
     

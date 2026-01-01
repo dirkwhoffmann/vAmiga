@@ -33,6 +33,18 @@ DMSFile::about(const fs::path &path)
     return {{ ImageType::FLOPPY, ImageFormat::DMS }};
 }
 
+std::vector<string>
+DMSFile::describe() const noexcept
+{
+    return {
+        "Amiga Floppy Disk",
+        std::format("{} {}",
+                    getDiameterStr(), getDensityStr()),
+        std::format("{} Cylinders, {} Sides, {} Sectors",
+                    numCyls(), numHeads(), numSectors(0))
+    };
+}
+
 void
 DMSFile::didLoad()
 {

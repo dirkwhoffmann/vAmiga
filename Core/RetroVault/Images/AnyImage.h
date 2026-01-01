@@ -32,8 +32,8 @@ public:
     static optional<ImageInfo> about(const fs::path& url);
 
     // Image factory
-    static std::unique_ptr<AnyImage> tryMake(const fs::path& path);
-    static std::unique_ptr<AnyImage> make(const fs::path& path);
+    static unique_ptr<AnyImage> tryMake(const fs::path& path);
+    static unique_ptr<AnyImage> make(const fs::path& path);
 
 
     //
@@ -42,13 +42,20 @@ public:
 
 public:
 
+    explicit AnyImage() { }
+    explicit AnyImage(isize len) { init(len); }
+    explicit AnyImage(const u8 *buf, isize len) { init(len); }
+    explicit AnyImage(const Buffer<u8>& buffer) { init(buffer); }
+    explicit AnyImage(const string& str) { init(str); }
+    explicit AnyImage(const fs::path& path) { init(path); }
+
     virtual ~AnyImage() = default;
 
     void init(isize len);
     void init(const u8 *buf, isize len);
-    void init(const Buffer<u8> &buffer);
-    void init(const string &str);
-    void init(const fs::path &path);
+    void init(const Buffer<u8>& buffer);
+    void init(const string& str);
+    void init(const fs::path& path);
 
     // Checks if the URL points to an image of the same type
     virtual bool validateURL(const fs::path& url) const noexcept = 0;
@@ -60,7 +67,7 @@ public:
 
 public:
 
-    u64 hash(HashAlgorithm algorithm) const override {
+    u64 hash(HashAlgorithm algorithm) const noexcept override {
         return data.hash(algorithm);
     }
 
@@ -86,11 +93,11 @@ public:
     virtual ImageFormat format() const noexcept = 0;
     ImageInfo info() const noexcept { return { type(), format() }; }
 
-    virtual std::vector<string> describe() const { return {}; }
-
     isize getSize() const { return data.size; }
     u8* getData() const { return data.ptr; }
     bool empty() const { return data.empty(); }
+
+    virtual std::vector<string> describe() const noexcept { return {}; }
 
 
     //

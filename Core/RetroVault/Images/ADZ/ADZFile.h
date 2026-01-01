@@ -28,11 +28,10 @@ public:
     
 public:
 
-    ADZFile(const fs::path &path) { init(path); }
-    ADZFile(const u8 *buf, isize len) { init(buf, len); }
+    ADZFile(const fs::path& path) { init(path); }
     ADZFile(const class ADFFile &adf) { init(adf); }
 
-    using AnyImage::init;
+    using FloppyDiskImage::init;
     void init(const class ADFFile &adf);
     
 
@@ -42,7 +41,7 @@ public:
 
 public:
 
-    u64 hash(HashAlgorithm algorithm) const override {
+    u64 hash(HashAlgorithm algorithm) const noexcept override {
         return adf.hash(algorithm);
     }
 
@@ -59,6 +58,7 @@ public:
     
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::ADZ; }
+    std::vector<string> describe() const noexcept override;
 
     void didLoad() override;
 
@@ -90,9 +90,9 @@ public:
 
 public:
     
-    isize numCyls() const override { return adf.numCyls(); }
-    isize numHeads() const override { return adf.numHeads(); }
-    isize numSectors(isize t) const override { return adf.numSectors(t); }
+    isize numCyls() const noexcept override { return adf.numCyls(); }
+    isize numHeads() const noexcept override { return adf.numHeads(); }
+    isize numSectors(isize t) const noexcept override { return adf.numSectors(t); }
 
 
     //
@@ -101,8 +101,8 @@ public:
 
 public:
 
-    Diameter getDiameter() const override { return adf.getDiameter(); }
-    Density getDensity() const override { return adf.getDensity(); }
+    Diameter getDiameter() const noexcept override { return adf.getDiameter(); }
+    Density getDensity() const noexcept override { return adf.getDensity(); }
 };
 
 }

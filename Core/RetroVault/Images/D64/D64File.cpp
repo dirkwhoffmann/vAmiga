@@ -35,8 +35,20 @@ D64File::about(const fs::path &path)
     return {{ ImageType::FLOPPY, ImageFormat::D64 }};
 }
 
+std::vector<string>
+D64File::describe() const noexcept
+{
+    return {
+        "Commodore 64 Floppy Disk",
+        std::format("{} {}",
+                    getDiameterStr(), getDensityStr()),
+        std::format("{} Tracks, {} Blocks",
+                    numTracks(), numBlocks())
+    };
+}
+
 isize
-D64File::numCyls() const
+D64File::numCyls() const noexcept
 {
     switch (data.size) {
 
@@ -53,42 +65,37 @@ D64File::numCyls() const
 }
 
 isize
-D64File::numHeads() const
+D64File::numHeads() const noexcept
 {
     return 1;
 }
 
 isize
-D64File::numSectors() const
+D64File::numSectors(isize t) const noexcept
 {
-    switch (data.size) {
+    if (t < 0 || t >= numTracks()) return 0;
 
-        case D64_683_SECTORS:
-        case D64_683_SECTORS_ECC:   return 683;
-        case D64_768_SECTORS:
-        case D64_768_SECTORS_ECC:   return 768;
-        case D64_802_SECTORS:
-        case D64_802_SECTORS_ECC:   return 802;
+    if (t < 17) return 21;  // Speedzone 3 (outer tracks)
+    if (t < 24) return 19;  // Speedzone 2
+    if (t < 30) return 18;  // Speedzone 1
 
-        default:
-            fatalError;
-    }
+    return 17;              // Speedzome 0 (inner tracks)
 }
 
 Diameter
-D64File::getDiameter() const
+D64File::getDiameter() const noexcept
 {
     return Diameter::INCH_525;
 }
 
 Density
-D64File::getDensity() const
+D64File::getDensity() const noexcept
 {
     return Density::SD;
 }
 
 bool
-D64File::hasEcc() const
+D64File::hasEcc() const noexcept
 {
     switch (data.size) {
 
@@ -102,10 +109,10 @@ D64File::hasEcc() const
 }
 
 optional<span<const u8>>
-D64File::ecc() const
+D64File::ecc() const noexcept
 {
     if (hasEcc())
-        return span<const u8>(data.ptr + bsize() * numSectors(), numSectors());
+        return span<const u8>(data.ptr + bsize() * numBlocks(), numBlocks());
 
     return {};
 }

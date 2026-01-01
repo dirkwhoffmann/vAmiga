@@ -12,7 +12,7 @@
 #include "HardDiskImage.h"
 #include "FSDescriptor.h"
 #include "utl/common.h"
-#include "utl/types/Literals.h"
+// #include "utl/types/Literals.h"
 
 namespace vamiga {
 
@@ -33,23 +33,22 @@ public:
 
     static optional<ImageInfo> about(const fs::path &path);
 
-    static bool isOversized(isize size) { return size > 504_MB; }
+    // static bool isOversized(isize size) { return size > 504_MB; }
 
-    void didLoad() override;
-    
     
     //
     // Initializing
     //
 
 public:
-    
-    HDFFile() { }
-    HDFFile(const fs::path &path) { init(path); }
-    HDFFile(const u8 *buf, isize len) { init(buf, len); }
 
-    void init(const fs::path &path);
-    void init(const u8 *buf, isize len);
+    explicit HDFFile() { }
+    explicit HDFFile(isize len) { init(len); }
+    explicit HDFFile(const u8 *buf, isize len) { init(len); }
+    explicit HDFFile(const Buffer<u8>& buffer) { init(buffer); }
+    explicit HDFFile(const fs::path& path) { init(path); }
+
+    using HardDiskImage::init;
 
 
     //
@@ -64,6 +63,9 @@ public:
     
     ImageType type() const noexcept override { return ImageType::HARDDISK; }
     ImageFormat format() const noexcept override { return ImageFormat::HDF; }
+    std::vector<string> describe() const noexcept override;
+
+    void didLoad() override;
 
 
     //
@@ -126,12 +128,12 @@ public:
 
 public:
     
-    std::optional<string> getDiskVendor() const { return rdbString(160, 8); }
-    std::optional<string> getDiskProduct() const { return rdbString(168, 16); }
-    std::optional<string> getDiskRevision() const { return rdbString(184, 4); }
-    std::optional<string> getControllerVendor() const { return rdbString(188, 8); }
-    std::optional<string> getControllerProduct() const { return rdbString(196, 16); }
-    std::optional<string> getControllerRevision() const { return rdbString(212, 4); }
+    optional<string> getDiskVendor() const { return rdbString(160, 8); }
+    optional<string> getDiskProduct() const { return rdbString(168, 16); }
+    optional<string> getDiskRevision() const { return rdbString(184, 4); }
+    optional<string> getControllerVendor() const { return rdbString(188, 8); }
+    optional<string> getControllerProduct() const { return rdbString(196, 16); }
+    optional<string> getControllerRevision() const { return rdbString(212, 4); }
 
 
     //
@@ -187,7 +189,7 @@ private:
     u8 *seekFSH(isize nr) const;
 
     // Returns a string from the Rigid Disk Block if it exists
-    std::optional<string> rdbString(isize offset, isize len) const;
+    optional<string> rdbString(isize offset, isize len) const;
 
     // Extracts the DOS revision number from a certain block
     FSFormat dos(isize nr) const;

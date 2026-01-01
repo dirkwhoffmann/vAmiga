@@ -35,7 +35,7 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     // Methods from Hashable
     //
 
-    u64 hash(HashAlgorithm algorithm) const override {
+    u64 hash(HashAlgorithm algorithm) const noexcept override {
         return Hashable::hash((const u8 *)ptr, size, algorithm);
     }
 

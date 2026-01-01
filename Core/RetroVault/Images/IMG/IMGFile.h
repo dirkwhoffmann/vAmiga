@@ -49,7 +49,8 @@ public:
     
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::IMG; }
-
+    std::vector<string> describe() const noexcept override;
+    
 
     //
     // Methods from DiskImage
@@ -85,8 +86,8 @@ public:
     // Methods from FloppyDiskImage
     //
 
-    Diameter getDiameter() const override { return Diameter::INCH_35; }
-    Density getDensity() const override { return Density::DD; }
+    Diameter getDiameter() const noexcept override { return Diameter::INCH_35; }
+    Density getDensity() const noexcept override { return Density::DD; }
 };
 
 }

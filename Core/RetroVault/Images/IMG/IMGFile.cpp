@@ -42,6 +42,18 @@ IMGFile::init(Diameter dia, Density den)
     init(9 * 160 * 512);
 }
 
+std::vector<string>
+IMGFile::describe() const noexcept
+{
+    return {
+        "PC Floppy Disk",
+        std::format("{} {}",
+                    getDiameterStr(), getDensityStr()),
+        std::format("{} Cylinders, {} Sides, {} Sectors",
+                    numCyls(), numHeads(), numSectors())
+    };
+}
+
 isize
 IMGFile::numCyls() const
 {

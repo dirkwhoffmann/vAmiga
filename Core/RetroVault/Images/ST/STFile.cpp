@@ -42,6 +42,18 @@ STFile::init(Diameter dia, Density den)
     init(9 * 160 * 512);
 }
 
+std::vector<string>
+STFile::describe() const noexcept
+{
+    return {
+        "AtariST Floppy Disk",
+        std::format("{} {}",
+                    getDiameterStr(), getDensityStr()),
+        std::format("{} Cylinders, {} Sides, {} Sectors",
+                    numCyls(), numHeads(), numSectors())
+    };
+}
+
 isize
 STFile::numCyls() const
 {

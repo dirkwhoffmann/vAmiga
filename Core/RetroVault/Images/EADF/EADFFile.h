@@ -57,11 +57,11 @@ public:
 
 public:
 
-    EADFFile(const fs::path &path) { init(path); }
     EADFFile(isize len) { init(len); }
+    EADFFile(const fs::path &path) { init(path); }
     EADFFile(const u8 *buf, isize len) { init(buf, len); }
 
-    using AnyImage::init;
+    using FloppyDiskImage::init;
 
 
     //
@@ -76,7 +76,8 @@ public:
     
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::EADF; }
-
+    std::vector<string> describe() const noexcept override;
+    
     void didLoad() override;
 
 
@@ -116,8 +117,8 @@ public:
 
 public:
 
-    Diameter getDiameter() const override;
-    Density getDensity() const override;
+    Diameter getDiameter() const noexcept override;
+    Density getDensity() const noexcept override;
 
 
     //

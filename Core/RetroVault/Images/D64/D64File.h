@@ -36,12 +36,12 @@ public:
 
 public:
 
-    using AnyImage::init;
-
     D64File();
     D64File(const fs::path &path) { init(path); }
     D64File(isize len) { init(len); }
     D64File(const u8 *buf, isize len) { init(buf, len); }
+
+    using FloppyDiskImage::init;
 
 
     //
@@ -56,7 +56,8 @@ public:
     
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::D64; }
-
+    std::vector<string> describe() const noexcept override;
+    
 
     //
     // Methods from DiskImage
@@ -82,10 +83,9 @@ public:
 
 public:
 
-    isize numCyls() const override;
-    isize numHeads() const override;
-    isize numSectors(isize) const override { return numSectors(); }
-    isize numSectors() const;
+    isize numCyls() const noexcept override;
+    isize numHeads() const noexcept override;
+    isize numSectors(isize) const noexcept override;
 
 
     //
@@ -94,8 +94,8 @@ public:
 
 public:
 
-    Diameter getDiameter() const override;
-    Density getDensity() const override;
+    Diameter getDiameter() const noexcept override;
+    Density getDensity() const noexcept override;
 
 
     //
@@ -105,10 +105,10 @@ public:
 public:
 
     // Returns true if the file contains error correction codes
-    bool hasEcc() const;
+    bool hasEcc() const noexcept;
 
     // Returns the error correction codes (if any)
-    optional<std::span<const u8>> ecc() const;
+    optional<std::span<const u8>> ecc() const noexcept;
 
 
     // Returns a file system descriptor for this volume

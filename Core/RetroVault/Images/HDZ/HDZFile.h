@@ -28,11 +28,10 @@ public:
     
 public:
 
-    HDZFile(const fs::path &path) { init(path); }
-    HDZFile(const u8 *buf, isize len) { init(buf, len); }
-    HDZFile(const class HDFFile &hdf) { init(hdf); }
+    explicit HDZFile(const fs::path& path) { init(path); }
+    explicit HDZFile(const class HDFFile &hdf) { init(hdf); }
 
-    using AnyImage::init;
+    using HardDiskImage::init;
     void init(const class HDFFile &hdf);
 
 
@@ -42,7 +41,7 @@ public:
 
 public:
 
-    u64 hash(HashAlgorithm algorithm) const override {
+    u64 hash(HashAlgorithm algorithm) const noexcept override {
         return hdf.hash(algorithm);
     }
 
@@ -59,7 +58,8 @@ public:
 
     ImageType type() const noexcept override { return ImageType::HARDDISK; }
     ImageFormat format() const noexcept override { return ImageFormat::HDZ; }
-
+    std::vector<string> describe() const noexcept override;
+    
 
     //
     // Methods from DiskImage

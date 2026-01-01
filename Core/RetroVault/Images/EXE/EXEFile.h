@@ -43,7 +43,7 @@ public:
 
 public:
 
-    u64 hash(HashAlgorithm algorithm) const override {
+    u64 hash(HashAlgorithm algorithm) const noexcept override {
         return adf.hash(algorithm);
     }
 
@@ -60,7 +60,8 @@ public:
     
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::EXE; }
-
+    std::vector<string> describe() const noexcept override;
+    
     void didLoad() override;
 
 
@@ -102,8 +103,8 @@ public:
 
 public:
     
-    Diameter getDiameter() const override { return adf.getDiameter(); }
-    Density getDensity() const override { return adf.getDensity(); }
+    Diameter getDiameter() const noexcept override { return adf.getDiameter(); }
+    Density getDensity() const noexcept override { return adf.getDensity(); }
 };
 
 }

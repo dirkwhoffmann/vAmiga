@@ -21,18 +21,24 @@ class FloppyDiskImage : public DiskImage {
 
 public:
 
+    // using DiskImage::DiskImage;
+    
     static optional<ImageInfo> about(const fs::path& url);
-    static std::unique_ptr<FloppyDiskImage> tryMake(const fs::path &path);
-    static std::unique_ptr<FloppyDiskImage> make(const fs::path &path);
+    static unique_ptr<FloppyDiskImage> tryMake(const fs::path &path);
+    static unique_ptr<FloppyDiskImage> make(const fs::path &path);
 
     // Returns the disk diameter and density
-    virtual Diameter getDiameter() const = 0;
-    virtual Density getDensity() const = 0;
+    virtual Diameter getDiameter() const noexcept = 0;
+    virtual Density getDensity() const noexcept = 0;
+
+    // Returns a string representation for the diameter and density
+    virtual string getDiameterStr() const noexcept;
+    virtual string getDensityStr() const noexcept;
 
     // Convenience wrappers
-    bool isSD() { return getDensity() == Density::SD; }
-    bool isDD() { return getDensity() == Density::DD; }
-    bool isHD() { return getDensity() == Density::HD; }
- };
+    bool isSD() const noexcept { return getDensity() == Density::SD; }
+    bool isDD() const noexcept { return getDensity() == Density::DD; }
+    bool isHD() const noexcept { return getDensity() == Density::HD; }
+};
 
 }

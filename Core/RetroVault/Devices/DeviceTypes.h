@@ -46,13 +46,14 @@ typedef isize TrackNr;
 enum class Diameter : long
 {
     INCH_35,
-    INCH_525
+    INCH_525,
+    INCH_8
 };
 
 struct DiameterEnum : Reflectable<DiameterEnum, Diameter>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(Diameter::INCH_525);
+    static constexpr long maxVal = long(Diameter::INCH_8);
 
     static const char *_key(Diameter value)
     {
@@ -60,6 +61,7 @@ struct DiameterEnum : Reflectable<DiameterEnum, Diameter>
 
             case Diameter::INCH_35:     return "INCH_35";
             case Diameter::INCH_525:    return "INCH_525";
+            case Diameter::INCH_8:      return "INCH_8";
         }
         return "???";
     }
@@ -69,6 +71,7 @@ struct DiameterEnum : Reflectable<DiameterEnum, Diameter>
 
             case Diameter::INCH_35:     return "3.5\" floppy disk";
             case Diameter::INCH_525:    return "5.25\" floppy disk";
+            case Diameter::INCH_8:      return "8\" floppy disk";
         }
         return "???";
     }

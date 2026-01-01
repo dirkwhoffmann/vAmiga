@@ -44,6 +44,12 @@ ADZFile::about(const fs::path &path)
     return {{ ImageType::FLOPPY, ImageFormat::ADZ }};
 }
 
+std::vector<string>
+ADZFile::describe() const noexcept
+{
+    return adf.describe();
+}
+
 void
 ADZFile::didLoad()
 {

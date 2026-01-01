@@ -53,6 +53,16 @@ EADFFile::numSectors() const
     return adf.empty() ? 0 : adf.numSectors();
 }
 
+std::vector<string>
+EADFFile::describe() const noexcept
+{
+    return {
+        "Amiga Floppy Disk",
+        "Extended ADF format",
+        ""
+    };
+}
+
 void
 EADFFile::didLoad()
 {
@@ -124,13 +134,13 @@ EADFFile::didLoad()
 }
 
 Diameter
-EADFFile::getDiameter() const
+EADFFile::getDiameter() const noexcept
 {
     return Diameter::INCH_35;
 }
 
 Density
-EADFFile::getDensity() const
+EADFFile::getDensity() const noexcept
 {
     isize bitsInLargestTrack = 0;
     

@@ -28,6 +28,18 @@ HDFFile::about(const fs::path &path)
     return {{ ImageType::HARDDISK, ImageFormat::HDF }};
 }
 
+std::vector<string>
+HDFFile::describe() const noexcept
+{
+    return {
+        "Amiga Hard Drive",
+        std::format("{} Partition{}", numPartitions(),
+                    numPartitions() != 1 ? "s" : ""),
+        std::format("{} Cylinders, {} Heads, {} Sectors",
+                    numCyls(), numHeads(), numSectors())
+    };
+}
+
 void
 HDFFile::didLoad()
 {        
@@ -44,24 +56,6 @@ HDFFile::didLoad()
 
     // Check the device driver descriptors for consistency
     for (auto &it : drivers) { it.checkCompatibility(); }
-}
-
-void
-HDFFile::init(const fs::path &path)
-{
-    // Check size
-    if (isOversized(utl::getSizeOfFile(path))) throw DeviceError(DeviceError::HDR_TOO_LARGE);
-    
-    AnyImage::init(path);
-}
-
-void
-HDFFile::init(const u8 *buf, isize len)
-{
-    // Check size
-    if (isOversized(len)) throw DeviceError(DeviceError::HDR_TOO_LARGE);
-
-    AnyImage::init(buf, len);
 }
 
 isize

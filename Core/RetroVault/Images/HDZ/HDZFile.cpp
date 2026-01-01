@@ -44,6 +44,12 @@ HDZFile::init(const class HDFFile &hdf)
     debug(HDF_DEBUG, "Compressed HDF size: %ld bytes.\n", data.size);
 }
 
+std::vector<string>
+HDZFile::describe() const noexcept
+{
+    return hdf.describe();
+}
+
 void
 HDZFile::didLoad()
 {
