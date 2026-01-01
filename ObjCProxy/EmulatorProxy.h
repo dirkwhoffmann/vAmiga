@@ -988,6 +988,9 @@ ImageInfo scan(const fs::path &url);
 
 @interface DiskImageProxy : Proxy { }
 
++ (ImageFormat)typeOfUrl:(NSURL *)url;
++ (ImageInfo)about:(NSURL *)url;
+
 @property (readonly) NSURL *path;
 @property (readonly) NSInteger size;
 @property (readonly) u64 fnv;
@@ -1004,6 +1007,10 @@ ImageInfo scan(const fs::path &url);
 @property (readonly) NSInteger numTracks;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
+@property (readonly) NSInteger numBytes;
+
+- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset;
+- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 
 @end
 
@@ -1015,7 +1022,7 @@ ImageInfo scan(const fs::path &url);
 @interface FloppyDiskImageProxy : DiskImageProxy <MakeWithDrive> { }
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
-                        format:(ImageFormat)fmt
+                       format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex;
 
 @property (readonly) Diameter diameter;

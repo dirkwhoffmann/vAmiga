@@ -93,7 +93,7 @@ NSString *EventSlotName(EventSlot slot)
 
 ImageInfo scan(const fs::path &url)
 {
-    if (auto info = DiskImage::scan(url)) {
+    if (auto info = DiskImage::about(url)) {
         return *info;
     } else {
         return { ImageType::UNKNOWN, ImageFormat::UNKNOWN };
@@ -2206,6 +2206,24 @@ ImageInfo scan(const fs::path &url)
 
 @implementation DiskImageProxy
 
++ (ImageFormat)typeOfUrl:(NSURL *)url
+{
+    if (auto about = DiskImage::about([url fileSystemRepresentation])) {
+        return about->format;
+    } else {
+        return ImageFormat::UNKNOWN;
+    }
+}
+
++ (ImageInfo)about:(NSURL *)url
+{
+    if (auto about = DiskImage::about([url fileSystemRepresentation])) {
+        return *about;
+    } else {
+        return { ImageType::UNKNOWN, ImageFormat::UNKNOWN };
+    }
+}
+
 - (DiskImage *)file
 {
     return (DiskImage *)obj;
@@ -2278,6 +2296,28 @@ ImageInfo scan(const fs::path &url)
     return [self file]->numBlocks();
 }
 
+- (NSInteger)numBytes
+{
+    return [self file]->numBytes();
+}
+
+- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset
+{
+    return [self file]->readByte(b * [self bsize] + offset);
+}
+
+- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
+{
+    string result;
+    auto p = [self file]->data.ptr + b * [self bsize] + offset;
+
+    for (isize i = 0; i < len; i++) {
+        result += isprint(int(p[i])) ? char(p[i]) : '.';
+    }
+
+    return @(result.c_str());
+}
+
 @end
 
 
@@ -2318,17 +2358,17 @@ ImageInfo scan(const fs::path &url)
 
 - (BOOL)isSD
 {
-    return [self image]->isSD();
+    return (BOOL)[self image]->isSD();
 }
 
 - (BOOL)isDD
 {
-    return [self image]->isDD();
+    return (BOOL)[self image]->isDD();
 }
 
 - (BOOL)isHD
 {
-    return [self image]->isHD();
+    return (BOOL)[self image]->isHD();
 }
 
 @end

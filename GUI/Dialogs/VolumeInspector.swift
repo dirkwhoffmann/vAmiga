@@ -212,7 +212,7 @@ class VolumeInspector: DialogController {
     func show(diskDrive nr: Int) throws {
         
         let dfn = emu.df(nr)!
-        let adf = try MediaFileProxy.make(with: dfn, type: .ADF)
+        let adf = try FloppyDiskImageProxy.make(with: dfn, format: .ADF)
         vol = try FileSystemProxy.make(with: adf)
 
         showAsWindow()
@@ -245,9 +245,9 @@ class VolumeInspector: DialogController {
     func show(hardDrive nr: Int, partition: Int) throws {
         
         let hdn = emu.hd(nr)!
-        let hdf = try MediaFileProxy.make(with: hdn, type: .HDF)
+        let hdf = try HardDiskImageProxy.make(with: hdn, format: .HDF)
         vol = try FileSystemProxy.make(with: hdf, partition: partition)
-        
+
         showAsWindow()
     }
     

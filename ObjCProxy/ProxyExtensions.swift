@@ -493,9 +493,50 @@ extension DiskImageProxy {
     }
 }
 
+extension DiskImageProxy {
+
+    func icon(protected: Bool = false) -> NSImage? {
+
+        if let proxy = self as? FloppyDiskImageProxy {
+
+            return icon(diameter: proxy.diameter,
+                        density: proxy.density,
+                        protected: protected)
+        }
+
+        switch format {
+
+        case .HDF, .HDZ:
+
+            var name = "hdf"
+            if protected { name += "_protected" }
+            return NSImage(named: name)!
+
+        default:
+            return nil
+        }
+    }
+
+    func icon(diameter: Diameter, density: Density, protected: Bool = false) -> NSImage? {
+
+        switch format {
+
+        case .ADF, .ADZ, .EADF, .IMG:
+
+            var name = (density == .HD ? "hd" : "dd") + (format == .IMG ? "_dos" : "_adf")
+            if protected { name += "_protected" }
+            return NSImage(named: name)!
+
+        default:
+            return nil
+        }
+    }
+}
+
 extension FloppyDiskImageProxy {
 
-    func icon(protected: Bool = false) -> NSImage {
+    /*
+    func icon(protected: Bool = false) -> NSImage? {
 
         var name = ""
 
@@ -514,10 +555,12 @@ extension FloppyDiskImageProxy {
         if protected { name += "_protected" }
         return NSImage(named: name)!
     }
+    */
 }
 
 extension HardDiskImageProxy {
 
+    /*
     func icon(protected: Bool = false) -> NSImage {
 
         var name = ""
@@ -536,6 +579,7 @@ extension HardDiskImageProxy {
         if protected { name += "_protected" }
         return NSImage(named: name)!
     }
+    */
 
     @discardableResult
     func writePartitionToFile(url: URL, partition nr: Int) throws -> Int {

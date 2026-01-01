@@ -28,7 +28,7 @@ using CHS = TrackDevice::CHS;
 using TS  = TrackDevice::TS;
 
 optional<ImageInfo>
-DiskImage::scan(fs::path url)
+DiskImage::about(const fs::path& url)
 {
     if (auto info = ADFFile::isCompatible(url))  return info;
     if (auto info = ADZFile::isCompatible(url))  return info;

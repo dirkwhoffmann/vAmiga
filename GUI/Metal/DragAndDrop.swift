@@ -45,7 +45,8 @@ extension MetalView {
 
                 // Analyze the file type
                 let type = MediaFileProxy.type(of: dropUrl)
-
+                // let type = DiskImageProxy.about(dropUrl).format
+                
                 // Open the drop zone layer
                 parent.renderer.dropZone.open(type: type, delay: 0.25)
             }
