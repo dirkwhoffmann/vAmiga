@@ -10,7 +10,6 @@
 #pragma once
 
 #include "utl/abilities/Reflectable.h"
-#include "HDFFileTypes.h"
 
 namespace vamiga {
 

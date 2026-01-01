@@ -1113,7 +1113,6 @@
 		50BCB9CB2EE861EA000C53CF /* Mailbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mailbox.h; sourceTree = "<group>"; };
 		50BCBDCF2EE9581C000C53CF /* common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		50BCBDD02EE9587C000C53CF /* Literals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Literals.h; sourceTree = "<group>"; };
-		50BCBDD12EE984DC000C53CF /* HDFFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFileTypes.h; sourceTree = "<group>"; };
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50BF1CC6276D174200386540 /* GdbServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServer.cpp; sourceTree = "<group>"; };
 		50BF1CC7276D174200386540 /* GdbServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GdbServer.h; sourceTree = "<group>"; };
@@ -1145,7 +1144,7 @@
 		50BF4B682F055B7D00F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50BF4B6A2F055BF600F1B9F2 /* AnyImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnyImage.h; sourceTree = "<group>"; };
 		50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AnyImage.cpp; sourceTree = "<group>"; };
-		50BF4B6F2F055CA600F1B9F2 /* CmakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CmakeLists.txt; sourceTree = "<group>"; };
+		50BF4B6F2F055CA600F1B9F2 /* CmakeLists_rename.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CmakeLists_rename.txt; sourceTree = "<group>"; };
 		50BF4B712F05759600F1B9F2 /* ImageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageTypes.h; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
@@ -1709,7 +1708,6 @@
 			isa = PBXGroup;
 			children = (
 				505A19452EDDF6CF000BB9C2 /* CMakeLists.txt */,
-				50BCBDD12EE984DC000C53CF /* HDFFileTypes.h */,
 				50EAD99B256E76820053F9AC /* HDFFile.h */,
 				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 			);
@@ -2616,7 +2614,7 @@
 		50BF4B6E2F055C1200F1B9F2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				50BF4B6F2F055CA600F1B9F2 /* CmakeLists.txt */,
+				50BF4B6F2F055CA600F1B9F2 /* CmakeLists_rename.txt */,
 				50BF4B712F05759600F1B9F2 /* ImageTypes.h */,
 				50BF4B6A2F055BF600F1B9F2 /* AnyImage.h */,
 				50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */,
