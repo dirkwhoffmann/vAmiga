@@ -411,13 +411,10 @@ public:
 
     // Inserts a new disk with an optional delay
     void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay = 0);
-    void insertMediaFile(const class MediaFile &file, bool wp);
+    void insertImage(const class FloppyDiskImage& image, bool wp);
 
     // Ejects the current disk with an optional delay
     void ejectDisk(Cycle delay = 0);
-
-    // Exports the current disk
-    [[deprecated]] std::unique_ptr<MediaFile> exportDisk(FileType type);
 
     // Replaces the current disk (recommended way to insert disks)
     void swapDisk(std::unique_ptr<FloppyDisk> disk);

@@ -316,16 +316,15 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &file)
     // Start with an unformatted disk
     clearDisk();
 
-    switch (MediaFile::type(file)) {
-    // switch (file.type()) {
+    switch (file.format()) {
 
-        case FileType::ADF:  encode(dynamic_cast<const ADFFile &>(file)); break;
-        case FileType::ADZ:  Codec::encodeADZ(dynamic_cast<const ADZFile &>(file), *this); break;
-        case FileType::EADF: Codec::encodeEADF(dynamic_cast<const EADFFile &>(file), *this); break;
-        case FileType::IMG:  Codec::encodeIMG(dynamic_cast<const IMGFile &>(file), *this); break;
-        case FileType::ST:   Codec::encodeST(dynamic_cast<const STFile &>(file), *this); break;
-        case FileType::DMS:  Codec::encodeDMS(dynamic_cast<const DMSFile &>(file), *this); break;
-        case FileType::EXE:  Codec::encodeEXE(dynamic_cast<const EXEFile &>(file), *this); break;
+        case ImageFormat::ADF:  encode(dynamic_cast<const ADFFile &>(file)); break;
+        case ImageFormat::ADZ:  Codec::encodeADZ(dynamic_cast<const ADZFile &>(file), *this); break;
+        case ImageFormat::EADF: Codec::encodeEADF(dynamic_cast<const EADFFile &>(file), *this); break;
+        case ImageFormat::IMG:  Codec::encodeIMG(dynamic_cast<const IMGFile &>(file), *this); break;
+        case ImageFormat::ST:   Codec::encodeST(dynamic_cast<const STFile &>(file), *this); break;
+        case ImageFormat::DMS:  Codec::encodeDMS(dynamic_cast<const DMSFile &>(file), *this); break;
+        case ImageFormat::EXE:  Codec::encodeEXE(dynamic_cast<const EXEFile &>(file), *this); break;
 
         default:
             throw IOError(IOError::FILE_TYPE_UNSUPPORTED);

@@ -687,24 +687,6 @@ MemoryAPI::loadExt(const fs::path &path)
     emu->markAsDirty();
 }
 
-/*
-void
-MemoryAPI::loadRom(MediaFile &file)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    mem->loadRom(file);
-    emu->markAsDirty();
-}
-
-void
-MemoryAPI::loadExt(MediaFile &file)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    mem->loadExt(file);
-    emu->markAsDirty();
-}
-*/
-
 void
 MemoryAPI::loadRom(const u8 *buf, isize len)
 {

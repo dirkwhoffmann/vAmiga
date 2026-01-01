@@ -10,7 +10,6 @@
 #include "config.h"
 #include "HardDrive.h"
 #include "Emulator.h"
-#include "MediaFile.h"
 #include "Codecs.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -135,24 +134,6 @@ HardDrive::init(const FileSystem &fs)
 
     // Copy over all blocks
     fs.exporter.exportVolume(data.ptr, geometry.numBytes());
-}
-
-void 
-HardDrive::init(const MediaFile &file)
-{
-    if (const auto *hdf = dynamic_cast<const HDFFile *>(file.get())) {
-
-        init(*hdf);
-        return;
-    }
-    
-    if (const auto *hdz = dynamic_cast<const HDZFile *>(file.get())) {
-        
-        init(*hdz);
-        return;
-    }
-    
-    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
 void

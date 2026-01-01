@@ -129,9 +129,6 @@ public:
     // Creates a hard drive with the contents of a file system
     void init(const class FileSystem &fs);
 
-    // Creates a hard drive with the contents of a media file
-    void init(const class MediaFile &file);
-
     // Creates a hard drive with the contents of an HDF or HDZ
     void init(const class HDFFile &hdf);
     void init(const class HDZFile &hdz);

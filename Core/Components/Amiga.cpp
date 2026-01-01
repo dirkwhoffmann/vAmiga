@@ -1144,25 +1144,6 @@ Amiga::clearFlag(u32 flag)
     flags &= ~flag;
 }
 
-unique_ptr<MediaFile>
-Amiga::deprecatedTakeSnapshot(Compressor compressor, isize delay, bool repeat)
-{
-    if (delay != 0) {
-
-        i64 payload = (i64)compressor << 24 | repeat << 16 | delay;
-        agnus.scheduleRel<SLOT_SNP>(Amiga::sec(delay), SNP_TAKE, payload);
-        return nullptr;
-    }
-
-    // Take the snapshot
-    auto result = make_unique<Snapshot>(*this);
-
-    // Compress the snapshot if requested
-    result->compress(compressor);
-
-    return make_unique<MediaFile>(std::move(result));
-}
-
 unique_ptr<Snapshot>
 Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
@@ -1189,7 +1170,7 @@ Amiga::serviceSnpEvent(EventID eventId)
     if (objid != 0) { agnus.cancel<SLOT_SNP>(); return; }
 
     // Take snapshot and hand it over to the GUI
-    auto snapshot = deprecatedTakeSnapshot(Compressor(agnus.data[SLOT_SNP] >> 24));
+    auto snapshot = takeSnapshot(Compressor(agnus.data[SLOT_SNP] >> 24));
     msgQueue.put( Message { .type = Msg::SNAPSHOT_TAKEN, .snapshot = { snapshot.release() } } );
 
     // Schedule the next event
@@ -1212,33 +1193,7 @@ Amiga::scheduleNextSnpEvent()
 void
 Amiga::loadSnapshot(const fs::path &path)
 {
-    loadSnapshot(MediaFile(make_unique<Snapshot>(path)));
-}
-
-void
-Amiga::loadSnapshot(const MediaFile &file)
-{
-    try {
-
-        const Snapshot &snap = dynamic_cast<const Snapshot &>(*file.file);
-
-        // Make a copy so we can modify the snapshot
-        Snapshot snapshot(snap);
-
-        // Uncompress the snapshot
-        snapshot.uncompress();
-
-        // Restore the saved state (may throw)
-        load(snapshot.getData() + sizeof(SnapshotHeader));
-
-        // Inform the GUI
-        msgQueue.put(Msg::SNAPSHOT_RESTORED);
-        msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
-
-    } catch (const std::bad_cast &) {
-
-        throw IOError(IOError::FILE_TYPE_MISMATCH);
-    }
+    loadSnapshot(Snapshot(path));
 }
 
 void

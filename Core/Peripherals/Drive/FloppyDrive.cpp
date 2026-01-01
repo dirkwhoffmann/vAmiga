@@ -1099,20 +1099,6 @@ FloppyDrive::ejectDisk(Cycle delay)
     if (objid == 3) ejectDisk <SLOT_DC3> (delay);
 }
 
-std::unique_ptr<MediaFile>
-FloppyDrive::exportDisk(FileType type)
-{
-    switch (type) {
-
-        case FileType::ADF:      return make_unique<MediaFile>(Codec::makeADF(*this));
-        case FileType::EADF:     return make_unique<MediaFile>(Codec::makeEADF(*this));
-        case FileType::IMG:      return make_unique<MediaFile>(Codec::makeIMG(*this));
-
-        default:
-            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
-    }
-}
-
 template <EventSlot s> void
 FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 {
@@ -1314,15 +1300,9 @@ FloppyDrive::swapDisk(const fs::path &path)
 }
 
 void
-FloppyDrive::insertMediaFile(const MediaFile &file, bool wp)
+FloppyDrive::insertImage(const class FloppyDiskImage& image, bool wp)
 {
-    if (const auto *adf = dynamic_cast<const FloppyDiskImage *>(file.get())) {
-
-        swapDisk(std::make_unique<FloppyDisk>(*adf, wp));
-        return;
-    }
-
-    throw IOError(IOError::FILE_TYPE_MISMATCH);
+    swapDisk(std::make_unique<FloppyDisk>(image, wp));
 }
 
 template <EventSlot s> void
