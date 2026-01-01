@@ -22,7 +22,6 @@ public:
     static unique_ptr<DiskImage> tryMake(const fs::path& path);
     static unique_ptr<DiskImage> make(const fs::path& path);
 
-    // using AnyImage::AnyImage;
 
     //
     // Methods from LinearDevice

@@ -890,7 +890,6 @@ ImageInfo scan(const fs::path &url);
 
 @interface AnyFileProxy : Proxy { }
 
-// @property (readonly) FileType type;
 @property (readonly) NSURL *path;
 @property (readonly) NSInteger size;
 @property (readonly) u64 fnv;
@@ -932,6 +931,8 @@ ImageInfo scan(const fs::path &url);
 @interface DiskImageProxy : Proxy { }
 
 + (ImageInfo)about:(NSURL *)url;
+
+- (NSArray<NSString *> *)describe;
 
 @property (readonly) NSURL *path;
 @property (readonly) NSInteger size;

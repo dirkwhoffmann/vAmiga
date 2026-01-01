@@ -28,10 +28,10 @@ public:
     
 public:
 
-    IMGFile(const fs::path &path) { init(path); }
-    IMGFile(isize len) { init(len); }
-    IMGFile(const u8 *buf, isize len) { init(buf, len); }
-    IMGFile(Diameter dia, Density den) { init(dia, den); }
+    explicit IMGFile(const fs::path &path) { init(path); }
+    explicit IMGFile(isize len) { init(len); }
+    explicit IMGFile(const u8 *buf, isize len) { init(buf, len); }
+    explicit IMGFile(Diameter dia, Density den) { init(dia, den); }
 
     using AnyImage::init;
     void init(Diameter dia, Density den);

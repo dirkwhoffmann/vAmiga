@@ -28,8 +28,8 @@ public:
     
 public:
 
-    DMSFile(const fs::path &path) { init(path); }
-    DMSFile(const u8 *buf, isize len) { init(buf, len); }
+    explicit DMSFile(const fs::path &path) { init(path); }
+    explicit DMSFile(const u8 *buf, isize len) { init(buf, len); }
 
     using AnyImage::init;
 

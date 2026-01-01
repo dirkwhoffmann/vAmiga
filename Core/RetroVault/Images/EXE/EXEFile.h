@@ -28,12 +28,11 @@ public:
     
 public:
 
-    EXEFile(const fs::path &path) { init(path); }
-    EXEFile(const u8 *buf, isize len) { init(buf, len); }
+    explicit EXEFile(const fs::path &path) { init(path); }
+    explicit EXEFile(const u8 *buf, isize len) { init(buf, len); }
 
     using AnyImage::init;
 
-    // const char *objectName() const override { return "EXE"; }
     const ADFFile &getADF() const { return adf; }
 
 

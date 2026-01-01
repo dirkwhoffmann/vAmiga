@@ -57,9 +57,9 @@ public:
 
 public:
 
-    EADFFile(isize len) { init(len); }
-    EADFFile(const fs::path &path) { init(path); }
-    EADFFile(const u8 *buf, isize len) { init(buf, len); }
+    explicit EADFFile(isize len) { init(len); }
+    explicit EADFFile(const fs::path &path) { init(path); }
+    explicit EADFFile(const u8 *buf, isize len) { init(buf, len); }
 
     using FloppyDiskImage::init;
 

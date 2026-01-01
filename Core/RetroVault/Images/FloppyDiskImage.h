@@ -21,8 +21,7 @@ class FloppyDiskImage : public DiskImage {
 
 public:
 
-    // using DiskImage::DiskImage;
-    
+    // Static functions
     static optional<ImageInfo> about(const fs::path& url);
     static unique_ptr<FloppyDiskImage> tryMake(const fs::path &path);
     static unique_ptr<FloppyDiskImage> make(const fs::path &path);

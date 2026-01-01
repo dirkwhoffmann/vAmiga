@@ -28,10 +28,10 @@ public:
 
 public:
 
-    STFile(const fs::path &path) { init(path); }
-    STFile(isize len) { init(len); }
-    STFile(const u8 *buf, isize len) { init(buf, len); }
-    STFile(Diameter dia, Density den) { init(dia, den); }
+    explicit STFile(const fs::path &path) { init(path); }
+    explicit STFile(isize len) { init(len); }
+    explicit STFile(const u8 *buf, isize len) { init(buf, len); }
+    explicit STFile(Diameter dia, Density den) { init(dia, den); }
 
     using AnyImage::init;
     void init(Diameter dia, Density den);

@@ -28,6 +28,13 @@ public:
     // The raw data of this file
     Buffer<u8> data;
 
+
+    //
+    // Static functions
+    //
+
+public:
+    
     // Analyzes the type and format of the specified file
     static optional<ImageInfo> about(const fs::path& url);
 
@@ -41,13 +48,6 @@ public:
     //
 
 public:
-
-    explicit AnyImage() { }
-    explicit AnyImage(isize len) { init(len); }
-    explicit AnyImage(const u8 *buf, isize len) { init(len); }
-    explicit AnyImage(const Buffer<u8>& buffer) { init(buffer); }
-    explicit AnyImage(const string& str) { init(str); }
-    explicit AnyImage(const fs::path& path) { init(path); }
 
     virtual ~AnyImage() = default;
 

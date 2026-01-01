@@ -1954,6 +1954,20 @@ ImageInfo scan(const fs::path &url)
     return (DiskImage *)obj;
 }
 
+- (NSArray<NSString *> *)describe
+{
+    const auto vec = [self file]->describe();
+
+    NSMutableArray<NSString *> *result =
+        [NSMutableArray arrayWithCapacity:vec.size()];
+
+    for (const auto &s : vec) {
+        [result addObject:[NSString stringWithUTF8String:s.c_str()]];
+    }
+
+    return result;
+}
+
 - (NSURL *)path
 {
     auto nsPath = @([self file]->path.c_str());

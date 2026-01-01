@@ -36,10 +36,10 @@ public:
 
 public:
 
-    D64File();
-    D64File(const fs::path &path) { init(path); }
-    D64File(isize len) { init(len); }
-    D64File(const u8 *buf, isize len) { init(buf, len); }
+    explicit D64File();
+    explicit D64File(const fs::path &path) { init(path); }
+    explicit D64File(isize len) { init(len); }
+    explicit D64File(const u8 *buf, isize len) { init(buf, len); }
 
     using FloppyDiskImage::init;
 

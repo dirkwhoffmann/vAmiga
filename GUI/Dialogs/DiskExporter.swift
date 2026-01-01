@@ -75,7 +75,7 @@ class DiskExporter: DialogController {
 
         // Select the export partition
         select(partition: 0)
-        
+
         super.showAsSheet()
     }
 
