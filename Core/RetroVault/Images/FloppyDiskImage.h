@@ -15,8 +15,6 @@
 
 namespace vamiga {
 
-class FloppyDisk;
-
 class FloppyDiskImage : public DiskImage {
 
 public:

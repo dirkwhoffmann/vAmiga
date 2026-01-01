@@ -17,7 +17,11 @@
 #include "utl/io.h"
 #include "utl/support.h"
 
-namespace vamiga {
+using vamiga::DeviceError;
+using vamiga::BlockNr;
+using vamiga::FSBlock;
+
+namespace retro::image {
 
 optional<ImageInfo>
 HDFFile::about(const fs::path &path)
@@ -42,12 +46,12 @@ HDFFile::describe() const noexcept
 
 void
 HDFFile::didLoad()
-{        
+{
     // Retrieve geometry and partition information
     geometry = getGeometryDescriptor();
     ptable = getPartitionDescriptors();
     drivers = getDriverDescriptors();
-    
+
     // Check the hard drive descriptor for consistency
     geometry.checkCompatibility();
 
@@ -90,13 +94,13 @@ HDFFile::getGeometryDescriptor() const
         result.bsize        = R32BE(rdb + 16);
 
     } else {
-        
+
         // Predict the number of blocks
         auto numBlocks = predictNumBlocks();
-        
+
         // Predict the drive geometry
         auto geometries = GeometryDescriptor::driveGeometries(numBlocks, result.bsize);
-        
+
         // Use the first match by default
         if (geometries.size()) result = geometries.front();
     }
@@ -108,9 +112,9 @@ PartitionDescriptor
 HDFFile::getPartitionDescriptor(isize part) const
 {
     PartitionDescriptor result;
-    
+
     if (auto pb = seekPB(part); pb) {
-        
+
         // Extract information from the partition block
         result.name           = utl::createStr(pb + 37, 31);
         result.flags          = R32BE(pb + 20);
@@ -127,19 +131,19 @@ HDFFile::getPartitionDescriptor(isize part) const
         result.mask           = R32BE(pb + 184);
         result.bootPri        = R32BE(pb + 188);
         result.dosType        = R32BE(pb + 192);
-        
+
     } else {
-        
+
         assert(part == 0);
-        
+
         // Add a default partition spanning the entire disk
         auto geo = getGeometryDescriptor();
         result = PartitionDescriptor(geo);
-        
+
         // Make the first partition bootable
         result.flags |= 1;
     }
-    
+
     return result;
 }
 
@@ -147,15 +151,15 @@ std::vector<PartitionDescriptor>
 HDFFile::getPartitionDescriptors() const
 {
     std::vector<PartitionDescriptor> result;
-    
+
     // Add the first partition (which always exists)
     result.push_back(getPartitionDescriptor(0));
-    
+
     // Add other partitions (if any)
     for (isize i = 1; i < 16 && seekPB(i); i++) {
         result.push_back(getPartitionDescriptor(i));
     }
-    
+
     return result;
 }
 
@@ -163,9 +167,9 @@ DriverDescriptor
 HDFFile::getDriverDescriptor(isize driver) const
 {
     DriverDescriptor result;
-    
+
     if (auto fsh = seekFSH(driver); fsh) {
-        
+
         // Extract information from the file system header block
         result.dosType      = R32BE(fsh + 32);
         result.dosVersion   = R32BE(fsh + 36);
@@ -173,18 +177,18 @@ HDFFile::getDriverDescriptor(isize driver) const
 
         // Traverse the seglist
         auto lsegRef = R32BE(fsh + 72);
-        
+
         for (isize i = 0; lsegRef != u32(-1); i++) {
 
             auto lsegBlock = seekBlock(lsegRef);
-            
+
             if (!lsegBlock || strcmp((const char *)lsegBlock, "LSEG")) {
                 throw DeviceError(DeviceError::HDR_CORRUPTED_LSEG);
             }
             if (i >= 1024) {
                 throw DeviceError(DeviceError::HDR_CORRUPTED_LSEG);
             }
-            
+
             result.blocks.push_back(lsegRef);
             lsegRef = R32BE(lsegBlock + 16);
         }
@@ -201,7 +205,7 @@ HDFFile::getDriverDescriptors() const
     for (isize i = 0; i < 16 && seekFSH(i); i++) {
         result.push_back(getDriverDescriptor(i));
     }
-    
+
     return result;
 }
 
@@ -211,11 +215,11 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     FSDescriptor result;
 
     auto &part = ptable[nr];
-    
+
     auto c = part.highCyl - part.lowCyl + 1;
     auto h = part.heads;
     auto s = part.sectors;
-    
+
     result.numBlocks = c * h * s;
 
     // Determine block bounds
@@ -227,11 +231,11 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 
     // Only proceed if the hard drive is formatted
     if (dos(first) == FSFormat::NODOS) return result;
-    
+
     // Determine the location of the root block
     i64 highKey = result.numBlocks - 1;
     i64 rootKey = (result.numReserved + highKey) / 2;
-    
+
     // Add partition
     result.rootBlock = (BlockNr)rootKey;
 
@@ -239,7 +243,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     BlockNr ref = BlockNr(rootKey);
     isize cnt = 25;
     isize offset = 512 - 49 * 4;
-    
+
     while (ref && ref < (BlockNr)result.numBlocks) {
 
         const u8 *p = dptr + (ref * 512) + offset;
@@ -252,7 +256,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
                 }
             }
         }
-        
+
         // Continue collecting in the next extension bitmap block
         if ((ref = FSBlock::read32(p)) != 0) {
             if (isize(ref) < result.numBlocks) result.bmExtBlocks.push_back(ref);
@@ -260,7 +264,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
             offset = 0;
         }
     }
-    
+
     return result;
 }
 
@@ -301,17 +305,17 @@ HDFFile::predictNumBlocks() const
 {
     isize numReserved = 2;
     isize highKey = 0;
-    
+
     auto match = [&]() {
         return isRB(seekBlock((numReserved + highKey) / 2));
     };
-    
+
     if (auto root = seekRB(); root) {
 
         // Predict block count by analyzing the file size
         highKey = data.size / bsize() - 1;
         if (match()) return highKey + 1;
-        
+
         // Predict block count by assuming a 32 sector standard geometry
         highKey = 32 * (data.size / (32 * bsize())) - 1;
         if (match()) return highKey + 1;
@@ -322,7 +326,7 @@ HDFFile::predictNumBlocks() const
 
         fatalError;
     }
-    
+
     // No root
     return data.size / bsize();
 }
@@ -343,7 +347,7 @@ u8 *
 HDFFile::seekRB() const
 {
     auto max = data.size - 512;
-    
+
     for (isize i = 0; i <= max; i += 512) {
         if (isRB(data.ptr + i)) return data.ptr + i;
     }
@@ -367,13 +371,13 @@ u8 *
 HDFFile::seekPB(isize nr) const
 {
     u8 *result = nullptr;
-    
+
     // Go to the rigid disk block
     if (auto rdb = seekRDB(); rdb) {
-        
+
         // Go to the first partition block
         result = seekBlock(R32BE(rdb + 28));
-        
+
         // Traverse the linked list
         for (isize i = 0; i < nr && result; i++) {
             result = seekBlock(R32BE(result + 16));
@@ -382,7 +386,7 @@ HDFFile::seekPB(isize nr) const
         // Make sure the reached block is a partition block
         if (result && strcmp((const char *)result, "PART")) result = nullptr;
     }
-    
+
     return result;
 }
 
@@ -390,13 +394,13 @@ u8 *
 HDFFile::seekFSH(isize nr) const
 {
     u8 *result = nullptr;
-    
+
     // Go to the rigid disk block
     if (auto rdb = seekRDB(); rdb) {
-        
+
         // Go to the first file system header block
         result = seekBlock(R32BE(rdb + 32));
-        
+
         // Traverse the linked list
         for (isize i = 0; i < nr && result; i++) {
             result = seekBlock(R32BE(result + 16));
@@ -405,7 +409,7 @@ HDFFile::seekFSH(isize nr) const
         // Make sure the reached block is a partition block
         if (result && strcmp((const char *)result, "FSHD")) result = nullptr;
     }
-    
+
     return result;
 }
 
@@ -415,7 +419,7 @@ HDFFile::rdbString(isize offset, isize len) const
     if (auto rdb = seekRDB(); rdb) {
         return utl::createStr(rdb + offset, len);
     }
-    
+
     return { };
 }
 
@@ -423,13 +427,13 @@ FSFormat
 HDFFile::dos(isize blockNr) const
 {
     if (auto block = seekBlock(blockNr); block) {
-        
+
         if (strncmp((const char *)block, "DOS", 3) || block[3] > 7) {
             return FSFormat::NODOS;
         }
         return (FSFormat)block[3];
     }
-    
+
     return FSFormat::NODOS;
 }
 
@@ -438,7 +442,7 @@ HDFFile::writePartitionToFile(const fs::path &path, isize nr) const
 {
     auto offset = partitionOffset(nr);
     auto size = partitionSize(nr);
-    
+
     return writeToFile(path, offset, size);
 }
 

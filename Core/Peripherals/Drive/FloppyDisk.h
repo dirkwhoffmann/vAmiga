@@ -12,12 +12,11 @@
 #include "FloppyDiskTypes.h"
 #include "DriveTypes.h"
 #include "ImageTypes.h"
+#include "FloppyDiskImage.h"
 #include "CoreComponent.h"
 #include "TrackDevice.h"
 
 namespace vamiga {
-
-class FloppyDiskImage;
 
 /* MFM encoded disk data of a standard 3.5" DD disk:
  *

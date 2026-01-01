@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "FloppyDisk.h"
+#include "FloppyDrive.h"
 #include "ADFFile.h"
 #include "ADZFile.h"
 #include "EADFFile.h"
@@ -26,24 +28,24 @@ class Codec {
 public:
 
     // Factory methods
-    static std::unique_ptr<ADFFile> makeADF(const class FloppyDisk &disk);
-    static std::unique_ptr<ADFFile> makeADF(const class FloppyDrive &drive);
+    static std::unique_ptr<ADFFile> makeADF(const FloppyDisk &disk);
+    static std::unique_ptr<ADFFile> makeADF(const FloppyDrive &drive);
 
-    static std::unique_ptr<ADZFile> makeADZ(const class FloppyDisk &disk);
-    static std::unique_ptr<ADZFile> makeADZ(const class FloppyDrive &drive);
+    static std::unique_ptr<ADZFile> makeADZ(const FloppyDisk &disk);
+    static std::unique_ptr<ADZFile> makeADZ(const FloppyDrive &drive);
 
-    static std::unique_ptr<EADFFile> makeEADF(const class FloppyDisk &disk);
-    static std::unique_ptr<EADFFile> makeEADF(const class FloppyDrive &drive);
+    static std::unique_ptr<EADFFile> makeEADF(const FloppyDisk &disk);
+    static std::unique_ptr<EADFFile> makeEADF(const FloppyDrive &drive);
 
-    static std::unique_ptr<IMGFile> makeIMG(const class FloppyDisk &disk);
-    static std::unique_ptr<IMGFile> makeIMG(const class FloppyDrive &drive);
+    static std::unique_ptr<IMGFile> makeIMG(const FloppyDisk &disk);
+    static std::unique_ptr<IMGFile> makeIMG(const FloppyDrive &drive);
 
-    static std::unique_ptr<STFile> makeST(const class FloppyDisk &disk);
-    static std::unique_ptr<STFile> makeST(const class FloppyDrive &drive);
+    static std::unique_ptr<STFile> makeST(const FloppyDisk &disk);
+    static std::unique_ptr<STFile> makeST(const FloppyDrive &drive);
 
-    static std::unique_ptr<HDFFile> makeHDF(const class HardDrive &hd);
+    static std::unique_ptr<HDFFile> makeHDF(const HardDrive &hd);
 
-    static std::unique_ptr<HDZFile> makeHDZ(const class HardDrive &hd);
+    static std::unique_ptr<HDZFile> makeHDZ(const HardDrive &hd);
 
 
     // Encoders and Decoders

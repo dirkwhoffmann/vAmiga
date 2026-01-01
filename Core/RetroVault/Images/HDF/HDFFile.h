@@ -12,22 +12,33 @@
 #include "HardDiskImage.h"
 #include "FSDescriptor.h"
 #include "utl/common.h"
-// #include "utl/types/Literals.h"
 
-namespace vamiga {
+using vamiga::HardDiskImage;
+using vamiga::FSDescriptor;
+using vamiga::GeometryDescriptor;
+using vamiga::PartitionDescriptor;
+using vamiga::DriverDescriptor;
+using vamiga::ImageInfo;
+using vamiga::ImageType;
+using vamiga::ImageFormat;
+using vamiga::FSFamily;
+using vamiga::FSFormat;
 
-class FloppyDisk;
+namespace retro::image {
+
+using namespace utl;
+
 
 class HDFFile : public HardDiskImage {
 
 public:
-    
+
     // Derived drive geometry
     GeometryDescriptor geometry;
 
     // Derived partition table
     std::vector <PartitionDescriptor> ptable;
-    
+
     // Included device drivers
     std::vector <DriverDescriptor> drivers;
 
@@ -35,7 +46,7 @@ public:
 
     // static bool isOversized(isize size) { return size > 504_MB; }
 
-    
+
     //
     // Initializing
     //
@@ -60,7 +71,7 @@ public:
     bool validateURL(const fs::path& path) const noexcept override {
         return about(path).has_value();
     }
-    
+
     ImageType type() const noexcept override { return ImageType::HARDDISK; }
     ImageFormat format() const noexcept override { return ImageFormat::HDF; }
     std::vector<string> describe() const noexcept override;
@@ -113,7 +124,7 @@ public:
     //
 
 public:
-    
+
     GeometryDescriptor getGeometryDescriptor() const;
     PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
@@ -127,7 +138,7 @@ public:
     //
 
 public:
-    
+
     optional<string> getDiskVendor() const { return rdbString(160, 8); }
     optional<string> getDiskProduct() const { return rdbString(168, 16); }
     optional<string> getDiskRevision() const { return rdbString(184, 4); }
@@ -141,16 +152,16 @@ public:
     //
 
 public:
-    
+
     // Returns the (predicted) geometry for this disk
     const GeometryDescriptor getGeometry() const { return geometry; }
 
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
-    
+
     // Returns the number of loadable file system drivers
     isize numDrivers() const { return isize(drivers.size()); }
-    
+
     // Returns the number of partitions
     // isize numPartitions() const { return isize(ptable.size()); }
 
@@ -159,11 +170,11 @@ public:
     isize partitionSize(isize nr) const;
     isize partitionOffset(isize nr) const;
     u8 *partitionData(isize nr) const;
-    
+
     // Predicts the number of blocks of this hard drive
     isize predictNumBlocks() const;
 
-    
+
     //
     // Scanning raw disk data
     //
@@ -175,13 +186,13 @@ private:
 
     // Checks whether the provided pointer points to a Root Block
     bool isRB(u8 *ptr) const;
-    
+
     // Return a pointer to the Root Block if it exists
     u8 *seekRB() const;
 
     // Return a pointer to the Rigid Disk Block if it exists
     u8 *seekRDB() const;
-    
+
     // Returns a pointer to a certain partition block if it exists
     u8 *seekPB(isize nr) const;
 
@@ -194,13 +205,13 @@ private:
     // Extracts the DOS revision number from a certain block
     FSFormat dos(isize nr) const;
 
-    
+
     //
     // Serializing
     //
-    
+
 public:
-    
+
     isize writePartitionToFile(const fs::path &path, isize nr) const;
 };
 

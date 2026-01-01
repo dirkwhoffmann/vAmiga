@@ -13,6 +13,8 @@
 
 namespace vamiga {
 
+using namespace retro::image;
+
 class HDZFile : public HardDiskImage {
 
 public:

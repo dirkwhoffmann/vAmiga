@@ -17,11 +17,15 @@
 #include "AgnusTypes.h"
 #include "Drive.h"
 #include "HardDiskImage.h"
+#include "HDFFile.h"
+#include "HDZFile.h"
 #include "TrackDevice.h"
 #include "utl/storage.h"
 #include "utl/wrappers.h"
 
 namespace vamiga {
+
+using namespace retro::image;
 
 class HardDrive final : public Drive, public TrackDevice {
 
@@ -130,8 +134,8 @@ public:
     void init(const class FileSystem &fs);
 
     // Creates a hard drive with the contents of an HDF or HDZ
-    void init(const class HDFFile &hdf);
-    void init(const class HDZFile &hdz);
+    void init(const HDFFile &hdf);
+    void init(const HDZFile &hdz);
 
     // Creates a hard drive with the contents of an HDF file
     void init(const fs::path &path);
