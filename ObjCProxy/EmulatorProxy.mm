@@ -538,14 +538,6 @@ ImageInfo scan(const fs::path &url)
     return MediaFile::type([url fileSystemRepresentation]) == FileType::ROM;
 }
 
-/*
-- (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
-{
-    try { return [self mem]->loadRom(*(MediaFile *)proxy->obj); }
-    catch(Error &error) { [ex save:error]; }
-}
-*/
-
 - (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
 {
     assert(data);
@@ -565,14 +557,6 @@ ImageInfo scan(const fs::path &url)
 {
     [self mem]->deleteExt();
 }
-
-/*
-- (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
-{
-    try { return [self mem]->loadExt(*(MediaFile *)proxy->obj); }
-    catch(Error &error) { [ex save:error]; }
-}
-*/
 
 - (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
 {
@@ -1299,14 +1283,6 @@ ImageInfo scan(const fs::path &url)
     catch(Error &error) { [ex save:error]; }
 }
 
-/*
-- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex
-{
-    try { [self drive]->insertMedia(*(MediaFile *)proxy->obj, wp); }
-    catch(Error &error) { [ex save:error]; }
-}
-*/
-
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
     try { [self drive]->insert([url fileSystemRepresentation], wp); }
@@ -1372,34 +1348,6 @@ ImageInfo scan(const fs::path &url)
     
     FileSystemProxy *proxy = [[self alloc] initWith: volume];
     return proxy;
-}
-
-+ (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
-{
-    try {
-
-        auto *base = ((MediaFile *)(proxy->obj))->get();
-
-        if (auto* adf = dynamic_cast<ADFFile *>(base)) {
-
-            auto *vol = new Volume(*adf); // TODO: REMOVE MEMORY LEAK!
-            auto *fs = new FileSystem(*vol);
-            return [self make:fs];
-        }
-        if (auto* hdf = dynamic_cast<HDFFile *>(base)) {
-
-            auto *vol = new Volume(*hdf, hdf->partition(nr)); // TODO: REMOVE MEMORY LEAK!
-            auto *fs = new FileSystem(*vol);
-            return [self make:fs];
-        }
-
-        throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
-
-    } catch(Error &error) {
-
-        [ex save:error];
-        return nil;
-    }
 }
 
 + (instancetype)makeWithImage:(FloppyDiskImageProxy *)proxy exception:(ExceptionWrapper *)ex
@@ -1712,213 +1660,9 @@ ImageInfo scan(const fs::path &url)
     [self shell]->execScript(fs::path(url.fileSystemRepresentation));
 }
 
-/*
-- (void)executeScript:(MediaFileProxy *)file
-{
-    [self shell]->execScript(*(MediaFile *)file->obj);
-}
-*/
-
 - (void)executeString:(NSString *)str
 {
     [self shell]->execScript(std::string([str UTF8String]));
-}
-
-@end
-
-
-//
-// MediaFile
-//
-
-@implementation MediaFileProxy
-
-- (MediaFile *)file
-{
-    return (MediaFile *)obj;
-}
-
-+ (instancetype)make:(void *)file
-{
-    return file ? [[self alloc] initWith:file] : nil;
-}
-
-+ (FileType)typeOfUrl:(NSURL *)url
-{
-    return MediaFile::type([url fileSystemRepresentation]);
-}
-
-+ (instancetype)makeWithFile:(NSString *)path
-                   exception:(ExceptionWrapper *)ex
-{
-    try { return [self make: MediaFile::make([path fileSystemRepresentation])]; }
-    catch(Error &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithFile:(NSString *)path
-                        type:(FileType)type
-                   exception:(ExceptionWrapper *)ex
-{
-    try { return [self make: MediaFile::make([path fileSystemRepresentation], type)]; }
-    catch(Error &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len
-                          type:(FileType)type
-                     exception:(ExceptionWrapper *)ex
-{
-    try { return [self make: MediaFile::make((u8 *)buf, len, type)]; }
-    catch(Error &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
-                         type:(FileType)type
-                    exception:(ExceptionWrapper *)ex
-{
-    auto drive = (FloppyDriveAPI *)proxy->obj;
-    try { return [self make: MediaFile::make(*drive, type)]; }
-    catch(Error &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy
-                             type:(FileType)type
-                        exception:(ExceptionWrapper *)ex
-{
-    auto drive = (HardDriveAPI *)proxy->obj;
-    try { return [self make: MediaFile::make(*drive, type)]; }
-    catch(Error &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy
-                              type:(FileType)type
-                         exception:(ExceptionWrapper *)ex
-{
-    auto fs = (FileSystem *)proxy->obj;
-    try { return [self make: MediaFile::make(*fs, type)]; }
-    catch(Error &error) { [ex save:error]; return nil; }
-}
-
-- (FileType)type
-{
-    return [self file]->type();
-}
-
-- (u64)fnv
-{
-    return [self file]->fnv64();
-}
-
-- (NSInteger)size
-{
-    return [self file]->getSize();
-}
-
-- (Compressor)compressor
-{
-    return [self file]->compressor();
-}
-
-- (BOOL)compressed
-{
-    return [self file]->isCompressed();
-}
-
-- (u8 *)data
-{
-    return [self file]->getData();
-}
-
-- (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
-{
-    try { [self file]->writeToFile(string([path fileSystemRepresentation])); }
-    catch(Error &err) { [ex save:err]; }
-}
-
-- (void)writeToFile:(NSString *)path
-             offset:(NSInteger)offset
-             length:(NSInteger)length
-          exception:(ExceptionWrapper *)ex
-{
-    try { [self file]->writeToFile(string([path fileSystemRepresentation], offset, length)); }
-    catch(Error &err) { [ex save:err]; }
-}
-
-- (NSImage *)previewImage
-{
-    // Return cached image (if any)
-    if (preview) { return preview; }
-
-    // Get dimensions and data
-    auto size = [self file]->previewImageSize();
-    auto data = (unsigned char *)[self file]->previewImageData();
-
-    // Create preview image
-    if (data) {
-
-        NSBitmapImageRep *rep = [[NSBitmapImageRep alloc]
-                                 initWithBitmapDataPlanes: &data
-                                 pixelsWide:size.first
-                                 pixelsHigh:size.second
-                                 bitsPerSample:8
-                                 samplesPerPixel:4
-                                 hasAlpha:true
-                                 isPlanar:false
-                                 colorSpaceName:NSCalibratedRGBColorSpace
-                                 bytesPerRow:4*size.first
-                                 bitsPerPixel:32];
-
-        preview = [[NSImage alloc] initWithSize:[rep size]];
-        [preview addRepresentation:rep];
-
-        // image.makeGlossy()
-    }
-    return preview;
-}
-
-- (time_t)timeStamp
-{
-    return [self file]->timestamp();
-}
-
-- (DiskInfo)diskInfo
-{
-    return [self file]->getDiskInfo();
-}
-
-- (FloppyDiskInfo)floppyDiskInfo
-{
-    return [self file]->getFloppyDiskInfo();
-}
-
--(HDFInfo)hdfInfo
-{
-    return [self file]->getHDFInfo();
-}
-
-- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset
-{
-    return [self file]->readByte(b, offset);
-}
-
-- (void)readSector:(NSInteger)b destination:(unsigned char *)buf
-{
-    [self file]->readSector(buf, b);
-}
-
-- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
-{
-    if (auto *file = dynamic_cast<DiskImage *>([self file]->file.get())) {
-
-        string result;
-        auto p = file->data.ptr + b * file->bsize() + offset;
-
-        for (isize i = 0; i < len; i++) {
-            result += isprint(int(p[i])) ? char(p[i]) : '.';
-        }
-
-        return @(result.c_str());
-    }
-    return @"";
 }
 
 @end

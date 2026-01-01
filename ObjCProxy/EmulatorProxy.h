@@ -42,7 +42,6 @@ using namespace vamiga;
 @class JoystickProxy;
 @class KeyboardProxy;
 @class LogicAnalyzerProxy;
-@class MediaFileProxy;
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
@@ -727,7 +726,6 @@ ImageInfo scan(const fs::path &url);
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)insertBlankDisk:(FSFormat)fs bootBlock:(BootBlockId)bb name:(NSString *)name url:(NSURL *)url exception:(ExceptionWrapper *)ex;
-// - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)eject;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
@@ -767,7 +765,6 @@ ImageInfo scan(const fs::path &url);
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
-// - (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)importFiles:(NSURL *)url exception:(ExceptionWrapper *)ex;
@@ -784,7 +781,6 @@ ImageInfo scan(const fs::path &url);
 
 @interface FileSystemProxy : Proxy { }
 
-+ (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithImage:(FloppyDiskImageProxy *)proxy exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithImage:(HardDiskImageProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 
@@ -850,7 +846,6 @@ ImageInfo scan(const fs::path &url);
 - (void)pressKey:(char)c;
 - (void)pressSpecialKey:(RSKey)key;
 - (void)pressSpecialKey:(RSKey)key shift:(BOOL)shift;
-// - (void)executeScript:(MediaFileProxy *)file;
 - (void)executeScript:(NSURL *)url;
 - (void)executeString:(NSString *)string;
 
@@ -886,56 +881,6 @@ ImageInfo scan(const fs::path &url);
 
 @protocol MakeWithFileSystem <NSObject>
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy exception:(ExceptionWrapper *)ex;
-@end
-
-
-//
-// MediaFile
-//
-
-@interface MediaFileProxy : Proxy
-{
-    NSImage *preview;
-}
-
-+ (FileType) typeOfUrl:(NSURL *)url;
-
-+ (instancetype)make:(void *)file;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path type:(FileType)t exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
-//+ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy compressor:(Compressor)c __attribute__((deprecated("Don't use")));
-+ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
-
-@property (readonly) FileType type;
-@property (readonly) NSInteger size;
-@property (readonly) u64 fnv;
-@property (readonly) Compressor compressor;
-@property (readonly) BOOL compressed;
-
-@property (readonly) u8 *data;
-
-- (void)writeToFile:(NSString *)path
-          exception:(ExceptionWrapper *)ex;
-
-- (void)writeToFile:(NSString *)path
-             offset:(NSInteger)offset
-             length:(NSInteger)length
-          exception:(ExceptionWrapper *)ex;
-
-@property (readonly, strong) NSImage *previewImage;
-@property (readonly) time_t timeStamp;
-@property (readonly) DiskInfo diskInfo;
-@property (readonly) FloppyDiskInfo floppyDiskInfo;
-@property (readonly) HDFInfo hdfInfo;
-@property (readonly) NSString *describeCapacity;
-
-- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset;
-- (void)readSector:(NSInteger)b destination:(unsigned char *)buf;
-- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
-
 @end
 
 

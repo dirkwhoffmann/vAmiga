@@ -436,15 +436,6 @@ extension HardDiskImageProxy {
 
 extension FileSystemProxy {
 
-    static func make(with file: MediaFileProxy, partition: Int = 0) throws -> FileSystemProxy {
-
-        let exception = ExceptionWrapper()
-        let result = FileSystemProxy.make(withMedia: file, partition: partition, exception: exception)
-        if exception.fault != 0 { throw AppError(exception) }
-
-        return result!
-    }
-
     static func make(with file: FloppyDiskImageProxy) throws -> FileSystemProxy {
 
         let exception = ExceptionWrapper()
