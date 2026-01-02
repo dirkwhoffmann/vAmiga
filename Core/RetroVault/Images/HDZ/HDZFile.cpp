@@ -13,8 +13,6 @@
 #include "utl/io.h"
 #include "utl/support.h"
 
-using vamiga::HDF_DEBUG;
-
 namespace retro::image {
 
 optional<ImageInfo>

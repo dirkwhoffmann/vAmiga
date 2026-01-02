@@ -18,12 +18,10 @@
 #define XSTR(x) STR(x)
 
 #define DEBUG_CHANNEL(name, description) \
-LogChannel EXPAND_CONCAT(CH, name) = \
+LogChannel EXPAND_CONCAT(CH_, name) = \
 Loggable::subscribe(XSTR(name), name, description);
 
-namespace vamiga {
-
-using namespace utl;
+namespace utl {
 
 //
 // Register a logging channel for each debug flag

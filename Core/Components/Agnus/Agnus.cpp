@@ -25,12 +25,6 @@ Agnus::Agnus(Amiga& ref) : SubComponent(ref)
 
     info.bind([this] { return cacheInfo(); } );
     metrics.bind([this] { return cacheMetrics(); } );
-
-    msg("Hallo %d\n", 1);
-    warn("Hallo %d\n", 2);
-    debug(42, "Hallo %d\n", 3);
-    trace(42, "Hallo %d\n", 4);
-    xfiles("Hallo %d\n", 5);
 }
 
 Agnus&

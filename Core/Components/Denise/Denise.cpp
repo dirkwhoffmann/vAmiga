@@ -1031,7 +1031,7 @@ Denise::updateBorderBuffer()
     // Print some debug info if requested
     if (DIW_DEBUG) {
 
-        trace(true, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
+        trace(DIW_DEBUG, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
         diwChanges.dump();
     }
 
@@ -1156,12 +1156,12 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
         
         if (CLX_DEBUG) {
             
-            if ((z & comp45) && (z & comp67)) trace(true, "Coll: 45 and 67\n");
-            if ((z & comp23) && (z & comp67)) trace(true, "Coll: 23 and 67\n");
-            if ((z & comp23) && (z & comp45)) trace(true, "Coll: 23 and 45\n");
-            if ((z & comp01) && (z & comp67)) trace(true, "Coll: 01 and 67\n");
-            if ((z & comp01) && (z & comp45)) trace(true, "Coll: 01 and 45\n");
-            if ((z & comp01) && (z & comp23)) trace(true, "Coll: 01 and 23\n");
+            if ((z & comp45) && (z & comp67)) trace(CLX_DEBUG, "Coll: 45 and 67\n");
+            if ((z & comp23) && (z & comp67)) trace(CLX_DEBUG, "Coll: 23 and 67\n");
+            if ((z & comp23) && (z & comp45)) trace(CLX_DEBUG, "Coll: 23 and 45\n");
+            if ((z & comp01) && (z & comp67)) trace(CLX_DEBUG, "Coll: 01 and 67\n");
+            if ((z & comp01) && (z & comp45)) trace(CLX_DEBUG, "Coll: 01 and 45\n");
+            if ((z & comp01) && (z & comp23)) trace(CLX_DEBUG, "Coll: 01 and 23\n");
         }
     }
 }

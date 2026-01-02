@@ -74,141 +74,141 @@ static constexpr bool vAmigaDOS = 1;
 static constexpr bool vAmigaDOS = 0;
 #endif
 
-namespace vamiga {
+namespace utl {
 
 // General
-constexpr long XFILES             = 0;
-constexpr long CNF_DEBUG          = 0;
-constexpr long OBJ_DEBUG          = 0;
-constexpr long DEF_DEBUG          = 0;
-constexpr long MIMIC_UAE          = 0;
+constexpr long XFILES             = 0;      extern long CH_XFILES;
+constexpr long CNF_DEBUG          = 0;      extern long CH_CNF_DEBUG;
+constexpr long OBJ_DEBUG          = 0;      extern long CH_OBJ_DEBUG;
+constexpr long DEF_DEBUG          = 0;      extern long CH_DEF_DEBUG;
+constexpr long MIMIC_UAE          = 0;      extern long CH_MIMIC_UAE;
 
 // Emulator
-constexpr long RUN_DEBUG          = 0;
-constexpr long TIM_DEBUG          = 0;
-constexpr long WARP_DEBUG         = 0;
-constexpr long CMD_DEBUG          = 0;
-constexpr long MSG_DEBUG          = 0;
-constexpr long SNP_DEBUG          = 0;
+constexpr long RUN_DEBUG          = 0;      extern long CH_RUN_DEBUG;
+constexpr long TIM_DEBUG          = 0;      extern long CH_TIM_DEBUG;
+constexpr long WARP_DEBUG         = 0;      extern long CH_WARP_DEBUG;
+constexpr long CMD_DEBUG          = 0;      extern long CH_CMD_DEBUG;
+constexpr long MSG_DEBUG          = 0;      extern long CH_MSG_DEBUG;
+constexpr long SNP_DEBUG          = 0;      extern long CH_SNP_DEBUG;
 
 // Run ahead
-constexpr long RUA_DEBUG          = 0;
-constexpr long RUA_CHECKSUM       = 0;
-constexpr long RUA_ON_STEROIDS    = 0;
+constexpr long RUA_DEBUG          = 0;      extern long CH_RUA_DEBUG;
+constexpr long RUA_CHECKSUM       = 0;      extern long CH_RUA_CHECKSUM;
+constexpr long RUA_ON_STEROIDS    = 0;      extern long CH_RUA_ON_STEROIDS;
 
 // CPU
-constexpr long CPU_DEBUG          = 0;
+constexpr long CPU_DEBUG          = 0;      extern long CH_CPU_DEBUG;
 
 // Memory access
-constexpr long OCSREG_DEBUG       = 0;
-constexpr long ECSREG_DEBUG       = 0;
-constexpr long INVREG_DEBUG       = 0;
-constexpr long MEM_DEBUG          = 0;
+constexpr long OCSREG_DEBUG       = 0;      extern long CH_OCSREG_DEBUG;
+constexpr long ECSREG_DEBUG       = 0;      extern long CH_ECSREG_DEBUG;
+constexpr long INVREG_DEBUG       = 0;      extern long CH_INVREG_DEBUG;
+constexpr long MEM_DEBUG          = 0;      extern long CH_MEM_DEBUG;
 
 // Agnus
-constexpr long DMA_DEBUG          = 0;
-constexpr long DDF_DEBUG          = 0;
-constexpr long SEQ_DEBUG          = 0;
-constexpr long SEQ_ON_STEROIDS    = 0;
-constexpr long NTSC_DEBUG         = 0;
+constexpr long DMA_DEBUG          = 0;      extern long CH_DMA_DEBUG;
+constexpr long DDF_DEBUG          = 0;      extern long CH_DDF_DEBUG;
+constexpr long SEQ_DEBUG          = 0;      extern long CH_SEQ_DEBUG;
+constexpr long SEQ_ON_STEROIDS    = 0;      extern long CH_SEQ_ON_STEROIDS;
+constexpr long NTSC_DEBUG         = 0;      extern long CH_NTSC_DEBUG;
 
 // Copper
-constexpr long COP_CHECKSUM       = 0;
-constexpr long COPREG_DEBUG       = 0;
-constexpr long COP_DEBUG          = 0;
+constexpr long COP_CHECKSUM       = 0;      extern long CH_COP_CHECKSUM;
+constexpr long COPREG_DEBUG       = 0;      extern long CH_COPREG_DEBUG;
+constexpr long COP_DEBUG          = 0;      extern long CH_COP_DEBUG;
 
 // Blitter
-constexpr long BLT_CHECKSUM       = 0;
-constexpr long BLTREG_DEBUG       = 0;
-constexpr long BLT_REG_GUARD      = 0;
-constexpr long BLT_MEM_GUARD      = 0;
-constexpr long BLT_DEBUG          = 0;
-constexpr long BLTTIM_DEBUG       = 0;
-constexpr long SLOW_BLT_DEBUG     = 0;
+constexpr long BLT_CHECKSUM       = 0;      extern long CH_BLT_CHECKSUM;
+constexpr long BLTREG_DEBUG       = 0;      extern long CH_BLTREG_DEBUG;
+constexpr long BLT_REG_GUARD      = 0;      extern long CH_BLT_REG_GUARD;
+constexpr long BLT_MEM_GUARD      = 0;      extern long CH_BLT_MEM_GUARD;
+constexpr long BLT_DEBUG          = 0;      extern long CH_BLT_DEBUG;
+constexpr long BLTTIM_DEBUG       = 0;      extern long CH_BLTTIM_DEBUG;
+constexpr long SLOW_BLT_DEBUG     = 0;      extern long CH_SLOW_BLT_DEBUG;
 
 // Denise
-constexpr long BPLREG_DEBUG       = 0;
-constexpr long BPLDAT_DEBUG       = 0;
-constexpr long BPLMOD_DEBUG       = 0;
-constexpr long SPRREG_DEBUG       = 0;
-constexpr long COLREG_DEBUG       = 0;
-constexpr long CLXREG_DEBUG       = 0;
-constexpr long BPL_ON_STEROIDS    = 0;
-constexpr long DIW_DEBUG          = 0;
-constexpr long SPR_DEBUG          = 0;
-constexpr long CLX_DEBUG          = 0;
-constexpr long BORDER_DEBUG       = 0;
-constexpr long LINE_DEBUG         = 0;
-constexpr long DENISE_ON_STEROIDS = 0;
+constexpr long BPLREG_DEBUG       = 0;      extern long CH_BPLREG_DEBUG;
+constexpr long BPLDAT_DEBUG       = 0;      extern long CH_BPLDAT_DEBUG;
+constexpr long BPLMOD_DEBUG       = 0;      extern long CH_BPLMOD_DEBUG;
+constexpr long SPRREG_DEBUG       = 0;      extern long CH_SPRREG_DEBUG;
+constexpr long COLREG_DEBUG       = 0;      extern long CH_COLREG_DEBUG;
+constexpr long CLXREG_DEBUG       = 0;      extern long CH_CLXREG_DEBUG;
+constexpr long BPL_ON_STEROIDS    = 0;      extern long CH_BPL_ON_STEROIDS;
+constexpr long DIW_DEBUG          = 0;      extern long CH_DIW_DEBUG;
+constexpr long SPR_DEBUG          = 0;      extern long CH_SPR_DEBUG;
+constexpr long CLX_DEBUG          = 0;      extern long CH_CLX_DEBUG;
+constexpr long BORDER_DEBUG       = 0;      extern long CH_BORDER_DEBUG;
+constexpr long LINE_DEBUG         = 0;      extern long CH_LINE_DEBUG;
+constexpr long DENISE_ON_STEROIDS = 0;      extern long CH_DENISE_ON_STEROIDS;
 
 // Paula
-constexpr long INTREG_DEBUG       = 0;
-constexpr long INT_DEBUG          = 0;
+constexpr long INTREG_DEBUG       = 0;      extern long CH_INTREG_DEBUG;
+constexpr long INT_DEBUG          = 0;      extern long CH_INT_DEBUG;
 
 // CIAs
-constexpr long CIAREG_DEBUG       = 0;
-constexpr long CIASER_DEBUG       = 0;
-constexpr long CIA_DEBUG          = 0;
-constexpr long TOD_DEBUG          = 0;
+constexpr long CIAREG_DEBUG       = 0;      extern long CH_CIAREG_DEBUG;
+constexpr long CIASER_DEBUG       = 0;      extern long CH_CIASER_DEBUG;
+constexpr long CIA_DEBUG          = 0;      extern long CH_CIA_DEBUG;
+constexpr long TOD_DEBUG          = 0;      extern long CH_TOD_DEBUG;
 
 // Floppy Drives
-constexpr long ALIGN_HEAD         = 0;
-constexpr long DSK_CHECKSUM       = 0;
-constexpr long DSKREG_DEBUG       = 0;
-constexpr long DSK_DEBUG          = 0;
-constexpr long MFM_DEBUG          = 0;
-constexpr long FS_DEBUG           = 0;
+constexpr long ALIGN_HEAD         = 0;      extern long CH_ALIGN_HEAD;
+constexpr long DSK_CHECKSUM       = 0;      extern long CH_DSK_CHECKSUM;
+constexpr long DSKREG_DEBUG       = 0;      extern long CH_DSKREG_DEBUG;
+constexpr long DSK_DEBUG          = 0;      extern long CH_DSK_DEBUG;
+constexpr long MFM_DEBUG          = 0;      extern long CH_MFM_DEBUG;
+constexpr long FS_DEBUG           = 0;      extern long CH_FS_DEBUG;
 
 // Hard Drives
-constexpr long HDR_ACCEPT_ALL     = 0;
-constexpr long HDR_FS_LOAD_ALL    = 0;
-constexpr long WT_DEBUG           = 0;
+constexpr long HDR_ACCEPT_ALL     = 0;      extern long CH_HDR_ACCEPT_ALL;
+constexpr long HDR_FS_LOAD_ALL    = 0;      extern long CH_HDR_FS_LOAD_ALL;
+constexpr long WT_DEBUG           = 0;      extern long CH_WT_DEBUG;
 
 // Audio
-constexpr long AUDREG_DEBUG       = 0;
-constexpr long AUD_DEBUG          = 0;
-constexpr long AUDBUF_DEBUG       = 0;
-constexpr long AUDVOL_DEBUG       = 0;
-constexpr long DISABLE_AUDIRQ     = 0;
+constexpr long AUDREG_DEBUG       = 0;      extern long CH_AUDREG_DEBUG;
+constexpr long AUD_DEBUG          = 0;      extern long CH_AUD_DEBUG;
+constexpr long AUDBUF_DEBUG       = 0;      extern long CH_AUDBUF_DEBUG;
+constexpr long AUDVOL_DEBUG       = 0;      extern long CH_AUDVOL_DEBUG;
+constexpr long DISABLE_AUDIRQ     = 0;      extern long CH_DISABLE_AUDIRQ;
 
 // Ports
-constexpr long POSREG_DEBUG       = 0;
-constexpr long JOYREG_DEBUG       = 0;
-constexpr long POTREG_DEBUG       = 0;
-constexpr long VID_DEBUG          = 0;
-constexpr long PRT_DEBUG          = 0;
-constexpr long SER_DEBUG          = 0;
-constexpr long POT_DEBUG          = 0;
-constexpr long HOLD_MOUSE_L       = 0;
-constexpr long HOLD_MOUSE_M       = 0;
-constexpr long HOLD_MOUSE_R       = 0;
+constexpr long POSREG_DEBUG       = 0;      extern long CH_POSREG_DEBUG;
+constexpr long JOYREG_DEBUG       = 0;      extern long CH_JOYREG_DEBUG;
+constexpr long POTREG_DEBUG       = 0;      extern long CH_POTREG_DEBUG;
+constexpr long VID_DEBUG          = 0;      extern long CH_VID_DEBUG;
+constexpr long PRT_DEBUG          = 0;      extern long CH_PRT_DEBUG;
+constexpr long SER_DEBUG          = 0;      extern long CH_SER_DEBUG;
+constexpr long POT_DEBUG          = 0;      extern long CH_POT_DEBUG;
+constexpr long HOLD_MOUSE_L       = 0;      extern long CH_HOLD_MOUSE_L;
+constexpr long HOLD_MOUSE_M       = 0;      extern long CH_HOLD_MOUSE_M;
+constexpr long HOLD_MOUSE_R       = 0;      extern long CH_HOLD_MOUSE_R;
 
 // Expansion boards
-constexpr long ZOR_DEBUG          = 0;
-constexpr long ACF_DEBUG          = 0;
-constexpr long FAS_DEBUG          = 0;
-constexpr long HDR_DEBUG          = 0;
-constexpr long DBD_DEBUG          = 0;
+constexpr long ZOR_DEBUG          = 0;      extern long CH_ZOR_DEBUG;
+constexpr long ACF_DEBUG          = 0;      extern long CH_ACF_DEBUG;
+constexpr long FAS_DEBUG          = 0;      extern long CH_FAS_DEBUG;
+constexpr long HDR_DEBUG          = 0;      extern long CH_HDR_DEBUG;
+constexpr long DBD_DEBUG          = 0;      extern long CH_DBD_DEBUG;
 
 // Media types
-constexpr long ADF_DEBUG          = 0;
-constexpr long HDF_DEBUG          = 0;
-constexpr long DMS_DEBUG          = 0;
-constexpr long IMG_DEBUG          = 0;
+constexpr long ADF_DEBUG          = 0;     extern long CH_ADF_DEBUG;
+constexpr long HDF_DEBUG          = 0;     extern long CH_HDF_DEBUG;
+constexpr long DMS_DEBUG          = 0;     extern long CH_DMS_DEBUG;
+constexpr long IMG_DEBUG          = 0;     extern long CH_IMG_DEBUG;
 
 // Real-time clock
-constexpr long RTC_DEBUG          = 0;
+constexpr long RTC_DEBUG          = 0;     extern long CH_RTC_DEBUG;
 
 // Keyboard
-constexpr long KBD_DEBUG          = 0;
-constexpr long KEY_DEBUG          = 0;
+constexpr long KBD_DEBUG          = 0;     extern long CH_KBD_DEBUG;
+constexpr long KEY_DEBUG          = 0;     extern long CH_KEY_DEBUG;
 
 // Misc
-constexpr long RSH_DEBUG          = 0;
-constexpr long REC_DEBUG          = 0;
-constexpr long SCK_DEBUG          = 0;
-constexpr long SRV_DEBUG          = 0;
-constexpr long GDB_DEBUG          = 0;
+constexpr long RSH_DEBUG          = 0;     extern long CH_RSH_DEBUG;
+constexpr long REC_DEBUG          = 0;     extern long CH_REC_DEBUG;
+constexpr long SCK_DEBUG          = 0;     extern long CH_SCK_DEBUG;
+constexpr long SRV_DEBUG          = 0;     extern long CH_SRV_DEBUG;
+constexpr long GDB_DEBUG          = 0;     extern long CH_GDB_DEBUG;
 
 
 //

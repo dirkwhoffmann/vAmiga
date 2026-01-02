@@ -336,7 +336,7 @@ FSAllocator::numUnallocated() const noexcept
 
         isize count = 0;
         for (isize i = 0; i < fs.blocks(); i++) { if (isUnallocated(BlockNr(i))) count++; }
-        debug(true, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
+        debug(FS_DEBUG, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
         assert(count == result);
     }
 

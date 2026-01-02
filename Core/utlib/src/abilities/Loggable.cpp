@@ -32,10 +32,8 @@ Loggable::subscribe(string name, isize level, string description)
         chns.reserve(64);
 
         // Register the default channels
-        chns.push_back(LogChannelInfo { "LOG",    1, "Messages" });
-        chns.push_back(LogChannelInfo { "WARN",   1, "Warnings" });
-        chns.push_back(LogChannelInfo { "ERROR",  1, "Errors" });
-        chns.push_back(LogChannelInfo { "XFILES", 1, "Paranormal activity" });
+        chns.push_back(LogChannelInfo { "NULL", 0, "Suppress output" });
+        chns.push_back(LogChannelInfo { "STD",  1, "Standard messages" });
     }
 
     // Seek the channel
@@ -48,7 +46,7 @@ Loggable::subscribe(string name, isize level, string description)
     // Add a new channel
     chns.push_back(LogChannelInfo{
 
-        .level       = level,
+        .verbosity       = level,
         .name        = std::move(name),
         .description = std::move(description)
     });
@@ -57,32 +55,54 @@ Loggable::subscribe(string name, isize level, string description)
 }
 
 void
-Loggable::log(LogChannel c, const std::source_location &loc, const char *fmt, ...) const
+Loggable::log(LogChannel c,
+              LogLevel level,
+              const std::source_location &loc,
+              const char *fmt, ...) const
 {
-    if (c && (c >= LogChannel(channels().size()) || channels()[c].level) && verbosity) {
+    auto v = c < LogChannel(channels().size()) ? channels()[c].verbosity : 0;
+    if (v == 0) return;
 
-        prefix(verbosity, loc);
+    switch (level) {
 
-        va_list ap;
-        va_start(ap, fmt);
-        vfprintf(stderr, fmt, ap);
-        va_end(ap);
+        case LogLevel::Message:
+
+            prefix(verbosity, loc);
+            break;
+
+        case LogLevel::Warning:
+
+            prefix(verbosity, loc);
+            fprintf(stderr, "WARNING: ");
+            break;
+
+        case LogLevel::Fatal:
+
+            prefix(verbosity, loc);
+            fprintf(stderr, " FATAL ERROR: ");
+            assert(0);
+            exit(1);
+            break;
+
+        case LogLevel::Debug:
+
+            prefix(verbosity, loc);
+            break;
+
+        case LogLevel::Trace:
+
+            tracePrefix(verbosity, loc);
+            prefix(verbosity, loc);
+            break;
+
+        default:
+            fatalError;
     }
-}
 
-void
-Loggable::traceLog(LogChannel c, const std::source_location &loc, const char *fmt, ...) const
-{
-    if (c && (c >= LogChannel(channels().size()) || channels()[c].level) && verbosity) {
-
-        tracePrefix(verbosity, loc);
-        prefix(verbosity, loc);
-
-        va_list ap;
-        va_start(ap, fmt);
-        vfprintf(stderr, fmt, ap);
-        va_end(ap);
-    }
+    va_list ap;
+    va_start(ap, fmt);
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
 }
 
 }

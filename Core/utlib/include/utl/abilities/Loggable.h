@@ -49,8 +49,8 @@ struct LogChannelInfo {
     // Channel identifier
     string name;
 
-    // Debug level (0 = no output)
-    isize  level;
+    // Verbosity level (0 = no output)
+    isize  verbosity;
 
     // Optional description
     string description;
@@ -63,6 +63,9 @@ class Loggable {
 
 public:
 
+    // Message category
+    enum class LogLevel { Message, Warning, Fatal, Debug, Trace };
+
     // Looks up an existing channel or creates a new one if it does not exist
     static LogChannel subscribe(string name, isize level, string description = "");
 
@@ -73,11 +76,10 @@ public:
     static const std::vector<LogChannelInfo> &getChannels() noexcept { return channels(); }
 
     // Output functions (called by macro wrappers)
-    __attribute__((format(printf, 4, 5)))
-    void log(LogChannel channel, const std::source_location &loc, const char *fmt, ...) const;
-
-    __attribute__((format(printf, 4, 5)))
-    void traceLog(LogChannel channel, const std::source_location &loc, const char *fmt, ...) const;
+    __attribute__((format(printf, 5, 6))) void log(LogChannel channel,
+                                                   LogLevel level,
+                                                   const std::source_location &loc,
+                                                   const char *fmt, ...) const;
 
     // Initializing
     Loggable() = default;
@@ -92,26 +94,40 @@ protected:
     virtual void tracePrefix(long verbosity, const std::source_location &) const { };
 };
 
+#define CONCAT(a,b) a##b
+#define LOG_CHANNEL(a) CONCAT(CH_,a)
+
 #define msg(format, ...) { \
-log(0, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
+log(1, LogLevel::Message, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
 
 #define warn(format, ...) { \
-log(1, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
+log(1, LogLevel::Warning, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
 
 #define fatal(format, ...) { \
-log(2, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
+log(1, LogLevel::Fatal, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
 
 #define xfiles(format, ...) { \
-log(3, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
+log(XFILES, LogLevel::Message, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
+
+#ifdef NDEBUG
 
 #define debug(channel, format, ...) \
-do { if ((channel) && verbosity) { \
-log(channel, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+do { if constexpr (channel) { \
+log(LOG_CHANNEL(channel), LogLevel::Debug, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
 }} while (0);
 
 #define trace(channel, format, ...) \
-do { if ((channel) && verbosity) { \
-traceLog(channel, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+do { if constexpr (channel) { \
+log(LOG_CHANNEL(channel), LogLevel::Trace, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
 }} while (0);
 
+#else
+
+#define debug(channel, format, ...) \
+log(LOG_CHANNEL(channel), LogLevel::Debug, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+
+#define trace(channel, format, ...) \
+log(LOG_CHANNEL(channel), LogLevel::Trace, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+
+#endif
 }
