@@ -13,7 +13,9 @@
 #include "utl/io.h"
 #include "utl/support.h"
 
-namespace vamiga {
+using vamiga::HDF_DEBUG;
+
+namespace retro::image {
 
 optional<ImageInfo>
 HDZFile::about(const fs::path &path)
@@ -55,8 +57,8 @@ HDZFile::didLoad()
 {
     debug(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
         
-    {   utl::StopWatch(SNP_DEBUG, "Uncompressing...");
-        
+    {   utl::StopWatch(HDF_DEBUG, "Uncompressing...");
+
         try {
             data.gunzip();
         } catch (std::runtime_error &err) {

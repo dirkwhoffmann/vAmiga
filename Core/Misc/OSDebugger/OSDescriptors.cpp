@@ -193,7 +193,7 @@ ProgramUnitDescriptor::init(const u8 *buf, isize len)
                 for (auto count = read(); count; count = read()) {
 
                     if (count > KB(64)) {
-                        warn("Relocation section too large (%d)\n", count);
+                        // warn("Relocation section too large (%d)\n", count);
                         throw CoreError(CoreError::HUNK_CORRUPTED);
                     }
 

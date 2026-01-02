@@ -11,9 +11,7 @@
 
 #include "HDFFile.h"
 
-namespace vamiga {
-
-using namespace retro::image;
+namespace retro::image {
 
 class HDZFile : public HardDiskImage {
 

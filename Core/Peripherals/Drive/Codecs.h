@@ -21,6 +21,9 @@
 #include "DMSFile.h"
 #include "EXEFile.h"
 
+using retro::image::HDFFile;
+using retro::image::HDZFile;
+
 namespace vamiga {
 
 class Codec {

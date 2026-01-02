@@ -40,13 +40,45 @@
 
 namespace utl {
 
+using LogChannel = isize;
+
+struct LogChannelInfo {
+
+    // Channel identifier
+    string name;
+
+    // Debug level (0 = no output)
+    isize  level;
+
+    // Optional description
+    string description;
+};
+
 class Loggable {
+
+    // Returns a reference to the channel pool
+    static std::vector<LogChannelInfo> &channels();
 
 public:
 
-    // Verbosity level
+    // Logger instance used for subscribing new channels
+    static Loggable main;
+
+    // Looks up an existing channel or creates a new one if it does not exist
+    LogChannel subscribe(string name, isize level, string description = "");
+
+    // Verbosity level passed to the prefix function
     static long verbosity;
 
+    // Returns all registered channels
+    static const std::vector<LogChannelInfo> &getChannels() noexcept { return channels(); }
+
+    // Output function (called by macro wrappers)
+    __attribute__((format(printf, 3, 4)))
+    void printLog(LogChannel channel, const char *format, ...) const;
+
+    // Initializing
+    Loggable() = default;
     virtual ~Loggable() = default;
 
 protected:
@@ -55,28 +87,33 @@ protected:
     virtual void prefix(long verbosity, const void *sender, long line) const { };
 };
 
-#define msg(format, ...) \
-fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__);
+#define msg(format, ...) { \
+printLog(0, format __VA_OPT__(,) __VA_ARGS__); }
 
-#define warn(format, ...) \
-fprintf(stderr, "Warning: " format __VA_OPT__(,) __VA_ARGS__);
+#define warn(format, ...) { \
+printLog(1, "Warning: " format __VA_OPT__(,) __VA_ARGS__); }
 
-#define fatal(format, ...) \
-{ fprintf(stderr, "Fatal: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
+#define fatal(format, ...) { \
+printLog(2, "Fatal: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
 
-#define debug(enable, format, ...) \
-if (enable) { if (verbosity) { \
+#define xfiles(format, ...) { \
 prefix(verbosity, this, __LINE__); \
-fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
+printLog(3, "XFiles: " format __VA_OPT__(,) __VA_ARGS__); }
 
-#define trace(enable, format, ...) \
-if (enable) { if (verbosity) { \
-prefix(5, this, __LINE__); \
-fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
+#define debug(channel, format, ...) \
+do { \
+    if ((channel) && verbosity) { \
+        prefix(verbosity, this, __LINE__); \
+        printLog(channel, format __VA_OPT__(,) __VA_ARGS__); \
+    } \
+} while (0);
 
-#define xfiles(format, ...) \
-if (XFILES) { if (verbosity) { \
-prefix(verbosity, this, __LINE__); \
-fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }}
+#define trace(channel, format, ...) \
+do { \
+    if ((channel) && verbosity) { \
+        prefix(5, this, __LINE__); \
+        printLog(channel, format __VA_OPT__(,) __VA_ARGS__); \
+    } \
+} while (0);
 
 }

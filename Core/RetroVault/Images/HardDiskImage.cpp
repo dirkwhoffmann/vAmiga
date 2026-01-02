@@ -13,6 +13,9 @@
 #include "HDZFile.h"
 #include "utl/io.h"
 
+using retro::image::HDFFile;
+using retro::image::HDZFile;
+
 namespace vamiga {
 
 optional<ImageInfo>

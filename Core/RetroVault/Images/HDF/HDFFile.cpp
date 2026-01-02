@@ -19,7 +19,6 @@
 
 using vamiga::DeviceError;
 using vamiga::BlockNr;
-using vamiga::FSBlock;
 
 namespace retro::image {
 
@@ -246,11 +245,11 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 
     while (ref && ref < (BlockNr)result.numBlocks) {
 
-        const u8 *p = dptr + (ref * 512) + offset;
+        const u8* p = dptr + (ref * 512) + offset;
 
         // Collect all references to bitmap blocks stored in this block
         for (isize i = 0; i < cnt; i++, p += 4) {
-            if (BlockNr bmb = FSBlock::read32(p)) {
+            if (BlockNr bmb = R32BE(p)) { // } FSBlock::read32(p)) {
                 if (isize(bmb) < result.numBlocks) {
                     result.bmBlocks.push_back(bmb);
                 }
@@ -258,7 +257,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
         }
 
         // Continue collecting in the next extension bitmap block
-        if ((ref = FSBlock::read32(p)) != 0) {
+        if ((ref = R32BE(p)) != 0) { // FSBlock::read32(p)) != 0) {
             if (isize(ref) < result.numBlocks) result.bmExtBlocks.push_back(ref);
             cnt = (512 / 4) - 1;
             offset = 0;
