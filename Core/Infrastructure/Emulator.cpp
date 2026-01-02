@@ -87,11 +87,13 @@ Emulator::_dump(Category category, std::ostream &os) const
 
     if (category == Category::Debug) {
 
+        /*
         for (const auto &i : DebugFlagEnum::elements()) {
 
             os << tab(DebugFlagEnum::key(i));
             os << dec(getDebugVariable(DebugFlag(i))) << std::endl;
         }
+        */
     }
     
     if (category == Category::Defaults) {
@@ -418,6 +420,7 @@ Emulator::put(const Command &cmd)
     cmdQueue.put(cmd);
 }
 
+/*
 int
 Emulator::getDebugVariable(DebugFlag flag)
 {
@@ -698,5 +701,6 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
     
 #endif
 }
+*/
 
 }

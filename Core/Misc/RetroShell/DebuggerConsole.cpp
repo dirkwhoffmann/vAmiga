@@ -1578,7 +1578,8 @@ DebuggerConsole::initCommands(RSCommand &root)
             dump(os, emulator, Category::Debug);
         }
     });
-    
+
+    /*
     if (debugBuild) {
         
         for (auto i : DebugFlagEnum::elements()) {
@@ -1611,6 +1612,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 }
         });
     }
+    */
     
     root.add({
         

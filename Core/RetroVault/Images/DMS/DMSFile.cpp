@@ -51,7 +51,7 @@ DMSFile::didLoad()
     u8* adfData = nullptr;
     size_t adfSize = 0;
     
-    if (extractDMS(data.ptr, (size_t)data.size, &adfData, &adfSize, DMS_DEBUG) == 0) {
+    if (extractDMS(data.ptr, (size_t)data.size, &adfData, &adfSize, (int)DMS_DEBUG) == 0) {
 
         if (!FORCE_DMS_CANT_CREATE) {
             adf.init(adfData, isize(adfSize));

@@ -9,166 +9,154 @@
 
 #include "config.h"
 
+#include "utl/abilities/Loggable.h"
+
+#define CONCAT(a,b) a##b
+#define EXPAND_CONCAT(a,b) CONCAT(a,b)
+
+#define STR(x) #x
+#define XSTR(x) STR(x)
+
+#define DEBUG_CHANNEL(name, description) \
+LogChannel EXPAND_CONCAT(CH, name) = \
+Loggable::subscribe(XSTR(name), name, description);
+
 namespace vamiga {
 
+using namespace utl;
+
+//
+// Register a logging channel for each debug flag
+
 // General
-debugflag XFILES          = 0;
-debugflag CNF_DEBUG       = 0;
-debugflag OBJ_DEBUG       = 0;
-debugflag DEF_DEBUG       = 0;
-debugflag MIMIC_UAE       = 0;
+DEBUG_CHANNEL(XFILES,           "Report paranormal activity")
+DEBUG_CHANNEL(CNF_DEBUG,        "Configuration options")
+DEBUG_CHANNEL(OBJ_DEBUG,        "Object life-times")
+DEBUG_CHANNEL(DEF_DEBUG,        "User defaults")
+DEBUG_CHANNEL(MIMIC_UAE,        "Deprecated")
 
 // Runloop
-debugflag RUN_DEBUG       = 0;
-debugflag TIM_DEBUG       = 0;
-debugflag WARP_DEBUG      = 0;
-debugflag CMD_DEBUG       = 0;
-debugflag MSG_DEBUG       = 0;
-debugflag SNP_DEBUG       = 0;
+DEBUG_CHANNEL(RUN_DEBUG,        "Run loop, component states");
+DEBUG_CHANNEL(TIM_DEBUG,        "Thread synchronization");
+DEBUG_CHANNEL(WARP_DEBUG,       "Warp mode");
+DEBUG_CHANNEL(CMD_DEBUG,        "Command queue");
+DEBUG_CHANNEL(MSG_DEBUG,        "Message queue");
+DEBUG_CHANNEL(SNP_DEBUG,        "Serialization (snapshots)");
 
 // Run ahead
-debugflag RUA_DEBUG       = 0;
-debugflag RUA_CHECKSUM    = 0;
-debugflag RUA_ON_STEROIDS = 0;
+DEBUG_CHANNEL(RUA_DEBUG,        "Run-ahead activit");
+DEBUG_CHANNEL(RUA_CHECKSUM,     "Run-ahead instance integrity");
+DEBUG_CHANNEL(RUA_ON_STEROIDS,  "Update RUA instance every frame");
 
 // CPU
-debugflag CPU_DEBUG       = 0;
+DEBUG_CHANNEL(CPU_DEBUG,        "CPU");
 
 // Memory access
-debugflag OCSREG_DEBUG    = 0;
-debugflag ECSREG_DEBUG    = 0;
-debugflag INVREG_DEBUG    = 0;
-debugflag MEM_DEBUG       = 0;
+DEBUG_CHANNEL(OCSREG_DEBUG,     "General OCS register debugging");
+DEBUG_CHANNEL(ECSREG_DEBUG,     "Special ECS register debugging");
+DEBUG_CHANNEL(INVREG_DEBUG,     "Invalid register accesses");
+DEBUG_CHANNEL(MEM_DEBUG,        "Memory");
 
 // Agnus
-debugflag DMA_DEBUG       = 0;
-debugflag DDF_DEBUG       = 0;
-debugflag SEQ_DEBUG       = 0;
-debugflag SEQ_ON_STEROIDS = 0;
-debugflag NTSC_DEBUG      = 0;
+DEBUG_CHANNEL(DMA_DEBUG,        "DMA registers");
+DEBUG_CHANNEL(DDF_DEBUG,        "Display data fetch");
+DEBUG_CHANNEL(SEQ_DEBUG,        "Bitplane sequencer");
+DEBUG_CHANNEL(SEQ_ON_STEROIDS,  "Disable sequencer fast-paths");
+DEBUG_CHANNEL(NTSC_DEBUG,       "NTSC mode");
 
 // Copper
-debugflag COP_CHECKSUM    = 0;
-debugflag COPREG_DEBUG    = 0;
-debugflag COP_DEBUG       = 0;
+DEBUG_CHANNEL(COP_CHECKSUM,     "Compute Copper checksums");
+DEBUG_CHANNEL(COPREG_DEBUG,     "Copper registers");
+DEBUG_CHANNEL(COP_DEBUG,        "Copper execution");
 
 // Blitter
-debugflag BLT_CHECKSUM    = 0;
-debugflag BLTREG_DEBUG    = 0;
-debugflag BLT_REG_GUARD   = 0;
-debugflag BLT_MEM_GUARD   = 0;
-debugflag BLT_DEBUG       = 0;
-debugflag BLTTIM_DEBUG    = 0;
-debugflag SLOW_BLT_DEBUG  = 0;
+DEBUG_CHANNEL(BLT_CHECKSUM,     "Compute Blitter checksums");
+DEBUG_CHANNEL(BLTREG_DEBUG,     "Blitter registers");
+DEBUG_CHANNEL(BLT_REG_GUARD,    "Guard registers while Blitter runs");
+DEBUG_CHANNEL(BLT_MEM_GUARD,    "Guard memory while Blitter runs");
+DEBUG_CHANNEL(BLT_DEBUG,        "Blitter execution");
+DEBUG_CHANNEL(BLTTIM_DEBUG,     "Blitter Timing");
+DEBUG_CHANNEL(SLOW_BLT_DEBUG,   "Execute micro-instructions in one chunk");
 
 // Denise
-debugflag BPLREG_DEBUG    = 0;
-debugflag BPLDAT_DEBUG    = 0;
-debugflag BPLMOD_DEBUG    = 0;
-debugflag SPRREG_DEBUG    = 0;
-debugflag COLREG_DEBUG    = 0;
-debugflag CLXREG_DEBUG    = 0;
-debugflag BPL_ON_STEROIDS = 0;
-debugflag DIW_DEBUG       = 0;
-debugflag SPR_DEBUG       = 0;
-debugflag CLX_DEBUG       = 0;
-debugflag BORDER_DEBUG    = 0;
-debugflag LINE_DEBUG      = 0;
+DEBUG_CHANNEL(BPLREG_DEBUG,     "Bitplane registers");
+DEBUG_CHANNEL(BPLDAT_DEBUG,     "BPLxDAT registers");
+DEBUG_CHANNEL(BPLMOD_DEBUG,     "BPLxMOD registers");
+DEBUG_CHANNEL(SPRREG_DEBUG,     "Sprite registers");
+DEBUG_CHANNEL(COLREG_DEBUG,     "Color registers");
+DEBUG_CHANNEL(CLXREG_DEBUG,     "Collision detection registers");
+DEBUG_CHANNEL(BPL_ON_STEROIDS,  "Disable drawing fast-paths");
+DEBUG_CHANNEL(DIW_DEBUG,        "Display window");
+DEBUG_CHANNEL(SPR_DEBUG,        "Sprites");
+DEBUG_CHANNEL(CLX_DEBUG,        "Collision detection");
+DEBUG_CHANNEL(BORDER_DEBUG,     "Draw the border in debug colors");
+DEBUG_CHANNEL(LINE_DEBUG,       "Draw a certain line in debug color");
 
 // Paula
-debugflag INTREG_DEBUG    = 0;
-debugflag INT_DEBUG       = 0;
+DEBUG_CHANNEL(INTREG_DEBUG,     "Interrupt registers");
+DEBUG_CHANNEL(INT_DEBUG,        "Interrupt logic");
 
 // CIAs
-debugflag CIAREG_DEBUG    = 0;
-debugflag CIASER_DEBUG    = 0;
-debugflag CIA_DEBUG       = 0;
-debugflag TOD_DEBUG       = 0;
+DEBUG_CHANNEL(CIAREG_DEBUG,     "CIA registers");
+DEBUG_CHANNEL(CIASER_DEBUG,     "CIA serial register");
+DEBUG_CHANNEL(CIA_DEBUG,        "CIA execution");
+DEBUG_CHANNEL(TOD_DEBUG,        "TODs (CIA 24-bit counters)");
 
 // Floppy Drives
-debugflag ALIGN_HEAD      = 0;
-debugflag DSK_CHECKSUM    = 0;
-debugflag DSKREG_DEBUG    = 0;
-debugflag DSK_DEBUG       = 0;
-debugflag MFM_DEBUG       = 1;
-debugflag FS_DEBUG        = 0;
+DEBUG_CHANNEL(ALIGN_HEAD,       "Make head movement deterministic");
+DEBUG_CHANNEL(DSK_CHECKSUM,     "Compute disk checksums");
+DEBUG_CHANNEL(DSKREG_DEBUG,     "Disk controller registers");
+DEBUG_CHANNEL(DSK_DEBUG,        "Disk controller execution");
+DEBUG_CHANNEL(MFM_DEBUG,        "Disk encoder / decoder");
+DEBUG_CHANNEL(FS_DEBUG,         "File System Classes (OFS / FFS)");
 
 // Hard Drives
-debugflag HDR_ACCEPT_ALL  = 0;
-debugflag HDR_FS_LOAD_ALL = 0;
-debugflag WT_DEBUG        = 0;
+DEBUG_CHANNEL(HDR_ACCEPT_ALL,   "Disables hard drive layout checks");
+DEBUG_CHANNEL(HDR_FS_LOAD_ALL,  "Don't filter out unneeded file systems");
+DEBUG_CHANNEL(WT_DEBUG,         "Write-through mode");
 
 // Audio
-debugflag AUDREG_DEBUG    = 0;
-debugflag AUD_DEBUG       = 0;
-debugflag AUDBUF_DEBUG    = 0;
-debugflag AUDVOL_DEBUG    = 0;
-debugflag DISABLE_AUDIRQ  = 0;
+DEBUG_CHANNEL(AUDREG_DEBUG,     "Audio registers");
+DEBUG_CHANNEL(AUD_DEBUG,        "Audio execution");
+DEBUG_CHANNEL(AUDBUF_DEBUG,     "Audio execution");
+DEBUG_CHANNEL(AUDVOL_DEBUG,     "Audio execution");
+DEBUG_CHANNEL(DISABLE_AUDIRQ,   "Audio execution");
 
 // Ports
-debugflag POSREG_DEBUG    = 0;
-debugflag JOYREG_DEBUG    = 0;
-debugflag POTREG_DEBUG    = 0;
-debugflag VID_DEBUG       = 0;
-debugflag PRT_DEBUG       = 0;
-debugflag SER_DEBUG       = 0;
-debugflag POT_DEBUG       = 0;
-debugflag HOLD_MOUSE_L    = 0;
-debugflag HOLD_MOUSE_M    = 0;
-debugflag HOLD_MOUSE_R    = 0;
+DEBUG_CHANNEL(POSREG_DEBUG,     "Audio execution");
+DEBUG_CHANNEL(JOYREG_DEBUG,     "Audio execution");
+DEBUG_CHANNEL(POTREG_DEBUG,     "Audio execution");
+DEBUG_CHANNEL(VID_DEBUG,        "Audio execution");
+DEBUG_CHANNEL(PRT_DEBUG,        "Audio execution");
+DEBUG_CHANNEL(SER_DEBUG,        "Audio execution");
+DEBUG_CHANNEL(POT_DEBUG,        "Audio execution");
+DEBUG_CHANNEL(HOLD_MOUSE_L,     "Hold down the left mouse button");
+DEBUG_CHANNEL(HOLD_MOUSE_M,     "Hold down the middle mouse button");
+DEBUG_CHANNEL(HOLD_MOUSE_R,     "Hold down the right mouse button");
 
 // Expansion boards
-debugflag ZOR_DEBUG       = 0;
-debugflag ACF_DEBUG       = 0;
-debugflag FAS_DEBUG       = 0;
-debugflag HDR_DEBUG       = 0;
-debugflag DBD_DEBUG       = 0;
+DEBUG_CHANNEL(ZOR_DEBUG,        "Zorro space");
+DEBUG_CHANNEL(ACF_DEBUG,        "Autoconfig");
+DEBUG_CHANNEL(FAS_DEBUG,        "FastRam");
+DEBUG_CHANNEL(HDR_DEBUG,        "HardDrive");
+DEBUG_CHANNEL(DBD_DEBUG,        "DebugBoard");
 
 // Media types
-debugflag ADF_DEBUG       = 0;
-debugflag HDF_DEBUG       = 0;
-debugflag DMS_DEBUG       = 0;
-debugflag IMG_DEBUG       = 1;
+DEBUG_CHANNEL(ADF_DEBUG,        "ADF, ADZ and extended ADF files");
+DEBUG_CHANNEL(HDF_DEBUG,        "HDF and HDZ files");
+DEBUG_CHANNEL(DMS_DEBUG,        "DMS files");
+DEBUG_CHANNEL(IMG_DEBUG,        "IMG files, ST files");
 
 // Other components
-debugflag RTC_DEBUG       = 0;
-debugflag KBD_DEBUG       = 0;
-debugflag KEY_DEBUG       = 0;
+DEBUG_CHANNEL(RTC_DEBUG,        "Real-time clock");
+DEBUG_CHANNEL(KBD_DEBUG,        "Keyboard");
+DEBUG_CHANNEL(KEY_DEBUG,        "Keyboard key events");
 
 // Misc
-debugflag RSH_DEBUG       = 0;
-debugflag REC_DEBUG       = 0;
-debugflag SCK_DEBUG       = 0;
-debugflag SRV_DEBUG       = 0;
-debugflag GDB_DEBUG       = 0;
-
-
-//
-// Forced error conditions
-//
-
-debugflag FORCE_LAUNCH_ERROR             = 0;
-debugflag FORCE_ROM_MISSING              = 0;
-debugflag FORCE_CHIP_RAM_MISSING         = 0;
-debugflag FORCE_AROS_NO_EXTROM           = 0;
-debugflag FORCE_AROS_RAM_LIMIT           = 0;
-debugflag FORCE_CHIP_RAM_LIMIT           = 0;
-debugflag FORCE_SNAP_TOO_OLD             = 0;
-debugflag FORCE_SNAP_TOO_NEW             = 0;
-debugflag FORCE_SNAP_IS_BETA             = 0;
-debugflag FORCE_SNAP_CORRUPTED           = 0;
-debugflag FORCE_DISK_INVALID_LAYOUT      = 0;
-debugflag FORCE_DISK_MODIFIED            = 0;
-debugflag FORCE_HDR_TOO_LARGE            = 0;
-debugflag FORCE_HDR_UNSUPPORTED_C        = 0;
-debugflag FORCE_HDR_UNSUPPORTED_H        = 0;
-debugflag FORCE_HDR_UNSUPPORTED_S        = 0;
-debugflag FORCE_HDR_UNSUPPORTED_B        = 0;
-debugflag FORCE_HDR_UNKNOWN_GEOMETRY     = 0;
-debugflag FORCE_HDR_MODIFIED             = 0;
-debugflag FORCE_FS_WRONG_BSIZE           = 0;
-debugflag FORCE_FS_WRONG_CAPACITY        = 0;
-debugflag FORCE_FS_WRONG_DOS_TYPE        = 0;
-debugflag FORCE_DMS_CANT_CREATE          = 0;
+DEBUG_CHANNEL(RSH_DEBUG,        "RetroShell");
+DEBUG_CHANNEL(REC_DEBUG,        "Screen recorde");
+DEBUG_CHANNEL(SCK_DEBUG,        "Sockets");
+DEBUG_CHANNEL(SRV_DEBUG,        "Remote server");
+DEBUG_CHANNEL(GDB_DEBUG,        "GDB server");
 
 }

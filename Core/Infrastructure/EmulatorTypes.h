@@ -18,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/*
 enum class DebugFlag
 {
     // General
@@ -390,18 +391,18 @@ struct DebugFlagEnum : Reflectable<DebugFlagEnum, DebugFlag>
                 // Audio
             case DebugFlag::AUDREG_DEBUG:     return "Audio registers";
             case DebugFlag::AUD_DEBUG:        return "Audio execution";
-            case DebugFlag::AUDBUF_DEBUG:     return "Audio buffers";
+            case DebugFlag::AUDBUF_DEBUG:     return "Audio execution";
             case DebugFlag::AUDVOL_DEBUG:     return "Audio volumes";
-            case DebugFlag::DISABLE_AUDIRQ:   return "Disable audio interrupts";
+            case DebugFlag::DISABLE_AUDIRQ:   return "Audio execution";
 
                 // Ports
-            case DebugFlag::POSREG_DEBUG:     return "POSxxx registers";
-            case DebugFlag::JOYREG_DEBUG:     return "JOYxxx registers";
-            case DebugFlag::POTREG_DEBUG:     return "POTxxx registers";
-            case DebugFlag::VID_DEBUG:        return "Video port";
-            case DebugFlag::PRT_DEBUG:        return "Control ports and connected devices";
-            case DebugFlag::SER_DEBUG:        return "Serial interface";
-            case DebugFlag::POT_DEBUG:        return "Potentiometer inputs";
+            case DebugFlag::POSREG_DEBUG:     return "Audio execution";
+            case DebugFlag::JOYREG_DEBUG:     return "Audio execution";
+            case DebugFlag::POTREG_DEBUG:     return "Audio execution";
+            case DebugFlag::VID_DEBUG:        return "Audio execution";
+            case DebugFlag::PRT_DEBUG:        return "Audio execution";
+            case DebugFlag::SER_DEBUG:        return "Audio execution";
+            case DebugFlag::POT_DEBUG:        return "Audio execution";
             case DebugFlag::HOLD_MOUSE_L:     return "Hold down the left mouse button";
             case DebugFlag::HOLD_MOUSE_M:     return "Hold down the middle mouse button";
             case DebugFlag::HOLD_MOUSE_R:     return "Hold down the right mouse button";
@@ -434,6 +435,7 @@ struct DebugFlagEnum : Reflectable<DebugFlagEnum, DebugFlag>
         return "???";
     }
 };
+*/
 
 //
 // Structures

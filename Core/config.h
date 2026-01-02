@@ -55,11 +55,11 @@ static constexpr bool betaRelease = VER_BETA != 0;
 #ifdef NDEBUG
 static constexpr bool releaseBuild = 1;
 static constexpr bool debugBuild = 0;
-typedef const int debugflag;
+typedef const long debugflag;
 #else
 static constexpr bool releaseBuild = 0;
 static constexpr bool debugBuild = 1;
-typedef int debugflag;
+typedef long debugflag;
 #endif
 
 #ifdef __EMSCRIPTEN__
@@ -77,167 +77,167 @@ static constexpr bool vAmigaDOS = 0;
 namespace vamiga {
 
 // General
-extern debugflag XFILES;
-extern debugflag CNF_DEBUG;
-extern debugflag OBJ_DEBUG;
-extern debugflag DEF_DEBUG;
-extern debugflag MIMIC_UAE;
+constexpr long XFILES             = 0;
+constexpr long CNF_DEBUG          = 0;
+constexpr long OBJ_DEBUG          = 0;
+constexpr long DEF_DEBUG          = 0;
+constexpr long MIMIC_UAE          = 0;
 
 // Emulator
-extern debugflag RUN_DEBUG;
-extern debugflag TIM_DEBUG;
-extern debugflag WARP_DEBUG;
-extern debugflag CMD_DEBUG;
-extern debugflag MSG_DEBUG;
-extern debugflag SNP_DEBUG;
+constexpr long RUN_DEBUG          = 0;
+constexpr long TIM_DEBUG          = 0;
+constexpr long WARP_DEBUG         = 0;
+constexpr long CMD_DEBUG          = 0;
+constexpr long MSG_DEBUG          = 0;
+constexpr long SNP_DEBUG          = 0;
 
 // Run ahead
-extern debugflag RUA_DEBUG;
-extern debugflag RUA_CHECKSUM;
-extern debugflag RUA_ON_STEROIDS;
+constexpr long RUA_DEBUG          = 0;
+constexpr long RUA_CHECKSUM       = 0;
+constexpr long RUA_ON_STEROIDS    = 0;
 
 // CPU
-extern debugflag CPU_DEBUG;
+constexpr long CPU_DEBUG          = 0;
 
 // Memory access
-extern debugflag OCSREG_DEBUG;
-extern debugflag ECSREG_DEBUG;
-extern debugflag INVREG_DEBUG;
-extern debugflag MEM_DEBUG;
+constexpr long OCSREG_DEBUG       = 0;
+constexpr long ECSREG_DEBUG       = 0;
+constexpr long INVREG_DEBUG       = 0;
+constexpr long MEM_DEBUG          = 0;
 
 // Agnus
-extern debugflag DMA_DEBUG;
-extern debugflag DDF_DEBUG;
-extern debugflag SEQ_DEBUG;
-extern debugflag SEQ_ON_STEROIDS;
-extern debugflag NTSC_DEBUG;
+constexpr long DMA_DEBUG          = 0;
+constexpr long DDF_DEBUG          = 0;
+constexpr long SEQ_DEBUG          = 0;
+constexpr long SEQ_ON_STEROIDS    = 0;
+constexpr long NTSC_DEBUG         = 0;
 
 // Copper
-extern debugflag COP_CHECKSUM;
-extern debugflag COPREG_DEBUG;
-extern debugflag COP_DEBUG;
+constexpr long COP_CHECKSUM       = 0;
+constexpr long COPREG_DEBUG       = 0;
+constexpr long COP_DEBUG          = 0;
 
 // Blitter
-extern debugflag BLT_CHECKSUM;
-extern debugflag BLTREG_DEBUG;
-extern debugflag BLT_REG_GUARD;
-extern debugflag BLT_MEM_GUARD;
-extern debugflag BLT_DEBUG;
-extern debugflag BLTTIM_DEBUG;
-extern debugflag SLOW_BLT_DEBUG;
+constexpr long BLT_CHECKSUM       = 0;
+constexpr long BLTREG_DEBUG       = 0;
+constexpr long BLT_REG_GUARD      = 0;
+constexpr long BLT_MEM_GUARD      = 0;
+constexpr long BLT_DEBUG          = 0;
+constexpr long BLTTIM_DEBUG       = 0;
+constexpr long SLOW_BLT_DEBUG     = 0;
 
 // Denise
-extern debugflag BPLREG_DEBUG;
-extern debugflag BPLDAT_DEBUG;
-extern debugflag BPLMOD_DEBUG;
-extern debugflag SPRREG_DEBUG;
-extern debugflag COLREG_DEBUG;
-extern debugflag CLXREG_DEBUG;
-extern debugflag BPL_ON_STEROIDS;
-extern debugflag DIW_DEBUG;
-extern debugflag SPR_DEBUG;
-extern debugflag CLX_DEBUG;
-extern debugflag BORDER_DEBUG;
-extern debugflag LINE_DEBUG;
-extern debugflag DENISE_ON_STEROIDS;
+constexpr long BPLREG_DEBUG       = 0;
+constexpr long BPLDAT_DEBUG       = 0;
+constexpr long BPLMOD_DEBUG       = 0;
+constexpr long SPRREG_DEBUG       = 0;
+constexpr long COLREG_DEBUG       = 0;
+constexpr long CLXREG_DEBUG       = 0;
+constexpr long BPL_ON_STEROIDS    = 0;
+constexpr long DIW_DEBUG          = 0;
+constexpr long SPR_DEBUG          = 0;
+constexpr long CLX_DEBUG          = 0;
+constexpr long BORDER_DEBUG       = 0;
+constexpr long LINE_DEBUG         = 0;
+constexpr long DENISE_ON_STEROIDS = 0;
 
 // Paula
-extern debugflag INTREG_DEBUG;
-extern debugflag INT_DEBUG;
+constexpr long INTREG_DEBUG       = 0;
+constexpr long INT_DEBUG          = 0;
 
 // CIAs
-extern debugflag CIAREG_DEBUG;
-extern debugflag CIASER_DEBUG;
-extern debugflag CIA_DEBUG;
-extern debugflag TOD_DEBUG;
+constexpr long CIAREG_DEBUG       = 0;
+constexpr long CIASER_DEBUG       = 0;
+constexpr long CIA_DEBUG          = 0;
+constexpr long TOD_DEBUG          = 0;
 
 // Floppy Drives
-extern debugflag ALIGN_HEAD;
-extern debugflag DSK_CHECKSUM;
-extern debugflag DSKREG_DEBUG;
-extern debugflag DSK_DEBUG;
-extern debugflag MFM_DEBUG;
-extern debugflag FS_DEBUG;
+constexpr long ALIGN_HEAD         = 0;
+constexpr long DSK_CHECKSUM       = 0;
+constexpr long DSKREG_DEBUG       = 0;
+constexpr long DSK_DEBUG          = 0;
+constexpr long MFM_DEBUG          = 0;
+constexpr long FS_DEBUG           = 0;
 
 // Hard Drives
-extern debugflag HDR_ACCEPT_ALL;
-extern debugflag HDR_FS_LOAD_ALL;
-extern debugflag WT_DEBUG;
+constexpr long HDR_ACCEPT_ALL     = 0;
+constexpr long HDR_FS_LOAD_ALL    = 0;
+constexpr long WT_DEBUG           = 0;
 
 // Audio
-extern debugflag AUDREG_DEBUG;
-extern debugflag AUD_DEBUG;
-extern debugflag AUDBUF_DEBUG;
-extern debugflag AUDVOL_DEBUG;
-extern debugflag DISABLE_AUDIRQ;
+constexpr long AUDREG_DEBUG       = 0;
+constexpr long AUD_DEBUG          = 0;
+constexpr long AUDBUF_DEBUG       = 0;
+constexpr long AUDVOL_DEBUG       = 0;
+constexpr long DISABLE_AUDIRQ     = 0;
 
 // Ports
-extern debugflag POSREG_DEBUG;
-extern debugflag JOYREG_DEBUG;
-extern debugflag POTREG_DEBUG;
-extern debugflag VID_DEBUG;
-extern debugflag PRT_DEBUG;
-extern debugflag SER_DEBUG;
-extern debugflag POT_DEBUG;
-extern debugflag HOLD_MOUSE_L;
-extern debugflag HOLD_MOUSE_M;
-extern debugflag HOLD_MOUSE_R;
+constexpr long POSREG_DEBUG       = 0;
+constexpr long JOYREG_DEBUG       = 0;
+constexpr long POTREG_DEBUG       = 0;
+constexpr long VID_DEBUG          = 0;
+constexpr long PRT_DEBUG          = 0;
+constexpr long SER_DEBUG          = 0;
+constexpr long POT_DEBUG          = 0;
+constexpr long HOLD_MOUSE_L       = 0;
+constexpr long HOLD_MOUSE_M       = 0;
+constexpr long HOLD_MOUSE_R       = 0;
 
 // Expansion boards
-extern debugflag ZOR_DEBUG;
-extern debugflag ACF_DEBUG;
-extern debugflag FAS_DEBUG;
-extern debugflag HDR_DEBUG;
-extern debugflag DBD_DEBUG;
+constexpr long ZOR_DEBUG          = 0;
+constexpr long ACF_DEBUG          = 0;
+constexpr long FAS_DEBUG          = 0;
+constexpr long HDR_DEBUG          = 0;
+constexpr long DBD_DEBUG          = 0;
 
 // Media types
-extern debugflag ADF_DEBUG;
-extern debugflag HDF_DEBUG;
-extern debugflag DMS_DEBUG;
-extern debugflag IMG_DEBUG;
+constexpr long ADF_DEBUG          = 0;
+constexpr long HDF_DEBUG          = 0;
+constexpr long DMS_DEBUG          = 0;
+constexpr long IMG_DEBUG          = 0;
 
 // Real-time clock
-extern debugflag RTC_DEBUG;
+constexpr long RTC_DEBUG          = 0;
 
 // Keyboard
-extern debugflag KBD_DEBUG;
-extern debugflag KEY_DEBUG;
+constexpr long KBD_DEBUG          = 0;
+constexpr long KEY_DEBUG          = 0;
 
 // Misc
-extern debugflag RSH_DEBUG;
-extern debugflag REC_DEBUG;
-extern debugflag SCK_DEBUG;
-extern debugflag SRV_DEBUG;
-extern debugflag GDB_DEBUG;
+constexpr long RSH_DEBUG          = 0;
+constexpr long REC_DEBUG          = 0;
+constexpr long SCK_DEBUG          = 0;
+constexpr long SRV_DEBUG          = 0;
+constexpr long GDB_DEBUG          = 0;
 
 
 //
 // Forced error conditions
 //
 
-extern debugflag FORCE_LAUNCH_ERROR;
-extern debugflag FORCE_ROM_MISSING;
-extern debugflag FORCE_CHIP_RAM_MISSING;
-extern debugflag FORCE_AROS_NO_EXTROM;
-extern debugflag FORCE_AROS_RAM_LIMIT;
-extern debugflag FORCE_CHIP_RAM_LIMIT;
-extern debugflag FORCE_SNAP_TOO_OLD;
-extern debugflag FORCE_SNAP_TOO_NEW;
-extern debugflag FORCE_SNAP_IS_BETA;
-extern debugflag FORCE_SNAP_CORRUPTED;
-extern debugflag FORCE_DISK_INVALID_LAYOUT;
-extern debugflag FORCE_DISK_MODIFIED;
-extern debugflag FORCE_HDR_TOO_LARGE;
-extern debugflag FORCE_HDR_UNSUPPORTED_C;
-extern debugflag FORCE_HDR_UNSUPPORTED_H;
-extern debugflag FORCE_HDR_UNSUPPORTED_S;
-extern debugflag FORCE_HDR_UNSUPPORTED_B;
-extern debugflag FORCE_HDR_UNKNOWN_GEOMETRY;
-extern debugflag FORCE_HDR_MODIFIED;
-extern debugflag FORCE_FS_WRONG_BSIZE;
-extern debugflag FORCE_FS_WRONG_CAPACITY;
-extern debugflag FORCE_FS_WRONG_DOS_TYPE;
-extern debugflag FORCE_DMS_CANT_CREATE;
+constexpr long FORCE_LAUNCH_ERROR           = 0;
+constexpr long FORCE_ROM_MISSING            = 0;
+constexpr long FORCE_CHIP_RAM_MISSING       = 0;
+constexpr long FORCE_AROS_NO_EXTROM         = 0;
+constexpr long FORCE_AROS_RAM_LIMIT         = 0;
+constexpr long FORCE_CHIP_RAM_LIMIT         = 0;
+constexpr long FORCE_SNAP_TOO_OLD           = 0;
+constexpr long FORCE_SNAP_TOO_NEW           = 0;
+constexpr long FORCE_SNAP_IS_BETA           = 0;
+constexpr long FORCE_SNAP_CORRUPTED         = 0;
+constexpr long FORCE_DISK_INVALID_LAYOUT    = 0;
+constexpr long FORCE_DISK_MODIFIED          = 0;
+constexpr long FORCE_HDR_TOO_LARGE          = 0;
+constexpr long FORCE_HDR_UNSUPPORTED_C      = 0;
+constexpr long FORCE_HDR_UNSUPPORTED_H      = 0;
+constexpr long FORCE_HDR_UNSUPPORTED_S      = 0;
+constexpr long FORCE_HDR_UNSUPPORTED_B      = 0;
+constexpr long FORCE_HDR_UNKNOWN_GEOMETRY   = 0;
+constexpr long FORCE_HDR_MODIFIED           = 0;
+constexpr long FORCE_FS_WRONG_BSIZE         = 0;
+constexpr long FORCE_FS_WRONG_CAPACITY      = 0;
+constexpr long FORCE_FS_WRONG_DOS_TYPE      = 0;
+constexpr long FORCE_DMS_CANT_CREATE        = 0;
 
 }
 
