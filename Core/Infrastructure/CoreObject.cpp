@@ -24,15 +24,13 @@ CoreObject::CoreObject()
 }
 
 void
-CoreObject::prefix(long level, const void *sender, long line) const
+CoreObject::prefix(long level, const std::source_location &loc) const
 {
-    auto *obj = dynamic_cast<CoreObject *>((CoreObject *)sender);
-
     if (level == 1) {
-        fprintf(stderr, "%s: ", obj ? obj->objectName() : "");
+        fprintf(stderr, "%s: ", objectName());
     }
     if (level >= 2) {
-        fprintf(stderr, "%s:%ld ", obj ? obj->objectName() : "", line);
+        fprintf(stderr, "%s:%u: ", objectName(), loc.line());
     }
 }
 

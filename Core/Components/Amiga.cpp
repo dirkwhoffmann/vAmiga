@@ -90,7 +90,7 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::prefix(long level, const void *sender, long line) const
+Amiga::tracePrefix(long level, const std::source_location &loc) const
 {
     if (level) {
         
@@ -121,10 +121,6 @@ Amiga::prefix(long level, const void *sender, long line) const
                     (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
             
             fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
-        }
-        if (level >= 2) {
-
-            CoreObject::prefix(level, sender, line);
         }
     }
 }

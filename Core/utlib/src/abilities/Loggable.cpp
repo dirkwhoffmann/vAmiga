@@ -12,7 +12,6 @@
 namespace utl {
 
 long Loggable::verbosity = 3;
-Loggable Loggable::main;
 
 std::vector<LogChannelInfo> &
 Loggable::channels()
@@ -58,13 +57,30 @@ Loggable::subscribe(string name, isize level, string description)
 }
 
 void
-Loggable::printLog(LogChannel c, const char *format, ...) const
+Loggable::log(LogChannel c, const std::source_location &loc, const char *fmt, ...) const
 {
     if (c && (c >= LogChannel(channels().size()) || channels()[c].level) && verbosity) {
 
+        prefix(verbosity, loc);
+
         va_list ap;
-        va_start(ap, format);
-        vfprintf(stderr, format, ap);
+        va_start(ap, fmt);
+        vfprintf(stderr, fmt, ap);
+        va_end(ap);
+    }
+}
+
+void
+Loggable::traceLog(LogChannel c, const std::source_location &loc, const char *fmt, ...) const
+{
+    if (c && (c >= LogChannel(channels().size()) || channels()[c].level) && verbosity) {
+
+        tracePrefix(verbosity, loc);
+        prefix(verbosity, loc);
+
+        va_list ap;
+        va_start(ap, fmt);
+        vfprintf(stderr, fmt, ap);
         va_end(ap);
     }
 }

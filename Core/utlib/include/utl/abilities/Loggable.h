@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <source_location>
+
 /* This file provides several macros for printing messages:
  *
  *   - msg    Information message   (Shows up in all builds)
@@ -61,11 +63,8 @@ class Loggable {
 
 public:
 
-    // Logger instance used for subscribing new channels
-    static Loggable main;
-
     // Looks up an existing channel or creates a new one if it does not exist
-    LogChannel subscribe(string name, isize level, string description = "");
+    static LogChannel subscribe(string name, isize level, string description = "");
 
     // Verbosity level passed to the prefix function
     static long verbosity;
@@ -73,9 +72,12 @@ public:
     // Returns all registered channels
     static const std::vector<LogChannelInfo> &getChannels() noexcept { return channels(); }
 
-    // Output function (called by macro wrappers)
-    __attribute__((format(printf, 3, 4)))
-    void printLog(LogChannel channel, const char *format, ...) const;
+    // Output functions (called by macro wrappers)
+    __attribute__((format(printf, 4, 5)))
+    void log(LogChannel channel, const std::source_location &loc, const char *fmt, ...) const;
+
+    __attribute__((format(printf, 4, 5)))
+    void traceLog(LogChannel channel, const std::source_location &loc, const char *fmt, ...) const;
 
     // Initializing
     Loggable() = default;
@@ -83,37 +85,33 @@ public:
 
 protected:
 
-    // Called by debug() and trace() to produce a detailed debug output
-    virtual void prefix(long verbosity, const void *sender, long line) const { };
+    // Prefix printed prior to the debug message
+    virtual void prefix(long verbosity, const std::source_location &) const { };
+
+    // Additional prefix printed by trace()
+    virtual void tracePrefix(long verbosity, const std::source_location &) const { };
 };
 
 #define msg(format, ...) { \
-printLog(0, format __VA_OPT__(,) __VA_ARGS__); }
+log(0, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
 
 #define warn(format, ...) { \
-printLog(1, "Warning: " format __VA_OPT__(,) __VA_ARGS__); }
+log(1, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
 
 #define fatal(format, ...) { \
-printLog(2, "Fatal: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
+log(2, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
 
 #define xfiles(format, ...) { \
-prefix(verbosity, this, __LINE__); \
-printLog(3, "XFiles: " format __VA_OPT__(,) __VA_ARGS__); }
+log(3, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
 
 #define debug(channel, format, ...) \
-do { \
-    if ((channel) && verbosity) { \
-        prefix(verbosity, this, __LINE__); \
-        printLog(channel, format __VA_OPT__(,) __VA_ARGS__); \
-    } \
-} while (0);
+do { if ((channel) && verbosity) { \
+log(channel, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+}} while (0);
 
 #define trace(channel, format, ...) \
-do { \
-    if ((channel) && verbosity) { \
-        prefix(5, this, __LINE__); \
-        printLog(channel, format __VA_OPT__(,) __VA_ARGS__); \
-    } \
-} while (0);
+do { if ((channel) && verbosity) { \
+traceLog(channel, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+}} while (0);
 
 }

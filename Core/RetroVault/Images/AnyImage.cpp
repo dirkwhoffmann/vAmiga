@@ -22,7 +22,7 @@
 
 namespace vamiga {
 
-auto HDF_DBG = Loggable::main.subscribe("HDF_DBG", 1, "HDF image debugging");
+auto HDF_DBG = Loggable::subscribe("HDF_DBG", 1, "HDF image debugging");
 
 optional<ImageInfo>
 AnyImage::about(const fs::path& url)
