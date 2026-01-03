@@ -57,11 +57,11 @@ static constexpr bool betaRelease = VER_BETA != 0;
 #ifdef NDEBUG
 static constexpr bool releaseBuild = 1;
 static constexpr bool debugBuild = 0;
-typedef const long debugflag;
+// typedef const long debugflag;
 #else
 static constexpr bool releaseBuild = 0;
 static constexpr bool debugBuild = 1;
-typedef long debugflag;
+// typedef long debugflag;
 #endif
 
 #ifdef __EMSCRIPTEN__
@@ -75,6 +75,19 @@ static constexpr bool vAmigaDOS = 1;
 #else
 static constexpr bool vAmigaDOS = 0;
 #endif
+
+/* Each debug option is represented as an optional Syslog severity level.
+ * An empty optional denotes a disabled option. For every debug option,
+ * the emulator registers a corresponding log channel with the Loggable
+ * interface. Log channels initialized with an empty optional are disabled.
+ *
+ * If a debug level is set to, for example, 4, all messages with a Syslog
+ * severity of 4 or lower are emitted. Setting the level to 7 (the maximum
+ * Syslog severity) enables all messages.
+ *
+ * In debug builds, log channels can be enabled, disabled, or reconfigured
+ * dynamically via the Loggable interface.
+ */
 
 namespace utl {
 

@@ -11,8 +11,6 @@
 
 namespace utl {
 
-long Loggable::verbosity = 3;
-
 std::vector<LogChannelInfo> &
 Loggable::channels()
 {
@@ -23,11 +21,13 @@ Loggable::channels()
 LogChannel
 Loggable::subscribe(string name, optional<long> level, string description)
 {
-    if (level) {
+    if (level && *level >= LogLevelEnum::minVal && *level <= LogLevelEnum::maxVal) {
+
         return subscribe(std::move(name),
                   optional<LogLevel>(LogLevel(*level)),
                   std::move(description));
     } else {
+
         return subscribe(std::move(name),
                   optional<LogLevel>(std::nullopt),
                   std::move(description));
@@ -80,7 +80,7 @@ Loggable::setLevel(isize nr, optional<LogLevel> level)
 void
 Loggable::setLevel(string name, optional<LogLevel> level)
 {
-    for (auto c : channels())
+    for (auto&  c : channels())
         if (c.name == name) { c.level = level; return; }
 }
 
@@ -97,43 +97,43 @@ Loggable::log(LogChannel c,
 
         case LogLevel::LV_EMERGENCY:
 
-            prefix(verbosity, loc);
+            prefix(loc);
             fprintf(stderr, "EMERGENCY: ");
             break;
 
         case LogLevel::LV_CRITICAL:
 
-            prefix(verbosity, loc);
+            prefix(loc);
             fprintf(stderr, "CRITICAL: ");
             break;
 
         case LogLevel::LV_ERROR:
 
-            prefix(verbosity, loc);
+            prefix(loc);
             fprintf(stderr, "ERROR: ");
             break;
 
         case LogLevel::LV_WARNING:
 
-            prefix(verbosity, loc);
+            prefix(loc);
             fprintf(stderr, "WARNING: ");
             break;
 
         case LogLevel::LV_NOTICE:
 
-            prefix(verbosity, loc);
+            prefix(loc);
             fprintf(stderr, "NOTICE: ");
             break;
 
         case LogLevel::LV_INFO:
 
-            prefix(verbosity, loc);
+            prefix(loc);
             break;
 
         case LogLevel::LV_DEBUG:
 
-            tracePrefix(verbosity, loc);
-            prefix(verbosity, loc);
+            tracePrefix(loc);
+            prefix(loc);
             break;
 
         default:

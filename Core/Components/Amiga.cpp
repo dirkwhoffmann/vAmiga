@@ -90,8 +90,10 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::tracePrefix(long level, const std::source_location &loc) const
+Amiga::tracePrefix(const std::source_location &loc) const
 {
+    const isize level = 5;
+
     if (level) {
         
         if (isRunAheadInstance()) fprintf(stderr, "[Run-ahead] ");

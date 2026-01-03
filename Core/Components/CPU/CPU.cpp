@@ -99,7 +99,7 @@ Moira::read16OnReset(u32 addr) const
 void
 Moira::write8(u32 addr, u8 val) const
 {
-    if (XFILES) {
+    if constexpr (XFILES) {
         if (addr - reg.pc < 5) xfiles("write8 close to PC %x\n", reg.pc);
     }
     mem.poke8 <Accessor::CPU> (addr, val);
@@ -108,7 +108,7 @@ Moira::write8(u32 addr, u8 val) const
 void
 Moira::write16(u32 addr, u16 val) const
 {
-    if (XFILES) {
+    if constexpr (XFILES) {
         if (addr - reg.pc < 5) xfiles("write16 close to PC %x\n", reg.pc);
     }
     mem.poke16 <Accessor::CPU> (addr, val);

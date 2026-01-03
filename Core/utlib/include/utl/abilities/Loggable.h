@@ -114,9 +114,6 @@ class Loggable {
 
 public:
 
-    // Message category
-    // enum class LogLevel { Message, Warning, Fatal, Debug, Trace };
-
     // Looks up an existing channel or creates a new one if it does not exist
     static LogChannel subscribe(string name, optional<long> level, string description = "");
     static LogChannel subscribe(string name, optional<LogLevel> level, string description = "");
@@ -124,9 +121,6 @@ public:
     // Modifies the verbosity of an existing channel
     static void setLevel(isize nr, optional<LogLevel> level);
     static void setLevel(string name, optional<LogLevel> level);
-
-    // Verbosity level passed to the prefix function
-    static long verbosity;
 
     // Returns the number of registered channels
     static isize size() noexcept { return channels().size(); }
@@ -147,10 +141,10 @@ public:
 protected:
 
     // Prefix printed prior to the debug message
-    virtual void prefix(long verbosity, const std::source_location &) const { };
+    virtual void prefix(const std::source_location &) const { };
 
     // Additional prefix printed by trace()
-    virtual void tracePrefix(long verbosity, const std::source_location &) const { };
+    virtual void tracePrefix(const std::source_location &) const { };
 };
 
 #define CONCAT(a,b) a##b

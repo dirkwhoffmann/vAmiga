@@ -70,9 +70,9 @@ SubComponent::isRunAheadInstance() const
 }
 
 void
-SubComponent::tracePrefix(long level, const std::source_location &loc) const
+SubComponent::tracePrefix(const std::source_location &loc) const
 {
-    amiga.tracePrefix(level, loc);
+    amiga.tracePrefix(loc);
 }
 
 }

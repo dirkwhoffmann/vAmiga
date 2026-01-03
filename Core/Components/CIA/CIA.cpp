@@ -65,7 +65,7 @@ CIA::operator << (SerResetter &worker)
     latchB = 0xFFFF;
 
     // UAE initializes CRB with 4 (which I think is wrong)
-    if (MIMIC_UAE) crb = 0x4;
+    if constexpr (MIMIC_UAE) crb = 0x4;
 
     updatePA();
     updatePB();

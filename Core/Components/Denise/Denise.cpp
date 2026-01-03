@@ -1013,7 +1013,7 @@ Denise::updateBorderColor()
     } else {
         borderColor = 0;  // Background color
     }
-    if (BORDER_DEBUG) {
+    if constexpr (BORDER_DEBUG) {
         borderColor = 65; // Debug color
     }
 }

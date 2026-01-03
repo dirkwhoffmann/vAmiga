@@ -78,7 +78,7 @@ public:
     SubComponent(Amiga& ref, isize id = 0);
 
     bool isRunAheadInstance() const;
-    void tracePrefix(long level, const std::source_location &) const override;
+    void tracePrefix(const std::source_location &) const override;
 };
 
 }

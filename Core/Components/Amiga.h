@@ -295,7 +295,7 @@ public:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-    void tracePrefix(long level, const std::source_location &) const override;
+    void tracePrefix(const std::source_location &) const override;
     void report(std::ostream &os, isize category) const override;
 
 private:

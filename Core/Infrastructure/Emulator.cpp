@@ -325,10 +325,13 @@ Emulator::cloneRunAheadInstance()
     // Recreate the runahead instance from scratch
     ahead = main; isDirty = false;
 
-    if (RUA_CHECKSUM && ahead != main) {
-
-        main.diff(ahead);
-        fatal("Corrupted run-ahead clone detected");
+    if constexpr (RUA_CHECKSUM) {
+        
+        if (ahead != main) {
+            
+            main.diff(ahead);
+            fatal("Corrupted run-ahead clone detected");
+        }
     }
 }
 

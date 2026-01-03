@@ -34,7 +34,7 @@ public:
     virtual const char *description() const { return ""; }
     
     // Called by debug() and trace() to produce a detailed debug output
-    virtual void prefix(long level, const std::source_location &) const override;
+    virtual void prefix(const std::source_location &) const override;
 
     
     //

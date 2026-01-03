@@ -1604,19 +1604,6 @@ DebuggerConsole::initCommands(RSCommand &root)
                     }, .payload = { i }
             });
         }
-        
-        root.add({
-            
-            .tokens = { "debug", "verbosity" },
-            .chelp  = { "Set the verbosity level for generated debug output" },
-            .args   = {
-                { .name = { "level", "Verbosity level" } }
-            },
-                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                    
-                    CoreObject::verbosity = isize(parseNum(args, "level"));
-                }
-        });
     }
     
     root.add({

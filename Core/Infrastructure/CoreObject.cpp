@@ -20,12 +20,14 @@ CoreObject::verbosity = 3;
 
 CoreObject::CoreObject()
 {
-    verbosity = 3;
+
 }
 
 void
-CoreObject::prefix(long level, const std::source_location &loc) const
+CoreObject::prefix(const std::source_location &loc) const
 {
+    const isize level = 2;
+
     if (level == 1) {
         fprintf(stderr, "%s: ", objectName());
     }

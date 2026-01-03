@@ -71,13 +71,13 @@ EXEFile::didLoad()
     // fs.importer.updateChecksums();
     fs.flush();
 
-    if (FS_DEBUG) {
+    if constexpr (FS_DEBUG) {
 
         // Print some debug information about the volume
         fs.dumpState();
 
         // Check file system integrity
-        if (FS_DEBUG) fs.doctor.xray(true, std::cout, false);
+        fs.doctor.xray(true, std::cout, false);
     }
 }
 

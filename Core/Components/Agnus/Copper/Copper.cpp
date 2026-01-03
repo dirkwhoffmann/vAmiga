@@ -416,7 +416,7 @@ Copper::eofHandler()
      */
     agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(0), COP_VBLANK);
     
-    if (COP_CHECKSUM) {
+    if constexpr (COP_CHECKSUM) {
         
         if (checkcnt) {
             msg("[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",
