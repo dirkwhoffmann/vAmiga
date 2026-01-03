@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "utl/abilities/Loggable.h"
+#include <cstdarg>
 
 namespace utl {
 

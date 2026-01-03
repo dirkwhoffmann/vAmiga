@@ -32,7 +32,7 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
     if (dia == Diameter::INCH_35  && den == Density::HD) numTrackBytes = 24636;
     if (dia == Diameter::INCH_525 && den == Density::DD) numTrackBytes = 12668;
 
-    if (numTrackBytes == 0 || debug::FORCE_DISK_INVALID_LAYOUT) {
+    if (numTrackBytes == 0 || force::DISK_INVALID_LAYOUT) {
         throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
     }
 
@@ -248,7 +248,7 @@ FloppyDisk::write8(CylNr c, HeadNr h, isize offset, u8 value)
 void
 FloppyDisk::clearDisk()
 {
-    setModified(debug::FORCE_DISK_MODIFIED);
+    setModified(force::DISK_MODIFIED);
 
     // Initialize with random data
     srand(0);

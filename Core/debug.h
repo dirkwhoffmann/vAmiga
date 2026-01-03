@@ -149,34 +149,37 @@ constexpr long SCK_DEBUG          = 0;
 constexpr long SRV_DEBUG          = 0;
 constexpr long GDB_DEBUG          = 0;
 
+}
 
 //
 // Forced error conditions
 //
 
-constexpr long FORCE_LAUNCH_ERROR           = 0;
-constexpr long FORCE_ROM_MISSING            = 0;
-constexpr long FORCE_CHIP_RAM_MISSING       = 0;
-constexpr long FORCE_AROS_NO_EXTROM         = 0;
-constexpr long FORCE_AROS_RAM_LIMIT         = 0;
-constexpr long FORCE_CHIP_RAM_LIMIT         = 0;
-constexpr long FORCE_SNAP_TOO_OLD           = 0;
-constexpr long FORCE_SNAP_TOO_NEW           = 0;
-constexpr long FORCE_SNAP_IS_BETA           = 0;
-constexpr long FORCE_SNAP_CORRUPTED         = 0;
-constexpr long FORCE_DISK_INVALID_LAYOUT    = 0;
-constexpr long FORCE_DISK_MODIFIED          = 0;
-constexpr long FORCE_HDR_TOO_LARGE          = 0;
-constexpr long FORCE_HDR_UNSUPPORTED_C      = 0;
-constexpr long FORCE_HDR_UNSUPPORTED_H      = 0;
-constexpr long FORCE_HDR_UNSUPPORTED_S      = 0;
-constexpr long FORCE_HDR_UNSUPPORTED_B      = 0;
-constexpr long FORCE_HDR_UNKNOWN_GEOMETRY   = 0;
-constexpr long FORCE_HDR_MODIFIED           = 0;
-constexpr long FORCE_FS_WRONG_BSIZE         = 0;
-constexpr long FORCE_FS_WRONG_CAPACITY      = 0;
-constexpr long FORCE_FS_WRONG_DOS_TYPE      = 0;
-constexpr long FORCE_DMS_CANT_CREATE        = 0;
+namespace utl::force {
+
+constexpr long LAUNCH_ERROR           = 0;
+constexpr long ROM_MISSING            = 0;
+constexpr long CHIP_RAM_MISSING       = 0;
+constexpr long AROS_NO_EXTROM         = 0;
+constexpr long AROS_RAM_LIMIT         = 0;
+constexpr long CHIP_RAM_LIMIT         = 0;
+constexpr long SNAP_TOO_OLD           = 0;
+constexpr long SNAP_TOO_NEW           = 0;
+constexpr long SNAP_IS_BETA           = 0;
+constexpr long SNAP_CORRUPTED         = 0;
+constexpr long DISK_INVALID_LAYOUT    = 0;
+constexpr long DISK_MODIFIED          = 0;
+constexpr long HDR_TOO_LARGE          = 0;
+constexpr long HDR_UNSUPPORTED_C      = 0;
+constexpr long HDR_UNSUPPORTED_H      = 0;
+constexpr long HDR_UNSUPPORTED_S      = 0;
+constexpr long HDR_UNSUPPORTED_B      = 0;
+constexpr long HDR_UNKNOWN_GEOMETRY   = 0;
+constexpr long HDR_MODIFIED           = 0;
+constexpr long FS_WRONG_BSIZE         = 0;
+constexpr long FS_WRONG_CAPACITY      = 0;
+constexpr long FS_WRONG_DOS_TYPE      = 0;
+constexpr long DMS_CANT_CREATE        = 0;
 
 }
 

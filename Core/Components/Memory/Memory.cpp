@@ -478,16 +478,16 @@ Memory::_isReady() const
     bool hasRom = traits.crc != 0;
     bool hasAros = traits.vendor == RomVendor::AROS;
 
-    if (!hasRom || debug::FORCE_ROM_MISSING) {
+    if (!hasRom || force::ROM_MISSING) {
         throw CoreError(CoreError::ROM_MISSING);
     }
-    if (!chip || debug::FORCE_CHIP_RAM_MISSING) {
+    if (!chip || force::CHIP_RAM_MISSING) {
         throw CoreError(CoreError::CHIP_RAM_MISSING);
     }
-    if ((hasAros && !ext) || debug::FORCE_AROS_NO_EXTROM) {
+    if ((hasAros && !ext) || force::AROS_NO_EXTROM) {
         throw CoreError(CoreError::AROS_NO_EXTROM);
     }
-    if ((hasAros && ramSize() < MB(1)) || debug::FORCE_AROS_RAM_LIMIT) {
+    if ((hasAros && ramSize() < MB(1)) || force::AROS_RAM_LIMIT) {
         throw CoreError(CoreError::AROS_RAM_LIMIT);
     }
 }

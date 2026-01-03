@@ -85,7 +85,7 @@ HardDrive::init()
     ptable.clear();
     drivers.clear();
     head = {};
-    setFlag(DiskFlags::MODIFIED, debug::FORCE_HDR_MODIFIED);
+    setFlag(DiskFlags::MODIFIED, force::HDR_MODIFIED);
 }
 
 void
@@ -235,7 +235,7 @@ HardDrive::_initialize()
 void
 HardDrive::_didReset(bool hard)
 {
-    if constexpr (debug::FORCE_HDR_MODIFIED)
+    if constexpr (force::HDR_MODIFIED)
         setFlag(DiskFlags::MODIFIED, true);
 
     // Mark all blocks as dirty

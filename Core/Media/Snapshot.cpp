@@ -86,9 +86,9 @@ Snapshot::Snapshot(Amiga &amiga, Compressor compressor) : Snapshot(amiga)
 void
 Snapshot::didLoad()
 {
-    if (debug::FORCE_SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
-    if (debug::FORCE_SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);
-    if (debug::FORCE_SNAP_IS_BETA) throw MediaError(MediaError::SNAP_IS_BETA);
+    if (force::SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
+    if (force::SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);
+    if (force::SNAP_IS_BETA) throw MediaError(MediaError::SNAP_IS_BETA);
 
     if (isTooOld()) throw MediaError(MediaError::SNAP_TOO_OLD);
     if (isTooNew()) throw MediaError(MediaError::SNAP_TOO_NEW);
