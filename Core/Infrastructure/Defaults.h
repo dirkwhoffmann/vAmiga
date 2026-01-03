@@ -21,7 +21,8 @@ class Defaults final : public CoreObject, public Synchronizable {
     std::map <string, string> values;
 
     // The default value storage
-    std::map <string, string> fallbacks;
+    // std::map <string, string> fallbacks;
+    static Defaults &fallbacks();
 
 
     //
@@ -78,10 +79,11 @@ public:
     i64 getFallback(const string &key) const;
     i64 getFallback(Opt option, isize nr = 0) const;
 
-
     //
     // Writing key-value pairs
     //
+
+public:
 
     // Writes a key-value pair into the user storage
     void set(const string &key, const string &value);

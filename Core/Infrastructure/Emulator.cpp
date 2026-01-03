@@ -97,7 +97,7 @@ Emulator::_dump(Category category, std::ostream &os) const
             if (c.level.has_value()) {
                 os << LogLevelEnum::key(*c.level) << std::endl;
             } else {
-                os << "DISABLED" << std::endl;
+                os << "-" << std::endl;
             }
         }
     }
