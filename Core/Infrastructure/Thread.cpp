@@ -337,7 +337,7 @@ Thread::trackOff(isize source)
 void
 Thread::wakeUp()
 {
-    // trace(RUN_DEBUG, "wakeup: %lld us\n", wakeupClock.restart().asMicroseconds());
+    // logtrace(RUN_DEBUG, "wakeup: %lld us\n", wakeupClock.restart().asMicroseconds());
     Wakeable::wakeUp();
 }
 

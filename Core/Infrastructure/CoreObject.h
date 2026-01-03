@@ -33,7 +33,7 @@ public:
     // Returns a textual description for this component
     virtual const char *description() const { return ""; }
     
-    // Called by debug() and trace() to produce a detailed debug output
+    // Called by debug() and logtrace() to produce a detailed debug output
     virtual void prefix(const std::source_location &) const override;
 
     

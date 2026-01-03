@@ -227,7 +227,7 @@ Moira::didJumpToVector(int nr, u32 addr)
     bool isIrqException = nr >= 24 && nr <= 31;
 
     if (isIrqException) {
-        trace(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
+        logtrace(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
     }
 }
 

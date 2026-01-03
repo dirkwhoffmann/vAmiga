@@ -191,30 +191,30 @@ Headless::process(Message msg)
 void 
 Headless::reportSize()
 {
-    msg("             Amiga : %zu bytes\n", sizeof(Amiga));
-    msg("             Agnus : %zu bytes\n", sizeof(Agnus));
-    msg("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
-    msg("               CIA : %zu bytes\n", sizeof(CIA));
-    msg("       ControlPort : %zu bytes\n", sizeof(ControlPort));
-    msg("               CPU : %zu bytes\n", sizeof(CPU));
-    msg("            Denise : %zu bytes\n", sizeof(Denise));
-    msg("             Drive : %zu bytes\n", sizeof(FloppyDrive));
-    msg("          Keyboard : %zu bytes\n", sizeof(Keyboard));
-    msg("            Memory : %zu bytes\n", sizeof(Memory));
-    msg("moira::Breakpoints : %zu bytes\n", sizeof(moira::Breakpoints));
-    msg("moira::Watchpoints : %zu bytes\n", sizeof(moira::Watchpoints));
-    msg("   moira::Debugger : %zu bytes\n", sizeof(moira::Debugger));
-    msg("      moira::Moira : %zu bytes\n", sizeof(moira::Moira));
-    msg("         AudioPort : %zu bytes\n", sizeof(AudioPort));
-    msg("             Paula : %zu bytes\n", sizeof(Paula));
-    msg("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
-    msg("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));
-    msg("               RTC : %zu bytes\n", sizeof(RTC));
-    msg("        RetroShell : %zu bytes\n", sizeof(RetroShell));
-    msg("           Sampler : %zu bytes\n", sizeof(Sampler));
-    msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
-    msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
-    msg("\n");
+    printf("             Amiga : %zu bytes\n", sizeof(Amiga));
+    printf("             Agnus : %zu bytes\n", sizeof(Agnus));
+    printf("       AudioFilter : %zu bytes\n", sizeof(AudioFilter));
+    printf("               CIA : %zu bytes\n", sizeof(CIA));
+    printf("       ControlPort : %zu bytes\n", sizeof(ControlPort));
+    printf("               CPU : %zu bytes\n", sizeof(CPU));
+    printf("            Denise : %zu bytes\n", sizeof(Denise));
+    printf("             Drive : %zu bytes\n", sizeof(FloppyDrive));
+    printf("          Keyboard : %zu bytes\n", sizeof(Keyboard));
+    printf("            Memory : %zu bytes\n", sizeof(Memory));
+    printf("moira::Breakpoints : %zu bytes\n", sizeof(moira::Breakpoints));
+    printf("moira::Watchpoints : %zu bytes\n", sizeof(moira::Watchpoints));
+    printf("   moira::Debugger : %zu bytes\n", sizeof(moira::Debugger));
+    printf("      moira::Moira : %zu bytes\n", sizeof(moira::Moira));
+    printf("         AudioPort : %zu bytes\n", sizeof(AudioPort));
+    printf("             Paula : %zu bytes\n", sizeof(Paula));
+    printf("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
+    printf("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));
+    printf("               RTC : %zu bytes\n", sizeof(RTC));
+    printf("        RetroShell : %zu bytes\n", sizeof(RetroShell));
+    printf("           Sampler : %zu bytes\n", sizeof(Sampler));
+    printf("        SerialPort : %zu bytes\n", sizeof(SerialPort));
+    printf("             Zorro : %zu bytes\n", sizeof(ZorroManager));
+    printf("\n");
 }
 
 const char *

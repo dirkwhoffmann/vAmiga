@@ -283,12 +283,12 @@ AudioPort::setSampleRate(double hz)
     if (hz != 0.0) {
 
         sampleRate = hz;
-        trace(AUD_DEBUG, "setSampleRate(%.2f)\n", sampleRate);
+        logtrace(AUD_DEBUG, "setSampleRate(%.2f)\n", sampleRate);
 
     } else {
 
         sampleRate = detector.sampleRate();
-        trace(AUD_DEBUG, "setSampleRate(%.2f) (predicted)\n", sampleRate);
+        logtrace(AUD_DEBUG, "setSampleRate(%.2f) (predicted)\n", sampleRate);
     }
 
     // Inform the audio filter about the new sample rate

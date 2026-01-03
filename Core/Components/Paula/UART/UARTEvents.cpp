@@ -18,7 +18,7 @@ namespace vamiga {
 void
 UART::serviceTxdEvent(EventID id)
 {
-    trace(SER_DEBUG, "serveTxdEvent(%d)\n", id);
+    logtrace(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
     switch (id) {
 
@@ -30,13 +30,13 @@ UART::serviceTxdEvent(EventID id)
                 if (transmitBuffer) {
 
                     // Copy new packet into shift register
-                    trace(SER_DEBUG, "Transmitting first packet %x\n", transmitBuffer);
+                    logtrace(SER_DEBUG, "Transmitting first packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
 
                 } else {
 
                     // Abort the transmission
-                    trace(SER_DEBUG, "All packets sent\n");
+                    logtrace(SER_DEBUG, "All packets sent\n");
                     agnus.cancel<SLOT_TXD>();
                     break;
                 }
@@ -44,13 +44,13 @@ UART::serviceTxdEvent(EventID id)
             } else {
 
                 // Run the shift register
-                trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
+                logtrace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
                 transmitShiftReg >>= 1;
 
                 if (!transmitShiftReg && transmitBuffer) {
 
                     // Copy next packet into shift register
-                    trace(SER_DEBUG, "Transmitting next packet %x\n", transmitBuffer);
+                    logtrace(SER_DEBUG, "Transmitting next packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
                 }
             }
@@ -98,7 +98,7 @@ UART::serviceRxdEvent(EventID id)
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
-        trace(SER_DEBUG, "Received packet %X (%c) (%ld)\n", receiveBuffer, (char)receiveBuffer, packetLength());
+        logtrace(SER_DEBUG, "Received packet %X (%c) (%ld)\n", receiveBuffer, (char)receiveBuffer, packetLength());
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {

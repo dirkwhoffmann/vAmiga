@@ -143,44 +143,8 @@ protected:
     // Prefix printed prior to the debug message
     virtual void prefix(const std::source_location &) const { };
 
-    // Additional prefix printed by trace()
+    // Additional prefix printed by logtrace()
     virtual void tracePrefix(const std::source_location &) const { };
 };
 
-#define CONCAT(a,b) a##b
-#define LOG_CHANNEL(a) CONCAT(CH_,a)
-
-#define msg(format, ...) { \
-log(1, LogLevel::LV_NOTICE, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
-
-#define warn(format, ...) { \
-log(1, LogLevel::LV_WARNING, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
-
-#define fatal(format, ...) { \
-log(1, LogLevel::LV_EMERGENCY, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
-
-#define xfiles(format, ...) { \
-log(CH_XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
-
-#ifdef NDEBUG
-
-#define debug(channel, format, ...) \
-do { if constexpr (channel) { \
-log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
-}} while (0);
-
-#define trace(channel, format, ...) \
-do { if constexpr (channel) { \
-log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
-}} while (0);
-
-#else
-
-#define debug(channel, format, ...) \
-log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
-
-#define trace(channel, format, ...) \
-log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
-
-#endif
 }

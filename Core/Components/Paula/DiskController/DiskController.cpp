@@ -182,7 +182,7 @@ DiskController::setState(DriveDmaState newState)
 void
 DiskController::setState(DriveDmaState oldState, DriveDmaState newState)
 {
-    trace(DSK_DEBUG, "%s -> %s\n",
+    logtrace(DSK_DEBUG, "%s -> %s\n",
           DriveStateEnum::key(oldState), DriveStateEnum::key(newState));
     
     state = newState;
@@ -311,7 +311,7 @@ DiskController::readBit(bool bit)
         syncCycle = agnus.clock;
 
         // Trigger a word SYNC interrupt
-        trace(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
+        logtrace(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
         paula.raiseIrq(IrqSource::DSKSYN);
 
         // Enable DMA if the controller was waiting for it

@@ -367,6 +367,7 @@
 		50BF4B632F05078500F1B9F2 /* Codecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B612F05078200F1B9F2 /* Codecs.cpp */; };
 		50BF4B6B2F055BFF00F1B9F2 /* AnyImage.h in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B6A2F055BF600F1B9F2 /* AnyImage.h */; };
 		50BF4B6D2F055C0700F1B9F2 /* AnyImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */; };
+		50BF4B752F09591C00F1B9F2 /* AnyImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */; };
 		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -3417,6 +3418,7 @@
 				506E5B1E2DE8E3C300CEA916 /* Monitor.cpp in Sources */,
 				50FC04A827DA198100C3E566 /* CopperRegs.cpp in Sources */,
 				50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */,
+				50BF4B752F09591C00F1B9F2 /* AnyImage.cpp in Sources */,
 				502B303928469CF600673377 /* Beam.cpp in Sources */,
 				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
 				503FC4CD2EE0AB1600637C95 /* Streams.cpp in Sources */,
@@ -3943,7 +3945,7 @@
 					Core,
 					Core/utlib/include,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -3967,7 +3969,7 @@
 					Core,
 					Core/utlib/include,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;

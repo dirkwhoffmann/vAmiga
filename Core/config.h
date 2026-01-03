@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <assert.h>
 #include <optional>
 
 //
@@ -256,4 +257,40 @@ constexpr long FORCE_DMS_CANT_CREATE        = 0;
 
 }
 
-#include <assert.h>
+// MOVE TO debug.h
+#define CONCAT(a,b) a##b
+#define LOG_CHANNEL(a) CONCAT(CH_,a)
+
+#define logmsg(format, ...) { \
+log(1, LogLevel::LV_NOTICE, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
+
+#define warn(format, ...) { \
+log(1, LogLevel::LV_WARNING, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
+
+#define fatal(format, ...) { \
+log(1, LogLevel::LV_EMERGENCY, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
+
+#define xfiles(format, ...) { \
+log(CH_XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
+
+#ifdef NDEBUG
+
+#define debug(channel, format, ...) \
+do { if constexpr (channel) { \
+log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+}} while (0);
+
+#define logtrace(channel, format, ...) \
+do { if constexpr (channel) { \
+log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+}} while (0);
+
+#else
+
+#define debug(channel, format, ...) \
+log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+
+#define logtrace(channel, format, ...) \
+log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+
+#endif

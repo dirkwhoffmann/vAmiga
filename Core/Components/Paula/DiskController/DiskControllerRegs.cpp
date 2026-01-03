@@ -26,7 +26,7 @@ DiskController::peekDSKDATR() const
 void
 DiskController::pokeDSKLEN(u16 value)
 {
-    trace(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", value);
+    logtrace(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", value);
 
     setDSKLEN(dsklen, value);
 }
@@ -34,7 +34,7 @@ DiskController::pokeDSKLEN(u16 value)
 void
 DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 {
-    trace(DSKREG_DEBUG, "setDSKLEN(%x) [%ld,%ld,%ld]\n",
+    logtrace(DSKREG_DEBUG, "setDSKLEN(%x) [%ld,%ld,%ld]\n",
           newValue, df0.head.cylinder, df0.head.head, df0.head.offset);
 
     FloppyDrive *drive = getSelectedDrive();

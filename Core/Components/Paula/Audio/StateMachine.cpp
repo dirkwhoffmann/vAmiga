@@ -56,7 +56,7 @@ StateMachine<nr>::cacheInfo() const
 template <isize nr> void
 StateMachine<nr>::enableDMA()
 {
-    trace(AUD_DEBUG, "Enable DMA\n");
+    logtrace(AUD_DEBUG, "Enable DMA\n");
 
     switch (state) {
 
@@ -70,7 +70,7 @@ StateMachine<nr>::enableDMA()
 template <isize nr> void
 StateMachine<nr>::disableDMA()
 {
-    trace(AUD_DEBUG, "Disable DMA\n");
+    logtrace(AUD_DEBUG, "Disable DMA\n");
 
     switch (state) {
 
@@ -169,12 +169,12 @@ StateMachine<nr>::penhi()
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = (i16)(sample * audvol);
     
-    trace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
+    logtrace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
 
     if (!sampler.isFull()) {
         sampler.append(agnus.clock, scaled);
     } else {
-        trace(AUD_DEBUG, "penhi: Sample buffer is full\n");
+        logtrace(AUD_DEBUG, "penhi: Sample buffer is full\n");
     }
     
     enablePenhi = false;
@@ -193,12 +193,12 @@ StateMachine<nr>::penlo()
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = (i16)(sample * audvol);
 
-    trace(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
+    logtrace(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
     if (!sampler.isFull()) {
         sampler.append(agnus.clock, scaled);
     } else {
-        trace(AUD_DEBUG, "penlo: Sample buffer is full\n");
+        logtrace(AUD_DEBUG, "penlo: Sample buffer is full\n");
     }
     
     enablePenlo = false;
@@ -207,7 +207,7 @@ StateMachine<nr>::penlo()
 template <isize nr> void
 StateMachine<nr>::move_000_010() {
 
-    trace(AUD_DEBUG, "move_000_010\n");
+    logtrace(AUD_DEBUG, "move_000_010\n");
 
     // This transition is taken in IRQ mode only
     assert(!AUDxON());
@@ -225,7 +225,7 @@ StateMachine<nr>::move_000_010() {
 template <isize nr> void
 StateMachine<nr>::move_000_001() {
 
-    trace(AUD_DEBUG, "move_000_001\n");
+    logtrace(AUD_DEBUG, "move_000_001\n");
 
     // This transition is taken in DMA mode only
     assert(AUDxON());
@@ -239,7 +239,7 @@ StateMachine<nr>::move_000_001() {
 template <isize nr> void
 StateMachine<nr>::move_001_000() {
 
-    trace(AUD_DEBUG, "move_001_000\n");
+    logtrace(AUD_DEBUG, "move_001_000\n");
 
     // This transition is taken in IRQ mode only
     assert(!AUDxON());
@@ -250,7 +250,7 @@ StateMachine<nr>::move_001_000() {
 template <isize nr> void
 StateMachine<nr>::move_001_101() {
 
-    trace(AUD_DEBUG, "move_001_101\n");
+    logtrace(AUD_DEBUG, "move_001_101\n");
 
     // This transition is taken in DMA mode only
     assert(AUDxON());
@@ -266,7 +266,7 @@ StateMachine<nr>::move_001_101() {
 template <isize nr> void
 StateMachine<nr>::move_101_000() {
 
-    trace(AUD_DEBUG, "move_101_000\n");
+    logtrace(AUD_DEBUG, "move_101_000\n");
 
     // This transition is taken in IRQ mode only
     assert(!AUDxON());
@@ -277,7 +277,7 @@ StateMachine<nr>::move_101_000() {
 template <isize nr> void
 StateMachine<nr>::move_101_010() {
 
-    trace(AUD_DEBUG, "move_101_010\n");
+    logtrace(AUD_DEBUG, "move_101_010\n");
 
     // This transition is taken in DMA mode only
     assert(AUDxON());
@@ -294,7 +294,7 @@ StateMachine<nr>::move_101_010() {
 template <isize nr> void
 StateMachine<nr>::move_010_011() {
 
-    trace(AUD_DEBUG, "move_010_011\n");
+    logtrace(AUD_DEBUG, "move_010_011\n");
     
     percntrld();
     
@@ -323,7 +323,7 @@ StateMachine<nr>::move_010_011() {
 template <isize nr> void
 StateMachine<nr>::move_010_000() {
 
-    trace(AUD_DEBUG, "move_010_000\n");
+    logtrace(AUD_DEBUG, "move_010_000\n");
 
     constexpr EventSlot slot = (EventSlot)(SLOT_CH0 + nr);
     agnus.cancel<slot>();
@@ -335,7 +335,7 @@ StateMachine<nr>::move_010_000() {
 template <isize nr> void
 StateMachine<nr>::move_011_000() {
 
-    trace(AUD_DEBUG, "move_011_000\n");
+    logtrace(AUD_DEBUG, "move_011_000\n");
 
     constexpr EventSlot slot = (EventSlot)(SLOT_CH0 + nr);
     agnus.cancel<slot>();
@@ -347,7 +347,7 @@ StateMachine<nr>::move_011_000() {
 template <isize nr> void
 StateMachine<nr>::move_011_010()
 {
-    trace(AUD_DEBUG, "move_011_010\n");
+    logtrace(AUD_DEBUG, "move_011_010\n");
 
     percntrld();
     pbufld1();

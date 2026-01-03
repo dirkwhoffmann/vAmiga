@@ -197,13 +197,13 @@ Copper::move(u32 addr, u16 value)
     assert(IS_EVEN(addr));
     assert(addr < 0x1FF);
     
-    trace(COP_DEBUG,
+    logtrace(COP_DEBUG,
           "COPPC: %X move(%s, $%X) (%d)\n", coppc0, MemoryDebugger::regName(addr), value, value);
 
     // Catch registers with special timing needs
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-        trace(OCSREG_DEBUG,
+        logtrace(OCSREG_DEBUG,
               "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
 
         // Color registers
@@ -419,8 +419,8 @@ Copper::eofHandler()
     if constexpr (COP_CHECKSUM) {
         
         if (checkcnt) {
-            msg("[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",
-                agnus.pos.frame, checksum, checkcnt, cop1lc, cop2lc);
+            logmsg("[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",
+                   agnus.pos.frame, checksum, checkcnt, cop1lc, cop2lc);
         }
         checkcnt = 0;
         checksum = Hashable::fnvInit32();

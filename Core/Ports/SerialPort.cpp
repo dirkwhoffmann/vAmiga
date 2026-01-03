@@ -274,7 +274,7 @@ SerialPort::recordIncomingByte(int byte)
 {
     {   SYNCHRONIZED
 
-        trace(SER_DEBUG, "Incoming: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+        logtrace(SER_DEBUG, "Incoming: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
 
         // Record the incoming byte
         incoming += char(byte);
@@ -292,7 +292,7 @@ SerialPort::recordOutgoingByte(int byte)
 {
     {   SYNCHRONIZED
 
-        trace(SER_DEBUG, "Outgoing: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+        logtrace(SER_DEBUG, "Outgoing: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
 
         // Record the incoming byte
         outgoing += char(byte);

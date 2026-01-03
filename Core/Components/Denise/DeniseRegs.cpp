@@ -17,7 +17,7 @@ namespace vamiga {
 void
 Denise::setDIWSTRT(u16 value)
 {
-    trace(DIW_DEBUG, "setDIWSTRT(%x)\n", value);
+    logtrace(DIW_DEBUG, "setDIWSTRT(%x)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
@@ -29,7 +29,7 @@ Denise::setDIWSTRT(u16 value)
 void
 Denise::setDIWSTOP(u16 value)
 {
-    trace(DIW_DEBUG, "setDIWSTOP(%x)\n", value);
+    logtrace(DIW_DEBUG, "setDIWSTOP(%x)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
@@ -41,7 +41,7 @@ Denise::setDIWSTOP(u16 value)
 void
 Denise::setDIWHIGH(u16 value)
 {
-    trace(DIW_DEBUG, "setDIWHIGH(%x)\n", value);
+    logtrace(DIW_DEBUG, "setDIWHIGH(%x)\n", value);
 
     if (!isECS()) return;
 
@@ -57,7 +57,7 @@ Denise::setDIWHIGH(u16 value)
 void
 Denise::setHSTRT(isize val)
 {
-    trace(DIW_DEBUG, "setHSTRT(%lx)\n", val);
+    logtrace(DIW_DEBUG, "setHSTRT(%lx)\n", val);
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTRT, .value = (u16)val });
@@ -67,7 +67,7 @@ Denise::setHSTRT(isize val)
 void
 Denise::setHSTOP(isize val)
 {
-    trace(DIW_DEBUG, "setHSTOP(%lx)\n", val);
+    logtrace(DIW_DEBUG, "setHSTOP(%lx)\n", val);
 
     // Record register change
     diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTOP, .value = (u16)val });
@@ -78,7 +78,7 @@ u16
 Denise::peekJOY0DATR() const
 {
     u16 result = controlPort1.joydat();
-    trace(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
+    logtrace(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
@@ -87,7 +87,7 @@ u16
 Denise::peekJOY1DATR() const
 {
     u16 result = controlPort2.joydat();
-    trace(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
+    logtrace(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
@@ -95,7 +95,7 @@ Denise::peekJOY1DATR() const
 void
 Denise::pokeJOYTEST(u16 value)
 {
-    trace(JOYREG_DEBUG, "pokeJOYTEST(%04X)\n", value);
+    logtrace(JOYREG_DEBUG, "pokeJOYTEST(%04X)\n", value);
 
     controlPort1.pokeJOYTEST(value);
     controlPort2.pokeJOYTEST(value);
@@ -105,7 +105,7 @@ u16
 Denise::peekDENISEID()
 {
     u16 result = isECS() ? 0xFFFC : 0xFFFF;
-    trace(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
+    logtrace(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
     return result;
 }
 
@@ -118,7 +118,7 @@ Denise::spypeekDENISEID() const
 template <Accessor s> void
 Denise::pokeBPLCON0(u16 value)
 {
-    trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
+    logtrace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON0, value, Accessor::DENISE);
 }
@@ -126,7 +126,7 @@ Denise::pokeBPLCON0(u16 value)
 void
 Denise::setBPLCON0(u16 oldValue, u16 newValue)
 {
-    trace(BPLREG_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
+    logtrace(BPLREG_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
 
     // Record the register change
     i64 pixel = std::max(agnus.pos.pixel() - 4, (isize)0);
@@ -158,7 +158,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 template <Accessor s> void
 Denise::pokeBPLCON1(u16 value)
 {
-    trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
+    logtrace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
     agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON1, value, Accessor::DENISE);
@@ -167,7 +167,7 @@ Denise::pokeBPLCON1(u16 value)
 void
 Denise::setBPLCON1(u16 oldValue, u16 newValue)
 {
-    trace(BPLREG_DEBUG, "setBPLCON1(%x,%x)\n", oldValue, newValue);
+    logtrace(BPLREG_DEBUG, "setBPLCON1(%x,%x)\n", oldValue, newValue);
 
     bplcon1 = newValue & 0xFF;
 
@@ -178,7 +178,7 @@ Denise::setBPLCON1(u16 oldValue, u16 newValue)
 template <Accessor s> void
 Denise::pokeBPLCON2(u16 value)
 {
-    trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
+    logtrace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON2, value);
 }
@@ -186,7 +186,7 @@ Denise::pokeBPLCON2(u16 value)
 void
 Denise::setBPLCON2(u16 newValue)
 {
-    trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", newValue);
+    logtrace(BPLREG_DEBUG, "setBPLCON2(%X)\n", newValue);
 
     bplcon2 = newValue;
 
@@ -201,7 +201,7 @@ Denise::setBPLCON2(u16 newValue)
 template <Accessor s> void
 Denise::pokeBPLCON3(u16 value)
 {
-    trace(BPLREG_DEBUG, "pokeBPLCON3(%X)\n", value);
+    logtrace(BPLREG_DEBUG, "pokeBPLCON3(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON3, value);
 }
@@ -209,7 +209,7 @@ Denise::pokeBPLCON3(u16 value)
 void
 Denise::setBPLCON3(u16 value)
 {
-    trace(BPLREG_DEBUG, "setBPLCON3(%X)\n", value);
+    logtrace(BPLREG_DEBUG, "setBPLCON3(%X)\n", value);
 
     bplcon3 = value;
     
@@ -223,7 +223,7 @@ Denise::peekCLXDAT()
     u16 result = clxdat | 0x8000;
     clxdat = 0;
     
-    trace(CLXREG_DEBUG, "peekCLXDAT() = %x\n", result);
+    logtrace(CLXREG_DEBUG, "peekCLXDAT() = %x\n", result);
     return result;
 }
 
@@ -236,7 +236,7 @@ Denise::spypeekCLXDAT() const
 void
 Denise::pokeCLXCON(u16 value)
 {
-    trace(CLXREG_DEBUG, "pokeCLXCON(%x)\n", value);
+    logtrace(CLXREG_DEBUG, "pokeCLXCON(%x)\n", value);
     clxcon = value;
 }
 
@@ -244,7 +244,7 @@ template <isize x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
     assert(x < 6);
-    trace(BPLREG_DEBUG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
+    logtrace(BPLREG_DEBUG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
 
     if constexpr (s == Accessor::AGNUS) {
         /*
@@ -259,7 +259,7 @@ template <isize x> void
 Denise::setBPLxDAT(u16 value)
 {
     assert(x < 6);
-    trace(BPLDAT_DEBUG, "setBPL%ldDAT(%X)\n", x + 1, value);
+    logtrace(BPLDAT_DEBUG, "setBPL%ldDAT(%X)\n", x + 1, value);
 
     bpldat[x] = value;
 
@@ -279,7 +279,7 @@ template <isize x> void
 Denise::pokeSPRxPOS(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%ldPOS(%X)\n", x, value);
+    logtrace(SPRREG_DEBUG, "pokeSPR%ldPOS(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
@@ -294,7 +294,7 @@ template <isize x> void
 Denise::pokeSPRxCTL(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%ldCTL(%X)\n", x, value);
+    logtrace(SPRREG_DEBUG, "pokeSPR%ldCTL(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
@@ -309,7 +309,7 @@ template <isize x> void
 Denise::pokeSPRxDATA(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%ldDATA(%X)\n", x, value);
+    logtrace(SPRREG_DEBUG, "pokeSPR%ldDATA(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -327,7 +327,7 @@ template <isize x> void
 Denise::pokeSPRxDATB(u16 value)
 {
     assert(x < 8);
-    trace(SPRREG_DEBUG, "pokeSPR%ldDATB(%X)\n", x, value);
+    logtrace(SPRREG_DEBUG, "pokeSPR%ldDATB(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -341,7 +341,7 @@ Denise::pokeSPRxDATB(u16 value)
 template <isize xx, Accessor s> void
 Denise::pokeCOLORxx(u16 value)
 {
-    trace(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
+    logtrace(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
 
     // Record the color change
     constexpr auto reg = Reg(isize(Reg::COLOR00) + xx);

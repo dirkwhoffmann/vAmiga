@@ -246,7 +246,7 @@ Mouse::setDxDy(double dx, double dy)
 void
 Mouse::setLeftButton(bool value)
 {
-    trace(PRT_DEBUG, "setLeftButton(%d)\n", value);
+    logtrace(PRT_DEBUG, "setLeftButton(%d)\n", value);
     
     leftButton = value;
     port.setDevice(ControlPortDevice::MOUSE);
@@ -255,7 +255,7 @@ Mouse::setLeftButton(bool value)
 void
 Mouse::setMiddleButton(bool value)
 {
-    trace(PRT_DEBUG, "setMiddleButton(%d)\n", value);
+    logtrace(PRT_DEBUG, "setMiddleButton(%d)\n", value);
 
     middleButton = value;
     port.setDevice(ControlPortDevice::MOUSE);
@@ -264,7 +264,7 @@ Mouse::setMiddleButton(bool value)
 void
 Mouse::setRightButton(bool value)
 {
-    trace(PRT_DEBUG, "setRightButton(%d)\n", value);
+    logtrace(PRT_DEBUG, "setRightButton(%d)\n", value);
     
     rightButton = value;
     port.setDevice(ControlPortDevice::MOUSE);
