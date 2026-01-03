@@ -47,7 +47,7 @@ HardDrive::operator= (const HardDrive& other) {
     CLONE(state)
     CLONE(flags)
 
-    if (RUA_ON_STEROIDS) {
+    if constexpr (RUA_ON_STEROIDS) {
 
         // Clone all blocks
         CLONE(data)
@@ -161,7 +161,7 @@ HardDrive::init(const HDFFile &hdf)
     // Copy over all needed file system drivers
     for (const auto &driver : hdf.drivers) {
 
-        bool needed = HDR_FS_LOAD_ALL;
+        bool needed = HDR_FS_LOAD_ALL.has_value();
 
         for (const auto &part : ptable) {
             if (driver.dosType == part.dosType) {

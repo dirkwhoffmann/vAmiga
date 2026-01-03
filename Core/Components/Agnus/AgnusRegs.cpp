@@ -315,7 +315,7 @@ Agnus::pokeBPLCON0(u16 value)
 void
 Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
-    trace(DMA_DEBUG | SEQ_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
+    trace(DMA_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
 
     // Determine the new bitmap resolution
     res = resolution(newValue);
@@ -366,7 +366,7 @@ void
 Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
-    trace(DMA_DEBUG | SEQ_DEBUG, "setBPLCON1(%04x,%04x)\n", oldValue, newValue);
+    trace(DMA_DEBUG, "setBPLCON1(%04x,%04x)\n", oldValue, newValue);
 
     bplcon1 = newValue & 0xFF;
     

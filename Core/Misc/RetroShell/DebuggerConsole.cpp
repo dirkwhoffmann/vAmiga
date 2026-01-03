@@ -1596,8 +1596,11 @@ DebuggerConsole::initCommands(RSCommand &root)
                     .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                         auto level = parseNum(args, "level");
-                        Loggable::setLVerbosity(values[0], isize(level));
-
+                        if (level >= 0 && level <= 8) {
+                            Loggable::setLevel(values[0], LogLevel(level));
+                        } else {
+                            Loggable::setLevel(values[0], {});
+                        }
                     }, .payload = { i }
             });
         }

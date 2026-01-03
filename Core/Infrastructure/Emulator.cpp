@@ -94,7 +94,11 @@ Emulator::_dump(Category category, std::ostream &os) const
         for (auto c : cs) {
 
             os << tab(c.name);
-            os << dec(c.verbosity) << std::endl;
+            if (c.level.has_value()) {
+                os << LogLevelEnum::key(*c.level) << std::endl;
+            } else {
+                os << "DISABLED" << std::endl;
+            }
         }
     }
     
@@ -336,7 +340,7 @@ Emulator::recreateRunAheadInstance()
     auto &config = main.getConfig();
 
     // Clone the main instance
-    if (RUA_DEBUG) {
+    if constexpr (RUA_DEBUG) {
         utl::StopWatch watch("Run-ahead: Clone");
         cloneRunAheadInstance();
     } else {
@@ -344,7 +348,7 @@ Emulator::recreateRunAheadInstance()
     }
 
     // Advance to the proper frame
-    if (RUA_DEBUG) {
+    if constexpr (RUA_DEBUG) {
         utl::StopWatch watch("Run-ahead: Fast-forward");
         ahead.fastForward(config.runAhead - 1);
     } else {

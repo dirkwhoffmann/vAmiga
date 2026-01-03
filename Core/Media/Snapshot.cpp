@@ -68,12 +68,12 @@ Snapshot::Snapshot(isize capacity)
 
 Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 {
-    {   utl::StopWatch(SNP_DEBUG, "Taking screenshot...");
-        
+    {   utl::StopWatch(SNP_DEBUG.has_value(), "Taking screenshot...");
+
         takeScreenshot(amiga);
     }
-    {   utl::StopWatch(SNP_DEBUG, "Saving state...");
-        
+    {   utl::StopWatch(SNP_DEBUG.has_value(), "Saving state...");
+
         amiga.save(getData() + sizeof(SnapshotHeader));
     }
 }
@@ -160,8 +160,8 @@ Snapshot::compress(Compressor compressor)
 
         debug(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
-        {   auto watch = utl::StopWatch(SNP_DEBUG, "");
-            
+        {   auto watch = utl::StopWatch(SNP_DEBUG.has_value(), "");
+
             switch (compressor) {
                     
                 case Compressor::NONE:  break;
@@ -187,7 +187,7 @@ Snapshot::uncompress()
         
         debug(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
         
-        {   auto watch = utl::StopWatch(SNP_DEBUG, "");
+        {   auto watch = utl::StopWatch(SNP_DEBUG.has_value(), "");
         
             switch (compressor()) {
                     

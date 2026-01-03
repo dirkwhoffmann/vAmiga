@@ -100,8 +100,8 @@ struct LogChannelInfo {
     // Channel identifier
     string name;
 
-    // Verbosity level (0 = no output)
-    isize  verbosity;
+    // Severity level
+    optional<LogLevel> level;
 
     // Optional description
     string description;
@@ -118,11 +118,12 @@ public:
     // enum class LogLevel { Message, Warning, Fatal, Debug, Trace };
 
     // Looks up an existing channel or creates a new one if it does not exist
-    static LogChannel subscribe(string name, isize level, string description = "");
+    static LogChannel subscribe(string name, optional<long> level, string description = "");
+    static LogChannel subscribe(string name, optional<LogLevel> level, string description = "");
 
     // Modifies the verbosity of an existing channel
-    static void setLVerbosity(isize nr, isize level);
-    static void setLVerbosity(string name, isize level);
+    static void setLevel(isize nr, optional<LogLevel> level);
+    static void setLevel(string name, optional<LogLevel> level);
 
     // Verbosity level passed to the prefix function
     static long verbosity;
@@ -165,7 +166,7 @@ log(1, LogLevel::LV_WARNING, std::source_location::current(), "WARNING: " format
 log(1, LogLevel::LV_EMERGENCY, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
 
 #define xfiles(format, ...) { \
-log(XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
+log(CH_XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
 
 #ifdef NDEBUG
 

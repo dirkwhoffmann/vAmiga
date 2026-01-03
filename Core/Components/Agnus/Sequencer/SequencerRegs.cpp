@@ -31,7 +31,7 @@ Sequencer::pokeDDFSTRT(u16 value)
 void
 Sequencer::setDDFSTRT(u16 old, u16 value)
 {
-    trace(DDF_DEBUG | SEQ_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
+    trace(DDF_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
 
     auto posh = agnus.pos.h;
     
@@ -83,7 +83,7 @@ Sequencer::pokeDDFSTOP(u16 value)
 void
 Sequencer::setDDFSTOP(u16 old, u16 value)
 {
-    trace(DDF_DEBUG | SEQ_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
+    trace(DDF_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
 
     auto posh = agnus.pos.h;
     
@@ -120,7 +120,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
 void
 Sequencer::setDIWSTRT(u16 value)
 {
-    trace(DIW_DEBUG | SEQ_DEBUG, "setDIWSTRT(%X)\n", value);
+    trace(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = 0
@@ -141,7 +141,7 @@ Sequencer::setDIWSTRT(u16 value)
 void
 Sequencer::setDIWSTOP(u16 value)
 {
-    trace(DIW_DEBUG | SEQ_DEBUG, "setDIWSTOP(%X)\n", value);
+    trace(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = !V7
@@ -168,7 +168,7 @@ Sequencer::setDIWSTOP(u16 value)
 void
 Sequencer::setDIWHIGH(u16 value)
 {
-    trace(DIW_DEBUG | SEQ_DEBUG, "setDIWHIGH(%X)\n", value);
+    trace(DIW_DEBUG, "setDIWHIGH(%X)\n", value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- VA V9 V8 -- -- -- -- -- VA V9 V8

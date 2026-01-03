@@ -21,7 +21,21 @@ Loggable::channels()
 }
 
 LogChannel
-Loggable::subscribe(string name, isize level, string description)
+Loggable::subscribe(string name, optional<long> level, string description)
+{
+    if (level) {
+        return subscribe(std::move(name),
+                  optional<LogLevel>(LogLevel(*level)),
+                  std::move(description));
+    } else {
+        return subscribe(std::move(name),
+                  optional<LogLevel>(std::nullopt),
+                  std::move(description));
+    }
+}
+
+LogChannel
+Loggable::subscribe(string name, optional<LogLevel> level, string description)
 {
     auto &chns = channels();
 
@@ -32,8 +46,10 @@ Loggable::subscribe(string name, isize level, string description)
         chns.reserve(64);
 
         // Register the default channels
-        chns.push_back(LogChannelInfo { "NULL", 0, "Suppress output" });
-        chns.push_back(LogChannelInfo { "STD",  1, "Standard messages" });
+        chns.push_back(LogChannelInfo
+                       { "NULL", {}, "Suppress output" });
+        chns.push_back(LogChannelInfo
+                       { "STD", LogLevel::LV_DEBUG, "Standard messages" });
     }
 
     // Seek the channel
@@ -46,8 +62,8 @@ Loggable::subscribe(string name, isize level, string description)
     // Add a new channel
     chns.push_back(LogChannelInfo{
 
-        .verbosity       = level,
         .name        = std::move(name),
+        .level       = level,
         .description = std::move(description)
     });
 
@@ -55,17 +71,17 @@ Loggable::subscribe(string name, isize level, string description)
 }
 
 void
-Loggable::setLVerbosity(isize nr, isize verbosity)
+Loggable::setLevel(isize nr, optional<LogLevel> level)
 {
     if (nr < size())
-        channels()[nr].verbosity = verbosity;;
+        channels()[nr].level = level;;
 }
 
 void
-Loggable::setLVerbosity(string name, isize verbosity)
+Loggable::setLevel(string name, optional<LogLevel> level)
 {
     for (auto c : channels())
-        if (c.name == name) { c.verbosity = verbosity; return; }
+        if (c.name == name) { c.level = level; return; }
 }
 
 void
@@ -74,8 +90,8 @@ Loggable::log(LogChannel c,
               const std::source_location &loc,
               const char *fmt, ...) const
 {
-    auto v = c < LogChannel(channels().size()) ? channels()[c].verbosity : 0;
-    if (v == 0) return;
+    auto &channel = channels().at(c);
+    if (!channel.level || level > *channel.level) return;
 
     switch (level) {
 

@@ -122,25 +122,45 @@ GeometryDescriptor::dump(std::ostream &os) const
 void
 GeometryDescriptor::checkCompatibility() const
 {
-    if (HDR_ACCEPT_ALL) {
-        return;
-    }
-    if (cylinders == 0 || FORCE_HDR_UNKNOWN_GEOMETRY) {
+    if constexpr (HDR_ACCEPT_ALL) return;
+
+    // Check forced error conditions
+    if constexpr (FORCE_HDR_UNKNOWN_GEOMETRY) {
         throw DeviceError(DeviceError::HDR_UNKNOWN_GEOMETRY);
     }
-    if (numBytes() > 504_MB || FORCE_HDR_TOO_LARGE) {
+    if constexpr (FORCE_HDR_TOO_LARGE) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE);
     }
-    if ((cylinders < cMin && heads > 1) || cylinders > cMax || FORCE_HDR_UNSUPPORTED_C) {
+    if constexpr (FORCE_HDR_UNSUPPORTED_C) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
     }
-    if (heads < hMin || heads > hMax || FORCE_HDR_UNSUPPORTED_H) {
+    if constexpr (FORCE_HDR_UNSUPPORTED_H) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_COUNT, heads);
     }
-    if (sectors < sMin || sectors > sMax || FORCE_HDR_UNSUPPORTED_S) {
+    if constexpr (FORCE_HDR_UNSUPPORTED_S) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_COUNT, sectors);
     }
-    if (bsize != 512 || FORCE_HDR_UNSUPPORTED_B) {
+    if constexpr (FORCE_HDR_UNSUPPORTED_B) {
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);
+    }
+
+    // Check for real error conditions
+    if (cylinders == 0) {
+        throw DeviceError(DeviceError::HDR_UNKNOWN_GEOMETRY);
+    }
+    if (numBytes() > 504_MB) {
+        throw DeviceError(DeviceError::HDR_TOO_LARGE);
+    }
+    if ((cylinders < cMin && heads > 1) || cylinders > cMax) {
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
+    }
+    if (heads < hMin || heads > hMax) {
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_COUNT, heads);
+    }
+    if (sectors < sMin || sectors > sMax) {
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_COUNT, sectors);
+    }
+    if (bsize != 512) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);
     }
 }

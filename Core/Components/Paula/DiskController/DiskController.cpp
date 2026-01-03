@@ -517,9 +517,11 @@ DiskController::performTurboDMA(FloppyDrive *drive)
     }
     
     // Trigger disk interrupt with some delay
-    Cycle delay = MIMIC_UAE ? 2 * PAL::HPOS_CNT - agnus.pos.h + 30 : 512;
+    Cycle delay = 512;
+    if constexpr (MIMIC_UAE) { delay = 2 * PAL::HPOS_CNT - agnus.pos.h + 30; }
+
     paula.scheduleIrqRel(IrqSource::DSKBLK, DMA_CYCLES(delay));
-    
+
     setState(DriveDmaState::OFF);
 }
 

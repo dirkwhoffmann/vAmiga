@@ -530,7 +530,7 @@ HdController::processResource(u32 ptr)
         
         for (auto it = drivers.begin(); it != drivers.end(); ) {
 
-            if (HDR_FS_LOAD_ALL) {
+            if constexpr (HDR_FS_LOAD_ALL) {
 
                 it++;
                 continue;

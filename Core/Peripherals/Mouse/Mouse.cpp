@@ -132,13 +132,19 @@ Mouse::changePotgo(u16 &potgo) const
     u16 maskR = port.isPort1() ? 0x0400 : 0x4000;
     u16 maskM = port.isPort1() ? 0x0100 : 0x1000;
 
-    if (rightButton || HOLD_MOUSE_R) {
+    bool rb = rightButton;
+    bool mb = middleButton;
+
+    if constexpr (HOLD_MOUSE_R) rb = true;
+    if constexpr (HOLD_MOUSE_M) mb = true;
+
+    if (rb) {
         potgo &= ~maskR;
     } else if (config.pullUpResistors) {
         potgo |= maskR;
     }
 
-    if (middleButton || HOLD_MOUSE_M) {
+    if (mb) {
         potgo &= ~maskM;
     } else if (config.pullUpResistors) {
         potgo |= maskM;
@@ -150,7 +156,11 @@ Mouse::changePra(u8 &pra) const
 {
     u16 mask = port.isPort1() ? 0x0040 : 0x0080;
 
-    if (leftButton || HOLD_MOUSE_L) {
+    bool lb = leftButton;
+
+    if constexpr (HOLD_MOUSE_L) lb = true;
+
+    if (lb) {
         pra &= ~mask;
     } else if (config.pullUpResistors) {
         pra |= mask;
