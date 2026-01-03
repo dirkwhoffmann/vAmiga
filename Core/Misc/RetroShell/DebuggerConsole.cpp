@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
+#include "utl/abilities/Loggable.h"
 #include "utl/io.h"
 #include "utl/support.h"
 
@@ -1579,23 +1580,25 @@ DebuggerConsole::initCommands(RSCommand &root)
         }
     });
 
-    /*
     if (debugBuild) {
-        
-        for (auto i : DebugFlagEnum::elements()) {
-            
+
+        auto& channels = Loggable::getChannels();
+
+        for (isize i = 0; i < isize(channels.size()); ++i) {
+
             root.add({
                 
-                .tokens = { "debug", DebugFlagEnum::key(i) },
-                .chelp  = { DebugFlagEnum::help(i) },
+                .tokens = { "debug", channels[i].name },
+                .chelp  = { channels[i].description },
                 .args   = {
                     { .name = { "level", "Debug level" } }
                 },
                     .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                        
-                        Emulator::setDebugVariable(DebugFlag(values[0]), int(parseNum(args, "level")));
-                        
-                    }, .payload = { isize(i) }
+
+                        auto level = parseNum(args, "level");
+                        Loggable::setLVerbosity(values[0], isize(level));
+
+                    }, .payload = { i }
             });
         }
         
@@ -1612,7 +1615,6 @@ DebuggerConsole::initCommands(RSCommand &root)
                 }
         });
     }
-    */
     
     root.add({
         

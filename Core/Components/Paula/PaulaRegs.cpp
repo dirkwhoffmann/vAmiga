@@ -17,7 +17,7 @@ namespace vamiga {
 u16
 Paula::peekADKCONR() const
 {
-    debug(AUDREG_DEBUG || DSKREG_DEBUG, "peekADKCON() = %x\n", adkcon);
+    debug(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
     
     return adkcon;
 }
@@ -25,7 +25,7 @@ Paula::peekADKCONR() const
 void
 Paula::pokeADKCON(u16 value)
 {
-    debug(AUDREG_DEBUG || DSKREG_DEBUG, "pokeADKCON(%x)\n", value);
+    debug(AUDREG_DEBUG, "pokeADKCON(%x)\n", value);
 
     bool set = value & 0x8000;
     bool clr = !set;

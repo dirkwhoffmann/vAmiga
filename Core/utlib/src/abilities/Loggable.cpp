@@ -55,6 +55,20 @@ Loggable::subscribe(string name, isize level, string description)
 }
 
 void
+Loggable::setLVerbosity(isize nr, isize verbosity)
+{
+    if (nr < size())
+        channels()[nr].verbosity = verbosity;;
+}
+
+void
+Loggable::setLVerbosity(string name, isize verbosity)
+{
+    for (auto c : channels())
+        if (c.name == name) { c.verbosity = verbosity; return; }
+}
+
+void
 Loggable::log(LogChannel c,
               LogLevel level,
               const std::source_location &loc,

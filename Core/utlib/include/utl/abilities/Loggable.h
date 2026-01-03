@@ -69,8 +69,15 @@ public:
     // Looks up an existing channel or creates a new one if it does not exist
     static LogChannel subscribe(string name, isize level, string description = "");
 
+    // Modifies the verbosity of an existing channel
+    static void setLVerbosity(isize nr, isize level);
+    static void setLVerbosity(string name, isize level);
+
     // Verbosity level passed to the prefix function
     static long verbosity;
+
+    // Returns the number of registered channels
+    static isize size() noexcept { return channels().size(); }
 
     // Returns all registered channels
     static const std::vector<LogChannelInfo> &getChannels() noexcept { return channels(); }

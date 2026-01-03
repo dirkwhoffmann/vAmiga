@@ -87,13 +87,15 @@ Emulator::_dump(Category category, std::ostream &os) const
 
     if (category == Category::Debug) {
 
-        /*
-        for (const auto &i : DebugFlagEnum::elements()) {
+        auto cs = getChannels();
+        std::sort(cs.begin(), cs.end(),
+                  [](const auto& a, const auto& b) { return a.name < b.name; });
 
-            os << tab(DebugFlagEnum::key(i));
-            os << dec(getDebugVariable(DebugFlag(i))) << std::endl;
+        for (auto c : cs) {
+
+            os << tab(c.name);
+            os << dec(c.verbosity) << std::endl;
         }
-        */
     }
     
     if (category == Category::Defaults) {
