@@ -115,7 +115,7 @@ Paula::scheduleIrqAbs(IrqSource src, Cycle trigger)
     assert(trigger != 0);
     assert(agnus.id[SLOT_IRQ] == IRQ_CHECK);
 
-    logtrace(INT_DEBUG, "scheduleIrq(%ld, %lld)\n", long(src), trigger);
+    logDebug(INT_DEBUG, "scheduleIrq(%ld, %lld)\n", long(src), trigger);
 
     // Record the interrupt request
     if (trigger < setIntreq[isize(src)])
@@ -143,7 +143,7 @@ Paula::checkInterrupt()
         iplPipe = (iplPipe & ~0xFF) | level;
         agnus.scheduleRel<SLOT_IPL>(0, IPL_CHANGE, 5);
 
-        logtrace(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);
+        logDebug(CPU_DEBUG, "iplPipe: %016llx\n", iplPipe);
     }
 }
 

@@ -363,20 +363,20 @@ do { \
 
 #endif
 
-#define logEmergency(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
+#define logEmergency(format, ...) \
+    logGeneric(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logAlert(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_ALERT, format __VA_OPT__(,) __VA_ARGS__)
+#define logAlert(format, ...) \
+    logGeneric(STDERR, LogLevel::LOG_ALERT, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logCritical(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_CRIT, format __VA_OPT__(,) __VA_ARGS__)
+#define logCritical(format, ...) \
+    logGeneric(STDERR, LogLevel::LOG_CRIT, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logError(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_ERR, format __VA_OPT__(,) __VA_ARGS__)
+#define logError(format, ...) \
+    logGeneric(STDERR, LogLevel::LOG_ERR, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logWarning(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
+#define logWarning(format, ...) \
+    logGeneric(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
 
 #define logNotice(channel, format, ...) \
     logGeneric(channel, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
@@ -391,20 +391,18 @@ do { \
 // Deprecated backward compatibility macros
 //
 
-#define logmsg(format, ...) \
-logGeneric(STDERR, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
+// #define logmsg(format, ...) \
+// logGeneric(STDERR, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
 
 #define warn(format, ...) \
 logGeneric(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
 
 #define fatal(format, ...) \
-logGeneric(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
+logGeneric(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__); \
+fatalError
 
 #define xfiles(format, ...) \
 logGeneric(XFILES, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
 
 #define debug(ch, format, ...) \
 logGeneric(ch, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
-
-#define logtrace(ch, format, ...) \
-logGeneric(ch, LogLevel::LOG_DEBUG, format __VA_OPT__(,) __VA_ARGS__)

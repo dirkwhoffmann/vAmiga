@@ -103,7 +103,7 @@ DiagBoard::peek8(u32 addr)
 {
     auto result = spypeek8(addr);
 
-    logtrace(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
+    logDebug(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
@@ -112,7 +112,7 @@ DiagBoard::peek16(u32 addr)
 {
     auto result = spypeek16(addr);
 
-    logtrace(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
+    logDebug(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
     return result;
 }
 
@@ -133,13 +133,13 @@ DiagBoard::spypeek16(u32 addr) const
 void
 DiagBoard::poke8(u32 addr, u8 value)
 {
-    logtrace(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
+    logDebug(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
 }
 
 void
 DiagBoard::poke16(u32 addr, u16 value)
 {
-    logtrace(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
+    logDebug(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
 
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
 

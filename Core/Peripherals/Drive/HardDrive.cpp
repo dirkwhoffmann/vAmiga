@@ -558,9 +558,9 @@ HardDrive::format(FSFormat fsType, FSName name)
 {
     if constexpr (debug::HDR_DEBUG) {
 
-        logmsg("Formatting hard drive\n");
-        logmsg("    File system : %s\n", FSFormatEnum::key(fsType));
-        logmsg("           Name : %s\n", name.c_str());
+        logInfo(HDR_DEBUG, "Formatting hard drive\n");
+        logInfo(HDR_DEBUG, "    File system : %s\n", FSFormatEnum::key(fsType));
+        logInfo(HDR_DEBUG, "           Name : %s\n", name.c_str());
     }
     
     // Only proceed if a disk is present

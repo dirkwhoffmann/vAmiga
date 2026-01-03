@@ -41,7 +41,7 @@ Sequencer::eolHandler()
     // Renew the signal recorder if it has been modified
     if (sigRecorder.modified) {
 
-        logtrace(SEQ_DEBUG, "eolHandler: sigRecorder.modified\n");
+        logDebug(SEQ_DEBUG, "eolHandler: sigRecorder.modified\n");
         hsyncActions |= UPDATE_SIG_RECORDER;
     }
 
@@ -49,13 +49,13 @@ Sequencer::eolHandler()
     // if (agnus.pos.v == vstop || agnus.inLastRasterline()) {
     if (agnus.pos.v == vstop || agnus.pos.v == (agnus.isPAL() ? 312 : 262)) {
         
-        logtrace(SEQ_DEBUG, "eolHandler: Vertical flipflop off\n");
+        logDebug(SEQ_DEBUG, "eolHandler: Vertical flipflop off\n");
         ddfInitial.bpv = ddf.bpv = false;
         hsyncActions |= UPDATE_SIG_RECORDER;
 
     } else if (agnus.pos.v == vstrt) {
 
-        logtrace(SEQ_DEBUG, "eolHandler: Vertical flipflop on\n");
+        logDebug(SEQ_DEBUG, "eolHandler: Vertical flipflop on\n");
         ddfInitial.bpv = ddf.bpv = true;
         hsyncActions |= UPDATE_SIG_RECORDER;
     }

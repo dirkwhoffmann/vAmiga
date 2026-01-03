@@ -126,7 +126,7 @@ Joystick::_didLoad()
 void
 Joystick::setButton(bool value)
 {
-    logtrace(PRT_DEBUG, "Button = %d\n", value);
+    logDebug(PRT_DEBUG, "Button = %d\n", value);
     button = value;
 }
 
@@ -139,7 +139,7 @@ Joystick::isAutofiring()
 void
 Joystick::startAutofire()
 {
-    logtrace(PRT_DEBUG, "startAutofire()\n");
+    logDebug(PRT_DEBUG, "startAutofire()\n");
 
     // Load magazine
     reload(config.autofireBursts ? config.autofireBullets : INT_MAX);
@@ -154,7 +154,7 @@ Joystick::startAutofire()
 void
 Joystick::stopAutofire()
 {
-    logtrace(PRT_DEBUG, "stopAutofire()\n");
+    logDebug(PRT_DEBUG, "stopAutofire()\n");
 
     // Release button and empty the bullet counter
     setButton(false);

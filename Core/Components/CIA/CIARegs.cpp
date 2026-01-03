@@ -135,7 +135,7 @@ CIA::peek(u16 addr)
             fatalError;
     }
     
-    logtrace(CIAREG_DEBUG, "Peek(%d [%s]) = %02x\n", addr, CIARegEnum::key(CIAReg(addr)), result);
+    logDebug(CIAREG_DEBUG, "Peek(%d [%s]) = %02x\n", addr, CIARegEnum::key(CIAReg(addr)), result);
     
     return result;
 }
@@ -209,7 +209,7 @@ CIA::spypeek(u16 addr) const
 void
 CIA::poke(u16 addr, u8 value)
 {
-    logtrace(CIAREG_DEBUG, "Poke(%d [%s], %02x)\n", addr, CIARegEnum::key(CIAReg(addr)), value);
+    logDebug(CIAREG_DEBUG, "Poke(%d [%s], %02x)\n", addr, CIARegEnum::key(CIAReg(addr)), value);
     
     wakeUp();
     
@@ -450,7 +450,7 @@ CIA::poke(u16 addr, u8 value)
             if ((value ^ cra) & 0x40) {
 
                 // Serial direction changing
-                logtrace(CIASER_DEBUG, "Serial register: %s\n", (value & 0x40) ? "output" : "input");
+                logDebug(CIASER_DEBUG, "Serial register: %s\n", (value & 0x40) ? "output" : "input");
 
                 // Inform the keyboard if this CIA is connected to it
                 if (isCIAA()) keyboard.setSPLine(!(value & 0x40), clock);

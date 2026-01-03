@@ -234,7 +234,7 @@ AudioFilter::setOption(Opt option, i64 value)
 void
 AudioFilter::setup(double sampleRate)
 {
-    logtrace(AUD_DEBUG, "Setting sample rate to %.1f Hz\n", sampleRate);
+    logDebug(AUD_DEBUG, "Setting sample rate to %.1f Hz\n", sampleRate);
 
     setupLoFilter(sampleRate);
     setupLedFilter(sampleRate);

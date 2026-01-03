@@ -17,7 +17,7 @@ StateMachine<nr>::serviceEvent()
 {
     assert(agnus.id[SLOT_CH0+nr] == CHX_PERFIN);
 
-    logtrace(AUD_DEBUG, "CHX_PERFIN state = %ld\n", state);
+    logDebug(AUD_DEBUG, "CHX_PERFIN state = %ld\n", state);
 
     switch (state) {
 

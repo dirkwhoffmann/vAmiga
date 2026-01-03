@@ -37,7 +37,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is free
             if (!agnus.busIsFree<BusOwner::BLITTER>()) {
-                logtrace(BLTTIM_DEBUG, "BLT_STRT1: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
+                logDebug(BLTTIM_DEBUG, "BLT_STRT1: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
                 break;
             }
 
@@ -49,7 +49,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is a free
             if (!agnus.busIsFree<BusOwner::BLITTER>()) {
-                logtrace(BLTTIM_DEBUG, "BLT_STRT2: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
+                logDebug(BLTTIM_DEBUG, "BLT_STRT2: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
                 break;
             }
 
@@ -59,25 +59,25 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_COPY_SLOW:
 
-            logtrace(BLT_DEBUG, "Copy instruction %d:%d\n", bltconUSE(), bltpc);
+            logDebug(BLT_DEBUG, "Copy instruction %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][0][bltconFE()][bltpc])();
             break;
 
         case BLT_COPY_FAKE:
 
-            logtrace(BLT_DEBUG, "Copy fake %d:%d\n", bltconUSE(), bltpc);
+            logDebug(BLT_DEBUG, "Copy fake %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][1][bltconFE()][bltpc])();
             break;
 
         case BLT_LINE_SLOW:
             
-            logtrace(BLT_DEBUG, "Line instruction %d:%d\n", bltconUSEB(), bltpc);
+            logDebug(BLT_DEBUG, "Line instruction %d:%d\n", bltconUSEB(), bltpc);
             (this->*lineBlitInstr[bltconUSEBC()][0][bltpc])();
             break;
 
         case BLT_LINE_FAKE:
             
-            logtrace(BLT_DEBUG, "Line fake %d:%d\n", bltconUSEB(), bltpc);
+            logDebug(BLT_DEBUG, "Line fake %d:%d\n", bltconUSEB(), bltpc);
             (this->*lineBlitInstr[bltconUSEBC()][1][bltpc])();
             break;
 

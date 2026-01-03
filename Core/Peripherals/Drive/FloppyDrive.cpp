@@ -875,7 +875,7 @@ FloppyDrive::findSyncMark()
         break;
     }
 
-    logtrace(DSK_DEBUG, "Moving to SYNC mark at offset %ld\n", head.offset);
+    logDebug(DSK_DEBUG, "Moving to SYNC mark at offset %ld\n", head.offset);
 }
 
 bool

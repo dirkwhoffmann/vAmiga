@@ -1611,14 +1611,14 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
 template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::NONE> (u32 addr, u8 value)
 {
-    logtrace(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
+    logDebug(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
 Memory::poke16 <Accessor::CPU, MemSrc::NONE> (u32 addr, u16 value)
 {
-    logtrace(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
+    logDebug(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
@@ -1629,7 +1629,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u8 value)
     
     if constexpr (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
-            logtrace(BLT_MEM_GUARD, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
+            logDebug(BLT_MEM_GUARD, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }
 
@@ -1651,7 +1651,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u16 value)
     
     if constexpr (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
-            logtrace(BLT_MEM_GUARD, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
+            logDebug(BLT_MEM_GUARD, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }
 
@@ -1947,7 +1947,7 @@ Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
 template <> void
 Memory::poke16 <Accessor::AGNUS, MemSrc::NONE> (u32 addr, u16 value)
 {
-    logtrace(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
+    logDebug(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
@@ -2198,7 +2198,7 @@ Memory::peekCustom16(u32 addr)
 
     }
 
-    logtrace(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, MemoryDebugger::regName(addr), result);
+    logDebug(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, MemoryDebugger::regName(addr), result);
 
     dataBus = result;
     return result;
@@ -2275,9 +2275,9 @@ template <Accessor s> void
 Memory::pokeCustom16(u32 addr, u16 value)
 {
     if ((addr & 0xFFF) == 0x30) {
-        logtrace(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
+        logDebug(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {
-        logtrace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
+        logDebug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
     }
 
     dataBus = value;
@@ -2697,10 +2697,10 @@ Memory::pokeCustom16(u32 addr, u16 value)
     }
     
     if (addr <= 0x1E) {
-        logtrace(INVREG_DEBUG,
+        logDebug(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): READ-ONLY\n", addr, MemoryDebugger::regName(addr));
     } else {
-        logtrace(INVREG_DEBUG,
+        logDebug(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): NON-OCS\n", addr, MemoryDebugger::regName(addr));
     }
 }

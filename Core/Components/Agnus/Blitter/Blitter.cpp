@@ -416,7 +416,7 @@ Blitter::doFill(u16 &data, bool &carry) const
 {
     assert(carry == 0 || carry == 1);
 
-    logtrace(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
+    logDebug(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
     
     u8 dataHi = HI_BYTE(data);
     u8 dataLo = LO_BYTE(data);
@@ -506,15 +506,15 @@ Blitter::beginBlit()
 
             linecount++;
             check1 = check2 = Hashable::fnvInit32();
-            logmsg("Line %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
-                   linecount, bltsizeH, bltsizeV,
-                   bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                   bltcon0,
-                   bltamod, bltbmod, bltcmod, bltdmod,
-                   bltapt & agnus.ptrMask,
-                   bltbpt & agnus.ptrMask,
-                   bltcpt & agnus.ptrMask,
-                   bltdpt & agnus.ptrMask);
+            logInfo(BLT_CHECKSUM, "Line %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+                    linecount, bltsizeH, bltsizeV,
+                    bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                    bltcon0,
+                    bltamod, bltbmod, bltcmod, bltdmod,
+                    bltapt & agnus.ptrMask,
+                    bltbpt & agnus.ptrMask,
+                    bltcpt & agnus.ptrMask,
+                    bltdpt & agnus.ptrMask);
         }
 
         beginLineBlit(level);
@@ -525,17 +525,17 @@ Blitter::beginBlit()
 
             copycount++;
             check1 = check2 = Hashable::fnvInit32();
-            logmsg("Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
-                   copycount,
-                   bltsizeH, bltsizeV,
-                   bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                   bltcon0,
-                   bltamod, bltbmod, bltcmod, bltdmod,
-                   bltapt & agnus.ptrMask,
-                   bltbpt & agnus.ptrMask,
-                   bltcpt & agnus.ptrMask,
-                   bltdpt & agnus.ptrMask,
-                   bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
+            logInfo(BLT_CHECKSUM, "Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+                    copycount,
+                    bltsizeH, bltsizeV,
+                    bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                    bltcon0,
+                    bltamod, bltbmod, bltcmod, bltdmod,
+                    bltapt & agnus.ptrMask,
+                    bltbpt & agnus.ptrMask,
+                    bltcpt & agnus.ptrMask,
+                    bltdpt & agnus.ptrMask,
+                    bltconDESC() ? "D" : "", bltconFE() ? "F" : "");
         }
 
         beginCopyBlit(level);
