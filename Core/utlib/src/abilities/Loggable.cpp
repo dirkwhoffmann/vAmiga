@@ -79,31 +79,42 @@ Loggable::log(LogChannel c,
 
     switch (level) {
 
-        case LogLevel::Message:
+        case LogLevel::LV_EMERGENCY:
 
             prefix(verbosity, loc);
+            fprintf(stderr, "EMERGENCY: ");
             break;
 
-        case LogLevel::Warning:
+        case LogLevel::LV_CRITICAL:
+
+            prefix(verbosity, loc);
+            fprintf(stderr, "CRITICAL: ");
+            break;
+
+        case LogLevel::LV_ERROR:
+
+            prefix(verbosity, loc);
+            fprintf(stderr, "ERROR: ");
+            break;
+
+        case LogLevel::LV_WARNING:
 
             prefix(verbosity, loc);
             fprintf(stderr, "WARNING: ");
             break;
 
-        case LogLevel::Fatal:
+        case LogLevel::LV_NOTICE:
 
             prefix(verbosity, loc);
-            fprintf(stderr, " FATAL ERROR: ");
-            assert(0);
-            exit(1);
+            fprintf(stderr, "NOTICE: ");
             break;
 
-        case LogLevel::Debug:
+        case LogLevel::LV_INFO:
 
             prefix(verbosity, loc);
             break;
 
-        case LogLevel::Trace:
+        case LogLevel::LV_DEBUG:
 
             tracePrefix(verbosity, loc);
             prefix(verbosity, loc);
@@ -117,6 +128,9 @@ Loggable::log(LogChannel c,
     va_start(ap, fmt);
     vfprintf(stderr, fmt, ap);
     va_end(ap);
+
+    // Exit the application if an emergency message came in
+    if (level == LogLevel::LV_EMERGENCY) { assert(0); exit(1); }
 }
 
 }

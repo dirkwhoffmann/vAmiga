@@ -38,11 +38,62 @@
  * be performed when variadic functions are used.
  */
 
-#include "utl/common.h"
+#include "utl/abilities/Reflectable.h"
 
 namespace utl {
 
 using LogChannel = isize;
+
+enum class LogLevel : long
+{
+    LV_EMERGENCY   = 0,
+    LV_ALERT       = 1,
+    LV_CRITICAL    = 2,
+    LV_ERROR       = 3,
+    LV_WARNING     = 4,
+    LV_NOTICE      = 5,
+    LV_INFO        = 6,
+    LV_DEBUG       = 7
+};
+
+struct LogLevelEnum : Reflectable<LogLevelEnum, LogLevel>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = (long)LogLevel::LV_DEBUG;
+
+    static const char *_key(long value) { return _key(LogLevel(value)); }
+    static const char *_key(LogLevel value)
+    {
+        switch (value) {
+
+            case LogLevel::LV_EMERGENCY:    return "LV_EMERGENCY";
+            case LogLevel::LV_ALERT:        return "LV_ALERT";
+            case LogLevel::LV_CRITICAL:     return "LV_CRITICAL";
+            case LogLevel::LV_ERROR:        return "LV_ERROR";
+            case LogLevel::LV_WARNING:      return "LV_WARNING";
+            case LogLevel::LV_NOTICE:       return "LV_NOTICE";
+            case LogLevel::LV_INFO:         return "LV_INFO";
+            case LogLevel::LV_DEBUG:        return "LV_DEBUG";
+        }
+        return "???";
+    }
+    static const char *help(long value) { return help(LogLevel(value)); }
+    static const char *help(LogLevel value)
+    {
+        switch (value) {
+
+            case LogLevel::LV_EMERGENCY:    return "System is unusable";
+            case LogLevel::LV_ALERT:        return "Immediate action required";
+            case LogLevel::LV_CRITICAL:     return "Critical condition";
+            case LogLevel::LV_ERROR:        return "Error condition";
+            case LogLevel::LV_WARNING:      return "Warning condition";
+            case LogLevel::LV_NOTICE:       return "Normal but significant condition";
+            case LogLevel::LV_INFO:         return "Informational message";
+            case LogLevel::LV_DEBUG:        return "Debug message";
+        }
+        return "???";
+    }
+};
 
 struct LogChannelInfo {
 
@@ -64,7 +115,7 @@ class Loggable {
 public:
 
     // Message category
-    enum class LogLevel { Message, Warning, Fatal, Debug, Trace };
+    // enum class LogLevel { Message, Warning, Fatal, Debug, Trace };
 
     // Looks up an existing channel or creates a new one if it does not exist
     static LogChannel subscribe(string name, isize level, string description = "");
@@ -105,36 +156,36 @@ protected:
 #define LOG_CHANNEL(a) CONCAT(CH_,a)
 
 #define msg(format, ...) { \
-log(1, LogLevel::Message, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
+log(1, LogLevel::LV_NOTICE, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
 
 #define warn(format, ...) { \
-log(1, LogLevel::Warning, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
+log(1, LogLevel::LV_WARNING, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
 
 #define fatal(format, ...) { \
-log(1, LogLevel::Fatal, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
+log(1, LogLevel::LV_EMERGENCY, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
 
 #define xfiles(format, ...) { \
-log(XFILES, LogLevel::Message, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
+log(XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
 
 #ifdef NDEBUG
 
 #define debug(channel, format, ...) \
 do { if constexpr (channel) { \
-log(LOG_CHANNEL(channel), LogLevel::Debug, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
 }} while (0);
 
 #define trace(channel, format, ...) \
 do { if constexpr (channel) { \
-log(LOG_CHANNEL(channel), LogLevel::Trace, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
 }} while (0);
 
 #else
 
 #define debug(channel, format, ...) \
-log(LOG_CHANNEL(channel), LogLevel::Debug, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
 
 #define trace(channel, format, ...) \
-log(LOG_CHANNEL(channel), LogLevel::Trace, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
 
 #endif
 }
