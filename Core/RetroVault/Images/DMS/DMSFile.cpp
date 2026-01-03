@@ -52,7 +52,7 @@ DMSFile::didLoad()
     size_t adfSize = 0;
 
     int verbose = 0;
-    if constexpr (DMS_DEBUG.has_value()) verbose = 1;
+    if constexpr (DMS_DEBUG) verbose = 1;
     if (extractDMS(data.ptr, (size_t)data.size, &adfData, &adfSize, verbose) == 0) {
 
         if (!FORCE_DMS_CANT_CREATE) {

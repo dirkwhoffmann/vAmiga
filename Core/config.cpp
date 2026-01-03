@@ -19,8 +19,9 @@
 
 #define DEBUG_CHANNEL(name, description) \
 LogChannel EXPAND_CONCAT(CH_, name) = \
-Loggable::subscribe(XSTR(name), name, description);
-
+name ? \
+Loggable::subscribe(XSTR(name), std::optional<long>(7), description) : \
+Loggable::subscribe(XSTR(name), std::optional<long>(std::nullopt), description);
 namespace utl {
 
 //

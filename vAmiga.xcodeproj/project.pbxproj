@@ -740,7 +740,7 @@
 		503FC4B92EE08B2B00637C95 /* Reflectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflectable.h; sourceTree = "<group>"; };
 		503FC4BD2EE091DC00637C95 /* Reflectable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Reflectable.cpp; sourceTree = "<group>"; };
 		503FC4C22EE092D900637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		503FC4C52EE093DD00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMakeLists.txt; sourceTree = "<group>"; };
+		503FC4C52EE093DD00637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4C62EE0A95000637C95 /* Files.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Files.h; sourceTree = "<group>"; };
 		503FC4C82EE0A97D00637C95 /* Streams.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Streams.h; sourceTree = "<group>"; };
 		503FC4C92EE0AB0500637C95 /* Files.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Files.cpp; sourceTree = "<group>"; };
@@ -768,7 +768,7 @@
 		503FC4F92EE1C35A00637C95 /* ReentrantMutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReentrantMutex.h; sourceTree = "<group>"; };
 		503FC4FA2EE1C36B00637C95 /* AutoMutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoMutex.h; sourceTree = "<group>"; };
 		503FC4FB2EE1C49500637C95 /* concurrency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = concurrency.h; sourceTree = "<group>"; };
-		503FC4FC2EE1C75300637C95 /* Synchronizable.h */ = {isa = PBXFileReference; lastKnownFileType = text; path = Synchronizable.h; sourceTree = "<group>"; };
+		503FC4FC2EE1C75300637C95 /* Synchronizable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Synchronizable.h; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -2123,7 +2123,6 @@
 		508FE06021EA318D0043D0E9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				503FC4B12EE00FF900637C95 /* utlib */,
 				50CF461C2620420500BB3B95 /* CMakeLists.txt */,
 				50B14C0921EB228E002E32A6 /* config.h */,
 				505B331E2B46D0CA00D3736F /* config.cpp */,
@@ -2132,6 +2131,7 @@
 				50DA83E32C161961001209AA /* VAmiga.cpp */,
 				50FC050027DA205D00C3E566 /* Headless.h */,
 				50FC047427DA108500C3E566 /* Headless.cpp */,
+				503FC4B12EE00FF900637C95 /* utlib */,
 				50104E8825ECDAA30047A9AA /* Infrastructure */,
 				506436E329C1D90B00768528 /* Components */,
 				505B801D23FE628F002407FE /* Ports */,

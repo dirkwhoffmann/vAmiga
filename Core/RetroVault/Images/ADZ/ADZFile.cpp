@@ -23,7 +23,7 @@ ADZFile::init(const class ADFFile &adf)
 
     debug(HDF_DEBUG, "Uncompressed ADF size: %ld bytes\n", data.size);
     
-    {   utl::StopWatch(HDF_DEBUG.has_value(), "Compressing ADF...");
+    {   utl::StopWatch(HDF_DEBUG, "Compressing ADF...");
         
         try {
             data.gzip();
