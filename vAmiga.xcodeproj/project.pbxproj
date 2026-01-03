@@ -149,8 +149,8 @@
 		505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A133D2C3BA8A000FF8D2C /* MemoryDebugger.cpp */; };
 		505A13402C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A133D2C3BA8A000FF8D2C /* MemoryDebugger.cpp */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
-		505B331F2B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
-		505B33202B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
+		505B331F2B46D25700D3736F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* debug.cpp */; };
+		505B33202B46D25700D3736F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* debug.cpp */; };
 		505C010A2577A8C000F9E05C /* FSDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C01082577A8C000F9E05C /* FSDescriptor.cpp */; };
 		505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83F727739ED0001F8159 /* RemoteManager.cpp */; };
 		505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83FB2773C9BA001F8159 /* SerServer.cpp */; };
@@ -826,7 +826,7 @@
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
-		505B331E2B46D0CA00D3736F /* config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = config.cpp; sourceTree = "<group>"; };
+		505B331E2B46D0CA00D3736F /* debug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		505C01082577A8C000F9E05C /* FSDescriptor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDescriptor.cpp; sourceTree = "<group>"; };
 		505C01092577A8C000F9E05C /* FSDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDescriptor.h; sourceTree = "<group>"; };
 		505C83F727739ED0001F8159 /* RemoteManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoteManager.cpp; sourceTree = "<group>"; };
@@ -1147,6 +1147,7 @@
 		50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AnyImage.cpp; sourceTree = "<group>"; };
 		50BF4B6F2F055CA600F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50BF4B712F05759600F1B9F2 /* ImageTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageTypes.h; sourceTree = "<group>"; };
+		50BF4B762F095FC300F1B9F2 /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -2125,7 +2126,8 @@
 			children = (
 				50CF461C2620420500BB3B95 /* CMakeLists.txt */,
 				50B14C0921EB228E002E32A6 /* config.h */,
-				505B331E2B46D0CA00D3736F /* config.cpp */,
+				50BF4B762F095FC300F1B9F2 /* debug.h */,
+				505B331E2B46D0CA00D3736F /* debug.cpp */,
 				50DA83E72C1619E0001209AA /* VAmigaTypes.h */,
 				5099432B29C2116500867E8F /* VAmiga.h */,
 				50DA83E32C161961001209AA /* VAmiga.cpp */,
@@ -3159,7 +3161,7 @@
 				503FC4DD2EE157B700637C95 /* Hashable.cpp in Sources */,
 				506407CC2D1AC45A002FBC57 /* SocketServer.cpp in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
-				505B331F2B46D25700D3736F /* config.cpp in Sources */,
+				505B331F2B46D25700D3736F /* debug.cpp in Sources */,
 				507C01B22D256B9400E29933 /* BusPanel.swift in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
@@ -3369,7 +3371,7 @@
 				501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */,
 				50BF4B512F04705500F1B9F2 /* D64File.cpp in Sources */,
 				504CC8C22D5A819F00C2AC9A /* ADZFile.cpp in Sources */,
-				505B33202B46D25700D3736F /* config.cpp in Sources */,
+				505B33202B46D25700D3736F /* debug.cpp in Sources */,
 				50FC04E027DA1A1400C3E566 /* xdms.c in Sources */,
 				50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */,
 				50FC04F227DA1A4A00C3E566 /* RegressionTester.cpp in Sources */,
