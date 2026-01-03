@@ -124,15 +124,20 @@ FSDescriptor::dump(std::ostream &os) const
 void
 FSDescriptor::checkCompatibility() const
 {
-    if (numBytes() > 504_MB || FORCE_FS_WRONG_CAPACITY) {
+    if constexpr (debug::FORCE_FS_WRONG_CAPACITY)
         throw FSError(FSError::FS_WRONG_CAPACITY);
-    }
-    if (bsize != 512 || FORCE_FS_WRONG_BSIZE) {
+
+    if constexpr (debug::FORCE_FS_WRONG_BSIZE)
         throw FSError(FSError::FS_WRONG_BSIZE);
-    }
-    if (isize(rootBlock) >= numBlocks) {
+
+    if (numBytes() > 504_MB)
+        throw FSError(FSError::FS_WRONG_CAPACITY);
+
+    if (bsize != 512)
+        throw FSError(FSError::FS_WRONG_BSIZE);
+
+    if (isize(rootBlock) >= numBlocks)
         throw FSError(FSError::FS_OUT_OF_RANGE);
-    }
 }
 
 GeometryDescriptor::GeometryDescriptor(isize c, isize h, isize s, isize b)

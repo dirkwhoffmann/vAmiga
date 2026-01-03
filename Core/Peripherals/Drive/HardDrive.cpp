@@ -47,7 +47,7 @@ HardDrive::operator= (const HardDrive& other) {
     CLONE(state)
     CLONE(flags)
 
-    if constexpr (RUA_ON_STEROIDS) {
+    if constexpr (debug::RUA_ON_STEROIDS) {
 
         // Clone all blocks
         CLONE(data)
@@ -85,7 +85,7 @@ HardDrive::init()
     ptable.clear();
     drivers.clear();
     head = {};
-    setFlag(DiskFlags::MODIFIED, FORCE_HDR_MODIFIED);
+    setFlag(DiskFlags::MODIFIED, debug::FORCE_HDR_MODIFIED);
 }
 
 void
@@ -161,7 +161,7 @@ HardDrive::init(const HDFFile &hdf)
     // Copy over all needed file system drivers
     for (const auto &driver : hdf.drivers) {
 
-        bool needed = HDR_FS_LOAD_ALL;
+        bool needed = debug::HDR_FS_LOAD_ALL;
 
         for (const auto &part : ptable) {
             if (driver.dosType == part.dosType) {
@@ -192,7 +192,7 @@ HardDrive::init(const HDFFile &hdf)
         
     // Print some debug information
     debug(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
-    if constexpr (HDR_DEBUG) {
+    if constexpr (debug::HDR_DEBUG) {
         for (auto &driver : drivers) driver.dump();
     }
 }
@@ -235,7 +235,8 @@ HardDrive::_initialize()
 void
 HardDrive::_didReset(bool hard)
 {
-    if (FORCE_HDR_MODIFIED) { setFlag(DiskFlags::MODIFIED, true); }
+    if constexpr (debug::FORCE_HDR_MODIFIED)
+        setFlag(DiskFlags::MODIFIED, true);
 
     // Mark all blocks as dirty
     dirty.clear(true);
@@ -555,7 +556,7 @@ HardDrive::defaultName(isize partition) const
 void
 HardDrive::format(FSFormat fsType, FSName name)
 {
-    if (HDR_DEBUG) {
+    if constexpr (debug::HDR_DEBUG) {
 
         logmsg("Formatting hard drive\n");
         logmsg("    File system : %s\n", FSFormatEnum::key(fsType));

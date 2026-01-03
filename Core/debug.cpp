@@ -18,12 +18,12 @@
 #define XSTR(x) STR(x)
 
 #define DEBUG_CHANNEL(name, description) \
-LogChannel EXPAND_CONCAT(CH_, name) = \
-name ? \
+LogChannel name = \
+::utl::debug::name ? \
 Loggable::subscribe(XSTR(name), std::optional<long>(7), description) : \
 Loggable::subscribe(XSTR(name), std::optional<long>(std::nullopt), description);
 
-namespace utl {
+namespace utl::channel {
 
 //
 // Register a logging channel for each debug flag

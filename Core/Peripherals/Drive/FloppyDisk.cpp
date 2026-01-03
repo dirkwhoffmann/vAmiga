@@ -32,7 +32,7 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
     if (dia == Diameter::INCH_35  && den == Density::HD) numTrackBytes = 24636;
     if (dia == Diameter::INCH_525 && den == Density::DD) numTrackBytes = 12668;
 
-    if (numTrackBytes == 0 || FORCE_DISK_INVALID_LAYOUT) {
+    if (numTrackBytes == 0 || debug::FORCE_DISK_INVALID_LAYOUT) {
         throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
     }
 
@@ -248,7 +248,7 @@ FloppyDisk::write8(CylNr c, HeadNr h, isize offset, u8 value)
 void
 FloppyDisk::clearDisk()
 {
-    setModified(FORCE_DISK_MODIFIED);
+    setModified(debug::FORCE_DISK_MODIFIED);
 
     // Initialize with random data
     srand(0);
@@ -334,7 +334,7 @@ void
 FloppyDisk::encode(const ADFFile &adf)
 {
     isize tracks = adf.numTracks();
-    if constexpr (ADF_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
+    if constexpr (debug::ADF_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -351,7 +351,7 @@ FloppyDisk::encode(const ADFFile &adf)
         Encoder::amiga.encodeTrack(byteView(t), t, adf.byteView(t));
 
     // In debug mode, also run the decoder
-    if constexpr (ADF_DEBUG) {
+    if constexpr (debug::ADF_DEBUG) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -363,7 +363,9 @@ void
 FloppyDisk::decode(ADFFile &adf) const
 {
     auto tracks = adf.numTracks();
-    if constexpr (ADF_DEBUG) fprintf(stderr, "Decoding Amiga disk with %ld tracks\n", tracks);
+
+    if constexpr (debug::ADF_DEBUG)
+        fprintf(stderr, "Decoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -381,7 +383,9 @@ void
 FloppyDisk::encode(const class IMGFile &img)
 {
     isize tracks = img.numTracks();
-    if constexpr (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+
+    if constexpr (debug::IMG_DEBUG)
+        fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -398,7 +402,7 @@ FloppyDisk::encode(const class IMGFile &img)
         Encoder::ibm.encodeTrack(byteView(t), t, img.byteView(t));
 
     // In debug mode, also run the decoder
-    if constexpr (IMG_DEBUG) {
+    if constexpr (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -410,7 +414,8 @@ void
 FloppyDisk::decode(class IMGFile &img) const
 {
     auto tracks = img.numTracks();
-    if constexpr (IMG_DEBUG) fprintf(stderr, "Decoding DOS disk (%ld tracks)\n", tracks);
+    if constexpr (debug::IMG_DEBUG)
+        fprintf(stderr, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -428,7 +433,8 @@ void
 FloppyDisk::encode(const class STFile &img)
 {
     isize tracks = img.numTracks();
-    if constexpr (IMG_DEBUG) fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+    if constexpr (debug::IMG_DEBUG)
+        fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -445,7 +451,7 @@ FloppyDisk::encode(const class STFile &img)
         Encoder::ibm.encodeTrack(byteView(t), t, img.byteView(t));
 
     // In debug mode, also run the decoder
-    if constexpr (IMG_DEBUG) {
+    if constexpr (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -457,7 +463,9 @@ void
 FloppyDisk::decode(class STFile &img) const
 {
     auto tracks = img.numTracks();
-    if constexpr (IMG_DEBUG) fprintf(stderr, "Decoding Atari ST disk (%ld tracks)\n", tracks);
+
+    if constexpr (debug::IMG_DEBUG)
+        fprintf(stderr, "Decoding Atari ST disk (%ld tracks)\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);

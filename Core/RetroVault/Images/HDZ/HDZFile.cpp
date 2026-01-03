@@ -32,7 +32,7 @@ HDZFile::init(const class HDFFile &hdf)
     
     debug(HDF_DEBUG, "Uncompressed HDF size: %ld bytes\n", data.size);
 
-    {   utl::StopWatch(HDF_DEBUG, "Compressing HDF...");
+    {   utl::StopWatch(debug::HDF_DEBUG, "Compressing HDF...");
 
         try {
             data.gzip();
@@ -55,7 +55,7 @@ HDZFile::didLoad()
 {
     debug(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
         
-    {   utl::StopWatch(HDF_DEBUG, "Uncompressing...");
+    {   utl::StopWatch(debug::HDF_DEBUG, "Uncompressing...");
 
         try {
             data.gunzip();

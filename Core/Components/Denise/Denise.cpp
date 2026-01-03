@@ -364,7 +364,7 @@ Denise::drawEven(Pixel offset)
 template <Resolution mode> void
 Denise::drawBoth(Pixel offset)
 {
-    if (BPL_ON_STEROIDS) {
+    if constexpr (debug::BPL_ON_STEROIDS) {
 
         drawOdd <mode> (offset);
         drawEven <mode> (offset);
@@ -1013,7 +1013,7 @@ Denise::updateBorderColor()
     } else {
         borderColor = 0;  // Background color
     }
-    if constexpr (BORDER_DEBUG) {
+    if constexpr (debug::BORDER_DEBUG) {
         borderColor = 65; // Debug color
     }
 }
@@ -1029,7 +1029,7 @@ Denise::updateBorderBuffer()
     auto hf = hflop;
 
     // Print some debug info if requested
-    if (DIW_DEBUG) {
+    if constexpr (debug::DIW_DEBUG) {
 
         logtrace(DIW_DEBUG, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
         diwChanges.dump();
@@ -1154,7 +1154,7 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
         
-        if (CLX_DEBUG) {
+        if constexpr (debug::CLX_DEBUG) {
             
             if ((z & comp45) && (z & comp67)) logtrace(CLX_DEBUG, "Coll: 45 and 67\n");
             if ((z & comp23) && (z & comp67)) logtrace(CLX_DEBUG, "Coll: 23 and 67\n");

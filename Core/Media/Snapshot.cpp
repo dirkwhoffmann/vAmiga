@@ -68,11 +68,11 @@ Snapshot::Snapshot(isize capacity)
 
 Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 {
-    {   utl::StopWatch(SNP_DEBUG, "Taking screenshot...");
+    {   utl::StopWatch(debug::SNP_DEBUG, "Taking screenshot...");
 
         takeScreenshot(amiga);
     }
-    {   utl::StopWatch(SNP_DEBUG, "Saving state...");
+    {   utl::StopWatch(debug::SNP_DEBUG, "Saving state...");
 
         amiga.save(getData() + sizeof(SnapshotHeader));
     }
@@ -86,9 +86,9 @@ Snapshot::Snapshot(Amiga &amiga, Compressor compressor) : Snapshot(amiga)
 void
 Snapshot::didLoad()
 {
-    if (FORCE_SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
-    if (FORCE_SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);
-    if (FORCE_SNAP_IS_BETA) throw MediaError(MediaError::SNAP_IS_BETA);
+    if (debug::FORCE_SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
+    if (debug::FORCE_SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);
+    if (debug::FORCE_SNAP_IS_BETA) throw MediaError(MediaError::SNAP_IS_BETA);
 
     if (isTooOld()) throw MediaError(MediaError::SNAP_TOO_OLD);
     if (isTooNew()) throw MediaError(MediaError::SNAP_TOO_NEW);
@@ -160,7 +160,7 @@ Snapshot::compress(Compressor compressor)
 
         debug(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
-        {   auto watch = utl::StopWatch(SNP_DEBUG, "");
+        {   auto watch = utl::StopWatch(debug::SNP_DEBUG, "");
 
             switch (compressor) {
                     
@@ -187,7 +187,7 @@ Snapshot::uncompress()
         
         debug(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
         
-        {   auto watch = utl::StopWatch(SNP_DEBUG, "");
+        {   auto watch = utl::StopWatch(debug::SNP_DEBUG, "");
         
             switch (compressor()) {
                     

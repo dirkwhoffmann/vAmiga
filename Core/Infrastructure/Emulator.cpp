@@ -43,7 +43,7 @@ Emulator::~Emulator()
 void
 Emulator::launch(const void *listener, Callback *func)
 {
-    if (FORCE_LAUNCH_ERROR) throw CoreError(CoreError::LAUNCH);
+    if (debug::FORCE_LAUNCH_ERROR) throw CoreError(CoreError::LAUNCH);
 
     // Connect the listener to the message queue of the main instance
     if (listener && func) { main.msgQueue.setListener(listener, func); }
@@ -293,7 +293,7 @@ Emulator::computeFrame()
             main.computeFrame();
 
             // Recreate the run-ahead instance if necessary
-            if (isDirty || RUA_ON_STEROIDS) recreateRunAheadInstance();
+            if (isDirty || debug::RUA_ON_STEROIDS) recreateRunAheadInstance();
 
             // Run the runahead instance
             ahead.computeFrame();
@@ -325,8 +325,8 @@ Emulator::cloneRunAheadInstance()
     // Recreate the runahead instance from scratch
     ahead = main; isDirty = false;
 
-    if constexpr (RUA_CHECKSUM) {
-        
+    if constexpr (debug::RUA_CHECKSUM) {
+
         if (ahead != main) {
             
             main.diff(ahead);
@@ -343,7 +343,7 @@ Emulator::recreateRunAheadInstance()
     auto &config = main.getConfig();
 
     // Clone the main instance
-    if constexpr (RUA_DEBUG) {
+    if constexpr (debug::RUA_DEBUG) {
         utl::StopWatch watch("Run-ahead: Clone");
         cloneRunAheadInstance();
     } else {
@@ -351,7 +351,7 @@ Emulator::recreateRunAheadInstance()
     }
 
     // Advance to the proper frame
-    if constexpr (RUA_DEBUG) {
+    if constexpr (debug::RUA_DEBUG) {
         utl::StopWatch watch("Run-ahead: Fast-forward");
         ahead.fastForward(config.runAhead - 1);
     } else {

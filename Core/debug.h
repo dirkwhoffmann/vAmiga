@@ -9,7 +9,7 @@
 
 #pragma once
 
-namespace utl {
+namespace utl::debug {
 
 //
 // Debug settings
@@ -178,6 +178,7 @@ constexpr long FORCE_FS_WRONG_CAPACITY      = 0;
 constexpr long FORCE_FS_WRONG_DOS_TYPE      = 0;
 constexpr long FORCE_DMS_CANT_CREATE        = 0;
 
+}
 
 //
 // Logging channels
@@ -193,146 +194,150 @@ constexpr long FORCE_DMS_CANT_CREATE        = 0;
  * to apply performance optimization.
  */
 
+namespace utl::channel {
+
 // General
-extern long CH_XFILES;
-extern long CH_CNF_DEBUG;
-extern long CH_OBJ_DEBUG;
-extern long CH_DEF_DEBUG;
-extern long CH_MIMIC_UAE;
+extern long XFILES;
+extern long CNF_DEBUG;
+extern long OBJ_DEBUG;
+extern long DEF_DEBUG;
+extern long MIMIC_UAE;
 
 // Emulator
-extern long CH_RUN_DEBUG;
-extern long CH_TIM_DEBUG;
-extern long CH_WARP_DEBUG;
-extern long CH_CMD_DEBUG;
-extern long CH_MSG_DEBUG;
-extern long CH_SNP_DEBUG;
+extern long RUN_DEBUG;
+extern long TIM_DEBUG;
+extern long WARP_DEBUG;
+extern long CMD_DEBUG;
+extern long MSG_DEBUG;
+extern long SNP_DEBUG;
 
 // Run ahead
-extern long CH_RUA_DEBUG;
-extern long CH_RUA_CHECKSUM;
-extern long CH_RUA_ON_STEROIDS;
+extern long RUA_DEBUG;
+extern long RUA_CHECKSUM;
+extern long RUA_ON_STEROIDS;
 
 // CPU
-extern long CH_CPU_DEBUG;
+extern long CPU_DEBUG;
 
 // Memory access
-extern long CH_OCSREG_DEBUG;
-extern long CH_ECSREG_DEBUG;
-extern long CH_INVREG_DEBUG;
-extern long CH_MEM_DEBUG;
+extern long OCSREG_DEBUG;
+extern long ECSREG_DEBUG;
+extern long INVREG_DEBUG;
+extern long MEM_DEBUG;
 
 // Agnus
-extern long CH_DMA_DEBUG;
-extern long CH_DDF_DEBUG;
-extern long CH_SEQ_DEBUG;
-extern long CH_SEQ_ON_STEROIDS;
-extern long CH_NTSC_DEBUG;
+extern long DMA_DEBUG;
+extern long DDF_DEBUG;
+extern long SEQ_DEBUG;
+extern long SEQ_ON_STEROIDS;
+extern long NTSC_DEBUG;
 
 // Copper
-extern long CH_COP_CHECKSUM;
-extern long CH_COPREG_DEBUG;
-extern long CH_COP_DEBUG;
+extern long COP_CHECKSUM;
+extern long COPREG_DEBUG;
+extern long COP_DEBUG;
 
 // Blitter
-extern long CH_BLT_CHECKSUM;
-extern long CH_BLTREG_DEBUG;
-extern long CH_BLT_REG_GUARD;
-extern long CH_BLT_MEM_GUARD;
-extern long CH_BLT_DEBUG;
-extern long CH_BLTTIM_DEBUG;
-extern long CH_SLOW_BLT_DEBUG;
+extern long BLT_CHECKSUM;
+extern long BLTREG_DEBUG;
+extern long BLT_REG_GUARD;
+extern long BLT_MEM_GUARD;
+extern long BLT_DEBUG;
+extern long BLTTIM_DEBUG;
+extern long SLOW_BLT_DEBUG;
 
 // Denise
-extern long CH_BPLREG_DEBUG;
-extern long CH_BPLDAT_DEBUG;
-extern long CH_BPLMOD_DEBUG;
-extern long CH_SPRREG_DEBUG;
-extern long CH_COLREG_DEBUG;
-extern long CH_CLXREG_DEBUG;
-extern long CH_BPL_ON_STEROIDS;
-extern long CH_DIW_DEBUG;
-extern long CH_SPR_DEBUG;
-extern long CH_CLX_DEBUG;
-extern long CH_BORDER_DEBUG;
-extern long CH_LINE_DEBUG;
-extern long CH_DENISE_ON_STEROIDS;
+extern long BPLREG_DEBUG;
+extern long BPLDAT_DEBUG;
+extern long BPLMOD_DEBUG;
+extern long SPRREG_DEBUG;
+extern long COLREG_DEBUG;
+extern long CLXREG_DEBUG;
+extern long BPL_ON_STEROIDS;
+extern long DIW_DEBUG;
+extern long SPR_DEBUG;
+extern long CLX_DEBUG;
+extern long BORDER_DEBUG;
+extern long LINE_DEBUG;
+extern long DENISE_ON_STEROIDS;
 
 // Paula
-extern long CH_INTREG_DEBUG;
-extern long CH_INT_DEBUG;
+extern long INTREG_DEBUG;
+extern long INT_DEBUG;
 
 // CIAs
-extern long CH_CIAREG_DEBUG;
-extern long CH_CIASER_DEBUG;
-extern long CH_CIA_DEBUG;
-extern long CH_TOD_DEBUG;
+extern long CIAREG_DEBUG;
+extern long CIASER_DEBUG;
+extern long CIA_DEBUG;
+extern long TOD_DEBUG;
 
 // Floppy Drives
-extern long CH_ALIGN_HEAD;
-extern long CH_DSK_CHECKSUM;
-extern long CH_DSKREG_DEBUG;
-extern long CH_DSK_DEBUG;
-extern long CH_MFM_DEBUG;
-extern long CH_FS_DEBUG;
+extern long ALIGN_HEAD;
+extern long DSK_CHECKSUM;
+extern long DSKREG_DEBUG;
+extern long DSK_DEBUG;
+extern long MFM_DEBUG;
+extern long FS_DEBUG;
 
 // Hard Drives
-extern long CH_HDR_ACCEPT_ALL;
-extern long CH_HDR_FS_LOAD_ALL;
-extern long CH_WT_DEBUG;
+extern long HDR_ACCEPT_ALL;
+extern long HDR_FS_LOAD_ALL;
+extern long WT_DEBUG;
 
 // Audio
-extern long CH_AUDREG_DEBUG;
-extern long CH_AUD_DEBUG;
-extern long CH_AUDBUF_DEBUG;
-extern long CH_AUDVOL_DEBUG;
-extern long CH_DISABLE_AUDIRQ;
+extern long AUDREG_DEBUG;
+extern long AUD_DEBUG;
+extern long AUDBUF_DEBUG;
+extern long AUDVOL_DEBUG;
+extern long DISABLE_AUDIRQ;
 
 // Ports
-extern long CH_POSREG_DEBUG;
-extern long CH_JOYREG_DEBUG;
-extern long CH_POTREG_DEBUG;
-extern long CH_VID_DEBUG;
-extern long CH_PRT_DEBUG;
-extern long CH_SER_DEBUG;
-extern long CH_POT_DEBUG;
-extern long CH_HOLD_MOUSE_L;
-extern long CH_HOLD_MOUSE_M;
-extern long CH_HOLD_MOUSE_R;
+extern long POSREG_DEBUG;
+extern long JOYREG_DEBUG;
+extern long POTREG_DEBUG;
+extern long VID_DEBUG;
+extern long PRT_DEBUG;
+extern long SER_DEBUG;
+extern long POT_DEBUG;
+extern long HOLD_MOUSE_L;
+extern long HOLD_MOUSE_M;
+extern long HOLD_MOUSE_R;
 
 // Expansion boards
-extern long CH_ZOR_DEBUG;
-extern long CH_ACF_DEBUG;
-extern long CH_FAS_DEBUG;
-extern long CH_HDR_DEBUG;
-extern long CH_DBD_DEBUG;
+extern long ZOR_DEBUG;
+extern long ACF_DEBUG;
+extern long FAS_DEBUG;
+extern long HDR_DEBUG;
+extern long DBD_DEBUG;
 
 // Media types
-extern long CH_ADF_DEBUG;
-extern long CH_HDF_DEBUG;
-extern long CH_DMS_DEBUG;
-extern long CH_IMG_DEBUG;
+extern long ADF_DEBUG;
+extern long HDF_DEBUG;
+extern long DMS_DEBUG;
+extern long IMG_DEBUG;
 
 // Real-time clock
-extern long CH_RTC_DEBUG;
+extern long RTC_DEBUG;
 
 // Keyboard
-extern long CH_KBD_DEBUG;
-extern long CH_KEY_DEBUG;
+extern long KBD_DEBUG;
+extern long KEY_DEBUG;
 
 // Misc
-extern long CH_RSH_DEBUG;
-extern long CH_REC_DEBUG;
-extern long CH_SCK_DEBUG;
-extern long CH_SRV_DEBUG;
-extern long CH_GDB_DEBUG;
+extern long RSH_DEBUG;
+extern long REC_DEBUG;
+extern long SCK_DEBUG;
+extern long SRV_DEBUG;
+extern long GDB_DEBUG;
 
 }
-
 
 //
 // Experimental
 //
+
+// Use same name for debug options, use different name spaces: -> dbg::HDF / chn::HDF
+// Use loginfo, logdebug, lognotice, etc, for each Syslog level
 
 
 //
@@ -352,26 +357,27 @@ log(1, LogLevel::LV_WARNING, std::source_location::current(), "WARNING: " format
 log(1, LogLevel::LV_EMERGENCY, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
 
 #define xfiles(format, ...) { \
-log(CH_XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
+log(channel::XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
 
 #ifdef NDEBUG
 
-#define debug(channel, format, ...) \
+#define debug(ch, format, ...) \
 do { if constexpr (channel) { \
-log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+log(channel::ch, LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
 }} while (0);
 
-#define logtrace(channel, format, ...) \
+#define logtrace(ch, format, ...) \
 do { if constexpr (channel) { \
-log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
+log(channel::ch, LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
 }} while (0);
 
 #else
 
-#define debug(channel, format, ...) \
-log(LOG_CHANNEL(channel), LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+#define debug(ch, format, ...) \
+log(channel::ch, LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
 
-#define logtrace(channel, format, ...) \
-log(LOG_CHANNEL(channel), LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+#define logtrace(ch, format, ...) \
+log(channel::ch, LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
 
 #endif
+

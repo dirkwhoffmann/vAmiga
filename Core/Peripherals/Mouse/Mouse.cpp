@@ -135,8 +135,8 @@ Mouse::changePotgo(u16 &potgo) const
     bool rb = rightButton;
     bool mb = middleButton;
 
-    if constexpr (HOLD_MOUSE_R) rb = true;
-    if constexpr (HOLD_MOUSE_M) mb = true;
+    if constexpr (debug::HOLD_MOUSE_R) rb = true;
+    if constexpr (debug::HOLD_MOUSE_M) mb = true;
 
     if (rb) {
         potgo &= ~maskR;
@@ -158,7 +158,7 @@ Mouse::changePra(u8 &pra) const
 
     bool lb = leftButton;
 
-    if constexpr (HOLD_MOUSE_L) lb = true;
+    if constexpr (debug::HOLD_MOUSE_L) lb = true;
 
     if (lb) {
         pra &= ~mask;

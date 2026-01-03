@@ -122,9 +122,9 @@ DeniseDebugger::getSpriteInfo(isize nr)
 void
 DeniseDebugger::hsyncHandler(isize vpos)
 {
-    if constexpr (LINE_DEBUG) {
+    if constexpr (debug::LINE_DEBUG) {
 
-        if (LINE_DEBUG == vpos) {
+        if (debug::LINE_DEBUG == vpos) {
 
             auto *ptr = pixelEngine.workingPtr(vpos);
 

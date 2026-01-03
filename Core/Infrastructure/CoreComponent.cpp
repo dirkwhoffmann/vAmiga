@@ -264,11 +264,11 @@ CoreComponent::load(const u8 *buf)
         auto count = u64(reader.ptr - (buf + result));
 
         // Check integrity
-        if (size != count || hash != c->checksum(false) || FORCE_SNAP_CORRUPTED) {
+        if (size != count || hash != c->checksum(false) || debug::FORCE_SNAP_CORRUPTED) {
 
             logmsg("Loaded %llu bytes (expected %llu)\n", count, size);
             logmsg("Hash: %llx (expected %llx)\n", hash, c->checksum(false));
-            if constexpr (SNP_DEBUG) { fatalError; }
+            if constexpr (debug::SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
@@ -302,10 +302,10 @@ CoreComponent::save(u8 *buffer)
         isize count = (isize)(writer.ptr - (buffer + result));
 
         // Check integrity
-        if (count != c->size(false) || FORCE_SNAP_CORRUPTED) {
+        if (count != c->size(false) || debug::FORCE_SNAP_CORRUPTED) {
 
             logmsg("Saved %ld bytes (expected %ld)\n", count, c->size(false));
-            if constexpr (SNP_DEBUG) { fatalError; }
+            if constexpr (debug::SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }

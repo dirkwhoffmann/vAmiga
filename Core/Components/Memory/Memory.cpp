@@ -478,16 +478,16 @@ Memory::_isReady() const
     bool hasRom = traits.crc != 0;
     bool hasAros = traits.vendor == RomVendor::AROS;
 
-    if (!hasRom || FORCE_ROM_MISSING) {
+    if (!hasRom || debug::FORCE_ROM_MISSING) {
         throw CoreError(CoreError::ROM_MISSING);
     }
-    if (!chip || FORCE_CHIP_RAM_MISSING) {
+    if (!chip || debug::FORCE_CHIP_RAM_MISSING) {
         throw CoreError(CoreError::CHIP_RAM_MISSING);
     }
-    if ((hasAros && !ext) || FORCE_AROS_NO_EXTROM) {
+    if ((hasAros && !ext) || debug::FORCE_AROS_NO_EXTROM) {
         throw CoreError(CoreError::AROS_NO_EXTROM);
     }
-    if ((hasAros && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
+    if ((hasAros && ramSize() < MB(1)) || debug::FORCE_AROS_RAM_LIMIT) {
         throw CoreError(CoreError::AROS_RAM_LIMIT);
     }
 }
@@ -1277,8 +1277,8 @@ Memory::peek8 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr)
     ASSERT_AUTO_ADDR(addr);
     
     // Experimental code to match UAE output (for debugging)
-    if constexpr (MIMIC_UAE) {
-        
+    if constexpr (debug::MIMIC_UAE) {
+
         if (fastRamSize() == 0) {
             dataBus = (addr & 0b10) ? 0xE8 : 0x02;
             return (u8)dataBus;
@@ -1627,7 +1627,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if constexpr (BLT_MEM_GUARD) {
+    if constexpr (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
             logtrace(BLT_MEM_GUARD, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
@@ -1649,7 +1649,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if constexpr (BLT_MEM_GUARD) {
+    if constexpr (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
             logtrace(BLT_MEM_GUARD, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }

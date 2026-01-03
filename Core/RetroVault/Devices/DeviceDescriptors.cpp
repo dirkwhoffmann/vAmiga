@@ -122,25 +122,25 @@ GeometryDescriptor::dump(std::ostream &os) const
 void
 GeometryDescriptor::checkCompatibility() const
 {
-    if constexpr (HDR_ACCEPT_ALL) return;
+    if constexpr (debug::HDR_ACCEPT_ALL) return;
 
     // Check forced error conditions
-    if constexpr (FORCE_HDR_UNKNOWN_GEOMETRY) {
+    if constexpr (debug::FORCE_HDR_UNKNOWN_GEOMETRY) {
         throw DeviceError(DeviceError::HDR_UNKNOWN_GEOMETRY);
     }
-    if constexpr (FORCE_HDR_TOO_LARGE) {
+    if constexpr (debug::FORCE_HDR_TOO_LARGE) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE);
     }
-    if constexpr (FORCE_HDR_UNSUPPORTED_C) {
+    if constexpr (debug::FORCE_HDR_UNSUPPORTED_C) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
     }
-    if constexpr (FORCE_HDR_UNSUPPORTED_H) {
+    if constexpr (debug::FORCE_HDR_UNSUPPORTED_H) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_COUNT, heads);
     }
-    if constexpr (FORCE_HDR_UNSUPPORTED_S) {
+    if constexpr (debug::FORCE_HDR_UNSUPPORTED_S) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_COUNT, sectors);
     }
-    if constexpr (FORCE_HDR_UNSUPPORTED_B) {
+    if constexpr (debug::FORCE_HDR_UNSUPPORTED_B) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);
     }
 

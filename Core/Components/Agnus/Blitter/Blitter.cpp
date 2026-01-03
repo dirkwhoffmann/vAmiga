@@ -62,7 +62,7 @@ Blitter::_didReset(bool hard)
 void
 Blitter::_run()
 {
-    if constexpr (BLT_MEM_GUARD) {
+    if constexpr (debug::BLT_MEM_GUARD) {
 
         memguard.resize(mem.getConfig().chipSize);
         memguard.clear();
@@ -128,7 +128,7 @@ Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
 {
     u16 result = doMintermLogicQuick(a, b, c, minterm);
 
-    if constexpr (BLT_DEBUG) {
+    if constexpr (debug::BLT_DEBUG) {
 
         u16 result2 = 0;
         
@@ -502,7 +502,7 @@ Blitter::beginBlit()
 
     if (bltconLINE()) {
 
-        if constexpr (BLT_CHECKSUM) {
+        if constexpr (debug::BLT_CHECKSUM) {
 
             linecount++;
             check1 = check2 = Hashable::fnvInit32();
@@ -521,8 +521,8 @@ Blitter::beginBlit()
 
     } else {
 
-        if constexpr (BLT_CHECKSUM) {
-            
+        if constexpr (debug::BLT_CHECKSUM) {
+
             copycount++;
             check1 = check2 = Hashable::fnvInit32();
             logmsg("Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
@@ -603,7 +603,7 @@ Blitter::endBlit()
     debug(BLTTIM_DEBUG, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
-    if constexpr (BLT_MEM_GUARD) blitcount++;
+    if constexpr (debug::BLT_MEM_GUARD) blitcount++;
     
     // Clear the Blitter slot
     agnus.cancel<SLOT_BLT>();
