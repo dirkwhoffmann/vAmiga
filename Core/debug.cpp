@@ -22,6 +22,7 @@ LogChannel EXPAND_CONCAT(CH_, name) = \
 name ? \
 Loggable::subscribe(XSTR(name), std::optional<long>(7), description) : \
 Loggable::subscribe(XSTR(name), std::optional<long>(std::nullopt), description);
+
 namespace utl {
 
 //
