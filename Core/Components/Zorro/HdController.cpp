@@ -682,7 +682,7 @@ HdController::processInitSeg(u32 ptr)
                         auto addr = segPtrs[i] + 8 + offset;
                         auto value = mem.spypeek32 <Accessor::CPU> (addr);
                         debug(HDR_DEBUG, "%x: %x -> %x\n",
-                              addr, value, value + segPtrs[s.target] + 8)
+                              addr, value, value + segPtrs[s.target] + 8);
                         mem.patch(addr, value + segPtrs[s.target] + 8);
                     }
                 }

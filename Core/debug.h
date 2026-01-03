@@ -199,6 +199,11 @@ constexpr long DMS_CANT_CREATE        = 0;
 
 namespace utl::channel {
 
+// Default IO channels
+
+extern long DEVNULL;
+extern long STDERR;
+
 // General
 extern long XFILES;
 extern long CNF_DEBUG;
@@ -336,51 +341,70 @@ extern long GDB_DEBUG;
 }
 
 //
-// Experimental
+// Logging macros
 //
 
-// Use same name for debug options, use different name spaces: -> dbg::HDF / chn::HDF
-// Use loginfo, logdebug, lognotice, etc, for each Syslog level
+#if NDEBUG
 
-
-//
-// Wrapper macros (TODO: cleanup)
-//
-
-#define CONCAT(a,b) a##b
-#define LOG_CHANNEL(a) CONCAT(CH_,a)
-
-#define logmsg(format, ...) { \
-log(1, LogLevel::LV_NOTICE, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); }
-
-#define warn(format, ...) { \
-log(1, LogLevel::LV_WARNING, std::source_location::current(), "WARNING: " format __VA_OPT__(,) __VA_ARGS__); }
-
-#define fatal(format, ...) { \
-log(1, LogLevel::LV_EMERGENCY, std::source_location::current(), "FATAL: " format __VA_OPT__(,) __VA_ARGS__); assert(false); exit(1); }
-
-#define xfiles(format, ...) { \
-log(channel::XFILES, LogLevel::LV_NOTICE, std::source_location::current(), "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }
-
-#ifdef NDEBUG
-
-#define debug(ch, format, ...) \
-do { if constexpr (channel) { \
-log(channel::ch, LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
-}} while (0);
-
-#define logtrace(ch, format, ...) \
-do { if constexpr (channel) { \
-log(channel::ch, LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__); \
-}} while (0);
+#define logGeneric(key, level, format, ...) \
+    do { \
+        if constexpr (debug::key) \
+            log(channel::key, level, std::source_location::current(), \
+                format __VA_OPT__(,) __VA_ARGS__); \
+    } while (0)
 
 #else
 
-#define debug(ch, format, ...) \
-log(channel::ch, LogLevel::LV_INFO, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
-
-#define logtrace(ch, format, ...) \
-log(channel::ch, LogLevel::LV_DEBUG, std::source_location::current(), format __VA_OPT__(,) __VA_ARGS__);
+#define logGeneric(key, level, format, ...)                           \
+do { \
+    log(channel::key, level, std::source_location::current(), \
+        format __VA_OPT__(,) __VA_ARGS__); \
+} while (0)
 
 #endif
 
+#define logEmergency(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logAlert(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_ALERT, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logCritical(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_CRIT, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logError(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_ERR, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logWarning(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logNotice(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logInfo(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logDebug(channel, format, ...) \
+    logGeneric(channel, LogLevel::LOG_DEBUG, format __VA_OPT__(,) __VA_ARGS__)
+
+//
+// Deprecated backward compatibility macros
+//
+
+#define logmsg(format, ...) \
+logGeneric(STDERR, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
+
+#define warn(format, ...) \
+logGeneric(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
+
+#define fatal(format, ...) \
+logGeneric(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
+
+#define xfiles(format, ...) \
+logGeneric(XFILES, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
+
+#define debug(ch, format, ...) \
+logGeneric(ch, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logtrace(ch, format, ...) \
+logGeneric(ch, LogLevel::LOG_DEBUG, format __VA_OPT__(,) __VA_ARGS__)

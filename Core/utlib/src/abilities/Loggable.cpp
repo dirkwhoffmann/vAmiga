@@ -40,20 +40,10 @@ Loggable::subscribe(string name, optional<LogLevel> level, string description)
 {
     auto &chns = channels();
 
-    // Register default channels if not present yet
-    if (chns.empty()) {
+    // Reserve some space to speed up further registrations
+    if (chns.empty()) chns.reserve(64);
 
-        // Reserve some space to speed up further registrations
-        chns.reserve(64);
-
-        // Register the default channels
-        chns.push_back(LogChannelInfo
-                       { "NULL", {}, "Suppress output" });
-        chns.push_back(LogChannelInfo
-                       { "STD", LogLevel::LV_DEBUG, "Standard messages" });
-    }
-
-    // Seek the channel
+    // Seek channel
     for (LogChannel i = 0; i < LogChannel(chns.size()); ++i)
         if (chns[i].name == name) return i;
 
@@ -96,42 +86,42 @@ Loggable::log(LogChannel c,
 
     switch (level) {
 
-        case LogLevel::LV_EMERGENCY:
+        case LogLevel::LOG_EMERG:
 
             prefix(loc);
             fprintf(stderr, "EMERGENCY: ");
             break;
 
-        case LogLevel::LV_CRITICAL:
+        case LogLevel::LOG_CRIT:
 
             prefix(loc);
             fprintf(stderr, "CRITICAL: ");
             break;
 
-        case LogLevel::LV_ERROR:
+        case LogLevel::LOG_ERR:
 
             prefix(loc);
             fprintf(stderr, "ERROR: ");
             break;
 
-        case LogLevel::LV_WARNING:
+        case LogLevel::LOG_WARNING:
 
             prefix(loc);
             fprintf(stderr, "WARNING: ");
             break;
 
-        case LogLevel::LV_NOTICE:
+        case LogLevel::LOG_NOTICE:
 
             prefix(loc);
             fprintf(stderr, "NOTICE: ");
             break;
 
-        case LogLevel::LV_INFO:
+        case LogLevel::LOG_INFO:
 
             prefix(loc);
             break;
 
-        case LogLevel::LV_DEBUG:
+        case LogLevel::LOG_DEBUG:
 
             tracePrefix(loc);
             prefix(loc);
@@ -147,7 +137,7 @@ Loggable::log(LogChannel c,
     va_end(ap);
 
     // Exit the application if an emergency message came in
-    if (level == LogLevel::LV_EMERGENCY) { assert(0); exit(1); }
+    if (level == LogLevel::LOG_EMERG) { assert(0); exit(1); }
 }
 
 }

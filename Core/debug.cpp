@@ -11,21 +11,24 @@
 
 #include "utl/abilities/Loggable.h"
 
-#define CONCAT(a,b) a##b
-#define EXPAND_CONCAT(a,b) CONCAT(a,b)
-
 #define STR(x) #x
 #define XSTR(x) STR(x)
 
 #define DEBUG_CHANNEL(name, description) \
 LogChannel name = \
-::utl::debug::name ? \
-Loggable::subscribe(XSTR(name), std::optional<long>(7), description) : \
-Loggable::subscribe(XSTR(name), std::optional<long>(std::nullopt), description);
+  ::utl::debug::name ? \
+    Loggable::subscribe(XSTR(name), std::optional<long>(7), description) : \
+    Loggable::subscribe(XSTR(name), std::optional<long>(std::nullopt), description);
 
 namespace utl::channel {
 
-//
+// Register default IO channels
+
+LogChannel DEVNULL =
+Loggable::subscribe("DEVNULL", std::optional<long>(std::nullopt), "Message sink");
+LogChannel STDERR  =
+Loggable::subscribe("STDERR",  std::optional<long>(7), "Standard error");
+
 // Register a logging channel for each debug flag
 
 // General
