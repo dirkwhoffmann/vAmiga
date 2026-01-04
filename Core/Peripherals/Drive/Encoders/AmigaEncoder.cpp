@@ -24,7 +24,7 @@ AmigaEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
     const isize ssize = 1088;                      // MFM sector size in bytes
     const isize count = (isize)src.size() / bsize; // Number of sectors to encode
 
-    if constexpr (debug::ADF_DEBUG) fprintf(stderr, "Encoding Amiga track %ld with %ld sectors\n", t, count);
+    loginfo(ADF_DEBUG, "Encoding Amiga track %ld with %ld sectors\n", t, count);
     assert(src.size() % bsize == 0);
 
     // Format track
@@ -35,7 +35,7 @@ AmigaEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
         encodeSector(track, s * ssize, t, s, ByteView(src.subspan(s * bsize, bsize)));
 
     // Compute a debug checksum
-    if constexpr (debug::ADF_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n", t, track.fnv32());
+    loginfo(ADF_DEBUG, "Track %ld checksum = %x\n", t, track.fnv32());
 }
 
 void
@@ -44,7 +44,7 @@ AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, Secto
     const isize bsize = 512;   // Block size in bytes
     const isize ssize = 1088;  // MFM sector size in bytes
 
-    if constexpr (debug::ADF_DEBUG) fprintf(stderr, "Encoding Amiga sector %ld\n", s);
+    loginfo(ADF_DEBUG, "Encoding Amiga sector %ld\n", s);
     assert(data.size() == bsize);
 
     // Block header layout:
@@ -115,7 +115,7 @@ AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
 
-    if constexpr (debug::ADF_DEBUG) fprintf(stderr, "Decoding Amiga track %ld\n", t);
+    loginfo(ADF_DEBUG, "Decoding Amiga track %ld\n", t);
     assert(dst.size() % bsize == 0);
 
     // Find all sectors

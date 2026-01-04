@@ -10,11 +10,12 @@
 #pragma once
 
 #include "DeviceTypes.h"
+#include "utl/abilities/Loggable.h"
 #include "utl/primitives/BitView.h"
 
 namespace vamiga {
 
-class DiskEncoder {
+class DiskEncoder : public Loggable {
 
 public:
 

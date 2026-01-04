@@ -334,7 +334,7 @@ void
 FloppyDisk::encode(const ADFFile &adf)
 {
     isize tracks = adf.numTracks();
-    if constexpr (debug::ADF_DEBUG) fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
+    loginfo(ADF_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -364,8 +364,7 @@ FloppyDisk::decode(ADFFile &adf) const
 {
     auto tracks = adf.numTracks();
 
-    if constexpr (debug::ADF_DEBUG)
-        fprintf(stderr, "Decoding Amiga disk with %ld tracks\n", tracks);
+    loginfo(ADF_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);

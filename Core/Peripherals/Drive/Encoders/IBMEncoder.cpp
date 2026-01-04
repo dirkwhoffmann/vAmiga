@@ -56,7 +56,7 @@ IBMEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, SectorN
 {
     const isize bsize = 512;   // Block size in bytes
 
-    if constexpr (debug::ADF_DEBUG) fprintf(stderr, "Encoding sector %ld\n", s);
+    loginfo(ADF_DEBUG, "Encoding sector %ld\n", s);
     assert(data.size() == bsize);
 
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
