@@ -12,7 +12,7 @@
 #include "utl/io.h"
 #include <fstream>
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 using namespace utl;
 

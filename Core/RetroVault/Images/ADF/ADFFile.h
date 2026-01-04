@@ -13,15 +13,15 @@
 #include "DeviceDescriptors.h"
 #include "FileSystems/Amiga/FSDescriptor.h"
 
-namespace retro::amigafs { class FileSystem; }
+namespace retro::rfs::amiga { class FileSystem; }
 
 namespace retro::image {
 
 using namespace utl;
-using retro::amigafs::BootBlockId;
-using retro::amigafs::FileSystem;
-using retro::amigafs::FSFormat;
-using retro::amigafs::FSDescriptor;
+using retro::rfs::amiga::BootBlockId;
+using retro::rfs::amiga::FileSystem;
+using retro::rfs::amiga::FSFormat;
+using retro::rfs::amiga::FSDescriptor;
 using retro::device::GeometryDescriptor;
 
 class ADFFile : public FloppyDiskImage {

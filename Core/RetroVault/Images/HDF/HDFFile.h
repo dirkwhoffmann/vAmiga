@@ -13,8 +13,8 @@
 #include "FileSystems/Amiga/FSDescriptor.h"
 #include "utl/common.h"
 
-using retro::amigafs::FSDescriptor;
-using retro::amigafs::FSFormat;
+using retro::rfs::amiga::FSDescriptor;
+using retro::rfs::amiga::FSFormat;
 using retro::device::GeometryDescriptor;
 using retro::device::PartitionDescriptor;
 using retro::device::DriverDescriptor;

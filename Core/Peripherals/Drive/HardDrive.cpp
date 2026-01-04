@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-using retro::amigafs::FSFormatEnum;
+using retro::rfs::amiga::FSFormatEnum;
 
 std::fstream HardDrive::wtStream[4];
 

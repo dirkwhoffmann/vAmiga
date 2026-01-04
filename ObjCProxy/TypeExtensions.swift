@@ -15,12 +15,12 @@ typealias ImageFormat = retro.image.ImageFormat
 typealias Diameter = retro.device.Diameter
 typealias Density = retro.device.Density
 
-// 'amigafs' namespace
-typealias BootBlockId = retro.amigafs.BootBlockId
-typealias FSBlockError = retro.amigafs.FSBlockError
-typealias FSBlockType = retro.amigafs.FSBlockType
-typealias FSItemType = retro.amigafs.FSItemType
-typealias FSFormat = retro.amigafs.FSFormat
+// 'retro::rfs' namespace
+typealias BootBlockId = retro.rfs.amiga.BootBlockId
+typealias FSBlockError = retro.rfs.amiga.FSBlockError
+typealias FSBlockType = retro.rfs.amiga.FSBlockType
+typealias FSItemType = retro.rfs.amiga.FSItemType
+typealias FSFormat = retro.rfs.amiga.FSFormat
 
 // 'vamiga' namespace
 typealias Accessor = vamiga.Accessor

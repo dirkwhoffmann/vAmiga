@@ -15,7 +15,7 @@
 #include <algorithm>
 #include <fstream>
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 FSBlock::FSBlock(FileSystem *ref, BlockNr nr) : fs(ref), cache(ref->cache)
 {

@@ -10,7 +10,7 @@
 #include "FileSystems/Amiga/FSService.h"
 #include "FileSystem.h"
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 FSService::FSService(FileSystem& fs) : fs(fs), traits(fs.getTraits())
 {

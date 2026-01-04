@@ -11,7 +11,7 @@
 #include "FileSystem.h"
 #include "utl/support.h"
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 void
 FileSystem::cd(BlockNr nr)

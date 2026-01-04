@@ -12,7 +12,7 @@
 #include "FileSystems/Amiga/FSTypes.h"
 #include "DeviceDescriptors.h"
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 using retro::device::GeometryDescriptor;
 using retro::device::PartitionDescriptor;

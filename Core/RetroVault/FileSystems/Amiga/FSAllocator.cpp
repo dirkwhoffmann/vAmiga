@@ -12,7 +12,7 @@
 #include "utl/support.h"
 #include <bit>
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 isize
 FSAllocator::requiredDataBlocks(isize fileSize) const noexcept

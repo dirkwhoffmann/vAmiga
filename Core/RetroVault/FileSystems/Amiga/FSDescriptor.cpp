@@ -15,7 +15,7 @@
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 using retro::image::ADFFile;
 

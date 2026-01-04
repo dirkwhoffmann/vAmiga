@@ -19,10 +19,10 @@
 
 namespace vamiga {
 
-using retro::amigafs::BlockNr;
-using retro::amigafs::FileSystem;
-using retro::amigafs::FSName;
-using retro::amigafs::FSBlock;
+using retro::rfs::amiga::BlockNr;
+using retro::rfs::amiga::FileSystem;
+using retro::rfs::amiga::FSName;
+using retro::rfs::amiga::FSBlock;
 using retro::device::Volume;
 using retro::image::ADFFile;
 

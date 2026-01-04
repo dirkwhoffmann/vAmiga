@@ -9,7 +9,7 @@
 
 #include "FileSystems/Amiga/PosixFileSystem.h"
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 PosixFileSystem::PosixFileSystem(FileSystem &fs) : fs(fs)
 {

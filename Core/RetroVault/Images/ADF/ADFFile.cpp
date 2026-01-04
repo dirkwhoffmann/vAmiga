@@ -20,13 +20,13 @@ using retro::device::Diameter;
 using retro::device::Density;
 using retro::device::DeviceError;
 using retro::device::Volume;
-using retro::amigafs::BlockNr;
-using retro::amigafs::FSName;
-using retro::amigafs::FSFormatEnum;
-using retro::amigafs::FileSystem;
-using retro::amigafs::FSBlock;
-using retro::amigafs::FSDescriptor;
-using retro::amigafs::FSError;
+using retro::rfs::amiga::BlockNr;
+using retro::rfs::amiga::FSName;
+using retro::rfs::amiga::FSFormatEnum;
+using retro::rfs::amiga::FileSystem;
+using retro::rfs::amiga::FSBlock;
+using retro::rfs::amiga::FSDescriptor;
+using retro::rfs::amiga::FSError;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
@@ -233,10 +233,10 @@ ADFFile::getFileSystemDescriptor() const noexcept
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
-    retro::amigafs::FSFormatEnum::validate(dos);
+    retro::rfs::amiga::FSFormatEnum::validate(dos);
 
     loginfo(ADF_DEBUG,
-            "Formatting disk (%ld, %s)\n", numBlocks(), retro::amigafs::FSFormatEnum::key(dos));
+            "Formatting disk (%ld, %s)\n", numBlocks(), retro::rfs::amiga::FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given
     if (dos == FSFormat::NODOS) return;

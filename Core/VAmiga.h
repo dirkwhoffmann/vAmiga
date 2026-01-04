@@ -13,12 +13,12 @@
 #include "CoreError.h"
 #include "Snapshot.h"
 
-namespace retro::amigafs { class FileSystem; }
+namespace retro::rfs::amiga { class FileSystem; }
 
 namespace vamiga {
 
-using retro::amigafs::BootBlockId;
-using retro::amigafs::FileSystem;
+using retro::rfs::amiga::BootBlockId;
+using retro::rfs::amiga::FileSystem;
 
 //
 // Base class for all APIs

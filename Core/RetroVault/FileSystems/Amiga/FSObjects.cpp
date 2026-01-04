@@ -17,7 +17,7 @@
 #include <unordered_set>
 #include <sys/stat.h>
 
-namespace retro::amigafs {
+namespace retro::rfs::amiga {
 
 FSString::FSString(const string &cpp, isize limit) : str(cpp), limit(limit)
 {

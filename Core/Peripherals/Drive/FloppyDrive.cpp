@@ -21,9 +21,9 @@
 
 namespace vamiga {
 
-using retro::amigafs::FSError;
-using retro::amigafs::FSFormatEnum;
-using retro::amigafs::BootBlockIdEnum;
+using retro::rfs::amiga::FSError;
+using retro::rfs::amiga::FSFormatEnum;
+using retro::rfs::amiga::BootBlockIdEnum;
 
 FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
