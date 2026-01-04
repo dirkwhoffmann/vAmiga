@@ -11,7 +11,7 @@
 
 #include "FSTypes.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 typedef struct
 {

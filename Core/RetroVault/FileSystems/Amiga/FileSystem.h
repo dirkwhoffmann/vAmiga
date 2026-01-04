@@ -104,7 +104,7 @@
 #include "Volume.h"
 #include "utl/abilities/Loggable.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 using retro::device::Volume;
 

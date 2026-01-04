@@ -163,7 +163,7 @@ class FloppyCreator: DialogController {
     
     @IBAction func insertAction(_ sender: Any!) {
         
-        let fs: FSVolumeType =
+        let fs: FSFormat =
         fileSystem.selectedTag() == 1 ? .OFS :
         fileSystem.selectedTag() == 2 ? .FFS : .NODOS
         

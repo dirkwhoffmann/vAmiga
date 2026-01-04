@@ -12,7 +12,7 @@
 #include "FileSystem.h"
 #include <fcntl.h>
 
-namespace vamiga {
+namespace retro::amigafs {
 
 struct Handle {
 

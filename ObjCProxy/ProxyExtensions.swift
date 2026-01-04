@@ -249,8 +249,8 @@ extension FloppyDriveProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
 
-    func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String, url: URL?) throws {
-        
+    func insertNew(fileSystem: FSFormat, bootBlock: BootBlockId, name: String, url: URL?) throws {
+
         let exception = ExceptionWrapper()
         insertBlankDisk(fileSystem, bootBlock: bootBlock, name: name, url: url, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
@@ -287,7 +287,7 @@ extension HardDriveProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
     
-    func format(fs: FSVolumeType, name: String) throws {
+    func format(fs: FSFormat, name: String) throws {
 
         let exception = ExceptionWrapper()
         format(fs, name: name, exception: exception)

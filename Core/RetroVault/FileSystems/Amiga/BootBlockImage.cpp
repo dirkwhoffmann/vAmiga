@@ -11,7 +11,7 @@
 #include "BootBlockImage.h"
 #include <cstring>
 
-namespace vamiga {
+namespace retro::amigafs {
 
 //
 // Bootblock images

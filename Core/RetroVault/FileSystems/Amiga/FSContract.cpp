@@ -10,7 +10,7 @@
 #include "FSContract.h"
 #include "FileSystem.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 void
 FSRequire::isFormatted() const

@@ -86,7 +86,7 @@ if (value == 0) return FSBlockError::EXPECTED_DATABLOCK_NR; }
 if (isize(value) != (traits.bsize / 4) - 56) { \
 expected = u32((traits.bsize / 4) - 56); return FSBlockError::INVALID_HASHTABLE_SIZE; } }
 
-namespace vamiga {
+namespace retro::amigafs {
 
 FSDoctor::FSDoctor(FileSystem& fs, FSAllocator &a) : FSService(fs), allocator(a)
 {

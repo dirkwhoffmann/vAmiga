@@ -11,7 +11,7 @@
 #include "FileSystem.h"
 #include "utl/support.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 void
 FileSystem::cd(BlockNr nr)

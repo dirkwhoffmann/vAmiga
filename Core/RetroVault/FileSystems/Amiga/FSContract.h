@@ -11,7 +11,7 @@
 
 #include "FSObjects.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 using namespace utl;
 

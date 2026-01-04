@@ -37,8 +37,8 @@ class HardDiskCreator: DialogController {
     var heads = 0
     var sectors = 0
     var bsize = 0
-    var fs = FSVolumeType.NODOS
-    
+    var fs = FSFormat.NODOS
+
     var drive: HardDriveProxy? { emu.hd(nr) }
     
     var importURL: URL?
@@ -252,7 +252,7 @@ class HardDiskCreator: DialogController {
     
     @IBAction func attachAction(_ sender: Any!) {
         
-        let fs: FSVolumeType =
+        let fs: FSFormat =
         fileSystem.selectedTag() == 0 ? .NODOS :
         fileSystem.selectedTag() == 1 ? .OFS : .FFS
                

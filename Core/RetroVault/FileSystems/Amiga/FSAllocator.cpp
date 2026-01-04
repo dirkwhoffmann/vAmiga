@@ -12,7 +12,7 @@
 #include "utl/support.h"
 #include <bit>
 
-namespace vamiga {
+namespace retro::amigafs {
 
 isize
 FSAllocator::requiredDataBlocks(isize fileSize) const noexcept

@@ -19,6 +19,11 @@
 
 namespace vamiga {
 
+using retro::amigafs::BlockNr;
+using retro::amigafs::FileSystem;
+using retro::amigafs::FSName;
+using retro::amigafs::FSBlock;
+using retro::device::Volume;
 using retro::image::ADFFile;
 
 class ConsoleDelegate {

@@ -12,7 +12,7 @@
 #include "FSTypes.h"
 #include "utl/abilities/Loggable.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 class FileSystem;
 

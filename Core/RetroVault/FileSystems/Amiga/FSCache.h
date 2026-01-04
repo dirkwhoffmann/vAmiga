@@ -18,7 +18,7 @@
 #include <ranges>
 #include <unordered_set>
 
-namespace vamiga {
+namespace retro::amigafs {
 
 using retro::device::BlockDevice;
 using retro::device::Volume;

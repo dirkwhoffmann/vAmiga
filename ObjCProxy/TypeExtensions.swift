@@ -7,11 +7,20 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// 'retro' namespace
+// 'retro::image' namespace
 typealias ImageType = retro.image.ImageType
 typealias ImageFormat = retro.image.ImageFormat
+
+// 'retro::device' namespace
 typealias Diameter = retro.device.Diameter
 typealias Density = retro.device.Density
+
+// 'amigafs' namespace
+typealias BootBlockId = retro.amigafs.BootBlockId
+typealias FSBlockError = retro.amigafs.FSBlockError
+typealias FSBlockType = retro.amigafs.FSBlockType
+typealias FSItemType = retro.amigafs.FSItemType
+typealias FSFormat = retro.amigafs.FSFormat
 
 // 'vamiga' namespace
 typealias Accessor = vamiga.Accessor
@@ -21,7 +30,6 @@ typealias AgnusRevision = vamiga.AgnusRevision
 typealias AgnusStats = vamiga.AgnusMetrics
 typealias BankMap = vamiga.BankMap
 typealias BlitterInfo = vamiga.BlitterInfo
-typealias BootBlockId = vamiga.BootBlockId
 typealias CIAInfo = vamiga.CIAInfo
 typealias CIARevision = vamiga.CIARev
 typealias CIAStats = vamiga.CIAMetrics
@@ -41,10 +49,6 @@ typealias EventSlotEnum = vamiga.EventSlotEnum
 typealias EventSlotInfo = vamiga.EventSlotInfo
 typealias FloppyDriveInfo = vamiga.FloppyDriveInfo
 typealias FloppyDriveType = vamiga.FloppyDriveType
-typealias FSBlockError = vamiga.FSBlockError
-typealias FSBlockType = vamiga.FSBlockType
-typealias FSItemType = vamiga.FSItemType
-typealias FSVolumeType = vamiga.FSFormat
 typealias GamePadAction = vamiga.GamePadAction
 typealias HardDriveInfo = vamiga.HardDriveInfo
 typealias MemorySource = vamiga.MemSrc
@@ -109,7 +113,7 @@ extension EventSlot: CustomStringConvertible {
     public var description: String { return EventSlotName(self) }
 }
 
-extension FSVolumeType: CustomStringConvertible {
+extension FSFormat: CustomStringConvertible {
 
     public var description: String {
         

@@ -17,7 +17,7 @@
 namespace retro::image {
 
 using retro::device::Volume;
-using vamiga::FSName;
+using retro::amigafs::FSName;
 
 optional<ImageInfo>
 EXEFile::about(const fs::path &path)

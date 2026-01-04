@@ -12,7 +12,7 @@
 #include "FSTypes.h"
 #include "DeviceDescriptors.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 using retro::device::GeometryDescriptor;
 using retro::device::PartitionDescriptor;

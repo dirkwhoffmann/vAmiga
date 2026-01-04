@@ -17,6 +17,8 @@
 
 namespace vamiga {
 
+using retro::amigafs::FSFormatEnum;
+
 std::fstream HardDrive::wtStream[4];
 
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)

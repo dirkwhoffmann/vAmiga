@@ -10,7 +10,7 @@
 #include "FSError.h"
 #include "FileSystem.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
 {

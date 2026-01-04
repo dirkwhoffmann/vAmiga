@@ -11,7 +11,7 @@
 #include "FileSystem.h"
 #include <cstring>
 
-namespace vamiga {
+namespace retro::amigafs {
 
 void
 FileSystem::format(FSFormat dos) {

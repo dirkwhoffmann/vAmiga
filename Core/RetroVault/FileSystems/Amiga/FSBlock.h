@@ -17,7 +17,7 @@
 #include "utl/storage.h"
 #include "utl/abilities/Dumpable.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 using utl::Buffer;
 using utl::DumpOpt;

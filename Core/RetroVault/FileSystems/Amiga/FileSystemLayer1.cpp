@@ -10,7 +10,7 @@
 #include "config.h"
 #include "FileSystem.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 /*
 FSBlockType

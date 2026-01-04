@@ -14,12 +14,19 @@
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
-using namespace vamiga;
-
 namespace retro::image {
 
-using namespace retro::device;
-using vamiga::FSDescriptor;
+using retro::device::Diameter;
+using retro::device::Density;
+using retro::device::DeviceError;
+using retro::device::Volume;
+using retro::amigafs::BlockNr;
+using retro::amigafs::FSName;
+using retro::amigafs::FSFormatEnum;
+using retro::amigafs::FileSystem;
+using retro::amigafs::FSBlock;
+using retro::amigafs::FSDescriptor;
+using retro::amigafs::FSError;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
@@ -55,8 +62,8 @@ ADFFile::fileSize(Diameter diameter, Density density)
 isize
 ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 {
-    DiameterEnum::validate(diameter);
-    DensityEnum::validate(density);
+    retro::device::DiameterEnum::validate(diameter);
+    retro::device::DensityEnum::validate(density);
 
     if (diameter != Diameter::INCH_35) throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
 
@@ -88,8 +95,8 @@ ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 void
 ADFFile::init(Diameter dia, Density den)
 {
-    DiameterEnum::validate(dia);
-    DensityEnum::validate(den);
+    retro::device::DiameterEnum::validate(dia);
+    retro::device::DensityEnum::validate(den);
 
     init(ADFFile::fileSize(dia, den));
 }
@@ -226,10 +233,10 @@ ADFFile::getFileSystemDescriptor() const noexcept
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
-    FSFormatEnum::validate(dos);
+    retro::amigafs::FSFormatEnum::validate(dos);
 
     loginfo(ADF_DEBUG,
-            "Formatting disk (%ld, %s)\n", numBlocks(), FSFormatEnum::key(dos));
+            "Formatting disk (%ld, %s)\n", numBlocks(), retro::amigafs::FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given
     if (dos == FSFormat::NODOS) return;

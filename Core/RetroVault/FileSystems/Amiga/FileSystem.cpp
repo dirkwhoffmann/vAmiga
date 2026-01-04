@@ -16,7 +16,7 @@
 #include <stack>
 #include <algorithm>
 
-namespace vamiga {
+namespace retro::amigafs {
 
 bool
 FSTraits::adf() const

@@ -23,9 +23,16 @@
 #include "utl/storage.h"
 #include "utl/wrappers.h"
 
+namespace retro::amigafs { class FileSystem; }
+
 namespace vamiga {
 
-using namespace retro::image;
+using retro::image::HardDiskImage;
+using retro::image::HDFFile;
+using retro::image::HDZFile;
+using retro::image::ImageFormat;
+using retro::amigafs::FileSystem;
+using retro::amigafs::FSName;
 
 class HardDrive final : public Drive, public TrackDevice {
 
@@ -131,7 +138,7 @@ public:
     void init(isize size);
 
     // Creates a hard drive with the contents of a file system
-    void init(const class FileSystem &fs);
+    void init(const FileSystem &fs);
 
     // Creates a hard drive with the contents of an HDF or HDZ
     void init(const HDFFile &hdf);

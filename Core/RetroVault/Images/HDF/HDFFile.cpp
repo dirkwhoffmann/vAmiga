@@ -18,7 +18,7 @@
 #include "utl/support.h"
 
 using retro::device::DeviceError;
-using vamiga::BlockNr;
+using retro::amigafs::BlockNr;
 
 namespace retro::image {
 

@@ -13,8 +13,8 @@
 #include "FSDescriptor.h"
 #include "utl/common.h"
 
-using vamiga::FSDescriptor;
-using vamiga::FSFormat;
+using retro::amigafs::FSDescriptor;
+using retro::amigafs::FSFormat;
 using retro::device::GeometryDescriptor;
 using retro::device::PartitionDescriptor;
 using retro::device::DriverDescriptor;

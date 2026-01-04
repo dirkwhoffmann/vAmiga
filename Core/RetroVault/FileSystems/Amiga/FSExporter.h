@@ -12,7 +12,7 @@
 #include "FSService.h"
 #include "FSTree.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 class FSExporter final : public FSService {
 

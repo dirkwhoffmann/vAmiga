@@ -10,7 +10,7 @@
 #include "FSService.h"
 #include "FileSystem.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 FSService::FSService(FileSystem& fs) : fs(fs), traits(fs.getTraits())
 {

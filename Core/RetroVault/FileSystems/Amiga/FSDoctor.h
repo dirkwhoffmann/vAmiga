@@ -11,7 +11,7 @@
 
 #include "FSService.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 class FSDoctor final : public FSService {
 

@@ -13,7 +13,12 @@
 #include "CoreError.h"
 #include "Snapshot.h"
 
+namespace retro::amigafs { class FileSystem; }
+
 namespace vamiga {
+
+using retro::amigafs::BootBlockId;
+using retro::amigafs::FileSystem;
 
 //
 // Base class for all APIs
@@ -731,7 +736,7 @@ public:
      *  @param  fs      A file system wrapper object.
      *  @param  wp      Write-protection status of the disk.
      */
-    void insertFileSystem(const class FileSystem& fs, bool wp);
+    void insertFileSystem(const FileSystem& fs, bool wp);
 
     /** @brief  Ejects the current disk.
      */

@@ -15,7 +15,7 @@
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 
-namespace vamiga {
+namespace retro::amigafs {
 
 using retro::image::ADFFile;
 
