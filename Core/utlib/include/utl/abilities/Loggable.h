@@ -116,10 +116,13 @@ public:
     static void setLevel(string name, optional<LogLevel> level);
 
     // Output functions (called by macro wrappers)
-    __attribute__((format(printf, 5, 6))) void log(LogChannel channel,
-                                                   LogLevel level,
-                                                   const std::source_location &loc,
-                                                   const char *fmt, ...) const;
+#if defined(__clang__)
+    __attribute__((format(printf, 5, 6)))
+#endif
+    void log(LogChannel channel,
+             LogLevel level,
+             const std::source_location &loc,
+             const char *fmt, ...) const;
 
     // Initializing
     Loggable() = default;
