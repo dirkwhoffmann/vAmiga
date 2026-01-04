@@ -102,7 +102,7 @@ class Loggable {
 public:
 
     // Returns the number of registered channels
-    static isize size() noexcept { return channels().size(); }
+    static isize size() noexcept { return isize(channels().size()); }
 
     // Returns all registered channels
     static const std::vector<LogChannelInfo> &getChannels() noexcept { return channels(); }

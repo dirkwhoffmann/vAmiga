@@ -15,6 +15,25 @@ namespace retro::vault {
 
 using namespace utl;
 
+namespace posix {
+
+static constexpr u32 IRWXU = 0000700;   // RWX mask for owner
+static constexpr u32 IRUSR = 0000400;   // R for owner
+static constexpr u32 IWUSR = 0000200;   // W for owner
+static constexpr u32 IXUSR = 0000100;   // X for owner
+
+static constexpr u32 IRWXG = 0000070;   // RWX mask for group
+static constexpr u32 IRGRP = 0000040;   // R for group
+static constexpr u32 IWGRP = 0000020;   // W for group
+static constexpr u32 IXGRP = 0000010;   // X for group
+
+static constexpr u32 IRWXO = 0000007;   // RWX mask for other
+static constexpr u32 IROTH = 0000004;   // R for other
+static constexpr u32 IWOTH = 0000002;   // W for other
+static constexpr u32 IXOTH = 0000001;   // X for other
+
+}
+
 struct FSPosixAttr {
 
     // Meta data
