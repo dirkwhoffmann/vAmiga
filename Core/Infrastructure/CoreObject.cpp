@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "CoreObject.h"
+#include <format>
 #include <iostream>
 
 namespace vamiga {

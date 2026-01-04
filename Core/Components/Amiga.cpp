@@ -16,6 +16,7 @@
 #include "utl/chrono.h"
 #include "utl/io.h"
 #include <algorithm>
+#include <format>
 
 namespace vamiga {
 

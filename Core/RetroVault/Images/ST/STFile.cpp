@@ -13,6 +13,7 @@
 #include "DeviceError.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
+#include <format>
 
 namespace retro::image {
 

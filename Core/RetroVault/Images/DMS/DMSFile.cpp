@@ -12,6 +12,7 @@
 #include "MediaError.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
+#include <format>
 
 using vamiga::MediaError;
 
