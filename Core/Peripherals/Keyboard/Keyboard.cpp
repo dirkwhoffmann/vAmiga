@@ -130,7 +130,7 @@ Keyboard::press(KeyCode keycode)
     
     if (!keyDown[keycode] && !queue.isFull()) {
         
-        debugmsg(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
+        logdebug(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
         
         keyDown[keycode] = true;
         queue.write(keycode);
@@ -152,7 +152,7 @@ Keyboard::release(KeyCode keycode)
     
     if (keyDown[keycode] && !queue.isFull()) {
         
-        debugmsg(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
+        logdebug(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
         
         keyDown[keycode] = false;
         queue.write(keycode | 0x80);
@@ -179,7 +179,7 @@ Keyboard::wakeUp()
 {
     if (!agnus.hasEvent<SLOT_KBD>()) {
         
-        debugmsg(KBD_DEBUG, "Wake up\n");
+        logdebug(KBD_DEBUG, "Wake up\n");
         state = KbState::SEND;
         execute();
     }
@@ -188,7 +188,7 @@ Keyboard::wakeUp()
 void
 Keyboard::abortTyping()
 {
-    infomsg(KEY_DEBUG, "abortTyping()\n");
+    loginfo(KEY_DEBUG, "abortTyping()\n");
 
     {   SYNCHRONIZED
 
@@ -203,7 +203,7 @@ Keyboard::abortTyping()
 void
 Keyboard::setSPLine(bool value, Cycle cycle)
 {
-    debugmsg(KBD_DEBUG, "setSPLine(%d)\n", value);
+    logdebug(KBD_DEBUG, "setSPLine(%d)\n", value);
 
     if (value) {
         if (spHigh <= spLow) spHigh = cycle;
@@ -227,13 +227,13 @@ Keyboard::setSPLine(bool value, Cycle cycle)
 
     if (accept) {
 
-        debugmsg(KBD_DEBUG, "Accepting handshake (SP low for %ld usec)\n", diff);
+        logdebug(KBD_DEBUG, "Accepting handshake (SP low for %ld usec)\n", diff);
         processHandshake();
     }
 
     if (reject) {
 
-        debugmsg(KBD_DEBUG, "REJECTING handshake (SP low for %ld usec)\n", diff);
+        logdebug(KBD_DEBUG, "REJECTING handshake (SP low for %ld usec)\n", diff);
     }
 }
 
@@ -266,7 +266,7 @@ Keyboard::execute()
             
         case KbState::SELFTEST:
             
-            debugmsg(KBD_DEBUG, "KB_SELFTEST\n");
+            logdebug(KBD_DEBUG, "KB_SELFTEST\n");
             
             // Await a handshake within the next second
             agnus.scheduleRel<SLOT_KBD>(SEC(1), KBD_TIMEOUT);
@@ -274,13 +274,13 @@ Keyboard::execute()
             
         case KbState::SYNC:
             
-            debugmsg(KBD_DEBUG, "KB_SYNC\n");
+            logdebug(KBD_DEBUG, "KB_SYNC\n");
             sendSyncPulse();
             break;
             
         case KbState::STRM_ON:
             
-            debugmsg(KBD_DEBUG, "KB_STRM_ON\n");
+            logdebug(KBD_DEBUG, "KB_STRM_ON\n");
             
             // Send the "Initiate power-up key stream" code ($FD)
             sendKeyCode(0xFD);
@@ -288,7 +288,7 @@ Keyboard::execute()
             
         case KbState::STRM_OFF:
             
-            debugmsg(KBD_DEBUG, "KB_STRM_OFF\n");
+            logdebug(KBD_DEBUG, "KB_STRM_OFF\n");
             
             // Send the "Terminate key stream" code ($FE)
             sendKeyCode(0xFE);
@@ -296,7 +296,7 @@ Keyboard::execute()
             
         case KbState::SEND:
 
-            debugmsg(KBD_DEBUG, "KB_SEND\n");
+            logdebug(KBD_DEBUG, "KB_SEND\n");
 
             // Send a key code if the buffer is filled
             if (!queue.isEmpty()) {
@@ -314,7 +314,7 @@ Keyboard::execute()
 void
 Keyboard::sendKeyCode(u8 code)
 {
-    debugmsg(KBD_DEBUG, "sendKeyCode(%d)\n", code);
+    logdebug(KBD_DEBUG, "sendKeyCode(%d)\n", code);
 
     // Reorder and invert the key code bits (6-5-4-3-2-1-0-7)
     shiftReg = ~((code << 1) | (code >> 7)) & 0xFF;
@@ -353,7 +353,7 @@ Keyboard::sendSyncPulse()
      *  1 and waits again. This process will continue until a handshake pulse
      *  arrives."
      */
-    debugmsg(KBD_DEBUG, "sendSyncPulse\n");
+    logdebug(KBD_DEBUG, "sendSyncPulse\n");
     
     if (config.accurate) {
         
@@ -371,7 +371,7 @@ Keyboard::processCommand(const Command &cmd)
 {
     if (cmd.key.delay > 0) {
 
-        debugmsg(KEY_DEBUG, "%s: Delayed for %f sec\n", CmdEnum::key(cmd.type), cmd.key.delay);
+        logdebug(KEY_DEBUG, "%s: Delayed for %f sec\n", CmdEnum::key(cmd.type), cmd.key.delay);
 
         pending.insert(agnus.clock + SEC(cmd.key.delay),
                        Command(cmd.type, KeyCmd { .keycode = cmd.key.keycode }));
@@ -379,7 +379,7 @@ Keyboard::processCommand(const Command &cmd)
 
     } else {
 
-        debugmsg(KEY_DEBUG, "%s\n", CmdEnum::key(cmd.type));
+        logdebug(KEY_DEBUG, "%s\n", CmdEnum::key(cmd.type));
 
         switch (cmd.type) {
 

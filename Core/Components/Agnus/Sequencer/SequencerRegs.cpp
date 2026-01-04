@@ -16,7 +16,7 @@ namespace vamiga {
 template <Accessor s> void
 Sequencer::pokeDDFSTRT(u16 value)
 {
-    debugmsg(DDF_DEBUG, "pokeDDFSTRT(%x)\n", value);
+    logdebug(DDF_DEBUG, "pokeDDFSTRT(%x)\n", value);
     
     //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -31,14 +31,14 @@ Sequencer::pokeDDFSTRT(u16 value)
 void
 Sequencer::setDDFSTRT(u16 old, u16 value)
 {
-    debugmsg(DDF_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
+    logdebug(DDF_DEBUG, "setDDFSTRT(%d, %d)\n", old, value);
 
     auto posh = agnus.pos.h;
     
     if (old != posh && value != posh) {
         
         if (old == value) {
-            debugmsg(SEQ_DEBUG, "setDDFSTRT: Skipping (value does not change)\n");
+            logdebug(SEQ_DEBUG, "setDDFSTRT: Skipping (value does not change)\n");
             return;
         }
 
@@ -53,7 +53,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
     }
     
     ddfstrt = value;
-    debugmsg(SEQ_DEBUG, "setDDFSTRT: %04x -> %04x\n", old, value);
+    logdebug(SEQ_DEBUG, "setDDFSTRT: %04x -> %04x\n", old, value);
     
     // Remove the old start event if it hasn't been reached
     sigRecorder.invalidate(posh, SIG_BPHSTART);
@@ -68,7 +68,7 @@ Sequencer::setDDFSTRT(u16 old, u16 value)
 template <Accessor s> void
 Sequencer::pokeDDFSTOP(u16 value)
 {
-    debugmsg(DDF_DEBUG, "pokeDDFSTOP(%x)\n", value);
+    logdebug(DDF_DEBUG, "pokeDDFSTOP(%x)\n", value);
 
     //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -83,14 +83,14 @@ Sequencer::pokeDDFSTOP(u16 value)
 void
 Sequencer::setDDFSTOP(u16 old, u16 value)
 {
-    debugmsg(DDF_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
+    logdebug(DDF_DEBUG, "setDDFSTOP(%d, %d)\n", old, value);
 
     auto posh = agnus.pos.h;
     
     if (old != posh && value != posh) {
         
         if (old == value) {
-            debugmsg(SEQ_DEBUG, "setDDFSTOP: Skipping (value does not change)\n");
+            logdebug(SEQ_DEBUG, "setDDFSTOP: Skipping (value does not change)\n");
             return;
         }
 
@@ -105,7 +105,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
     }
     
     ddfstop = value;
-    debugmsg(SEQ_DEBUG, "setDDFSTOP: %04x -> %04x\n", old, value);
+    logdebug(SEQ_DEBUG, "setDDFSTOP: %04x -> %04x\n", old, value);
 
     // Remove the old stop event if it hasn't been reached
     sigRecorder.invalidate(posh + 1, SIG_BPHSTOP);
@@ -120,7 +120,7 @@ Sequencer::setDDFSTOP(u16 old, u16 value)
 void
 Sequencer::setDIWSTRT(u16 value)
 {
-    debugmsg(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
+    logdebug(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = 0
@@ -141,7 +141,7 @@ Sequencer::setDIWSTRT(u16 value)
 void
 Sequencer::setDIWSTOP(u16 value)
 {
-    debugmsg(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
+    logdebug(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 -- -- -- -- -- -- -- --  and  V8 = !V7
@@ -168,7 +168,7 @@ Sequencer::setDIWSTOP(u16 value)
 void
 Sequencer::setDIWHIGH(u16 value)
 {
-    debugmsg(DIW_DEBUG, "setDIWHIGH(%X)\n", value);
+    logdebug(DIW_DEBUG, "setDIWHIGH(%X)\n", value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- VA V9 V8 -- -- -- -- -- VA V9 V8

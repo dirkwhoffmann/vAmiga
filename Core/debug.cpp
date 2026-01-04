@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-
 #include "utl/abilities/Loggable.h"
 
 #define STR(x) #x
@@ -22,10 +21,8 @@ LogChannel name = \
 
 namespace utl::channel {
 
-// Register default IO channels
+// Register the default channel
 
-LogChannel DEVNULL =
-Loggable::subscribe("DEVNULL", std::optional<long>(std::nullopt), "Message sink");
 LogChannel STDERR  =
 Loggable::subscribe("STDERR",  std::optional<long>(7), "Standard error");
 

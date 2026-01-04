@@ -101,12 +101,12 @@ extension Canvas {
             bw = x1 - 0.5 * (width - (x2 - x1))
             bw = max(bw, largest.minX)
             bw = min(bw, largest.maxX - width)
-            infomsg(.events, "AutoShift x: \(bw)")
+            loginfo(.events, "AutoShift x: \(bw)")
 
             bh = y1 - 0.5 * (height - (y2 - y1))
             bh = max(bh, largest.minY)
             bh = min(bh, largest.maxY - height)
-            infomsg(.events, "AutoShift y: \(bh)")
+            loginfo(.events, "AutoShift y: \(bh)")
 
         } else {
             
@@ -133,7 +133,7 @@ extension Canvas {
 
     func updateTextureRect(hstrt: Int, vstrt: Int, hstop: Int, vstop: Int) {
 
-        infomsg(.metal, "updateTextureRect(\(hstrt), \(vstrt), \(hstop), \(vstop))")
+        loginfo(.metal, "updateTextureRect(\(hstrt), \(vstrt), \(hstop), \(vstop))")
 
         // Convert to pixel coordinates
         x1 = CGFloat(2 * Int(TPP) * hstrt)
@@ -152,7 +152,7 @@ extension Canvas {
         if x2 > max.maxX { x2 = max.maxX }
         if y2 > max.maxY { y2 = max.maxY }
 
-        infomsg(.metal, "New texture rect = (\(x1),\(y1)) - (\(x2),\(y2))")
+        loginfo(.metal, "New texture rect = (\(x1),\(y1)) - (\(x2),\(y2))")
 
         updateTextureRect()
     }

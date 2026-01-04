@@ -130,7 +130,7 @@ class Screenshot: CustomStringConvertible {
                 
         if folder == nil { return nil }
         
-        infomsg(.media, "Determining next free URL in \(folder!)")
+        loginfo(.media, "Determining next free URL in \(folder!)")
 
         // Get a list of all filenames without extensions
         let names = allFiles.map({ (url) -> String in
@@ -144,7 +144,7 @@ class Screenshot: CustomStringConvertible {
                 let url = folder!.appendingPathComponent(name)
                 return url.byAddingExtension(for: format)
             } else {
-                infomsg(.media, "\(name) already exists")
+                loginfo(.media, "\(name) already exists")
             }
         }
         

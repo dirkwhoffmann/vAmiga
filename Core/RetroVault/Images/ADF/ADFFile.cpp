@@ -222,8 +222,8 @@ void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
     FSFormatEnum::validate(dos);
-    
-    infomsg(ADF_DEBUG,
+
+    loginfo(ADF_DEBUG,
             "Formatting disk (%ld, %s)\n", numBlocks(), FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given

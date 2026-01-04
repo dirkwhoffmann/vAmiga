@@ -456,9 +456,9 @@ extension MyController: NSMenuItemValidation {
             virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }
         if virtualKeyboard?.window?.isVisible == true {
-            infomsg(.lifetime, "Virtual keyboard already open")
+            loginfo(.lifetime, "Virtual keyboard already open")
         } else {
-            infomsg(.lifetime, "Opeining virtual keyboard as a window")
+            loginfo(.lifetime, "Opeining virtual keyboard as a window")
         }
         virtualKeyboard?.showAsWindow()
     }
@@ -545,7 +545,7 @@ extension MyController: NSMenuItemValidation {
     
     func insertRecentDiskAction(df n: Int, slot: Int) {
         
-        infomsg(.media, "insertRecentDiskAction(df: \(n), slot: \(slot))")
+        loginfo(.media, "insertRecentDiskAction(df: \(n), slot: \(slot))")
                 
         if let url = MediaManager.getRecentlyInsertedDiskURL(slot) {
             
@@ -688,7 +688,7 @@ extension MyController: NSMenuItemValidation {
     
     func attachRecentHdrAction(hd n: Int, slot: Int) {
         
-        infomsg(.media, "attachRecentHdrAction(hd: \(n), slot: \(slot))")
+        loginfo(.media, "attachRecentHdrAction(hd: \(n), slot: \(slot))")
         
         if let url = MediaManager.getRecentlyAttachedHdrURL(slot) {
             
@@ -720,7 +720,7 @@ extension MyController: NSMenuItemValidation {
     
     func exportRecentAction(hd n: Int, slot: Int) {
         
-        infomsg(.media, "exportRecentAction(hd: \(n), slot: \(slot))")
+        loginfo(.media, "exportRecentAction(hd: \(n), slot: \(slot))")
         
         if let url = mm.getRecentlyExportedHdrURL(slot, hd: n) {
             
@@ -791,11 +791,11 @@ extension MyController: NSMenuItemValidation {
         
         let height = renderer.canvas.visible.height * 2
         
-        infomsg(.metal, "Old metal view: \(metal.frame)")
-        infomsg(.metal, "Visible texture lines: \(height)")
+        loginfo(.metal, "Old metal view: \(metal.frame)")
+        loginfo(.metal, "Visible texture lines: \(height)")
         
         adjustWindowSize(height: height)
         
-        infomsg(.metal, "New metal view: \(metal.frame)")
+        loginfo(.metal, "New metal view: \(metal.frame)")
     }
 }

@@ -30,7 +30,7 @@ HDZFile::init(const class HDFFile &hdf)
     this->hdf = hdf;
     data = hdf.data;
     
-    infomsg(HDF_DEBUG, "Uncompressed HDF size: %ld bytes\n", data.size);
+    loginfo(HDF_DEBUG, "Uncompressed HDF size: %ld bytes\n", data.size);
 
     {   utl::StopWatch(debug::HDF_DEBUG, "Compressing HDF...");
 
@@ -41,7 +41,7 @@ HDZFile::init(const class HDFFile &hdf)
         }
     }
     
-    infomsg(HDF_DEBUG, "Compressed HDF size: %ld bytes.\n", data.size);
+    loginfo(HDF_DEBUG, "Compressed HDF size: %ld bytes.\n", data.size);
 }
 
 std::vector<string>
@@ -53,7 +53,7 @@ HDZFile::describe() const noexcept
 void
 HDZFile::didLoad()
 {
-    infomsg(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
+    loginfo(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
         
     {   utl::StopWatch(debug::HDF_DEBUG, "Uncompressing...");
 
@@ -64,7 +64,7 @@ HDZFile::didLoad()
         }
     }
     
-    infomsg(HDF_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
+    loginfo(HDF_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
     
     // Initialize the ADF with the decompressed data (may throw)
     hdf.init(data.ptr, data.size);

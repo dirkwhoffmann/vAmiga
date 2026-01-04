@@ -57,7 +57,7 @@ class VirtualKeyboardController: DialogController {
         let style = kbStyle(parent)
         let layout = kbLayout(parent)
 
-        infomsg(.lifetime, "Virtual keyboard (style: \(style) layout: \(layout))")
+        loginfo(.lifetime, "Virtual keyboard (style: \(style) layout: \(layout))")
 
         var xibName = ""
         let ansi = (layout == .us)

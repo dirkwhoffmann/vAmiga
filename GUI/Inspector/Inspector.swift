@@ -670,7 +670,7 @@ class Inspector: DialogController {
     private var refreshCnt = 0
 
     deinit {
-        infomsg(.lifetime)
+        loginfo(.lifetime)
     }
     
     override func dialogWillShow() {

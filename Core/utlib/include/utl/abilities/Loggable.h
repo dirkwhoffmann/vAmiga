@@ -7,38 +7,25 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#pragma once
-
-#include <source_location>
-
-/* This file provides several macros for printing messages:
+/* The Loggable interface provides a framework for printing log messages.
  *
- *   - msg    Information message   (Shows up in all builds)
- *   - warn   Warning message       (Shows up in all builds)
- *   - fatal  Error message + Exit  (Shows up in all builds)
- *   - debug  Debug message         (Shows up in debug builds, only)
- *   - trace  Detailed debug output (Shows up in debug builds, only)
+ * The framework maintains a list of output channels. The `subscribe` method
+ * returns a handle to a channel and creates a new channel on-the-fly if it
+ * does not exist yet. Each output channel consists of an identifier, an
+ * optional severity threshold, and an optional human-readable description.
  *
- * Debug, plain, and trace messages are accompanied by an optional 'enable'
- * parameter. If 0 is passed in, no output will be generated. In addition,
- * variable 'verbose' is checked which is set to true by default. By setting
- * this variable to false, debug output can be silenced temporarily.
+ * The severity threshold is used to filter messages based on their severity.
+ * Severity levels are based on BSD syslog conventions, where lower numbers
+ * indicate higher urgency. If no threshold is set, the channel is disabled;
+ * no output is printed.
  *
- * Debug messages are also affected by the verbosity level which is a static
- * member of the CoreComponent class. If set to 0, all debug messages are
- * omitted. If set the 1, debug messages appear as plain text. If set to a
- * value of 1 or above, the debug message is prefixed with additional
- * information about the emulator state, such as the component name issuing
- * the message, the currently processed frame, or the value of CPU flags.
- *
- * Sidenote: In previous releases the printing macros were implemented in form
- * of variadic functions. Although this might seem to be superior at first
- * glance, it is not. Using macros allows modern compilers to verify the format
- * strings against the data types of the provided arguments. This check can't
- * be performed when variadic functions are used.
+ * Messages are generated via the log function.
  */
 
+#pragma once
+
 #include "utl/abilities/Reflectable.h"
+#include <source_location>
 
 namespace utl {
 
@@ -100,7 +87,7 @@ struct LogChannelInfo {
     // Channel identifier
     string name;
 
-    // Severity level
+    // Severity threshold (empty optional blocks everything)
     optional<LogLevel> level;
 
     // Optional description
@@ -114,19 +101,19 @@ class Loggable {
 
 public:
 
-    // Looks up an existing channel or creates a new one if it does not exist
-    static LogChannel subscribe(string name, optional<long> level, string description = "");
-    static LogChannel subscribe(string name, optional<LogLevel> level, string description = "");
-
-    // Modifies the verbosity of an existing channel
-    static void setLevel(isize nr, optional<LogLevel> level);
-    static void setLevel(string name, optional<LogLevel> level);
-
     // Returns the number of registered channels
     static isize size() noexcept { return channels().size(); }
 
     // Returns all registered channels
     static const std::vector<LogChannelInfo> &getChannels() noexcept { return channels(); }
+
+    // Looks up an existing channel or creates a new one if it does not exist
+    static LogChannel subscribe(string name, optional<long> level, string description = "");
+    static LogChannel subscribe(string name, optional<LogLevel> level, string description = "");
+
+    // Modifies the severity threshold of an existing channel
+    static void setLevel(isize nr, optional<LogLevel> level);
+    static void setLevel(string name, optional<LogLevel> level);
 
     // Output functions (called by macro wrappers)
     __attribute__((format(printf, 5, 6))) void log(LogChannel channel,
@@ -140,11 +127,8 @@ public:
 
 protected:
 
-    // Prefix printed prior to the debug message
-    virtual void prefix(const std::source_location &) const { };
-
-    // Additional prefix printed by debugmsg()
-    virtual void tracePrefix(const std::source_location &) const { };
+    // Optional prefix printed prior to the debug message
+    virtual string prefix(LogLevel, const std::source_location &) const { return ""; }
 };
 
 }

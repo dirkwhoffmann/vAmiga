@@ -70,19 +70,19 @@ EADFFile::didLoad()
     
     if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
         
-        warnmsg("Only UAE-1ADF files are supported\n");
+        logwarn("Only UAE-1ADF files are supported\n");
         throw MediaError(MediaError::EXT_FACTOR5);
     }
     
     if (numTracks < 160 || numTracks > 168) {
 
-        warnmsg("Invalid number of tracks\n");
+        logwarn("Invalid number of tracks\n");
         throw MediaError(MediaError::EXT_CORRUPTED);
     }
 
     if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
         
-        warnmsg("File size mismatch\n");
+        logwarn("File size mismatch\n");
         throw MediaError(MediaError::EXT_CORRUPTED);
     }
 
@@ -90,7 +90,7 @@ EADFFile::didLoad()
 
         if (typeOfTrack(i) != 0 && typeOfTrack(i) != 1) {
             
-            warnmsg("Unsupported track format\n");
+            logwarn("Unsupported track format\n");
             throw MediaError(MediaError::EXT_INCOMPATIBLE);
         }
 
@@ -98,20 +98,20 @@ EADFFile::didLoad()
 
             if (usedBitsForTrack(i) != 11 * 512 * 8) {
 
-                warnmsg("Unsupported standard track size\n");
+                logwarn("Unsupported standard track size\n");
                 throw MediaError(MediaError::EXT_CORRUPTED);
             }
         }
 
         if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
             
-            warnmsg("Corrupted length information\n");
+            logwarn("Corrupted length information\n");
             throw MediaError(MediaError::EXT_CORRUPTED);
         }
 
         if (usedBitsForTrack(i) % 8) {
             
-            warnmsg("Truncating track (bit count is not a multiple of 8)\n");
+            logwarn("Truncating track (bit count is not a multiple of 8)\n");
             // throw MediaError(MediaError::EXT_INCOMPATIBLE);
             W32BE(data.ptr + 12 + 12 * i + 8, usedBitsForTrack(i) & ~7);
         }

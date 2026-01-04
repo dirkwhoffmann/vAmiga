@@ -218,7 +218,7 @@ Moira::cpuDidHalt()
 void
 Moira::willInterrupt(u8 level)
 {
-    infomsg(INT_DEBUG, "Executing level %d IRQ\n", level);
+    loginfo(INT_DEBUG, "Executing level %d IRQ\n", level);
 }
 
 void
@@ -227,7 +227,7 @@ Moira::didJumpToVector(int nr, u32 addr)
     bool isIrqException = nr >= 24 && nr <= 31;
 
     if (isIrqException) {
-        debugmsg(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
+        logdebug(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
     }
 }
 
@@ -645,14 +645,14 @@ CPU::_dump(Category category, std::ostream &os) const
 void
 CPU::_trackOn()
 {
-    infomsg(RUN_DEBUG, "Enabling debug mode\n");
+    loginfo(RUN_DEBUG, "Enabling debug mode\n");
     debugger.enableLogging();
 }
 
 void
 CPU::_trackOff()
 {
-    infomsg(RUN_DEBUG, "Disabling debug mode\n");
+    loginfo(RUN_DEBUG, "Disabling debug mode\n");
     debugger.disableLogging();
 }
 

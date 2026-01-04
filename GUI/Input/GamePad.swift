@@ -191,7 +191,7 @@ class GamePad {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
         
-        infomsg(.events, "keyUpEvents \(direction)")
+        loginfo(.events, "keyUpEvents \(direction)")
         
         switch GamePadAction(rawValue: direction) {
             
@@ -295,7 +295,7 @@ class GamePad {
         let usagePage = Int(IOHIDElementGetUsagePage(element))
         let usage     = Int(IOHIDElementGetUsage(element))
         
-        // infomsg(.hid, "usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
+        // loginfo(.hid, "usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
         
         if usagePage == kHIDPage_Button {
             
@@ -355,7 +355,7 @@ class GamePad {
                 hidEvent = (.DPAD_LEFT, 0, intValue == 0 ? 0 : 1)
                 
             default:
-                infomsg(.hid, "Unknown HID usage: \(usage)")
+                loginfo(.hid, "Unknown HID usage: \(usage)")
             }
         }
         

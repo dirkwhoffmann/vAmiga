@@ -199,9 +199,7 @@ constexpr long DMS_CANT_CREATE        = 0;
 
 namespace utl::channel {
 
-// Default IO channels
-
-extern long DEVNULL;
+// Default channel (always enabled)
 extern long STDERR;
 
 // General
@@ -340,13 +338,14 @@ extern long GDB_DEBUG;
 
 }
 
+
 //
-// Logging macros
+// Main logging macro
 //
 
 #if NDEBUG
 
-#define logGeneric(key, level, format, ...) \
+#define logMsg(key, level, format, ...) \
     do { \
         if constexpr (debug::key) \
             log(channel::key, level, std::source_location::current(), \
@@ -355,7 +354,7 @@ extern long GDB_DEBUG;
 
 #else
 
-#define logGeneric(key, level, format, ...)                           \
+#define logMsg(key, level, format, ...)                           \
 do { \
     log(channel::key, level, std::source_location::current(), \
         format __VA_OPT__(,) __VA_ARGS__); \
@@ -363,36 +362,46 @@ do { \
 
 #endif
 
-#define emergencymsg(format, ...) \
-    logGeneric(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
 
-#define alertmsg(format, ...) \
-    logGeneric(STDERR, LogLevel::LOG_ALERT, format __VA_OPT__(,) __VA_ARGS__)
+//
+// Wrappers for all syslog levels
+//
 
-#define criticalmsg(format, ...) \
-    logGeneric(STDERR, LogLevel::LOG_CRIT, format __VA_OPT__(,) __VA_ARGS__)
+#define logemergency(format, ...) \
+    logMsg(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
 
-#define errormsg(format, ...) \
-    logGeneric(STDERR, LogLevel::LOG_ERR, format __VA_OPT__(,) __VA_ARGS__)
+#define logalert(format, ...) \
+    logMsg(STDERR, LogLevel::LOG_ALERT, format __VA_OPT__(,) __VA_ARGS__)
 
-#define warnmsg(format, ...) \
-    logGeneric(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
+#define logcritical(format, ...) \
+    logMsg(STDERR, LogLevel::LOG_CRIT, format __VA_OPT__(,) __VA_ARGS__)
 
-#define notice(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
+#define logerror(format, ...) \
+    logMsg(STDERR, LogLevel::LOG_ERR, format __VA_OPT__(,) __VA_ARGS__)
 
-#define infomsg(channel, format, ...) \
-logGeneric(channel, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
+#define logwarn(format, ...) \
+    logMsg(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
 
-#define debugmsg(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_DEBUG, format __VA_OPT__(,) __VA_ARGS__)
+#define lognotice(channel, format, ...) \
+    logMsg(channel, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
+
+#define loginfo(channel, format, ...) \
+    logMsg(channel, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
+
+#define logdebug(channel, format, ...) \
+    logMsg(channel, LogLevel::LOG_DEBUG, format __VA_OPT__(,) __VA_ARGS__)
+
 
 //
 // Convenience wrappers
 //
 
 #define fatal(format, ...) \
-warnmsg(format __VA_OPT__(,) __VA_ARGS__); fatalError
+    do { \
+        logemergency(format __VA_OPT__(,) __VA_ARGS__); \
+        assert(false); \
+        std::terminate(); \
+    } while(0)
 
 #define xfiles(format, ...) \
-logGeneric(XFILES, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
+    logMsg(XFILES, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)

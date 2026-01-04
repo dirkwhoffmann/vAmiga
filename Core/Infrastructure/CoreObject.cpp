@@ -13,26 +13,18 @@
 
 namespace vamiga {
 
-/*
-isize
-CoreObject::verbosity = 3;
-*/
-
-CoreObject::CoreObject()
+string
+CoreObject::prefix(LogLevel level, const std::source_location &loc) const
 {
+    const isize verbosity = 2;
 
-}
+    switch (verbosity) {
 
-void
-CoreObject::prefix(const std::source_location &loc) const
-{
-    const isize level = 2;
+        case 0:  return "";
+        case 1:  return std::format("{}: ", objectName());
 
-    if (level == 1) {
-        fprintf(stderr, "%s: ", objectName());
-    }
-    if (level >= 2) {
-        fprintf(stderr, "%s:%u: ", objectName(), loc.line());
+        default:
+            return std::format("{}:{}: ", objectName(), loc.line());
     }
 }
 

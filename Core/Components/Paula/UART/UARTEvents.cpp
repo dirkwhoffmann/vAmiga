@@ -18,7 +18,7 @@ namespace vamiga {
 void
 UART::serviceTxdEvent(EventID id)
 {
-    debugmsg(SER_DEBUG, "serveTxdEvent(%d)\n", id);
+    logdebug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
     switch (id) {
 
@@ -30,13 +30,13 @@ UART::serviceTxdEvent(EventID id)
                 if (transmitBuffer) {
 
                     // Copy new packet into shift register
-                    debugmsg(SER_DEBUG, "Transmitting first packet %x\n", transmitBuffer);
+                    logdebug(SER_DEBUG, "Transmitting first packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
 
                 } else {
 
                     // Abort the transmission
-                    debugmsg(SER_DEBUG, "All packets sent\n");
+                    logdebug(SER_DEBUG, "All packets sent\n");
                     agnus.cancel<SLOT_TXD>();
                     break;
                 }
@@ -44,13 +44,13 @@ UART::serviceTxdEvent(EventID id)
             } else {
 
                 // Run the shift register
-                debugmsg(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
+                logdebug(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
                 transmitShiftReg >>= 1;
 
                 if (!transmitShiftReg && transmitBuffer) {
 
                     // Copy next packet into shift register
-                    debugmsg(SER_DEBUG, "Transmitting next packet %x\n", transmitBuffer);
+                    logdebug(SER_DEBUG, "Transmitting next packet %x\n", transmitBuffer);
                     copyToTransmitShiftRegister();
                 }
             }
@@ -71,7 +71,7 @@ UART::serviceTxdEvent(EventID id)
 void
 UART::serviceRxdEvent(EventID id)
 {
-    // infomsg(SER_DEBUG, "serveRxdEvent(%d)\n", id);
+    // loginfo(SER_DEBUG, "serveRxdEvent(%d)\n", id);
 
     // Shift in the next bit from the RXD line
     bool rxd = serialPort.getRXD();
@@ -98,7 +98,7 @@ UART::serviceRxdEvent(EventID id)
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
-        debugmsg(SER_DEBUG, "Received packet %X (%c) (%ld)\n", receiveBuffer, (char)receiveBuffer, packetLength());
+        logdebug(SER_DEBUG, "Received packet %X (%c) (%ld)\n", receiveBuffer, (char)receiveBuffer, packetLength());
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {

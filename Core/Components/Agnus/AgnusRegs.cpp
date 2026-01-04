@@ -31,7 +31,7 @@ Agnus::peekDMACONR() const
 template <Accessor s> void
 Agnus::pokeDMACON(u16 value)
 {
-    debugmsg(DMA_DEBUG, "pokeDMACON(%04x)\n", value);
+    logdebug(DMA_DEBUG, "pokeDMACON(%04x)\n", value);
 
     // Schedule the write cycle
     recordRegisterChange(DMA_CYCLES(2), Reg::DMACON, value);
@@ -40,7 +40,7 @@ Agnus::pokeDMACON(u16 value)
 void
 Agnus::setDMACON(u16 oldValue, u16 value)
 {
-    debugmsg(DMA_DEBUG, "setDMACON(%x, %x)\n", oldValue, value);
+    logdebug(DMA_DEBUG, "setDMACON(%x, %x)\n", oldValue, value);
     
     u16 newValue;
     
@@ -51,7 +51,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     }
     if (oldValue == newValue) {
         
-        debugmsg(SEQ_DEBUG, "setDMACON: Skipping (value does not change)\n");
+        logdebug(SEQ_DEBUG, "setDMACON: Skipping (value does not change)\n");
         return;
     }
 
@@ -104,7 +104,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
 void
 Agnus::setBPLEN(bool value)
 {
-    debugmsg(SEQ_DEBUG, "setBPLEN(%d)\n", value);
+    logdebug(SEQ_DEBUG, "setBPLEN(%d)\n", value);
     
     // Update the bitplane event table
     if (value) {
@@ -118,7 +118,7 @@ Agnus::setBPLEN(bool value)
 void
 Agnus::setCOPEN(bool value)
 {
-    debugmsg(DMA_DEBUG, "Copper DMA %s\n", value ? "on" : "off");
+    logdebug(DMA_DEBUG, "Copper DMA %s\n", value ? "on" : "off");
     
     if (value) copper.activeInThisFrame = true;
 }
@@ -126,19 +126,19 @@ Agnus::setCOPEN(bool value)
 void
 Agnus::setBLTEN(bool value)
 {
-    debugmsg(DMA_DEBUG, "Blitter DMA %s\n", value ? "on" : "off");
+    logdebug(DMA_DEBUG, "Blitter DMA %s\n", value ? "on" : "off");
 }
 
 void
 Agnus::setSPREN(bool value)
 {
-    debugmsg(DMA_DEBUG, "Sprite DMA %s\n", value ? "on" : "off");
+    logdebug(DMA_DEBUG, "Sprite DMA %s\n", value ? "on" : "off");
 }
 
 void
 Agnus::setDSKEN(bool value)
 {
-    debugmsg(DMA_DEBUG, "Disk DMA %s\n", value ? "on" : "off");
+    logdebug(DMA_DEBUG, "Disk DMA %s\n", value ? "on" : "off");
 }
 
 void
@@ -193,14 +193,14 @@ Agnus::peekVHPOSR() const
         }
     }
     
-    debugmsg(POSREG_DEBUG, "peekVHPOSR() = %04x\n", result);
+    logdebug(POSREG_DEBUG, "peekVHPOSR() = %04x\n", result);
     return result;
 }
 
 void
 Agnus::pokeVHPOS(u16 value)
 {
-    debugmsg(POSREG_DEBUG, "pokeVHPOS(%04x)\n", value);
+    logdebug(POSREG_DEBUG, "pokeVHPOS(%04x)\n", value);
     
     setVHPOS(value);
 }
@@ -250,14 +250,14 @@ Agnus::peekVPOSR() const
         }
     }
     
-    debugmsg(POSREG_DEBUG, "peekVPOSR() = %04x\n", result);
+    logdebug(POSREG_DEBUG, "peekVPOSR() = %04x\n", result);
     return result;
 }
 
 void
 Agnus::pokeVPOS(u16 value)
 {
-    debugmsg(POSREG_DEBUG, "pokeVPOS(%04x)\n", value);
+    logdebug(POSREG_DEBUG, "pokeVPOS(%04x)\n", value);
     
     setVPOS(value);
 }
@@ -273,7 +273,7 @@ Agnus::setVPOS(u16 value)
     // Writing to this register clears the LOL bit
     if (pos.lol) {
 
-        debugmsg(NTSC_DEBUG, "Clearing the LOL bit\n");
+        logdebug(NTSC_DEBUG, "Clearing the LOL bit\n");
         pos.lol = false;
         rectifyVBLEvent();
     }
@@ -305,7 +305,7 @@ Agnus::setVPOS(u16 value)
 template <Accessor s> void
 Agnus::pokeBPLCON0(u16 value)
 {
-    debugmsg(DMA_DEBUG, "pokeBPLCON0(%04x)\n", value);
+    logdebug(DMA_DEBUG, "pokeBPLCON0(%04x)\n", value);
 
     if (bplcon0 != value) {
         recordRegisterChange(DMA_CYCLES(4), Reg::BPLCON0, value, Accessor::AGNUS);
@@ -315,7 +315,7 @@ Agnus::pokeBPLCON0(u16 value)
 void
 Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
-    debugmsg(DMA_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
+    logdebug(DMA_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
 
     // Determine the new bitmap resolution
     res = resolution(newValue);
@@ -328,7 +328,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
         
         if (bpldma()) {
 
-            debugmsg(SEQ_DEBUG, "setBPLCON0: Recomputing BPL event table\n");
+            logdebug(SEQ_DEBUG, "setBPLCON0: Recomputing BPL event table\n");
 
             // Recompute the bitplane event table
             sequencer.computeBplEventTable(sequencer.sigRecorder);
@@ -339,7 +339,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
         } else {
 
             // Speed optimization: Recomputation will happen in the next line
-            debugmsg(SEQ_DEBUG, "setBPLCON0: Postponing recomputation\n");
+            logdebug(SEQ_DEBUG, "setBPLCON0: Postponing recomputation\n");
         }
     }
     
@@ -355,7 +355,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 void
 Agnus::pokeBPLCON1(u16 value)
 {
-    debugmsg(DMA_DEBUG, "pokeBPLCON1(%04x)\n", value);
+    logdebug(DMA_DEBUG, "pokeBPLCON1(%04x)\n", value);
     
     if (bplcon1 != value) {
         recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON1, value, Accessor::AGNUS);
@@ -366,7 +366,7 @@ void
 Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
-    debugmsg(DMA_DEBUG, "setBPLCON1(%04x,%04x)\n", oldValue, newValue);
+    logdebug(DMA_DEBUG, "setBPLCON1(%04x,%04x)\n", oldValue, newValue);
 
     bplcon1 = newValue & 0xFF;
     
@@ -384,7 +384,7 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
-    debugmsg(DIW_DEBUG, "pokeDIWSTRT<%s>(%04x)\n", AccessorEnum::key(s), value);
+    logdebug(DIW_DEBUG, "pokeDIWSTRT<%s>(%04x)\n", AccessorEnum::key(s), value);
 
     recordRegisterChange(DMA_CYCLES(4), Reg::DIWSTRT, value, Accessor::AGNUS);
     recordRegisterChange(DMA_CYCLES(1), Reg::DIWSTRT, value, Accessor::DENISE);
@@ -393,7 +393,7 @@ Agnus::pokeDIWSTRT(u16 value)
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
-    debugmsg(DIW_DEBUG, "pokeDIWSTOP<%s>(%04x)\n", AccessorEnum::key(s), value);
+    logdebug(DIW_DEBUG, "pokeDIWSTOP<%s>(%04x)\n", AccessorEnum::key(s), value);
 
     recordRegisterChange(DMA_CYCLES(4), Reg::DIWSTOP, value, Accessor::AGNUS);
     recordRegisterChange(DMA_CYCLES(1), Reg::DIWSTOP, value, Accessor::DENISE);
@@ -402,7 +402,7 @@ Agnus::pokeDIWSTOP(u16 value)
 template <Accessor s> void
 Agnus::pokeDIWHIGH(u16 value)
 {
-    debugmsg(DIW_DEBUG, "pokeDIWHIGH<%s>(%04x)\n", AccessorEnum::key(s), value);
+    logdebug(DIW_DEBUG, "pokeDIWHIGH<%s>(%04x)\n", AccessorEnum::key(s), value);
 
     value &= 0x2727;
 
@@ -413,35 +413,35 @@ Agnus::pokeDIWHIGH(u16 value)
 void
 Agnus::pokeBPL1MOD(u16 value)
 {
-    debugmsg(BPLMOD_DEBUG, "pokeBPL1MOD(%04x)\n", value);
+    logdebug(BPLMOD_DEBUG, "pokeBPL1MOD(%04x)\n", value);
     recordRegisterChange(DMA_CYCLES(2), Reg::BPL1MOD, value);
 }
 
 void
 Agnus::setBPL1MOD(u16 value)
 {
-    debugmsg(BPLMOD_DEBUG, "setBPL1MOD(%04x)\n", value);
+    logdebug(BPLMOD_DEBUG, "setBPL1MOD(%04x)\n", value);
     bpl1mod = (i16)(value & 0xFFFE);
 }
 
 void
 Agnus::pokeBPL2MOD(u16 value)
 {
-    debugmsg(BPLMOD_DEBUG, "pokeBPL2MOD(%04x)\n", value);
+    logdebug(BPLMOD_DEBUG, "pokeBPL2MOD(%04x)\n", value);
     recordRegisterChange(DMA_CYCLES(2), Reg::BPL2MOD, value);
 }
 
 void
 Agnus::setBPL2MOD(u16 value)
 {
-    debugmsg(BPLMOD_DEBUG, "setBPL2MOD(%04x)\n", value);
+    logdebug(BPLMOD_DEBUG, "setBPL2MOD(%04x)\n", value);
     bpl2mod = (i16)(value & 0xFFFE);
 }
 
 template <int x, Accessor s> void
 Agnus::pokeSPRxPOS(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "pokeSPR%dPOS<%s>(%04x)\n", x, AccessorEnum::key(s), value);
+    logdebug(SPRREG_DEBUG, "pokeSPR%dPOS<%s>(%04x)\n", x, AccessorEnum::key(s), value);
 
     // setSPRxPOS<x>(value);
     // return;
@@ -461,7 +461,7 @@ Agnus::pokeSPRxPOS(u16 value)
 template <int x> void
 Agnus::setSPRxPOS(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "setSPR%dPOS(%04x)\n", x, value);
+    logdebug(SPRREG_DEBUG, "setSPR%dPOS(%04x)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
     // i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
@@ -478,7 +478,7 @@ Agnus::setSPRxPOS(u16 value)
 template <int x, Accessor s> void
 Agnus::pokeSPRxCTL(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
+    logdebug(SPRREG_DEBUG, "pokeSPR%dCTL(%04x)\n", x, value);
 
     // setSPRxCTL<x>(value);
     // return;
@@ -498,7 +498,7 @@ Agnus::pokeSPRxCTL(u16 value)
 template <int x> void
 Agnus::setSPRxCTL(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "setSPR%dCTL(%04x)\n", x, value);
+    logdebug(SPRREG_DEBUG, "setSPR%dCTL(%04x)\n", x, value);
 
     // Remember the write cycle (checked in pokeSPRxCTL)
     lastCtlWrite[x] = u8(pos.h);
@@ -552,7 +552,7 @@ Agnus::pokeBEAMCON0(u16 value)
 template <Accessor s> void
 Agnus::pokeDSKPTH(u16 value)
 {
-    debugmsg(DSKREG_DEBUG, "pokeDSKPTH(%04x) [%s]\n", value, AccessorEnum::key(s));
+    logdebug(DSKREG_DEBUG, "pokeDSKPTH(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
     recordRegisterChange(DMA_CYCLES(2), Reg::DSKPTH, value, s);
@@ -561,7 +561,7 @@ Agnus::pokeDSKPTH(u16 value)
 void
 Agnus::setDSKPTH(u16 value)
 {
-    debugmsg(DSKREG_DEBUG, "setDSKPTH(%04x)\n", value);
+    logdebug(DSKREG_DEBUG, "setDSKPTH(%04x)\n", value);
 
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BusOwner::DISK)) return;
@@ -577,7 +577,7 @@ Agnus::setDSKPTH(u16 value)
 template <Accessor s>
 void Agnus::pokeDSKPTL(u16 value)
 {
-    debugmsg(DSKREG_DEBUG, "pokeDSKPTL(%04x) [%s]\n", value, AccessorEnum::key(s));
+    logdebug(DSKREG_DEBUG, "pokeDSKPTL(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
     recordRegisterChange(DMA_CYCLES(2), Reg::DSKPTL, value, s);
@@ -586,7 +586,7 @@ void Agnus::pokeDSKPTL(u16 value)
 void
 Agnus::setDSKPTL(u16 value)
 {
-    debugmsg(DSKREG_DEBUG, "setDSKPTL(%04x)\n", value);
+    logdebug(DSKREG_DEBUG, "setDSKPTL(%04x)\n", value);
 
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BusOwner::DISK)) return;
@@ -598,7 +598,7 @@ Agnus::setDSKPTL(u16 value)
 template <int x, Accessor s> void
 Agnus::pokeAUDxLCH(u16 value)
 {
-    infomsg(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
+    loginfo(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
 
     audlc[x] = REPLACE_HI_WORD(audlc[x], value);
 }
@@ -606,7 +606,7 @@ Agnus::pokeAUDxLCH(u16 value)
 template <int x, Accessor s> void
 Agnus::pokeAUDxLCL(u16 value)
 {
-    debugmsg(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
+    logdebug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
 
     audlc[x] = REPLACE_LO_WORD(audlc[x], value & 0xFFFE);
 }
@@ -614,7 +614,7 @@ Agnus::pokeAUDxLCL(u16 value)
 template <int x, Accessor s> void
 Agnus::pokeBPLxPTH(u16 value)
 {
-    debugmsg(BPLREG_DEBUG, "pokeBPL%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
+    logdebug(BPLREG_DEBUG, "pokeBPL%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
     
     // Schedule the write cycle
     auto reg = Reg(int(Reg::BPL1PTH) + 2 * (x - 1));
@@ -624,7 +624,7 @@ Agnus::pokeBPLxPTH(u16 value)
 template <int x> void
 Agnus::setBPLxPTH(u16 value)
 {
-    debugmsg(BPLREG_DEBUG, "setBPL%dPTH(%X)\n", x, value);
+    logdebug(BPLREG_DEBUG, "setBPL%dPTH(%X)\n", x, value);
 
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BusOwner(BUS_BPL1 + x - 1))) return;
@@ -640,7 +640,7 @@ Agnus::setBPLxPTH(u16 value)
 template <int x, Accessor s> void
 Agnus::pokeBPLxPTL(u16 value)
 {
-    debugmsg(BPLREG_DEBUG, "pokeBPL%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
+    logdebug(BPLREG_DEBUG, "pokeBPL%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
     auto reg = Reg(int(Reg::BPL1PTL) + 2 * (x - 1));
@@ -650,7 +650,7 @@ Agnus::pokeBPLxPTL(u16 value)
 template <int x> void
 Agnus::setBPLxPTL(u16 value)
 {
-    debugmsg(BPLREG_DEBUG, "setBPL%dPTL(%X)\n", x, value);
+    logdebug(BPLREG_DEBUG, "setBPL%dPTL(%X)\n", x, value);
 
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BusOwner(BUS_BPL1 + x - 1))) return;
@@ -662,7 +662,7 @@ Agnus::setBPLxPTL(u16 value)
 template <int x, Accessor s> void
 Agnus::pokeSPRxPTH(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "pokeSPR%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
+    logdebug(SPRREG_DEBUG, "pokeSPR%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
     auto reg = Reg(int(Reg::SPR0PTH) + 2 * x);
@@ -672,7 +672,7 @@ Agnus::pokeSPRxPTH(u16 value)
 template <int x> void
 Agnus::setSPRxPTH(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
+    logdebug(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
     
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BusOwner(BUS_SPRITE0 + x))) return;
@@ -688,7 +688,7 @@ Agnus::setSPRxPTH(u16 value)
 template <int x, Accessor s> void
 Agnus::pokeSPRxPTL(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "pokeSPR%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
+    logdebug(SPRREG_DEBUG, "pokeSPR%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
     auto reg = Reg(int(Reg::SPR0PTL) + 2 * x);
@@ -698,7 +698,7 @@ Agnus::pokeSPRxPTL(u16 value)
 template <int x> void
 Agnus::setSPRxPTL(u16 value)
 {
-    debugmsg(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
+    logdebug(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
     
     // Check if the register is blocked due to ongoing DMA
     if (dropWrite(BusOwner(BUS_SPRITE0 + x))) return;

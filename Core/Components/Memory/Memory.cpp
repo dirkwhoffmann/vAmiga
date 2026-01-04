@@ -103,19 +103,19 @@ Memory::_initialize()
 {    
     if (auto romPath = Emulator::defaults.getRaw("ROM_PATH"); romPath != "") {
 
-        infomsg(CNF_DEBUG, "Trying to load Rom from %s...\n", romPath.c_str());
+        loginfo(CNF_DEBUG, "Trying to load Rom from %s...\n", romPath.c_str());
         
         try { loadRom(romPath); } catch (std::exception& e) {
-            infomsg(CNF_DEBUG, "Error: %s\n", e.what());
+            loginfo(CNF_DEBUG, "Error: %s\n", e.what());
         }
     }
     
     if (auto extPath = Emulator::defaults.getRaw("EXT_PATH"); extPath != "") {
 
-        infomsg(CNF_DEBUG, "Trying to load extension Rom from %s...\n", extPath.c_str());
+        loginfo(CNF_DEBUG, "Trying to load extension Rom from %s...\n", extPath.c_str());
         
         try { loadExt(extPath); } catch (std::exception& e) {
-            infomsg(CNF_DEBUG, "Error: %s\n", e.what());
+            loginfo(CNF_DEBUG, "Error: %s\n", e.what());
         }
     }
 }
@@ -788,7 +788,7 @@ Memory::patchExpansionLib()
                     return;
                 }
             }
-            warnmsg("patchExpansionLib: Can't find patch location\n");
+            logwarn("patchExpansionLib: Can't find patch location\n");
             break;
         }
 
@@ -1611,14 +1611,14 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
 template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::NONE> (u32 addr, u8 value)
 {
-    debugmsg(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
+    logdebug(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
 Memory::poke16 <Accessor::CPU, MemSrc::NONE> (u32 addr, u16 value)
 {
-    debugmsg(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
+    logdebug(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
@@ -1629,7 +1629,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u8 value)
     
     if constexpr (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
-            debugmsg(BLT_MEM_GUARD, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
+            logdebug(BLT_MEM_GUARD, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }
 
@@ -1651,7 +1651,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u16 value)
     
     if constexpr (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
-            debugmsg(BLT_MEM_GUARD, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
+            logdebug(BLT_MEM_GUARD, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }
 
@@ -1838,7 +1838,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::ROM> (u32 addr, u8 value)
 
     // On Amigas with a WOM, writing into ROM space locks the WOM
     if (hasWom() && !womIsLocked) {
-        infomsg(MEM_DEBUG, "Locking WOM\n");
+        loginfo(MEM_DEBUG, "Locking WOM\n");
         womIsLocked = true;
         updateMemSrcTables();
     }
@@ -1947,7 +1947,7 @@ Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
 template <> void
 Memory::poke16 <Accessor::AGNUS, MemSrc::NONE> (u32 addr, u16 value)
 {
-    debugmsg(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
+    logdebug(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
@@ -2198,7 +2198,7 @@ Memory::peekCustom16(u32 addr)
 
     }
 
-    debugmsg(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, MemoryDebugger::regName(addr), result);
+    logdebug(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, MemoryDebugger::regName(addr), result);
 
     dataBus = result;
     return result;
@@ -2275,9 +2275,9 @@ template <Accessor s> void
 Memory::pokeCustom16(u32 addr, u16 value)
 {
     if ((addr & 0xFFF) == 0x30) {
-        debugmsg(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
+        logdebug(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {
-        debugmsg(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
+        logdebug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
     }
 
     dataBus = value;
@@ -2697,10 +2697,10 @@ Memory::pokeCustom16(u32 addr, u16 value)
     }
     
     if (addr <= 0x1E) {
-        debugmsg(INVREG_DEBUG,
+        logdebug(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): READ-ONLY\n", addr, MemoryDebugger::regName(addr));
     } else {
-        debugmsg(INVREG_DEBUG,
+        logdebug(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): NON-OCS\n", addr, MemoryDebugger::regName(addr));
     }
 }

@@ -74,7 +74,7 @@ class MediaManager {
     
     init(with document: MyDocument) {
         
-        infomsg(.lifetime, "Creating media manager")
+        loginfo(.lifetime, "Creating media manager")
         self.mydocument = document
         
         diskMenuImage.isTemplate = true

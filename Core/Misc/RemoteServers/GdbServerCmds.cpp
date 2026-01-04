@@ -21,7 +21,7 @@ namespace vamiga {
 template <> void
 GdbServer::process <' ', GdbCmd::CtrlC> (string arg)
 {
-    infomsg(SRV_DEBUG, "Ctrl+C\n");
+    loginfo(SRV_DEBUG, "Ctrl+C\n");
     
     amiga.signalStop();
     reply("OK");
@@ -406,7 +406,7 @@ GdbServer::process <'z'> (string cmd)
 void
 GdbServer::process(string package)
 {
-    infomsg(SRV_DEBUG, "process(%s)\n", package.c_str());
+    loginfo(SRV_DEBUG, "process(%s)\n", package.c_str());
     
     // Check if the previous package has been rejected
     if (package[0] == '-') throw ServerError(ServerError::GDB_NO_ACK);

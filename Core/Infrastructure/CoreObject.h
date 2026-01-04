@@ -24,7 +24,7 @@ class CoreObject : public Loggable, Reportable {
     
 public:
     
-    CoreObject();
+    CoreObject() = default;
     virtual ~CoreObject() = default;
     
     // Returns the name for this component
@@ -33,8 +33,8 @@ public:
     // Returns a textual description for this component
     virtual const char *description() const { return ""; }
     
-    // Called by infomsg() and debugmsg() to produce a detailed debug output
-    virtual void prefix(const std::source_location &) const override;
+    // Called by loginfo() and logdebug() to produce a detailed debug output
+    virtual string prefix(LogLevel, const std::source_location &) const override;
 
     
     //

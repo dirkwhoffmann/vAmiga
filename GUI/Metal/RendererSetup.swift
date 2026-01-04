@@ -149,13 +149,13 @@ extension Renderer {
         let aspect = Float(size.width) / Float(size.height)
         var xs = Float(1.0)
 
-        // infomsg(.metal, "buildMatrices2D: aspect = \(aspect)")
+        // loginfo(.metal, "buildMatrices2D: aspect = \(aspect)")
 
         // Scale horizontal coordinates if necessary
         if parent.pref.keepAspectRatio && abs(aspect - (4/3)) > 0.1 {
 
             xs = 4 / (3 * aspect)
-            infomsg(.metal, "Fixing aspect ratio with scaling factor \(xs)")
+            loginfo(.metal, "Fixing aspect ratio with scaling factor \(xs)")
         }
 
         let mvp = Renderer.scalingMatrix(xs: xs, ys: 1.0, zs: 1.0)

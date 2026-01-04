@@ -96,7 +96,7 @@ class RomDropView: DropView {
                 if item.tag == hash && hash != 0 {
 
                     if let url = UserDefaults.romUrl(fingerprint: hash) {
-                        infomsg(1, "Saving \(url)")
+                        loginfo(1, "Saving \(url)")
                         try? emu.mem.saveRom(url)
                         parent.refreshRomSelector()
                     }

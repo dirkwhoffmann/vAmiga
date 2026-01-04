@@ -65,18 +65,18 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     func register() {
         
         DialogController.active.append(self)
-        infomsg(.lifetime, "Register: \(DialogController.active)")
+        loginfo(.lifetime, "Register: \(DialogController.active)")
     }
     
     func unregister() {
         
         DialogController.active = DialogController.active.filter {$0 != self}
-        infomsg(.lifetime, "Unregister: \(DialogController.active)")
+        loginfo(.lifetime, "Unregister: \(DialogController.active)")
     }
 
     override func windowDidLoad() {
         
-        infomsg(.lifetime)
+        loginfo(.lifetime)
 
         super.windowDidLoad()
         self.window?.delegate = self
@@ -84,22 +84,22 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     
     func dialogWillShow() {
 
-        infomsg(.lifetime)
+        loginfo(.lifetime)
     }
     
     func dialogDidShow() {
 
-        infomsg(.lifetime)
+        loginfo(.lifetime)
     }
     
     func cleanup() {
 
-        infomsg(.lifetime)
+        loginfo(.lifetime)
     }
     
     func showAsWindow() {
 
-        infomsg(.lifetime)
+        loginfo(.lifetime)
         
         sheet = false
         register()
@@ -111,7 +111,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
     func showAsSheet(completionHandler handler:(() -> Void)? = nil) {
 
-        infomsg(.lifetime)
+        loginfo(.lifetime)
         
         sheet = true
         register()
@@ -138,7 +138,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
     func join() {
 
-        infomsg(.shutdown, "Wait until the window is closed...")
+        loginfo(.shutdown, "Wait until the window is closed...")
 
         lock.lock()
         lock.unlock()
@@ -161,7 +161,7 @@ extension DialogController: NSWindowDelegate {
 
     func windowDidBecomeKey(_ notification: Notification) {
 
-        infomsg(.lifetime)
+        loginfo(.lifetime)
     }
 
     func windowWillClose(_ notification: Notification) {

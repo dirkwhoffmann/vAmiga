@@ -156,14 +156,14 @@ public class MacAudio: NSObject {
 
     func shutDown() {
 
-        infomsg(.shutdown, "Initiating shutdown...")
+        loginfo(.shutdown, "Initiating shutdown...")
         state = .shutdown
 
-        infomsg(.shutdown, "Fading out...")
+        loginfo(.shutdown, "Fading out...")
         lock.lock()
         precondition(state == .off)
 
-        infomsg(.shutdown, "Stopping audio hardware...")
+        loginfo(.shutdown, "Stopping audio hardware...")
         audiounit.stopHardware()
         audiounit.outputProvider = nil
     }
@@ -187,11 +187,11 @@ public class MacAudio: NSObject {
 
             if let cnt = emu?.audioPort.copyMono(ptr, size: n) {
 
-                infomsg(.shutdown, "Copied \(cnt) mono samples.")
+                loginfo(.shutdown, "Copied \(cnt) mono samples.")
                 if cnt == n { break }
             }
 
-            infomsg(.shutdown, "Successfully faded out.")
+            loginfo(.shutdown, "Successfully faded out.")
             state = .off
             lock.unlock()
 
@@ -221,11 +221,11 @@ public class MacAudio: NSObject {
 
             if let cnt = emu?.audioPort.copyStereo(ptr1, buffer2: ptr2, size: n) {
 
-                infomsg(.shutdown, "Copied \(cnt) stereo samples.")
+                loginfo(.shutdown, "Copied \(cnt) stereo samples.")
                 if cnt == n { break }
             }
 
-            infomsg(.shutdown, "Successfully faded out.")
+            loginfo(.shutdown, "Successfully faded out.")
             state = .off
             lock.unlock()
 

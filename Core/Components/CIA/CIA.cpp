@@ -269,7 +269,7 @@ CIA::emulateFallingEdgeOnFlagPin()
 void
 CIA::emulateRisingEdgeOnCntPin()
 {
-    debugmsg(CIASER_DEBUG, "emulateRisingEdgeOnCntPin\n");
+    logdebug(CIASER_DEBUG, "emulateRisingEdgeOnCntPin\n");
     
     wakeUp();
     cnt = 1;
@@ -283,9 +283,9 @@ CIA::emulateRisingEdgeOnCntPin()
     // Serial register
     if (!(cra & 0x40) /* input mode */ ) {
         
-        // infomsg("rising CNT: serCounter %d\n", serCounter);
+        // loginfo("rising CNT: serCounter %d\n", serCounter);
         if (serCounter == 0) serCounter = 8;
-        debugmsg(CIASER_DEBUG, "Clocking in bit %d [%d]\n", sp, serCounter);
+        logdebug(CIASER_DEBUG, "Clocking in bit %d [%d]\n", sp, serCounter);
         
         // Shift in a bit from the SP line
         ssr = (u8)(ssr << 1) | (u8)sp;
@@ -294,7 +294,7 @@ CIA::emulateRisingEdgeOnCntPin()
         if (--serCounter == 0) {
             
             // Load the data register (SDR) with the shift register (SSR)
-            debugmsg(CIASER_DEBUG, "Loading %x into sdr\n", sdr);
+            logdebug(CIASER_DEBUG, "Loading %x into sdr\n", sdr);
             delay |= CIASsrToSdr0; // sdr = ssr;
             
             // Trigger interrupt
@@ -306,7 +306,7 @@ CIA::emulateRisingEdgeOnCntPin()
 void
 CIA::emulateFallingEdgeOnCntPin()
 {
-    debugmsg(CIASER_DEBUG, "emulateFallingEdgeOnCntPin\n");
+    logdebug(CIASER_DEBUG, "emulateFallingEdgeOnCntPin\n");
 
     wakeUp();
     cnt = 0;
@@ -333,7 +333,7 @@ CIA::reloadTimerB(u64 *delay)
 void
 CIA::triggerTimerIrq(u64 *delay)
 {
-    debugmsg(CIA_DEBUG, "triggerTimerIrq()\n");
+    logdebug(CIA_DEBUG, "triggerTimerIrq()\n");
     *delay |= (*delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
     *delay |= (*delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
@@ -341,7 +341,7 @@ CIA::triggerTimerIrq(u64 *delay)
 void
 CIA::triggerTodIrq(u64 *delay)
 {
-    debugmsg(CIA_DEBUG, "triggerTodIrq()\n");
+    logdebug(CIA_DEBUG, "triggerTodIrq()\n");
     *delay |= CIASetInt0;
     *delay |= CIASetIcr0;
 }
@@ -349,7 +349,7 @@ CIA::triggerTodIrq(u64 *delay)
 void
 CIA::triggerFlagPinIrq(u64 *delay)
 {
-    debugmsg(CIA_DEBUG, "triggerFlagPinIrq()\n");
+    logdebug(CIA_DEBUG, "triggerFlagPinIrq()\n");
     *delay |= CIASetInt0;
     *delay |= CIASetIcr0;
 }
@@ -357,7 +357,7 @@ CIA::triggerFlagPinIrq(u64 *delay)
 void
 CIA::triggerSerialIrq(u64 *delay)
 {
-    debugmsg(CIA_DEBUG, "triggerSerialIrq()\n");
+    logdebug(CIA_DEBUG, "triggerSerialIrq()\n");
     *delay |= CIASetInt0;
     *delay |= CIASetIcr0;
 }
@@ -808,14 +808,14 @@ CIAA::_powerOff()
 void 
 CIAA::pullDownInterruptLine()
 {
-    debugmsg(CIA_DEBUG, "Pulling down IRQ line\n");
+    logdebug(CIA_DEBUG, "Pulling down IRQ line\n");
     paula.raiseIrq(IrqSource::PORTS);
 }
 
 void 
 CIAA::releaseInterruptLine()
 {
-    debugmsg(CIA_DEBUG, "Releasing IRQ line\n");
+    logdebug(CIA_DEBUG, "Releasing IRQ line\n");
 }
 
 //              -------
@@ -837,7 +837,7 @@ CIAA::updatePA()
     
     if (oldpa ^ pa) {
         
-        debugmsg(DSKREG_DEBUG,
+        logdebug(DSKREG_DEBUG,
               "/FIR1: %d /FIR0: %d /RDY: %d /TK0: %d "
               "/WPRO: %d /CHNG: %d /LED: %d OVL: %d\n",
               !!(pa & 0x80), !!(pa & 0x40), !!(pa & 0x20), !!(pa & 0x10),
@@ -948,7 +948,7 @@ CIAA::portBexternal() const
 void
 CIAA::setKeyCode(u8 keyCode)
 {
-    debugmsg(KBD_DEBUG, "setKeyCode: %x\n", keyCode);
+    logdebug(KBD_DEBUG, "setKeyCode: %x\n", keyCode);
     
     // Put the key code into the serial data register
     sdr = keyCode;
@@ -967,14 +967,14 @@ CIAA::setKeyCode(u8 keyCode)
 void 
 CIAB::pullDownInterruptLine()
 {
-    debugmsg(CIA_DEBUG, "Pulling down IRQ line\n");
+    logdebug(CIA_DEBUG, "Pulling down IRQ line\n");
     paula.raiseIrq(IrqSource::EXTER);
 }
 
 void 
 CIAB::releaseInterruptLine()
 {
-    debugmsg(CIA_DEBUG, "Releasing IRQ line\n");
+    logdebug(CIA_DEBUG, "Releasing IRQ line\n");
 }
 
 //                                 -------
@@ -1093,7 +1093,7 @@ CIAB::updatePB()
     // Notify the disk controller about the changed bits
     if (oldPB ^ pb) {
         
-        debugmsg(DSKREG_DEBUG,
+        logdebug(DSKREG_DEBUG,
               "MTR: %d SEL3: %d SEL2: %d SEL1: %d "
               "SEL0: %d SIDE: %d DIR: %d STEP: %d\n",
               !!(pb & 0x80), !!(pb & 0x40), !!(pb & 0x20), !!(pb & 0x10),

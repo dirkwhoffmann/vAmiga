@@ -16,12 +16,12 @@ namespace vamiga {
 
 Socket::Socket() : socket(INVALID_SOCKET)
 {
-    infomsg(SCK_DEBUG, "Socket constructor\n");
+    loginfo(SCK_DEBUG, "Socket constructor\n");
 }
 
 Socket::Socket(SOCKET id) : socket(id)
 {
-    infomsg(SCK_DEBUG, "Wrapping socket %lld\n", (i64)id);
+    loginfo(SCK_DEBUG, "Wrapping socket %lld\n", (i64)id);
 }
 
 Socket::Socket(Socket&& other)
@@ -45,7 +45,7 @@ Socket& Socket::operator=(Socket&& other)
 
 Socket::~Socket()
 {
-    infomsg(SCK_DEBUG, "Socket destructor\n");
+    loginfo(SCK_DEBUG, "Socket destructor\n");
     
     if (socket != INVALID_SOCKET) {
         close();
@@ -89,7 +89,7 @@ void Socket::create()
             throw ServerError(ServerError::SOCK_CANT_CREATE);
         }
         
-        infomsg(SCK_DEBUG, "Created new socket %lld\n", (i64)socket);
+        loginfo(SCK_DEBUG, "Created new socket %lld\n", (i64)socket);
     }
 }
 
@@ -182,7 +182,7 @@ Socket::close()
 {    
     if (socket != INVALID_SOCKET) {
 
-        infomsg(SCK_DEBUG, "Closing socket %lld\n", (i64)socket);
+        loginfo(SCK_DEBUG, "Closing socket %lld\n", (i64)socket);
 #ifdef _WIN32
         closesocket(socket);
 #else

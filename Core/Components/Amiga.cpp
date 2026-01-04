@@ -86,44 +86,63 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
 
 Amiga::~Amiga()
 {
-    infomsg(RUN_DEBUG, "Destroying emulator instance\n");
+    loginfo(RUN_DEBUG, "Destroying emulator instance\n");
 }
 
-void
-Amiga::tracePrefix(const std::source_location &loc) const
+string
+Amiga::prefix(LogLevel level, const std::source_location &loc) const
 {
-    const isize level = 5;
+    const isize verbosity = 5;
 
-    if (level) {
-        
-        if (isRunAheadInstance()) fprintf(stderr, "[Run-ahead] ");
+    std::string result;
+    result.reserve(256);
 
-        if (level >= 3) {
-            
-            fprintf(stderr, "[%lld] (%3ld,%3ld) ", agnus.pos.frame, agnus.pos.v, agnus.pos.h);
+    if (level == LogLevel::LOG_DEBUG && verbosity) {
+
+        // Run-ahead prefix
+        if (isRunAheadInstance()) {
+            result += "[Run-ahead] ";
         }
-        if (level >= 4) {
-            
-            fprintf(stderr, "%06X ", cpu.getPC0());
+
+        // verbosity >= 3: frame & position
+        if (verbosity >= 3) {
+            std::format_to(std::back_inserter(result),
+                           "[{}] ({:3},{:3}) ",
+                           agnus.pos.frame, agnus.pos.v, agnus.pos.h);
+        }
+
+        // verbosity >= 4: CPU PC, Copper, IPL
+        if (verbosity >= 4) {
+            std::format_to(std::back_inserter(result), "{:06X} ", cpu.getPC0());
             if (agnus.copper.servicing) {
-                fprintf(stderr, "[%06X] ", agnus.copper.getCopPC0());
+                std::format_to(std::back_inserter(result), "[{:06X}] ", agnus.copper.getCopPC0());
             }
-            fprintf(stderr, "%2X ", cpu.getIPL());
+            std::format_to(std::back_inserter(result), "{:02X} ", cpu.getIPL());
         }
-        if (level >= 5) {
-            
+
+        // verbosity >= 5: DMACON, intena, intreq
+        if (verbosity >= 5) {
             u16 dmacon = agnus.dmacon;
             bool dmaen = dmacon & DMAEN;
-            fprintf(stderr, "%c%c%c%c%c%c ",
-                    (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
-                    (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
-                    (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
-                    (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
-                    (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
-                    (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
-            
-            fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
+
+            // DMACON bitfield characters
+            std::format_to(std::back_inserter(result),
+                           "{}{}{}{}{}{} ",
+                           (dmacon & BPLEN) ? (dmaen ? 'B' : 'b') : '-',
+                           (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
+                           (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
+                           (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
+                           (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
+                           (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
+
+            std::format_to(std::back_inserter(result),
+                           "{:04X} {:04X} ", paula.intena, paula.intreq);
         }
+
+        return result;
+
+    } else {
+        return CoreObject::prefix(level, loc);
     }
 }
 
@@ -459,7 +478,7 @@ Amiga::revertToFactorySettings()
 i64
 Amiga::get(Opt opt, isize objid) const
 {
-    infomsg(CNF_DEBUG, "get(%s, %ld)\n", OptEnum::key(opt), objid);
+    loginfo(CNF_DEBUG, "get(%s, %ld)\n", OptEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
     if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -476,13 +495,13 @@ Amiga::check(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            infomsg(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            loginfo(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->checkOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        infomsg(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        loginfo(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -501,13 +520,13 @@ Amiga::set(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            infomsg(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            loginfo(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->setOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        infomsg(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        loginfo(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -796,7 +815,7 @@ Amiga::_dump(Category category, std::ostream &os) const
 void
 Amiga::_powerOn()
 {
-    infomsg(RUN_DEBUG, "_powerOn\n");
+    loginfo(RUN_DEBUG, "_powerOn\n");
 
     hardReset();
     msgQueue.put(Msg::POWER, 1);
@@ -805,7 +824,7 @@ Amiga::_powerOn()
 void
 Amiga::_powerOff()
 {
-    infomsg(RUN_DEBUG, "_powerOff\n");
+    loginfo(RUN_DEBUG, "_powerOff\n");
 
     hardReset();
     msgQueue.put(Msg::POWER, 0);
@@ -814,7 +833,7 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    infomsg(RUN_DEBUG, "_run\n");
+    loginfo(RUN_DEBUG, "_run\n");
 
     msgQueue.put(Msg::RUN);
 }
@@ -822,7 +841,7 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-    infomsg(RUN_DEBUG, "_pause\n");
+    loginfo(RUN_DEBUG, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
     msgQueue.put(Msg::PAUSE);
@@ -831,7 +850,7 @@ Amiga::_pause()
 void
 Amiga::_halt()
 {
-    infomsg(RUN_DEBUG, "_halt\n");
+    loginfo(RUN_DEBUG, "_halt\n");
 
     msgQueue.put(Msg::SHUTDOWN);
 }
@@ -839,7 +858,7 @@ Amiga::_halt()
 void
 Amiga::_warpOn()
 {
-    infomsg(RUN_DEBUG, "_warpOn\n");
+    loginfo(RUN_DEBUG, "_warpOn\n");
 
     msgQueue.put(Msg::WARP, 1);
 }
@@ -847,7 +866,7 @@ Amiga::_warpOn()
 void
 Amiga::_warpOff()
 {
-    infomsg(RUN_DEBUG, "_warpOff\n");
+    loginfo(RUN_DEBUG, "_warpOff\n");
 
     msgQueue.put(Msg::WARP, 0);
 }
@@ -855,7 +874,7 @@ Amiga::_warpOff()
 void
 Amiga::_trackOn()
 {
-    infomsg(RUN_DEBUG, "_trackOn\n");
+    loginfo(RUN_DEBUG, "_trackOn\n");
 
     msgQueue.put(Msg::TRACK, 1);
 }
@@ -863,7 +882,7 @@ Amiga::_trackOn()
 void
 Amiga::_trackOff()
 {
-    infomsg(RUN_DEBUG, "_trackOff\n");
+    loginfo(RUN_DEBUG, "_trackOff\n");
 
     msgQueue.put(Msg::TRACK, 0);
 }

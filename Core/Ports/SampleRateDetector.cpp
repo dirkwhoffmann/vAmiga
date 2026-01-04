@@ -36,7 +36,7 @@ SampleRateDetector::feed(isize samples)
         // Measure how much time has passed since the previous call
         auto delay = delta.restart().asSeconds();
         
-        debugmsg(TIM_DEBUG, "Requested %ld samples in %f seconds (%.0f)\n", samples, delay, samples / delay);
+        logdebug(TIM_DEBUG, "Requested %ld samples in %f seconds (%.0f)\n", samples, delay, samples / delay);
 
         // Record the measured value
         if (buffer.isFull()) (void)buffer.read();
@@ -65,7 +65,7 @@ SampleRateDetector::sampleRate()
     for (usize i = trash; i < size - trash; i++) result += samples[i];
     result /= size - 2 * trash;
 
-    debugmsg(TIM_DEBUG, "Sample rate = %.2f\n", result);
+    logdebug(TIM_DEBUG, "Sample rate = %.2f\n", result);
     return result;
 }
 

@@ -103,7 +103,7 @@ DiagBoard::peek8(u32 addr)
 {
     auto result = spypeek8(addr);
 
-    debugmsg(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
+    logdebug(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
@@ -112,7 +112,7 @@ DiagBoard::peek16(u32 addr)
 {
     auto result = spypeek16(addr);
 
-    debugmsg(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
+    logdebug(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
     return result;
 }
 
@@ -133,13 +133,13 @@ DiagBoard::spypeek16(u32 addr) const
 void
 DiagBoard::poke8(u32 addr, u8 value)
 {
-    debugmsg(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
+    logdebug(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
 }
 
 void
 DiagBoard::poke16(u32 addr, u16 value)
 {
-    debugmsg(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
+    logdebug(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
 
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
 
@@ -176,14 +176,14 @@ DiagBoard::poke16(u32 addr, u16 value)
                 case 5: processLoadSeg(pointer1, pointer2, true); break;
                     
                 default:
-                    warnmsg("Invalid value: %x\n", value);
+                    logwarn("Invalid value: %x\n", value);
                     break;
             }
             break;
 
         default:
 
-            warnmsg("Invalid addr: %x\n", addr);
+            logwarn("Invalid addr: %x\n", addr);
             break;
     }
 }
@@ -193,14 +193,14 @@ DiagBoard::processInit(u32 ptr1)
 {
     try {
         
-        infomsg(DBD_DEBUG, "processInit\n");
+        loginfo(DBD_DEBUG, "processInit\n");
         
         auto exec = osDebugger.getExecBase();
         tasks.push_back(exec.ThisTask);
 
     } catch (...) {
 
-        warnmsg("processInit failed\n");
+        logwarn("processInit failed\n");
     }
 }
 
@@ -209,7 +209,7 @@ DiagBoard::processAddTask(u32 ptr1)
 {
     try {
         
-        infomsg(DBD_DEBUG, "processAddTask\n");
+        loginfo(DBD_DEBUG, "processAddTask\n");
 
         // Read task
         os::Task task;
@@ -223,7 +223,7 @@ DiagBoard::processAddTask(u32 ptr1)
         auto type = task.tc_Node.ln_Type;
         if (type != os::NT_TASK && type != os::NT_PROCESS) {
 
-            warnmsg("AddTask %x (%s): Wrong type: %d\n", ptr1, name.c_str(), type);
+            logwarn("AddTask %x (%s): Wrong type: %d\n", ptr1, name.c_str(), type);
             return;
         }
 
@@ -231,19 +231,19 @@ DiagBoard::processAddTask(u32 ptr1)
         auto it = std::find(tasks.begin(), tasks.end(), ptr1);
         if (it != tasks.end()) {
             
-            warnmsg("AddTask: %s '%s' already added\n",
+            logwarn("AddTask: %s '%s' already added\n",
                  type == os::NT_TASK ? "task" : "process", name.c_str());
             return;
         }
 
         // Add task
         tasks.push_back(ptr1);
-        infomsg(DBD_DEBUG, "Added %s '%s'\n",
+        loginfo(DBD_DEBUG, "Added %s '%s'\n",
               type == os::NT_TASK ? "task" : "process", name.c_str());
 
     } catch (...) {
 
-        warnmsg("processAddTask failed\n");
+        logwarn("processAddTask failed\n");
     }
 }
 
@@ -252,7 +252,7 @@ DiagBoard::processRemTask(u32 ptr1)
 {
     try {
         
-        infomsg(DBD_DEBUG, "processRemTask\n");
+        loginfo(DBD_DEBUG, "processRemTask\n");
         
         // Read task
         os::Task task;
@@ -266,17 +266,17 @@ DiagBoard::processRemTask(u32 ptr1)
         auto it = std::find(tasks.begin(), tasks.end(), ptr1);
         if (it == tasks.end()) {
             
-            warnmsg("RemTask: '%s' (%x) not found\n", name.c_str(), ptr1);
+            logwarn("RemTask: '%s' (%x) not found\n", name.c_str(), ptr1);
             return;
         }
 
         // Remove task
         tasks.erase(it);
-        infomsg(DBD_DEBUG, "Removed '%s'\n", name.c_str());
+        loginfo(DBD_DEBUG, "Removed '%s'\n", name.c_str());
         
     } catch (...) {
         
-        warnmsg("processRemTask failed\n");
+        logwarn("processRemTask failed\n");
     }
 }
 
@@ -285,18 +285,18 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
 {
     try {
         
-        infomsg(DBD_DEBUG, "processLoadSeg(%x,%x)\n", ptr1, ptr2);
+        loginfo(DBD_DEBUG, "processLoadSeg(%x,%x)\n", ptr1, ptr2);
 
         // Read task name
         string name;
         if (bstr) {
             auto length = (isize)mem.spypeek8 <Accessor::CPU> (4 * ptr1);
-            infomsg(DBD_DEBUG, "Length = %ld\n", length);
+            loginfo(DBD_DEBUG, "Length = %ld\n", length);
             osDebugger.read(4 * ptr1 + 1, name, length);
         } else {
             osDebugger.read(ptr1, name);
         }
-        infomsg(DBD_DEBUG, "LoadSeg: '%s' (%x)\n", name.c_str(), ptr2);
+        loginfo(DBD_DEBUG, "LoadSeg: '%s' (%x)\n", name.c_str(), ptr2);
         
         auto it = std::find(targets.begin(), targets.end(), name);
         if (it != targets.end()) {
@@ -304,12 +304,12 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
             targets.erase(it);
             auto addr = 4 * (ptr2 + 1);
             cpu.debugger.breakpoints.setAt(addr);
-            infomsg(DBD_DEBUG, "Setting breakpoint at %x\n", addr);
+            loginfo(DBD_DEBUG, "Setting breakpoint at %x\n", addr);
         }
 
     } catch (...) {
         
-        warnmsg("processLoadSeg failed\n");
+        logwarn("processLoadSeg failed\n");
     }
 }
 

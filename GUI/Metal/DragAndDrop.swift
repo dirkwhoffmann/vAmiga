@@ -17,7 +17,7 @@ extension MetalView {
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         
-        // infomsg(.dragndrop, "draggingEntered \(sender)\n")
+        // loginfo(.dragndrop, "draggingEntered \(sender)\n")
         
         dropZone = nil
         dropUrl = nil
@@ -56,7 +56,7 @@ extension MetalView {
     
     override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
         
-        // infomsg(.dragndrop, "draggingUpdated \(sender)\n")
+        // loginfo(.dragndrop, "draggingUpdated \(sender)\n")
 
         parent.renderer.dropZone.draggingUpdated(sender)
         return NSDragOperation.copy
@@ -64,14 +64,14 @@ extension MetalView {
 
     override func draggingExited(_ sender: NSDraggingInfo?) {
     
-        infomsg(.dragndrop, "draggingExited \(String(describing: sender))")
+        loginfo(.dragndrop, "draggingExited \(String(describing: sender))")
         
         parent.renderer.dropZone.close(delay: 0.25)
     }
     
     override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
         
-        infomsg(.dragndrop, "prepareForDragOperation \(sender)\n")
+        loginfo(.dragndrop, "prepareForDragOperation \(sender)\n")
         
         parent.renderer.dropZone.close(delay: 0.25)
         return true
@@ -79,7 +79,7 @@ extension MetalView {
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
         
-        infomsg(.dragndrop, "performDragOperation \(sender)\n")
+        loginfo(.dragndrop, "performDragOperation \(sender)\n")
         
         let pasteBoard = sender.draggingPasteboard
         

@@ -21,7 +21,7 @@ ADZFile::init(const class ADFFile &adf)
     this->adf = ADFFile(adf.data.ptr, adf.data.size);
     data = adf.data;
 
-    infomsg(HDF_DEBUG, "Uncompressed ADF size: %ld bytes\n", data.size);
+    loginfo(HDF_DEBUG, "Uncompressed ADF size: %ld bytes\n", data.size);
     
     {   utl::StopWatch(debug::HDF_DEBUG, "Compressing ADF...");
         
@@ -32,7 +32,7 @@ ADZFile::init(const class ADFFile &adf)
         }
     }
     
-    infomsg(HDF_DEBUG, "Compressed ADF size: %ld bytes.\n", data.size);
+    loginfo(HDF_DEBUG, "Compressed ADF size: %ld bytes.\n", data.size);
 }
 
 optional<ImageInfo>
@@ -53,7 +53,7 @@ ADZFile::describe() const noexcept
 void
 ADZFile::didLoad()
 {
-    infomsg(ADF_DEBUG, "Decompressing %ld bytes...\n", data.size);
+    loginfo(ADF_DEBUG, "Decompressing %ld bytes...\n", data.size);
     
     try {
         data.gunzip();
@@ -61,7 +61,7 @@ ADZFile::didLoad()
         throw IOError(IOError::ZLIB_ERROR, err.what());
     }
     
-    infomsg(ADF_DEBUG, "Restored %ld bytes.\n", data.size);
+    loginfo(ADF_DEBUG, "Restored %ld bytes.\n", data.size);
     
     // Initialize the ADF with the decompressed data (may throw)
     adf.init(data.ptr, data.size);

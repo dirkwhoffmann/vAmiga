@@ -84,60 +84,24 @@ Loggable::log(LogChannel c,
     auto &channel = channels().at(c);
     if (!channel.level || level > *channel.level) return;
 
+    fprintf(stderr, "%s", prefix(level, loc).c_str());
+
     switch (level) {
 
-        case LogLevel::LOG_EMERG:
-
-            prefix(loc);
-            fprintf(stderr, "EMERGENCY: ");
-            break;
-
-        case LogLevel::LOG_CRIT:
-
-            prefix(loc);
-            fprintf(stderr, "CRITICAL: ");
-            break;
-
-        case LogLevel::LOG_ERR:
-
-            prefix(loc);
-            fprintf(stderr, "ERROR: ");
-            break;
-
-        case LogLevel::LOG_WARNING:
-
-            prefix(loc);
-            fprintf(stderr, "WARNING: ");
-            break;
-
-        case LogLevel::LOG_NOTICE:
-
-            prefix(loc);
-            fprintf(stderr, "NOTICE: ");
-            break;
-
-        case LogLevel::LOG_INFO:
-
-            prefix(loc);
-            break;
-
-        case LogLevel::LOG_DEBUG:
-
-            tracePrefix(loc);
-            prefix(loc);
-            break;
+        case LogLevel::LOG_EMERG:   fprintf(stderr, "EMERGENCY: "); break;
+        case LogLevel::LOG_CRIT:    fprintf(stderr, "CRITICAL: ");  break;
+        case LogLevel::LOG_ERR:     fprintf(stderr, "ERROR: ");     break;
+        case LogLevel::LOG_WARNING: fprintf(stderr, "WARNING: ");   break;
+        case LogLevel::LOG_NOTICE:  fprintf(stderr, "NOTICE: ");    break;
 
         default:
-            fatalError;
+            break;
     }
 
     va_list ap;
     va_start(ap, fmt);
     vfprintf(stderr, fmt, ap);
     va_end(ap);
-
-    // Exit the application if an emergency message came in
-    if (level == LogLevel::LOG_EMERG) { assert(0); exit(1); }
 }
 
 }

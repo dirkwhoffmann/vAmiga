@@ -27,7 +27,7 @@ AudioStream::eliminateCracks()
 {
     {   SYNCHRONIZED
 
-        infomsg(AUDVOL_DEBUG, "Eliminating cracks (%ld samples)...\n", count());
+        loginfo(AUDVOL_DEBUG, "Eliminating cracks (%ld samples)...\n", count());
 
         float scale = 1.0f;
         float delta = 1.0f / count();
