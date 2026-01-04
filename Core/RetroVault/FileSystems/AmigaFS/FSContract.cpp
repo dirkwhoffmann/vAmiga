@@ -10,7 +10,7 @@
 #include "FileSystems/AmigaFS/FSContract.h"
 #include "FileSystems/AmigaFS/FileSystem.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 void
 FSRequire::isFormatted() const

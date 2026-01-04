@@ -11,7 +11,7 @@
 
 #include "ADFFile.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 /* This class represents a file in extended ADF format. Layout:
  *

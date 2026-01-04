@@ -15,19 +15,19 @@
 #include "utl/support/Strings.h"
 #include <format>
 
-namespace retro::image {
+namespace retro::vault::image {
 
-using retro::device::Diameter;
-using retro::device::Density;
-using retro::device::DeviceError;
-using retro::device::Volume;
-using retro::rfs::amiga::BlockNr;
-using retro::rfs::amiga::FSName;
-using retro::rfs::amiga::FSFormatEnum;
-using retro::rfs::amiga::FileSystem;
-using retro::rfs::amiga::FSBlock;
-using retro::rfs::amiga::FSDescriptor;
-using retro::rfs::amiga::FSError;
+using retro::vault::device::Diameter;
+using retro::vault::device::Density;
+using retro::vault::device::DeviceError;
+using retro::vault::device::Volume;
+using retro::vault::amigafs::BlockNr;
+using retro::vault::amigafs::FSName;
+using retro::vault::amigafs::FSFormatEnum;
+using retro::vault::amigafs::FileSystem;
+using retro::vault::amigafs::FSBlock;
+using retro::vault::amigafs::FSDescriptor;
+using retro::vault::amigafs::FSError;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
@@ -63,8 +63,8 @@ ADFFile::fileSize(Diameter diameter, Density density)
 isize
 ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 {
-    retro::device::DiameterEnum::validate(diameter);
-    retro::device::DensityEnum::validate(density);
+    retro::vault::device::DiameterEnum::validate(diameter);
+    retro::vault::device::DensityEnum::validate(density);
 
     if (diameter != Diameter::INCH_35) throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
 
@@ -96,8 +96,8 @@ ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 void
 ADFFile::init(Diameter dia, Density den)
 {
-    retro::device::DiameterEnum::validate(dia);
-    retro::device::DensityEnum::validate(den);
+    retro::vault::device::DiameterEnum::validate(dia);
+    retro::vault::device::DensityEnum::validate(den);
 
     init(ADFFile::fileSize(dia, den));
 }
@@ -234,10 +234,10 @@ ADFFile::getFileSystemDescriptor() const noexcept
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
-    retro::rfs::amiga::FSFormatEnum::validate(dos);
+    retro::vault::amigafs::FSFormatEnum::validate(dos);
 
     loginfo(ADF_DEBUG,
-            "Formatting disk (%ld, %s)\n", numBlocks(), retro::rfs::amiga::FSFormatEnum::key(dos));
+            "Formatting disk (%ld, %s)\n", numBlocks(), retro::vault::amigafs::FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given
     if (dos == FSFormat::NODOS) return;

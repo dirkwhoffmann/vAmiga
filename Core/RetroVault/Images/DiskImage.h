@@ -12,11 +12,11 @@
 #include "AnyImage.h"
 #include "TrackDevice.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
-using retro::device::TrackDevice;
-using retro::device::TrackNr;
-using retro::device::SectorNr;
+using retro::vault::device::TrackDevice;
+using retro::vault::device::TrackNr;
+using retro::vault::device::SectorNr;
 
 class DiskImage : public AnyImage, public TrackDevice {
 

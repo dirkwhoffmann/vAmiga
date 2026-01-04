@@ -22,8 +22,8 @@
 
 namespace vamiga {
 
-using retro::image::ImageFormat;
-using retro::rfs::amiga::BootBlockId;
+using retro::vault::image::ImageFormat;
+using retro::vault::amigafs::BootBlockId;
 
 class FloppyDrive final : public Drive, public TrackDevice {
 

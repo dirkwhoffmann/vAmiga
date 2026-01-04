@@ -11,7 +11,7 @@
 
 #include "utl/common.h"
 
-namespace retro::rfs {
+namespace retro::vault {
 
 using namespace utl;
 

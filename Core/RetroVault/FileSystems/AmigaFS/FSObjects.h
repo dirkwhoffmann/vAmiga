@@ -13,7 +13,7 @@
 #include <ostream>
 #include <regex>
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 struct FSString {
     

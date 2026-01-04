@@ -11,7 +11,7 @@
 
 #include "utl/common.h"
 
-namespace retro::device {
+namespace retro::vault::device {
 
 struct DeviceError : public Error {
 

@@ -10,7 +10,7 @@
 #include "FileSystems/AmigaFS/FSError.h"
 #include "FileSystems/AmigaFS/FileSystem.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
 {

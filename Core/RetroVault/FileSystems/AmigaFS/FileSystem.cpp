@@ -16,7 +16,7 @@
 #include <stack>
 #include <algorithm>
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 bool
 FSTraits::adf() const

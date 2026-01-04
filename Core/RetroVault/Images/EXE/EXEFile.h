@@ -11,7 +11,7 @@
 
 #include "ADFFile.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 class EXEFile : public FloppyDiskImage {
 

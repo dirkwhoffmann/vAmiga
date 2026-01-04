@@ -11,7 +11,7 @@
 
 #include "utl/abilities/Reflectable.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 using namespace utl;
 

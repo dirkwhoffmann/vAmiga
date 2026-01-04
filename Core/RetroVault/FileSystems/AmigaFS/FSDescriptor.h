@@ -12,12 +12,12 @@
 #include "FileSystems/AmigaFS/FSTypes.h"
 #include "DeviceDescriptors.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
-using retro::device::GeometryDescriptor;
-using retro::device::PartitionDescriptor;
-using retro::device::Diameter;
-using retro::device::Density;
+using retro::vault::device::GeometryDescriptor;
+using retro::vault::device::PartitionDescriptor;
+using retro::vault::device::Diameter;
+using retro::vault::device::Density;
 
 /* To create a FileSystem, several layout parameters need to to be provided.
  * This is done by passing a FSDescriptor which contains the necessary

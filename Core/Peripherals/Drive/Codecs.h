@@ -23,13 +23,13 @@
 
 namespace vamiga {
 
-using retro::image::ADFFile;
-using retro::image::ADZFile;
-using retro::image::EADFFile;
-using retro::image::HDFFile;
-using retro::image::HDZFile;
-using retro::image::DMSFile;
-using retro::image::EXEFile;
+using retro::vault::image::ADFFile;
+using retro::vault::image::ADZFile;
+using retro::vault::image::EADFFile;
+using retro::vault::image::HDFFile;
+using retro::vault::image::HDZFile;
+using retro::vault::image::DMSFile;
+using retro::vault::image::EXEFile;
 
 class Codec {
 

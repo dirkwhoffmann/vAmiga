@@ -21,7 +21,7 @@
 
 namespace vamiga {
 
-using namespace retro::image;
+using namespace retro::vault::image;
 
 void
 FloppyDisk::init(Diameter dia, Density den, bool wp)

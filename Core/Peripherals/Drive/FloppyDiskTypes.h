@@ -14,10 +14,10 @@
 
 namespace vamiga {
 
-using retro::device::Diameter;
-using retro::device::Density;
-using retro::rfs::amiga::BootBlockType;
-using retro::rfs::amiga::FSFormat;
+using retro::vault::device::Diameter;
+using retro::vault::device::Density;
+using retro::vault::amigafs::BootBlockType;
+using retro::vault::amigafs::FSFormat;
 
 //
 // Structures

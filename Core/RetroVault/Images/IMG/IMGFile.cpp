@@ -15,9 +15,9 @@
 #include "utl/support/Strings.h"
 #include <format>
 
-namespace retro::image {
+namespace retro::vault::image {
 
-using retro::device::DeviceError;
+using retro::vault::device::DeviceError;
 
 optional<ImageInfo>
 IMGFile::about(const fs::path &path)

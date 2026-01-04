@@ -11,7 +11,7 @@
 
 #include "HDFFile.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 class HDZFile : public HardDiskImage {
 

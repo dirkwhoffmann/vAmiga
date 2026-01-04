@@ -19,12 +19,12 @@
 
 namespace vamiga {
 
-using retro::rfs::amiga::BlockNr;
-using retro::rfs::amiga::FileSystem;
-using retro::rfs::amiga::FSName;
-using retro::rfs::amiga::FSBlock;
-using retro::device::Volume;
-using retro::image::ADFFile;
+using retro::vault::amigafs::BlockNr;
+using retro::vault::amigafs::FileSystem;
+using retro::vault::amigafs::FSName;
+using retro::vault::amigafs::FSBlock;
+using retro::vault::device::Volume;
+using retro::vault::image::ADFFile;
 
 class ConsoleDelegate {
 

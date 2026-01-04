@@ -13,7 +13,7 @@
 #include "utl/abilities/Streamable.h"
 #include "utl/primitives.h"
 
-namespace retro::device {
+namespace retro::vault::device {
 
 struct GeometryDescriptor : Streamable {
 

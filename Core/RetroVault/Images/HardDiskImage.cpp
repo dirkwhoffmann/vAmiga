@@ -13,10 +13,10 @@
 #include "HDZFile.h"
 #include "utl/io.h"
 
-using retro::image::HDFFile;
-using retro::image::HDZFile;
+using retro::vault::image::HDFFile;
+using retro::vault::image::HDZFile;
 
-namespace retro::image {
+namespace retro::vault::image {
 
 optional<ImageInfo>
 HardDiskImage::about(const fs::path& url)

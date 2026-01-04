@@ -18,10 +18,10 @@
 #include <ranges>
 #include <unordered_set>
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
-using retro::device::BlockDevice;
-using retro::device::Volume;
+using retro::vault::device::BlockDevice;
+using retro::vault::device::Volume;
 
 class FSCache final : public FSService {
 

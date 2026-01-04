@@ -21,7 +21,7 @@ unsigned short extractDMS(const unsigned char *in, size_t inSize,
                           unsigned char **out, size_t *outSize, int verbose);
 }
 
-namespace retro::image {
+namespace retro::vault::image {
 
 optional<ImageInfo>
 DMSFile::about(const fs::path &path)

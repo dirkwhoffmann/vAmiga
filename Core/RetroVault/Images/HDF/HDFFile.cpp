@@ -16,11 +16,12 @@
 #include "utl/chrono.h"
 #include "utl/io.h"
 #include "utl/support.h"
+#include <format>
 
-using retro::device::DeviceError;
-using retro::rfs::amiga::BlockNr;
+using retro::vault::device::DeviceError;
+using retro::vault::amigafs::BlockNr;
 
-namespace retro::image {
+namespace retro::vault::image {
 
 optional<ImageInfo>
 HDFFile::about(const fs::path &path)

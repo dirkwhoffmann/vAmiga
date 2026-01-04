@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-using namespace retro::device;
+using namespace retro::vault::device;
 
 //
 // Enumerations

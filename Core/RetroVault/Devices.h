@@ -9,21 +9,12 @@
 
 #pragma once
 
-#include "FileSystems/AmigaFS/FSTypes.h"
-#include "utl/abilities/Loggable.h"
+#include "Devices/DeviceTypes.h"
+#include "Devices/DeviceError.h"
+#include "Devices/DeviceDescriptors.h"
+#include "Devices/LinearDevice.h"
+#include "Devices/BlockDevice.h"
+#include "Devices/TrackDevice.h"
+#include "Devices/Volume.h"
 
-namespace retro::vault::amigafs {
-
-class FileSystem;
-
-class FSService : public Loggable {
-
-public:
-
-    FileSystem &fs;
-    const FSTraits &traits;
-
-    explicit FSService(FileSystem& fs);
-};
-
-}
+namespace rv = retro::vault;

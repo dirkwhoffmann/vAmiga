@@ -12,7 +12,7 @@
 #include "FileSystems/AmigaFS/FSService.h"
 #include "FileSystems/AmigaFS/FSTree.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 class FSExporter final : public FSService {
 

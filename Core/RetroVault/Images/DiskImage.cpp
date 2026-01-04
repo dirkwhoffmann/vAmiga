@@ -22,7 +22,7 @@
 #include "EXEFile.h"
 #include "D64File.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 using CHS = TrackDevice::CHS;
 using TS  = TrackDevice::TS;

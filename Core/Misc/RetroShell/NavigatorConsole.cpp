@@ -20,14 +20,14 @@
 
 namespace vamiga {
 
-namespace accept = retro::rfs::amiga::accept;
-namespace sort = retro::rfs::amiga::sort;
-using retro::rfs::amiga::BootBlockId;
-using retro::rfs::amiga::BootBlockIdEnum;
-using retro::rfs::amiga::FSPath;
-using retro::rfs::amiga::FSError;
-using retro::rfs::amiga::FSPattern;
-using retro::rfs::amiga::FSTree;
+namespace accept = retro::vault::amigafs::accept;
+namespace sort = retro::vault::amigafs::sort;
+using retro::vault::amigafs::BootBlockId;
+using retro::vault::amigafs::BootBlockIdEnum;
+using retro::vault::amigafs::FSPath;
+using retro::vault::amigafs::FSError;
+using retro::vault::amigafs::FSPattern;
+using retro::vault::amigafs::FSTree;
 
 void
 NavigatorConsole::_pause()

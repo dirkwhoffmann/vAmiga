@@ -15,9 +15,9 @@
 #import <MetalKit/MetalKit.h>
 
 using namespace vamiga;
-using namespace retro::image;
-using namespace retro::device;
-using namespace retro::rfs::amiga;
+using namespace retro::vault::image;
+using namespace retro::vault::device;
+using namespace retro::vault::amigafs;
 
 //
 // Forward declarations

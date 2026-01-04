@@ -16,7 +16,7 @@
 namespace vamiga {
 
 using namespace utl;
-using namespace retro::device;
+using namespace retro::vault::device;
 
 class DiskEncoder : public Loggable {
 

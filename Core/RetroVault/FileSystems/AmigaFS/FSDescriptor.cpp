@@ -15,9 +15,9 @@
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
-using retro::image::ADFFile;
+using retro::vault::image::ADFFile;
 
 FSDescriptor::FSDescriptor(isize numBlocks)
 {

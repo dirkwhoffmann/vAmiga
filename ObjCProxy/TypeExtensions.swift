@@ -7,20 +7,20 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// 'retro::image' namespace
-typealias ImageType = retro.image.ImageType
-typealias ImageFormat = retro.image.ImageFormat
+// 'retro::vault::image' namespace
+typealias ImageType = retro.vault.image.ImageType
+typealias ImageFormat = retro.vault.image.ImageFormat
 
-// 'retro::device' namespace
-typealias Diameter = retro.device.Diameter
-typealias Density = retro.device.Density
+// 'retro::vault::device' namespace
+typealias Diameter = retro.vault.device.Diameter
+typealias Density = retro.vault.device.Density
 
-// 'retro::rfs' namespace
-typealias BootBlockId = retro.rfs.amiga.BootBlockId
-typealias FSBlockError = retro.rfs.amiga.FSBlockError
-typealias FSBlockType = retro.rfs.amiga.FSBlockType
-typealias FSItemType = retro.rfs.amiga.FSItemType
-typealias FSFormat = retro.rfs.amiga.FSFormat
+// 'retro' namespace
+typealias BootBlockId = retro.vault.amigafs.BootBlockId
+typealias FSBlockError = retro.vault.amigafs.FSBlockError
+typealias FSBlockType = retro.vault.amigafs.FSBlockType
+typealias FSItemType = retro.vault.amigafs.FSItemType
+typealias FSFormat = retro.vault.amigafs.FSFormat
 
 // 'vamiga' namespace
 typealias Accessor = vamiga.Accessor

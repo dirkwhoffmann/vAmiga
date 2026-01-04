@@ -11,7 +11,7 @@
 
 #include "utl/abilities/Reflectable.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 using namespace utl;
 

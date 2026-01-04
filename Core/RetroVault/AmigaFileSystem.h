@@ -1,4 +1,4 @@
-// -----------------------------------------------------------------------------
+/// -----------------------------------------------------------------------------
 // This file is part of vAmiga
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
@@ -7,9 +7,6 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
-#include "FileSystems/PosixView.h"
+#pragma once
 
-namespace retro::vault {
-
-}
+#include "FileSystems/AmigaFS/FileSystem.h"

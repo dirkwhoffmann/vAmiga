@@ -105,9 +105,9 @@
 #include "Volume.h"
 #include "utl/abilities/Loggable.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
-using retro::device::Volume;
+using retro::vault::device::Volume;
 
 class FileSystem : public Loggable {
 

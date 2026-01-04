@@ -13,13 +13,13 @@
 #include "FileSystems/AmigaFS/FSDescriptor.h"
 #include "utl/common.h"
 
-using retro::rfs::amiga::FSDescriptor;
-using retro::rfs::amiga::FSFormat;
-using retro::device::GeometryDescriptor;
-using retro::device::PartitionDescriptor;
-using retro::device::DriverDescriptor;
+using retro::vault::amigafs::FSDescriptor;
+using retro::vault::amigafs::FSFormat;
+using retro::vault::device::GeometryDescriptor;
+using retro::vault::device::PartitionDescriptor;
+using retro::vault::device::DriverDescriptor;
 
-namespace retro::image {
+namespace retro::vault::image {
 
 using namespace utl;
 

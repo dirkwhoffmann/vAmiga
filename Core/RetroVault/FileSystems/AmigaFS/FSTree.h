@@ -14,7 +14,7 @@
 #include <limits>
 #include <deque>
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 enum class TraversalOrder { DFS, BFS };
 

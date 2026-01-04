@@ -16,7 +16,7 @@
 #include "MediaError.h"
 #include "utl/io.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 using vamiga::MediaError;
 using vamiga::FloppyDisk;

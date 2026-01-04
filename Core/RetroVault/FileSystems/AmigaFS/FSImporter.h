@@ -11,7 +11,7 @@
 
 #include "FileSystems/AmigaFS/FSService.h"
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 class FSImporter final : public FSService {
 

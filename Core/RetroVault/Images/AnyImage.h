@@ -14,7 +14,7 @@
 #include "utl/storage.h"
 #include <iostream>
 
-namespace retro::image {
+namespace retro::vault::image {
 
 using namespace utl;
 

@@ -11,7 +11,7 @@
 #include "DeviceTypes.h"
 #include "DeviceError.h"
 
-namespace retro::device {
+namespace retro::vault::device {
 
 DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 {

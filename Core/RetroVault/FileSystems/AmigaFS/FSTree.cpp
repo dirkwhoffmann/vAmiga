@@ -12,7 +12,7 @@
 #include "FileSystems/AmigaFS/FileSystem.h"
 #include <algorithm>
 
-namespace retro::rfs::amiga {
+namespace retro::vault::amigafs {
 
 FSTree
 FSTreeBuilder::build(const FSBlock &root,

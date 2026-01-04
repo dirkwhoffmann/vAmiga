@@ -11,7 +11,7 @@
 
 #include "FloppyDiskImage.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 class STFile : public FloppyDiskImage {
 

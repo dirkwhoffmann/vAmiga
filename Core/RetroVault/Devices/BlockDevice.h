@@ -11,7 +11,7 @@
 
 #include "LinearDevice.h"
 
-namespace retro::device {
+namespace retro::vault::device {
 
 using namespace utl;
 

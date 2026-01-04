@@ -13,7 +13,7 @@
 #include "DeviceDescriptors.h"
 #include "utl/primitives.h"
 
-namespace retro::device {
+namespace retro::vault::device {
 
 class Volume : public BlockDevice {
 

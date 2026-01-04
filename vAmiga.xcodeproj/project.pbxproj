@@ -1151,6 +1151,9 @@
 		50BF4B772F0AB26400F1B9F2 /* PosixView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PosixView.h; sourceTree = "<group>"; };
 		50BF4B782F0AB26D00F1B9F2 /* PosixView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PosixView.cpp; sourceTree = "<group>"; };
 		50BF4B792F0AB6BF00F1B9F2 /* PosixViewTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PosixViewTypes.h; sourceTree = "<group>"; };
+		50BF4B942F0ADA0F00F1B9F2 /* Devices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Devices.h; sourceTree = "<group>"; };
+		50BF4B952F0ADA1C00F1B9F2 /* Images.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Images.h; sourceTree = "<group>"; };
+		50BF4B962F0ADA2800F1B9F2 /* AmigaFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaFileSystem.h; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -2571,6 +2574,9 @@
 			isa = PBXGroup;
 			children = (
 				50BF4B682F055B7D00F1B9F2 /* CMakeLists.txt */,
+				50BF4B942F0ADA0F00F1B9F2 /* Devices.h */,
+				50BF4B952F0ADA1C00F1B9F2 /* Images.h */,
+				50BF4B962F0ADA2800F1B9F2 /* AmigaFileSystem.h */,
 				503E869B2EEE9D5300ED891D /* Devices */,
 				50BF4B6E2F055C1200F1B9F2 /* Images */,
 				5056506925440FDE00A79D27 /* FileSystems */,

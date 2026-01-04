@@ -11,7 +11,7 @@
 #include "TrackDevice.h"
 #include <algorithm>
 
-namespace retro::device {
+namespace retro::vault::device {
 
 using CHS = TrackDevice::CHS;
 using TS  = TrackDevice::TS;

@@ -13,7 +13,7 @@
 #include "utl/io.h"
 #include "utl/support.h"
 
-namespace retro::image {
+namespace retro::vault::image {
 
 optional<ImageInfo>
 HDZFile::about(const fs::path &path)

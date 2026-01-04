@@ -15,10 +15,10 @@
 #include "utl/support/Strings.h"
 #include <format>
 
-namespace retro::image {
+namespace retro::vault::image {
 
-using retro::device::Volume;
-using retro::rfs::amiga::FSName;
+using retro::vault::device::Volume;
+using retro::vault::amigafs::FSName;
 
 optional<ImageInfo>
 EXEFile::about(const fs::path &path)

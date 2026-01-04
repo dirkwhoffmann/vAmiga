@@ -11,7 +11,7 @@
 
 #include "FileSystems/PosixViewTypes.h"
 
-namespace retro::rfs {
+namespace retro::vault {
 
 class PosixView {
 

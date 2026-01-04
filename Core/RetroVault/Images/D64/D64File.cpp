@@ -13,7 +13,7 @@
 #include "utl/support/Strings.h"
 #include <format>
 
-namespace retro::image {
+namespace retro::vault::image {
 
 optional<ImageInfo>
 D64File::about(const fs::path &path)
