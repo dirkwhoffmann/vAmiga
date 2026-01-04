@@ -10,9 +10,9 @@
 #pragma once
 
 #include "BlockDevice.h"
-#include "FileSystems/Amiga/FSTypes.h"
-#include "FileSystems/Amiga/FSBlock.h"
-#include "FileSystems/Amiga/FSService.h"
+#include "FileSystems/AmigaFS/FSTypes.h"
+#include "FileSystems/AmigaFS/FSBlock.h"
+#include "FileSystems/AmigaFS/FSService.h"
 #include "Volume.h"
 #include <iostream>
 #include <ranges>

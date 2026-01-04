@@ -7,14 +7,23 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FileSystems/Amiga/FSService.h"
-#include "FileSystem.h"
+#pragma once
+
+#include "FileSystems/AmigaFS/FSTypes.h"
+#include "utl/abilities/Loggable.h"
 
 namespace retro::rfs::amiga {
 
-FSService::FSService(FileSystem& fs) : fs(fs), traits(fs.getTraits())
-{
+class FileSystem;
 
-}
+class FSService : public Loggable {
+
+public:
+
+    FileSystem &fs;
+    const FSTraits &traits;
+
+    explicit FSService(FileSystem& fs);
+};
 
 }

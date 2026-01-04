@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FileSystems/Amiga/PosixFileSystem.h"
+#include "FileSystems/AmigaFS/PosixFileSystem.h"
 
 namespace retro::rfs::amiga {
 

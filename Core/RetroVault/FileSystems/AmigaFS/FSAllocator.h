@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FileSystems/Amiga/FSService.h"
+#include "FileSystems/AmigaFS/FSService.h"
 
 namespace retro::rfs::amiga {
 

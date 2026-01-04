@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/Amiga/FSTree.h"
+#include "FileSystems/AmigaFS/FSTree.h"
 #include "FileSystem.h"
 #include <algorithm>
 

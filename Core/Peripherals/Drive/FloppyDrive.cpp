@@ -10,7 +10,7 @@
 #include "config.h"
 #include "FloppyDrive.h"
 #include "Amiga.h"
-#include "FileSystems/Amiga/FSBootBlockImage.h"
+#include "FileSystems/AmigaFS/FSBootBlockImage.h"
 #include "Codecs.h"
 #include "DiskController.h"
 #include "Media.h"

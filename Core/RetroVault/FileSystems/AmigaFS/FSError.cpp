@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FileSystems/Amiga/FSError.h"
+#include "FileSystems/AmigaFS/FSError.h"
 #include "FileSystem.h"
 
 namespace retro::rfs::amiga {

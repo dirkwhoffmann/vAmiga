@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/Amiga/FSDoctor.h"
+#include "FileSystems/AmigaFS/FSDoctor.h"
 #include "FileSystem.h"
 #include "utl/io.h"
 #include "utl/support.h"

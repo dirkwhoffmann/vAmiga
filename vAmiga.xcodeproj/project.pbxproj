@@ -1686,7 +1686,7 @@
 			isa = PBXGroup;
 			children = (
 				50BF4B662F055B6A00F1B9F2 /* CMakeLists.txt */,
-				50BF4B652F055B6100F1B9F2 /* Amiga */,
+				50BF4B652F055B6100F1B9F2 /* AmigaFS */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
@@ -2572,7 +2572,7 @@
 			path = RetroVault;
 			sourceTree = "<group>";
 		};
-		50BF4B652F055B6100F1B9F2 /* Amiga */ = {
+		50BF4B652F055B6100F1B9F2 /* AmigaFS */ = {
 			isa = PBXGroup;
 			children = (
 				50EFF1E726E25A5D00296065 /* CMakeLists.txt */,
@@ -2611,7 +2611,7 @@
 				50A64B94257A63A600442964 /* FSBootBlockImage.h */,
 				50A64B95257A63A600442964 /* FSBootBlockImage.cpp */,
 			);
-			path = Amiga;
+			path = AmigaFS;
 			sourceTree = "<group>";
 		};
 		50BF4B6E2F055C1200F1B9F2 /* Images */ = {

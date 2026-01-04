@@ -10,7 +10,7 @@
 #pragma once
 
 #include "HardDiskImage.h"
-#include "FileSystems/Amiga/FSDescriptor.h"
+#include "FileSystems/AmigaFS/FSDescriptor.h"
 #include "utl/common.h"
 
 using retro::rfs::amiga::FSDescriptor;

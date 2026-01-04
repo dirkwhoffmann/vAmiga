@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/Amiga/FSBlock.h"
+#include "FileSystems/AmigaFS/FSBlock.h"
 #include "FileSystem.h"
 #include "utl/io.h"
 #include "utl/support.h"

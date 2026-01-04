@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FileSystems/Amiga/FSTypes.h"
+#include "FileSystems/AmigaFS/FSTypes.h"
 #include <ostream>
 #include <regex>
 

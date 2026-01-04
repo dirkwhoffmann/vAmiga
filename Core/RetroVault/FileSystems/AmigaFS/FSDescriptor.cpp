@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/Amiga/FSDescriptor.h"
+#include "FileSystems/AmigaFS/FSDescriptor.h"
 #include "BlockDevice.h"
 #include "ADFFile.h"
-#include "FileSystems/Amiga/FSError.h"
+#include "FileSystems/AmigaFS/FSError.h"
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/Amiga/FSCache.h"
+#include "FileSystems/AmigaFS/FSCache.h"
 #include "FileSystem.h"
 #include "utl/io.h"
 #include <algorithm>

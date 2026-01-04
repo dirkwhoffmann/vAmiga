@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/Amiga/FSBootBlockImage.h"
+#include "FileSystems/AmigaFS/FSBootBlockImage.h"
 #include <cstring>
 
 namespace retro::rfs::amiga {
