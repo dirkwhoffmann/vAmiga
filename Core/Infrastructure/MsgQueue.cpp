@@ -83,7 +83,7 @@ MsgQueue::put(const Message &msg)
                     queue.write(msg);
                 }
             } else {
-                    warn("Message lost: %s [%llx]\n", MsgEnum::key(msg.type), msg.value);
+                warnmsg("Message lost: %s [%llx]\n", MsgEnum::key(msg.type), msg.value);
             }
         }
     }

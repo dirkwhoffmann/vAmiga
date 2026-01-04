@@ -266,8 +266,8 @@ CoreComponent::load(const u8 *buf)
         // Check integrity
         if (size != count || hash != c->checksum(false) || force::SNAP_CORRUPTED) {
 
-            logCritical("Loaded %llu bytes (expected %llu)\n", count, size);
-            logCritical("Hash: %llx (expected %llx)\n", hash, c->checksum(false));
+            criticalmsg("Loaded %llu bytes (expected %llu)\n", count, size);
+            criticalmsg("Hash: %llx (expected %llx)\n", hash, c->checksum(false));
             if constexpr (debug::SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
@@ -304,7 +304,7 @@ CoreComponent::save(u8 *buffer)
         // Check integrity
         if (count != c->size(false) || force::SNAP_CORRUPTED) {
 
-            logCritical("Saved %ld bytes (expected %ld)\n", count, c->size(false));
+            criticalmsg("Saved %ld bytes (expected %ld)\n", count, c->size(false));
             if constexpr (debug::SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
@@ -361,7 +361,7 @@ CoreComponent::diff(CoreComponent &other)
 
     // Compare this component
     if (auto check1 = checksum(false), check2 = other.checksum(false); check1 != check2) {
-        logError("Checksum mismatch: %llx != %llx\n", check1, check2);
+        errormsg("Checksum mismatch: %llx != %llx\n", check1, check2);
     }
 }
 

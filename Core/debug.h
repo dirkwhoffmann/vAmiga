@@ -363,19 +363,19 @@ do { \
 
 #endif
 
-#define logEmergency(format, ...) \
+#define emergencymsg(format, ...) \
     logGeneric(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logAlert(format, ...) \
+#define alertmsg(format, ...) \
     logGeneric(STDERR, LogLevel::LOG_ALERT, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logCritical(format, ...) \
+#define criticalmsg(format, ...) \
     logGeneric(STDERR, LogLevel::LOG_CRIT, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logError(format, ...) \
+#define errormsg(format, ...) \
     logGeneric(STDERR, LogLevel::LOG_ERR, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logWarning(format, ...) \
+#define warnmsg(format, ...) \
     logGeneric(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
 
 #define notice(channel, format, ...) \
@@ -388,18 +388,11 @@ logGeneric(channel, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
     logGeneric(channel, LogLevel::LOG_DEBUG, format __VA_OPT__(,) __VA_ARGS__)
 
 //
-// Deprecated backward compatibility macros
+// Convenience wrappers
 //
 
-// #define logmsg(format, ...) \
-// logGeneric(STDERR, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
-
-#define warn(format, ...) \
-logGeneric(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
-
 #define fatal(format, ...) \
-logGeneric(STDERR, LogLevel::LOG_EMERG, format __VA_OPT__(,) __VA_ARGS__); \
-fatalError
+warnmsg(format __VA_OPT__(,) __VA_ARGS__); fatalError
 
 #define xfiles(format, ...) \
 logGeneric(XFILES, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)

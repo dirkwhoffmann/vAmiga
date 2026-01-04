@@ -1934,7 +1934,7 @@ FSBlock::extractData(Buffer<u8> &buf) const
     }
 
     if (bytesRemaining != 0) {
-        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+        warnmsg("%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
 
     return bytesTotal;
@@ -2037,7 +2037,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
                 
             } else {
                 
-                warn("Ignoring block %d (no data block)\n", ref);
+                warnmsg("Ignoring block %d (no data block)\n", ref);
             }
         }
         
@@ -2046,7 +2046,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
     }
     
     if (bytesRemaining != 0) {
-        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+        warnmsg("%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
     
     return bytesTotal;

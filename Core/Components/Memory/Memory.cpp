@@ -788,7 +788,7 @@ Memory::patchExpansionLib()
                     return;
                 }
             }
-            warn("patchExpansionLib: Can't find patch location\n");
+            warnmsg("patchExpansionLib: Can't find patch location\n");
             break;
         }
 

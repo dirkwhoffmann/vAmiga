@@ -22,7 +22,7 @@ CmdQueue::put(const Command &cmd)
         if (!queue.isFull()) {
             queue.write(cmd);
         } else {
-            warn("Command lost: %s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
+            warnmsg("Command lost: %s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
         }
 
         empty = false;

@@ -176,14 +176,14 @@ DiagBoard::poke16(u32 addr, u16 value)
                 case 5: processLoadSeg(pointer1, pointer2, true); break;
                     
                 default:
-                    warn("Invalid value: %x\n", value);
+                    warnmsg("Invalid value: %x\n", value);
                     break;
             }
             break;
 
         default:
 
-            warn("Invalid addr: %x\n", addr);
+            warnmsg("Invalid addr: %x\n", addr);
             break;
     }
 }
@@ -200,7 +200,7 @@ DiagBoard::processInit(u32 ptr1)
 
     } catch (...) {
 
-        warn("processInit failed\n");
+        warnmsg("processInit failed\n");
     }
 }
 
@@ -223,7 +223,7 @@ DiagBoard::processAddTask(u32 ptr1)
         auto type = task.tc_Node.ln_Type;
         if (type != os::NT_TASK && type != os::NT_PROCESS) {
 
-            warn("AddTask %x (%s): Wrong type: %d\n", ptr1, name.c_str(), type);
+            warnmsg("AddTask %x (%s): Wrong type: %d\n", ptr1, name.c_str(), type);
             return;
         }
 
@@ -231,7 +231,7 @@ DiagBoard::processAddTask(u32 ptr1)
         auto it = std::find(tasks.begin(), tasks.end(), ptr1);
         if (it != tasks.end()) {
             
-            warn("AddTask: %s '%s' already added\n",
+            warnmsg("AddTask: %s '%s' already added\n",
                  type == os::NT_TASK ? "task" : "process", name.c_str());
             return;
         }
@@ -243,7 +243,7 @@ DiagBoard::processAddTask(u32 ptr1)
 
     } catch (...) {
 
-        warn("processAddTask failed\n");
+        warnmsg("processAddTask failed\n");
     }
 }
 
@@ -266,7 +266,7 @@ DiagBoard::processRemTask(u32 ptr1)
         auto it = std::find(tasks.begin(), tasks.end(), ptr1);
         if (it == tasks.end()) {
             
-            warn("RemTask: '%s' (%x) not found\n", name.c_str(), ptr1);
+            warnmsg("RemTask: '%s' (%x) not found\n", name.c_str(), ptr1);
             return;
         }
 
@@ -276,7 +276,7 @@ DiagBoard::processRemTask(u32 ptr1)
         
     } catch (...) {
         
-        warn("processRemTask failed\n");
+        warnmsg("processRemTask failed\n");
     }
 }
 
@@ -309,7 +309,7 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
 
     } catch (...) {
         
-        warn("processLoadSeg failed\n");
+        warnmsg("processLoadSeg failed\n");
     }
 }
 

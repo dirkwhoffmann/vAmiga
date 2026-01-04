@@ -320,14 +320,14 @@ HdController::poke16(u32 addr, u16 value)
                 case 0xfee2: processInitSeg(pointer); break;
                     
                 default:
-                    warn("Invalid value: %x\n", value);
+                    warnmsg("Invalid value: %x\n", value);
                     break;
             }
             break;
 
         default:
 
-            warn("Invalid addr: %x\n", addr);
+            warnmsg("Invalid addr: %x\n", addr);
             break;
     }
 }
@@ -599,7 +599,7 @@ HdController::processInfoReq(u32 ptr)
 
     } catch(Error &e) {
 
-        warn("processInfoReq: %s\n", e.what());
+        warnmsg("processInfoReq: %s\n", e.what());
     }
 }
 
@@ -694,7 +694,7 @@ HdController::processInitSeg(u32 ptr)
         
     } catch(Error &e) {
 
-        warn("processInitSeg: %s\n", e.what());
+        warnmsg("processInitSeg: %s\n", e.what());
     }
     
     infomsg(HDR_DEBUG, "processInitSeg completed\n");
