@@ -537,9 +537,9 @@ FSAttr::mode() const
     if (!(prot & 0x04)) mode |= posix::IXUSR;
 
     // Mirror owner permissions to group and others
-    if (mode & S_IRUSR) mode |= posix::IRGRP | posix::IROTH;
-    if (mode & S_IWUSR) mode |= posix::IWGRP | posix::IWOTH;
-    if (mode & S_IXUSR) mode |= posix::IXGRP | posix::IXOTH;
+    if (mode & posix::IRUSR) mode |= posix::IRGRP | posix::IROTH;
+    if (mode & posix::IWUSR) mode |= posix::IWGRP | posix::IWOTH;
+    if (mode & posix::IXUSR) mode |= posix::IXGRP | posix::IXOTH;
 
     return mode;
 }

@@ -93,7 +93,7 @@ Amiga::~Amiga()
 string
 Amiga::prefix(LogLevel level, const std::source_location &loc) const
 {
-    const isize verbosity = 5;
+    constexpr isize verbosity = 5;
 
     std::string result;
     result.reserve(256);
@@ -106,14 +106,14 @@ Amiga::prefix(LogLevel level, const std::source_location &loc) const
         }
 
         // verbosity >= 3: frame & position
-        if (verbosity >= 3) {
+        if constexpr (verbosity >= 3) {
             std::format_to(std::back_inserter(result),
                            "[{}] ({:3},{:3}) ",
                            agnus.pos.frame, agnus.pos.v, agnus.pos.h);
         }
 
         // verbosity >= 4: CPU PC, Copper, IPL
-        if (verbosity >= 4) {
+        if constexpr (verbosity >= 4) {
             std::format_to(std::back_inserter(result), "{:06X} ", cpu.getPC0());
             if (agnus.copper.servicing) {
                 std::format_to(std::back_inserter(result), "[{:06X}] ", agnus.copper.getCopPC0());
@@ -122,7 +122,7 @@ Amiga::prefix(LogLevel level, const std::source_location &loc) const
         }
 
         // verbosity >= 5: DMACON, intena, intreq
-        if (verbosity >= 5) {
+        if constexpr (verbosity >= 5) {
             u16 dmacon = agnus.dmacon;
             bool dmaen = dmacon & DMAEN;
 
