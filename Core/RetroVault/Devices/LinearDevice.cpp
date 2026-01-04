@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "LinearDevice.h"
-#include "Buffer.h"
+#include "utl/storage/Buffer.h"
 
 namespace retro::device {
 

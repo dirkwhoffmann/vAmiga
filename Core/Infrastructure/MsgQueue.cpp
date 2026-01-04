@@ -12,6 +12,8 @@
 
 namespace vamiga {
 
+using namespace utl;
+
 void
 MsgQueue::setListener(const void *listener, Callback *callback)
 {

@@ -23,8 +23,7 @@ namespace utl::channel {
 
 // Register the default channel
 
-LogChannel STDERR  =
-Loggable::subscribe("STDERR",  std::optional<long>(7), "Standard error");
+DEBUG_CHANNEL(STDERR,           "Standard error");
 
 // Register a logging channel for each debug flag
 

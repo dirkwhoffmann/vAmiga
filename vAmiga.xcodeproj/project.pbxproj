@@ -2571,8 +2571,8 @@
 			isa = PBXGroup;
 			children = (
 				50BF4B682F055B7D00F1B9F2 /* CMakeLists.txt */,
-				50BF4B6E2F055C1200F1B9F2 /* Images */,
 				503E869B2EEE9D5300ED891D /* Devices */,
+				50BF4B6E2F055C1200F1B9F2 /* Images */,
 				5056506925440FDE00A79D27 /* FileSystems */,
 			);
 			path = RetroVault;

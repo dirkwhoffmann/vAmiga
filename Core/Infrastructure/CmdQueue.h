@@ -18,7 +18,7 @@
 namespace vamiga {
 
 /// Command queue
-class CmdQueue final : CoreObject, Synchronizable {
+class CmdQueue final : public CoreObject, Synchronizable {
 
     /// Ring buffer storing all pending commands
     utl::RingBuffer <Command, 256> queue;

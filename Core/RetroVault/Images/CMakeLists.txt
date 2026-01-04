@@ -3,6 +3,9 @@ target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_sources(VACore PRIVATE
 
     AnyImage.cpp
+    DiskImage.cpp
+    FloppyDiskImage.cpp
+    HardDiskImage.cpp
 )
 
 add_subdirectory(ADF)

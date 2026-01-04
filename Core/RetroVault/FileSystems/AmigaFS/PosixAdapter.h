@@ -56,7 +56,7 @@ class PosixAdapter : public PosixView {
 
     // Contracts
     FSRequire require = FSRequire(fs);
-    FSEnsure ensure = FSEnsure(fs);
+    // FSEnsure ensure = FSEnsure(fs);
 
     // Metadata for nodes indexed by block number
     std::unordered_map<BlockNr, NodeMeta> meta;

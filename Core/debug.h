@@ -15,6 +15,9 @@ namespace utl::debug {
 // Debug settings
 //
 
+// Default channel
+constexpr long STDERR             = 1;
+
 // General
 constexpr long XFILES             = 0;
 constexpr long CNF_DEBUG          = 0;
