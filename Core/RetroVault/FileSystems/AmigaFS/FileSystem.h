@@ -100,6 +100,7 @@
 #include "FileSystems/AmigaFS/FSImporter.h"
 #include "FileSystems/AmigaFS/FSExporter.h"
 #include "FileSystems/AmigaFS/FSTree.h"
+#include "FileSystems/PosixViewTypes.h"
 #include "DeviceError.h"
 #include "Volume.h"
 #include "utl/abilities/Loggable.h"
@@ -203,13 +204,13 @@ public:
     bool isFormatted() const noexcept;
 
     // Returns usage information and root metadata
-    FSStat stat() const noexcept;
+    FSPosixStat stat() const noexcept;
 
     // Returns information about the boot block
     FSBootStat bootStat() const noexcept;
 
     // Returns information about file permissions
-    FSAttr attr(BlockNr nr) const;
+    FSPosixAttr attr(BlockNr nr) const;
 
 
     //

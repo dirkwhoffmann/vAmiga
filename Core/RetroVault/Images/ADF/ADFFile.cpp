@@ -10,7 +10,7 @@
 #include "config.h"
 #include "FileSystems/AmigaFS/FSBootBlockImage.h"
 #include "EADFFile.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 

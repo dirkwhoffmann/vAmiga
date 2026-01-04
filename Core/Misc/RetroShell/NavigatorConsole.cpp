@@ -795,14 +795,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                         auto item = parsePath(args, "file");
                         // auto &item = fs->fetch(itemNr);
                         auto name = fs->fetch(item).cppName();
-                        if (name.empty()) name = fs->stat().name.cpp_str();
+                        if (name.empty()) name = fs->stat().name;
                         fs->exporter.exportFiles(item, "/export", recursive, true);
                         msgQueue.setPayload( { "/export", name } );
                         
                     } else {
                         
                         fs->exporter.exportBlocks("/export");
-                        auto name = fs->stat().name.cpp_str();
+                        auto name = fs->stat().name;
                         name += fs->getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );
                     }

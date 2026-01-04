@@ -19,5 +19,6 @@ FSImporter.cpp
 FSObjects.cpp
 FSService.cpp
 FSTree.cpp
+PosixAdapter.cpp
 
 )

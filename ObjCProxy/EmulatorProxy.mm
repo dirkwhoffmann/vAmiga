@@ -1403,14 +1403,24 @@ ImageInfo scan(const fs::path &url)
 
 - (NSString *)creationDate
 {
-    auto str = [self fs]->stat().bDate;
-    return @(str.str().c_str());
+    auto time = [self fs]->stat().btime;
+    if (time == 0) return @"-";
+
+    return [NSDateFormatter localizedStringFromDate:
+            [NSDate dateWithTimeIntervalSince1970:[self fs]->stat().btime]
+                                          dateStyle:NSDateFormatterMediumStyle
+                                          timeStyle:NSDateFormatterMediumStyle];
 }
 
 - (NSString *)modificationDate
 {
-    auto str = [self fs]->stat().mDate;
-    return @(str.str().c_str());
+    auto time = [self fs]->stat().mtime;
+    if (time == 0) return @"-";
+
+    return [NSDateFormatter localizedStringFromDate:
+            [NSDate dateWithTimeIntervalSince1970:[self fs]->stat().btime]
+                                          dateStyle:NSDateFormatterMediumStyle
+                                          timeStyle:NSDateFormatterMediumStyle];
 }
 
 - (NSString *)bootBlockName
@@ -1427,7 +1437,8 @@ ImageInfo scan(const fs::path &url)
 
 - (NSString *)fillLevelString
 {
-    auto str = utl::fillLevelAsString([self fs]->stat().fill);
+    auto st = [self fs]->stat();
+    auto str = utl::fillLevelAsString(100.0 * st.usedBlocks / st.blocks);
     return @(str.c_str());
 }
 
@@ -1468,7 +1479,8 @@ ImageInfo scan(const fs::path &url)
 
 - (double)fillLevel
 {
-    return [self fs]->stat().fill;
+    auto st = [self fs]->stat();
+    return 100.0 * st.usedBlocks / st.blocks;
 }
 
 - (BOOL)hasVirus

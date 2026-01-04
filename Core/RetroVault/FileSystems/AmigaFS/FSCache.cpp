@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FileSystems/AmigaFS/FSCache.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include "utl/io.h"
 #include <algorithm>
 

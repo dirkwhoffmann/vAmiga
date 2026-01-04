@@ -127,6 +127,7 @@ struct FSTime {
     string str() const;
 };
 
+// DEPRECATED
 struct FSAttr {
 
     isize size;         // File size in bytes
@@ -139,6 +140,7 @@ struct FSAttr {
     u32 mode() const;
 };
 
+// DEPRECATED
 struct FSStat {
 
     // Capacity information

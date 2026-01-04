@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "EXEFile.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include "OSDescriptors.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"

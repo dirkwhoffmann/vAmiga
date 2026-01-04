@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FileSystems/AmigaFS/FSTree.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include <algorithm>
 
 namespace retro::rfs::amiga {

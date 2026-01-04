@@ -9,10 +9,13 @@
 
 #pragma once
 
-#include "FileSystem.h"
+#include "FileSystems/PosixView.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include <fcntl.h>
 
 namespace retro::rfs::amiga {
+
+using retro::rfs::PosixView;
 
 struct Handle {
 
@@ -46,7 +49,7 @@ struct NodeMeta {
     isize openCount() { return openHandles.size(); };
 };
 
-class PosixFileSystem {
+class PosixAdapter : public PosixView {
 
     // The wrapped file system
     FileSystem &fs;
@@ -66,7 +69,7 @@ class PosixFileSystem {
 
 public:
 
-    explicit PosixFileSystem(FileSystem &fs);
+    explicit PosixAdapter(FileSystem &fs);
 
     //
     // Querying statistics and properties
@@ -75,10 +78,10 @@ public:
 public:
 
     // Queries information about the file system
-    FSStat stat() const noexcept;
+    FSPosixStat stat() const noexcept override;
 
     // Queries information about a specific file
-    FSAttr attr(const fs::path &path) const;
+    FSPosixAttr attr(const fs::path &path) const override;
 
 
     //
@@ -104,13 +107,13 @@ private:
 public:
 
     // Creates a directory
-    void mkdir(const fs::path &path);
+    void mkdir(const fs::path &path) override;
 
     // Removes a directory
-    void rmdir(const fs::path &path);
+    void rmdir(const fs::path &path) override;
 
     // Returns the contents of a directory
-    std::vector<FSName> readDir(const fs::path &path);
+    std::vector<string> readDir(const fs::path &path) const override;
 
 
     //
@@ -120,32 +123,32 @@ public:
 public:
 
     // Opens or closes a file
-    HandleRef open(const fs::path &path, u32 flags);
-    void close(HandleRef handle);
+    HandleRef open(const fs::path &path, u32 flags) override;
+    void close(HandleRef handle) override;
 
     // Creates a new file
-    void create(const fs::path &path);
+    void create(const fs::path &path) override;
 
     // Removes a file from its directory
-    void unlink(const fs::path &path);
+    void unlink(const fs::path &path) override;
 
     // Moves the file to a different location
-    void move(const fs::path &oldPath, const fs::path &newPath);
+    void move(const fs::path &oldPath, const fs::path &newPath) override;
 
     // Changes the size of a file
-    void resize(const fs::path &path, isize size);
+    void resize(const fs::path &path, isize size) override;
 
     // Moves the read/write pointer
-    isize lseek(HandleRef ref, isize offset, u16 whence = 0);
+    isize lseek(HandleRef ref, isize offset, u16 whence = 0) override;
 
     // Reads data from a file
-    isize read(HandleRef ref, std::span<u8> buffer);
+    isize read(HandleRef ref, std::span<u8> buffer) override;
 
     // Writes data to a file
-    isize write(HandleRef ref, std::span<const u8> buffer);
+    isize write(HandleRef ref, std::span<const u8> buffer) override;
 
     // Changes file permissions
-    void chmod(const fs::path &path, mode_t mode);
+    void chmod(const fs::path &path, mode_t mode) override;
 
 
 private:

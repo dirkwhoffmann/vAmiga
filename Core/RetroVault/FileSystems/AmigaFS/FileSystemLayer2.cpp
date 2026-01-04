@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include <cstring>
 
 namespace retro::rfs::amiga {

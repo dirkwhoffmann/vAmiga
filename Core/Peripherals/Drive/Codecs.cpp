@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Codecs.h"
 #include "DiskEncoder.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "HardDrive.h"

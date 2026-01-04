@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <climits>
@@ -79,6 +79,8 @@ FileSystem::dumpState(std::ostream &os) const noexcept
 
     if (isFormatted()) {
 
+        auto fill = 100.0 * st.usedBlocks / st.blocks;
+
         os << std::setw(5) << std::left << ("DOS" + std::to_string(isize(traits.dos)));
         os << "  ";
         os << std::setw(15) << std::left << std::setfill(' ') << size;
@@ -87,7 +89,7 @@ FileSystem::dumpState(std::ostream &os) const noexcept
         os << "  ";
         os << std::setw(6) << std::left << std::setfill(' ') << st.freeBlocks;
         os << "  ";
-        os << std::setw(3) << std::right << std::setfill(' ') << isize(st.fill);
+        os << std::setw(3) << std::right << std::setfill(' ') << isize(fill);
         os << "%  ";
         os << st.name.c_str() << std::endl;
 
@@ -112,15 +114,16 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
 {
     using namespace utl;
 
-    auto st = stat();
-    auto bst = bootStat();
+    auto st   = stat();
+    auto bst  = bootStat();
+    auto fill = 100.0 * st.usedBlocks / st.blocks;
 
     os << tab("Name");
-    os << st.name.cpp_str() << std::endl;
+    os << st.name << std::endl;
     os << tab("Created");
-    os << st.bDate.str() << std::endl;
+    os << st.btime << std::endl;
     os << tab("Modified");
-    os << st.mDate.str() << std::endl;
+    os << st.mtime << std::endl;
     os << tab("Boot block");
     os << bst.name << std::endl;
     os << tab("Capacity");
@@ -133,7 +136,7 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     os << dec(st.usedBlocks);
     os << tab("Free");
     os << dec(st.freeBlocks);
-    os << " (" <<  std::fixed << std::setprecision(2) << st.fill << "%)" << std::endl;
+    os << " (" <<  std::fixed << std::setprecision(2) << fill << "%)" << std::endl;
     os << tab("Root block");
     os << dec(rootBlock) << std::endl;
     os << tab("Bitmap blocks");
@@ -160,27 +163,21 @@ FileSystem::isFormatted() const noexcept
     return fetch(rootBlock).is(FSBlockType::ROOT);
 }
 
-FSStat
+FSPosixStat
 FileSystem::stat() const noexcept
 {
     auto &rb = fetch(rootBlock);
 
-    FSStat result = {
+    FSPosixStat result = {
 
-        .traits     = traits,
-
-        .freeBlocks = cache.freeBlocks(),
-        .freeBytes  = cache.freeBytes(),
-        .usedBlocks = cache.usedBlocks(),
-        .usedBytes  = cache.usedBytes(),
-        .fill       = double(100) * cache.usedBlocks() / cache.capacity(),
-
-        .name       = rb.isRoot() ? rb.getName() : FSName(""),
-        .bDate      = rb.isRoot() ? rb.getCreationDate() : FSTime(),
-        .mDate      = rb.isRoot() ? rb.getModificationDate() : FSTime(),
-
-        .reads      = 0, // Not yet supported
-        .writes     = 0, // Not yet supported
+        .bsize          = traits.bsize,
+        .blocks         = traits.blocks,
+        .freeBlocks     = cache.freeBlocks(),
+        .usedBlocks     = cache.usedBlocks(),
+        .btime          = rb.isRoot() ? rb.getCreationDate().time() : FSTime().time(),
+        .mtime          = rb.isRoot() ? rb.getModificationDate().time() : FSTime().time(),
+        .blockReads     = 0, // Not yet supported
+        .blockWrites    = 0, // Not yet supported
     };
 
     return result;
@@ -201,35 +198,23 @@ FileSystem::bootStat() const noexcept
     return result;
 }
 
-/*
-string
-FileSystem::getBootBlockName() const noexcept
-{
-    return BootBlockImage(storage[0].data(), storage[1].data()).name;
-}
-
-BootBlockType
-FileSystem::bootBlockType() const noexcept
-{
-    return BootBlockImage(storage[0].data(), storage[1].data()).type;
-}
-*/
-
-FSAttr
+FSPosixAttr
 FileSystem::attr(BlockNr nr) const
 {
     auto &fhd   = fetch(nr);
     auto size   = isize(fhd.getFileSize());
     auto blocks = allocator.requiredBlocks(size);
 
-    FSAttr result = {
+    FSPosixAttr result = {
 
         .size   = size,
         .blocks = blocks,
         .prot   = fhd.getProtectionBits(),
         .isDir  = fhd.isDirectory(),
-        .ctime  = fhd.getCreationDate(),
-        .mtime  = fhd.getModificationDate()
+        .btime  = fhd.getCreationDate().time(),
+        .atime  = fhd.getModificationDate().time(),
+        .mtime  = fhd.getModificationDate().time(),
+        .ctime  = fhd.getCreationDate().time()
     };
 
     return result;

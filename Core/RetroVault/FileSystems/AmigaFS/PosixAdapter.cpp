@@ -7,49 +7,49 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FileSystems/AmigaFS/PosixFileSystem.h"
+#include "FileSystems/AmigaFS/PosixAdapter.h"
 
 namespace retro::rfs::amiga {
 
-PosixFileSystem::PosixFileSystem(FileSystem &fs) : fs(fs)
+PosixAdapter::PosixAdapter(FileSystem &fs) : fs(fs)
 {
 
 }
 
 NodeMeta *
-PosixFileSystem::getMeta(BlockNr nr)
+PosixAdapter::getMeta(BlockNr nr)
 {
     auto it = meta.find(nr);
     return it == meta.end() ? nullptr : &it->second;
 }
 
 NodeMeta &
-PosixFileSystem::ensureMeta(BlockNr nr)
+PosixAdapter::ensureMeta(BlockNr nr)
 {
     auto [it, inserted] = meta.try_emplace(nr);
     return it->second;
 }
 
 NodeMeta &
-PosixFileSystem::ensureMeta(HandleRef ref)
+PosixAdapter::ensureMeta(HandleRef ref)
 {
     return ensureMeta(getHandle(ref).headerBlock);
 }
 
-FSStat
-PosixFileSystem::stat() const noexcept
+FSPosixStat
+PosixAdapter::stat() const noexcept
 {
     return fs.stat();
 }
 
-FSAttr
-PosixFileSystem::attr(const fs::path &path) const
+FSPosixAttr
+PosixAdapter::attr(const fs::path &path) const
 {
     return fs.attr(fs.seek(path));
 }
 
 void
-PosixFileSystem::mkdir(const fs::path &path)
+PosixAdapter::mkdir(const fs::path &path)
 {
     auto parent = path.parent_path();
     auto name = path.filename();
@@ -66,7 +66,7 @@ PosixFileSystem::mkdir(const fs::path &path)
 }
 
 void
-PosixFileSystem::rmdir(const fs::path &path)
+PosixAdapter::rmdir(const fs::path &path)
 {
     // Lookup directory
     auto node = fs.seek(path);
@@ -87,34 +87,20 @@ PosixFileSystem::rmdir(const fs::path &path)
     }
 }
 
-std::vector<FSName>
-PosixFileSystem::readDir(const fs::path &path)
+std::vector<string>
+PosixAdapter::readDir(const fs::path &path) const
 {
-    std::vector<FSName> result;
+    std::vector<string> result;
 
     for (auto &it : fs.getItems(fs.seek(path))) {
-        result.push_back(fs.fetch(it).name());
+        result.push_back(fs.fetch(it).cppName());
     }
 
     return result;
-
-    /*
-    auto node = fs.seek(path);
-
-    // Extract the directory tree
-    OldFSTree tree(fs.fetch(node), { .recursive = false });
-
-    // Walk the tree
-    tree.bfsWalk( [&](const OldFSTree &it) {
-        result.push_back(it.node->getName());
-    });
-
-    return result;
-    */
 }
 
 HandleRef
-PosixFileSystem::open(const fs::path &path, u32 flags)
+PosixAdapter::open(const fs::path &path, u32 flags)
 {
     // Resolve path
     auto node = fs.seek(path);
@@ -146,7 +132,7 @@ PosixFileSystem::open(const fs::path &path, u32 flags)
 }
 
 void
-PosixFileSystem::close(HandleRef ref)
+PosixAdapter::close(HandleRef ref)
 {
     // Lookup handle
     auto &handle = getHandle(ref);
@@ -164,7 +150,7 @@ PosixFileSystem::close(HandleRef ref)
 }
 
 void
-PosixFileSystem::unlink(const fs::path &path)
+PosixAdapter::unlink(const fs::path &path)
 {
     auto node = fs.seek(path);
 
@@ -182,7 +168,7 @@ PosixFileSystem::unlink(const fs::path &path)
 }
 
 void
-PosixFileSystem::tryReclaim(BlockNr node)
+PosixAdapter::tryReclaim(BlockNr node)
 {
     if (auto *info = getMeta(node); info) {
 
@@ -198,7 +184,7 @@ PosixFileSystem::tryReclaim(BlockNr node)
 }
 
 Handle &
-PosixFileSystem::getHandle(HandleRef ref)
+PosixAdapter::getHandle(HandleRef ref)
 {
     auto it = handles.find(ref);
 
@@ -210,7 +196,7 @@ PosixFileSystem::getHandle(HandleRef ref)
 }
 
 BlockNr
-PosixFileSystem::ensureFile(const fs::path &path)
+PosixAdapter::ensureFile(const fs::path &path)
 {
     auto node = fs.seek(path);
     require.file(node);
@@ -218,7 +204,7 @@ PosixFileSystem::ensureFile(const fs::path &path)
 }
 
 BlockNr
-PosixFileSystem::ensureFileOrDirectory(const fs::path &path)
+PosixAdapter::ensureFileOrDirectory(const fs::path &path)
 {
     auto node = fs.seek(path);
     require.fileOrDirectory(node);
@@ -226,7 +212,7 @@ PosixFileSystem::ensureFileOrDirectory(const fs::path &path)
 }
 
 BlockNr
-PosixFileSystem::ensureDirectory(const fs::path &path)
+PosixAdapter::ensureDirectory(const fs::path &path)
 {
     auto node = fs.seek(path);
     require.directory(node);
@@ -234,7 +220,7 @@ PosixFileSystem::ensureDirectory(const fs::path &path)
 }
 
 void
-PosixFileSystem::create(const fs::path &path)
+PosixAdapter::create(const fs::path &path)
 {
     auto parent = path.parent_path();
     auto name   = path.filename();
@@ -251,7 +237,7 @@ PosixFileSystem::create(const fs::path &path)
 }
 
 isize
-PosixFileSystem::lseek(HandleRef ref, isize offset, u16 whence)
+PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
 {
     auto &handle  = getHandle(ref);
     auto &node    = fs.fetch(handle.headerBlock);
@@ -278,7 +264,7 @@ PosixFileSystem::lseek(HandleRef ref, isize offset, u16 whence)
 }
 
 void
-PosixFileSystem::move(const fs::path &oldPath, const fs::path &newPath)
+PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 {
     auto newDir  = newPath.parent_path();
     auto newName = newPath.filename();
@@ -289,7 +275,7 @@ PosixFileSystem::move(const fs::path &oldPath, const fs::path &newPath)
 }
 
 void
-PosixFileSystem::chmod(const fs::path &path, mode_t mode)
+PosixAdapter::chmod(const fs::path &path, mode_t mode)
 {
     auto &node = fs.fetch(ensureFile(path)).mutate();
 
@@ -303,13 +289,13 @@ PosixFileSystem::chmod(const fs::path &path, mode_t mode)
 }
 
 void
-PosixFileSystem::resize(const fs::path &path, isize size)
+PosixAdapter::resize(const fs::path &path, isize size)
 {
     fs.resize(ensureFile(path), size);
 }
 
 isize
-PosixFileSystem::read(HandleRef ref, std::span<u8> buffer)
+PosixAdapter::read(HandleRef ref, std::span<u8> buffer)
 {
     auto &handle = getHandle(ref);
     auto &node   = fs.fetch(handle.headerBlock);
@@ -334,7 +320,7 @@ PosixFileSystem::read(HandleRef ref, std::span<u8> buffer)
 }
 
 isize
-PosixFileSystem::write(HandleRef ref, std::span<const u8> buffer)
+PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
 {
     auto &handle = getHandle(ref);
 //    auto &fhb    = fs.fetch(handle.headerBlock);

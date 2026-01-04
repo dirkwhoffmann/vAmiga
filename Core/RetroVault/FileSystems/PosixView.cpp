@@ -7,14 +7,9 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FileSystems/AmigaFS/FSService.h"
-#include "FileSystems/AmigaFS/FileSystem.h"
+#include "config.h"
+#include "FileSystems/PosixView.h"
 
-namespace retro::rfs::amiga {
-
-FSService::FSService(FileSystem& fs) : fs(fs), traits(fs.getTraits())
-{
-
-}
+namespace retro::rfs {
 
 }

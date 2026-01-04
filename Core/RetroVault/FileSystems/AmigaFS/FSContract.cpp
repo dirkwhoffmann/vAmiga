@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "FileSystems/AmigaFS/FSContract.h"
-#include "FileSystem.h"
+#include "FileSystems/AmigaFS/FileSystem.h"
 
 namespace retro::rfs::amiga {
 
