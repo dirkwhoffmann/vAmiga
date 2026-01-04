@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "HDFFile.h"
-#include "FSBlock.h"
+#include "FileSystems/Amiga/FSBlock.h"
 #include "Memory.h"
 #include "DeviceError.h"
 #include "utl/common.h"

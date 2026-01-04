@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FSService.h"
+#include "FileSystems/Amiga/FSService.h"
 #include "FileSystem.h"
 
 namespace retro::amigafs {

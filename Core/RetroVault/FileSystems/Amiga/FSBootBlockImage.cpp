@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "BootBlockImage.h"
+#include "FileSystems/Amiga/FSBootBlockImage.h"
 #include <cstring>
 
 namespace retro::amigafs {
@@ -1115,7 +1115,7 @@ const BBRecord bbRecord[] = {
           77,60,274,0,536,0,987,110,997,109,1010,109,1019,48)
 };
 
-BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
+FSBootBlockImage::FSBootBlockImage(const u8 *buf1, const u8 *buf2)
 {
     std::memcpy(data, buf1, 512);
     std::memcpy(data + 512, buf2, 512);
@@ -1155,12 +1155,12 @@ BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
     }
 }
 
-BootBlockImage::BootBlockImage(const u8 *buf) : BootBlockImage(buf, buf + 512)
+FSBootBlockImage::FSBootBlockImage(const u8 *buf) : FSBootBlockImage(buf, buf + 512)
 {
     
 }
 
-BootBlockImage::BootBlockImage(const string &name)
+FSBootBlockImage::FSBootBlockImage(const string &name)
 {
     std::memset(data, 0, 1024);
     
@@ -1175,7 +1175,7 @@ BootBlockImage::BootBlockImage(const string &name)
     }
 }
 
-BootBlockImage::BootBlockImage(BootBlockId bootBlockID)
+FSBootBlockImage::FSBootBlockImage(BootBlockId bootBlockID)
 {
     std::memset(data, 0, 1024);
     const char *name;
@@ -1189,12 +1189,12 @@ BootBlockImage::BootBlockImage(BootBlockId bootBlockID)
         default:                        name = "";                                break;
     }
     
-    BootBlockImage bb = BootBlockImage(string(name));
+    FSBootBlockImage bb = FSBootBlockImage(string(name));
     *this = bb;
 }
 
 void
-BootBlockImage::write(u8 *buffer, isize first, isize last)
+FSBootBlockImage::write(u8 *buffer, isize first, isize last)
 {
     assert(first < last && last < 1024);
     

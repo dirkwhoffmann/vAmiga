@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FSObjects.h"
+#include "FileSystems/Amiga/FSObjects.h"
 
 namespace retro::amigafs {
 

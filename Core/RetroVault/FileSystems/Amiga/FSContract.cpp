@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FSContract.h"
+#include "FileSystems/Amiga/FSContract.h"
 #include "FileSystem.h"
 
 namespace retro::amigafs {

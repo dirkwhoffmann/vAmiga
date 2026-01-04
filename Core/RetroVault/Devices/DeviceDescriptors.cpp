@@ -10,7 +10,7 @@
 #include "config.h"
 #include "DeviceDescriptors.h"
 #include "DeviceError.h"
-#include "FSTypes.h"
+#include "FileSystems/Amiga/FSTypes.h"
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 #include <algorithm>

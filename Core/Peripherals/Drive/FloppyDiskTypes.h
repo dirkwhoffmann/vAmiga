@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FSTypes.h"
+#include "FileSystems/Amiga/FSTypes.h"
 #include "DeviceTypes.h"
 
 namespace vamiga {

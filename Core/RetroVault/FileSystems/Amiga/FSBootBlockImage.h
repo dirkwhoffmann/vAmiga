@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "FSTypes.h"
+#include "FileSystems/Amiga/FSTypes.h"
 
 namespace retro::amigafs {
 
@@ -23,7 +23,7 @@ typedef struct
 }
 BBRecord;
 
-class BootBlockImage {
+class FSBootBlockImage {
 
     // Image data
     u8 data[1024];
@@ -35,10 +35,10 @@ public:
     const char *name = "Custom boot block";
     
     // Constructors
-    BootBlockImage(const u8 *buf1, const u8 *buf2);
-    BootBlockImage(const u8 *buf);
-    BootBlockImage(const string &name);
-    BootBlockImage(BootBlockId id);
+    FSBootBlockImage(const u8 *buf1, const u8 *buf2);
+    FSBootBlockImage(const u8 *buf);
+    FSBootBlockImage(const string &name);
+    FSBootBlockImage(BootBlockId id);
     
     // Exports the image
     void write(u8 *buffer, isize first = 0, isize last = 0);

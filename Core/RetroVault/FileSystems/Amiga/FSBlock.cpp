@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSBlock.h"
+#include "FileSystems/Amiga/FSBlock.h"
 #include "FileSystem.h"
 #include "utl/io.h"
 #include "utl/support.h"
@@ -1624,7 +1624,7 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
     if (id != BootBlockId::NONE) {
 
         // Read boot block image from the database
-        auto image = BootBlockImage(id);
+        auto image = FSBootBlockImage(id);
 
         if (page == 0) {
             image.write(data() + 4, 4, 511); // Write 508 bytes (skip header)

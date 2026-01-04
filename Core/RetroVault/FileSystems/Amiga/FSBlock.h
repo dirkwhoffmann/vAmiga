@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "FSService.h"
-#include "FSTypes.h"
-#include "FSError.h"
-#include "FSObjects.h"
-#include "BootBlockImage.h"
+#include "FileSystems/Amiga/FSService.h"
+#include "FileSystems/Amiga/FSTypes.h"
+#include "FileSystems/Amiga/FSError.h"
+#include "FileSystems/Amiga/FSObjects.h"
+#include "FileSystems/Amiga/FSBootBlockImage.h"
 #include "utl/storage.h"
 #include "utl/abilities/Dumpable.h"
 

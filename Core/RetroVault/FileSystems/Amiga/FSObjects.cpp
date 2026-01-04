@@ -8,8 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSObjects.h"
-#include "FSBlock.h"
+#include "FileSystems/Amiga/FSObjects.h"
+#include "FileSystems/Amiga/FSBlock.h"
 #include "utl/chrono.h"
 #include "utl/support.h"
 #include <algorithm>

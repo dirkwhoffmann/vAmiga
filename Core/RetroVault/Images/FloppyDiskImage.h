@@ -11,7 +11,7 @@
 
 #include "DiskImage.h"
 #include "DeviceTypes.h"
-#include "FSTypes.h"
+#include "FileSystems/Amiga/FSTypes.h"
 
 using retro::device::Diameter;
 using retro::device::Density;

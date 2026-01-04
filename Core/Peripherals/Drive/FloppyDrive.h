@@ -12,7 +12,7 @@
 #include "FloppyDriveTypes.h"
 #include "AgnusTypes.h"
 #include "ImageTypes.h"
-#include "FSTypes.h"
+#include "FileSystems/Amiga/FSTypes.h"
 #include "Drive.h"
 #include "FloppyDisk.h"
 #include "DiskController.h"

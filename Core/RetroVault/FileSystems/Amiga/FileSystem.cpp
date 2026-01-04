@@ -189,7 +189,7 @@ FileSystem::stat() const noexcept
 FSBootStat
 FileSystem::bootStat() const noexcept
 {
-    auto bb = BootBlockImage(cache[0].data(), cache[1].data());
+    auto bb = FSBootBlockImage(cache[0].data(), cache[1].data());
 
     FSBootStat result = {
 

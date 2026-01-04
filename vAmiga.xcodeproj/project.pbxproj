@@ -293,7 +293,7 @@
 		50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
-		50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
+		50A64B96257A63A600442964 /* FSBootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* FSBootBlockImage.cpp */; };
 		50AD904B276E104E0011ECCB /* TextStorage.h in Resources */ = {isa = PBXBuildFile; fileRef = 50AD904A276E104E0011ECCB /* TextStorage.h */; };
 		50AD904D276E10660011ECCB /* TextStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD904C276E10660011ECCB /* TextStorage.cpp */; };
 		50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD90582771B2770011ECCB /* RshServer.cpp */; };
@@ -522,7 +522,7 @@
 		50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FC04CF27DA19F600C3E566 /* FSDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C01082577A8C000F9E05C /* FSDescriptor.cpp */; };
 		50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E427CA6209002F6CCC /* FileSystem.cpp */; };
-		50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
+		50FC04D227DA19F600C3E566 /* FSBootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* FSBootBlockImage.cpp */; };
 		50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
 		50FC04D527DA1A0000C3E566 /* CommanderConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommanderConsole.cpp */; };
@@ -1026,8 +1026,8 @@
 		50A61447260CF26100A01428 /* MouseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MouseTypes.h; sourceTree = "<group>"; };
 		50A61452260D113C00A01428 /* TODTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TODTypes.h; sourceTree = "<group>"; };
 		50A61470260DCA6200A01428 /* RomFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFileTypes.h; sourceTree = "<group>"; };
-		50A64B94257A63A600442964 /* BootBlockImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BootBlockImage.h; sourceTree = "<group>"; };
-		50A64B95257A63A600442964 /* BootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BootBlockImage.cpp; sourceTree = "<group>"; };
+		50A64B94257A63A600442964 /* FSBootBlockImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSBootBlockImage.h; sourceTree = "<group>"; };
+		50A64B95257A63A600442964 /* FSBootBlockImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FSBootBlockImage.cpp; sourceTree = "<group>"; };
 		50A6F50328C7AB51002F31EA /* MoiraDasmMMU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDasmMMU_cpp.h; sourceTree = "<group>"; };
 		50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDasmFPU_cpp.h; sourceTree = "<group>"; };
 		50A6F50528C7AB7F002F31EA /* MoiraExecMMU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExecMMU_cpp.h; sourceTree = "<group>"; };
@@ -2608,8 +2608,8 @@
 				509D04962EDA471900355638 /* FSImporter.cpp */,
 				509D04942EDA471900355638 /* FSExporter.h */,
 				509D04952EDA471900355638 /* FSExporter.cpp */,
-				50A64B94257A63A600442964 /* BootBlockImage.h */,
-				50A64B95257A63A600442964 /* BootBlockImage.cpp */,
+				50A64B94257A63A600442964 /* FSBootBlockImage.h */,
+				50A64B95257A63A600442964 /* FSBootBlockImage.cpp */,
 			);
 			path = Amiga;
 			sourceTree = "<group>";
@@ -3215,7 +3215,7 @@
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AnyFile.cpp in Sources */,
-				50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */,
+				50A64B96257A63A600442964 /* FSBootBlockImage.cpp in Sources */,
 				50627FD3286EBA7300F2A835 /* Texture.cpp in Sources */,
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
 				50E8199325B350DA00D2E3A5 /* Errors.swift in Sources */,
@@ -3362,7 +3362,7 @@
 				50BCB9AB2EE2FA11000C53CF /* DeviceError.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
 				50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */,
-				50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */,
+				50FC04D227DA19F600C3E566 /* FSBootBlockImage.cpp in Sources */,
 				50FC04EC27DA1A4500C3E566 /* SerServer.cpp in Sources */,
 				50BF4B4E2F03D73000F1B9F2 /* GCR.cpp in Sources */,
 				50BF4B632F05078500F1B9F2 /* Codecs.cpp in Sources */,
@@ -3780,6 +3780,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
+					Core/RetroVault,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3836,6 +3837,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
+					Core/RetroVault,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3946,6 +3948,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
+					Core/RetroVault,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				OTHER_LDFLAGS = "";
@@ -3970,6 +3973,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
+					Core/RetroVault,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				OTHER_LDFLAGS = "";
