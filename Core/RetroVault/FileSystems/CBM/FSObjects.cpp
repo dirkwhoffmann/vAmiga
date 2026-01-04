@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "FileSystems/PosixViewTypes.h"
 #include "FileSystems/CBM/FSObjects.h"
 #include "FileSystems/CBM/FSBlock.h"
 #include "utl/chrono.h"
@@ -527,22 +528,18 @@ FSAttr::mode() const
 {
     u32 mode = 0;
 
-#ifndef _WIN32
-
     // File type
     mode |= isDir ? S_IFDIR : S_IFREG;
 
     // Owner permissions
-    if (!(prot & 0x01)) mode |= S_IRUSR;
-    if (!(prot & 0x02)) mode |= S_IWUSR;
-    if (!(prot & 0x04)) mode |= S_IXUSR;
+    if (!(prot & 0x01)) mode |= posix::IRUSR;
+    if (!(prot & 0x02)) mode |= posix::IWUSR;
+    if (!(prot & 0x04)) mode |= posix::IXUSR;
 
     // Mirror owner permissions to group and others
-    if (mode & S_IRUSR) mode |= S_IRGRP | S_IROTH;
-    if (mode & S_IWUSR) mode |= S_IWGRP | S_IWOTH;
-    if (mode & S_IXUSR) mode |= S_IXGRP | S_IXOTH;
-
-#endif
+    if (mode & posix::IRUSR) mode |= posix::IRGRP | posix::IROTH;
+    if (mode & posix::IWUSR) mode |= posix::IWGRP | posix::IWOTH;
+    if (mode & posix::IXUSR) mode |= posix::IXGRP | posix::IXOTH;
 
     return mode;
 }

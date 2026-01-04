@@ -281,9 +281,9 @@ PosixAdapter::chmod(const fs::path &path, mode_t mode)
 
     u32 prot = node.getProtectionBits();
 
-    if (mode & S_IRUSR) prot &= ~0x01; else prot |= 0x01;
-    if (mode & S_IWUSR) prot &= ~0x02; else prot |= 0x02;
-    if (mode & S_IXUSR) prot &= ~0x04; else prot |= 0x04;
+    if (mode & posix::IRUSR) prot &= ~0x01; else prot |= 0x01;
+    if (mode & posix::IWUSR) prot &= ~0x02; else prot |= 0x02;
+    if (mode & posix::IXUSR) prot &= ~0x04; else prot |= 0x04;
 
     node.setProtectionBits(prot);
 }
