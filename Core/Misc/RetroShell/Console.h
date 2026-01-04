@@ -19,6 +19,8 @@
 
 namespace vamiga {
 
+using retro::image::ADFFile;
+
 class ConsoleDelegate {
 
 public:

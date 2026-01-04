@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FloppyDisk.h"
 #include "ImageTypes.h"
+#include "ADFFile.h"
 #include "AmigaEncoder.h"
 #include "Codecs.h"
 #include "IBMEncoder.h"
@@ -19,6 +20,8 @@
 #include "utl/io.h"
 
 namespace vamiga {
+
+using namespace retro::image;
 
 void
 FloppyDisk::init(Diameter dia, Density den, bool wp)

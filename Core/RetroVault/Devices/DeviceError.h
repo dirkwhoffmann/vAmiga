@@ -11,7 +11,7 @@
 
 #include "utl/common.h"
 
-namespace vamiga {
+namespace retro::device {
 
 struct DeviceError : public Error {
 

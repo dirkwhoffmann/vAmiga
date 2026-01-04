@@ -11,7 +11,7 @@
 
 #include "FloppyDiskImage.h"
 
-namespace vamiga {
+namespace retro::image {
 
 class IMGFile : public FloppyDiskImage {
     

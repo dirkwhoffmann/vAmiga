@@ -14,7 +14,10 @@
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
-namespace vamiga {
+namespace retro::image {
+
+using retro::device::Volume;
+using vamiga::FSName;
 
 optional<ImageInfo>
 EXEFile::about(const fs::path &path)

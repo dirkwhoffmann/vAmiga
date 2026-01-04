@@ -13,7 +13,7 @@
 #include "utl/io.h"
 #include "utl/support.h"
 
-namespace vamiga {
+namespace retro::image {
 
 void
 ADZFile::init(const class ADFFile &adf)

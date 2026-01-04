@@ -11,7 +11,7 @@
 
 #include "LinearDevice.h"
 
-namespace vamiga {
+namespace retro::device {
 
 using namespace utl;
 

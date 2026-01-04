@@ -14,6 +14,9 @@
 
 namespace vamiga {
 
+using retro::device::Diameter;
+using retro::device::Density;
+
 //
 // Structures
 //

@@ -30,7 +30,7 @@ using namespace retro::image;
 class HardDrive final : public Drive, public TrackDevice {
 
     friend class Codec;
-    friend class HDFFile;
+    friend class retro::image::HDFFile;
     friend class HdController;
 
     Descriptions descriptions = {

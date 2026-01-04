@@ -14,7 +14,7 @@
 #include "utl/storage.h"
 #include <iostream>
 
-namespace vamiga {
+namespace retro::image {
 
 using namespace utl;
 

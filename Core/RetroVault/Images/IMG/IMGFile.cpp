@@ -14,7 +14,9 @@
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
-namespace vamiga {
+namespace retro::image {
+
+using retro::device::DeviceError;
 
 optional<ImageInfo>
 IMGFile::about(const fs::path &path)

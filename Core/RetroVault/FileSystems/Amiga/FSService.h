@@ -14,11 +14,13 @@
 
 namespace vamiga {
 
+class FileSystem;
+
 class FSService : public Loggable {
 
 public:
 
-    class FileSystem &fs;
+    FileSystem &fs;
     const FSTraits &traits;
 
     explicit FSService(FileSystem& fs);

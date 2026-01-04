@@ -22,7 +22,7 @@
 #include "EXEFile.h"
 #include "D64File.h"
 
-namespace vamiga {
+namespace retro::image {
 
 using CHS = TrackDevice::CHS;
 using TS  = TrackDevice::TS;

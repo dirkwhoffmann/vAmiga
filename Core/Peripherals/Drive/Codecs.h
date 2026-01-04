@@ -21,10 +21,15 @@
 #include "DMSFile.h"
 #include "EXEFile.h"
 
+namespace vamiga {
+
+using retro::image::ADFFile;
+using retro::image::ADZFile;
+using retro::image::EADFFile;
 using retro::image::HDFFile;
 using retro::image::HDZFile;
-
-namespace vamiga {
+using retro::image::DMSFile;
+using retro::image::EXEFile;
 
 class Codec {
 

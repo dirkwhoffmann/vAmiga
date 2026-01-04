@@ -20,6 +20,9 @@
 
 namespace vamiga {
 
+using retro::device::BlockDevice;
+using retro::device::Volume;
+
 class FSCache final : public FSService {
 
     friend struct FSBlock;

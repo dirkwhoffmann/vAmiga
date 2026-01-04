@@ -11,7 +11,7 @@
 
 #include "ADFFile.h"
 
-namespace vamiga {
+namespace retro::image {
 
 /* This class represents a file in extended ADF format. Layout:
  *

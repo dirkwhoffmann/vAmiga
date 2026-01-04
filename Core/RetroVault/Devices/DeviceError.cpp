@@ -11,7 +11,7 @@
 #include "DeviceTypes.h"
 #include "DeviceError.h"
 
-namespace vamiga {
+namespace retro::device {
 
 DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 {

@@ -12,11 +12,26 @@
 #include "FloppyDiskTypes.h"
 #include "DriveTypes.h"
 #include "ImageTypes.h"
+#include "ADFFile.h"
 #include "FloppyDiskImage.h"
 #include "CoreComponent.h"
 #include "TrackDevice.h"
 
+namespace retro::image {
+
+class ADFFile;
+class IMGFile;
+class STFile;
+
+}
+
 namespace vamiga {
+
+using retro::image::FloppyDiskImage;
+using retro::image::ImageFormat;
+using retro::image::ADFFile;
+using retro::image::IMGFile;
+using retro::image::STFile;
 
 /* MFM encoded disk data of a standard 3.5" DD disk:
  *
@@ -268,12 +283,12 @@ public:
     // Encodes a disk
     void encodeDisk(const class FloppyDiskImage &file);
 
-    void encode(const class ADFFile &source);
-    void decode(class ADFFile &target) const;
-    void encode(const class IMGFile &source);
-    void decode(class IMGFile &target) const;
-    void encode(const class STFile &source);
-    void decode(class STFile &target) const;
+    void encode(const ADFFile &source);
+    void decode(ADFFile &target) const;
+    void encode(const IMGFile &source);
+    void decode(IMGFile &target) const;
+    void encode(const STFile &source);
+    void decode(STFile &target) const;
 
     // Shifts the tracks agains each other
     void shiftTracks(isize offset);

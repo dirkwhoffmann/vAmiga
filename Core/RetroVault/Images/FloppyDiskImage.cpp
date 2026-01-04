@@ -19,7 +19,7 @@
 #include "D64File.h"
 #include "utl/io.h"
 
-namespace vamiga {
+namespace retro::image {
 
 optional<ImageInfo>
 FloppyDiskImage::about(const fs::path& url)

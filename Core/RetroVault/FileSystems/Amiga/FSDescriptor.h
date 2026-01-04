@@ -14,6 +14,11 @@
 
 namespace vamiga {
 
+using retro::device::GeometryDescriptor;
+using retro::device::PartitionDescriptor;
+using retro::device::Diameter;
+using retro::device::Density;
+
 /* To create a FileSystem, several layout parameters need to to be provided.
  * This is done by passing a FSDescriptor which contains the necessary
  * information.

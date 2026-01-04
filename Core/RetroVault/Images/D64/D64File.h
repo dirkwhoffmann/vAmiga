@@ -11,9 +11,9 @@
 
 #include "FloppyDiskImage.h"
 
-namespace vamiga {
+namespace retro::image {
 
-class FileSystem;
+// class FileSystem;
 
 class D64File : public FloppyDiskImage {
 

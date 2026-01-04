@@ -11,7 +11,7 @@
 #include "LinearDevice.h"
 #include "Buffer.h"
 
-namespace vamiga {
+namespace retro::device {
 
 u8
 LinearDevice::readByte(isize offset) const

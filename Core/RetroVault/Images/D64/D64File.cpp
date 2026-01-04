@@ -12,7 +12,7 @@
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
-namespace vamiga {
+namespace retro::image {
 
 optional<ImageInfo>
 D64File::about(const fs::path &path)

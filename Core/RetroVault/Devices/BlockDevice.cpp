@@ -9,7 +9,7 @@
 
 #include "BlockDevice.h"
 
-namespace vamiga {
+namespace retro::device {
 
 isize
 BlockDevice::capacity() const

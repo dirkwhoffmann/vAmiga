@@ -15,6 +15,8 @@
 #import <MetalKit/MetalKit.h>
 
 using namespace vamiga;
+using namespace retro;
+using namespace retro::image;
 
 //
 // Forward declarations

@@ -22,6 +22,8 @@
 
 namespace vamiga {
 
+using retro::image::ImageFormat;
+
 class FloppyDrive final : public Drive, public TrackDevice {
 
     friend class DiskController;

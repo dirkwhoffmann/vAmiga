@@ -13,16 +13,11 @@
 #include "FSDescriptor.h"
 #include "utl/common.h"
 
-using vamiga::HardDiskImage;
 using vamiga::FSDescriptor;
-using vamiga::GeometryDescriptor;
-using vamiga::PartitionDescriptor;
-using vamiga::DriverDescriptor;
-using vamiga::ImageInfo;
-using vamiga::ImageType;
-using vamiga::ImageFormat;
-using vamiga::FSFamily;
 using vamiga::FSFormat;
+using retro::device::GeometryDescriptor;
+using retro::device::PartitionDescriptor;
+using retro::device::DriverDescriptor;
 
 namespace retro::image {
 

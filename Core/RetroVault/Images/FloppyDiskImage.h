@@ -13,7 +13,10 @@
 #include "DeviceTypes.h"
 #include "FSTypes.h"
 
-namespace vamiga {
+using retro::device::Diameter;
+using retro::device::Density;
+
+namespace retro::image {
 
 class FloppyDiskImage : public DiskImage {
 

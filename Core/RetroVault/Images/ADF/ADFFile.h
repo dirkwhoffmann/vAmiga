@@ -11,10 +11,19 @@
 
 #include "FloppyDiskImage.h"
 #include "DeviceDescriptors.h"
+#include "FSDescriptor.h"
 
-namespace vamiga {
+using vamiga::BootBlockId;
+using vamiga::FSFormat;
+using vamiga::FSDescriptor;
+using retro::device::GeometryDescriptor;
 
-class FileSystem;
+namespace vamiga { class FileSystem; }
+
+namespace retro::image {
+
+using namespace utl;
+using vamiga::FileSystem;
 
 class ADFFile : public FloppyDiskImage {
 
@@ -47,12 +56,12 @@ public:
     explicit ADFFile(const fs::path& path) { init(path); }
     explicit ADFFile(Diameter dia, Density den) { init(dia, den); }
     explicit ADFFile(const GeometryDescriptor &descr) { init(descr); }
-    explicit ADFFile(const class FileSystem &volume) { init(volume); }
+    explicit ADFFile(FileSystem &volume) { init(volume); }
 
     using FloppyDiskImage::init;
     void init(Diameter dia, Density den);
     void init(const GeometryDescriptor &descr);
-    void init(const class FileSystem &volume);
+    void init(const FileSystem &volume);
 
 
     //
@@ -119,7 +128,7 @@ public:
 public:
     
     // Returns a file system descriptor for this volume
-    struct FSDescriptor getFileSystemDescriptor() const noexcept;
+    FSDescriptor getFileSystemDescriptor() const noexcept;
 
     
     //

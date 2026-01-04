@@ -106,6 +106,8 @@
 
 namespace vamiga {
 
+using retro::device::Volume;
+
 class FileSystem : public Loggable {
 
     friend struct FSBlock;

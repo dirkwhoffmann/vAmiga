@@ -14,7 +14,12 @@
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
-namespace vamiga {
+using namespace vamiga;
+
+namespace retro::image {
+
+using namespace retro::device;
+using vamiga::FSDescriptor;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)

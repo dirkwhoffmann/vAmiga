@@ -12,7 +12,11 @@
 #include "AnyImage.h"
 #include "TrackDevice.h"
 
-namespace vamiga {
+namespace retro::image {
+
+using retro::device::TrackDevice;
+using retro::device::TrackNr;
+using retro::device::SectorNr;
 
 class DiskImage : public AnyImage, public TrackDevice {
 

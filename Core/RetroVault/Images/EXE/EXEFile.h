@@ -11,7 +11,7 @@
 
 #include "ADFFile.h"
 
-namespace vamiga {
+namespace retro::image {
 
 class EXEFile : public FloppyDiskImage {
 

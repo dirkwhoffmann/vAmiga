@@ -11,7 +11,7 @@
 
 #include "DiskImage.h"
 
-namespace vamiga {
+namespace retro::image {
 
 class HardDiskImage : public DiskImage {
 

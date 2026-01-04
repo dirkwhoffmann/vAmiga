@@ -9,7 +9,7 @@
 
 #include "Volume.h"
 
-namespace vamiga {
+namespace retro::device {
 
 Volume::Volume(BlockDevice &device) : device(device)
 {

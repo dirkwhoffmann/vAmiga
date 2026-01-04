@@ -20,7 +20,7 @@
 #include "utl/support.h"
 #include <fstream>
 
-namespace vamiga {
+namespace retro::image {
 
 auto HDF_DBG = Loggable::subscribe("HDF_DBG", 1, "HDF image debugging");
 

@@ -13,12 +13,14 @@
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 
+using vamiga::MediaError;
+
 extern "C" {
 unsigned short extractDMS(const unsigned char *in, size_t inSize,
                           unsigned char **out, size_t *outSize, int verbose);
 }
 
-namespace vamiga {
+namespace retro::image {
 
 optional<ImageInfo>
 DMSFile::about(const fs::path &path)

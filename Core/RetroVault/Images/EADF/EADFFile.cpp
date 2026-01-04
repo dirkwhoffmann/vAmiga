@@ -16,7 +16,10 @@
 #include "MediaError.h"
 #include "utl/io.h"
 
-namespace vamiga {
+namespace retro::image {
+
+using vamiga::MediaError;
+using vamiga::FloppyDisk;
 
 const std::vector<string> EADFFile::extAdfHeaders =
 {

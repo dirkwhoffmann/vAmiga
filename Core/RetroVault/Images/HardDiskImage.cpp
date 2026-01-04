@@ -16,7 +16,7 @@
 using retro::image::HDFFile;
 using retro::image::HDZFile;
 
-namespace vamiga {
+namespace retro::image {
 
 optional<ImageInfo>
 HardDiskImage::about(const fs::path& url)

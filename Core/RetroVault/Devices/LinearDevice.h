@@ -13,7 +13,7 @@
 #include "utl/primitives/Range.h"
 #include "DeviceTypes.h"
 
-namespace vamiga {
+namespace retro::device {
 
 using namespace utl;
 

@@ -13,7 +13,7 @@
 #include "utl/abilities/Streamable.h"
 #include "utl/primitives.h"
 
-namespace vamiga {
+namespace retro::device {
 
 struct GeometryDescriptor : Streamable {
 

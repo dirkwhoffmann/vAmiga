@@ -17,7 +17,7 @@
 #include "utl/io.h"
 #include "utl/support.h"
 
-using vamiga::DeviceError;
+using retro::device::DeviceError;
 using vamiga::BlockNr;
 
 namespace retro::image {

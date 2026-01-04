@@ -17,6 +17,8 @@
 
 namespace vamiga {
 
+using retro::image::ADFFile;
+
 FSDescriptor::FSDescriptor(isize numBlocks)
 {
     init(numBlocks);
@@ -138,62 +140,6 @@ FSDescriptor::checkCompatibility() const
 
     if (isize(rootBlock) >= numBlocks)
         throw FSError(FSError::FS_OUT_OF_RANGE);
-}
-
-GeometryDescriptor::GeometryDescriptor(isize c, isize h, isize s, isize b)
-{
-    cylinders = c;
-    heads = h;
-    sectors = s;
-    bsize = b;
-}
-
-GeometryDescriptor::GeometryDescriptor(isize size)
-{
-    // Create a default geometry for the provide size
-
-    bsize = 512;
-    sectors = 32;
-    heads = 1;
-    
-    auto tsize = bsize * sectors;
-    cylinders = (size / tsize) + (size % tsize ? 1 : 0);
-    
-    while (cylinders > 1024) {
-        
-        cylinders = (cylinders + 1) / 2;
-        heads = heads * 2;
-    }
-}
-
-GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)
-{
-    if (type == Diameter::INCH_525 && density == Density::SD) {
-
-        cylinders = 40;
-        heads = 2;
-        sectors = 11;
-        bsize = 512;
-        return;
-    }
-    if (type == Diameter::INCH_35 && density == Density::DD) {
-        
-        cylinders = 80;
-        heads = 2;
-        sectors = 11;
-        bsize = 512;
-        return;
-    }
-    if (type == Diameter::INCH_35 && density == Density::HD) {
-        
-        cylinders = 80;
-        heads = 2;
-        sectors = 22;
-        bsize = 512;
-        return;
-    }
-    
-    fatalError;
 }
 
 }

@@ -11,7 +11,7 @@
 
 #include "BlockDevice.h"
 
-namespace vamiga {
+namespace retro::device {
 
 using namespace utl;
 

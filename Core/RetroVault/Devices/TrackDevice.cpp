@@ -11,7 +11,7 @@
 #include "TrackDevice.h"
 #include <algorithm>
 
-namespace vamiga {
+namespace retro::device {
 
 using CHS = TrackDevice::CHS;
 using TS  = TrackDevice::TS;

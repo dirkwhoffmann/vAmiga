@@ -7,6 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// 'retro' namespace
+typealias ImageType = retro.image.ImageType
+typealias ImageFormat = retro.image.ImageFormat
+typealias Diameter = retro.device.Diameter
+typealias Density = retro.device.Density
+
+// 'vamiga' namespace
 typealias Accessor = vamiga.Accessor
 typealias AmigaInfo = vamiga.AmigaInfo
 typealias AgnusInfo = vamiga.AgnusInfo
@@ -28,8 +35,6 @@ typealias DasmNumbers = vamiga.DasmNumbers
 typealias DasmSyntax = vamiga.DasmSyntax
 typealias DeniseInfo = vamiga.DeniseInfo
 typealias DeniseRevision = vamiga.DeniseRev
-typealias Diameter = vamiga.Diameter
-typealias Density = vamiga.Density
 typealias DiskControllerInfo = vamiga.DiskControllerInfo
 typealias EventSlot = vamiga.EventSlot
 typealias EventSlotEnum = vamiga.EventSlotEnum
@@ -42,8 +47,6 @@ typealias FSItemType = vamiga.FSItemType
 typealias FSVolumeType = vamiga.FSFormat
 typealias GamePadAction = vamiga.GamePadAction
 typealias HardDriveInfo = vamiga.HardDriveInfo
-typealias ImageType = vamiga.ImageType
-typealias ImageFormat = vamiga.ImageFormat
 typealias MemorySource = vamiga.MemSrc
 typealias MemInfo = vamiga.MemInfo
 typealias MemStats = vamiga.MemMetrics
