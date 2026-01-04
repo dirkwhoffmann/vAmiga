@@ -6,4 +6,5 @@ PosixView.cpp
 
 )
 
-add_subdirectory(AmigaFS)
+add_subdirectory(Amiga)
+add_subdirectory(CBM)

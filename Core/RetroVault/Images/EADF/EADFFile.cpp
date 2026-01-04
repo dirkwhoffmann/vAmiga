@@ -12,7 +12,7 @@
 #include "DiskEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
-#include "FileSystems/AmigaFS/FileSystem.h"
+#include "FileSystems/Amiga/FileSystem.h"
 #include "MediaError.h"
 #include "utl/io.h"
 

@@ -9,4 +9,4 @@
 
 #pragma once
 
-#include "FileSystems/AmigaFS/FileSystem.h"
+#include "FileSystems/Amiga/FileSystem.h"

@@ -11,7 +11,7 @@
 
 #include "FloppyDiskImage.h"
 #include "DeviceDescriptors.h"
-#include "FileSystems/AmigaFS/FSDescriptor.h"
+#include "FileSystems/Amiga/FSDescriptor.h"
 
 namespace retro::vault::amigafs { class FileSystem; }
 

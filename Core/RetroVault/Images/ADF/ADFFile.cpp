@@ -8,9 +8,9 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/AmigaFS/FSBootBlockImage.h"
+#include "FileSystems/Amiga/FSBootBlockImage.h"
 #include "EADFFile.h"
-#include "FileSystems/AmigaFS/FileSystem.h"
+#include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <format>

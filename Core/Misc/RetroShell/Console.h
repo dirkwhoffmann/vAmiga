@@ -13,7 +13,7 @@
 #include "SubComponent.h"
 #include "RSCommand.h"
 #include "TextStorage.h"
-#include "FileSystems/AmigaFS/FileSystem.h"
+#include "FileSystems/Amiga/FileSystem.h"
 #include "ADFFile.h"
 #include "utl/io.h"
 

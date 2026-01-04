@@ -11,9 +11,9 @@
 
 #include "HardDriveTypes.h"
 #include "HdControllerTypes.h"
-#include "FileSystems/AmigaFS/FSTypes.h"
+#include "FileSystems/Amiga/FSTypes.h"
 #include "ImageTypes.h"
-#include "FileSystems/AmigaFS/FSObjects.h"
+#include "FileSystems/Amiga/FSObjects.h"
 #include "AgnusTypes.h"
 #include "Drive.h"
 #include "HardDiskImage.h"
