@@ -86,7 +86,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
 
 Amiga::~Amiga()
 {
-    debug(RUN_DEBUG, "Destroying emulator instance\n");
+    infomsg(RUN_DEBUG, "Destroying emulator instance\n");
 }
 
 void
@@ -459,7 +459,7 @@ Amiga::revertToFactorySettings()
 i64
 Amiga::get(Opt opt, isize objid) const
 {
-    debug(CNF_DEBUG, "get(%s, %ld)\n", OptEnum::key(opt), objid);
+    infomsg(CNF_DEBUG, "get(%s, %ld)\n", OptEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
     if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -476,13 +476,13 @@ Amiga::check(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            infomsg(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->checkOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        infomsg(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -501,13 +501,13 @@ Amiga::set(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            infomsg(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->setOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        infomsg(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -796,7 +796,7 @@ Amiga::_dump(Category category, std::ostream &os) const
 void
 Amiga::_powerOn()
 {
-    debug(RUN_DEBUG, "_powerOn\n");
+    infomsg(RUN_DEBUG, "_powerOn\n");
 
     hardReset();
     msgQueue.put(Msg::POWER, 1);
@@ -805,7 +805,7 @@ Amiga::_powerOn()
 void
 Amiga::_powerOff()
 {
-    debug(RUN_DEBUG, "_powerOff\n");
+    infomsg(RUN_DEBUG, "_powerOff\n");
 
     hardReset();
     msgQueue.put(Msg::POWER, 0);
@@ -814,7 +814,7 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    debug(RUN_DEBUG, "_run\n");
+    infomsg(RUN_DEBUG, "_run\n");
 
     msgQueue.put(Msg::RUN);
 }
@@ -822,7 +822,7 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-    debug(RUN_DEBUG, "_pause\n");
+    infomsg(RUN_DEBUG, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
     msgQueue.put(Msg::PAUSE);
@@ -831,7 +831,7 @@ Amiga::_pause()
 void
 Amiga::_halt()
 {
-    debug(RUN_DEBUG, "_halt\n");
+    infomsg(RUN_DEBUG, "_halt\n");
 
     msgQueue.put(Msg::SHUTDOWN);
 }
@@ -839,7 +839,7 @@ Amiga::_halt()
 void
 Amiga::_warpOn()
 {
-    debug(RUN_DEBUG, "_warpOn\n");
+    infomsg(RUN_DEBUG, "_warpOn\n");
 
     msgQueue.put(Msg::WARP, 1);
 }
@@ -847,7 +847,7 @@ Amiga::_warpOn()
 void
 Amiga::_warpOff()
 {
-    debug(RUN_DEBUG, "_warpOff\n");
+    infomsg(RUN_DEBUG, "_warpOff\n");
 
     msgQueue.put(Msg::WARP, 0);
 }
@@ -855,7 +855,7 @@ Amiga::_warpOff()
 void
 Amiga::_trackOn()
 {
-    debug(RUN_DEBUG, "_trackOn\n");
+    infomsg(RUN_DEBUG, "_trackOn\n");
 
     msgQueue.put(Msg::TRACK, 1);
 }
@@ -863,7 +863,7 @@ Amiga::_trackOn()
 void
 Amiga::_trackOff()
 {
-    debug(RUN_DEBUG, "_trackOff\n");
+    infomsg(RUN_DEBUG, "_trackOff\n");
 
     msgQueue.put(Msg::TRACK, 0);
 }

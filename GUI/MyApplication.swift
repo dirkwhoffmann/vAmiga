@@ -79,7 +79,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     
     public func application(_ application: NSApplication, open urls: [URL]) {
         
-        debug(.lifetime, "application(open urls: \(urls))")
+        infomsg(.lifetime, "application(open urls: \(urls))")
     }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -87,21 +87,21 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         token = ProcessInfo.processInfo.beginActivity(options: [ .idleSystemSleepDisabled, .suddenTerminationDisabled ], reason: "Running an emulator")
         argv = Array(CommandLine.arguments.dropFirst())
         
-        debug(.lifetime, "Launched with arguments \(argv)")
+        infomsg(.lifetime, "Launched with arguments \(argv)")
     }
     
     public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         
-        debug(.shutdown, "Delay a bit to let audio fade out...")
+        infomsg(.shutdown, "Delay a bit to let audio fade out...")
         usleep(250000)
-        debug(.shutdown, "OK...")
+        infomsg(.shutdown, "OK...")
         
         return .terminateNow
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {
         
-        debug(.lifetime)
+        infomsg(.lifetime)
         ProcessInfo.processInfo.endActivity(token)
     }
 }

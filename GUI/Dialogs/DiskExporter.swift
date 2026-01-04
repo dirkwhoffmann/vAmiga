@@ -359,37 +359,37 @@ class DiskExporter: DialogController {
 
             case Format.adf:
                 
-                debug(.media, "Exporting ADF")
+                infomsg(.media, "Exporting ADF")
                 try adf!.writeToFile(url: url)
                 // try parent.mydocument.export(fileProxy: adf!, to: url)
 
             case Format.adz:
                 
-                debug(.media, "Exporting ADZ")
+                infomsg(.media, "Exporting ADZ")
                 try adz!.writeToFile(url: url)
                 // try parent.mydocument.export(fileProxy: adz!, to: url)
 
             case Format.ext:
                 
-                debug(.media, "Exporting Extended ADF")
+                infomsg(.media, "Exporting Extended ADF")
                 try ext!.writeToFile(url: url)
                 // try parent.mydocument.export(fileProxy: ext!, to: url)
 
             case Format.img:
                 
-                debug(.media, "Exporting IMG")
+                infomsg(.media, "Exporting IMG")
                 try img!.writeToFile(url: url)
                 // try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.ima:
                 
-                debug(.media, "Exporting IMA")
+                infomsg(.media, "Exporting IMA")
                 try img!.writeToFile(url: url)
                 // try parent.mydocument.export(fileProxy: img!, to: url)
 
             case Format.vol:
                 
-                debug(.media, "Exporting file system")
+                infomsg(.media, "Exporting file system")
                 try vol!.export(url: url)
                 
             default:
@@ -416,12 +416,12 @@ class DiskExporter: DialogController {
 
                 if let nr = partition {
 
-                    debug(.media, "Exporting partiton \(nr) to \(url)")
+                    infomsg(.media, "Exporting partiton \(nr) to \(url)")
                     try hdf?.writePartitionToFile(url: url, partition: nr)
 
                 } else {
 
-                    debug(.media, "Exporting entire hard disk to \(url)")
+                    infomsg(.media, "Exporting entire hard disk to \(url)")
                     try hdf?.writeToFile(url: url)
                 }
 
@@ -429,18 +429,18 @@ class DiskExporter: DialogController {
 
                 if let nr = partition {
 
-                    debug(.media, "Exporting partiton \(nr) to \(url)")
+                    infomsg(.media, "Exporting partiton \(nr) to \(url)")
                     try hdf?.writePartitionToFile(url: url, partition: nr)
 
                 } else {
 
-                    debug(.media, "Exporting entire hard disk to \(url)")
+                    infomsg(.media, "Exporting entire hard disk to \(url)")
                     try hdz?.writeToFile(url: url)
                 }
 
             case Format.vol:
 
-                debug(.media, "Exporting file system")
+                infomsg(.media, "Exporting file system")
                 try vol!.export(url: url)
 
             default:

@@ -17,7 +17,7 @@ namespace vamiga {
 u16
 Paula::peekADKCONR() const
 {
-    debug(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
+    infomsg(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
     
     return adkcon;
 }
@@ -25,7 +25,7 @@ Paula::peekADKCONR() const
 void
 Paula::pokeADKCON(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeADKCON(%x)\n", value);
+    infomsg(AUDREG_DEBUG, "pokeADKCON(%x)\n", value);
 
     bool set = value & 0x8000;
     bool clr = !set;
@@ -50,14 +50,14 @@ Paula::pokeADKCON(u16 value)
     uart.updateTXD();
 
     if (adkcon & 0b1110111) {
-        logDebug(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
+        debugmsg(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
     }
 }
 
 u16
 Paula::peekINTREQR() const
 {
-    logDebug(INTREG_DEBUG, "peekINTREQR(): %x (INTENA = %x)\n", intreq, intena);
+    debugmsg(INTREG_DEBUG, "peekINTREQR(): %x (INTENA = %x)\n", intreq, intena);
 
     return intreq;
 }
@@ -65,7 +65,7 @@ Paula::peekINTREQR() const
 template <Accessor s> void
 Paula::pokeINTREQ(u16 value)
 {
-    logDebug(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
+    debugmsg(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), Reg::INTREQ, value);
 }
@@ -75,7 +75,7 @@ Paula::setINTREQ(bool setclr, u16 value)
 {
     assert(!(value & 0x8000));
 
-    logDebug(INTREG_DEBUG, "setINTREQ(%d,%x)\n", setclr, value);
+    debugmsg(INTREG_DEBUG, "setINTREQ(%d,%x)\n", setclr, value);
 
     if (setclr) {
         intreq |= value;
@@ -92,7 +92,7 @@ Paula::setINTREQ(bool setclr, u16 value)
 u16
 Paula::peekINTENAR() const
 {
-    logDebug(INTREG_DEBUG, "peekINTENAR(): %x (INTREQ = %x)\n", intena, intreq);
+    debugmsg(INTREG_DEBUG, "peekINTENAR(): %x (INTREQ = %x)\n", intena, intreq);
 
     return intena;
 }
@@ -100,7 +100,7 @@ Paula::peekINTENAR() const
 template <Accessor s> void
 Paula::pokeINTENA(u16 value)
 {
-    logDebug(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
+    debugmsg(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), Reg::INTENA, value);
 }
@@ -110,7 +110,7 @@ Paula::setINTENA(bool setclr, u16 value)
 {
     assert(!(value & 0x8000));
 
-    logDebug(INTREG_DEBUG, "setINTENA(%d,%x)\n", setclr, value);
+    debugmsg(INTREG_DEBUG, "setINTENA(%d,%x)\n", setclr, value);
 
     if (setclr) intena |= value; else intena &= ~value;
     checkInterrupt();
@@ -124,7 +124,7 @@ Paula::peekPOTxDAT() const
     if constexpr (x == 0) result = HI_LO(potCntY0, potCntX0);
     if constexpr (x == 1) result = HI_LO(potCntY1, potCntX1);
 
-    logDebug(POTREG_DEBUG, "peekPOT%ldDAT() = %x\n", x, result);
+    debugmsg(POTREG_DEBUG, "peekPOT%ldDAT() = %x\n", x, result);
     return result;
 }
 
@@ -138,20 +138,20 @@ Paula::peekPOTGOR() const
     REPLACE_BIT(result, 10, chargeY0 >= 1.0);
     REPLACE_BIT(result,  8, chargeX0 >= 1.0);
 
-    logDebug(POT_DEBUG, "charges: %f %f %f %f\n", chargeY1, chargeX1, chargeY0, chargeX0);
+    debugmsg(POT_DEBUG, "charges: %f %f %f %f\n", chargeY1, chargeX1, chargeY0, chargeX0);
     
     // A connected device may force the output level to a specific value
     controlPort1.changePotgo(result);
     controlPort2.changePotgo(result);
 
-    logDebug(POTREG_DEBUG, "peekPOTGOR() = %x (potgo = %x)\n", result, potgo);
+    debugmsg(POTREG_DEBUG, "peekPOTGOR() = %x (potgo = %x)\n", result, potgo);
     return result;
 }
 
 void
 Paula::pokePOTGO(u16 value)
 {
-    logDebug(POTREG_DEBUG, "pokePOTGO(%x)\n", value);
+    debugmsg(POTREG_DEBUG, "pokePOTGO(%x)\n", value);
 
     potgo = value;
 
@@ -164,7 +164,7 @@ Paula::pokePOTGO(u16 value)
     // Check the START bit
     if (GET_BIT(value, 0)) {
 
-        logDebug(POT_DEBUG, "Starting potentiometer scan procedure\n");
+        debugmsg(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
         // Clear potentiometer counters
         potCntX0 = 0;

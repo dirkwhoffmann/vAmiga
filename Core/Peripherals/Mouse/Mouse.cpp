@@ -222,7 +222,7 @@ Mouse::detectShakeDxDy(double dx, double dy)
 void
 Mouse::setXY(double x, double y)
 {
-    debug(PRT_DEBUG, "setXY(%f,%f)\n", x, y);
+    infomsg(PRT_DEBUG, "setXY(%f,%f)\n", x, y);
 
     targetX = x * scaleX;
     targetY = y * scaleY;
@@ -234,7 +234,7 @@ Mouse::setXY(double x, double y)
 void
 Mouse::setDxDy(double dx, double dy)
 {
-    debug(PRT_DEBUG, "setDxDy(%f,%f)\n", dx, dy);
+    infomsg(PRT_DEBUG, "setDxDy(%f,%f)\n", dx, dy);
     
     targetX += dx * scaleX;
     targetY += dy * scaleY;
@@ -246,7 +246,7 @@ Mouse::setDxDy(double dx, double dy)
 void
 Mouse::setLeftButton(bool value)
 {
-    logDebug(PRT_DEBUG, "setLeftButton(%d)\n", value);
+    debugmsg(PRT_DEBUG, "setLeftButton(%d)\n", value);
     
     leftButton = value;
     port.setDevice(ControlPortDevice::MOUSE);
@@ -255,7 +255,7 @@ Mouse::setLeftButton(bool value)
 void
 Mouse::setMiddleButton(bool value)
 {
-    logDebug(PRT_DEBUG, "setMiddleButton(%d)\n", value);
+    debugmsg(PRT_DEBUG, "setMiddleButton(%d)\n", value);
 
     middleButton = value;
     port.setDevice(ControlPortDevice::MOUSE);
@@ -264,7 +264,7 @@ Mouse::setMiddleButton(bool value)
 void
 Mouse::setRightButton(bool value)
 {
-    logDebug(PRT_DEBUG, "setRightButton(%d)\n", value);
+    debugmsg(PRT_DEBUG, "setRightButton(%d)\n", value);
     
     rightButton = value;
     port.setDevice(ControlPortDevice::MOUSE);
@@ -275,7 +275,7 @@ Mouse::trigger(GamePadAction event)
 {
     GamePadActionEnum::validate(event);
 
-    debug(PRT_DEBUG, "trigger(%s)\n", GamePadActionEnum::key(event));
+    infomsg(PRT_DEBUG, "trigger(%s)\n", GamePadActionEnum::key(event));
 
     switch (event) {
 
@@ -329,7 +329,7 @@ ShakeDetector::isShakingRel(double dx) {
                 // Report a shake if the threshold has been reached.
                 if (dxturns > 3) {
                     
-                    // debug(PRT_DEBUG, "Mouse shake detected\n");
+                    // infomsg(PRT_DEBUG, "Mouse shake detected\n");
                     lastShake = utl::Time::now().asNanoseconds();
                     dxturns = 0;
                     return true;

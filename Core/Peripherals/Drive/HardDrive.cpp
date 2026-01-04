@@ -60,7 +60,7 @@ HardDrive::operator= (const HardDrive& other) {
 
             if (other.dirty[i]) {
 
-                debug(RUA_DEBUG, "Cloning block %ld\n", i);
+                infomsg(RUA_DEBUG, "Cloning block %ld\n", i);
                 memcpy(data.ptr + 512 * i, other.data.ptr + 512 * i, 512);
             }
         }
@@ -178,12 +178,12 @@ HardDrive::init(const HDFFile &hdf)
     
     if (data.size < numBytes) {
         
-        debug(HDR_DEBUG, "HDF is too large. Ignoring excess bytes.\n");
+        infomsg(HDR_DEBUG, "HDF is too large. Ignoring excess bytes.\n");
         numBytes = data.size;
     }
     if (data.size > hdf.data.size) {
         
-        debug(HDR_DEBUG, "HDF is too small. Padding with zeroes.");
+        infomsg(HDR_DEBUG, "HDF is too small. Padding with zeroes.");
         data.clear(0, hdf.data.size);
     }
     
@@ -191,7 +191,7 @@ HardDrive::init(const HDFFile &hdf)
     hdf.copy(data.ptr, 0, numBytes);
         
     // Print some debug information
-    debug(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
+    infomsg(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
     if constexpr (debug::HDR_DEBUG) {
         for (auto &driver : drivers) driver.dump();
     }
@@ -213,7 +213,7 @@ HardDrive::init(const fs::path &path)
 
     if (fs::is_directory(path)) {
         
-        debug(HDR_DEBUG, "Importing directory...\n");
+        infomsg(HDR_DEBUG, "Importing directory...\n");
         
         importFolder(path);
         
@@ -312,7 +312,7 @@ HardDrive::connect()
     // Attach a small default disk
     if (!hasDisk()) {
         
-        debug(WT_DEBUG, "Creating default disk...\n");
+        infomsg(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
         format(FSFormat::OFS, FSName(defaultName()));
     }
@@ -356,16 +356,16 @@ HardDrive::isBootable()
 
         if (fs.exists("s/startup-sequence")) {
 
-            debug(HDR_DEBUG, "Bootable drive\n");
+            infomsg(HDR_DEBUG, "Bootable drive\n");
             return true;
         }
         
     } catch (...) {
         
-        debug(HDR_DEBUG, "No file system found\n");
+        infomsg(HDR_DEBUG, "No file system found\n");
     }
     
-    debug(HDR_DEBUG, "Unbootable drive\n");
+    infomsg(HDR_DEBUG, "Unbootable drive\n");
     return false;
 }
 
@@ -558,9 +558,9 @@ HardDrive::format(FSFormat fsType, FSName name)
 {
     if constexpr (debug::HDR_DEBUG) {
 
-        logInfo(HDR_DEBUG, "Formatting hard drive\n");
-        logInfo(HDR_DEBUG, "    File system : %s\n", FSFormatEnum::key(fsType));
-        logInfo(HDR_DEBUG, "           Name : %s\n", name.c_str());
+        infomsg(HDR_DEBUG, "Formatting hard drive\n");
+        infomsg(HDR_DEBUG, "    File system : %s\n", FSFormatEnum::key(fsType));
+        infomsg(HDR_DEBUG, "           Name : %s\n", name.c_str());
     }
     
     // Only proceed if a disk is present
@@ -625,7 +625,7 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 i8
 HardDrive::read(isize offset, isize length, u32 addr)
 {
-    debug(HDR_DEBUG, "read(%ld, %ld, %u)\n", offset, length, addr);
+    infomsg(HDR_DEBUG, "read(%ld, %ld, %u)\n", offset, length, addr);
 
     // Check arguments
     auto error = verify(offset, length, addr);
@@ -653,7 +653,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
 i8
 HardDrive::write(isize offset, isize length, u32 addr)
 {
-    debug(HDR_DEBUG, "write(%ld, %ld, %u)\n", offset, length, addr);
+    infomsg(HDR_DEBUG, "write(%ld, %ld, %u)\n", offset, length, addr);
 
     // Check arguments
     auto error = verify(offset, length, addr);
@@ -714,25 +714,25 @@ HardDrive::verify(isize offset, isize length, u32 addr)
 
     if (length % 512) {
         
-        debug(HDR_DEBUG, "Length must be a multiple of 512 bytes");
+        infomsg(HDR_DEBUG, "Length must be a multiple of 512 bytes");
         return IOERR_BADLENGTH;
     }
 
     if (offset % 512) {
         
-        debug(HDR_DEBUG, "Offset is not aligned");
+        infomsg(HDR_DEBUG, "Offset is not aligned");
         return IOERR_BADADDRESS;
     }
 
     if (offset + length > geometry.numBytes()) {
         
-        debug(HDR_DEBUG, "Invalid block location");
+        infomsg(HDR_DEBUG, "Invalid block location");
         return IOERR_BADADDRESS;
     }
 
     if (!mem.inRam(addr) || !mem.inRam(u32(addr + length))) {
         
-        debug(HDR_DEBUG, "Invalid RAM location");
+        infomsg(HDR_DEBUG, "Invalid RAM location");
         return IOERR_BADADDRESS;
     }
 
@@ -775,7 +775,7 @@ HardDrive::importFolder(const fs::path &path)
     
     if (fs::is_directory(path)) {
         
-        debug(HDR_DEBUG, "Importing directory...\n");
+        infomsg(HDR_DEBUG, "Importing directory...\n");
 
         // Retrieve some information about the first partition
         auto traits = getPartitionTraits(0);

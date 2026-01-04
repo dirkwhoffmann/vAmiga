@@ -143,7 +143,7 @@ protected:
     // Prefix printed prior to the debug message
     virtual void prefix(const std::source_location &) const { };
 
-    // Additional prefix printed by logDebug()
+    // Additional prefix printed by debugmsg()
     virtual void tracePrefix(const std::source_location &) const { };
 };
 

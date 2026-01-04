@@ -83,7 +83,7 @@ GdbServer::doProcess(const string &payload)
     } catch(Error &err) {
         
         auto msg = "GDB server error: " + string(err.what());
-        debug(SRV_DEBUG, "%s\n", msg.c_str());
+        infomsg(SRV_DEBUG, "%s\n", msg.c_str());
 
         // Display the error message in RetroShell
         retroShell << msg << '\n';
@@ -236,7 +236,7 @@ GdbServer::readMemory(isize addr)
 void
 GdbServer::breakpointReached()
 {
-    debug(GDB_DEBUG, "breakpointReached()\n");
+    infomsg(GDB_DEBUG, "breakpointReached()\n");
     process <'?'> ("");
 }
 

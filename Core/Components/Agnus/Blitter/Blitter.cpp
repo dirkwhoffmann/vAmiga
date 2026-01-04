@@ -416,7 +416,7 @@ Blitter::doFill(u16 &data, bool &carry) const
 {
     assert(carry == 0 || carry == 1);
 
-    logDebug(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
+    debugmsg(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
     
     u8 dataHi = HI_BYTE(data);
     u8 dataLo = LO_BYTE(data);
@@ -506,7 +506,7 @@ Blitter::beginBlit()
 
             linecount++;
             check1 = check2 = Hashable::fnvInit32();
-            logInfo(BLT_CHECKSUM, "Line %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+            infomsg(BLT_CHECKSUM, "Line %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                     linecount, bltsizeH, bltsizeV,
                     bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                     bltcon0,
@@ -525,7 +525,7 @@ Blitter::beginBlit()
 
             copycount++;
             check1 = check2 = Hashable::fnvInit32();
-            logInfo(BLT_CHECKSUM, "Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+            infomsg(BLT_CHECKSUM, "Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                     copycount,
                     bltsizeH, bltsizeV,
                     bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
@@ -548,7 +548,7 @@ Blitter::beginLineBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        debug(BLT_CHECKSUM, "Performing level %ld line blits.\n", level);
+        infomsg(BLT_CHECKSUM, "Performing level %ld line blits.\n", level);
     }
     if (bltcon0 & BLTCON0_USEB) {
         xfiles("Performing line blit with channel B enabled\n");
@@ -574,7 +574,7 @@ Blitter::beginCopyBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        debug(BLT_CHECKSUM, "Performing level %ld copy blits.\n", level);
+        infomsg(BLT_CHECKSUM, "Performing level %ld copy blits.\n", level);
     }
 
     switch (level) {
@@ -591,7 +591,7 @@ Blitter::beginCopyBlit(isize level)
 void
 Blitter::clearBusyFlag()
 {
-    debug(BLTTIM_DEBUG, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
+    infomsg(BLTTIM_DEBUG, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -600,7 +600,7 @@ Blitter::clearBusyFlag()
 void
 Blitter::endBlit()
 {
-    debug(BLTTIM_DEBUG, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+    infomsg(BLTTIM_DEBUG, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
     if constexpr (debug::BLT_MEM_GUARD) blitcount++;
@@ -609,7 +609,7 @@ Blitter::endBlit()
     agnus.cancel<SLOT_BLT>();
     
     // Dump checksums if requested
-    debug(BLT_CHECKSUM,
+    infomsg(BLT_CHECKSUM,
           "check1: %x check2: %x ABCD: %x %x %x %x\n",
           check1, check2,
           bltapt & agnus.ptrMask, bltbpt & agnus.ptrMask,

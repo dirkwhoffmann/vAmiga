@@ -61,7 +61,7 @@ Paula::serviceIplEvent()
 void
 Paula::servicePotEvent(EventID id)
 {
-    logDebug(POT_DEBUG, "servicePotEvent(%hhd)\n", id);
+    debugmsg(POT_DEBUG, "servicePotEvent(%hhd)\n", id);
 
     bool outry = potgo & 0x8000;
     bool outrx = potgo & 0x2000;

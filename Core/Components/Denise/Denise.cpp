@@ -1031,7 +1031,7 @@ Denise::updateBorderBuffer()
     // Print some debug info if requested
     if constexpr (debug::DIW_DEBUG) {
 
-        logDebug(DIW_DEBUG, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
+        debugmsg(DIW_DEBUG, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
         diwChanges.dump();
     }
 
@@ -1059,13 +1059,13 @@ Denise::updateBorderBuffer()
                     case Reg::DIWSTRT:
 
                         hstrt = r.value;
-                        logDebug(DIW_DEBUG, "hstrt -> %ld (%lx)\n", hstrt, hstrt);
+                        debugmsg(DIW_DEBUG, "hstrt -> %ld (%lx)\n", hstrt, hstrt);
                         break;
 
                     case Reg::DIWSTOP:
 
                         hstop = r.value;
-                        logDebug(DIW_DEBUG, "hstop -> %ld (%lx)\n", hstop, hstop);
+                        debugmsg(DIW_DEBUG, "hstop -> %ld (%lx)\n", hstop, hstop);
                         break;
 
                     default:
@@ -1080,12 +1080,12 @@ Denise::updateBorderBuffer()
         // Set or clear the horizontal DIW flipflop
         if (counter == hstrt) {
 
-            logDebug(DIW_DEBUG, "hflop -> 1 at %ld (%lx)\n", counter, counter);
+            debugmsg(DIW_DEBUG, "hflop -> 1 at %ld (%lx)\n", counter, counter);
             hf = true;
         }
         if (counter == hstop) {
 
-            logDebug(DIW_DEBUG, "hflop -> 0 at %ld (%lx)\n", counter, counter);
+            debugmsg(DIW_DEBUG, "hflop -> 0 at %ld (%lx)\n", counter, counter);
             hf = false;
         }
 
@@ -1156,12 +1156,12 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
         
         if constexpr (debug::CLX_DEBUG) {
             
-            if ((z & comp45) && (z & comp67)) logDebug(CLX_DEBUG, "Coll: 45 and 67\n");
-            if ((z & comp23) && (z & comp67)) logDebug(CLX_DEBUG, "Coll: 23 and 67\n");
-            if ((z & comp23) && (z & comp45)) logDebug(CLX_DEBUG, "Coll: 23 and 45\n");
-            if ((z & comp01) && (z & comp67)) logDebug(CLX_DEBUG, "Coll: 01 and 67\n");
-            if ((z & comp01) && (z & comp45)) logDebug(CLX_DEBUG, "Coll: 01 and 45\n");
-            if ((z & comp01) && (z & comp23)) logDebug(CLX_DEBUG, "Coll: 01 and 23\n");
+            if ((z & comp45) && (z & comp67)) debugmsg(CLX_DEBUG, "Coll: 45 and 67\n");
+            if ((z & comp23) && (z & comp67)) debugmsg(CLX_DEBUG, "Coll: 23 and 67\n");
+            if ((z & comp23) && (z & comp45)) debugmsg(CLX_DEBUG, "Coll: 23 and 45\n");
+            if ((z & comp01) && (z & comp67)) debugmsg(CLX_DEBUG, "Coll: 01 and 67\n");
+            if ((z & comp01) && (z & comp45)) debugmsg(CLX_DEBUG, "Coll: 01 and 45\n");
+            if ((z & comp01) && (z & comp23)) debugmsg(CLX_DEBUG, "Coll: 01 and 23\n");
         }
     }
 }
@@ -1190,7 +1190,7 @@ Denise::checkS2PCollisions(Pixel start, Pixel end)
         // Check for a collision with playfield 2
         if ((dBuffer[pos] & enabled2) == compare2) {
             
-            logDebug(CLX_DEBUG, "S%d collides with PF2\n", x);
+            debugmsg(CLX_DEBUG, "S%d collides with PF2\n", x);
             SET_BIT(clxdat, 5 + (x / 2));
 
         } else {
@@ -1205,7 +1205,7 @@ Denise::checkS2PCollisions(Pixel start, Pixel end)
         // Check for a collision with playfield 1
         if ((dBuffer[pos] & enabled1) == compare1) {
             
-            logDebug(CLX_DEBUG, "S%d collides with PF1\n", x);
+            debugmsg(CLX_DEBUG, "S%d collides with PF1\n", x);
             SET_BIT(clxdat, 1 + (x / 2));
         }
     }

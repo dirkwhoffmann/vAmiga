@@ -827,7 +827,7 @@ FSBlock::exportUserDirBlock(const fs::path &path) const
 {
     // Assemble the host file name
     auto filename = path / sanitizedPath();
-    debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
+    infomsg(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
     if (!utl::createDirectory(filename)) return FSError::FS_CANNOT_CREATE_DIR;
@@ -840,7 +840,7 @@ FSBlock::exportFileHeaderBlock(const fs::path &path) const
 {
     // Assemble the host file name
     auto filename = path; //  / sanitizedPath();
-    debug(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
+    infomsg(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file
     std::ofstream file(filename, std::ofstream::binary);
@@ -1619,7 +1619,7 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
     assert(page == 0 || page == 1);
     assert(type == FSBlockType::BOOT);
     
-    debug(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
+    infomsg(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
     
     if (id != BootBlockId::NONE) {
 

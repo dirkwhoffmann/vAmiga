@@ -254,7 +254,7 @@ FSCache::flush(BlockNr nr)
 void
 FSCache::flush()
 {
-    debug(FS_DEBUG, "Flushing %zd dirty blocks\n", dirty.size());
+    infomsg(FS_DEBUG, "Flushing %zd dirty blocks\n", dirty.size());
 
     auto toFlush = dirty;
     for (auto block: toFlush) { printf("Flushing block %d\n", block); flush(block); }

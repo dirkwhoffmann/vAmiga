@@ -207,7 +207,7 @@ class Canvas: Layer {
         // Check for duplicated or dropped frames
         if nr != prevNr + 1 {
             
-            debug(.vsync, "Frame sync mismatch (\(prevNr) -> \(nr))")
+            infomsg(.vsync, "Frame sync mismatch (\(prevNr) -> \(nr))")
         }
         prevNr = nr
         

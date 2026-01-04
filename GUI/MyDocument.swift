@@ -52,7 +52,7 @@ class MyDocument: NSDocument {
     
     override init() {
         
-        debug(.lifetime)
+        infomsg(.lifetime)
         
         super.init()
         
@@ -92,7 +92,7 @@ class MyDocument: NSDocument {
     
     override open func makeWindowControllers() {
         
-        debug(.lifetime)
+        infomsg(.lifetime)
         
         let controller = MyController(windowNibName: "MyDocument")
         self.addWindowController(controller)
@@ -100,12 +100,12 @@ class MyDocument: NSDocument {
     
     func shutDown() {
         
-        debug(.shutdown, "Remove proxy...")
+        infomsg(.shutdown, "Remove proxy...")
         
         emu?.kill()
         emu = nil
         
-        debug(.shutdown, "Done")
+        infomsg(.shutdown, "Done")
     }
     
     //
@@ -114,12 +114,12 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        debug(.media)
+        infomsg(.media)
     }
     
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
         
-        debug(.media)
+        infomsg(.media)
         
         do {
             // try mm.mount(url: url, allowedTypes: [.WORKSPACE])
@@ -137,7 +137,7 @@ class MyDocument: NSDocument {
     
     override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) async throws {
         
-        debug(.media, "url = \(url)")
+        infomsg(.media, "url = \(url)")
         
         if typeName == "de.dirkwhoffmann.retro.vamiga" {
             
@@ -280,7 +280,7 @@ class MyDocument: NSDocument {
         dfn.setFlag(.MODIFIED, value: false)
         mm.noteNewRecentlyExportedDiskURL(url, df: nr)
 
-        debug(.media, "Disk exported successfully")
+        infomsg(.media, "Disk exported successfully")
     }
     
     func export(hardDrive nr: Int, to url: URL) throws {
@@ -298,6 +298,6 @@ class MyDocument: NSDocument {
         hdn.setFlag(.MODIFIED, value: false)
         mm.noteNewRecentlyExportedHdrURL(url, hd: nr)
 
-        debug(.media, "Hard Drive exported successfully")
+        infomsg(.media, "Hard Drive exported successfully")
     }
 }

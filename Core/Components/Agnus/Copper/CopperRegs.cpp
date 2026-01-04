@@ -16,7 +16,7 @@ namespace vamiga {
 void
 Copper::pokeCOPCON(u16 value)
 {
-    logDebug(COPREG_DEBUG, "pokeCOPCON(%04X)\n", value);
+    debugmsg(COPREG_DEBUG, "pokeCOPCON(%04X)\n", value);
     
     /* "This is a 1-bit register that when set true, allows the Copper to
      *  access the blitter hardware. This bit is cleared by power-on reset, so
@@ -28,7 +28,7 @@ Copper::pokeCOPCON(u16 value)
 template <Accessor s> void
 Copper::pokeCOPJMP1()
 {
-    logDebug(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
+    debugmsg(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
 
     if constexpr (s == Accessor::AGNUS) {
 
@@ -47,7 +47,7 @@ Copper::pokeCOPJMP1()
 template <Accessor s> void
 Copper::pokeCOPJMP2()
 {
-    logDebug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
+    debugmsg(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
     if constexpr (s == Accessor::AGNUS) {
 
@@ -66,7 +66,7 @@ Copper::pokeCOPJMP2()
 void
 Copper::pokeCOPINS(u16 value)
 {
-    logDebug(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc0, value);
+    debugmsg(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc0, value);
 
     // Manually writing into COPINS seems to have no noticeable effect
     xfiles("Write to COPINS (%x)\n", value);
@@ -75,7 +75,7 @@ Copper::pokeCOPINS(u16 value)
 void
 Copper::pokeCOP1LCH(u16 value)
 {
-    logDebug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
+    debugmsg(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
 
     if (HI_WORD(cop1lc) != value) {
         
@@ -90,7 +90,7 @@ Copper::pokeCOP1LCH(u16 value)
 void
 Copper::pokeCOP1LCL(u16 value)
 {
-    logDebug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
+    debugmsg(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
 
     value &= 0xFFFE;
 
@@ -107,7 +107,7 @@ Copper::pokeCOP1LCL(u16 value)
 void
 Copper::pokeCOP2LCH(u16 value)
 {
-    logDebug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
+    debugmsg(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
     if (HI_WORD(cop2lc) != value) {
         
@@ -122,7 +122,7 @@ Copper::pokeCOP2LCH(u16 value)
 void
 Copper::pokeCOP2LCL(u16 value)
 {
-    logDebug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
+    debugmsg(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
 
     value &= 0xFFFE;
 
@@ -139,7 +139,7 @@ Copper::pokeCOP2LCL(u16 value)
 void
 Copper::pokeNOOP(u16 value)
 {
-    logDebug(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
+    debugmsg(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
 }
 
 template void Copper::pokeCOPJMP1<Accessor::CPU>();

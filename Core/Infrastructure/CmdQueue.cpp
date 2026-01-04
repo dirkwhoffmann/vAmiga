@@ -17,7 +17,7 @@ CmdQueue::put(const Command &cmd)
 {
     {   SYNCHRONIZED
 
-        debug(CMD_DEBUG, "%s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
+        infomsg(CMD_DEBUG, "%s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
 
         if (!queue.isFull()) {
             queue.write(cmd);

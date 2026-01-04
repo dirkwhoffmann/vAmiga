@@ -216,13 +216,13 @@ class Renderer: NSObject, MTKViewDelegate {
             let newfps = Int(round(Double(interval) / elapsed))
             if newfps != fps {
 
-                debug(.vsync, "Measured GPU frame rate: \(newfps)")
+                infomsg(.vsync, "Measured GPU frame rate: \(newfps)")
 
                 if [50, 60, 100, 120, 200, 240].contains(newfps) {
 
                     fps = newfps
                     emu?.set(.HOST_REFRESH_RATE, value: Int(fps))
-                    debug(.vsync, "New GPU frame rate: \(fps)")
+                    infomsg(.vsync, "New GPU frame rate: \(fps)")
                 }
             }
         }

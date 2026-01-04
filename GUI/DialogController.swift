@@ -65,18 +65,18 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     func register() {
         
         DialogController.active.append(self)
-        debug(.lifetime, "Register: \(DialogController.active)")
+        infomsg(.lifetime, "Register: \(DialogController.active)")
     }
     
     func unregister() {
         
         DialogController.active = DialogController.active.filter {$0 != self}
-        debug(.lifetime, "Unregister: \(DialogController.active)")
+        infomsg(.lifetime, "Unregister: \(DialogController.active)")
     }
 
     override func windowDidLoad() {
         
-        debug(.lifetime)
+        infomsg(.lifetime)
 
         super.windowDidLoad()
         self.window?.delegate = self
@@ -84,22 +84,22 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     
     func dialogWillShow() {
 
-        debug(.lifetime)
+        infomsg(.lifetime)
     }
     
     func dialogDidShow() {
 
-        debug(.lifetime)
+        infomsg(.lifetime)
     }
     
     func cleanup() {
 
-        debug(.lifetime)
+        infomsg(.lifetime)
     }
     
     func showAsWindow() {
 
-        debug(.lifetime)
+        infomsg(.lifetime)
         
         sheet = false
         register()
@@ -111,7 +111,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
     func showAsSheet(completionHandler handler:(() -> Void)? = nil) {
 
-        debug(.lifetime)
+        infomsg(.lifetime)
         
         sheet = true
         register()
@@ -138,7 +138,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
     func join() {
 
-        debug(.shutdown, "Wait until the window is closed...")
+        infomsg(.shutdown, "Wait until the window is closed...")
 
         lock.lock()
         lock.unlock()
@@ -161,7 +161,7 @@ extension DialogController: NSWindowDelegate {
 
     func windowDidBecomeKey(_ notification: Notification) {
 
-        debug(.lifetime)
+        infomsg(.lifetime)
     }
 
     func windowWillClose(_ notification: Notification) {

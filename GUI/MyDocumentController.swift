@@ -17,7 +17,7 @@ class MyDocumentController: NSDocumentController {
 
         var doc : NSDocument!
 
-        debug(.lifetime, "makeDocument(withContentsOf: \(url), ofType: \(typeName)")
+        infomsg(.lifetime, "makeDocument(withContentsOf: \(url), ofType: \(typeName)")
 
         if typeName.components(separatedBy: ".").last?.lowercased() != "vamiga" {
 

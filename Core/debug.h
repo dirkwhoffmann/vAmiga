@@ -378,13 +378,13 @@ do { \
 #define logWarning(format, ...) \
     logGeneric(STDERR, LogLevel::LOG_WARNING, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logNotice(channel, format, ...) \
+#define notice(channel, format, ...) \
     logGeneric(channel, LogLevel::LOG_NOTICE, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logInfo(channel, format, ...) \
-    logGeneric(channel, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
+#define infomsg(channel, format, ...) \
+logGeneric(channel, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
 
-#define logDebug(channel, format, ...) \
+#define debugmsg(channel, format, ...) \
     logGeneric(channel, LogLevel::LOG_DEBUG, format __VA_OPT__(,) __VA_ARGS__)
 
 //
@@ -403,6 +403,3 @@ fatalError
 
 #define xfiles(format, ...) \
 logGeneric(XFILES, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)
-
-#define debug(ch, format, ...) \
-logGeneric(ch, LogLevel::LOG_INFO, format __VA_OPT__(,) __VA_ARGS__)

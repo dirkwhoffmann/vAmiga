@@ -65,7 +65,7 @@ MsgQueue::put(const Message &msg)
 
         SYNCHRONIZED
 
-        debug(MSG_DEBUG, "%s [%llx]\n", MsgEnum::key(msg.type), msg.value);
+        infomsg(MSG_DEBUG, "%s [%llx]\n", MsgEnum::key(msg.type), msg.value);
 
         if (listener) {
 

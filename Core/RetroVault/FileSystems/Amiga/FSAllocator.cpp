@@ -46,9 +46,9 @@ FSAllocator::requiredBlocks(isize fileSize) const noexcept
     isize numDataBlocks = requiredDataBlocks(fileSize);
     isize numFileListBlocks = requiredFileListBlocks(fileSize);
 
-    debug(FS_DEBUG, "Required file header blocks : %d\n",  1);
-    debug(FS_DEBUG, "       Required data blocks : %ld\n", numDataBlocks);
-    debug(FS_DEBUG, "  Required file list blocks : %ld\n", numFileListBlocks);
+    infomsg(FS_DEBUG, "Required file header blocks : %d\n",  1);
+    infomsg(FS_DEBUG, "       Required data blocks : %ld\n", numDataBlocks);
+    infomsg(FS_DEBUG, "  Required file list blocks : %ld\n", numFileListBlocks);
 
     return 1 + numDataBlocks + numFileListBlocks;
 }
@@ -82,7 +82,7 @@ FSAllocator::allocate()
 
         if ((i = (i + 1) % numBlocks) == ap) {
 
-            debug(FS_DEBUG, "No more free blocks\n");
+            infomsg(FS_DEBUG, "No more free blocks\n");
             throw FSError(FSError::FS_OUT_OF_SPACE);
         }
     }
@@ -138,7 +138,7 @@ FSAllocator::allocate(isize count, std::vector<BlockNr> &result, std::vector<Blo
         // Fail if we looped all the way and still need blocks
         if (i == ap && count > 0) {
 
-            debug(FS_DEBUG, "No more free blocks\n");
+            infomsg(FS_DEBUG, "No more free blocks\n");
             throw FSError(FSError::FS_OUT_OF_SPACE);
         }
     }
@@ -215,13 +215,13 @@ FSAllocator::allocateFileBlocks(isize bytes,
     isize refsInListBlocks      = numDataBlocks - refsInHeaderBlock;
     isize refsInLastListBlock   = refsInListBlocks % refsPerBlock;
 
-    debug(FS_DEBUG, "                   Data bytes : %ld\n", bytes);
-    debug(FS_DEBUG, "         Required data blocks : %ld\n", numDataBlocks);
-    debug(FS_DEBUG, "         Required list blocks : %ld\n", numListBlocks);
-    debug(FS_DEBUG, "         References per block : %ld\n", refsPerBlock);
-    debug(FS_DEBUG, "   References in header block : %ld\n", refsInHeaderBlock);
-    debug(FS_DEBUG, "    References in list blocks : %ld\n", refsInListBlocks);
-    debug(FS_DEBUG, "References in last list block : %ld\n", refsInLastListBlock);
+    infomsg(FS_DEBUG, "                   Data bytes : %ld\n", bytes);
+    infomsg(FS_DEBUG, "         Required data blocks : %ld\n", numDataBlocks);
+    infomsg(FS_DEBUG, "         Required list blocks : %ld\n", numListBlocks);
+    infomsg(FS_DEBUG, "         References per block : %ld\n", refsPerBlock);
+    infomsg(FS_DEBUG, "   References in header block : %ld\n", refsInHeaderBlock);
+    infomsg(FS_DEBUG, "    References in list blocks : %ld\n", refsInListBlocks);
+    infomsg(FS_DEBUG, "References in last list block : %ld\n", refsInLastListBlock);
 
     // Free the surplus list blocks
     freeSurplus(listBlocks, numListBlocks);
@@ -285,14 +285,14 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noex
 
     // Get the bitmap block
     if (bmNr <= (isize)bmBlocks.size()) {
-        debug(FS_DEBUG, "Bitmap block index %ld for block %d is out of range \n", bmNr, nr);
+        infomsg(FS_DEBUG, "Bitmap block index %ld for block %d is out of range \n", bmNr, nr);
         return nullptr;
     }
 
     auto &bm = fs.fetch(bmBlocks[bmNr]);
 
     if (!bm.is(FSBlockType::BITMAP)) {
-        debug(FS_DEBUG, "Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
+        infomsg(FS_DEBUG, "Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
         return nullptr;
     }
 
@@ -336,7 +336,7 @@ FSAllocator::numUnallocated() const noexcept
 
         isize count = 0;
         for (isize i = 0; i < fs.blocks(); i++) { if (isUnallocated(BlockNr(i))) count++; }
-        debug(FS_DEBUG, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
+        infomsg(FS_DEBUG, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
         assert(count == result);
     }
 

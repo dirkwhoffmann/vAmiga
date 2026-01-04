@@ -66,7 +66,7 @@ FloppyDisk::init(SerReader &reader, Diameter dia, Density den, bool wp)
 
 FloppyDisk::~FloppyDisk()
 {
-    debug(OBJ_DEBUG, "Deleting disk\n");
+    infomsg(OBJ_DEBUG, "Deleting disk\n");
 }
 
 void
@@ -109,7 +109,7 @@ FloppyDisk::_dump(Category category, std::ostream &os) const
 void
 FloppyDisk::readBlock(u8 *dst, isize nr) const
 {
-    debug(MFM_DEBUG, "readBlock: %ld\n", nr);
+    infomsg(MFM_DEBUG, "readBlock: %ld\n", nr);
 
     auto [t,s]  = ts(nr);
     auto tdata  = track[t].byteView();
@@ -118,14 +118,14 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
     if (!offset)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
-    debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
+    infomsg(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
     Encoder::amiga.decodeSector(tdata, *offset, MutableByteView(std::span<u8>(dst, 512)));
 }
 
 void
 FloppyDisk::writeBlock(const u8 *src, isize nr)
 {
-    debug(MFM_DEBUG, "writeBlock: %ld\n", nr);
+    infomsg(MFM_DEBUG, "writeBlock: %ld\n", nr);
 
     auto [t,s]  = ts(nr);
     auto tdata  = track[t].byteView();
@@ -134,7 +134,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
     if (!offset)
         throw IOError(DeviceError::DEV_SEEK_ERR, "Block " + std::to_string(nr));
 
-    debug(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
+    infomsg(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
     Encoder::amiga.encodeSector(tdata, *offset, t, s, ByteView(std::span<const u8>(src, 512)));
 }
 
@@ -482,7 +482,7 @@ FloppyDisk::decode(class STFile &img) const
 void
 FloppyDisk::shiftTracks(isize offset)
 {
-    debug(DSK_DEBUG, "Shifting tracks by %ld bytes against each other\n", offset);
+    infomsg(DSK_DEBUG, "Shifting tracks by %ld bytes against each other\n", offset);
 
     u8 spare[2 * 32768];
 

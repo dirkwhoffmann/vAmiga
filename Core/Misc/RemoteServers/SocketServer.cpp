@@ -40,7 +40,7 @@ SocketServer::_dump(Category category, std::ostream &os) const
 void
 SocketServer::disconnect()
 {
-    debug(SRV_DEBUG, "Disconnecting...\n");
+    infomsg(SRV_DEBUG, "Disconnecting...\n");
 
     // Trigger an exception inside the server thread
     connection.close();
@@ -56,7 +56,7 @@ SocketServer::main()
         
     } catch (std::exception &err) {
         
-        debug(SRV_DEBUG, "Server thread interrupted\n");
+        infomsg(SRV_DEBUG, "Server thread interrupted\n");
         handleError(err.what());
     }
 }
@@ -74,12 +74,12 @@ SocketServer::mainLoop()
                 
                 // Try to be a client by connecting to an existing server
                 connection.connect(config.port);
-                debug(SRV_DEBUG, "Acting as a client\n");
+                infomsg(SRV_DEBUG, "Acting as a client\n");
                 
             } catch (...) {
                 
                 // If there is no existing server, be the server
-                debug(SRV_DEBUG, "Acting as a server\n");
+                infomsg(SRV_DEBUG, "Acting as a server\n");
                 
                 // Create a port listener
                 listener.bind(config.port);
@@ -97,7 +97,7 @@ SocketServer::mainLoop()
             
         } catch (std::exception &err) {
             
-            debug(SRV_DEBUG, "Main loop interrupted\n");
+            infomsg(SRV_DEBUG, "Main loop interrupted\n");
             
             // Handle error if we haven't been interrupted purposely
             if (!isStopping()) handleError(err.what());
@@ -122,7 +122,7 @@ SocketServer::sessionLoop()
         
     } catch (std::exception &err) {
         
-        debug(SRV_DEBUG, "Session loop interrupted\n");
+        infomsg(SRV_DEBUG, "Session loop interrupted\n");
         
         // Handle error if we haven't been interrupted purposely
         if (!isStopping()) {

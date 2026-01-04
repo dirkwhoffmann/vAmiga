@@ -74,7 +74,7 @@ DeniseDebugger::recordDiwH(isize hstrt, isize hstop)
         maxViewPort.hstrt = hstrt;
         maxViewPort.hstop = hstop;
 
-        logDebug(DIW_DEBUG, "recordDiwH: (%ld,%ld)\n", maxViewPort.hstrt, maxViewPort.hstop);
+        debugmsg(DIW_DEBUG, "recordDiwH: (%ld,%ld)\n", maxViewPort.hstrt, maxViewPort.hstop);
     }
 }
 
@@ -96,7 +96,7 @@ DeniseDebugger::updateDiwH(isize hstrt, isize hstop)
         maxViewPort.hstrt = std::min(maxViewPort.hstrt, hstrt);
         maxViewPort.hstop = std::max(maxViewPort.hstop, hstop);
 
-        logDebug(DIW_DEBUG, "updateDiwH: (%ld,%ld)\n", maxViewPort.hstrt, maxViewPort.hstop);
+        debugmsg(DIW_DEBUG, "updateDiwH: (%ld,%ld)\n", maxViewPort.hstrt, maxViewPort.hstop);
     }
 }
 

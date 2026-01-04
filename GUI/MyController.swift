@@ -165,7 +165,7 @@ extension MyController {
     
     func commonInit() {
         
-        debug(.lifetime)
+        infomsg(.lifetime)
         assert(!initialized, "Double-initialization of MyController")
         
         mydocument = document as? MyDocument
@@ -422,7 +422,7 @@ extension MyController {
             shutDown()
             
         case .ABORT:
-            debug(.shutdown, "Aborting with exit code \(value)")
+            infomsg(.shutdown, "Aborting with exit code \(value)")
             exit(Int32(value))
             
         case .MUTE:
@@ -623,7 +623,7 @@ extension MyController {
             break
             
         case .ALARM:
-            debug(.events, "Received Alarm \(msg.value)")
+            infomsg(.events, "Received Alarm \(msg.value)")
             
         default:
             warn("Unknown message: \(msg)")

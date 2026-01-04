@@ -189,7 +189,7 @@ class VideoSettingsViewController: SettingsViewController {
 
         case 11: // My personal monitor (ViewSonic VP191b)
 
-            debug(1, "ViewSonic VP191b")
+            infomsg(1, "ViewSonic VP191b")
             EmulatorProxy.defaults.removeGeometryUserDefaults()
             defaults.set(.MON_ZOOM, 0)          // (Keys.Vid.zoom, 0)
             defaults.set(.MON_HZOOM, 676)       // (Keys.Vid.hZoom, 0.6763221)
