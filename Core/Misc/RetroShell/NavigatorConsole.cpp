@@ -857,7 +857,10 @@ NavigatorConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFormattedFS();
-                df[values[0]]->insertImage(ADFFile(*fs), false);
+
+                ADFFile adf(fs->getTraits().blocks);
+                fs->exporter.exportVolume(adf);
+                df[values[0]]->insertImage(adf, false);
 
             }, .payload = {i}
         });

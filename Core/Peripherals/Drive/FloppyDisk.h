@@ -312,7 +312,7 @@ public:
 public:
     
     // Repeats the MFM data inside the track buffer to ease decoding (DEPRECATED)
-    [[deprecated]] void repeatTracks();
+    // [[deprecated]] void repeatTracks();
 
     // Returns a textual representation of all bits of a track
     string readTrackBits(TrackNr t) const;

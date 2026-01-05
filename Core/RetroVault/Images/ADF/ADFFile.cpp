@@ -22,13 +22,7 @@ using retro::vault::device::Diameter;
 using retro::vault::device::Density;
 using retro::vault::device::DeviceError;
 using retro::vault::device::Volume;
-using retro::vault::amigafs::BlockNr;
 using retro::vault::amigafs::FSName;
-using retro::vault::amigafs::FSFormatEnum;
-using retro::vault::amigafs::FileSystem;
-using retro::vault::amigafs::FSBlock;
-using retro::vault::amigafs::FSDescriptor;
-using retro::vault::amigafs::FSError;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
@@ -124,21 +118,6 @@ ADFFile::init(const GeometryDescriptor &descr)
     }
 
     throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
-}
-
-void
-ADFFile::init(const FileSystem &volume)
-{
-    switch (volume.blocks()) {
-
-        case 2 * 880: init(Diameter::INCH_35, Density::DD); break;
-        case 4 * 880: init(Diameter::INCH_35, Density::HD); break;
-
-        default:
-            throw FSError(FSError::FS_WRONG_CAPACITY);
-    }
-
-    volume.exporter.exportVolume(data.ptr, data.size);
 }
 
 std::vector<string>
@@ -241,32 +220,6 @@ ADFFile::decode(TrackNr t, BitView bits)
     // Decode track
     Encoder::amiga.decodeTrack(mfmByteView, t, dataByteView);
 }
-
-/*
-FSDescriptor
-ADFFile::getFileSystemDescriptor() const noexcept
-{
-    FSDescriptor result;
-    
-    // Determine the root block location
-    BlockNr root = data.size < ADFSIZE_35_HD ? 880 : 1760;
-
-    // Determine the bitmap block location
-    BlockNr bitmap = FSBlock::read32(data.ptr + root * 512 + 316);
-
-    // Assign a default location if the bitmap block reference is invalid
-    if (bitmap == 0 || bitmap >= (BlockNr)numBlocks()) bitmap = root + 1;
-
-    // Setup the descriptor
-    result.numBlocks = numBlocks();
-    result.bsize = 512;
-    result.numReserved = 2;
-    result.rootBlock = root;
-    result.bmBlocks.push_back(bitmap);
-    
-    return result;
-}
-*/
 
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)

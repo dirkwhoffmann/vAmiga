@@ -28,6 +28,21 @@ FSExporter::exportVolume(u8 *dst, isize size, FSFault *err) const
     return exportBlocks(0, (BlockNr)(fs.blocks() - 1), dst, size, err);
 }
 
+void
+FSExporter::exportVolume(TrackDevice &dev) const
+{
+    auto& traits = fs.getTraits();
+
+    if (fs.getTraits().bsize != dev.bsize())
+        throw FSError(FSError::FS_WRONG_BSIZE);
+
+    if (fs.getTraits().blocks != dev.capacity())
+        throw FSError(FSError::FS_WRONG_CAPACITY);
+
+    for (isize i = 0; i < traits.blocks; ++i)
+        dev.writeBlock(fs.fetch(i).data(), i);
+}
+
 bool
 FSExporter::exportBlock(BlockNr nr, u8 *dst, isize size) const
 {

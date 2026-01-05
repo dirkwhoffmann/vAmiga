@@ -376,7 +376,6 @@ FloppyDisk::decode(ADFFile &adf) const
 
     // Decode all tracks
     for (TrackNr t = 0; t < tracks; ++t) adf.decode(t, track[t]);
-        // Encoder::amiga.decodeTrack(byteView(t), t, adf.byteView(t));
 }
 
 void
@@ -542,6 +541,7 @@ FloppyDisk::writeToFile(const fs::path& path, ImageFormat fmt) const
     }
 }
 
+/*
 void
 FloppyDisk::repeatTracks()
 {
@@ -557,6 +557,7 @@ FloppyDisk::repeatTracks()
         }
     }
 }
+*/
 
 string
 FloppyDisk::readTrackBits(TrackNr t) const

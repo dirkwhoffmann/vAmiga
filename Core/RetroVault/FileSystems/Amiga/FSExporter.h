@@ -11,8 +11,11 @@
 
 #include "FileSystems/Amiga/FSService.h"
 #include "FileSystems/Amiga/FSTree.h"
+#include "Devices/TrackDevice.h"
 
 namespace retro::vault::amigafs {
+
+using device::TrackDevice;
 
 class FSExporter final : public FSService {
 
@@ -20,9 +23,12 @@ public:
 
     using FSService::FSService;
 
-    // Exports the volume to a buffer
+    // Exports the file system to a buffer
     bool exportVolume(u8 *dst, isize size) const;
     bool exportVolume(u8 *dst, isize size, FSFault *error) const;
+
+    // Exports the file system to a TrackDevice
+    void exportVolume(TrackDevice &dev) const;
 
     // Exports a single block or a range of blocks to a buffer
     bool exportBlock(BlockNr nr, u8 *dst, isize size) const;

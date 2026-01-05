@@ -58,12 +58,10 @@ public:
     explicit ADFFile(const fs::path& path) { init(path); }
     explicit ADFFile(Diameter dia, Density den) { init(dia, den); }
     explicit ADFFile(const GeometryDescriptor &descr) { init(descr); }
-    explicit ADFFile(FileSystem &volume) { init(volume); }
 
     using FloppyDiskImage::init;
     void init(Diameter dia, Density den);
     void init(const GeometryDescriptor &descr);
-    void init(const FileSystem &volume);
 
 
     //
