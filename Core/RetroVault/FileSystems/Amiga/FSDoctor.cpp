@@ -398,10 +398,10 @@ FSDoctor::xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) c
 {
     assert(pos % 4 == 0);
 
-    auto &node = fs.fetch(ref);
+    auto& node = fs.fetch(ref);
     isize word = pos / 4;
     isize sword = word - (node.bsize() / 4);
-    u32 value = node.get32(word);
+    BlockNr value = node.get32(word);
 
     switch (node.type) {
 

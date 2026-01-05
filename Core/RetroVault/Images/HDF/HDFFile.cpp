@@ -209,6 +209,7 @@ HDFFile::getDriverDescriptors() const
     return result;
 }
 
+/*
 FSDescriptor
 HDFFile::getFileSystemDescriptor(isize nr) const
 {
@@ -267,6 +268,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 
     return result;
 }
+*/
 
 bool
 HDFFile::hasRDB() const
@@ -423,6 +425,7 @@ HDFFile::rdbString(isize offset, isize len) const
     return { };
 }
 
+/*
 FSFormat
 HDFFile::dos(isize blockNr) const
 {
@@ -436,6 +439,7 @@ HDFFile::dos(isize blockNr) const
 
     return FSFormat::NODOS;
 }
+*/
 
 isize
 HDFFile::writePartitionToFile(const fs::path &path, isize nr) const

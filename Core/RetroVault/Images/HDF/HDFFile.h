@@ -10,11 +10,9 @@
 #pragma once
 
 #include "HardDiskImage.h"
-#include "FileSystems/Amiga/FSDescriptor.h"
+#include "DeviceDescriptors.h"
 #include "utl/common.h"
 
-using retro::vault::amigafs::FSDescriptor;
-using retro::vault::amigafs::FSFormat;
 using retro::vault::device::GeometryDescriptor;
 using retro::vault::device::PartitionDescriptor;
 using retro::vault::device::DriverDescriptor;
@@ -38,8 +36,6 @@ public:
     std::vector <DriverDescriptor> drivers;
 
     static optional<ImageInfo> about(const fs::path &path);
-
-    // static bool isOversized(isize size) { return size > 504_MB; }
 
 
     //
@@ -125,7 +121,6 @@ public:
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
     DriverDescriptor getDriverDescriptor(isize driver = 0) const;
     std::vector<DriverDescriptor> getDriverDescriptors() const;
-    FSDescriptor getFileSystemDescriptor(isize part = 0) const;
 
 
     //
@@ -157,11 +152,8 @@ public:
     // Returns the number of loadable file system drivers
     isize numDrivers() const { return isize(drivers.size()); }
 
-    // Returns the number of partitions
-    // isize numPartitions() const { return isize(ptable.size()); }
 
     // Returns the byte count and the location of a certain partition
-    // Range<isize> range(isize nr) const { return ptable[nr].range(); }
     isize partitionSize(isize nr) const;
     isize partitionOffset(isize nr) const;
     u8 *partitionData(isize nr) const;
@@ -196,9 +188,6 @@ private:
 
     // Returns a string from the Rigid Disk Block if it exists
     optional<string> rdbString(isize offset, isize len) const;
-
-    // Extracts the DOS revision number from a certain block
-    FSFormat dos(isize nr) const;
 
 
     //
