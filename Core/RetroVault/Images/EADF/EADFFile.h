@@ -13,39 +13,43 @@
 
 namespace retro::vault::image {
 
-/* This class represents a file in extended ADF format. Layout:
+/* This class represents a file in the extended ADF format. The file layout is
+ * organized as follows:
  *
  *   1. Header section:
  *
- *      8 Byte: "UAE-1ADF"
- *      2 Byte: Reserved
- *      2 Byte: Number of tracks (default 2*80=160)
+ *      8 bytes : ASCII signature "UAE-1ADF"
+ *      2 bytes : Reserved
+ *      2 bytes : Number of tracks (typically 2 × 80 = 160)
  *
- *   2. Track header section (one entry for each track):
+ *   2. Track header section (one entry per track):
  *
- *      2 Byte: Reserved
- *      2 Byte: Type
- *              0 = standard AmigaDOS track
- *              1 = raw MFM data (upper byte = disk revolutions - 1)
- *      4 Byte: Available space for track in bytes (must be even)
- *      4 Byte: Track length in bits
+ *      2 bytes : Reserved
+ *      2 bytes : Track type
+ *                0 = Standard AmigaDOS track
+ *                1 = Raw MFM data (upper byte = number of disk revolutions − 1)
+ *      4 bytes : Available space for the track, in bytes (must be even)
+ *      4 bytes : Track length, in bits
  *
- *   3. Track data section
+ *   3. Track data section:
  *
- * Note: There is related format with a "UAE--ADF" header. This format had been
- * introduced by Factor 5 to distribute Turrican images and those images seem
- * to be the only ones out there. This format is not supported by the emulator
- * and won't be.
+ *      Raw track data for each track, stored consecutively.
+ *
+ * Note:
+ * There exists a related format identified by the header "UAE--ADF". This
+ * variant was introduced by Factor 5 to distribute Turrican disk images and
+ * appears to be the only known use of this format. It is not supported by the
+ * emulator and will not be supported in the future.
  */
 
 class EADFFile : public FloppyDiskImage {
 
+    using MFMTrack = std::vector<u8>;
+    mutable std::vector<MFMTrack> mfmTracks;
+
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
-    
-    // The same file as a standard ADF (if a conversion is possible)
-    ADFFile adf;
-    
+
 public:
 
     static optional<ImageInfo> about(const fs::path &path);
@@ -60,8 +64,6 @@ public:
     explicit EADFFile(isize len) { init(len); }
     explicit EADFFile(const fs::path &path) { init(path); }
     explicit EADFFile(const u8 *buf, isize len) { init(buf, len); }
-
-    using FloppyDiskImage::init;
 
 
     //
@@ -122,6 +124,12 @@ public:
 
     BitView encode(TrackNr t) const override;
     void decode(TrackNr t, BitView bits) override;
+
+private:
+
+    MFMTrack& ensureMFMTrack(TrackNr t) const;
+    BitView encodeStandardTrack(TrackNr t) const;
+    BitView encodeExtendedTrack(TrackNr t) const;
 
 
     //

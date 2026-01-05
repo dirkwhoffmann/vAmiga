@@ -12,6 +12,7 @@
 #include "DiskEncoder.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
+#include "AmigaEncoder.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "ImageError.h"
 #include "utl/io.h"
@@ -52,7 +53,14 @@ EADFFile::numHeads() const
 isize
 EADFFile::numSectors() const
 {
-    return adf.empty() ? 0 : adf.numSectors();
+    switch (getDensity()) {
+
+        case Density::DD:   return 11;
+        case Density::HD:   return 22;
+
+        default:
+            return 0;
+    }
 }
 
 std::vector<string>
@@ -110,29 +118,9 @@ EADFFile::didLoad()
             logwarn("Corrupted length information\n");
             throw ImageError(ImageError::EXT_CORRUPTED);
         }
-
-        if (usedBitsForTrack(i) % 8) {
-            
-            logwarn("Truncating track (bit count is not a multiple of 8)\n");
-            // throw MediaError(MediaError::EXT_INCOMPATIBLE);
-            W32BE(data.ptr + 12 + 12 * i + 8, usedBitsForTrack(i) & ~7);
-        }
     }
-    
-    /* Try to convert the file to a standard ADF. The conversion will fail if
-     * the extended ADF does not contain a standard Amiga disk.
-     */
-    try {
 
-        // Convert the extended ADF to a disk
-        auto disk = FloppyDisk(*this);
-
-        // Convert the disk to a standard ADF
-        
-        adf = ADFFile(numTracks * 11 * 512);
-        disk.decode(adf);
-
-    } catch (...) { }
+    mfmTracks.resize(numTracks);
 }
 
 Diameter
@@ -156,7 +144,60 @@ EADFFile::getDensity() const noexcept
 BitView
 EADFFile::encode(TrackNr t) const
 {
-    throw std::runtime_error("NOT IMPLEMENTED YET");
+    switch (typeOfTrack(t)) {
+
+        case 0: return encodeStandardTrack(t);
+        case 1: return encodeExtendedTrack(t);
+
+        default:
+            throw ImageError(ImageError::EXT_CORRUPTED,
+                             "Invalid track type: " + std::to_string(t));
+    }
+}
+
+EADFFile::MFMTrack &
+EADFFile::ensureMFMTrack(TrackNr t) const
+{
+    static constexpr isize MFMSectorSize = 1088;
+    static constexpr isize MFMTrackBytes = 22 * MFMSectorSize;
+
+    validateTrackNr(t);
+    assert(t < isize(mfmTracks.size()));
+
+    // Access the MFM data cache
+    auto &track = mfmTracks.at(t);
+
+    // Resize if necessary
+    if (isize(track.size()) != MFMTrackBytes) track.resize(MFMTrackBytes);
+
+    return track;
+}
+
+BitView
+EADFFile::encodeStandardTrack(TrackNr t) const
+{
+    loginfo(MFM_DEBUG, "Encoding standard track %ld\n", t);
+
+    auto &track = ensureMFMTrack(t);
+
+    // Create views
+    auto dataByteView = ByteView(trackData(t), availableBytesForTrack(t));
+    auto mfmByteView  = MutableByteView(track.data(), track.size());
+
+    // Encode the track
+    Encoder::amiga.encodeTrack(mfmByteView, t, dataByteView);
+
+    // Return a bit view for the cached MFM data
+    return BitView(mfmByteView.data(), usedBitsForTrack(t));
+}
+
+BitView
+EADFFile::encodeExtendedTrack(TrackNr t) const
+{
+    loginfo(MFM_DEBUG, "Encoding extended track %ld\n", t);
+    validateTrackNr(t);
+
+    return BitView(trackData(t), usedBitsForTrack(t));
 }
 
 void

@@ -75,11 +75,11 @@ ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 
             switch (tracks) {
 
-                case 80: return ADFSIZE_35_DD;
-                case 81: return ADFSIZE_35_DD_81;
-                case 82: return ADFSIZE_35_DD_82;
-                case 83: return ADFSIZE_35_DD_83;
-                case 84: return ADFSIZE_35_DD_84;
+                case 2 * 80: return ADFSIZE_35_DD;
+                case 2 * 81: return ADFSIZE_35_DD_81;
+                case 2 * 82: return ADFSIZE_35_DD_82;
+                case 2 * 83: return ADFSIZE_35_DD_83;
+                case 2 * 84: return ADFSIZE_35_DD_84;
 
                 default:
                     throw (DeviceError(DeviceError::DSK_INVALID_LAYOUT));
@@ -215,9 +215,12 @@ ADFFile::encode(TrackNr t) const
     // Resize if necessary
     if (isize(track.size()) != MFMTrackBytes) track.resize(MFMTrackBytes);
 
+    // Create views
+    auto dataByteView = byteView(t);
+    auto mfmByteView  = MutableByteView(track.data(), MFMTrackBytes);
+
     // Encode the track
-    auto mfmByteView = MutableByteView(track.data(), MFMTrackBytes);
-    Encoder::amiga.encodeTrack(mfmByteView, t, byteView(t));
+    Encoder::amiga.encodeTrack(mfmByteView, t, dataByteView);
 
     // Return a bit view for the cached MFM data
     return BitView(mfmByteView.data(), MFMTrackBytes * 8);

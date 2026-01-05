@@ -21,19 +21,19 @@
 //
 
 #define EXPECT_VALUE(exp) { \
-if (value != u32(exp)) { expected = u32(exp); return FSBlockError::EXPECTED_VALUE; } }
+if ((u32)value != u32(exp)) { expected = u32(exp); return FSBlockError::EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_VALUE(node.checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
-if (value > (u32)exp) \
+if ((u32)value > (u32)exp) \
 { expected = (u8)(exp); return FSBlockError::EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_REF { \
 if (!fs.block(value)) return FSBlockError::EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if (value != ref) { expected = ref; return FSBlockError::EXPECTED_SELFREF; } }
+if ((u32)value != (u32)ref) { expected = ref; return FSBlockError::EXPECTED_SELFREF; } }
 
 #define EXPECT_FILEHEADER_REF { \
 if (!fs.is(value, FSBlockType::FILEHEADER)) { \
@@ -398,10 +398,10 @@ FSDoctor::xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) c
 {
     assert(pos % 4 == 0);
 
-    auto &node = fs.fetch(ref);
+    auto& node = fs.fetch(ref);
     isize word = pos / 4;
     isize sword = word - (node.bsize() / 4);
-    u32 value = node.get32(word);
+    BlockNr value = node.get32(word);
 
     switch (node.type) {
 

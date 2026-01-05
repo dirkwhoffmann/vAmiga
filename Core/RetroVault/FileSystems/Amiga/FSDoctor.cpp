@@ -21,19 +21,19 @@
 //
 
 #define EXPECT_VALUE(exp) { \
-if (value != u32(exp)) { expected = u32(exp); return FSBlockError::EXPECTED_VALUE; } }
+if ((u32)value != u32(exp)) { expected = u32(exp); return FSBlockError::EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_VALUE(node.checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
-if (value > (u32)exp) \
+if ((u32)value > (u32)exp) \
 { expected = (u8)(exp); return FSBlockError::EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_REF { \
 if (!fs.block(value)) return FSBlockError::EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if (value != ref) { expected = ref; return FSBlockError::EXPECTED_SELFREF; } }
+if ((u32)value != (u32)ref) { expected = ref; return FSBlockError::EXPECTED_SELFREF; } }
 
 #define EXPECT_FILEHEADER_REF { \
 if (!fs.is(value, FSBlockType::FILEHEADER)) { \
