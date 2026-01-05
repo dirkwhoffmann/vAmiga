@@ -339,19 +339,17 @@ FloppyDisk::encode(const ADFFile &adf)
     isize tracks = adf.numTracks();
     loginfo(ADF_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
-    if (getDiameter() != adf.getDiameter()) {
+    if (getDiameter() != adf.getDiameter())
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
-    }
-    if (getDensity() != adf.getDensity()) {
+
+    if (getDensity() != adf.getDensity())
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
-    }
 
     // Start with an unformatted disk
     clearDisk();
 
     // Encode all tracks
-    for (TrackNr t = 0; t < tracks; ++t)
-        Encoder::amiga.encodeTrack(byteView(t), t, adf.byteView(t));
+    for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, adf.encode(t));
 
     // In debug mode, also run the decoder
     if constexpr (debug::ADF_DEBUG) {
@@ -377,8 +375,8 @@ FloppyDisk::decode(ADFFile &adf) const
     }
 
     // Decode all tracks
-    for (TrackNr t = 0; t < tracks; ++t)
-        Encoder::amiga.decodeTrack(byteView(t), t, adf.byteView(t));
+    for (TrackNr t = 0; t < tracks; ++t) adf.decode(t, track[t]);
+        // Encoder::amiga.decodeTrack(byteView(t), t, adf.byteView(t));
 }
 
 void
@@ -479,6 +477,21 @@ FloppyDisk::decode(class STFile &img) const
     // Decode all tracks
     for (TrackNr t = 0; t < tracks; ++t)
         Encoder::ibm.decodeTrack(byteView(t), t, img.byteView(t));
+}
+
+void
+FloppyDisk::replaceTrack(TrackNr t, BitView mfm)
+{
+    auto numBits  = mfm.size();
+    auto numBytes = mfm.bytes().size();
+
+    assert(numBytes < sizeof(data.track[t]));
+
+    // Copy track data
+    memcpy(data.track[t], mfm.data(), numBytes);
+
+    // Adapt the new length
+    track[t] = MutableBitView(track[t].data(), numBits);
 }
 
 void

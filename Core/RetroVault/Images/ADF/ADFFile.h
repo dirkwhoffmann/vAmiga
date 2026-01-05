@@ -127,16 +127,6 @@ public:
 
 
     //
-    // Querying disk properties
-    //
-    
-public:
-    
-    // Returns a file system descriptor for this volume
-    FSDescriptor getFileSystemDescriptor() const noexcept;
-
-    
-    //
     // Formatting
     //
 

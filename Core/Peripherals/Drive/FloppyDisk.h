@@ -290,6 +290,9 @@ public:
     void encode(const STFile &source);
     void decode(STFile &target) const;
 
+    // Replaces the MFM data of a single track
+    void replaceTrack(TrackNr t, BitView mfm);
+
     // Shifts the tracks agains each other
     void shiftTracks(isize offset);
 

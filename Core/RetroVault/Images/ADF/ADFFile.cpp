@@ -226,14 +226,13 @@ ADFFile::encode(TrackNr t) const
     Encoder::amiga.encodeTrack(mfmByteView, t, byteView(t));
 
     // Return a bit view for the cached MFM data
-    return BitView(mfmByteView.data(), MFMSectorSize * 8);
+    return BitView(mfmByteView.data(), MFMTrackBytes * 8);
 }
 
 void
 ADFFile::decode(TrackNr t, BitView bits)
 {
-    if (t < 0 || t >= numTracks())
-        throw DeviceError(DeviceError::INVALID_TRACK_NR, t);
+    validateTrackNr(t);
 
     // Create views
     auto dataByteView = byteView(t);
@@ -243,6 +242,7 @@ ADFFile::decode(TrackNr t, BitView bits)
     Encoder::amiga.decodeTrack(mfmByteView, t, dataByteView);
 }
 
+/*
 FSDescriptor
 ADFFile::getFileSystemDescriptor() const noexcept
 {
@@ -266,6 +266,7 @@ ADFFile::getFileSystemDescriptor() const noexcept
     
     return result;
 }
+*/
 
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
