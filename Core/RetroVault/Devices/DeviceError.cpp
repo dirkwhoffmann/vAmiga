@@ -53,8 +53,16 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
             set_msg("Unable to decode the MFM bit stream (wrong sector count).");
             break;
 
+        case DSK_INVALID_TRACK_SIZE:
+            set_msg("Invalid track size: " + s);
+            break;
+
+        case DSK_INVALID_TRACK_NUMBER:
+            set_msg("Invalid track number: " + s);
+            break;
+
         case DSK_INVALID_SECTOR_NUMBER:
-            set_msg("Unable to decode the MFM bit stream (invalid sector number).");
+            set_msg("Invalid sector number: " + s);
             break;
 
         case HDR_TOO_LARGE:

@@ -75,4 +75,16 @@ IMGFile::numSectors() const
     return 9;
 }
 
+BitView
+IMGFile::encode(TrackNr t) const
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
+void
+IMGFile::decode(TrackNr t, BitView bits)
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
 }

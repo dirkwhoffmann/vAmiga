@@ -30,7 +30,9 @@ struct DeviceError : public Error {
     static constexpr long DSK_INVALID_DENSITY           = 23;
     static constexpr long DSK_INVALID_LAYOUT            = 24;
     static constexpr long DSK_WRONG_SECTOR_COUNT        = 25;
-    static constexpr long DSK_INVALID_SECTOR_NUMBER     = 26;
+    static constexpr long DSK_INVALID_TRACK_SIZE        = 26;
+    static constexpr long DSK_INVALID_TRACK_NUMBER      = 27;
+    static constexpr long DSK_INVALID_SECTOR_NUMBER     = 28;
 
     // Hard disks
     static constexpr long HDR_TOO_LARGE                 = 30;
@@ -62,6 +64,8 @@ struct DeviceError : public Error {
             case DSK_INVALID_DENSITY:         return "DSK_INVALID_DENSITY";
             case DSK_INVALID_LAYOUT:          return "DSK_INVALID_LAYOUT";
             case DSK_WRONG_SECTOR_COUNT:      return "DSK_WRONG_SECTOR_COUNT";
+            case DSK_INVALID_TRACK_SIZE:      return "DSK_INVALID_TRACK_SIZE";
+            case DSK_INVALID_TRACK_NUMBER:    return "DSK_INVALID_TRACK_NUMBER";
             case DSK_INVALID_SECTOR_NUMBER:   return "DSK_INVALID_SECTOR_NUMBER";
 
             case HDR_TOO_LARGE:               return "HDR_TOO_LARGE";

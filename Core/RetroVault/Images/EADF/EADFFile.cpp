@@ -154,6 +154,18 @@ EADFFile::getDensity() const noexcept
     return bitsInLargestTrack < 16000 * 8 ? Density::DD : Density::HD;
 }
 
+BitView
+EADFFile::encode(TrackNr t) const
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
+void
+EADFFile::decode(TrackNr t, BitView bits)
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
 isize
 EADFFile::storedTracks() const
 {

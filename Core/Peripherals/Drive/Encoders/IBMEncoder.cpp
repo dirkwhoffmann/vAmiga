@@ -12,6 +12,7 @@
 #include "DeviceError.h"
 #include "MFM.h"
 #include "utl/support/Bits.h"
+#include <array>
 
 namespace vamiga {
 
@@ -24,7 +25,7 @@ IBMEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
     const isize ssize = 1300;                      // MFM sector size in bytes
     const isize count = (isize)src.size() / bsize; // Number of sectors to encode
 
-    if constexpr (debug::IMG_DEBUG) fprintf(stderr, "Encoding DOS track %ld with %ld sectors\n", t, count);
+    loginfo(IMG_DEBUG, "Encoding DOS track %ld with %ld sectors\n", t, count);
     assert(src.size() % bsize == 0);
 
     // Format track
@@ -48,7 +49,7 @@ IBMEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
         encodeSector(track, 194 + s * ssize, t, s, ByteView(src.subspan(s * bsize, bsize)));
 
     // Compute a debug checksum
-    if constexpr (debug::IMG_DEBUG) fprintf(stderr, "Track %ld checksum = %x\n", t, track.fnv32());
+    loginfo(IMG_DEBUG, "Track %ld checksum = %x\n", t, track.fnv32());
 }
 
 void
@@ -128,7 +129,7 @@ IBMEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
 
-    if constexpr (debug::IMG_DEBUG) fprintf(stderr, "Decoding DOS track %ld\n", t);
+    loginfo(IMG_DEBUG, "Decoding DOS track %ld\n", t);
     assert(dst.size() % bsize == 0);
 
     // Find all IDAM blocks
@@ -152,7 +153,7 @@ IBMEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
     const isize bsize = 512;
     assert(dst.size() == bsize);
 
-    if constexpr (debug::MFM_DEBUG) fprintf(stderr, "Decoding DOS sector at offset %ld\n", offset);
+    loginfo(MFM_DEBUG, "Decoding DOS sector at offset %ld\n", offset);
 
     // Initialize an iterator at the position of the IDAM block
     auto it = track.cyclic_begin(offset);
@@ -246,7 +247,7 @@ IBMEncoder::seekSectors(ByteView track)
         // Decode CHRN block
         struct { u8 c, h, r, n; } chrn;
         MFM::decodeMFM((u8 *)&chrn, &it[8], 4);
-        if constexpr (debug::IMG_DEBUG) fprintf(stderr, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
+        loginfo(IMG_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
 
         if (chrn.r >= 1 && chrn.r <= numSectors) {
 

@@ -26,6 +26,9 @@ using retro::vault::device::GeometryDescriptor;
 
 class ADFFile : public FloppyDiskImage {
 
+    using MFMTrack = std::vector<u8>;
+    mutable std::vector<MFMTrack> mfmTracks {168};
+
 public:
 
     static constexpr isize ADFSIZE_35_DD    = 901120;   //  880 KB
@@ -119,7 +122,10 @@ public:
     Diameter getDiameter() const noexcept override;
     Density getDensity() const noexcept override;
 
-    
+    BitView encode(TrackNr t) const override;
+    void decode(TrackNr t, BitView bits) override;
+
+
     //
     // Querying disk properties
     //

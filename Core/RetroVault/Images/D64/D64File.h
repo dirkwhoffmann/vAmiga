@@ -97,6 +97,9 @@ public:
     Diameter getDiameter() const noexcept override;
     Density getDensity() const noexcept override;
 
+    BitView encode(TrackNr t) const override;
+    void decode(TrackNr t, BitView bits) override;
+
 
     //
     // Querying disk properties

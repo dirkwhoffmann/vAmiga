@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FileSystems/Amiga/FSBootBlockImage.h"
 #include "EADFFile.h"
+#include "AmigaEncoder.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
@@ -205,6 +206,42 @@ Density
 ADFFile::getDensity() const noexcept
 {
     return (data.size & ~1) == ADFSIZE_35_HD ? Density::HD : Density::DD;
+}
+
+BitView
+ADFFile::encode(TrackNr t) const
+{
+    const isize MFMSectorSize = 1088;
+    const isize MFMTrackBytes = MFMSectorSize * numSectors(t);
+
+    if (t < 0 || t >= numTracks())
+        throw DeviceError(DeviceError::DSK_INVALID_TRACK_NUMBER, t);
+
+    auto &track = mfmTracks.at(t);
+
+    // Resize the MFM data cache if necessary
+    if (isize(track.size()) != MFMTrackBytes) track.resize(MFMTrackBytes);
+
+    // Encode the track
+    auto mfmByteView = MutableByteView(track.data(), MFMTrackBytes);
+    vamiga::Encoder::amiga.encodeTrack(mfmByteView, t, byteView(t));
+
+    // Return a bit view for the cached MFM data
+    return BitView(mfmByteView.data(), MFMSectorSize * 8);
+}
+
+void
+ADFFile::decode(TrackNr t, BitView bits)
+{
+    if (t < 0 || t >= numTracks())
+        throw DeviceError(DeviceError::DSK_INVALID_TRACK_NUMBER, t);
+
+    // Create views
+    auto dataByteView = byteView(t);
+    auto mfmByteView  = bits.byteView();
+
+    // Decode track
+    vamiga::Encoder::amiga.decodeTrack(mfmByteView, t, dataByteView);
 }
 
 FSDescriptor

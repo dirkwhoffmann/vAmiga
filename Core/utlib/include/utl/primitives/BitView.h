@@ -49,7 +49,8 @@ public:
     // Provides a byte-level view
     constexpr auto byteView() const
     {
-        if constexpr (std::is_const_v<decltype(*this)>) {
+        // if constexpr (std::is_const_v<decltype(*this)>) {
+        if constexpr (std::is_const_v<T>) {
             return ByteView(sp);
         } else {
             return MutableByteView(sp);

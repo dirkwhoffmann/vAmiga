@@ -21,11 +21,11 @@ public:
 
     static optional<ImageInfo> about(const fs::path &path);
 
-    
+
     //
     // Initializing
     //
-    
+
 public:
 
     explicit DMSFile(const fs::path &path) { init(path); }
@@ -56,11 +56,11 @@ public:
     bool validateURL(const fs::path& path) const noexcept override {
         return about(path).has_value();
     }
-    
+
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::DMS; }
     std::vector<string> describe() const noexcept override;
-    
+
     void didLoad() override;
 
 
@@ -104,6 +104,9 @@ public:
 
     Diameter getDiameter() const noexcept override { return adf.getDiameter(); }
     Density getDensity() const noexcept override { return adf.getDensity(); }
+
+    BitView encode(TrackNr t) const override { return adf.encode(t); }
+    void decode(TrackNr t, BitView bits) override { return adf.decode(t, bits); }
 };
 
 }

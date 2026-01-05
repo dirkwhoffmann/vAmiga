@@ -103,6 +103,10 @@ public:
 
     Diameter getDiameter() const noexcept override { return adf.getDiameter(); }
     Density getDensity() const noexcept override { return adf.getDensity(); }
+
+    BitView encode(TrackNr t) const override { return adf.encode(t); }
+    void decode(TrackNr t, BitView bits) override { return adf.decode(t, bits); }
+
 };
 
 }

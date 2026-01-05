@@ -27,18 +27,32 @@ public:
     static unique_ptr<FloppyDiskImage> tryMake(const fs::path &path);
     static unique_ptr<FloppyDiskImage> make(const fs::path &path);
 
+
+    //
+    // Querying floppy disk properties
+    //
+
+public:
+
     // Returns the disk diameter and density
     virtual Diameter getDiameter() const noexcept = 0;
     virtual Density getDensity() const noexcept = 0;
+    bool isSD() const noexcept { return getDensity() == Density::SD; }
+    bool isDD() const noexcept { return getDensity() == Density::DD; }
+    bool isHD() const noexcept { return getDensity() == Density::HD; }
 
     // Returns a string representation for the diameter and density
     virtual string getDiameterStr() const noexcept;
     virtual string getDensityStr() const noexcept;
 
-    // Convenience wrappers
-    bool isSD() const noexcept { return getDensity() == Density::SD; }
-    bool isDD() const noexcept { return getDensity() == Density::DD; }
-    bool isHD() const noexcept { return getDensity() == Density::HD; }
+    //
+    // Encoding and decoding
+    //
+
+public:
+
+    virtual BitView encode(TrackNr t) const = 0;
+    virtual void decode(TrackNr t, BitView bits) = 0;
 };
 
 }

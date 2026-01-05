@@ -31,29 +31,46 @@ class BaseByteView : public Hashable, public Dumpable {
 public:
 
     constexpr BaseByteView() = default;
-    constexpr BaseByteView(T* data, isize size) {
-
+    constexpr BaseByteView(T* data, isize size)
+    {
         assert(size >= 0);
         sp = std::span(data, size_t(size));
     }
 
-    constexpr explicit BaseByteView(std::span<T> bytes) {
+    /*
+    constexpr explicit BaseByteView(const std::span<T> bytes)
+    requires std::is_const_v<T>
+    {
+        sp = bytes;
+    }
+    */
 
+    constexpr explicit BaseByteView(const std::span<T> bytes)
+    {
         sp = bytes;
     }
 
+    /*
     constexpr BaseByteView(const BaseByteView<u8>& other)
-            // requires std::is_const_v<T>
-        : sp(other.span()) {}
-    
-    constexpr T &operator[](isize i) const {
+    requires std::is_const_v<T>
+    {
+        sp = other.span();
+    }
+    */
 
+    constexpr BaseByteView(const BaseByteView<u8>& other)
+    {
+        sp = other.span();
+    }
+
+    constexpr T &operator[](isize i) const
+    {
         assert(i >= 0 && i < isize(sp.size()));
         return sp[i];
     }
 
-    constexpr operator std::span<T>() const {
-
+    constexpr operator std::span<T>() const
+    {
         return sp;
     }
 

@@ -46,11 +46,11 @@ public:
     bool validateURL(const fs::path& path) const noexcept override {
         return about(path).has_value();
     }
-    
+
     ImageType type() const noexcept override { return ImageType::FLOPPY; }
     ImageFormat format() const noexcept override { return ImageFormat::ST; }
     std::vector<string> describe() const noexcept override;
-    
+
 
     //
     // Methods from DiskImage
@@ -81,15 +81,18 @@ public:
     isize numSectors(isize) const override { return numSectors(); }
     isize numSectors() const;
 
-    
+
     //
     // Methods from FloppyDiskImage
     //
 
 public:
-    
+
     Diameter getDiameter() const noexcept override { return Diameter::INCH_35; }
     Density getDensity() const noexcept override { return Density::DD; }
+
+    BitView encode(TrackNr t) const override;
+    void decode(TrackNr t, BitView bits) override;
 };
 
 }

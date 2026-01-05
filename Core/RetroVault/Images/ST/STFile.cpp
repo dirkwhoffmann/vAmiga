@@ -75,4 +75,16 @@ STFile::numSectors() const
     return 9;
 }
 
+BitView
+STFile::encode(TrackNr t) const
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
+void
+STFile::decode(TrackNr t, BitView bits)
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
 }

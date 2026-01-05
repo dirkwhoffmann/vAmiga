@@ -95,6 +95,18 @@ D64File::getDensity() const noexcept
     return Density::SD;
 }
 
+BitView
+D64File::encode(TrackNr t) const
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
+void
+D64File::decode(TrackNr t, BitView bits)
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
 bool
 D64File::hasEcc() const noexcept
 {
