@@ -36,27 +36,6 @@ MediaError::MediaError(long code, const string &s) : Error(code)
                     " emulator into an inconsistent state.");
             break;
 
-        case DMS_CANT_CREATE:
-            set_msg("Failed to extract the DMS archive.");
-            break;
-
-        case EXT_FACTOR5:
-            set_msg("The file is encoded in an outdated format that was"
-                    " introduced by Factor 5 to distribute Turrican images."
-                    " The format has no relevance today and is not supported"
-                    " by the emulator.");
-            break;
-
-        case EXT_INCOMPATIBLE:
-            set_msg("This file utilizes encoding features of the extended "
-                    " ADF format that are not supported by the emulator yet.");
-            break;
-
-        case EXT_CORRUPTED:
-            set_msg("The disk encoder failed to extract the disk due to "
-                    " corrupted or inconsistend file data.");
-            break;
-
         case MISSING_ROM_KEY:
             set_msg("No \"rom.key\" file found.");
             break;

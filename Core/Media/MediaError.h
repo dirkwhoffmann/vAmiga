@@ -26,12 +26,6 @@ struct MediaError : public Error {
     static constexpr long SNAP_IS_BETA      = 12; ///< Snapshot was created with a beta release
     static constexpr long SNAP_CORRUPTED    = 13; ///< Snapshot data is corrupted
 
-    // Disk images
-    static constexpr long DMS_CANT_CREATE   = 20;
-    static constexpr long EXT_FACTOR5       = 21;
-    static constexpr long EXT_INCOMPATIBLE  = 22;
-    static constexpr long EXT_CORRUPTED     = 23;
-
     // Encrypted Roms
     static constexpr long MISSING_ROM_KEY   = 30;
     static constexpr long INVALID_ROM_KEY   = 31;
@@ -47,11 +41,6 @@ struct MediaError : public Error {
             case SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
             case SNAP_IS_BETA:                return "SNAP_IS_BETA";
             case SNAP_CORRUPTED:              return "SNAP_CORRUPTED";
-
-            case DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
-            case EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
-            case EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
-            case EXT_CORRUPTED:               return "EXT_CORRUPTED";
 
             case MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case INVALID_ROM_KEY:             return "INVALID_ROM_KEY";

@@ -6,6 +6,7 @@ target_sources(VACore PRIVATE
     DiskImage.cpp
     FloppyDiskImage.cpp
     HardDiskImage.cpp
+    ImageError.cpp
 )
 
 add_subdirectory(ADF)
@@ -13,6 +14,7 @@ add_subdirectory(ADZ)
 add_subdirectory(D64)
 add_subdirectory(DMS)
 add_subdirectory(EADF)
+add_subdirectory(Encoders)
 add_subdirectory(EXE)
 add_subdirectory(HDF)
 add_subdirectory(HDZ)

@@ -1,8 +1,16 @@
+// -----------------------------------------------------------------------------
+// This file is part of RetroVault
 //
-//  GCR.cpp
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
 //
-//  Created by Dirk Hoffmann on 30.12.25.
-//  Copyright © 2025 Dirk Hoffmann. All rights reserved.
-//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "GCR.h"
+#include "utl/support/Bits.h"
+
+namespace retro::vault::image::GCR {
+
+}

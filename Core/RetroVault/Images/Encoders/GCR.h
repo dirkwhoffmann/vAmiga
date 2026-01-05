@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of RetroVault
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the Mozilla Public License v2
@@ -11,12 +11,8 @@
 
 #include "utl/common.h"
 
-namespace retro::vault::image {
+namespace retro::vault::image::GCR {
 
 using namespace utl;
-
-namespace GCR {
-
-}
 
 }

@@ -9,5 +9,3 @@ HardDrive.cpp
 FloppyDisk.cpp
 
 )
-
-add_subdirectory(Encoders)

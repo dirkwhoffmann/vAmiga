@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of RetroVault
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
@@ -13,12 +13,11 @@
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "FileSystems/Amiga/FileSystem.h"
-#include "MediaError.h"
+#include "ImageError.h"
 #include "utl/io.h"
 
 namespace retro::vault::image {
 
-using vamiga::MediaError;
 using vamiga::FloppyDisk;
 
 const std::vector<string> EADFFile::extAdfHeaders =
@@ -74,19 +73,19 @@ EADFFile::didLoad()
     if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
         
         logwarn("Only UAE-1ADF files are supported\n");
-        throw MediaError(MediaError::EXT_FACTOR5);
+        throw ImageError(ImageError::EXT_FACTOR5);
     }
     
     if (numTracks < 160 || numTracks > 168) {
 
         logwarn("Invalid number of tracks\n");
-        throw MediaError(MediaError::EXT_CORRUPTED);
+        throw ImageError(ImageError::EXT_CORRUPTED);
     }
 
     if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
         
         logwarn("File size mismatch\n");
-        throw MediaError(MediaError::EXT_CORRUPTED);
+        throw ImageError(ImageError::EXT_CORRUPTED);
     }
 
     for (isize i = 0; i < numTracks; i++) {
@@ -94,7 +93,7 @@ EADFFile::didLoad()
         if (typeOfTrack(i) != 0 && typeOfTrack(i) != 1) {
             
             logwarn("Unsupported track format\n");
-            throw MediaError(MediaError::EXT_INCOMPATIBLE);
+            throw ImageError(ImageError::EXT_INCOMPATIBLE);
         }
 
         if (typeOfTrack(i) == 0) {
@@ -102,14 +101,14 @@ EADFFile::didLoad()
             if (usedBitsForTrack(i) != 11 * 512 * 8) {
 
                 logwarn("Unsupported standard track size\n");
-                throw MediaError(MediaError::EXT_CORRUPTED);
+                throw ImageError(ImageError::EXT_CORRUPTED);
             }
         }
 
         if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
             
             logwarn("Corrupted length information\n");
-            throw MediaError(MediaError::EXT_CORRUPTED);
+            throw ImageError(ImageError::EXT_CORRUPTED);
         }
 
         if (usedBitsForTrack(i) % 8) {

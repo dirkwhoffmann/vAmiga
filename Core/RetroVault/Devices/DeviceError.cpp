@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of RetroVault
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the Mozilla Public License v2
@@ -78,13 +78,13 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
             break;
 
         case HDR_TOO_LARGE:
-            set_msg(string("vAmiga supports hard drives with a maximum capacity of ") +
-                    "504 MB.");
+            set_msg(string("Hard drives with a maximum capacity of ") +
+                    "504 MB are supported");
             break;
 
         case HDR_UNSUPPORTED_CYL_CNT:
             set_msg(string("The geometry of this drive is not supported. ") +
-                    "vAmiga supports hard drives with " +
+                    "Hard drives are supported with " +
                     "at least " + std::to_string(HDR_C_MIN) + " and " +
                     "at most " + std::to_string(HDR_C_MAX) + " cylinders. " +
                     "This drive has " + s + " cylinders.");
@@ -92,7 +92,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 
         case HDR_UNSUPPORTED_HEAD_CNT:
             set_msg(string("The geometry of this drive is not supported. ") +
-                    "vAmiga supports hard drives with " +
+                    "Hard drives are supported with " +
                     "at least " + std::to_string(HDR_H_MIN) + " and " +
                     "at most " + std::to_string(HDR_H_MAX) + " heads. " +
                     "The drive has " + s + " heads.");
@@ -100,7 +100,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 
         case HDR_UNSUPPORTED_SEC_CNT:
             set_msg(string("The geometry of this drive is not supported. ") +
-                    "vAmiga only supports hard drives with " +
+                    "Hard drives are supported with " +
                     "at least " + std::to_string(HDR_S_MIN) + " and " +
                     "at most " + std::to_string(HDR_S_MAX) + " sectors. " +
                     "The drive stores " + s + " sectors per track.");
@@ -108,13 +108,13 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 
         case HDR_UNSUPPORTED_BSIZE:
             set_msg(string("The geometry of this drive is not supported. ") +
-                    "vAmiga only supports hard drives with a " +
+                    "Hard drives are supported with s " +
                     "block size of 512 bytes. " +
                     "The drive stores " + s + " bytes per block.");
             break;
 
         case HDR_UNKNOWN_GEOMETRY:
-            set_msg("vAmiga failed to derive to geometry of this drive.");
+            set_msg("Failed to derive to geometry of this drive.");
             break;
 
         case HDR_UNMATCHED_GEOMETRY:

@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of RetroVault
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the GNU General Public License v3
@@ -9,12 +9,10 @@
 
 #include "config.h"
 #include "DMSFile.h"
-#include "MediaError.h"
+#include "ImageError.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <format>
-
-using vamiga::MediaError;
 
 extern "C" {
 unsigned short extractDMS(const unsigned char *in, size_t inSize,
@@ -64,7 +62,7 @@ DMSFile::didLoad()
     }
     
     if (adfData) free(adfData);
-    if (adf.empty()) throw MediaError(MediaError::DMS_CANT_CREATE);
+    if (adf.empty()) throw ImageError(ImageError::DMS_CANT_CREATE);
 }
 
 }
