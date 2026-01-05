@@ -13,7 +13,7 @@
 #include "MFM.h"
 #include "utl/support/Bits.h"
 
-namespace vamiga {
+namespace retro::vault::image {
 
 namespace Encoder { AmigaEncoder amiga; }
 
@@ -125,7 +125,7 @@ AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
     for (SectorNr s = 0; s < count; s++) {
 
         if (!offsets.contains(s))
-            throw DeviceError(DeviceError::DEV_SEEK_ERR);
+            throw DeviceError(DeviceError::SEEK_ERR);
 
         auto *secData = dst.data() + s * bsize;
         decodeSector(track, offsets[s], MutableByteView(span<u8>(secData, bsize)));
@@ -185,7 +185,7 @@ AmigaEncoder::seekSector(ByteView track, SectorNr s, isize offset)
     if (auto result = trySeekSector(track, s, offset))
         return *result;
 
-    throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
+    throw DeviceError(DeviceError::INVALID_SECTOR_NR);
 }
 
 std::unordered_map<isize, isize>

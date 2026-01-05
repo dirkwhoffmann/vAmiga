@@ -14,7 +14,7 @@
 #include "utl/support/Bits.h"
 #include <array>
 
-namespace vamiga {
+namespace retro::vault::image {
 
 namespace Encoder { IBMEncoder ibm; }
 
@@ -139,7 +139,7 @@ IBMEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
     for (SectorNr s = 0; s < count; s++) {
 
         if (!offsets.contains(s))
-            throw DeviceError(DeviceError::DEV_SEEK_ERR,
+            throw DeviceError(DeviceError::SEEK_ERR,
                               "Sector " + std::to_string(s) + " not found");
 
         auto *secData = dst.data() + s * bsize;
@@ -180,7 +180,7 @@ IBMEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
 
         return;
     }
-    throw DeviceError(DeviceError::DEV_SEEK_ERR,
+    throw DeviceError(DeviceError::SEEK_ERR,
                       "No DAM found for IDAM at " + std::to_string(offset));
 }
 
@@ -218,7 +218,7 @@ IBMEncoder::seekSector(ByteView track, SectorNr s, isize offset)
     if (auto result = trySeekSector(track, s, offset))
         return *result;
 
-    throw DeviceError(DeviceError::DEV_SEEK_ERR,
+    throw DeviceError(DeviceError::SEEK_ERR,
                       "Sector " + std::to_string(s) + " not found");
 }
 
@@ -257,12 +257,12 @@ IBMEncoder::seekSectors(ByteView track)
             result[chrn.r - 1] = it.offset();
 
         } else {
-            throw DeviceError(DeviceError::DSK_INVALID_SECTOR_NUMBER);
+            throw DeviceError(DeviceError::INVALID_SECTOR_NR);
         }
     }
 
     if (result.size() != numSectors) {
-        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_COUNT);
+        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
     }
 
     return result;

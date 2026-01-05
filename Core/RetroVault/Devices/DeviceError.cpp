@@ -17,15 +17,35 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
 {
     switch (code)
     {
-        case DEV_SEEK_ERR:
+        case INVALID_BLOCK_NR:
+            set_msg("Invalid block index: " + s);
+            break;
+
+        case INVALID_TRACK_NR:
+            set_msg("Invalid track index: " + s);
+            break;
+
+        case INVALID_SECTOR_NR:
+            set_msg("Invalid sector index: " + s);
+            break;
+
+        case INVALID_CYLINDER_NR:
+            set_msg("Invalid sector index: " + s);
+            break;
+            
+        case INVALID_HEAD_NR:
+            set_msg("Invalid sector index: " + s);
+            break;
+
+        case SEEK_ERR:
             set_msg("Seek error: " + s);
             break;
 
-        case DEV_READ_ERR:
+        case READ_ERR:
             set_msg("Read error: " + s);
             break;
 
-        case DEV_WRITE_ERR:
+        case WRITE_ERR:
             set_msg("Write error: " + s);
             break;
 
@@ -49,7 +69,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
             set_msg("The disk density and disk diameter do not match.");
             break;
 
-        case DSK_WRONG_SECTOR_COUNT:
+        case DSK_WRONG_SECTOR_CNT:
             set_msg("Unable to decode the MFM bit stream (wrong sector count).");
             break;
 
@@ -57,20 +77,12 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
             set_msg("Invalid track size: " + s);
             break;
 
-        case DSK_INVALID_TRACK_NUMBER:
-            set_msg("Invalid track number: " + s);
-            break;
-
-        case DSK_INVALID_SECTOR_NUMBER:
-            set_msg("Invalid sector number: " + s);
-            break;
-
         case HDR_TOO_LARGE:
             set_msg(string("vAmiga supports hard drives with a maximum capacity of ") +
                     "504 MB.");
             break;
 
-        case HDR_UNSUPPORTED_CYL_COUNT:
+        case HDR_UNSUPPORTED_CYL_CNT:
             set_msg(string("The geometry of this drive is not supported. ") +
                     "vAmiga supports hard drives with " +
                     "at least " + std::to_string(HDR_C_MIN) + " and " +
@@ -78,7 +90,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
                     "This drive has " + s + " cylinders.");
             break;
 
-        case HDR_UNSUPPORTED_HEAD_COUNT:
+        case HDR_UNSUPPORTED_HEAD_CNT:
             set_msg(string("The geometry of this drive is not supported. ") +
                     "vAmiga supports hard drives with " +
                     "at least " + std::to_string(HDR_H_MIN) + " and " +
@@ -86,7 +98,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
                     "The drive has " + s + " heads.");
             break;
 
-        case HDR_UNSUPPORTED_SEC_COUNT:
+        case HDR_UNSUPPORTED_SEC_CNT:
             set_msg(string("The geometry of this drive is not supported. ") +
                     "vAmiga only supports hard drives with " +
                     "at least " + std::to_string(HDR_S_MIN) + " and " +

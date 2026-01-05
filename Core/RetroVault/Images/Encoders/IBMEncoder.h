@@ -11,7 +11,7 @@
 
 #include "DiskEncoder.h"
 
-namespace vamiga {
+namespace retro::vault::image {
 
 class IBMEncoder : public DiskEncoder {
 

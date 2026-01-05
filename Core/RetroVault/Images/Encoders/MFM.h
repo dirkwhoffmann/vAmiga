@@ -11,7 +11,7 @@
 
 #include "utl/common.h"
 
-namespace vamiga::MFM {
+namespace retro::vault::image::MFM {
 
 using namespace utl;
 

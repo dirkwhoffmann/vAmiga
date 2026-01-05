@@ -13,7 +13,7 @@
 #include "utl/abilities/Loggable.h"
 #include "utl/primitives/BitView.h"
 
-namespace vamiga {
+namespace retro::vault::image {
 
 using namespace utl;
 using namespace retro::vault::device;

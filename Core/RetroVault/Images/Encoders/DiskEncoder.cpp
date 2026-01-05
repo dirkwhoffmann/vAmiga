@@ -10,6 +10,6 @@
 #include "config.h"
 #include "DiskEncoder.h"
 
-namespace vamiga {
+namespace retro::vault::image {
 
 }

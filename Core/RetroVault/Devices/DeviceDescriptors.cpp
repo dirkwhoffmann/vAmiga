@@ -188,13 +188,13 @@ GeometryDescriptor::checkCompatibility() const
         throw DeviceError(DeviceError::HDR_TOO_LARGE);
     }
     if constexpr (force::HDR_UNSUPPORTED_C) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_CNT, cylinders);
     }
     if constexpr (force::HDR_UNSUPPORTED_H) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_COUNT, heads);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_CNT, heads);
     }
     if constexpr (force::HDR_UNSUPPORTED_S) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_COUNT, sectors);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_CNT, sectors);
     }
     if constexpr (force::HDR_UNSUPPORTED_B) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);
@@ -208,13 +208,13 @@ GeometryDescriptor::checkCompatibility() const
         throw DeviceError(DeviceError::HDR_TOO_LARGE);
     }
     if ((cylinders < cMin && heads > 1) || cylinders > cMax) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_CNT, cylinders);
     }
     if (heads < hMin || heads > hMax) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_COUNT, heads);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_CNT, heads);
     }
     if (sectors < sMin || sectors > sMax) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_COUNT, sectors);
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_CNT, sectors);
     }
     if (bsize != 512) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);

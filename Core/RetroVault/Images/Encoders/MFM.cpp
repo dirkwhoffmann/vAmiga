@@ -11,7 +11,7 @@
 #include "MFM.h"
 #include "utl/support/Bits.h"
 
-namespace vamiga::MFM {
+namespace retro::vault::image::MFM {
 
 void
 encodeMFM(u8 *dst, const u8 *src, isize count)

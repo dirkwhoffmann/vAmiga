@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "TrackDevice.h"
+#include "DeviceError.h"
 #include <algorithm>
 
 namespace retro::vault::device {
@@ -39,6 +40,103 @@ TrackDevice::block2track(isize b) const
     // Find the track via binary search
     auto it = std::upper_bound(track2block.begin(), track2block.end(), b);
     return isize(std::distance(track2block.begin(), it) - 1);
+}
+
+bool
+TrackDevice::isValidBlockNr(isize b) const noexcept
+{
+    return b >= 0 && b < numBlocks();
+}
+
+bool
+TrackDevice::isValidTrackNr(isize t) const noexcept
+{
+    return t >= 0 && t < numTracks();
+}
+
+bool
+TrackDevice::isValidSectorNr(isize t, isize s) const noexcept
+{
+    return isValidTrackNr(t) && s >= 0 && s < numSectors(t);
+}
+
+bool
+TrackDevice::isValidCylinderNr(isize c) const noexcept
+{
+    return c >= 0 && c < numCyls();
+}
+
+bool
+TrackDevice::isValidHeadNr(isize h) const noexcept
+{
+    return h >= 0 && h < numHeads();
+}
+
+bool
+TrackDevice::isValidTS(TS ts) const noexcept
+{
+    return isValidSectorNr(ts.track, ts.sector);
+}
+
+bool
+TrackDevice::isValidCHS(CHS chs) const noexcept
+{
+    return isValidCylinderNr(chs.cylinder) &&
+           isValidHeadNr(chs.head) &&
+           isValidSectorNr(chs.cylinder * numHeads() + chs.head, chs.sector);
+}
+
+//
+// Throwing validators
+//
+
+void
+TrackDevice::validateBlockNr(isize b) const
+{
+    if (!isValidBlockNr(b))
+        throw DeviceError(DeviceError::INVALID_BLOCK_NR, b);
+}
+
+void
+TrackDevice::validateTrackNr(isize t) const
+{
+    if (!isValidTrackNr(t))
+        throw DeviceError(DeviceError::INVALID_TRACK_NR, t);
+}
+
+void
+TrackDevice::validateSectorNr(isize t, isize s) const
+{
+    if (!isValidSectorNr(t, s))
+        throw DeviceError(DeviceError::INVALID_SECTOR_NR, s);
+}
+
+void
+TrackDevice::validateCylinderNr(isize c) const
+{
+    if (!isValidCylinderNr(c))
+        throw DeviceError(DeviceError::INVALID_CYLINDER_NR, c);
+}
+
+void
+TrackDevice::validateHeadNr(isize h) const
+{
+    if (!isValidHeadNr(h))
+        throw DeviceError(DeviceError::INVALID_HEAD_NR, h);
+}
+
+void
+TrackDevice::validateTS(TS ts) const
+{
+    validateSectorNr(ts.track, ts.sector);
+}
+
+void
+TrackDevice::validateCHS(CHS chs) const
+{
+    validateCylinderNr(chs.cylinder);
+    validateHeadNr(chs.head);
+    validateSectorNr(chs.cylinder * numHeads() + chs.head, chs.sector);
 }
 
 CHS

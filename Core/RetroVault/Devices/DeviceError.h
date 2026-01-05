@@ -15,13 +15,18 @@ namespace retro::vault::device {
 
 struct DeviceError : public Error {
 
-    static constexpr long DEV_OK                        = 0;
-    static constexpr long DEV_UNKNOWN                   = 1;
+    static constexpr long OK                            = 0;
+    static constexpr long UNKNOWN                       = 1;
 
-    // Device I/O
-    static constexpr long DEV_SEEK_ERR                  = 10;
-    static constexpr long DEV_READ_ERR                  = 11;
-    static constexpr long DEV_WRITE_ERR                 = 12;
+    // All devices
+    static constexpr long INVALID_BLOCK_NR              = 10;
+    static constexpr long INVALID_TRACK_NR              = 11;
+    static constexpr long INVALID_SECTOR_NR             = 12;
+    static constexpr long INVALID_CYLINDER_NR           = 13;
+    static constexpr long INVALID_HEAD_NR               = 14;
+    static constexpr long SEEK_ERR                      = 15;
+    static constexpr long READ_ERR                      = 16;
+    static constexpr long WRITE_ERR                     = 17;
 
     // Floppy disks
     static constexpr long DSK_MISSING                   = 20;
@@ -29,16 +34,14 @@ struct DeviceError : public Error {
     static constexpr long DSK_INVALID_DIAMETER          = 22;
     static constexpr long DSK_INVALID_DENSITY           = 23;
     static constexpr long DSK_INVALID_LAYOUT            = 24;
-    static constexpr long DSK_WRONG_SECTOR_COUNT        = 25;
+    static constexpr long DSK_WRONG_SECTOR_CNT          = 25;
     static constexpr long DSK_INVALID_TRACK_SIZE        = 26;
-    static constexpr long DSK_INVALID_TRACK_NUMBER      = 27;
-    static constexpr long DSK_INVALID_SECTOR_NUMBER     = 28;
 
     // Hard disks
     static constexpr long HDR_TOO_LARGE                 = 30;
-    static constexpr long HDR_UNSUPPORTED_CYL_COUNT     = 31;
-    static constexpr long HDR_UNSUPPORTED_HEAD_COUNT    = 32;
-    static constexpr long HDR_UNSUPPORTED_SEC_COUNT     = 33;
+    static constexpr long HDR_UNSUPPORTED_CYL_CNT       = 31;
+    static constexpr long HDR_UNSUPPORTED_HEAD_CNT      = 32;
+    static constexpr long HDR_UNSUPPORTED_SEC_CNT       = 33;
     static constexpr long HDR_UNSUPPORTED_BSIZE         = 34;
     static constexpr long HDR_UNKNOWN_GEOMETRY          = 35;
     static constexpr long HDR_UNMATCHED_GEOMETRY        = 36;
@@ -52,26 +55,30 @@ struct DeviceError : public Error {
 
         switch (payload) {
 
-            case DEV_UNKNOWN:                 return "UNKNOWN";
+            case UNKNOWN:                     return "UNKNOWN";
 
-            case DEV_SEEK_ERR:                return "DEV_SEEK_ERR";
-            case DEV_READ_ERR:                return "DEV_READ_ERR";
-            case DEV_WRITE_ERR:               return "DEV_WRITE_ERR";
+            case INVALID_BLOCK_NR:            return "INVALID_BLOCK_NR";
+            case INVALID_TRACK_NR:            return "INVALID_TRACK_NR";
+            case INVALID_SECTOR_NR:           return "INVALID_SECTOR_NR";
+            case INVALID_CYLINDER_NR:         return "INVALID_CYLINDER_NR";
+            case INVALID_HEAD_NR:             return "INVALID_HEAD_NR";
+
+            case SEEK_ERR:                    return "SEEK_ERR";
+            case READ_ERR:                    return "READ_ERR";
+            case WRITE_ERR:                   return "WRITE_ERR";
 
             case DSK_MISSING:                 return "DSK_MISSING";
             case DSK_INCOMPATIBLE:            return "DSK_INCOMPATIBLE";
             case DSK_INVALID_DIAMETER:        return "DSK_INVALID_DIAMETER";
             case DSK_INVALID_DENSITY:         return "DSK_INVALID_DENSITY";
             case DSK_INVALID_LAYOUT:          return "DSK_INVALID_LAYOUT";
-            case DSK_WRONG_SECTOR_COUNT:      return "DSK_WRONG_SECTOR_COUNT";
+            case DSK_WRONG_SECTOR_CNT:        return "DSK_WRONG_SECTOR_CNT";
             case DSK_INVALID_TRACK_SIZE:      return "DSK_INVALID_TRACK_SIZE";
-            case DSK_INVALID_TRACK_NUMBER:    return "DSK_INVALID_TRACK_NUMBER";
-            case DSK_INVALID_SECTOR_NUMBER:   return "DSK_INVALID_SECTOR_NUMBER";
 
             case HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
-            case HDR_UNSUPPORTED_CYL_COUNT:   return "HDR_UNSUPPORTED_CYL_COUNT";
-            case HDR_UNSUPPORTED_HEAD_COUNT:  return "HDR_UNSUPPORTED_HEAD_COUNT";
-            case HDR_UNSUPPORTED_SEC_COUNT:   return "HDR_UNSUPPORTED_SEC_COUNT";
+            case HDR_UNSUPPORTED_CYL_CNT:     return "HDR_UNSUPPORTED_CYL_CNT";
+            case HDR_UNSUPPORTED_HEAD_CNT:    return "HDR_UNSUPPORTED_HEAD_CNT";
+            case HDR_UNSUPPORTED_SEC_CNT:     return "HDR_UNSUPPORTED_SEC_CNT";
             case HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
             case HDR_UNKNOWN_GEOMETRY:        return "HDR_UNKNOWN_GEOMETRY";
             case HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";

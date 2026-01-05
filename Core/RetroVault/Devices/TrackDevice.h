@@ -64,6 +64,33 @@ public:
 
 
     //
+    // Validating indices
+    //
+
+public:
+
+    // Non-throwing
+    bool isValidBlockNr(isize b) const noexcept;
+    bool isValidTrackNr(isize t) const noexcept;
+    bool isValidSectorNr(isize t, isize s) const noexcept;
+    bool isValidCylinderNr(isize c) const noexcept;
+    bool isValidHeadNr(isize h) const noexcept;
+
+    bool isValidTS(TS ts) const noexcept;
+    bool isValidCHS(CHS chs) const noexcept;
+
+    // Throwing
+    void validateBlockNr(isize b) const;
+    void validateTrackNr(isize t) const;
+    void validateSectorNr(isize t, isize s) const;
+    void validateCylinderNr(isize c) const;
+    void validateHeadNr(isize h) const;
+
+    void validateTS(TS ts) const;
+    void validateCHS(CHS chs) const;
+
+
+    //
     // Mapping [c]ylinders, [h]eads, [s]ectors, [b]locks
     //
 

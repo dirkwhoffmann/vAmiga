@@ -1163,7 +1163,7 @@
 		50BF4B3A2EFD5E7300F1B9F2 /* ByteView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ByteView.h; sourceTree = "<group>"; };
 		50BF4B3B2EFD618700F1B9F2 /* BitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BitView.h; sourceTree = "<group>"; };
 		50BF4B3C2F026C3E00F1B9F2 /* Streamable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Streamable.h; sourceTree = "<group>"; };
-		50BF4B3E2F03D66600F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50BF4B3E2F03D66600F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50BF4B3F2F03D6AB00F1B9F2 /* AmigaEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaEncoder.h; sourceTree = "<group>"; };
 		50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaEncoder.cpp; sourceTree = "<group>"; };
 		50BF4B432F03D6EA00F1B9F2 /* IBMEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IBMEncoder.h; sourceTree = "<group>"; };
@@ -2312,7 +2312,6 @@
 				50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */,
 				50BF4B602F05077B00F1B9F2 /* Codecs.h */,
 				50BF4B612F05078200F1B9F2 /* Codecs.cpp */,
-				50BF4B3D2F03D65600F1B9F2 /* Encoders */,
 			);
 			path = Drive;
 			sourceTree = "<group>";
@@ -2723,6 +2722,7 @@
 				505A19432EDDF63C000BB9C2 /* DMS */,
 				505A19442EDDF647000BB9C2 /* EXE */,
 				50BF4B532F04706900F1B9F2 /* D64 */,
+				50BF4B3D2F03D65600F1B9F2 /* Encoders */,
 			);
 			path = Images;
 			sourceTree = "<group>";

@@ -214,17 +214,16 @@ ADFFile::encode(TrackNr t) const
     const isize MFMSectorSize = 1088;
     const isize MFMTrackBytes = MFMSectorSize * numSectors(t);
 
-    if (t < 0 || t >= numTracks())
-        throw DeviceError(DeviceError::DSK_INVALID_TRACK_NUMBER, t);
-
+    // Get the proper entry from the MFM data cache
+    validateTrackNr(t);
     auto &track = mfmTracks.at(t);
 
-    // Resize the MFM data cache if necessary
+    // Resize if necessary
     if (isize(track.size()) != MFMTrackBytes) track.resize(MFMTrackBytes);
 
     // Encode the track
     auto mfmByteView = MutableByteView(track.data(), MFMTrackBytes);
-    vamiga::Encoder::amiga.encodeTrack(mfmByteView, t, byteView(t));
+    Encoder::amiga.encodeTrack(mfmByteView, t, byteView(t));
 
     // Return a bit view for the cached MFM data
     return BitView(mfmByteView.data(), MFMSectorSize * 8);
@@ -234,14 +233,14 @@ void
 ADFFile::decode(TrackNr t, BitView bits)
 {
     if (t < 0 || t >= numTracks())
-        throw DeviceError(DeviceError::DSK_INVALID_TRACK_NUMBER, t);
+        throw DeviceError(DeviceError::INVALID_TRACK_NR, t);
 
     // Create views
     auto dataByteView = byteView(t);
     auto mfmByteView  = bits.byteView();
 
     // Decode track
-    vamiga::Encoder::amiga.decodeTrack(mfmByteView, t, dataByteView);
+    Encoder::amiga.decodeTrack(mfmByteView, t, dataByteView);
 }
 
 FSDescriptor
@@ -274,7 +273,8 @@ ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
     retro::vault::amigafs::FSFormatEnum::validate(dos);
 
     loginfo(ADF_DEBUG,
-            "Formatting disk (%ld, %s)\n", numBlocks(), retro::vault::amigafs::FSFormatEnum::key(dos));
+            "Formatting disk (%ld, %s)\n",
+            numBlocks(), retro::vault::amigafs::FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given
     if (dos == FSFormat::NODOS) return;
