@@ -16,6 +16,18 @@ namespace retro::vault::device {
 using namespace utl;
 
 //
+// Aliases
+//
+
+// Track devices
+using BlockNr = u32;  // TODO: REPLACE BY isize
+using CylNr = isize;
+using HeadNr = isize;
+using SectorNr = isize;
+using TrackNr = isize;
+
+
+//
 // Constants
 //
 
@@ -26,17 +38,6 @@ static const isize HDR_H_MIN =  1;
 static const isize HDR_H_MAX =  16;
 static const isize HDR_S_MIN =  16;
 static const isize HDR_S_MAX =  63;
-
-
-//
-// Aliases
-//
-
-// Track devices
-typedef isize CylNr;
-typedef isize HeadNr;
-typedef isize SectorNr;
-typedef isize TrackNr;
 
 
 //

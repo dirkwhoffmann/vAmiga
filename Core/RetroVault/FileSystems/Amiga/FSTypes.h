@@ -9,15 +9,14 @@
 
 #pragma once
 
-#include "utl/abilities/Reflectable.h"
+#include "DeviceTypes.h"
 
 namespace retro::vault::amigafs {
 
 using namespace utl;
+using device::BlockNr;
 
 struct FSBlock;
-
-using BlockNr = u32;
 
 enum class FSFormat : long
 {
