@@ -349,7 +349,7 @@ NavigatorConsole::requireFormattedFS() const
 void
 NavigatorConsole::exportBlocks(fs::path path)
 {
-    fs->exporter.exportBlocks(path);
+    fs->exporter.exportVolume(path);
 }
 
 BlockNr
@@ -801,7 +801,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         
                     } else {
                         
-                        fs->exporter.exportBlocks("/export");
+                        fs->exporter.exportVolume("/export");
                         auto name = fs->stat().name;
                         name += fs->getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );

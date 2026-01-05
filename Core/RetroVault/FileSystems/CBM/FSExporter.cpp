@@ -16,42 +16,43 @@ namespace retro::vault::cbmfs {
 
 using namespace utl;
 
-bool
+void
 FSExporter::exportVolume(u8 *dst, isize size) const
 {
-    return exportBlocks(0, (BlockNr)(fs.blocks() - 1), dst, size);
+    exportBlocks(0, (BlockNr)(fs.blocks() - 1), dst, size);
 }
 
-bool
-FSExporter::exportVolume(u8 *dst, isize size, FSFault *err) const
+void
+FSExporter::exportVolume(TrackDevice &dev) const
 {
-    return exportBlocks(0, (BlockNr)(fs.blocks() - 1), dst, size, err);
+    auto& traits = fs.getTraits();
+
+    if (fs.getTraits().bsize != dev.bsize())
+        throw FSError(FSError::FS_WRONG_BSIZE);
+
+    if (fs.getTraits().blocks != dev.capacity())
+        throw FSError(FSError::FS_WRONG_CAPACITY);
+
+    for (isize i = 0; i < traits.blocks; ++i)
+        dev.writeBlock(fs.fetch(i).data(), i);
 }
 
-bool
+void
+FSExporter::exportVolume(const fs::path &path) const
+{
+    if (traits.blocks) {
+        exportBlocks(0, BlockNr(traits.blocks - 1), path);
+    }
+}
+
+void
 FSExporter::exportBlock(BlockNr nr, u8 *dst, isize size) const
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
-bool
-FSExporter::exportBlock(BlockNr nr, u8 *dst, isize size, FSFault *error) const
-{
-    return exportBlocks(nr, nr, dst, size, error);
-}
-
-bool
+void
 FSExporter::exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size) const
-{
-    FSFault error;
-    bool result = exportBlocks(first, last, dst, size, &error);
-
-    assert(result == (error == FSError::FS_OK));
-    return result;
-}
-
-bool
-FSExporter::exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size, FSFault *err) const
 {
     assert(last < (BlockNr)fs.blocks());
     assert(first <= last);
@@ -62,16 +63,10 @@ FSExporter::exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size, FSFau
     loginfo(FS_DEBUG, "Exporting %ld blocks (%ld - %ld)\n", count, first, last);
 
     // Only proceed if the (predicted) block size matches
-    if (size % traits.bsize != 0) {
-        if (err) *err = FSError::FS_WRONG_BSIZE;
-        return false;
-    }
+    if (size % traits.bsize != 0) throw FSError(FSError::FS_WRONG_BSIZE);
 
     // Only proceed if the source buffer contains the right amount of data
-    if (count * traits.bsize != size) {
-        if (err) *err = FSError::FS_WRONG_CAPACITY;
-        return false;
-    }
+    if (count * traits.bsize != size) throw FSError(FSError::FS_WRONG_CAPACITY);
 
     // Wipe out the target buffer
     std::memset(dst, 0, size);
@@ -83,8 +78,6 @@ FSExporter::exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size, FSFau
     }
 
     loginfo(FS_DEBUG, "Success\n");
-    if (err) *err = FSError::FS_OK;
-    return true;
 }
 
 void
@@ -110,14 +103,6 @@ FSExporter::exportBlocks(BlockNr first, BlockNr last, const fs::path &path) cons
 
     if (!stream) {
         throw IOError(IOError::FILE_CANT_WRITE, path);
-    }
-}
-
-void
-FSExporter::exportBlocks(const fs::path &path) const
-{
-    if (traits.blocks) {
-        exportBlocks(0, BlockNr(traits.blocks - 1), path);
     }
 }
 

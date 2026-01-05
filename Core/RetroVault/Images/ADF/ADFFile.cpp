@@ -22,7 +22,13 @@ using retro::vault::device::Diameter;
 using retro::vault::device::Density;
 using retro::vault::device::DeviceError;
 using retro::vault::device::Volume;
+using retro::vault::amigafs::BlockNr;
 using retro::vault::amigafs::FSName;
+using retro::vault::amigafs::FSFormatEnum;
+using retro::vault::amigafs::FileSystem;
+using retro::vault::amigafs::FSBlock;
+using retro::vault::amigafs::FSDescriptor;
+using retro::vault::amigafs::FSError;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
@@ -88,6 +94,25 @@ ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
     }
 }
 
+void ADFFile::init(isize len)
+{
+    switch (len) {
+
+        case ADFFile::ADFSIZE_35_DD:
+        case ADFFile::ADFSIZE_35_DD_81:
+        case ADFFile::ADFSIZE_35_DD_82:
+        case ADFFile::ADFSIZE_35_DD_83:
+        case ADFFile::ADFSIZE_35_DD_84:
+        case ADFFile::ADFSIZE_35_HD:
+
+            FloppyDiskImage::init(len);
+            break;
+
+        default:
+            throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
+    }
+}
+
 void
 ADFFile::init(Diameter dia, Density den)
 {
@@ -100,24 +125,14 @@ ADFFile::init(Diameter dia, Density den)
 void
 ADFFile::init(const GeometryDescriptor &descr)
 {
-    auto bytes = descr.numBytes();
+    init(descr.numBytes());
+}
 
-    switch (bytes) {
-
-        case ADFFile::ADFSIZE_35_DD:
-        case ADFFile::ADFSIZE_35_DD_81:
-        case ADFFile::ADFSIZE_35_DD_82:
-        case ADFFile::ADFSIZE_35_DD_83:
-        case ADFFile::ADFSIZE_35_DD_84:
-        case ADFFile::ADFSIZE_35_HD:
-
-            init(bytes);
-
-        default:
-            break;
-    }
-
-    throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
+void
+ADFFile::init(const FileSystem &volume)
+{
+    init(volume.bytes());
+    volume.exporter.exportVolume(*this);
 }
 
 std::vector<string>
@@ -220,6 +235,32 @@ ADFFile::decode(TrackNr t, BitView bits)
     // Decode track
     Encoder::amiga.decodeTrack(mfmByteView, t, dataByteView);
 }
+
+/*
+FSDescriptor
+ADFFile::getFileSystemDescriptor() const noexcept
+{
+    FSDescriptor result;
+    
+    // Determine the root block location
+    BlockNr root = data.size < ADFSIZE_35_HD ? 880 : 1760;
+
+    // Determine the bitmap block location
+    BlockNr bitmap = FSBlock::read32(data.ptr + root * 512 + 316);
+
+    // Assign a default location if the bitmap block reference is invalid
+    if (bitmap == 0 || bitmap >= (BlockNr)numBlocks()) bitmap = root + 1;
+
+    // Setup the descriptor
+    result.numBlocks = numBlocks();
+    result.bsize = 512;
+    result.numReserved = 2;
+    result.rootBlock = root;
+    result.bmBlocks.push_back(bitmap);
+    
+    return result;
+}
+*/
 
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)

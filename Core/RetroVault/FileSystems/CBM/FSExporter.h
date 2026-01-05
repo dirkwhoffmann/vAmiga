@@ -11,8 +11,11 @@
 
 #include "FileSystems/CBM/FSService.h"
 #include "FileSystems/CBM/FSTree.h"
+#include "Devices/TrackDevice.h"
 
 namespace retro::vault::cbmfs {
+
+using device::TrackDevice;
 
 class FSExporter final : public FSService {
 
@@ -20,25 +23,28 @@ public:
 
     using FSService::FSService;
 
-    // Exports the volume to a buffer
-    bool exportVolume(u8 *dst, isize size) const;
-    bool exportVolume(u8 *dst, isize size, FSFault *error) const;
+    // Exports the file system to a buffer
+    void exportVolume(u8 *dst, isize size) const;
+
+    // Exports the file system to a TrackDevice
+    void exportVolume(TrackDevice &dev) const;
+
+    // Exports the file system to a file
+    void exportVolume(const fs::path &path) const;
 
     // Exports a single block or a range of blocks to a buffer
-    bool exportBlock(BlockNr nr, u8 *dst, isize size) const;
-    bool exportBlock(BlockNr nr, u8 *dst, isize size, FSFault *error) const;
-    bool exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size) const;
-    bool exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size, FSFault *error) const;
+    void exportBlock(BlockNr nr, u8 *dst, isize size) const;
+    void exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size) const;
 
     // Exports a single block or a range of blocks to a file
     void exportBlock(BlockNr nr, const fs::path &path) const;
     void exportBlocks(BlockNr first, BlockNr last, const fs::path &path) const;
-    void exportBlocks(const fs::path &path) const;
 
     // Exports the volume to a buffer
-    void exportFiles(BlockNr nr, const fs::path &path, bool recursive = true, bool contents = false) const;
-    // void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
-    void exportFiles(const fs::path &path, bool recursive = true, bool contents = false) const;
+    void exportFiles(BlockNr nr, const fs::path &path,
+                     bool recursive = true, bool contents = false) const;
+    void exportFiles(const fs::path &path,
+                     bool recursive = true, bool contents = false) const;
 
 private:
 
