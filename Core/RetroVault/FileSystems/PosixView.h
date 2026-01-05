@@ -80,7 +80,7 @@ public:
     virtual isize write(HandleRef ref, std::span<const u8> buffer) = 0;
 
     // Changes file permissions
-    virtual void chmod(const fs::path &path, mode_t mode) = 0;
+    virtual void chmod(const fs::path &path, u32 mode) = 0;
 };
 
 }

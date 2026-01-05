@@ -17,23 +17,6 @@ namespace retro::vault::amigafs {
 
 using retro::vault::PosixView;
 
-struct Handle {
-
-    // Unique indentifier
-    isize id = 0;
-
-    // File header block
-    BlockNr headerBlock = 0;
-
-    // I/O offset
-    isize offset = 0;
-
-    // Open mode (POSIX-style flags)
-    u32 flags = 0;
-};
-
-using HandleRef = isize;
-
 struct NodeMeta {
 
     // Number of directory entries
@@ -148,7 +131,7 @@ public:
     isize write(HandleRef ref, std::span<const u8> buffer) override;
 
     // Changes file permissions
-    void chmod(const fs::path &path, mode_t mode) override;
+    void chmod(const fs::path &path, u32 mode) override;
 
 
 private:

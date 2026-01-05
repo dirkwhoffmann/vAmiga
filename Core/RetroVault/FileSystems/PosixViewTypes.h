@@ -9,11 +9,13 @@
 
 #pragma once
 
-#include "utl/common.h"
+// #include "utl/common.h"
+#include "DeviceTypes.h"
 
 namespace retro::vault {
 
 using namespace utl;
+using device::BlockNr;
 
 namespace posix {
 
@@ -78,7 +80,7 @@ struct FSPosixStat {
 struct Handle {
 
     isize id;           // Unique indentifier
-    isize node;         // File root node
+    BlockNr node;       // File root node
     isize offset;       // I/O offset
     u32 flags;          // Open mode
 };

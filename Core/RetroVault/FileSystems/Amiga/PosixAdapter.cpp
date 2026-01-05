@@ -33,7 +33,7 @@ PosixAdapter::ensureMeta(BlockNr nr)
 NodeMeta &
 PosixAdapter::ensureMeta(HandleRef ref)
 {
-    return ensureMeta(getHandle(ref).headerBlock);
+    return ensureMeta(getHandle(ref).node);
 }
 
 FSPosixStat
@@ -112,7 +112,7 @@ PosixAdapter::open(const fs::path &path, u32 flags)
     handles[ref] = Handle {
 
         .id = ref,
-        .headerBlock = node,
+        .node = node,
         .offset = 0,
         .flags = flags
     };
@@ -136,7 +136,7 @@ PosixAdapter::close(HandleRef ref)
 {
     // Lookup handle
     auto &handle = getHandle(ref);
-    auto header = handle.headerBlock;
+    auto header = handle.node;
 
     // Remove from metadata
     auto &info = ensureMeta(header);
@@ -240,7 +240,7 @@ isize
 PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
 {
     auto &handle  = getHandle(ref);
-    auto &node    = fs.fetch(handle.headerBlock);
+    auto &node    = fs.fetch(handle.node);
     auto fileSize = isize(node.getFileSize());
 
     isize newOffset;
@@ -275,7 +275,7 @@ PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 }
 
 void
-PosixAdapter::chmod(const fs::path &path, mode_t mode)
+PosixAdapter::chmod(const fs::path &path, u32 mode)
 {
     auto &node = fs.fetch(ensureFile(path)).mutate();
 
@@ -298,7 +298,7 @@ isize
 PosixAdapter::read(HandleRef ref, std::span<u8> buffer)
 {
     auto &handle = getHandle(ref);
-    auto &node   = fs.fetch(handle.headerBlock);
+    auto &node   = fs.fetch(handle.node);
     auto &meta   = ensureMeta(node.nr);
 
     // Cache the file if necessary
@@ -323,11 +323,10 @@ isize
 PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
 {
     auto &handle = getHandle(ref);
-//    auto &fhb    = fs.fetch(handle.headerBlock);
-    auto &meta   = ensureMeta(handle.headerBlock);
+    auto &meta   = ensureMeta(handle.node);
 
     // Cache the file if necessary
-    if (meta.cache.empty()) { fs.fetch(handle.headerBlock).extractData(meta.cache); }
+    if (meta.cache.empty()) { fs.fetch(handle.node).extractData(meta.cache); }
 
     // Determine the new file size
     auto newSize = std::max(meta.cache.size, handle.offset + (isize)buffer.size());
@@ -342,7 +341,7 @@ PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
     std::memcpy(meta.cache.ptr + handle.offset, buffer.data(), count);
 
     // Write back
-    fs.replace(handle.headerBlock, meta.cache);
+    fs.replace(handle.node, meta.cache);
 
     return count;
 }
