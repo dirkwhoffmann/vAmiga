@@ -382,7 +382,7 @@ private:
 
     // Adds a new block of a certain kind
     void addFileListBlock(BlockNr at, BlockNr head, BlockNr prev);
-    void addDataBlock(BlockNr at, isize id, BlockNr head, BlockNr prev);
+    void addDataBlock(BlockNr at, BlockNr id, BlockNr head, BlockNr prev);
 
     // Adds bytes to a data block
     isize addData(BlockNr nr, const u8 *buf, isize size);

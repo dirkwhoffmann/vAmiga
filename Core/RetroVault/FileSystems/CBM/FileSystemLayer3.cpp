@@ -87,7 +87,7 @@ FileSystem::match(BlockNr top, const vector<FSPattern> &patterns)
 
             auto matches = searchdir(blk, pattern);
             for (auto m : matches) {
-                printf("    Found %d (%s)\n", m, fetch(m).absName().c_str());
+                printf("    Found %ld (%s)\n", m, fetch(m).absName().c_str());
                 nextSet.push_back(m);
             }
         }

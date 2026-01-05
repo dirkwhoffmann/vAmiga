@@ -240,7 +240,7 @@ FSCache::erase(BlockNr nr)
 void
 FSCache::flush(BlockNr nr)
 {
-    printf("FSCache: %d\n", nr);
+    printf("FSCache: %ld\n", nr);
 
     if (dirty.contains(nr)) {
 
@@ -257,7 +257,7 @@ FSCache::flush()
     loginfo(FS_DEBUG, "Flushing %zd dirty blocks\n", dirty.size());
 
     auto toFlush = dirty;
-    for (auto block: toFlush) { printf("Flushing block %d\n", block); flush(block); }
+    for (auto block: toFlush) { printf("Flushing block %ld\n", block); flush(block); }
 }
 
 }

@@ -106,7 +106,7 @@ PosixAdapter::open(const fs::path &path, u32 flags)
     auto node = fs.seek(path);
 
     // Create a unique identifier
-    auto ref = nextHandle++;
+    auto ref = HandleRef { isize(nextHandle) + 1 };
 
     // Create a new file handle
     handles[ref] = Handle {
@@ -189,7 +189,7 @@ PosixAdapter::getHandle(HandleRef ref)
     auto it = handles.find(ref);
 
     if (it == handles.end()) {
-        throw FSError(FSError::FS_INVALID_HANDLE, std::to_string(ref));
+        throw FSError(FSError::FS_INVALID_HANDLE, std::to_string(isize(ref)));
     }
 
     return it->second;

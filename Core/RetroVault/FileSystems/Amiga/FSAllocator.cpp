@@ -285,14 +285,14 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noex
 
     // Get the bitmap block
     if (bmNr <= (isize)bmBlocks.size()) {
-        loginfo(FS_DEBUG, "Bitmap block index %ld for block %d is out of range \n", bmNr, nr);
+        loginfo(FS_DEBUG, "Bitmap block index %ld for block %ld is out of range \n", bmNr, nr);
         return nullptr;
     }
 
     auto &bm = fs.fetch(bmBlocks[bmNr]);
 
     if (!bm.is(FSBlockType::BITMAP)) {
-        loginfo(FS_DEBUG, "Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
+        loginfo(FS_DEBUG, "Failed to lookup allocation bit for block %ld (%ld)\n", nr, bmNr);
         return nullptr;
     }
 

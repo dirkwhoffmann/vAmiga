@@ -171,7 +171,7 @@ public:
 
     // Reads, writes, or modifies the n-th long word
     u32 get32(isize n) const { return read32(addr32(n)); }
-    void set32(isize n, u32 val) { write32(addr32(n), val); }
+    void set32(isize n, isize val) { write32(addr32(n), u32(val)); }
     void inc32(isize n) { inc32(addr32(n)); }
     void dec32(isize n) { dec32(addr32(n)); }
 
@@ -343,8 +343,8 @@ public:
     u32 hashValue() const;
 
     // Looks up an item in the hash table
-    u32 getHashRef(u32 nr) const;
-    void setHashRef(u32 nr, u32 ref);
+    BlockNr getHashRef(BlockNr nr) const;
+    void setHashRef(BlockNr nr, BlockNr ref);
 
  
     //
@@ -376,7 +376,7 @@ public:
     
     // Gets or sets the data block number
     u32 getDataBlockNr() const;
-    void setDataBlockNr(u32 val);
+    void setDataBlockNr(BlockNr val);
 
     // Returns the maximum number of storable data block references
     isize getMaxDataBlockRefs() const;
@@ -389,8 +389,8 @@ public:
 
     // Adds a data block reference to this block
     bool addDataBlockRef(BlockNr ref);
-    void addDataBlockRef(u32 first, u32 ref);
-    
+    void addDataBlockRef(BlockNr first, BlockNr ref);
+
     // Gets or sets the number of data bytes stored in this block
     u32 getDataBytesInBlock() const;
     void setDataBytesInBlock(u32 val);

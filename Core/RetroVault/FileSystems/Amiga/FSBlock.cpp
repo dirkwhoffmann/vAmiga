@@ -1598,14 +1598,14 @@ FSBlock::hashValue() const
     }
 }
 
-u32
+BlockNr
 FSBlock::getHashRef(BlockNr nr) const
 {
     return (nr < (BlockNr)hashTableSize()) ? get32(6 + nr) : 0;
 }
 
 void
-FSBlock::setHashRef(BlockNr nr, u32 ref)
+FSBlock::setHashRef(BlockNr nr, BlockNr ref)
 {
     if (nr < (BlockNr)hashTableSize()) {
 
@@ -1749,7 +1749,7 @@ FSBlock::getDataBlockNr() const
 }
 
 void
-FSBlock::setDataBlockNr(u32 val)
+FSBlock::setDataBlockNr(BlockNr val)
 {
     switch (type) {
             
@@ -1827,7 +1827,7 @@ FSBlock::getDataBlockRefs() const
 }
 
 void
-FSBlock::addDataBlockRef(u32 first, u32 ref)
+FSBlock::addDataBlockRef(BlockNr first, BlockNr ref)
 {
     assert(getNumDataBlockRefs() < getMaxDataBlockRefs());
     
@@ -2037,7 +2037,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
                 
             } else {
                 
-                logwarn("Ignoring block %d (no data block)\n", ref);
+                logwarn("Ignoring block %ld (no data block)\n", ref);
             }
         }
         

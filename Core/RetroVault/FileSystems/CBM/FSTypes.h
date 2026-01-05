@@ -9,15 +9,15 @@
 
 #pragma once
 
-#include "utl/abilities/Reflectable.h"
+// #include "utl/abilities/Reflectable.h"
+#include "DeviceTypes.h"
 
 namespace retro::vault::cbmfs {
 
 using namespace utl;
+using namespace device;
 
 struct FSBlock;
-
-using BlockNr = u32;
 
 enum class FSFormat : long
 {

@@ -20,11 +20,11 @@ using namespace utl;
 //
 
 // Track devices
-using BlockNr = u32;  // TODO: REPLACE BY isize
-using CylNr = isize;
-using HeadNr = isize;
+using BlockNr  = isize;
+using CylNr    = isize;
+using HeadNr   = isize;
 using SectorNr = isize;
-using TrackNr = isize;
+using TrackNr  = isize;
 
 
 //

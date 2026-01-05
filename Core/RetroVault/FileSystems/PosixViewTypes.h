@@ -77,14 +77,14 @@ struct FSPosixStat {
     isize blockWrites;  // Total number of written blocks
 };
 
+enum class HandleRef : isize {};
+
 struct Handle {
 
-    isize id;           // Unique indentifier
+    HandleRef id;       // Unique indentifier
     BlockNr node;       // File root node
     isize offset;       // I/O offset
     u32 flags;          // Open mode
 };
-
-using HandleRef = isize;
 
 }

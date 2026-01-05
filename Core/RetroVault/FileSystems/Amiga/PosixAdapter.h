@@ -48,7 +48,7 @@ class PosixAdapter : public PosixView {
     std::unordered_map<HandleRef, Handle> handles;
 
     // Handle ID generator
-    isize nextHandle = 3;
+    HandleRef nextHandle{3};
 
 public:
 
@@ -146,3 +146,4 @@ private:
 };
 
 }
+

@@ -59,7 +59,7 @@ FSExporter::exportBlocks(BlockNr first, BlockNr last, u8 *dst, isize size, FSFau
 
     isize count = last - first + 1;
 
-    loginfo(FS_DEBUG, "Exporting %ld blocks (%d - %d)\n", count, first, last);
+    loginfo(FS_DEBUG, "Exporting %ld blocks (%ld - %ld)\n", count, first, last);
 
     // Only proceed if the (predicted) block size matches
     if (size % traits.bsize != 0) {

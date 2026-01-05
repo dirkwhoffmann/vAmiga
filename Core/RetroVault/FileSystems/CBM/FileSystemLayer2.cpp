@@ -143,7 +143,7 @@ FileSystem::searchdir(BlockNr at, const FSName &name) const
 
     // Compute the table position and read the item
     u32 hash = name.hashValue(traits.dos) % top.hashTableSize();
-    u32 ref = top.getHashRef(hash);
+    BlockNr ref = top.getHashRef(hash);
 
     // Traverse the linked list until the item has been found
     while (ref && visited.find(ref) == visited.end())  {
@@ -530,13 +530,13 @@ FileSystem::addFileListBlock(BlockNr at, BlockNr head, BlockNr prev)
 }
 
 void
-FileSystem::addDataBlock(BlockNr at, isize id, BlockNr head, BlockNr prev)
+FileSystem::addDataBlock(BlockNr at, BlockNr id, BlockNr head, BlockNr prev)
 {
     auto &node = fetch(at).mutate();
     auto &prevNode = fetch(prev).mutate();
 
     node.init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
-    node.setDataBlockNr((BlockNr)id);
+    node.setDataBlockNr(id);
     node.setFileHeaderRef(head);
 
     prevNode.setNextDataBlockRef(at);
