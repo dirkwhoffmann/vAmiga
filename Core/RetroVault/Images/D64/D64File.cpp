@@ -95,26 +95,6 @@ D64File::getDensity() const noexcept
     return Density::DD;
 }
 
-BitView
-D64File::encode(TrackNr t) const
-{
-    // TO BE IMPLEMENTED. WE RETURN AN EMPTY TRACK FOR NOW
-    static constexpr size_t TrackSize = 6250;
-     static const std::array<uint8_t, TrackSize> emptyTrack = [] {
-         std::array<uint8_t, TrackSize> data{};
-         data.fill(0x55);
-         return data;
-     }();
-
-     return BitView(emptyTrack.data(), emptyTrack.size() * 8);
-}
-
-void
-D64File::decode(TrackNr t, BitView bits)
-{
-    throw std::runtime_error("NOT IMPLEMENTED YET");
-}
-
 bool
 D64File::hasEcc() const noexcept
 {

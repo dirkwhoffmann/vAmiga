@@ -29,6 +29,11 @@ public:
 
     static optional<ImageInfo> about(const fs::path &path);
 
+private:
+
+    // Backing buffer used by the GCR encoder
+    mutable u8 gcrbuffer[8192];
+
 
     //
     // Initializing
@@ -99,6 +104,10 @@ public:
 
     BitView encode(TrackNr t) const override;
     void decode(TrackNr t, BitView bits) override;
+
+private:
+
+    isize encodeSector(TrackNr t, SectorNr s, isize offset) const;
 
 
     //
