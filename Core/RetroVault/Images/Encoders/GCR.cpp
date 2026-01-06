@@ -9,8 +9,28 @@
 
 #include "config.h"
 #include "GCR.h"
-#include "utl/support/Bits.h"
 
 namespace retro::vault::image::GCR {
+
+void
+encodeGcr(MutableBitView &view, isize bitPos, u8 value)
+{
+    assert(bitPos >= 0 && bitPos < view.size());
+
+    u8 n1 = bin2gcr(value >> 4);
+    u8 n2 = bin2gcr(value & 0xF);
+
+    view.set(bitPos++, n1 & 0x10);
+    view.set(bitPos++, n1 & 0x08);
+    view.set(bitPos++, n1 & 0x04);
+    view.set(bitPos++, n1 & 0x02);
+    view.set(bitPos++, n1 & 0x01);
+
+    view.set(bitPos++, n2 & 0x10);
+    view.set(bitPos++, n2 & 0x08);
+    view.set(bitPos++, n2 & 0x04);
+    view.set(bitPos++, n2 & 0x02);
+    view.set(bitPos++, n2 & 0x01);
+}
 
 }

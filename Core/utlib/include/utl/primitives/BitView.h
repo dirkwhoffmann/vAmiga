@@ -97,10 +97,14 @@ public:
     }
 
     // Writes a single bit
-    constexpr void set(isize i, bool value)
+    constexpr void set(isize bitIndex, bool value)
     requires (!std::is_const_v<T>)
     {
-        assert(i >= 0 && i < len);
+        // Clamp position
+        isize i = bitIndex % len;
+        if (i < 0) i += len;
+
+        // assert(i >= 0 && i < len);
 
         auto& byte = sp[i >> 3];
         auto  mask = u8(1 << (7 - (i & 7)));
