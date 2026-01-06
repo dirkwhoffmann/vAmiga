@@ -1286,7 +1286,7 @@ ImageInfo scan(const fs::path &url)
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
     try { [self drive]->insert([url fileSystemRepresentation], wp); }
-    catch(Error &error) { [ex save:error]; }
+    catch(std::exception &error) { [ex save:error]; }
 }
 
 - (void)eject

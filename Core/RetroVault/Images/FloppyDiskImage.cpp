@@ -48,6 +48,7 @@ FloppyDiskImage::tryMake(const fs::path &path)
     if (STFile::about(path).has_value())   return make_unique<STFile>(path);
     if (DMSFile::about(path).has_value())  return make_unique<DMSFile>(path);
     if (EXEFile::about(path).has_value())  return make_unique<EXEFile>(path);
+    if (D64File::about(path).has_value())  return make_unique<D64File>(path);
 
     return nullptr;
 }

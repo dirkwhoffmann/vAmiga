@@ -29,6 +29,7 @@ namespace vamiga {
 
 using retro::vault::image::FloppyDiskImage;
 using retro::vault::image::ImageFormat;
+using retro::vault::image::ImageFormatEnum;
 using retro::vault::image::ADFFile;
 using retro::vault::image::IMGFile;
 using retro::vault::image::STFile;

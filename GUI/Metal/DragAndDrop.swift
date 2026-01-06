@@ -21,8 +21,7 @@ extension MetalView {
         
         dropZone = nil
         dropUrl = nil
-        // dropType = nil
-        
+
         let pasteBoard = sender.draggingPasteboard
         guard let type = pasteBoard.availableType(from: acceptedTypes()) else {
             return NSDragOperation()
@@ -40,7 +39,6 @@ extension MetalView {
             
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
-                // Unpack the file if it is compressed
                 dropUrl = url
 
                 // Open the drop zone layer
@@ -128,7 +126,6 @@ extension MetalView {
         if zone == nil { return false }
 
         dropZone = zone
-        // dropType = type
         return true
     }
             

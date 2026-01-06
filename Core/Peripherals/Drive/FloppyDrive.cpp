@@ -113,9 +113,6 @@ FloppyDrive::checkOption(Opt opt, i64 value)
             if (!FloppyDriveTypeEnum::isValid(value)) {
                 throw CoreError(CoreError::OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
             }
-            if (value != i64(FloppyDriveType::DD_35) && value != i64(FloppyDriveType::HD_35)) {
-                throw CoreError(CoreError::OPT_UNSUPPORTED);
-            }
             return;
 
         case Opt::DRIVE_MECHANICS:

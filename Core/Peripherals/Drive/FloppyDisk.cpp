@@ -311,26 +311,49 @@ FloppyDisk::clearTrack(TrackNr t, u8 value1, u8 value2)
 }
 
 void
-FloppyDisk::encodeDisk(const FloppyDiskImage &file)
+FloppyDisk::encodeDisk(const FloppyDiskImage &image)
 {
-    assert(file.getDiameter() == getDiameter());
+    loginfo(DSK_DEBUG,
+            "Encoding floppy disk image %s...\n", image.path.string().c_str());
+
+    if (getDiameter() != image.getDiameter())
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
+
+    if (getDensity() != image.getDensity())
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
 
     // Start with an unformatted disk
     clearDisk();
 
-    switch (file.format()) {
+    // Encode all tracks
+    for (TrackNr t = 0; t < image.numTracks(); ++t)
+        replaceTrack(t, image.encode(t));
 
-        case ImageFormat::ADF:  encode(dynamic_cast<const ADFFile &>(file)); break;
-        case ImageFormat::ADZ:  Codec::encodeADZ(dynamic_cast<const ADZFile &>(file), *this); break;
-        case ImageFormat::EADF: Codec::encodeEADF(dynamic_cast<const EADFFile &>(file), *this); break;
-        case ImageFormat::IMG:  Codec::encodeIMG(dynamic_cast<const IMGFile &>(file), *this); break;
-        case ImageFormat::ST:   Codec::encodeST(dynamic_cast<const STFile &>(file), *this); break;
-        case ImageFormat::DMS:  Codec::encodeDMS(dynamic_cast<const DMSFile &>(file), *this); break;
-        case ImageFormat::EXE:  Codec::encodeEXE(dynamic_cast<const EXEFile &>(file), *this); break;
+    // In debug mode, also run the decoder
+    /*
+    if constexpr (debug::ADF_DEBUG) {
+
+        string tmp = "/tmp/debug.adf";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        Codec::makeADF(*this)->writeToFile(tmp);
+    }
+    */
+
+    /*
+    switch (image.format()) {
+
+        case ImageFormat::ADF:  encode(dynamic_cast<const ADFFile &>(image)); break;
+        case ImageFormat::ADZ:  Codec::encodeADZ(dynamic_cast<const ADZFile &>(image), *this); break;
+        case ImageFormat::EADF: Codec::encodeEADF(dynamic_cast<const EADFFile &>(image), *this); break;
+        case ImageFormat::IMG:  encode(dynamic_cast<const IMGFile &>(image)); break;
+        case ImageFormat::ST:   encode(dynamic_cast<const STFile &>(image)); break;
+        case ImageFormat::DMS:  Codec::encodeDMS(dynamic_cast<const DMSFile &>(image), *this); break;
+        case ImageFormat::EXE:  Codec::encodeEXE(dynamic_cast<const EXEFile &>(image), *this); break;
 
         default:
             throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
+    */
 }
 
 void

@@ -92,7 +92,7 @@ D64File::getDiameter() const noexcept
 Density
 D64File::getDensity() const noexcept
 {
-    return Density::SD;
+    return Density::DD;
 }
 
 BitView

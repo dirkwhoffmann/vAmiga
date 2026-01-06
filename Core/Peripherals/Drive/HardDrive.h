@@ -31,6 +31,7 @@ using retro::vault::image::HardDiskImage;
 using retro::vault::image::HDFFile;
 using retro::vault::image::HDZFile;
 using retro::vault::image::ImageFormat;
+using retro::vault::image::ImageFormatEnum;
 using retro::vault::amiga::FileSystem;
 using retro::vault::amiga::FSName;
 

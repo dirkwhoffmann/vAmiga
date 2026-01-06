@@ -99,7 +99,9 @@ struct IOError : public Error {
                 break;
 
             case FILE_TYPE_UNSUPPORTED:
-                set_msg("Unsupported file type: \"" + msg + "\".");
+                set_msg(msg.empty() ?
+                        "Unsupported file type." :
+                        "Unsupported file type: \"" + msg + "\".");
                 break;
 
             case FILE_CANT_READ:
