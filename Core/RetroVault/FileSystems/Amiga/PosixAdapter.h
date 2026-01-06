@@ -13,7 +13,7 @@
 #include "FileSystems/Amiga/FileSystem.h"
 #include <fcntl.h>
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 using retro::vault::PosixView;
 

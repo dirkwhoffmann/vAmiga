@@ -13,7 +13,7 @@
 #include "FileSystems/CBM/FSTree.h"
 #include "Devices/TrackDevice.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using device::TrackDevice;
 

@@ -15,7 +15,7 @@
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using retro::vault::image::ADFFile;
 

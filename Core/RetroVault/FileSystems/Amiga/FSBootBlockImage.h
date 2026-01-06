@@ -11,7 +11,7 @@
 
 #include "FileSystems/Amiga/FSTypes.h"
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 typedef struct
 {

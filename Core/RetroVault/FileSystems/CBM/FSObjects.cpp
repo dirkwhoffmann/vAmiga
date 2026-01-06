@@ -18,7 +18,7 @@
 #include <unordered_set>
 #include <sys/stat.h>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 FSString::FSString(const string &cpp, isize limit) : str(cpp), limit(limit)
 {

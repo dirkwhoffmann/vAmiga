@@ -11,7 +11,7 @@
 
 #include "FileSystems/Amiga/FSObjects.h"
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 using namespace utl;
 

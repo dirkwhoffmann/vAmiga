@@ -13,7 +13,7 @@
 #include "utl/io.h"
 #include <algorithm>
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 FSCache::FSCache(FileSystem &fs, Volume &v) : FSService(fs), dev(v) {
 

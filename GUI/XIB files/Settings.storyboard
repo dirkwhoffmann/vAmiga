@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24412"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -2719,7 +2719,7 @@
                                             <menuItem title="3.5&quot; HD" tag="1" id="JzA-9A-WoG">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="Vgs-Xw-NiK">
+                                            <menuItem title="5.25&quot; DD" tag="2" id="Vgs-Xw-NiK">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -2870,7 +2870,7 @@
                                             <menuItem title="3.5&quot; HD" tag="1" id="O4e-e8-JZ9" userLabel="3.5&quot; HD">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="9zy-n4-Yfp">
+                                            <menuItem title="5.25&quot; DD" tag="2" id="9zy-n4-Yfp">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -2905,7 +2905,7 @@
                                             <menuItem title="3.5&quot; HD" tag="1" id="Gfn-3k-APG">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="bM5-xV-GNi">
+                                            <menuItem title="5.25&quot; DD" tag="2" id="bM5-xV-GNi">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -6595,7 +6595,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="trashTemplate" width="174" height="214"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>
     </resources>

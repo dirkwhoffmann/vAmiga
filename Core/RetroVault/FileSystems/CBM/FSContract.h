@@ -11,7 +11,7 @@
 
 #include "FileSystems/CBM/FSObjects.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using namespace utl;
 

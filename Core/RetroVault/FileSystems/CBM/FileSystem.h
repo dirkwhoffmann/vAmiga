@@ -105,7 +105,7 @@
 #include "Volume.h"
 #include "utl/abilities/Loggable.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using retro::vault::device::Volume;
 

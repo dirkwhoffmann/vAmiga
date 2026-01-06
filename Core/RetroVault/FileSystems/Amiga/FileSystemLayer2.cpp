@@ -11,7 +11,7 @@
 #include "FileSystems/Amiga/FileSystem.h"
 #include <cstring>
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 void
 FileSystem::format(FSFormat dos) {

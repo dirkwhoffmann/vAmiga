@@ -10,7 +10,7 @@
 #include "config.h"
 #include "FileSystems/Amiga/FileSystem.h"
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 /*
 FSBlockType

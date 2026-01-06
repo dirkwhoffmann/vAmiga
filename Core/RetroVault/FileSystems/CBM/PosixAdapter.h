@@ -13,7 +13,7 @@
 #include "FileSystems/CBM/FileSystem.h"
 #include <fcntl.h>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using retro::vault::PosixView;
 

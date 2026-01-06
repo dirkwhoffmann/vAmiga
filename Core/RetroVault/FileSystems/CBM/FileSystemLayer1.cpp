@@ -10,7 +10,7 @@
 #include "config.h"
 #include "FileSystems/CBM/FileSystem.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 /*
 FSBlockType

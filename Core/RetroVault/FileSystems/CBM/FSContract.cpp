@@ -10,7 +10,7 @@
 #include "FileSystems/CBM/FSContract.h"
 #include "FileSystems/CBM/FileSystem.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 void
 FSRequire::isFormatted() const

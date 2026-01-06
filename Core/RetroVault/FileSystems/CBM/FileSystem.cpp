@@ -16,7 +16,7 @@
 #include <stack>
 #include <algorithm>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 bool
 FSTraits::adf() const

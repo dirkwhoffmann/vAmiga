@@ -13,7 +13,7 @@
 #include <ostream>
 #include <regex>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 struct FSString {
     

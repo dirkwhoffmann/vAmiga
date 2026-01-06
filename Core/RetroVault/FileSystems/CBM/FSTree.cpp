@@ -12,7 +12,7 @@
 #include "FileSystems/CBM/FileSystem.h"
 #include <algorithm>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 FSTree
 FSTreeBuilder::build(const FSBlock &root,

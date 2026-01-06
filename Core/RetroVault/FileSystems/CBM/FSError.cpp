@@ -10,7 +10,7 @@
 #include "FileSystems/CBM/FSError.h"
 #include "FileSystems/CBM/FileSystem.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
 {

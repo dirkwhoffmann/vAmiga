@@ -23,7 +23,7 @@
 #include "utl/storage.h"
 #include "utl/wrappers.h"
 
-namespace retro::vault::amigafs { class FileSystem; }
+namespace retro::vault::amiga { class FileSystem; }
 
 namespace vamiga {
 
@@ -31,8 +31,8 @@ using retro::vault::image::HardDiskImage;
 using retro::vault::image::HDFFile;
 using retro::vault::image::HDZFile;
 using retro::vault::image::ImageFormat;
-using retro::vault::amigafs::FileSystem;
-using retro::vault::amigafs::FSName;
+using retro::vault::amiga::FileSystem;
+using retro::vault::amiga::FSName;
 
 class HardDrive final : public Drive, public TrackDevice {
 

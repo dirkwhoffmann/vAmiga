@@ -17,7 +17,7 @@
 #include "utl/storage.h"
 #include "utl/abilities/Dumpable.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using utl::Buffer;
 using utl::DumpOpt;

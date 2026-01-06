@@ -18,7 +18,7 @@
 #include <ranges>
 #include <unordered_set>
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 using retro::vault::device::BlockDevice;
 using retro::vault::device::Volume;

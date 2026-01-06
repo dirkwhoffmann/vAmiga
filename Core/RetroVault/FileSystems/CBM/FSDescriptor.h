@@ -12,7 +12,7 @@
 #include "FileSystems/CBM/FSTypes.h"
 #include "DeviceDescriptors.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using retro::vault::device::GeometryDescriptor;
 using retro::vault::device::PartitionDescriptor;

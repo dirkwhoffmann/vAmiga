@@ -12,7 +12,7 @@
 #include "FileSystems/CBM/FSTypes.h"
 #include "utl/abilities/Loggable.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 class FileSystem;
 

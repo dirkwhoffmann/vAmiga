@@ -19,7 +19,7 @@
 #include <format>
 
 using retro::vault::device::DeviceError;
-using retro::vault::amigafs::BlockNr;
+using retro::vault::amiga::BlockNr;
 
 namespace retro::vault::image {
 

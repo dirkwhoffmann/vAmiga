@@ -21,9 +21,9 @@
 
 namespace vamiga {
 
-using retro::vault::amigafs::FSError;
-using retro::vault::amigafs::FSFormatEnum;
-using retro::vault::amigafs::BootBlockIdEnum;
+using retro::vault::amiga::FSError;
+using retro::vault::amiga::FSFormatEnum;
+using retro::vault::amiga::BootBlockIdEnum;
 
 FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
@@ -228,7 +228,7 @@ FloppyDrive::density() const
 
         case FloppyDriveType::DD_35:    return Density::DD;
         case FloppyDriveType::HD_35:    return Density::HD;
-        case FloppyDriveType::DD_525:   return Density::SD;
+        case FloppyDriveType::DD_525:   return Density::DD;
 
         default:
             fatalError;

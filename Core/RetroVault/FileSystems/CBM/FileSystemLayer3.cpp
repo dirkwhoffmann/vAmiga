@@ -11,7 +11,7 @@
 #include "FileSystems/CBM/FileSystem.h"
 #include "utl/support.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 void
 FileSystem::cd(BlockNr nr)

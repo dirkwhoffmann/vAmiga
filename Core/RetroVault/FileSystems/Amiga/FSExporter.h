@@ -13,7 +13,7 @@
 #include "FileSystems/Amiga/FSTree.h"
 #include "Devices/TrackDevice.h"
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 using device::TrackDevice;
 

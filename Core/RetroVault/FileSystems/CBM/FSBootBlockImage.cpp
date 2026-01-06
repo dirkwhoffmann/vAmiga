@@ -11,7 +11,7 @@
 #include "FileSystems/CBM/FSBootBlockImage.h"
 #include <cstring>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 //
 // Bootblock images

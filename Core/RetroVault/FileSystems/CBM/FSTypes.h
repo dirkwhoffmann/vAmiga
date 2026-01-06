@@ -12,7 +12,7 @@
 // #include "utl/abilities/Reflectable.h"
 #include "DeviceTypes.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using namespace utl;
 using namespace device;

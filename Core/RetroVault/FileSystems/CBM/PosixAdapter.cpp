@@ -9,7 +9,7 @@
 
 #include "FileSystems/CBM/PosixAdapter.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 PosixAdapter::PosixAdapter(FileSystem &fs) : fs(fs)
 {

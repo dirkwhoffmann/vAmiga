@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-using retro::vault::amigafs::FSFormat;
+using retro::vault::amiga::FSFormat;
 
 //
 // Enumerations

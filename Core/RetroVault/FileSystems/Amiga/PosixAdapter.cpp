@@ -9,7 +9,7 @@
 
 #include "FileSystems/Amiga/PosixAdapter.h"
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 PosixAdapter::PosixAdapter(FileSystem &fs) : fs(fs)
 {

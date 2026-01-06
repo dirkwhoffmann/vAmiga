@@ -17,7 +17,7 @@
 using namespace vamiga;
 using namespace retro::vault::image;
 using namespace retro::vault::device;
-using namespace retro::vault::amigafs;
+using namespace retro::vault::amiga;
 
 //
 // Forward declarations

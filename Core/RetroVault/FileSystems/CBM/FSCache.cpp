@@ -13,7 +13,7 @@
 #include "utl/io.h"
 #include <algorithm>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 FSCache::FSCache(FileSystem &fs, Volume &v) : FSService(fs), dev(v) {
 

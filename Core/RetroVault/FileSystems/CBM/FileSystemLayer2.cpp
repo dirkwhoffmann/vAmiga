@@ -11,7 +11,7 @@
 #include "FileSystems/CBM/FileSystem.h"
 #include <cstring>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 void
 FileSystem::format(FSFormat dos) {

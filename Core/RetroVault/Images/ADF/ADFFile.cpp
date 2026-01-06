@@ -22,13 +22,13 @@ using retro::vault::device::Diameter;
 using retro::vault::device::Density;
 using retro::vault::device::DeviceError;
 using retro::vault::device::Volume;
-using retro::vault::amigafs::BlockNr;
-using retro::vault::amigafs::FSName;
-using retro::vault::amigafs::FSFormatEnum;
-using retro::vault::amigafs::FileSystem;
-using retro::vault::amigafs::FSBlock;
-using retro::vault::amigafs::FSDescriptor;
-using retro::vault::amigafs::FSError;
+using retro::vault::amiga::BlockNr;
+using retro::vault::amiga::FSName;
+using retro::vault::amiga::FSFormatEnum;
+using retro::vault::amiga::FileSystem;
+using retro::vault::amiga::FSBlock;
+using retro::vault::amiga::FSDescriptor;
+using retro::vault::amiga::FSError;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
@@ -58,7 +58,7 @@ ADFFile::about(const fs::path &path)
 isize
 ADFFile::fileSize(Diameter diameter, Density density)
 {
-    return fileSize(diameter, density, 80);
+    return fileSize(diameter, density, 160);
 }
 
 isize
@@ -268,11 +268,11 @@ ADFFile::getFileSystemDescriptor() const noexcept
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
-    retro::vault::amigafs::FSFormatEnum::validate(dos);
+    retro::vault::amiga::FSFormatEnum::validate(dos);
 
     loginfo(ADF_DEBUG,
             "Formatting disk (%ld, %s)\n",
-            numBlocks(), retro::vault::amigafs::FSFormatEnum::key(dos));
+            numBlocks(), retro::vault::amiga::FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given
     if (dos == FSFormat::NODOS) return;

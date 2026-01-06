@@ -18,7 +18,7 @@
 #include <ranges>
 #include <unordered_set>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using retro::vault::device::BlockDevice;
 using retro::vault::device::Volume;

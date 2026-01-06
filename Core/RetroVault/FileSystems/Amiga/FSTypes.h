@@ -11,7 +11,7 @@
 
 #include "DeviceTypes.h"
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 using namespace utl;
 using device::BlockNr;

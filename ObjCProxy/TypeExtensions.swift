@@ -16,11 +16,11 @@ typealias Diameter = retro.vault.device.Diameter
 typealias Density = retro.vault.device.Density
 
 // 'retro' namespace
-typealias BootBlockId = retro.vault.amigafs.BootBlockId
-typealias FSBlockError = retro.vault.amigafs.FSBlockError
-typealias FSBlockType = retro.vault.amigafs.FSBlockType
-typealias FSItemType = retro.vault.amigafs.FSItemType
-typealias FSFormat = retro.vault.amigafs.FSFormat
+typealias BootBlockId = retro.vault.amiga.BootBlockId
+typealias FSBlockError = retro.vault.amiga.FSBlockError
+typealias FSBlockType = retro.vault.amiga.FSBlockType
+typealias FSItemType = retro.vault.amiga.FSItemType
+typealias FSFormat = retro.vault.amiga.FSFormat
 
 // 'vamiga' namespace
 typealias Accessor = vamiga.Accessor

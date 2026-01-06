@@ -11,7 +11,7 @@
 
 #include "FileSystems/CBM/FSService.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 class FSImporter final : public FSService {
 

@@ -16,8 +16,8 @@ namespace vamiga {
 
 using retro::vault::device::Diameter;
 using retro::vault::device::Density;
-using retro::vault::amigafs::BootBlockType;
-using retro::vault::amigafs::FSFormat;
+using retro::vault::amiga::BootBlockType;
+using retro::vault::amiga::FSFormat;
 
 //
 // Structures

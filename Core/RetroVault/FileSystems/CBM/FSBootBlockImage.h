@@ -11,7 +11,7 @@
 
 #include "FileSystems/CBM/FSTypes.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 typedef struct
 {

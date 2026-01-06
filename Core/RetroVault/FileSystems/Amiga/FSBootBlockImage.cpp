@@ -11,7 +11,7 @@
 #include "FileSystems/Amiga/FSBootBlockImage.h"
 #include <cstring>
 
-namespace retro::vault::amigafs {
+namespace retro::vault::amiga {
 
 //
 // Bootblock images

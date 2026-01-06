@@ -14,7 +14,7 @@
 #include <limits>
 #include <deque>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 enum class TraversalOrder { DFS, BFS };
 

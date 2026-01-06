@@ -11,7 +11,7 @@
 
 #include "utl/abilities/Reflectable.h"
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 using namespace utl;
 

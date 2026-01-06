@@ -12,7 +12,7 @@
 #include "utl/support.h"
 #include <bit>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 isize
 FSAllocator::requiredDataBlocks(isize fileSize) const noexcept

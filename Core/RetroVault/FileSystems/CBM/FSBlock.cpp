@@ -15,7 +15,7 @@
 #include <algorithm>
 #include <fstream>
 
-namespace retro::vault::cbmfs {
+namespace retro::vault::cbm {
 
 FSBlock::FSBlock(FileSystem *ref, BlockNr nr) : fs(ref), cache(ref->cache)
 {
