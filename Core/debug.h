@@ -132,8 +132,8 @@ constexpr long FAS_DEBUG          = 0;
 constexpr long HDR_DEBUG          = 0;
 constexpr long DBD_DEBUG          = 0;
 
-// Media types
-constexpr long ADF_DEBUG          = 0;
+// Image files
+constexpr long ADF_DEBUG          = 1;
 constexpr long HDF_DEBUG          = 0;
 constexpr long DMS_DEBUG          = 0;
 constexpr long IMG_DEBUG          = 0;

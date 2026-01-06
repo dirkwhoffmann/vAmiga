@@ -122,26 +122,34 @@ Codec::encodeEADF(const EADFFile &eadf, FloppyDisk &disk)
     assert(!eadf.data.empty());
 
     isize tracks   = eadf.storedTracks();
-    auto  diameter = eadf.getDiameter();
-    auto  density  = eadf.getDensity();
+    // auto  diameter = eadf.getDiameter();
+    // auto  density  = eadf.getDensity();
 
     if constexpr (debug::MFM_DEBUG)
         fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     // Create an empty ADF
-    auto adf = make_unique<ADFFile>(ADFFile::fileSize(diameter, density, tracks));
+    // auto adf = make_unique<ADFFile>(ADFFile::fileSize(diameter, density, tracks));
 
     // Wipe out all data
     disk.clearDisk(0);
 
+    // Encode all tracks
+    for (TrackNr t = 0; t < tracks; ++t) disk.replaceTrack(t, eadf.encode(t));
+
+    /*
+    // Wipe out all data
+    disk.clearDisk(0);
+
     // Encode all standard tracks
-    for (TrackNr t = 0; t < tracks; t++) encodeStandardTrack(eadf, *adf, t);
+    for (TrackNr t = 0; t < tracks; t++) encode StandardTrack(eadf, *adf, t);
 
     // Convert the ADF to a disk
     disk.encodeDisk(*adf);
 
     // Encode all extended tracks
     for (TrackNr t = 0; t < tracks; t++) encodeExtendedTrack(eadf, disk, t);
+    */
 }
 
 std::unique_ptr<STFile>
@@ -159,6 +167,7 @@ Codec::makeST(const FloppyDrive &drive)
     return makeST(*drive.disk);
 }
 
+/*
 void
 Codec::encodeStandardTrack(const EADFFile &eadf, ADFFile &adf, TrackNr t)
 {
@@ -190,6 +199,7 @@ Codec::encodeExtendedTrack(const EADFFile &eadf, FloppyDisk &disk, TrackNr t)
         disk.track[t] = MutableBitView(disk.data.track[t], numBits);
     }
 }
+*/
 
 void
 Codec::decodeEADF(EADFFile &eadf, const FloppyDisk &disk)

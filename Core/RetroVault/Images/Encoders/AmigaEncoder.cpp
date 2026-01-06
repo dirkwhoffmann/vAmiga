@@ -115,7 +115,7 @@ AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
     const isize bsize = 512;                       // Block size in bytes
     const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
 
-    loginfo(ADF_DEBUG, "Decoding Amiga track %ld\n", t);
+    loginfo(MFM_DEBUG, "Decoding Amiga track %ld\n", t);
     assert(dst.size() % bsize == 0);
 
     // Find all sectors

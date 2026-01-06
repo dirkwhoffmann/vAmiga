@@ -74,9 +74,10 @@ public:
 
 private:
 
+    /*
     static void encodeStandardTrack(const EADFFile &eadf, ADFFile &adf, TrackNr t);
     static void encodeExtendedTrack(const EADFFile &eadf, FloppyDisk &disk, TrackNr t);
-
+    */
 };
 
 }

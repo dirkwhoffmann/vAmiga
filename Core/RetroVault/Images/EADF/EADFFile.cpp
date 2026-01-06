@@ -77,6 +77,66 @@ void
 EADFFile::didLoad()
 {
     isize numTracks = storedTracks();
+
+    // Scan the EADF file for errors
+    checkIntegrity();
+
+    // Prepare the track storage
+    tracks.resize(numTracks);
+
+    // Read all tracks
+    for (TrackNr t = 0; t < numTracks; ++t) {
+
+        auto &track = tracks.at(t);
+
+        if (isStandardTrack(t)) {
+
+            loginfo(ADF_DEBUG, "Reading standard track %ld from EADF\n", t);
+
+            // Copy bytes from the EADF
+            track.data.assign(trackData(t), trackData(t) + availableBytesForTrack(t));
+
+            // Run the MFM encoder on the copied bytes
+            static constexpr isize MFMSectorSize = 1088;
+            static constexpr isize MFMTrackBytes = 22 * MFMSectorSize;
+            static constexpr isize MFMTrackBits  = 8 * MFMTrackBytes;
+            track.bitCnt = MFMTrackBits;
+            track.mfm.resize(MFMTrackBytes);
+            Encoder::amiga.encodeTrack(track.mfmByteView(), t, track.dataByteView());
+        }
+
+        if (isExtendedTrack(t)) {
+
+            loginfo(ADF_DEBUG, "Reading extended track %ld from EADF\n", t);
+
+            // Copy MFM bits from the EADF
+            track.mfm.assign(trackData(t), trackData(t) + availableBytesForTrack(t));
+            track.bitCnt = usedBitsForTrack(t);
+
+            // Run the MFM decoder on the copied bit stream
+            try {
+
+                track.data.resize(numSectors() * bsize());
+                Encoder::amiga.decodeTrack(track.mfmByteView(), t, track.dataByteView());
+
+            } catch (...) {
+
+                // Since the EADF format is designed to preserve custom MFM
+                // tracks, decoding may fail for some tracks. In that case, no
+                // MFM data is generated. Any attempt to read a block from such
+                // a track via the LinearDevice, BlockDevice, or TrackDevice
+                // interface will result in a read error—exactly as it would on
+                // real hardware.
+                track.data.resize(0);
+            }
+        }
+    }
+}
+
+void
+EADFFile::checkIntegrity()
+{
+    isize numTracks = storedTracks();
     
     if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
         
@@ -98,13 +158,13 @@ EADFFile::didLoad()
 
     for (isize i = 0; i < numTracks; i++) {
 
-        if (typeOfTrack(i) != 0 && typeOfTrack(i) != 1) {
-            
+        if (!isStandardTrack(i) && !isExtendedTrack(i)) {
+
             logwarn("Unsupported track format\n");
             throw ImageError(ImageError::EXT_INCOMPATIBLE);
         }
 
-        if (typeOfTrack(i) == 0) {
+        if (isStandardTrack(i)) {
 
             if (usedBitsForTrack(i) != 11 * 512 * 8) {
 
@@ -119,8 +179,61 @@ EADFFile::didLoad()
             throw ImageError(ImageError::EXT_CORRUPTED);
         }
     }
+}
 
-    mfmTracks.resize(numTracks);
+isize
+EADFFile::size() const
+{
+    return numBlocks() * bsize();
+}
+
+void
+EADFFile::read(u8 *dst, isize offset, isize count) const
+{
+    throw DeviceError(DeviceError::READ_ERR, "Linear access denied.");
+}
+
+void
+EADFFile::write(const u8 *src, isize offset, isize count)
+{
+    throw DeviceError(DeviceError::READ_ERR, "Linear access denied.");
+}
+
+void
+EADFFile::readBlock(u8 *dst, isize nr) const
+{
+    validateBlockNr(nr);
+
+    auto pos    = ts(nr);
+    auto &track = tracks.at(pos.track);
+    auto &bytes = track.data;
+    auto offset = pos.sector * bsize();
+
+    if (track.data.empty())
+        throw(DeviceError::DeviceError::READ_ERR);
+
+    assert(offset + bsize() <= isize(bytes.size()));
+    memcpy(dst, bytes.data() + offset, bsize());
+}
+
+void
+EADFFile::writeBlock(const u8 *src, isize nr)
+{
+    validateBlockNr(nr);
+
+    auto pos    = ts(nr);
+    auto &track = tracks.at(pos.track);
+
+    if (track.data.empty())
+        track.data.resize(numSectors() * numBytes());
+
+    auto &bytes = track.data;
+    auto offset = pos.sector * bsize();
+
+    assert(offset + bsize() <= isize(bytes.size()));
+    memcpy(bytes.data() + offset, src, bsize());
+
+    // TODO: Update the MFM bit stream
 }
 
 Diameter
@@ -144,60 +257,10 @@ EADFFile::getDensity() const noexcept
 BitView
 EADFFile::encode(TrackNr t) const
 {
-    switch (typeOfTrack(t)) {
-
-        case 0: return encodeStandardTrack(t);
-        case 1: return encodeExtendedTrack(t);
-
-        default:
-            throw ImageError(ImageError::EXT_CORRUPTED,
-                             "Invalid track type: " + std::to_string(t));
-    }
-}
-
-EADFFile::MFMTrack &
-EADFFile::ensureMFMTrack(TrackNr t) const
-{
-    static constexpr isize MFMSectorSize = 1088;
-    static constexpr isize MFMTrackBytes = 22 * MFMSectorSize;
-
-    validateTrackNr(t);
-    assert(t < isize(mfmTracks.size()));
-
-    // Access the MFM data cache
-    auto &track = mfmTracks.at(t);
-
-    // Resize if necessary
-    if (isize(track.size()) != MFMTrackBytes) track.resize(MFMTrackBytes);
-
-    return track;
-}
-
-BitView
-EADFFile::encodeStandardTrack(TrackNr t) const
-{
-    loginfo(MFM_DEBUG, "Encoding standard track %ld\n", t);
-
-    auto &track = ensureMFMTrack(t);
-
-    // Create views
-    auto dataByteView = ByteView(trackData(t), availableBytesForTrack(t));
-    auto mfmByteView  = MutableByteView(track.data(), track.size());
-
-    // Encode the track
-    Encoder::amiga.encodeTrack(mfmByteView, t, dataByteView);
-
-    // Return a bit view for the cached MFM data
-    return BitView(mfmByteView.data(), usedBitsForTrack(t));
-}
-
-BitView
-EADFFile::encodeExtendedTrack(TrackNr t) const
-{
-    loginfo(MFM_DEBUG, "Encoding extended track %ld\n", t);
     validateTrackNr(t);
 
-    return BitView(trackData(t), usedBitsForTrack(t));
+    assert(!tracks.at(t).mfm.empty());
+    return tracks.at(t).mfmBitView();
 }
 
 void
@@ -207,7 +270,7 @@ EADFFile::decode(TrackNr t, BitView bits)
 }
 
 isize
-EADFFile::storedTracks() const
+EADFFile::storedTracks() const noexcept
 {
     assert(!data.empty());
 
@@ -215,34 +278,40 @@ EADFFile::storedTracks() const
 }
 
 isize
-EADFFile::typeOfTrack(isize nr) const
+EADFFile::typeOfTrack(isize t) const
 {
+    validateTrackNr(t);
+
     assert(!data.empty());
-    
-    u8 *p = data.ptr + 12 + 12 * nr + 2;
+    u8 *p = data.ptr + 12 + 12 * t + 2;
+
     return HI_LO(p[0], p[1]);
 }
 
 isize
-EADFFile::availableBytesForTrack(isize nr) const
+EADFFile::availableBytesForTrack(isize t) const
 {
+    validateTrackNr(t);
+
     assert(!data.empty());
-    
-    u8 *p = data.ptr + 12 + 12 * nr + 4;
+    u8 *p = data.ptr + 12 + 12 * t + 4;
+
     return HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
 }
 
 isize
-EADFFile::usedBitsForTrack(isize nr) const
+EADFFile::usedBitsForTrack(isize t) const
 {
+    validateTrackNr(t);
+
     assert(!data.empty());
-    
-    u8 *p = data.ptr + 12 + 12 * nr + 8;
+    u8 *p = data.ptr + 12 + 12 * t + 8;
+
     return HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
 }
 
 isize
-EADFFile::proposedHeaderSize() const
+EADFFile::proposedHeaderSize() const noexcept
 {
     assert(!data.empty());
     
@@ -250,7 +319,7 @@ EADFFile::proposedHeaderSize() const
 }
 
 isize
-EADFFile::proposedFileSize() const
+EADFFile::proposedFileSize() const noexcept
 {
     assert(!data.empty());
 
@@ -264,13 +333,14 @@ EADFFile::proposedFileSize() const
 }
 
 u8 *
-EADFFile::trackData(isize nr) const
+EADFFile::trackData(isize t) const
 {
+    validateTrackNr(t);
+
     assert(!data.empty());
-    
     u8 *p = data.ptr + proposedHeaderSize();
     
-    for (isize i = 0; i < nr; i++) {
+    for (isize i = 0; i < t; i++) {
         p += availableBytesForTrack(i);
     }
     

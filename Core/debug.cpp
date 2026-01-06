@@ -140,7 +140,7 @@ DEBUG_CHANNEL(FAS_DEBUG,        "FastRam");
 DEBUG_CHANNEL(HDR_DEBUG,        "HardDrive");
 DEBUG_CHANNEL(DBD_DEBUG,        "DebugBoard");
 
-// Media types
+// Image files
 DEBUG_CHANNEL(ADF_DEBUG,        "ADF, ADZ and extended ADF files");
 DEBUG_CHANNEL(HDF_DEBUG,        "HDF and HDZ files");
 DEBUG_CHANNEL(DMS_DEBUG,        "DMS files");

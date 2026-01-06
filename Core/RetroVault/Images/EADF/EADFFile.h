@@ -44,8 +44,19 @@ namespace retro::vault::image {
 
 class EADFFile : public FloppyDiskImage {
 
-    using MFMTrack = std::vector<u8>;
-    mutable std::vector<MFMTrack> mfmTracks;
+    struct EADFTrack {
+
+        isize bitCnt;           // Track length in bits
+        std::vector<u8> mfm;    // Encoded MFM bit stream
+        std::vector<u8> data;   // Decoded data bytes
+
+        MutableBitView mfmBitView() { return MutableBitView(mfm.data(), bitCnt); }
+        MutableByteView mfmByteView() { return MutableByteView(mfm.data(), mfm.size()); }
+        MutableByteView dataByteView() { return MutableByteView(data.data(), data.size()); }
+    };
+
+    // Track cache
+    mutable std::vector<EADFTrack> tracks;
 
     // Accepted header signatures
     static const std::vector<string> extAdfHeaders;
@@ -82,6 +93,11 @@ public:
     
     void didLoad() override;
 
+private:
+
+    // Scans the file for errors; throws if an inconsistency was found
+    void checkIntegrity(); // TODO: MOVE TO AnyImage class, next to didLoad
+
 
     //
     // Methods from DiskImage
@@ -93,12 +109,25 @@ public:
 
 
     //
+    // Methods from LinearDevice
+    //
+
+public:
+
+    isize size() const override;
+    void read(u8 *dst, isize offset, isize count) const override;
+    void write(const u8 *src, isize offset, isize count) override;
+
+
+    //
     // Methods from BlockDevice
     //
 
 public:
 
     isize bsize() const override { return 512; }
+    void readBlock(u8 *dst, isize nr) const override;
+    void writeBlock(const u8 *src, isize nr) override;
 
 
     //
@@ -127,26 +156,31 @@ public:
 
 private:
 
-    MFMTrack& ensureMFMTrack(TrackNr t) const;
-    BitView encodeStandardTrack(TrackNr t) const;
-    BitView encodeExtendedTrack(TrackNr t) const;
+    // BitView encodeStandardTrack(TrackNr t) const;
+    // BitView encodeExtendedTrack(TrackNr t) const;
 
 
     //
     // Scanning the raw data
     //
     
-public:
-    
-    isize storedTracks() const;
-    isize typeOfTrack(isize nr) const;
-    isize availableBytesForTrack(isize nr) const;
-    isize usedBitsForTrack(isize nr) const;
-    isize proposedHeaderSize() const;
-    isize proposedFileSize() const;
-    
+public: // TODO: MAKE PRIVATE
+
+    isize storedTracks() const noexcept;
+    isize typeOfTrack(isize t) const;
+    isize availableBytesForTrack(isize t) const;
+    isize usedBitsForTrack(isize t) const;
+    isize proposedHeaderSize() const noexcept;
+    isize proposedFileSize() const noexcept;
+
+private:
+
     // Returns a pointer to the first data byte of a certain track
-    u8 *trackData(isize nr) const;
+    u8 *trackData(isize t) const;
+
+    // Convenience wrappers
+    bool isStandardTrack(isize t) const { return typeOfTrack(t) == 0; }
+    bool isExtendedTrack(isize t) const { return typeOfTrack(t) == 1; }
 };
 
 }
