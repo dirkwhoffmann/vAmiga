@@ -51,7 +51,7 @@ ADZFile::describe() const noexcept
 }
 
 void
-ADZFile::didLoad()
+ADZFile::didInitialize()
 {
     loginfo(ADF_DEBUG, "Decompressing %ld bytes...\n", data.size);
     

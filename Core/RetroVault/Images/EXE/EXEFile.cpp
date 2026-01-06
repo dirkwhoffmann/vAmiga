@@ -50,7 +50,7 @@ EXEFile::describe() const noexcept
 }
 
 void
-EXEFile::didLoad()
+EXEFile::didInitialize()
 {
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;

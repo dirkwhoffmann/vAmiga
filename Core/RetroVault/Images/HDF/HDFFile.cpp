@@ -45,7 +45,7 @@ HDFFile::describe() const noexcept
 }
 
 void
-HDFFile::didLoad()
+HDFFile::didInitialize()
 {
     // Retrieve geometry and partition information
     geometry = getGeometryDescriptor();

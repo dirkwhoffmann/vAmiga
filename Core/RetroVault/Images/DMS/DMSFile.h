@@ -61,7 +61,7 @@ public:
     ImageFormat format() const noexcept override { return ImageFormat::DMS; }
     std::vector<string> describe() const noexcept override;
 
-    void didLoad() override;
+    void didInitialize() override;
 
 
     //

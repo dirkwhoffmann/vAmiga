@@ -88,7 +88,7 @@ AnyImage::init(const u8 *buf, isize len)
 
     // Copy data
     std::memcpy(data.ptr, buf, data.size);
-    didLoad();
+    didInitialize();
 }
 
 void

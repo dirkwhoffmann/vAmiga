@@ -91,12 +91,8 @@ public:
     ImageFormat format() const noexcept override { return ImageFormat::EADF; }
     std::vector<string> describe() const noexcept override;
     
-    void didLoad() override;
-
-private:
-
-    // Scans the file for errors; throws if an inconsistency was found
-    void checkIntegrity(); // TODO: MOVE TO AnyImage class, next to didLoad
+    void checkIntegrity() override;
+    void didInitialize() override;
 
 
     //

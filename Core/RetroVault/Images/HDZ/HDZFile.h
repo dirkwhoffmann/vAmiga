@@ -76,7 +76,7 @@ public:
 
 public:
 
-    void didLoad() override;
+    void didInitialize() override;
 
     
     //

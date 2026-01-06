@@ -19,8 +19,6 @@
 
 namespace retro::vault::image {
 
-using vamiga::FloppyDisk;
-
 const std::vector<string> EADFFile::extAdfHeaders =
 {
     "UAE--ADF",
@@ -74,7 +72,55 @@ EADFFile::describe() const noexcept
 }
 
 void
-EADFFile::didLoad()
+EADFFile::checkIntegrity()
+{
+    isize numTracks = storedTracks();
+    
+    if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
+        
+        logwarn("Only UAE-1ADF files are supported\n");
+        throw ImageError(ImageError::EXT_FACTOR5);
+    }
+    
+    if (numTracks < 160 || numTracks > 168) {
+
+        logwarn("Invalid number of tracks\n");
+        throw ImageError(ImageError::EXT_CORRUPTED);
+    }
+
+    if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
+        
+        logwarn("File size mismatch\n");
+        throw ImageError(ImageError::EXT_CORRUPTED);
+    }
+
+    for (isize i = 0; i < numTracks; i++) {
+
+        if (!isStandardTrack(i) && !isExtendedTrack(i)) {
+
+            logwarn("Unsupported track format\n");
+            throw ImageError(ImageError::EXT_INCOMPATIBLE);
+        }
+
+        if (isStandardTrack(i)) {
+
+            if (usedBitsForTrack(i) != 11 * 512 * 8) {
+
+                logwarn("Unsupported standard track size\n");
+                throw ImageError(ImageError::EXT_CORRUPTED);
+            }
+        }
+
+        if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
+            
+            logwarn("Corrupted length information\n");
+            throw ImageError(ImageError::EXT_CORRUPTED);
+        }
+    }
+}
+
+void
+EADFFile::didInitialize()
 {
     isize numTracks = storedTracks();
 
@@ -129,54 +175,6 @@ EADFFile::didLoad()
                 // real hardware.
                 track.data.resize(0);
             }
-        }
-    }
-}
-
-void
-EADFFile::checkIntegrity()
-{
-    isize numTracks = storedTracks();
-    
-    if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
-        
-        logwarn("Only UAE-1ADF files are supported\n");
-        throw ImageError(ImageError::EXT_FACTOR5);
-    }
-    
-    if (numTracks < 160 || numTracks > 168) {
-
-        logwarn("Invalid number of tracks\n");
-        throw ImageError(ImageError::EXT_CORRUPTED);
-    }
-
-    if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
-        
-        logwarn("File size mismatch\n");
-        throw ImageError(ImageError::EXT_CORRUPTED);
-    }
-
-    for (isize i = 0; i < numTracks; i++) {
-
-        if (!isStandardTrack(i) && !isExtendedTrack(i)) {
-
-            logwarn("Unsupported track format\n");
-            throw ImageError(ImageError::EXT_INCOMPATIBLE);
-        }
-
-        if (isStandardTrack(i)) {
-
-            if (usedBitsForTrack(i) != 11 * 512 * 8) {
-
-                logwarn("Unsupported standard track size\n");
-                throw ImageError(ImageError::EXT_CORRUPTED);
-            }
-        }
-
-        if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
-            
-            logwarn("Corrupted length information\n");
-            throw ImageError(ImageError::EXT_CORRUPTED);
         }
     }
 }

@@ -148,7 +148,7 @@ ADFFile::describe() const noexcept
 }
 
 void
-ADFFile::didLoad()
+ADFFile::didInitialize()
 {
     // Add some empty cylinders if the file contains less than 80
     if (data.size < ADFSIZE_35_DD) data.resize(ADFSIZE_35_DD, 0);

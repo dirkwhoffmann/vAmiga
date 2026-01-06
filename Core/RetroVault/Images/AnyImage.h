@@ -103,6 +103,13 @@ public:
 
 
     //
+    // Checking consistency
+    //
+
+    // Scans the image and throws an exception if an inconsistency is found
+    virtual void checkIntegrity() { };
+
+    //
     // Accessing data
     //
 
@@ -133,7 +140,7 @@ public:
 private:
 
     // Called at the end of init()
-    virtual void didLoad() {};
+    virtual void didInitialize() {};
 };
 
 }

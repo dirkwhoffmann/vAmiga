@@ -47,7 +47,7 @@ DMSFile::describe() const noexcept
 }
 
 void
-DMSFile::didLoad()
+DMSFile::didInitialize()
 {
     u8* adfData = nullptr;
     size_t adfSize = 0;

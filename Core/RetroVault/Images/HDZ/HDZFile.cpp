@@ -51,7 +51,7 @@ HDZFile::describe() const noexcept
 }
 
 void
-HDZFile::didLoad()
+HDZFile::didInitialize()
 {
     loginfo(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
         
