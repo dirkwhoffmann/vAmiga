@@ -18,6 +18,30 @@ namespace retro::vault::image {
 
 namespace Encoder { IBMEncoder ibm; }
 
+BitView
+IBMEncoder::encodeTrack(TrackNr t, ByteView src)
+{
+    // Determine the number of sectors to encode
+    const isize count = (isize)src.size() / bsize;
+    if (count >= maxsec) throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
+
+    loginfo(IMG_DEBUG, "Encoding DOS track %ld with %ld sectors\n", t, count);
+    assert(src.size() % bsize == 0);
+
+    // Start with a clean track
+    auto view = MutableByteView(mfmBuffer, count * ssize);
+    view.clear(0xAA);
+
+    // Encode all sectors
+    for (SectorNr s = 0; s < count; s++)
+        encodeSector(view, s * ssize, t, s, ByteView(src.subspan(s * bsize, bsize)));
+
+    // Compute a debug checksum
+    loginfo(IMG_DEBUG, "Track %ld checksum = %x\n", t, view.fnv32());
+    
+    return BitView(view.data(), view.size() * 8);
+}
+
 void
 IBMEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 {

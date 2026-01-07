@@ -15,8 +15,17 @@ namespace retro::vault::image {
 
 class IBMEncoder : public DiskEncoder {
 
+    static constexpr isize bsize  = 512;  // Block size in bytes
+    static constexpr isize ssize  = 1300; // MFM sector size in bytes
+    static constexpr isize maxsec = 22;   // Maximum number of sectors
+
+    // Backing buffer used by the MFM encoder
+    u8 mfmBuffer[ssize * maxsec];
+
 public:
 
+    BitView encodeTrack(TrackNr t, ByteView src) override;
+    
     void encodeTrack(MutableByteView track, TrackNr t, ByteView src) override;
     void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 

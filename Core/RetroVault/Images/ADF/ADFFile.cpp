@@ -205,25 +205,17 @@ ADFFile::getDensity() const noexcept
 BitView
 ADFFile::encode(TrackNr t) const
 {
-    const isize MFMSectorSize = 1088;
-    const isize MFMTrackBytes = MFMSectorSize * numSectors(t);
-
-    // Get the proper entry from the MFM data cache
     validateTrackNr(t);
     auto &track = mfmTracks.at(t);
 
-    // Resize if necessary
-    if (isize(track.size()) != MFMTrackBytes) track.resize(MFMTrackBytes);
+    // Encode track
+    auto mfm = Encoder::amiga.encodeTrack(t, byteView(t));
 
-    // Create views
-    auto dataByteView = byteView(t);
-    auto mfmByteView  = MutableByteView(track.data(), MFMTrackBytes);
+    // Copy the encoded track data
+    track.assign(mfm.data(), mfm.data() + mfm.byteView().size());
 
-    // Encode the track
-    Encoder::amiga.encodeTrack(mfmByteView, t, dataByteView);
-
-    // Return a bit view for the cached MFM data
-    return BitView(mfmByteView.data(), MFMTrackBytes * 8);
+    // Return a bit view with the proper size
+    return BitView(track.data(), mfm.size());
 }
 
 void

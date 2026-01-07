@@ -10,6 +10,7 @@
 #pragma once
 
 #include "DeviceTypes.h"
+#include "DeviceError.h"
 #include "utl/abilities/Loggable.h"
 #include "utl/primitives/BitView.h"
 
@@ -24,7 +25,10 @@ public:
 
     virtual ~DiskEncoder() = default;
 
-    virtual void encodeTrack(MutableByteView track, TrackNr t, ByteView src) = 0;
+    virtual BitView encodeTrack(TrackNr t, ByteView src) = 0;
+
+    // DEPRECATED API
+    [[deprecated]] virtual void encodeTrack(MutableByteView track, TrackNr t, ByteView src) = 0;
     virtual void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) = 0;
 };
 
