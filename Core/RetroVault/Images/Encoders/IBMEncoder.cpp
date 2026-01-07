@@ -42,6 +42,7 @@ IBMEncoder::encodeTrack(TrackNr t, ByteView src)
     return BitView(view.data(), view.size() * 8);
 }
 
+/*
 void
 IBMEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
 {
@@ -75,6 +76,7 @@ IBMEncoder::encodeTrack(MutableByteView track, TrackNr t, ByteView src)
     // Compute a debug checksum
     loginfo(IMG_DEBUG, "Track %ld checksum = %x\n", t, track.fnv32());
 }
+*/
 
 void
 IBMEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)

@@ -360,7 +360,7 @@ void
 FloppyDisk::encode(const ADFFile &adf)
 {
     isize tracks = adf.numTracks();
-    loginfo(ADF_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
+    loginfo(IMG_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter())
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -375,7 +375,7 @@ FloppyDisk::encode(const ADFFile &adf)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, adf.encode(t));
 
     // In debug mode, also run the decoder
-    if constexpr (debug::ADF_DEBUG) {
+    if constexpr (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -406,8 +406,7 @@ FloppyDisk::encode(const class IMGFile &img)
 {
     isize tracks = img.numTracks();
 
-    if constexpr (debug::IMG_DEBUG)
-        fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+    loginfo(IMG_DEBUG, "Encoding DOS disk with %ld tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -420,8 +419,7 @@ FloppyDisk::encode(const class IMGFile &img)
     clearDisk();
 
     // Encode all tracks
-    for (TrackNr t = 0; t < tracks; ++t)
-        Encoder::ibm.encodeTrack(byteView(t), t, img.byteView(t));
+    for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
     if constexpr (debug::IMG_DEBUG) {
@@ -455,8 +453,7 @@ void
 FloppyDisk::encode(const class STFile &img)
 {
     isize tracks = img.numTracks();
-    if constexpr (debug::IMG_DEBUG)
-        fprintf(stderr, "Encoding DOS disk with %ld tracks\n", tracks);
+    loginfo(IMG_DEBUG, "Encoding ST disk with %ld tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -469,8 +466,7 @@ FloppyDisk::encode(const class STFile &img)
     clearDisk();
 
     // Encode all tracks
-    for (TrackNr t = 0; t < tracks; ++t)
-        Encoder::ibm.encodeTrack(byteView(t), t, img.byteView(t));
+    for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
     if constexpr (debug::IMG_DEBUG) {

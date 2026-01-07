@@ -26,7 +26,6 @@ public:
 
     BitView encodeTrack(TrackNr t, ByteView src) override;
 
-    [[deprecated]] void encodeTrack(MutableByteView track, TrackNr t, ByteView src) override;
     void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 
     void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;

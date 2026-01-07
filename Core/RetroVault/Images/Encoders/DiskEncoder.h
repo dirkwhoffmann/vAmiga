@@ -28,7 +28,7 @@ public:
     virtual BitView encodeTrack(TrackNr t, ByteView src) = 0;
 
     // DEPRECATED API
-    [[deprecated]] virtual void encodeTrack(MutableByteView track, TrackNr t, ByteView src) = 0;
+    // [[deprecated]] virtual void encodeTrack(MutableByteView track, TrackNr t, ByteView src) = 0;
     virtual void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) = 0;
 };
 

@@ -137,19 +137,18 @@ EADFFile::didInitialize()
 
         if (isStandardTrack(t)) {
 
-            loginfo(ADF_DEBUG, "Reading standard track %ld from EADF\n", t);
+            loginfo(IMG_DEBUG, "Reading standard track %ld from EADF\n", t);
 
             // Copy bytes from the EADF
-            track.data.assign(trackData(t), trackData(t) + availableBytesForTrack(t));
+            track.data.assign(trackData(t), trackData(t) + usedBitsForTrack(t) / 8);
 
             // Run the MFM encoder on the copied bytes
-            static constexpr isize MFMSectorSize = 1088;
-            static constexpr isize MFMTrackBytes = 22 * MFMSectorSize;
-            static constexpr isize MFMTrackBits  = 8 * MFMTrackBytes;
-            track.bitCnt = MFMTrackBits;
-            track.mfm.resize(MFMTrackBytes);
-            Encoder::amiga.encodeTrack(track.mfmByteView(), t, track.dataByteView());
-        }
+            auto mfm = Encoder::amiga.encodeTrack(t, track.dataByteView());
+
+            // Copy the encoded data
+            track.mfm.assign(mfm.data(), mfm.data() + mfm.byteView().size());
+            track.bitCnt = mfm.size();
+         }
 
         if (isExtendedTrack(t)) {
 
