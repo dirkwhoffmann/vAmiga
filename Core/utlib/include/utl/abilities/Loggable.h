@@ -131,7 +131,7 @@ public:
 protected:
 
     // Optional prefix printed prior to the debug message
-    virtual string prefix(LogLevel, const std::source_location &) const { return ""; }
+    virtual string prefix(LogLevel, const std::source_location &) const;
 };
 
 }

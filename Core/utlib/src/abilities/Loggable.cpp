@@ -104,4 +104,21 @@ Loggable::log(LogChannel c,
     va_end(ap);
 }
 
+string
+Loggable::prefix(LogLevel level, const std::source_location &loc) const
+{
+    const isize verbosity = 2;
+
+    const auto stem = std::filesystem::path(loc.file_name()).stem().string();
+
+    switch (verbosity) {
+
+        case 0:  return "";
+        case 1:  return std::format("{}: ", stem);
+
+        default:
+            return std::format("{}.{}: ", stem, loc.line());
+    }
+}
+
 }
