@@ -141,10 +141,10 @@ DEBUG_CHANNEL(HDR_DEBUG,        "HardDrive");
 DEBUG_CHANNEL(DBD_DEBUG,        "DebugBoard");
 
 // Image files
+DEBUG_CHANNEL(IMG_DEBUG,        "Disk images");
 DEBUG_CHANNEL(ADF_DEBUG,        "ADF, ADZ and extended ADF files");
 DEBUG_CHANNEL(HDF_DEBUG,        "HDF and HDZ files");
 DEBUG_CHANNEL(DMS_DEBUG,        "DMS files");
-DEBUG_CHANNEL(IMG_DEBUG,        "IMG files, ST files");
 
 // Other components
 DEBUG_CHANNEL(RTC_DEBUG,        "Real-time clock");

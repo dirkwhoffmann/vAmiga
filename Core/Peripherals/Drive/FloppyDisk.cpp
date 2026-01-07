@@ -114,7 +114,7 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
 {
     loginfo(MFM_DEBUG, "readBlock: %ld\n", nr);
 
-    auto [t,s]  = ts(nr);
+    auto [t,s]  = b2ts(nr);
     auto tdata  = track[t].byteView();
     auto offset = Encoder::amiga.trySeekSector(tdata, s);
 
@@ -130,7 +130,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
 {
     loginfo(MFM_DEBUG, "writeBlock: %ld\n", nr);
 
-    auto [t,s]  = ts(nr);
+    auto [t,s]  = b2ts(nr);
     auto tdata  = track[t].byteView();
     auto offset = Encoder::amiga.trySeekSector(tdata, s);
 

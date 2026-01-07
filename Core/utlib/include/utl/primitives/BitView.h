@@ -146,6 +146,13 @@ public:
         }
     }
 
+    constexpr void setBytes(isize bitIndex, const std::vector<u8> &values)
+    {
+        for (auto &value : values) {
+            setByte(bitIndex, value); bitIndex += 8;
+        }
+    }
+    
     constexpr isize size()  const { return len; }
     constexpr bool  empty() const { return len == 0; }
     constexpr std::span<T> bytes() const { return sp; }

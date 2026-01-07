@@ -140,7 +140,7 @@ TrackDevice::validateCHS(CHS chs) const
 }
 
 CHS
-TrackDevice::chs(isize b) const
+TrackDevice::b2chs(isize b) const
 {
     auto t = block2track(b);
     auto c = t / numHeads();
@@ -151,7 +151,7 @@ TrackDevice::chs(isize b) const
 }
 
 CHS
-TrackDevice::chs(isize t, isize s) const
+TrackDevice::ts2chs(isize t, isize s) const
 {
     assert(0 <= t && t < numTracks());
     assert(0 <= s && s < numSectors(t));
@@ -163,7 +163,7 @@ TrackDevice::chs(isize t, isize s) const
 }
 
 TS
-TrackDevice::ts(isize b) const
+TrackDevice::b2ts(isize b) const
 {
     assert(0 <= b && b < capacity());
 
@@ -174,7 +174,7 @@ TrackDevice::ts(isize b) const
 }
 
 TS
-TrackDevice::ts(isize c, isize h, isize s) const
+TrackDevice::chs2ts(isize c, isize h, isize s) const
 {
     auto t = c * numHeads() + h;
 
@@ -185,13 +185,13 @@ TrackDevice::ts(isize c, isize h, isize s) const
 }
 
 isize
-TrackDevice::bindex(CHS chs) const
+TrackDevice::bindex(const CHS &chs) const
 {
     return bindex(TS {chs.cylinder * numHeads() + chs.head, chs.sector});
 }
 
 isize
-TrackDevice::bindex(TS ts) const
+TrackDevice::bindex(const TS &ts) const
 {
     assert(0 <= ts.track && ts.track < numTracks());
     assert(0 <= ts.sector && ts.sector < numSectors(ts.track));

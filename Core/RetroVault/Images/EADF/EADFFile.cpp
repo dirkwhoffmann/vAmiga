@@ -202,7 +202,7 @@ EADFFile::readBlock(u8 *dst, isize nr) const
 {
     validateBlockNr(nr);
 
-    auto pos    = ts(nr);
+    auto pos    = b2ts(nr);
     auto &track = tracks.at(pos.track);
     auto &bytes = track.data;
     auto offset = pos.sector * bsize();
@@ -219,7 +219,7 @@ EADFFile::writeBlock(const u8 *src, isize nr)
 {
     validateBlockNr(nr);
 
-    auto pos    = ts(nr);
+    auto pos    = b2ts(nr);
     auto &track = tracks.at(pos.track);
 
     if (track.data.empty())

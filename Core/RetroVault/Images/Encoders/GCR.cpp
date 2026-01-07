@@ -15,8 +15,6 @@ namespace retro::vault::image::GCR {
 void
 encodeGcr(MutableBitView &view, isize bitPos, u8 value)
 {
-    assert(bitPos >= 0 && bitPos < view.size());
-
     u8 n1 = bin2gcr(value >> 4);
     u8 n2 = bin2gcr(value & 0xF);
 

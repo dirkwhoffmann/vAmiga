@@ -13,7 +13,18 @@
 
 namespace retro::vault::image {
 
-// class FileSystem;
+// Disk parameters of a standard floppy disk
+typedef struct
+{
+    u8     sectors;         // Typical number of sectors in this track
+    u8     speedZone;       // Default speed zone for this track
+    u16    lengthInBytes;   // Typical track size in bits
+    u16    lengthInBits;    // Typical track size in bits
+    isize  firstSectorNr;   // Logical number of first sector in track
+    isize  tailGap;         // Gap between two sectors (number of 0x55 bytes)
+    double stagger;         // Relative position of first bit (from Hoxs64)
+}
+TrackDefaults;
 
 class D64File : public FloppyDiskImage {
 
@@ -28,6 +39,7 @@ public:
     static constexpr isize D64_802_SECTORS_ECC = 206114;
 
     static optional<ImageInfo> about(const fs::path &path);
+    static const TrackDefaults &trackDefaults(isize t);
 
 private:
 
@@ -107,7 +119,7 @@ public:
 
 private:
 
-    isize encodeSector(TrackNr t, SectorNr s, isize offset) const;
+    isize encodeSector(MutableBitView &track, TrackNr t, SectorNr s, isize offset) const;
 
 
     //
@@ -122,9 +134,13 @@ public:
     // Returns the error correction codes (if any)
     optional<std::span<const u8>> ecc() const noexcept;
 
+    // Returns the error code for the specified sector (01 = no error)
+    u8 getErrorCode(isize b) const;
 
-    // Returns a file system descriptor for this volume
-    // struct FSDescriptor getFileSystemDescriptor() const;
+private:
+
+    // Translates a track and sector number into an offset (-1 if invalid)
+    isize tsOffset(isize t, isize s) const;
 
 
     //

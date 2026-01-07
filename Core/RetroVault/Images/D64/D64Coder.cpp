@@ -9,99 +9,183 @@
 
 #include "config.h"
 #include "D64File.h"
+#include "GCR.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <format>
 
 namespace retro::vault::image {
 
-// Disk parameters of a standard floppy disk
-typedef struct
-{
-    u8     sectors;         // Typical number of sectors in this track
-    u8     speedZone;       // Default speed zone for this track
-    u16    lengthInBytes;   // Typical track size in bits
-    u16    lengthInBits;    // Typical track size in bits
-    isize  firstSectorNr;   // Logical number of first sector in track
-    double stagger;         // Relative position of first bit (from Hoxs64)
-}
-TrackDefaults;
-
-static constexpr TrackDefaults trackDefaults[43] = {
-
-    { 0, 0, 0, 0, 0, 0 },                       // Padding
-
-    // Speedzone 3 (outer tracks)
-    { 21, 3, 7693, 7693 * 8,   0, 0.268956 },   // Track 1
-    { 21, 3, 7693, 7693 * 8,  21, 0.724382 },   // Track 2
-    { 21, 3, 7693, 7693 * 8,  42, 0.177191 },   // Track 3
-    { 21, 3, 7693, 7693 * 8,  63, 0.632698 },   // Track 4
-    { 21, 3, 7693, 7693 * 8,  84, 0.088173 },   // Track 5
-    { 21, 3, 7693, 7693 * 8, 105, 0.543583 },   // Track 6
-    { 21, 3, 7693, 7693 * 8, 126, 0.996409 },   // Track 7
-    { 21, 3, 7693, 7693 * 8, 147, 0.451883 },   // Track 8
-    { 21, 3, 7693, 7693 * 8, 168, 0.907342 },   // Track 9
-    { 21, 3, 7693, 7693 * 8, 289, 0.362768 },   // Track 10
-    { 21, 3, 7693, 7693 * 8, 210, 0.815512 },   // Track 11
-    { 21, 3, 7693, 7693 * 8, 231, 0.268338 },   // Track 12
-    { 21, 3, 7693, 7693 * 8, 252, 0.723813 },   // Track 13
-    { 21, 3, 7693, 7693 * 8, 273, 0.179288 },   // Track 14
-    { 21, 3, 7693, 7693 * 8, 294, 0.634779 },   // Track 15
-    { 21, 3, 7693, 7693 * 8, 315, 0.090253 },   // Track 16
-    { 21, 3, 7693, 7693 * 8, 336, 0.545712 },   // Track 17
-
-    // Speedzone 2
-    { 19, 2, 7143, 7143 * 8, 357, 0.945418 },   // Track 18
-    { 19, 2, 7143, 7143 * 8, 376, 0.506081 },   // Track 19
-    { 19, 2, 7143, 7143 * 8, 395, 0.066622 },   // Track 20
-    { 19, 2, 7143, 7143 * 8, 414, 0.627303 },   // Track 21
-    { 19, 2, 7143, 7143 * 8, 433, 0.187862 },   // Track 22
-    { 19, 2, 7143, 7143 * 8, 452, 0.748403 },   // Track 23
-    { 19, 2, 7143, 7143 * 8, 471, 0.308962 },   // Track 24
-
-    // Speedzone 1
-    { 18, 1, 6667, 6667 * 8, 490, 0.116926 },   // Track 25
-    { 18, 1, 6667, 6667 * 8, 508, 0.788086 },   // Track 26
-    { 18, 1, 6667, 6667 * 8, 526, 0.459190 },   // Track 27
-    { 18, 1, 6667, 6667 * 8, 544, 0.130238 },   // Track 28
-    { 18, 1, 6667, 6667 * 8, 562, 0.801286 },   // Track 29
-    { 18, 1, 6667, 6667 * 8, 580, 0.472353 },   // Track 30
-
-    // Speedzone 0 (inner tracks)
-    { 17, 0, 6250, 6250 * 8, 598, 0.834120 },   // Track 31
-    { 17, 0, 6250, 6250 * 8, 615, 0.614880 },   // Track 32
-    { 17, 0, 6250, 6250 * 8, 632, 0.395480 },   // Track 33
-    { 17, 0, 6250, 6250 * 8, 649, 0.176140 },   // Track 34
-    { 17, 0, 6250, 6250 * 8, 666, 0.956800 },   // Track 35
-
-    // Speedzone 0 (usually unused tracks)
-    { 17, 0, 6250, 6250 * 8, 683, 0.300 },      // Track 36
-    { 17, 0, 6250, 6250 * 8, 700, 0.820 },      // Track 37
-    { 17, 0, 6250, 6250 * 8, 717, 0.420 },      // Track 38
-    { 17, 0, 6250, 6250 * 8, 734, 0.940 },      // Track 39
-    { 17, 0, 6250, 6250 * 8, 751, 0.540 },      // Track 40
-    { 17, 0, 6250, 6250 * 8, 768, 0.130 },      // Track 41
-    { 17, 0, 6250, 6250 * 8, 785, 0.830 }       // Track 42
-};
-
 BitView
 D64File::encode(TrackNr t) const
 {
-    // TO BE IMPLEMENTED. WE RETURN AN EMPTY TRACK FOR NOW
-    static constexpr size_t TrackSize = 6250;
-     static const std::array<uint8_t, TrackSize> emptyTrack = [] {
-         std::array<uint8_t, TrackSize> data{};
-         data.fill(0x55);
-         return data;
-     }();
+    loginfo(IMG_DEBUG, "Encoding D64 track %ld\n", t);
+    validateTrackNr(t);
 
-     return BitView(emptyTrack.data(), emptyTrack.size() * 8);
+    /* Naming scheme:
+     *
+     * TrackNr    0     1     2     3           68     69           82     83
+     *         -----------------------------------------------------------------
+     * C64     |  1  | 1.5 |  2  | 2.5 | ... |  35  | 35.5 | ... |  42  | 42.5 |
+     *         -----------------------------------------------------------------
+     */
+    auto track = MutableByteView(gcrbuffer, sizeof(gcrbuffer));
+
+    // Format track
+    track.clear(0x55);
+
+    // Get track infos
+    auto &defaults = trackDefaults(t);
+
+    // Create a bit view with proper length
+    auto view = MutableBitView(gcrbuffer, defaults.lengthInBits);
+
+    // Compute start position inside the bit view
+    auto offset = isize(view.size() * defaults.stagger);
+
+    // For each sector in this track ...
+    isize totalBits = 0;
+    for (SectorNr s = 0; s < defaults.sectors; ++s) {
+
+        isize encodedBits = encodeSector(view, t, s, offset);
+        offset += encodedBits;
+        totalBits += encodedBits;
+    }
+
+    if constexpr (debug::IMG_DEBUG) {
+
+        loginfo(IMG_DEBUG,
+                "\nTrack size: %ld Encoded: %ld Checksum: %x\n",
+                view.size(), totalBits, view.byteView().fnv32());
+    }
+    return view;
 }
 
 isize
-D64File::encodeSector(TrackNr t, SectorNr s, isize offset) const
+D64File::encodeSector(MutableBitView &view, TrackNr t, SectorNr s, isize offset) const
 {
-    return 0;
+    loginfo(IMG_DEBUG, "%ld (%ld) ", s, offset);
+
+    auto ts = TS{t,s};
+    validateTS(ts);
+
+    isize b = bindex(ts);
+    validateBlockNr(b);
+
+    auto head      = offset;
+    auto &defaults = trackDefaults(t);
+    auto errorCode = getErrorCode(b);
+
+    // Get disk id and compute checksum
+    auto *bam = data.ptr + 357 * bsize();
+    u8 id1 = bam[0xA2];
+    u8 id2 = bam[0xA3];
+    u8 checksum = (u8)(id1 ^ id2 ^ (t + 1) ^ s); // Header checksum byte
+
+    // SYNC (0xFF 0xFF 0xFF 0xFF 0xFF)
+    if (errorCode == 0x3) {
+        view.setBytes(head, std::vector<u8>(5, 0x00)); // HEADER_CHECKSUM_ERROR
+    } else {
+        view.setBytes(head, std::vector<u8>(5, 0xFF));
+    }
+    head += 40;
+
+    // Header ID
+    if (errorCode == 0x2) {
+        GCR::encodeGcr(view, head, 0x00); // HEADER_BLOCK_NOT_FOUND_ERROR
+    } else {
+        GCR::encodeGcr(view, head, 0x08);
+    }
+    head += 10;
+
+    // Checksum
+    if (errorCode == 0x9) {
+        GCR::encodeGcr(view, head, checksum ^ 0xFF); // HEADER_BLOCK_CHECKSUM_ERROR
+    } else {
+        GCR::encodeGcr(view, head, checksum);
+    }
+    head += 10;
+
+    // Sector and track number
+    GCR::encodeGcr(view, head, u8(s));
+    head += 10;
+    GCR::encodeGcr(view, head, u8(t + 1));
+    head += 10;
+
+    // Disk ID (two bytes)
+    if (errorCode == 0xB) {
+        GCR::encodeGcr(view, head, id2 ^ 0xFF); // DISK_ID_MISMATCH_ERROR
+        head += 10;
+        GCR::encodeGcr(view, head, id1 ^ 0xFF); // DISK_ID_MISMATCH_ERROR
+    } else {
+        GCR::encodeGcr(view, head, id2);
+        head += 10;
+        GCR::encodeGcr(view, head, id1);
+    }
+    head += 10;
+
+    // 0x0F, 0x0F
+    GCR::encodeGcr(view, head, 0x0F);
+    head += 10;
+    GCR::encodeGcr(view, head, 0x0F);
+    head += 10;
+
+    // 0x55 0x55 0x55 0x55 0x55 0x55 0x55 0x55 0x55
+    view.setBytes(head, std::vector<u8>(9, 0x55));
+    // writeGapToTrack(t, offset, 9);
+    head += 9 * 8;
+
+    // SYNC (0xFF 0xFF 0xFF 0xFF 0xFF)
+    if (errorCode == 3) {
+        view.setBytes(head, std::vector<u8>(5, 0x00)); // NO_SYNC_SEQUENCE_ERROR
+    } else {
+        view.setBytes(head, std::vector<u8>(5, 0xFF));
+    }
+    head += 40;
+
+    // Data ID
+    if (errorCode == 0x4) {
+        // The error value is important here:
+        // (1) If the first GCR bit equals 0, the sector can still be read.
+        // (2) If the first GCR bit equals 1, the SYNC sequence continues.
+        //     In this case, the bit sequence gets out of sync and the data
+        //     can't be read.
+        // Hoxs64 and VICE 3.2 write 0x00 which results in option (1)
+        GCR::encodeGcr(view, head, 0x00); // DATA_BLOCK_NOT_FOUND_ERROR
+    } else {
+        GCR::encodeGcr(view, head, 0x07);
+    }
+    head += 10;
+
+    // Data bytes
+    checksum = 0;
+    for (isize i = 0; i < 256; i++, head += 10) {
+        u8 byte = data[b * 256 + i]; // fs.readByte(ts, (u32)i);
+        checksum ^= byte;
+        GCR::encodeGcr(view, head, byte);
+    }
+
+    // Checksum
+    if (errorCode == 0x5) {
+        GCR::encodeGcr(view, head, checksum ^ 0xFF); // DATA_BLOCK_CHECKSUM_ERROR
+    } else {
+        GCR::encodeGcr(view, head, checksum);
+    }
+    head += 10;
+
+    // 0x00, 0x00
+    GCR::encodeGcr(view, head, 0x00);
+    head += 10;
+    GCR::encodeGcr(view, head, 0x00);
+    head += 10;
+
+    // Tail gap (0x55 0x55 ... 0x55)
+    view.setBytes(head, std::vector<u8>(defaults.tailGap, 0x55));
+    // writeGapToTrack(t, offset, tailGap);
+    head += defaults.tailGap * 8;
+
+    // Return the number of encoded bits
+    return head - offset;
 }
 
 void

@@ -136,7 +136,7 @@ constexpr long DBD_DEBUG          = 0;
 constexpr long ADF_DEBUG          = 1;
 constexpr long HDF_DEBUG          = 0;
 constexpr long DMS_DEBUG          = 0;
-constexpr long IMG_DEBUG          = 0;
+constexpr long IMG_DEBUG          = 1;
 
 // Real-time clock
 constexpr long RTC_DEBUG          = 0;

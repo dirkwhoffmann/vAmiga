@@ -97,22 +97,22 @@ public:
 public:
 
     // Translates to cylinder/head/sector format
-    CHS chs(isize b) const;
-    CHS chs(isize t, isize s) const;
-    CHS chs(TS ts) const { return chs(ts.track, ts.sector); }
+    CHS b2chs(isize b) const;
+    CHS ts2chs(isize t, isize s) const;
+    CHS ts2chs(const TS &ts) const { return ts2chs(ts.track, ts.sector); }
 
     // Translates to track/sector format
-    TS ts(isize b) const;
-    TS ts(isize c, isize h, isize s) const;
-    TS ts(CHS chs) const { return ts(chs.cylinder, chs.head, chs.sector); }
+    TS b2ts(isize b) const;
+    TS chs2ts(isize c, isize h, isize s) const;
+    TS chs2ts(const CHS &chs) const { return chs2ts(chs.cylinder, chs.head, chs.sector); }
 
     // Translates to block numbers
-    isize bindex(CHS chs) const;
-    isize bindex(TS ts) const;
+    isize bindex(const CHS &chs) const;
+    isize bindex(const TS &ts) const;
 
     // Translates to byte offsets
-    isize boffset(CHS chs) const { return bindex(chs) * bsize(); }
-    isize boffset(TS ts) const { return bindex(ts) * bsize(); }
+    isize boffset(const CHS &chs) const { return bindex(chs) * bsize(); }
+    isize boffset(const TS &ts) const { return bindex(ts) * bsize(); }
 
 
     //
