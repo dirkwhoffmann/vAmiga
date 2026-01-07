@@ -51,8 +51,8 @@ class EADFFile : public FloppyDiskImage {
         std::vector<u8> data;   // Decoded data bytes
 
         MutableBitView mfmBitView() { return MutableBitView(mfm.data(), bitCnt); }
-        MutableByteView mfmByteView() { return MutableByteView(mfm.data(), mfm.size()); }
-        MutableByteView dataByteView() { return MutableByteView(data.data(), data.size()); }
+        MutableByteView mfmByteView() { return MutableByteView(mfm.data(), isize(mfm.size())); }
+        MutableByteView dataByteView() { return MutableByteView(data.data(), isize(data.size())); }
     };
 
     // Track cache

@@ -224,11 +224,14 @@ ADFFile::decode(TrackNr t, BitView bits)
     validateTrackNr(t);
 
     // Create views
-    auto dataByteView = byteView(t);
-    auto mfmByteView  = bits.byteView();
+    // auto dataByteView = byteView(t);
+    // auto mfmByteView  = bits.byteView();
 
     // Decode track
-    Encoder::amiga.decodeTrack(mfmByteView, t, dataByteView);
+    auto bytes = Encoder::amiga.decodeTrack(t, bits);
+
+    // Copy decoded bytes back to the ADF
+    memcpy(byteView(t).data(), bytes.data(), bytes.size());
 }
 
 /*

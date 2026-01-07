@@ -434,8 +434,8 @@ void
 FloppyDisk::decode(class IMGFile &img) const
 {
     auto tracks = img.numTracks();
-    if constexpr (debug::IMG_DEBUG)
-        fprintf(stderr, "Decoding DOS disk (%ld tracks)\n", tracks);
+
+    loginfo(IMG_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -445,8 +445,7 @@ FloppyDisk::decode(class IMGFile &img) const
     }
 
     // Decode all tracks
-    for (TrackNr t = 0; t < tracks; ++t)
-        Encoder::ibm.decodeTrack(byteView(t), t, img.byteView(t));
+    for (TrackNr t = 0; t < tracks; ++t) img.decode(t, track[t]);
 }
 
 void
@@ -478,23 +477,21 @@ FloppyDisk::encode(const class STFile &img)
 }
 
 void
-FloppyDisk::decode(class STFile &img) const
+FloppyDisk::decode(class STFile &st) const
 {
-    auto tracks = img.numTracks();
+    auto tracks = st.numTracks();
 
-    if constexpr (debug::IMG_DEBUG)
-        fprintf(stderr, "Decoding Atari ST disk (%ld tracks)\n", tracks);
+    loginfo(IMG_DEBUG, "Decoding Atari ST disk (%ld tracks)\n", tracks);
 
-    if (getDiameter() != img.getDiameter()) {
+    if (getDiameter() != st.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
-    if (getDensity() != img.getDensity()) {
+    if (getDensity() != st.getDensity()) {
         throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
     }
 
     // Decode all tracks
-    for (TrackNr t = 0; t < tracks; ++t)
-        Encoder::ibm.decodeTrack(byteView(t), t, img.byteView(t));
+    for (TrackNr t = 0; t < tracks; ++t) st.decode(t, track[t]);
 }
 
 void

@@ -149,6 +149,34 @@ IBMEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, SectorN
     p[2*58+1] &= 0xDF;
 }
 
+ByteView
+IBMEncoder::decodeTrack(TrackNr t, BitView src)
+{
+    loginfo(IMG_DEBUG, "Decoding DOS track %ld\n", t);
+
+    // Setup the backing buffer
+    if (!decoded) decoded = make_unique<u8>(16384);
+
+    // Find all IDAM blocks
+    auto offsets    = seekSectors(src.byteView());
+    auto numSectors = isize(offsets.size());
+
+    // Decode all sectors
+    for (SectorNr s = 0; s < numSectors; s++) {
+
+        if (!offsets.contains(s))
+            throw DeviceError(DeviceError::SEEK_ERR,
+                              "Sector " + std::to_string(s) + " not found");
+
+        decodeSector(src.byteView(),
+                     offsets[s],
+                     MutableByteView(decoded.get() + s * bsize, bsize));
+    }
+
+    return ByteView(decoded.get(), numSectors * bsize);
+}
+
+/*
 void
 IBMEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
 {
@@ -172,6 +200,7 @@ IBMEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
         decodeSector(track, offsets[s], MutableByteView(span<u8>(secData, bsize)));
     }
 }
+*/
 
 void
 IBMEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)

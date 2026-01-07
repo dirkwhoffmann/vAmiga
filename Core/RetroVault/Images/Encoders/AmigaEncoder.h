@@ -19,16 +19,19 @@ class AmigaEncoder : public DiskEncoder {
     static constexpr isize ssize  = 1088; // MFM sector size in bytes
     static constexpr isize maxsec = 22;   // Maximum number of sectors
 
-    // Backing buffer used by the MFM encoder
+    // Backing buffer
     u8 mfmBuffer[maxsec * ssize];
+
+    // Backing buffer
+    std::vector<u8> decoded;
 
 public:
 
     BitView encodeTrack(TrackNr t, ByteView src) override;
+    ByteView decodeTrack(TrackNr t, BitView src) override;
 
     void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
-
-    void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
+    // void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
     void decodeSector(ByteView track, isize offset, MutableByteView dst);
 
     optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);

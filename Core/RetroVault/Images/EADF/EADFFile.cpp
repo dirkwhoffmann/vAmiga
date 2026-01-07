@@ -158,11 +158,13 @@ EADFFile::didInitialize()
             track.mfm.assign(trackData(t), trackData(t) + availableBytesForTrack(t));
             track.bitCnt = usedBitsForTrack(t);
 
-            // Run the MFM decoder on the copied bit stream
             try {
 
-                track.data.resize(numSectors() * bsize());
-                Encoder::amiga.decodeTrack(track.mfmByteView(), t, track.dataByteView());
+                // Run the MFM decoder on the copied bit stream
+                auto bytes = Encoder::amiga.decodeTrack(t, track.mfmBitView());
+
+                // Copy the decoded data
+                track.data.assign(bytes.data(), bytes.data() + bytes.size());
 
             } catch (...) {
 
@@ -172,6 +174,7 @@ EADFFile::didInitialize()
                 // a track via the LinearDevice, BlockDevice, or TrackDevice
                 // interface will result in a read error—exactly as it would on
                 // real hardware.
+                
                 track.data.resize(0);
             }
         }

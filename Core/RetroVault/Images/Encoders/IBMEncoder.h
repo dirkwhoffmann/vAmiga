@@ -22,14 +22,18 @@ class IBMEncoder : public DiskEncoder {
     // Backing buffer used by the MFM encoder
     u8 mfmBuffer[ssize * maxsec];
 
+    // Backing buffer
+    unique_ptr<u8> decoded;
+
 public:
 
     BitView encodeTrack(TrackNr t, ByteView src) override;
-    
+    ByteView decodeTrack(TrackNr t, BitView src) override;
+
     // void encodeTrack(MutableByteView track, TrackNr t, ByteView src) override;
     void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 
-    void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
+    // void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
     void decodeSector(ByteView track, isize offset, MutableByteView dst);
 
     optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);

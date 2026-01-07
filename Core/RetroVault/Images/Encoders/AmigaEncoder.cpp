@@ -112,6 +112,33 @@ AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, Secto
     }
 }
 
+ByteView
+AmigaEncoder::decodeTrack(TrackNr t, BitView src)
+{
+    loginfo(IMG_DEBUG, "Decoding Amiga track %ld\n", t);
+
+    // Setup the backing buffer
+    if (decoded.empty()) decoded.resize(16384);
+
+    // Find all sectors
+    auto offsets    = seekSectors(src.byteView());
+    auto numSectors = isize(offsets.size());
+
+    // Decode all sectors
+    for (isize s = 0; s < numSectors; ++s) {
+
+        if (!offsets.contains(s))
+            throw DeviceError(DeviceError::SEEK_ERR);
+
+        decodeSector(src.byteView(),
+                     offsets[s],
+                     MutableByteView(decoded.data() + s * bsize, bsize));
+    }
+
+    return ByteView(decoded.data(), numSectors * bsize);
+}
+
+/*
 void
 AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
 {
@@ -134,6 +161,7 @@ AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
         decodeSector(track, offsets[s], MutableByteView(span<u8>(secData, bsize)));
     }
 }
+*/
 
 void
 AmigaEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
