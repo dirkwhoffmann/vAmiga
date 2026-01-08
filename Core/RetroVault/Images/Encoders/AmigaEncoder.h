@@ -20,10 +20,14 @@ class AmigaEncoder : public DiskEncoder {
 
 public:
 
+    // Methods from DiskDecoder
     BitView encodeTrack(TrackNr t, ByteView src) override;
+
+    // Encodes a single sector
     void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 };
 
+// DEPRECATED
 namespace Encoder { extern AmigaEncoder amiga; }
 
 }

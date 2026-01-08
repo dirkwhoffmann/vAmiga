@@ -15,6 +15,8 @@
 
 namespace retro::vault {
 
+static constexpr isize bsize  = 512;
+
 namespace Decoder { AmigaDecoder amiga; }
 
 ByteView
@@ -23,7 +25,7 @@ AmigaDecoder::decodeTrack(TrackNr t, BitView src)
     loginfo(IMG_DEBUG, "Decoding Amiga track %ld\n", t);
 
     // Setup the backing buffer
-    if (decoded.empty()) decoded.resize(16384);
+    if (bytes.empty()) bytes.resize(16384);
 
     // Find all sectors
     auto offsets    = seekSectors(src.byteView());
@@ -37,10 +39,10 @@ AmigaDecoder::decodeTrack(TrackNr t, BitView src)
 
         decodeSector(src.byteView(),
                      offsets[s],
-                     MutableByteView(decoded.data() + s * bsize, bsize));
+                     MutableByteView(bytes.data() + s * bsize, bsize));
     }
 
-    return ByteView(decoded.data(), numSectors * bsize);
+    return ByteView(bytes.data(), numSectors * bsize);
 }
 
 void
