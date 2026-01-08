@@ -17,23 +17,25 @@ namespace retro::vault {
 
 static constexpr isize bsize  = 512;  // Block size in bytes
 static constexpr isize ssize  = 1088; // MFM sector size in bytes
-static constexpr isize maxsec = 22;   // Maximum number of sectors
 
 namespace Encoder { AmigaEncoder amiga; }
 
 BitView
 AmigaEncoder::encodeTrack(TrackNr t, ByteView src)
 {
+    assert(src.size() % bsize == 0);
+
     // Determine the number of sectors to encode
     const isize count = (isize)src.size() / bsize;
-    if (count >= maxsec) throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
+
+    if (count != 11 && count != 22)
+        throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
 
     loginfo(ADF_DEBUG, "Encoding Amiga track %ld with %ld sectors\n", t, count);
-    assert(src.size() % bsize == 0);
 
     // Start with a clean track
     if (mfm.empty()) mfm.resize(16384);
-    auto view = MutableByteView(mfm.data(), sizeof(mfm));
+    auto view = MutableByteView(mfm.data(), count * ssize);
     view.clear(0xAA);
 
     // Encode all sectors

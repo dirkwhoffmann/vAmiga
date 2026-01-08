@@ -28,6 +28,9 @@ TrackDefaults;
 
 class D64File : public FloppyDiskImage {
 
+    using GCRTrack = std::vector<u8>;
+    mutable std::vector<GCRTrack> gcrTracks {42};
+
 public:
 
     // D64 files come in six different sizes
@@ -119,7 +122,7 @@ public:
 
 private:
 
-    isize encodeSector(MutableBitView &track, TrackNr t, SectorNr s, isize offset) const;
+    [[deprecated]] isize encodeSector(MutableBitView &track, TrackNr t, SectorNr s, isize offset) const;
 
 
     //
@@ -132,10 +135,11 @@ public:
     bool hasEcc() const noexcept;
 
     // Returns the error correction codes (if any)
-    optional<std::span<const u8>> ecc() const noexcept;
+    // optional<std::span<const u8>> ecc() const noexcept;
+    std::vector<u8> ecc() const noexcept;
 
     // Returns the error code for the specified sector (01 = no error)
-    u8 getErrorCode(isize b) const;
+    u8 getErrorCode(isize b) const ;
 
 private:
 

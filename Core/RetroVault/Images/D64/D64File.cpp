@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "D64File.h"
+#include "C64Encoder.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <format>
@@ -153,6 +154,36 @@ D64File::getDensity() const noexcept
     return Density::DD;
 }
 
+BitView
+D64File::encode(TrackNr t) const
+{
+    validateTrackNr(t);
+    auto &track = gcrTracks.at(t);
+
+    // Get the disk id bytes from the BAM
+    auto *bam = data.ptr + 357 * bsize();
+    u8 id1 = bam[0xA2];
+    u8 id2 = bam[0xA3];
+
+    // Setup the encoder
+    auto encoder = C64Encoder(id1, id2, ecc());
+
+    // Encode track
+    auto gcr = encoder.encodeTrack(t, byteView(t));
+
+    // Copy the encoded track data
+    track.assign(gcr.data(), gcr.data() + gcr.byteView().size());
+
+    // Return a bit view with the proper size
+    return BitView(track.data(), gcr.size());
+}
+
+void
+D64File::decode(TrackNr t, BitView bits)
+{
+    throw std::runtime_error("NOT IMPLEMENTED YET");
+}
+
 bool
 D64File::hasEcc() const noexcept
 {
@@ -167,13 +198,13 @@ D64File::hasEcc() const noexcept
     }
 }
 
-optional<span<const u8>>
+std::vector<u8>
 D64File::ecc() const noexcept
 {
-    if (hasEcc())
-        return span<const u8>(data.ptr + bsize() * numBlocks(), numBlocks());
+    if (!hasEcc()) return {};
 
-    return {};
+    return std::vector<u8>(data.ptr + bsize() * numBlocks(),
+                           data.ptr + bsize() * numBlocks() + numBlocks());
 }
 
 u8
@@ -182,7 +213,7 @@ D64File::getErrorCode(isize b) const
     validateBlockNr(b);
 
     auto codes = ecc();
-    return codes.has_value() ? (codes->data())[b] : 0;
+    return b < isize(codes.size()) ? codes[b] : 0;
 }
 
 isize

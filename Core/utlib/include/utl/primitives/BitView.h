@@ -24,7 +24,11 @@ class BaseBitView {
 
 public:
 
-    constexpr BaseBitView() = default;
+    BaseBitView() = default;
+    BaseBitView(const BaseBitView&) = default;
+    BaseBitView& operator=(const BaseBitView&) = default;
+    BaseBitView(BaseBitView&&) = default;
+    BaseBitView& operator=(BaseBitView&&) = default;
 
     constexpr BaseBitView(T* data, isize bitCount)
     : sp(data, (bitCount + 7) / 8), len(bitCount)
