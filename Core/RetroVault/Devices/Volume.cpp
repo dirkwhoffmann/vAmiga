@@ -9,7 +9,7 @@
 
 #include "Volume.h"
 
-namespace retro::vault::device {
+namespace retro::vault {
 
 Volume::Volume(BlockDevice &device) : device(device)
 {

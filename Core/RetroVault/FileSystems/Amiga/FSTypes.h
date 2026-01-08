@@ -14,7 +14,6 @@
 namespace retro::vault::amiga {
 
 using namespace utl;
-using device::BlockNr;
 
 struct FSBlock;
 

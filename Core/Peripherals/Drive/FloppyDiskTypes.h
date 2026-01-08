@@ -14,10 +14,9 @@
 
 namespace vamiga {
 
-using retro::vault::device::Diameter;
-using retro::vault::device::Density;
-using retro::vault::amiga::BootBlockType;
-using retro::vault::amiga::FSFormat;
+using retro::vault::Diameter;
+using retro::vault::Density;
+
 
 //
 // Structures
@@ -25,10 +24,10 @@ using retro::vault::amiga::FSFormat;
 
 typedef struct
 {
-    FSFormat dos;
-    Diameter diameter;
-    Density density;
-    BootBlockType bootBlockType;
+    retro::vault::amiga::FSFormat dos;
+    retro::vault::Diameter diameter;
+    retro::vault::Density density;
+    retro::vault::amiga::BootBlockType bootBlockType;
     const char *bootBlockName;
     bool hasVirus;
 }

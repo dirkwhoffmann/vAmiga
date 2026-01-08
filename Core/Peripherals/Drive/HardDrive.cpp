@@ -11,13 +11,14 @@
 #include "HardDrive.h"
 #include "Emulator.h"
 #include "Codecs.h"
+#include "DeviceError.h"
 #include "Memory.h"
 #include "MsgQueue.h"
 #include "utl/io.h"
 
 namespace vamiga {
 
-using retro::vault::amiga::FSFormatEnum;
+using namespace retro::vault;
 
 std::fstream HardDrive::wtStream[4];
 
@@ -316,7 +317,7 @@ HardDrive::connect()
         
         loginfo(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
-        format(FSFormat::OFS, FSName(defaultName()));
+        format(amiga::FSFormat::OFS, FSName(defaultName()));
     }
 }
 
@@ -556,12 +557,14 @@ HardDrive::defaultName(isize partition) const
 }
 
 void
-HardDrive::format(FSFormat fsType, FSName name)
+HardDrive::format(amiga::FSFormat fsType, FSName name)
 {
+    using amiga::FSFormat;
+
     if constexpr (debug::HDR_DEBUG) {
 
         loginfo(HDR_DEBUG, "Formatting hard drive\n");
-        loginfo(HDR_DEBUG, "    File system : %s\n", FSFormatEnum::key(fsType));
+        loginfo(HDR_DEBUG, "    File system : %s\n", amiga::FSFormatEnum::key(fsType));
         loginfo(HDR_DEBUG, "           Name : %s\n", name.c_str());
     }
     

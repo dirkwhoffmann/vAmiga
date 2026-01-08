@@ -15,8 +15,6 @@
 
 namespace vamiga {
 
-using retro::vault::amiga::FSFormat;
-
 //
 // Enumerations
 //
@@ -121,7 +119,7 @@ typedef struct
     string name;
     isize lowerCyl;
     isize upperCyl;
-    FSFormat fsType;
+    amiga::FSFormat fsType;
 }
 PartitionTraits;
 

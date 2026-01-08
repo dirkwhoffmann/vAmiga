@@ -594,12 +594,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                 requireFS();
 
                 // Determine the DOS type
-                auto type = FSFormat::NODOS;
+                auto type = amiga::FSFormat::NODOS;
                 auto dos = utl::uppercased(args.at("dos"));
-                if (dos == "OFS") type = FSFormat::OFS;
-                if (dos == "FFS") type = FSFormat::FFS;
-                
-                if (type == FSFormat::NODOS) {
+                if (dos == "OFS") type = amiga::FSFormat::OFS;
+                if (dos == "FFS") type = amiga::FSFormat::FFS;
+
+                if (type == amiga::FSFormat::NODOS) {
                     throw RSError(RSError::GENERIC, "Expected values: OFS or FFS");
                 }
                 

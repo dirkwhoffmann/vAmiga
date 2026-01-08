@@ -15,8 +15,7 @@
 #import <MetalKit/MetalKit.h>
 
 using namespace vamiga;
-using namespace retro::vault::image;
-using namespace retro::vault::device;
+using namespace retro::vault;
 using namespace retro::vault::amiga;
 
 //

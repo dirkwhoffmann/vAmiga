@@ -13,7 +13,11 @@
 #include "MFM.h"
 #include "utl/support/Bits.h"
 
-namespace retro::vault::image {
+namespace retro::vault {
+
+static constexpr isize bsize  = 512;  // Block size in bytes
+static constexpr isize ssize  = 1088; // MFM sector size in bytes
+static constexpr isize maxsec = 22;   // Maximum number of sectors
 
 namespace Encoder { AmigaEncoder amiga; }
 
@@ -28,7 +32,8 @@ AmigaEncoder::encodeTrack(TrackNr t, ByteView src)
     assert(src.size() % bsize == 0);
 
     // Start with a clean track
-    auto view = MutableByteView(mfmBuffer, count * ssize);
+    if (mfm.empty()) mfm.resize(16384);
+    auto view = MutableByteView(mfm.data(), sizeof(mfm));
     view.clear(0xAA);
 
     // Encode all sectors
@@ -44,10 +49,7 @@ AmigaEncoder::encodeTrack(TrackNr t, ByteView src)
 void
 AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
 {
-    const isize bsize = 512;   // Block size in bytes
-    const isize ssize = 1088;  // MFM sector size in bytes
-
-    loginfo(ADF_DEBUG, "Encoding Amiga sector %ld\n", s);
+    loginfo(IMG_DEBUG, "Encoding Amiga sector %ld\n", s);
     assert(data.size() == bsize);
 
     // Block header layout:
@@ -110,143 +112,6 @@ AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, Secto
     for(isize i = 8; i < ssize + 1; i++) {
         it[i] = MFM::addClockBits(it[i], it[i-1]);
     }
-}
-
-ByteView
-AmigaEncoder::decodeTrack(TrackNr t, BitView src)
-{
-    loginfo(IMG_DEBUG, "Decoding Amiga track %ld\n", t);
-
-    // Setup the backing buffer
-    if (decoded.empty()) decoded.resize(16384);
-
-    // Find all sectors
-    auto offsets    = seekSectors(src.byteView());
-    auto numSectors = isize(offsets.size());
-
-    // Decode all sectors
-    for (isize s = 0; s < numSectors; ++s) {
-
-        if (!offsets.contains(s))
-            throw DeviceError(DeviceError::SEEK_ERR);
-
-        decodeSector(src.byteView(),
-                     offsets[s],
-                     MutableByteView(decoded.data() + s * bsize, bsize));
-    }
-
-    return ByteView(decoded.data(), numSectors * bsize);
-}
-
-/*
-void
-AmigaEncoder::decodeTrack(ByteView track, TrackNr t, MutableByteView dst)
-{
-    const isize bsize = 512;                       // Block size in bytes
-    const isize count = (isize)dst.size() / bsize; // Number of sectors to decode
-
-    loginfo(MFM_DEBUG, "Decoding Amiga track %ld\n", t);
-    assert(dst.size() % bsize == 0);
-
-    // Find all sectors
-    auto offsets = seekSectors(track);
-
-    // Decode all sectors
-    for (SectorNr s = 0; s < count; s++) {
-
-        if (!offsets.contains(s))
-            throw DeviceError(DeviceError::SEEK_ERR);
-
-        auto *secData = dst.data() + s * bsize;
-        decodeSector(track, offsets[s], MutableByteView(span<u8>(secData, bsize)));
-    }
-}
-*/
-
-void
-AmigaEncoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
-{
-    const isize bsize = 512;
-    assert(dst.size() == bsize);
-
-    if constexpr (debug::MFM_DEBUG) fprintf(stderr, "Decoding Amiga sector at offset %ld\n", offset);
-
-    // Skip sync mark + sector header
-    offset += 4 + 56;
-
-    // Determine the source address
-    auto *mfmData = &track[offset];
-
-    // Decode sector data
-    MFM::decodeOddEven(dst.data(), mfmData, bsize);
-}
-
-optional<isize>
-AmigaEncoder::trySeekSector(ByteView track, SectorNr s, isize offset)
-{
-    constexpr isize syncMarkLen = 4;
-
-    // Search through all sync marks...
-    auto it = track.cyclic_begin(offset);
-
-   for (isize i = 0; i < track.size() + syncMarkLen; ++i, ++it) {
-
-        // Scan MFM stream for $4489 $4489
-        if (it[0] != 0x44) continue;
-        if (it[1] != 0x89) continue;
-        if (it[2] != 0x44) continue;
-        if (it[3] != 0x89) continue;
-
-        // Make sure it's not a DOS track
-        if (it[5] == 0x89) continue;
-
-        // Decode track & sector info
-        u8 info[4]; MFM::decodeOddEven(info, &it[4], 4);
-
-        // Check if the sector number matches
-        if (info[2] == s) return it.offset();
-    }
-
-    return {};
-}
-
-isize
-AmigaEncoder::seekSector(ByteView track, SectorNr s, isize offset)
-{
-    if (auto result = trySeekSector(track, s, offset))
-        return *result;
-
-    throw DeviceError(DeviceError::INVALID_SECTOR_NR);
-}
-
-std::unordered_map<isize, isize>
-AmigaEncoder::seekSectors(ByteView track)
-{
-    constexpr isize syncMarkLen = 4;
-    std::unordered_map<isize, isize> result;
-
-    // Search through all sync marks...
-    auto it = track.cyclic_begin();
-
-    for (isize i = 0; i < track.size() + syncMarkLen; ++i, ++it) {
-
-        // Scan MFM stream for $4489 $4489
-        if (it[0] != 0x44) continue;
-        if (it[1] != 0x89) continue;
-        if (it[2] != 0x44) continue;
-        if (it[3] != 0x89) continue;
-
-        // Make sure it's not a DOS track
-        if (it[5] == 0x89) continue;
-
-        // Decode track & sector info (info[2] = sector number)
-        u8 info[4]; MFM::decodeOddEven(info, &it[4], 4);
-
-        // Record the offset
-        result[info[2]] = it.offset();
-    }
-
-    return result;
 }
 
 }

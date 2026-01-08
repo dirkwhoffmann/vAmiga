@@ -11,7 +11,7 @@
 #include "ImageTypes.h"
 #include "ImageError.h"
 
-namespace retro::vault::image {
+namespace retro::vault {
 
 ImageError::ImageError(long code, const string &s) : utl::Error(code)
 {

@@ -13,6 +13,7 @@
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "AmigaEncoder.h"
+#include "AmigaDecoder.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "ImageError.h"
 #include "utl/io.h"
@@ -161,7 +162,7 @@ EADFFile::didInitialize()
             try {
 
                 // Run the MFM decoder on the copied bit stream
-                auto bytes = Encoder::amiga.decodeTrack(t, track.mfmBitView());
+                auto bytes = Decoder::amiga.decodeTrack(t, track.mfmBitView());
 
                 // Copy the decoded data
                 track.data.assign(bytes.data(), bytes.data() + bytes.size());

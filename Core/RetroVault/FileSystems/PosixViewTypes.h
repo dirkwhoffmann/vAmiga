@@ -9,13 +9,11 @@
 
 #pragma once
 
-// #include "utl/common.h"
 #include "DeviceTypes.h"
 
 namespace retro::vault {
 
 using namespace utl;
-using device::BlockNr;
 
 namespace posix {
 

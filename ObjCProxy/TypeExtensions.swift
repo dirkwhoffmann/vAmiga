@@ -7,15 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// 'retro::vault::image' namespace
-typealias ImageType = retro.vault.image.ImageType
-typealias ImageFormat = retro.vault.image.ImageFormat
+// 'retro::vault' namespace
+typealias Diameter = retro.vault.Diameter
+typealias Density = retro.vault.Density
+typealias ImageType = retro.vault.ImageType
+typealias ImageFormat = retro.vault.ImageFormat
 
-// 'retro::vault::device' namespace
-typealias Diameter = retro.vault.device.Diameter
-typealias Density = retro.vault.device.Density
-
-// 'retro' namespace
+// 'retro::vault::amiga' namespace
 typealias BootBlockId = retro.vault.amiga.BootBlockId
 typealias FSBlockError = retro.vault.amiga.FSBlockError
 typealias FSBlockType = retro.vault.amiga.FSBlockType

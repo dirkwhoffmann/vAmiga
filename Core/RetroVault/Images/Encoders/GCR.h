@@ -12,7 +12,7 @@
 #include "utl/common.h"
 #include "utl/primitives/BitView.h"
 
-namespace retro::vault::image::GCR {
+namespace retro::vault::GCR {
 
 using namespace utl;
 

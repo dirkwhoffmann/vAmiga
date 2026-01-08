@@ -15,8 +15,6 @@
 
 namespace retro::vault::cbm {
 
-using device::TrackDevice;
-
 class FSExporter final : public FSService {
 
 public:

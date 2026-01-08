@@ -285,8 +285,6 @@
 		509D07742EDB920100355638 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */; };
 		509D07772EDB993F00355638 /* PosixAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixAdapter.cpp */; };
 		509D07782EDB993F00355638 /* PosixAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixAdapter.cpp */; };
-		509E76122EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
-		509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509E76112EDD74F700608FA7 /* DiskEncoder.cpp */; };
 		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
 		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
@@ -357,8 +355,8 @@
 		50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
 		50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
 		50BF4B422F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
-		50BF4B452F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */; };
-		50BF4B462F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */; };
+		50BF4B452F03D6F500F1B9F2 /* DOSEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B442F03D6F400F1B9F2 /* DOSEncoder.cpp */; };
+		50BF4B462F03D6F500F1B9F2 /* DOSEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B442F03D6F400F1B9F2 /* DOSEncoder.cpp */; };
 		50BF4B492F03D72800F1B9F2 /* MFM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B482F03D72700F1B9F2 /* MFM.cpp */; };
 		50BF4B4A2F03D72800F1B9F2 /* MFM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B482F03D72700F1B9F2 /* MFM.cpp */; };
 		50BF4B4D2F03D73000F1B9F2 /* GCR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B4C2F03D73000F1B9F2 /* GCR.cpp */; };
@@ -486,6 +484,10 @@
 		50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* FloppyDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */; };
+		50FB49B32F0F1E2500369491 /* AmigaDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49B22F0F1E2400369491 /* AmigaDecoder.cpp */; };
+		50FB49B42F0F1E2500369491 /* AmigaDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49B22F0F1E2400369491 /* AmigaDecoder.cpp */; };
+		50FB49B72F0F1E2D00369491 /* DOSDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49B62F0F1E2D00369491 /* DOSDecoder.cpp */; };
+		50FB49B82F0F1E2D00369491 /* DOSDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49B62F0F1E2D00369491 /* DOSDecoder.cpp */; };
 		50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC047427DA108500C3E566 /* Headless.cpp */; };
 		50FC048027DA190400C3E566 /* CoreComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* CoreComponent.cpp */; };
 		50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
@@ -1044,7 +1046,6 @@
 		509D07762EDB993E00355638 /* PosixAdapter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PosixAdapter.cpp; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509E76102EDD74E400608FA7 /* DiskEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskEncoder.h; sourceTree = "<group>"; };
-		509E76112EDD74F700608FA7 /* DiskEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskEncoder.cpp; sourceTree = "<group>"; };
 		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
@@ -1171,8 +1172,8 @@
 		50BF4B3E2F03D66600F1B9F2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50BF4B3F2F03D6AB00F1B9F2 /* AmigaEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaEncoder.h; sourceTree = "<group>"; };
 		50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaEncoder.cpp; sourceTree = "<group>"; };
-		50BF4B432F03D6EA00F1B9F2 /* IBMEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IBMEncoder.h; sourceTree = "<group>"; };
-		50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IBMEncoder.cpp; sourceTree = "<group>"; };
+		50BF4B432F03D6EA00F1B9F2 /* DOSEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOSEncoder.h; sourceTree = "<group>"; };
+		50BF4B442F03D6F400F1B9F2 /* DOSEncoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DOSEncoder.cpp; sourceTree = "<group>"; };
 		50BF4B472F03D72000F1B9F2 /* MFM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MFM.h; sourceTree = "<group>"; };
 		50BF4B482F03D72700F1B9F2 /* MFM.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MFM.cpp; sourceTree = "<group>"; };
 		50BF4B4B2F03D72B00F1B9F2 /* GCR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GCR.h; sourceTree = "<group>"; };
@@ -1390,6 +1391,11 @@
 		50FAC76F2515EBED00E47421 /* IMGFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFile.h; sourceTree = "<group>"; };
 		50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyDiskImage.cpp; sourceTree = "<group>"; };
 		50FAC77425160BBF00E47421 /* FloppyDiskImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDiskImage.h; sourceTree = "<group>"; };
+		50FB49AD2F0F1D3B00369491 /* DiskDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskDecoder.h; sourceTree = "<group>"; };
+		50FB49B12F0F1E1E00369491 /* AmigaDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaDecoder.h; sourceTree = "<group>"; };
+		50FB49B22F0F1E2400369491 /* AmigaDecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaDecoder.cpp; sourceTree = "<group>"; };
+		50FB49B52F0F1E2800369491 /* DOSDecoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DOSDecoder.h; sourceTree = "<group>"; };
+		50FB49B62F0F1E2D00369491 /* DOSDecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DOSDecoder.cpp; sourceTree = "<group>"; };
 		50FC046D27DA0FA500C3E566 /* Headless */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Headless; sourceTree = BUILT_PRODUCTS_DIR; };
 		50FC047427DA108500C3E566 /* Headless.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Headless.cpp; sourceTree = "<group>"; };
 		50FC050027DA205D00C3E566 /* Headless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Headless.h; sourceTree = "<group>"; };
@@ -2626,11 +2632,15 @@
 			children = (
 				50BF4B3E2F03D66600F1B9F2 /* CMakeLists.txt */,
 				509E76102EDD74E400608FA7 /* DiskEncoder.h */,
-				509E76112EDD74F700608FA7 /* DiskEncoder.cpp */,
+				50FB49AD2F0F1D3B00369491 /* DiskDecoder.h */,
 				50BF4B3F2F03D6AB00F1B9F2 /* AmigaEncoder.h */,
 				50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */,
-				50BF4B432F03D6EA00F1B9F2 /* IBMEncoder.h */,
-				50BF4B442F03D6F400F1B9F2 /* IBMEncoder.cpp */,
+				50FB49B12F0F1E1E00369491 /* AmigaDecoder.h */,
+				50FB49B22F0F1E2400369491 /* AmigaDecoder.cpp */,
+				50BF4B432F03D6EA00F1B9F2 /* DOSEncoder.h */,
+				50BF4B442F03D6F400F1B9F2 /* DOSEncoder.cpp */,
+				50FB49B52F0F1E2800369491 /* DOSDecoder.h */,
+				50FB49B62F0F1E2D00369491 /* DOSDecoder.cpp */,
 				50BF4B472F03D72000F1B9F2 /* MFM.h */,
 				50BF4B482F03D72700F1B9F2 /* MFM.cpp */,
 				50BF4B4B2F03D72B00F1B9F2 /* GCR.h */,
@@ -3103,7 +3113,7 @@
 				506C71E22D2A0C3F007CBD93 /* DashboardPanel.swift in Sources */,
 				50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
 				506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */,
-				509E76122EDD74F800608FA7 /* DiskEncoder.cpp in Sources */,
+				50FB49B82F0F1E2D00369491 /* DOSDecoder.cpp in Sources */,
 				501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */,
 				50144E362E7BE5EA009E15B4 /* SettingsWindowController.swift in Sources */,
 				509C365E260B177E004F160A /* Console.cpp in Sources */,
@@ -3112,6 +3122,7 @@
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				50BF4BE32F0C0DB000F1B9F2 /* ImageError.cpp in Sources */,
 				502023ED27B6BE7200820DB6 /* RamExpansion.cpp in Sources */,
+				50FB49B32F0F1E2500369491 /* AmigaDecoder.cpp in Sources */,
 				50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */,
 				50650F4E2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
@@ -3170,7 +3181,7 @@
 				50BF4BCC2F0ADF3200F1B9F2 /* FSBootBlockImage.cpp in Sources */,
 				50AFEBBE278EF6CB00F422D5 /* SequencerInfo.cpp in Sources */,
 				50BF4BC32F0ADF3200F1B9F2 /* FSTree.cpp in Sources */,
-				50BF4B452F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */,
+				50BF4B452F03D6F500F1B9F2 /* DOSEncoder.cpp in Sources */,
 				50DE553A2E874647001789C9 /* MyToolbarItems.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
@@ -3580,6 +3591,7 @@
 				50FC04B827DA19B200C3E566 /* FloppyDrive.cpp in Sources */,
 				50BF4BCE2F0ADF3200F1B9F2 /* FSService.cpp in Sources */,
 				50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */,
+				50FB49B42F0F1E2500369491 /* AmigaDecoder.cpp in Sources */,
 				503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */,
 				50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */,
 				509D076F2EDB2A0900355638 /* FileSystemLayer2.cpp in Sources */,
@@ -3618,6 +3630,7 @@
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,
 				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
 				50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
+				50FB49B72F0F1E2D00369491 /* DOSDecoder.cpp in Sources */,
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
 				50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */,
 				501B00162C629A0500749664 /* Beamtraps.cpp in Sources */,
@@ -3634,7 +3647,7 @@
 				50FC048427DA190400C3E566 /* Thread.cpp in Sources */,
 				50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */,
 				509D07742EDB920100355638 /* FileSystemLayer3.cpp in Sources */,
-				50BF4B462F03D6F500F1B9F2 /* IBMEncoder.cpp in Sources */,
+				50BF4B462F03D6F500F1B9F2 /* DOSEncoder.cpp in Sources */,
 				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
@@ -3651,7 +3664,6 @@
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
-				509E76132EDD74F800608FA7 /* DiskEncoder.cpp in Sources */,
 				50BF4BE42F0C0DB000F1B9F2 /* ImageError.cpp in Sources */,
 				50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,
 				5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */,

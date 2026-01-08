@@ -17,8 +17,6 @@
 
 namespace retro::vault::image {
 
-using retro::vault::device::DeviceError;
-
 optional<ImageInfo>
 IMGFile::about(const fs::path &path)
 {

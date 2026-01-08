@@ -13,10 +13,6 @@
 #include "DeviceDescriptors.h"
 #include "utl/common.h"
 
-using retro::vault::device::GeometryDescriptor;
-using retro::vault::device::PartitionDescriptor;
-using retro::vault::device::DriverDescriptor;
-
 namespace retro::vault::image {
 
 using namespace utl;

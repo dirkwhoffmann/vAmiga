@@ -20,7 +20,7 @@
 #include "utl/support.h"
 #include <fstream>
 
-namespace retro::vault::image {
+namespace retro::vault {
 
 optional<ImageInfo>
 AnyImage::about(const fs::path& url)

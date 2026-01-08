@@ -18,9 +18,6 @@
 #include "utl/support.h"
 #include <format>
 
-using retro::vault::device::DeviceError;
-using retro::vault::amiga::BlockNr;
-
 namespace retro::vault::image {
 
 optional<ImageInfo>

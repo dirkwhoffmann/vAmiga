@@ -13,7 +13,7 @@
 #include "utl/common.h"
 #include "utl/primitives/Range.h"
 
-namespace retro::vault::device {
+namespace retro::vault {
 
 using namespace utl;
 

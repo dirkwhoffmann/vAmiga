@@ -11,6 +11,7 @@
 #include "FileSystems/Amiga/FSBootBlockImage.h"
 #include "EADFFile.h"
 #include "AmigaEncoder.h"
+#include "AmigaDecoder.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
@@ -18,11 +19,6 @@
 
 namespace retro::vault::image {
 
-using retro::vault::device::Diameter;
-using retro::vault::device::Density;
-using retro::vault::device::DeviceError;
-using retro::vault::device::Volume;
-using retro::vault::amiga::BlockNr;
 using retro::vault::amiga::FSName;
 using retro::vault::amiga::FSFormatEnum;
 using retro::vault::amiga::FileSystem;
@@ -64,8 +60,8 @@ ADFFile::fileSize(Diameter diameter, Density density)
 isize
 ADFFile::fileSize(Diameter diameter, Density density, isize tracks)
 {
-    retro::vault::device::DiameterEnum::validate(diameter);
-    retro::vault::device::DensityEnum::validate(density);
+    DiameterEnum::validate(diameter);
+    DensityEnum::validate(density);
 
     if (diameter != Diameter::INCH_35) throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
 
@@ -116,8 +112,8 @@ void ADFFile::init(isize len)
 void
 ADFFile::init(Diameter dia, Density den)
 {
-    retro::vault::device::DiameterEnum::validate(dia);
-    retro::vault::device::DensityEnum::validate(den);
+    DiameterEnum::validate(dia);
+    DensityEnum::validate(den);
 
     init(ADFFile::fileSize(dia, den));
 }
@@ -228,7 +224,7 @@ ADFFile::decode(TrackNr t, BitView bits)
     // auto mfmByteView  = bits.byteView();
 
     // Decode track
-    auto bytes = Encoder::amiga.decodeTrack(t, bits);
+    auto bytes = Decoder::amiga.decodeTrack(t, bits);
 
     // Copy decoded bytes back to the ADF
     memcpy(byteView(t).data(), bytes.data(), bytes.size());

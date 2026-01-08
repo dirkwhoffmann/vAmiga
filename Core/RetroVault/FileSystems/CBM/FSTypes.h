@@ -15,7 +15,6 @@
 namespace retro::vault::cbm {
 
 using namespace utl;
-using namespace device;
 
 struct FSBlock;
 

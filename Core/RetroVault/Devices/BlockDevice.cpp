@@ -9,7 +9,7 @@
 
 #include "BlockDevice.h"
 
-namespace retro::vault::device {
+namespace retro::vault {
 
 isize
 BlockDevice::capacity() const

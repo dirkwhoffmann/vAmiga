@@ -27,18 +27,13 @@ namespace retro::vault::amiga { class FileSystem; }
 
 namespace vamiga {
 
-using retro::vault::image::HardDiskImage;
-using retro::vault::image::HDFFile;
-using retro::vault::image::HDZFile;
-using retro::vault::image::ImageFormat;
-using retro::vault::image::ImageFormatEnum;
-using retro::vault::amiga::FileSystem;
-using retro::vault::amiga::FSName;
+using image::HDFFile;
+using image::HDZFile;
 
 class HardDrive final : public Drive, public TrackDevice {
 
     friend class Codec;
-    friend class retro::vault::image::HDFFile;
+    friend class image::HDFFile;
     friend class HdController;
 
     Descriptions descriptions = {
@@ -139,7 +134,7 @@ public:
     void init(isize size);
 
     // Creates a hard drive with the contents of a file system
-    void init(const FileSystem &fs);
+    void init(const amiga::FileSystem &fs);
 
     // Creates a hard drive with the contents of an HDF or HDZ
     void init(const HDFFile &hdf);
@@ -178,6 +173,8 @@ public:
 
     const PartitionTraits &getPartitionTraits(isize nr) const {
 
+        using amiga::FSFormat;
+
         static PartitionTraits traits;
 
         auto descr = getPartitionDescriptor(nr);
@@ -187,7 +184,7 @@ public:
         traits.upperCyl = descr.highCyl;
         
         switch (descr.dosType) {
-                
+
             case 0x444F5300: traits.fsType = FSFormat::OFS; break;
             case 0x444F5301: traits.fsType = FSFormat::FFS; break;
             case 0x444F5302: traits.fsType = FSFormat::OFS_INTL; break;
@@ -387,7 +384,7 @@ public:
     string defaultName(isize partition = 0) const;
 
     // Formats the disk
-    void format(FSFormat fs, FSName name);
+    void format(amiga::FSFormat fs, amiga::FSName name);
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512);

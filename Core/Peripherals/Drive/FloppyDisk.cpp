@@ -12,8 +12,10 @@
 #include "ImageTypes.h"
 #include "ADFFile.h"
 #include "AmigaEncoder.h"
+#include "AmigaDecoder.h"
 #include "Codecs.h"
-#include "IBMEncoder.h"
+#include "DOSEncoder.h"
+#include "DOSDecoder.h"
 #include "Media.h"
 #include "DeviceError.h"
 #include "DiskEncoder.h"
@@ -21,7 +23,7 @@
 
 namespace vamiga {
 
-using namespace retro::vault::image;
+using namespace retro::vault;
 
 void
 FloppyDisk::init(Diameter dia, Density den, bool wp)
@@ -116,13 +118,13 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
 
     auto [t,s]  = b2ts(nr);
     auto tdata  = track[t].byteView();
-    auto offset = Encoder::amiga.trySeekSector(tdata, s);
+    auto offset = Decoder::amiga.trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::SEEK_ERR, "Block " + std::to_string(nr));
 
     loginfo(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    Encoder::amiga.decodeSector(tdata, *offset, MutableByteView(std::span<u8>(dst, 512)));
+    Decoder::amiga.decodeSector(tdata, *offset, MutableByteView(std::span<u8>(dst, 512)));
 }
 
 void
@@ -132,7 +134,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
 
     auto [t,s]  = b2ts(nr);
     auto tdata  = track[t].byteView();
-    auto offset = Encoder::amiga.trySeekSector(tdata, s);
+    auto offset = Decoder::amiga.trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::SEEK_ERR, "Block " + std::to_string(nr));

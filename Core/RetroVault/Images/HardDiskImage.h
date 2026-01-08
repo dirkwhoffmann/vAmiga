@@ -11,7 +11,7 @@
 
 #include "DiskImage.h"
 
-namespace retro::vault::image {
+namespace retro::vault {
 
 class HardDiskImage : public DiskImage {
 

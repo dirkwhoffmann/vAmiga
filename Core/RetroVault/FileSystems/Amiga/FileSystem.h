@@ -107,8 +107,6 @@
 
 namespace retro::vault::amiga {
 
-using retro::vault::device::Volume;
-
 class FileSystem : public Loggable {
 
     friend struct FSBlock;

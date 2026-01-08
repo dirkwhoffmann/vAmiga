@@ -22,9 +22,7 @@
 
 namespace vamiga {
 
-using retro::vault::image::ImageFormat;
-using retro::vault::image::ImageFormatEnum;
-using retro::vault::amiga::BootBlockId;
+using namespace retro::vault;
 
 class FloppyDrive final : public Drive, public TrackDevice {
 
@@ -426,8 +424,9 @@ public:
     void swapDisk(const fs::path &path);
 
     // Replaces the current disk with a factory-fresh disk
-    void insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path &path = {});
-    
+    void insertNew(amiga::FSFormat fs, amiga::BootBlockId bb,
+                   string name, const fs::path &path = {});
+
 private:
     
     template <EventSlot s> void ejectDisk(Cycle delay);

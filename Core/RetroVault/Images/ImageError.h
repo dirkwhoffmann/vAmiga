@@ -11,7 +11,7 @@
 
 #include "utl/common.h"
 
-namespace retro::vault::image {
+namespace retro::vault {
 
 struct ImageError : public Error {
 

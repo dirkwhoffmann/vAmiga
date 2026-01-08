@@ -17,8 +17,6 @@
 
 namespace retro::vault::image {
 
-using retro::vault::device::DeviceError;
-
 optional<ImageInfo>
 STFile::about(const fs::path &path)
 {

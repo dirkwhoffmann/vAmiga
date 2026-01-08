@@ -11,7 +11,7 @@
 
 #include "utl/common.h"
 
-namespace retro::vault::image::MFM {
+namespace retro::vault::MFM {
 
 using namespace utl;
 

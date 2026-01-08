@@ -12,7 +12,7 @@
 #include "DeviceError.h"
 #include <algorithm>
 
-namespace retro::vault::device {
+namespace retro::vault {
 
 using CHS = TrackDevice::CHS;
 using TS  = TrackDevice::TS;

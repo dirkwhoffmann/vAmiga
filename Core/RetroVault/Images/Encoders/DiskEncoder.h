@@ -10,27 +10,19 @@
 #pragma once
 
 #include "DeviceTypes.h"
-#include "DeviceError.h"
 #include "utl/abilities/Loggable.h"
 #include "utl/primitives/BitView.h"
 
-namespace retro::vault::image {
+namespace retro::vault {
 
 using namespace utl;
-using namespace retro::vault::device;
 
 class DiskEncoder : public Loggable {
 
 public:
 
     virtual ~DiskEncoder() = default;
-
     virtual BitView encodeTrack(TrackNr t, ByteView src) = 0;
-    virtual ByteView decodeTrack(TrackNr t, BitView src) = 0;
-
-    // DEPRECATED API
-    // [[deprecated]] virtual void encodeTrack(MutableByteView track, TrackNr t, ByteView src) = 0;
-    // [[deprecated]] virtual void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) = 0;
 };
 
 }

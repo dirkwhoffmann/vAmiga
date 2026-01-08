@@ -1173,7 +1173,8 @@ FloppyDriveAPI::isInsertable(Diameter t, Density d) const
 }
 
 void
-FloppyDriveAPI::insertBlankDisk(FSFormat fstype, BootBlockId bb, string name, const std::filesystem::path &path)
+FloppyDriveAPI::insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId bb,
+                                string name, const std::filesystem::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->insertNew(fstype, bb, name, path);
@@ -1301,7 +1302,7 @@ HardDriveAPI::attach(isize c, isize h, isize s, isize b)
 }
 
 void 
-HardDriveAPI::format(FSFormat fs, const string &name)
+HardDriveAPI::format(amiga::FSFormat fs, const string &name)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->format(fs, FSName(name));

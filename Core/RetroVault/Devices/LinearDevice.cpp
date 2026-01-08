@@ -11,7 +11,7 @@
 #include "LinearDevice.h"
 #include "utl/storage/Buffer.h"
 
-namespace retro::vault::device {
+namespace retro::vault {
 
 u8
 LinearDevice::readByte(isize offset) const

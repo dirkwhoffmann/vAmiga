@@ -20,9 +20,6 @@
 
 namespace retro::vault::amiga {
 
-using retro::vault::device::BlockDevice;
-using retro::vault::device::Volume;
-
 class FSCache final : public FSService {
 
     friend struct FSBlock;

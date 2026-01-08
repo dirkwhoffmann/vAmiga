@@ -17,8 +17,8 @@ namespace retro::vault::amiga { class FileSystem; }
 
 namespace vamiga {
 
-using retro::vault::amiga::BootBlockId;
-using retro::vault::amiga::FileSystem;
+using namespace retro::vault;
+
 
 //
 // Base class for all APIs
@@ -724,7 +724,8 @@ public:
      *  @param  name  Name of the disk
      *  @param  path Optional folder to import
      */
-    void insertBlankDisk(FSFormat fstype, BootBlockId id, string name, const std::filesystem::path &path = {});
+    void insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId id,
+                         string name, const std::filesystem::path &path = {});
 
     /** @brief  Inserts a disk created from a media file.
      *  @param  path   Path to the media file.
@@ -736,7 +737,7 @@ public:
      *  @param  fs      A file system wrapper object.
      *  @param  wp      Write-protection status of the disk.
      */
-    void insertFileSystem(const FileSystem& fs, bool wp);
+    void insertFileSystem(const amiga::FileSystem& fs, bool wp);
 
     /** @brief  Ejects the current disk.
      */
@@ -832,8 +833,8 @@ public:
 
     /** @brief  Formats the hard drive
      */
-    void format(FSFormat fs, const string &name);
-    
+    void format(amiga::FSFormat fs, const string &name);
+
     /** @brief  Attaches a hard drive provided by an URL to a media file.
      *  @param  path    Path to the media file.
      */

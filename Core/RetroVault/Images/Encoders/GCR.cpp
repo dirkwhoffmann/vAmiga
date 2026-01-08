@@ -10,7 +10,7 @@
 #include "config.h"
 #include "GCR.h"
 
-namespace retro::vault::image::GCR {
+namespace retro::vault::GCR {
 
 void
 encodeGcr(MutableBitView &view, isize bitPos, u8 value)

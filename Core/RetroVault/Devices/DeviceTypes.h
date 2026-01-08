@@ -11,7 +11,7 @@
 
 #include "utl/abilities/Reflectable.h"
 
-namespace retro::vault::device {
+namespace retro::vault {
 
 using namespace utl;
 

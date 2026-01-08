@@ -16,7 +16,7 @@
 using retro::vault::image::HDFFile;
 using retro::vault::image::HDZFile;
 
-namespace retro::vault::image {
+namespace retro::vault {
 
 optional<ImageInfo>
 HardDiskImage::about(const fs::path& url)

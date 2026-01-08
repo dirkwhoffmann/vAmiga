@@ -11,12 +11,8 @@
 
 #include "DiskImage.h"
 #include "DeviceTypes.h"
-// #include "FileSystems/Amiga/FSTypes.h"
 
-using retro::vault::device::Diameter;
-using retro::vault::device::Density;
-
-namespace retro::vault::image {
+namespace retro::vault {
 
 class FloppyDiskImage : public DiskImage {
 

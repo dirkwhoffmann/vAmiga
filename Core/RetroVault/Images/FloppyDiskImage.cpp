@@ -19,7 +19,9 @@
 #include "D64File.h"
 #include "utl/io.h"
 
-namespace retro::vault::image {
+namespace retro::vault {
+
+using namespace image;
 
 optional<ImageInfo>
 FloppyDiskImage::about(const fs::path& url)

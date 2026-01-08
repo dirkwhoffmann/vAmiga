@@ -17,8 +17,7 @@
 
 namespace retro::vault::image {
 
-using retro::vault::device::Volume;
-using retro::vault::amiga::FSName;
+// using retro::vault::amiga::FSName;
 
 optional<ImageInfo>
 EXEFile::about(const fs::path &path)
@@ -52,6 +51,8 @@ EXEFile::describe() const noexcept
 void
 EXEFile::didInitialize()
 {
+    using amiga::FSName;
+
     // Check if this file requires a high-density disk
     bool hd = data.size > 853000;
 

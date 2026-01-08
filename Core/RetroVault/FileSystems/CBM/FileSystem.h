@@ -107,7 +107,7 @@
 
 namespace retro::vault::cbm {
 
-using retro::vault::device::Volume;
+using retro::vault::Volume;
 
 class FileSystem : public Loggable {
 

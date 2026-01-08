@@ -14,11 +14,6 @@
 
 namespace retro::vault::amiga {
 
-using retro::vault::device::GeometryDescriptor;
-using retro::vault::device::PartitionDescriptor;
-using retro::vault::device::Diameter;
-using retro::vault::device::Density;
-
 /* To create a FileSystem, several layout parameters need to to be provided.
  * This is done by passing a FSDescriptor which contains the necessary
  * information.

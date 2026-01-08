@@ -15,7 +15,7 @@
 #include "utl/types/Literals.h"
 #include <algorithm>
 
-namespace retro::vault::device {
+namespace retro::vault {
 
 //
 // GeometryDescriptor

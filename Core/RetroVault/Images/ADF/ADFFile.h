@@ -22,7 +22,6 @@ using retro::vault::amiga::BootBlockId;
 using retro::vault::amiga::FileSystem;
 using retro::vault::amiga::FSFormat;
 using retro::vault::amiga::FSDescriptor;
-using retro::vault::device::GeometryDescriptor;
 
 class ADFFile : public FloppyDiskImage {
 

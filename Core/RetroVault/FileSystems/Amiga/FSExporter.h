@@ -15,8 +15,6 @@
 
 namespace retro::vault::amiga {
 
-using device::TrackDevice;
-
 class FSExporter final : public FSService {
 
 public:
