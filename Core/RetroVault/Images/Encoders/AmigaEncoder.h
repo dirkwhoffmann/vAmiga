@@ -27,7 +27,4 @@ public:
     void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 };
 
-// DEPRECATED
-namespace Encoder { extern AmigaEncoder amiga; }
-
 }

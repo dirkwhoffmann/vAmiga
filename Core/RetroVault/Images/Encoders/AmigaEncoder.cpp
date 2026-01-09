@@ -18,8 +18,6 @@ namespace retro::vault {
 static constexpr isize bsize  = 512;  // Block size in bytes
 static constexpr isize ssize  = 1088; // MFM sector size in bytes
 
-namespace Encoder { AmigaEncoder amiga; }
-
 BitView
 AmigaEncoder::encodeTrack(TrackNr t, ByteView src)
 {

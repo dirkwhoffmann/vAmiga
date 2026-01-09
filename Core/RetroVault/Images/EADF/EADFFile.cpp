@@ -144,7 +144,8 @@ EADFFile::didInitialize()
             track.data.assign(trackData(t), trackData(t) + usedBitsForTrack(t) / 8);
 
             // Run the MFM encoder on the copied bytes
-            auto mfm = Encoder::amiga.encodeTrack(t, track.dataByteView());
+            AmigaEncoder encoder;
+            auto mfm = encoder.encodeTrack(t, track.dataByteView());
 
             // Copy the encoded data
             track.mfm.assign(mfm.data(), mfm.data() + mfm.byteView().size());
@@ -162,7 +163,8 @@ EADFFile::didInitialize()
             try {
 
                 // Run the MFM decoder on the copied bit stream
-                auto bytes = Decoder::amiga.decodeTrack(t, track.mfmBitView());
+                AmigaDecoder decoder;
+                auto bytes = decoder.decodeTrack(t, track.mfmBitView());
 
                 // Copy the decoded data
                 track.data.assign(bytes.data(), bytes.data() + bytes.size());

@@ -37,7 +37,4 @@ public:
 
 };
 
-// DEPRECATED
-namespace Decoder { extern AmigaDecoder amiga; }
-
 }

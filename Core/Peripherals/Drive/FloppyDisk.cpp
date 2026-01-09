@@ -116,15 +116,17 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
 {
     loginfo(MFM_DEBUG, "readBlock: %ld\n", nr);
 
-    auto [t,s]  = b2ts(nr);
-    auto tdata  = track[t].byteView();
-    auto offset = Decoder::amiga.trySeekSector(tdata, s);
+    AmigaDecoder decoder;
+
+    auto [t,s]   = b2ts(nr);
+    auto tdata   = track[t].byteView();
+    auto offset  = decoder.trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::SEEK_ERR, "Block " + std::to_string(nr));
 
     loginfo(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    Decoder::amiga.decodeSector(tdata, *offset, MutableByteView(std::span<u8>(dst, 512)));
+    decoder.decodeSector(tdata, *offset, MutableByteView(std::span<u8>(dst, 512)));
 }
 
 void
@@ -132,15 +134,18 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
 {
     loginfo(MFM_DEBUG, "writeBlock: %ld\n", nr);
 
+    AmigaDecoder decoder;
+    AmigaEncoder encoder;
+
     auto [t,s]  = b2ts(nr);
     auto tdata  = track[t].byteView();
-    auto offset = Decoder::amiga.trySeekSector(tdata, s);
+    auto offset = decoder.trySeekSector(tdata, s);
 
     if (!offset)
         throw IOError(DeviceError::SEEK_ERR, "Block " + std::to_string(nr));
 
     loginfo(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
-    Encoder::amiga.encodeSector(tdata, *offset, t, s, ByteView(std::span<const u8>(src, 512)));
+    encoder.encodeSector(tdata, *offset, t, s, ByteView(std::span<const u8>(src, 512)));
 }
 
 void

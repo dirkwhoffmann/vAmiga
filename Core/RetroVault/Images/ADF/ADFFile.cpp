@@ -205,7 +205,8 @@ ADFFile::encode(TrackNr t) const
     auto &track = mfmTracks.at(t);
 
     // Encode track
-    auto mfm = Encoder::amiga.encodeTrack(t, byteView(t));
+    AmigaEncoder encoder;
+    auto mfm = encoder.encodeTrack(t, byteView(t));
 
     // Copy the encoded track data
     track.assign(mfm.data(), mfm.data() + mfm.byteView().size());
@@ -219,12 +220,8 @@ ADFFile::decode(TrackNr t, BitView bits)
 {
     validateTrackNr(t);
 
-    // Create views
-    // auto dataByteView = byteView(t);
-    // auto mfmByteView  = bits.byteView();
-
     // Decode track
-    auto bytes = Decoder::amiga.decodeTrack(t, bits);
+    auto bytes = AmigaDecoder().decodeTrack(t, bits);
 
     // Copy decoded bytes back to the ADF
     memcpy(byteView(t).data(), bytes.data(), bytes.size());

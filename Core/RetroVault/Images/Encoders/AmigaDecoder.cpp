@@ -17,8 +17,6 @@ namespace retro::vault {
 
 static constexpr isize bsize  = 512;
 
-namespace Decoder { AmigaDecoder amiga; }
-
 ByteView
 AmigaDecoder::decodeTrack(TrackNr t, BitView src)
 {
@@ -48,7 +46,6 @@ AmigaDecoder::decodeTrack(TrackNr t, BitView src)
 void
 AmigaDecoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
 {
-    const isize bsize = 512;
     assert(dst.size() == bsize);
 
     loginfo(NULLDEV, "Decoding Amiga sector at offset %ld\n", offset);
