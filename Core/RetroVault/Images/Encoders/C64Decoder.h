@@ -37,16 +37,16 @@ public:
     // std::unordered_map<isize, isize> seekSectors(BitView track);
 
     // Decodes a single sector
-    void decodeSector(BitView track, isize offset, MutableByteView dst);
+    void decodeSector(BitView sector, MutableByteView dst);
 
-    // Seeks the first data bit of a single sector (throws if not found)
-    isize seekSector(BitView track, SectorNr s, isize offset = 0);
+    // Returns a bit view on the data section of a sector (throws if not found)
+    BitView seekSector(BitView track, SectorNr s, isize offset = 0);
 
-    // Seeks the first data bit of a single sector (empty if not found)
-    optional<isize> trySeekSector(BitView track, SectorNr s, isize offset = 0);
+    // Returns a bit view on the data section of a sector (empty if not found)
+    optional<BitView> trySeekSector(BitView track, SectorNr s, isize offset = 0);
 
-    // Returns a map from sector numbers to the respective first data bits
-    std::unordered_map<isize, isize> seekSectors(BitView track);
+    // Computes the data section bit views for all sectors
+    std::unordered_map<SectorNr, BitView> seekSectors(BitView track);
 
 private:
 
@@ -68,9 +68,9 @@ private:
     // Returns a mapping from sector numbers to their start offsets. Each offset
     // is the bit position of the sector’s first data bit.
 
-    std::unordered_map<SectorNr, isize> seekSectors(BitView track,
-                                                    std::span<const SectorNr> wanted,
-                                                    isize offset = 0);
+    std::unordered_map<SectorNr, BitView> seekSectors(BitView track,
+                                                      std::span<const SectorNr> wanted,
+                                                      isize offset = 0);
 
 };
 

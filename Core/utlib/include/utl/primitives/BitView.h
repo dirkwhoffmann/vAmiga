@@ -46,6 +46,14 @@ public:
         assert(isize(sp.size()) * 8 >= bitCount);
     }
 
+    constexpr BaseBitView(std::span<T> bytes, isize first, isize last)
+    : sp(bytes), first(first), last(last)
+    {
+        assert(first >= 0);
+        assert(last >= first);
+        assert(isize(sp.size()) * 8 >= last);
+    }
+
     // Allows const-view from mutable-view
     constexpr BaseBitView(const BaseBitView<u8>& other)
     requires std::is_const_v<T>

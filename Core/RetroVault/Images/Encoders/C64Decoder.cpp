@@ -39,17 +39,16 @@ C64Decoder::decodeTrack(TrackNr t, BitView src)
     if (bytes.empty()) bytes.resize(16384);
 
     // Find all sectors
-    auto offsets    = seekSectors(src);
-    auto numSectors = isize(offsets.size());
+    auto sectors = seekSectors(src);
+    auto numSectors = isize(sectors.size());
 
     // Decode all sectors
     for (isize s = 0; s < numSectors; ++s) {
 
-        if (!offsets.contains(s))
+        if (!sectors.contains(s))
             throw DeviceError(DeviceError::SEEK_ERR);
 
-        decodeSector(src,
-                     offsets[s],
+        decodeSector(sectors[s],
                      MutableByteView(bytes.data() + s * bsize, bsize));
     }
 
@@ -57,19 +56,17 @@ C64Decoder::decodeTrack(TrackNr t, BitView src)
 }
 
 void
-C64Decoder::decodeSector(BitView src, isize offset, MutableByteView dst)
+C64Decoder::decodeSector(BitView sector, MutableByteView dst)
 {
     assert(dst.size() == bsize);
 
-    loginfo(IMG_DEBUG, "Decoding C64 sector at offset %ld\n", offset);
-
     // Skip sync mark + sector header
-    offset += 40 + 10;
+    isize offset = 40 + 10;
 
     // Decode sector data
-    for (isize i = 0; i < bsize; i++) {
+    for (isize i = 0; i < bsize; ++i) {
 
-        dst[i] = GCR::decodeGcr(src, offset);
+        dst[i] = GCR::decodeGcr(sector, offset);
         offset += 10;
     }
 }
@@ -106,7 +103,7 @@ C64Decoder::seekHeaderSync(BitView track, BitView::cyclic_iterator &it)
     return false;
 }
 
-isize
+BitView
 C64Decoder::seekSector(BitView track, SectorNr s, isize offset)
 {
     if (auto result = trySeekSector(track, s, offset))
@@ -115,7 +112,7 @@ C64Decoder::seekSector(BitView track, SectorNr s, isize offset)
     throw DeviceError(DeviceError::INVALID_SECTOR_NR);
 }
 
-optional<isize>
+optional<BitView>
 C64Decoder::trySeekSector(BitView track, SectorNr s, isize offset)
 {
     auto map = seekSectors(track, std::span<const SectorNr>(&s, 1), offset);
@@ -126,17 +123,17 @@ C64Decoder::trySeekSector(BitView track, SectorNr s, isize offset)
     return std::nullopt;
 }
 
-std::unordered_map<SectorNr, isize>
+std::unordered_map<SectorNr, BitView>
 C64Decoder::seekSectors(BitView track)
 {
     return seekSectors(track, std::vector<SectorNr>(), 0);
 }
 
-std::unordered_map<SectorNr, isize>
+std::unordered_map<SectorNr, BitView>
 C64Decoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize offset)
 {
     std::unordered_set<SectorNr> visited;
-    std::unordered_map<SectorNr, isize> result;
+    std::unordered_map<SectorNr, BitView> result;
 
     // Loop until a sector header repeats or no sync marks are found
     for (auto it = track.cyclic_begin(offset);;) {
@@ -166,7 +163,7 @@ C64Decoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize o
                 it += GCR::bitsPerByte;
 
                 // At this point, the offset references the first data bit
-                result[nr] = it.offset();
+                result[nr] = track.subview(it.offset(), GCR::bitsPerByte * 256);
 
                 // Check for early exit
                 if (!wanted.empty() && result.size() == wanted.size()) break;

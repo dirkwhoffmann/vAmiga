@@ -19,9 +19,6 @@ class DOSDecoder : public DiskDecoder {
     static constexpr isize ssize  = 1300; // MFM sector size in bytes
     static constexpr isize maxsec = 22;   // Maximum number of sectors
 
-    // Backing buffer used by the MFM encoder
-    u8 mfmBuffer[ssize * maxsec];
-
     // Backing buffer
     unique_ptr<u8> decoded;
 
