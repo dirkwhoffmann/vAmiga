@@ -17,10 +17,12 @@ namespace utl {
 template <typename T>
 class BaseBitView {
 
+    template <typename> friend class BaseBitView;
     static_assert(std::is_same_v<T, u8> || std::is_same_v<T, const u8>);
 
-    std::span<T> sp{};   // underlying bytes
-    isize len = 0;       // number of bits
+    std::span<T> sp{};  // Underlying data buffer
+    isize first = 0;    // View window start (inclusive)
+    isize last  = 0;    // View window end (exclusive)
 
 public:
 
@@ -31,29 +33,28 @@ public:
     BaseBitView& operator=(BaseBitView&&) = default;
 
     constexpr BaseBitView(T* data, isize bitCount)
-    : sp(data, (bitCount + 7) / 8), len(bitCount)
+    : sp(data, (bitCount + 7) / 8), first(0), last(bitCount)
     {
-        assert(len >= 0);
-        assert(isize(sp.size()) * 8 >= len);
+        assert(bitCount >= 0);
+        assert(isize(sp.size()) * 8 >= bitCount);
     }
 
     constexpr BaseBitView(std::span<T> bytes, isize bitCount)
-    : sp(bytes), len(bitCount)
+    : sp(bytes), first(0), last(bitCount)
     {
-        assert(len >= 0);
-        assert(isize(sp.size()) * 8 >= len);
+        assert(bitCount >= 0);
+        assert(isize(sp.size()) * 8 >= bitCount);
     }
 
     // Allows const-view from mutable-view
     constexpr BaseBitView(const BaseBitView<u8>& other)
-        requires std::is_const_v<T>
-    : sp(other.bytes()), len(other.size())
+    requires std::is_const_v<T>
+    : sp(other.bytes()), first(other.first), last(other.last)
     {}
 
     // Provides a byte-level view
     constexpr auto byteView() const
     {
-        // if constexpr (std::is_const_v<decltype(*this)>) {
         if constexpr (std::is_const_v<T>) {
             return ByteView(sp);
         } else {
@@ -61,100 +62,107 @@ public:
         }
     }
 
+    constexpr BaseBitView subview(isize bitOffset, isize bitCount) const
+    {
+        assert(bitCount >= 0);
+        assert(bitOffset >= 0);
+        assert(bitOffset + bitCount <= size());
+
+        return BaseBitView(sp, first + bitOffset, first + bitOffset + bitCount);
+    }
+
+    constexpr BaseBitView slice(isize from, isize to) const
+    {
+        assert(from >= 0);
+        assert(to >= from);
+        assert(to <= size());
+
+        return BaseBitView(sp, first + from, first + to);
+    }
+
     // Reads a single bit
     constexpr bool operator[](isize i) const
     {
-        assert(i >= 0 && i < len);
-        return (sp[i >> 3] >> (7 - (i & 7))) & 1;
+        assert(i >= 0 && i < size());
+        isize abs = first + i;
+        return (sp[abs >> 3] >> (7 - (abs & 7))) & 1;
     }
 
     constexpr isize normalize(isize i) const
     {
-        if (i < 0 || i >= len) {
-            i %= len; if (i < 0) i += len;
+        isize n = size();
+
+        if (i < 0 || i >= n) {
+
+            i %= n;
+            if (i < 0) i += n;
         }
         return i;
     }
     
     constexpr u8 getByte(isize bitIndex) const
     {
-        assert(len > 0);
+        assert(!empty());
 
-        // Fast path for a byte-aligned and byte-sized buffer
-        if (((bitIndex & 7) == 0) && ((len & 7) == 0)) {
+        isize n   = size();
+        isize pos = normalize(bitIndex);
+        isize abs = first + pos;
+        u8    val = 0;
 
-            const isize byteCount = len >> 3;
-            isize byteIndex = (bitIndex >> 3) % byteCount;
-            if (byteIndex < 0) byteIndex += byteCount;
+        if (((abs & 7) == 0) && ((n & 7) == 0)) {
 
-            return sp[byteIndex];
+            // Fast path: Byte-aligned read inside a byte-aligned view
+            val = sp[abs >> 3];
+
+        } else {
+
+            // Slow path: Bitwise fallback
+            for (int b = 0; b < 8; ++b) {
+
+                isize i = first + ((pos + b) % n);
+                val <<= 1;
+                val |= (sp[i >> 3] >> (7 - (i & 7))) & 1;
+            }
         }
-
-        // Normalize start bit
-        isize pos = bitIndex % len;
-        if (pos < 0) pos += len;
-
-        u8 value = 0;
-
-        for (int b = 0; b < 8; ++b) {
-
-            isize i = pos + b;
-            if (i >= len) i -= len;
-
-            value <<= 1;
-            value |= (sp[i >> 3] >> (7 - (i & 7))) & 1;
-        }
-
-        return value;
+        return val;
     }
 
-    // Writes a single bit
     constexpr void set(isize bitIndex, bool value)
     requires (!std::is_const_v<T>)
     {
-        // Clamp position
-        isize i = bitIndex % len;
-        if (i < 0) i += len;
-
-        // assert(i >= 0 && i < len);
-
+        isize i = first + normalize(bitIndex);
         auto& byte = sp[i >> 3];
-        auto  mask = u8(1 << (7 - (i & 7)));
+        auto mask = u8(1 << (7 - (i & 7)));
         value ? byte |= mask : byte &= ~mask;
     }
 
-    // Writes a byte
-    constexpr void setByte(isize bitIndex, u8 value)
+    constexpr void setByte(isize bitIndex, u8 val)
+    requires (!std::is_const_v<T>)
     {
-        assert(len > 0);
+        assert(!empty());
 
-        // Fast path for a byte-aligned and byte-sized buffer
-        if (((bitIndex & 7) == 0) && ((len & 7) == 0)) {
+        isize n   = size();
+        isize pos = normalize(bitIndex);
+        isize abs = first + pos;
 
-            const isize byteCount = len >> 3;
-            isize byteIndex = (bitIndex >> 3) % byteCount;
-            if (byteIndex < 0) byteIndex += byteCount;
+        if (((abs & 7) == 0) && ((n & 7) == 0)) {
 
-            sp[byteIndex] = value;
-            return;
-        }
+            // Fast path: Byte-aligned write inside a byte-aligned view
+            sp[abs >> 3] = val;
 
-        // Normalize start bit
-        isize pos = bitIndex % len;
-        if (pos < 0) pos += len;
-
-        for (int b = 0; b < 8; ++b) {
-
-            isize i = pos + b;
-            if (i >= len) i -= len;
-
-            u8& byte = sp[i >> 3];
-            const u8 mask = u8(1 << (7 - (i & 7)));
-
-            if (value & (1 << (7 - b)))
-                byte |= mask;
-            else
-                byte &= ~mask;
+        } else {
+            
+            // Slow path: Bitwise fallback
+            for (int b = 0; b < 8; ++b) {
+                
+                isize i = first + ((pos + b) % n);
+                u8 mask = u8(1 << (7 - (i & 7)));
+                
+                if (val & (1 << (7 - b)))
+                    sp[i >> 3] |= mask;
+                else
+                    sp[i >> 3] &= ~mask;
+            }
         }
     }
 
@@ -165,11 +173,11 @@ public:
         }
     }
     
-    constexpr isize size()  const { return len; }
-    constexpr bool  empty() const { return len == 0; }
+    constexpr isize size()  const { return last - first; }
+    constexpr bool  empty() const { return size() == 0; }
     constexpr std::span<T> bytes() const { return sp; }
-    constexpr T* data() const { return sp.data();}
-    
+    constexpr T* data() const { return sp.data(); }
+
     // -----------------------------------------------------------------
     // Iterator (read-only bit iterator — by value, like std::vector<bool>)
     // -----------------------------------------------------------------
@@ -221,7 +229,8 @@ public:
     };
 
     constexpr iterator begin() const { return iterator(this, 0); }
-    constexpr iterator end()   const { return iterator(this, len); }
+    constexpr iterator end()   const { return iterator(this, size()); }
+
 
     // -----------------------------------------------------------------
     // Cyclic iterator
