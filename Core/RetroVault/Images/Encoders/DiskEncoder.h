@@ -22,6 +22,7 @@ class DiskEncoder : public Loggable {
 public:
 
     virtual ~DiskEncoder() = default;
+
     virtual BitView encodeTrack(TrackNr t, ByteView src) = 0;
 };
 

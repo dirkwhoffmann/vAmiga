@@ -221,7 +221,7 @@ ADFFile::decode(TrackNr t, BitView bits)
     validateTrackNr(t);
 
     // Decode track
-    auto bytes = AmigaDecoder().decodeTrack(t, bits);
+    auto bytes = AmigaDecoder().decodeTrack(bits, t);
 
     // Copy decoded bytes back to the ADF
     memcpy(byteView(t).data(), bytes.data(), bytes.size());

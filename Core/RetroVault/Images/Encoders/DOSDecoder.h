@@ -24,7 +24,12 @@ class DOSDecoder : public DiskDecoder {
 
 public:
 
-    ByteView decodeTrack(TrackNr t, BitView src) override;
+    //
+    // Methods from DiskDecoder
+    //
+
+    ByteView decodeTrack(BitView track, TrackNr t) override;
+    ByteView decodeSector(BitView track, TrackNr t, SectorNr s) override;
 
     // void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
     void decodeSector(ByteView track, isize offset, MutableByteView dst);

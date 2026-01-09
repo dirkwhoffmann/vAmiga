@@ -15,13 +15,18 @@ namespace retro::vault {
 
 class C64Decoder : public DiskDecoder {
 
-    // Backing buffer
-    std::vector<u8> bytes;
+    // Backing buffers
+    std::vector<u8> trackbuffer;
+    std::vector<u8> sectorBuffer;
 
 public:
 
+    //
     // Methods from DiskDecoder
-    ByteView decodeTrack(TrackNr t, BitView src) override;
+    //
+
+    ByteView decodeTrack(BitView track, TrackNr t) override;
+    ByteView decodeSector(BitView track, TrackNr t, SectorNr s) override;
 
     // Returns the start offset of a SYNC mark (empty if not found)
     // optional<isize> trySeekSync(BitView track, isize offset = 0);

@@ -164,7 +164,7 @@ EADFFile::didInitialize()
 
                 // Run the MFM decoder on the copied bit stream
                 AmigaDecoder decoder;
-                auto bytes = decoder.decodeTrack(t, track.mfmBitView());
+                auto bytes = decoder.decodeTrack(track.mfmBitView(), t);
 
                 // Copy the decoded data
                 track.data.assign(bytes.data(), bytes.data() + bytes.size());

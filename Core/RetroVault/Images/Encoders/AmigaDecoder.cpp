@@ -18,15 +18,15 @@ namespace retro::vault {
 static constexpr isize bsize  = 512;
 
 ByteView
-AmigaDecoder::decodeTrack(TrackNr t, BitView src)
+AmigaDecoder::decodeTrack(BitView track, TrackNr t)
 {
     loginfo(IMG_DEBUG, "Decoding Amiga track %ld\n", t);
 
     // Setup the backing buffer
-    if (bytes.empty()) bytes.resize(16384);
+    if (trackBuffer.empty()) trackBuffer.resize(16384);
 
     // Find all sectors
-    auto offsets    = seekSectors(src.byteView());
+    auto offsets    = seekSectors(track.byteView());
     auto numSectors = isize(offsets.size());
 
     // Decode all sectors
@@ -35,12 +35,35 @@ AmigaDecoder::decodeTrack(TrackNr t, BitView src)
         if (!offsets.contains(s))
             throw DeviceError(DeviceError::SEEK_ERR);
 
-        decodeSector(src.byteView(),
+        decodeSector(track.byteView(),
                      offsets[s],
-                     MutableByteView(bytes.data() + s * bsize, bsize));
+                     MutableByteView(trackBuffer.data() + s * bsize, bsize));
     }
 
-    return ByteView(bytes.data(), numSectors * bsize);
+    return ByteView(trackBuffer.data(), numSectors * bsize);
+}
+
+ByteView
+AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s)
+{
+    loginfo(IMG_DEBUG, "Decoding DOS sector %ld:%ld\n", t, s);
+
+    // Setup the backing buffer
+    if (sectorBuffer.empty()) sectorBuffer.resize(512);
+
+    // Find sector
+    auto sector = seekSector(track.byteView(), s);
+
+    // Skip sync mark + sector header
+    isize offset = sector + 4 + 56;
+
+    // Determine the source address
+    auto *mfmData = &track.byteView()[offset];
+
+    // Decode sector data
+    MFM::decodeOddEven(sectorBuffer.data(), mfmData, bsize);
+
+    return ByteView(sectorBuffer);
 }
 
 void

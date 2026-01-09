@@ -31,15 +31,15 @@ struct SYNC
 };
 
 ByteView
-C64Decoder::decodeTrack(TrackNr t, BitView src)
+C64Decoder::decodeTrack(BitView track, TrackNr t)
 {
     loginfo(IMG_DEBUG, "Decoding C64 track %ld\n", t);
 
     // Setup the backing buffer
-    if (bytes.empty()) bytes.resize(16384);
+    if (trackbuffer.empty()) trackbuffer.resize(16384);
 
     // Find all sectors
-    auto sectors = seekSectors(src);
+    auto sectors = seekSectors(track);
     auto numSectors = isize(sectors.size());
 
     // Decode all sectors
@@ -49,10 +49,34 @@ C64Decoder::decodeTrack(TrackNr t, BitView src)
             throw DeviceError(DeviceError::SEEK_ERR);
 
         decodeSector(sectors[s],
-                     MutableByteView(bytes.data() + s * bsize, bsize));
+                     MutableByteView(trackbuffer.data() + s * bsize, bsize));
     }
 
-    return ByteView(bytes.data(), numSectors * bsize);
+    return ByteView(trackbuffer.data(), numSectors * bsize);
+}
+
+ByteView
+C64Decoder::decodeSector(BitView track, TrackNr t, SectorNr s)
+{
+    loginfo(IMG_DEBUG, "Decoding C64 track %ld:%ld\n", t, s);
+
+    // Setup the backing buffer
+    if (sectorBuffer.empty()) sectorBuffer.resize(bsize);
+
+    // Find sector
+    auto sector = seekSector(track, s);
+
+    // Skip sync mark + sector header
+    isize offset = 40 + 10;
+
+    // Decode sector data
+    for (isize i = 0; i < bsize; ++i) {
+
+        sectorBuffer[i] = GCR::decodeGcr(sector, offset);
+        offset += 10;
+    }
+
+    return ByteView(sectorBuffer);
 }
 
 void

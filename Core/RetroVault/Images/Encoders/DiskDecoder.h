@@ -22,7 +22,9 @@ class DiskDecoder : public Loggable {
 public:
 
     virtual ~DiskDecoder() = default;
-    virtual ByteView decodeTrack(TrackNr t, BitView src) = 0;
+
+    virtual ByteView decodeTrack(BitView track, TrackNr t) = 0;
+    virtual ByteView decodeSector(BitView track, TrackNr t, SectorNr s) = 0;
 };
 
 }
