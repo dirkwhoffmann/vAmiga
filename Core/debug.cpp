@@ -21,8 +21,9 @@ LogChannel name = \
 
 namespace utl::channel {
 
-// Register the default channel
+// Register the default channels
 
+DEBUG_CHANNEL(NULLDEV,          "Message sink");
 DEBUG_CHANNEL(STDERR,           "Standard error");
 
 // Register a logging channel for each debug flag

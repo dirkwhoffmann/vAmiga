@@ -16,6 +16,10 @@ namespace retro::vault::GCR {
 
 using namespace utl;
 
+constexpr isize bitsPerByte = 10;
+
+using namespace utl;
+
 // GCR encoding table. Maps 4 data bits to 5 GCR bits.
 static constexpr u8 gcr[16] = {
 
@@ -38,7 +42,7 @@ static constexpr u8 invgcr[32] = {
     255,  13,  14, 255  /* 0x1C - 0x1F */
 };
 
-// Converts a 4 bit binary value to a 5 bit GCR codeword or vice versa
+// Converts a data nibble to a 5 bit GCR codeword or vice versa
 static inline u8 bin2gcr(u8 value) { assert(value < 16); return gcr[value]; }
 static inline u8 gcr2bin(u8 value) { assert(value < 32); return invgcr[value]; }
 
@@ -47,5 +51,11 @@ static inline bool isGcr(u8 value) { assert(value < 32); return invgcr[value] !=
 
 // Encodes a byte as a GCR bit stream
 void encodeGcr(MutableBitView &view, isize bitPos, u8 value);
+
+// Decodes 5 GCR bits back into a data nibble
+u8 decodeGcr4(BitView &view, isize offset);
+
+// Decodes 10 GCR bits back into a data byte
+u8 decodeGcr(BitView &view, isize offset);
 
 }

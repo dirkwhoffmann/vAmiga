@@ -51,7 +51,7 @@ AmigaDecoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
     const isize bsize = 512;
     assert(dst.size() == bsize);
 
-    if constexpr (debug::MFM_DEBUG) fprintf(stderr, "Decoding Amiga sector at offset %ld\n", offset);
+    loginfo(NULLDEV, "Decoding Amiga sector at offset %ld\n", offset);
 
     // Skip sync mark + sector header
     offset += 4 + 56;

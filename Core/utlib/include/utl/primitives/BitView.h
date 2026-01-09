@@ -68,6 +68,14 @@ public:
         return (sp[i >> 3] >> (7 - (i & 7))) & 1;
     }
 
+    constexpr isize normalize(isize i) const
+    {
+        if (i < 0 || i >= len) {
+            i %= len; if (i < 0) i += len;
+        }
+        return i;
+    }
+    
     constexpr u8 getByte(isize bitIndex) const
     {
         assert(len > 0);
@@ -192,7 +200,12 @@ public:
         constexpr bool operator[](difference_type n) const {
             return *(*this + n);
         }
-
+        constexpr iterator& operator+=(difference_type n) {
+            pos_ += n; return *this;
+        }
+        constexpr iterator& operator-=(difference_type n) {
+            pos_ -= n; return *this;
+        }
         friend constexpr iterator operator+(iterator it, difference_type n) {
             it.pos_ += n; return it;
         }
@@ -250,8 +263,17 @@ public:
 
         constexpr isize offset() const { return pos_; }
 
+        constexpr cyclic_iterator& operator+=(difference_type n) {
+            pos_ += n; return *this;
+        }
+        constexpr cyclic_iterator& operator-=(difference_type n) {
+            pos_ -= n; return *this;
+        }
         friend constexpr cyclic_iterator operator+(cyclic_iterator it, difference_type n) {
             it.pos_ += n; return it;
+        }
+        friend constexpr cyclic_iterator operator-(cyclic_iterator it, difference_type n) {
+            it.pos_ -= n; return it;
         }
     };
 

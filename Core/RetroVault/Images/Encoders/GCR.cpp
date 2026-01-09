@@ -31,4 +31,26 @@ encodeGcr(MutableBitView &view, isize bitPos, u8 value)
     view.set(bitPos++, n2 & 0x01);
 }
 
+u8
+decodeGcr4(BitView &view, isize offset)
+{
+    auto codeword =
+    view[offset + 0] << 4 |
+    view[offset + 1] << 3 |
+    view[offset + 2] << 2 |
+    view[offset + 3] << 1 |
+    view[offset + 4];
+
+    return invgcr[codeword];
+}
+
+u8
+decodeGcr(BitView &view, isize offset)
+{
+    u8 nibble1 = decodeGcr4(view, offset);
+    u8 nibble2 = decodeGcr4(view, offset + 5);
+
+    return (u8)(nibble1 << 4 | nibble2);
+}
+
 }

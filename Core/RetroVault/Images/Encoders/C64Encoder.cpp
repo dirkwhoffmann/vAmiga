@@ -222,7 +222,7 @@ C64Encoder::encodeSector(MutableBitView view,
     }
     head += 40;
 
-    // Data ID
+    // Data block ID
     if (errorCode == 0x4) {
         // The error value is important here:
         // (1) If the first GCR bit equals 0, the sector can still be read.

@@ -490,6 +490,8 @@
 		50FB49BC2F0FAFBA00369491 /* C64Encoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49BA2F0FAFBA00369491 /* C64Encoder.cpp */; };
 		50FB49BF2F0FF48100369491 /* CBMNavigator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49BE2F0FF47F00369491 /* CBMNavigator.cpp */; };
 		50FB49C02F0FF48100369491 /* CBMNavigator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49BE2F0FF47F00369491 /* CBMNavigator.cpp */; };
+		50FB49C32F1113A300369491 /* C64Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49C22F1113A200369491 /* C64Decoder.cpp */; };
+		50FB49C42F1113A300369491 /* C64Decoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49C22F1113A200369491 /* C64Decoder.cpp */; };
 		50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC047427DA108500C3E566 /* Headless.cpp */; };
 		50FC048027DA190400C3E566 /* CoreComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* CoreComponent.cpp */; };
 		50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
@@ -1400,6 +1402,8 @@
 		50FB49B92F0FAFAF00369491 /* C64Encoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = C64Encoder.h; sourceTree = "<group>"; };
 		50FB49BA2F0FAFBA00369491 /* C64Encoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = C64Encoder.cpp; sourceTree = "<group>"; };
 		50FB49BE2F0FF47F00369491 /* CBMNavigator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CBMNavigator.cpp; sourceTree = "<group>"; };
+		50FB49C12F11139B00369491 /* C64Decoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = C64Decoder.h; sourceTree = "<group>"; };
+		50FB49C22F1113A200369491 /* C64Decoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = C64Decoder.cpp; sourceTree = "<group>"; };
 		50FC046D27DA0FA500C3E566 /* Headless */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Headless; sourceTree = BUILT_PRODUCTS_DIR; };
 		50FC047427DA108500C3E566 /* Headless.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Headless.cpp; sourceTree = "<group>"; };
 		50FC050027DA205D00C3E566 /* Headless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Headless.h; sourceTree = "<group>"; };
@@ -2648,6 +2652,8 @@
 				50FB49B62F0F1E2D00369491 /* DOSDecoder.cpp */,
 				50FB49B92F0FAFAF00369491 /* C64Encoder.h */,
 				50FB49BA2F0FAFBA00369491 /* C64Encoder.cpp */,
+				50FB49C12F11139B00369491 /* C64Decoder.h */,
+				50FB49C22F1113A200369491 /* C64Decoder.cpp */,
 				50BF4B472F03D72000F1B9F2 /* MFM.h */,
 				50BF4B482F03D72700F1B9F2 /* MFM.cpp */,
 				50BF4B4B2F03D72B00F1B9F2 /* GCR.h */,
@@ -3196,6 +3202,7 @@
 				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
 				50BF4BC62F0ADF3200F1B9F2 /* FSError.cpp in Sources */,
 				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
+				50FB49C42F1113A300369491 /* C64Decoder.cpp in Sources */,
 				50BF4BC12F0ADF3200F1B9F2 /* FileSystemLayer1.cpp in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
 				501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */,
@@ -3624,6 +3631,7 @@
 				506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				503FC4D42EE0D8A500637C95 /* Loggable.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
+				50FB49C32F1113A300369491 /* C64Decoder.cpp in Sources */,
 				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,
 				50BCB9942EE1D88E000C53CF /* Buffer.cpp in Sources */,
 				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,

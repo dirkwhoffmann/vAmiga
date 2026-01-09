@@ -15,7 +15,8 @@ namespace utl::debug {
 // Debug settings
 //
 
-// Default channel
+// Default channels
+constexpr long NULLDEV            = 0;
 constexpr long STDERR             = 1;
 
 // General
@@ -202,7 +203,8 @@ constexpr long DMS_CANT_CREATE        = 0;
 
 namespace utl::channel {
 
-// Default channel (always enabled)
+// Default channels (always disabled / enabled)
+extern long NULLDEV;
 extern long STDERR;
 
 // General

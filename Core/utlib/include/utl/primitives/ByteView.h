@@ -37,26 +37,10 @@ public:
         sp = std::span(data, size_t(size));
     }
 
-    /*
-    constexpr explicit BaseByteView(const std::span<T> bytes)
-    requires std::is_const_v<T>
-    {
-        sp = bytes;
-    }
-    */
-
     constexpr explicit BaseByteView(const std::span<T> bytes)
     {
         sp = bytes;
     }
-
-    /*
-    constexpr BaseByteView(const BaseByteView<u8>& other)
-    requires std::is_const_v<T>
-    {
-        sp = other.span();
-    }
-    */
 
     constexpr BaseByteView(const BaseByteView<u8>& other)
     {
