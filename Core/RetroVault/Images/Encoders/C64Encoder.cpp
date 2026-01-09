@@ -105,7 +105,7 @@ C64Encoder::encodeTrack(TrackNr t, ByteView src)
     // Determine the number of sectors to encode
     const isize count = (isize)src.size() / 256;
 
-    if (count != trackDefaults(t).sectors != count)
+    if (count != trackDefaults(t).sectors)
         throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
 
     loginfo(IMG_DEBUG, "Encoding C64 track %ld with %ld sectors\n", t, count);
@@ -128,8 +128,8 @@ C64Encoder::encodeTrack(TrackNr t, ByteView src)
     for (SectorNr s = 0; s < defaults.sectors; ++s) {
 
         // Create a view on the sector data
-        BlockNr b = trackDefaults(t).firstSectorNr + s;
-        ByteView sview(src.subspan(b * 256, 256));
+        // BlockNr b = trackDefaults(t).firstSectorNr + s;
+        ByteView sview(src.subspan(s * 256, 256));
 
         // Encode the sector
         isize encodedBits = encodeSector(view, offset, t, s, sview);

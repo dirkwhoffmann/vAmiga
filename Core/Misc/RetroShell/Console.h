@@ -15,6 +15,7 @@
 #include "TextStorage.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "ADFFile.h"
+#include "D64File.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -25,6 +26,7 @@ using retro::vault::amiga::FileSystem;
 using retro::vault::amiga::FSName;
 using retro::vault::amiga::FSBlock;
 using retro::vault::image::ADFFile;
+using retro::vault::image::D64File;
 
 class ConsoleDelegate {
 
@@ -486,6 +488,77 @@ class NavigatorConsole final : public Console
     BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
     BlockNr matchPath(const string &path, Tokens &notFound);
     
+public:
+
+    // Imports the file system from a floppy drive or hard drive
+    void import(const FloppyDrive &dfn);
+    void import(const HardDrive &hdn, isize part);
+    void importDf(isize n);
+    void importHd(isize n, isize part);
+    void import(const fs::path &path, bool recursive = true, bool contents = false);
+
+    // Throws an exception if the file system fails to match the condition
+    void requireFS() const;
+    void requireFormattedFS() const;
+
+    // Exports the file system
+    void exportBlocks(fs::path path);
+};
+
+//
+// Experimental console for CBM images
+//
+
+class CBMNavigator final : public Console
+{
+    unique_ptr<ADFFile> adf;
+    unique_ptr<D64File> d64;
+    unique_ptr<Volume> vol;
+    unique_ptr<FileSystem> fs;
+
+    using Console::Console;
+
+    //
+    // Methods from Console
+    //
+
+    virtual void initCommands(RSCommand &root) override;
+    void _pause() override;
+    string prompt() override;
+    void autoComplete(Tokens &argv) override;
+    void help(std::ostream &os, const string &argv, isize tabs) override;
+    string autoCompleteFilename(const string &input, usize flags) const;
+
+
+    //
+    // Methods from ConsoleDelegate
+    //
+
+    void didActivate() override;
+    void didDeactivate() override;
+
+
+    //
+    // Parsing input
+    //
+
+    BlockNr parseBlock(const string &arg);
+    BlockNr parseBlock(const Arguments &argv, const string &token);
+    BlockNr parseBlock(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr parsePath(const Arguments &argv, const string &token);
+    BlockNr parsePath(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr parseFile(const Arguments &argv, const string &token);
+    BlockNr parseFile(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr parseDirectory(const Arguments &argv, const string &token);
+    BlockNr parseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
+
+    std::pair<DumpOpt,DumpFmt> parseDumpOpts(const Arguments &argv);
+
+    // Experimental
+    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound);
+    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
+    BlockNr matchPath(const string &path, Tokens &notFound);
+
 public:
 
     // Imports the file system from a floppy drive or hard drive

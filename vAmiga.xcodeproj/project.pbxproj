@@ -488,6 +488,8 @@
 		50FB49B82F0F1E2D00369491 /* DOSDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49B62F0F1E2D00369491 /* DOSDecoder.cpp */; };
 		50FB49BB2F0FAFBA00369491 /* C64Encoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49BA2F0FAFBA00369491 /* C64Encoder.cpp */; };
 		50FB49BC2F0FAFBA00369491 /* C64Encoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49BA2F0FAFBA00369491 /* C64Encoder.cpp */; };
+		50FB49BF2F0FF48100369491 /* CBMNavigator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49BE2F0FF47F00369491 /* CBMNavigator.cpp */; };
+		50FB49C02F0FF48100369491 /* CBMNavigator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FB49BE2F0FF47F00369491 /* CBMNavigator.cpp */; };
 		50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC047427DA108500C3E566 /* Headless.cpp */; };
 		50FC048027DA190400C3E566 /* CoreComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* CoreComponent.cpp */; };
 		50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
@@ -1397,6 +1399,7 @@
 		50FB49B62F0F1E2D00369491 /* DOSDecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DOSDecoder.cpp; sourceTree = "<group>"; };
 		50FB49B92F0FAFAF00369491 /* C64Encoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = C64Encoder.h; sourceTree = "<group>"; };
 		50FB49BA2F0FAFBA00369491 /* C64Encoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = C64Encoder.cpp; sourceTree = "<group>"; };
+		50FB49BE2F0FF47F00369491 /* CBMNavigator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CBMNavigator.cpp; sourceTree = "<group>"; };
 		50FC046D27DA0FA500C3E566 /* Headless */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Headless; sourceTree = BUILT_PRODUCTS_DIR; };
 		50FC047427DA108500C3E566 /* Headless.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Headless.cpp; sourceTree = "<group>"; };
 		50FC050027DA205D00C3E566 /* Headless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Headless.h; sourceTree = "<group>"; };
@@ -2528,6 +2531,7 @@
 				509C3662260B1D95004F160A /* CommanderConsole.cpp */,
 				50672CBF2946100F004113F5 /* DebuggerConsole.cpp */,
 				50650F4D2DF5D075008AD660 /* NavigatorConsole.cpp */,
+				50FB49BE2F0FF47F00369491 /* CBMNavigator.cpp */,
 				50AD904A276E104E0011ECCB /* TextStorage.h */,
 				50AD904C276E10660011ECCB /* TextStorage.cpp */,
 				509C3659260B1766004F160A /* RSCommand.h */,
@@ -3151,6 +3155,7 @@
 				50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */,
 				500B0D362E8017BC008FC5E1 /* PerformanceSettings.swift in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
+				50FB49C02F0FF48100369491 /* CBMNavigator.cpp in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
@@ -3513,6 +3518,7 @@
 				50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */,
 				50BF4BDE2F0ADF3200F1B9F2 /* FSAllocator.cpp in Sources */,
 				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
+				50FB49BF2F0FF48100369491 /* CBMNavigator.cpp in Sources */,
 				50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */,
 				50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */,
 				50FC04DD27DA1A1400C3E566 /* tables.c in Sources */,
