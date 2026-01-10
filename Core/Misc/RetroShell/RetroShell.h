@@ -70,8 +70,8 @@ public:
     // Consoles
     CommanderConsole commander = CommanderConsole(amiga, 0, s1);
     DebuggerConsole debugger = DebuggerConsole(amiga, 1, s1);
-    // NavigatorConsole navigator = NavigatorConsole(amiga, 2, s1);
-    CBMNavigator navigator = CBMNavigator(amiga, 2, s1);
+    NavigatorConsole navigator = NavigatorConsole(amiga, 2, s1);
+    // CBMNavigator navigator = CBMNavigator(amiga, 2, s1);
 
     // Indicates if one of the consoles has new contents
     bool isDirty = false;

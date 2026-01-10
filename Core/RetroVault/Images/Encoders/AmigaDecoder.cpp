@@ -32,12 +32,8 @@ AmigaDecoder::decodeTrack(BitView track, TrackNr t)
     // Decode all sectors
     for (isize s = 0; s < numSectors; ++s) {
 
-        if (!offsets.contains(s))
-            throw DeviceError(DeviceError::SEEK_ERR);
-
-        decodeSector(track.byteView(),
-                     offsets[s],
-                     MutableByteView(trackBuffer.data() + s * bsize, bsize));
+        auto bytes = decodeSector(track, t, s);
+        memcpy(trackBuffer.data() + s * bsize, bytes.data(), bsize);
     }
 
     return ByteView(trackBuffer.data(), numSectors * bsize);
@@ -46,7 +42,7 @@ AmigaDecoder::decodeTrack(BitView track, TrackNr t)
 ByteView
 AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s)
 {
-    loginfo(IMG_DEBUG, "Decoding DOS sector %ld:%ld\n", t, s);
+    loginfo(IMG_DEBUG, "Decoding Amiga sector %ld:%ld\n", t, s);
 
     // Setup the backing buffer
     if (sectorBuffer.empty()) sectorBuffer.resize(512);
@@ -64,23 +60,6 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s)
     MFM::decodeOddEven(sectorBuffer.data(), mfmData, bsize);
 
     return ByteView(sectorBuffer);
-}
-
-void
-AmigaDecoder::decodeSector(ByteView track, isize offset, MutableByteView dst)
-{
-    assert(dst.size() == bsize);
-
-    loginfo(NULLDEV, "Decoding Amiga sector at offset %ld\n", offset);
-
-    // Skip sync mark + sector header
-    offset += 4 + 56;
-
-    // Determine the source address
-    auto *mfmData = &track[offset];
-
-    // Decode sector data
-    MFM::decodeOddEven(dst.data(), mfmData, bsize);
 }
 
 optional<isize>

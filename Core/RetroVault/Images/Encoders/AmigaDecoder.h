@@ -38,9 +38,6 @@ public:
 
     // Computes a map from sector numbers to byte offsets
     std::unordered_map<isize, isize> seekSectors(ByteView track);
-
-    // Decodes a single sector
-    void decodeSector(ByteView track, isize offset, MutableByteView dst);
 };
 
 }
