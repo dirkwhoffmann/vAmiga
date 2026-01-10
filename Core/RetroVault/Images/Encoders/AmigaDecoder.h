@@ -25,7 +25,8 @@ public:
     using DiskDecoder::decodeSector;
     ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
-
+    optional<BitView> seekSectorNew(BitView track, SectorNr s, isize offset = 0) override;
+    
 // private:
 
     // Returns the start offset of a sector (empty if not found)

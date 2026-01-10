@@ -17,6 +17,8 @@ namespace utl {
 template <typename T>
 class BaseBitView {
 
+public:
+
     template <typename> friend class BaseBitView;
     static_assert(std::is_same_v<T, u8> || std::is_same_v<T, const u8>);
 
@@ -132,6 +134,32 @@ public:
                 val |= (sp[i >> 3] >> (7 - (i & 7))) & 1;
             }
         }
+        return val;
+    }
+
+    constexpr u64 getBits(isize bitIndex, int count) const
+    {
+        assert(!empty());
+        assert(count >= 1 && count <= 64);
+
+        u64 val = 0;
+        isize pos = bitIndex;
+
+        // Read whole bytes
+        while (count >= 8) {
+
+            val = (val << 8) | getByte(pos);
+            pos += 8;
+            count -= 8;
+        }
+
+        // Read remaining bits
+        if (count > 0) {
+
+            u8 tail = getByte(pos);
+            val = (val << count) | (tail >> (8 - count));
+        }
+
         return val;
     }
 
@@ -277,9 +305,15 @@ public:
         constexpr bool operator[](difference_type n) const {
             return *(*this + n);
         }
-
-        constexpr isize offset() const { return pos_; }
-
+        constexpr u8 readByte() {
+            auto result = view_->getByte(pos_); pos_ += 8; return result;
+        }
+        constexpr u64 readBits(isize count) {
+            auto result = view_->getBits(*this, count); pos_ += count; return result;
+        }
+        constexpr isize offset() const {
+            return pos_;
+        }
         constexpr cyclic_iterator& operator+=(difference_type n) {
             pos_ += n; return *this;
         }
@@ -296,6 +330,36 @@ public:
 
     constexpr cyclic_iterator cyclic_begin(isize pos = 0) const {
         return cyclic_iterator(this, pos);
+    }
+
+    // Advances the iterator until the given bit pattern is found.
+    // On success, the iterator is positioned at the first bit of the match.
+    // On failure, the iterator remains unchanged.
+    bool forward(cyclic_iterator &it, u64 pattern, isize bits) const
+    {
+        assert(bits > 0 && bits <= 64);
+
+        auto probe   = it;
+        u64 shiftreg = 0;
+        u64 mask     = (bits == 64) ? ~u64(0) : ((u64(1) << bits) - 1);
+        u64 target   = pattern & mask;
+
+        // Prefill the shift register
+        for (isize i = 0; i < bits; ++i, ++probe)
+            shiftreg = (shiftreg << 1) | u64(probe[0]);
+
+        // Search for the pattern
+        for (isize i = 0; i < size(); ++i, ++probe) {
+
+            if ((shiftreg & mask) == target) {
+                it = probe; //  - bits;
+                return true;
+            }
+
+            shiftreg = (shiftreg << 1) | u64(probe[0]);
+        }
+
+        return false;
     }
 };
 
