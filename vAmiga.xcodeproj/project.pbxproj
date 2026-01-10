@@ -119,6 +119,8 @@
 		503FC4EF2EE1BA7400637C95 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4ED2EE1BA6F00637C95 /* Time.cpp */; };
 		503FC4F12EE1BA7C00637C95 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4F02EE1BA7900637C95 /* Clock.cpp */; };
 		503FC4F22EE1BA7C00637C95 /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4F02EE1BA7900637C95 /* Clock.cpp */; };
+		5041A32B2F1293DA00684946 /* DiskDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041A32A2F1293D600684946 /* DiskDecoder.cpp */; };
+		5041A32C2F1293DA00684946 /* DiskDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041A32A2F1293D600684946 /* DiskDecoder.cpp */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5042FB122D4E4E8200E4A167 /* FilePanel.swift */; };
@@ -815,6 +817,7 @@
 		503FC4FA2EE1C36B00637C95 /* AutoMutex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AutoMutex.h; sourceTree = "<group>"; };
 		503FC4FB2EE1C49500637C95 /* concurrency.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = concurrency.h; sourceTree = "<group>"; };
 		503FC4FC2EE1C75300637C95 /* Synchronizable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Synchronizable.h; sourceTree = "<group>"; };
+		5041A32A2F1293D600684946 /* DiskDecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskDecoder.cpp; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -2642,6 +2645,7 @@
 				50BF4B3E2F03D66600F1B9F2 /* CMakeLists.txt */,
 				509E76102EDD74E400608FA7 /* DiskEncoder.h */,
 				50FB49AD2F0F1D3B00369491 /* DiskDecoder.h */,
+				5041A32A2F1293D600684946 /* DiskDecoder.cpp */,
 				50BF4B3F2F03D6AB00F1B9F2 /* AmigaEncoder.h */,
 				50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */,
 				50FB49B12F0F1E1E00369491 /* AmigaDecoder.h */,
@@ -3307,6 +3311,7 @@
 				50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */,
 				505F45802E96A45000418105 /* CGImage.swift in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
+				5041A32C2F1293DA00684946 /* DiskDecoder.cpp in Sources */,
 				5009B7FC2557051A0037288E /* EADFFile.cpp in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
@@ -3496,6 +3501,7 @@
 				50FC04FB27DA1AA200C3E566 /* DiskControllerRegs.cpp in Sources */,
 				50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */,
 				50BCB9A82EE2F347000C53CF /* Parser.cpp in Sources */,
+				5041A32B2F1293DA00684946 /* DiskDecoder.cpp in Sources */,
 				50672CC12946100F004113F5 /* DebuggerConsole.cpp in Sources */,
 				508FDD9F2EF40D3200FDBC32 /* Volume.cpp in Sources */,
 				50BF4BDB2F0ADF3200F1B9F2 /* FileSystemLayer3.cpp in Sources */,

@@ -15,18 +15,16 @@ namespace retro::vault {
 
 class AmigaDecoder : public DiskDecoder {
 
-    // Backing buffers
-    std::vector<u8> trackBuffer;
-    std::vector<u8> sectorBuffer;
-
 public:
 
     //
     // Methods from DiskDecoder
     //
 
-    ByteView decodeTrack(BitView track, TrackNr t) override;
-    ByteView decodeSector(BitView track, TrackNr t, SectorNr s) override;
+    using DiskDecoder::decodeTrack;
+    using DiskDecoder::decodeSector;
+    ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
+    ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
 
 // private:
 

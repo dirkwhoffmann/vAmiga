@@ -35,11 +35,11 @@ u8
 decodeGcr4(BitView &view, isize offset)
 {
     auto codeword =
-    view[offset + 0] << 4 |
-    view[offset + 1] << 3 |
-    view[offset + 2] << 2 |
-    view[offset + 3] << 1 |
-    view[offset + 4];
+    (int)view[offset + 0] << 4 |
+    (int)view[offset + 1] << 3 |
+    (int)view[offset + 2] << 2 |
+    (int)view[offset + 3] << 1 |
+    (int)view[offset + 4];
 
     return invgcr[codeword];
 }

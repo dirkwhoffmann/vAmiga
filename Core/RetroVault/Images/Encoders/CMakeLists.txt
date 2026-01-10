@@ -6,6 +6,7 @@ target_sources(VACore PRIVATE
                AmigaDecoder.cpp
                C64Encoder.cpp
                C64Decoder.cpp
+               DiskDecoder.cpp
                DOSEncoder.cpp
                DOSDecoder.cpp
                GCR.cpp

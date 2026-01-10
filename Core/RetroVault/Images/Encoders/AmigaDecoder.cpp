@@ -18,34 +18,34 @@ namespace retro::vault {
 static constexpr isize bsize  = 512;
 
 ByteView
-AmigaDecoder::decodeTrack(BitView track, TrackNr t)
+AmigaDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
 {
     loginfo(IMG_DEBUG, "Decoding Amiga track %ld\n", t);
-
-    // Setup the backing buffer
-    if (trackBuffer.empty()) trackBuffer.resize(16384);
 
     // Find all sectors
     auto offsets    = seekSectors(track.byteView());
     auto numSectors = isize(offsets.size());
 
+    // Ensure the output buffer is large enough
+    assert(isize(out.size()) >= numSectors * bsize);
+
     // Decode all sectors
     for (isize s = 0; s < numSectors; ++s) {
 
         auto bytes = decodeSector(track, t, s);
-        memcpy(trackBuffer.data() + s * bsize, bytes.data(), bsize);
+        memcpy(out.data() + s * bsize, bytes.data(), bsize);
     }
 
-    return ByteView(trackBuffer.data(), numSectors * bsize);
+    return ByteView(out.data(), numSectors * bsize);
 }
 
 ByteView
-AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s)
+AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out)
 {
     loginfo(IMG_DEBUG, "Decoding Amiga sector %ld:%ld\n", t, s);
 
-    // Setup the backing buffer
-    if (sectorBuffer.empty()) sectorBuffer.resize(512);
+    // Ensure the output buffer is large enough
+    assert(isize(out.size()) >= bsize);
 
     // Find sector
     auto sector = seekSector(track.byteView(), s);
@@ -57,9 +57,9 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s)
     auto *mfmData = &track.byteView()[offset];
 
     // Decode sector data
-    MFM::decodeOddEven(sectorBuffer.data(), mfmData, bsize);
+    MFM::decodeOddEven(out.data(), mfmData, bsize);
 
-    return ByteView(sectorBuffer);
+    return ByteView(out);
 }
 
 optional<isize>

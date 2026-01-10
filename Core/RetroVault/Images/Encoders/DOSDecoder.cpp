@@ -19,16 +19,16 @@ namespace retro::vault {
 namespace Decoder { DOSDecoder dos; }
 
 ByteView
-DOSDecoder::decodeTrack(BitView track, TrackNr t)
+DOSDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
 {
     loginfo(IMG_DEBUG, "Decoding DOS track %ld\n", t);
-
-    // Setup the backing buffer
-    if (!decoded) decoded = make_unique<u8>(16384);
 
     // Find all IDAM blocks
     auto offsets    = seekSectors(track.byteView());
     auto numSectors = isize(offsets.size());
+
+    // Ensure the output buffer is large enough
+    assert(isize(out.size()) >= numSectors * bsize);
 
     // Decode all sectors
     for (SectorNr s = 0; s < numSectors; s++) {
@@ -39,14 +39,14 @@ DOSDecoder::decodeTrack(BitView track, TrackNr t)
 
         decodeSector(track.byteView(),
                      offsets[s],
-                     MutableByteView(decoded.get() + s * bsize, bsize));
+                     MutableByteView(out.data() + s * bsize, bsize));
     }
 
-    return ByteView(decoded.get(), numSectors * bsize);
+    return ByteView(out.data(), numSectors * bsize);
 }
 
 ByteView
-DOSDecoder::decodeSector(BitView track, TrackNr t, SectorNr s)
+DOSDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out)
 {
     loginfo(IMG_DEBUG, "Decoding DOS track %ld:%ld\n", t, s);
 

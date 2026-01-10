@@ -19,17 +19,16 @@ class DOSDecoder : public DiskDecoder {
     static constexpr isize ssize  = 1300; // MFM sector size in bytes
     static constexpr isize maxsec = 22;   // Maximum number of sectors
 
-    // Backing buffer
-    unique_ptr<u8> decoded;
-
 public:
 
     //
     // Methods from DiskDecoder
     //
 
-    ByteView decodeTrack(BitView track, TrackNr t) override;
-    ByteView decodeSector(BitView track, TrackNr t, SectorNr s) override;
+    using DiskDecoder::decodeTrack;
+    using DiskDecoder::decodeSector;
+    ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
+    ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
 
     // void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
     void decodeSector(ByteView track, isize offset, MutableByteView dst);

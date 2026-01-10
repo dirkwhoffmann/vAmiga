@@ -31,16 +31,16 @@ struct SYNC
 };
 
 ByteView
-C64Decoder::decodeTrack(BitView track, TrackNr t)
+C64Decoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
 {
     loginfo(IMG_DEBUG, "Decoding C64 track %ld\n", t);
-
-    // Setup the backing buffer
-    if (trackbuffer.empty()) trackbuffer.resize(16384);
 
     // Find all sectors
     auto sectors = seekSectors(track);
     auto numSectors = isize(sectors.size());
+
+    // Ensure the output buffer is large enough
+    assert(isize(out.size()) >= numSectors * bsize);
 
     // Decode all sectors
     for (isize s = 0; s < numSectors; ++s) {
@@ -49,19 +49,19 @@ C64Decoder::decodeTrack(BitView track, TrackNr t)
             throw DeviceError(DeviceError::SEEK_ERR);
 
         decodeSector(sectors[s],
-                     MutableByteView(trackbuffer.data() + s * bsize, bsize));
+                     MutableByteView(out.data() + s * bsize, bsize));
     }
 
-    return ByteView(trackbuffer.data(), numSectors * bsize);
+    return ByteView(out.data(), numSectors * bsize);
 }
 
 ByteView
-C64Decoder::decodeSector(BitView track, TrackNr t, SectorNr s)
+C64Decoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out)
 {
     loginfo(IMG_DEBUG, "Decoding C64 track %ld:%ld\n", t, s);
 
-    // Setup the backing buffer
-    if (sectorBuffer.empty()) sectorBuffer.resize(bsize);
+    // Ensure the output buffer is large enough
+    assert(isize(out.size()) >= bsize);
 
     // Find sector
     auto sector = seekSector(track, s);
@@ -72,11 +72,11 @@ C64Decoder::decodeSector(BitView track, TrackNr t, SectorNr s)
     // Decode sector data
     for (isize i = 0; i < bsize; ++i) {
 
-        sectorBuffer[i] = GCR::decodeGcr(sector, offset);
+        out[i] = GCR::decodeGcr(sector, offset);
         offset += 10;
     }
 
-    return ByteView(sectorBuffer);
+    return ByteView(out.data(), bsize);
 }
 
 void
