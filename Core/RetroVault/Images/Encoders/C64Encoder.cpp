@@ -98,7 +98,7 @@ C64Encoder::trackDefaults(isize t)
 }
 
 BitView
-C64Encoder::encodeTrack(TrackNr t, ByteView src)
+C64Encoder::encodeTrack(ByteView src, TrackNr t)
 {
     assert(src.size() % 256 == 0);
 
@@ -144,6 +144,12 @@ C64Encoder::encodeTrack(TrackNr t, ByteView src)
                 view.size(), totalBits, view.byteView().fnv32());
     }
     return view;
+}
+
+BitView
+C64Encoder::encodeSector(ByteView bytes, TrackNr t, SectorNr s)
+{
+    return BitView(nullptr, 0);
 }
 
 isize

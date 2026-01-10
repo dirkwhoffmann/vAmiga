@@ -19,7 +19,7 @@ namespace retro::vault {
 namespace Encoder { DOSEncoder ibm; }
 
 BitView
-DOSEncoder::encodeTrack(TrackNr t, ByteView src)
+DOSEncoder::encodeTrack(ByteView src, TrackNr t)
 {
     // Determine the number of sectors to encode
     const isize count = (isize)src.size() / bsize;
@@ -40,6 +40,12 @@ DOSEncoder::encodeTrack(TrackNr t, ByteView src)
     loginfo(IMG_DEBUG, "Track %ld checksum = %x\n", t, view.fnv32());
     
     return BitView(view.data(), view.size() * 8);
+}
+
+BitView
+DOSEncoder::encodeSector(ByteView bytes, TrackNr t, SectorNr s)
+{
+    return BitView(nullptr, 0);
 }
 
 /*

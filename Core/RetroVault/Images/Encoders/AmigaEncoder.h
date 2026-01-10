@@ -16,15 +16,18 @@ namespace retro::vault {
 class AmigaEncoder : public DiskEncoder {
 
     // Backing buffer
-    std::vector<u8> mfm;
+    std::vector<u8> trackBuffer;
+    std::vector<u8> sectorBuffer;
 
 public:
 
     // Methods from DiskDecoder
-    BitView encodeTrack(TrackNr t, ByteView src) override;
+    BitView encodeTrack(ByteView bytes, TrackNr t) override;
+    BitView encodeSector(ByteView bytes, TrackNr t, SectorNr s) override;
 
-    // Encodes a single sector
-    void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
+private:
+
+    void rectifyClockBit(MutableBitView bytes, isize offset);
 };
 
 }

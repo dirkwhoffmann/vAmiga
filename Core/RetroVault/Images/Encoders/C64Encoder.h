@@ -46,7 +46,8 @@ public:
     id1(id1), id2(id2), ecc(std::move(ecc)) { }
     
     // Methods from DiskDecoder
-    BitView encodeTrack(TrackNr t, ByteView src) override;
+    BitView encodeTrack(ByteView bytes, TrackNr t) override;
+    BitView encodeSector(ByteView bytes, TrackNr t, TrackNr s) override;
 
     // Encodes a single sector (returns the number of encoded bits)
     isize encodeSector(MutableBitView track,

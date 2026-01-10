@@ -206,7 +206,7 @@ ADFFile::encode(TrackNr t) const
 
     // Encode track
     AmigaEncoder encoder;
-    auto mfm = encoder.encodeTrack(t, byteView(t));
+    auto mfm = encoder.encodeTrack(byteView(t), t);
 
     // Copy the encoded track data
     track.assign(mfm.data(), mfm.data() + mfm.byteView().size());

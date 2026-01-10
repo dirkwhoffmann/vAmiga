@@ -19,7 +19,7 @@ static constexpr isize bsize  = 512;  // Block size in bytes
 static constexpr isize ssize  = 1088; // MFM sector size in bytes
 
 BitView
-AmigaEncoder::encodeTrack(TrackNr t, ByteView src)
+AmigaEncoder::encodeTrack(ByteView src, TrackNr t)
 {
     assert(src.size() % bsize == 0);
 
@@ -29,16 +29,28 @@ AmigaEncoder::encodeTrack(TrackNr t, ByteView src)
     if (count != 11 && count != 22)
         throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
 
-    loginfo(ADF_DEBUG, "Encoding Amiga track %ld with %ld sectors\n", t, count);
+    loginfo(IMG_DEBUG, "Encoding Amiga track %ld with %ld sectors\n", t, count);
 
     // Start with a clean track
-    if (mfm.empty()) mfm.resize(16384);
-    auto view = MutableByteView(mfm.data(), count * ssize);
-    view.clear(0xAA);
+    if (trackBuffer.empty()) trackBuffer.resize(16384, 0xAA);
 
-    // Encode all sectors
-    for (SectorNr s = 0; s < count; s++)
-        encodeSector(view, s * ssize, t, s, ByteView(src.subspan(s * bsize, bsize)));
+    // Create views
+    auto bitView = MutableBitView(trackBuffer.data(), count * ssize * 8);
+    auto view = bitView.byteView();
+
+    for (SectorNr s = 0; s < count; s++) {
+
+        // Encode sector
+        auto mfm = encodeSector(ByteView(src.subspan(s * bsize, bsize)), t, s);
+        assert(mfm.size() == 8 * ssize);
+
+        // Copy data onto the track
+        memcpy(view.data() + s * ssize, mfm.data(), ssize);
+
+        // Rectify the clock bits at the border
+        rectifyClockBit(bitView, 8 * ssize * s);
+        rectifyClockBit(bitView, 8 * ssize * (s + 1));
+    }
 
     // Compute a debug checksum
     loginfo(IMG_DEBUG, "Track %ld checksum = %x\n", t, view.fnv32());
@@ -46,11 +58,15 @@ AmigaEncoder::encodeTrack(TrackNr t, ByteView src)
     return BitView(view.data(), view.size() * 8);
 }
 
-void
-AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView data)
+BitView
+AmigaEncoder::encodeSector(ByteView bytes, TrackNr t, SectorNr s)
 {
-    loginfo(IMG_DEBUG, "Encoding Amiga sector %ld\n", s);
-    assert(data.size() == bsize);
+    assert(bytes.size() == bsize);
+
+    loginfo(IMG_DEBUG, "Encoding Amiga sector %ld:%ld\n", t, s);
+
+    // Start with a clean track
+    if (sectorBuffer.empty()) sectorBuffer.resize(ssize, 0xAA);
 
     // Block header layout:
     //
@@ -62,10 +78,11 @@ AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, Secto
     //     Block checksum      48      8     Odd/Even encoded
     //     Data checksum       56      8     Odd/Even encoded
 
-    auto it = track.cyclic_begin(offset);
+    auto view = MutableByteView(sectorBuffer);
+    auto it = view.begin();
 
     // Bytes before SYNC
-    it[0] = (it[-1] & 1) ? 0x2A : 0xAA;
+    it[0] = 0xAA; // (it[-1] & 1) ? 0x2A : 0xAA;
     it[1] = 0xAA;
     it[2] = 0xAA;
     it[3] = 0xAA;
@@ -86,7 +103,7 @@ AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, Secto
         it[i] = 0xAA;
 
     // Data
-    MFM::encodeOddEven(&it[64], data.data(), bsize);
+    MFM::encodeOddEven(&it[64], bytes.data(), bsize);
 
     // Block checksum
     u8 bcheck[4] = { 0, 0, 0, 0 };
@@ -109,9 +126,19 @@ AmigaEncoder::encodeSector(MutableByteView track, isize offset, TrackNr t, Secto
     MFM::encodeOddEven(&it[56], dcheck, sizeof(dcheck));
 
     // Add clock bits
-    for(isize i = 8; i < ssize + 1; i++) {
+    // for(isize i = 8; i < ssize + 1; i++) {
+    for(isize i = 8; i < ssize; i++) {
         it[i] = MFM::addClockBits(it[i], it[i-1]);
     }
+
+    return BitView(view.data(), 8 * view.size());
+}
+
+void
+AmigaEncoder::rectifyClockBit(MutableBitView view, isize offset)
+{
+    auto it = view.cyclic_begin(offset);
+    view.set(offset, it[-1] || it[1] ? 0 : 1);
 }
 
 }

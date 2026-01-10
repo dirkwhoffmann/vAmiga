@@ -118,7 +118,7 @@ AmigaDecoder::seekSector(ByteView track, SectorNr s, isize offset)
     if (auto result = trySeekSector(track, s, offset))
         return *result;
 
-    throw DeviceError(DeviceError::INVALID_SECTOR_NR);
+    throw DeviceError(DeviceError::SEEK_ERR);
 }
 
 std::unordered_map<isize, isize>

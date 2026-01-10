@@ -145,7 +145,7 @@ EADFFile::didInitialize()
 
             // Run the MFM encoder on the copied bytes
             AmigaEncoder encoder;
-            auto mfm = encoder.encodeTrack(t, track.dataByteView());
+            auto mfm = encoder.encodeTrack(track.dataByteView(), t);
 
             // Copy the encoded data
             track.mfm.assign(mfm.data(), mfm.data() + mfm.byteView().size());

@@ -27,7 +27,8 @@ class DOSEncoder : public DiskEncoder {
 
 public:
 
-    BitView encodeTrack(TrackNr t, ByteView src) override;
+    BitView encodeTrack(ByteView bytes, TrackNr t) override;
+    BitView encodeSector(ByteView bytes, TrackNr t, TrackNr s) override;
 
     void encodeSector(MutableByteView track, isize offset, TrackNr t, SectorNr s, ByteView src);
 };

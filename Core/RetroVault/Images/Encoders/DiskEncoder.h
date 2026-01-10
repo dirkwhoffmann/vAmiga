@@ -23,7 +23,8 @@ public:
 
     virtual ~DiskEncoder() = default;
 
-    virtual BitView encodeTrack(TrackNr t, ByteView src) = 0;
+    virtual BitView encodeTrack(ByteView src, TrackNr t) = 0;
+    virtual BitView encodeSector(ByteView src, TrackNr t, TrackNr s) = 0;
 };
 
 }

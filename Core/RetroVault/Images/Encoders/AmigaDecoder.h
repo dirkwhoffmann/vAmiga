@@ -28,6 +28,8 @@ public:
     ByteView decodeTrack(BitView track, TrackNr t) override;
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s) override;
 
+// private:
+
     // Returns the start offset of a sector (empty if not found)
     optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
 
@@ -39,7 +41,6 @@ public:
 
     // Decodes a single sector
     void decodeSector(ByteView track, isize offset, MutableByteView dst);
-
 };
 
 }

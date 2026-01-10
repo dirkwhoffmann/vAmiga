@@ -169,7 +169,7 @@ D64File::encode(TrackNr t) const
     auto encoder = C64Encoder(id1, id2, ecc());
 
     // Encode track
-    auto gcr = encoder.encodeTrack(t, byteView(t));
+    auto gcr = encoder.encodeTrack(byteView(t), t);
 
     // Copy the encoded track data
     track.assign(gcr.data(), gcr.data() + gcr.byteView().size());
