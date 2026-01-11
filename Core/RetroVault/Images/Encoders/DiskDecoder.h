@@ -12,6 +12,7 @@
 #include "DeviceTypes.h"
 #include "utl/abilities/Loggable.h"
 #include "utl/primitives/BitView.h"
+#include "utl/primitives/Range.h"
 
 namespace retro::vault {
 
@@ -48,10 +49,9 @@ public:
     ByteView decodeTrack(BitView track, TrackNr t);
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s);
 
-    // Returns a BitView of the sector’s data area
-    virtual optional<BitView> seekSectorNew(BitView track, SectorNr s, isize offset = 0) {return{};}
-    virtual std::unordered_map<isize, BitView> seekSectorsNew(BitView track) { return{}; }
-
+    // Returns a range on the sector’s data area
+    virtual optional<Range<isize>> seekSectorNew(BitView track, SectorNr s, isize offset = 0) {return{};}
+    virtual std::unordered_map<isize, Range<isize>> seekSectorsNew(BitView track) { return{}; }
 };
 
 }

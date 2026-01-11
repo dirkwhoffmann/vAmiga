@@ -127,26 +127,32 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
 void
 FloppyDisk::writeBlock(const u8 *src, isize nr)
 {
-    AmigaDecoder decoder;
     AmigaEncoder encoder;
+    AmigaDecoder decoder;
 
     auto [t,s]  = b2ts(nr);
     loginfo(MFM_DEBUG, "writeBlock: %ld (%ld,%ld)\n", nr, t, s);
 
-    auto tdata = track[t].byteView();
+    // Compute the MFM bit stream
+    auto mfm = encoder.encodeSector(ByteView(src, bsize()), t, s);
 
-    auto offset = decoder.trySeekSector(tdata, s);
+    // Locate the sector inside the track
+    auto sector = decoder.seekSectorNew(track[t], s);
 
-    if (!offset)
+    if (!sector.has_value())
         throw IOError(DeviceError::SEEK_ERR, "Block " + std::to_string(nr));
 
-    loginfo(MFM_DEBUG, "Found (%ld,%ld) at offset %ld\n", t, s, *offset);
+    auto tr = track[t];
+    auto it = track[t].cyclic_begin() + sector->lower;
 
-    auto mfm = encoder.encodeSector(ByteView(src, bsize()), t, s);
-    for (isize i = 0; i < mfm.size(); i++)
-        track[t].set(*offset + i, mfm[i]);
+    // Replace the sector data
+    assert(mfm.size() == (*sector).size());
+    for (isize i = 0; i < mfm.size(); ++i, ++it)
+        tr.set(it.offset(), mfm[i]);
 
-    // encoder.encodeSector(tdata, *offset, t, s, ByteView(std::span<const u8>(src, 512)));
+    // Rectify clock bits
+    encoder.rectifyClockBit(tr, sector->lower);
+    encoder.rectifyClockBit(tr, sector->upper);
 }
 
 void

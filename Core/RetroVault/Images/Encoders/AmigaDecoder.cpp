@@ -39,7 +39,7 @@ AmigaDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
         if (!sectors.contains(s))
             throw DeviceError(DeviceError::SEEK_ERR);
 
-        auto it = sectors[s].cyclic_begin();
+        auto it = track.cyclic_begin() + sectors[s].lower;
 
         // Read sector data
         assert(sectors[s].size() == 1024*8);
@@ -68,7 +68,7 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> o
     // Skip sync mark + sector header
     isize offset = sector + 4 + 56;
 
-    assert(offset * 8 == sec->first);
+    assert(offset * 8 == sec->lower);
 
     // Determine the source address
     auto *mfmData = &track.byteView()[offset];
@@ -79,7 +79,7 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> o
     return ByteView(out);
 }
 
-optional<BitView>
+optional<Range<isize>>
 AmigaDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
 {
     auto map = seekSectors(track, std::vector<SectorNr>{1}, offset);
@@ -90,18 +90,18 @@ AmigaDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
     return map[s];
 }
 
-std::unordered_map<isize, BitView>
+std::unordered_map<isize, Range<isize>>
 AmigaDecoder::seekSectorsNew(BitView track)
 {
     return seekSectors(track, std::vector<SectorNr>{});
 }
 
-std::unordered_map<SectorNr, BitView>
+std::unordered_map<SectorNr, Range<isize>>
 AmigaDecoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize offset)
 {
     static constexpr u64 SYNC = u64(0x44894489);
 
-    std::unordered_map<SectorNr, BitView> result;
+    std::unordered_map<SectorNr, Range<isize>> result;
     std::unordered_set<SectorNr> visited;
 
     // Loop until a sector header repeats or no sync marks are found
@@ -129,7 +129,8 @@ AmigaDecoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize
         if (wanted.empty() || std::find(wanted.begin(), wanted.end(), s) != wanted.end()) {
 
             // Record the sector number
-            result[s] = track.subview(it.offset() + 48*8, 1024*8);
+            result[s] = Range<isize>(it.offset() + 48 * 8,
+                                     it.offset() + 48 * 8 + 1024 * 8);
 
             // Check for early exit
             if (!wanted.empty() && result.size() == wanted.size()) break;

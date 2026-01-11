@@ -25,10 +25,18 @@ public:
     using DiskDecoder::decodeSector;
     ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
-    optional<BitView> seekSectorNew(BitView track, SectorNr s, isize offset = 0) override;
-    std::unordered_map<isize, BitView> seekSectorsNew(BitView track) override;
 
-// private:
+    optional<Range<isize>> seekSectorNew(BitView track, SectorNr s, isize offset = 0) override;
+    std::unordered_map<isize, Range<isize>> seekSectorsNew(BitView track) override;
+
+private:
+
+    /*
+    template <typename View>
+    optional<View> seekSectorImpl(View track, SectorNr s, isize offset = 0);
+    template <typename View>
+    std::unordered_map<isize, View> seekSectorsImpl(View track);
+    */
 
     // Returns the start offset of a sector (empty if not found)
     optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
@@ -52,11 +60,9 @@ private:
     //
     // Returns a mapping from sector numbers to BitViews on the data area.
 
-    std::unordered_map<SectorNr, BitView> seekSectors(BitView track,
-                                                      std::span<const SectorNr> wanted,
-                                                      isize offset = 0);
-
-
+    std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track,
+                                                           std::span<const SectorNr> wanted,
+                                                           isize offset = 0);
 };
 
 }

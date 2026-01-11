@@ -25,8 +25,7 @@ public:
     BitView encodeTrack(ByteView bytes, TrackNr t) override;
     BitView encodeSector(ByteView bytes, TrackNr t, SectorNr s) override;
 
-private:
-
+    // Recomputes the clock bit at the specified offset
     void rectifyClockBit(MutableBitView bytes, isize offset);
 };
 
