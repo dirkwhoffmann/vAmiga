@@ -50,8 +50,8 @@ public:
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s);
 
     // Returns a range on the sector’s data area
-    virtual optional<Range<isize>> seekSectorNew(BitView track, SectorNr s, isize offset = 0) {return{};}
-    virtual std::unordered_map<isize, Range<isize>> seekSectorsNew(BitView track) { return{}; }
+    virtual optional<Range<isize>> seekSector(BitView track, SectorNr s, isize offset = 0) = 0;
+    virtual std::unordered_map<isize, Range<isize>> seekSectors(BitView track) = 0;
 };
 
 }

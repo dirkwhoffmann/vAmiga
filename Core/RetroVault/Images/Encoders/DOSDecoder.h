@@ -37,8 +37,8 @@ public:
 
 private:
 
-    optional<Range<isize>> seekSectorNew(BitView track, SectorNr s, isize offset = 0) override;
-    std::unordered_map<isize, Range<isize>> seekSectorsNew(BitView track) override;
+    optional<Range<isize>> seekSector(BitView track, SectorNr s, isize offset = 0) override;
+    std::unordered_map<isize, Range<isize>> seekSectors(BitView track) override;
 
     // Locates the data areas of certain sectors on a track
     //

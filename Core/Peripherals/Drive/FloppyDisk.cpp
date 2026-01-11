@@ -137,7 +137,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
     auto mfm = encoder.encodeSector(ByteView(src, bsize()), t, s);
 
     // Locate the sector inside the track
-    auto sector = decoder.seekSectorNew(track[t], s);
+    auto sector = decoder.seekSector(track[t], s);
 
     if (!sector.has_value())
         throw IOError(DeviceError::SEEK_ERR, "Block " + std::to_string(nr));

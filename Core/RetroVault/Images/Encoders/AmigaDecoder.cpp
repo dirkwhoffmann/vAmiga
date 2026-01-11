@@ -24,7 +24,7 @@ AmigaDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
     loginfo(IMG_DEBUG, "Decoding Amiga track %ld\n", t);
 
     // Find all sectors
-    auto sectors    = seekSectorsNew(track);
+    auto sectors    = seekSectors(track);
     auto numSectors = isize(sectors.size());
 
     // Ensure the output buffer is large enough
@@ -58,7 +58,7 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> o
     assert(isize(out.size()) >= bsize);
 
     // Find sector
-    auto sector = seekSectorNew(track, s);
+    auto sector = seekSector(track, s);
 
     if (!sector.has_value())
         throw DeviceError(DeviceError::SEEK_ERR);
@@ -76,7 +76,7 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> o
 }
 
 optional<Range<isize>>
-AmigaDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
+AmigaDecoder::seekSector(BitView track, SectorNr s, isize offset)
 {
     auto map = seekSectors(track, std::vector<SectorNr>{s}, offset);
 
@@ -87,7 +87,7 @@ AmigaDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
 }
 
 std::unordered_map<isize, Range<isize>>
-AmigaDecoder::seekSectorsNew(BitView track)
+AmigaDecoder::seekSectors(BitView track)
 {
     return seekSectors(track, std::vector<SectorNr>{});
 }

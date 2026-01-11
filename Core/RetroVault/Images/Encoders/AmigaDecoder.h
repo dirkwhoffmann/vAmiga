@@ -27,8 +27,8 @@ public:
     ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
 
-    optional<Range<isize>> seekSectorNew(BitView track, SectorNr s, isize offset = 0) override;
-    std::unordered_map<isize, Range<isize>> seekSectorsNew(BitView track) override;
+    optional<Range<isize>> seekSector(BitView track, SectorNr s, isize offset = 0) override;
+    std::unordered_map<isize, Range<isize>> seekSectors(BitView track) override;
 
 private:
 

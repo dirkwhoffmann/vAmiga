@@ -69,7 +69,7 @@ C64Decoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out
     assert(isize(out.size()) >= bsize);
 
     // Find sector
-    auto sector = seekSectorNew(track, s);
+    auto sector = seekSector(track, s);
 
     if (!sector.has_value())
         throw DeviceError(DeviceError::SEEK_ERR);
@@ -79,22 +79,6 @@ C64Decoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out
         out[i] = GCR::decodeGcr(track, offset);
 
     return ByteView(out.data(), bsize);
-}
-
-void
-C64Decoder::decodeSector(BitView sector, MutableByteView dst)
-{
-    assert(dst.size() == bsize);
-
-    // Skip sync mark + sector header
-    isize offset = 40 + 10;
-
-    // Decode sector data
-    for (isize i = 0; i < bsize; ++i) {
-
-        dst[i] = GCR::decodeGcr(sector, offset);
-        offset += 10;
-    }
 }
 
 bool
@@ -129,17 +113,8 @@ C64Decoder::seekHeaderSync(BitView track, BitView::cyclic_iterator &it)
     return false;
 }
 
-Range<isize>
-C64Decoder::seekSector(BitView track, SectorNr s, isize offset)
-{
-    if (auto result = trySeekSector(track, s, offset))
-        return *result;
-
-    throw DeviceError(DeviceError::INVALID_SECTOR_NR);
-}
-
 optional<Range<isize>>
-C64Decoder::trySeekSector(BitView track, SectorNr s, isize offset)
+C64Decoder::seekSector(BitView track, SectorNr s, isize offset)
 {
     auto map = seekSectors(track, std::span<const SectorNr>(&s, 1), offset);
 
@@ -200,29 +175,4 @@ C64Decoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize o
     return result;
 }
 
-/*
-isize
-C64Decoder::seekSector(BitView track, SectorNr s, isize offset)
-{
-    if (auto result = trySeekSector(track, s, offset))
-        return *result;
-
-    throw DeviceError(DeviceError::INVALID_SECTOR_NR);
 }
-
-bool
-C64Decoder::seekSectorHeader(BitView track, BitView::cyclic_iterator &it)
-{
-    constexpr isize syncMarkLen = 50;
-
-    isize max = track.size() + syncMarkLen;
-    for (isize i = 0, ones = 0; i < max; ++i, ++it) {
-
-        if (ones == 50) return true;
-        ones = it[i] ? ones + 1 : 0;
-    }
-}
-*/
-
-}
-

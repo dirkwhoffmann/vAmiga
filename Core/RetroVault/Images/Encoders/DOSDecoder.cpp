@@ -21,7 +21,7 @@ DOSDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
     loginfo(IMG_DEBUG, "Decoding DOS track %ld\n", t);
 
     // Find all sectors
-    auto sectors    = seekSectorsNew(track);
+    auto sectors    = seekSectors(track);
     auto numSectors = isize(sectors.size());
 
     // Ensure the output buffer is large enough
@@ -56,7 +56,7 @@ DOSDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out
 }
 
 optional<Range<isize>>
-DOSDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
+DOSDecoder::seekSector(BitView track, SectorNr s, isize offset)
 {
     auto map = seekSectors(track, std::vector<SectorNr>{s}, offset);
 
@@ -67,7 +67,7 @@ DOSDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
 }
 
 std::unordered_map<isize, Range<isize>>
-DOSDecoder::seekSectorsNew(BitView track)
+DOSDecoder::seekSectors(BitView track)
 {
     return seekSectors(track, std::vector<SectorNr>{});
 }

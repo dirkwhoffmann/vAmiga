@@ -23,21 +23,12 @@ public:
 
     using DiskDecoder::decodeTrack;
     using DiskDecoder::decodeSector;
+
     ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
 
-
-    // Decodes a single sector
-    void decodeSector(BitView sector, MutableByteView dst);
-
-    // Returns a bit view on the data section of a sector (throws if not found)
-    Range<isize> seekSector(BitView track, SectorNr s, isize offset = 0);
-
-    // Returns a bit view on the data section of a sector (empty if not found)
-    optional<Range<isize>> trySeekSector(BitView track, SectorNr s, isize offset = 0);
-
-    // Computes the data section bit views for all sectors
-    std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track);
+    optional<Range<isize>> seekSector(BitView track, SectorNr s, isize offset = 0) override;
+    std::unordered_map<isize, Range<isize>> seekSectors(BitView track) override;
 
 private:
 
@@ -61,7 +52,6 @@ private:
     std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track,
                                                            std::span<const SectorNr> wanted,
                                                            isize offset = 0);
-
 };
 
 }
