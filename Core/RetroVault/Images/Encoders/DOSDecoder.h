@@ -27,6 +27,7 @@ public:
 
     using DiskDecoder::decodeTrack;
     using DiskDecoder::decodeSector;
+
     ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
 
@@ -38,8 +39,24 @@ public:
 
     // Computes a map from sector numbers to byte offsets
     std::unordered_map<isize, isize> seekSectors(ByteView track);
-};
 
-namespace Decoder { extern DOSDecoder dos; }
+    optional<Range<isize>> seekSectorNew(BitView track, SectorNr s, isize offset = 0) override;
+    std::unordered_map<isize, Range<isize>> seekSectorsNew(BitView track) override;
+
+    // Locates the data areas of certain sectors on a track
+    //
+    // `wanted` specifies which sectors to locate. For example, { 7 } searches
+    // only for sector 7. If empty, all sectors are searched for.
+    //
+    // `offset` specifies the bit position at which the search begins. If a
+    // sector’s approximate position is already known, this can be used to
+    // speed up the search.
+    //
+    // Returns a mapping from sector numbers to BitViews on the data area.
+
+    std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track,
+                                                           std::span<const SectorNr> wanted,
+                                                           isize offset = 0);
+};
 
 }

@@ -78,7 +78,7 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> o
 optional<Range<isize>>
 AmigaDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
 {
-    auto map = seekSectors(track, std::vector<SectorNr>{1}, offset);
+    auto map = seekSectors(track, std::vector<SectorNr>{s}, offset);
 
     if (!map.contains(s))
         throw DeviceError(DeviceError::INVALID_SECTOR_NR);
@@ -101,7 +101,7 @@ AmigaDecoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize
     std::unordered_set<SectorNr> visited;
 
     // Loop until a sector header repeats or no sync marks are found
-    for (auto it = track.cyclic_begin();;) {
+    for (auto it = track.cyclic_begin(offset);;) {
 
         // Move behind the next sync mark
         if (!track.forward(it, SYNC, 32)) throw DeviceError(DeviceError::SEEK_ERR);
@@ -121,7 +121,7 @@ AmigaDecoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize
         // Break the loop if we've seen this sector before
         if (!visited.insert(s).second) break;
 
-        // Record the sector if requested
+        // If the sector is requested...
         if (wanted.empty() || std::find(wanted.begin(), wanted.end(), s) != wanted.end()) {
 
             // Record the sector number

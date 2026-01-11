@@ -343,6 +343,13 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
     for (TrackNr t = 0; t < image.numTracks(); ++t)
         replaceTrack(t, image.encode(t));
 
+    if constexpr (debug::IMG_DEBUG) {
+
+        string tmp = "/tmp/debug.img";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        Codec::makeIMG(*this)->writeToFile(tmp);
+    }
+    
     // In debug mode, also run the decoder
     /*
     if constexpr (debug::ADF_DEBUG) {
@@ -570,24 +577,6 @@ FloppyDisk::writeToFile(const fs::path& path, ImageFormat fmt) const
             throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
-
-/*
-void
-FloppyDisk::repeatTracks()
-{
-    for (TrackNr t = 0; t < 168; t++) {
-
-        assert(track[t].size() % 8 == 0);
-
-        auto end = isize(track[t].size() / 8);
-        auto max = isize(sizeof(data.track[t]));
-
-        for (isize i = end, j = 0; i < max; i++, j++) {
-            data.track[t][i] = data.track[t][j];
-        }
-    }
-}
-*/
 
 string
 FloppyDisk::readTrackBits(TrackNr t) const

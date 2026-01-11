@@ -230,32 +230,6 @@ ADFFile::decode(TrackNr t, BitView bits)
     memcpy(byteView(t).data(), bytes.data(), bytes.size());
 }
 
-/*
-FSDescriptor
-ADFFile::getFileSystemDescriptor() const noexcept
-{
-    FSDescriptor result;
-    
-    // Determine the root block location
-    BlockNr root = data.size < ADFSIZE_35_HD ? 880 : 1760;
-
-    // Determine the bitmap block location
-    BlockNr bitmap = FSBlock::read32(data.ptr + root * 512 + 316);
-
-    // Assign a default location if the bitmap block reference is invalid
-    if (bitmap == 0 || bitmap >= (BlockNr)numBlocks()) bitmap = root + 1;
-
-    // Setup the descriptor
-    result.numBlocks = numBlocks();
-    result.bsize = 512;
-    result.numReserved = 2;
-    result.rootBlock = root;
-    result.bmBlocks.push_back(bitmap);
-    
-    return result;
-}
-*/
-
 void
 ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {

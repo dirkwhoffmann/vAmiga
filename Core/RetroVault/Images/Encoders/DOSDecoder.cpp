@@ -13,11 +13,42 @@
 #include "MFM.h"
 #include "utl/support/Bits.h"
 #include <array>
+#include <unordered_set>
 
 namespace retro::vault {
 
-namespace Decoder { DOSDecoder dos; }
+ByteView
+DOSDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
+{
+    loginfo(IMG_DEBUG, "Decoding DOS track %ld\n", t);
 
+    // Find all sectors
+    auto sectors    = seekSectorsNew(track);
+    auto numSectors = isize(sectors.size());
+
+    // Ensure the output buffer is large enough
+    assert(isize(out.size()) >= numSectors * bsize);
+
+    // Iterator through all sectors
+    for (isize s = 0; s < numSectors; ++s) {
+
+        if (!sectors.contains(s))
+            throw DeviceError(DeviceError::SEEK_ERR);
+
+        auto it = track.cyclic_begin() + sectors[s].lower;
+
+        // Read sector data
+        assert(sectors[s].size() == 1024*8);
+        u8 mfm[1024]; for (isize i = 0; i < 1024; ++i) mfm[i] = it.readByte();
+
+        // Decode data
+        MFM::decodeMFM(out.data() + s * bsize, mfm, bsize);
+    }
+
+    return ByteView(out.data(), numSectors * bsize);
+}
+
+/*
 ByteView
 DOSDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
 {
@@ -44,6 +75,7 @@ DOSDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
 
     return ByteView(out.data(), numSectors * bsize);
 }
+*/
 
 ByteView
 DOSDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out)
@@ -172,6 +204,66 @@ DOSDecoder::seekSectors(ByteView track)
         throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
     }
 
+    return result;
+}
+
+optional<Range<isize>>
+DOSDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
+{
+    auto map = seekSectors(track, std::vector<SectorNr>{s}, offset);
+
+    if (!map.contains(s))
+        throw DeviceError(DeviceError::INVALID_SECTOR_NR);
+
+    return map[s];
+}
+
+std::unordered_map<isize, Range<isize>>
+DOSDecoder::seekSectorsNew(BitView track)
+{
+    return seekSectors(track, std::vector<SectorNr>{});
+}
+
+std::unordered_map<SectorNr, Range<isize>>
+DOSDecoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize offset)
+{
+    constexpr u64 IDAM = u64(0x4489448944895554);
+    constexpr u64 DAM  = u64(0x4489448944895545);
+
+    std::unordered_map<SectorNr, Range<isize>> result;
+    std::unordered_set<SectorNr> visited;
+
+    // Loop until a sector header repeats or no sync marks are found
+    for (auto it = track.cyclic_begin(offset);;) {
+
+        // Move behind the next IDAM sync mark
+        if (!track.forward(it, IDAM, 64)) throw DeviceError(DeviceError::SEEK_ERR);
+
+        // Read the next 8 MFM bytes
+        u8 mfm[8]; for (isize i = 0; i < 8; ++i) mfm[i] = it.readByte();
+
+        // Decode the CHRN block
+        u8 info[4]; MFM::decodeMFM(info, mfm, 4);
+
+        // The sector number is encoded in the third byte, counting 1,2,...
+        u8 s = info[2] - 1;
+
+        // Break the loop if we've seen this sector before
+        if (!visited.insert(s).second) break;
+
+        // If the sector is requested...
+        if (wanted.empty() || std::find(wanted.begin(), wanted.end(), s) != wanted.end()) {
+
+            // Move behind the next IDAM sync mark
+            if (!track.forward(it, DAM, 64)) throw DeviceError(DeviceError::SEEK_ERR);
+
+            // Record the sector number
+            result[s] = Range<isize>(it.offset(), it.offset() + 1024 * 8);
+
+            // Check for early exit
+            if (!wanted.empty() && result.size() == wanted.size()) break;
+        }
+    }
     return result;
 }
 

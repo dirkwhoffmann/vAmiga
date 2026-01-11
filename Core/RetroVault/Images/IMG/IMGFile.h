@@ -15,6 +15,9 @@ namespace retro::vault::image {
 
 class IMGFile : public FloppyDiskImage {
 
+    using MFMTrack = std::vector<u8>;
+    mutable std::vector<MFMTrack> mfmTracks {168};
+    
 public:
 
     static constexpr isize IMGSIZE_35_DD = 737280;  // 720 KB PC disk

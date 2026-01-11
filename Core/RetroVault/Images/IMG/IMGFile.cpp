@@ -11,6 +11,8 @@
 #include "IMGFile.h"
 #include "FloppyDrive.h"
 #include "DeviceError.h"
+#include "DOSEncoder.h"
+#include "DOSDecoder.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <format>
@@ -76,13 +78,32 @@ IMGFile::numSectors() const
 BitView
 IMGFile::encode(TrackNr t) const
 {
-    throw std::runtime_error("NOT IMPLEMENTED YET");
+    validateTrackNr(t);
+    auto &track = mfmTracks.at(t);
+
+    // Encode track
+    DOSEncoder encoder;
+    auto mfm = encoder.encodeTrack(byteView(t), t);
+
+    // Copy the encoded track data
+    track.assign(mfm.data(), mfm.data() + mfm.byteView().size());
+
+    // Return a bit view with the proper size
+    return BitView(track.data(), mfm.size());
 }
 
 void
 IMGFile::decode(TrackNr t, BitView bits)
 {
-    throw std::runtime_error("NOT IMPLEMENTED YET");
+    validateTrackNr(t);
+
+    // Decode track
+    DOSDecoder decoder;
+    auto bytes = decoder.decodeTrack(bits, t);
+    assert(bytes.size() == 9 * 512);
+
+    // Copy back the decoded bytes
+    memcpy(byteView(t).data(), bytes.data(), bytes.size());
 }
 
 }
