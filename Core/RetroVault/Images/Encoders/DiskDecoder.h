@@ -50,6 +50,8 @@ public:
 
     // Returns a BitView of the sector’s data area
     virtual optional<BitView> seekSectorNew(BitView track, SectorNr s, isize offset = 0) {return{};}
+    virtual std::unordered_map<isize, BitView> seekSectorsNew(BitView track) { return{}; }
+
 };
 
 }

@@ -30,11 +30,23 @@ AmigaDecoder::decodeTrack(BitView track, TrackNr t, std::span<u8> out)
     // Ensure the output buffer is large enough
     assert(isize(out.size()) >= numSectors * bsize);
 
-    // Decode all sectors
+    // Find all sectors
+    auto sectors = seekSectorsNew(track);
+
+    // Iterator through all sectors
     for (isize s = 0; s < numSectors; ++s) {
 
-        auto bytes = decodeSector(track, t, s);
-        memcpy(out.data() + s * bsize, bytes.data(), bsize);
+        if (!sectors.contains(s))
+            throw DeviceError(DeviceError::SEEK_ERR);
+
+        auto it = sectors[s].cyclic_begin();
+
+        // Read sector data
+        assert(sectors[s].size() == 1024*8);
+        u8 mfm[1024]; for (isize i = 0; i < 1024; ++i) mfm[i] = it.readByte();
+
+        // Decode data
+        MFM::decodeOddEven(out.data() + s * bsize, mfm, bsize);
     }
 
     return ByteView(out.data(), numSectors * bsize);
@@ -70,13 +82,33 @@ AmigaDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> o
 optional<BitView>
 AmigaDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
 {
+    auto map = seekSectors(track, std::vector<SectorNr>{1}, offset);
+
+    if (!map.contains(s))
+        throw DeviceError(DeviceError::INVALID_SECTOR_NR);
+
+    return map[s];
+}
+
+std::unordered_map<isize, BitView>
+AmigaDecoder::seekSectorsNew(BitView track)
+{
+    return seekSectors(track, std::vector<SectorNr>{});
+}
+
+std::unordered_map<SectorNr, BitView>
+AmigaDecoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize offset)
+{
+    static constexpr u64 SYNC = u64(0x44894489);
+
+    std::unordered_map<SectorNr, BitView> result;
     std::unordered_set<SectorNr> visited;
 
     // Loop until a sector header repeats or no sync marks are found
-    for (auto it = track.cyclic_begin(offset);;) {
+    for (auto it = track.cyclic_begin();;) {
 
-        // Move behind the next sync mark ($44 $89 $44 $89)
-        if (!track.forward(it, 0x44894489, 32)) throw DeviceError(DeviceError::SEEK_ERR);
+        // Move behind the next sync mark
+        if (!track.forward(it, SYNC, 32)) throw DeviceError(DeviceError::SEEK_ERR);
 
         // Read the next 8 MFM bytes
         u8 mfm[8]; for (isize i = 0; i < 8; ++i) mfm[i] = it.readByte();
@@ -87,16 +119,24 @@ AmigaDecoder::seekSectorNew(BitView track, SectorNr s, isize offset)
         // Decode track & sector info
         u8 info[4]; MFM::decodeOddEven(info, mfm, 4);
 
-        // Check if the sector number matches
-        if (info[2] == s) return track.subview(it.offset() + 48 * 8, 1024 * 8);
+        // The sector number is encoded in the third byte
+        u8 s = info[2];
 
-        // Bail out if we've seen this sector before
-        if (!visited.insert(info[2]).second) break;
+        // Break the loop if we've seen this sector before
+        if (!visited.insert(s).second) break;
+
+        // Record the sector if requested
+        if (wanted.empty() || std::find(wanted.begin(), wanted.end(), s) != wanted.end()) {
+
+            // Record the sector number
+            result[s] = track.subview(it.offset() + 48*8, 1024*8);
+
+            // Check for early exit
+            if (!wanted.empty() && result.size() == wanted.size()) break;
+        }
     }
-
-    return {};
+    return result;
 }
-
 
 optional<isize>
 AmigaDecoder::trySeekSector(ByteView track, SectorNr s, isize offset)

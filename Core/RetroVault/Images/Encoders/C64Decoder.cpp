@@ -150,7 +150,7 @@ C64Decoder::trySeekSector(BitView track, SectorNr s, isize offset)
 std::unordered_map<SectorNr, BitView>
 C64Decoder::seekSectors(BitView track)
 {
-    return seekSectors(track, std::vector<SectorNr>(), 0);
+    return seekSectors(track, std::vector<SectorNr>());
 }
 
 std::unordered_map<SectorNr, BitView>
@@ -171,7 +171,7 @@ C64Decoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize o
         // The next byte stores the sector number
         SectorNr nr = GCR::decodeGcr(track, it.offset());
 
-        // Bail out if we've seen this sector before
+        // Break the loop if we've seen this sector before
         if (!visited.insert(nr).second) break;
 
         // Record the sector if requested
@@ -194,7 +194,6 @@ C64Decoder::seekSectors(BitView track, std::span<const SectorNr> wanted, isize o
             }
         }
     }
-
     return result;
 }
 
