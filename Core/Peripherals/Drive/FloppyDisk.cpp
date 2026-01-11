@@ -343,13 +343,22 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
     for (TrackNr t = 0; t < image.numTracks(); ++t)
         replaceTrack(t, image.encode(t));
 
+    /*
     if constexpr (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
         Codec::makeIMG(*this)->writeToFile(tmp);
     }
-    
+     */
+    if constexpr (debug::IMG_DEBUG) {
+
+        string tmp = "/tmp/debug.img";
+        fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
+        Codec::makeD64(*this)->writeToFile(tmp);
+    }
+
+
     // In debug mode, also run the decoder
     /*
     if constexpr (debug::ADF_DEBUG) {
@@ -359,22 +368,24 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
         Codec::makeADF(*this)->writeToFile(tmp);
     }
     */
+}
 
-    /*
-    switch (image.format()) {
+void
+FloppyDisk::decodeDisk(FloppyDiskImage &file) const
+{
+    auto tracks = file.numTracks();
 
-        case ImageFormat::ADF:  encode(dynamic_cast<const ADFFile &>(image)); break;
-        case ImageFormat::ADZ:  Codec::encodeADZ(dynamic_cast<const ADZFile &>(image), *this); break;
-        case ImageFormat::EADF: Codec::encodeEADF(dynamic_cast<const EADFFile &>(image), *this); break;
-        case ImageFormat::IMG:  encode(dynamic_cast<const IMGFile &>(image)); break;
-        case ImageFormat::ST:   encode(dynamic_cast<const STFile &>(image)); break;
-        case ImageFormat::DMS:  Codec::encodeDMS(dynamic_cast<const DMSFile &>(image), *this); break;
-        case ImageFormat::EXE:  Codec::encodeEXE(dynamic_cast<const EXEFile &>(image), *this); break;
+    loginfo(ADF_DEBUG, "Decoding disk with %ld tracks\n", tracks);
 
-        default:
-            throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+    if (getDiameter() != file.getDiameter()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
     }
-    */
+    if (getDensity() != file.getDensity()) {
+        throw DeviceError(DeviceError::DSK_INVALID_DENSITY);
+    }
+
+    // Decode all tracks
+    for (TrackNr t = 0; t < tracks; ++t) file.decode(t, track[t]);
 }
 
 void

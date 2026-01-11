@@ -93,8 +93,8 @@ public:
     // Reads a single bit
     constexpr bool operator[](isize i) const
     {
-        assert(i >= 0 && i < size());
-        isize abs = first + i;
+        // assert(i >= 0 && i < size());
+        isize abs = first + normalize(i);
         return (sp[abs >> 3] >> (7 - (abs & 7))) & 1;
     }
 

@@ -31,13 +31,13 @@ public:
     void decodeSector(BitView sector, MutableByteView dst);
 
     // Returns a bit view on the data section of a sector (throws if not found)
-    BitView seekSector(BitView track, SectorNr s, isize offset = 0);
+    Range<isize> seekSector(BitView track, SectorNr s, isize offset = 0);
 
     // Returns a bit view on the data section of a sector (empty if not found)
-    optional<BitView> trySeekSector(BitView track, SectorNr s, isize offset = 0);
+    optional<Range<isize>> trySeekSector(BitView track, SectorNr s, isize offset = 0);
 
     // Computes the data section bit views for all sectors
-    std::unordered_map<SectorNr, BitView> seekSectors(BitView track);
+    std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track);
 
 private:
 
@@ -47,21 +47,20 @@ private:
     // Moves the iterator to the bit following the next header block sync mark
     bool seekHeaderSync(BitView track, BitView::cyclic_iterator &it);
 
-    // Finds the start offsets of sectors on a track
+    // Locates the data areas of certain sectors on a track
     //
     // `wanted` specifies which sectors to locate. For example, { 7 } searches
-    // only for sector 7. If empty, all sectors are found.
+    // only for sector 7. If empty, all sectors are searched for.
     //
     // `offset` specifies the bit position at which the search begins. If a
     // sector’s approximate position is already known, this can be used to
     // speed up the search.
     //
-    // Returns a mapping from sector numbers to their start offsets. Each offset
-    // is the bit position of the sector’s first data bit.
+    // Returns a mapping from sector numbers to the respective data area range.
 
-    std::unordered_map<SectorNr, BitView> seekSectors(BitView track,
-                                                      std::span<const SectorNr> wanted,
-                                                      isize offset = 0);
+    std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track,
+                                                           std::span<const SectorNr> wanted,
+                                                           isize offset = 0);
 
 };
 

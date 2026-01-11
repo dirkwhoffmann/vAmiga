@@ -10,6 +10,7 @@
 #include "config.h"
 #include "D64File.h"
 #include "C64Encoder.h"
+#include "C64Decoder.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <format>
@@ -181,7 +182,16 @@ D64File::encode(TrackNr t) const
 void
 D64File::decode(TrackNr t, BitView bits)
 {
-    throw std::runtime_error("NOT IMPLEMENTED YET");
+    validateTrackNr(t);
+
+    C64Decoder decoder;
+
+    // Decode track
+    auto bytes = decoder.decodeTrack(bits, t);
+    assert(bytes.size() == D64File::trackDefaults(t).sectors * 256);
+
+    // Copy back decoded bytes
+    memcpy(byteView(t).data(), bytes.data(), bytes.size());
 }
 
 bool

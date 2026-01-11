@@ -15,15 +15,19 @@ namespace retro::vault {
 
 class DOSDecoder : public DiskDecoder {
 
-    static constexpr isize bsize  = 512;  // Block size in bytes
-    static constexpr isize ssize  = 1300; // MFM sector size in bytes
-    static constexpr isize maxsec = 22;   // Maximum number of sectors
+    static constexpr u64 IDAM_SYNC = u64(0x4489448944895554);
+    static constexpr u64 DAM_SYNC  = u64(0x4489448944895545);
 
-public:
+    static constexpr isize bsize   = 512;  // Block size in bytes
+    static constexpr isize ssize   = 1300; // MFM sector size in bytes
+    static constexpr isize maxsec  = 22;   // Maximum number of sectors
+
 
     //
     // Methods from DiskDecoder
     //
+
+public:
 
     using DiskDecoder::decodeTrack;
     using DiskDecoder::decodeSector;
@@ -31,14 +35,7 @@ public:
     ByteView decodeTrack(BitView track, TrackNr t, std::span<u8> out) override;
     ByteView decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out) override;
 
-    // void decodeTrack(ByteView track, TrackNr t, MutableByteView dst) override;
-    void decodeSector(ByteView track, isize offset, MutableByteView dst);
-
-    optional<isize> trySeekSector(ByteView track, SectorNr s, isize offset = 0);
-    isize seekSector(ByteView track, SectorNr s, isize offset = 0);
-
-    // Computes a map from sector numbers to byte offsets
-    std::unordered_map<isize, isize> seekSectors(ByteView track);
+private:
 
     optional<Range<isize>> seekSectorNew(BitView track, SectorNr s, isize offset = 0) override;
     std::unordered_map<isize, Range<isize>> seekSectorsNew(BitView track) override;
@@ -52,7 +49,7 @@ public:
     // sector’s approximate position is already known, this can be used to
     // speed up the search.
     //
-    // Returns a mapping from sector numbers to BitViews on the data area.
+    // Returns a mapping from sector numbers to the respective data area range.
 
     std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track,
                                                            std::span<const SectorNr> wanted,

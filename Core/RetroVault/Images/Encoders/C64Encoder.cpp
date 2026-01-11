@@ -121,14 +121,14 @@ C64Encoder::encodeTrack(ByteView src, TrackNr t)
     view.byteView().clear(0x55);
 
     // Compute start position inside the bit view
-    auto offset = isize(view.size() * defaults.stagger);
+    // auto offset = isize(view.size() * defaults.stagger);
+    auto offset = 0;
 
     // For each sector in this track ...
     isize totalBits = 0;
     for (SectorNr s = 0; s < defaults.sectors; ++s) {
 
         // Create a view on the sector data
-        // BlockNr b = trackDefaults(t).firstSectorNr + s;
         ByteView sview(src.subspan(s * 256, 256));
 
         // Encode the sector
@@ -143,6 +143,10 @@ C64Encoder::encodeTrack(ByteView src, TrackNr t)
                 "\nTrack size: %ld Encoded: %ld Checksum: %x\n",
                 view.size(), totalBits, view.byteView().fnv32());
     }
+
+    for (isize i = 0; i < 64; ++i) printf("%02X ", gcrbuffer[i]);
+    printf("\n");
+    
     return view;
 }
 

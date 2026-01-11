@@ -13,6 +13,7 @@
 #include "FloppyDrive.h"
 #include "ADFFile.h"
 #include "ADZFile.h"
+#include "D64File.h"
 #include "EADFFile.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
@@ -25,6 +26,7 @@ namespace vamiga {
 
 using retro::vault::image::ADFFile;
 using retro::vault::image::ADZFile;
+using retro::vault::image::D64File;
 using retro::vault::image::EADFFile;
 using retro::vault::image::HDFFile;
 using retro::vault::image::HDZFile;
@@ -50,6 +52,9 @@ public:
 
     static std::unique_ptr<STFile> makeST(const FloppyDisk &disk);
     static std::unique_ptr<STFile> makeST(const FloppyDrive &drive);
+
+    static std::unique_ptr<D64File> makeD64(const FloppyDisk &disk);
+    static std::unique_ptr<D64File> makeD64(const FloppyDrive &drive);
 
     static std::unique_ptr<HDFFile> makeHDF(const HardDrive &hd);
 

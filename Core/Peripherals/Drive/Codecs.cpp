@@ -167,6 +167,22 @@ Codec::makeST(const FloppyDrive &drive)
     return makeST(*drive.disk);
 }
 
+std::unique_ptr<D64File>
+Codec::makeD64(const FloppyDisk &disk)
+{
+    // auto d64 = make_unique<D64File>(disk.getDiameter(), disk.getDensity());
+    auto d64 = make_unique<D64File>(D64File::D64_683_SECTORS);
+    disk.decodeDisk(*d64);
+    return d64;
+}
+
+std::unique_ptr<D64File>
+Codec::makeD64(const FloppyDrive &drive)
+{
+    if (drive.disk == nullptr) throw DeviceError(DeviceError::DSK_MISSING);
+    return makeD64(*drive.disk);
+}
+
 /*
 void
 Codec::encodeStandardTrack(const EADFFile &eadf, ADFFile &adf, TrackNr t)

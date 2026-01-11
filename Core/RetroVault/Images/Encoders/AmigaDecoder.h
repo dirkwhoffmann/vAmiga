@@ -15,11 +15,11 @@ namespace retro::vault {
 
 class AmigaDecoder : public DiskDecoder {
 
-public:
-
     //
     // Methods from DiskDecoder
     //
+
+public:
 
     using DiskDecoder::decodeTrack;
     using DiskDecoder::decodeSector;
@@ -41,7 +41,7 @@ private:
     // sector’s approximate position is already known, this can be used to
     // speed up the search.
     //
-    // Returns a mapping from sector numbers to BitViews on the data area.
+    // Returns a mapping from sector numbers to the respective data area range.
 
     std::unordered_map<SectorNr, Range<isize>> seekSectors(BitView track,
                                                            std::span<const SectorNr> wanted,

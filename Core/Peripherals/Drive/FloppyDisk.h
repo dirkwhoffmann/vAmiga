@@ -284,6 +284,7 @@ public:
 
     // Encodes a disk
     void encodeDisk(const class FloppyDiskImage &file);
+    void decodeDisk(class FloppyDiskImage &file) const;
 
     void encode(const ADFFile &source);
     void decode(ADFFile &target) const;
