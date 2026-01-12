@@ -56,7 +56,7 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     if constexpr (debug::FS_DEBUG) dumpState();
 
     // Set the current directory to '/'
-    current = rootBlock;
+    // current = rootBlock;
 
     loginfo(FS_DEBUG, "Success\n");
 }

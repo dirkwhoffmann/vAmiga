@@ -18,7 +18,7 @@ isize
 FSAllocator::requiredDataBlocks(isize fileSize) const noexcept
 {
     // Compute the capacity of a single data block
-    isize numBytes = traits.bsize - (traits.ofs() ? 24 : 0);
+    isize numBytes = traits.bsize - 2;
 
     // Compute the required number of data blocks
     return (fileSize + numBytes - 1) / numBytes;
@@ -227,7 +227,7 @@ FSAllocator::allocateFileBlocks(isize bytes,
     freeSurplus(listBlocks, numListBlocks);
     freeSurplus(dataBlocks, numDataBlocks);
 
-    if (traits.ofs()) {
+    { // if (traits.ofs()) {
 
         // Header block -> Data blocks -> List block -> Data blocks ... List block -> Data blocks
         ensureDataBlocks(refsInHeaderBlock);
@@ -239,6 +239,7 @@ FSAllocator::allocateFileBlocks(isize bytes,
         }
     }
 
+    /*
     if (traits.ffs()) {
 
         // Header block -> Data blocks -> All list block -> All remaining data blocks
@@ -246,6 +247,7 @@ FSAllocator::allocateFileBlocks(isize bytes,
         ensureListBlocks(numListBlocks);
         ensureDataBlocks(refsInListBlocks);
     }
+    */
 
     // Rectify checksums
     for (auto &it : fs.getBmBlocks()) fs[it].mutate().updateChecksum();

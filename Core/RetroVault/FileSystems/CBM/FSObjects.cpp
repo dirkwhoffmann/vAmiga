@@ -45,11 +45,7 @@ FSString::FSString(const u8 *bcpl, isize limit) : limit(limit)
 char
 FSString::capital(char c, FSFormat dos)
 {
-    if (isINTLVolumeType(dos)) {
-        return (c >= 'a' && c <= 'z') || ((u8)c >= 224 && (u8)c <= 254 && (u8)c != 247) ? c - ('a' - 'A') : c ;
-    } else {
-        return (c >= 'a' && c <= 'z') ? c - ('a' - 'A') : c;
-    }
+    return (c >= 'a' && c <= 'z') ? c - ('a' - 'A') : c;
 }
 
 bool

@@ -140,7 +140,7 @@ class FileSystem : public Loggable {
     // Path layer
 
     // Location of the current directory
-    BlockNr current = 0;
+    [[deprecated]] BlockNr current = 0;
 
 
     // Service layer
@@ -283,10 +283,10 @@ public:
     void setName(const FSName &name);
 
     // Installs a boot block
-    void makeBootable(BootBlockId id);
+    // [[deprecated]] void makeBootable(BootBlockId id);
 
     // Removes a boot block virus (if any)
-    void killVirus();
+    // [[deprecated]] void killVirus();
 
 
     //
@@ -302,10 +302,10 @@ public:
     vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
 
     // Creates a new directory
-    BlockNr mkdir(BlockNr at, const FSName &name);
+    // [[deprecated]] BlockNr mkdir(BlockNr at, const FSName &name);
 
     // Removes an empty directory
-    void rmdir(BlockNr at);
+    // [[deprecated]] void rmdir(BlockNr at);
 
     // Creates a new directory entry
     void link(BlockNr at, BlockNr fhb);
@@ -424,12 +424,12 @@ private:
 public:
 
     // Returns the working directory
-    BlockNr pwd() const { return current; }
+    [[deprecated]] BlockNr pwd() const { return current; }
 
     // Changes the working directory
-    void cd(BlockNr nr);
-    void cd(const string &path) { cd(seek(path)); }
-    void cd(const fs::path &path) { cd(seek(path)); }
+    // [[deprecated]] void cd(BlockNr nr);
+    //[[deprecated]] void cd(const string &path) { cd(seek(path)); }
+    //[[deprecated]] void cd(const fs::path &path) { cd(seek(path)); }
 
 
     //

@@ -88,11 +88,7 @@ FileSystem::predictType(BlockNr nr, const u8 *buf) const noexcept
         if (type == 16 && subtype == (u32)-3) return FSBlockType::FILELIST;
 
         // Check if this block is a data block
-        if (traits.ofs()) {
-            if (type == 8) return FSBlockType::DATA_OFS;
-        } else {
-            for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA_FFS;
-        }
+        for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA;
     }
     
     return FSBlockType::EMPTY;

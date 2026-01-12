@@ -51,40 +51,13 @@ PosixAdapter::attr(const fs::path &path) const
 void
 PosixAdapter::mkdir(const fs::path &path)
 {
-    auto parent = path.parent_path();
-    auto name = path.filename();
-
-    // Lookup destination directory
-    auto node = fs.seek(parent);
-
-    // Create directory
-    auto udb = fs.mkdir(node, FSName(name));
-
-    // Create meta info
-    auto &info = ensureMeta(udb);
-    info.linkCount = 1;
+    throw FSError(FSError::FS_UNSUPPORTED);
 }
 
 void
 PosixAdapter::rmdir(const fs::path &path)
 {
-    // Lookup directory
-    auto node = fs.seek(path);
-
-    // Only empty directories can be removed
-    require.emptyDirectory(node);
-
-    if (auto *info = getMeta(node); info) {
-
-        // Remove directory entry
-        fs.unlink(node);
-
-        // Decrement link count
-        if (info->linkCount > 0) info->linkCount--;
-
-        // Maybe delete
-        tryReclaim(node);
-    }
+    throw FSError(FSError::FS_UNSUPPORTED);
 }
 
 std::vector<string>

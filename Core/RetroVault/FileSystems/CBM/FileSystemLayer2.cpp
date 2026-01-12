@@ -70,7 +70,7 @@ FileSystem::format(FSFormat dos) {
     for (auto& ref : bmExtBlocks) { (*this)[ref].mutate().updateChecksum(); }
 
     // Set the current directory
-    current = rootBlock;
+    // current = rootBlock;
 }
 
 void
@@ -83,6 +83,7 @@ FileSystem::setName(const FSName &name)
     }
 }
 
+/*
 void
 FileSystem::makeBootable(BootBlockId id)
 {
@@ -113,6 +114,7 @@ FileSystem::killVirus()
         }
     }
 }
+*/
 
 isize
 FileSystem::numItems(BlockNr at) const
@@ -160,6 +162,7 @@ FileSystem::searchdir(BlockNr at, const FSName &name) const
     return {};
 }
 
+/*
 BlockNr
 FileSystem::mkdir(BlockNr at, const FSName &name)
 {
@@ -183,6 +186,7 @@ FileSystem::rmdir(BlockNr at)
     deleteFromHashTable(at);
     reclaim(at);
 }
+*/
 
 vector<BlockNr>
 FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
@@ -535,7 +539,7 @@ FileSystem::addDataBlock(BlockNr at, BlockNr id, BlockNr head, BlockNr prev)
     auto &node = fetch(at).mutate();
     auto &prevNode = fetch(prev).mutate();
 
-    node.init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
+    node.init(FSBlockType::DATA);
     node.setDataBlockNr(id);
     node.setFileHeaderRef(head);
 
@@ -550,15 +554,7 @@ FileSystem::addData(BlockNr nr, const u8 *buf, isize size)
 
     switch (block.type) {
 
-        case FSBlockType::DATA_OFS:
-
-            count = std::min(traits.bsize - 24, size);
-            std::memcpy(block.data() + 24, buf, count);
-            block.setDataBytesInBlock((u32)count);
-            block.updateChecksum();
-            break;
-
-        case FSBlockType::DATA_FFS:
+        case FSBlockType::DATA:
 
             count = std::min(traits.bsize, size);
             std::memcpy(block.data(), buf, count);

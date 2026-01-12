@@ -33,7 +33,7 @@ struct FSBlock : Loggable, Hashable, Dumpable {
     // The type of this block
     FSBlockType type = FSBlockType::UNKNOWN;
 
-    // The sector number of this block
+    // The number of this block
     BlockNr nr = 0;
 
     // Cached block data
@@ -106,6 +106,7 @@ public:
     // Informs about the block type
     bool is(FSBlockType type) const;
     bool isEmpty() const;
+    bool isBAM() const;
     bool isRoot() const;
     bool isFile() const;
     bool isDirectory() const;
@@ -116,7 +117,7 @@ public:
     string cppName() const;
     string absName() const;
     string relName() const;
-    string relName(BlockNr top) const;
+    [[deprecated]] string relName(BlockNr top) const;
 
     // Experimental
     string acabsName() const;

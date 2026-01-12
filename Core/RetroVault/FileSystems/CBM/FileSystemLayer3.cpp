@@ -13,18 +13,21 @@
 
 namespace retro::vault::cbm {
 
+/*
 void
 FileSystem::cd(BlockNr nr)
 {
     current = nr;
 }
+*/
 
 optional<BlockNr>
 FileSystem::trySeek(const FSPath &path) const
 {
     try {
 
-        BlockNr current = path.absolute() ? root() : pwd();
+        // BlockNr current = path.absolute() ? root() : pwd();
+        BlockNr current = root();
 
         for (const auto &p : path) {
 
@@ -106,7 +109,7 @@ FileSystem::match(BlockNr top, const vector<FSPattern> &patterns)
 vector<BlockNr>
 FileSystem::match(const string &path)
 {
-    return match(pwd(), FSPattern(path).splitted());
+    return match(root(), FSPattern(path).splitted());
 }
 
 FSTree

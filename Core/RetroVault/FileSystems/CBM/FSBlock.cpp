@@ -91,7 +91,7 @@ FSBlock::init(FSBlockType t)
             set32(-1, (u32)-3);                  // Sub type
             break;
 
-        case FSBlockType::DATA_OFS:
+        case FSBlockType::DATA:
 
             set32(0, 8);                         // Block type
             break;
@@ -114,8 +114,7 @@ FSBlock::make(FileSystem *ref, BlockNr nr, FSBlockType type)
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
-        case FSBlockType::DATA_FFS:
+        case FSBlockType::DATA:
 
             return new FSBlock(ref, nr, type);
 
@@ -146,8 +145,7 @@ FSBlock::objectName() const
         case FSBlockType::USERDIR:     return "FSBlock (UserDir)";
         case FSBlockType::FILEHEADER:  return "FSBlock (FileHeader)";
         case FSBlockType::FILELIST:    return "FSBlock (FileList)";
-        case FSBlockType::DATA_OFS:    return "FSBlock (OFS)";
-        case FSBlockType::DATA_FFS:    return "FSBlock (FFF)";
+        case FSBlockType::DATA:        return "FSBlock (Data)";
 
         default:
             throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
@@ -164,6 +162,12 @@ bool
 FSBlock::isEmpty() const
 {
     return type == FSBlockType::EMPTY;
+}
+
+bool
+FSBlock::isBAM() const
+{
+    return type == FSBlockType::BAM;
 }
 
 bool
@@ -193,9 +197,6 @@ FSBlock::isRegular() const
 bool
 FSBlock::isData() const
 {
-    if (fs->traits.ofs()) {
-        return type == FSBlockType::DATA_OFS;
-    }
 
     // Note: As FFS data blocks have no header, each block can be a data block.
     return true;
@@ -216,13 +217,13 @@ FSBlock::cppName() const
 string
 FSBlock::absName() const
 {
-    return "/" + relName(fs->root());
+    return "/" + relName();
 }
 
 string
 FSBlock::relName() const
 {
-    return relName(fs->pwd());
+    return name().cpp_str();
 }
 
 string
@@ -237,6 +238,7 @@ FSBlock::acrelName() const
     return relName() + (isDirectory() ? "/" : "");
 }
 
+/*
 string
 FSBlock::relName(BlockNr top) const
 {
@@ -253,6 +255,7 @@ FSBlock::relName(BlockNr top) const
 
     return utl::trim(result, "/");
 }
+*/
 
 fs::path
 FSBlock::sanitizedPath() const
@@ -296,8 +299,7 @@ FSBlock::dsize() const
 {
     switch (type) {
 
-        case FSBlockType::DATA_OFS: return bsize() - 24;
-        case FSBlockType::DATA_FFS: return bsize();
+        case FSBlockType::DATA:     return bsize() - 24;
         case FSBlockType::EMPTY:    return bsize();
 
         default:
@@ -454,21 +456,7 @@ FSBlock::itemType(isize byte) const
 
             return word <= -51 ? FSItemType::DATA_BLOCK_REF : FSItemType::UNUSED;
 
-        case FSBlockType::DATA_OFS:
-
-            switch (word) {
-
-                case 0: return FSItemType::TYPE_ID;
-                case 1: return FSItemType::FILEHEADER_REF;
-                case 2: return FSItemType::DATA_BLOCK_NUMBER;
-                case 3: return FSItemType::DATA_COUNT;
-                case 4: return FSItemType::NEXT_DATA_BLOCK_REF;
-                case 5: return FSItemType::CHECKSUM;
-            }
-
-            return FSItemType::DATA;
-
-        case FSBlockType::DATA_FFS:
+        case FSBlockType::DATA:
 
             return FSItemType::DATA;
 
@@ -576,7 +564,7 @@ FSBlock::checksumLocation() const
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
+        case FSBlockType::DATA:
 
             return 5;
 
@@ -1115,7 +1103,6 @@ FSBlock::hasHeaderKey() const
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
 
             return true;
 
@@ -1134,9 +1121,6 @@ FSBlock::getHeaderKey() const
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
-
-            return get32(1);
 
         default:
 
@@ -1153,10 +1137,6 @@ FSBlock::setHeaderKey(u32 val)
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
-
-            set32(1, val);
-            break;
 
         default:
             break;
@@ -1177,9 +1157,6 @@ FSBlock::hasChecksum() const
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
-
-            return true;
 
         default:
 
@@ -1204,9 +1181,6 @@ FSBlock::getChecksum() const
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
-
-            return get32(5);
 
         default:
 
@@ -1231,9 +1205,6 @@ FSBlock::setChecksum(u32 val)
         case FSBlockType::USERDIR:
         case FSBlockType::FILEHEADER:
         case FSBlockType::FILELIST:
-        case FSBlockType::DATA_OFS:
-
-            set32(5, val);
 
         default:
 
@@ -1285,8 +1256,7 @@ FSBlock::getFileHeaderRef() const
     switch (type) {
             
         case FSBlockType::FILELIST:  return get32(-3);
-        case FSBlockType::DATA_OFS:  return get32(1);
-            
+
         default:
             return 0;
     }
@@ -1300,11 +1270,6 @@ FSBlock::setFileHeaderRef(BlockNr ref)
         case FSBlockType::FILELIST:
 
             set32(-3, ref);
-            break;
-
-        case FSBlockType::DATA_OFS:
-
-            set32(1, ref);
             break;
 
         default:
@@ -1536,13 +1501,13 @@ FSBlock::getDataBlock(isize nr) const
 BlockNr
 FSBlock::getNextDataBlockRef() const
 {
-    return type == FSBlockType::DATA_OFS ? get32(4) : 0;
+    return 0;
 }
 
 void
 FSBlock::setNextDataBlockRef(BlockNr ref)
 {
-    if (type == FSBlockType::DATA_OFS) {
+    if (type == FSBlockType::DATA) {
 
         set32(4, ref);
     }
@@ -1740,8 +1705,7 @@ FSBlock::getDataBlockNr() const
 {
     switch (type) {
             
-        case FSBlockType::DATA_OFS: return get32(2);
-        case FSBlockType::DATA_FFS: return 0;
+        case FSBlockType::DATA: return 0;
 
         default:
             fatalError;
@@ -1751,14 +1715,16 @@ FSBlock::getDataBlockNr() const
 void
 FSBlock::setDataBlockNr(BlockNr val)
 {
+    /*
     switch (type) {
-            
+
         case FSBlockType::DATA_OFS: set32(2, val); break;
         case FSBlockType::DATA_FFS: break;
 
         default:
             fatalError;
     }
+    */
 }
 
 isize
@@ -1857,8 +1823,7 @@ FSBlock::getDataBytesInBlock() const
 {
     switch (type) {
             
-        case FSBlockType::DATA_OFS: return get32(3);
-        case FSBlockType::DATA_FFS: return 0;
+        case FSBlockType::DATA: return 0;
 
         default:
             fatalError;
@@ -1870,8 +1835,7 @@ FSBlock::setDataBytesInBlock(u32 val)
 {
     switch (type) {
             
-        case FSBlockType::DATA_OFS: set32(3, val); break;
-        case FSBlockType::DATA_FFS: break;
+        case FSBlockType::DATA: break;
 
         default:
             fatalError;
@@ -1900,16 +1864,11 @@ FSBlock::writeData(std::ostream &os, isize size) const
 
     switch (type) {
             
-        case FSBlockType::DATA_OFS:
+        case FSBlockType::DATA:
             
-            os.write((char *)(bdata + 24), count);
+            os.write((char *)(bdata + 2), count);
             return count;
-            
-        case FSBlockType::DATA_FFS:
-            
-            os.write((char *)bdata, count);
-            return count;
-            
+
         default:
             fatalError;
     }
@@ -1985,14 +1944,9 @@ FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count) const
 
     switch (type) {
             
-        case FSBlockType::DATA_OFS:
+        case FSBlockType::DATA:
             
-            std::memcpy((void *)(buf.ptr + offset), (void *)(bdata + 24), count);
-            return count;
-            
-        case FSBlockType::DATA_FFS:
-
-            std::memcpy((void *)(buf.ptr + offset), (void *)(bdata), count);
+            std::memcpy((void *)(buf.ptr + offset), (void *)(bdata + 22), count);
             return count;
 
         case FSBlockType::EMPTY:
@@ -2060,16 +2014,11 @@ FSBlock::overwriteData(Buffer<u8> &buf, isize offset, isize count)
 
     switch (type) {
             
-        case FSBlockType::DATA_OFS:
+        case FSBlockType::DATA:
             
-            std::memcpy((void *)(bdata + 24), (void *)(buf.ptr + offset), count);
+            std::memcpy((void *)(bdata + 2), (void *)(buf.ptr + offset), count);
             return count;
-            
-        case FSBlockType::DATA_FFS:
-
-            std::memcpy((void *)(bdata), (void *)(buf.ptr + offset), count);
-            return count;
-            
+                        
         default:
             fatalError;
     }

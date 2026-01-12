@@ -131,7 +131,7 @@ FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool c
 void
 FSExporter::exportFiles(const fs::path &path, bool recursive, bool contents) const
 {
-    exportFiles(fs.pwd(), path, recursive, contents);
+    exportFiles(fs.root(), path, recursive, contents);
 }
 
 void

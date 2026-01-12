@@ -20,15 +20,8 @@ struct FSBlock;
 
 enum class FSFormat : long
 {
-    OFS      = 0,    // Original File System
-    FFS      = 1,    // Fast File System
-    OFS_INTL = 2,    // "International" (not supported)
-    FFS_INTL = 3,    // "International" (not supported)
-    OFS_DC   = 4,    // "Directory Cache" (not supported)
-    FFS_DC   = 5,    // "Directory Cache" (not supported)
-    OFS_LNFS = 6,    // "Long Filenames" (not supported)
-    FFS_LNFS = 7,    // "Long Filenames" (not supported)
-    NODOS
+    NODOS, // No file system
+    CBM    // C64 CBM file system
 };
 
 struct FSFormatEnum : Reflectable<FSFormatEnum, FSFormat>
@@ -40,14 +33,7 @@ struct FSFormatEnum : Reflectable<FSFormatEnum, FSFormat>
     {
         switch (value) {
                 
-            case FSFormat::OFS:       return "OFS";
-            case FSFormat::FFS:       return "FFS";
-            case FSFormat::OFS_INTL:  return "OFS_INTL";
-            case FSFormat::FFS_INTL:  return "FFS_INTL";
-            case FSFormat::OFS_DC:    return "OFS_DC";
-            case FSFormat::FFS_DC:    return "FFS_DC";
-            case FSFormat::OFS_LNFS:  return "OFS_LNFS";
-            case FSFormat::FFS_LNFS:  return "FFS_LNFS";
+            case FSFormat::CBM:       return "CBM";
             case FSFormat::NODOS:     return "NODOS";
         }
         return "???";
@@ -57,7 +43,8 @@ struct FSFormatEnum : Reflectable<FSFormatEnum, FSFormat>
     {
         return "";
     }
-    
+
+    /*
     static FSFormat fromDosType(u32 value)
     {
         switch (value) {
@@ -73,50 +60,14 @@ struct FSFormatEnum : Reflectable<FSFormatEnum, FSFormat>
             default:            return FSFormat::NODOS;
         }
     }
+    */
 };
-
-inline bool isOFSVolumeType(FSFormat value)
-{
-    switch (value) {
-            
-        case FSFormat::OFS:
-        case FSFormat::OFS_INTL:
-        case FSFormat::OFS_DC:
-        case FSFormat::OFS_LNFS:    return true;
-        default:                    return false;
-    }
-}
-
-inline bool isFFSVolumeType(FSFormat value)
-{
-    switch (value) {
-            
-        case FSFormat::FFS:
-        case FSFormat::FFS_INTL:
-        case FSFormat::FFS_DC:
-        case FSFormat::FFS_LNFS:    return true;
-        default:                    return false;
-    }
-}
-
-inline bool isINTLVolumeType(FSFormat value)
-{
-    switch (value) {
-
-        case FSFormat::OFS_INTL:
-        case FSFormat::FFS_INTL:
-        case FSFormat::OFS_DC:
-        case FSFormat::FFS_DC:
-        case FSFormat::OFS_LNFS:
-        case FSFormat::FFS_LNFS:    return true;
-        default:                    return false;
-    }
-}
 
 enum class FSBlockType : long
 {
     UNKNOWN,
     EMPTY,
+    BAM,
     BOOT,
     ROOT,
     BITMAP,
@@ -124,14 +75,13 @@ enum class FSBlockType : long
     USERDIR,
     FILEHEADER,
     FILELIST,
-    DATA_OFS,
-    DATA_FFS
+    DATA
 };
 
 struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSBlockType::DATA_FFS);
+    static constexpr long maxVal = long(FSBlockType::DATA);
     
     static const char *_key(FSBlockType value)
     {
@@ -139,6 +89,7 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
                 
             case FSBlockType::UNKNOWN:     return "UNKNOWN";
             case FSBlockType::EMPTY:       return "EMPTY";
+            case FSBlockType::BAM:         return "BAM";
             case FSBlockType::BOOT:        return "BOOT";
             case FSBlockType::ROOT:        return "ROOT";
             case FSBlockType::BITMAP:      return "BITMAP";
@@ -146,8 +97,7 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
             case FSBlockType::USERDIR:     return "USERDIR";
             case FSBlockType::FILEHEADER:  return "FILEHEADER";
             case FSBlockType::FILELIST:    return "FILELIST";
-            case FSBlockType::DATA_OFS:    return "DATA_OFS";
-            case FSBlockType::DATA_FFS:    return "DATA_FFS";
+            case FSBlockType::DATA:        return "DATA";
         }
         return "???";
     }
@@ -437,9 +387,11 @@ struct FSTraits
     isize bsize = 512;
     isize reserved = 2;
 
+    /*
     bool ofs() const { return isOFSVolumeType(dos); }
     bool ffs() const { return isFFSVolumeType(dos); }
     bool intl() const { return isINTLVolumeType(dos); }
+    */
     bool adf() const;
 };
 
