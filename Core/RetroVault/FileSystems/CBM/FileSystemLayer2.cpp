@@ -74,12 +74,12 @@ FileSystem::format(FSFormat dos) {
 }
 
 void
-FileSystem::setName(const FSName &name)
+FileSystem::setName(const PETName<16> &name)
 {
-    if (auto &rb = fetch(rootBlock); rb.isRoot()) {
+    if (auto bam = tryFetchBAM()) {
 
-        rb.mutate().setName(name);
-        rb.mutate().updateChecksum();
+        bam->mutate().setName(name);
+        bam->mutate().updateChecksum();
     }
 }
 
@@ -135,8 +135,10 @@ FileSystem::getItems(BlockNr at) const
 }
 
 optional<BlockNr>
-FileSystem::searchdir(BlockNr at, const FSName &name) const
+FileSystem::searchdir(BlockNr at, const PETName<16> &name) const
 {
+    return {};
+    /*
     std::unordered_set<BlockNr> visited;
 
     // Only proceed if a hash table is present
@@ -160,6 +162,7 @@ FileSystem::searchdir(BlockNr at, const FSName &name) const
     }
 
     return {};
+    */
 }
 
 /*
@@ -191,6 +194,8 @@ FileSystem::rmdir(BlockNr at)
 vector<BlockNr>
 FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
 {
+    return {};
+    /*
     // Start with all items
     auto items = getItems(at);
 
@@ -199,25 +204,13 @@ FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
     items.erase(std::remove_if(items.begin(), items.end(), unmatch), items.end());
 
     return items;
-
-    /*
-    auto items = collectHashedBlocks(fetch(at));
-
-    // Filter out matching items
-    if (pattern.glob != "*") {
-        auto unmatch = [pattern](const FSBlock *b) { return !pattern.match(b->name()); };
-        items.erase(std::remove_if(items.begin(), items.end(), unmatch), items.end());
-    }
-    // Return block numbers
-    std::vector<BlockNr> result;
-    for (auto &it : items) result.push_back(it->nr);
-    return result;
     */
 }
 
 void
 FileSystem::link(BlockNr at, BlockNr fhb)
 {
+    /*
     require.directory(at);
 
     // Read the file heade block
@@ -229,15 +222,18 @@ FileSystem::link(BlockNr at, BlockNr fhb)
     // Wire up
     fhbBlk.mutate().setParentDirRef(at);
     addToHashTable(at, fhb);
+    */
 }
 
 void
 FileSystem::unlink(BlockNr node)
 {
+    /*
     require.fileOrDirectory(node);
 
     // Unwire
     deleteFromHashTable(node);
+    */
 }
 
 void
@@ -302,7 +298,7 @@ FileSystem::deleteFromHashTable(BlockNr ref)
 }
 
 BlockNr
-FileSystem::createFile(BlockNr at, const FSName &name)
+FileSystem::createFile(BlockNr at, const PETName<16> &name)
 {
     require.directory(at);
 
@@ -321,7 +317,7 @@ FileSystem::createFile(BlockNr at, const FSName &name)
 }
 
 BlockNr
-FileSystem::createFile(BlockNr at, const FSName &name, const u8 *buf, isize size)
+FileSystem::createFile(BlockNr at, const PETName<16> &name, const u8 *buf, isize size)
 {
     // Create an empty file
     auto fhb = createFile(at, name);
@@ -334,13 +330,13 @@ FileSystem::createFile(BlockNr at, const FSName &name, const u8 *buf, isize size
 }
 
 BlockNr
-FileSystem::createFile(BlockNr at, const FSName &name, const Buffer<u8> &buf)
+FileSystem::createFile(BlockNr at, const PETName<16> &name, const Buffer<u8> &buf)
 {
     return createFile(at, name, buf.ptr, buf.size);
 }
 
 BlockNr
-FileSystem::createFile(BlockNr top, const FSName &name, const string &str)
+FileSystem::createFile(BlockNr top, const PETName<16> &name, const string &str)
 {
     return createFile(top, name, (const u8 *)str.c_str(), (isize)str.size());
 }
@@ -356,7 +352,7 @@ FileSystem::rm(BlockNr node)
 }
 
 void
-FileSystem::rename(BlockNr item, const FSName &name)
+FileSystem::rename(BlockNr item, const PETName<16> &name)
 {
     auto &block = fetch(item);
 
@@ -364,9 +360,13 @@ FileSystem::rename(BlockNr item, const FSName &name)
     if (block.isRoot()) { setName(name); return; }
 
     // For regular items, relocate entry in the parent directory
-    move(item, block.getParentDirRef(), name);
+    // move(item, block.getParentDirRef(), name);
+
+    // TODO
+    assert(false);
 }
 
+/*
 void
 FileSystem::move(BlockNr item, BlockNr dest)
 {
@@ -388,7 +388,9 @@ FileSystem::move(BlockNr item, BlockNr dest, const FSName &name)
     // Insert into the destination directory
     link(dest, item);
 }
+*/
 
+/*
 void
 FileSystem::copy(BlockNr item, BlockNr dest)
 {
@@ -407,6 +409,7 @@ FileSystem::copy(BlockNr item, BlockNr dest, const FSName &name)
     // Create file at destination
     createFile(dest, name, buffer);
 }
+*/
 
 void
 FileSystem::resize(BlockNr at, isize size)
@@ -498,7 +501,7 @@ FileSystem::replace(BlockNr fhb,
 }
 
 BlockNr
-FileSystem::newUserDirBlock(const FSName &name)
+FileSystem::newUserDirBlock(const PETName<16> &name)
 {
     BlockNr nr = allocator.allocate();
 
@@ -510,7 +513,7 @@ FileSystem::newUserDirBlock(const FSName &name)
 }
 
 BlockNr
-FileSystem::newFileHeaderBlock(const FSName &name)
+FileSystem::newFileHeaderBlock(const PETName<16> &name)
 {
     BlockNr nr = allocator.allocate();
 
@@ -592,7 +595,7 @@ FileSystem::reclaim(BlockNr fhb)
         return;
     }
 
-    throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY, node.absName());
+    throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY);
 }
 
 std::vector<const FSBlock *>

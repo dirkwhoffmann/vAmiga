@@ -63,8 +63,6 @@ FSBlock::init(FSBlockType t)
             set32(0, 2);                         // Type
             set32(3, (u32)hashTableSize());      // Hash table size
             set32(-50, 0xFFFFFFFF);              // Bitmap validity
-            setCreationDate(time(nullptr));      // Creation date
-            setModificationDate(time(nullptr));  // Modification date
             set32(-1, 1);                        // Sub type
             break;
 
@@ -72,7 +70,6 @@ FSBlock::init(FSBlockType t)
 
             set32(0, 2);                         // Type
             set32(1, nr);                        // Block pointer to itself
-            setCreationDate(time(nullptr));      // Creation date
             set32(-1, 2);                        // Sub type
             break;
 
@@ -80,7 +77,6 @@ FSBlock::init(FSBlockType t)
 
             set32(0, 2);                         // Type
             set32(1, nr);                        // Block pointer to itself
-            setCreationDate(time(nullptr));      // Creation date
             set32(-1, (u32)-3);                  // Sub type
             break;
 
@@ -202,16 +198,17 @@ FSBlock::isData() const
     return true;
 }
 
-FSName
+/*
+PETName<16>
 FSBlock::name() const
 {
-    return isRoot() ? FSName("") : getName();
+    return PETName<16>("");
 }
 
 string
 FSBlock::cppName() const
 {
-    return isRoot() ? string("") : getName().cpp_str();
+    return "";
 }
 
 string
@@ -223,9 +220,10 @@ FSBlock::absName() const
 string
 FSBlock::relName() const
 {
-    return name().cpp_str();
+    return "";
 }
-
+*/
+/*
 string
 FSBlock::acabsName() const
 {
@@ -237,7 +235,7 @@ FSBlock::acrelName() const
 {
     return relName() + (isDirectory() ? "/" : "");
 }
-
+*/
 /*
 string
 FSBlock::relName(BlockNr top) const
@@ -260,6 +258,8 @@ FSBlock::relName(BlockNr top) const
 fs::path
 FSBlock::sanitizedPath() const
 {
+    return "";
+    /*
     fs::path result;
 
     auto nodes = fs->collect(*this, [](auto *node) { return node->getParentDirBlock(); });
@@ -274,11 +274,14 @@ FSBlock::sanitizedPath() const
     }
 
     return result;
+    */
 }
 
 bool
 FSBlock::matches(const FSPattern &pattern) const
 {
+    return false;
+    /*
     if (pattern.isAbsolute()) {
         printf("Abs matching %s and %s (%d)\n", absName().c_str(), pattern.glob.c_str(), pattern.match(absName()));
         return pattern.match(absName());
@@ -286,6 +289,7 @@ FSBlock::matches(const FSPattern &pattern) const
         printf("Rel matching %s and %s (%d)\n", relName().c_str(), pattern.glob.c_str(), pattern.match(relName()));
         return pattern.match(cppName());
     }
+    */
 }
 
 isize
@@ -664,7 +668,7 @@ FSBlock::dumpInfo(std::ostream &os) const
 
         case FSBlockType::FILEHEADER:
         {
-            auto name = getName().cpp_str();
+            auto name = getName().str();
             auto size = getFileSize();
             auto listBlocks = isize(fs->collectListBlocks(nr).size());
             auto dataBlocks = isize(fs->collectDataBlocks(nr).size());
@@ -702,7 +706,7 @@ FSBlock::dumpBlocks(std::ostream &os) const
             auto totalBlocks = 1 + listBlocks.size() + dataBlocks.size();
 
             os << tab("Name");
-            os << getName().cpp_str() << std::endl;
+            os << getName().str() << std::endl;
             os << tab("Blocks");
             os << totalBlocks << " Block" << (totalBlocks == 1 ? "" : "s") << std::endl;
             os << tab("Size");
@@ -844,9 +848,7 @@ FSBlock::hasName() const
 {
     switch (type) {
 
-        case FSBlockType::ROOT:
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
+        case FSBlockType::BAM:
 
             return true;
 
@@ -856,33 +858,28 @@ FSBlock::hasName() const
     }
 }
 
-FSName
+PETName<16>
 FSBlock::getName() const
 {
     switch (type) {
 
-        case FSBlockType::ROOT:
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
-            
-            return FSName(addr32(-20));
+        case FSBlockType::BAM:
+
+            return PETName<16>(data() + 0x90);
 
         default:
-            
-            return FSName("");
+            return PETName<16>("");
     }
 }
 
 void
-FSBlock::setName(FSName name)
+FSBlock::setName(PETName<16> name)
 {
     switch (type) {
 
-        case FSBlockType::ROOT:
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
-            
-            name.write(addr32(-20));
+        case FSBlockType::BAM:
+
+            name.write(data() + 0x90);
 
         default:
             break;
@@ -890,7 +887,7 @@ FSBlock::setName(FSName name)
 }
 
 bool
-FSBlock::isNamed(const FSName &other) const
+FSBlock::isNamed(const PETName<16> &other) const
 {
     switch (type) {
 
@@ -901,11 +898,11 @@ FSBlock::isNamed(const FSName &other) const
             return getName() == other;
             
         default:
-            
             return false;
     }
 }
 
+/*
 FSComment
 FSBlock::getComment() const
 {
@@ -937,133 +934,7 @@ FSBlock::setComment(FSComment name)
             break;
     }
 }
-
-FSTime
-FSBlock::getCreationDate() const
-{
-    switch (type) {
-            
-        case FSBlockType::ROOT:
-            
-            return FSTime(addr32(-7));
-            
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
-            
-            return FSTime(addr32(-23));
-            
-        default:
-            return FSTime((time_t)0);
-    }
-}
-
-void
-FSBlock::setCreationDate(FSTime t)
-{
-    switch (type) {
-            
-        case FSBlockType::ROOT:
-
-            t.write(addr32(-7));
-            break;
-            
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
-
-            t.write(addr32(-23));
-            break;
-
-        default:
-            break;
-    }
-}
-
-FSTime
-FSBlock::getModificationDate() const
-{
-    switch (type) {
-            
-        case FSBlockType::ROOT:
-            
-            return FSTime(addr32(-23));
-
-        default:
-            return FSTime((time_t)0);
-    }
-}
-
-void
-FSBlock::setModificationDate(FSTime t)
-{
-    switch (type) {
-            
-        case FSBlockType::ROOT:
-            
-            t.write(addr32(-23));
-            break;
-
-        default:
-            break;
-    }
-}
-
-u32
-FSBlock::getProtectionBits() const
-{
-    switch (type) {
-
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
-
-            return get32(-48);
-
-        default:
-            return 0;
-    }
-}
-
-void
-FSBlock::setProtectionBits(u32 val)
-{
-    switch (type) {
-
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
-
-            set32(-48, val);
-            break;
-            
-        default:
-            break;
-    }
-}
-
-string
-FSBlock::getProtectionBitString() const
-{
-    auto bits = getProtectionBits();
-
-    // From dos/dos.h (AmigaDOS)
-    constexpr isize FIBB_SCRIPT  = 6; // program is a script (execute) file
-    constexpr isize FIBB_PURE    = 5; // program is reentrant and rexecutable
-    constexpr isize FIBB_ARCHIVE = 4; // cleared whenever file is changed
-    constexpr isize FIBB_READ    = 3; // ignored by old filesystem
-    constexpr isize FIBB_WRITE   = 2; // ignored by old filesystem
-    constexpr isize FIBB_EXECUTE = 1; // ignored by system, used by Shell
-    constexpr isize FIBB_DELETE  = 0; // prevent file from being deleted
-
-    string result;
-    result += (bits & (1 << 7))            ? "h" : "-";
-    result += (bits & (1 << FIBB_SCRIPT))  ? "s" : "-";
-    result += (bits & (1 << FIBB_PURE))    ? "p" : "-";
-    result += (bits & (1 << FIBB_ARCHIVE)) ? "a" : "-";
-    result += (bits & (1 << FIBB_READ))    ? "-" : "r";
-    result += (bits & (1 << FIBB_WRITE))   ? "-" : "w";
-    result += (bits & (1 << FIBB_EXECUTE)) ? "-" : "e";
-    result += (bits & (1 << FIBB_DELETE))  ? "-" : "d";
-
-    return result;
-}
+*/
 
 u32
 FSBlock::getFileSize() const
@@ -1551,16 +1422,7 @@ FSBlock::hashTableSize() const
 u32
 FSBlock::hashValue() const
 {
-    switch (type) {
-            
-        case FSBlockType::USERDIR:
-        case FSBlockType::FILEHEADER:
-            
-            return getName().hashValue(fs->traits.dos);
-
-        default:
-            return 0;
-    }
+    return 0;
 }
 
 BlockNr
@@ -1575,27 +1437,6 @@ FSBlock::setHashRef(BlockNr nr, BlockNr ref)
     if (nr < (BlockNr)hashTableSize()) {
 
         set32(6 + nr, ref);
-    }
-}
-
-void
-FSBlock::writeBootBlock(BootBlockId id, isize page)
-{
-    assert(page == 0 || page == 1);
-    assert(type == FSBlockType::BOOT);
-    
-    loginfo(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
-    
-    if (id != BootBlockId::NONE) {
-
-        // Read boot block image from the database
-        auto image = FSBootBlockImage(id);
-
-        if (page == 0) {
-            image.write(data() + 4, 4, 511); // Write 508 bytes (skip header)
-        } else {
-            image.write(data(), 512, 1023);  // Write 512 bytes
-        }
     }
 }
 

@@ -24,6 +24,8 @@ FileSystem::cd(BlockNr nr)
 optional<BlockNr>
 FileSystem::trySeek(const FSPath &path) const
 {
+    return {};
+    /*
     try {
 
         // BlockNr current = path.absolute() ? root() : pwd();
@@ -43,6 +45,7 @@ FileSystem::trySeek(const FSPath &path) const
         return current;
 
     } catch (...) { return { }; }
+    */
 }
 
 BlockNr
@@ -55,6 +58,8 @@ FileSystem::seek(const FSPath &path) const
 vector<BlockNr>
 FileSystem::match(BlockNr top, const vector<FSPattern> &patterns)
 {
+    return {};
+    /*
     vector<BlockNr> currentSet { top };
 
     for (const auto &pattern : patterns) {
@@ -104,6 +109,7 @@ FileSystem::match(BlockNr top, const vector<FSPattern> &patterns)
     }
 
     return currentSet;
+    */
 }
 
 vector<BlockNr>

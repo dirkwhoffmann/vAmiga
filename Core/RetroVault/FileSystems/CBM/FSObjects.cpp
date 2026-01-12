@@ -427,117 +427,12 @@ FSPattern::splitted() const
     }
 
     return result;
-    /*
-    std::vector<string> parts;
-    for (auto &it : utl::split(utl::trim(glob, "/"), '/')) {
-        result.push_back(FSPattern(it));
-    }
-    return result;
-    */
 }
 
 bool
 FSPattern::match(const FSString &name) const
 {
     return std::regex_match(name.cpp_str(), regex);
-}
-
-FSTime::FSTime(time_t t)
-{
-    const u32 secPerDay = 24 * 60 * 60;
-    
-    // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
-    t -= (8 * 365 + 2) * secPerDay;
-
-    days = (u32)(t / secPerDay);
-    mins = (u32)((t % secPerDay) / 60);
-    ticks = (u32)((t % secPerDay % 60) * 50);
-}
-
-FSTime::FSTime(const u8 *p)
-{
-    assert(p != nullptr);
-    
-    days = FSBlock::read32(p);
-    mins = FSBlock::read32(p + 4);
-    ticks = FSBlock::read32(p + 8);
-}
-
-time_t
-FSTime::time() const
-{
-    const u32 secPerDay = 24 * 60 * 60;
-    u32 t = days * secPerDay + mins * 60 + ticks / 50;
-
-    // Shift reference point from Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
-    t += (8 * 365 + 2) * secPerDay;
-
-    return (time_t)t;
-}
-
-void
-FSTime::write(u8 *p)
-{
-    assert(p != nullptr);
-    
-    FSBlock::write32(p + 0, days);
-    FSBlock::write32(p + 4, mins);
-    FSBlock::write32(p + 8, ticks);
-}
-
-string
-FSTime::dateStr() const
-{
-    const char *month[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-    char tmp[32];
-    
-    time_t t = time();
-    tm gm = utl::Time::gmtime(t);
-    snprintf(tmp, sizeof(tmp), "%02d-%s-%02d", gm.tm_mday, month[gm.tm_mon % 12], gm.tm_year % 100);
-
-    return string(tmp);
-}
-
-string
-FSTime::timeStr() const
-{
-    char tmp[32];
-    
-    time_t t = time();
-    tm local = utl::Time::gmtime(t);
-
-    snprintf(tmp, sizeof(tmp), "%02d:%02d:%02d",
-             local.tm_hour, local.tm_min, local.tm_sec);
-    
-    return string(tmp);
-}
-
-string
-FSTime::str() const
-{
-    string result = dateStr() + " " + timeStr();
-    return result;
-}
-
-u32
-FSAttr::mode() const
-{
-    u32 mode = 0;
-
-    // File type
-    mode |= isDir ? S_IFDIR : S_IFREG;
-
-    // Owner permissions
-    if (!(prot & 0x01)) mode |= posix::IRUSR;
-    if (!(prot & 0x02)) mode |= posix::IWUSR;
-    if (!(prot & 0x04)) mode |= posix::IXUSR;
-
-    // Mirror owner permissions to group and others
-    if (mode & posix::IRUSR) mode |= posix::IRGRP | posix::IROTH;
-    if (mode & posix::IWUSR) mode |= posix::IWGRP | posix::IWOTH;
-    if (mode & posix::IXUSR) mode |= posix::IXGRP | posix::IXOTH;
-
-    return mode;
 }
 
 }

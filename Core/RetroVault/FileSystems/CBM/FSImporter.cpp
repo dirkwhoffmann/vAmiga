@@ -98,7 +98,7 @@ FSImporter::import(BlockNr top, const fs::directory_entry &entry, bool recursive
 
     const auto path = entry.path().string();
     const auto name = entry.path().filename();
-    FSName fsname = FSName(name);
+    auto fsname = PETName<16>(name);
 
     // Skip hidden files
     if (isHidden(name)) return;

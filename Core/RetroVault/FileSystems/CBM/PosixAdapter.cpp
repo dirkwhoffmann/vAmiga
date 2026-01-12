@@ -39,13 +39,42 @@ PosixAdapter::ensureMeta(HandleRef ref)
 FSPosixStat
 PosixAdapter::stat() const noexcept
 {
-    return fs.stat();
+    auto stat = fs.stat();
+
+    return FSPosixStat {
+
+        .name           = stat.name,
+        .bsize          = stat.bsize,
+        .blocks         = stat.blocks,
+
+        .freeBlocks     = stat.freeBlocks,
+        .usedBlocks     = stat.usedBlocks,
+
+        .btime          = time_t{0},
+        .mtime          = time_t{0},
+
+        .blockReads     = stat.blockReads,
+        .blockWrites    = stat.blockWrites
+    };
 }
 
 FSPosixAttr
 PosixAdapter::attr(const fs::path &path) const
 {
-    return fs.attr(fs.seek(path));
+    auto stat = fs.attr(fs.seek(path));
+
+    return FSPosixAttr {
+
+        .size           = stat.size,
+        .blocks         = stat.blocks,
+        .prot           = 0,
+        .isDir          = false,
+
+        .btime          = time_t{0},
+        .atime          = time_t{0},
+        .mtime          = time_t{0},
+        .ctime          = time_t{0},
+    };
 }
 
 void
@@ -65,10 +94,12 @@ PosixAdapter::readDir(const fs::path &path) const
 {
     std::vector<string> result;
 
+    /*
     for (auto &it : fs.getItems(fs.seek(path))) {
         result.push_back(fs.fetch(it).cppName());
     }
-
+    */
+    
     return result;
 }
 
@@ -202,7 +233,7 @@ PosixAdapter::create(const fs::path &path)
     auto node = fs.seek(parent);
 
     // Create file
-    auto fhb = fs.createFile(node, FSName(name));
+    auto fhb = fs.createFile(node, PETName<16>(name));
 
     // Create meta info
     auto &info = ensureMeta(fhb);
@@ -239,26 +270,18 @@ PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
 void
 PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 {
-    auto newDir  = newPath.parent_path();
+    // auto newDir  = newPath.parent_path();
     auto newName = newPath.filename();
     auto src     = fs.seek(oldPath);
-    auto dst     = fs.seek(newDir);
+    // auto dst     = fs.seek(newDir);
 
-    fs.move(src, dst, FSName(newName));
+    fs.rename(src, PETName<16>(newName));
 }
 
 void
 PosixAdapter::chmod(const fs::path &path, u32 mode)
 {
-    auto &node = fs.fetch(ensureFile(path)).mutate();
-
-    u32 prot = node.getProtectionBits();
-
-    if (mode & posix::IRUSR) prot &= ~0x01; else prot |= 0x01;
-    if (mode & posix::IWUSR) prot &= ~0x02; else prot |= 0x02;
-    if (mode & posix::IXUSR) prot &= ~0x04; else prot |= 0x04;
-
-    node.setProtectionBits(prot);
+    throw FSError(FSError::FS_UNSUPPORTED);
 }
 
 void

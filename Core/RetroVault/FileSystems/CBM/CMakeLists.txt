@@ -8,7 +8,6 @@ FileSystemLayer2.cpp
 FileSystemLayer3.cpp
 FSAllocator.cpp
 FSBlock.cpp
-FSBootBlockImage.cpp
 FSCache.cpp
 FSContract.cpp
 FSError.cpp

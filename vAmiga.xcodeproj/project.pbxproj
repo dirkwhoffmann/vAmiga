@@ -384,14 +384,12 @@
 		50BF4BC92F0ADF3200F1B9F2 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB82F0ADF3200F1B9F2 /* FSExporter.cpp */; };
 		50BF4BCA2F0ADF3200F1B9F2 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB62F0ADF3200F1B9F2 /* FSImporter.cpp */; };
 		50BF4BCB2F0ADF3200F1B9F2 /* FSService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB02F0ADF3200F1B9F2 /* FSService.cpp */; };
-		50BF4BCC2F0ADF3200F1B9F2 /* FSBootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BBA2F0ADF3200F1B9F2 /* FSBootBlockImage.cpp */; };
 		50BF4BCD2F0ADF3200F1B9F2 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9B2F0ADF3200F1B9F2 /* FSObjects.cpp */; };
 		50BF4BCE2F0ADF3200F1B9F2 /* FSService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB02F0ADF3200F1B9F2 /* FSService.cpp */; };
 		50BF4BCF2F0ADF3200F1B9F2 /* FSDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA12F0ADF3200F1B9F2 /* FSDescriptor.cpp */; };
 		50BF4BD02F0ADF3200F1B9F2 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB82F0ADF3200F1B9F2 /* FSExporter.cpp */; };
 		50BF4BD12F0ADF3200F1B9F2 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB62F0ADF3200F1B9F2 /* FSImporter.cpp */; };
 		50BF4BD22F0ADF3200F1B9F2 /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */; };
-		50BF4BD32F0ADF3200F1B9F2 /* FSBootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BBA2F0ADF3200F1B9F2 /* FSBootBlockImage.cpp */; };
 		50BF4BD42F0ADF3200F1B9F2 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9B2F0ADF3200F1B9F2 /* FSObjects.cpp */; };
 		50BF4BD52F0ADF3200F1B9F2 /* PosixAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA82F0ADF3200F1B9F2 /* PosixAdapter.cpp */; };
 		50BF4BD62F0ADF3200F1B9F2 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */; };
@@ -1235,8 +1233,6 @@
 		50BF4BB62F0ADF3200F1B9F2 /* FSImporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSImporter.cpp; sourceTree = "<group>"; };
 		50BF4BB72F0ADF3200F1B9F2 /* FSExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSExporter.h; sourceTree = "<group>"; };
 		50BF4BB82F0ADF3200F1B9F2 /* FSExporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSExporter.cpp; sourceTree = "<group>"; };
-		50BF4BB92F0ADF3200F1B9F2 /* FSBootBlockImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBootBlockImage.h; sourceTree = "<group>"; };
-		50BF4BBA2F0ADF3200F1B9F2 /* FSBootBlockImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBootBlockImage.cpp; sourceTree = "<group>"; };
 		50BF4BE02F0AE00C00F1B9F2 /* CBMFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBMFileSystem.h; sourceTree = "<group>"; };
 		50BF4BE12F0C0DA800F1B9F2 /* ImageError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageError.h; sourceTree = "<group>"; };
 		50BF4BE22F0C0DAF00F1B9F2 /* ImageError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImageError.cpp; sourceTree = "<group>"; };
@@ -2799,8 +2795,6 @@
 				50BF4BB62F0ADF3200F1B9F2 /* FSImporter.cpp */,
 				50BF4BB72F0ADF3200F1B9F2 /* FSExporter.h */,
 				50BF4BB82F0ADF3200F1B9F2 /* FSExporter.cpp */,
-				50BF4BB92F0ADF3200F1B9F2 /* FSBootBlockImage.h */,
-				50BF4BBA2F0ADF3200F1B9F2 /* FSBootBlockImage.cpp */,
 			);
 			path = CBM;
 			sourceTree = "<group>";
@@ -3195,7 +3189,6 @@
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
-				50BF4BCC2F0ADF3200F1B9F2 /* FSBootBlockImage.cpp in Sources */,
 				50AFEBBE278EF6CB00F422D5 /* SequencerInfo.cpp in Sources */,
 				50BF4BC32F0ADF3200F1B9F2 /* FSTree.cpp in Sources */,
 				50BF4B452F03D6F500F1B9F2 /* DOSEncoder.cpp in Sources */,
@@ -3545,7 +3538,6 @@
 				50FC04E427DA1A1400C3E566 /* u_quick.c in Sources */,
 				50FC04F927DA1A8F00C3E566 /* StateMachineRegs.cpp in Sources */,
 				50FC04BC27DA19B200C3E566 /* DeviceDescriptors.cpp in Sources */,
-				50BF4BD32F0ADF3200F1B9F2 /* FSBootBlockImage.cpp in Sources */,
 				50FC049627DA196C00C3E566 /* DeniseDebugger.cpp in Sources */,
 				50BF4BD82F0ADF3200F1B9F2 /* FileSystem.cpp in Sources */,
 				50BF4BCF2F0ADF3200F1B9F2 /* FSDescriptor.cpp in Sources */,

@@ -129,18 +129,15 @@ class FileSystem : public Loggable {
 
     // Node layer
 
+    // Location of the BAM (always at 18:0)
+    BlockNr bamBlock = 0;
+
     // Location of the root block
     BlockNr rootBlock = 0;
 
     // Location of bitmap blocks and extended bitmap blocks
     vector<BlockNr> bmBlocks;
     vector<BlockNr> bmExtBlocks;
-
-
-    // Path layer
-
-    // Location of the current directory
-    [[deprecated]] BlockNr current = 0;
 
 
     // Service layer
@@ -204,13 +201,10 @@ public:
     bool isFormatted() const noexcept;
 
     // Returns usage information and root metadata
-    FSPosixStat stat() const noexcept;
-
-    // Returns information about the boot block
-    FSBootStat bootStat() const noexcept;
+    FSStat stat() const noexcept;
 
     // Returns information about file permissions
-    FSPosixAttr attr(BlockNr nr) const;
+    FSAttr attr(BlockNr nr) const;
 
 
     //
@@ -256,6 +250,10 @@ public:
     const FSBlock &fetch(BlockNr nr, FSBlockType t) const { return cache.fetch(nr, t); }
     const FSBlock &fetch(BlockNr nr, vector<FSBlockType> ts) const { return cache.fetch(nr, ts); }
 
+    // Convenience wrapper
+    const FSBlock *tryFetchBAM() const noexcept { return tryFetch(bamBlock, FSBlockType::BAM); }
+    const FSBlock &fetchBAM() const { return fetch(bamBlock, FSBlockType::BAM); }
+
     // Writes back dirty cache blocks to the block device
     void flush();
 
@@ -280,13 +278,7 @@ public:
     void format() { format(traits.dos); }
 
     // Assigns the volume name
-    void setName(const FSName &name);
-
-    // Installs a boot block
-    // [[deprecated]] void makeBootable(BootBlockId id);
-
-    // Removes a boot block virus (if any)
-    // [[deprecated]] void killVirus();
+    void setName(const PETName<16> &name);
 
 
     //
@@ -298,14 +290,8 @@ public:
     vector<BlockNr> getItems(BlockNr at) const;
 
     // Looks up a specific directory item
-    optional<BlockNr> searchdir(BlockNr at, const FSName &name) const;
+    optional<BlockNr> searchdir(BlockNr at, const PETName<16> &name) const;
     vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
-
-    // Creates a new directory
-    // [[deprecated]] BlockNr mkdir(BlockNr at, const FSName &name);
-
-    // Removes an empty directory
-    // [[deprecated]] void rmdir(BlockNr at);
 
     // Creates a new directory entry
     void link(BlockNr at, BlockNr fhb);
@@ -329,24 +315,24 @@ private:
 public:
 
     // Creates a new file
-    BlockNr createFile(BlockNr at, const FSName &name);
-    BlockNr createFile(BlockNr at, const FSName &name, const u8 *buf, isize size);
-    BlockNr createFile(BlockNr at, const FSName &name, const Buffer<u8> &buf);
-    BlockNr createFile(BlockNr at, const FSName &name, const string &str);
+    BlockNr createFile(BlockNr at, const PETName<16> &name);
+    BlockNr createFile(BlockNr at, const PETName<16> &name, const u8 *buf, isize size);
+    BlockNr createFile(BlockNr at, const PETName<16> &name, const Buffer<u8> &buf);
+    BlockNr createFile(BlockNr at, const PETName<16> &name, const string &str);
 
     // Delete a file
     void rm(BlockNr at);
 
     // Renames a file or directory
-    void rename(BlockNr item, const FSName &name);
+    void rename(BlockNr item, const PETName<16> &name);
 
     // Moves a file or directory to another location
-    void move(BlockNr item, BlockNr dest);
-    void move(BlockNr item, BlockNr dest, const FSName &name);
+    // void move(BlockNr item, BlockNr dest);
+    // void move(BlockNr item, BlockNr dest, const FSName &name);
 
     // Copies a file
-    void copy(BlockNr item, BlockNr dest);
-    void copy(BlockNr item, BlockNr dest, const FSName &name);
+    // void copy(BlockNr item, BlockNr dest);
+    // void copy(BlockNr item, BlockNr dest, const FSName &name);
 
     // Shrinks or expands an existing file (pad with 0)
     void resize(BlockNr at, isize size);
@@ -377,8 +363,8 @@ public:
 private:
 
     // Creates a new block of a certain kind
-    BlockNr newUserDirBlock(const FSName &name);
-    BlockNr newFileHeaderBlock(const FSName &name);
+    BlockNr newUserDirBlock(const PETName<16> &name);
+    BlockNr newFileHeaderBlock(const PETName<16> &name);
 
     // Adds a new block of a certain kind
     void addFileListBlock(BlockNr at, BlockNr head, BlockNr prev);
@@ -418,21 +404,6 @@ private:
     //
 
     //
-    // Managing the working directory
-    //
-
-public:
-
-    // Returns the working directory
-    [[deprecated]] BlockNr pwd() const { return current; }
-
-    // Changes the working directory
-    // [[deprecated]] void cd(BlockNr nr);
-    //[[deprecated]] void cd(const string &path) { cd(seek(path)); }
-    //[[deprecated]] void cd(const fs::path &path) { cd(seek(path)); }
-
-
-    //
     // Seeking files and directories
     //
 
@@ -440,6 +411,7 @@ public:
 
     // Returns the root of the directory tree
     BlockNr root() const { return rootBlock; }
+    BlockNr bam() const { return bamBlock; }
 
     // Returns the locations of the bitmap and bitmap extension blocks
     const vector<BlockNr> &getBmBlocks() const { return bmBlocks; }

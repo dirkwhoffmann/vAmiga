@@ -14,6 +14,7 @@
 #include "RSCommand.h"
 #include "TextStorage.h"
 #include "FileSystems/Amiga/FileSystem.h"
+#include "FileSystems/CBM/FileSystem.h"
 #include "ADFFile.h"
 #include "D64File.h"
 #include "utl/io.h"
@@ -514,7 +515,7 @@ class CBMNavigator final : public Console
     unique_ptr<ADFFile> adf;
     unique_ptr<D64File> d64;
     unique_ptr<Volume> vol;
-    unique_ptr<FileSystem> fs;
+    unique_ptr<retro::vault::cbm::FileSystem> fs;
 
     using Console::Console;
 

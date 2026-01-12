@@ -99,7 +99,6 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
     using namespace utl;
 
     auto &p = fs.fetch(nr);
-    auto *bdata = p.data();
 
     os << tab("Block");
     os << dec(nr) << std::endl;
@@ -119,105 +118,18 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
 
     switch (p.type) {
 
-        case FSBlockType::BOOT:
-
-            os << tab("Header");
-            for (isize i = 0; i < 8; i++) os << hex(bdata[i]) << " ";
-            os << std::endl;
-            break;
-
-        case FSBlockType::ROOT:
+        case FSBlockType::BAM:
 
             os << tab("Name");
-            os << p.getName() << std::endl;
-            os << tab("Created");
-            os << p.getCreationDate().str() << std::endl;
-            os << tab("Modified");
-            os << p.getCreationDate().str() << std::endl;
-            os << tab("Bitmap blocks");
-            os << FSBlock::rangeString(p.getBmBlockRefs()) << std::endl;
-            os << tab("Bitmap extension block");
-            os << dec(p.getNextBmExtBlockRef()) << std::endl;
-            break;
-
-        case FSBlockType::BITMAP:
-        {
-            isize count = 0;
-            for (isize i = 1; i < p.bsize() / 4; i++) {
-                if (u32 value = p.get32(i)) {
-                    for (isize j = 0; j < 32; j++) {
-                        if (GET_BIT(value, j)) count++;
-                    }
-                }
-            }
-            os << tab("Free");
-            os << dec(count) << " blocks" << std::endl;
-            break;
-        }
-        case FSBlockType::BITMAP_EXT:
-
-            os << tab("Bitmap blocks");
-            os << FSBlock::rangeString(p.getBmBlockRefs()) << std::endl;
-            os << tab("Next extension block");
-            os << dec(p.getNextBmExtBlockRef()) << std::endl;
+            os << p.getName().str() << std::endl;
             break;
 
         case FSBlockType::USERDIR:
 
             os << tab("Name");
-            os << p.getName() << std::endl;
-            os << tab("Comment");
-            os << p.getComment() << std::endl;
-            os << tab("Created");
-            os << p.getCreationDate().str() << std::endl;
-            os << tab("Parent");
-            os << dec(p.getParentDirRef()) << std::endl;
+            os << p.getName().str() << std::endl;
             os << tab("Next");
             os << dec(p.getNextHashRef()) << std::endl;
-            break;
-
-        case FSBlockType::FILEHEADER:
-
-            os << tab("Name");
-            os << p.getName() << std::endl;
-            os << tab("Comment");
-            os << p.getComment() << std::endl;
-            os << tab("Created");
-            os << p.getCreationDate().str() << std::endl;
-            os << tab("UID (User ID)");
-            os << hex(HI_WORD(p.get32(-49))) << std::endl;
-            os << tab("GID (Group ID)");
-            os << hex(LO_WORD(p.get32(-49))) << std::endl;
-            os << tab("Protection flags");
-            os << hex(p.getProtectionBits()) << std::endl;
-            os << tab("File size");
-            os << dec(p.getFileSize()) << " bytes" << std::endl;
-            os << tab("First data block");
-            os << dec(p.getFirstDataBlockRef()) << std::endl;
-            os << tab("Data block count");
-            os << dec(p.getNumDataBlockRefs()) << " out of " << dec(p.getMaxDataBlockRefs()) << std::endl;
-            os << tab("Data block refs");
-            os << FSBlock::rangeString(p.getDataBlockRefs()) << std::endl;
-            os << tab("First extension block");
-            os << dec(p.getNextListBlockRef()) << std::endl;
-            os << tab("Parent dir");
-            os << dec(p.getParentDirRef()) << std::endl;
-            os << tab("Next file");
-            os << dec(p.getNextHashRef()) << std::endl;
-            break;
-
-        case FSBlockType::FILELIST:
-
-            os << tab("Header block");
-            os << p.getFileHeaderRef() << std::endl;
-            os << tab("Data block count");
-            os << p.getNumDataBlockRefs() << " out of " << p.getMaxDataBlockRefs() << std::endl;
-            os << tab("First");
-            os << p.getFirstDataBlockRef() << std::endl;
-            os << tab("Data blocks");
-            os << FSBlock::rangeString(p.getDataBlockRefs()) << std::endl;
-            os << tab("Next extension block");
-            os << p.getNextListBlockRef() << std::endl;
             break;
 
         case FSBlockType::DATA:
@@ -234,25 +146,6 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
 
         default:
             break;
-    }
-
-    if (p.hashTableSize() > 0) {
-
-        os << tab("Hash table");
-        for (isize i = 0, j = 0; i < p.hashTableSize(); i++) {
-
-            if (BlockNr ref = p.read32(bdata + 24 + 4 * i); ref) {
-
-                if (j++) os << std::endl << tab();
-                os << std::setfill(' ') << std::setw(2) << i << " -> ";
-                os << std::setfill(' ') << std::setw(4) << ref;
-
-                if (auto ptr = fs.tryFetch(ref)) {
-                    os << " (" << ptr->getName().cpp_str() << ")";
-                }
-            }
-        }
-        os << std::endl;
     }
 }
 
@@ -322,18 +215,15 @@ FSDoctor::xrayBitmap(bool strict)
         bool contained = used.contains(BlockNr(i));
 
         if (allocated && !contained) {
-
             diagnosis.unusedButAllocated.push_back(BlockNr(i));
-            diagnosis.bitmapErrors[BlockNr(i)] = 1;
-
         } else if (!allocated && contained) {
-
             diagnosis.usedButUnallocated.push_back(BlockNr(i));
-            diagnosis.bitmapErrors[BlockNr(i)] = 2;
         }
     }
 
-    return (isize)diagnosis.bitmapErrors.size();
+    return
+    (isize)diagnosis.unusedButAllocated.size() +
+    (isize)diagnosis.usedButUnallocated.size();
 }
 
 isize

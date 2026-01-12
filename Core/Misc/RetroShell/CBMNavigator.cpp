@@ -40,6 +40,7 @@ CBMNavigator::prompt()
 {
     std::stringstream ss;
 
+    /*
     if (fs) {
 
         auto &pwd = fs->fetch(fs->pwd());
@@ -52,6 +53,8 @@ CBMNavigator::prompt()
     }
 
     ss << "> ";
+    */
+
     return ss.str();
 }
 
@@ -91,6 +94,8 @@ CBMNavigator::autoComplete(Tokens &argv)
 string
 CBMNavigator::autoCompleteFilename(const string &input, usize flags) const
 {
+    return input;
+    /*
     try {
 
         requireFormattedFS();
@@ -124,6 +129,7 @@ CBMNavigator::autoCompleteFilename(const string &input, usize flags) const
 
         return input;
     }
+    */
 }
 
 void
@@ -134,7 +140,7 @@ CBMNavigator::help(std::ostream &os, const string &argv, isize tabs)
         auto [cmd, args] = seekCommand(argv);
 
         // Determine the kind of help to display
-        bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
+        // bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
         bool displayCmds  = true;
 
         if (displayCmds) {
@@ -143,6 +149,7 @@ CBMNavigator::help(std::ostream &os, const string &argv, isize tabs)
             Console::help(os, argv, tabs);
         }
 
+        /*
         if (displayFiles) {
 
             // Find matching items
@@ -197,6 +204,7 @@ CBMNavigator::help(std::ostream &os, const string &argv, isize tabs)
                 });
             }
         }
+        */
 
     }
     catch (...) { }
@@ -215,7 +223,7 @@ CBMNavigator::parseBlock(const string &argv)
 BlockNr
 CBMNavigator::parseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, fs->pwd());
+    return parseBlock(argv, token, fs->bam());
 }
 
 BlockNr
@@ -264,7 +272,7 @@ CBMNavigator::parsePath(const Arguments &argv, const string &token, BlockNr fall
 BlockNr
 CBMNavigator::parseFile(const Arguments &argv, const string &token)
 {
-    return parseFile(argv, token, fs->pwd());
+    return parseFile(argv, token, fs->bam());
 }
 
 BlockNr
@@ -279,7 +287,7 @@ CBMNavigator::parseFile(const Arguments &argv, const string &token, BlockNr fall
 BlockNr
 CBMNavigator::parseDirectory(const Arguments &argv, const string &token)
 {
-    return parseDirectory(argv, token, fs->pwd());
+    return parseDirectory(argv, token, fs->bam());
 }
 
 BlockNr
@@ -301,7 +309,7 @@ CBMNavigator::import(const FloppyDrive &dfn)
 
     // Create a file system on top
     auto vol = Volume(*adf);
-    fs = make_unique<FileSystem>(vol);
+    fs = make_unique<retro::vault::cbm::FileSystem>(vol);
 }
 
 void
@@ -372,7 +380,7 @@ CBMNavigator::matchPath(const string &path, Tokens &notFound)
     auto tokens = utl::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
 
-    auto p = fs->pwd();
+    auto p = fs->bam();
     while (!tokens.empty()) {
 
         auto next = fs->trySeek(tokens.front());
@@ -593,6 +601,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFS();
 
+                /*
                 // Determine the DOS type
                 auto type = amiga::FSFormat::NODOS;
                 auto dos = utl::uppercased(args.at("dos"));
@@ -608,6 +617,9 @@ CBMNavigator::initCommands(RSCommand &root)
                 fs->format(type);
                 fs->setName(FSName(name));
                 fs->dumpInfo(os);
+                */
+
+                throw FSError(FSError::FS_UNSUPPORTED);
             }
     });
 
@@ -635,7 +647,7 @@ CBMNavigator::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 vol = make_unique<Volume>(*df[values[0]]);
-                fs  = make_unique<FileSystem>(*vol);
+                fs  = make_unique<retro::vault::cbm::FileSystem>(*vol);
 
                 fs->dumpInfo(os);
 
@@ -688,7 +700,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 bool recursive = true;
                 bool contents = path.back() == '/';
 
-                fs->importer.import(fs->pwd(), hostPath, recursive, contents);
+                fs->importer.import(fs->bam(), hostPath, recursive, contents);
             }
     });
 
@@ -711,9 +723,9 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 auto n = values[0];
 
-                adf = Codec::makeADF(*df[n]);
-                vol = make_unique<Volume>(*adf);
-                fs  = make_unique<FileSystem>(*vol);
+                d64 = Codec::makeD64(*df[n]);
+                vol = make_unique<Volume>(*d64);
+                fs  = make_unique<retro::vault::cbm::FileSystem>(*vol);
 
                 fs->dumpInfo(os);
 
@@ -765,7 +777,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 requireFS();
 
                 auto path = host.makeAbsolute(args.at("path"));
-                auto nr = parseBlock(args, "nr", fs->pwd());
+                auto nr = parseBlock(args, "nr", fs->bam());
 
                 fs->importer.importBlock(nr, path);
             }
@@ -787,6 +799,8 @@ CBMNavigator::initCommands(RSCommand &root)
 
                     requireFormattedFS();
 
+                    throw FSError(FSError::FS_UNSUPPORTED);
+                    /*
                     bool recursive = args.contains("r");
                     std::filesystem::remove_all("/export");
 
@@ -806,8 +820,8 @@ CBMNavigator::initCommands(RSCommand &root)
                         name += fs->getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );
                     }
-
-                    msgQueue.put(Msg::RSH_EXPORT);
+                    */
+                    // msgQueue.put(Msg::RSH_EXPORT);
                 }
         });
 
@@ -868,32 +882,6 @@ CBMNavigator::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "export", "hd[n]" },
-        .ghelp  = { "Export the file system to hard drive n" },
-        .chelp  = { "export { hd0 | hd1 | hd1 | hd2 }" },
-        .flags  = vAmigaDOS ? rs::disabled : 0
-    });
-
-    for (isize i = 0; i < 4; i++) {
-
-        root.add({
-
-            .tokens = { "export", "hd" + std::to_string(i) },
-            .chelp  = { "Export the file system to hard drive" + std::to_string(i) },
-            .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                auto n = values[0];
-                hd[n]->init(*fs);
-
-            }, .payload = {i}
-        });
-    }
-
-    root.add({
-
         .tokens = { "export", "block" },
         .chelp  = { "Export a block to a file" },
         .args   = {
@@ -904,7 +892,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
-                auto nr = parseBlock(args, "nr", fs->pwd());
+                auto nr = parseBlock(args, "nr", fs->bam());
 
                 if constexpr (vAmigaDOS) {
 
@@ -924,23 +912,6 @@ CBMNavigator::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "cd" },
-        .chelp  = { "Change the working directory" },
-        .flags  = rs::acdir,
-        .args   = {
-            { .name = { "path", "New working directory" }, .flags = rs::opt },
-        },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                auto path = parsePath(args, "path", fs->root());
-                fs->cd(path);
-            }
-    });
-
-    root.add({
-
         .tokens = { "dir" },
         .chelp  = { "Display a sorted list of the files in a directory" },
         .flags  = rs::acdir,
@@ -954,11 +925,13 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
+                /*
                 auto path = parseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
-
+                */
+                /*
                 // Collect the directories to print
                 FSTree tree = fs->build(path, {
                     .accept = accept::directories,
@@ -1021,6 +994,7 @@ CBMNavigator::initCommands(RSCommand &root)
                         });
                     }
                 }
+                */
             }
     });
 
@@ -1040,13 +1014,15 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
+                /*
                 auto path = parseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
                 auto k = args.contains("k");
                 auto s = args.contains("s");
-
+                */
+                /*
                 // Formats the output for a single item
                 auto formatted = [&](BlockNr nr) {
 
@@ -1094,89 +1070,7 @@ CBMNavigator::initCommands(RSCommand &root)
                         os << formatted(it.nr) << "\n";
                     }
                 }
-            }
-    });
-
-    root.add({
-
-        .tokens = { "find" },
-        .chelp  = { "Find files or directories" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "name", "Search pattern" } },
-            { .name = { "d", "Find directories only" }, .flags = rs::flag },
-            { .name = { "f", "Find files only" }, .flags = rs::flag },
-            { .name = { "s", "Sort output" }, .flags = rs::flag } },
-            .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                auto pattern = FSPattern(args.at("name"));
-                auto d = args.contains("d");
-                auto f = args.contains("f");
-                auto s = args.contains("s");
-
-                // Determine the start node
-                auto start = fs->pwd();
-
-                // Build a directory tree
-                FSTree tree = fs->build(start, {
-                    .accept = accept::all,
-                    .sort   = sort::none,
-                    .depth  = MAX_ISIZE
-                });
-
-                // Traverse the tree and find matches
-                vector<const FSBlock *> matching;
-                for (const auto &node : tree.bfs()) {
-
-                    auto &block = fs->fetch(node.nr);
-
-                    if (!pattern.match(block.cppName())) continue;
-                    if (d && !block.isDirectory())       continue;
-                    if (f && !block.isFile())            continue;
-
-                    matching.push_back(&block);
-                }
-
-                // Print the result
-                if (s) {
-
-                    int tab = 0;
-
-                    std::sort(matching.begin(), matching.end(), sort::alphaPtr);
-
-                    for (auto &it : matching) {
-                        tab = std::max(int(it->cppName().size()), tab);
-                    }
-                    for (auto &it : matching) {
-                        os << std::setw(tab) << std::left << it->cppName() << " : " << it->absName() << '\n';
-                    }
-
-                } else {
-
-                    for (auto &it : matching) { os << it->absName() << '\n'; }
-                }
-            }
-    });
-
-    root.add({
-
-        .tokens = { "resolve" },
-        .chelp  = { "Resolves a path name" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "name", "Search pattern" } },
-        },
-            .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                // Find matches
-                vector <BlockNr> matches = fs->match(args.at("name"));
-
-                // Print the result
-                for (auto &it : matches) { os << fs->fetch(it).absName() << '\n'; }
+                */
             }
     });
 
@@ -1238,58 +1132,6 @@ CBMNavigator::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "boot" },
-        .ghelp  = { "Manage the boot block" },
-    });
-
-    root.add({
-
-        .tokens = { "boot", "install" },
-        .chelp  = { "Installs a block block" },
-    });
-
-    for (const auto& [key, value] : BootBlockIdEnum::pairs()) {
-
-        root.add({
-
-            .tokens = { "boot", "install", key },
-            .chelp  = { BootBlockIdEnum::help(BootBlockId(value)) },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                fs->makeBootable(BootBlockId(values[0]));
-
-            },  .payload = { value }
-        });
-    }
-
-    root.add({
-
-        .tokens = { "boot", "scan" },
-        .chelp  = { "Scan a boot block for viruses" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            requireFormattedFS();
-
-            os << "Boot block: " << fs->bootStat().name << std::endl;
-        }
-    });
-
-    root.add({
-
-        .tokens = { "boot", "kill" },
-        .chelp  = { "Kills a boot block virus" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            requireFormattedFS();
-
-            fs->killVirus();
-        }
-    });
-
-    root.add({
-
         .tokens = { "type" },
         .chelp  = { "Print the contents of a file" },
         .flags  = rs::ac,
@@ -1300,6 +1142,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
+                /*
                 auto &file = fs->fetch(parsePath(args, "path", fs->pwd()));
                 if (!file.isFile()) {
                     throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
@@ -1308,6 +1151,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 Buffer<u8> buffer;
                 file.extractData(buffer);
                 buffer.txtDump(os);
+                */
             }
     });
 
@@ -1330,6 +1174,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
+                /*
                 auto &file = fs->fetch(parseFile(args, "path", fs->pwd()));
                 auto opt   = parseDumpOpts(args);
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
@@ -1342,6 +1187,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 buffer.dump(ss, opt.first, opt.second);
 
                 t ? tail(ss, os, lines) : head(ss, os, lines);
+                */
             }
     });
 
@@ -1363,6 +1209,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
+                /*
                 auto nr    = parseBlock(args, "nr", fs->pwd());
                 auto opt   = parseDumpOpts(args);
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
@@ -1372,6 +1219,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 fs->fetch(nr).dump(ss, opt.first, opt.second);
 
                 t ? tail(ss, os, lines) : head(ss, os, lines);
+                */
             }
     });
 
@@ -1416,39 +1264,6 @@ CBMNavigator::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "mkdir" },
-        .chelp  = { "Create a directory" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "name", "Name of the new directory" } },
-        },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                Tokens missing;
-                auto path = matchPath(args.at("name"), missing);
-
-                if (missing.empty()) {
-                    throw(FSError(FSError::FS_EXISTS, args.at("name")));
-                }
-
-                auto p = path;
-                for (auto &it: missing) {
-                    p = fs->mkdir(p, FSName(it));
-                }
-
-                /*
-                auto *p = &path.mutate();
-                for (auto &it: missing) {
-                    if (p) p = &fs->mkdir(*p, FSName(it));
-                }
-                */
-            }
-    });
-
-    root.add({
-
         .tokens = { "move" },
         .chelp  = { "Moves a file or directory" },
         .flags  = rs::ac,
@@ -1460,6 +1275,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
+                /*
                 auto sourceNr = parsePath(args, "source");
                 auto &source = fs->fetch(sourceNr);
 
@@ -1493,6 +1309,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                     throw FSError(FSError::FS_NOT_FOUND, missing.front());
                 }
+                */
             }
     });
 
@@ -1509,6 +1326,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
+                /*
                 auto sourceNr = parsePath(args, "source");
 
                 Tokens missing;
@@ -1534,6 +1352,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                     throw FSError(FSError::FS_NOT_FOUND, missing.front());
                 }
+                */
             }
     });
 
@@ -1553,12 +1372,9 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 if (path.isFile()) {
                     fs->rm(path.nr);
-                } else if (path.isDirectory()) {
-                    throw FSError(FSError::FS_NOT_A_FILE, args.at("path"));
                 } else {
-                    throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY, args.at("path"));
+                    throw FSError(FSError::FS_NOT_A_FILE, args.at("path"));
                 }
-
             }
     });
 }

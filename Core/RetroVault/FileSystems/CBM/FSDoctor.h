@@ -13,9 +13,11 @@
 
 namespace retro::vault::cbm {
 
+class FSAllocator;
+
 class FSDoctor final : public FSService {
 
-    class FSAllocator &allocator;
+    FSAllocator &allocator;
 
 public:
 

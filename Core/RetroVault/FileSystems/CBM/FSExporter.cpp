@@ -109,6 +109,7 @@ FSExporter::exportBlocks(BlockNr first, BlockNr last, const fs::path &path) cons
 void
 FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool contents) const
 {
+    /*
     auto &item = fs.fetch(nr);
     fs::path hostPath;
 
@@ -126,6 +127,7 @@ FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool c
 
     auto newTree = fs.build(nr, { .depth = recursive ? MAX_ISIZE : 1 });
     save(newTree, hostPath, recursive);
+    */
 }
 
 void
@@ -169,6 +171,7 @@ FSExporter::save(const FSTree &tree, const fs::path &path, bool recursive) const
 void
 FSExporter::saveDir(const FSTree &tree, const fs::path &path, bool recursive) const
 {
+    /*
     // Save files
     for (auto &it : tree.children) {
 
@@ -186,11 +189,13 @@ FSExporter::saveDir(const FSTree &tree, const fs::path &path, bool recursive) co
         if (!node.isDirectory()) continue;
         save(it, path / node.name().path(), recursive);
     }
+    */
 }
 
 void
 FSExporter::saveFile(const FSTree &tree, const fs::path &path, bool recursive) const
 {
+    /*
     auto &node = fs.fetch(tree.nr);
 
     // Get data
@@ -207,6 +212,7 @@ FSExporter::saveFile(const FSTree &tree, const fs::path &path, bool recursive) c
     if (!stream) {
         throw IOError(IOError::FILE_CANT_WRITE, path);
     }
+    */
 }
 
 }

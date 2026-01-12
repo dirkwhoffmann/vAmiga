@@ -81,8 +81,11 @@ void
 FSRequire::notExist(BlockNr nr, const FSName &name) const
 {
     directory(nr);
+    /*
     auto &node = fs.fetch(nr);
-    if (node.fs->searchdir(node.nr, name)) throw FSError(FSError::FS_EXISTS);
+    if (node.fs->searchdir(node.nr, name))
+    */
+    throw FSError(FSError::FS_EXISTS);
 }
 
 void

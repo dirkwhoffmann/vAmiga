@@ -17,11 +17,6 @@ namespace retro::vault::cbm {
 /* To create a FileSystem, several layout parameters need to to be provided.
  * This is done by passing a FSDescriptor which contains the necessary
  * information.
- *
- * A FSDescriptor can be obtained in several ways. If a descriptor for
- * a floppy disk is needed, it can be created by specifiying the form factor
- * and density of the disk. In addition, a suitabe descriptors can be extracted
- * directly from an ADF or HDF.
  */
 struct FSDescriptor {
 
@@ -29,18 +24,11 @@ struct FSDescriptor {
     isize numBlocks = 0;
     
     // Size of a block in bytes
-    isize bsize = 512;
-    
-    // Number of reserved blocks
-    isize numReserved = 0;
+    isize bsize = 256;
 
     // Location of the root block
     BlockNr rootBlock = 0;
 
-    // References to all bitmap blocks and bitmap extension blocks
-    std::vector<BlockNr> bmBlocks;
-    std::vector<BlockNr> bmExtBlocks;
-    
     // Initializing
     FSDescriptor() { };
     FSDescriptor(isize numBlocks);

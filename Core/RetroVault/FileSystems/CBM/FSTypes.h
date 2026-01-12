@@ -305,74 +305,6 @@ struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
     }
 };
 
-enum class BootBlockType
-{
-    STANDARD,
-    VIRUS,
-    CUSTOM
-};
-
-struct BootBlockTypeEnum : Reflectable<BootBlockTypeEnum, BootBlockType>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = long(BootBlockType::CUSTOM);
-
-    static const char *_key(BootBlockType value)
-    {
-        switch (value) {
-
-            case BootBlockType::STANDARD:  return "STANDARD";
-            case BootBlockType::VIRUS:     return "VIRUS";
-            case BootBlockType::CUSTOM:    return "CUSTOM";
-        }
-        return "???";
-    }
-    static const char *help(BootBlockType value)
-    {
-        return "";
-    }
-};
-
-enum class BootBlockId
-{
-    NONE,
-    AMIGADOS_13,
-    AMIGADOS_20,
-    SCA,
-    BYTE_BANDIT
-};
-
-struct BootBlockIdEnum : Reflectable<BootBlockIdEnum, BootBlockId>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = long(BootBlockId::BYTE_BANDIT);
-
-    static const char *_key(BootBlockId value)
-    {
-        switch (value) {
-
-            case BootBlockId::NONE:         return "NONE";
-            case BootBlockId::AMIGADOS_13:  return "AMIGADOS_13";
-            case BootBlockId::AMIGADOS_20:  return "AMIGADOS_20";
-            case BootBlockId::SCA:          return "SCA";
-            case BootBlockId::BYTE_BANDIT:  return "BYTE_BANDIT";
-        }
-        return "???";
-    }
-    static const char *help(BootBlockId value)
-    {
-        switch (value) {
-
-            case BootBlockId::NONE:         return "Empty block";
-            case BootBlockId::AMIGADOS_13:  return "Kickstart 1.3 boot block";
-            case BootBlockId::AMIGADOS_20:  return "Kickstart 2.0 boot block";
-            case BootBlockId::SCA:          return "SCA Virus";
-            case BootBlockId::BYTE_BANDIT:  return "Byte Bandit Virus";
-        }
-        return "???";
-    }
-};
-
 
 //
 // Structures
@@ -384,15 +316,32 @@ struct FSTraits
 
     isize blocks = 0;
     isize bytes = 0;
-    isize bsize = 512;
-    isize reserved = 2;
+    isize bsize = 256;
+};
 
-    /*
-    bool ofs() const { return isOFSVolumeType(dos); }
-    bool ffs() const { return isFFSVolumeType(dos); }
-    bool intl() const { return isINTLVolumeType(dos); }
-    */
-    bool adf() const;
+struct FSAttr {
+
+    isize size;         // File size in bytes
+    isize blocks;       // Number of occupied blocks
+};
+
+struct FSStat {
+
+    // Meta data
+
+    string name;
+    isize bsize;        // Block size
+    isize blocks;       // File system capacity in blocks
+
+    // Usage information
+
+    isize freeBlocks;   // Available blocks
+    isize usedBlocks;   // Occupied blocks
+
+    // Access statistics
+
+    isize blockReads;   // Total number of read blocks
+    isize blockWrites;  // Total number of written blocks
 };
 
 typedef struct
@@ -404,7 +353,7 @@ typedef struct
     std::vector<BlockNr> usedButUnallocated;
     std::vector<BlockNr> unusedButAllocated;
 
-    std::unordered_map<BlockNr,isize> bitmapErrors; // DEPRECATED
+    [[deprecated]] std::unordered_map<BlockNr,isize> bitmapErrors; // DEPRECATED
 }
 FSDiagnosis;
 

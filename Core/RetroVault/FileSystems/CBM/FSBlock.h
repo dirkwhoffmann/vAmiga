@@ -13,7 +13,6 @@
 #include "FileSystems/CBM/FSTypes.h"
 #include "FileSystems/CBM/FSError.h"
 #include "FileSystems/CBM/FSObjects.h"
-#include "FileSystems/CBM/FSBootBlockImage.h"
 #include "utl/storage.h"
 #include "utl/abilities/Dumpable.h"
 
@@ -113,15 +112,17 @@ public:
     bool isRegular() const;
     bool isData() const;
 
-    FSName name() const;
+    /*
+    PETName<16> name() const;
     string cppName() const;
     string absName() const;
     string relName() const;
-    [[deprecated]] string relName(BlockNr top) const;
+    */
+    // [[deprecated]] string relName(BlockNr top) const;
 
     // Experimental
-    string acabsName() const;
-    string acrelName() const;
+    //string acabsName() const;
+    // string acrelName() const;
 
     // Converts the path to a host path
     fs::path sanitizedPath() const;
@@ -235,39 +236,24 @@ private:
 
 
     //
-    // Geting and setting names and comments
+    // Geting and setting names
     //
     
 public:
     
     bool hasName() const;
-    FSName getName() const;
-    void setName(FSName name);
-    bool isNamed(const FSName &other) const;
+    PETName<16> getName() const;
+    void setName(PETName<16> name);
+    bool isNamed(const PETName<16> &other) const;
 
-    FSComment getComment() const;
-    void setComment(FSComment name);
+//    FSComment getComment() const;
+//    void setComment(FSComment name);
 
-    
-    //
-    // Getting and settting date and time
-    //
-    
-    FSTime getCreationDate() const;
-    void setCreationDate(FSTime t);
 
-    FSTime getModificationDate() const;
-    void setModificationDate(FSTime t);
-    
-    
     //
     // Getting and setting file properties
     //
     
-    u32 getProtectionBits() const;
-    void setProtectionBits(u32 val);
-    string getProtectionBitString() const;
-
     u32 getFileSize() const;
     void setFileSize(u32 val);
 
@@ -347,14 +333,7 @@ public:
     BlockNr getHashRef(BlockNr nr) const;
     void setHashRef(BlockNr nr, BlockNr ref);
 
- 
-    //
-    // Working with boot blocks
-    //
 
-    void writeBootBlock(BootBlockId id, isize page);
-    
-    
     //
     // Working with bitmap blocks
     //
@@ -424,6 +403,7 @@ typedef FSBlock* BlockPtr;
 
 namespace sort {
 
+/*
 inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSBlock &b1, const FSBlock &b2)
 {
     if ( b1.isDirectory() && !b2.isDirectory()) return true;
@@ -447,6 +427,8 @@ inline std::function<bool(const FSBlock *, const FSBlock *)> alphaPtr = [](const
 {
     return b1->getName() < b2->getName();
 };
+
+*/
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;
 inline std::function<bool(const FSBlock *, const FSBlock *)> nonePtr = nullptr;
@@ -472,7 +454,8 @@ inline std::function<bool(const FSBlock &)> directories = [](const FSBlock &b)
 
 inline std::function<bool(const FSBlock &)> pattern(const FSPattern &p)
 {
-    return [p](const FSBlock &b) { return p.match(b.name()); };
+    return [p](const FSBlock &b) { return false; };
+    // return [p](const FSBlock &b) { return p.match(b.name()); };
 };
 
 }
