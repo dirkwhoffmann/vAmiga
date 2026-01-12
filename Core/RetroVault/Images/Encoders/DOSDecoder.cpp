@@ -51,8 +51,25 @@ DOSDecoder::decodeSector(BitView track, TrackNr t, SectorNr s, std::span<u8> out
 {
     loginfo(IMG_DEBUG, "Decoding DOS track %ld:%ld\n", t, s);
 
-    // TODO
-    return ByteView(nullptr, 0);
+    // Ensure the output buffer is large enough
+    assert(isize(out.size()) >= bsize);
+
+    // Find sector
+    auto sector = seekSector(track, s);
+
+    if (!sector.has_value())
+        throw DeviceError(DeviceError::SEEK_ERR);
+
+    auto it = track.cyclic_begin() + sector->lower;
+
+    // Read sector data
+    assert(sector->size() == 1024*8);
+    u8 mfm[1024]; for (isize i = 0; i < 1024; ++i) mfm[i] = it.readByte();
+
+    // Decode data
+    MFM::decodeMFM(out.data(), mfm, bsize);
+
+    return ByteView(out);
 }
 
 optional<Range<isize>>

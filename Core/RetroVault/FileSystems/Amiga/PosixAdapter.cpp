@@ -343,7 +343,7 @@ PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
     // Write back
     fs.replace(handle.node, meta.cache);
 
-    return count;
+    return isize(count);
 }
 
 }

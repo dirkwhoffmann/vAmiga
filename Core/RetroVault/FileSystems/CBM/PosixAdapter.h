@@ -29,7 +29,7 @@ struct NodeMeta {
     Buffer<u8> cache;
 
     // Returns the number of open handles
-    isize openCount() { return openHandles.size(); };
+    isize openCount() { return (isize)openHandles.size(); };
 };
 
 class PosixAdapter : public PosixView {
