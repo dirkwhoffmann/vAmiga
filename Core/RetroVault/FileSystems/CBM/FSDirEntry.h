@@ -38,7 +38,10 @@ struct FSDirEntry
     void init(const string &name, TSLink ref, isize numBlocks);
 
     // Checks whether this entry if empty
-    bool isEmpty() const;
+    bool empty() const noexcept;
+
+    // Checks whether this entry has been deleted
+    bool deleted() const noexcept;
 
     // Returns the name of this file
     PETName<16> getName() const { return PETName<16>(fileName); }

@@ -84,39 +84,6 @@ FileSystem::setName(const PETName<16> &name)
     }
 }
 
-/*
-void
-FileSystem::makeBootable(BootBlockId id)
-{
-    assert(cache.getType(0) == FSBlockType::BOOT);
-    assert(cache.getType(1) == FSBlockType::BOOT);
-    fetch(0).mutate().writeBootBlock(id, 0);
-    fetch(1).mutate().writeBootBlock(id, 1);
-}
-
-void
-FileSystem::killVirus()
-{
-    assert(cache.getType(0) == FSBlockType::BOOT);
-    assert(cache.getType(1) == FSBlockType::BOOT);
-
-    if (bootStat().hasVirus) {
-
-        auto id =
-        traits.ofs() ? BootBlockId::AMIGADOS_13 :
-        traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
-
-        if (id != BootBlockId::NONE) {
-            fetch(0).mutate().writeBootBlock(id, 0);
-            fetch(1).mutate().writeBootBlock(id, 1);
-        } else {
-            std::memset(fetch(0).mutate().data() + 4, 0, traits.bsize - 4);
-            std::memset(fetch(1).mutate().data(), 0, traits.bsize);
-        }
-    }
-}
-*/
-
 optional<BlockNr>
 FileSystem::searchdir(BlockNr at, const PETName<16> &name) const
 {
@@ -144,132 +111,100 @@ FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
     return result;
 }
 
-FSDirEntry *
-FileSystem::link(BlockNr b)
+void
+FileSystem::link(const FSDirEntry &entry)
 {
-    return link(traits.tsLink(b));
-}
+    auto dir = readDir();
 
-FSDirEntry *
-FileSystem::link(const TSLink &ts)
-{
-    if (auto *entry = getOrCreateNextFreeDirEntry()) {
+    // Find a free slot
+    for (auto &slot : dir) {
 
-        entry->firstDataTrack  = u8(ts.t);
-        entry->firstDataSector = u8(ts.s);
-        return entry;
+        if (slot.deleted()) {
+
+            slot = entry;
+            writeDir(dir);
+            return;
+        }
     }
 
-    return nullptr;
+    // Append at the end
+    dir.push_back(entry);
+    writeDir(dir);
 }
 
 void
 FileSystem::unlink(BlockNr node)
 {
-    /*
-    require.fileOrDirectory(node);
+    auto ts  = traits.tsLink(node);
+    auto dir = readDir();
 
-    // Unwire
-    deleteFromHashTable(node);
-    */
-}
+    for (auto &slot : dir) {
 
-FSDirEntry *
-FileSystem::getOrCreateNextFreeDirEntry()
-{
-    // The directory starts on track 18, sector 1
-    auto *ptr = tryFetch(TSLink{18,1});
+        if (slot.firstDataTrack == ts.t && slot.firstDataSector == ts.s) {
 
-    // A disk can hold up to 144 files
-    for (int i = 0; ptr && i < 144; i++) {
-
-        FSDirEntry *entry = (FSDirEntry *)ptr->data() + (i % 8);
-
-        // Return if this entry is unused
-        if (entry->isEmpty()) return entry;
-
-        // Keep on searching in the current block if slots remain
-        if (i % 8 != 7) continue;
-
-        // Keep on searching in the next directory block if it already exists
-        if (auto *next = tryFetch(ptr->tsLink())) {
-            ptr = next;
-            continue;
-        }
-
-        // Create a new directory block and link to it
-        TSLink ts = traits.nextBlockRef(ptr->nr);
-        if (auto *next = tryFetch(ts)) {
-
-            next->mutate().type = FSBlockType::USERDIR;
-            memset(ptr->mutate().data(), 0, 256);
-            ptr->mutate().data()[0] = (u8)ts.t;
-            ptr->mutate().data()[1] = (u8)ts.s;
-            ptr = next;
-            continue;
+            slot = FSDirEntry();
+            writeDir(dir);
         }
     }
-
-    return nullptr;
 }
-
-/*
-vector<BlockNr>
-FileSystem::collectLinkedBlocks(BlockNr b) const
-{
-    vector<BlockNr> result;
-    std::unordered_set<BlockNr> visited;
-
-    auto ref = tryFetch(b);
-
-    // Traverse the linked list until the item has been found
-    while (ref && visited.find(ref->nr) == visited.end())  {
-
-        // Break the loop if we've seen this sector before
-        if (!visited.insert(ref->nr).second) break;
-
-        // Store the block number and
-        result.push_back(ref->nr);
-
-        // Proceed to the next block
-        ref = tryFetch(ref->tsLink());
-    }
-
-    return result;
-}
-
-vector<BlockNr>
-FileSystem::collectDirBlocks() const
-{
-    return collectLinkedBlocks(*traits.blockNr(18,1));
-}
-*/
 
 vector<FSDirEntry>
 FileSystem::readDir() const 
 {
+    auto dirBlocks = collectDirBlocks();
+
     vector<FSDirEntry> result;
+    result.reserve(dirBlocks.size() * 8);
 
     // Iterate through all directory blocks
-    for (auto block : collectDirBlocks()) {
+    for (auto block : dirBlocks) {
 
         auto *data = fetch(block).data();
 
-        // Each directory block contains up to 8 directory entries
+        // Each directory block contains 8 directory entries
         for (int i = 0; i < 8; i++) {
 
-            // Create directory entry (each entry is 0x20 bytes)
             FSDirEntry entry(std::span(data + i * 0x20, 0x20));
-
-            // A zeroed out entry indicates the directory end
-            if (entry.isEmpty()) return result;
-
-            // Store the new entry
             result.push_back(entry);
         }
     }
 
     return result;
+}
+
+void
+FileSystem::writeDir(const vector<FSDirEntry> &dir)
+{
+    static constexpr u8 interleave[18] = {
+        1, 4, 7, 10, 13, 16, 2, 5, 8, 11, 14, 17, 3, 6, 9, 12, 15, 18
+    };
+
+    // A directory contains up to 144 files
+    if (dir.size() > 144) throw FSError(FSError::FS_OUT_OF_SPACE);
+
+    // Compute the number of required directory blocks
+    auto numDirBlocks = (dir.size() + 7) / 8;
+
+    for (usize b = 0, i = 0; b < numDirBlocks; ++b) {
+
+        auto &block = fetch(TSLink{18,interleave[b]}).mutate();
+        auto *data  = block.data();
+
+        for (isize j = 0; j < 8; ++j, ++i) {
+
+            // Write directory entry
+            FSDirEntry *entry = (FSDirEntry *)data + j;
+            if (i < dir.size()) {
+                memcpy(entry, &dir[i], sizeof(FSDirEntry));
+            } else {
+                memset(entry, 0, sizeof(FSDirEntry));
+            }
+        }
+
+        // Write TS link
+        data[0] = (b + 1 < numDirBlocks) ? 18 : 0;
+        data[1] = (b + 1 < numDirBlocks) ? interleave[b + 1] : 0;
+    }
 }
 
 BlockNr
@@ -587,6 +522,16 @@ FileSystem::collect(const FSBlock &node, BlockIterator succ) const noexcept
     }
 
     return result;
+}
+
+void
+FileSystem::chainBlocks(TSLink from, TSLink to)
+{
+    auto &block = fetch(from).mutate();
+    auto *data  = block.data();
+
+    data[0] = u8(to.t);
+    data[1] = u8(to.s);
 }
 
 std::vector<BlockNr>

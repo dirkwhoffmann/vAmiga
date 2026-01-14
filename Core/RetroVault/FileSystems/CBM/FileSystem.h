@@ -289,8 +289,11 @@ public:
     // Managing directories
     //
 
-    // Collects all diretory items
+    // Reads the existing directory
     vector<FSDirEntry> readDir() const;
+
+    // Overwrites the existing directory
+    void writeDir(const vector<FSDirEntry> &dir);
 
     // Returns the number of directory items
     isize numItems() const { return isize(readDir().size()); }
@@ -299,23 +302,11 @@ public:
     optional<BlockNr> searchdir(BlockNr at, const PETName<16> &name) const;
     vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
 
-    // Creates a new directory entry
-    // void link(BlockNr at, BlockNr fhb);
-    FSDirEntry *link(BlockNr b);
-    FSDirEntry *link(const TSLink &ts);
+    // Adds a new entry to the directory
+    void link(const FSDirEntry &entry);
 
     // Removes an existing directory entry
     void unlink(BlockNr b);
-
-private:
-
-    FSDirEntry *getOrCreateNextFreeDirEntry();
-    
-    // Follows a chain of TS links
-//    vector<BlockNr> collectLinkedBlocks(BlockNr b) const;
-
-    // Collects all directory blocks
-//    vector<BlockNr> collectDirBlocks() const;
 
 
     //
@@ -382,7 +373,7 @@ private:
 
 
     //
-    // Traversing linked lists
+    // Managing linked lists
     //
 
 public:
@@ -400,7 +391,10 @@ private:
     vector<BlockNr> collect(const BlockNr nr, BlockIterator succ) const noexcept;
     vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const noexcept;
 
+    // Add a TS link from the first block to the second
+    void chainBlocks(TSLink from, TSLink to);
 
+    
     //
     // P A T H   L A Y E R
     //

@@ -45,9 +45,15 @@ FSDirEntry::init(const string &name, TSLink ref, isize numBlocks)
 }
 
 bool
-FSDirEntry::isEmpty() const
+FSDirEntry::empty() const noexcept
 {
     return isZero(&fileType, 30);
+}
+
+bool
+FSDirEntry::deleted() const noexcept
+{
+    return fileType == 0;
 }
 
 const string
