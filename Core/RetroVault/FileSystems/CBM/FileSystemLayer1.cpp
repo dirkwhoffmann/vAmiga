@@ -32,10 +32,10 @@ FileSystem::predictType(BlockNr nr, const u8 *buf) const noexcept
 const FSBlock *
 FileSystem::tryFetch(TSLink ts) const noexcept
 {
-    if (ts.t < 0 || ts.t > traits.numTracks())
-        return nullptr;
+    if (auto b = traits.blockNr(ts))
+        return tryFetch(*b);
 
-    return tryFetch(traits.blockNr(ts));
+    return nullptr;
 }
 
 void

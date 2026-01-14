@@ -653,6 +653,7 @@ FSBlock::dumpInfo(std::ostream &os) const
 {
     using namespace utl;
 
+    /*
     auto byteStr = [&os](isize num) {
 
         auto str = std::to_string(num) + " Byte" + (num == 1 ? "" : "s");
@@ -663,7 +664,8 @@ FSBlock::dumpInfo(std::ostream &os) const
         auto str = std::to_string(num) + " Block" + (num == 1 ? "" : "s");
         os << std::setw(13) << std::left << std::setfill(' ') << str;
     };
-
+    */
+    /*
     switch (type) {
 
         case FSBlockType::FILEHEADER:
@@ -689,6 +691,7 @@ FSBlock::dumpInfo(std::ostream &os) const
         default:
             break;
     }
+    */
 }
 
 void
@@ -696,6 +699,7 @@ FSBlock::dumpBlocks(std::ostream &os) const
 {
     using namespace utl;
 
+    /*
     switch (type) {
 
         case FSBlockType::FILEHEADER:
@@ -721,6 +725,7 @@ FSBlock::dumpBlocks(std::ostream &os) const
         default:
             break;
     }
+    */
 }
 
 void

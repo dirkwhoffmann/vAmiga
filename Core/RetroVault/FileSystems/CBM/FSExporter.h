@@ -10,7 +10,6 @@
 #pragma once
 
 #include "FileSystems/CBM/FSService.h"
-#include "FileSystems/CBM/FSTree.h"
 #include "Devices/TrackDevice.h"
 
 namespace retro::vault::cbm {
@@ -43,13 +42,6 @@ public:
                      bool recursive = true, bool contents = false) const;
     void exportFiles(const fs::path &path,
                      bool recursive = true, bool contents = false) const;
-
-private:
-
-    // Exports a tree to the host file system
-    void save(const FSTree &tree, const fs::path &path, bool recursive = true) const;
-    void saveFile(const FSTree &tree, const fs::path &path, bool recursive = true) const;
-    void saveDir(const FSTree &tree, const fs::path &path, bool recursive = true) const;
 };
 
 }

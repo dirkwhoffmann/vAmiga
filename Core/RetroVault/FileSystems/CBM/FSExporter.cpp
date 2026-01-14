@@ -136,6 +136,7 @@ FSExporter::exportFiles(const fs::path &path, bool recursive, bool contents) con
     exportFiles(fs.root(), path, recursive, contents);
 }
 
+/*
 void
 FSExporter::save(const FSTree &tree, const fs::path &path, bool recursive) const
 {
@@ -171,7 +172,6 @@ FSExporter::save(const FSTree &tree, const fs::path &path, bool recursive) const
 void
 FSExporter::saveDir(const FSTree &tree, const fs::path &path, bool recursive) const
 {
-    /*
     // Save files
     for (auto &it : tree.children) {
 
@@ -189,13 +189,11 @@ FSExporter::saveDir(const FSTree &tree, const fs::path &path, bool recursive) co
         if (!node.isDirectory()) continue;
         save(it, path / node.name().path(), recursive);
     }
-    */
 }
 
 void
 FSExporter::saveFile(const FSTree &tree, const fs::path &path, bool recursive) const
 {
-    /*
     auto &node = fs.fetch(tree.nr);
 
     // Get data
@@ -212,7 +210,7 @@ FSExporter::saveFile(const FSTree &tree, const fs::path &path, bool recursive) c
     if (!stream) {
         throw IOError(IOError::FILE_CANT_WRITE, path);
     }
-    */
 }
+*/
 
 }

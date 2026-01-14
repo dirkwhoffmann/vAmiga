@@ -188,6 +188,7 @@ FSDoctor::xrayBitmap(bool strict)
 {
     std::unordered_set<BlockNr> used;
 
+    /*
     // Extract the directory tree
     auto tree = fs.build(fs.root(), { .depth = MAX_ISIZE });
 
@@ -224,6 +225,8 @@ FSDoctor::xrayBitmap(bool strict)
     return
     (isize)diagnosis.unusedButAllocated.size() +
     (isize)diagnosis.usedButUnallocated.size();
+    */
+    return 0;
 }
 
 isize

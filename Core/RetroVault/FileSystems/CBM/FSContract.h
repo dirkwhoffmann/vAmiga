@@ -25,7 +25,7 @@ struct FSRequire {
     void directory(BlockNr nr) const;
     void fileOrDirectory(BlockNr nr) const;
     void notRoot(BlockNr nr) const;
-    void emptyDirectory(BlockNr nr) const;
+    void emptyDirectory() const;
     void notExist(BlockNr nr, const FSName &name) const;
 };
 

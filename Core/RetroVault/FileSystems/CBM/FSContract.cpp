@@ -69,10 +69,9 @@ FSRequire::notRoot(BlockNr nr) const
 }
 
 void
-FSRequire::emptyDirectory(BlockNr nr) const
+FSRequire::emptyDirectory() const
 {
-    directory(nr);
-    if (fs.numItems(nr) != 0) {
+    if (fs.numItems() != 0) {
         throw FSError(FSError::FS_DIR_NOT_EMPTY);
     }
 }

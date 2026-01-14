@@ -115,8 +115,8 @@ public:
 
     void write(u8 *p) { write(p, len); }
 
-    const char *c_str() { return asc; }
-    string str() { return string(asc); }
+    const char *c_str() const { return asc; }
+    string str() const { return string(asc); }
 };
 
 struct FSString {
@@ -166,6 +166,7 @@ struct FSName : FSString {
     fs::path path() const { return sanitize(str); }
 };
 
+/*
 struct FSPath {
 
     using component_type = FSName;
@@ -193,6 +194,7 @@ struct FSPath {
     auto begin() const { return components.begin(); }
     auto end() const { return components.end(); }
 };
+*/
 
 struct FSComment : FSString {
     

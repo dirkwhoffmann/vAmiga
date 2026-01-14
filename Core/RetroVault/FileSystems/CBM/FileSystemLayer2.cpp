@@ -238,7 +238,7 @@ FileSystem::unlink(BlockNr node)
 }
 
 vector<BlockNr>
-FileSystem::collectLinkedBlocks(BlockNr b)
+FileSystem::collectLinkedBlocks(BlockNr b) const
 {
     vector<BlockNr> result;
     std::unordered_set<BlockNr> visited;
@@ -262,13 +262,13 @@ FileSystem::collectLinkedBlocks(BlockNr b)
 }
 
 vector<BlockNr>
-FileSystem::collectDirBlocks()
+FileSystem::collectDirBlocks() const
 {
-    return collectLinkedBlocks(traits.blockNr(18,1));
+    return collectLinkedBlocks(*traits.blockNr(18,1));
 }
 
 vector<FSDirEntry>
-FileSystem::readDir()
+FileSystem::readDir() const 
 {
     vector<FSDirEntry> result;
 
@@ -485,12 +485,14 @@ FileSystem::resize(BlockNr at, isize size)
 void
 FileSystem::replace(BlockNr at, const u8 *buf, isize size)
 {
+    /*
     // Collect all blocks occupied by this file
     auto listBlocks = collectListBlocks(at);
     auto dataBlocks = collectDataBlocks(at);
 
     // Update the file contents
     replace(at, buf, size, listBlocks, dataBlocks);
+    */
 }
 
 void
@@ -631,6 +633,7 @@ FileSystem::addData(BlockNr nr, const u8 *buf, isize size)
 void
 FileSystem::reclaim(BlockNr fhb)
 {
+    /*
     auto &node = fetch(fhb);
 
     if (node.isDirectory()) {
@@ -654,6 +657,7 @@ FileSystem::reclaim(BlockNr fhb)
     }
 
     throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY);
+    */
 }
 
 std::vector<const FSBlock *>
@@ -701,6 +705,9 @@ FileSystem::collect(const BlockNr nr, BlockIterator succ) const
 std::vector<const FSBlock *>
 FileSystem::collectDataBlocks(const FSBlock &node) const
 {
+    std::vector<const FSBlock *> result;
+
+    /*
     // Gather all blocks containing data block references
     auto blocks = collectListBlocks(node);
     blocks.push_back(&node);
@@ -719,6 +726,8 @@ FileSystem::collectDataBlocks(const FSBlock &node) const
             }
         }
     }
+    */
+
     return result;
 }
 

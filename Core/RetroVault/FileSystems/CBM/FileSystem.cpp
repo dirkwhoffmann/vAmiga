@@ -154,6 +154,20 @@ FileSystem::stat() const noexcept
     return result;
 }
 
+
+FSAttr
+FileSystem::attr(const FSDirEntry &entry) const
+{
+    auto blocks = collectDataBlocks(0);
+    FSAttr result = {
+
+        .size   = 0,
+        .blocks = 0,
+    };
+
+    return result;
+}
+
 FSAttr
 FileSystem::attr(BlockNr nr) const
 {

@@ -85,17 +85,21 @@ struct FSTraits {
     // Translating blocks, tracks, sectors, and heads
     //
 
+    // DEPRECATED
     CylNr cylNr(TrackNr t) const { return t <= numCyls ? t : t - numCyls; }
     HeadNr headNr(TrackNr t) const { return t <= numCyls ? 0 : 1; }
     TrackNr trackNr(CylNr c, HeadNr h) const { return c + h * numCyls; }
-
     TSLink tsLink(BlockNr b) const;
     TrackNr trackNr(BlockNr b) const { return tsLink(b).t; }
     SectorNr sectorNr(BlockNr b) const { return tsLink(b).s; }
 
-    BlockNr blockNr(TSLink ts) const;
-    BlockNr blockNr(TrackNr t, SectorNr s) const { return blockNr(TSLink{t,s}); }
-    BlockNr blockNr(CylNr c, HeadNr h, SectorNr s) const { return blockNr(trackNr(c,h), s); }
+
+    optional<BlockNr> blockNr(TSLink ts) const;
+
+
+    // DEPRECATED
+    optional<BlockNr> blockNr(TrackNr t, SectorNr s) const { return blockNr(TSLink{t,s}); }
+    optional<BlockNr> blockNr(CylNr c, HeadNr h, SectorNr s) const { return blockNr(trackNr(c,h), s); }
 
 
     //

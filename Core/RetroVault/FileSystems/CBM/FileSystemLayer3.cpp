@@ -13,46 +13,38 @@
 
 namespace retro::vault::cbm {
 
-/*
-void
-FileSystem::cd(BlockNr nr)
+optional<FSDirEntry>
+FileSystem::trySeekEntry(const PETName<16> &path) const
 {
-    current = nr;
+    auto dir = readDir();
+
+    for (auto &item : dir)
+        if (item.getName() == path) return item;
+
+    return {};
 }
-*/
 
 optional<BlockNr>
-FileSystem::trySeek(const FSPath &path) const
+FileSystem::trySeek(const PETName<16> &path) const
 {
+    if (auto entry = trySeekEntry(path))
+        return traits.blockNr(entry->firstBlock());
+
     return {};
-    /*
-    try {
+}
 
-        // BlockNr current = path.absolute() ? root() : pwd();
-        BlockNr current = root();
-
-        for (const auto &p : path) {
-
-            // Check for special tokens
-            if (p == "." ) { continue; }
-            if (p == "..") { current = fetch(current).getParentDirRef(); continue; }
-
-            auto next = searchdir(current, p);
-            if (!next) return { };
-
-            current = *next;
-        }
-        return current;
-
-    } catch (...) { return { }; }
-    */
+FSDirEntry
+FileSystem::seekEntry(const PETName<16> &path) const
+{
+    if (auto it = trySeekEntry(path)) return *it;
+    throw FSError(FSError::FS_NOT_FOUND, path.str());
 }
 
 BlockNr
-FileSystem::seek(const FSPath &path) const
+FileSystem::seek(const PETName<16> &path) const
 {
     if (auto it = trySeek(path)) return *it;
-    throw FSError(FSError::FS_NOT_FOUND, path.cpp_str());
+    throw FSError(FSError::FS_NOT_FOUND, path.str());
 }
 
 vector<BlockNr>
@@ -116,12 +108,6 @@ vector<BlockNr>
 FileSystem::match(const string &path)
 {
     return match(root(), FSPattern(path).splitted());
-}
-
-FSTree
-FileSystem::build(BlockNr root, const FSTreeBuildOptions &opt) const
-{
-    return FSTreeBuilder::build(fetch(root), opt); 
 }
 
 }

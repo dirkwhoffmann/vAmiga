@@ -101,7 +101,6 @@
 #include "FileSystems/CBM/FSImporter.h"
 #include "FileSystems/CBM/FSExporter.h"
 #include "FileSystems/CBM/FSTraits.h"
-#include "FileSystems/CBM/FSTree.h"
 #include "FileSystems/PosixViewTypes.h"
 #include "DeviceError.h"
 #include "Volume.h"
@@ -206,6 +205,7 @@ public:
     FSStat stat() const noexcept;
 
     // Returns information about file permissions
+    FSAttr attr(const FSDirEntry &entry) const;
     FSAttr attr(BlockNr nr) const;
 
 
@@ -290,12 +290,14 @@ public:
     //
 
     // Collects all diretory items
-    vector<FSDirEntry> readDir();
+    vector<FSDirEntry> readDir() const;
 
+    // Returns the number of directory items
+    isize numItems() const { return isize(readDir().size()); }
 
     // Returns the number of items in a directory or the items themselves
-    isize numItems(BlockNr at) const;
-    vector<BlockNr> getItems(BlockNr at) const;
+    [[deprecated]] isize numItems(BlockNr at) const;
+    [[deprecated]] vector<BlockNr> getItems(BlockNr at) const;
 
     // Looks up a specific directory item
     optional<BlockNr> searchdir(BlockNr at, const PETName<16> &name) const;
@@ -310,16 +312,16 @@ public:
 private:
 
     // Follows a chain of TS links
-    vector<BlockNr> collectLinkedBlocks(BlockNr b);
+    vector<BlockNr> collectLinkedBlocks(BlockNr b) const;
 
     // Collects all directory blocks
-    vector<BlockNr> collectDirBlocks();
+    vector<BlockNr> collectDirBlocks() const;
 
     // Adds a hash-table entry for a given item
-    void addToHashTable(BlockNr parent, BlockNr ref);
+    [[deprecated]] void addToHashTable(BlockNr parent, BlockNr ref);
 
     // Removes the hash-table entry for a given item
-    void deleteFromHashTable(BlockNr item);
+    [[deprecated]] void deleteFromHashTable(BlockNr item);
 
 
     //
@@ -397,9 +399,9 @@ public:
     vector<BlockNr> collectDataBlocks(BlockNr nr) const;
 
 
-    vector<BlockNr> collectListBlocks(BlockNr nr) const;
-    vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
-    vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
+    [[deprecated]] vector<BlockNr> collectListBlocks(BlockNr nr) const;
+    [[deprecated]] vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
+    [[deprecated]] vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
 
 private:
 
@@ -410,9 +412,10 @@ private:
 
     // Collects blocks of a certain type
     vector<const FSBlock *> collectDataBlocks(const FSBlock &block) const;
-    vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
-    vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
-    vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
+
+    [[deprecated]] vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
+    [[deprecated]] vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
+    [[deprecated]] vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
 
 
     //
@@ -434,22 +437,34 @@ public:
     const vector<BlockNr> &getBmExtBlocks() const { return bmExtBlocks; }
 
     // Checks if a an item exists in the directory tree
-    bool exists(const FSPath &path) const { return trySeek(path).has_value(); }
+    bool exists(const PETName<16> &path) const { return trySeek(path).has_value(); }
     bool exists(const char *path) const { return trySeek(path).has_value(); }
     bool exists(const string &path) const { return trySeek(path).has_value(); }
     bool exists(const fs::path &path) const { return trySeek(path).has_value(); }
 
-    // Resolves a path by name
-    optional<BlockNr> trySeek(const FSPath &path) const;
-    optional<BlockNr> trySeek(const char *path) const { return trySeek(FSPath(path)); }
-    optional<BlockNr> trySeek(const string &path) const { return trySeek(FSPath(path)); }
-    optional<BlockNr> trySeek(const fs::path &path) const { return trySeek(FSPath(path)); }
+    // Resolves a path by name (returns a directory entry)
+    optional<FSDirEntry> trySeekEntry(const PETName<16> &path) const;
+    optional<FSDirEntry> trySeekEntry(const char *path) const { return trySeekEntry(PETName<16>(path)); }
+    optional<FSDirEntry> trySeekEntry(const string &path) const { return trySeekEntry(PETName<16>(path)); }
+    optional<FSDirEntry> trySeekEntry(const fs::path &path) const { return trySeekEntry(PETName<16>(path)); }
+
+    // Resolves a path by name (returns the number of the first data block)
+    optional<BlockNr> trySeek(const PETName<16> &path) const;
+    optional<BlockNr> trySeek(const char *path) const { return trySeek(PETName<16>(path)); }
+    optional<BlockNr> trySeek(const string &path) const { return trySeek(PETName<16>(path)); }
+    optional<BlockNr> trySeek(const fs::path &path) const { return trySeek(PETName<16>(path)); }
 
     // Resolves a path by name (may throw)
-    BlockNr seek(const FSPath &path) const;
-    BlockNr seek(const char *path) const { return seek(FSPath(path)); }
-    BlockNr seek(const string &path) const { return seek(FSPath(path)); }
-    BlockNr seek(const fs::path &path) const { return seek(FSPath(path)); }
+    FSDirEntry seekEntry(const PETName<16> &path) const;
+    FSDirEntry seekEntry(const char *path) const { return seekEntry(PETName<16>(path)); }
+    FSDirEntry seekEntry(const string &path) const { return seekEntry(PETName<16>(path)); }
+    FSDirEntry seekEntry(const fs::path &path) const { return seekEntry(PETName<16>(path)); }
+
+    // Resolves a path by name (may throw)
+    BlockNr seek(const PETName<16> &path) const;
+    BlockNr seek(const char *path) const { return seek(PETName<16>(path)); }
+    BlockNr seek(const string &path) const { return seek(PETName<16>(path)); }
+    BlockNr seek(const fs::path &path) const { return seek(PETName<16>(path)); }
 
     // Resolves a path by a regular expression
     vector<BlockNr> match(BlockNr top, const vector<FSPattern> &patterns);
@@ -459,11 +474,6 @@ public:
     //
     // S E R V I C E   L A Y E R
     //
-
-public:
-
-    // Builds a directory tree with traversal capabilities
-    FSTree build(BlockNr root, const FSTreeBuildOptions &opt = {}) const;
 };
 
 }

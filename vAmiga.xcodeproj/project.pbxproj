@@ -379,7 +379,6 @@
 		50BF4BC02F0ADF3200F1B9F2 /* FSAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BAE2F0ADF3200F1B9F2 /* FSAllocator.cpp */; };
 		50BF4BC12F0ADF3200F1B9F2 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA42F0ADF3200F1B9F2 /* FileSystemLayer1.cpp */; };
 		50BF4BC22F0ADF3200F1B9F2 /* FSCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BAA2F0ADF3200F1B9F2 /* FSCache.cpp */; };
-		50BF4BC32F0ADF3200F1B9F2 /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB22F0ADF3200F1B9F2 /* FSTree.cpp */; };
 		50BF4BC42F0ADF3200F1B9F2 /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */; };
 		50BF4BC52F0ADF3200F1B9F2 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA62F0ADF3200F1B9F2 /* FileSystemLayer3.cpp */; };
 		50BF4BC62F0ADF3200F1B9F2 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */; };
@@ -399,7 +398,6 @@
 		50BF4BD62F0ADF3200F1B9F2 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */; };
 		50BF4BD72F0ADF3200F1B9F2 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA52F0ADF3200F1B9F2 /* FileSystemLayer2.cpp */; };
 		50BF4BD82F0ADF3200F1B9F2 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA32F0ADF3200F1B9F2 /* FileSystem.cpp */; };
-		50BF4BD92F0ADF3200F1B9F2 /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB22F0ADF3200F1B9F2 /* FSTree.cpp */; };
 		50BF4BDA2F0ADF3200F1B9F2 /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB42F0ADF3200F1B9F2 /* FSDoctor.cpp */; };
 		50BF4BDB2F0ADF3200F1B9F2 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA62F0ADF3200F1B9F2 /* FileSystemLayer3.cpp */; };
 		50BF4BDC2F0ADF3200F1B9F2 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BAC2F0ADF3200F1B9F2 /* FSBlock.cpp */; };
@@ -1233,8 +1231,6 @@
 		50BF4BAE2F0ADF3200F1B9F2 /* FSAllocator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSAllocator.cpp; sourceTree = "<group>"; };
 		50BF4BAF2F0ADF3200F1B9F2 /* FSService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSService.h; sourceTree = "<group>"; };
 		50BF4BB02F0ADF3200F1B9F2 /* FSService.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSService.cpp; sourceTree = "<group>"; };
-		50BF4BB12F0ADF3200F1B9F2 /* FSTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTree.h; sourceTree = "<group>"; };
-		50BF4BB22F0ADF3200F1B9F2 /* FSTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSTree.cpp; sourceTree = "<group>"; };
 		50BF4BB32F0ADF3200F1B9F2 /* FSDoctor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDoctor.h; sourceTree = "<group>"; };
 		50BF4BB42F0ADF3200F1B9F2 /* FSDoctor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDoctor.cpp; sourceTree = "<group>"; };
 		50BF4BB52F0ADF3200F1B9F2 /* FSImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSImporter.h; sourceTree = "<group>"; };
@@ -2799,8 +2795,6 @@
 				50BF4BAE2F0ADF3200F1B9F2 /* FSAllocator.cpp */,
 				50BF4BAF2F0ADF3200F1B9F2 /* FSService.h */,
 				50BF4BB02F0ADF3200F1B9F2 /* FSService.cpp */,
-				50BF4BB12F0ADF3200F1B9F2 /* FSTree.h */,
-				50BF4BB22F0ADF3200F1B9F2 /* FSTree.cpp */,
 				50BF4BB32F0ADF3200F1B9F2 /* FSDoctor.h */,
 				50BF4BB42F0ADF3200F1B9F2 /* FSDoctor.cpp */,
 				50BF4BB52F0ADF3200F1B9F2 /* FSImporter.h */,
@@ -3202,7 +3196,6 @@
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
 				50AFEBBE278EF6CB00F422D5 /* SequencerInfo.cpp in Sources */,
-				50BF4BC32F0ADF3200F1B9F2 /* FSTree.cpp in Sources */,
 				50BF4B452F03D6F500F1B9F2 /* DOSEncoder.cpp in Sources */,
 				50DE553A2E874647001789C9 /* MyToolbarItems.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
@@ -3580,7 +3573,6 @@
 				50FC04E027DA1A1400C3E566 /* xdms.c in Sources */,
 				50FC04BD27DA19C200C3E566 /* Mouse.cpp in Sources */,
 				50FC04F227DA1A4A00C3E566 /* RegressionTester.cpp in Sources */,
-				50BF4BD92F0ADF3200F1B9F2 /* FSTree.cpp in Sources */,
 				50FC04B927DA19B200C3E566 /* Drive.cpp in Sources */,
 				50FC04EE27DA1A4500C3E566 /* GdbServer.cpp in Sources */,
 				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,

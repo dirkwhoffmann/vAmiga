@@ -132,10 +132,10 @@ FSTraits::tsLink(BlockNr b) const
     return TSLink{0,0};
 }
 
-BlockNr
+optional<BlockNr>
 FSTraits::blockNr(TSLink ts) const
 {
-    if (!isValidLink(ts)) return (BlockNr)(-1);
+    if (!isValidLink(ts)) return {};
 
     BlockNr result = ts.s;
     for (TrackNr i = 1; i < ts.t; i++) {
