@@ -67,7 +67,7 @@ PosixAdapter::attr(const fs::path &path) const
 
         .size           = stat.size,
         .blocks         = stat.blocks,
-        .prot           = 0,
+        .prot           = u32{0},
         .isDir          = false,
 
         .btime          = time_t{0},
@@ -94,12 +94,11 @@ PosixAdapter::readDir(const fs::path &path) const
 {
     std::vector<string> result;
 
-    /*
-    for (auto &it : fs.getItems(fs.seek(path))) {
-        result.push_back(fs.fetch(it).cppName());
-    }
-    */
-    
+    auto dir = fs.readDir();
+
+    for (auto &item : dir)
+        result.push_back(item.getName().str());
+
     return result;
 }
 

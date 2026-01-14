@@ -140,10 +140,13 @@ public:
     FSItemType itemType(isize byte) const;
     
     // Returns the type and subtype identifiers of this block
-    u32 typeID() const;
-    u32 subtypeID() const;
-    
-        
+    [[deprecated]] u32 typeID() const;
+    [[deprecated]] u32 subtypeID() const;
+
+    // Returns the track / sector link stored in the fist two bytes
+    TSLink tsLink() const { auto *p = data(); return TSLink {p[0],p[1]}; }
+
+
     //
     // Reading and writing block data
     //

@@ -108,6 +108,39 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
     }
 };
 
+enum class FSFileType : long
+{
+    DEL,
+    SEQ,
+    PRG,
+    USR,
+    REL
+};
+
+struct FSFileTypeEnum : Reflectable<FSFileTypeEnum, FSFileType> {
+
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(FSFileType::REL);
+
+    static const char *_key(FSFileType value)
+    {
+        switch (value) {
+
+            case FSFileType::DEL:    return "DEL";
+            case FSFileType::SEQ:    return "SEQ";
+            case FSFileType::PRG:    return "PRG";
+            case FSFileType::USR:    return "USR";
+            case FSFileType::REL:    return "REL";
+        }
+        return "???";
+    }
+
+    static const char *help(FSFileType value)
+    {
+        return "";
+    }
+};
+
 enum class FSItemType
 {
     UNKNOWN,
@@ -310,6 +343,7 @@ struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
 // Structures
 //
 
+/*
 struct FSTraits
 {
     FSFormat dos = FSFormat::NODOS;
@@ -318,6 +352,7 @@ struct FSTraits
     isize bytes = 0;
     isize bsize = 256;
 };
+*/
 
 struct FSAttr {
 
@@ -344,7 +379,7 @@ struct FSStat {
     isize blockWrites;  // Total number of written blocks
 };
 
-typedef struct
+struct FSDiagnosis
 {
     // Block errors
     std::vector<BlockNr> blockErrors;
@@ -354,7 +389,6 @@ typedef struct
     std::vector<BlockNr> unusedButAllocated;
 
     [[deprecated]] std::unordered_map<BlockNr,isize> bitmapErrors; // DEPRECATED
-}
-FSDiagnosis;
+};
 
 }

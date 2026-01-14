@@ -43,13 +43,15 @@ FSCache::dump(std::ostream &os) const
 FSFormat
 FSCache::predictDOS(BlockDevice &dev) noexcept
 {
-    Buffer<u8> data(dev.bsize());
+    // The CBM file system was never designed for self-identification.
+    // Until we find a more reliable approach we only check, if the
+    // BAM block is non-empty.
 
-    // Analyze the signature of the first block
-    dev.readBlock(data.ptr, 0);
-    if (strncmp((const char *)data.ptr, "DOS", 3) == 0 && data.ptr[3] <= 7) {
-        return FSFormat(data.ptr[3]);
-    }
+    // Read block at the BAM location
+    Buffer<u8> data(dev.bsize()); dev.readBlock(data.ptr, 357);
+
+    // Check if the block is empty
+    for (isize i = 0; i < data.size; ++i) if (data[i]) return FSFormat::CBM;
 
     return FSFormat::NODOS;
 }

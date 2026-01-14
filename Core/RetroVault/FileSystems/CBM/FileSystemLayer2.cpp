@@ -10,6 +10,7 @@
 #include "config.h"
 #include "FileSystems/CBM/FileSystem.h"
 #include <cstring>
+#include <span>
 
 namespace retro::vault::cbm {
 
@@ -234,6 +235,63 @@ FileSystem::unlink(BlockNr node)
     // Unwire
     deleteFromHashTable(node);
     */
+}
+
+vector<BlockNr>
+FileSystem::collectLinkedBlocks(BlockNr b)
+{
+    vector<BlockNr> result;
+    std::unordered_set<BlockNr> visited;
+
+    auto ref = tryFetch(b);
+
+    // Traverse the linked list until the item has been found
+    while (ref && visited.find(ref->nr) == visited.end())  {
+
+        // Break the loop if we've seen this sector before
+        if (!visited.insert(ref->nr).second) break;
+
+        // Store the block number and
+        result.push_back(ref->nr);
+
+        // Proceed to the next block
+        ref = tryFetch(ref->tsLink());
+    }
+
+    return result;
+}
+
+vector<BlockNr>
+FileSystem::collectDirBlocks()
+{
+    return collectLinkedBlocks(traits.blockNr(18,1));
+}
+
+vector<FSDirEntry>
+FileSystem::readDir()
+{
+    vector<FSDirEntry> result;
+
+    // Iterate through all directory blocks
+    for (auto block : collectDirBlocks()) {
+
+        auto *data = fetch(block).data();
+
+        // Each directory block contains up to 8 directory entries
+        for (int i = 0; i < 8; i++) {
+
+            // Create directory entry (each entry is 0x20 bytes)
+            FSDirEntry entry(std::span(data + i * 0x20, 0x20));
+
+            // A zeroed out entry indicates the directory end
+            if (entry.isEmpty()) return result;
+
+            // Store the new entry
+            result.push_back(entry);
+        }
+    }
+
+    return result;
 }
 
 void

@@ -28,6 +28,17 @@ using TrackNr  = isize;
 
 
 //
+// Structures
+//
+
+struct TSLink
+{
+    TrackNr t;
+    SectorNr s;
+};
+
+
+//
 // Constants
 //
 

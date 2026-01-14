@@ -17,6 +17,7 @@ FSExporter.cpp
 FSImporter.cpp
 FSObjects.cpp
 FSService.cpp
+FSTraits.cpp
 FSTree.cpp
 PosixAdapter.cpp
 

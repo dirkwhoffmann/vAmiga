@@ -95,10 +95,12 @@
 #include "FileSystems/CBM/FSDescriptor.h"
 #include "FileSystems/CBM/FSObjects.h"
 #include "FileSystems/CBM/FSCache.h"
+#include "FileSystems/CBM/FSDirEntry.h"
 #include "FileSystems/CBM/FSDoctor.h"
 #include "FileSystems/CBM/FSAllocator.h"
 #include "FileSystems/CBM/FSImporter.h"
 #include "FileSystems/CBM/FSExporter.h"
+#include "FileSystems/CBM/FSTraits.h"
 #include "FileSystems/CBM/FSTree.h"
 #include "FileSystems/PosixViewTypes.h"
 #include "DeviceError.h"
@@ -194,8 +196,8 @@ public:
     // Queries immutable file system properties
     const FSTraits &getTraits() const noexcept { return traits; }
     isize blocks() const noexcept { return traits.blocks; }
-    isize bytes() const noexcept { return traits.bytes; }
     isize bsize() const noexcept { return traits.bsize; }
+    isize bytes() const noexcept { return blocks() * bsize(); }
 
     // Checks whether the file system is formatted
     bool isFormatted() const noexcept;
@@ -251,6 +253,8 @@ public:
     const FSBlock &fetch(BlockNr nr, vector<FSBlockType> ts) const { return cache.fetch(nr, ts); }
 
     // Convenience wrapper
+    const FSBlock *tryFetch(TSLink ts) const noexcept;
+
     const FSBlock *tryFetchBAM() const noexcept { return tryFetch(bamBlock, FSBlockType::BAM); }
     const FSBlock &fetchBAM() const { return fetch(bamBlock, FSBlockType::BAM); }
 
@@ -285,6 +289,10 @@ public:
     // Managing directories
     //
 
+    // Collects all diretory items
+    vector<FSDirEntry> readDir();
+
+
     // Returns the number of items in a directory or the items themselves
     isize numItems(BlockNr at) const;
     vector<BlockNr> getItems(BlockNr at) const;
@@ -300,6 +308,12 @@ public:
     void unlink(BlockNr fhb);
 
 private:
+
+    // Follows a chain of TS links
+    vector<BlockNr> collectLinkedBlocks(BlockNr b);
+
+    // Collects all directory blocks
+    vector<BlockNr> collectDirBlocks();
 
     // Adds a hash-table entry for a given item
     void addToHashTable(BlockNr parent, BlockNr ref);
@@ -381,6 +395,8 @@ private:
 public:
 
     vector<BlockNr> collectDataBlocks(BlockNr nr) const;
+
+
     vector<BlockNr> collectListBlocks(BlockNr nr) const;
     vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
     vector<BlockNr> collectHashedBlocks(BlockNr nr) const;

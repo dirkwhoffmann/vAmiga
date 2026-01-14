@@ -27,7 +27,11 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     // Check consistency (may throw)
     layout.checkCompatibility();
 
+    // Derive persistant file system properties
+    traits.init(cache.predictDOS(vol), vol.capacity());
+
     // Predict the file system
+    /*
     traits.dos = cache.predictDOS(vol);
 
     // Copy layout parameters
@@ -35,6 +39,7 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     traits.bytes    = layout.numBlocks * layout.bsize;
     traits.bsize    = layout.bsize;
     rootBlock       = layout.rootBlock;
+    */
 
     if constexpr (debug::FS_DEBUG) dumpState();
 

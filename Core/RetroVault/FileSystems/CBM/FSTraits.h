@@ -22,7 +22,16 @@ using image::D64File;
  * This is done by passing a FSDescriptor which contains the necessary
  * information.
  */
-struct FSDescriptor {
+struct FSTraits {
+
+    // File system type
+    FSFormat dos = FSFormat::NODOS;
+
+    // Number of blocks
+    isize blocks = 0;
+
+    // Number of bytes
+    isize bytes = 0;
 
     // Number of cylinders
     isize numCyls = 0;
@@ -33,23 +42,21 @@ struct FSDescriptor {
     // Block size in bytes
     isize bsize = 256;
 
-    // Creates a device descriptor for a standard disk
-    FSDescriptor(Diameter dia, Density den, isize sides) { init(dia, den, sides); }
+    FSTraits() { }
 
     // Creates a device descriptor for a given block count
-    FSDescriptor(isize numBlocks) { init(numBlocks); }
+    FSTraits(FSFormat format, isize numBlocks) { init(format, numBlocks); }
 
     // Creates a device descriptor fitting a D64 file
-    FSDescriptor(const D64File &d64) { init(d64); }
+    FSTraits(const D64File &d64) { init(d64); }
 
-    void init(Diameter dia, Density den, isize sides);
-    void init(isize numBlocks);
+    void init(FSFormat format, isize numBlocks);
     void init(const D64File &d64);
 
     // Prints debug information
     void dump() const;
     void dump(std::ostream &os) const;
-    
+
     // Throws an exception if the descriptor contains unsupported values
     void checkCompatibility() const;
 

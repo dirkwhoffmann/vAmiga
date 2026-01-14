@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FileSystems/CBM/FSDescriptor.h"
+#include "FileSystems/CBM/FSTraits.h"
 #include "FileSystems/CBM/FSError.h"
 #include "BlockDevice.h"
 #include "D64File.h"
@@ -17,29 +17,20 @@
 namespace retro::vault::cbm {
 
 void
-FSDescriptor::init(Diameter dia, Density den, isize sides)
+FSTraits::init(const D64File &d64)
 {
-    if ((dia == Diameter::INCH_525 && den == Density::DD && sides == 1) ||
-        (dia == Diameter::INCH_525 && den == Density::DD && sides == 2)) {
-
-        init(sides * D64File::D64_683_SECTORS / 256);
-
-    } else {
-
-        throw FSError(FSError::FS_WRONG_CAPACITY);
-    }
+    init(FSFormat::CBM, d64.numBlocks());
 }
 
 void
-FSDescriptor::init(const D64File &d64)
+FSTraits::init(FSFormat format, isize blocks)
 {
-    init(d64.numBlocks());
-}
+    this->dos    = format;
+    this->bsize  = 256;
+    this->blocks = blocks;
+    this->bytes  = this->blocks * this->bsize;
 
-void
-FSDescriptor::init(isize numBlocks)
-{
-    switch (numBlocks * 256) {
+    switch (blocks * this->bsize) {
 
         case D64File::D64_683_SECTORS: numCyls = 35; numHeads = 1; break;
         case D64File::D64_768_SECTORS: numCyls = 40; numHeads = 1; break;
@@ -51,13 +42,13 @@ FSDescriptor::init(isize numBlocks)
 }
 
 void
-FSDescriptor::dump() const
+FSTraits::dump() const
 {
     dump(std::cout);
 }
 
 void
-FSDescriptor::dump(std::ostream &os) const
+FSTraits::dump(std::ostream &os) const
 {
     using namespace utl;
 
@@ -68,7 +59,7 @@ FSDescriptor::dump(std::ostream &os) const
 }
 
 void
-FSDescriptor::checkCompatibility() const
+FSTraits::checkCompatibility() const
 {
     auto blocks = numBlocks();
 
@@ -86,13 +77,13 @@ FSDescriptor::checkCompatibility() const
 }
 
 bool
-FSDescriptor::isValidLink(TSLink ref) const
+FSTraits::isValidLink(TSLink ref) const
 {
     return isTrackNr(ref.t) && ref.s >= 0 && ref.s < numSectors(ref.t);
 }
 
 isize
-FSDescriptor::speedZone(CylNr t) const
+FSTraits::speedZone(CylNr t) const
 {
     assert(isTrackNr(t));
 
@@ -100,7 +91,7 @@ FSDescriptor::speedZone(CylNr t) const
 }
 
 isize
-FSDescriptor::numSectors(TrackNr t) const
+FSTraits::numSectors(TrackNr t) const
 {
     if (!isTrackNr(t)) return 0;
 
@@ -117,7 +108,7 @@ FSDescriptor::numSectors(TrackNr t) const
 }
 
 isize
-FSDescriptor::numBlocks() const
+FSTraits::numBlocks() const
 {
     isize result = 0;
 
@@ -129,7 +120,7 @@ FSDescriptor::numBlocks() const
 }
 
 TSLink
-FSDescriptor::tsLink(BlockNr b) const
+FSTraits::tsLink(BlockNr b) const
 {
     for (TrackNr i = 1; i <= numTracks(); i++) {
 
@@ -142,7 +133,7 @@ FSDescriptor::tsLink(BlockNr b) const
 }
 
 BlockNr
-FSDescriptor::blockNr(TSLink ts) const
+FSTraits::blockNr(TSLink ts) const
 {
     if (!isValidLink(ts)) return (BlockNr)(-1);
 
@@ -155,7 +146,7 @@ FSDescriptor::blockNr(TSLink ts) const
 }
 
 TSLink
-FSDescriptor::nextBlockRef(TSLink ref) const
+FSTraits::nextBlockRef(TSLink ref) const
 {
     assert(isValidLink(ref));
 
