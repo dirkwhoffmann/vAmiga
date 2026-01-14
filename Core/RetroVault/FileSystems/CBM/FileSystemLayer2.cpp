@@ -207,6 +207,17 @@ FileSystem::writeDir(const vector<FSDirEntry> &dir)
     }
 }
 
+isize
+FileSystem::numItems() const
+{
+    isize result = 0;
+
+    for (auto &slot : readDir())
+        result += slot.deleted() ? 0 : 1;
+
+    return result;
+}
+
 BlockNr
 FileSystem::createFile(const PETName<16> &name)
 {
@@ -229,7 +240,7 @@ FileSystem::createFile(const PETName<16> &name, const u8 *buf, isize size)
     entry.firstDataSector = u8(first.s);
 
     // Add the file to the directory
-    // TODO
+    link(entry);
 
     return blocks[0];
 }
@@ -367,115 +378,42 @@ FileSystem::replace(std::vector<BlockNr> blocks, const u8 *buf, isize size)
     for (usize i = 0; i < blocks.size() && size > 0; ++i) {
 
         auto &block = fetch(blocks[i]).mutate();
+        auto *data  = block.data();
+
         auto written = std::min(size, isize(254));
-        std::memcpy(block.data(), buf, written);
-        buf += written;
+
+        // Write payload
+        std::memcpy(data + 2, buf, written);
+
+        buf  += written;
         size -= written;
+
+        if (i < blocks.size() - 1) {
+
+            // Intermediate block: TS link
+            TSLink ts = traits.tsLink(blocks[i + 1]);
+            data[0] = u8(ts.t);
+            data[1] = u8(ts.s);
+
+        } else {
+
+            // Last block: Byte count
+            data[0] = 0;
+            data[1] = u8(written);
+        }
     }
 
     assert(size == 0);
 }
 
-/*
-BlockNr
-FileSystem::newUserDirBlock(const PETName<16> &name)
-{
-    BlockNr nr = allocator.allocate();
-
-    auto &node = fetch(nr).mutate();
-    node.init(FSBlockType::USERDIR);
-    node.setName(name);
-
-    return nr;
-}
-
-BlockNr
-FileSystem::newFileHeaderBlock(const PETName<16> &name)
-{
-    BlockNr nr = allocator.allocate();
-
-    auto &node = fetch(nr).mutate();
-    node.init(FSBlockType::FILEHEADER);
-    node.setName(name);
-
-    return nr;
-}
-
 void
-FileSystem::addFileListBlock(BlockNr at, BlockNr head, BlockNr prev)
+FileSystem::reclaim(BlockNr b)
 {
-    auto &node = fetch(at).mutate();
-    auto &prevNode = fetch(prev).mutate();
+    // Collect all blocks occupied by this file
+    auto blocks = collectDataBlocks(b);
 
-    node.init(FSBlockType::FILELIST);
-    node.setFileHeaderRef(head);
-
-    prevNode.setNextListBlockRef(at);
-}
-
-void
-FileSystem::addDataBlock(BlockNr at, BlockNr id, BlockNr head, BlockNr prev)
-{
-    auto &node = fetch(at).mutate();
-    auto &prevNode = fetch(prev).mutate();
-
-    node.init(FSBlockType::DATA);
-    node.setDataBlockNr(id);
-    node.setFileHeaderRef(head);
-
-    prevNode.setNextDataBlockRef(at);
-}
-
-isize
-FileSystem::addData(BlockNr nr, const u8 *buf, isize size)
-{
-    auto &block = fetch(nr).mutate();
-    isize count = 0;
-
-    switch (block.type) {
-
-        case FSBlockType::DATA:
-
-            count = std::min(traits.bsize, size);
-            std::memcpy(block.data(), buf, count);
-            break;
-
-        default:
-            break;
-    }
-
-    return count;
-}
-*/
-
-void
-FileSystem::reclaim(BlockNr fhb)
-{
-    /*
-    auto &node = fetch(fhb);
-
-    if (node.isDirectory()) {
-
-        // Remove user directory block
-        cache.erase(node.nr); allocator.markAsFree(node.nr);
-        return;
-    }
-
-    if (node.isFile()) {
-
-        // Collect all blocks occupied by this file
-        auto dataBlocks = collectDataBlocks(node.nr);
-        auto listBlocks = collectListBlocks(node.nr);
-
-        // Remove all blocks
-        cache.erase(node.nr); allocator.markAsFree(node.nr);
-        for (auto &it : dataBlocks) { cache.erase(it); allocator.markAsFree(it); }
-        for (auto &it : listBlocks) { cache.erase(it); allocator.markAsFree(it); }
-        return;
-    }
-
-    throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY);
-    */
+    // Remove all blocks
+    for (auto &it : blocks) { cache.erase(it); allocator.markAsFree(it); }
 }
 
 vector<BlockNr>
@@ -524,16 +462,6 @@ FileSystem::collect(const FSBlock &node, BlockIterator succ) const noexcept
     return result;
 }
 
-void
-FileSystem::chainBlocks(TSLink from, TSLink to)
-{
-    auto &block = fetch(from).mutate();
-    auto *data  = block.data();
-
-    data[0] = u8(to.t);
-    data[1] = u8(to.s);
-}
-
 std::vector<BlockNr>
 FileSystem::collect(const BlockNr nr, BlockIterator succ) const noexcept
 {
@@ -554,81 +482,5 @@ FileSystem::collect(const BlockNr nr, BlockIterator succ) const noexcept
 
     return result;
 }
-
-/*
-std::vector<const FSBlock *>
-FileSystem::collectDataBlocks(const FSBlock &node) const
-{
-    return collect(node, [&](const FSBlock *node) {
-        return tryFetch(node->tsLink());
-    });
-}
-
-std::vector<const FSBlock *>
-FileSystem::collectListBlocks(const FSBlock &node) const
-{
-    std::vector<const FSBlock *> result;
-
-    if (auto *ptr = node.getNextListBlock()) {
-        result = collect(*ptr, [&](auto *block) { return block->getNextListBlock(); });
-    }
-    return result;
-}
-
-std::vector<BlockNr>
-FileSystem::collectListBlocks(const BlockNr ref) const
-{
-    std::vector<BlockNr> result;
-
-    if (auto *ptr = tryFetch(ref)) {
-        for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
-    }
-    return result;
-}
-
-std::vector<BlockNr>
-FileSystem::collectHashedBlocks(BlockNr ref, isize bucket) const
-{
-    std::vector<BlockNr> result;
-
-    if (auto *ptr = tryFetch(ref)) {
-        for (auto &it: collectHashedBlocks(*ptr, bucket)) result.push_back(it->nr);
-    }
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
-{
-    auto first = node.getHashRef((u32)bucket);
-    if (auto *ptr = tryFetch(first, { FSBlockType::USERDIR, FSBlockType::FILEHEADER }); ptr) {
-        return collect(*ptr, [&](auto *p) { return p->getNextHashBlock(); });
-    } else {
-        return {};
-    }
-}
-
-std::vector<BlockNr>
-FileSystem::collectHashedBlocks(BlockNr ref) const
-{
-    std::vector<BlockNr> result;
-    if (auto *ptr = tryFetch(ref)) {
-        for (auto &it: collectHashedBlocks(*ptr)) result.push_back(it->nr);
-    }
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::collectHashedBlocks(const FSBlock &node) const
-{
-    std::vector<const FSBlock *> result;
-
-    // Walk through all hash table buckets in reverse order
-    for (isize i = (isize)node.hashTableSize() - 1; i >= 0; i--) {
-        for (auto &it : collectHashedBlocks(node, i)) result.push_back(it);
-    }
-    return result;
-}
-*/
 
 }

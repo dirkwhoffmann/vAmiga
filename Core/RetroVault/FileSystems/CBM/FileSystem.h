@@ -296,7 +296,7 @@ public:
     void writeDir(const vector<FSDirEntry> &dir);
 
     // Returns the number of directory items
-    isize numItems() const { return isize(readDir().size()); }
+    isize numItems() const;
 
     // Looks up a specific directory item
     optional<BlockNr> searchdir(BlockNr at, const PETName<16> &name) const;
@@ -392,7 +392,7 @@ private:
     vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const noexcept;
 
     // Add a TS link from the first block to the second
-    void chainBlocks(TSLink from, TSLink to);
+    // void chainBlocks(TSLink from, TSLink to);
 
     
     //
