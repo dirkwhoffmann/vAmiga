@@ -38,6 +38,35 @@ FileSystem::tryFetch(TSLink ts) const noexcept
     return nullptr;
 }
 
+const FSBlock *
+FileSystem::tryFetch(TSLink ts, FSBlockType t) const noexcept
+{
+    if (auto b = traits.blockNr(ts))
+        return tryFetch(*b, t);
+
+    return nullptr;
+}
+
+const FSBlock &
+FileSystem::fetch(TSLink ts) const
+{
+    if (auto b = traits.blockNr(ts))
+        return fetch(*b);
+
+    throw FSError(FSError::FS_OUT_OF_RANGE,
+                  "{" + std::to_string(ts.t) + ":" + std::to_string(ts.s) + "}");
+}
+
+const FSBlock &
+FileSystem::fetch(TSLink ts, FSBlockType t) const
+{
+    if (auto b = traits.blockNr(ts))
+        return fetch(*b, t);
+
+    throw FSError(FSError::FS_OUT_OF_RANGE,
+                  "{" + std::to_string(ts.t) + ":" + std::to_string(ts.s) + "}");
+}
+
 void
 FileSystem::flush()
 {

@@ -1726,12 +1726,13 @@ FSBlock::extractData(Buffer<u8> &buf) const
     // Only call this function for file header blocks
     if (type != FSBlockType::FILEHEADER) throw FSError(FSError::FS_NOT_A_FILE);
 
-    isize bytesRemaining = getFileSize();
+    // isize bytesRemaining = getFileSize();
     isize bytesTotal = 0;
 
+    /*
     buf.init(bytesRemaining);
 
-    for (auto &it : fs->collectDataBlocks(*this)) {
+    for (auto &it : fs->collectDataBlocks(this->nr)) {
 
         isize bytesWritten = it->writeData(buf, bytesTotal, bytesRemaining);
         bytesTotal += bytesWritten;
@@ -1741,6 +1742,7 @@ FSBlock::extractData(Buffer<u8> &buf) const
     if (bytesRemaining != 0) {
         logwarn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
+    */
 
     return bytesTotal;
 

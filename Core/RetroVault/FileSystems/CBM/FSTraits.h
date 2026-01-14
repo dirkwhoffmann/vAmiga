@@ -107,7 +107,8 @@ struct FSTraits {
     //
 
     bool nextBlock(BlockNr b, BlockNr *nb) const;
-    TSLink nextBlockRef(TSLink b) const;
+    TSLink nextBlockRef(TSLink ts) const;
+    TSLink nextBlockRef(BlockNr b) const;
 };
 
 }

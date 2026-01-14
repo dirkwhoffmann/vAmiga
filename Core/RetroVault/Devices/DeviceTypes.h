@@ -37,6 +37,13 @@ struct TSLink
     SectorNr s;
 };
 
+constexpr bool operator==(const TSLink &a, const TSLink &b) noexcept {
+    return a.t == b.t && a.s == b.s;
+}
+constexpr bool operator!=(const TSLink &a, const TSLink &b) noexcept {
+    return !(a == b);
+}
+
 
 //
 // Constants

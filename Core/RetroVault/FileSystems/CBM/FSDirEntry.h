@@ -30,6 +30,7 @@ struct FSDirEntry
     u8 fileSizeLo;        // $1E
     u8 fileSizeHi;        // $1F
 
+    FSDirEntry();
     FSDirEntry(std::span<const u8> data);
 
     // Initializes this entry

@@ -232,7 +232,7 @@ PosixAdapter::create(const fs::path &path)
     auto node = fs.seek(parent);
 
     // Create file
-    auto fhb = fs.createFile(node, PETName<16>(name));
+    auto fhb = fs.createFile(PETName<16>(name));
 
     // Create meta info
     auto &info = ensureMeta(fhb);

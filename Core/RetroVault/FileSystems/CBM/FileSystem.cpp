@@ -30,19 +30,7 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     // Derive persistant file system properties
     traits.init(cache.predictDOS(vol), vol.capacity());
 
-    // Predict the file system
-    /*
-    traits.dos = cache.predictDOS(vol);
-
-    // Copy layout parameters
-    traits.blocks   = layout.numBlocks;
-    traits.bytes    = layout.numBlocks * layout.bsize;
-    traits.bsize    = layout.bsize;
-    rootBlock       = layout.rootBlock;
-    */
-
     if constexpr (debug::FS_DEBUG) dumpState();
-
     loginfo(FS_DEBUG, "Success\n");
 }
 
@@ -116,7 +104,7 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
     os << dec(st.freeBlocks);
     os << " (" <<  std::fixed << std::setprecision(2) << fill << "%)" << std::endl;
     os << tab("BAM");
-    os << dec(bamBlock) << std::endl;
+    os << dec(bam()) << std::endl;
 }
 
 void
@@ -132,13 +120,13 @@ FileSystem::isFormatted() const noexcept
     if (traits.dos == FSFormat::NODOS) return false;
 
     // Check if the BAM is present
-    return fetch(bamBlock).is(FSBlockType::BAM);
+    return fetch({18,0}).is(FSBlockType::BAM);
 }
 
 FSStat
 FileSystem::stat() const noexcept
 {
-    auto &bam = fetch(bamBlock);
+    auto &bam = fetch({18,0});
 
     FSStat result = {
 
@@ -158,14 +146,24 @@ FileSystem::stat() const noexcept
 FSAttr
 FileSystem::attr(const FSDirEntry &entry) const
 {
-    auto blocks = collectDataBlocks(0);
-    FSAttr result = {
+    auto blocks     = collectDataBlocks(entry);
+    isize numBlocks = isize(blocks.size());
+    isize numBytes  = 0;
 
-        .size   = 0,
-        .blocks = 0,
+    if (numBlocks) {
+
+        // All blocks except the last one contain 254 bytes
+        numBytes = (numBlocks - 1) * 254;
+
+        // Add the byte count of the last block (encoded in the sector field)
+        numBytes += fetch(*blocks.end()).data()[1];
+    }
+
+    return FSAttr {
+
+        .size   = numBytes,
+        .blocks = numBlocks
     };
-
-    return result;
 }
 
 FSAttr

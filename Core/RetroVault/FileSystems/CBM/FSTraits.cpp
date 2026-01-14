@@ -39,6 +39,8 @@ FSTraits::init(FSFormat format, isize blocks)
         default:
             throw FSError(FSError::FS_WRONG_CAPACITY);
     }
+
+    // this-> = blockNr(18, 0);
 }
 
 void
@@ -143,6 +145,12 @@ FSTraits::blockNr(TSLink ts) const
     }
 
     return result;
+}
+
+TSLink
+FSTraits::nextBlockRef(BlockNr b) const
+{
+    return nextBlockRef(tsLink(b));
 }
 
 TSLink

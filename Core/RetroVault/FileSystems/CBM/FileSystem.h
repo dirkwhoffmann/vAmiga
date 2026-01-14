@@ -131,7 +131,7 @@ class FileSystem : public Loggable {
     // Node layer
 
     // Location of the BAM (always at 18:0)
-    BlockNr bamBlock = 0;
+    // BlockNr bamBlock = 0;
 
     // Location of the root block
     BlockNr rootBlock = 0;
@@ -245,18 +245,18 @@ public:
     // Returns a pointer to a block with read permissions (maybe null)
     const FSBlock *tryFetch(BlockNr nr) const noexcept { return cache.tryFetch(nr); }
     const FSBlock *tryFetch(BlockNr nr, FSBlockType t) const noexcept { return cache.tryFetch(nr, t); }
-    const FSBlock *tryFetch(BlockNr nr, vector<FSBlockType> ts) const noexcept { return cache.tryFetch(nr, ts); }
+    const FSBlock *tryFetch(TSLink ts) const noexcept;
+    const FSBlock *tryFetch(TSLink ts, FSBlockType t) const noexcept;
 
     // Returns a reference to a block with read permissions (may throw)
     const FSBlock &fetch(BlockNr nr) const { return cache.fetch(nr); }
     const FSBlock &fetch(BlockNr nr, FSBlockType t) const { return cache.fetch(nr, t); }
-    const FSBlock &fetch(BlockNr nr, vector<FSBlockType> ts) const { return cache.fetch(nr, ts); }
+    const FSBlock &fetch(TSLink ts) const;
+    const FSBlock &fetch(TSLink ts, FSBlockType t) const;
 
     // Convenience wrapper
-    const FSBlock *tryFetch(TSLink ts) const noexcept;
-
-    const FSBlock *tryFetchBAM() const noexcept { return tryFetch(bamBlock, FSBlockType::BAM); }
-    const FSBlock &fetchBAM() const { return fetch(bamBlock, FSBlockType::BAM); }
+    const FSBlock *tryFetchBAM() const noexcept { return tryFetch({18,0}, FSBlockType::BAM); }
+    const FSBlock &fetchBAM() const { return fetch({18,0}, FSBlockType::BAM); }
 
     // Writes back dirty cache blocks to the block device
     void flush();
@@ -295,33 +295,27 @@ public:
     // Returns the number of directory items
     isize numItems() const { return isize(readDir().size()); }
 
-    // Returns the number of items in a directory or the items themselves
-    [[deprecated]] isize numItems(BlockNr at) const;
-    [[deprecated]] vector<BlockNr> getItems(BlockNr at) const;
-
     // Looks up a specific directory item
     optional<BlockNr> searchdir(BlockNr at, const PETName<16> &name) const;
     vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
 
     // Creates a new directory entry
-    void link(BlockNr at, BlockNr fhb);
+    // void link(BlockNr at, BlockNr fhb);
+    FSDirEntry *link(BlockNr b);
+    FSDirEntry *link(const TSLink &ts);
 
     // Removes an existing directory entry
-    void unlink(BlockNr fhb);
+    void unlink(BlockNr b);
 
 private:
 
+    FSDirEntry *getOrCreateNextFreeDirEntry();
+    
     // Follows a chain of TS links
-    vector<BlockNr> collectLinkedBlocks(BlockNr b) const;
+//    vector<BlockNr> collectLinkedBlocks(BlockNr b) const;
 
     // Collects all directory blocks
-    vector<BlockNr> collectDirBlocks() const;
-
-    // Adds a hash-table entry for a given item
-    [[deprecated]] void addToHashTable(BlockNr parent, BlockNr ref);
-
-    // Removes the hash-table entry for a given item
-    [[deprecated]] void deleteFromHashTable(BlockNr item);
+//    vector<BlockNr> collectDirBlocks() const;
 
 
     //
@@ -331,10 +325,10 @@ private:
 public:
 
     // Creates a new file
-    BlockNr createFile(BlockNr at, const PETName<16> &name);
-    BlockNr createFile(BlockNr at, const PETName<16> &name, const u8 *buf, isize size);
-    BlockNr createFile(BlockNr at, const PETName<16> &name, const Buffer<u8> &buf);
-    BlockNr createFile(BlockNr at, const PETName<16> &name, const string &str);
+    BlockNr createFile(const PETName<16> &name);
+    BlockNr createFile(const PETName<16> &name, const u8 *buf, isize size);
+    BlockNr createFile(const PETName<16> &name, const Buffer<u8> &buf);
+    BlockNr createFile(const PETName<16> &name, const string &str);
 
     // Delete a file
     void rm(BlockNr at);
@@ -361,10 +355,7 @@ public:
 private:
 
     // Main replace function
-    BlockNr replace(BlockNr fhb,
-                    const u8 *buf, isize size,
-                    vector<BlockNr> listBlocks,
-                    vector<BlockNr> dataBlocks);
+    void replace(vector<BlockNr> blocks, const u8 *buf, isize size);
 
 
     //
@@ -379,15 +370,15 @@ public:
 private:
 
     // Creates a new block of a certain kind
-    BlockNr newUserDirBlock(const PETName<16> &name);
-    BlockNr newFileHeaderBlock(const PETName<16> &name);
+    // BlockNr newUserDirBlock(const PETName<16> &name);
+    // BlockNr newFileHeaderBlock(const PETName<16> &name);
 
     // Adds a new block of a certain kind
-    void addFileListBlock(BlockNr at, BlockNr head, BlockNr prev);
-    void addDataBlock(BlockNr at, BlockNr id, BlockNr head, BlockNr prev);
+    // void addFileListBlock(BlockNr at, BlockNr head, BlockNr prev);
+    // void addDataBlock(BlockNr at, BlockNr id, BlockNr head, BlockNr prev);
 
     // Adds bytes to a data block
-    isize addData(BlockNr nr, const u8 *buf, isize size);
+    // isize addData(BlockNr nr, const u8 *buf, isize size);
 
 
     //
@@ -396,26 +387,18 @@ private:
 
 public:
 
+    vector<BlockNr> collectDirBlocks() const;
     vector<BlockNr> collectDataBlocks(BlockNr nr) const;
-
-
-    [[deprecated]] vector<BlockNr> collectListBlocks(BlockNr nr) const;
-    [[deprecated]] vector<BlockNr> collectHashedBlocks(BlockNr nr, isize bucket) const;
-    [[deprecated]] vector<BlockNr> collectHashedBlocks(BlockNr nr) const;
+    vector<BlockNr> collectDataBlocks(const FSDirEntry &entry) const;
 
 private:
 
-    // Follows a linked list and collects all blocks
+    // Block iterator
     using BlockIterator = std::function<const FSBlock *(const FSBlock *)>;
-    vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const;
-    vector<BlockNr> collect(const BlockNr nr, BlockIterator succ) const;
 
-    // Collects blocks of a certain type
-    vector<const FSBlock *> collectDataBlocks(const FSBlock &block) const;
-
-    [[deprecated]] vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
-    [[deprecated]] vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
-    [[deprecated]] vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
+    // Follows a linked list and collects all blocks
+    vector<BlockNr> collect(const BlockNr nr, BlockIterator succ) const noexcept;
+    vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const noexcept;
 
 
     //
@@ -430,7 +413,7 @@ public:
 
     // Returns the root of the directory tree
     BlockNr root() const { return rootBlock; }
-    BlockNr bam() const { return bamBlock; }
+    BlockNr bam() const { return *traits.blockNr({18,0}); }
 
     // Returns the locations of the bitmap and bitmap extension blocks
     const vector<BlockNr> &getBmBlocks() const { return bmBlocks; }

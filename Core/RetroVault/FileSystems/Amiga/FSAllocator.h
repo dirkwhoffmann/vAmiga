@@ -79,9 +79,9 @@ public:
     [[nodiscard]] isize numAllocated() const noexcept;
 
     // Marks a block as allocated or free
-    void markAsAllocated(BlockNr nr) { setAllocationBit(nr, 0); }
-    void markAsFree(BlockNr nr) { setAllocationBit(nr, 1); }
-    void setAllocationBit(BlockNr nr, bool value);
+    void markAsAllocated(BlockNr nr) { setAllocBit(nr, 0); }
+    void markAsFree(BlockNr nr) { setAllocBit(nr, 1); }
+    void setAllocBit(BlockNr nr, bool value);
 
 private:
 

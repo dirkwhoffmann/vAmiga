@@ -383,7 +383,7 @@ FSAllocator::serializeBitmap() const
 }
 
 void
-FSAllocator::setAllocationBit(BlockNr nr, bool value)
+FSAllocator::setAllocBit(BlockNr nr, bool value)
 {
     isize byte, bit;
 

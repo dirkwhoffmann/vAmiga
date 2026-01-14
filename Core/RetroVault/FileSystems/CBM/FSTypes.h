@@ -27,7 +27,7 @@ enum class FSFormat : long
 struct FSFormatEnum : Reflectable<FSFormatEnum, FSFormat>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSFormat::NODOS);
+    static constexpr long maxVal = long(FSFormat::CBM);
     
     static const char *_key(FSFormat value)
     {

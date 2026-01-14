@@ -117,113 +117,50 @@ FileSystem::killVirus()
 }
 */
 
-isize
-FileSystem::numItems(BlockNr at) const
-{
-    return (isize)collectHashedBlocks(fetch(at)).size();
-}
-
-vector<BlockNr>
-FileSystem::getItems(BlockNr at) const
-{
-    // Gather all items
-    auto items = collectHashedBlocks(fetch(at));
-
-    // Return block numbers
-    std::vector<BlockNr> result;
-    for (auto &it : items) result.push_back(it->nr);
-    return result;
-}
-
 optional<BlockNr>
 FileSystem::searchdir(BlockNr at, const PETName<16> &name) const
 {
-    return {};
-    /*
-    std::unordered_set<BlockNr> visited;
+    for (auto &entry: readDir()) {
 
-    // Only proceed if a hash table is present
-    auto &top = fetch(at);
-    if (!top.hasHashTable()) return {};
-
-    // Compute the table position and read the item
-    u32 hash = name.hashValue(traits.dos) % top.hashTableSize();
-    BlockNr ref = top.getHashRef(hash);
-
-    // Traverse the linked list until the item has been found
-    while (ref && visited.find(ref) == visited.end())  {
-
-        auto *block = tryFetch(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
-        if (block == nullptr) break;
-
-        if (block->isNamed(name)) return block->nr;
-
-        visited.insert(ref);
-        ref = block->getNextHashRef();
+        if (entry.getName() == name)
+            return traits.blockNr(entry.firstBlock());
     }
-
     return {};
-    */
 }
-
-/*
-BlockNr
-FileSystem::mkdir(BlockNr at, const FSName &name)
-{
-    require.directory(at);
-
-    // Error out if the file already exists
-    if (searchdir(at, name)) throw(FSError(FSError::FS_EXISTS, name.cpp_str()));
-
-    auto udb = newUserDirBlock(name);
-    fetch(udb).mutate().setParentDirRef(at);
-    addToHashTable(at, udb);
-
-    return udb;
-}
-
-void
-FileSystem::rmdir(BlockNr at)
-{
-    require.emptyDirectory(at);
-
-    deleteFromHashTable(at);
-    reclaim(at);
-}
-*/
 
 vector<BlockNr>
 FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
 {
-    return {};
-    /*
-    // Start with all items
-    auto items = getItems(at);
+    vector<BlockNr> result;
 
-    // Filter out non-matching items
-    auto unmatch = [&](const BlockNr nr) { return !pattern.match(fetch(nr).name()); };
-    items.erase(std::remove_if(items.begin(), items.end(), unmatch), items.end());
+    for (auto &entry: readDir()) {
 
-    return items;
-    */
+        if (pattern.match(entry.getName().str())) {
+            if (auto b = traits.blockNr(entry.firstBlock())) {
+                result.push_back(*b);
+            }
+        }
+    }
+    return result;
 }
 
-void
-FileSystem::link(BlockNr at, BlockNr fhb)
+FSDirEntry *
+FileSystem::link(BlockNr b)
 {
-    /*
-    require.directory(at);
+    return link(traits.tsLink(b));
+}
 
-    // Read the file heade block
-    auto &fhbBlk = fetch(fhb);
+FSDirEntry *
+FileSystem::link(const TSLink &ts)
+{
+    if (auto *entry = getOrCreateNextFreeDirEntry()) {
 
-    // Only proceed if the file does not yet exist
-    if (searchdir(at, fhbBlk.name())) throw FSError(FSError::FS_EXISTS);
+        entry->firstDataTrack  = u8(ts.t);
+        entry->firstDataSector = u8(ts.s);
+        return entry;
+    }
 
-    // Wire up
-    fhbBlk.mutate().setParentDirRef(at);
-    addToHashTable(at, fhb);
-    */
+    return nullptr;
 }
 
 void
@@ -237,6 +174,46 @@ FileSystem::unlink(BlockNr node)
     */
 }
 
+FSDirEntry *
+FileSystem::getOrCreateNextFreeDirEntry()
+{
+    // The directory starts on track 18, sector 1
+    auto *ptr = tryFetch(TSLink{18,1});
+
+    // A disk can hold up to 144 files
+    for (int i = 0; ptr && i < 144; i++) {
+
+        FSDirEntry *entry = (FSDirEntry *)ptr->data() + (i % 8);
+
+        // Return if this entry is unused
+        if (entry->isEmpty()) return entry;
+
+        // Keep on searching in the current block if slots remain
+        if (i % 8 != 7) continue;
+
+        // Keep on searching in the next directory block if it already exists
+        if (auto *next = tryFetch(ptr->tsLink())) {
+            ptr = next;
+            continue;
+        }
+
+        // Create a new directory block and link to it
+        TSLink ts = traits.nextBlockRef(ptr->nr);
+        if (auto *next = tryFetch(ts)) {
+
+            next->mutate().type = FSBlockType::USERDIR;
+            memset(ptr->mutate().data(), 0, 256);
+            ptr->mutate().data()[0] = (u8)ts.t;
+            ptr->mutate().data()[1] = (u8)ts.s;
+            ptr = next;
+            continue;
+        }
+    }
+
+    return nullptr;
+}
+
+/*
 vector<BlockNr>
 FileSystem::collectLinkedBlocks(BlockNr b) const
 {
@@ -266,6 +243,7 @@ FileSystem::collectDirBlocks() const
 {
     return collectLinkedBlocks(*traits.blockNr(18,1));
 }
+*/
 
 vector<FSDirEntry>
 FileSystem::readDir() const 
@@ -294,109 +272,43 @@ FileSystem::readDir() const
     return result;
 }
 
-void
-FileSystem::addToHashTable(BlockNr parent, BlockNr ref)
+BlockNr
+FileSystem::createFile(const PETName<16> &name)
 {
-    auto &pp = fetch(parent);
-    if (!pp.hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
-
-    auto &pr = fetch(ref);
-    if (!pr.isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
-
-    // Read the linked list from the proper hash-table bucket
-    u32 hash = pr.hashValue() % pp.hashTableSize();
-    auto chain = collectHashedBlocks(pp.nr, hash);
-
-    if (chain.empty()) {
-
-        // If the bucket is empty, make the reference the first entry
-        pp.mutate().setHashRef(hash, ref);
-        pp.mutate().updateChecksum();
-
-    } else {
-
-        // Otherwise, put the reference at the end of the linked list
-        auto &back = fetch(chain.back());
-        back.mutate().setNextHashRef(ref);
-        back.mutate().updateChecksum();
-    }
-}
-
-void
-FileSystem::deleteFromHashTable(BlockNr ref)
-{
-    auto &pr = fetch(ref);
-    if (!pr.isHashable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
-
-    auto &pp = fetch(pr.getParentDirRef());
-    if (!pp.hasHashTable()) throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
-
-    // Read the linked list from the proper hash-table bucket
-    u32 hash = pr.hashValue() % pp.hashTableSize();
-    auto chain = collectHashedBlocks(pp.nr, hash);
-
-    // Find the element
-    if (auto it = std::find(chain.begin(), chain.end(), ref); it != chain.end()) {
-
-        auto pred = it != chain.begin() ? *(it - 1) : 0;
-        auto succ = (it + 1) != chain.end() ? *(it + 1) : 0;
-
-        // Remove the element from the list
-        if (!pred) {
-
-            pp.mutate().setHashRef(hash, succ);
-            pp.mutate().updateChecksum();
-
-        } else {
-
-            fetch(pred).mutate().setNextHashRef(succ);
-            fetch(pred).mutate().updateChecksum();
-        }
-    }
+    return createFile(name, nullptr, 0);
 }
 
 BlockNr
-FileSystem::createFile(BlockNr at, const PETName<16> &name)
+FileSystem::createFile(const PETName<16> &name, const u8 *buf, isize size)
 {
-    require.directory(at);
-
-    auto  fhb = newFileHeaderBlock(name);
-
-    try {
-
-        link(at, fhb);
-        return fhb;
-
-    } catch(...) {
-
-        allocator.deallocateBlock(fhb);
-        throw;
-    }
-}
-
-BlockNr
-FileSystem::createFile(BlockNr at, const PETName<16> &name, const u8 *buf, isize size)
-{
-    // Create an empty file
-    auto fhb = createFile(at, name);
+    // Allocate required blocks
+    auto blocks = allocator.allocate(std::min(isize(1), (size + 253) / 254));
+    auto first  = traits.tsLink(blocks[0]);
 
     // Add data
-    replace(fhb, buf, size);
+    if (buf) replace(blocks, buf, size);
 
-    // Return the number of the file header block
-    return fhb;
+    // Create a directory entry
+    FSDirEntry entry;
+    entry.firstDataTrack  = u8(first.t);
+    entry.firstDataSector = u8(first.s);
+
+    // Add the file to the directory
+    // TODO
+
+    return blocks[0];
 }
 
 BlockNr
-FileSystem::createFile(BlockNr at, const PETName<16> &name, const Buffer<u8> &buf)
+FileSystem::createFile(const PETName<16> &name, const Buffer<u8> &buf)
 {
-    return createFile(at, name, buf.ptr, buf.size);
+    return createFile(name, buf.ptr, buf.size);
 }
 
 BlockNr
-FileSystem::createFile(BlockNr top, const PETName<16> &name, const string &str)
+FileSystem::createFile(const PETName<16> &name, const string &str)
 {
-    return createFile(top, name, (const u8 *)str.c_str(), (isize)str.size());
+    return createFile(name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 void
@@ -485,14 +397,21 @@ FileSystem::resize(BlockNr at, isize size)
 void
 FileSystem::replace(BlockNr at, const u8 *buf, isize size)
 {
-    /*
     // Collect all blocks occupied by this file
-    auto listBlocks = collectListBlocks(at);
-    auto dataBlocks = collectDataBlocks(at);
+    auto blocks = collectDataBlocks(at);
+
+    // Compute how many blocks we need
+    auto needed = allocator.requiredBlocks(size);
+
+    // Allocate additional blocks if necessary
+    if (needed > isize(blocks.size())) {
+
+        auto more = allocator.allocate(needed - isize(blocks.size()));
+        blocks.insert(blocks.end(), more.begin(), more.end());
+    }
 
     // Update the file contents
-    replace(at, buf, size, listBlocks, dataBlocks);
-    */
+    replace(blocks, buf, size);
 }
 
 void
@@ -507,59 +426,22 @@ FileSystem::replace(BlockNr at, const string &str)
     replace(at, (const u8 *)str.c_str(), (isize)str.size());
 }
 
-BlockNr
-FileSystem::replace(BlockNr fhb,
-                    const u8 *buf, isize size,
-                    std::vector<BlockNr> listBlocks,
-                    std::vector<BlockNr> dataBlocks)
+void
+FileSystem::replace(std::vector<BlockNr> blocks, const u8 *buf, isize size)
 {
-    auto &fhbNode = fetch(fhb).mutate();
+    for (usize i = 0; i < blocks.size() && size > 0; ++i) {
 
-    // Number of data block references held in a file header or list block
-    const isize numRefs = ((traits.bsize / 4) - 56);
-
-    // Start with a clean reference area
-    fhbNode.setNextListBlockRef(0);
-    fhbNode.setNextDataBlockRef(0);
-    for (isize i = 0; i < numRefs; i++) fhbNode.setDataBlockRef(i, 0);
-
-    // Set file size
-    fhbNode.setFileSize(u32(size));
-
-    // Allocate blocks
-    allocator.allocateFileBlocks(size, listBlocks, dataBlocks);
-
-    for (usize i = 0; i < listBlocks.size(); i++) {
-
-        // Add a list block
-        addFileListBlock(listBlocks[i], fhb, i == 0 ? fhb : listBlocks[i-1]);
-    }
-
-    for (isize i = 0; i < (isize)dataBlocks.size(); i++) {
-
-        // Add a data block
-        addDataBlock(dataBlocks[i], i + 1, fhb, i == 0 ? fhb : dataBlocks[i-1]);
-
-        // Determine the list block managing this data block
-        auto &lb = fetch((i < numRefs) ? fhb : listBlocks[i / numRefs - 1]);
-
-        // Link the data block
-        lb.mutate().addDataBlockRef(dataBlocks[0], dataBlocks[i]);
-
-        // Add data bytes
-        isize written = addData(dataBlocks[i], buf, size);
+        auto &block = fetch(blocks[i]).mutate();
+        auto written = std::min(size, isize(254));
+        std::memcpy(block.data(), buf, written);
         buf += written;
         size -= written;
     }
 
-    // Rectify checksums
-    for (auto &it : listBlocks) { fetch(it).mutate().updateChecksum(); }
-    for (auto &it : dataBlocks) { fetch(it).mutate().updateChecksum(); }
-    fhbNode.updateChecksum();
-
-    return fhb;
+    assert(size == 0);
 }
 
+/*
 BlockNr
 FileSystem::newUserDirBlock(const PETName<16> &name)
 {
@@ -629,6 +511,7 @@ FileSystem::addData(BlockNr nr, const u8 *buf, isize size)
 
     return count;
 }
+*/
 
 void
 FileSystem::reclaim(BlockNr fhb)
@@ -660,8 +543,33 @@ FileSystem::reclaim(BlockNr fhb)
     */
 }
 
+vector<BlockNr>
+FileSystem::collectDirBlocks() const
+{
+    return collect(*traits.blockNr(18, 1), [&](const FSBlock *node) {
+        return tryFetch(node->tsLink());
+    });
+}
+
+vector<BlockNr>
+FileSystem::collectDataBlocks(BlockNr ref) const
+{
+    return collect(ref, [&](const FSBlock *node) {
+        return tryFetch(node->tsLink());
+    });
+}
+
+vector<BlockNr>
+FileSystem::collectDataBlocks(const FSDirEntry &entry) const
+{
+    if (auto b = traits.blockNr(entry.firstBlock()))
+        return collectDataBlocks(*b);
+
+    return {};
+}
+
 std::vector<const FSBlock *>
-FileSystem::collect(const FSBlock &node, BlockIterator succ) const
+FileSystem::collect(const FSBlock &node, BlockIterator succ) const noexcept
 {
     std::vector<const FSBlock *> result;
     std::unordered_set<BlockNr> visited;
@@ -682,7 +590,7 @@ FileSystem::collect(const FSBlock &node, BlockIterator succ) const
 }
 
 std::vector<BlockNr>
-FileSystem::collect(const BlockNr nr, BlockIterator succ) const
+FileSystem::collect(const BlockNr nr, BlockIterator succ) const noexcept
 {
     std::vector<BlockNr> result;
     std::unordered_set<BlockNr> visited;
@@ -702,44 +610,13 @@ FileSystem::collect(const BlockNr nr, BlockIterator succ) const
     return result;
 }
 
+/*
 std::vector<const FSBlock *>
 FileSystem::collectDataBlocks(const FSBlock &node) const
 {
-    std::vector<const FSBlock *> result;
-
-    /*
-    // Gather all blocks containing data block references
-    auto blocks = collectListBlocks(node);
-    blocks.push_back(&node);
-
-    // Setup the result vector
-    std::vector<const FSBlock *> result;
-    result.reserve(blocks.size() * node.getMaxDataBlockRefs());
-
-    // Crawl through blocks and collect all data block references
-    for (auto &it : blocks) {
-
-        isize num = std::min(it->getNumDataBlockRefs(), it->getMaxDataBlockRefs());
-        for (isize i = 0; i < num; i++) {
-            if (auto *ptr = it->getDataBlock(i); ptr) {
-                result.push_back(ptr);
-            }
-        }
-    }
-    */
-
-    return result;
-}
-
-std::vector<BlockNr>
-FileSystem::collectDataBlocks(BlockNr ref) const
-{
-    std::vector<BlockNr> result;
-
-    if (auto *ptr = tryFetch(ref)) {
-        for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
-    }
-    return result;
+    return collect(node, [&](const FSBlock *node) {
+        return tryFetch(node->tsLink());
+    });
 }
 
 std::vector<const FSBlock *>
@@ -807,5 +684,6 @@ FileSystem::collectHashedBlocks(const FSBlock &node) const
     }
     return result;
 }
+*/
 
 }

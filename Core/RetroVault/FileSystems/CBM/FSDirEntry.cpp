@@ -14,6 +14,11 @@
 
 namespace retro::vault::cbm {
 
+FSDirEntry::FSDirEntry()
+{
+    memset(&nextDirTrack, 0, sizeof(*this));
+}
+
 FSDirEntry::FSDirEntry(std::span<const u8> data)
 {
     assert(sizeof(*this) == data.size());

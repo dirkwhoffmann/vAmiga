@@ -43,16 +43,10 @@ FSAllocator::requiredFileListBlocks(isize fileSize) const noexcept
 isize
 FSAllocator::requiredBlocks(isize fileSize) const noexcept
 {
-    isize numDataBlocks = requiredDataBlocks(fileSize);
-    isize numFileListBlocks = requiredFileListBlocks(fileSize);
-
-    loginfo(FS_DEBUG, "Required file header blocks : %d\n",  1);
-    loginfo(FS_DEBUG, "       Required data blocks : %ld\n", numDataBlocks);
-    loginfo(FS_DEBUG, "  Required file list blocks : %ld\n", numFileListBlocks);
-
-    return 1 + numDataBlocks + numFileListBlocks;
+    return (fileSize + 253) / 254;
 }
 
+/*
 bool
 FSAllocator::allocatable(isize count) const noexcept
 {
@@ -71,83 +65,78 @@ FSAllocator::allocatable(isize count) const noexcept
 
     return true;
 }
+*/
 
 BlockNr
 FSAllocator::allocate()
 {
-    auto numBlocks = fs.blocks();
-    BlockNr i = ap;
+    if (auto blocks = allocate(1); !blocks.empty())
+        return blocks[0];
 
-    while (!fs.isEmpty(i)) {
-
-        if ((i = (i + 1) % numBlocks) == ap) {
-
-            loginfo(FS_DEBUG, "No more free blocks\n");
-            throw FSError(FSError::FS_OUT_OF_SPACE);
-        }
-    }
-
-    fs.fetch(i).mutate().init(FSBlockType::UNKNOWN);
-    markAsAllocated(i);
-    ap = (i + 1) % numBlocks;
-    return i;
+    throw FSError(FSError::FS_OUT_OF_SPACE);
 }
 
-void
-FSAllocator::allocate(isize count, std::vector<BlockNr> &result, std::vector<BlockNr> prealloc)
+std::vector<BlockNr>
+FSAllocator::allocate(isize count)
 {
-    /* Allocate multiple blocks and return them in `result`.
-     *
-     * Parameters:
-     *
-     * count    – number of blocks to allocate
-     * result   – vector to store the allocated blocks
-     * prealloc – optional list of pre-allocated blocks. If not empty, these
-     *            blocks are used first: the allocator moves blocks from
-     *            `prealloc` into `result` until `prealloc` is empty.
-     *            Remaining blocks (if any) are allocated normally.
-     *
-     * Notes:
-     *
-     * - The function does not modify `prealloc` outside of moving blocks.
-     * - Guarantees that `result` contains exactly `count` blocks upon return.
-     */
+    std::vector<BlockNr> result;
+    TSLink ts = ap;
 
-    // Step 1: Use pre-allocated blocks first
-    while (!prealloc.empty() && count > 0) {
-
-        result.push_back(prealloc.back());
-        prealloc.pop_back();
-        count--;
-    }
-
-    // Step 2: Allocate remaining blocks from free space
-    BlockNr i = ap;
+    // Gather 'count' free blocks
     while (count > 0) {
 
-        if (fs.isEmpty(i)) {
+        if (auto nr = traits.blockNr(ts); nr.has_value()) {
 
-            fs.fetch(i).mutate().type = FSBlockType::UNKNOWN;
-            result.push_back(i);
-            count--;
+            // Note this block if it is empty
+            if (fs.isEmpty(*nr)) {
+
+                result.push_back(*nr);
+                count--;
+            }
+
+            // Move to the next block
+            ts = advance(ts);
+            if (ts != ap) continue;
         }
-
-        // Move to the next block
-        i = (i + 1) % fs.blocks();
-
-        // Fail if we looped all the way and still need blocks
-        if (i == ap && count > 0) {
-
-            loginfo(FS_DEBUG, "No more free blocks\n");
-            throw FSError(FSError::FS_OUT_OF_SPACE);
-        }
+        throw FSError(FSError::FS_OUT_OF_SPACE);
     }
 
-    // Step 3: Mark all blocks as allocated
-    for (const auto &b : result) markAsAllocated(b);
+    // Allocate blocks
+     for (const auto &b : result) {
 
-    // Step 4: Advance allocation pointer
-    ap = i;
+        fs.fetch(b).mutate().type = FSBlockType::UNKNOWN;
+        markAsAllocated(b);
+    }
+
+    return result;
+}
+
+std::vector<BlockNr>
+FSAllocator::allocate(isize count, std::vector<BlockNr> prealloc)
+{
+    std::vector<BlockNr> result;
+     result.reserve(count);
+
+     // Step 1: Use pre-allocated blocks from the start
+     auto it = prealloc.begin();
+     while (it != prealloc.end() && count > 0) {
+
+         result.push_back(*it);
+         ++it;
+         --count;
+     }
+
+     // Step 2: Allocate remaining blocks from free space
+     if (count > 0) {
+
+         auto more = allocate(count);
+         result.insert(result.end(), more.begin(), more.end());
+     }
+
+     // Step 3: Free all unused preallocated blocks
+     for (; it != prealloc.end(); ++it) deallocateBlock(*it);
+
+     return result;
 }
 
 void
@@ -163,22 +152,54 @@ FSAllocator::deallocateBlocks(const std::vector<BlockNr> &nrs)
     for (BlockNr nr : nrs) { deallocateBlock(nr); }
 }
 
+TSLink
+FSAllocator::advance(TSLink ts)
+{
+    // Interleave patterns used to determine the next sector
+    static constexpr SectorNr next[5][21] = {
+
+        // Speed zone 0 - 3
+        { 10,11,12,13,14,15,16, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+        { 10,11,12,13,14,15,16,17, 1, 0, 2, 3, 4, 5, 6, 7, 8, 9 },
+        { 10,11,12,13,14,15,16,17,18, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+        { 10,11,12,13,14,15,16,17,18,19,20, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+
+        // Directory track
+        {  3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18, 0, 1, 2 }
+    };
+
+    if (!traits.isValidLink(ts)) return {0,0};
+
+    TrackNr t  = ts.t;
+    SectorNr s = ts.s;
+
+    if (t == 18) {
+
+        // Take care of the directory track
+        s = next[4][s];
+
+        // Return immediately if we've wrapped over (directory track is full)
+        if (s == 0) return {0,0};
+
+    } else {
+
+        // Take care of all other tracks
+        s = next[traits.speedZone(t)][s];
+
+        // Move to the next track if we've wrapped over
+        if (s == 0) t = t >= traits.numTracks() ? 1 : t == 17 ? 19 : t + 1;
+    }
+
+    assert(traits.isValidLink(TSLink{t,s}));
+    return TSLink{t,s};
+}
+
+/*
 void
 FSAllocator::allocateFileBlocks(isize bytes,
                                 std::vector<BlockNr> &listBlocks,
                                 std::vector<BlockNr> &dataBlocks)
 {
-    /* This function takes a file size and two lists:
-
-            listBlocks  – pre-allocated list blocks (extension blocks)
-            dataBlocks  – pre-allocated data blocks
-
-        It first determines how many blocks of each type are required to store
-        a file of the given size. If the caller provided more blocks than needed,
-        the surplus blocks are freed. If fewer blocks are provided, new blocks
-        are allocated and appended to the respective lists.
-    */
-
     auto freeSurplus = [&](std::vector<BlockNr> &blocks, usize count) {
 
         if (blocks.size() > count) {
@@ -239,20 +260,11 @@ FSAllocator::allocateFileBlocks(isize bytes,
         }
     }
 
-    /*
-    if (traits.ffs()) {
-
-        // Header block -> Data blocks -> All list block -> All remaining data blocks
-        ensureDataBlocks(refsInHeaderBlock);
-        ensureListBlocks(numListBlocks);
-        ensureDataBlocks(refsInListBlocks);
-    }
-    */
-
     // Rectify checksums
     for (auto &it : fs.getBmBlocks()) fs[it].mutate().updateChecksum();
     for (auto &it : fs.getBmExtBlocks()) fs[it].mutate().updateChecksum();
 }
+*/
 
 bool
 FSAllocator::isUnallocated(BlockNr nr) const noexcept
@@ -264,69 +276,36 @@ FSAllocator::isUnallocated(BlockNr nr) const noexcept
 
     // Locate the allocation bit in the bitmap block
     isize byte, bit;
-    auto *bm = locateAllocationBit(nr, &byte, &bit);
+    auto *bm = locateAllocBit(nr, &byte, &bit);
 
     // Read the bit
     return bm ? GET_BIT(bm->data()[byte], bit) : false;
 }
 
 const FSBlock *
-FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept
+FSAllocator::locateAllocBit(BlockNr nr, isize *byte, isize *bit) const noexcept
 {
-    assert(isize(nr) < traits.blocks);
-
-    auto &bmBlocks = fs.getBmBlocks();
-
-    // The first two blocks are always allocated and not part of the map
-    if (nr < 2) return nullptr;
-    nr -= 2;
-
-    // Locate the bitmap block which stores the allocation bit
-    isize bitsPerBlock = (traits.bsize - 4) * 8;
-    isize bmNr = nr / bitsPerBlock;
-
-    // Get the bitmap block
-    if (bmNr <= (isize)bmBlocks.size()) {
-        loginfo(FS_DEBUG, "Bitmap block index %ld for block %ld is out of range \n", bmNr, nr);
-        return nullptr;
-    }
-
-    auto &bm = fs.fetch(bmBlocks[bmNr]);
-
-    if (!bm.is(FSBlockType::BITMAP)) {
-        loginfo(FS_DEBUG, "Failed to lookup allocation bit for block %ld (%ld)\n", nr, bmNr);
-        return nullptr;
-    }
-
-    // Locate the byte position (note: the long word ordering will be reversed)
-    nr = nr % bitsPerBlock;
-    isize rByte = nr / 8;
-
-    // Rectifiy the ordering
-    switch (rByte % 4) {
-        case 0: rByte += 3; break;
-        case 1: rByte += 1; break;
-        case 2: rByte -= 1; break;
-        case 3: rByte -= 3; break;
-    }
-
-    // Skip the checksum which is located in the first four bytes
-    rByte += 4;
-    assert(rByte >= 4 && rByte < traits.bsize);
-
-    *byte = rByte;
-    *bit = nr % 8;
-
-    return &bm;
+    return locateAllocBit(traits.tsLink(nr), byte, bit);
 }
 
-/*
 const FSBlock *
-FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept
+FSAllocator::locateAllocBit(TSLink ts, isize *byte, isize *bit) const noexcept
 {
-    return const_cast<const FSBlock *>(const_cast<FSAllocator *>(this)->locateAllocationBit(nr, byte, bit));
+    if (!traits.isValidLink(ts)) return nullptr;
+
+    /* Bytes $04 - $8F store the BAM entries for each track, in groups of four
+     * bytes per track, starting on track 1. [...] The first byte is the number
+     * of free sectors on that track. The next three bytes represent the bitmap
+     * of which sectors are used/free. Since it is 3 bytes we have 24 bits of
+     * storage. Remember that at most, each track only has 21 sectors, so there
+     * are a few unused bits.
+     */
+
+    *byte = (4 * ts.t) + 1 + (ts.s >> 3);
+    *bit = ts.s & 0x07;
+
+    return fs.tryFetchBAM();
 }
-*/
 
 isize
 FSAllocator::numUnallocated() const noexcept
@@ -385,11 +364,11 @@ FSAllocator::serializeBitmap() const
 }
 
 void
-FSAllocator::setAllocationBit(BlockNr nr, bool value)
+FSAllocator::setAllocBit(BlockNr nr, bool value)
 {
     isize byte, bit;
 
-    if (auto *bm = locateAllocationBit(nr, &byte, &bit)) {
+    if (auto *bm = locateAllocBit(nr, &byte, &bit)) {
 
         auto *data = bm->mutate().data();
         REPLACE_BIT(data[byte], bit, value);
