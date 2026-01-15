@@ -20,71 +20,25 @@
 // Macros used inside the check() methods
 //
 
-#define EXPECT_VALUE(exp) { \
-if ((u32)value != u32(exp)) { expected = u32(exp); return FSBlockError::EXPECTED_VALUE; } }
+#define EXPECT_BYTE(exp) { \
+if (value != (exp)) { expected = (u8)(exp); return FSBlockError::EXPECTED_VALUE; } }
 
-#define EXPECT_CHECKSUM EXPECT_VALUE(node.checksum())
+#define EXPECT_MIN(min) { \
+if (value < (min)) { expected = (u8)(min); return FSBlockError::EXPECTED_LARGER_VALUE; } }
 
-#define EXPECT_LESS_OR_EQUAL(exp) { \
-if ((u32)value > (u32)exp) \
-{ expected = (u8)(exp); return FSBlockError::EXPECTED_SMALLER_VALUE; } }
+#define EXPECT_MAX(max) { \
+if (value > (max)) { expected = (u8)(max); return FSBlockError::EXPECTED_SMALLER_VALUE; } }
 
-#define EXPECT_REF { \
-if (!fs.block(value)) return FSBlockError::EXPECTED_REF; }
+#define EXPECT_RANGE(min,max) { \
+EXPECT_MIN(min); EXPECT_MAX(max) }
 
-#define EXPECT_SELFREF { \
-if ((u32)value != (u32)ref) { expected = ref; return FSBlockError::EXPECTED_SELFREF; } }
+#define EXPECT_TRACK_REF(s) \
+EXPECT_RANGE(0, traits.numTracks() + 1)
 
-#define EXPECT_FILEHEADER_REF { \
-if (!fs.is(value, FSBlockType::FILEHEADER)) { \
-return FSBlockError::EXPECTED_FILE_HEADER_BLOCK; } }
+#define EXPECT_SECTOR_REF(t) { \
+if (isize num = traits.numSectors(t)) \
+EXPECT_RANGE(0,num) else if (strict) EXPECT_MAX(254) }
 
-#define EXPECT_HASH_REF { \
-if (!fs.is(value, FSBlockType::FILEHEADER) && !fs.is(value, FSBlockType::USERDIR)) { \
-return FSBlockError::EXPECTED_HASHABLE_BLOCK; } }
-
-#define EXPECT_OPTIONAL_HASH_REF { \
-if (value) { EXPECT_HASH_REF } }
-
-#define EXPECT_PARENT_DIR_REF { \
-if (!fs.is(value, FSBlockType::ROOT) && !fs.is(value, FSBlockType::USERDIR)) { \
-return FSBlockError::EXPECTED_USERDIR_OR_ROOT; } }
-
-#define EXPECT_FILELIST_REF { \
-if (!fs.is(value, FSBlockType::FILELIST)) { \
-return FSBlockError::EXPECTED_FILE_LIST_BLOCK; } }
-
-#define EXPECT_OPTIONAL_FILELIST_REF { \
-if (value) { EXPECT_FILELIST_REF } }
-
-#define EXPECT_BITMAP_REF(nr) { \
-if (!fs.is(value, FSBlockType::BITMAP)) { \
-if (fs.getBmBlocks().size() > usize(nr)) { expected = fs.getBmBlocks()[nr]; } \
-return FSBlockError::EXPECTED_BITMAP_BLOCK; } }
-
-#define EXPECT_OPTIONAL_BITMAP_REF(nr) { \
-if (value) { EXPECT_BITMAP_REF(nr) } }
-
-#define EXPECT_BITMAP_EXT_REF { \
-if (!fs.is(value, FSBlockType::BITMAP_EXT)) { \
-return FSBlockError::EXPECTED_BITMAP_EXT_BLOCK; } }
-
-#define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
-if (value) { EXPECT_BITMAP_EXT_REF } }
-
-#define EXPECT_DATABLOCK_REF { \
-if (traits.ofs() && !fs.is(value, FSBlockType::DATA_OFS)) { \
-return FSBlockError::EXPECTED_DATA_BLOCK; } }
-
-#define EXPECT_OPTIONAL_DATABLOCK_REF { \
-if (value) { EXPECT_DATABLOCK_REF } }
-
-#define EXPECT_DATABLOCK_NUMBER { \
-if (value == 0) return FSBlockError::EXPECTED_DATABLOCK_NR; }
-
-#define EXPECT_HTABLE_SIZE { \
-if (isize(value) != (traits.bsize / 4) - 56) { \
-expected = u32((traits.bsize / 4) - 56); return FSBlockError::INVALID_HASHTABLE_SIZE; } }
 
 namespace retro::vault::cbm {
 
@@ -188,31 +142,23 @@ FSDoctor::xrayBitmap(bool strict)
 {
     std::unordered_set<BlockNr> used;
 
-    /*
-    // Extract the directory tree
-    auto tree = fs.build(fs.root(), { .depth = MAX_ISIZE });
+    // Read directory
+    auto dir = fs.readDir();
 
     // Collect all used blocks
-    for (auto &it : tree.dfs()) {
+    for (auto &it : dir) {
 
-        used.insert(it.nr);
-        auto &node = fs.fetch(it.nr);
-
-        if (node.isFile()) {
-
-            auto listBlocks = fs.collectListBlocks(it.nr);
-            auto dataBlocks = fs.collectDataBlocks(it.nr);
-            used.insert(listBlocks.begin(), listBlocks.end());
-            used.insert(dataBlocks.begin(), dataBlocks.end());
-        }
+        auto dataBlocks = fs.collectDataBlocks(it);
+        used.insert(dataBlocks.begin(), dataBlocks.end());
     }
-    used.insert(fs.getBmBlocks().begin(), fs.getBmBlocks().end());
-    used.insert(fs.getBmExtBlocks().begin(), fs.getBmExtBlocks().end());
 
-    // Check all blocks (ignoring the first two boot blocks)
-    for (isize i = 2, capacity = fs.blocks(); i < capacity; i++) {
+    // Read allocation map
+    auto alloc = fs.readBitmap();
 
-        bool allocated = allocator.isAllocated(BlockNr(i));
+    // Check all blocks
+    for (isize i = 0; i < fs.blocks(); ++i) {
+
+        bool allocated = alloc[i];
         bool contained = used.contains(BlockNr(i));
 
         if (allocated && !contained) {
@@ -225,8 +171,6 @@ FSDoctor::xrayBitmap(bool strict)
     return
     (isize)diagnosis.unusedButAllocated.size() +
     (isize)diagnosis.usedButUnallocated.size();
-    */
-    return 0;
 }
 
 isize
@@ -263,10 +207,10 @@ FSDoctor::xray(BlockNr ref, bool strict) const
     auto &node = fs.fetch(ref);
     isize count = 0;
 
-    for (isize i = 0; i < node.bsize(); i += 4) {
+    for (isize i = 0; i < node.bsize(); ++i) {
 
-        std::optional<u32> expected;
-        if (auto error = xray32(ref, i, strict, expected); error != FSBlockError::OK) {
+        std::optional<u8> expected;
+        if (auto error = xray8(ref, i, strict, expected); error != FSBlockError::OK) {
 
             count++;
             loginfo(FS_DEBUG, "Block %ld [%ld]: %s\n", node.nr, i, FSBlockErrorEnum::key(error));
@@ -279,23 +223,137 @@ FSDoctor::xray(BlockNr ref, bool strict) const
 FSBlockError
 FSDoctor::xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const
 {
-    // auto &node = fs.fetch(ref);
-    optional<u32> exp;
-    auto result = xray32(ref, pos & ~3, strict, exp);
-    if (exp) expected = GET_BYTE(*exp, 3 - (pos & 3));
-    return result;
-}
+    assert(pos >= 0 && pos < 256);
 
-FSBlockError
-FSDoctor::xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) const
-{
-    return FSBlockError::OK;
+    auto& block = fs.fetch(ref);
+    auto *data  = block.data();
+    u8 value    = data[pos];
+
+    switch (block.type) {
+
+        case FSBlockType::BAM:
+
+            switch (pos) {
+
+                case 0x00: EXPECT_BYTE(18);               break;
+                case 0x01: EXPECT_BYTE(1);                break;
+                case 0x02: EXPECT_BYTE(0x41);             break;
+                case 0xA0:
+                case 0xA1:
+                case 0xA4: if (strict) EXPECT_BYTE(0xA0); break;
+                case 0xA5: EXPECT_BYTE('2');              break;
+                case 0xA6: EXPECT_BYTE('A');              break;
+                case 0xA7:
+                case 0xA8:
+                case 0xA9:
+                case 0xAA: if (strict) EXPECT_BYTE(0xA0); break;
+            }
+
+            if (strict && pos >= 0xAB && pos <= 0xFF) EXPECT_BYTE(0x00);
+
+            return FSBlockError::OK;
+
+        case FSBlockType::USERDIR:
+
+            if (pos == 0) EXPECT_TRACK_REF (data[pos + 1]);
+            if (pos == 1) EXPECT_SECTOR_REF(data[pos - 1]);
+
+            if (!utl::isZero(data + pos, 0x20)) {
+
+                switch (pos & 0x1F) {
+
+                    case 0x03: EXPECT_TRACK_REF (data[pos + 1]); break;
+                    case 0x04: EXPECT_SECTOR_REF(data[pos - 1]); break;
+                    case 0x15: EXPECT_TRACK_REF (data[pos + 1]); break;
+                    case 0x16: EXPECT_SECTOR_REF(data[pos - 1]); break;
+                    case 0x17: EXPECT_MAX(254);                  break;
+                }
+            }
+
+            return FSBlockError::OK;
+
+        case FSBlockType::DATA:
+
+            if (pos == 0 && strict) EXPECT_TRACK_REF (data[pos + 1]);
+            if (pos == 1 && strict) EXPECT_SECTOR_REF(data[pos - 1]);
+
+            return FSBlockError::OK;
+
+        default:
+            fatalError;
+    }
+
 }
 
 isize
 FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
 {
-    return 0;
+    auto &node   = fs.fetch(ref);
+    auto errors  = isize(0);
+
+    std::stringstream ss;
+
+    auto hex = [&](int width, isize value, string delim = "") {
+        ss << std::setw(width) << std::right << std::setfill('0') << std::hex << value << delim;
+    };
+    auto hex4 = [&](u32 value, string delim = "") {
+        hex(2, BYTE3(value), " ");
+        hex(2, BYTE2(value), " ");
+        hex(2, BYTE1(value), " ");
+        hex(2, BYTE0(value), delim);
+    };
+
+    auto describe = [&](FSBlockError fault, const optional<u32> &value) {
+
+        if (value) { hex4(*value); return; }
+
+        switch (fault) {
+
+            case FSBlockError::EXPECTED_VALUE:
+                ss << "Value"; break;
+            case FSBlockError::EXPECTED_SMALLER_VALUE:
+                ss << "Smaller value"; break;
+            case FSBlockError::EXPECTED_LARGER_VALUE:
+                ss << "Larger value"; break;
+            default:
+                ss << "???";
+        }
+    };
+
+    for (isize i = 0; i < traits.bsize; ++i) {
+
+        optional<u8> expected;
+
+        if (auto fault = xray8(ref, i, strict, expected); fault != FSBlockError::OK) {
+
+            auto *data = node.data();
+            auto type = fs.typeOf(node.nr, i);
+
+            ss << std::setw(7) << std::left << std::to_string(node.nr);
+            ss << "+";
+            hex(4, i, "  ");
+            hex4(node.read32(data + i), "  ");
+
+            ss << std::setw(36) << std::left << std::setfill(' ') << FSItemTypeEnum::help(type);
+            describe(fault, expected);
+            ss << std::endl;
+
+            errors++;
+        }
+    }
+
+    if (errors) {
+
+        os << "Block  Entry  Data         Item type                           Expected" << std::endl;
+        string line;
+        while(std::getline(ss, line)) os << line << '\n';
+
+    } else {
+
+        // os << "No errors found" << std::endl;
+    }
+
+    return errors;
 }
 
 void
@@ -315,11 +373,11 @@ FSDoctor::rectify(BlockNr ref, bool strict)
 {
     auto &node = fs.fetch(ref);
 
-    for (isize i = 0; i < traits.bsize / 4; i += 4) {
+    for (isize i = 0; i < fs.blocks(); ++i) {
 
-        optional<u32> expected;
+        optional<u8> expected;
 
-        if (auto fault = xray32(ref, i, strict, expected); fault != FSBlockError::OK) {
+        if (auto fault = xray8(ref, i, strict, expected); fault != FSBlockError::OK) {
 
             if (expected) {
 
@@ -335,6 +393,8 @@ void
 FSDoctor::rectifyBitmap(bool strict)
 {
     xrayBitmap(strict);
+
+    // TODO: SETUP VECTOR, WRITE BACK
 
     for (auto &it : diagnosis.unusedButAllocated) {
         allocator.markAsFree(BlockNr(it));

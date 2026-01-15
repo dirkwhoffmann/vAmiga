@@ -28,16 +28,6 @@ public:
 
 
     //
-    // Methods from CoreObject
-    //
-
-private:
-
-    // const char *objectName() const override { return "DiskDoctor"; }
-    // void _dump(Category category, std::ostream &os) const override { }
-
-
-    //
     // Dumping debug information
     //
 
@@ -64,9 +54,7 @@ public:
 
     // Checks the integrity of a certain byte or long word in this block
     FSBlockError xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const;
-    // FSBlockError xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const;
-    FSBlockError xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) const;
-    // FSBlockError xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
+    // FSBlockError xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) const;
 
     // Checks the allocation table. Returns the number of errors. Stores details in 'diagnosis'
     isize xrayBitmap(bool strict = false);

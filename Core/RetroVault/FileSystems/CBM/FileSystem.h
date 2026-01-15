@@ -262,6 +262,9 @@ public:
     // Operator overload for fetch
     const FSBlock &operator[](size_t nr) { return cache.fetch(BlockNr(nr)); }
 
+    // Reads the block allocation map
+    std::vector<bool> readBitmap() const { return allocator.readBitmap(); }
+
 
     //
     // N O D E   L A Y E R

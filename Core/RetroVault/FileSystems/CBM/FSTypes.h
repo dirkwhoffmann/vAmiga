@@ -290,24 +290,13 @@ enum class FSBlockError : long
     OK,
     EXPECTED_VALUE,
     EXPECTED_SMALLER_VALUE,
-    EXPECTED_NO_REF,
-    EXPECTED_REF,
-    EXPECTED_SELFREF,
-    EXPECTED_BITMAP_BLOCK,
-    EXPECTED_BITMAP_EXT_BLOCK,
-    EXPECTED_HASHABLE_BLOCK,
-    EXPECTED_USERDIR_OR_ROOT,
-    EXPECTED_DATA_BLOCK,
-    EXPECTED_FILE_HEADER_BLOCK,
-    EXPECTED_FILE_LIST_BLOCK,
-    EXPECTED_DATABLOCK_NR,
-    INVALID_HASHTABLE_SIZE
+    EXPECTED_LARGER_VALUE
 };
 
 struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSBlockError::INVALID_HASHTABLE_SIZE);
+    static constexpr long maxVal = long(FSBlockError::EXPECTED_LARGER_VALUE);
 
     static const char *_key(FSBlockError value)
     {
@@ -316,18 +305,7 @@ struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
             case FSBlockError::OK:                          return "OK";
             case FSBlockError::EXPECTED_VALUE:              return "EXPECTED_VALUE";
             case FSBlockError::EXPECTED_SMALLER_VALUE:      return "EXPECTED_SMALLER_VALUE";
-            case FSBlockError::EXPECTED_NO_REF:             return "EXPECTED_NO_REF";
-            case FSBlockError::EXPECTED_REF:                return "EXPECTED_REF";
-            case FSBlockError::EXPECTED_SELFREF:            return "EXPECTED_SELFREF";
-            case FSBlockError::EXPECTED_BITMAP_BLOCK:       return "EXPECTED_BITMAP_BLOCK";
-            case FSBlockError::EXPECTED_BITMAP_EXT_BLOCK:   return "EXPECTED_BITMAP_EXT_BLOCK";
-            case FSBlockError::EXPECTED_HASHABLE_BLOCK:     return "EXPECTED_HASHABLE_BLOCK";
-            case FSBlockError::EXPECTED_USERDIR_OR_ROOT:    return "EXPECTED_USERDIR_OR_ROOT";
-            case FSBlockError::EXPECTED_DATA_BLOCK:         return "EXPECTED_DATA_BLOCK";
-            case FSBlockError::EXPECTED_FILE_HEADER_BLOCK:  return "EXPECTED_FILE_HEADER_BLOCK";
-            case FSBlockError::EXPECTED_FILE_LIST_BLOCK:    return "EXPECTED_FILE_LIST_BLOCK";
-            case FSBlockError::EXPECTED_DATABLOCK_NR:       return "EXPECTED_DATABLOCK_NR";
-            case FSBlockError::INVALID_HASHTABLE_SIZE:      return "INVALID_HASHTABLE_SIZE";
+            case FSBlockError::EXPECTED_LARGER_VALUE:       return "EXPECTED_LARGER_VALUE";
         }
         return "???";
     }

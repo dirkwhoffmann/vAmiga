@@ -10,7 +10,6 @@
 #pragma once
 
 #include "FileSystems/CBM/FSTypes.h"
-// #include "FileSystems/CBM/FSTraits.h"
 #include "utl/abilities/Loggable.h"
 
 namespace retro::vault::cbm {
