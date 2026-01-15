@@ -110,7 +110,6 @@ namespace retro::vault::amiga {
 class FileSystem : public Loggable {
 
     friend struct FSBlock;
-    friend struct OldFSTree;
 
     // Immutable file system properties
     FSTraits traits;

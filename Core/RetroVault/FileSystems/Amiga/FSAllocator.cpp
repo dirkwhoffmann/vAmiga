@@ -330,7 +330,7 @@ isize
 FSAllocator::numUnallocated() const noexcept
 {
     isize result = 0;
-    for (auto &it : serializeBitmap()) result += std::popcount(it);
+    for (auto &it : readBitmap()) result += std::popcount(it);
 
     if constexpr (debug::FS_DEBUG) {
 
@@ -350,7 +350,7 @@ FSAllocator::numAllocated() const noexcept
 }
 
 std::vector<u32>
-FSAllocator::serializeBitmap() const
+FSAllocator::readBitmap() const
 {
     if (!fs.isFormatted()) return {};
 

@@ -7,10 +7,9 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-/* The FileSystem class represents an Amiga file system (OFS or FFS).
- * It models a logical volume that can be created on top of, e.g., an ADF file,
- * an HDF file, or an MFM-encoded FloppyDisk. In the case of an HDF, the file
- * system may span either the entire HDF or a single partition, only.
+/* The FileSystem class represents a Commodore CBM file system.
+ * It models a logical volume that can be created on top of, e.g., a D64 file,
+ * an HDF file, or a GCR-encoded FloppyDisk.
  *
  * The FileSystem class is organized as a layered architecture to separate
  * responsibilities and to enforce downward-only dependencies.
@@ -83,7 +82,7 @@
  *
  *   Provides access to the physical or virtual storage medium and stores the
  *   actual data. Any object implementing the BlockDevice protocol can serve as
- *   a backing store, including ADFFile, HDFFile, or FloppyDisk.
+ *   a backing store.
  */
 
 #pragma once
@@ -113,7 +112,6 @@ using retro::vault::Volume;
 class FileSystem : public Loggable {
 
     friend struct FSBlock;
-    friend struct OldFSTree;
 
     // Immutable file system properties
     FSTraits traits;
@@ -134,11 +132,11 @@ class FileSystem : public Loggable {
     // BlockNr bamBlock = 0;
 
     // Location of the root block
-    BlockNr rootBlock = 0;
+    [[deprecated]] BlockNr rootBlock = 0;
 
     // Location of bitmap blocks and extended bitmap blocks
-    vector<BlockNr> bmBlocks;
-    vector<BlockNr> bmExtBlocks;
+    [[deprecated]] vector<BlockNr> bmBlocks;
+    [[deprecated]] vector<BlockNr> bmExtBlocks;
 
 
     // Service layer
@@ -226,10 +224,10 @@ public:
     // Convenience wrappers
     bool is(BlockNr nr, FSBlockType type) const { return fetch(nr).is(type); }
     bool isEmpty(BlockNr nr) const { return fetch(nr).isEmpty(); }
-    bool isRoot(BlockNr nr) const { return fetch(nr).isRoot(); }
-    bool isFile(BlockNr nr) const { return fetch(nr).isFile(); }
-    bool isDirectory(BlockNr nr) const { return fetch(nr).isDirectory(); }
-    bool isRegular(BlockNr nr) const { return fetch(nr).isRegular(); }
+    [[deprecated]] bool isRoot(BlockNr nr) const { return fetch(nr).isRoot(); }
+    [[deprecated]] bool isFile(BlockNr nr) const { return fetch(nr).isFile(); }
+    [[deprecated]] bool isDirectory(BlockNr nr) const { return fetch(nr).isDirectory(); }
+    [[deprecated]] bool isRegular(BlockNr nr) const { return fetch(nr).isRegular(); }
     bool isData(BlockNr nr) const { return fetch(nr).isData(); }
 
     // Predicts the type of a block based on the stored data
@@ -284,11 +282,18 @@ public:
     // Assigns the volume name
     void setName(const PETName<16> &name);
 
+private:
+
+    // Formats the BAM sector
+    void formatBAM(FSFormat dos, const PETName<16> &name);
+
 
     //
     // Managing directories
     //
 
+public:
+    
     // Reads the existing directory
     vector<FSDirEntry> readDir() const;
 
@@ -406,12 +411,12 @@ private:
 public:
 
     // Returns the root of the directory tree
-    BlockNr root() const { return rootBlock; }
+    [[deprecated]] BlockNr root() const { return rootBlock; }
     BlockNr bam() const { return *traits.blockNr({18,0}); }
 
     // Returns the locations of the bitmap and bitmap extension blocks
-    const vector<BlockNr> &getBmBlocks() const { return bmBlocks; }
-    const vector<BlockNr> &getBmExtBlocks() const { return bmExtBlocks; }
+    [[deprecated]] const vector<BlockNr> &getBmBlocks() const { return bmBlocks; }
+    [[deprecated]] const vector<BlockNr> &getBmExtBlocks() const { return bmExtBlocks; }
 
     // Checks if a an item exists in the directory tree
     bool exists(const PETName<16> &path) const { return trySeek(path).has_value(); }
@@ -444,8 +449,8 @@ public:
     BlockNr seek(const fs::path &path) const { return seek(PETName<16>(path)); }
 
     // Resolves a path by a regular expression
-    vector<BlockNr> match(BlockNr top, const vector<FSPattern> &patterns);
-    vector<BlockNr> match(const string &path);
+    [[deprecated]] vector<BlockNr> match(BlockNr top, const vector<FSPattern> &patterns);
+    [[deprecated]] vector<BlockNr> match(const string &path);
 
 
     //

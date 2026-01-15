@@ -228,14 +228,19 @@ PosixAdapter::create(const fs::path &path)
     auto parent = path.parent_path();
     auto name   = path.filename();
 
-    // Lookup destination directory
-    auto node = fs.seek(parent);
+    // Reject nested paths (CBM is flat)
+    if (!parent.empty() && parent != ".")
+        throw FSError(FSError::FS_INVALID_PATH);
+
+    // Reject invalid names
+    if (name.empty() || name == ".")
+        throw FSError(FSError::FS_INVALID_PATH);
 
     // Create file
-    auto fhb = fs.createFile(PETName<16>(name));
+    auto fdb = fs.createFile(PETName<16>(name));
 
     // Create meta info
-    auto &info = ensureMeta(fhb);
+    auto &info = ensureMeta(fdb);
     info.linkCount = 1;
 }
 

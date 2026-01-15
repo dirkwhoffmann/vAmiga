@@ -105,7 +105,7 @@ public:
         return name;
     }
 
-    void write(u8 *p, isize length)
+    void write(u8 *p, isize length) const noexcept
     {
         assert(p);
         assert(length <= len);
@@ -113,10 +113,10 @@ public:
         for (isize i = 0; i < length; i++) p[i] = pet[i];
     }
 
-    void write(u8 *p) { write(p, len); }
+    void write(u8 *p) const noexcept { write(p, len); }
 
-    const char *c_str() const { return asc; }
-    string str() const { return string(asc); }
+    const char *c_str() const noexcept { return asc; }
+    string str() const noexcept { return string(asc); }
 };
 
 struct FSString {

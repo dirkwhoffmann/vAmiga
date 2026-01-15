@@ -23,55 +23,82 @@ FileSystem::format(FSFormat dos) {
 
     // Perform some consistency checks
     assert(blocks() > 2);
-    assert(rootBlock > 0);
 
-    // Create boot blocks
-    cache.modify(0).init(FSBlockType::BOOT);
-    cache.modify(1).init(FSBlockType::BOOT);
-
-    // Wipe out all other blocks
-    for (isize i = 2; i < traits.blocks; i++) {
+    // Start with an empty block device
+    for (isize i = 0; i < traits.blocks; i++) {
         (*this)[i].mutate().init(FSBlockType::EMPTY);
     }
 
-    // Create the root block
-    (*this)[rootBlock].mutate().init(FSBlockType::ROOT);
+    // Create the BAM
+    formatBAM(dos, PETName<16>(""));
 
-    // Create bitmap blocks
-    for (auto& ref : bmBlocks) {
+    // Create the first directory block
+    (*this)[bam() + 1].mutate().init(FSBlockType::USERDIR);
+}
 
-        // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
-        cache.modify(ref).init(FSBlockType::BITMAP);
+void
+FileSystem::formatBAM(FSFormat dos, const PETName<16> &name) {
+
+    auto &block = (*this)[bam()].mutate();
+    block.init(FSBlockType::BAM);
+
+    // Obtain write access for the data area
+    auto *data = (*this)[bam()].mutate().data();
+
+    // Location of the first directory sector
+    data[0x00] = 18;
+    data[0x01] = 1;
+
+    // Disk DOS version type ('A')
+    data[0x02] = 0x41;
+
+    // Unused
+    data[0x03] = 0x00;
+
+    // BAM entries for each track (in groups of four bytes)
+    for (TrackNr k = 1; k <= 35; k++) {
+
+        u8 *p = data + 4 * k;
+
+        if (k == 18) {
+
+            p[0] = 17;      // 17 out of 19 blocks are free
+            p[1] = 0xFC;    // Mark first two blocks as allocated
+            p[2] = 0xFF;
+            p[3] = 0x07;
+
+        } else {
+
+            p[0] = (u8)traits.numSectors(k);
+            p[1] = 0xFF;
+            p[2] = 0xFF;
+            p[3] = p[0] == 21 ? 0x1F : p[0] == 19 ? 0x07 : p[0] == 18 ? 0x03 : 0x01;
+        }
     }
 
-    // Add bitmap extension blocks
-    BlockNr pred = rootBlock;
-    for (auto &ref : bmExtBlocks) {
+    // Disk Name (padded with $A0)
+    name.write(data + 0x90);
 
-        // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        (*this)[ref].mutate().init(FSBlockType::BITMAP_EXT);
-        (*this)[pred].mutate().setNextBmExtBlockRef(ref);
-        pred = ref;
-    }
+    // Filled with $A0
+    data[0xA0] = 0xA0;
+    data[0xA1] = 0xA0;
 
-    // Add all bitmap block references
-    (*this)[rootBlock].mutate().addBitmapBlockRefs(bmBlocks);
+    // Disk ID
+    data[0xA2] = 0x56;
+    data[0xA3] = 0x54;
 
-    // Mark free blocks as free in the bitmap block
-    // TODO: SPEED THIS UP
-    for (isize i = 0; i < blocks(); i++) {
-        if (cache.isEmpty(BlockNr(i))) allocator.markAsFree(BlockNr(i));
-    }
+    // Usually $A0
+    data[0xA4] = 0xA0;
 
-    // Rectify checksums
-    fetch(0).mutate().updateChecksum();
-    fetch(1).mutate().updateChecksum();
-    (*this)[rootBlock].mutate().updateChecksum();
-    for (auto& ref : bmBlocks) { (*this)[ref].mutate().updateChecksum(); }
-    for (auto& ref : bmExtBlocks) { (*this)[ref].mutate().updateChecksum(); }
+    // DOS type
+    data[0xA5] = 0x32;  // "2"
+    data[0xA6] = 0x41;  // "A"
 
-    // Set the current directory
-    // current = rootBlock;
+    // Filled with $A0
+    data[0xA7] = 0xA0;
+    data[0xA8] = 0xA0;
+    data[0xA9] = 0xA0;
+    data[0xAA] = 0xA0;
 }
 
 void

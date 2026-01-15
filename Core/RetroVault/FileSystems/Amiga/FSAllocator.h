@@ -90,7 +90,7 @@ private:
     const FSBlock *locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept;
 
     // Translate the bitmap into to a vector with the n-th bit set iff the n-th block is free
-    std::vector<u32> serializeBitmap() const;
+    std::vector<u32> readBitmap() const;
 };
 
 }

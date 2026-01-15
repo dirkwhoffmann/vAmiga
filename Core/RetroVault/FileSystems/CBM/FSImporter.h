@@ -23,15 +23,14 @@ public:
     void importVolume(const u8 *src, isize size);
 
     // Imports files and folders from the host file system
-    void import(const fs::path &path, bool recursive = true, bool contents = false);
-    void import(BlockNr top, const fs::path &path, bool recursive = true, bool contents = false);
+    void import(const fs::path &path);
 
     // Imports a single block
     void importBlock(BlockNr nr, const fs::path &path);
 
 private:
 
-    void import(BlockNr top, const fs::directory_entry &dir, bool recursive);
+    void import(const fs::directory_entry &dir);
 };
 
 }

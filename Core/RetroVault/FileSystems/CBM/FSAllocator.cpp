@@ -15,57 +15,10 @@
 namespace retro::vault::cbm {
 
 isize
-FSAllocator::requiredDataBlocks(isize fileSize) const noexcept
-{
-    // Compute the capacity of a single data block
-    isize numBytes = traits.bsize - 2;
-
-    // Compute the required number of data blocks
-    return (fileSize + numBytes - 1) / numBytes;
-}
-
-isize
-FSAllocator::requiredFileListBlocks(isize fileSize) const noexcept
-{
-    // Compute the required number of data blocks
-    isize numBlocks = requiredDataBlocks(fileSize);
-
-    // Compute the number of data block references in a single block
-    isize numRefs = (traits.bsize / 4) - 56;
-
-    // Small files do not require any file list block
-    if (numBlocks <= numRefs) return 0;
-
-    // Compute the required number of additional file list blocks
-    return (numBlocks - 1) / numRefs;
-}
-
-isize
 FSAllocator::requiredBlocks(isize fileSize) const noexcept
 {
     return (fileSize + 253) / 254;
 }
-
-/*
-bool
-FSAllocator::allocatable(isize count) const noexcept
-{
-    BlockNr i = ap;
-    isize capacity = fs.blocks();
-
-    while (count > 0) {
-
-        if (fs.isEmpty(i)) {
-            if (--count == 0) break;
-        }
-
-        i = (i + 1) % capacity;
-        if (i == ap) return false;
-    }
-
-    return true;
-}
-*/
 
 BlockNr
 FSAllocator::allocate()
@@ -194,129 +147,39 @@ FSAllocator::advance(TSLink ts)
     return TSLink{t,s};
 }
 
-/*
-void
-FSAllocator::allocateFileBlocks(isize bytes,
-                                std::vector<BlockNr> &listBlocks,
-                                std::vector<BlockNr> &dataBlocks)
+bool
+FSAllocator::isFree(BlockNr nr) const noexcept
 {
-    auto freeSurplus = [&](std::vector<BlockNr> &blocks, usize count) {
-
-        if (blocks.size() > count) {
-
-            for (auto i = count; i < blocks.size(); i++) {
-                deallocateBlock(blocks[i]);
-            }
-            blocks.resize(count);
-
-        } else {
-
-            blocks.reserve(count);
-        }
-    };
-
-    usize dataBlocksNeeded = 0;
-    auto ensureDataBlocks = [&](isize n) {
-
-        dataBlocksNeeded += n;
-        while (dataBlocks.size() < dataBlocksNeeded) allocate(1, dataBlocks);
-    };
-
-    usize listBlocksNeeded = 0;
-    auto ensureListBlocks = [&](isize n) {
-
-        listBlocksNeeded += n;
-        while (listBlocks.size() < listBlocksNeeded) allocate(1, listBlocks);
-    };
-
-    isize numDataBlocks         = requiredDataBlocks(bytes);
-    isize numListBlocks         = requiredFileListBlocks(bytes);
-    isize refsPerBlock          = (traits.bsize / 4) - 56;
-    isize refsInHeaderBlock     = std::min(numDataBlocks, refsPerBlock);
-    isize refsInListBlocks      = numDataBlocks - refsInHeaderBlock;
-    isize refsInLastListBlock   = refsInListBlocks % refsPerBlock;
-
-    loginfo(FS_DEBUG, "                   Data bytes : %ld\n", bytes);
-    loginfo(FS_DEBUG, "         Required data blocks : %ld\n", numDataBlocks);
-    loginfo(FS_DEBUG, "         Required list blocks : %ld\n", numListBlocks);
-    loginfo(FS_DEBUG, "         References per block : %ld\n", refsPerBlock);
-    loginfo(FS_DEBUG, "   References in header block : %ld\n", refsInHeaderBlock);
-    loginfo(FS_DEBUG, "    References in list blocks : %ld\n", refsInListBlocks);
-    loginfo(FS_DEBUG, "References in last list block : %ld\n", refsInLastListBlock);
-
-    // Free the surplus list blocks
-    freeSurplus(listBlocks, numListBlocks);
-    freeSurplus(dataBlocks, numDataBlocks);
-
-    { // if (traits.ofs()) {
-
-        // Header block -> Data blocks -> List block -> Data blocks ... List block -> Data blocks
-        ensureDataBlocks(refsInHeaderBlock);
-
-        for (isize i = 0; i < numListBlocks; i++) {
-
-            ensureListBlocks(1);
-            ensureDataBlocks(i < numListBlocks - 1 ? refsPerBlock : refsInLastListBlock);
-        }
-    }
-
-    // Rectify checksums
-    for (auto &it : fs.getBmBlocks()) fs[it].mutate().updateChecksum();
-    for (auto &it : fs.getBmExtBlocks()) fs[it].mutate().updateChecksum();
+    return isFree(traits.tsLink(nr));
 }
-*/
 
 bool
-FSAllocator::isUnallocated(BlockNr nr) const noexcept
+FSAllocator::isFree(TSLink ts) const noexcept
 {
-    assert(isize(nr) < traits.blocks);
+    assert(traits.isValidLink(ts));
 
-    // The first two blocks are always allocated and not part of the bitmap
-    if (nr < 2) return false;
+    auto &bam       = fs.fetchBAM();
+    auto *data      = bam.data();
+    auto *entry     = data + (4 * ts.t);
+    auto *allocBits = entry + 1;
 
-    // Locate the allocation bit in the bitmap block
-    isize byte, bit;
-    auto *bm = locateAllocBit(nr, &byte, &bit);
-
-    // Read the bit
-    return bm ? GET_BIT(bm->data()[byte], bit) : false;
-}
-
-const FSBlock *
-FSAllocator::locateAllocBit(BlockNr nr, isize *byte, isize *bit) const noexcept
-{
-    return locateAllocBit(traits.tsLink(nr), byte, bit);
-}
-
-const FSBlock *
-FSAllocator::locateAllocBit(TSLink ts, isize *byte, isize *bit) const noexcept
-{
-    if (!traits.isValidLink(ts)) return nullptr;
-
-    /* Bytes $04 - $8F store the BAM entries for each track, in groups of four
-     * bytes per track, starting on track 1. [...] The first byte is the number
-     * of free sectors on that track. The next three bytes represent the bitmap
-     * of which sectors are used/free. Since it is 3 bytes we have 24 bits of
-     * storage. Remember that at most, each track only has 21 sectors, so there
-     * are a few unused bits.
-     */
-
-    *byte = (4 * ts.t) + 1 + (ts.s >> 3);
-    *bit = ts.s & 0x07;
-
-    return fs.tryFetchBAM();
+    return allocBits[ts.s / 8] & (1 << (ts.s % 8));
 }
 
 isize
 FSAllocator::numUnallocated() const noexcept
 {
-    isize result = 0;
-    for (auto &it : serializeBitmap()) result += std::popcount(it);
+    auto &bam       = fs.fetchBAM();
+    auto *data      = bam.data();
+    isize result    = 0;
+
+    for (isize i = 0x04; i < 0x8F; i += 4)
+        result += data[i];
 
     if constexpr (debug::FS_DEBUG) {
 
         isize count = 0;
-        for (isize i = 0; i < fs.blocks(); i++) { if (isUnallocated(BlockNr(i))) count++; }
+        for (isize i = 0; i < fs.blocks(); ++i) { if (isFree(BlockNr(i))) count++; }
         loginfo(FS_DEBUG, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
         assert(count == result);
     }
@@ -330,49 +193,138 @@ FSAllocator::numAllocated() const noexcept
     return fs.blocks() - numUnallocated();
 }
 
-std::vector<u32>
-FSAllocator::serializeBitmap() const
+void
+FSAllocator::setAllocBit(BlockNr nr, bool value)
 {
-    if (!fs.isFormatted()) return {};
+    setAllocBit(traits.tsLink(nr), value);
+}
 
-    auto longwords = ((fs.blocks() - 2) + 31) / 32;
-    std::vector<u32> result;
-    result.reserve(longwords);
+void
+FSAllocator::setAllocBit(TSLink ts, bool value)
+{
+    assert(traits.isValidLink(ts));
 
-    // Iterate through all bitmap blocks
-    isize j = 0;
-    for (auto &it : fs.getBmBlocks()) {
+    auto &bam       = fs.fetchBAM().mutate();
+    auto *data      = bam.data();
+    auto *entry     = data + (4 * ts.t);
+    auto *allocBits = entry + 1;
+    auto byteIndex  = ts.s / 8;
+    auto mask       = 1 << (ts.s % 8);
+    auto bit        = allocBits[byteIndex] & mask;
 
-        if (auto *bm = fs.tryFetch(it, FSBlockType::BITMAP)) {
+    if (value && !bit) {
 
-            auto *data = bm->data();
-            for (isize i = 4; i < traits.bsize; i += 4) {
+        // Mark sector as free
+        allocBits[byteIndex] |= mask;
 
-                if (j == longwords) break;
-                result.push_back(HI_HI_LO_LO(data[i], data[i+1], data[i+2], data[i+3]));
-                j++;
-            }
-        }
+        // Increase the number of free sectors
+        entry[0]++;
     }
 
-    // Zero out the superfluous bits in the last word
-    if (auto bits = (fs.blocks() - 2) % 32; bits && !result.empty()) {
-        result.back() &= (1 << bits) - 1;
+    if (!value && bit) {
+
+        // Mark sector as allocated
+        allocBits[byteIndex] &= ~mask;
+
+        // Decrease the number of free sectors
+        entry[0]--;
+    }
+}
+
+std::vector<bool>
+FSAllocator::readBitmap(TrackNr t) const
+{
+    auto numSectors = traits.numSectors(t);
+    auto &bam       = fs.fetchBAM();
+    auto *data      = bam.data();
+    auto *entry     = data + 4 + (4 * t);
+    auto *allocBits = entry + 1;
+
+    std::vector<bool> result;
+    result.reserve(numSectors);
+
+    for (SectorNr s = 0; s < numSectors; ++s) {
+
+        auto byteIndex = s / 8; // 0..2
+        auto bitIndex  = s % 8; // LSB first
+
+        bool free = (allocBits[byteIndex] >> bitIndex) & 1;
+        result.push_back(free);
     }
 
     return result;
 }
 
-void
-FSAllocator::setAllocBit(BlockNr nr, bool value)
+std::vector<bool>
+FSAllocator::readBitmap() const
 {
-    isize byte, bit;
+    std::vector<bool> result;
+    result.reserve(traits.numBlocks());
 
-    if (auto *bm = locateAllocBit(nr, &byte, &bit)) {
+    auto numTracks = traits.numTracks();
 
-        auto *data = bm->mutate().data();
-        REPLACE_BIT(data[byte], bit, value);
+    for (TrackNr t = 0; t < numTracks; ++t) {
+
+        auto trackBits = readBitmap(t);
+        result.insert(result.end(), trackBits.begin(), trackBits.end());
     }
+
+    assert(isize(result.size()) == traits.numBlocks());
+    return result;
+}
+
+void
+FSAllocator::writeBitmap(TrackNr t, const std::vector<bool> &bitmap)
+{
+    auto numSectors = traits.numSectors(t);
+    auto &bam       = fs.fetchBAM().mutate();
+    auto *data      = bam.data();
+    auto *entry     = data + 4 + (4 * t);
+    auto *allocBits = entry + 1;
+    auto freeCount  = 0;
+
+    assert(isize(bitmap.size()) == numSectors);
+
+    // Clear bitmap bytes
+    allocBits[0] = allocBits[1] = allocBits[2] = 0;
+
+    for (SectorNr s = 0; s < numSectors; ++s) {
+
+        if (bitmap[s]) {
+
+            auto byteIndex = s / 8; // 0..2
+            auto bitIndex  = s % 8; // LSB first
+
+            allocBits[byteIndex] |= (1 << bitIndex);
+            ++freeCount;
+        }
+    }
+
+    entry[0] = u8(freeCount);
+}
+
+void
+FSAllocator::writeBitmap(const std::vector<bool> &bitmap)
+{
+    assert(isize(bitmap.size()) == traits.numBlocks());
+
+    auto numTracks = traits.numTracks();
+    isize index = 0;
+
+    for (TrackNr t = 0; t < numTracks; ++t) {
+
+        auto numSectors = traits.numSectors(t);
+
+        std::vector<bool> trackBits;
+        trackBits.reserve(numSectors);
+
+        for (SectorNr s = 0; s < numSectors; ++s)
+            trackBits.push_back(bitmap[index++]);
+
+        writeBitmap(t, trackBits);
+    }
+
+    assert(index == isize(bitmap.size()));
 }
 
 }

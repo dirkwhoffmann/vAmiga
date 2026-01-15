@@ -52,43 +52,37 @@ FSImporter::importVolume(const u8 *src, isize size)
 }
 
 void
-FSImporter::import(const fs::path &path, bool recursive, bool contents)
-{
-    import(fs.root(), path, recursive, contents);
-}
-
-void
-FSImporter::import(BlockNr top, const fs::path &path, bool recursive, bool contents)
+FSImporter::import(const fs::path &path)
 {
     fs::directory_entry dir;
 
-    // Get the directory item
-    try { dir = fs::directory_entry(path); } catch (...) {
-        // throw IOError(IOError::FILE_CANT_READ);
+    try {
+
+        // Get the directory item
+        dir = fs::directory_entry(path);
+
+        if (dir.is_directory()) {
+
+            // Add directory contents
+            for (const auto& it : fs::directory_iterator(dir)) import(it);
+
+        } else {
+
+            // Add file
+            import(dir);
+        }
+
+    } catch (...) {
+
         throw IOError(IOError::FILE_CANT_READ, path);
     }
 
-    if (dir.is_directory() && contents) {
-
-        // Add the directory contents
-        for (const auto& it : fs::directory_iterator(dir)) import(top, it, recursive);
-
-    } else {
-
-        // Add the file or directory as a whole
-        import(top, dir, recursive);
-    }
-
-    // Rectify the checksums of all blocks
-    // fs.importer.updateChecksums();
-
     // Verify the result
-    if constexpr (debug::FS_DEBUG)
-        fs.doctor.xray(true, std::cout, false);
+    if constexpr (debug::FS_DEBUG) fs.doctor.xray(true, std::cout, false);
 }
 
 void
-FSImporter::import(BlockNr top, const fs::directory_entry &entry, bool recursive)
+FSImporter::import(const fs::directory_entry &entry)
 {
     auto isHidden = [&](const fs::path &path) {
 

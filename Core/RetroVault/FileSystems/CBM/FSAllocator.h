@@ -15,10 +15,10 @@ namespace retro::vault::cbm {
 
 class FSAllocator final : public FSService {
 
-public:
-
     // Allocation pointer (selects the block to allocate next)
     TSLink ap = {1,0};
+
+public:
 
     using FSService::FSService;
 
@@ -28,15 +28,9 @@ public:
     //
 
 public:
-    
+
     // Returns the number of required blocks to store a file of certain size
-    isize requiredBlocks(isize fileSize) const noexcept;
-
-private:
-
-    // Returns the number of required file list or data blocks
-    [[deprecated]] isize requiredFileListBlocks(isize fileSize) const noexcept;
-    [[deprecated]] isize requiredDataBlocks(isize fileSize) const noexcept;
+    isize requiredBlocks(isize size) const noexcept;
 
 
     //
@@ -44,9 +38,6 @@ private:
     //
 
 public:
-
-    // Returns true if at least 'count' free blocks are available
-    // bool allocatable(isize count) const noexcept;
 
     // Seeks a free block and marks it as allocated
     BlockNr allocate();
@@ -58,18 +49,12 @@ public:
     // Deallocates a block
     void deallocateBlock(BlockNr nr);
 
-    // Allocates multiple blocks
+    // Deallocates multiple blocks
     void deallocateBlocks(const std::vector<BlockNr> &nrs);
-
-    // Allocates all blocks needed for a file
-    /*
-    void allocateFileBlocks(isize bytes,
-                            std::vector<BlockNr> &listBlocks, std::vector<BlockNr> &dataBlocks);
-     */
 
 private:
 
-    // Moves to the next block according to the underlying interleaving scheme
+    // Moves to the next block according to the CBM interleaving scheme
     TSLink advance(TSLink ts);
 
 
@@ -80,26 +65,34 @@ private:
 public:
 
     // Checks if a block is allocated or unallocated
-    bool isUnallocated(BlockNr nr) const noexcept;
-    bool isAllocated(BlockNr nr) const noexcept { return !isUnallocated(nr); }
+    bool isFree(BlockNr nr) const noexcept;
+    bool isFree(TSLink ts) const noexcept;
+    bool isAllocated(BlockNr nr) const noexcept { return !isFree(nr); }
+    bool isAllocated(TSLink ts) const noexcept { return !isFree(ts); }
 
     // Returns the number of allocated or unallocated blocks
     isize numUnallocated() const noexcept;
     isize numAllocated() const noexcept;
 
     // Marks a block as allocated or free
-    void markAsAllocated(BlockNr nr) { setAllocBit(nr, 0); }
-    void markAsFree(BlockNr nr) { setAllocBit(nr, 1); }
     void setAllocBit(BlockNr nr, bool value);
+    void setAllocBit(TSLink ts, bool value);
 
-private:
+    // Convenience wrappers
+    void markAsAllocated(BlockNr nr) { setAllocBit(nr, 0); }
+    void markAsAllocated(TSLink ts) { setAllocBit(ts, 0); }
+    void markAsFree(BlockNr nr) { setAllocBit(nr, 1); }
+    void markAsFree(TSLink ts) { setAllocBit(ts, 1); }
 
-    // Locates the allocation bit for a certain block
-    const FSBlock *locateAllocBit(BlockNr nr, isize *byte, isize *bit) const noexcept;
-    const FSBlock *locateAllocBit(TSLink ref, isize *byte, isize *bit) const noexcept;
+    // Reads the allocation bits from the BAM, for a single track or all tracks.
+    // The n-th bit set means the n-th block is free.
+    std::vector<bool> readBitmap(TrackNr t) const;
+    std::vector<bool> readBitmap() const;
 
-    // Translate the bitmap into to a vector with the n-th bit set iff the n-th block is free
-    std::vector<u32> serializeBitmap() const;
+    // Writes the allocation bits to the BAB, for a single track or all tracks.
+    // The n-th bit set means the n-th block is free.
+    void writeBitmap(TrackNr t, const std::vector<bool> &bitmap);
+    void writeBitmap(const std::vector<bool> &bitmap);
 };
 
 }

@@ -338,7 +338,7 @@ CBMNavigator::importHd(isize n, isize part)
 void
 CBMNavigator::import(const fs::path &path, bool recursive, bool contents)
 {
-    fs->importer.import(path, recursive, contents);
+    fs->importer.import(path);
 }
 
 void
@@ -697,10 +697,8 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 auto path = args.at("path");
                 auto hostPath = host.makeAbsolute(args.at("path"));
-                bool recursive = true;
-                bool contents = path.back() == '/';
 
-                fs->importer.import(fs->bam(), hostPath, recursive, contents);
+                fs->importer.import(hostPath);
             }
     });
 
