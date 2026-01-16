@@ -15,12 +15,14 @@ namespace retro::vault::cbm {
 FSBlockType
 FileSystem::predictType(BlockNr nr, const u8 *buf) const noexcept
 {
+    assert(traits.isValidBlock(nr));
+
     if (buf) {
 
         auto ts = traits.tsLink(nr);
 
         // Track 18 contains the BAM and the directory blocks
-        if (ts.t == 18) return ts.s == 0 ? FSBlockType::BAM : FSBlockType::USERDIR;
+        if (ts->t == 18) return ts->s == 0 ? FSBlockType::BAM : FSBlockType::USERDIR;
 
         // Check if this block is a data block
         for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA;

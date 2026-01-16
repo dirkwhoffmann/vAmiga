@@ -65,10 +65,11 @@ struct FSTraits {
     // Performing integrity checks
     //
 
-    bool isCylinderNr(CylNr c) const { return 1 <= c && c <= numCyls; }
-    bool isHeadNr(HeadNr h) const { return h == 0 || h == 1; }
-    bool isTrackNr(TrackNr t) const { return 1 <= t && t <= numCyls * numHeads; }
-    bool isValidLink(TSLink ref) const;
+    // [[deprecated]] bool isCylinderNr(CylNr c) const { return 1 <= c && c <= numCyls; }
+    // [[deprecated]] bool isHeadNr(HeadNr h) const { return h == 0 || h == 1; }
+    bool isValidTrackNr(TrackNr t) const { return 1 <= t && t <= numCyls * numHeads; }
+    bool isValidLink(TSLink ts) const;
+    bool isValidBlock(BlockNr nr) const;
 
 
     //
@@ -82,33 +83,22 @@ struct FSTraits {
 
 
     //
-    // Translating blocks, tracks, sectors, and heads
+    // Translating blocks, tracks, and sectors
     //
 
-    // DEPRECATED
-    [[deprecated]] CylNr cylNr(TrackNr t) const { return t <= numCyls ? t : t - numCyls; }
-    [[deprecated]] HeadNr headNr(TrackNr t) const { return t <= numCyls ? 0 : 1; }
-    [[deprecated]] TrackNr trackNr(CylNr c, HeadNr h) const { return c + h * numCyls; }
-    TSLink tsLink(BlockNr b) const;
-    [[deprecated]] TrackNr trackNr(BlockNr b) const { return tsLink(b).t; }
-    [[deprecated]] SectorNr sectorNr(BlockNr b) const { return tsLink(b).s; }
-
-
+    optional<TSLink> tsLink(BlockNr b) const;
     optional<BlockNr> blockNr(TSLink ts) const;
 
-
-    // DEPRECATED
-    optional<BlockNr> blockNr(TrackNr t, SectorNr s) const { return blockNr(TSLink{t,s}); }
-    [[deprecated]] optional<BlockNr> blockNr(CylNr c, HeadNr h, SectorNr s) const { return blockNr(trackNr(c,h), s); }
+    [[deprecated]] optional<BlockNr> blockNr(TrackNr t, SectorNr s) const { return blockNr(TSLink{t,s}); }
 
 
     //
     // Ordering blocks
     //
 
-    bool nextBlock(BlockNr b, BlockNr *nb) const;
-    TSLink nextBlockRef(TSLink ts) const;
-    TSLink nextBlockRef(BlockNr b) const;
+    [[deprecated]] bool nextBlock(BlockNr b, BlockNr *nb) const;
+    optional<TSLink> nextBlockRef(TSLink ts) const;
+    optional<TSLink> nextBlockRef(BlockNr b) const;
 };
 
 }

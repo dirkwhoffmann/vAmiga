@@ -373,7 +373,6 @@
 		50BF4B6D2F055C0700F1B9F2 /* AnyImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */; };
 		50BF4B752F09591C00F1B9F2 /* AnyImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B6C2F055C0500F1B9F2 /* AnyImage.cpp */; };
 		50BF4BBC2F0ADF3200F1B9F2 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA52F0ADF3200F1B9F2 /* FileSystemLayer2.cpp */; };
-		50BF4BBD2F0ADF3200F1B9F2 /* FSDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA12F0ADF3200F1B9F2 /* FSDescriptor.cpp */; };
 		50BF4BBE2F0ADF3200F1B9F2 /* PosixAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA82F0ADF3200F1B9F2 /* PosixAdapter.cpp */; };
 		50BF4BBF2F0ADF3200F1B9F2 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BAC2F0ADF3200F1B9F2 /* FSBlock.cpp */; };
 		50BF4BC02F0ADF3200F1B9F2 /* FSAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BAE2F0ADF3200F1B9F2 /* FSAllocator.cpp */; };
@@ -389,7 +388,6 @@
 		50BF4BCB2F0ADF3200F1B9F2 /* FSService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB02F0ADF3200F1B9F2 /* FSService.cpp */; };
 		50BF4BCD2F0ADF3200F1B9F2 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9B2F0ADF3200F1B9F2 /* FSObjects.cpp */; };
 		50BF4BCE2F0ADF3200F1B9F2 /* FSService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB02F0ADF3200F1B9F2 /* FSService.cpp */; };
-		50BF4BCF2F0ADF3200F1B9F2 /* FSDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA12F0ADF3200F1B9F2 /* FSDescriptor.cpp */; };
 		50BF4BD02F0ADF3200F1B9F2 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB82F0ADF3200F1B9F2 /* FSExporter.cpp */; };
 		50BF4BD12F0ADF3200F1B9F2 /* FSImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB62F0ADF3200F1B9F2 /* FSImporter.cpp */; };
 		50BF4BD22F0ADF3200F1B9F2 /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */; };
@@ -1214,8 +1212,6 @@
 		50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		50BF4B9E2F0ADF3200F1B9F2 /* FSContract.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSContract.h; sourceTree = "<group>"; };
 		50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSContract.cpp; sourceTree = "<group>"; };
-		50BF4BA02F0ADF3200F1B9F2 /* FSDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDescriptor.h; sourceTree = "<group>"; };
-		50BF4BA12F0ADF3200F1B9F2 /* FSDescriptor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDescriptor.cpp; sourceTree = "<group>"; };
 		50BF4BA22F0ADF3200F1B9F2 /* FileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		50BF4BA32F0ADF3200F1B9F2 /* FileSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		50BF4BA42F0ADF3200F1B9F2 /* FileSystemLayer1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystemLayer1.cpp; sourceTree = "<group>"; };
@@ -2774,8 +2770,6 @@
 				50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */,
 				50BF4B9E2F0ADF3200F1B9F2 /* FSContract.h */,
 				50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */,
-				50BF4BA02F0ADF3200F1B9F2 /* FSDescriptor.h */,
-				50BF4BA12F0ADF3200F1B9F2 /* FSDescriptor.cpp */,
 				50BF4BA22F0ADF3200F1B9F2 /* FileSystem.h */,
 				50BF4BA32F0ADF3200F1B9F2 /* FileSystem.cpp */,
 				50BF4BA42F0ADF3200F1B9F2 /* FileSystemLayer1.cpp */,
@@ -3363,7 +3357,6 @@
 				50B70CAD252CE0BF006B5191 /* AudioPort.cpp in Sources */,
 				501D686028085131000BB5E9 /* Defaults.cpp in Sources */,
 				5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */,
-				50BF4BBD2F0ADF3200F1B9F2 /* FSDescriptor.cpp in Sources */,
 				502023EA27B6BDEA00820DB6 /* ZorroBoard.cpp in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				509D04972EDA471900355638 /* FSExporter.cpp in Sources */,
@@ -3547,7 +3540,6 @@
 				50FC04BC27DA19B200C3E566 /* DeviceDescriptors.cpp in Sources */,
 				50FC049627DA196C00C3E566 /* DeniseDebugger.cpp in Sources */,
 				50BF4BD82F0ADF3200F1B9F2 /* FileSystem.cpp in Sources */,
-				50BF4BCF2F0ADF3200F1B9F2 /* FSDescriptor.cpp in Sources */,
 				50FC04E727DA1A1400C3E566 /* u_deep.c in Sources */,
 				50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */,
 				50FC04EA27DA1A3900C3E566 /* OSDebuggerDump.cpp in Sources */,

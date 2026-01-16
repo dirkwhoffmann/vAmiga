@@ -150,7 +150,12 @@ FSAllocator::advance(TSLink ts)
 bool
 FSAllocator::isFree(BlockNr nr) const noexcept
 {
-    return isFree(traits.tsLink(nr));
+    assert(traits.isValidBlock(nr));
+
+    if (auto ts = traits.tsLink(nr))
+        return isFree(*ts);
+
+    return false;
 }
 
 bool
@@ -196,7 +201,8 @@ FSAllocator::numAllocated() const noexcept
 void
 FSAllocator::setAllocBit(BlockNr nr, bool value)
 {
-    setAllocBit(traits.tsLink(nr), value);
+    if (auto ts = traits.tsLink(nr))
+        setAllocBit(*ts, value);
 }
 
 void

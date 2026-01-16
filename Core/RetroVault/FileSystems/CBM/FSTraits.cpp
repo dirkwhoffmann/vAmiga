@@ -81,13 +81,19 @@ FSTraits::checkCompatibility() const
 bool
 FSTraits::isValidLink(TSLink ref) const
 {
-    return isTrackNr(ref.t) && ref.s >= 0 && ref.s < numSectors(ref.t);
+    return isValidTrackNr(ref.t) && ref.s >= 0 && ref.s < numSectors(ref.t);
+}
+
+bool
+FSTraits::isValidBlock(BlockNr nr) const
+{
+    return nr >= 0 && nr < numBlocks();
 }
 
 isize
 FSTraits::speedZone(CylNr t) const
 {
-    assert(isTrackNr(t));
+    assert(isValidTrackNr(t));
 
     return (t <= 17) ? 3 : (t <= 24) ? 2 : (t <= 30) ? 1 : 0;
 }
@@ -95,7 +101,7 @@ FSTraits::speedZone(CylNr t) const
 isize
 FSTraits::numSectors(TrackNr t) const
 {
-    if (!isTrackNr(t)) return 0;
+    if (!isValidTrackNr(t)) return 0;
 
     switch (speedZone(t)) {
 
@@ -121,17 +127,18 @@ FSTraits::numBlocks() const
     return result;
 }
 
-TSLink
+optional<TSLink>
 FSTraits::tsLink(BlockNr b) const
 {
-    for (TrackNr i = 1; i <= numTracks(); i++) {
+    auto tracks = numTracks();
+
+    for (TrackNr i = 1; i <= tracks; i++) {
 
         isize num = numSectors(i);
         if (b < num) return TSLink{i,b};
         b -= num;
     }
-
-    return TSLink{0,0};
+    return {};
 }
 
 optional<BlockNr>
@@ -150,13 +157,16 @@ FSTraits::blockNr(TSLink ts) const
     return {};
 }
 
-TSLink
+optional<TSLink>
 FSTraits::nextBlockRef(BlockNr b) const
 {
-    return nextBlockRef(tsLink(b));
+    if (auto ts = tsLink(b))
+        return nextBlockRef(*ts);
+
+    return {};
 }
 
-TSLink
+optional<TSLink>
 FSTraits::nextBlockRef(TSLink ref) const
 {
     assert(isValidLink(ref));
@@ -183,7 +193,7 @@ FSTraits::nextBlockRef(TSLink ref) const
         s = next[4][s];
 
         // Return immediately if we've wrapped over (directory track is full)
-        if (s == 0) return {0,0};
+        if (s == 0) return {};
 
     } else {
 
@@ -193,7 +203,7 @@ FSTraits::nextBlockRef(TSLink ref) const
         // Move to the next track if we've wrapped over
         if (s == 0) {
 
-            if (t >= numTracks()) return {0,0};
+            if (t >= numTracks()) return {};
             t = t == 17 ? 19 : t + 1;
         }
     }

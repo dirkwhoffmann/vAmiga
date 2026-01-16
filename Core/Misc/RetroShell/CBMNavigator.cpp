@@ -16,6 +16,7 @@
 #include "utl/chrono.h"
 #include "utl/support.h"
 #include "utl/io.h"
+#include <format>
 #include <regex>
 
 namespace vamiga {
@@ -38,9 +39,13 @@ CBMNavigator::prompt()
 
     if (fs) {
 
-        auto ts = fs->getTraits().tsLink(cb);
+        ss << "[" << std::to_string(cb);
 
-        ss << "[" << std::to_string(cb) << "]";
+        if (auto ts = fs->getTraits().tsLink(cb))
+            ss << " (" << std::to_string(ts->t) << ":" << std::to_string(ts->s) << ")";
+
+        ss << "]";
+
         auto fsName = fs->stat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
     }

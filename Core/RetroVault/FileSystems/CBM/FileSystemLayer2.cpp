@@ -156,15 +156,17 @@ FileSystem::link(const FSDirEntry &entry)
 void
 FileSystem::unlink(BlockNr node)
 {
-    auto ts  = traits.tsLink(node);
-    auto dir = readDir();
+    if (auto ts = traits.tsLink(node)) {
 
-    for (auto &slot : dir) {
+        auto dir = readDir();
 
-        if (slot.firstDataTrack == ts.t && slot.firstDataSector == ts.s) {
+        for (auto &slot : dir) {
 
-            slot = FSDirEntry();
-            writeDir(dir);
+            if (slot.firstDataTrack == ts->t && slot.firstDataSector == ts->s) {
+
+                slot = FSDirEntry();
+                writeDir(dir);
+            }
         }
     }
 }
@@ -257,8 +259,8 @@ FileSystem::createFile(const PETName<16> &name, const u8 *buf, isize size)
 
     // Create a directory entry
     FSDirEntry entry;
-    entry.firstDataTrack  = u8(first.t);
-    entry.firstDataSector = u8(first.s);
+    entry.firstDataTrack  = u8(first->t);
+    entry.firstDataSector = u8(first->s);
 
     // Add the file to the directory
     link(entry);
@@ -412,9 +414,9 @@ FileSystem::replace(std::vector<BlockNr> blocks, const u8 *buf, isize size)
         if (i < blocks.size() - 1) {
 
             // Intermediate block: TS link
-            TSLink ts = traits.tsLink(blocks[i + 1]);
-            data[0] = u8(ts.t);
-            data[1] = u8(ts.s);
+            auto ts = traits.tsLink(blocks[i + 1]);
+            data[0] = u8(ts->t);
+            data[1] = u8(ts->s);
 
         } else {
 
@@ -440,7 +442,7 @@ FileSystem::reclaim(BlockNr b)
 vector<BlockNr>
 FileSystem::collectDirBlocks() const
 {
-    return collect(*traits.blockNr(18, 1), [&](const FSBlock *node) {
+    return collect(bam() + 1, [&](const FSBlock *node) {
         return tryFetch(node->tsLink());
     });
 }

@@ -22,10 +22,12 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
 {
     loginfo(FS_DEBUG, "Creating file system...\n");
 
-    auto layout = FSDescriptor(vol.capacity());
+    // Check consistency
+    if (vol.size() != 683 && vol.size() != 768 && vol.size() != 802)
+        throw FSError(FSError::FS_WRONG_CAPACITY);
 
-    // Check consistency (may throw)
-    layout.checkCompatibility();
+    if (vol.bsize() != 256)
+        throw FSError(FSError::FS_WRONG_BSIZE);
 
     // Derive persistant file system properties
     traits.init(cache.predictDOS(vol), vol.capacity());

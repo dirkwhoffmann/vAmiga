@@ -11,7 +11,6 @@ FSBlock.cpp
 FSCache.cpp
 FSContract.cpp
 FSError.cpp
-FSDescriptor.cpp
 FSDoctor.cpp
 FSExporter.cpp
 FSImporter.cpp

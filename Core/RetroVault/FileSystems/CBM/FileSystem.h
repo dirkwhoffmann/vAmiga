@@ -91,7 +91,6 @@
 #include "FileSystems/CBM/FSError.h"
 #include "FileSystems/CBM/FSBlock.h"
 #include "FileSystems/CBM/FSContract.h"
-#include "FileSystems/CBM/FSDescriptor.h"
 #include "FileSystems/CBM/FSObjects.h"
 #include "FileSystems/CBM/FSCache.h"
 #include "FileSystems/CBM/FSDirEntry.h"
@@ -193,8 +192,6 @@ public:
     FSAttr attr(const FSDirEntry &entry) const;
     optional<FSAttr> attr(const PETName<16> &name) const;
     optional<FSAttr> attr(const fs::path &path) const;
-
-    //FSAttr attr(BlockNr nr) const;
 
 
     //
