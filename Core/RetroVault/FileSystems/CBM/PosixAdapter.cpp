@@ -306,7 +306,7 @@ PosixAdapter::read(HandleRef ref, std::span<u8> buffer)
     auto &meta   = ensureMeta(node.nr);
 
     // Cache the file if necessary
-    if (meta.cache.empty()) { node.extractData(meta.cache); }
+    if (meta.cache.empty()) { fs.extractData(handle.node, meta.cache); }
 
     // Check for EOF
     if (handle.offset >= meta.cache.size) return 0;
@@ -330,7 +330,7 @@ PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
     auto &meta   = ensureMeta(handle.node);
 
     // Cache the file if necessary
-    if (meta.cache.empty()) { fs.fetch(handle.node).extractData(meta.cache); }
+    if (meta.cache.empty()) { fs.extractData(handle.node, meta.cache); }
 
     // Determine the new file size
     auto newSize = std::max(meta.cache.size, handle.offset + (isize)buffer.size());

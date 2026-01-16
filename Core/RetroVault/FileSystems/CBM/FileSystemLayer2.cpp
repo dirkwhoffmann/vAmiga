@@ -380,11 +380,38 @@ FileSystem::copy(BlockNr item, BlockNr dest, const FSName &name)
 }
 */
 
+isize
+FileSystem::extractData(BlockNr b, Buffer<u8> &buf) const
+{
+    auto blocks = collectDataBlocks(b);
+    if (blocks.empty()) return 0;
+
+    // Compute total size
+    isize byteCount = 0;
+    for (auto blockNr : blocks) {
+        byteCount += fetch(blockNr).dataSection().size();
+    }
+
+    // Resize target buffer
+    buf.resize(byteCount);
+
+    // Copy data
+    u8 *p = buf.ptr;
+    for (auto blockNr : blocks) {
+
+        auto chunk = fetch(blockNr).dataSection();
+        memcpy(p, chunk.data(), chunk.size());
+        p += chunk.size();
+    }
+
+    return byteCount;
+}
+
 void
 FileSystem::resize(BlockNr at, isize size)
 {
     // Extract file data
-    Buffer<u8> buffer; fetch(at).extractData(buffer);
+    Buffer<u8> buffer; extractData(at, buffer);
 
     // Adjust size (pads with zero when growing)
     buffer.resize(size, 0);
@@ -467,6 +494,24 @@ FileSystem::reclaim(BlockNr b)
 
     // Remove all blocks
     for (auto &it : blocks) { cache.erase(it); allocator.markAsFree(it); }
+}
+
+optional<BlockNr>
+FileSystem::nextBlock(BlockNr b) const noexcept
+{
+    if (auto *block = tryFetch(b))
+        return traits.blockNr(block->tsLink());
+
+    return {};
+}
+
+optional<TSLink>
+FileSystem::nextBlock(TSLink ts) const noexcept
+{
+    if (auto *block = tryFetch(ts))
+        return block->tsLink();
+
+    return {};
 }
 
 vector<BlockNr>

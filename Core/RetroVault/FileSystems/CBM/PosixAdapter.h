@@ -38,7 +38,7 @@ class PosixAdapter : public PosixView {
     FileSystem &fs;
 
     // Contracts
-    FSRequire require = FSRequire(fs);
+    // FSRequire require = FSRequire(fs);
 
     // Metadata for nodes indexed by block number
     std::unordered_map<BlockNr, NodeMeta> meta;

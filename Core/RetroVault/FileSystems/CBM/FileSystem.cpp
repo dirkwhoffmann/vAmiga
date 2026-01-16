@@ -23,7 +23,7 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     loginfo(FS_DEBUG, "Creating file system...\n");
 
     // Check consistency
-    if (vol.size() != 683 && vol.size() != 768 && vol.size() != 802)
+    if (vol.capacity() != 683 && vol.capacity() != 768 && vol.capacity() != 802)
         throw FSError(FSError::FS_WRONG_CAPACITY);
 
     if (vol.bsize() != 256)
@@ -32,25 +32,19 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     // Derive persistant file system properties
     traits.init(cache.predictDOS(vol), vol.capacity());
 
-    if constexpr (debug::FS_DEBUG) dumpState();
+    if constexpr (debug::FS_DEBUG) dumpStatfs();
     loginfo(FS_DEBUG, "Success\n");
 }
 
 void
-FileSystem::dumpInfo(std::ostream &os) const noexcept
-{
-    os << "Type   Size             Used    Free    Full  Name" << std::endl;
-    dumpState(os);
-}
-
-void
-FileSystem::dumpState(std::ostream &os) const noexcept
+FileSystem::dumpStatfs(std::ostream &os) const noexcept
 {
     using namespace utl;
 
     auto st = stat();
-
     auto size = std::to_string(traits.blocks) + " (x " + std::to_string(traits.bsize) + ")";
+
+    os << "Type   Size             Used    Free    Full  Name" << std::endl;
 
     if (isFormatted()) {
 

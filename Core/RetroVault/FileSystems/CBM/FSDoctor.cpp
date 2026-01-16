@@ -81,17 +81,19 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
             for (const auto &it : fs.readDirBlock(nr)) {
 
                 os << tab("Slot " + std::to_string(++slot));
+
+                auto name = "\"" + it.getName().str() + "\"";
+                auto size = it.getFileSize();
+                auto type = it.typeString();
+                auto t    = it.firstDataTrack;
+                auto s    = it.firstDataSector;
+
                 if (it.empty()) {
                     os << "<empty>" << std::endl;
                 } else {
-                    os << it.getName().str() << std::endl;
+                    os << std::format("{:<5} {:<16} {} -> {:>2}:{:<2}\n",
+                                      size, name, type, t, s);
                 }
-                os << tab("Size");
-                os << (it.fileSizeHi << 8 | it.fileSizeLo) << std::endl;
-                os << tab("First data block");
-                os << it.firstDataTrack << ":" << it.firstDataSector << std::endl;
-
-                if (slot < 8) os << std::endl;
             }
             break;
         }

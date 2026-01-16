@@ -164,10 +164,9 @@ public:
 
 public:
 
-    void dumpInfo(std::ostream &ss = std::cout) const noexcept;
-    void dumpState(std::ostream &ss = std::cout) const noexcept;
-    void dumpProps(std::ostream &ss = std::cout) const noexcept;
-    void dumpBlocks(std::ostream &ss = std::cout) const noexcept;
+    void dumpStatfs(std::ostream &os = std::cout) const noexcept;
+    void dumpProps(std::ostream &os = std::cout) const noexcept;
+    void dumpBlocks(std::ostream &os = std::cout) const noexcept;
 
 
     //
@@ -329,6 +328,9 @@ public:
     // void copy(BlockNr item, BlockNr dest);
     // void copy(BlockNr item, BlockNr dest, const FSName &name);
 
+    // Extracts the data from a file
+    isize extractData(BlockNr b, Buffer<u8> &buf) const;
+
     // Shrinks or expands an existing file (pad with 0)
     void resize(BlockNr at, isize size);
 
@@ -358,6 +360,9 @@ public:
     //
 
 public:
+
+    optional<BlockNr> nextBlock(BlockNr b) const noexcept;
+    optional<TSLink> nextBlock(TSLink ts) const noexcept;
 
     vector<BlockNr> collectDirBlocks() const;
     vector<BlockNr> collectDataBlocks(BlockNr nr) const;

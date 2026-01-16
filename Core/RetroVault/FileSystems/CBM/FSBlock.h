@@ -91,9 +91,9 @@ public:
 public:
 
     // const char *objectName() const;
-    void dumpInfo(std::ostream &os) const;
-    void dumpStorage(std::ostream &os) const;
-    void dumpBlocks(std::ostream &os) const;
+    // void dumpInfo(std::ostream &os) const;
+    // void dumpStorage(std::ostream &os) const;
+    // void dumpBlocks(std::ostream &os) const;
 
     
     //
@@ -106,17 +106,7 @@ public:
     bool is(FSBlockType type) const;
     bool isEmpty() const;
     bool isBAM() const;
-    /*
-    bool isDirectory() const;
-    bool isRegular() const;
     bool isData() const;
-    */
-
-    // [[deprecated]] string relName(BlockNr top) const;
-
-    // Experimental
-    //string acabsName() const;
-    // string acrelName() const;
 
     // Converts the path to a host path
     fs::path sanitizedPath() const;
@@ -145,9 +135,13 @@ public:
     // Reading and writing block data
     //
 
-    // Provides the data of a block
+    // Provides the data of this block
     u8 *data();
     const u8 *data() const;
+
+    // Provides a span on the data section of this block (may be empty)
+    std::span<u8> dataSection();
+    std::span<const u8> dataSection() const;
 
     // Grants write access for this block
     FSBlock &mutate() const;
@@ -236,7 +230,7 @@ public:
     isize writeData(std::ostream &os) const;
     isize writeData(std::ostream &os, isize size) const;
     isize writeData(Buffer<u8> &buf, isize offset, isize count) const;
-    isize extractData(Buffer<u8> &buf) const;
+    // isize extractData(Buffer<u8> &buf) const;
 
     
     //

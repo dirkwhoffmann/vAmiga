@@ -88,6 +88,12 @@ FSBlock::isBAM() const
     return type == FSBlockType::BAM;
 }
 
+bool
+FSBlock::isData() const
+{
+    return type == FSBlockType::DATA;
+}
+
 fs::path
 FSBlock::sanitizedPath() const
 {
@@ -247,6 +253,26 @@ FSBlock::data() const
     return const_cast<const u8 *>(const_cast<FSBlock *>(this)->data());
 }
 
+std::span<u8>
+FSBlock::dataSection()
+{
+    isize count = 0;
+
+    if (isData()) {
+
+        auto ts = tsLink();
+        count = (ts.t == 0 && ts.s <= 254) ? ts.s : 254;
+    }
+
+    return std::span<u8>(data() + 2, count);
+}
+
+std::span<const u8>
+FSBlock::dataSection() const
+{
+    return const_cast<FSBlock *>(this)->dataSection();
+}
+
 FSBlock &
 FSBlock::mutate() const
 {
@@ -284,84 +310,17 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
+/*
 void
 FSBlock::dumpInfo(std::ostream &os) const
 {
     using namespace utl;
-
-    /*
-    auto byteStr = [&os](isize num) {
-
-        auto str = std::to_string(num) + " Byte" + (num == 1 ? "" : "s");
-        os << std::setw(13) << std::left << std::setfill(' ') << str;
-    };
-    auto blockStr = [&os](isize num) {
-
-        auto str = std::to_string(num) + " Block" + (num == 1 ? "" : "s");
-        os << std::setw(13) << std::left << std::setfill(' ') << str;
-    };
-    */
-    /*
-    switch (type) {
-
-        case FSBlockType::FILEHEADER:
-        {
-            auto name = getName().str();
-            auto size = getFileSize();
-            auto listBlocks = isize(fs->collectListBlocks(nr).size());
-            auto dataBlocks = isize(fs->collectDataBlocks(nr).size());
-            auto totalBlocks = 1 + listBlocks + dataBlocks;
-            auto tab = int(name.size()) + 4;
-
-            os << std::setw(tab) << std::left << "Name";
-            os << "Size         Header       Lists        Data         Total" << std::endl;
-
-            os << std::setw(tab) << std::left << name;
-            byteStr(size);
-            blockStr(1);
-            blockStr(listBlocks);
-            blockStr(dataBlocks);
-            blockStr(totalBlocks);
-            os << std::endl;
-        }
-        default:
-            break;
-    }
-    */
 }
 
 void
 FSBlock::dumpBlocks(std::ostream &os) const
 {
     using namespace utl;
-
-    /*
-    switch (type) {
-
-        case FSBlockType::FILEHEADER:
-        {
-            auto size = getFileSize();
-            auto listBlocks = fs->collectListBlocks(nr);
-            auto dataBlocks = fs->collectDataBlocks(nr);
-            auto totalBlocks = 1 + listBlocks.size() + dataBlocks.size();
-
-            os << tab("Name");
-            os << getName().str() << std::endl;
-            os << tab("Blocks");
-            os << totalBlocks << " Block" << (totalBlocks == 1 ? "" : "s") << std::endl;
-            os << tab("Size");
-            os << size << " Byte" << (size == 1 ? "" : "s") << std::endl;
-            os << tab("File header block");
-            os << nr << std::endl;
-            os << tab("File list blocks");
-            os << FSBlock::rangeString(listBlocks) << std::endl;
-            os << tab("Data blocks");
-            os << FSBlock::rangeString(dataBlocks) << std::endl;
-        }
-        default:
-            break;
-    }
-    */
 }
 
 void
@@ -369,7 +328,7 @@ FSBlock::dumpStorage(std::ostream &os) const
 {
     fs->doctor.dump(nr, os);
 }
-
+*/
 /*
 void
 FSBlock::hexDump(std::ostream &os, const DumpOpt &opt) const
@@ -533,15 +492,12 @@ FSBlock::setName(PETName<16> name)
 isize
 FSBlock::writeData(std::ostream &os) const
 {
-    Buffer<u8> buffer;
-    
+    auto data = dataSection();
+
     // Write block into buffer
-    extractData(buffer);
-    
-    // Export the buffer
-    os << buffer;
-    
-    return buffer.size;
+    os.write((const char *)data.data(), std::streamsize(data.size()));
+
+    return isize(data.size());
 }
 
 isize
@@ -562,6 +518,7 @@ FSBlock::writeData(std::ostream &os, isize size) const
     }
 }
 
+#if 0
 isize
 FSBlock::extractData(Buffer<u8> &buf) const
 {
@@ -625,6 +582,7 @@ FSBlock::extractData(Buffer<u8> &buf) const
     return bytesTotal;
      */
 }
+#endif
 
 isize
 FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count) const

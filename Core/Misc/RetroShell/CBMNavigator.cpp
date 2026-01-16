@@ -385,7 +385,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
             if (fs) {
 
-                fs->dumpInfo(os);
+                fs->dumpStatfs(os);
 
             } else {
 
@@ -455,7 +455,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 auto name = args.contains("name") ? args.at("name") : "New Disk";
                 fs->format(type);
                 fs->setName(PETName<16>(name));
-                fs->dumpInfo(os);
+                fs->dumpStatfs(os);
             }
     });
 
@@ -556,12 +556,14 @@ CBMNavigator::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                auto n = values[0];
-                d64 = Codec::makeD64(*df[n]);
+                d64 = Codec::makeD64(*df[values[0]]);
                 vol = make_unique<Volume>(*d64);
                 fs  = make_unique<retro::vault::cbm::FileSystem>(*vol);
 
-                fs->dumpInfo(os);
+                // Select the BAM as current working block
+                cb = fs->bam();
+
+                fs->dumpStatfs(os);
 
             }, .payload = {i}
         });
@@ -738,7 +740,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 if (args.contains("b")) {
                     fs->dumpBlocks(os);
                 } else {
-                    fs->dumpInfo(os);
+                    fs->dumpStatfs(os);
                 }
 
             }
@@ -755,11 +757,12 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
-                auto &file = fs->fetch(parseFileOrBlock(args, "path"));
-                file.dumpInfo(os);
+                auto block = parseFileOrBlock(args, "file", cb);
+                fs->doctor.dump(block, os);
             }
     });
 
+    /*
     root.add({
 
         .tokens = { "file" },
@@ -778,6 +781,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 args.contains("v") ? file.dumpBlocks(os) : file.dumpInfo(os);
             }
     });
+    */
 
     root.add({
 
@@ -834,22 +838,16 @@ CBMNavigator::initCommands(RSCommand &root)
         .chelp  = { "Print the contents of a file" },
         .flags  = rs::ac,
         .args   = {
-            { .name = { "path", "File path" }, .flags = rs::opt }
+            { .name = { "file", "File path" } }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFormattedFS();
-
-                /*
-                auto &file = fs->fetch(parsePath(args, "path", fs->pwd()));
-                if (!file.isFile()) {
-                    throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
-                }
+                auto file = parseFile(args, "file");
 
                 Buffer<u8> buffer;
-                file.extractData(buffer);
+                fs->extractData(file, buffer);
                 buffer.txtDump(os);
-                */
             }
     });
 
@@ -938,14 +936,32 @@ CBMNavigator::initCommands(RSCommand &root)
         .chelp  = { "Selects the current working block" },
         .flags  = rs::ac,
         .args   = {
-            { .name = { "nr", "Block number" } }
+            { .name = { "file", "File name or block number" } }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFormattedFS();
 
-                auto nr = parseBlock(args, "nr");
-                cb = nr;
+                cb = parseFileOrBlock(args, "file");
+            }
+    });
+
+    root.add({
+
+        .tokens = { "next" },
+        .chelp  = { "Take the TS link to the next block" },
+        .flags  = rs::ac,
+        .args   = {
+            { .name = { "file", "File name or block number" } }
+        },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
+                if (auto ts = fs->getTraits().tsLink(cb)) {
+                    if (auto b = fs->getTraits().blockNr(*ts)) {
+                        cb = *b;
+                    }
+                }
             }
     });
 
