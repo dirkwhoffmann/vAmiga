@@ -133,8 +133,8 @@ FileSystem::stat() const noexcept
         .name           = bam.getName().str(),
         .bsize          = traits.bsize,
         .blocks         = traits.blocks,
-        .freeBlocks     = cache.freeBlocks(),
-        .usedBlocks     = cache.usedBlocks(),
+        .freeBlocks     = allocator.numUnallocated(),
+        .usedBlocks     = allocator.numAllocated(),
         .blockReads     = 0, // Not yet supported
         .blockWrites    = 0, // Not yet supported
     };
@@ -166,19 +166,20 @@ FileSystem::attr(const FSDirEntry &entry) const
     };
 }
 
-FSAttr
-FileSystem::attr(BlockNr nr) const
+optional<FSAttr>
+FileSystem::attr(const PETName<16> &name) const
 {
-    auto size   = isize(fetch(nr).getFileSize());
-    auto blocks = allocator.requiredBlocks(size);
+    if (auto item = searchDir(name)) {
+        return attr(*item);
+    }
 
-    FSAttr result = {
+    return {};
+}
 
-        .size   = size,
-        .blocks = blocks,
-    };
-
-    return result;
+optional<FSAttr>
+FileSystem::attr(const fs::path &path) const
+{
+    return attr(PETName<16>(path.string()));
 }
 
 }

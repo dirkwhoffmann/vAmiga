@@ -172,8 +172,8 @@ FileSystem::stat() const noexcept
 
         .bsize          = traits.bsize,
         .blocks         = traits.blocks,
-        .freeBlocks     = cache.freeBlocks(),
-        .usedBlocks     = cache.usedBlocks(),
+        .freeBlocks     = allocator.numUnallocated(),
+        .usedBlocks     = allocator.numAllocated(),
         .btime          = rb.isRoot() ? rb.getCreationDate().time() : FSTime().time(),
         .mtime          = rb.isRoot() ? rb.getModificationDate().time() : FSTime().time(),
         .blockReads     = 0, // Not yet supported

@@ -55,6 +55,9 @@ struct FSDirEntry
     // Returns the file type as a string
     const string typeString() const;
 
+    // Returns the file size in blocks
+    isize getFileSize() const;
+
     // Returns true if this file does not appear in a regular directory listing
     bool isHidden() const;
 

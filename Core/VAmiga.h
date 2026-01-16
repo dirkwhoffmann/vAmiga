@@ -1554,12 +1554,13 @@ public:
 
     /** @brief  Installs a file system in the file system navigator
      */
+    /*
     void import(const FloppyDrive &dfn);
     void import(const HardDrive &hdn, isize part);
     void importDf(isize n);
     void importHd(isize n, isize part);
     void import(const std::filesystem::path &path, bool recursive = true, bool contents = false);
-
+    */
 
     /** @brief  Exports the file system in the file system navigator
      */

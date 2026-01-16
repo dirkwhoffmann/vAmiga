@@ -56,7 +56,7 @@ public:
 
     void init(FSBlockType t);
 
-    static FSBlock *make(FileSystem *ref, BlockNr nr, FSBlockType type);
+    // static FSBlock *make(FileSystem *ref, BlockNr nr, FSBlockType type);
     static std::vector<BlockNr> refs(const std::vector<const FSBlock *> blocks);
 
 
@@ -90,7 +90,7 @@ public:
     
 public:
 
-    const char *objectName() const;
+    // const char *objectName() const;
     void dumpInfo(std::ostream &os) const;
     void dumpStorage(std::ostream &os) const;
     void dumpBlocks(std::ostream &os) const;
@@ -106,18 +106,12 @@ public:
     bool is(FSBlockType type) const;
     bool isEmpty() const;
     bool isBAM() const;
-    bool isRoot() const;
-    bool isFile() const;
+    /*
     bool isDirectory() const;
     bool isRegular() const;
     bool isData() const;
-
-    /*
-    PETName<16> name() const;
-    string cppName() const;
-    string absName() const;
-    string relName() const;
     */
+
     // [[deprecated]] string relName(BlockNr top) const;
 
     // Experimental
@@ -180,20 +174,6 @@ public:
     void inc32(isize n) { inc32(addr32(n)); }
     void dec32(isize n) { dec32(addr32(n)); }
 
-    // Returns the location of the checksum inside this block
-    isize checksumLocation() const;
-    
-    // Computes a checksum for this block
-    u32 checksum() const;
-    
-    // Updates the checksum in this block
-    void updateChecksum();
-    
-private:
-
-    u32 checksumStandard() const;
-    u32 checksumBootBlock() const;
-
 
     //
     // Printing
@@ -247,136 +227,6 @@ public:
     bool hasName() const;
     PETName<16> getName() const;
     void setName(PETName<16> name);
-    bool isNamed(const PETName<16> &other) const;
-
-//    FSComment getComment() const;
-//    void setComment(FSComment name);
-
-
-    //
-    // Getting and setting file properties
-    //
-    
-    u32 getFileSize() const;
-    void setFileSize(u32 val);
-
-
-    //
-    // Getting and setting meta information
-    //
-
-    bool hasHeaderKey() const;
-    u32 getHeaderKey() const;
-    void setHeaderKey(u32 val);
-
-    bool hasChecksum() const;
-    u32 getChecksum() const;
-    void setChecksum(u32 val);
-
-
-    //
-    // Chaining blocks
-    //
-
-    // Link to the parent directory block
-    BlockNr getParentDirRef() const;
-    void setParentDirRef(BlockNr ref);
-    const FSBlock *getParentDirBlock() const;
-
-    // Link to the file header block
-    BlockNr getFileHeaderRef() const;
-    void setFileHeaderRef(BlockNr ref);
-    const FSBlock *getFileHeaderBlock() const;
-
-    // Link to the next block with the same hash
-    BlockNr getNextHashRef() const;
-    void setNextHashRef(BlockNr ref);
-    const FSBlock *getNextHashBlock() const;
-
-    // Link to the next extension block
-    BlockNr getNextListBlockRef() const;
-    void setNextListBlockRef(BlockNr ref);
-    const FSBlock *getNextListBlock() const;
-    
-    // Link to the next bitmap extension block
-    BlockNr getNextBmExtBlockRef() const;
-    void setNextBmExtBlockRef(BlockNr ref);
-    const FSBlock *getNextBmExtBlock() const;
-    
-    // Link to the first data block
-    BlockNr getFirstDataBlockRef() const;
-    void setFirstDataBlockRef(BlockNr ref);
-    const FSBlock *getFirstDataBlock() const;
-
-    BlockNr getDataBlockRef(isize nr) const;
-    void setDataBlockRef(isize nr, BlockNr ref);
-    const FSBlock *getDataBlock(isize nr) const;
-
-    // Link to the next data block
-    BlockNr getNextDataBlockRef() const;
-    void setNextDataBlockRef(BlockNr ref);
-    const FSBlock *getNextDataBlock() const;
-
-
-    //
-    // Working with hash tables
-    //
-
-    // Returns true if this block can be stored in a hash list
-    bool isHashable() const;
-
-    // Returns the hash table size
-    isize hashTableSize() const;
-    bool hasHashTable() const { return hashTableSize() != 0; }
-
-    // Returns a hash value for this block
-    u32 hashValue() const;
-
-    // Looks up an item in the hash table
-    BlockNr getHashRef(BlockNr nr) const;
-    void setHashRef(BlockNr nr, BlockNr ref);
-
-
-    //
-    // Working with bitmap blocks
-    //
-
-    // Adds bitmap block references to the root block or an extension block
-    bool addBitmapBlockRefs(std::vector<BlockNr> &refs);
-    void addBitmapBlockRefs(std::vector<BlockNr> &refs,
-                            std::vector<BlockNr>::iterator &it);
-
-    // Gets or sets a link to a bitmap block
-    isize numBmBlockRefs() const;
-    BlockNr getBmBlockRef(isize nr) const;
-    void setBmBlockRef(isize nr, BlockNr ref);
-    std::vector<BlockNr> getBmBlockRefs() const;
-
-
-    //
-    // Working with data blocks
-    //
-    
-    // Gets or sets the data block number
-    u32 getDataBlockNr() const;
-    void setDataBlockNr(BlockNr val);
-
-    // Returns the maximum number of storable data block references
-    isize getMaxDataBlockRefs() const;
-
-    // Gets or sets the number of data block references in this block
-    isize getNumDataBlockRefs() const;
-    void setNumDataBlockRefs(u32 val);
-    void incNumDataBlockRefs();
-    std::vector<BlockNr> getDataBlockRefs() const;
-
-    // Adds a data block reference to this block
-    bool addDataBlockRef(BlockNr ref);
-    void addDataBlockRef(BlockNr first, BlockNr ref);
-
-    // Gets or sets the number of data bytes stored in this block
-    u32 getDataBytesInBlock() const;
-    void setDataBytesInBlock(u32 val);
 
     
     //
@@ -433,11 +283,14 @@ inline std::function<bool(const FSBlock *, const FSBlock *)> alphaPtr = [](const
 
 */
 
+/*
 inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;
 inline std::function<bool(const FSBlock *, const FSBlock *)> nonePtr = nullptr;
+*/
 
 }
 
+/*
 namespace accept {
 
 inline std::function<bool(const FSBlock &)> all = [](const FSBlock &b1)
@@ -462,5 +315,6 @@ inline std::function<bool(const FSBlock &)> pattern(const FSPattern &p)
 };
 
 }
+*/
 
 }

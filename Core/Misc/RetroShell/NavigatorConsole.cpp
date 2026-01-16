@@ -491,12 +491,12 @@ NavigatorConsole::initCommands(RSCommand &root)
     
     
     //
-    // Importing and exporting
+    // Creating
     //
 
-    /*
     RSCommand::currentGroup = "Create";
-    
+    /*
+
     root.add({
         
         .tokens = { "create" },

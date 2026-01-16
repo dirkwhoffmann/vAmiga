@@ -59,17 +59,6 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
     os << tab("Type");
     os << FSBlockTypeEnum::key(p.type) << std::endl;
 
-    if (p.hasHeaderKey()) {
-
-        os << tab("Header Key");
-        os << dec(p.getHeaderKey()) << std::endl;
-    }
-    if (p.hasChecksum()) {
-
-        os << tab("Checksum");
-        os << hex(p.getChecksum()) << std::endl;
-    }
-
     switch (p.type) {
 
         case FSBlockType::BAM:
@@ -80,22 +69,16 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
 
         case FSBlockType::USERDIR:
 
+            /*
             os << tab("Name");
             os << p.getName().str() << std::endl;
             os << tab("Next");
             os << dec(p.getNextHashRef()) << std::endl;
+            */
             break;
 
         case FSBlockType::DATA:
 
-            os << tab("File header block");
-            os << p.getFileHeaderRef() << std::endl;
-            os << tab("Chain number");
-            os << p.getDataBlockNr() << std::endl;
-            os << tab("Data bytes");
-            os << p.getDataBytesInBlock() << std::endl;
-            os << tab("Next data block");
-            os << p.getNextDataBlockRef() << std::endl;
             break;
 
         default:

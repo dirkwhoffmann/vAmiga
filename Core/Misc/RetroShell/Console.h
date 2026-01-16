@@ -512,10 +512,13 @@ public:
 
 class CBMNavigator final : public Console
 {
-    unique_ptr<ADFFile> adf;
+    [[deprecated]] unique_ptr<ADFFile> adf;
     unique_ptr<D64File> d64;
     unique_ptr<Volume> vol;
     unique_ptr<retro::vault::cbm::FileSystem> fs;
+
+    // Currently observed block
+    BlockNr cb = 0;
 
     using Console::Console;
 
@@ -550,23 +553,27 @@ class CBMNavigator final : public Console
     BlockNr parsePath(const Arguments &argv, const string &token, BlockNr fallback);
     BlockNr parseFile(const Arguments &argv, const string &token);
     BlockNr parseFile(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parseDirectory(const Arguments &argv, const string &token);
-    BlockNr parseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
+    // BlockNr parseDirectory(const Arguments &argv, const string &token);
+    // BlockNr parseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
 
     std::pair<DumpOpt,DumpFmt> parseDumpOpts(const Arguments &argv);
 
     // Experimental
+    /*
     BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound);
     BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
     BlockNr matchPath(const string &path, Tokens &notFound);
+    */
 
 public:
 
     // Imports the file system from a floppy drive or hard drive
+    /*
     void import(const FloppyDrive &dfn);
     void import(const HardDrive &hdn, isize part);
     void importDf(isize n);
     void importHd(isize n, isize part);
+     */
     void import(const fs::path &path, bool recursive = true, bool contents = false);
 
     // Throws an exception if the file system fails to match the condition

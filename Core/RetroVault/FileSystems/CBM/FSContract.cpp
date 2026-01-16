@@ -28,6 +28,7 @@ FSRequire::inRange(BlockNr nr) const
     }
 }
 
+/*
 void
 FSRequire::file(BlockNr nr) const
 {
@@ -67,6 +68,7 @@ FSRequire::notRoot(BlockNr nr) const
         throw FSError(FSError::FS_INVALID_PATH);
     }
 }
+*/
 
 void
 FSRequire::emptyDirectory() const
@@ -77,14 +79,17 @@ FSRequire::emptyDirectory() const
 }
 
 void
-FSRequire::notExist(BlockNr nr, const FSName &name) const
+FSRequire::exists(const PETName<16> &name) const
 {
-    directory(nr);
-    /*
-    auto &node = fs.fetch(nr);
-    if (node.fs->searchdir(node.nr, name))
-    */
-    throw FSError(FSError::FS_EXISTS);
+    if (auto result = fs.searchDir(name); !result.has_value())
+        throw FSError(FSError::FS_NOT_FOUND);
+}
+
+void
+FSRequire::notExist(const PETName<16> &name) const
+{
+    if (auto result = fs.searchDir(name); result.has_value())
+        throw FSError(FSError::FS_EXISTS);
 }
 
 void

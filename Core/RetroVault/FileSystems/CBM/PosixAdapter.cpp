@@ -61,20 +61,23 @@ PosixAdapter::stat() const noexcept
 FSPosixAttr
 PosixAdapter::attr(const fs::path &path) const
 {
-    auto stat = fs.attr(fs.seek(path));
+    if (auto stat = fs.attr(path)) {
 
-    return FSPosixAttr {
+        return FSPosixAttr {
 
-        .size           = stat.size,
-        .blocks         = stat.blocks,
-        .prot           = u32{0},
-        .isDir          = false,
+            .size           = stat->size,
+            .blocks         = stat->blocks,
+            .prot           = u32{0},
+            .isDir          = false,
 
-        .btime          = time_t{0},
-        .atime          = time_t{0},
-        .mtime          = time_t{0},
-        .ctime          = time_t{0},
-    };
+            .btime          = time_t{0},
+            .atime          = time_t{0},
+            .mtime          = time_t{0},
+            .ctime          = time_t{0},
+        };
+    }
+
+    throw FSError(FSError::FS_NOT_FOUND);
 }
 
 void
@@ -201,11 +204,11 @@ PosixAdapter::getHandle(HandleRef ref)
 BlockNr
 PosixAdapter::ensureFile(const fs::path &path)
 {
-    auto node = fs.seek(path);
-    require.file(node);
-    return node;
+    // TODO
+    return 0;
 }
 
+/*
 BlockNr
 PosixAdapter::ensureFileOrDirectory(const fs::path &path)
 {
@@ -221,6 +224,7 @@ PosixAdapter::ensureDirectory(const fs::path &path)
     require.directory(node);
     return node;
 }
+*/
 
 void
 PosixAdapter::create(const fs::path &path)
@@ -248,8 +252,8 @@ isize
 PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
 {
     auto &handle  = getHandle(ref);
-    auto &node    = fs.fetch(handle.node);
-    auto fileSize = isize(node.getFileSize());
+    // auto &node    = fs.fetch(handle.node);
+    auto fileSize = 0; // TODO // isize(node.getFileSize());
 
     isize newOffset;
 

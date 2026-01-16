@@ -68,13 +68,13 @@ enum class FSBlockType : long
     UNKNOWN,
     EMPTY,
     BAM,
-    BOOT,
-    ROOT,
-    BITMAP,
-    BITMAP_EXT,
+    // BOOT,
+    // ROOT,
+    // BITMAP,
+    // BITMAP_EXT,
     USERDIR,
-    FILEHEADER,
-    FILELIST,
+    // FILEHEADER,
+    // FILELIST,
     DATA
 };
 
@@ -90,13 +90,7 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
             case FSBlockType::UNKNOWN:     return "UNKNOWN";
             case FSBlockType::EMPTY:       return "EMPTY";
             case FSBlockType::BAM:         return "BAM";
-            case FSBlockType::BOOT:        return "BOOT";
-            case FSBlockType::ROOT:        return "ROOT";
-            case FSBlockType::BITMAP:      return "BITMAP";
-            case FSBlockType::BITMAP_EXT:  return "BITMAP_EXT";
             case FSBlockType::USERDIR:     return "USERDIR";
-            case FSBlockType::FILEHEADER:  return "FILEHEADER";
-            case FSBlockType::FILELIST:    return "FILELIST";
             case FSBlockType::DATA:        return "DATA";
         }
         return "???";
@@ -145,93 +139,59 @@ enum class FSItemType
 {
     UNKNOWN,
     UNUSED,
-    DOS_HEADER,
     DOS_VERSION,
-    BOOTCODE,
-    TYPE_ID,
-    SUBTYPE_ID,
-    SELF_REF,
-    CHECKSUM,
-    HASHTABLE_SIZE,
-    HASH_REF,
-    PROT_BITS,
-    BCPL_STRING_LENGTH,
-    BCPL_DISK_NAME,
-    BCPL_DIR_NAME,
-    BCPL_FILE_NAME,
-    BCPL_COMMENT,
-    CREATED_DAY,
-    CREATED_MIN,
-    CREATED_TICKS,
-    MODIFIED_DAY,
-    MODIFIED_MIN,
-    MODIFIED_TICKS,
-    NEXT_HASH_REF,
-    PARENT_DIR_REF,
-    FILEHEADER_REF,
-    EXT_BLOCK_REF,
-    BITMAP_BLOCK_REF,
-    BITMAP_EXT_BLOCK_REF,
-    BITMAP_VALIDITY,
-    FILESIZE,
-    DATA_BLOCK_NUMBER,
-    DATA_BLOCK_REF_COUNT,
-    FIRST_DATA_BLOCK_REF,
-    NEXT_DATA_BLOCK_REF,
-    DATA_BLOCK_REF,
-    DATA_COUNT,
-    DATA,
-    BITMAP
+    DOS_TYPE,
+    ALLOCATION_BITS,
+    DISK_ID,
+    DISK_NAME,
+    TRACK_LINK,
+    SECTOR_LINK,
+    FIRST_FILE_TRACK,
+    FIRST_FILE_SECTOR,
+    FIRST_REL_TRACK,
+    FIRST_REL_SECTOR,
+    FIRST_DIR_TRACK,
+    FIRST_DIR_SECTOR,
+    FILE_TYPE,
+    FILE_NAME,
+    FILE_LENGTH_LO,
+    FILE_LENGTH_HI,
+    REL_RECORD_LENGTH,
+    GEOS,
+    DATA
 };
 
-struct FSItemTypeEnum : Reflectable<FSItemTypeEnum, FSItemType>
-{
+struct FSItemTypeEnum : Reflectable<FSItemTypeEnum, FSItemType> {
+
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSItemType::BITMAP);
-    
+    static constexpr long maxVal = long(FSItemType::DATA);
+
     static const char *_key(FSItemType value)
     {
         switch (value) {
-                
-            case FSItemType::UNKNOWN:               return "UNKNOWN";
-            case FSItemType::UNUSED:                return "UNUSED";
-            case FSItemType::DOS_HEADER:            return "DOS_HEADER";
-            case FSItemType::DOS_VERSION:           return "DOS_VERSION";
-            case FSItemType::BOOTCODE:              return "BOOTCODE";
-            case FSItemType::TYPE_ID:               return "TYPE_ID";
-            case FSItemType::SUBTYPE_ID:            return "SUBTYPE_ID";
-            case FSItemType::SELF_REF:              return "SELF_REF";
-            case FSItemType::CHECKSUM:              return "CHECKSUM";
-            case FSItemType::HASHTABLE_SIZE:        return "HASHTABLE_SIZE";
-            case FSItemType::HASH_REF:              return "HASH_REF";
-            case FSItemType::PROT_BITS:             return "PROT_BITS";
-            case FSItemType::BCPL_STRING_LENGTH:    return "BCPL_STRING_LENGTH";
-            case FSItemType::BCPL_DISK_NAME:        return "BCPL_DISK_NAME";
-            case FSItemType::BCPL_DIR_NAME:         return "BCPL_DIR_NAME";
-            case FSItemType::BCPL_FILE_NAME:        return "BCPL_FILE_NAME";
-            case FSItemType::BCPL_COMMENT:          return "BCPL_COMMENT";
-            case FSItemType::CREATED_DAY:           return "CREATED_DAY";
-            case FSItemType::CREATED_MIN:           return "CREATED_MIN";
-            case FSItemType::CREATED_TICKS:         return "CREATED_TICKS";
-            case FSItemType::MODIFIED_DAY:          return "MODIFIED_DAY";
-            case FSItemType::MODIFIED_MIN:          return "MODIFIED_MIN";
-            case FSItemType::MODIFIED_TICKS:        return "MODIFIED_TICKS";
-            case FSItemType::NEXT_HASH_REF:         return "NEXT_HASH_REF";
-            case FSItemType::PARENT_DIR_REF:        return "PARENT_DIR_REF";
-            case FSItemType::FILEHEADER_REF:        return "FILEHEADER_REF";
-            case FSItemType::EXT_BLOCK_REF:         return "EXT_BLOCK_REF";
-            case FSItemType::BITMAP_BLOCK_REF:      return "BITMAP_BLOCK_REF";
-            case FSItemType::BITMAP_EXT_BLOCK_REF:  return "BITMAP_EXT_BLOCK_REF";
-            case FSItemType::BITMAP_VALIDITY:       return "BITMAP_VALIDITY";
-            case FSItemType::FILESIZE:              return "FILESIZE";
-            case FSItemType::DATA_BLOCK_NUMBER:     return "DATA_BLOCK_NUMBER";
-            case FSItemType::DATA_BLOCK_REF_COUNT:  return "DATA_BLOCK_REF_COUNT";
-            case FSItemType::FIRST_DATA_BLOCK_REF:  return "FIRST_DATA_BLOCK_REF";
-            case FSItemType::NEXT_DATA_BLOCK_REF:   return "NEXT_DATA_BLOCK_REF";
-            case FSItemType::DATA_BLOCK_REF:        return "DATA_BLOCK_REF";
-            case FSItemType::DATA_COUNT:            return "DATA_COUNT";
-            case FSItemType::DATA:                  return "DATA";
-            case FSItemType::BITMAP:                return "BITMAP";
+
+            case FSItemType::UNKNOWN:           return "UNKNOWN";
+            case FSItemType::UNUSED:            return "UNUSED";
+            case FSItemType::DOS_VERSION:       return "DOS_VERSION";
+            case FSItemType::DOS_TYPE:          return "DOS_TYPE";
+            case FSItemType::ALLOCATION_BITS:   return "ALLOCATION_BITS";
+            case FSItemType::DISK_ID:           return "DISK_ID";
+            case FSItemType::DISK_NAME:         return "DISK_NAME";
+            case FSItemType::TRACK_LINK:        return "TRACK_LINK";
+            case FSItemType::SECTOR_LINK:       return "SECTOR_LINK";
+            case FSItemType::FIRST_FILE_TRACK:  return "FIRST_FILE_TRACK";
+            case FSItemType::FIRST_FILE_SECTOR: return "FIRST_FILE_SECTOR";
+            case FSItemType::FIRST_REL_TRACK:   return "FIRST_REL_TRACK";
+            case FSItemType::FIRST_REL_SECTOR:  return "FIRST_REL_SECTOR";
+            case FSItemType::FIRST_DIR_TRACK:   return "FIRST_DIR_TRACK";
+            case FSItemType::FIRST_DIR_SECTOR:  return "FIRST_DIR_SECTOR";
+            case FSItemType::FILE_TYPE:         return "FILE_TYPE";
+            case FSItemType::FILE_NAME:         return "FILE_NAME";
+            case FSItemType::FILE_LENGTH_LO:    return "FILE_LENGTH_LO";
+            case FSItemType::FILE_LENGTH_HI:    return "FILE_LENGTH_HI";
+            case FSItemType::REL_RECORD_LENGTH: return "REL_RECORD_LENGTH";
+            case FSItemType::GEOS:              return "GEOS";
+            case FSItemType::DATA:              return "DATA";
         }
         return "???";
     }
@@ -240,50 +200,32 @@ struct FSItemTypeEnum : Reflectable<FSItemTypeEnum, FSItemType>
     {
         switch (value) {
 
-            case FSItemType::UNKNOWN:               return "Unknown";
-            case FSItemType::UNUSED:                return "Unused";
-            case FSItemType::DOS_HEADER:            return "AmigaDOS header signature";
-            case FSItemType::DOS_VERSION:           return "AmigaDOS version number";
-            case FSItemType::BOOTCODE:              return "Boot code instruction";
-            case FSItemType::TYPE_ID:               return "Type identifier";
-            case FSItemType::SUBTYPE_ID:            return "Subtype identifier";
-            case FSItemType::SELF_REF:              return "Block reference to itself";
-            case FSItemType::CHECKSUM:              return "Checksum";
-            case FSItemType::HASHTABLE_SIZE:        return "Hashtable size";
-            case FSItemType::HASH_REF:              return "Hashtable entry";
-            case FSItemType::PROT_BITS:             return "Protection status bits";
-            case FSItemType::BCPL_STRING_LENGTH:    return "BCPL string Length";
-            case FSItemType::BCPL_DISK_NAME:        return "Disk name (BCPL character)";
-            case FSItemType::BCPL_DIR_NAME:         return "Directory name (BCPL character)";
-            case FSItemType::BCPL_FILE_NAME:        return "File name (BCPL character)";
-            case FSItemType::BCPL_COMMENT:          return "Comment (BCPL character)";
-            case FSItemType::CREATED_DAY:           return "Creation date (days)";
-            case FSItemType::CREATED_MIN:           return "Creation date (minutes)";
-            case FSItemType::CREATED_TICKS:         return "Creation date (ticks)";
-            case FSItemType::MODIFIED_DAY:          return "Modification date (day)";
-            case FSItemType::MODIFIED_MIN:          return "Modification date (minutes)";
-            case FSItemType::MODIFIED_TICKS:        return "Modification date (ticks)";
-            case FSItemType::NEXT_HASH_REF:         return "Reference to the next hash block";
-            case FSItemType::PARENT_DIR_REF:        return "Parent directory block reference";
-            case FSItemType::FILEHEADER_REF:        return "File header block reference";
-            case FSItemType::EXT_BLOCK_REF:         return "Next extension block reference";
-            case FSItemType::BITMAP_BLOCK_REF:      return "Bitmap block reference";
-            case FSItemType::BITMAP_EXT_BLOCK_REF:  return "Extension bitmap block reference";
-            case FSItemType::BITMAP_VALIDITY:       return "Bitmap validity bits";
-            case FSItemType::DATA_BLOCK_REF_COUNT:  return "Number of data block references";
-            case FSItemType::FILESIZE:              return "File size";
-            case FSItemType::DATA_BLOCK_NUMBER:     return "Position in the data block chain";
-            case FSItemType::DATA_BLOCK_REF:        return "Data block reference";
-            case FSItemType::FIRST_DATA_BLOCK_REF:  return "Reference to the first data block";
-            case FSItemType::NEXT_DATA_BLOCK_REF:   return "Reference to next data block";
-            case FSItemType::DATA_COUNT:            return "Number of stored data bytes";
-            case FSItemType::DATA:                  return "Data byte";
-            case FSItemType::BITMAP:                return "Block allocation table";
+            case FSItemType::UNKNOWN:           return "Unknown";
+            case FSItemType::UNUSED:            return "Unused";
+            case FSItemType::DOS_VERSION:       return "DOS version";
+            case FSItemType::DOS_TYPE:          return "DOS type";
+            case FSItemType::ALLOCATION_BITS:   return "Allocation bits";
+            case FSItemType::DISK_ID:           return "Disk ID";
+            case FSItemType::DISK_NAME:         return "Disk name";
+            case FSItemType::TRACK_LINK:        return "Track link";
+            case FSItemType::SECTOR_LINK:       return "Sector link";
+            case FSItemType::FIRST_FILE_TRACK:  return "Track of first data block";
+            case FSItemType::FIRST_FILE_SECTOR: return "Sector of first data block";
+            case FSItemType::FIRST_REL_TRACK:   return "First REL track";
+            case FSItemType::FIRST_REL_SECTOR:  return "First REL sector";
+            case FSItemType::FIRST_DIR_TRACK:   return "First DIR track";
+            case FSItemType::FIRST_DIR_SECTOR:  return "First DIR track";
+            case FSItemType::FILE_TYPE:         return "File type";
+            case FSItemType::FILE_NAME:         return "File name";
+            case FSItemType::FILE_LENGTH_LO:    return "Block size (low byte)";
+            case FSItemType::FILE_LENGTH_HI:    return "Block size (high byte)";
+            case FSItemType::REL_RECORD_LENGTH: return "REL record length";
+            case FSItemType::GEOS:              return "GEOS only";
+            case FSItemType::DATA:              return "File data";
         }
         return "???";
     }
 };
-
 
 enum class FSBlockError : long
 {

@@ -22,7 +22,7 @@ FileSystem::format(FSFormat dos) {
     if (dos == FSFormat::NODOS) return;
 
     // Perform some consistency checks
-    assert(blocks() > 2);
+    assert(blocks() > 0);
 
     // Start with an empty block device
     for (isize i = 0; i < traits.blocks; i++) {
@@ -104,36 +104,30 @@ FileSystem::formatBAM(FSFormat dos, const PETName<16> &name) {
 void
 FileSystem::setName(const PETName<16> &name)
 {
-    if (auto bam = tryFetchBAM()) {
-
+    if (auto bam = tryFetchBAM())
         bam->mutate().setName(name);
-        bam->mutate().updateChecksum();
-    }
 }
 
-optional<BlockNr>
-FileSystem::searchdir(BlockNr at, const PETName<16> &name) const
+optional<FSDirEntry>
+FileSystem::searchDir(const PETName<16> &name) const
 {
     for (auto &entry: readDir()) {
 
         if (entry.getName() == name)
-            return traits.blockNr(entry.firstBlock());
+            return entry;
     }
     return {};
 }
 
-vector<BlockNr>
-FileSystem::searchdir(BlockNr at, const FSPattern &pattern) const
+vector<FSDirEntry>
+FileSystem::searchDir(const FSPattern &pattern) const
 {
-    vector<BlockNr> result;
+    vector<FSDirEntry> result;
 
     for (auto &entry: readDir()) {
 
-        if (pattern.match(entry.getName().str())) {
-            if (auto b = traits.blockNr(entry.firstBlock())) {
-                result.push_back(*b);
-            }
-        }
+        if (pattern.match(entry.getName().str()))
+           result.push_back(entry);
     }
     return result;
 }
@@ -297,10 +291,10 @@ FileSystem::rm(BlockNr node)
 void
 FileSystem::rename(BlockNr item, const PETName<16> &name)
 {
-    auto &block = fetch(item);
+    // auto &block = fetch(item);
 
     // Renaming the root updates the file system name
-    if (block.isRoot()) { setName(name); return; }
+    // if (block.isRoot()) { setName(name); return; }
 
     // For regular items, relocate entry in the parent directory
     // move(item, block.getParentDirRef(), name);

@@ -141,8 +141,8 @@ private:
     Handle &getHandle(HandleRef ref);
 
     BlockNr ensureFile(const fs::path &path);
-    BlockNr ensureFileOrDirectory(const fs::path &path);
-    BlockNr ensureDirectory(const fs::path &path);
+//    BlockNr ensureFileOrDirectory(const fs::path &path);
+//    BlockNr ensureDirectory(const fs::path &path);
 };
 
 }

@@ -1742,6 +1742,7 @@ RetroShellAPI::execScript(const string &contents)
     retroShell->asyncExecScript(contents);
 }
 
+/*
 void
 RetroShellAPI::import(const FloppyDrive &dfn)
 {
@@ -1776,6 +1777,7 @@ RetroShellAPI::import(const fs::path &path, bool recursive, bool contents)
     VAMIGA_PUBLIC_SUSPEND
     retroShell->navigator.import(path, recursive, contents);
 }
+*/
 
 void
 RetroShellAPI::exportBlocks(const std::filesystem::path &path)

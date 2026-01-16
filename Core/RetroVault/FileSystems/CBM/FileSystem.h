@@ -126,19 +126,6 @@ class FileSystem : public Loggable {
     FSAllocator allocator = FSAllocator(*this);
 
 
-    // Node layer
-
-    // Location of the BAM (always at 18:0)
-    // BlockNr bamBlock = 0;
-
-    // Location of the root block
-    [[deprecated]] BlockNr rootBlock = 0;
-
-    // Location of bitmap blocks and extended bitmap blocks
-    [[deprecated]] vector<BlockNr> bmBlocks;
-    [[deprecated]] vector<BlockNr> bmExtBlocks;
-
-
     // Service layer
 
 public:
@@ -204,7 +191,10 @@ public:
 
     // Returns information about file permissions
     FSAttr attr(const FSDirEntry &entry) const;
-    FSAttr attr(BlockNr nr) const;
+    optional<FSAttr> attr(const PETName<16> &name) const;
+    optional<FSAttr> attr(const fs::path &path) const;
+
+    //FSAttr attr(BlockNr nr) const;
 
 
     //
@@ -224,11 +214,7 @@ public:
     // Convenience wrappers
     bool is(BlockNr nr, FSBlockType type) const { return fetch(nr).is(type); }
     bool isEmpty(BlockNr nr) const { return fetch(nr).isEmpty(); }
-    [[deprecated]] bool isRoot(BlockNr nr) const { return fetch(nr).isRoot(); }
-    [[deprecated]] bool isFile(BlockNr nr) const { return fetch(nr).isFile(); }
-    [[deprecated]] bool isDirectory(BlockNr nr) const { return fetch(nr).isDirectory(); }
-    [[deprecated]] bool isRegular(BlockNr nr) const { return fetch(nr).isRegular(); }
-    bool isData(BlockNr nr) const { return fetch(nr).isData(); }
+    // bool isData(BlockNr nr) const { return fetch(nr).isData(); }
 
     // Predicts the type of a block based on the stored data
     FSBlockType predictType(BlockNr nr, const u8 *buf) const noexcept;
@@ -307,8 +293,8 @@ public:
     isize numItems() const;
 
     // Looks up a specific directory item
-    optional<BlockNr> searchdir(BlockNr at, const PETName<16> &name) const;
-    vector<BlockNr> searchdir(BlockNr at, const FSPattern &pattern) const;
+    optional<FSDirEntry> searchDir(const PETName<16> &name) const;
+    vector<FSDirEntry> searchDir(const FSPattern &pattern) const;
 
     // Adds a new entry to the directory
     void link(const FSDirEntry &entry);
@@ -366,19 +352,6 @@ public:
     // Frees the blocks of a deleted directory or file
     void reclaim(BlockNr fhb);
 
-private:
-
-    // Creates a new block of a certain kind
-    // BlockNr newUserDirBlock(const PETName<16> &name);
-    // BlockNr newFileHeaderBlock(const PETName<16> &name);
-
-    // Adds a new block of a certain kind
-    // void addFileListBlock(BlockNr at, BlockNr head, BlockNr prev);
-    // void addDataBlock(BlockNr at, BlockNr id, BlockNr head, BlockNr prev);
-
-    // Adds bytes to a data block
-    // isize addData(BlockNr nr, const u8 *buf, isize size);
-
 
     //
     // Managing linked lists
@@ -399,9 +372,6 @@ private:
     vector<BlockNr> collect(const BlockNr nr, BlockIterator succ) const noexcept;
     vector<const FSBlock *> collect(const FSBlock &block, BlockIterator succ) const noexcept;
 
-    // Add a TS link from the first block to the second
-    // void chainBlocks(TSLink from, TSLink to);
-
     
     //
     // P A T H   L A Y E R
@@ -414,12 +384,7 @@ private:
 public:
 
     // Returns the root of the directory tree
-    [[deprecated]] BlockNr root() const { return rootBlock; }
     BlockNr bam() const { return *traits.blockNr({18,0}); }
-
-    // Returns the locations of the bitmap and bitmap extension blocks
-    [[deprecated]] const vector<BlockNr> &getBmBlocks() const { return bmBlocks; }
-    [[deprecated]] const vector<BlockNr> &getBmExtBlocks() const { return bmExtBlocks; }
 
     // Checks if a an item exists in the directory tree
     bool exists(const PETName<16> &path) const { return trySeek(path).has_value(); }
@@ -429,9 +394,12 @@ public:
 
     // Resolves a path by name (returns a directory entry)
     optional<FSDirEntry> trySeekEntry(const PETName<16> &path) const;
-    optional<FSDirEntry> trySeekEntry(const char *path) const { return trySeekEntry(PETName<16>(path)); }
-    optional<FSDirEntry> trySeekEntry(const string &path) const { return trySeekEntry(PETName<16>(path)); }
-    optional<FSDirEntry> trySeekEntry(const fs::path &path) const { return trySeekEntry(PETName<16>(path)); }
+    optional<FSDirEntry> trySeekEntry(const char *path) const {
+        return trySeekEntry(PETName<16>(path)); }
+    optional<FSDirEntry> trySeekEntry(const string &path) const {
+        return trySeekEntry(PETName<16>(path)); }
+    optional<FSDirEntry> trySeekEntry(const fs::path &path) const {
+        return trySeekEntry(PETName<16>(path)); }
 
     // Resolves a path by name (returns the number of the first data block)
     optional<BlockNr> trySeek(const PETName<16> &path) const;
@@ -452,13 +420,7 @@ public:
     BlockNr seek(const fs::path &path) const { return seek(PETName<16>(path)); }
 
     // Resolves a path by a regular expression
-    [[deprecated]] vector<BlockNr> match(BlockNr top, const vector<FSPattern> &patterns);
     [[deprecated]] vector<BlockNr> match(const string &path);
-
-
-    //
-    // S E R V I C E   L A Y E R
-    //
 };
 
 }

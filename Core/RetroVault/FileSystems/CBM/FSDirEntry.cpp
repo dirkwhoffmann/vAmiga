@@ -86,6 +86,12 @@ FSDirEntry::typeString() const
     return "";
 }
 
+isize
+FSDirEntry::getFileSize() const
+{
+    return fileSizeHi << 8 | fileSizeLo;
+}
+
 bool
 FSDirEntry::isHidden() const
 {

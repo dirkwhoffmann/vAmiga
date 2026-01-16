@@ -47,11 +47,11 @@ FileSystem::seek(const PETName<16> &path) const
     throw FSError(FSError::FS_NOT_FOUND, path.str());
 }
 
+/*
 vector<BlockNr>
 FileSystem::match(BlockNr top, const vector<FSPattern> &patterns)
 {
     return {};
-    /*
     vector<BlockNr> currentSet { top };
 
     for (const auto &pattern : patterns) {
@@ -101,13 +101,13 @@ FileSystem::match(BlockNr top, const vector<FSPattern> &patterns)
     }
 
     return currentSet;
-    */
 }
+*/
 
 vector<BlockNr>
 FileSystem::match(const string &path)
 {
-    return match(root(), FSPattern(path).splitted());
+    return {};
 }
 
 }
