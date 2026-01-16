@@ -838,7 +838,7 @@ CBMNavigator::initCommands(RSCommand &root)
         .chelp  = { "Print the contents of a file" },
         .flags  = rs::ac,
         .args   = {
-            { .name = { "file", "File path" } }
+            { .name = { "file", "File name" } }
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -857,7 +857,7 @@ CBMNavigator::initCommands(RSCommand &root)
         .chelp  = { "Dump the contents of a file" },
         .flags  = rs::ac,
         .args   = {
-            { .name = { "path", "File path" }, .flags = rs::opt },
+            { .name = { "file", "File name" } },
             { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
             { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
             { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
@@ -869,21 +869,16 @@ CBMNavigator::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFormattedFS();
-
-                /*
-                auto &file = fs->fetch(parseFile(args, "path", fs->pwd()));
+                auto file  = parseFile(args, "file");
                 auto opt   = parseDumpOpts(args);
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
                 auto t     = args.contains("t");
 
                 Buffer<u8> buffer;
-                file.extractData(buffer);
-
+                fs->extractData(file, buffer);
                 std::stringstream ss;
                 buffer.dump(ss, opt.first, opt.second);
-
                 t ? tail(ss, os, lines) : head(ss, os, lines);
-                */
             }
     });
 
@@ -950,19 +945,15 @@ CBMNavigator::initCommands(RSCommand &root)
 
         .tokens = { "next" },
         .chelp  = { "Take the TS link to the next block" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "file", "File name or block number" } }
-        },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
-                if (auto ts = fs->getTraits().tsLink(cb)) {
-                    if (auto b = fs->getTraits().blockNr(*ts)) {
-                        cb = *b;
-                    }
+            requireFormattedFS();
+            if (auto ts = fs->getTraits().tsLink(cb)) {
+                if (auto b = fs->getTraits().blockNr(*ts)) {
+                    cb = *b;
                 }
             }
+        }
     });
 
 

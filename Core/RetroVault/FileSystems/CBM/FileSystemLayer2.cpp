@@ -389,7 +389,7 @@ FileSystem::extractData(BlockNr b, Buffer<u8> &buf) const
     // Compute total size
     isize byteCount = 0;
     for (auto blockNr : blocks) {
-        byteCount += fetch(blockNr).dataSection().size();
+        byteCount += isize(fetch(blockNr).dataSection().size());
     }
 
     // Resize target buffer

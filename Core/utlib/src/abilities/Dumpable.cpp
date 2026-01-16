@@ -47,7 +47,6 @@ DumpFmt::fmt() const
 
     fmt += "\n";
 
-    printf("fmt = %s\n", fmt.c_str());
     return fmt;
 }
 

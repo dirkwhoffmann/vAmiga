@@ -512,7 +512,6 @@ public:
 
 class CBMNavigator final : public Console
 {
-    [[deprecated]] unique_ptr<ADFFile> adf;
     unique_ptr<D64File> d64;
     unique_ptr<Volume> vol;
     unique_ptr<retro::vault::cbm::FileSystem> fs;
