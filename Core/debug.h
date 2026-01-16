@@ -100,7 +100,7 @@ constexpr long DSK_CHECKSUM       = 0;
 constexpr long DSKREG_DEBUG       = 0;
 constexpr long DSK_DEBUG          = 0;
 constexpr long MFM_DEBUG          = 0;
-constexpr long FS_DEBUG           = 1;
+constexpr long FS_DEBUG           = 0;
 
 // Hard Drives
 constexpr long HDR_ACCEPT_ALL     = 0;

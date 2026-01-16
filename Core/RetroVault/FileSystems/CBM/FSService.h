@@ -15,7 +15,7 @@
 namespace retro::vault::cbm {
 
 class FileSystem;
-class FSTraits;
+struct FSTraits;
 
 class FSService : public Loggable {
 

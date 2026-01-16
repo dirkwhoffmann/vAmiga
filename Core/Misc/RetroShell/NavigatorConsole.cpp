@@ -418,7 +418,7 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
     } else if (a) {
 
         opt = { .base = 0 };
-        fmt = { .size = size, .columns = 64, .offset = true, .ascii = true };
+        fmt = { .size = 0, .columns = 64, .offset = true, .ascii = true };
 
     } else {
 

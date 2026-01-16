@@ -25,7 +25,7 @@ DumpFmt::fmt() const
     if (nr)     fmt += "%n: ";
     if (offset) fmt += "%p: ";
 
-    if (columns > 0) {
+    if (size) {
 
         isize g = std::max<isize>(1, groups);
         isize base = columns / g;
@@ -46,6 +46,8 @@ DumpFmt::fmt() const
         fmt += "|" + repeat(s2, columns) + "|";
 
     fmt += "\n";
+
+    printf("fmt = %s\n", fmt.c_str());
     return fmt;
 }
 

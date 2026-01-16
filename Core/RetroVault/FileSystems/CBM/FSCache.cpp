@@ -81,12 +81,14 @@ FSCache::getType(BlockNr nr) const noexcept
     return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY;
 }
 
+/*
 void
 FSCache::setType(BlockNr nr, FSBlockType type)
 {
     if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
     blocks.at(nr)->init(type);
 }
+*/
 
 FSBlock *
 FSCache::cache(BlockNr nr) const noexcept

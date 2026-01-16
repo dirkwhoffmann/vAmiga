@@ -38,6 +38,8 @@ CBMNavigator::prompt()
 
     if (fs) {
 
+        auto ts = fs->getTraits().tsLink(cb);
+
         ss << "[" << std::to_string(cb) << "]";
         auto fsName = fs->stat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
@@ -164,25 +166,44 @@ CBMNavigator::help(std::ostream &os, const string &argv, isize tabs)
 }
 
 BlockNr
-CBMNavigator::parseBlock(const string &argv)
+CBMNavigator::parseBlock(const std::string &argv)
 {
-    if (auto nr = BlockNr(parseNum(argv)); fs->tryFetch(nr)) {
-        return nr;
+    if (auto pos = argv.find(':'); pos != std::string::npos) {
+
+        // TS syntax (track:sector)
+        auto lhs = argv.substr(0, pos);
+        auto rhs = argv.substr(pos + 1);
+
+        if (lhs.empty() || rhs.empty()) {
+            throw CoreError(CoreError::OPT_INV_ARG, argv);
+        }
+
+        auto t = parseNum(lhs);
+        auto s = parseNum(rhs);
+
+        if (auto nr = fs->getTraits().blockNr(TSLink{t,s})) {
+            printf("t: %ld s: %ld nr: %ld\n", t, s, *nr);
+            return *nr;
+        }
+
+    } else {
+
+        // Block syntax (single number)
+        BlockNr nr = parseNum(argv);
+
+        if (fs->tryFetch(nr)) {
+            return nr;
+        }
     }
 
-    throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
-}
-
-BlockNr
-CBMNavigator::parseBlock(const Arguments &argv, const string &token)
-{
-    return parseBlock(argv, token, fs->bam());
+    throw CoreError(CoreError::OPT_INV_ARG,
+                    "0..." + std::to_string(fs->blocks()));
 }
 
 BlockNr
 CBMNavigator::parseBlock(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    auto nr = argv.contains(token) ? BlockNr(parseNum(argv.at(token))) : fallback;
+    auto nr = argv.contains(token) ? BlockNr(parseBlock(argv.at(token))) : fallback;
 
     if (!fs->tryFetch(nr)) {
         throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
@@ -191,100 +212,48 @@ CBMNavigator::parseBlock(const Arguments &argv, const string &token, BlockNr fal
 }
 
 BlockNr
-CBMNavigator::parsePath(const Arguments &argv, const string &token)
+CBMNavigator::parseBlock(const Arguments &argv, const string &token)
+{
+    return parseBlock(argv, token, cb);
+}
+
+BlockNr
+CBMNavigator::parseFile(const string &arg)
 {
     fs->require.isFormatted();
 
-    assert(argv.contains(token));
-
     try {
 
-        // Try to find the directory by name
-        return fs->seek(argv.at(token));
+        // Try to find the file by name
+        return fs->seek(arg);
 
     } catch (...) {
 
         try {
 
             // Treat the argument as a block number
-            return parseBlock(argv.at(token));
+            return parseBlock(arg);
 
         } catch (...) {
 
             // The item does not exist
-            throw FSError(FSError::FS_NOT_FOUND, argv.at(token));
+            throw FSError(FSError::FS_NOT_FOUND, arg);
         }
     }
 }
 
 BlockNr
-CBMNavigator::parsePath(const Arguments &argv, const string &token, BlockNr fallback)
-{
-    return argv.contains(token) ? parsePath(argv, token) : fallback;
-}
-
-BlockNr
 CBMNavigator::parseFile(const Arguments &argv, const string &token)
 {
-    return parsePath(argv, token, fs->bam());
+    assert(argv.contains(token));
+    return parseFile(argv.at(token));
 }
 
 BlockNr
 CBMNavigator::parseFile(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    return parsePath(argv, token, fallback);
+    return argv.contains(token) ? parseFile(argv, token) : fallback;
 }
-
-/*
-BlockNr
-CBMNavigator::parseDirectory(const Arguments &argv, const string &token)
-{
-    return parseDirectory(argv, token, fs->bam());
-}
-
-BlockNr
-CBMNavigator::parseDirectory(const Arguments &argv, const string &token, BlockNr fallback)
-{
-    auto path = parsePath(argv, token, fallback);
-    fs->require.directory(path);
-
-    return path;
-}
-*/
-/*
-void
-CBMNavigator::import(const FloppyDrive &dfn)
-{
-    // Later: Directly mount the file system on top of the drive
-
-    // Create a block device
-    d64 = Codec::makeD64(dfn);
-
-    // Create a file system on top
-    vol = Volume(*d64);
-    fs = make_unique<retro::vault::cbm::FileSystem>(vol);
-}
-
-void
-CBMNavigator::import(const HardDrive &hdn, isize part)
-{
-    throw FSError(FSError::FS_UNSUPPORTED);
-}
-
-void
-CBMNavigator::importDf(isize n)
-{
-    assert(n >= 0 && n <= 3);
-    import(*amiga.df[n]);
-}
-
-void
-CBMNavigator::importHd(isize n, isize part)
-{
-    assert(n >= 0 && n <= 3);
-    import(*amiga.hd[n], part);
-}
-*/
 
 void
 CBMNavigator::import(const fs::path &path, bool recursive, bool contents)
@@ -379,7 +348,7 @@ CBMNavigator::parseDumpOpts(const Arguments &argv)
     } else if (a) {
 
         opt = { .base = 0 };
-        fmt = { .size = size, .columns = 64, .offset = true, .ascii = true };
+        fmt = { .size = 0, .columns = 64, .offset = true, .ascii = true };
 
     } else {
 
@@ -650,7 +619,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                     requireFormattedFS();
 
-                    auto itemNr = parsePath(args, "file");
+                    auto itemNr = parseFile(args, "file");
                     bool recursive = args.contains("r");
                     bool contents = args.at("file").back() == '/';
 
@@ -787,6 +756,37 @@ CBMNavigator::initCommands(RSCommand &root)
     root.add({
 
         .tokens = { "block" },
+        .chelp  = { "Dump the contents of a block" },
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
+            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
+            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
+            { .name = { "w", "Print in word format" }, .flags = rs::flag },
+            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
+            { .name = { "t", "Display the last part" }, .flags = rs::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
+        },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
+
+                auto nr    = parseBlock(args, "nr", cb);
+                auto opt   = parseDumpOpts(args);
+                auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
+                auto t     = args.contains("t");
+
+                std::stringstream ss;
+                fs->fetch(nr).dump(ss, opt.first, opt.second);
+
+                t ? tail(ss, os, lines) : head(ss, os, lines);
+            }
+    });
+
+    /*
+    root.add({
+
+        .tokens = { "block" },
         .ghelp  = { "Manage blocks" },
         .chelp  = { "Inspect a block" },
         .args   = {
@@ -800,6 +800,7 @@ CBMNavigator::initCommands(RSCommand &root)
                 fs->doctor.dump(nr, os);
             }
     });
+    */
 
     root.add({
 
@@ -864,38 +865,6 @@ CBMNavigator::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "dump", "block" },
-        .chelp  = { "Dump the contents of a block" },
-        .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
-            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
-            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
-            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
-            { .name = { "w", "Print in word format" }, .flags = rs::flag },
-            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
-            { .name = { "t", "Display the last part" }, .flags = rs::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
-        },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                /*
-                auto nr    = parseBlock(args, "nr", fs->pwd());
-                auto opt   = parseDumpOpts(args);
-                auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
-                auto t     = args.contains("t");
-
-                std::stringstream ss;
-                fs->fetch(nr).dump(ss, opt.first, opt.second);
-
-                t ? tail(ss, os, lines) : head(ss, os, lines);
-                */
-            }
-    });
-
-    root.add({
-
         .tokens = { "xray" },
         .ghelp  = { "Examines the file system integrity" },
         .chelp  = { "Inspects the entire file system or a single block" },
@@ -930,6 +899,34 @@ CBMNavigator::initCommands(RSCommand &root)
                 }
             }
     });
+
+    //
+    // Navigating
+    //
+
+    RSCommand::currentGroup = "Navigate";
+
+    root.add({
+
+        .tokens = { "select" },
+        .chelp  = { "Selects the current working block" },
+        .flags  = rs::ac,
+        .args   = {
+            { .name = { "nr", "Block number" } }
+        },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
+
+                auto nr = parseBlock(args, "nr");
+                cb = nr;
+            }
+    });
+
+
+    //
+    // Modifying
+    //
 
     RSCommand::currentGroup = "Modify";
 
@@ -1039,7 +1036,7 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 requireFormattedFS();
 
-                auto &path = fs->fetch(parsePath(args, "path"));
+                auto &path = fs->fetch(parseFile(args, "path"));
                 fs->rm(path.nr);
             }
     });

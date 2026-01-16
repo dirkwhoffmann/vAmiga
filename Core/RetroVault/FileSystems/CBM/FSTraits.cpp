@@ -144,7 +144,10 @@ FSTraits::blockNr(TSLink ts) const
         result += numSectors(i);
     }
 
-    return result;
+    if (result >= 0 && result < blocks)
+        return result;
+
+    return {};
 }
 
 TSLink

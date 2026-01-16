@@ -36,12 +36,12 @@ void
 FSBlock::init(FSBlockType t)
 {
     type = t;
+    dataCache.clear();
 
     switch (type) {
 
         case FSBlockType::EMPTY:
 
-            dataCache.dealloc();
             break;
 
         case FSBlockType::UNKNOWN:
@@ -58,9 +58,6 @@ FSBlock::init(FSBlockType t)
 
         case FSBlockType::DATA:
 
-            break;
-
-        default:
             break;
     }
 }

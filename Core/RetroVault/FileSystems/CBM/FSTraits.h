@@ -86,12 +86,12 @@ struct FSTraits {
     //
 
     // DEPRECATED
-    CylNr cylNr(TrackNr t) const { return t <= numCyls ? t : t - numCyls; }
-    HeadNr headNr(TrackNr t) const { return t <= numCyls ? 0 : 1; }
-    TrackNr trackNr(CylNr c, HeadNr h) const { return c + h * numCyls; }
+    [[deprecated]] CylNr cylNr(TrackNr t) const { return t <= numCyls ? t : t - numCyls; }
+    [[deprecated]] HeadNr headNr(TrackNr t) const { return t <= numCyls ? 0 : 1; }
+    [[deprecated]] TrackNr trackNr(CylNr c, HeadNr h) const { return c + h * numCyls; }
     TSLink tsLink(BlockNr b) const;
-    TrackNr trackNr(BlockNr b) const { return tsLink(b).t; }
-    SectorNr sectorNr(BlockNr b) const { return tsLink(b).s; }
+    [[deprecated]] TrackNr trackNr(BlockNr b) const { return tsLink(b).t; }
+    [[deprecated]] SectorNr sectorNr(BlockNr b) const { return tsLink(b).s; }
 
 
     optional<BlockNr> blockNr(TSLink ts) const;
@@ -99,7 +99,7 @@ struct FSTraits {
 
     // DEPRECATED
     optional<BlockNr> blockNr(TrackNr t, SectorNr s) const { return blockNr(TSLink{t,s}); }
-    optional<BlockNr> blockNr(CylNr c, HeadNr h, SectorNr s) const { return blockNr(trackNr(c,h), s); }
+    [[deprecated]] optional<BlockNr> blockNr(CylNr c, HeadNr h, SectorNr s) const { return blockNr(trackNr(c,h), s); }
 
 
     //

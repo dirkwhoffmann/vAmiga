@@ -105,7 +105,7 @@ public:
 
     // Gets or sets the block type
     FSBlockType getType(BlockNr nr) const noexcept;
-    void setType(BlockNr nr, FSBlockType type);
+    // void setType(BlockNr nr, FSBlockType type);
 
     // Caches a block (if not already cached)
     FSBlock *cache(BlockNr nr) const noexcept;

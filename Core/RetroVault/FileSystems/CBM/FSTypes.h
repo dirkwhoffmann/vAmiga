@@ -307,8 +307,6 @@ struct FSDiagnosis
     // Bitmap errors
     std::vector<BlockNr> usedButUnallocated;
     std::vector<BlockNr> unusedButAllocated;
-
-    [[deprecated]] std::unordered_map<BlockNr,isize> bitmapErrors; // DEPRECATED
 };
 
 }

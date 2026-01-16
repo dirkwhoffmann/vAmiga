@@ -16,12 +16,7 @@ namespace retro::vault::cbm {
 optional<FSDirEntry>
 FileSystem::trySeekEntry(const PETName<16> &path) const
 {
-    auto dir = readDir();
-
-    for (auto &item : dir)
-        if (item.getName() == path) return item;
-
-    return {};
+    return searchDir(path);
 }
 
 optional<BlockNr>

@@ -547,14 +547,11 @@ class CBMNavigator final : public Console
     //
 
     BlockNr parseBlock(const string &arg);
-    BlockNr parseBlock(const Arguments &argv, const string &token);
     BlockNr parseBlock(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parsePath(const Arguments &argv, const string &token);
-    BlockNr parsePath(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parseFile(const Arguments &argv, const string &token);
+    BlockNr parseBlock(const Arguments &argv, const string &token);
+    BlockNr parseFile(const string &arg);
     BlockNr parseFile(const Arguments &argv, const string &token, BlockNr fallback);
-    // BlockNr parseDirectory(const Arguments &argv, const string &token);
-    // BlockNr parseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr parseFile(const Arguments &argv, const string &token);
 
     std::pair<DumpOpt,DumpFmt> parseDumpOpts(const Arguments &argv);
 
