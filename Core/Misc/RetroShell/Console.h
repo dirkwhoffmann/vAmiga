@@ -552,6 +552,9 @@ class CBMNavigator final : public Console
     BlockNr parseFile(const string &arg);
     BlockNr parseFile(const Arguments &argv, const string &token, BlockNr fallback);
     BlockNr parseFile(const Arguments &argv, const string &token);
+    BlockNr parseFileOrBlock(const string &arg);
+    BlockNr parseFileOrBlock(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr parseFileOrBlock(const Arguments &argv, const string &token);
 
     std::pair<DumpOpt,DumpFmt> parseDumpOpts(const Arguments &argv);
 

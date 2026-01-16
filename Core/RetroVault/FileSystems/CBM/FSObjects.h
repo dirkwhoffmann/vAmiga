@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FileSystems/CBM/FSTypes.h"
+#include <cstring>
 #include <ostream>
 #include <regex>
 
@@ -42,7 +43,7 @@ public:
         return asciichar >= 0x20 && asciichar <= 0x5D ? asciichar : ' ';
     }
 
-    PETName(const u8 *_pet, u8 _pad = 0xA0) : pad(_pad)
+    explicit PETName(const u8 *_pet, u8 _pad = 0xA0) : pad(_pad)
     {
         assert(_pet);
 
@@ -56,7 +57,7 @@ public:
         }
     }
 
-    PETName(const char *_str, u8 _pad = 0xA0) : pad(_pad)
+    explicit PETName(const char *_str, u8 _pad = 0xA0) : pad(_pad)
     {
         assert(_str);
 
@@ -70,7 +71,8 @@ public:
         }
     }
 
-    PETName(string str) : PETName(str.c_str()) { }
+    explicit PETName(string str) : PETName(str.c_str()) { }
+    explicit PETName(fs::path path) : PETName(path.string()) { }
 
     void setPad(u8 _pad) {
 

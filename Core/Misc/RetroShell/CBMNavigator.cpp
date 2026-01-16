@@ -225,26 +225,7 @@ CBMNavigator::parseBlock(const Arguments &argv, const string &token)
 BlockNr
 CBMNavigator::parseFile(const string &arg)
 {
-    fs->require.isFormatted();
-
-    try {
-
-        // Try to find the file by name
-        return fs->seek(arg);
-
-    } catch (...) {
-
-        try {
-
-            // Treat the argument as a block number
-            return parseBlock(arg);
-
-        } catch (...) {
-
-            // The item does not exist
-            throw FSError(FSError::FS_NOT_FOUND, arg);
-        }
-    }
+    return fs->seek(arg);
 }
 
 BlockNr
@@ -258,6 +239,25 @@ BlockNr
 CBMNavigator::parseFile(const Arguments &argv, const string &token, BlockNr fallback)
 {
     return argv.contains(token) ? parseFile(argv, token) : fallback;
+}
+
+BlockNr
+CBMNavigator::parseFileOrBlock(const string &arg)
+{
+    try { return parseFile(arg); } catch (...) { return parseBlock(arg); }
+}
+
+BlockNr
+CBMNavigator::parseFileOrBlock(const Arguments &argv, const string &token)
+{
+    assert(argv.contains(token));
+    return parseFileOrBlock(argv.at(token));
+}
+
+BlockNr
+CBMNavigator::parseFileOrBlock(const Arguments &argv, const string &token, BlockNr fallback)
+{
+    return argv.contains(token) ? parseFileOrBlock(argv, token) : fallback;
 }
 
 void
@@ -690,6 +690,10 @@ CBMNavigator::initCommands(RSCommand &root)
             }
     });
 
+    //
+    // Inspecting
+    //
+
     RSCommand::currentGroup = "Inspect";
 
     root.add({
@@ -721,9 +725,10 @@ CBMNavigator::initCommands(RSCommand &root)
             os << ss.str();
         }
     });
+
     root.add({
 
-        .tokens = { "info" },
+        .tokens = { "statfs" },
         .chelp  = { "Print a file system summary" },
         .args   = {
             { .name = { "b", "Inspect the block storage" }, .flags = rs::flag },
@@ -736,6 +741,22 @@ CBMNavigator::initCommands(RSCommand &root)
                     fs->dumpInfo(os);
                 }
 
+            }
+    });
+
+    root.add({
+
+        .tokens = { "stat" },
+        .chelp  = { "Inform about a file or block" },
+        .args   = {
+            { .name = { "file", "File name or block number" }, .flags = rs::opt }
+        },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
+
+                auto &file = fs->fetch(parseFileOrBlock(args, "path"));
+                file.dumpInfo(os);
             }
     });
 

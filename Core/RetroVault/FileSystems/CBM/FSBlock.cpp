@@ -62,24 +62,6 @@ FSBlock::init(FSBlockType t)
     }
 }
 
-/*
-FSBlock *
-FSBlock::make(FileSystem *ref, BlockNr nr, FSBlockType type)
-{
-    switch (type) {
-
-        case FSBlockType::EMPTY:
-        case FSBlockType::USERDIR:
-        case FSBlockType::DATA:
-
-            return new FSBlock(ref, nr, type);
-
-        default:
-            throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
-    }
-}
-*/
-
 std::vector<BlockNr>
 FSBlock::refs(const std::vector<const FSBlock *> blocks)
 {
@@ -87,23 +69,6 @@ FSBlock::refs(const std::vector<const FSBlock *> blocks)
     for (auto &it : blocks) { if (it) result.push_back(it->nr); }
     return result;
 }
-
-/*
-const char *
-FSBlock::objectName() const
-{
-    switch (type) {
-
-        case FSBlockType::UNKNOWN:     return "FSBlock (Unknown)";
-        case FSBlockType::EMPTY:       return "FSBlock (Empty)";
-        case FSBlockType::USERDIR:     return "FSBlock (UserDir)";
-        case FSBlockType::DATA:        return "FSBlock (Data)";
-
-        default:
-            throw FSError(FSError::FS_WRONG_BLOCK_TYPE);
-    }
-}
-*/
 
 bool
 FSBlock::is(FSBlockType type) const
@@ -122,28 +87,6 @@ FSBlock::isBAM() const
 {
     return type == FSBlockType::BAM;
 }
-
-/*
-bool
-FSBlock::isDirectory() const
-{
-    return type == FSBlockType::ROOT || type == FSBlockType::USERDIR;
-}
-
-bool
-FSBlock::isRegular() const
-{
-    return isFile() || isDirectory();
-}
-
-bool
-FSBlock::isData() const
-{
-
-    // Note: As FFS data blocks have no header, each block can be a data block.
-    return true;
-}
-*/
 
 fs::path
 FSBlock::sanitizedPath() const

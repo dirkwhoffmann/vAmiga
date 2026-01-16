@@ -52,35 +52,56 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
 {
     using namespace utl;
 
-    auto &p = fs.fetch(nr);
+    auto &p   = fs.fetch(nr);
+    auto ts   = p.tsLink();
+    auto data = p.data();
 
     os << tab("Block");
     os << dec(nr) << std::endl;
     os << tab("Type");
     os << FSBlockTypeEnum::key(p.type) << std::endl;
+    os << tab("TS link");
+    os << ts.t << ":" << ts.s << std::endl;
 
     switch (p.type) {
 
         case FSBlockType::BAM:
-
+        {
             os << tab("Name");
             os << p.getName().str() << std::endl;
+            os << tab("DOS version");
+            os << data[0x02] << std::endl;
+            os << tab("DOS type");
+            os << data[0xA5] << data[0xA6] << std::endl;
             break;
-
+        }
         case FSBlockType::USERDIR:
+        {
+            isize slot = 0;
+            for (const auto &it : fs.readDirBlock(nr)) {
 
-            /*
-            os << tab("Name");
-            os << p.getName().str() << std::endl;
-            os << tab("Next");
-            os << dec(p.getNextHashRef()) << std::endl;
-            */
+                os << tab("Slot " + std::to_string(++slot));
+                if (it.empty()) {
+                    os << "<empty>" << std::endl;
+                } else {
+                    os << it.getName().str() << std::endl;
+                }
+                os << tab("Size");
+                os << (it.fileSizeHi << 8 | it.fileSizeLo) << std::endl;
+                os << tab("First data block");
+                os << it.firstDataTrack << ":" << it.firstDataSector << std::endl;
+
+                if (slot < 8) os << std::endl;
+            }
             break;
-
+        }
         case FSBlockType::DATA:
-
+        {
+            auto lastBlock = ts.t == 0;
+            os << tab("Stored bytes");
+            os << (lastBlock ? ts.s : 254) << std::endl;
             break;
-
+        }
         default:
             break;
     }

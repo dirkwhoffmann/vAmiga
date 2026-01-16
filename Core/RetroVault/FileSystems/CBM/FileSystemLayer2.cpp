@@ -172,28 +172,58 @@ FileSystem::unlink(BlockNr node)
 }
 
 vector<FSDirEntry>
-FileSystem::readDir() const 
+FileSystem::readDirBlock(BlockNr block) const
+{
+    vector<FSDirEntry> entries;
+    entries.reserve(8);
+
+    auto *data = fetch(block).data();
+
+    // Each directory block contains 8 directory entries
+    for (int i = 0; i < 8; i++) {
+        entries.emplace_back(std::span(data + i * 0x20, 0x20));
+    }
+
+    return entries;
+}
+
+vector<FSDirEntry>
+FileSystem::readDir() const
 {
     auto dirBlocks = collectDirBlocks();
 
     vector<FSDirEntry> result;
     result.reserve(dirBlocks.size() * 8);
 
-    // Iterate through all directory blocks
     for (auto block : dirBlocks) {
 
-        auto *data = fetch(block).data();
-
-        // Each directory block contains 8 directory entries
-        for (int i = 0; i < 8; i++) {
-
-            FSDirEntry entry(std::span(data + i * 0x20, 0x20));
-            result.push_back(entry);
-        }
+        auto entries = readDirBlock(block);
+        result.insert(result.end(), entries.begin(), entries.end());
     }
 
     return result;
 }
+
+/*
+void
+FileSystem::writeDirEntries(BlockNr block, const vector<FSDirEntry> &entries)
+{
+    auto &blk  = fetch(block).mutate();
+    auto *data = blk.data();
+
+    // Write up to 8 directory entries
+    for (usize j = 0; j < 8; ++j) {
+
+        FSDirEntry *entry = (FSDirEntry *)data + j;
+
+        if (j < entries.size()) {
+            memcpy(entry, &entries[j], sizeof(FSDirEntry));
+        } else {
+            memset(entry, 0, sizeof(FSDirEntry));
+        }
+    }
+}
+*/
 
 void
 FileSystem::writeDir(const vector<FSDirEntry> &dir)

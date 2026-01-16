@@ -283,6 +283,9 @@ public:
     // Reads the existing directory
     vector<FSDirEntry> readDir() const;
 
+    // Reads the directory entries from a specific block
+    vector<FSDirEntry> readDirBlock(BlockNr block) const;
+
     // Overwrites the existing directory
     void writeDir(const vector<FSDirEntry> &dir);
 
