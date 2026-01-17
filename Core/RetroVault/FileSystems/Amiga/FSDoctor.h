@@ -47,14 +47,10 @@ public:
     // Scans a single block and returns the number of errors
     isize xray(BlockNr ref, bool strict) const;
     isize xray(BlockNr ref, bool strict, std::ostream &os) const;
-    // isize xray(FSBlock &node, bool strict) const;
-    // isize xray(FSBlock &node, bool strict, std::ostream &os) const;
 
     // Checks the integrity of a certain byte or long word in this block
     FSBlockError xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const;
-    // FSBlockError xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const;
     FSBlockError xray32(BlockNr ref, isize pos, bool strict, optional<u32> &expected) const;
-    // FSBlockError xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
 
     // Checks the allocation table. Returns the number of errors. Stores details in 'diagnosis'
     isize xrayBitmap(bool strict = false);

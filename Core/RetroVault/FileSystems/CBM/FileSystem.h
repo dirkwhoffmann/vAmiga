@@ -301,6 +301,27 @@ public:
     // Removes an existing directory entry
     void unlink(BlockNr b);
 
+    // Applies a function to all items in a directory block
+    template <typename Func>
+    void forEachDirEntry(BlockNr b, Func &&func) const
+    {
+        auto *data = fetch(b).data();
+
+        for (int i = 0; i < 8; i++) {
+            func((const FSDirEntry *)data + i);
+        }
+    }
+
+    template <typename Func>
+    void forEachDirEntry(BlockNr b, Func &&func)
+    {
+        auto *data = fetch(b).mutate().data();
+
+        for (int i = 0; i < 8; i++) {
+            func((FSDirEntry *)data + i);
+        }
+    }
+
 
     //
     // Managing files
@@ -318,7 +339,8 @@ public:
     void rm(BlockNr at);
 
     // Renames a file or directory
-    void rename(BlockNr item, const PETName<16> &name);
+    [[deprecated]] void rename(BlockNr item, const PETName<16> &name);
+    void rename(const PETName<16> &src, const PETName<16> &dst);
 
     // Moves a file or directory to another location
     // void move(BlockNr item, BlockNr dest);

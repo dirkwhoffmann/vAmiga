@@ -43,8 +43,9 @@ struct FSDirEntry
     // Checks whether this entry has been deleted
     bool deleted() const noexcept;
 
-    // Returns the name of this file
+    // Gets or sets the file name
     PETName<16> getName() const { return PETName<16>(fileName); }
+    void setName(const PETName<16> &name) { name.write(fileName); }
 
     // Return the name of this file with certain symbols escaped
     fs::path getFileSystemRepresentation() const;

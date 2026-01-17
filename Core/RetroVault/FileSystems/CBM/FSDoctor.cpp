@@ -211,24 +211,29 @@ FSDoctor::xrayBitmap(std::ostream &os, bool strict)
 isize
 FSDoctor::xray(BlockNr ref, bool strict) const
 {
-    auto &node = fs.fetch(ref);
-    isize count = 0;
+    auto &node      = fs.fetch(ref);
+    auto dirBlocks  = fs.collectDirBlocks();
+    isize erroneous = 0;
+
 
     for (isize i = 0; i < node.bsize(); ++i) {
 
         std::optional<u8> expected;
-        if (auto error = xray8(ref, i, strict, expected); error != FSBlockError::OK) {
+        auto error = xray8(ref, i, strict, dirBlocks, expected);
 
-            count++;
+        if ( error != FSBlockError::OK) {
+
+            erroneous++;
             loginfo(FS_DEBUG, "Block %ld [%ld]: %s\n", node.nr, i, FSBlockErrorEnum::key(error));
         }
     }
 
-    return count;
+    return erroneous;
 }
 
 FSBlockError
-FSDoctor::xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const
+FSDoctor::xray8(BlockNr ref, isize pos, bool strict,
+                const std::vector<BlockNr> &dirBlocks, optional<u8> &expected) const
 {
     assert(pos >= 0 && pos < 256);
 
@@ -262,18 +267,21 @@ FSDoctor::xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) con
 
         case FSBlockType::USERDIR:
 
-            if (pos == 0) EXPECT_TRACK_REF (data[pos + 1]);
-            if (pos == 1) EXPECT_SECTOR_REF(data[pos - 1]);
+            if (std::find(dirBlocks.begin(), dirBlocks.end(), ref) != dirBlocks.end()) {
 
-            if (!utl::isZero(data + pos, 0x20)) {
+                if (pos == 0) EXPECT_TRACK_REF (data[pos + 1]);
+                if (pos == 1) EXPECT_SECTOR_REF(data[pos - 1]);
 
-                switch (pos & 0x1F) {
+                if (!utl::isZero(data + pos, 0x20)) {
 
-                    case 0x03: EXPECT_TRACK_REF (data[pos + 1]); break;
-                    case 0x04: EXPECT_SECTOR_REF(data[pos - 1]); break;
-                    case 0x15: EXPECT_TRACK_REF (data[pos + 1]); break;
-                    case 0x16: EXPECT_SECTOR_REF(data[pos - 1]); break;
-                    case 0x17: EXPECT_MAX(254);                  break;
+                    switch (pos & 0x1F) {
+
+                        case 0x03: EXPECT_TRACK_REF (data[pos + 1]); break;
+                        case 0x04: EXPECT_SECTOR_REF(data[pos - 1]); break;
+                        case 0x15: EXPECT_TRACK_REF (data[pos + 1]); break;
+                        case 0x16: EXPECT_SECTOR_REF(data[pos - 1]); break;
+                        case 0x17: EXPECT_MAX(254);                  break;
+                    }
                 }
             }
 
@@ -295,69 +303,59 @@ FSDoctor::xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) con
 isize
 FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
 {
-    auto &node   = fs.fetch(ref);
-    auto errors  = isize(0);
+    auto &node     = fs.fetch(ref);
+    auto dirBlocks = fs.collectDirBlocks();
+    auto *data     = node.data();
 
-    std::stringstream ss;
+    isize errors = 0;
+    std::string report;
 
-    auto hex = [&](int width, isize value, string delim = "") {
-        ss << std::setw(width) << std::right << std::setfill('0') << std::hex << value << delim;
-    };
-    auto hex4 = [&](u32 value, string delim = "") {
-        hex(2, BYTE3(value), " ");
-        hex(2, BYTE2(value), " ");
-        hex(2, BYTE1(value), " ");
-        hex(2, BYTE0(value), delim);
-    };
-
-    auto describe = [&](FSBlockError fault, const optional<u32> &value) {
-
-        if (value) { hex4(*value); return; }
+    auto describeExpected =
+        [](FSBlockError fault, const std::optional<u8> &value) -> std::string
+    {
+        if (!value)
+            return "";
 
         switch (fault) {
 
             case FSBlockError::EXPECTED_VALUE:
-                ss << "Value"; break;
+                return std::format("Expected: {:02x}", *value);
+
             case FSBlockError::EXPECTED_SMALLER_VALUE:
-                ss << "Smaller value"; break;
+                return std::format("Expected: {:02x} or lower", *value);
+
             case FSBlockError::EXPECTED_LARGER_VALUE:
-                ss << "Larger value"; break;
+                return std::format("Expected: {:02x} or higher", *value);
+
             default:
-                ss << "???";
+                return "???";
         }
     };
 
     for (isize i = 0; i < traits.bsize; ++i) {
 
-        optional<u8> expected;
+        std::optional<u8> expected;
+        const auto fault = xray8(ref, i, strict, dirBlocks, expected);
 
-        if (auto fault = xray8(ref, i, strict, expected); fault != FSBlockError::OK) {
+        if (fault == FSBlockError::OK) continue;
 
-            auto *data = node.data();
-            auto type = fs.typeOf(node.nr, i);
+        const auto type = fs.typeOf(node.nr, i);
 
-            ss << std::setw(7) << std::left << std::to_string(node.nr);
-            ss << "+";
-            hex(4, i, "  ");
-            hex4(node.read32(data + i), "  ");
+        report += std::format(
+            "{:<7}+{:02x}    {:02x}    {:<16}{}\n",
+            node.nr,
+            static_cast<unsigned>(i),
+            static_cast<unsigned>(data[i]),
+            FSItemTypeEnum::help(type),
+            describeExpected(fault, expected)
+        );
 
-            ss << std::setw(36) << std::left << std::setfill(' ') << FSItemTypeEnum::help(type);
-            describe(fault, expected);
-            ss << std::endl;
-
-            errors++;
-        }
+        ++errors;
     }
 
     if (errors) {
-
-        os << "Block  Entry  Data         Item type                           Expected" << std::endl;
-        string line;
-        while(std::getline(ss, line)) os << line << '\n';
-
-    } else {
-
-        // os << "No errors found" << std::endl;
+        os << "Block  Entry  Data  Item type       \n" // Expected\n"
+           << report;
     }
 
     return errors;
@@ -378,13 +376,15 @@ FSDoctor::rectify(bool strict)
 void
 FSDoctor::rectify(BlockNr ref, bool strict)
 {
-    auto &node = fs.fetch(ref);
+    auto &node     = fs.fetch(ref);
+    auto dirBlocks = fs.collectDirBlocks();
 
     for (isize i = 0; i < fs.blocks(); ++i) {
 
         optional<u8> expected;
+        auto fault = xray8(ref, i, strict, dirBlocks, expected);
 
-        if (auto fault = xray8(ref, i, strict, expected); fault != FSBlockError::OK) {
+        if (fault != FSBlockError::OK) {
 
             if (expected) {
 

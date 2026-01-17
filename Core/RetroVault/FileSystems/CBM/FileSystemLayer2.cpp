@@ -250,7 +250,7 @@ FileSystem::writeDir(const vector<FSDirEntry> &dir)
             if (i < dir.size()) {
                 memcpy(entry, &dir[i], sizeof(FSDirEntry));
             } else {
-                memset(entry, 0, sizeof(FSDirEntry));
+                entry = {};
             }
         }
 
@@ -333,6 +333,21 @@ FileSystem::rename(BlockNr item, const PETName<16> &name)
 
     // TODO
     assert(false);
+}
+
+void
+FileSystem::rename(const PETName<16> &src, const PETName<16> &dst)
+{
+    auto dirBlocks = collectDirBlocks();
+
+    for (auto &b : dirBlocks) {
+
+        forEachDirEntry(b, [&](FSDirEntry *entry) {
+
+            if (entry->getName() == src)
+                entry->setName(dst);
+        });
+    }
 }
 
 /*

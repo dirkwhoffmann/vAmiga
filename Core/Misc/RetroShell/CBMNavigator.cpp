@@ -965,95 +965,29 @@ CBMNavigator::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "move" },
-        .chelp  = { "Moves a file or directory" },
+        .tokens = { "rename" },
+        .chelp  = { "Renames a file" },
         .flags  = rs::ac,
         .args   = {
-            { .name = { "source", "Item to move" } },
-            { .name = { "target", "New name or target directory" } },
+            { .name = { "source", "Old file name" } },
+            { .name = { "target", "New file name" } },
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFormattedFS();
 
-                /*
-                auto sourceNr = parsePath(args, "source");
-                auto &source = fs->fetch(sourceNr);
+                auto oldName = PETName<16>(args.at("source"));
+                auto newName = PETName<16>(args.at("target"));
 
-                Tokens missing;
-                auto pathNr = matchPath(args.at("target"), missing);
-                auto &path = fs->fetch(pathNr);
+                // Make sure the source file exists
+                if (!fs->trySeek(oldName))
+                    throw FSError(FSError::FS_NOT_FOUND, oldName.str());
 
-                printf("%s -> '%s' {", source.absName().c_str(), path.absName().c_str());
-                for (auto &it : missing) printf(" %s", it.c_str());
-                printf(" }\n");
+                // Make sure the target file does not exist
+                if (fs->trySeek(newName))
+                    throw FSError(FSError::FS_EXISTS, newName.str());
 
-                if (missing.empty()) {
-
-                    if (path.isFile()) {
-
-                        throw FSError(FSError::FS_EXISTS, args.at("target"));
-                    }
-                    if (path.isDirectory()) {
-
-                        loginfo(RSH_DEBUG, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
-                        fs->move(sourceNr, pathNr);
-                    }
-
-                } else if (missing.size() == 1) {
-
-                    loginfo(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
-                          source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
-                    fs->move(sourceNr, pathNr, FSName(missing.back()));
-
-                } else {
-
-                    throw FSError(FSError::FS_NOT_FOUND, missing.front());
-                }
-                */
-            }
-    });
-
-    root.add({
-
-        .tokens = { "copy" },
-        .chelp  = { "Copies a file" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "source", "Item to copy" } },
-            { .name = { "target", "New name or target directory" } },
-        },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                requireFormattedFS();
-
-                /*
-                auto sourceNr = parsePath(args, "source");
-
-                Tokens missing;
-                auto pathNr = matchPath(args.at("target"), missing);
-                auto &path = fs->fetch(pathNr);
-
-                if (missing.empty()) {
-
-                    if (path.isFile()) {
-
-                        throw FSError(FSError::FS_EXISTS, args.at("target"));
-                    }
-                    if (path.isDirectory()) {
-
-                        fs->copy(sourceNr, pathNr);
-                    }
-
-                } else if (missing.size() == 1) {
-
-                    fs->copy(sourceNr, pathNr, FSName(missing.back()));
-
-                } else {
-
-                    throw FSError(FSError::FS_NOT_FOUND, missing.front());
-                }
-                */
+                fs->rename(oldName, newName);
             }
     });
 

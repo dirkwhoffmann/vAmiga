@@ -278,12 +278,10 @@ PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
 void
 PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 {
-    // auto newDir  = newPath.parent_path();
-    auto newName = newPath.filename();
-    auto src     = fs.seek(oldPath);
-    // auto dst     = fs.seek(newDir);
+    auto oldName = PETName<16>(oldPath);
+    auto newName = PETName<16>(newPath);
 
-    fs.rename(src, PETName<16>(newName));
+    fs.rename(oldName, newName);
 }
 
 void
