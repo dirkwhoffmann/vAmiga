@@ -610,25 +610,22 @@ CBMNavigator::initCommands(RSCommand &root)
         root.add({
 
             .tokens = { "export" },
-            .ghelp  = { "Export files, directories, or blocks" },
+            .ghelp  = { "Export files or blocks" },
             .chelp  = { "Export a file or directory to the host file system" },
             .flags  = rs::ac,
             .args   = {
-                { .name = { "file", "Export item" } },
-                { .name = { "path", "Host file system location" } },
-                { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
+                { .name = { "pattern", "File name pattern" } },
+                { .name = { "path", "Host file system location" } }
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                     requireFormattedFS();
 
-                    auto itemNr = parseFile(args, "file");
-                    bool recursive = args.contains("r");
-                    bool contents = args.at("file").back() == '/';
-
                     auto path = args.at("path");
                     auto hostPath = host.makeAbsolute(args.at("path"));
-                    fs->exporter.exportFiles(itemNr, hostPath, recursive, contents);
+
+                    auto pattern = FSPattern(args.at("pattern"));
+                    fs->exporter.exportFiles(pattern, hostPath);
                 }
         });
     }

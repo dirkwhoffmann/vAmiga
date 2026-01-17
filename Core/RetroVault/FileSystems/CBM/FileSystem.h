@@ -352,6 +352,7 @@ public:
 
     // Extracts the data from a file
     isize extractData(BlockNr b, Buffer<u8> &buf) const;
+    isize extractData(TSLink ts, Buffer<u8> &buf) const;
 
     // Shrinks or expands an existing file (pad with 0)
     void resize(BlockNr at, isize size);

@@ -394,6 +394,13 @@ FileSystem::extractData(BlockNr b, Buffer<u8> &buf) const
     return byteCount;
 }
 
+isize
+FileSystem::extractData(TSLink ts, Buffer<u8> &buf) const
+{
+    auto b = traits.blockNr(ts);
+    return b ? extractData(*b, buf) : 0;
+}
+
 void
 FileSystem::resize(BlockNr at, isize size)
 {

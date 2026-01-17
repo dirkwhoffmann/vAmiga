@@ -144,7 +144,6 @@ FSAllocator::advance(TSLink ts)
     }
 
     assert(traits.isValidLink(TSLink{t,s}));
-    printf("advance to: %ld %ld\n", t, s);
     return TSLink{t,s};
 }
 

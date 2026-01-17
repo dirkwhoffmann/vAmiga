@@ -107,6 +107,41 @@ FSExporter::exportBlocks(BlockNr first, BlockNr last, const fs::path &path) cons
 }
 
 void
+FSExporter::exportFile(const FSDirEntry &entry, const fs::path &path) const
+{
+    Buffer<u8> buffer;
+    fs.extractData(entry.firstBlock(), buffer);
+
+    if (!fs::exists(path)) {
+        fs::create_directories(path);
+    } else if (!fs::is_directory(path)) {
+        throw FSError(FSError::FS_NOT_A_DIRECTORY, path.string());
+    }
+
+    // Open file
+    auto hostPath = path / entry.getName().str();
+    std::ofstream stream(hostPath, std::ios::binary);
+    if (!stream.is_open()) {
+        throw IOError(IOError::FILE_CANT_CREATE, path);
+    }
+
+    // Write data
+    stream.write((const char *)buffer.ptr, buffer.size);
+    if (!stream) {
+        throw IOError(IOError::FILE_CANT_WRITE, path);
+    }
+}
+
+void
+FSExporter::exportFiles(const FSPattern &pattern, const fs::path &path) const
+{
+    auto items = fs.searchDir(pattern);
+    for (const auto &entry : items) exportFile(entry, path);
+}
+
+#if 0
+
+void
 FSExporter::exportFiles(BlockNr nr, const fs::path &path, bool recursive, bool contents) const
 {
     /*
@@ -212,5 +247,6 @@ FSExporter::saveFile(const FSTree &tree, const fs::path &path, bool recursive) c
     }
 }
 */
+#endif
 
 }
