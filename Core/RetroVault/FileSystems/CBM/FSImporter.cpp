@@ -51,29 +51,28 @@ FSImporter::importVolume(const u8 *src, isize size)
     loginfo(FS_DEBUG, "Success\n");
 }
 
-void
-FSImporter::import(const fs::path &path)
+void FSImporter::import(const fs::path &path)
 {
-    fs::directory_entry dir;
+    if (!fs::exists(path))
+        throw FSError(FSError::FS_NOT_FOUND, path);
 
     try {
 
-        // Get the directory item
-        dir = fs::directory_entry(path);
+        const fs::directory_entry entry{path};
 
-        if (dir.is_directory()) {
+        if (entry.is_directory()) {
 
-            // Add directory contents
-            for (const auto& it : fs::directory_iterator(dir)) import(it);
+            for (const auto &child : fs::directory_iterator(entry))
+                import(child);
 
         } else {
 
-            // Add file
-            import(dir);
+            import(entry);
         }
 
+    } catch (const FSError &) {
+        throw;
     } catch (...) {
-
         throw IOError(IOError::FILE_CANT_READ, path);
     }
 
@@ -97,16 +96,13 @@ FSImporter::import(const fs::directory_entry &entry)
     // Skip hidden files
     if (isHidden(name)) return;
 
-    if (entry.is_regular_file()) {
+    loginfo(FS_DEBUG, "  Importing file %s\n", path.c_str());
 
-        loginfo(FS_DEBUG > 1, "  Importing file %s\n", path.c_str());
-
-        Buffer<u8> buffer(entry.path());
-        if (buffer) {
-            fs.createFile(fsname, buffer.ptr, buffer.size);
-        } else {
-            fs.createFile(fsname);
-        }
+    Buffer<u8> buffer(entry.path());
+    if (buffer) {
+        fs.createFile(fsname, buffer.ptr, buffer.size);
+    } else {
+        fs.createFile(fsname);
     }
 }
 

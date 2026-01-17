@@ -337,9 +337,9 @@ public:
 
     // Delete a file
     void rm(BlockNr at);
+    void rm(const PETName<16> file);
 
-    // Renames a file or directory
-    [[deprecated]] void rename(BlockNr item, const PETName<16> &name);
+    // Renames a file
     void rename(const PETName<16> &src, const PETName<16> &dst);
 
     // Moves a file or directory to another location

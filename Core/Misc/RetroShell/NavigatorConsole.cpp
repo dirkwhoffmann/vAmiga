@@ -757,8 +757,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Import a block from a file" },
         .flags  = vAmigaDOS ? rs::disabled : 0,
         .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
             { .name = { "path", "File path" } },
+            { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -897,8 +897,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "export", "block" },
         .chelp  = { "Export a block to a file" },
         .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
             { .name = { "path", "File path" }, .flags = vAmigaDOS ? rs::disabled : 0 },
+            { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 

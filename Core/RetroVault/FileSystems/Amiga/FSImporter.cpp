@@ -105,7 +105,7 @@ FSImporter::import(BlockNr top, const fs::directory_entry &entry, bool recursive
 
     if (entry.is_regular_file()) {
 
-        loginfo(FS_DEBUG > 1, "  Importing file %s\n", path.c_str());
+        loginfo(FS_DEBUG, "  Importing file %s\n", path.c_str());
 
         Buffer<u8> buffer(entry.path());
         if (buffer) {
@@ -116,7 +116,7 @@ FSImporter::import(BlockNr top, const fs::directory_entry &entry, bool recursive
 
     } else {
 
-        loginfo(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
+        loginfo(FS_DEBUG, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
         auto subdir = fs.mkdir(top, fsname);

@@ -41,7 +41,7 @@ FSAllocator::allocate(isize count)
         if (auto nr = traits.blockNr(ts); nr.has_value()) {
 
             // Note this block if it is empty
-            if (fs.isEmpty(*nr)) {
+            if (isFree(ts)) {
 
                 result.push_back(*nr);
                 count--;
@@ -144,6 +144,7 @@ FSAllocator::advance(TSLink ts)
     }
 
     assert(traits.isValidLink(TSLink{t,s}));
+    printf("advance to: %ld %ld\n", t, s);
     return TSLink{t,s};
 }
 

@@ -126,7 +126,7 @@ FileSystem::searchDir(const FSPattern &pattern) const
 
     for (auto &entry: readDir()) {
 
-        if (pattern.match(entry.getName().str()))
+        if (!entry.deleted() && pattern.match(entry.getName().str()))
            result.push_back(entry);
     }
     return result;
@@ -158,15 +158,13 @@ FileSystem::unlink(BlockNr node)
 {
     if (auto ts = traits.tsLink(node)) {
 
-        auto dir = readDir();
+        auto dirBlocks = collectDirBlocks();
 
-        for (auto &slot : dir) {
+        for (auto &b : dirBlocks) {
 
-            if (slot.firstDataTrack == ts->t && slot.firstDataSector == ts->s) {
-
-                slot = FSDirEntry();
-                writeDir(dir);
-            }
+            forEachDirEntry(b, [&](FSDirEntry *e) {
+                if (e->firstDataTrack == ts->t && e->firstDataSector == ts->s) *e = {};
+            });
         }
     }
 }
@@ -203,27 +201,6 @@ FileSystem::readDir() const
 
     return result;
 }
-
-/*
-void
-FileSystem::writeDirEntries(BlockNr block, const vector<FSDirEntry> &entries)
-{
-    auto &blk  = fetch(block).mutate();
-    auto *data = blk.data();
-
-    // Write up to 8 directory entries
-    for (usize j = 0; j < 8; ++j) {
-
-        FSDirEntry *entry = (FSDirEntry *)data + j;
-
-        if (j < entries.size()) {
-            memcpy(entry, &entries[j], sizeof(FSDirEntry));
-        } else {
-            memset(entry, 0, sizeof(FSDirEntry));
-        }
-    }
-}
-*/
 
 void
 FileSystem::writeDir(const vector<FSDirEntry> &dir)
@@ -289,8 +266,12 @@ FileSystem::createFile(const PETName<16> &name, const u8 *buf, isize size)
 
     // Create a directory entry
     FSDirEntry entry;
+    entry.setName(name);
     entry.firstDataTrack  = u8(first->t);
     entry.firstDataSector = u8(first->s);
+    entry.fileSizeHi      = HI_BYTE(blocks.size());
+    entry.fileSizeLo      = LO_BYTE(blocks.size());
+    entry.fileType        = 0xA2; // PRG
 
     // Add the file to the directory
     link(entry);
@@ -313,7 +294,7 @@ FileSystem::createFile(const PETName<16> &name, const string &str)
 void
 FileSystem::rm(BlockNr node)
 {
-    // Remove the file from its parent directory
+    // Remove the file from the directory
     unlink(node);
 
     // Reclaim all associated storage blocks
@@ -321,18 +302,9 @@ FileSystem::rm(BlockNr node)
 }
 
 void
-FileSystem::rename(BlockNr item, const PETName<16> &name)
+FileSystem::rm(const PETName<16> file)
 {
-    // auto &block = fetch(item);
-
-    // Renaming the root updates the file system name
-    // if (block.isRoot()) { setName(name); return; }
-
-    // For regular items, relocate entry in the parent directory
-    // move(item, block.getParentDirRef(), name);
-
-    // TODO
-    assert(false);
+    rm(seek(file));
 }
 
 void
@@ -472,10 +444,12 @@ FileSystem::replace(std::vector<BlockNr> blocks, const u8 *buf, isize size)
 {
     for (usize i = 0; i < blocks.size() && size > 0; ++i) {
 
-        auto &block = fetch(blocks[i]).mutate();
-        auto *data  = block.data();
-
+        auto &block  = fetch(blocks[i]).mutate();
+        auto *data   = block.data();
         auto written = std::min(size, isize(254));
+
+        // Mark the block as a data block
+        block.type = FSBlockType::DATA;
 
         // Write payload
         std::memcpy(data + 2, buf, written);
@@ -504,11 +478,11 @@ FileSystem::replace(std::vector<BlockNr> blocks, const u8 *buf, isize size)
 void
 FileSystem::reclaim(BlockNr b)
 {
-    // Collect all blocks occupied by this file
-    auto blocks = collectDataBlocks(b);
+    for (auto &block : collectDataBlocks(b)) {
 
-    // Remove all blocks
-    for (auto &it : blocks) { cache.erase(it); allocator.markAsFree(it); }
+        cache.erase(block);
+        allocator.markAsFree(block);
+    }
 }
 
 optional<BlockNr>

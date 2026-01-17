@@ -179,26 +179,22 @@ CBMNavigator::parseBlock(const std::string &argv)
         auto lhs = argv.substr(0, pos);
         auto rhs = argv.substr(pos + 1);
 
-        if (lhs.empty() || rhs.empty()) {
+        if (lhs.empty() || rhs.empty())
             throw CoreError(CoreError::OPT_INV_ARG, argv);
-        }
 
         auto t = parseNum(lhs);
         auto s = parseNum(rhs);
 
-        if (auto nr = fs->getTraits().blockNr(TSLink{t,s})) {
-            printf("t: %ld s: %ld nr: %ld\n", t, s, *nr);
+        if (auto nr = fs->getTraits().blockNr(TSLink{t,s}))
             return *nr;
-        }
 
     } else {
 
         // Block syntax (single number)
         BlockNr nr = parseNum(argv);
 
-        if (fs->tryFetch(nr)) {
+        if (fs->tryFetch(nr))
             return nr;
-        }
     }
 
     throw CoreError(CoreError::OPT_INV_ARG,
@@ -522,7 +518,7 @@ CBMNavigator::initCommands(RSCommand &root)
     root.add({
 
         .tokens = { "import" },
-        .ghelp  = { "Import a file system" },
+        .ghelp  = { "Import files" },
         .chelp  = { "Import a file or a folder from the host file system" },
         .flags  = vAmigaDOS ? rs::hidden : 0,
         .args   = {
@@ -575,15 +571,15 @@ CBMNavigator::initCommands(RSCommand &root)
         .chelp  = { "Import a block from a file" },
         .flags  = vAmigaDOS ? rs::disabled : 0,
         .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
             { .name = { "path", "File path" } },
+            { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFS();
 
                 auto path = host.makeAbsolute(args.at("path"));
-                auto nr = parseBlock(args, "nr", fs->bam());
+                auto nr = parseBlock(args, "nr", cb);
 
                 fs->importer.importBlock(nr, path);
             }
@@ -669,14 +665,14 @@ CBMNavigator::initCommands(RSCommand &root)
         .tokens = { "export", "block" },
         .chelp  = { "Export a block to a file" },
         .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
             { .name = { "path", "File path" }, .flags = vAmigaDOS ? rs::disabled : 0 },
+            { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 requireFormattedFS();
 
-                auto nr = parseBlock(args, "nr", fs->bam());
+                auto nr = parseBlock(args, "nr", cb);
 
                 if constexpr (vAmigaDOS) {
 
@@ -702,7 +698,6 @@ CBMNavigator::initCommands(RSCommand &root)
 
         .tokens = { "dir" },
         .chelp  = { "Display a sorted list of the files in a directory" },
-        .flags  = rs::acdir,
         .args   = { },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -948,10 +943,10 @@ CBMNavigator::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             requireFormattedFS();
-            if (auto ts = fs->getTraits().tsLink(cb)) {
-                if (auto b = fs->getTraits().blockNr(*ts)) {
-                    cb = *b;
-                }
+
+            auto ts = fs->fetch(cb).tsLink();
+            if (auto b = fs->getTraits().blockNr(ts)) {
+                cb = *b;
             }
         }
     });
