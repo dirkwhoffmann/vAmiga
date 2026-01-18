@@ -245,7 +245,7 @@ public:
     const FSBlock &operator[](size_t nr) { return cache.fetch(BlockNr(nr)); }
 
     // Reads the block allocation map
-    std::vector<bool> readBitmap() const { return allocator.readBitmap(); }
+    [[deprecated]] std::vector<bool> readBitmap() const { return allocator.readBitmap(); }
 
 
     //

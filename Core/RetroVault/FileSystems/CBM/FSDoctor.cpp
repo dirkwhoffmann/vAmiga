@@ -160,12 +160,12 @@ FSDoctor::xrayBitmap(bool strict)
     }
 
     // Read allocation map
-    auto alloc = fs.readBitmap();
+    auto bitmap = allocator.readBitmap();
 
     // Check all blocks
     for (isize i = 0; i < fs.blocks(); ++i) {
 
-        bool allocated = alloc[i];
+        bool allocated = !bitmap[i];
         bool contained = used.contains(BlockNr(i));
 
         if (allocated && !contained) {

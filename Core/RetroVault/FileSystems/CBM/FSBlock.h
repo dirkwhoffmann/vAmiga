@@ -85,18 +85,6 @@ public:
 
 
     //
-    // Printing debug information
-    //
-    
-public:
-
-    // const char *objectName() const;
-    // void dumpInfo(std::ostream &os) const;
-    // void dumpStorage(std::ostream &os) const;
-    // void dumpBlocks(std::ostream &os) const;
-
-    
-    //
     // Querying block properties
     //
 
@@ -124,8 +112,8 @@ public:
     FSItemType itemType(isize byte) const;
     
     // Returns the type and subtype identifiers of this block
-    [[deprecated]] u32 typeID() const;
-    [[deprecated]] u32 subtypeID() const;
+    // [[deprecated]] u32 typeID() const;
+    // [[deprecated]] u32 subtypeID() const;
 
     // Returns the track / sector link stored in the fist two bytes
     TSLink tsLink() const { auto *p = data(); return TSLink {p[0],p[1]}; }
@@ -152,22 +140,6 @@ public:
     // Writes the block back to the block device
     void flush();
 
-    // Reads or writes a long word in Big Endian format
-    [[deprecated]] static u32 read32(const u8 *p);
-    [[deprecated]] static void write32(u8 *p, u32 value);
-    [[deprecated]] static void inc32(u8 *p) { write32(p, read32(p) + 1); }
-    [[deprecated]] static void dec32(u8 *p) { write32(p, read32(p) - 1); }
-
-    // Computes the address of a long word inside the block
-    [[deprecated]] const u8 *addr32(isize nr) const;
-    [[deprecated]] u8 *addr32(isize nr);
-
-    // Reads, writes, or modifies the n-th long word
-    [[deprecated]] u32 get32(isize n) const { return read32(addr32(n)); }
-    [[deprecated]] void set32(isize n, isize val) { write32(addr32(n), u32(val)); }
-    [[deprecated]] void inc32(isize n) { inc32(addr32(n)); }
-    [[deprecated]] void dec32(isize n) { dec32(addr32(n)); }
-
 
     //
     // Printing
@@ -181,16 +153,6 @@ public:
     static string rangeString(const std::vector<BlockNr> &vec);
 
 
-    //
-    // Debugging
-    //
-    
-public:
-    
-    // Prints some debug information for this block
-    // void dump(std::ostream &os) const;
-
-    
     //
     // Importing and exporting
     //
@@ -230,85 +192,8 @@ public:
     isize writeData(std::ostream &os) const;
     isize writeData(std::ostream &os, isize size) const;
     isize writeData(Buffer<u8> &buf, isize offset, isize count) const;
-    // isize extractData(Buffer<u8> &buf) const;
-
-    
-    //
-    // Importing
-    //
-    
-    isize overwriteData(Buffer<u8> &buf);
-    isize overwriteData(Buffer<u8> &buf, isize offset, isize count);
 };
 
 typedef FSBlock* BlockPtr;
-
-
-//
-// Comparison function used for sorting
-//
-
-namespace sort {
-
-/*
-inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSBlock &b1, const FSBlock &b2)
-{
-    if ( b1.isDirectory() && !b2.isDirectory()) return true;
-    if (!b1.isDirectory() &&  b2.isDirectory()) return false;
-    return b1.getName() < b2.getName();
-};
-
-inline std::function<bool(const FSBlock *, const FSBlock *)> dafaPtr = [](const FSBlock *b1, const FSBlock *b2)
-{
-    if ( b1->isDirectory() && !b2->isDirectory()) return true;
-    if (!b1->isDirectory() &&  b2->isDirectory()) return false;
-    return b1->getName() < b2->getName();
-};
-
-inline std::function<bool(const FSBlock &, const FSBlock &)> alpha = [](const FSBlock &b1, const FSBlock &b2)
-{
-    return b1.getName() < b2.getName();
-};
-
-inline std::function<bool(const FSBlock *, const FSBlock *)> alphaPtr = [](const FSBlock *b1, const FSBlock *b2)
-{
-    return b1->getName() < b2->getName();
-};
-
-*/
-
-/*
-inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;
-inline std::function<bool(const FSBlock *, const FSBlock *)> nonePtr = nullptr;
-*/
-
-}
-
-/*
-namespace accept {
-
-inline std::function<bool(const FSBlock &)> all = [](const FSBlock &b1)
-{
-    return true;
-};
-
-inline std::function<bool(const FSBlock &)> files = [](const FSBlock &b)
-{
-    return b.isFile();
-};
-
-inline std::function<bool(const FSBlock &)> directories = [](const FSBlock &b)
-{
-    return b.isDirectory();
-};
-
-inline std::function<bool(const FSBlock &)> pattern(const FSPattern &p)
-{
-    return [p](const FSBlock &b) { return false; };
-    // return [p](const FSBlock &b) { return p.match(b.name()); };
-};
-
-}
-*/
 
 }

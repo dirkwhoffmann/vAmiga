@@ -208,30 +208,6 @@ FSBlock::itemType(isize byte) const
     }
 }
 
-u32
-FSBlock::typeID() const
-{
-    return type == FSBlockType::EMPTY ? 0 : get32(0);
-}
-
-u32
-FSBlock::subtypeID() const
-{
-    return type == FSBlockType::EMPTY ? 0 : get32((bsize() / 4) - 1);
-}
-
-const u8 *
-FSBlock::addr32(isize nr) const
-{
-    return (data() + 4 * nr) + (nr < 0 ? bsize() : 0);
-}
-
-u8 *
-FSBlock::addr32(isize nr)
-{
-    return (data() + 4 * nr) + (nr < 0 ? bsize() : 0);
-}
-
 u8 *
 FSBlock::data()
 {
@@ -294,55 +270,6 @@ FSBlock::flush()
         cache.dev.writeBlock(dataCache.ptr, nr);
     }
 }
-
-u32
-FSBlock::read32(const u8 *p)
-{
-    return p[0] << 24 | p[1] << 16 | p[2] << 8 | p[3];
-}
-
-void
-FSBlock::write32(u8 *p, u32 value)
-{
-    p[0] = (value >> 24) & 0xFF;
-    p[1] = (value >> 16) & 0xFF;
-    p[2] = (value >>  8) & 0xFF;
-    p[3] = (value >>  0) & 0xFF;
-}
-
-/*
-void
-FSBlock::dumpInfo(std::ostream &os) const
-{
-    using namespace utl;
-}
-
-void
-FSBlock::dumpBlocks(std::ostream &os) const
-{
-    using namespace utl;
-}
-
-void
-FSBlock::dumpStorage(std::ostream &os) const
-{
-    fs->doctor.dump(nr, os);
-}
-*/
-/*
-void
-FSBlock::hexDump(std::ostream &os, const DumpOpt &opt) const
-{
-    if (type == FSBlockType::EMPTY) {
-
-        Dumpable::dump(os, [&](isize offset, isize bytes) { return offset < bsize() ? 0 : -1; }, opt, DumpFmt{} );
-
-    } else {
-
-        Dumpable::dump(os, Dumpable::dataProvider(data(), bsize()), opt, DumpFmt{});
-    }
-}
-*/
 
 string
 FSBlock::rangeString(const std::vector<BlockNr> &vec)
@@ -518,72 +445,6 @@ FSBlock::writeData(std::ostream &os, isize size) const
     }
 }
 
-#if 0
-isize
-FSBlock::extractData(Buffer<u8> &buf) const
-{
-    // Only call this function for file header blocks
-    // if (type != FSBlockType::FILEHEADER) throw FSError(FSError::FS_NOT_A_FILE);
-
-    // isize bytesRemaining = getFileSize();
-    isize bytesTotal = 0;
-
-    /*
-    buf.init(bytesRemaining);
-
-    for (auto &it : fs->collectDataBlocks(this->nr)) {
-
-        isize bytesWritten = it->writeData(buf, bytesTotal, bytesRemaining);
-        bytesTotal += bytesWritten;
-        bytesRemaining -= bytesWritten;
-    }
-
-    if (bytesRemaining != 0) {
-        logwarn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
-    }
-    */
-
-    return bytesTotal;
-
-    /*
-     isize blocksTotal = 0;
-    // Start here and iterate through all connected file list blocks
-    const FSBlock *block = this;
-    
-    while (block && blocksTotal < fs->numBlocks()) {
-
-        blocksTotal++;
-        
-        // Iterate through all data blocks references in this block
-        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
-        for (isize i = 0; i < num; i++) {
-            
-            Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = fs->dataBlockPtr(ref)) {
-
-                isize bytesWritten = dataBlock->writeData(buf, bytesTotal, bytesRemaining);
-                bytesTotal += bytesWritten;
-                bytesRemaining -= bytesWritten;
-                
-            } else {
-                
-                warn("Ignoring block %d (no data block)\n", ref);
-            }
-        }
-        
-        // Continue with the next list block
-        block = block->getNextListBlock();
-    }
-    
-    if (bytesRemaining != 0) {
-        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
-    }
-
-    return bytesTotal;
-     */
-}
-#endif
-
 isize
 FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count) const
 {
@@ -605,77 +466,6 @@ FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count) const
         default:
             fatalError;
     }
-}
-
-isize
-FSBlock::overwriteData(Buffer<u8> &buf)
-{
-    /*
-    // Only call this function for file header blocks
-    assert(type == FSBlockType::FILEHEADER);
-    
-    isize bytesRemaining = getFileSize();
-    isize bytesTotal = 0;
-    isize blocksTotal = 0;
-    
-    assert(buf.size == bytesRemaining);
-    
-    // Start here and iterate through all connected file list blocks
-    const FSBlock *block = this;
-
-    while (block && blocksTotal < fs->blocks()) {
-
-        blocksTotal++;
-        
-        // Iterate through all data blocks references in this block
-        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
-        for (isize i = 0; i < num; i++) {
-
-            BlockNr ref = block->getDataBlockRef(i);
-            if (auto &dataBlock = fs->fetch(ref); dataBlock.isData()) { //} dataBlockPtr(ref)) {
-
-                isize bytesWritten = dataBlock.mutate().overwriteData(buf, bytesTotal, bytesRemaining);
-                bytesTotal += bytesWritten;
-                bytesRemaining -= bytesWritten;
-                
-            } else {
-                
-                logwarn("Ignoring block %ld (no data block)\n", ref);
-            }
-        }
-        
-        // Continue with the next list block
-        block = block->getNextListBlock();
-    }
-    
-    if (bytesRemaining != 0) {
-        logwarn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
-    }
-    
-    return bytesTotal;
-    */
-    return 0;
-}
-
-isize
-FSBlock::overwriteData(Buffer<u8> &buf, isize offset, isize count)
-{
-    /*
-    count = std::min(dsize(), count);
-    auto *bdata = data();
-
-    switch (type) {
-            
-        case FSBlockType::DATA:
-            
-            std::memcpy((void *)(bdata + 2), (void *)(buf.ptr + offset), count);
-            return count;
-                        
-        default:
-            fatalError;
-    }
-    */
-    return 0;
 }
 
 }
