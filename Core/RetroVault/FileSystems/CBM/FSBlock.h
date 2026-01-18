@@ -153,20 +153,20 @@ public:
     void flush();
 
     // Reads or writes a long word in Big Endian format
-    static u32 read32(const u8 *p);
-    static void write32(u8 *p, u32 value);
-    static void inc32(u8 *p) { write32(p, read32(p) + 1); }
-    static void dec32(u8 *p) { write32(p, read32(p) - 1); }
+    [[deprecated]] static u32 read32(const u8 *p);
+    [[deprecated]] static void write32(u8 *p, u32 value);
+    [[deprecated]] static void inc32(u8 *p) { write32(p, read32(p) + 1); }
+    [[deprecated]] static void dec32(u8 *p) { write32(p, read32(p) - 1); }
 
     // Computes the address of a long word inside the block
-    const u8 *addr32(isize nr) const;
-    u8 *addr32(isize nr);
+    [[deprecated]] const u8 *addr32(isize nr) const;
+    [[deprecated]] u8 *addr32(isize nr);
 
     // Reads, writes, or modifies the n-th long word
-    u32 get32(isize n) const { return read32(addr32(n)); }
-    void set32(isize n, isize val) { write32(addr32(n), u32(val)); }
-    void inc32(isize n) { inc32(addr32(n)); }
-    void dec32(isize n) { dec32(addr32(n)); }
+    [[deprecated]] u32 get32(isize n) const { return read32(addr32(n)); }
+    [[deprecated]] void set32(isize n, isize val) { write32(addr32(n), u32(val)); }
+    [[deprecated]] void inc32(isize n) { inc32(addr32(n)); }
+    [[deprecated]] void dec32(isize n) { dec32(addr32(n)); }
 
 
     //

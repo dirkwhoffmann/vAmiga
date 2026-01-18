@@ -33,7 +33,7 @@ FileSystem::format(FSFormat dos) {
     formatBAM(dos, PETName<16>(""));
 
     // Create the first directory block
-    (*this)[bam() + 1].mutate().init(FSBlockType::USERDIR);
+    (*this)[bam() + 1].mutate().init(FSBlockType::DIR);
 }
 
 void
@@ -321,51 +321,6 @@ FileSystem::rename(const PETName<16> &src, const PETName<16> &dst)
         });
     }
 }
-
-/*
-void
-FileSystem::move(BlockNr item, BlockNr dest)
-{
-    move (item, dest, fetch(item).name());
-}
-
-void
-FileSystem::move(BlockNr item, BlockNr dest, const FSName &name)
-{
-    require.fileOrDirectory(item);
-    require.notExist(dest, name);
-
-    // Detach the item from its current parent
-    unlink(item);
-
-    // Apply new name if provided
-    fetch(item).mutate().setName(name);
-
-    // Insert into the destination directory
-    link(dest, item);
-}
-*/
-
-/*
-void
-FileSystem::copy(BlockNr item, BlockNr dest)
-{
-    copy(item, dest, fetch(item).name());
-}
-
-void
-FileSystem::copy(BlockNr item, BlockNr dest, const FSName &name)
-{
-    require.file(item);
-    require.directory(dest);
-
-    // Read source file
-    Buffer<u8> buffer; fetch(item).extractData(buffer);
-
-    // Create file at destination
-    createFile(dest, name, buffer);
-}
-*/
 
 isize
 FileSystem::extractData(BlockNr b, Buffer<u8> &buf) const

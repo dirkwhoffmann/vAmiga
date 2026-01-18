@@ -21,12 +21,6 @@ struct FSRequire {
 
     void isFormatted() const;
     void inRange(BlockNr nr) const;
-    /*
-    void file(BlockNr nr) const;
-    void directory(BlockNr nr) const;
-    void fileOrDirectory(BlockNr nr) const;
-    void notRoot(BlockNr nr) const;
-     */
     void emptyDirectory() const;
     void exists(const PETName<16> &name) const;
     void notExist(const PETName<16> &name) const;

@@ -43,24 +43,6 @@ struct FSFormatEnum : Reflectable<FSFormatEnum, FSFormat>
     {
         return "";
     }
-
-    /*
-    static FSFormat fromDosType(u32 value)
-    {
-        switch (value) {
-                
-            case 0x444F5300:    return FSFormat::OFS;
-            case 0x444F5301:    return FSFormat::FFS;
-            case 0x444F5302:    return FSFormat::OFS_INTL;
-            case 0x444F5303:    return FSFormat::FFS_INTL;
-            case 0x444F5304:    return FSFormat::OFS_DC;
-            case 0x444F5305:    return FSFormat::FFS_DC;
-            case 0x444F5306:    return FSFormat::OFS_LNFS;
-            case 0x444F5307:    return FSFormat::FFS_LNFS;
-            default:            return FSFormat::NODOS;
-        }
-    }
-    */
 };
 
 enum class FSBlockType : long
@@ -68,13 +50,7 @@ enum class FSBlockType : long
     UNKNOWN,
     EMPTY,
     BAM,
-    // BOOT,
-    // ROOT,
-    // BITMAP,
-    // BITMAP_EXT,
-    USERDIR,
-    // FILEHEADER,
-    // FILELIST,
+    DIR,
     DATA
 };
 
@@ -87,11 +63,11 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
     {
         switch (value) {
                 
-            case FSBlockType::UNKNOWN:     return "UNKNOWN";
-            case FSBlockType::EMPTY:       return "EMPTY";
-            case FSBlockType::BAM:         return "BAM";
-            case FSBlockType::USERDIR:     return "USERDIR";
-            case FSBlockType::DATA:        return "DATA";
+            case FSBlockType::UNKNOWN:  return "UNKNOWN";
+            case FSBlockType::EMPTY:    return "EMPTY";
+            case FSBlockType::BAM:      return "BAM";
+            case FSBlockType::DIR:      return "USERDIR";
+            case FSBlockType::DATA:     return "DATA";
         }
         return "???";
     }
@@ -262,17 +238,6 @@ struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
 //
 // Structures
 //
-
-/*
-struct FSTraits
-{
-    FSFormat dos = FSFormat::NODOS;
-
-    isize blocks = 0;
-    isize bytes = 0;
-    isize bsize = 256;
-};
-*/
 
 struct FSAttr {
 

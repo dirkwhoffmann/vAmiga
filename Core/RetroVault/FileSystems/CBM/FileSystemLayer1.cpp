@@ -22,7 +22,7 @@ FileSystem::predictType(BlockNr nr, const u8 *buf) const noexcept
         auto ts = traits.tsLink(nr);
 
         // Track 18 contains the BAM and the directory blocks
-        if (ts->t == 18) return ts->s == 0 ? FSBlockType::BAM : FSBlockType::USERDIR;
+        if (ts->t == 18) return ts->s == 0 ? FSBlockType::BAM : FSBlockType::DIR;
 
         // Check if this block is a data block
         for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA;

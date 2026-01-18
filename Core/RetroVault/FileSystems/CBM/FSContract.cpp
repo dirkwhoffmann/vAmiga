@@ -28,48 +28,6 @@ FSRequire::inRange(BlockNr nr) const
     }
 }
 
-/*
-void
-FSRequire::file(BlockNr nr) const
-{
-    inRange(nr);
-    auto t = fs.typeOf(nr);
-    if (t != FSBlockType::FILEHEADER) {
-        throw FSError(FSError::FS_NOT_A_FILE);
-    }
-}
-
-void
-FSRequire::fileOrDirectory(BlockNr nr) const
-{
-    inRange(nr);
-    auto t = fs.typeOf(nr);
-    if (t != FSBlockType::ROOT && t != FSBlockType::USERDIR && t != FSBlockType::FILEHEADER) {
-        throw FSError(FSError::FS_NOT_A_FILE);
-    }
-}
-
-void
-FSRequire::directory(BlockNr nr) const
-{
-    inRange(nr);
-    auto t = fs.typeOf(nr);
-    if (t != FSBlockType::ROOT && t != FSBlockType::USERDIR) {
-        throw FSError(FSError::FS_NOT_A_DIRECTORY);
-    }
-}
-
-void
-FSRequire::notRoot(BlockNr nr) const
-{
-    inRange(nr);
-    auto t = fs.typeOf(nr);
-    if (t == FSBlockType::ROOT) {
-        throw FSError(FSError::FS_INVALID_PATH);
-    }
-}
-*/
-
 void
 FSRequire::emptyDirectory() const
 {

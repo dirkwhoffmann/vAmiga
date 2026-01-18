@@ -149,61 +149,6 @@ struct FSString {
     friend std::ostream &operator<<(std::ostream &os, const FSString &str);
 };
 
-struct FSName : FSString {
-
-    // Makes a file name compatible with the host file system
-    static fs::path sanitize(const string &filename);
-
-    // Makes a file name compatible with the Amiga file system
-    static string unsanitize(const fs::path &filename);
-
-    // Constructors
-    explicit FSName() : FSName("") { }
-    explicit FSName(const string &cpp);
-    explicit FSName(const char *c);
-    explicit FSName(const u8 *bcpl);
-    explicit FSName(const fs::path &path);
-    explicit FSName(const std::map<string,string> map, const string &cpp, const string fallback);
-
-    fs::path path() const { return sanitize(str); }
-};
-
-/*
-struct FSPath {
-
-    using component_type = FSName;
-
-    optional<FSName> volume;
-    vector<FSName>   components;
-
-    explicit FSPath(const string &cpp);
-    explicit FSPath(const fs::path &path);
-    explicit FSPath(const char *str) : FSPath(string(str)) { };
-
-    string cpp_str() const;
-
-    bool empty() const { return !volume.has_value() && components.empty(); }
-    bool absolute() const { return volume.has_value(); }
-
-    FSName filename() const;
-    FSPath parentPath() const;
-
-    FSPath &operator/=(const FSName &);
-    FSPath &operator/=(const FSPath &);
-    FSPath operator/(const FSName &rhs) const;
-    FSPath operator/(const FSPath &rhs) const;
-
-    auto begin() const { return components.begin(); }
-    auto end() const { return components.end(); }
-};
-*/
-
-struct FSComment : FSString {
-    
-    FSComment(const char *cString) : FSString(cString, 91) { }
-    FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
-};
-
 struct FSPattern {
 
     string glob;

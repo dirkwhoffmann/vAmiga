@@ -342,14 +342,6 @@ public:
     // Renames a file
     void rename(const PETName<16> &src, const PETName<16> &dst);
 
-    // Moves a file or directory to another location
-    // void move(BlockNr item, BlockNr dest);
-    // void move(BlockNr item, BlockNr dest, const FSName &name);
-
-    // Copies a file
-    // void copy(BlockNr item, BlockNr dest);
-    // void copy(BlockNr item, BlockNr dest, const FSName &name);
-
     // Extracts the data from a file
     isize extractData(BlockNr b, Buffer<u8> &buf) const;
     isize extractData(TSLink ts, Buffer<u8> &buf) const;
@@ -420,15 +412,6 @@ public:
     bool exists(const string &path) const { return trySeek(path).has_value(); }
     bool exists(const fs::path &path) const { return trySeek(path).has_value(); }
 
-    // Resolves a path by name (returns a directory entry)
-    optional<FSDirEntry> trySeekEntry(const PETName<16> &path) const;
-    optional<FSDirEntry> trySeekEntry(const char *path) const {
-        return trySeekEntry(PETName<16>(path)); }
-    optional<FSDirEntry> trySeekEntry(const string &path) const {
-        return trySeekEntry(PETName<16>(path)); }
-    optional<FSDirEntry> trySeekEntry(const fs::path &path) const {
-        return trySeekEntry(PETName<16>(path)); }
-
     // Resolves a path by name (returns the number of the first data block)
     optional<BlockNr> trySeek(const PETName<16> &path) const;
     optional<BlockNr> trySeek(const char *path) const { return trySeek(PETName<16>(path)); }
@@ -436,19 +419,10 @@ public:
     optional<BlockNr> trySeek(const fs::path &path) const { return trySeek(PETName<16>(path)); }
 
     // Resolves a path by name (may throw)
-    FSDirEntry seekEntry(const PETName<16> &path) const;
-    FSDirEntry seekEntry(const char *path) const { return seekEntry(PETName<16>(path)); }
-    FSDirEntry seekEntry(const string &path) const { return seekEntry(PETName<16>(path)); }
-    FSDirEntry seekEntry(const fs::path &path) const { return seekEntry(PETName<16>(path)); }
-
-    // Resolves a path by name (may throw)
     BlockNr seek(const PETName<16> &path) const;
     BlockNr seek(const char *path) const { return seek(PETName<16>(path)); }
     BlockNr seek(const string &path) const { return seek(PETName<16>(path)); }
     BlockNr seek(const fs::path &path) const { return seek(PETName<16>(path)); }
-
-    // Resolves a path by a regular expression
-    [[deprecated]] vector<BlockNr> match(const string &path);
 };
 
 }

@@ -52,7 +52,7 @@ FSBlock::init(FSBlockType t)
 
             break;
 
-        case FSBlockType::USERDIR:
+        case FSBlockType::DIR:
 
             break;
 
@@ -172,7 +172,7 @@ FSBlock::itemType(isize byte) const
 
             return FSItemType::UNUSED;
 
-        case FSBlockType::USERDIR:
+        case FSBlockType::DIR:
 
             if (byte == 0) return FSItemType::TRACK_LINK;
             if (byte == 1) return FSItemType::SECTOR_LINK;
@@ -407,7 +407,7 @@ FSBlock::exportBlock(const fs::path &path) const
     /*
      switch (type) {
 
-     case FSBlockType::USERDIR:    return exportUserDirBlock(path);
+     case FSBlockType::DIR:    return exportUserDirBlock(path);
      case FSBlockType::FILEHEADER: return exportFileHeaderBlock(path);
 
      default:

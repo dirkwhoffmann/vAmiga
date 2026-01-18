@@ -76,7 +76,7 @@ FSDoctor::dump(BlockNr nr, std::ostream &os)
             os << data[0xA5] << data[0xA6] << std::endl;
             break;
         }
-        case FSBlockType::USERDIR:
+        case FSBlockType::DIR:
         {
             isize slot = 0;
             for (const auto &it : fs.readDirBlock(nr)) {
@@ -243,6 +243,11 @@ FSDoctor::xray8(BlockNr ref, isize pos, bool strict,
 
     switch (block.type) {
 
+        case FSBlockType::UNKNOWN:
+        case FSBlockType::EMPTY:
+
+            return FSBlockError::OK;
+
         case FSBlockType::BAM:
 
             switch (pos) {
@@ -265,7 +270,7 @@ FSDoctor::xray8(BlockNr ref, isize pos, bool strict,
 
             return FSBlockError::OK;
 
-        case FSBlockType::USERDIR:
+        case FSBlockType::DIR:
 
             if (std::find(dirBlocks.begin(), dirBlocks.end(), ref) != dirBlocks.end()) {
 
@@ -376,22 +381,18 @@ FSDoctor::rectify(bool strict)
 void
 FSDoctor::rectify(BlockNr ref, bool strict)
 {
-    auto &node     = fs.fetch(ref);
+    auto &block    = fs.fetch(ref);
     auto dirBlocks = fs.collectDirBlocks();
 
-    for (isize i = 0; i < fs.blocks(); ++i) {
+    for (isize i = 0; i < traits.bsize; ++i) {
 
         optional<u8> expected;
         auto fault = xray8(ref, i, strict, dirBlocks, expected);
 
         if (fault != FSBlockError::OK) {
 
-            if (expected) {
-
-                auto &mutatableNode = node.mutate();
-                auto *data = mutatableNode.data();
-                mutatableNode.mutate().write32(data + i, *expected);
-            }
+            if (expected)
+                block.mutate().data()[i] = *expected;
         }
     }
 }
@@ -427,7 +428,7 @@ FSDoctor::createUsageMap(u8 *buffer, isize len) const
     pri[isize(FSBlockType::UNKNOWN)]      = 0;
     pri[isize(FSBlockType::EMPTY)]        = 1;
     pri[isize(FSBlockType::BAM)]          = 4;
-    pri[isize(FSBlockType::USERDIR)]      = 3;
+    pri[isize(FSBlockType::DIR)]      = 3;
     pri[isize(FSBlockType::DATA)]         = 2;
 
     isize max = traits.blocks;

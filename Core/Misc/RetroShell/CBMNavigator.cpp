@@ -281,42 +281,6 @@ CBMNavigator::exportBlocks(fs::path path)
     fs->exporter.exportVolume(path);
 }
 
-/*
-BlockNr
-CBMNavigator::matchPath(const Arguments &argv, const string &token, Tokens &notFound)
-{
-    return matchPath(argv.at(token), notFound);
-}
-
-BlockNr
-CBMNavigator::matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback)
-{
-    return argv.contains(token) ? matchPath(argv, token, notFound) : fallback;
-}
-
-BlockNr
-CBMNavigator::matchPath(const string &path, Tokens &notFound)
-{
-    fs->require.isFormatted();
-
-    auto tokens = utl::split(path, '/');
-    if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
-
-    auto p = fs->bam();
-    while (!tokens.empty()) {
-
-        auto next = fs->trySeek(tokens.front());
-        if (!next) break;
-
-        tokens.erase(tokens.begin());
-        p = *next;
-    }
-    notFound = tokens;
-
-    return p;
-}
-*/
-
 std::pair<DumpOpt,DumpFmt>
 CBMNavigator::parseDumpOpts(const Arguments &argv)
 {
@@ -910,6 +874,25 @@ CBMNavigator::initCommands(RSCommand &root)
                 }
             }
     });
+
+    root.add({
+
+        .tokens = { "xray", "bitmap" },
+        .chelp  = { "Inspects the block allocation map" },
+        .args   = {
+            { .name = { "r", "Rectify errors" }, .flags = rs::flag }
+        },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                requireFormattedFS();
+
+                if (args.contains("r")) fs->doctor.rectifyBitmap();
+                if (auto errors = fs->doctor.xrayBitmap(os); !errors) {
+                    os << "No findings." << std::endl;
+                }
+            }
+    });
+
 
     //
     // Navigating
