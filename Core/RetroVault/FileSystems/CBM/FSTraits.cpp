@@ -79,9 +79,18 @@ FSTraits::checkCompatibility() const
 }
 
 bool
+FSTraits::isValidTrackNr(TrackNr t) const
+{
+    return t >= 0 && t < numCyls * numHeads;
+}
+
+bool
 FSTraits::isValidLink(TSLink ref) const
 {
-    return isValidTrackNr(ref.t) && ref.s >= 0 && ref.s < numSectors(ref.t);
+    isize t = isize(ref.t) - 1; // Track counting starts at 1
+    isize s = isize(ref.s);     // Sector counting starts at 0
+
+    return (t >= 0 && t < numTracks() && s >= 0 && s < numSectors(t));
 }
 
 bool
@@ -91,11 +100,27 @@ FSTraits::isValidBlock(BlockNr nr) const
 }
 
 isize
-FSTraits::speedZone(CylNr t) const
+FSTraits::speedZone(TrackNr t) const
 {
-    assert(isValidTrackNr(t));
+    assert(isValidTrackNr(t));  // Note: t starts counting at 0
 
-    return (t <= 17) ? 3 : (t <= 24) ? 2 : (t <= 30) ? 1 : 0;
+    if (t < 17) return 3;       // Tracks 1  - 17 (in CBM numbering)
+    if (t < 24) return 2;       // Tracks 18 - 24 (in CBM numbering)
+    if (t < 30) return 1;       // Tracks 25 - 30 (in CBM numbering)
+
+    return 0;                   // All other tracks
+}
+
+isize
+FSTraits::speedZone(TSLink ts) const
+{
+    assert(isValidLink(ts));    // Note: ts.t starts counting at 1
+
+    if (ts.t <= 17) return 3;   // Tracks 1  - 17 (in CBM numbering)
+    if (ts.t <= 24) return 2;   // Tracks 18 - 24 (in CBM numbering)
+    if (ts.t <= 30) return 1;   // Tracks 25 - 30 (in CBM numbering)
+
+    return 0;                   // All other tracks
 }
 
 isize
@@ -116,11 +141,18 @@ FSTraits::numSectors(TrackNr t) const
 }
 
 isize
+FSTraits::numSectors(TSLink ts) const
+{
+    if (!isValidLink(ts)) return 0;
+    return numSectors(ts.t - 1);
+}
+
+isize
 FSTraits::numBlocks() const
 {
     isize result = 0;
 
-    for (TrackNr t = 1; t <= numTracks(); t++) {
+    for (TrackNr t = 0; t < numTracks(); t++) {
         result += numSectors(t);
     }
 
@@ -132,10 +164,10 @@ FSTraits::tsLink(BlockNr b) const
 {
     auto tracks = numTracks();
 
-    for (TrackNr i = 1; i <= tracks; i++) {
+    for (TrackNr t = 0; t < tracks; ++t) {
 
-        isize num = numSectors(i);
-        if (b < num) return TSLink{i,b};
+        isize num = numSectors(t);
+        if (b < num) return TSLink{t+1,b};
         b -= num;
     }
     return {};
@@ -147,16 +179,15 @@ FSTraits::blockNr(TSLink ts) const
     if (!isValidLink(ts)) return {};
 
     BlockNr result = ts.s;
-    for (TrackNr i = 1; i < ts.t; i++) {
-        result += numSectors(i);
-    }
 
-    if (result >= 0 && result < blocks)
-        return result;
+    for (TrackNr t = 0; t < ts.t - 1; t++)
+        result += numSectors(t);
 
-    return {};
+    assert(result >= 0 && result < blocks);
+    return result;
 }
 
+/*
 optional<TSLink>
 FSTraits::nextBlockRef(BlockNr b) const
 {
@@ -165,14 +196,15 @@ FSTraits::nextBlockRef(BlockNr b) const
 
     return {};
 }
+*/
 
 optional<TSLink>
-FSTraits::nextBlockRef(TSLink ref) const
+FSTraits::nextBlockRef(TSLink ts) const
 {
-    assert(isValidLink(ref));
+    assert(isValidLink(ts));
 
-    TrackNr t = ref.t;
-    SectorNr s = ref.s;
+    TrackNr t = ts.t;
+    SectorNr s = ts.s;
 
     // Lookup table for the next sector (interleave patterns)
     SectorNr next[5][21] = {
@@ -198,7 +230,7 @@ FSTraits::nextBlockRef(TSLink ref) const
     } else {
 
         // Take care of all other tracks
-        s = next[speedZone(t)][s];
+        s = next[speedZone(ts)][s];
 
         // Move to the next track if we've wrapped over
         if (s == 0) {

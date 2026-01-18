@@ -137,7 +137,7 @@ FSAllocator::advance(TSLink ts)
     } else {
 
         // Take care of all other tracks
-        s = next[traits.speedZone(t)][s];
+        s = next[traits.speedZone(ts)][s];
 
         // Move to the next track if we've wrapped over
         if (s == 0) t = t >= traits.numTracks() ? 1 : t == 17 ? 19 : t + 1;

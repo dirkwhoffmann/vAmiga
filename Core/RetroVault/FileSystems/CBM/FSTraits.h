@@ -65,9 +65,7 @@ struct FSTraits {
     // Performing integrity checks
     //
 
-    // [[deprecated]] bool isCylinderNr(CylNr c) const { return 1 <= c && c <= numCyls; }
-    // [[deprecated]] bool isHeadNr(HeadNr h) const { return h == 0 || h == 1; }
-    bool isValidTrackNr(TrackNr t) const { return 1 <= t && t <= numCyls * numHeads; }
+    bool isValidTrackNr(TrackNr t) const;
     bool isValidLink(TSLink ts) const;
     bool isValidBlock(BlockNr nr) const;
 
@@ -77,8 +75,10 @@ struct FSTraits {
     //
 
     isize numTracks() const { return numCyls * numHeads; }
-    isize speedZone(CylNr track) const;
-    isize numSectors(CylNr track) const;
+    isize speedZone(TrackNr track) const;
+    isize speedZone(TSLink ts) const;
+    isize numSectors(TrackNr track) const;
+    isize numSectors(TSLink ts) const;
     isize numBlocks() const;
 
 
@@ -89,14 +89,14 @@ struct FSTraits {
     optional<TSLink> tsLink(BlockNr b) const;
     optional<BlockNr> blockNr(TSLink ts) const;
 
-    [[deprecated]] optional<BlockNr> blockNr(TrackNr t, SectorNr s) const { return blockNr(TSLink{t,s}); }
+    // [[deprecated]] optional<BlockNr> blockNr(TrackNr t, SectorNr s) const { return blockNr(TSLink{t,s}); }
 
 
     //
     // Ordering blocks
     //
 
-    [[deprecated]] bool nextBlock(BlockNr b, BlockNr *nb) const;
+    // [[deprecated]] bool nextBlock(BlockNr b, BlockNr *nb) const;
     optional<TSLink> nextBlockRef(TSLink ts) const;
     optional<TSLink> nextBlockRef(BlockNr b) const;
 };
