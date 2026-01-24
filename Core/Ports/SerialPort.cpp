@@ -11,6 +11,7 @@
 #include "SerialPort.h"
 #include "IOUtils.h"
 #include "Amiga.h"
+#include "MidiManager.h"
 
 namespace vamiga {
 
@@ -49,6 +50,7 @@ SerialPort::checkOption(Opt opt, i64 value)
 }
 
 void
+
 SerialPort::setOption(Opt option, i64 value)
 {
     switch (option) {
@@ -60,6 +62,20 @@ SerialPort::setOption(Opt option, i64 value)
             }
             
             config.device = (SerialPortDevice)value;
+            
+            // Initialize MIDI if selected
+            if (config.device == SerialPortDevice::MIDI) {
+                if (amiga.midiManager.initMidi()) {
+                    // Auto-connect to first available MIDI output
+                    if (MidiManager::getOutputCount() > 0) {
+                        amiga.midiManager.openOutput(MidiManager::getOutputEndpoint(0));
+                    }
+                    // Auto-connect to first available MIDI input
+                    if (MidiManager::getInputCount() > 0) {
+                        amiga.midiManager.openInput(MidiManager::getInputEndpoint(0));
+                    }
+                }
+            }
             return;
 
         case Opt::SER_VERBOSE:
