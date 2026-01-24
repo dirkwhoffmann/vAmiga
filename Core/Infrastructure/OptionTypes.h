@@ -168,6 +168,10 @@ enum class Opt : long
     SER_DEVICE,
     SER_VERBOSE,
     
+    // MIDI
+    MIDI_DEVICE_OUT,
+    MIDI_DEVICE_IN,
+
     // Blitter
     BLITTER_ACCURACY,
     
@@ -357,7 +361,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
                 
             case Opt::SER_DEVICE:                return "SER.DEVICE";
             case Opt::SER_VERBOSE:               return "SER.VERBOSE";
-                
+            
+            case Opt::MIDI_DEVICE_OUT:           return "MIDI_DEVICE_OUT";
+            case Opt::MIDI_DEVICE_IN:            return "MIDI_DEVICE_IN";
+
             case Opt::BLITTER_ACCURACY:          return "BLITTER.ACCURACY";
                 
             case Opt::CIA_REVISION:              return "CIA.REVISION";
@@ -536,7 +543,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
                 
             case Opt::SER_DEVICE:                return "Serial device type";
             case Opt::SER_VERBOSE:               return "Verbose";
-                
+            
+            case Opt::MIDI_DEVICE_OUT:           return "MIDI output device";
+            case Opt::MIDI_DEVICE_IN:            return "MIDI input device";
+
             case Opt::BLITTER_ACCURACY:          return "Blitter accuracy level";
                 
             case Opt::CIA_REVISION:              return "Chip revision";

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 class PeripheralsSettingsViewController: SettingsViewController {
-
+    
     // Flopp drives
     @IBOutlet weak var df0Type: NSPopUpButton!
     @IBOutlet weak var df1Connect: NSButton!
@@ -17,7 +17,7 @@ class PeripheralsSettingsViewController: SettingsViewController {
     @IBOutlet weak var df2Type: NSPopUpButton!
     @IBOutlet weak var df3Connect: NSButton!
     @IBOutlet weak var df3Type: NSPopUpButton!
-
+    
     // Hard drives
     @IBOutlet weak var hd0Connect: NSButton!
     @IBOutlet weak var hd0Type: NSPopUpButton!
@@ -27,14 +27,20 @@ class PeripheralsSettingsViewController: SettingsViewController {
     @IBOutlet weak var hd2Type: NSPopUpButton!
     @IBOutlet weak var hd3Connect: NSButton!
     @IBOutlet weak var hd3Type: NSPopUpButton!
-
+    
     // Ports
     @IBOutlet weak var gameDevice1: NSPopUpButton!
     @IBOutlet weak var gameDevice2: NSPopUpButton!
     @IBOutlet weak var serialDevice: NSPopUpButton!
     @IBOutlet weak var serialPort: NSTextField!
     @IBOutlet weak var serialPortText: NSTextField!
-
+    
+    // MIDI Interface
+    @IBOutlet weak var midiInputDevice: NSPopUpButton!
+    @IBOutlet weak var midiOutputDevice: NSPopUpButton!
+    @IBOutlet weak var midiOutputLabel: NSTextField!
+    @IBOutlet weak var midiInputLabel: NSTextField!
+    
     // Joystick
     @IBOutlet weak var autofire: NSButton!
     @IBOutlet weak var autofireText: NSTextField!
@@ -45,20 +51,20 @@ class PeripheralsSettingsViewController: SettingsViewController {
     @IBOutlet weak var autofireCeaseText: NSTextField!
     @IBOutlet weak var autofireBullets: NSTextField!
     @IBOutlet weak var autofireBulletsText: NSTextField!
-
+    
     override var showLock: Bool { true }
     
     override func viewDidLoad() {
-
+        
         log(.lifetime)
     }
-
+    
     //
     // Methods from SettingsViewController
     //
     
     override func refresh() {
-
+        
         func update(_ component: NSTextField, enable: Bool = true, hidden: Bool = false) {
             component.textColor = enable ? .controlTextColor : .disabledControlTextColor
             component.isEnabled = enable
@@ -68,12 +74,12 @@ class PeripheralsSettingsViewController: SettingsViewController {
             component.isEnabled = enable
             component.isHidden = hidden
         }
-
+        
         super.refresh()
-
+        
         guard let emu = emu, let config = config else { return }
         let poweredOff = emu.poweredOff
-
+        
         // Floppy drives
         df1Connect.state = config.df1Connected ? .on : .off
         df2Connect.state = config.df2Connected ? .on : .off
@@ -82,7 +88,7 @@ class PeripheralsSettingsViewController: SettingsViewController {
         df1Type.selectItem(withTag: config.df1Type)
         df2Type.selectItem(withTag: config.df2Type)
         df3Type.selectItem(withTag: config.df3Type)
-
+        
         // Hard drives
         hd0Connect.state = config.hd0Connected ? .on : .off
         hd1Connect.state = config.hd1Connected ? .on : .off
@@ -92,7 +98,7 @@ class PeripheralsSettingsViewController: SettingsViewController {
         hd1Type.selectItem(withTag: config.hd1Type)
         hd2Type.selectItem(withTag: config.hd2Type)
         hd3Type.selectItem(withTag: config.hd3Type)
-
+        
         // Ports
         let nullmodem = SerialPortDevice.NULLMODEM.rawValue
         gamePadManager?.refresh(popup: gameDevice1, hide: true)
@@ -103,7 +109,42 @@ class PeripheralsSettingsViewController: SettingsViewController {
         serialPort.integerValue = config.serialDevicePort
         serialPort.isHidden = config.serialDevice != nullmodem
         serialPortText.isHidden = config.serialDevice != nullmodem
-
+        
+        // MIDI devices
+        let isMidi = config.serialDevice == SerialPortDevice.MIDI.rawValue
+        if let midiOut = midiOutputDevice, let midiIn = midiInputDevice {
+            midiOut.isHidden = !isMidi
+            midiIn.isHidden = !isMidi
+            midiOutputLabel?.isHidden = !isMidi
+            midiInputLabel?.isHidden = !isMidi
+            
+            if isMidi {
+                // Populate MIDI output devices
+                midiOut.removeAllItems()
+                midiOut.addItem(withTitle: "None")
+                midiOut.lastItem?.tag = -1
+                for i in 0..<MidiManagerProxy.outputCount() {
+                    let name = MidiManagerProxy.outputDeviceName(i) ?? "Unknown"
+                    midiOut.addItem(withTitle: name)
+                    midiOut.lastItem?.tag = Int(i)
+                }
+                let outSelection = emu.midiManager.selectedOutputDevice
+                midiOut.selectItem(withTag: Int(outSelection))
+                
+                // Populate MIDI input devices
+                midiIn.removeAllItems()
+                midiIn.addItem(withTitle: "None")
+                midiIn.lastItem?.tag = -1
+                for i in 0..<MidiManagerProxy.inputCount() {
+                    let name = MidiManagerProxy.inputDeviceName(i) ?? "Unknown"
+                    midiIn.addItem(withTitle: name)
+                    midiIn.lastItem?.tag = Int(i)
+                }
+                let inSelection = emu.midiManager.selectedInputDevice
+                midiIn.selectItem(withTag: Int(inSelection))
+            }
+        }
+        
         // Joysticks
         autofire.state = config.autofire ? .on : .off
         autofireCease.state = config.autofireBursts ? .on : .off
@@ -116,7 +157,7 @@ class PeripheralsSettingsViewController: SettingsViewController {
         update(autofireCeaseText, hidden: !config.autofire)
         update(autofireBullets, hidden: !config.autofire || !config.autofireBursts)
         update(autofireBulletsText, hidden: !config.autofire || !config.autofireBursts)
-
+        
         // Lock controls if emulator is powered on
         df1Connect.isEnabled = poweredOff
         df2Connect.isEnabled = poweredOff && df1Connect.state == .on
@@ -134,33 +175,33 @@ class PeripheralsSettingsViewController: SettingsViewController {
         hd2Type.isEnabled = poweredOff // && config.hd2Connected
         hd3Type.isEnabled = poweredOff // && config.hd3Connected
     }
-
+    
     override func preset(tag: Int) {
-
+        
         emu?.suspend()
-
+        
         // Revert to standard settings
         EmulatorProxy.defaults.removePeripheralsUserDefaults()
-
+        
         // Update the configuration
         config?.applyPeripheralsUserDefaults()
-
+        
         emu?.resume()
     }
-
+    
     override func save() {
-
+        
         config?.savePeripheralsUserDefaults()
     }
-
+    
     //
     // Action methods
     //
-
+    
     @IBAction func driveConnectAction(_ sender: NSButton!) {
-
+        
         guard let config = config else { return }
-
+        
         switch sender.tag {
         case 0: config.df0Connected = sender.state == .on
         case 1: config.df1Connected = sender.state == .on
@@ -168,14 +209,14 @@ class PeripheralsSettingsViewController: SettingsViewController {
         case 3: config.df3Connected = sender.state == .on
         default: fatalError()
         }
-
+        
         // Disconnect df(n+1) if dfn is disconnected
         if !config.df1Connected { config.df2Connected = false }
         if !config.df2Connected { config.df3Connected = false }
     }
-
+    
     @IBAction func driveTypeAction(_ sender: NSPopUpButton!) {
-
+        
         switch sender.tag {
         case 0: config?.df0Type = sender.selectedTag()
         case 1: config?.df1Type = sender.selectedTag()
@@ -184,9 +225,9 @@ class PeripheralsSettingsViewController: SettingsViewController {
         default: fatalError()
         }
     }
-
+    
     @IBAction func hdrConnectAction(_ sender: NSButton!) {
-
+        
         switch sender.tag {
         case 0: config?.hd0Connected = sender.state == .on
         case 1: config?.hd1Connected = sender.state == .on
@@ -195,49 +236,56 @@ class PeripheralsSettingsViewController: SettingsViewController {
         default: fatalError()
         }
     }
-
+    
     @IBAction func hdrTypeAction(_ sender: NSPopUpButton!) {
-
+        
     }
-
+    
     @IBAction func gameDeviceAction(_ sender: NSPopUpButton!) {
-
+        
         switch sender.tag {
         case 1: config?.gameDevice1 = sender.selectedTag()
         case 2: config?.gameDevice2 = sender.selectedTag()
         default: fatalError()
         }
     }
-
+    
     @IBAction func autofireAction(_ sender: NSButton!) {
-
+        
         config?.autofire = (sender.state == .on)
     }
-
+    
     @IBAction func autofireCeaseAction(_ sender: NSButton!) {
-
+        
         config?.autofireBursts = (sender.state == .on)
     }
-
+    
     @IBAction func autofireBulletsAction(_ sender: NSTextField!) {
-
+        
         config?.autofireBullets = sender.integerValue
     }
-
+    
     @IBAction func autofireFrequencyAction(_ sender: NSSlider!) {
-
+        
         config?.autofireDelay = sender.integerValue
     }
-
+    
     @IBAction func serialDeviceAction(_ sender: NSPopUpButton!) {
-
+        
         config?.serialDevice = sender.selectedTag()
     }
-
+    
     @IBAction func serialDevicePortAction(_ sender: NSTextField!) {
-
         if sender.integerValue > 0 && sender.integerValue < 65536 {
             config?.serialDevicePort = sender.integerValue
         }
+    }
+
+    @IBAction func midiOutputDeviceAction(_ sender: NSPopUpButton!) {
+        emu?.midiManager.setOutputDevice(sender.selectedTag())
+    }
+
+    @IBAction func midiInputDeviceAction(_ sender: NSPopUpButton!) {
+        emu?.midiManager.setInputDevice(sender.selectedTag())
     }
 }

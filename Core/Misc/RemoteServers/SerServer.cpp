@@ -15,6 +15,8 @@
 #include "SerialPort.h"
 #include "Thread.h"
 #include "UART.h"
+#include "MidiManager.h"
+#include "SerialPortTypes.h"
 
 namespace vamiga {
 
@@ -119,14 +121,30 @@ void
 SerServer::serviceSerEvent()
 {
     assert(agnus.id[SLOT_SER] == SER_RECEIVE);
-    
-    if (buffer.isEmpty()) {
+
+// Check if we're in MIDI mode
+    if (serialPort.getConfig().device == SerialPortDevice::MIDI) {
         
+        // Handle MIDI input
+        uint8_t midiByte;
+        if (amiga.midiManager.receiveByte(&midiByte)) {
+            uart.receiveShiftReg = midiByte;
+            uart.copyFromReceiveShiftRegister();
+        }
+        
+        // Keep checking for more MIDI data
+        scheduleNextEvent();
+        return;
+    }
+
+    // Original SerServer code for null modem
+    if (buffer.isEmpty()) {
+
         // Enter buffering mode if we run dry
         buffering = true;
 
     } else if (buffering) {
-        
+
         // Exit buffering mode if now new symbols came in for quite a while
         if (++skippedTransmissions > 8) buffering = false;
 
@@ -138,7 +156,7 @@ SerServer::serviceSerEvent()
         processedBytes++;
         skippedTransmissions = 0;
     }
-    
+
     scheduleNextEvent();
 }
 

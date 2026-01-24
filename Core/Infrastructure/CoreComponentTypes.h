@@ -57,6 +57,7 @@ enum class Class : long
     // Ports
     AudioPort,
     ControlPort,
+    MidiManager,
     SerialPort,
     VideoPort,
     SampleRateDetector,

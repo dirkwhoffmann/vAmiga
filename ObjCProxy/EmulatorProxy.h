@@ -42,6 +42,7 @@ using namespace vamiga;
 @class LogicAnalyzerProxy;
 @class MediaFileProxy;
 @class MemProxy;
+@class MidiManagerProxy;
 @class MouseProxy;
 @class PaulaProxy;
 @class DefaultsProxy;
@@ -193,6 +194,7 @@ NSString *EventSlotName(EventSlot slot);
     KeyboardProxy *keyboard;
     LogicAnalyzerProxy *logicAnalyzer;
     MemProxy *mem;
+    MidiManagerProxy *midiManager;
     PaulaProxy *paula;
     DefaultsProxy *properties;
     RemoteManagerProxy *remoteManager;
@@ -229,6 +231,7 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) LogicAnalyzerProxy *logicAnalyzer;
 @property (readonly, strong) MemProxy *mem;
+@property (readonly, strong) MidiManagerProxy *midiManager;
 @property (readonly, strong) PaulaProxy *paula;
 @property (readonly, strong) RemoteManagerProxy *remoteManager;
 @property (readonly, strong) RetroShellProxy *retroShell;
@@ -649,6 +652,27 @@ NSString *EventSlotName(EventSlot slot);
 
 @end
 
+//
+// MidiManager
+//
+
+@interface MidiManagerProxy : CoreComponentProxy { }
+
+// Device enumeration
++ (NSInteger)outputCount;
++ (NSInteger)inputCount;
++ (NSString *)outputDeviceName:(NSInteger)index;
++ (NSString *)inputDeviceName:(NSInteger)index;
+
+// Current selection
+@property (readonly) NSInteger selectedOutputDevice;
+@property (readonly) NSInteger selectedInputDevice;
+
+// Set device
+- (void)setOutputDevice:(NSInteger)index;
+- (void)setInputDevice:(NSInteger)index;
+
+@end
 
 //
 // Mouse
