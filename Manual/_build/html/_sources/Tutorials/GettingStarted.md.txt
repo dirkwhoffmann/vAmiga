@@ -26,7 +26,7 @@ Once the ROM is installed, the emulator is ready to be powered on. To do so, cli
 
 In case you don't own a legal ROM, you can alternatively start vAmiga with the free AROS Kickstart replacement. AROS ROMs ship with the emulator and can be selected from the *Install ROM* popup-menu located in the lower left corner.
 
-At you can see below, the popup menu is presently grayed out therefore inaccessible. This is to protect against accidental changes to the Kickstart ROM while the emulator is running. To access the menu, turn off the emulator first by clicking on the lock icon.
+As you can see below, the popup menu is presently grayed out therefore inaccessible. This is to protect against accidental changes to the Kickstart ROM while the emulator is running. To access the menu, turn off the emulator first by clicking on the lock icon.
 
 ![Inspectors](images/roms4.png "Rom Dialog")
 
