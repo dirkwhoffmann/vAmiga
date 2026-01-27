@@ -45,6 +45,7 @@
 #include "RetroShell.h"
 #include "RshServer.h"
 #include "SerialPort.h"
+#include "MidiManager.h"
 #include "Snapshot.h"
 
 // Utilities
@@ -117,6 +118,7 @@ public:
     ControlPort controlPort1 = ControlPort(*this, 0);
     ControlPort controlPort2 = ControlPort(*this, 1);
     SerialPort serialPort = SerialPort(*this);
+    MidiManager midiManager = MidiManager(*this);
     ZorroManager zorro = ZorroManager(*this);
 
     // Floppy drives

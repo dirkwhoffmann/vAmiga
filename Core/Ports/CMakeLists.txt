@@ -4,6 +4,7 @@ target_sources(VACore PRIVATE
 
 AudioPort.cpp
 ControlPort.cpp
+MidiManager.cpp
 SerialPort.cpp
 VideoPort.cpp
 SampleRateDetector.cpp

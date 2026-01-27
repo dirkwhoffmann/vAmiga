@@ -23,13 +23,14 @@ enum class SerialPortDevice
     NULLMODEM,
     LOOPBACK,
     RETROSHELL,
-    COMMANDER
+    COMMANDER,
+    MIDI
 };
 
 struct SerialPortDeviceEnum : Reflectable<SerialPortDeviceEnum, SerialPortDevice>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(SerialPortDevice::COMMANDER);
+    static constexpr long maxVal = long(SerialPortDevice::MIDI);
     
     static const char *_key(SerialPortDevice value)
     {
@@ -40,6 +41,7 @@ struct SerialPortDeviceEnum : Reflectable<SerialPortDeviceEnum, SerialPortDevice
             case SerialPortDevice::LOOPBACK:      return "LOOPBACK";
             case SerialPortDevice::RETROSHELL:    return "RETROSHELL";
             case SerialPortDevice::COMMANDER:     return "COMMANDER";
+            case SerialPortDevice::MIDI:          return "MIDI";
         }
         return "???";
     }
@@ -52,6 +54,7 @@ struct SerialPortDeviceEnum : Reflectable<SerialPortDeviceEnum, SerialPortDevice
             case SerialPortDevice::LOOPBACK:      return "Loopback cable";
             case SerialPortDevice::RETROSHELL:    return "RetroShell monitor";
             case SerialPortDevice::COMMANDER:     return "RetroShell commander";
+	    case SerialPortDevice::MIDI:          return "MIDI interface";
         }
         return "???";
     }

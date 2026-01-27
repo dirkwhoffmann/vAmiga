@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// import Foundation
-
 @MainActor
 class MyDocumentController: NSDocumentController {
 

@@ -12,6 +12,8 @@
 #include "Agnus.h"
 #include "Paula.h"
 #include "SerialPort.h"
+#include "Amiga.h"
+#include "MidiManager.h"
 
 namespace vamiga {
 
@@ -80,7 +82,7 @@ UART::serviceRxdEvent(EventID id)
     // Check if this was the last bit to receive
     if (recCnt >= packetLength() + 2) {
 
-        if (!payload.empty()) {
+    if (!payload.empty()) {
 
             SYNCHRONIZED
 
@@ -94,6 +96,17 @@ UART::serviceRxdEvent(EventID id)
 
             // Send a stop bit if necessary
             rxd = payload.empty();
+        }
+
+        // Check for MIDI input
+        else if (serialPort.config.device == SerialPortDevice::MIDI) {
+            
+            uint8_t midiByte;
+            if (amiga.midiManager.receiveByte(&midiByte)) {
+                receiveShiftReg = midiByte;
+                // Continue receiving if more MIDI data available
+                rxd = !amiga.midiManager.hasInput();
+            }
         }
 
         // Copy shift register contents into the receive buffer

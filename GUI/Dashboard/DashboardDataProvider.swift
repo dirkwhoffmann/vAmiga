@@ -65,7 +65,6 @@ class DashboardDataProvider: ObservableObject {
     
     func add(series: Int, value: Double) {
         
-        data = []
         data.append(DataPoint(series: 0, timestamp: Date.now, value: value))
                 
         // Update the view

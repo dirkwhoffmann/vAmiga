@@ -14,6 +14,7 @@
 #import "DiskImage.h"
 #import "RomFile.h"
 #import "utl/support/Strings.h"
+#import "utl/support/Strings.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;
@@ -1146,6 +1147,60 @@ ImageInfo scan(const fs::path &url)
 
 @end
 
+//
+// MidiManager proxy
+//
+
+@implementation MidiManagerProxy
+
+- (MidiManager *)midi
+{
+    return (MidiManager *)obj;
+}
+
++ (NSInteger)outputCount
+{
+    return (NSInteger)MidiManager::getOutputCount();
+}
+
++ (NSInteger)inputCount
+{
+    return (NSInteger)MidiManager::getInputCount();
+}
+
++ (NSString *)outputDeviceName:(NSInteger)index
+{
+    auto name = MidiManager::getOutputName((ItemCount)index);
+    return [NSString stringWithUTF8String:name.c_str()];
+}
+
++ (NSString *)inputDeviceName:(NSInteger)index
+{
+    auto name = MidiManager::getInputName((ItemCount)index);
+    return [NSString stringWithUTF8String:name.c_str()];
+}
+
+- (NSInteger)selectedOutputDevice
+{
+    return [self midi]->getOption(Opt::MIDI_DEVICE_OUT);
+}
+
+- (NSInteger)selectedInputDevice
+{
+    return [self midi]->getOption(Opt::MIDI_DEVICE_IN);
+}
+
+- (void)setOutputDevice:(NSInteger)index
+{
+    [self midi]->setOption(Opt::MIDI_DEVICE_OUT, index);
+}
+
+- (void)setInputDevice:(NSInteger)index
+{
+    [self midi]->setOption(Opt::MIDI_DEVICE_IN, index);
+}
+
+@end
 
 //
 // Keyboard
@@ -2315,6 +2370,7 @@ ImageInfo scan(const fs::path &url)
 @synthesize keyboard;
 @synthesize logicAnalyzer;
 @synthesize mem;
+@synthesize midiManager;
 @synthesize paula;
 @synthesize remoteManager;
 @synthesize retroShell;
@@ -2359,6 +2415,7 @@ ImageInfo scan(const fs::path &url)
     keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
     logicAnalyzer = [[LogicAnalyzerProxy alloc] initWith:&vamiga->agnus.logicAnalyzer];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
+    midiManager = [[MidiManagerProxy alloc] initWith:&vamiga->amiga.amiga->midiManager];
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];
     retroShell = [[RetroShellProxy alloc] initWith:&vamiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&vamiga->rtc];

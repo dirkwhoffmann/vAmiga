@@ -14,6 +14,8 @@
 #include "Paula.h"
 #include "RemoteManager.h"
 #include "SerialPort.h"
+#include "Amiga.h"
+#include "MidiManager.h"
 #include "utl/io.h"
 #include <algorithm>
 #include <iostream>
@@ -164,8 +166,12 @@ UART::copyToTransmitShiftRegister()
     // Record outgoing data
     recordOutgoingByte(transmitBuffer);
 
-    // Send the byte to the null modem cable
-    remoteManager.serServer << char(transmitBuffer);
+    // Send the byte to the null modem cable or MIDI
+    if (serialPort.config.device == SerialPortDevice::MIDI) {
+        amiga.midiManager.sendByte(transmitBuffer & 0xFF);
+    } else {
+        remoteManager.serServer << char(transmitBuffer);
+    }
 
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;

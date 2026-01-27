@@ -616,7 +616,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="10" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gD1-dW-bLJ">
-                                <rect key="frame" x="456" y="331" width="32" height="32"/>
+                                <rect key="frame" x="455" y="330" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="Lvc-zr-6u2">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -627,7 +627,7 @@
                                 </connections>
                             </button>
                             <button tag="11" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xal-kF-Pjk">
-                                <rect key="frame" x="456" y="263" width="32" height="32"/>
+                                <rect key="frame" x="455" y="262" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="TY1-qj-5Xx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -647,7 +647,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="12" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G5b-Qt-bDe">
-                                <rect key="frame" x="420" y="297" width="32" height="32"/>
+                                <rect key="frame" x="419" y="296" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="vvj-hX-poV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -667,7 +667,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="13" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZsJ-O3-sHB">
-                                <rect key="frame" x="492" y="297" width="32" height="32"/>
+                                <rect key="frame" x="491" y="296" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="5vE-0k-0th">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -687,7 +687,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="14" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lpR-Fv-g6t">
-                                <rect key="frame" x="551" y="297" width="32" height="32"/>
+                                <rect key="frame" x="550" y="296" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="V4A-Zz-r8T">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -730,7 +730,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="des-5P-WeK">
-                                <rect key="frame" x="161" y="332" width="32" height="32"/>
+                                <rect key="frame" x="160" y="331" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="bJS-np-3kN">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -741,7 +741,7 @@
                                 </connections>
                             </button>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qiN-Vt-cZ9">
-                                <rect key="frame" x="161" y="264" width="32" height="32"/>
+                                <rect key="frame" x="160" y="263" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7p8-if-sKB">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -761,7 +761,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="piy-oU-ZMj">
-                                <rect key="frame" x="125" y="298" width="32" height="32"/>
+                                <rect key="frame" x="124" y="297" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="pMv-gq-6d9">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -790,7 +790,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="4" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z8s-ms-5Vh">
-                                <rect key="frame" x="256" y="298" width="32" height="32"/>
+                                <rect key="frame" x="255" y="297" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="zO3-cU-e8q">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -824,7 +824,7 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="joystick2" id="Sa3-MT-0Fo"/>
                             </imageView>
                             <button tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ab8-Bs-wb6">
-                                <rect key="frame" x="197" y="298" width="32" height="32"/>
+                                <rect key="frame" x="196" y="297" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="gEr-iG-iQ5">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -844,7 +844,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="7" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iem-XV-yfz">
-                                <rect key="frame" x="124" y="158" width="32" height="32"/>
+                                <rect key="frame" x="123" y="157" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="DEJ-bJ-A4U">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -873,7 +873,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="8" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dp6-1e-tQl">
-                                <rect key="frame" x="160" y="159" width="32" height="32"/>
+                                <rect key="frame" x="159" y="158" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="3Nc-90-ox4">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -902,7 +902,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="9" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nob-Tt-Dql">
-                                <rect key="frame" x="196" y="158" width="32" height="32"/>
+                                <rect key="frame" x="195" y="157" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="z4G-20-jm8">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3194,6 +3194,9 @@
                                             <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="2" id="xRg-tt-S9K">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
+                                            <menuItem title="MIDI Interface" image="devMidiInterfaceTemplate" tag="5" id="OCr-ju-2CU">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
                                             <menuItem title="RetroShell" image="devRetroShellTemplate" tag="3" id="Czf-d6-Oo2">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
@@ -3225,6 +3228,56 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="midi-out-label">
+                                <rect key="frame" x="43" y="86" width="64" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="MIDI Out:" id="midi-out-label-cell">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="midi-out-popup">
+                                <rect key="frame" x="111" y="80" width="182" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" selectedItem="midi-out-none" id="midi-out-popup-cell">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="message"/>
+                                    <menu key="menu" title="OtherViews" id="midi-out-menu">
+                                        <items>
+                                            <menuItem title="None" state="on" tag="-1" id="midi-out-none"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="midiOutputDeviceAction:" target="oqP-PU-J20" id="midi-out-action"/>
+                                </connections>
+                            </popUpButton>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="midi-in-label">
+                                <rect key="frame" x="43" y="56" width="64" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="MIDI In:" id="midi-in-label-cell">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="midi-in-popup">
+                                <rect key="frame" x="111" y="50" width="182" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" selectedItem="midi-in-none" id="midi-in-popup-cell">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="message"/>
+                                    <menu key="menu" title="OtherViews" id="midi-in-menu">
+                                        <items>
+                                            <menuItem title="None" state="on" tag="-1" id="midi-in-none"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="midiInputDeviceAction:" target="oqP-PU-J20" id="midi-in-action"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="oHf-cK-UwD"/>
                         <viewLayoutGuide key="layoutMargins" id="3qX-7S-P6K"/>
@@ -3259,12 +3312,49 @@
                         <outlet property="lockImage" destination="BdG-3m-nLJ" id="6EB-Sd-VBv"/>
                         <outlet property="lockInfo1" destination="sGw-18-UFg" id="Uin-3G-DYW"/>
                         <outlet property="lockInfo2" destination="U3S-J8-UsE" id="bxe-OD-Q2V"/>
+                        <outlet property="midiInputDevice" destination="midi-in-popup" id="midi-in-outlet"/>
+                        <outlet property="midiInputLabel" destination="midi-in-label" id="midi-in-label-outlet"/>
+                        <outlet property="midiOutputDevice" destination="midi-out-popup" id="midi-out-outlet"/>
+                        <outlet property="midiOutputLabel" destination="midi-out-label" id="midi-out-label-outlet"/>
                         <outlet property="serialDevice" destination="wfe-3q-n5s" id="EcL-Zg-SC6"/>
                         <outlet property="serialPort" destination="0cL-ho-vQ0" id="Wc7-Sc-a4l"/>
                         <outlet property="serialPortText" destination="3GE-DY-Z5C" id="KwS-R5-1IM"/>
                     </connections>
                 </viewController>
                 <customObject id="Ccg-CF-bza" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <popUpButton verticalHuggingPriority="750" id="HD5-UX-o0i">
+                    <rect key="frame" x="0.0" y="0.0" width="182" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="NHw-6l-MMh" id="T4n-EG-kTO">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="message"/>
+                        <menu key="menu" title="OtherViews" id="Ude-zB-FNw">
+                            <items>
+                                <menuItem title="No device" state="on" image="devNoneTemplate" id="NHw-6l-MMh">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Null modem cable" image="devCableTemplate" tag="1" id="Vnj-dF-E4l">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="2" id="pJP-41-y8R">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="RetroShell" image="devRetroShellTemplate" tag="3" id="fu0-JR-BMn">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Commander" image="devCommanderTemplate" tag="4" id="qhR-oL-2Je">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="MIDI Interface" image="devCableTemplate" tag="5" id="rhO-d3-TDM">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <action selector="serialDeviceAction:" target="oqP-PU-J20" id="YQ7-rU-URr"/>
+                    </connections>
+                </popUpButton>
             </objects>
             <point key="canvasLocation" x="2724" y="904"/>
         </scene>
@@ -6584,6 +6674,7 @@
         <image name="devGamepad2Template" width="20" height="21"/>
         <image name="devKeys1Template" width="20" height="20"/>
         <image name="devKeys2Template" width="20" height="20"/>
+        <image name="devMidiInterfaceTemplate" width="24" height="24"/>
         <image name="devMouseTemplate" width="20" height="20"/>
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="devRetroShellTemplate" width="24" height="24"/>
