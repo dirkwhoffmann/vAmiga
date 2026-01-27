@@ -11,7 +11,6 @@
 #include "MidiManager.h"
 #include "Amiga.h"
 #include "Agnus.h"
-#include "IOUtils.h"
 
 #ifdef __APPLE__
 #define MIDI_SUPPORT
@@ -68,7 +67,7 @@ MidiRingBuffer::isEmpty() const
 void
 MidiManager::_dump(Category category, std::ostream &os) const
 {
-    using namespace util;
+    using namespace utl;
     
     if (category == Category::State) {
         os << tab("Client Created") << bol(clientCreated) << std::endl;
@@ -98,6 +97,7 @@ i64
 MidiManager::getOption(Opt option) const
 {
     switch (option) {
+            
         case Opt::MIDI_DEVICE_OUT:  return selectedOutputDevice;
         case Opt::MIDI_DEVICE_IN:   return selectedInputDevice;
         default:                    fatalError;
@@ -108,11 +108,13 @@ void
 MidiManager::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
+            
         case Opt::MIDI_DEVICE_OUT:
         case Opt::MIDI_DEVICE_IN:
             return;
+            
         default:
-            throw(Fault::OPT_UNSUPPORTED);
+            throw CoreError(CoreError::OPT_UNSUPPORTED);
     }
 }
 
@@ -120,7 +122,9 @@ void
 MidiManager::setOption(Opt option, i64 value)
 {
     switch (option) {
+            
         case Opt::MIDI_DEVICE_OUT:
+            
             selectedOutputDevice = (int)value;
             if (value >= 0 && value < (i64)getOutputCount()) {
                 initMidi();
@@ -131,6 +135,7 @@ MidiManager::setOption(Opt option, i64 value)
             return;
             
         case Opt::MIDI_DEVICE_IN:
+            
             selectedInputDevice = (int)value;
             if (value >= 0 && value < (i64)getInputCount()) {
                 initMidi();
@@ -184,12 +189,14 @@ MidiManager::initMidi()
     );
     
     if (status != noErr) {
-        warn("Failed to create MIDI client: %d\n", (int)status);
+        
+        logwarn("Failed to create MIDI client: %d\n", (int)status);
         return false;
     }
     
     // Create input port
     status = MIDIInputPortCreate(
+                                 
         midiClient,
         CFSTR("vAmiga Input"),
         staticMidiInputCallback,
@@ -198,7 +205,8 @@ MidiManager::initMidi()
     );
     
     if (status != noErr) {
-        warn("Failed to create MIDI input port: %d\n", (int)status);
+        
+        logwarn("Failed to create MIDI input port: %d\n", (int)status);
         MIDIClientDispose(midiClient);
         midiClient = 0;
         return false;
@@ -206,13 +214,15 @@ MidiManager::initMidi()
     
     // Create output port
     status = MIDIOutputPortCreate(
+                                  
         midiClient,
         CFSTR("vAmiga Output"),
         &outputPort
     );
     
     if (status != noErr) {
-        warn("Failed to create MIDI output port: %d\n", (int)status);
+        
+        logwarn("Failed to create MIDI output port: %d\n", (int)status);
         MIDIPortDispose(inputPort);
         inputPort = 0;
         MIDIClientDispose(midiClient);
@@ -221,9 +231,10 @@ MidiManager::initMidi()
     }
     
     clientCreated = true;
-   // Useful to debug CoreMIDI 
+    
+   // Useful to debug CoreMIDI
    // printf("MIDI client initialized successfully - clientCreated=%d\n", clientCreated);
-    debug(SER_DEBUG, "MIDI client initialized successfully\n");
+    logdebug(SER_DEBUG, "MIDI client initialized successfully\n");
     return true;
 }
 
@@ -249,7 +260,7 @@ MidiManager::shutdownMidi()
     }
     
     clientCreated = false;
-    debug(SER_DEBUG, "MIDI client shut down\n");
+    logdebug(SER_DEBUG, "MIDI client shut down\n");
 }
 
 bool
@@ -260,7 +271,7 @@ MidiManager::openOutput(MIDIEndpointRef endpoint)
     closeOutput();
     currentOutputEndpoint = endpoint;
 
-    debug(SER_DEBUG, "MIDI output opened\n");
+    logdebug(SER_DEBUG, "MIDI output opened\n");
     return true;
 }
 
@@ -273,12 +284,13 @@ MidiManager::openInput(MIDIEndpointRef endpoint)
     
     OSStatus status = MIDIPortConnectSource(inputPort, endpoint, nullptr);
     if (status != noErr) {
-        warn("Failed to connect MIDI input source: %d\n", (int)status);
+
+        logwarn("Failed to connect MIDI input source: %d\n", (int)status);
         return false;
     }
     
     currentInputEndpoint = endpoint;
-    debug(SER_DEBUG, "MIDI input opened\n");
+    logdebug(SER_DEBUG, "MIDI input opened\n");
     return true;
 }
 
@@ -484,9 +496,12 @@ MidiManager::sendMidiMessage(const uint8_t *data, size_t length)
                                 length, data);
 
     if (packet) {
+        
         OSStatus status = MIDISend(outputPort, currentOutputEndpoint, packetList);
+        
         if (status != noErr) {
-            warn("MIDI send failed: %d\n", (int)status);
+            
+            logwarn("MIDI send failed: %d\n", (int)status);
             closeOutput();
         }
     }
