@@ -94,6 +94,8 @@
 		5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5030C2DE252A2E8400107E00 /* AudioStream.cpp */; };
 		50357BB6239123B2007E7563 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB5239123B2007E7563 /* Renderer.swift */; };
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
+		503846132F28E5CD00945B2B /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE71F3C2F22F0FC00C29588 /* CoreMIDI.framework */; };
+		503846142F28E62A00945B2B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFE221EA21550043D0E9 /* Cocoa.framework */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
@@ -1179,10 +1181,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DE71F3D2F22F0FC00C29588 /* CoreMIDI.framework in Frameworks */,
 				504CC8C42D5AB62300C2AC9A /* libz.tbd in Frameworks */,
 				508FDFE921EA21C80043D0E9 /* AppKit.framework in Frameworks */,
 				508FDFE721EA21780043D0E9 /* CoreAudio.framework in Frameworks */,
+				2DE71F3D2F22F0FC00C29588 /* CoreMIDI.framework in Frameworks */,
 				508FDFE521EA21630043D0E9 /* IOKit.framework in Frameworks */,
 				508FDFE321EA21550043D0E9 /* Cocoa.framework in Frameworks */,
 				508FDFE021EA214A0043D0E9 /* MetalKit.framework in Frameworks */,
@@ -1202,6 +1204,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				503846142F28E62A00945B2B /* Cocoa.framework in Frameworks */,
+				503846132F28E5CD00945B2B /* CoreMIDI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1460,8 +1464,6 @@
 		505B801D23FE628F002407FE /* Ports */ = {
 			isa = PBXGroup;
 			children = (
-				2DE71F382F22F0B700C29588 /* MidiManager.h */,
-				2DE71F392F22F0B700C29588 /* MidiManager.cpp */,
 				50CF46222620427600BB3B95 /* CMakeLists.txt */,
 				505A13232C2FE29600FF8D2C /* VideoPortTypes.h */,
 				505A13202C2FE27A00FF8D2C /* VideoPort.h */,
@@ -1477,6 +1479,8 @@
 				50A61442260CF00200A01428 /* SerialPortTypes.h */,
 				50B35B6122B2382E001A9C17 /* SerialPort.h */,
 				50B35B6022B2382E001A9C17 /* SerialPort.cpp */,
+				2DE71F382F22F0B700C29588 /* MidiManager.h */,
+				2DE71F392F22F0B700C29588 /* MidiManager.cpp */,
 			);
 			path = Ports;
 			sourceTree = "<group>";
