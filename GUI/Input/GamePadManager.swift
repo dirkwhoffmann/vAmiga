@@ -168,7 +168,11 @@ class GamePadManager {
     func icon(slot: Int) -> NSImage {
         return gamePads[slot]?.icon ?? SFSymbol.get(.gamecontroller)
     }
-    
+
+    func smallIcon(slot: Int) -> NSImage {
+        return gamePads[slot]?.smallIcon ?? SFSymbol.get(.gamecontroller, size: 20)
+    }
+
     //
     // HID support
     //
@@ -266,12 +270,12 @@ class GamePadManager {
         }
     }
     
-    func refresh(popup: NSPopUpButton, hide: Bool = false) {
+    func refresh(popup: NSPopUpButton, hide: Bool = false, small: Bool = false) {
         
-        refresh(menu: popup.menu!, hide: hide)
+        refresh(menu: popup.menu!, hide: hide, small: small)
     }
     
-    func refresh(menu: NSMenu, hide: Bool = false) {
+    func refresh(menu: NSMenu, hide: Bool = false, small: Bool = false) {
         
         let slots = [
             InputDevice.mouse,
@@ -286,7 +290,7 @@ class GamePadManager {
         for s in slots {
             if let item = menu.item(withTag: s) {
                 item.title = name(slot: s)
-                item.image = icon(slot: s)
+                item.image = small ? smallIcon(slot: s) : icon(slot: s)
                 item.isEnabled = isUsed(slot: s)
                 item.isHidden = isEmpty(slot: s) && hide
             }

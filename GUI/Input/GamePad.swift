@@ -48,6 +48,7 @@ class GamePad {
     
     // Icon of this device
     var icon: NSImage?
+    var smallIcon: NSImage?
     
     // Indicates if this device is officially supported
     var isKnown: Bool { return db.isKnown(guid: guid) }
@@ -82,6 +83,7 @@ class GamePad {
         
         name = device?.name ?? "HID device"
         icon = isMouse ? SFSymbol.get(.mouse) : SFSymbol.get(.gamecontroller)
+        smallIcon = isMouse ? SFSymbol.get(.mouse, size: 20) : SFSymbol.get(.gamecontroller, size: 20)
         
         updateMapping()
     }

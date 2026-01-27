@@ -2947,7 +2947,7 @@
                             <popUpButton tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0sc-sW-Uwc">
                                 <rect key="frame" x="111" y="201" width="182" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="J8C-7h-wVn" id="d7p-JF-gBL">
+                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="J8C-7h-wVn" id="d7p-JF-gBL">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>
                                     <menu key="menu" title="OtherViews" id="gEV-LX-CeS">
@@ -6686,7 +6686,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="trashTemplate" width="174" height="214"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>
     </resources>

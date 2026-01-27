@@ -101,8 +101,8 @@ class PeripheralsSettingsViewController: SettingsViewController {
         
         // Ports
         let nullmodem = SerialPortDevice.NULLMODEM.rawValue
-        gamePadManager?.refresh(popup: gameDevice1, hide: true)
-        gamePadManager?.refresh(popup: gameDevice2, hide: true)
+        gamePadManager?.refresh(popup: gameDevice1, hide: true, small: true)
+        gamePadManager?.refresh(popup: gameDevice2, hide: true, small: true)
         gameDevice1.selectItem(withTag: config.gameDevice1)
         gameDevice2.selectItem(withTag: config.gameDevice2)
         serialDevice.selectItem(withTag: config.serialDevice)
