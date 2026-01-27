@@ -10,10 +10,28 @@
 #pragma once
 
 #include "SubComponent.h"
-#include <CoreMIDI/CoreMIDI.h>
 #include <atomic>
 #include <vector>
 #include <string>
+
+#ifdef __APPLE__
+#include <CoreMIDI/CoreMIDI.h>
+#else
+
+// namespace vamiga {
+
+// No MIDI support. Declare dummy types to make the compile happy
+using MIDIClientRef = long;
+using MIDIEndpointRef = long;
+using MIDIEndpointRef = long;
+using MIDINotification = long;
+using MIDIPacketList = long;
+using MIDIPortRef = long;
+using MIDIPortRef = long;
+using ItemCount = unsigned long;
+// }
+
+#endif
 
 namespace vamiga {
 

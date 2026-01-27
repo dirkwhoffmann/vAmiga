@@ -39,14 +39,6 @@ static constexpr int SNP_BETA       = 5;
 
 
 //
-// Execution settings
-//
-
-static constexpr int        DIAG_BOARD       = 0;           // Plug in the diagnose board
-static constexpr int        ALLOW_ALL_ROMS   = 1;           // Disable the magic bytes check
-
-
-//
 // Debug settings
 //
 
@@ -62,6 +54,12 @@ static constexpr bool debugBuild = 1;
 typedef int debugflag;
 #endif
 
+#ifdef __APPLE__
+static constexpr bool macOS = 1;
+#else
+static constexpr bool macOS = 0;
+#endif
+
 #ifdef __EMSCRIPTEN__
 static constexpr bool wasmBuild = 1;
 #else
@@ -73,6 +71,15 @@ static constexpr bool vAmigaDOS = 1;
 #else
 static constexpr bool vAmigaDOS = 0;
 #endif
+
+
+//
+// Execution settings
+//
+
+static constexpr int        DIAG_BOARD       = 0;           // Plug in the diagnose board
+static constexpr int        ALLOW_ALL_ROMS   = 1;           // Disable the magic bytes check
+
 
 namespace vamiga {
 

@@ -13,7 +13,13 @@
 #include "Agnus.h"
 #include "IOUtils.h"
 
+#ifdef __APPLE__
+#define MIDI_SUPPORT
+#endif
+
 namespace vamiga {
+
+#ifdef MIDI_SUPPORT
 
 //
 // MidiRingBuffer
@@ -528,4 +534,38 @@ MidiManager::getMessageLength(uint8_t status)
     return 1;
 }
 
+#else // MIDI_SUPPORT
+
+bool MidiRingBuffer::push(uint8_t byte) { return false; }
+bool MidiRingBuffer::pop(uint8_t *byte) { return false; }
+bool MidiRingBuffer::isEmpty() const { return true; }
+
+void MidiManager::_dump(Category category, std::ostream &os) const { }
+void MidiManager::_didReset(bool hard) { }
+void MidiManager::_powerOff() { }
+i64 MidiManager::getOption(Opt option) const { return 0; }
+void MidiManager::checkOption(Opt opt, i64 value) { }
+void MidiManager::setOption(Opt option, i64 value) { }
+bool MidiManager::initMidi() { return false; }
+void MidiManager::shutdownMidi() { }
+bool MidiManager::openOutput(MIDIEndpointRef endpoint) { return false; }
+bool MidiManager::openInput(MIDIEndpointRef endpoint) { return false; }
+void MidiManager::closeOutput() { }
+void MidiManager::closeInput() { }
+ItemCount MidiManager::getOutputCount() { return 0; }
+ItemCount MidiManager::getInputCount() { return 0; }
+string MidiManager::getOutputName(ItemCount index) { return ""; }
+std::string MidiManager::getInputName(ItemCount index) { return ""; }
+MIDIEndpointRef MidiManager::getOutputEndpoint(ItemCount index) { return 0; }
+MIDIEndpointRef MidiManager::getInputEndpoint(ItemCount index)  { return 0; }
+void MidiManager::sendByte(uint8_t byte) { }
+bool MidiManager::hasInput() const { return false; }
+bool MidiManager::receiveByte(uint8_t *byte) { return false; }
+void MidiManager::handleMidiInput(const MIDIPacketList *pktlist) { }
+void MidiManager::processOutputByte(uint8_t byte) { }
+void MidiManager::sendMidiMessage(const uint8_t *data, size_t length) { }
+void MidiManager::flushSysEx() { }
+int MidiManager::getMessageLength(uint8_t status) { return 0; }
+
+#endif
 }
