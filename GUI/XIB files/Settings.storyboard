@@ -3328,39 +3328,6 @@
                     </connections>
                 </viewController>
                 <customObject id="Ccg-CF-bza" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <popUpButton verticalHuggingPriority="750" id="HD5-UX-o0i">
-                    <rect key="frame" x="0.0" y="0.0" width="182" height="26"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="NHw-6l-MMh" id="T4n-EG-kTO">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="message"/>
-                        <menu key="menu" title="OtherViews" id="Ude-zB-FNw">
-                            <items>
-                                <menuItem title="No device" state="on" image="devNoneTemplate" id="NHw-6l-MMh">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                                <menuItem title="Null modem cable" image="devCableTemplate" tag="1" id="Vnj-dF-E4l">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                                <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="2" id="pJP-41-y8R">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                                <menuItem title="RetroShell" image="devRetroShellTemplate" tag="3" id="fu0-JR-BMn">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                                <menuItem title="Commander" image="devCommanderTemplate" tag="4" id="qhR-oL-2Je">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                                <menuItem title="MIDI Interface" image="devCableTemplate" tag="5" id="rhO-d3-TDM">
-                                    <modifierMask key="keyEquivalentModifierMask"/>
-                                </menuItem>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <action selector="serialDeviceAction:" target="oqP-PU-J20" id="YQ7-rU-URr"/>
-                    </connections>
-                </popUpButton>
             </objects>
             <point key="canvasLocation" x="2724" y="904"/>
         </scene>
@@ -6674,16 +6641,12 @@
         <image name="ad-rv" width="542" height="542"/>
         <image name="app.connected.to.app.below.fill" catalog="system" width="19" height="21"/>
         <image name="book" catalog="system" width="22" height="18"/>
-        <image name="devCableLoopTemplate" width="24" height="24"/>
-        <image name="devCableTemplate" width="24" height="24"/>
-        <image name="devCommanderTemplate" width="24" height="24"/>
         <image name="devGamepad1Template" width="20" height="21"/>
         <image name="devGamepad2Template" width="20" height="21"/>
         <image name="devKeys1Template" width="20" height="20"/>
         <image name="devKeys2Template" width="20" height="20"/>
         <image name="devMouseTemplate" width="20" height="20"/>
         <image name="devNoneTemplate" width="24" height="24"/>
-        <image name="devRetroShellTemplate" width="24" height="24"/>
         <image name="fossil.shell" catalog="system" width="24" height="20"/>
         <image name="gamepad" width="244" height="151"/>
         <image name="headphones" catalog="system" width="21" height="21"/>
