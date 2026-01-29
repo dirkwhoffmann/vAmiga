@@ -66,7 +66,7 @@ class MediaManager {
     
     // Pictograms used in menu items
     var diskMenuImage = Symbol.get(.floppy35, size: 16)
-    var hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
+    var hdrMenuImage = Symbol.get(.harddrive, size: 16)
     
     //
     // Initializing

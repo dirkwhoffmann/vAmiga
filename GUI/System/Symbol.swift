@@ -35,6 +35,7 @@ enum Symbol {
 
     // Pictograms
     case biohazard
+    case exclamationmark
     case gear
     case magnifyingglass
     case shell
@@ -93,6 +94,7 @@ enum Symbol {
 
             // Pictograms
         case .biohazard:        return [ "biohazardTemplate" ]
+        case .exclamationmark:  return [ "exclamationmark.octagon" ]
         case .gear:             return [ "gear" ]
         case .magnifyingglass:  return [ "magnifyingglass" ]
         case .shell:            return [ "fossil.shell" ]
@@ -147,6 +149,7 @@ enum Symbol {
 
             // Look up the image in the assets folder (custom images)
             if let img = get(name: name, size: size - border) {
+                img.isTemplate = true
                 return img
             }
             

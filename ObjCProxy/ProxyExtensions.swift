@@ -564,22 +564,24 @@ extension FloppyDriveProxy {
     }
 }
 
+@MainActor
 extension HardDriveProxy {
     
     var templateIcon: NSImage? {
         
-        var name: String
+        var icon: NSImage?
                 
         switch controller.info.state {
 
         case .UNDETECTED, .INITIALIZING:
-            name = "hdrETemplate"
+            icon = Symbol.get(.exclamationmark)
             
         default:
-            name = info.hasModifiedDisk ? "hdrUTemplate" : "hdrTemplate"
+            icon = Symbol.get(.harddrive)
+            if info.hasModifiedDisk { icon?.tint(.gray) }
         }
         
-        return NSImage(named: name)!
+        return icon
     }
     
     var toolTip: String? {
