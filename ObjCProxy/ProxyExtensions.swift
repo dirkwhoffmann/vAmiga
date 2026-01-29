@@ -620,6 +620,7 @@ extension HardDriveProxy {
     }
 }
 
+@MainActor
 extension RemoteManagerProxy {
     
     var icon: NSImage? {

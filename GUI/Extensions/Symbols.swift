@@ -9,73 +9,135 @@
 
 import AppKit
 
+@MainActor
 enum SFSymbol {
-
-    case alarm
-    case arrowClock
-    case arrowDown
-    case arrowkeys
-    case arrowUp
-    case console
-    case gamecontroller
-    case gauge
-    case gear
-    case keyboard
-    case magnifyingglass
-    case mouse
-    case serverListening
-    case serverConnected
-    case nosign
+    
+    // Actions
     case pause
     case play
     case power
     case reset
     case trash
+    case stepInto
+    case stepOver
+    case stepCycle
+    case stepLine
+    case stepFrame
+
+    // Status
+    case serverListening
+    case serverConnected
     case wifi
 
+    // Devices
+    case console
+    case gamecontroller
+    case keyboard
+    case mouse
+    case nosign
+
+    // Indicators
+    case arrowClock
+    case arrowDown
+    case arrowkeys
+    case arrowUp
+    case gauge
+    case gear
+    case magnifyingglass
+    
     var systemNames: [String] {
 
         switch self {
 
-        case .alarm:            return [ "alarm" ]
-        case .arrowClock:       return [ "clock.arrow.trianglehead.counterclockwise.rotate.90",
-                                         "clock.arrow.circlepath" ]
-        case .arrowDown:        return [ "arrow.down.circle" ]
-        case .arrowkeys:        return [ "arrowkeys" ]
-        case .arrowUp:          return [ "arrow.up.circle" ]
-        case .console:          return [ "fossil.shell", "text.justify.left", "text.rectangle", "apple.terminal", "text.alignleft" ]
-        case .gamecontroller:   return [ "gamecontroller" ]
-        case .gauge:            return [ "gauge.chart.lefthalf.righthalf", "gauge.with.needle" ]
-        case .gear:             return [ "gear" ]
-        case .keyboard:         return [ "keyboard" ]
-        case .magnifyingglass:  return [ "magnifyingglass" ]
-        case .mouse:            return [ "computermouse" ]
-        case .serverListening:  return [ "point.3.connected.trianglepath.dotted" ]
-        case .serverConnected:  return [ "point.3.filled.connected.trianglepath.dotted" ]
-        case .nosign:           return [ "nosign" ]
+            // Actions
         case .pause:            return [ "pause.circle" ]
         case .play:             return [ "play.circle" ]
         case .power:            return [ "power" ]
         case .reset:            return [ "arrow.counterclockwise.circle" ]
         case .trash:            return [ "trash" ]
+
+            // Status
+        case .serverListening:  return [ "point.3.connected.trianglepath.dotted" ]
+        case .serverConnected:  return [ "point.3.filled.connected.trianglepath.dotted" ]
         case .wifi:             return [ "wifi.circle" ]
+
+            // Devices
+        case .console:          return [ "fossil.shell", "text.justify.left", "text.rectangle", "apple.terminal", "text.alignleft" ]
+        case .gamecontroller:   return [ "gamecontroller" ]
+        case .keyboard:         return [ "keyboard" ]
+        case .mouse:            return [ "computermouse" ]
+        case .nosign:           return [ "nosign" ]
+
+            // Indicators
+        case .arrowClock:       return [ "clock.arrow.trianglehead.counterclockwise.rotate.90",
+                                         "clock.arrow.circlepath" ]
+        case .arrowDown:        return [ "arrow.down.circle" ]
+        case .arrowkeys:        return [ "arrowkeys" ]
+        case .arrowUp:          return [ "arrow.up.circle" ]
+        case .gauge:            return [ "gauge.chart.lefthalf.righthalf", "gauge.with.needle" ]
+        case .gear:             return [ "gear" ]
+        case .magnifyingglass:  return [ "magnifyingglass" ]
+            
+        default:                return [ ]
         }
     }
 
+    var customIcon: String? {
+        
+        switch self {
+            
+        case .stepInto:         return "stepIntoTemplate"
+        case .stepOver:         return "stepOverTemplate"
+        case .stepCycle:        return "stepCycleTemplate"
+        case .stepLine:         return "stepLineTemplate"
+        case .stepFrame:        return "stepFrameTemplate"
+            
+        default:                return nil
+        }
+    }
+    
+    private struct CacheKey: Hashable {
+     
+        let symbol: SFSymbol
+        let size: CGFloat
+    }
+
+    private static var imageCache = [CacheKey: NSImage]()
+
     static func get(_ symbol: SFSymbol, size: CGFloat = 25, description: String? = nil) -> NSImage {
 
-        let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
+        // Return cached image if available
+        if let cached = imageCache[CacheKey(symbol: symbol, size: size)] { return cached }
 
-        for name in symbol.systemNames {
+        if let custom = symbol.customIcon {
 
-            if let img = NSImage(systemSymbolName: name, accessibilityDescription: description) {
-                if let result = img.withSymbolConfiguration(config) {
-                    return result
+            // Get the custom image
+            let border = CGFloat(4)
+            if let img = get(name: custom, size: size - border) {
+                return img
+            }
+
+        } else {
+            
+            // Get a symbol from the SF library
+            let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
+            for name in symbol.systemNames {
+                if let img = NSImage(systemSymbolName: name, accessibilityDescription: description) {
+                    if let result = img.withSymbolConfiguration(config) {
+                        return result
+                    }
                 }
             }
         }
 
+        // No image found
         return NSImage(systemSymbolName: "questionmark.circle", accessibilityDescription: description)!
+    }
+    
+    static func get(name: String, size: CGFloat = 25) -> NSImage? {
+
+        guard let img = NSImage(named: name) else { return nil }
+        return img.resize(size: CGSize(width: size, height: size))
     }
 }
 
