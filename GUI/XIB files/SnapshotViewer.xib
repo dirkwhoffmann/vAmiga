@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24128" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -29,7 +30,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="516" height="305"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1496" height="933"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="516" height="305"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -38,11 +39,11 @@
                         <rect key="frame" x="196" y="56" width="303" height="243"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="1kH-fg-suh">
-                            <rect key="frame" x="4" y="5" width="295" height="223"/>
+                            <rect key="frame" x="0.0" y="0.0" width="303" height="231"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hdf-K3-cDR" customClass="iCarousel">
-                                    <rect key="frame" x="8" y="11" width="279" height="202"/>
+                                    <rect key="frame" x="12" y="19" width="279" height="202"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <connections>
                                         <outlet property="dataSource" destination="-2" id="Q6i-Mh-8dC"/>
@@ -105,22 +106,24 @@ DQ
                         </textFieldCell>
                     </textField>
                     <button hidden="YES" toolTip="Move one item down" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y6C-V1-tRr">
-                        <rect key="frame" x="162" y="146" width="25" height="16"/>
+                        <rect key="frame" x="161" y="133" width="24" height="36"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="downTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Zdc-OW-yWw">
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="Zdc-OW-yWw">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
+                            <imageReference key="image" image="arrowshape.down" catalog="system" symbolScale="large"/>
                         </buttonCell>
                         <connections>
                             <action selector="moveDownAction:" target="-2" id="tcI-kI-2Cb"/>
                         </connections>
                     </button>
                     <button hidden="YES" toolTip="Move one item up" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IMZ-a6-Dm0">
-                        <rect key="frame" x="161" y="198" width="25" height="16"/>
+                        <rect key="frame" x="161" y="194" width="24" height="24"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="upTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="E34-dI-QPH">
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="E34-dI-QPH">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
+                            <imageReference key="image" image="arrowshape.up" catalog="system" symbolScale="large"/>
                         </buttonCell>
                         <connections>
                             <action selector="moveUpAction:" target="-2" id="pPT-n0-0DZ"/>
@@ -154,17 +157,6 @@ DQ
                         <rect key="frame" x="23" y="259" width="157" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
-                    <button hidden="YES" toolTip="Restore snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JJm-E1-cpp">
-                        <rect key="frame" x="161" y="172" width="25" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="trashTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="yB8-ah-3oV">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="trashAction:" target="-2" id="UBf-eN-bp4"/>
-                        </connections>
-                    </button>
                     <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ISt-pr-ku6">
                         <rect key="frame" x="200" y="22" width="215" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -183,14 +175,26 @@ DQ
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button hidden="YES" toolTip="Restore snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JJm-E1-cpp">
+                        <rect key="frame" x="161" y="166.5" width="24" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="yB8-ah-3oV">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="trashAction:" target="-2" id="UBf-eN-bp4"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="307" y="257.5"/>
         </window>
     </objects>
     <resources>
-        <image name="downTemplate" width="220" height="199"/>
-        <image name="trashTemplate" width="174" height="214"/>
-        <image name="upTemplate" width="220" height="199"/>
+        <image name="arrowshape.down" catalog="system" width="19" height="21"/>
+        <image name="arrowshape.up" catalog="system" width="19" height="21"/>
+        <image name="trash" catalog="system" width="19" height="22"/>
     </resources>
 </document>

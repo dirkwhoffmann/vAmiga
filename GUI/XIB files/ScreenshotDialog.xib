@@ -88,7 +88,7 @@ DQ
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PAY-b3-zIZ">
                         <rect key="frame" x="13" y="13" width="78" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="folderTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7uA-qG-Ilf">
+                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="folder" catalog="system" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7uA-qG-Ilf">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -97,7 +97,7 @@ DQ
                         </connections>
                     </button>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2QX-vC-XeZ">
-                        <rect key="frame" x="91" y="22" width="140" height="14"/>
+                        <rect key="frame" x="97" y="22" width="140" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Open images in Finder..." id="xVf-qY-I4F">
                             <font key="font" metaFont="smallSystem"/>
@@ -149,7 +149,7 @@ DQ
     <resources>
         <image name="arrowshape.left" catalog="system" width="21" height="18"/>
         <image name="arrowshape.right" catalog="system" width="21" height="18"/>
-        <image name="folderTemplate" width="221" height="221"/>
+        <image name="folder" catalog="system" width="18" height="14"/>
         <image name="trash" catalog="system" width="19" height="22"/>
     </resources>
 </document>

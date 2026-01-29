@@ -13,6 +13,7 @@ import AppKit
 enum Symbol {
     
     // Actions
+    case inspect
     case pause
     case play
     case power
@@ -27,12 +28,23 @@ enum Symbol {
     // Status
     case serverListening
     case serverConnected
+    case warpAutoOn
+    case warpAutoOff
+    case warpOn
+    case warpOff
+
+    // Signs
+    case biohazard
     case wifi
 
     // Devices
+    case amigaKey
+    case cable
+    case cableLoop
     case console
     case gamecontroller
     case keyboard
+    case midi
     case mouse
     case nosign
 
@@ -52,21 +64,38 @@ enum Symbol {
         switch self {
 
             // Actions
+        case .inspect:          return [ "magnifyingglass" ]
         case .pause:            return [ "pause.circle" ]
         case .play:             return [ "play.circle" ]
         case .power:            return [ "power" ]
         case .reset:            return [ "arrow.counterclockwise.circle" ]
         case .trash:            return [ "trash" ]
+        case .stepInto:         return [ "stepIntoTemplate" ]
+        case .stepOver:         return [ "stepOverTemplate" ]
+        case .stepCycle:        return [ "stepCycleTemplate" ]
+        case .stepLine:         return [ "stepLineTemplate" ]
+        case .stepFrame:        return [ "stepFrameTemplate" ]
 
             // Status
         case .serverListening:  return [ "point.3.connected.trianglepath.dotted" ]
         case .serverConnected:  return [ "point.3.filled.connected.trianglepath.dotted" ]
+        case .warpAutoOn:       return [ "hourglass3Template" ]
+        case .warpAutoOff:      return [ "hourglass1Template" ]
+        case .warpOn:           return [ "warpOnTemplate" ]
+        case .warpOff:          return [ "warpOffTemplate" ]
+
+            // Signs
+        case .biohazard:        return [ "biohazardTemplate" ]
         case .wifi:             return [ "wifi.circle" ]
 
             // Devices
+        case .amigaKey:         return [ "amigaKey.template" ]
+        case .cable:            return [ "point.bottomleft.forward.to.point.topright.scurvepath" ]
+        case .cableLoop:        return [ "point.forward.to.point.capsulepath" ]
         case .console:          return [ "fossil.shell", "text.justify.left", "text.rectangle", "apple.terminal", "text.alignleft" ]
         case .gamecontroller:   return [ "gamecontroller" ]
         case .keyboard:         return [ "keyboard" ]
+        case .midi:             return [ "devMidiInterfaceTemplate" ]
         case .mouse:            return [ "computermouse" ]
         case .nosign:           return [ "nosign" ]
 
@@ -80,26 +109,10 @@ enum Symbol {
         case .arrowkeys:        return [ "arrowkeys" ]
         case .gauge:            return [ "gauge.chart.lefthalf.righthalf", "gauge.with.needle" ]
         case .gear:             return [ "gear" ]
-        case .magnifyingglass:  return [ "magnifyingglass" ]
-            
-        default:                return [ ]
+        case .magnifyingglass:  return [ "magnifyingglass" ]            
         }
     }
 
-    var customIcon: String? {
-        
-        switch self {
-            
-        case .stepInto:         return "stepIntoTemplate"
-        case .stepOver:         return "stepOverTemplate"
-        case .stepCycle:        return "stepCycleTemplate"
-        case .stepLine:         return "stepLineTemplate"
-        case .stepFrame:        return "stepFrameTemplate"
-            
-        default:                return nil
-        }
-    }
-    
     private struct CacheKey: Hashable {
      
         let symbol: Symbol
@@ -113,23 +126,20 @@ enum Symbol {
         // Return cached image if available
         if let cached = imageCache[CacheKey(symbol: symbol, size: size)] { return cached }
 
-        if let custom = symbol.customIcon {
+        let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
+        let border = CGFloat(4)
 
-            // Get the custom image
-            let border = CGFloat(4)
-            if let img = get(name: custom, size: size - border) {
+        for name in symbol.systemNames {
+
+            // Look up the image in the assets folder (custom images)
+            if let img = get(name: name, size: size - border) {
                 return img
             }
-
-        } else {
             
-            // Get a symbol from the SF library
-            let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
-            for name in symbol.systemNames {
-                if let img = NSImage(systemSymbolName: name, accessibilityDescription: description) {
-                    if let result = img.withSymbolConfiguration(config) {
-                        return result
-                    }
+            // Look up the image in the system SF library
+            if let img = NSImage(systemSymbolName: name, accessibilityDescription: description) {
+                if let result = img.withSymbolConfiguration(config) {
+                    return result
                 }
             }
         }

@@ -187,7 +187,7 @@
                     <button tag="2" id="cdG-NT-T3J" userLabel="Debug Mode">
                         <rect key="frame" x="515" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="srvConnectTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="point.3.filled.connected.trianglepath.dotted" catalog="system" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -274,6 +274,6 @@
         <image name="ledGrey" width="100" height="50"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
         <image name="muteTemplate" width="240" height="241"/>
-        <image name="srvConnectTemplate" width="48" height="49"/>
+        <image name="point.3.filled.connected.trianglepath.dotted" catalog="system" width="17" height="14"/>
     </resources>
 </document>

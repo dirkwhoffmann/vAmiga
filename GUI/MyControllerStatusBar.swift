@@ -15,9 +15,9 @@ extension MyController {
         guard let emu = emu else { return nil }
         
         if Warp(rawValue: config.warpMode) == .AUTO {
-            return NSImage(named: emu.warping ? "hourglass3Template" : "hourglass1Template")
+            return Symbol.get(emu.warping ? .warpAutoOn : .warpAutoOff)
         } else {
-            return NSImage(named: emu.warping ? "warpOnTemplate" : "warpOffTemplate")
+            return Symbol.get(emu.warping ? .warpOn : .warpOff)
         }
     }
     
