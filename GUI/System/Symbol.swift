@@ -33,8 +33,12 @@ enum Symbol {
     case warpOn
     case warpOff
 
-    // Signs
+    // Pictograms
     case biohazard
+    case gear
+    case magnifyingglass
+    case shell
+    case stearingwheel
     case wifi
 
     // Devices
@@ -56,8 +60,6 @@ enum Symbol {
     case arrowRight
     case arrowkeys
     case gauge
-    case gear
-    case magnifyingglass
     
     var systemNames: [String] {
 
@@ -84,8 +86,12 @@ enum Symbol {
         case .warpOn:           return [ "warpOnTemplate" ]
         case .warpOff:          return [ "warpOffTemplate" ]
 
-            // Signs
+            // Pictograms
         case .biohazard:        return [ "biohazardTemplate" ]
+        case .gear:             return [ "gear" ]
+        case .magnifyingglass:  return [ "magnifyingglass" ]
+        case .shell:            return [ "fossil.shell" ]
+        case .stearingwheel:    return [ "steeringwheel" ]
         case .wifi:             return [ "wifi.circle" ]
 
             // Devices
@@ -108,8 +114,6 @@ enum Symbol {
         case .arrowRight:       return [ "arrowshape.right" ]
         case .arrowkeys:        return [ "arrowkeys" ]
         case .gauge:            return [ "gauge.chart.lefthalf.righthalf", "gauge.with.needle" ]
-        case .gear:             return [ "gear" ]
-        case .magnifyingglass:  return [ "magnifyingglass" ]            
         }
     }
 

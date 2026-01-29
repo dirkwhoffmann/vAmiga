@@ -381,6 +381,7 @@ extension MyDocument {
             
             alert.alertStyle = .informational
             alert.icon = NSImage(named: "powerSwitch")
+            // alert.icon = Symbol.get(.power)
             alert.messageText = "The emulator must be powered off to perform this operation."
             alert.informativeText = "Your changes will be lost if you proceed."
             alert.addButton(withTitle: "Proceed")

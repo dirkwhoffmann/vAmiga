@@ -25,9 +25,11 @@ class InspectorToolbar: NSToolbar {
         // Update icons
         let running = emu.running
         let label = running ? "Pause" : "Run"
-        let image = running ? "pauseTemplate" : "runTemplate"
+        // let image = running ? "pauseTemplate" : "runTemplate"
+        let image = Symbol.get(running ? .pause : .play)
         execSegCtrl.setToolTip(label, forSegment: 0)
-        execSegCtrl.setImage(NSImage(named: image), forSegment: 0)
+        // execSegCtrl.setImage(NSImage(named: image), forSegment: 0)
+        execSegCtrl.setImage(image, forSegment: 0)
         for i in 1...4 { execSegCtrl.setEnabled(!running, forSegment: i) }
         
         // Disable shrinked popup buttons to prevent macOS from crashing

@@ -2947,7 +2947,7 @@
                             <popUpButton tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0sc-sW-Uwc">
                                 <rect key="frame" x="111" y="201" width="182" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="J8C-7h-wVn" id="d7p-JF-gBL">
+                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="J8C-7h-wVn" id="d7p-JF-gBL">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>
                                     <menu key="menu" title="OtherViews" id="gEV-LX-CeS">
@@ -3004,7 +3004,7 @@
                             <popUpButton tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VYL-DQ-C84">
                                 <rect key="frame" x="111" y="171" width="182" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="to4-L3-mD5" id="67K-Ld-dfd">
+                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="to4-L3-mD5" id="67K-Ld-dfd">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>
                                     <menu key="menu" title="OtherViews" id="1ex-fl-fm0">
@@ -3180,27 +3180,33 @@
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wfe-3q-n5s">
                                 <rect key="frame" x="111" y="110" width="182" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="WB6-ws-Ita" id="AJB-Zo-PnW">
+                                <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="WB6-ws-Ita" id="AJB-Zo-PnW">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>
                                     <menu key="menu" title="OtherViews" id="pRM-Js-1te">
                                         <items>
-                                            <menuItem title="No device" state="on" image="devNoneTemplate" id="WB6-ws-Ita">
+                                            <menuItem title="No device" state="on" id="WB6-ws-Ita">
+                                                <imageReference key="image" image="nosign" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Null modem cable" image="devCableTemplate" tag="1" id="qHp-bJ-VXn">
+                                            <menuItem title="Null modem cable" tag="1" id="qHp-bJ-VXn">
+                                                <imageReference key="image" image="app.connected.to.app.below.fill" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Loopback cable" image="devCableLoopTemplate" tag="2" id="xRg-tt-S9K">
+                                            <menuItem title="Loopback cable" tag="2" id="xRg-tt-S9K">
+                                                <imageReference key="image" image="point.forward.to.point.capsulepath.fill" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="MIDI Interface" image="devMidiInterfaceTemplate" tag="5" id="OCr-ju-2CU">
+                                            <menuItem title="MIDI Interface" tag="5" id="OCr-ju-2CU">
+                                                <imageReference key="image" image="headphones" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="RetroShell" image="devRetroShellTemplate" tag="3" id="Czf-d6-Oo2">
+                                            <menuItem title="RetroShell" tag="3" id="Czf-d6-Oo2">
+                                                <imageReference key="image" image="fossil.shell" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Commander" image="devCommanderTemplate" tag="4" id="fXa-HV-cUX">
+                                            <menuItem title="Commander" tag="4" id="fXa-HV-cUX">
+                                                <imageReference key="image" image="steeringwheel" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -6666,6 +6672,7 @@
         <image name="NSCaution" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
         <image name="ad-rv" width="542" height="542"/>
+        <image name="app.connected.to.app.below.fill" catalog="system" width="19" height="21"/>
         <image name="book" catalog="system" width="22" height="18"/>
         <image name="devCableLoopTemplate" width="24" height="24"/>
         <image name="devCableTemplate" width="24" height="24"/>
@@ -6674,19 +6681,23 @@
         <image name="devGamepad2Template" width="20" height="21"/>
         <image name="devKeys1Template" width="20" height="20"/>
         <image name="devKeys2Template" width="20" height="20"/>
-        <image name="devMidiInterfaceTemplate" width="24" height="24"/>
         <image name="devMouseTemplate" width="20" height="20"/>
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="devRetroShellTemplate" width="24" height="24"/>
+        <image name="fossil.shell" catalog="system" width="24" height="20"/>
         <image name="gamepad" width="244" height="151"/>
+        <image name="headphones" catalog="system" width="21" height="21"/>
         <image name="joystick2" width="261" height="300"/>
         <image name="mouse" width="128" height="128"/>
+        <image name="nosign" catalog="system" width="20" height="20"/>
         <image name="patched" width="276" height="276"/>
+        <image name="point.forward.to.point.capsulepath.fill" catalog="system" width="25" height="17"/>
         <image name="recordKey" width="36" height="36"/>
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
+        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="steeringwheel" catalog="system" width="20" height="20"/>
         <image name="trashTemplate" width="174" height="214"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>
     </resources>

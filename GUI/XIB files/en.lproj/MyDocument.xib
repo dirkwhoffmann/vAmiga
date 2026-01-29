@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -185,7 +186,7 @@
                         </connections>
                     </button>
                     <button tag="2" id="cdG-NT-T3J" userLabel="Debug Mode">
-                        <rect key="frame" x="515" y="3" width="20" height="20"/>
+                        <rect key="frame" x="515" y="1" width="20" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="point.3.filled.connected.trianglepath.dotted" catalog="system" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -195,9 +196,10 @@
                     <button tag="2" id="46l-A8-v8C" userLabel="Halt">
                         <rect key="frame" x="487" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="haltTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Qoa-ac-fgt">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="right" id="Qoa-ac-fgt">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
+                            <imageReference key="image" image="exclamationmark.brakesignal" catalog="system" symbolScale="large"/>
                         </buttonCell>
                     </button>
                     <button toolTip="Warp mode" id="1052">
@@ -245,7 +247,7 @@
                     <button tag="2" id="9cr-37-7RV" userLabel="Mute">
                         <rect key="frame" x="571" y="2" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="muteTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WPR-BY-tr5">
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="speaker.slash.fill" catalog="system" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WPR-BY-tr5">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -269,11 +271,11 @@
     </objects>
     <resources>
         <image name="diskTemplate" width="217" height="217"/>
-        <image name="haltTemplate" width="240" height="241"/>
+        <image name="exclamationmark.brakesignal" catalog="system" width="26" height="19"/>
         <image name="hourglass1Template" width="240" height="241"/>
         <image name="ledGrey" width="100" height="50"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
-        <image name="muteTemplate" width="240" height="241"/>
         <image name="point.3.filled.connected.trianglepath.dotted" catalog="system" width="17" height="14"/>
+        <image name="speaker.slash.fill" catalog="system" width="14" height="16"/>
     </resources>
 </document>
