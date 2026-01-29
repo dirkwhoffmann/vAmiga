@@ -353,9 +353,11 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
      */
     if constexpr (debug::IMG_DEBUG) {
 
+        /*
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
         Codec::makeD64(*this)->writeToFile(tmp);
+        */
     }
 
 

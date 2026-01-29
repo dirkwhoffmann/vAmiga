@@ -53,17 +53,17 @@ class GamePadManager {
         // Add default devices
         gamePads[0] = GamePad(manager: self, type: .MOUSE)
         gamePads[0]!.name = "Mouse"
-        gamePads[0]!.icon = Symbol.get(.mouse)
+        gamePads[0]!.symbol = .mouse
         gamePads[0]!.keyMap = 0
         
         gamePads[1] = GamePad(manager: self, type: .JOYSTICK)
         gamePads[1]!.name = "Joystick Keyset 1"
-        gamePads[1]!.icon = Symbol.get(.arrowkeys)
+        gamePads[1]!.symbol = .arrowkeys
         gamePads[1]!.keyMap = 1
         
         gamePads[2] = GamePad(manager: self, type: .JOYSTICK)
         gamePads[2]!.name = "Joystick Keyset 2"
-        gamePads[2]!.icon = Symbol.get(.arrowkeys)
+        gamePads[2]!.symbol = .arrowkeys
         gamePads[2]!.keyMap = 2
         
         // Tell the mouse event receiver where the mouse resides
@@ -165,12 +165,8 @@ class GamePadManager {
         return gamePads[slot]?.name ?? "External device"
     }
     
-    func icon(slot: Int) -> NSImage {
-        return gamePads[slot]?.icon ?? Symbol.get(.gamecontroller)
-    }
-
-    func smallIcon(slot: Int) -> NSImage {
-        return gamePads[slot]?.smallIcon ?? Symbol.get(.gamecontroller, size: 20)
+    func icon(slot: Int, size: Int) -> NSImage {
+        return gamePads[slot]?.icon(size: size) ?? Symbol.get(.gamecontroller, size: CGFloat(size))
     }
 
     //
@@ -290,7 +286,7 @@ class GamePadManager {
         for s in slots {
             if let item = menu.item(withTag: s) {
                 item.title = name(slot: s)
-                item.image = small ? smallIcon(slot: s) : icon(slot: s)
+                item.image = icon(slot: s, size: small ? 16 : 24)
                 item.isEnabled = isUsed(slot: s)
                 item.isHidden = isEmpty(slot: s) && hide
             }

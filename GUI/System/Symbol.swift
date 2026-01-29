@@ -46,7 +46,12 @@ enum Symbol {
     case cable
     case cableLoop
     case console
+    case floppy35
+    case floppy35wp
+    case floppy525
+    case floppy525wp
     case gamecontroller
+    case harddrive
     case keyboard
     case midi
     case mouse
@@ -99,7 +104,12 @@ enum Symbol {
         case .cable:            return [ "point.bottomleft.forward.to.point.topright.scurvepath" ]
         case .cableLoop:        return [ "point.forward.to.point.capsulepath" ]
         case .console:          return [ "fossil.shell", "text.justify.left", "text.rectangle", "apple.terminal", "text.alignleft" ]
+        case .floppy35:         return [ "floppy35Template" ]
+        case .floppy35wp:       return [ "floppy35wpTemplate" ]
+        case .floppy525:        return [ "" ]
+        case .floppy525wp:      return [ "" ]
         case .gamecontroller:   return [ "gamecontroller" ]
+        case .harddrive:        return [ "hdrTemplate" ]
         case .keyboard:         return [ "keyboard" ]
         case .midi:             return [ "devMidiInterfaceTemplate" ]
         case .mouse:            return [ "computermouse" ]

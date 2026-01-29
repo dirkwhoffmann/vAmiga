@@ -77,9 +77,8 @@ class MyController: NSWindowController, MessageReceiver {
     var infoText2: String?
     
     // Pictograms for being used in NSMenuItems (MOVE TO AppDelegate)
-    static let iconSize = CGSize(width: 16, height: 16)
-    var smallDisk = NSImage(named: "diskTemplate")!.resize(size: iconSize)
-    var smallHdr = NSImage(named: "hdrTemplate")!.resize(size: iconSize)
+    var smallDisk = Symbol.get(.floppy35, size: 16)
+    var smallHdr = Symbol.get(.harddrive, size: 16)
     
     // Serial input and output
     var serialIn = ""

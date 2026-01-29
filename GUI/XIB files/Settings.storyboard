@@ -538,33 +538,36 @@
                                 </view>
                             </box>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ekf-Vj-jps">
-                                <rect key="frame" x="295" y="307" width="16" height="16"/>
+                                <rect key="frame" x="295" y="301.5" width="16" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="cV9-AF-8eO">
+                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="cV9-AF-8eO">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="deleteKeysetAction:" target="EGi-z1-MUh" id="eLt-vo-4RU"/>
                                 </connections>
                             </button>
                             <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pjw-fJ-yBQ">
-                                <rect key="frame" x="590" y="306" width="16" height="16"/>
+                                <rect key="frame" x="590" y="300.5" width="16" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="r6H-QI-ong">
+                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="r6H-QI-ong">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="deleteKeysetAction:" target="EGi-z1-MUh" id="CMz-oU-Y0K"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ge5-sT-OZn">
-                                <rect key="frame" x="294" y="167" width="16" height="16"/>
+                                <rect key="frame" x="294" y="161.5" width="16" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="xpi-pz-TFp">
+                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="xpi-pz-TFp">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="deleteKeysetAction:" target="EGi-z1-MUh" id="95E-dU-tcC"/>
@@ -1537,9 +1540,10 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="glf-kA-hIl">
                                 <rect key="frame" x="228" y="114" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="PVi-tP-nrB">
+                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="PVi-tP-nrB">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="extDeleteAction:" target="wtk-Jg-WAA" id="g1t-fv-yvR"/>
@@ -1593,9 +1597,10 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iWC-3y-xAY">
                                 <rect key="frame" x="228" y="248" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="job-js-cso">
+                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="job-js-cso">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="romDeleteAction:" target="wtk-Jg-WAA" id="QCZ-Fe-hFJ"/>
@@ -2952,28 +2957,36 @@
                                     <font key="font" metaFont="message"/>
                                     <menu key="menu" title="OtherViews" id="gEV-LX-CeS">
                                         <items>
-                                            <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="J8C-7h-wVn">
+                                            <menuItem title="No device" state="on" tag="-1" id="J8C-7h-wVn">
+                                                <imageReference key="image" image="nosign" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Mouse" image="devMouseTemplate" id="slX-wW-2pf">
+                                            <menuItem title="Mouse" id="slX-wW-2pf">
+                                                <imageReference key="image" image="computermouse" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="gsD-xU-XWQ">
+                                            <menuItem title="Joystick Keyset 1" tag="1" id="gsD-xU-XWQ">
+                                                <imageReference key="image" image="arrowkeys" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="fjO-CM-8rL">
+                                            <menuItem title="Joystick Keyset 2" tag="2" id="fjO-CM-8rL">
+                                                <imageReference key="image" image="arrowkeys" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 1" image="devGamepad1Template" tag="3" id="kUT-js-5EM">
+                                            <menuItem title="USB Device 1" tag="3" id="kUT-js-5EM">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 2" image="devGamepad2Template" tag="4" id="Uja-ql-PId">
+                                            <menuItem title="USB Device 2" tag="4" id="Uja-ql-PId">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 3" image="devGamepad2Template" tag="5" id="WMQ-Fx-oPs">
+                                            <menuItem title="USB Device 3" tag="5" id="WMQ-Fx-oPs">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 4" image="devGamepad2Template" tag="6" id="Mki-al-D4f">
+                                            <menuItem title="USB Device 4" tag="6" id="Mki-al-D4f">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -3009,28 +3022,36 @@
                                     <font key="font" metaFont="message"/>
                                     <menu key="menu" title="OtherViews" id="1ex-fl-fm0">
                                         <items>
-                                            <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="to4-L3-mD5">
+                                            <menuItem title="No device" state="on" tag="-1" id="to4-L3-mD5">
+                                                <imageReference key="image" image="nosign" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Mouse" image="devMouseTemplate" id="sXo-3y-9tI">
+                                            <menuItem title="Mouse" id="sXo-3y-9tI">
+                                                <imageReference key="image" image="computermouse" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="0nv-zO-z1N">
+                                            <menuItem title="Joystick Keyset 1" tag="1" id="0nv-zO-z1N">
+                                                <imageReference key="image" image="arrowkeys" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="9wK-3S-8gv">
+                                            <menuItem title="Joystick Keyset 2" tag="2" id="9wK-3S-8gv">
+                                                <imageReference key="image" image="arrowkeys" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 1" image="devGamepad1Template" tag="3" id="3rx-Fc-Ra4">
+                                            <menuItem title="USB Device 1" tag="3" id="3rx-Fc-Ra4">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 2" image="devGamepad2Template" tag="4" id="OrV-5C-YGW">
+                                            <menuItem title="USB Device 2" tag="4" id="OrV-5C-YGW">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 3" image="devGamepad2Template" tag="5" id="gfJ-Uc-gdp">
+                                            <menuItem title="USB Device 3" tag="5" id="gfJ-Uc-gdp">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="USB Device 4" image="devGamepad2Template" tag="6" id="Smu-bE-gkN">
+                                            <menuItem title="USB Device 4" tag="6" id="Smu-bE-gkN">
+                                                <imageReference key="image" image="gamecontroller" catalog="system" symbolScale="large"/>
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -6640,14 +6661,11 @@
         <image name="NSInfo" width="32" height="32"/>
         <image name="ad-rv" width="542" height="542"/>
         <image name="app.connected.to.app.below.fill" catalog="system" width="19" height="21"/>
+        <image name="arrowkeys" catalog="system" width="33" height="22"/>
         <image name="book" catalog="system" width="22" height="18"/>
-        <image name="devGamepad1Template" width="20" height="21"/>
-        <image name="devGamepad2Template" width="20" height="21"/>
-        <image name="devKeys1Template" width="20" height="20"/>
-        <image name="devKeys2Template" width="20" height="20"/>
-        <image name="devMouseTemplate" width="20" height="20"/>
-        <image name="devNoneTemplate" width="24" height="24"/>
+        <image name="computermouse" catalog="system" width="16" height="21"/>
         <image name="fossil.shell" catalog="system" width="24" height="20"/>
+        <image name="gamecontroller" catalog="system" width="28" height="18"/>
         <image name="gamepad" width="244" height="151"/>
         <image name="headphones" catalog="system" width="21" height="21"/>
         <image name="joystick2" width="261" height="300"/>
@@ -6661,7 +6679,7 @@
         <image name="rom_missing" width="129" height="157"/>
         <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="steeringwheel" catalog="system" width="20" height="20"/>
-        <image name="trashTemplate" width="174" height="214"/>
+        <image name="trash" catalog="system" width="19" height="22"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>
     </resources>
 </document>

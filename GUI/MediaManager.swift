@@ -65,7 +65,7 @@ class MediaManager {
     var exportedHardDrives3: [URL] = []
     
     // Pictograms used in menu items
-    var diskMenuImage = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
+    var diskMenuImage = Symbol.get(.floppy35, size: 16)
     var hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
     
     //

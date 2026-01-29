@@ -529,22 +529,16 @@ extension EmulatorProxy {
     }
 }
 
+@MainActor
 extension FloppyDriveProxy {
     
     var templateIcon: NSImage? {
 
-        let info = info
-        var name: String
-
         if !info.hasDisk { return nil }
-
-        if info.hasProtectedDisk {
-            name = info.hasModifiedDisk ? "diskUPTemplate" : "diskPTemplate"
-        } else {
-            name = info.hasModifiedDisk ? "diskUTemplate" : "diskTemplate"
-        }
+        let icon = Symbol.get(info.hasProtectedDisk ? .floppy35wp : .floppy35, size: 25)
+        if info.hasModifiedDisk { icon.tint(.gray) }
         
-        return NSImage(named: name)!
+        return icon
     }
     
     var toolTip: String? {

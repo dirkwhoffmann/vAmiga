@@ -335,8 +335,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "454"
-            endingLineNumber = "454"
+            startingLineNumber = "456"
+            endingLineNumber = "456"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
          </BreakpointContent>
@@ -351,8 +351,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "500"
-            endingLineNumber = "500"
+            startingLineNumber = "502"
+            endingLineNumber = "502"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
          </BreakpointContent>
@@ -370,6 +370,22 @@
             startingLineNumber = "156"
             endingLineNumber = "156"
             landmarkName = "C64Encoder::encodeSector(bytes, t, s)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C734F4EF-F5E2-41E3-B199-498CBB505750"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "354"
+            endingLineNumber = "354"
+            landmarkName = "FloppyDisk::encodeDisk(image)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

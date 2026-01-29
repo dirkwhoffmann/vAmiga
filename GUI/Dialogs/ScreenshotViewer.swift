@@ -93,7 +93,6 @@ class ScreenshotViewer: DialogController {
         rightButton.isEnabled = currentItem >= 0 && currentItem < lastItem
         itemLabel.stringValue = "\(currentItem + 1) / \(screenshots.count)"
 
-        // deleteButton.image = NSImage(named: "trashTemplate")
         deleteButton.isHidden = empty
         leftButton.isHidden = empty
         rightButton.isHidden = empty

@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -725,9 +726,10 @@
                                         <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HiD-6D-klX">
                                             <rect key="frame" x="567" y="340" width="16" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="WBu-KV-33I">
+                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="WBu-KV-33I">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="conDeleteKeysetAction:" target="-2" id="tKl-wz-UlJ"/>
@@ -736,9 +738,10 @@
                                         <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HXz-VN-lav">
                                             <rect key="frame" x="567" y="228" width="16" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="tlA-sg-j9U">
+                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="tlA-sg-j9U">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="conDeleteKeysetAction:" target="-2" id="NHh-eY-YQb"/>
@@ -747,9 +750,10 @@
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g51-Ax-Tce">
                                             <rect key="frame" x="567" y="133" width="16" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="Rdu-Mo-Epb">
+                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" inset="2" id="Rdu-Mo-Epb">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="conDeleteKeysetAction:" target="-2" id="mOk-Ge-fXW"/>
@@ -1565,6 +1569,6 @@
         <image name="joystick2" width="261" height="300"/>
         <image name="mouse" width="128" height="128"/>
         <image name="recordKey" width="36" height="36"/>
-        <image name="trashTemplate" width="174" height="214"/>
+        <image name="trash" catalog="system" width="19" height="22"/>
     </resources>
 </document>
