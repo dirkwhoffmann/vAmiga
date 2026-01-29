@@ -27,11 +27,11 @@ import Cocoa
 
 class MyToolbarButton: NSButton {
     
-    init(image: SFSymbol, target: Any?, action: Selector?) {
+    init(image: Symbol, target: Any?, action: Selector?) {
         
         super.init(frame: .zero)
         
-        self.image = SFSymbol.get(image)
+        self.image = Symbol.get(image)
         self.target = target as AnyObject
         self.action = action
         
@@ -56,7 +56,7 @@ class MyToolbarButton: NSButton {
 class MyToolbarItem: MyToolbarItemGroup {
     
     convenience init(identifier: NSToolbarItem.Identifier,
-                     image: SFSymbol, action: Selector, target: AnyObject? = nil,
+                     image: Symbol, action: Selector, target: AnyObject? = nil,
                      label: String, paletteLabel: String? = nil) {
         
         self.init(identifier: identifier, images: [image], actions: [action],
@@ -85,7 +85,7 @@ class MyToolbarItemGroup: NSToolbarItem {
     }()
     
     init(identifier: NSToolbarItem.Identifier,
-         images: [SFSymbol], actions: [Selector], target: AnyObject? = nil,
+         images: [Symbol], actions: [Selector], target: AnyObject? = nil,
          label: String, paletteLabel: String? = nil) {
         
         assert(images.count == actions.count, "Mismatch in images and actions")
@@ -176,15 +176,15 @@ class MyToolbarItemGroup: NSToolbarItem {
 
 class MyToolbarMenuItem: MyToolbarItem {
     
-    var items: [(SFSymbol, String, Int)] = []
+    var items: [(Symbol, String, Int)] = []
     var finalAction: Selector?
     var finalTarget: AnyObject?
     
     var menu = NSMenu()
     
     convenience init(identifier: NSToolbarItem.Identifier,
-                     menuItems: [(SFSymbol, String, Int)],
-                     image: SFSymbol, action: Selector, target: AnyObject?,
+                     menuItems: [(Symbol, String, Int)],
+                     image: Symbol, action: Selector, target: AnyObject?,
                      label: String, paletteLabel: String? = nil) {
         
         self.init(identifier: identifier,
@@ -200,7 +200,7 @@ class MyToolbarMenuItem: MyToolbarItem {
             
             let item = menu.addItem(withTitle: title, action: #selector(menuAction), keyEquivalent: "")
             item.tag = tag
-            item.image = SFSymbol.get(image)
+            item.image = Symbol.get(image)
             item.target = self
         }
     }

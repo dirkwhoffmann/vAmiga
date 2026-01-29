@@ -82,8 +82,8 @@ class GamePad {
         self.type = type
         
         name = device?.name ?? "HID device"
-        icon = isMouse ? SFSymbol.get(.mouse) : SFSymbol.get(.gamecontroller)
-        smallIcon = isMouse ? SFSymbol.get(.mouse, size: 20) : SFSymbol.get(.gamecontroller, size: 20)
+        icon = isMouse ? Symbol.get(.mouse) : Symbol.get(.gamecontroller)
+        smallIcon = isMouse ? Symbol.get(.mouse, size: 20) : Symbol.get(.gamecontroller, size: 20)
         
         updateMapping()
     }

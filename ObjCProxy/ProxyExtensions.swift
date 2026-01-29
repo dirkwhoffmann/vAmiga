@@ -640,8 +640,8 @@ extension RemoteManagerProxy {
         count(info.promInfo)
         count(info.serInfo)
 
-        if numConnected > 0 { return SFSymbol.get(.serverConnected) }
-        if numActive > 0 { return SFSymbol.get(.serverListening) }
+        if numConnected > 0 { return Symbol.get(.serverConnected) }
+        if numActive > 0 { return Symbol.get(.serverListening) }
 
         return nil
     }

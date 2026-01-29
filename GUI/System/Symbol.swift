@@ -10,7 +10,7 @@
 import AppKit
 
 @MainActor
-enum SFSymbol {
+enum Symbol {
     
     // Actions
     case pause
@@ -38,9 +38,11 @@ enum SFSymbol {
 
     // Indicators
     case arrowClock
-    case arrowDown
-    case arrowkeys
     case arrowUp
+    case arrowDown
+    case arrowLeft
+    case arrowRight
+    case arrowkeys
     case gauge
     case gear
     case magnifyingglass
@@ -71,9 +73,11 @@ enum SFSymbol {
             // Indicators
         case .arrowClock:       return [ "clock.arrow.trianglehead.counterclockwise.rotate.90",
                                          "clock.arrow.circlepath" ]
-        case .arrowDown:        return [ "arrow.down.circle" ]
+        case .arrowUp:          return [ "arrowshape.up" ]
+        case .arrowDown:        return [ "arrowshape.down" ]
+        case .arrowLeft:        return [ "arrowshape.left" ]
+        case .arrowRight:       return [ "arrowshape.right" ]
         case .arrowkeys:        return [ "arrowkeys" ]
-        case .arrowUp:          return [ "arrow.up.circle" ]
         case .gauge:            return [ "gauge.chart.lefthalf.righthalf", "gauge.with.needle" ]
         case .gear:             return [ "gear" ]
         case .magnifyingglass:  return [ "magnifyingglass" ]
@@ -98,13 +102,13 @@ enum SFSymbol {
     
     private struct CacheKey: Hashable {
      
-        let symbol: SFSymbol
+        let symbol: Symbol
         let size: CGFloat
     }
 
     private static var imageCache = [CacheKey: NSImage]()
 
-    static func get(_ symbol: SFSymbol, size: CGFloat = 25, description: String? = nil) -> NSImage {
+    static func get(_ symbol: Symbol, size: CGFloat = 25, description: String? = nil) -> NSImage {
 
         // Return cached image if available
         if let cached = imageCache[CacheKey(symbol: symbol, size: size)] { return cached }

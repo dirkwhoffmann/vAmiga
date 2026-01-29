@@ -409,7 +409,7 @@
 		50BF4BDF2F0ADF3200F1B9F2 /* FileSystemLayer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA42F0ADF3200F1B9F2 /* FileSystemLayer1.cpp */; };
 		50BF4BE32F0C0DB000F1B9F2 /* ImageError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BE22F0C0DAF00F1B9F2 /* ImageError.cpp */; };
 		50BF4BE42F0C0DB000F1B9F2 /* ImageError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BE22F0C0DAF00F1B9F2 /* ImageError.cpp */; };
-		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
+		50C246032E8ABACB00B134F6 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbol.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
 		50C8C44A2607396200F4E012 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4492607396200F4E012 /* Layer.swift */; };
@@ -1244,7 +1244,7 @@
 		50BF4BE02F0AE00C00F1B9F2 /* CBMFileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBMFileSystem.h; sourceTree = "<group>"; };
 		50BF4BE12F0C0DA800F1B9F2 /* ImageError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageError.h; sourceTree = "<group>"; };
 		50BF4BE22F0C0DAF00F1B9F2 /* ImageError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImageError.cpp; sourceTree = "<group>"; };
-		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
+		50C246022E8ABAC600B134F6 /* Symbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
 		50C8C42C2605D51A00F4E012 /* BasicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicTypes.h; sourceTree = "<group>"; };
@@ -1810,7 +1810,6 @@
 				505F457F2E96A44C00418105 /* CGImage.swift */,
 				505F457B2E96A33F00418105 /* CGRect.swift */,
 				505F45792E96A2A600418105 /* NSImage.swift */,
-				50C246022E8ABAC600B134F6 /* Symbols.swift */,
 				50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */,
 				50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */,
 				50E1D2C526CCF942001FE199 /* FontExtensions.swift */,
@@ -1953,6 +1952,7 @@
 				5042FB122D4E4E8200E4A167 /* FilePanel.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
 				50E8199225B350DA00D2E3A5 /* Errors.swift */,
+				50C246022E8ABAC600B134F6 /* Symbol.swift */,
 				508FE00E21EA227B0043D0E9 /* MacAudio.swift */,
 				50F580652431D1A000E7D84D /* Screenshot.swift */,
 				501A9936243A07A100D269B2 /* Storage.swift */,
@@ -3432,7 +3432,7 @@
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				500B0D3C2E801818008FC5E1 /* VideoSettings.swift in Sources */,
 				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
-				50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */,
+				50C246032E8ABACB00B134F6 /* Symbol.swift in Sources */,
 				5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */,
 				503FC4D52EE0D8A500637C95 /* Loggable.cpp in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,

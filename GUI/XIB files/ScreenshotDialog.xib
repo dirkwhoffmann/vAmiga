@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ScreenshotViewer" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="carousel" destination="GAd-J3-YSP" id="4rD-wS-Dmf"/>
-                <outlet property="deleteButton" destination="4Am-2Q-SIR" id="l0N-So-omr"/>
+                <outlet property="deleteButton" destination="C7N-yQ-L5H" id="9Hp-h4-4zN"/>
                 <outlet property="finderButton" destination="PAY-b3-zIZ" id="FPi-JX-7Mf"/>
                 <outlet property="finderLabel" destination="2QX-vC-XeZ" id="J2Y-xU-i4D"/>
                 <outlet property="itemLabel" destination="FMx-Uj-7dU" id="Sto-aA-cdj"/>
-                <outlet property="leftButton" destination="FI6-64-fmB" id="XOt-YF-0sv"/>
-                <outlet property="rightButton" destination="noa-bd-n2g" id="QMM-l8-jOI"/>
+                <outlet property="leftButton" destination="78I-K2-baG" id="3Qe-LX-ie1"/>
+                <outlet property="rightButton" destination="Uil-8d-79b" id="CkE-g5-lgx"/>
                 <outlet property="text1" destination="gmM-Sq-fBJ" id="qZV-wd-7EO"/>
                 <outlet property="text2" destination="HEt-9L-ffk" id="UwC-4j-JOk"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="3Af-Bl-jmJ"/>
@@ -25,7 +27,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="593" height="368"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1084"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="593" height="368"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -65,39 +67,6 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button hidden="YES" toolTip="Move screenshot one slot left" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FI6-64-fmB">
-                        <rect key="frame" x="256" y="20" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="backTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="x1w-a6-qdK">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="leftAction:" target="-2" id="ed1-jR-GnR"/>
-                        </connections>
-                    </button>
-                    <button hidden="YES" toolTip="Delete screenshot permanently" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Am-2Q-SIR">
-                        <rect key="frame" x="284" y="20" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="trashTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="1mC-D3-I8Q">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="deleteAction:" target="-2" id="AIT-NH-qPg"/>
-                        </connections>
-                    </button>
-                    <button hidden="YES" toolTip="Move screenshot one slot right" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="noa-bd-n2g">
-                        <rect key="frame" x="315" y="20" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="frontTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="i8E-3q-CMy">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="rightAction:" target="-2" id="hQ6-2u-YEw"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s41-0O-bEz">
                         <rect key="frame" x="502" y="13" width="78" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
@@ -128,7 +97,7 @@ DQ
                         </connections>
                     </button>
                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2QX-vC-XeZ">
-                        <rect key="frame" x="91" y="23" width="140" height="14"/>
+                        <rect key="frame" x="91" y="22" width="140" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Open images in Finder..." id="xVf-qY-I4F">
                             <font key="font" metaFont="smallSystem"/>
@@ -136,15 +105,51 @@ DQ
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uil-8d-79b">
+                        <rect key="frame" x="316" y="13" width="21.5" height="33"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="3G1-M6-vO1">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <imageReference key="image" image="arrowshape.right" catalog="system" symbolScale="large"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="rightAction:" target="-2" id="gzy-ej-hIi"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="78I-K2-baG">
+                        <rect key="frame" x="256" y="11" width="21.5" height="36"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="WfE-BY-E1O">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <imageReference key="image" image="arrowshape.left" catalog="system" symbolScale="large"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="leftAction:" target="-2" id="5nv-nx-tOD"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C7N-yQ-L5H">
+                        <rect key="frame" x="286" y="12" width="21.5" height="36"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" inset="2" id="6N3-9x-aBq">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <imageReference key="image" image="trash" catalog="system" symbolScale="large"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="deleteAction:" target="-2" id="gv2-UM-EDi"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="54.5" y="95"/>
         </window>
     </objects>
     <resources>
-        <image name="backTemplate" width="234" height="214"/>
+        <image name="arrowshape.left" catalog="system" width="21" height="18"/>
+        <image name="arrowshape.right" catalog="system" width="21" height="18"/>
         <image name="folderTemplate" width="221" height="221"/>
-        <image name="frontTemplate" width="234" height="214"/>
-        <image name="trashTemplate" width="174" height="214"/>
+        <image name="trash" catalog="system" width="19" height="22"/>
     </resources>
 </document>

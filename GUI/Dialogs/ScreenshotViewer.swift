@@ -63,6 +63,10 @@ class ScreenshotViewer: DialogController {
     override func dialogWillShow() {
 
         super.dialogWillShow()
+        
+        // leftButton.image = Symbol.get(.arrowLeft, size: 16)
+        // deleteButton.image = Symbol.get(.trash, size: 16)
+        // rightButton.image = Symbol.get(.arrowLeft, size: 16)
         loadScreenshots()
     }
     
@@ -89,7 +93,7 @@ class ScreenshotViewer: DialogController {
         rightButton.isEnabled = currentItem >= 0 && currentItem < lastItem
         itemLabel.stringValue = "\(currentItem + 1) / \(screenshots.count)"
 
-        deleteButton.image = NSImage(named: "trashTemplate")
+        // deleteButton.image = NSImage(named: "trashTemplate")
         deleteButton.isHidden = empty
         leftButton.isHidden = empty
         rightButton.isHidden = empty
