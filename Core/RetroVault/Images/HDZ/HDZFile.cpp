@@ -45,9 +45,9 @@ HDZFile::init(const class HDFFile &hdf)
 }
 
 std::vector<string>
-HDZFile::describe() const noexcept
+HDZFile::describeImage() const noexcept
 {
-    return hdf.describe();
+    return hdf.describeImage();
 }
 
 void

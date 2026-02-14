@@ -28,6 +28,7 @@ Volume::read(u8 *dst, isize offset, isize count) const
         throw Error(offset, "Range out of bounds");
     }
 
+    reads += count;
     device.read(dst, range.translate(0) * bsize() + offset, count);
 }
 
@@ -38,19 +39,34 @@ Volume::write(const u8 *src, isize offset, isize count)
         throw Error(offset, "Range out of bounds");
     }
 
+    writes += count;
     device.write(src, range.translate(0) * bsize() + offset, count);
 }
 
 void
-Volume::readBlock(u8 *dst, isize nr) const
+Volume::readBlocks(u8 *dst, Range<isize> r) const
 {
-    device.readBlock(dst, range.translate(nr));
+    auto mappedLower = range.translate(r.lower);
+    auto mappedRange = Range<isize> { mappedLower, mappedLower + r.size() };
+    
+    if (auto size = mappedRange.size(); size > 0) {
+        
+        reads += size * bsize();
+        device.readBlocks(dst, mappedRange);
+    }
 }
 
 void
-Volume::writeBlock(const u8 *src, isize nr)
+Volume::writeBlocks(const u8 *src, Range<isize> r)
 {
-    device.writeBlock(src, range.translate(nr));
+    auto mappedLower = range.translate(r.lower);
+    auto mappedRange = Range<isize> { mappedLower, mappedLower + r.size() };
+
+    if (auto size = mappedRange.size(); size > 0) {
+        
+        writes += size * bsize();
+        device.writeBlocks(src, mappedRange);
+    }
 }
 
 }

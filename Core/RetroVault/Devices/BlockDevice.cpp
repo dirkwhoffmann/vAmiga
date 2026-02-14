@@ -18,17 +18,21 @@ BlockDevice::capacity() const
 }
 
 void
-BlockDevice::readBlock(u8 *dst, isize nr) const
+BlockDevice::readBlocks(u8 *dst, Range<isize> range) const
 {
-    assert(0 <= nr && nr < capacity());
-    read(dst, nr * bsize(), bsize());
+    assert(range.subset(Range<isize>(0, capacity())));
+    
+    if (range.size() > 0)
+        read(dst, range.lower * bsize(), range.size() * bsize());
 }
 
 void
-BlockDevice::writeBlock(const u8 *src, isize nr)
+BlockDevice::writeBlocks(const u8 *src, Range<isize> range)
 {
-    assert(0 <= nr && nr < capacity());
-    write(src, nr * bsize(), bsize());
+    assert(range.subset(Range<isize>(0, capacity())));
+
+    if (range.size() > 0)
+        write(src, range.lower * bsize(), range.size() * bsize());
 }
 
 void

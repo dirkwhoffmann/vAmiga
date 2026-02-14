@@ -30,7 +30,7 @@ HDFFile::about(const fs::path &path)
 }
 
 std::vector<string>
-HDFFile::describe() const noexcept
+HDFFile::describeImage() const noexcept
 {
     return {
         "Amiga Hard Drive",

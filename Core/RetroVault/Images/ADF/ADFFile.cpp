@@ -132,7 +132,7 @@ ADFFile::init(const FileSystem &volume)
 }
 
 std::vector<string>
-ADFFile::describe() const noexcept
+ADFFile::describeImage() const noexcept
 {
     return {
         "Amiga Floppy Disk",

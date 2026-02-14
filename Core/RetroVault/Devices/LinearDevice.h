@@ -24,6 +24,9 @@ public:
     LinearDevice() { }
     virtual ~LinearDevice() = default;
 
+    // Returns a textual description of the file system
+    virtual vector<string> describeDevice() const noexcept;
+
     // Total size in bytes
     virtual isize size() const = 0;
 
@@ -37,7 +40,7 @@ public:
     virtual u8 readByte(isize offset) const;
 
     // Writes a single byte
-    virtual void writeByte(u8 value, isize offset);
+    virtual void writeByte(isize offset, u8 value);
 
     // Exports all bytes or a selected range to a file
     void exportBytes(const fs::path& path) const;

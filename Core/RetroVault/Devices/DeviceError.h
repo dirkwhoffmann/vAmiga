@@ -16,7 +16,7 @@ namespace retro::vault {
 struct DeviceError : public Error {
 
     static constexpr long OK                            = 0;
-    static constexpr long UNKNOWN                       = 1;
+    static constexpr long CUSTOM                        = 1;
 
     // All devices
     static constexpr long INVALID_BLOCK_NR              = 10;
@@ -55,7 +55,8 @@ struct DeviceError : public Error {
 
         switch (payload) {
 
-            case UNKNOWN:                     return "UNKNOWN";
+            case OK:                          return "OK";
+            case CUSTOM:                      return "CUSTOM";
 
             case INVALID_BLOCK_NR:            return "INVALID_BLOCK_NR";
             case INVALID_TRACK_NR:            return "INVALID_TRACK_NR";

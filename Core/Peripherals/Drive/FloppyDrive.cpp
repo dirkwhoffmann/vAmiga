@@ -513,17 +513,17 @@ FloppyDrive::bsize() const
 }
 
 void
-FloppyDrive::readBlock(u8 *dst, isize nr) const
+FloppyDrive::readBlocks(u8 *dst, Range<isize> range) const
 {
     if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
-    disk->readBlock(dst, nr);
+    disk->readBlocks(dst, range);
 }
 
 void
-FloppyDrive::writeBlock(const u8 *src, isize nr)
+FloppyDrive::writeBlocks(const  u8 *src, Range<isize> range)
 {
     if (!disk) throw DeviceError(DeviceError::DSK_MISSING);
-    disk->writeBlock(src, nr);
+    disk->writeBlocks(src, range);
 }
 
 isize

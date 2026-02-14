@@ -125,6 +125,14 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
 }
 
 void
+FloppyDisk::readBlocks(u8 *dst, Range<isize> range) const
+{
+    for (isize b = range.lower; b < range.upper; ++b)
+        readBlock(dst, b);
+
+}
+
+void
 FloppyDisk::writeBlock(const u8 *src, isize nr)
 {
     AmigaEncoder encoder;
@@ -153,6 +161,13 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
     // Rectify clock bits
     encoder.rectifyClockBit(tr, sector->lower);
     encoder.rectifyClockBit(tr, sector->upper);
+}
+
+void
+FloppyDisk::writeBlocks(const  u8 *src, Range<isize> range)
+{
+    for (isize b = range.lower; b < range.upper; ++b)
+        writeBlock(src, b);
 }
 
 void

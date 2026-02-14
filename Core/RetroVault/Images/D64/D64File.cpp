@@ -101,7 +101,7 @@ D64File::trackDefaults(isize t)
 }
 
 std::vector<string>
-D64File::describe() const noexcept
+D64File::describeImage() const noexcept
 {
     return {
         "Commodore 64 Floppy Disk",

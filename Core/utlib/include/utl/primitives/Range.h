@@ -10,6 +10,8 @@
 #pragma once
 
 #include "utl/common.h"
+#include <algorithm>
+#include <unordered_set>
 
 namespace utl {
 
@@ -23,11 +25,15 @@ struct Range {
     T lower{}, upper{};
 
     constexpr bool valid() const noexcept {
-        return lower >= 0 && lower <= upper;
+        return lower <= upper;
     }
 
-    constexpr bool inside(isize min, isize max) const noexcept {
+    [[deprecated]] constexpr bool inside(isize min, isize max) const noexcept {
         return lower >= min && lower <= upper && upper <= max;
+    }
+
+    constexpr bool subset(const Range<T> &other) const noexcept {
+        return lower >= other.lower && lower <= upper && upper <= other.upper;
     }
 
     constexpr bool contains(T value) const noexcept {
@@ -42,6 +48,45 @@ struct Range {
 
         if (offset >= T{} && offset < size()) return lower + offset;
         throw Error(offset, "Range offset out of bounds");
+    }
+    
+    static std::vector<Range<T>> coalesce(const std::vector<T> &values) {
+        
+        std::vector<Range<T>> result;
+        
+        if (!values.empty()) {
+
+            std::vector<T> copy = values;
+            std::sort(copy.begin(), copy.end());
+            
+            T start = values[0];
+            T prev  = values[0];
+            
+            for (usize i = 1; i < copy.size(); i++) {
+                
+                if (copy[i] == prev + 1) {
+                    prev = copy[i];
+                } else {
+                    result.emplace_back(Range<T>{ start, prev + 1 });
+                    start = prev = copy[i];
+                }
+            }
+            
+            result.emplace_back(Range<T>{ start, prev + 1 });
+        }
+        
+        return result;
+    }
+    
+    static std::vector<Range<T>> coalesce(const std::unordered_set<T> &values) {
+        
+        std::vector<T> vec;
+        vec.reserve(values.size());
+        
+        for (auto val : values)
+            vec.push_back(val);
+        
+        return Range<T>::coalesce(std::move(vec));
     }
 };
 
@@ -58,6 +103,14 @@ struct ClosedRange {
         return lower <= upper;
     }
 
+    [[deprecated]] constexpr bool inside(isize min, isize max) const noexcept {
+        return lower >= min && lower <= upper && upper <= max;
+    }
+
+    constexpr bool subset(const ClosedRange<T> &other) const noexcept {
+        return lower >= other.lower && lower <= upper && upper <= other.upper;
+    }
+    
     constexpr bool contains(T value) const noexcept {
         return value >= lower && value <= upper;
     }

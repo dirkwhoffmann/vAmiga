@@ -99,7 +99,7 @@ public:
     u8* getData() const { return data.ptr; }
     bool empty() const { return data.empty(); }
 
-    virtual std::vector<string> describe() const noexcept { return {}; }
+    virtual std::vector<string> describeImage() const noexcept { return {}; }
 
 
     //

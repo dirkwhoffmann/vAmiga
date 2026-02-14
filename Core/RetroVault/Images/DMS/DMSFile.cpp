@@ -35,7 +35,7 @@ DMSFile::about(const fs::path &path)
 }
 
 std::vector<string>
-DMSFile::describe() const noexcept
+DMSFile::describeImage() const noexcept
 {
     return {
         "Amiga Floppy Disk",

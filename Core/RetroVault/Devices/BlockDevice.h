@@ -28,11 +28,13 @@ public:
     // Number of blocks
     virtual isize capacity() const;
 
-    // Reads a block
-    virtual void readBlock(u8 *dst, isize nr) const;
+    // Reads a single block or a range of blocks
+    virtual void readBlock(u8 *dst, isize nr) const { readBlocks(dst, Range{nr,nr+1}); }
+    virtual void readBlocks(u8 *dst, Range<isize> range) const;
 
     // Writes a block
-    virtual void writeBlock(const u8 *src, isize nr);
+    virtual void writeBlock(const u8 *src, isize nr) { writeBlocks(src, Range{nr,nr+1}); };
+    virtual void writeBlocks(const  u8 *src, Range<isize> range);
 
     // Safety wrappers
     void readBlock(span<u8> dst, isize nr) const;

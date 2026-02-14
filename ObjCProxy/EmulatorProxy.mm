@@ -2023,7 +2023,7 @@ ImageInfo scan(const fs::path &url)
 
 - (NSArray<NSString *> *)describe
 {
-    const auto vec = [self file]->describe();
+    const auto vec = [self file]->describeImage();
 
     NSMutableArray<NSString *> *result =
         [NSMutableArray arrayWithCapacity:vec.size()];

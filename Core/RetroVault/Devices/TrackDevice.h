@@ -147,7 +147,6 @@ public:
     // Writes a track
     virtual void writeTrack(const u8 *src, isize nr);
     void writeTrack(span<const u8> src, isize nr);
-
 };
 
 }

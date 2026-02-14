@@ -37,7 +37,7 @@ EXEFile::about(const fs::path &path)
 }
 
 std::vector<string>
-EXEFile::describe() const noexcept
+EXEFile::describeImage() const noexcept
 {
     return {
         "Amiga Floppy Disk",
