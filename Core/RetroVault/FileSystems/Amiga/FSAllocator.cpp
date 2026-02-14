@@ -284,7 +284,7 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noex
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
-    if (bmNr <= (isize)bmBlocks.size()) {
+    if (bmNr >= (isize)bmBlocks.size()) {
         loginfo(FS_DEBUG, "Bitmap block index %ld for block %ld is out of range \n", bmNr, nr);
         return nullptr;
     }

@@ -59,7 +59,9 @@ FileSystem::format(FSFormat dos) {
     // Mark free blocks as free in the bitmap block
     // TODO: SPEED THIS UP
     for (isize i = 0; i < blocks(); i++) {
-        if (cache.isEmpty(BlockNr(i))) allocator.markAsFree(BlockNr(i));
+        if (cache.isEmpty(BlockNr(i))) {
+            allocator.markAsFree(BlockNr(i));
+        }
     }
 
     // Rectify checksums

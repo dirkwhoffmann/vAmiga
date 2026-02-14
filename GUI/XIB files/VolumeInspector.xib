@@ -412,7 +412,7 @@
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </tableColumn>
-                                        <tableColumn identifier="Ascii" width="126.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="srb-Mp-8hi" userLabel="Ascii">
+                                        <tableColumn identifier="Ascii" width="127" minWidth="10" maxWidth="3.4028234663852886e+38" id="srb-Mp-8hi" userLabel="Ascii">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="ASCII">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -702,6 +702,7 @@ class Configuration {
             deniseRev = DeniseRevision.OCS.rawValue
             rtClock = RTCRevision.NONE.rawValue
             bankMap = BankMap.A500.rawValue
+            hd0Connected = false
 
         case 1:
 
@@ -710,7 +711,8 @@ class Configuration {
             deniseRev = DeniseRevision.OCS.rawValue
             rtClock = RTCRevision.NONE.rawValue
             bankMap = BankMap.A1000.rawValue
-
+            hd0Connected = false
+            
         case 2:
 
             // Amiga 2000
@@ -718,7 +720,8 @@ class Configuration {
             deniseRev = DeniseRevision.OCS.rawValue
             rtClock = RTCRevision.OKI.rawValue
             bankMap = BankMap.A2000B.rawValue
-
+            hd0Connected = true
+            
         case 3:
 
             // Amiga 500+
@@ -726,6 +729,7 @@ class Configuration {
             deniseRev = DeniseRevision.ECS.rawValue
             rtClock = RTCRevision.OKI.rawValue
             bankMap = BankMap.A500.rawValue
+            hd0Connected = false
 
         default:
             fatalError()
