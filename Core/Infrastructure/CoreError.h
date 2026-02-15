@@ -22,8 +22,7 @@ struct CoreError : public Error {
     static constexpr long LAUNCH            = 100; ///< Launch error
     static constexpr long POWERED_OFF       = 101; ///< The emulator is powered off
     static constexpr long POWERED_ON        = 102; ///< The emulator is powered on
-    static constexpr long DEBUG_OFF         = 103;
-    static constexpr long RUNNING           = 104; ///< The emulator is running
+    static constexpr long RUNNING           = 103; ///< The emulator is running
 
     // Configuration
     static constexpr long OPT_UNSUPPORTED   = 200; ///< Unsupported configuration option
@@ -81,7 +80,6 @@ struct CoreError : public Error {
             case LAUNCH:                      return "LAUNCH";
             case POWERED_OFF:                 return "POWERED_OFF";
             case POWERED_ON:                  return "POWERED_ON";
-            case DEBUG_OFF:                   return "DEBUG_OFF";
             case RUNNING:                     return "RUNNING";
 
             case OPT_UNSUPPORTED:             return "OPT_UNSUPPORTED";

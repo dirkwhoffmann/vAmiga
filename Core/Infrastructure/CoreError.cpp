@@ -26,6 +26,10 @@ CoreError::CoreError(long code, const string &s) : Error(code)
             fatalError;
             break;
             
+        case LAUNCH:
+            set_msg("Launch error.");
+            break;
+
         case POWERED_OFF:
             set_msg("The emulator is powered off.");
             break;
@@ -33,11 +37,7 @@ CoreError::CoreError(long code, const string &s) : Error(code)
         case POWERED_ON:
             set_msg("The emulator is powered on.");
             break;
-
-        case DEBUG_OFF:
-            set_msg("Debug mode is switched off.");
-            break;
-
+            
         case RUNNING:
             set_msg("The emulator is running.");
             break;

@@ -7,6 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// 'utl' namespace
+typealias Compressor = utl.Compressor
+
 // 'retro::vault' namespace
 typealias Diameter = retro.vault.Diameter
 typealias Density = retro.vault.Density
@@ -31,7 +34,6 @@ typealias BlitterInfo = vamiga.BlitterInfo
 typealias CIAInfo = vamiga.CIAInfo
 typealias CIARevision = vamiga.CIARev
 typealias CIAStats = vamiga.CIAMetrics
-typealias Compressor = utl.Compressor
 typealias ControlPortDevice = vamiga.ControlPortDevice
 typealias ControlPortInfo = vamiga.ControlPortInfo
 typealias CopperInfo = vamiga.CopperInfo

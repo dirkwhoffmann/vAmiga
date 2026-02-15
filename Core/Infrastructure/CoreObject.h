@@ -33,7 +33,7 @@ public:
     // Returns a textual description for this component
     virtual const char *description() const { return ""; }
     
-    // Called by loginfo() and logdebug() to produce a detailed debug output
+    // Called by logging functions to produce detailed debug output
     virtual string prefix(LogLevel, const std::source_location &) const override;
 
     

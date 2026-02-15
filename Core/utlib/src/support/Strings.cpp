@@ -108,6 +108,12 @@ trim(const string &s, const string &characters)
     return ltrim(rtrim(s, characters), characters);
 }
 
+string_view unquote(string_view sv)
+{
+    bool quoted = sv.size() >= 2 && sv.front() == '"' && sv.back() == '"';
+    return quoted ? sv.substr(1, sv.size() - 2) : sv;
+}
+
 string
 commonPrefix(const string &s1, const string &s2, bool caseSensitive)
 {

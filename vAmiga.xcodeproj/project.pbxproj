@@ -224,8 +224,6 @@
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		508FDD9E2EF40D3200FDBC32 /* Volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* Volume.cpp */; };
 		508FDD9F2EF40D3200FDBC32 /* Volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* Volume.cpp */; };
-		508FDDA52EF56DF200FDBC32 /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDDA42EF56DF100FDBC32 /* RSError.cpp */; };
-		508FDDA62EF56DF200FDBC32 /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDDA42EF56DF100FDBC32 /* RSError.cpp */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDF8721EA1FBC0043D0E9 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
@@ -302,6 +300,8 @@
 		50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50A64B96257A63A600442964 /* FSBootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* FSBootBlockImage.cpp */; };
+		50AC25C62F4264670016265E /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AC25C52F4264620016265E /* RSError.cpp */; };
+		50AC25C72F4264670016265E /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AC25C52F4264620016265E /* RSError.cpp */; };
 		50AD904B276E104E0011ECCB /* TextStorage.h in Resources */ = {isa = PBXBuildFile; fileRef = 50AD904A276E104E0011ECCB /* TextStorage.h */; };
 		50AD904D276E10660011ECCB /* TextStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD904C276E10660011ECCB /* TextStorage.cpp */; };
 		50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD90582771B2770011ECCB /* RshServer.cpp */; };
@@ -982,7 +982,6 @@
 		508FDDA02EF53BEF00FDBC32 /* primitives.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = primitives.h; sourceTree = "<group>"; };
 		508FDDA12EF53C5200FDBC32 /* Range.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
 		508FDDA32EF56DEA00FDBC32 /* RSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RSError.h; sourceTree = "<group>"; };
-		508FDDA42EF56DF100FDBC32 /* RSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RSError.cpp; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508FDE7221EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1088,6 +1087,7 @@
 		50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDasmFPU_cpp.h; sourceTree = "<group>"; };
 		50A6F50528C7AB7F002F31EA /* MoiraExecMMU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExecMMU_cpp.h; sourceTree = "<group>"; };
 		50A6F50628C7AB8F002F31EA /* MoiraExecFPU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExecFPU_cpp.h; sourceTree = "<group>"; };
+		50AC25C52F4264620016265E /* RSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RSError.cpp; sourceTree = "<group>"; };
 		50AD9048276DCB470011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50AD904A276E104E0011ECCB /* TextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextStorage.h; sourceTree = "<group>"; };
 		50AD904C276E10660011ECCB /* TextStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TextStorage.cpp; sourceTree = "<group>"; };
@@ -1495,9 +1495,9 @@
 		50104E8825ECDAA30047A9AA /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
 				50C8C42C2605D51A00F4E012 /* BasicTypes.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
-				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
 				501C362F2C1C176C000FA274 /* EmulatorTypes.h */,
 				50DA83E02C160DCA001209AA /* Emulator.h */,
 				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
@@ -2536,7 +2536,7 @@
 			children = (
 				50CF46562620436A00BB3B95 /* CMakeLists.txt */,
 				508FDDA32EF56DEA00FDBC32 /* RSError.h */,
-				508FDDA42EF56DF100FDBC32 /* RSError.cpp */,
+				50AC25C52F4264620016265E /* RSError.cpp */,
 				50AD904E276F61C40011ECCB /* RetroShellTypes.h */,
 				50B9C427260942D000A86C31 /* RetroShell.h */,
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
@@ -3372,6 +3372,7 @@
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				509D04972EDA471900355638 /* FSExporter.cpp in Sources */,
 				509D04982EDA471900355638 /* FSImporter.cpp in Sources */,
+				50AC25C72F4264670016265E /* RSError.cpp in Sources */,
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
 				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
 				509D04932EDA46E400355638 /* FSService.cpp in Sources */,
@@ -3461,7 +3462,6 @@
 				5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
-				508FDDA62EF56DF200FDBC32 /* RSError.cpp in Sources */,
 				50FB49BC2F0FAFBA00369491 /* C64Encoder.cpp in Sources */,
 				50144E3D2E7BEA8D009E15B4 /* SidebarViewController.swift in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
@@ -3527,7 +3527,6 @@
 				50FC04A727DA198100C3E566 /* CopperDebugger.cpp in Sources */,
 				50FC04A027DA197A00C3E566 /* Sequencer.cpp in Sources */,
 				50FC048F27DA195D00C3E566 /* PaulaEvents.cpp in Sources */,
-				508FDDA52EF56DF200FDBC32 /* RSError.cpp in Sources */,
 				50FC04CF27DA19F600C3E566 /* FSDescriptor.cpp in Sources */,
 				509D04992EDA471900355638 /* FSExporter.cpp in Sources */,
 				509D049A2EDA471900355638 /* FSImporter.cpp in Sources */,
@@ -3688,6 +3687,7 @@
 				503FC4CB2EE0AB0D00637C95 /* Files.cpp in Sources */,
 				50FC04CA27DA19E900C3E566 /* DiskImage.cpp in Sources */,
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
+				50AC25C62F4264670016265E /* RSError.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
 				50BF4BE42F0C0DB000F1B9F2 /* ImageError.cpp in Sources */,

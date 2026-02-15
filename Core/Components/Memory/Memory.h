@@ -575,7 +575,7 @@ public:
 
     // Searches RAM and ROM for a certain byte sequence
     std::vector <u32> search(u64 pattern, isize bytes);
-    std::vector <u32> search(auto pattern) { return search(pattern, isizeof(pattern)); }
+    std::vector <u32> search(auto pattern) { return search(pattern, isize(sizeof(pattern))); }
 };
 
 }

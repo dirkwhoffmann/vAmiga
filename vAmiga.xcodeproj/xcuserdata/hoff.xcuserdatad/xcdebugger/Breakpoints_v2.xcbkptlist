@@ -339,36 +339,6 @@
             endingLineNumber = "471"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "00138939-7F35-442C-97FB-CB1BE3FA07BC - c80b68b147230c72"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::FloppyDisk::decode(retro::vault::image::IMGFile&amp;) const"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Peripherals/Drive/FloppyDisk.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "472"
-                  endingLineNumber = "472">
-               </Location>
-               <Location
-                  uuid = "00138939-7F35-442C-97FB-CB1BE3FA07BC - faaef92f85a8db65"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::FloppyDisk::encode(retro::vault::image::IMGFile const&amp;)"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Peripherals/Drive/FloppyDisk.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "471"
-                  endingLineNumber = "471">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -385,36 +355,6 @@
             endingLineNumber = "517"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A6EFAF8F-F6F9-4F19-BAFE-5BFD294FFF6D - 10142d5d19973c17"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::FloppyDisk::decode(retro::vault::image::STFile&amp;) const"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Peripherals/Drive/FloppyDisk.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "518"
-                  endingLineNumber = "518">
-               </Location>
-               <Location
-                  uuid = "A6EFAF8F-F6F9-4F19-BAFE-5BFD294FFF6D - 48d0f472868d613c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::FloppyDisk::encode(retro::vault::image::STFile const&amp;)"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Peripherals/Drive/FloppyDisk.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "517"
-                  endingLineNumber = "517">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -447,36 +387,6 @@
             endingLineNumber = "369"
             landmarkName = "FloppyDisk::encodeDisk(image)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C734F4EF-F5E2-41E3-B199-498CBB505750 - 23a3ed71aaec66b3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::FloppyDisk::encodeDisk(retro::vault::FloppyDiskImage const&amp;)"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Peripherals/Drive/FloppyDisk.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "373"
-                  endingLineNumber = "373">
-               </Location>
-               <Location
-                  uuid = "C734F4EF-F5E2-41E3-B199-498CBB505750 - 23a3ed71aaec64ac"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::FloppyDisk::encodeDisk(retro::vault::FloppyDiskImage const&amp;)"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Peripherals/Drive/FloppyDisk.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "388"
-                  endingLineNumber = "388">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

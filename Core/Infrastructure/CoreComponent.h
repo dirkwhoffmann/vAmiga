@@ -32,7 +32,7 @@ struct Description {
 typedef std::vector<Description> Descriptions;
 
 class CoreComponent :
-public CoreObject, public Synchronizable, public Configurable {
+public CoreObject, public utl::Synchronizable, public Configurable {
 
 public:
 
