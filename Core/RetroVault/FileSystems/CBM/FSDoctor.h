@@ -52,7 +52,9 @@ public:
 
     // Checks the integrity of a certain byte or long word in this block
     FSBlockError xray8(BlockNr ref, isize pos, bool strict,
-                       const std::vector<BlockNr> &dirBlocks, optional<u8> &expected) const;
+                       optional<u8> &expected) const;
+    FSBlockError xray8(BlockNr ref, isize pos, bool strict,
+                       optional<u8> &expected, const std::vector<BlockNr> &dirBlocks) const;
 
     // Checks the allocation table. Returns the number of errors. Stores details in 'diagnosis'
     isize xrayBitmap(bool strict = false);

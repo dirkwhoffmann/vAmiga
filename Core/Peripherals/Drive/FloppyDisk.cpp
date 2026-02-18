@@ -56,11 +56,13 @@ FloppyDisk::init(const class FloppyDiskImage &file, bool wp)
     encodeDisk(file);
 }
 
+/*
 void
 FloppyDisk::init(unique_ptr<FloppyDiskImage> file, bool wp)
 {
     init(*file, wp);
 }
+*/
 
 void
 FloppyDisk::init(SerReader &reader, Diameter dia, Density den, bool wp)

@@ -12,6 +12,7 @@
 #include "ImageTypes.h"
 #include "utl/abilities.h"
 #include "utl/storage.h"
+#include "utl/primitives/Range.h"
 #include <iostream>
 
 namespace retro::vault {
@@ -26,6 +27,9 @@ public:
 
     // The location of this file (may be empty)
     fs::path path;
+    
+    // File handle (if 'path' is provided)
+    std::fstream file;
 
     // The raw data of this file
     Buffer<u8> data;
@@ -56,7 +60,7 @@ public:
     void init(isize len);
     void init(const u8 *buf, isize len);
     void init(const Buffer<u8>& buffer);
-    void init(const string& str);
+    // void init(const string& str);
     void init(const fs::path& path);
 
     // Checks if the URL points to an image of the same type
@@ -106,6 +110,8 @@ public:
     // Checking consistency
     //
 
+public:
+    
     // Scans the image and throws an exception if an inconsistency is found
     virtual void checkIntegrity() { };
 
@@ -131,6 +137,14 @@ public:
 
 public:
 
+    // Update the image or a portion of the image on disk
+    void save();
+    void save(const Range<isize> range);
+    void save(const std::vector<Range<isize>> ranges);
+    
+    // Create a new image file on disk and update it with the current contents
+    void saveAs(const fs::path &path);
+    
     isize writeToStream(std::ostream &stream) const;
     isize writeToFile(const fs::path &path) const;
 

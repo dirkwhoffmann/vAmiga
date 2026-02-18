@@ -147,7 +147,7 @@ FSExporter::save(const FSTree &tree, const fs::path &path, bool recursive) const
                 throw FSError(FSError::FS_NOT_A_DIRECTORY, path.string());
             }
             if (!fs::is_empty(path)) {
-                throw FSError(FSError::FS_DIR_NOT_EMPTY, path.string());
+                throw FSError(FSError::FS_NOT_EMPTY, path.string());
             }
 
         } else {

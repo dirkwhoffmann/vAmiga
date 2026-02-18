@@ -162,15 +162,22 @@ FSDoctor::xrayBitmap(bool strict)
     // Read allocation map
     auto bitmap = allocator.readBitmap();
 
+    // Start from scratch
+    diagnosis.unusedButAllocated.clear();
+    diagnosis.usedButUnallocated.clear();
+
     // Check all blocks
     for (isize i = 0; i < fs.blocks(); ++i) {
 
         bool allocated = !bitmap[i];
         bool contained = used.contains(BlockNr(i));
 
-        if (allocated && !contained) {
+        if (strict && allocated && !contained) {
+            
             diagnosis.unusedButAllocated.push_back(BlockNr(i));
+            
         } else if (!allocated && contained) {
+            
             diagnosis.usedButUnallocated.push_back(BlockNr(i));
         }
     }
@@ -219,7 +226,7 @@ FSDoctor::xray(BlockNr ref, bool strict) const
     for (isize i = 0; i < node.bsize(); ++i) {
 
         std::optional<u8> expected;
-        auto error = xray8(ref, i, strict, dirBlocks, expected);
+        auto error = xray8(ref, i, strict, expected, dirBlocks);
 
         if ( error != FSBlockError::OK) {
 
@@ -232,8 +239,15 @@ FSDoctor::xray(BlockNr ref, bool strict) const
 }
 
 FSBlockError
+FSDoctor::xray8(BlockNr ref, isize pos, bool strict, optional<u8> &expected) const
+{
+    auto dirBlocks = fs.collectDirBlocks();
+    return xray8(ref, pos, strict, expected, dirBlocks);
+}
+
+FSBlockError
 FSDoctor::xray8(BlockNr ref, isize pos, bool strict,
-                const std::vector<BlockNr> &dirBlocks, optional<u8> &expected) const
+                optional<u8> &expected, const std::vector<BlockNr> &dirBlocks) const
 {
     assert(pos >= 0 && pos < 256);
 
@@ -340,7 +354,7 @@ FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
     for (isize i = 0; i < traits.bsize; ++i) {
 
         std::optional<u8> expected;
-        const auto fault = xray8(ref, i, strict, dirBlocks, expected);
+        const auto fault = xray8(ref, i, strict, expected, dirBlocks);
 
         if (fault == FSBlockError::OK) continue;
 
@@ -369,9 +383,6 @@ FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
 void
 FSDoctor::rectify(bool strict)
 {
-    auto *mfs = dynamic_cast<FileSystem *>(&fs);
-    if (!mfs) throw FSError(FSError::FS_READ_ONLY);
-
     xray(strict);
 
     // Rectify all erroneous blocks
@@ -387,7 +398,7 @@ FSDoctor::rectify(BlockNr ref, bool strict)
     for (isize i = 0; i < traits.bsize; ++i) {
 
         optional<u8> expected;
-        auto fault = xray8(ref, i, strict, dirBlocks, expected);
+        auto fault = xray8(ref, i, strict, expected, dirBlocks);
 
         if (fault != FSBlockError::OK) {
 

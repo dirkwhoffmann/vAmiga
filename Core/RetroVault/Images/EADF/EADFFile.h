@@ -122,8 +122,8 @@ public:
 public:
 
     isize bsize() const override { return 512; }
-    void readBlock(u8 *dst, isize nr) const override;
-    void writeBlock(const u8 *src, isize nr) override;
+    void readBlocks(u8 *dst, Range<isize> r) const override;
+    void writeBlocks(const u8 *src, Range<isize> r) override;
 
 
     //

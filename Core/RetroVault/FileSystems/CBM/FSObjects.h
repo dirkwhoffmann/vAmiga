@@ -72,7 +72,7 @@ public:
     }
 
     explicit PETName(string str) : PETName(str.c_str()) { }
-    explicit PETName(fs::path path) : PETName(path.string()) { }
+    explicit PETName(fs::path path) : PETName(path.filename().string()) { }
 
     void setPad(u8 _pad) {
 

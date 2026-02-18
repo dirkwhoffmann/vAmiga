@@ -88,7 +88,6 @@
 #pragma once
 
 #include "FileSystems/CBM/FSTypes.h"
-#include "FileSystems/CBM/FSError.h"
 #include "FileSystems/CBM/FSBlock.h"
 #include "FileSystems/CBM/FSContract.h"
 #include "FileSystems/CBM/FSObjects.h"
@@ -99,6 +98,7 @@
 #include "FileSystems/CBM/FSImporter.h"
 #include "FileSystems/CBM/FSExporter.h"
 #include "FileSystems/CBM/FSTraits.h"
+#include "FileSystems/FSError.h"
 #include "FileSystems/PosixViewTypes.h"
 #include "DeviceError.h"
 #include "Volume.h"
@@ -114,6 +114,9 @@ class FileSystem : public Loggable {
 
     // Immutable file system properties
     FSTraits traits;
+
+    // Generation counter (increased with every write access)
+    isize generation = 0;
 
 
     // Block layer
@@ -157,7 +160,9 @@ public:
     FileSystem& operator=(const FileSystem &) = delete;
     FileSystem& operator=(FileSystem &&) = delete;
 
-
+    void stepGeneration() { ++generation; }
+    
+    
     //
     // Printing debug information
     //
@@ -181,6 +186,9 @@ public:
     isize bsize() const noexcept { return traits.bsize; }
     isize bytes() const noexcept { return blocks() * bsize(); }
 
+    // Returns a textual description of the file system
+    vector<string> describe() const noexcept { return { "CBM File System" }; }
+    
     // Checks whether the file system is formatted
     bool isFormatted() const noexcept;
 
@@ -210,7 +218,6 @@ public:
     // Convenience wrappers
     bool is(BlockNr nr, FSBlockType type) const { return fetch(nr).is(type); }
     bool isEmpty(BlockNr nr) const { return fetch(nr).isEmpty(); }
-    // bool isData(BlockNr nr) const { return fetch(nr).isData(); }
 
     // Predicts the type of a block based on the stored data
     FSBlockType predictType(BlockNr nr, const u8 *buf) const noexcept;
@@ -240,6 +247,9 @@ public:
 
     // Writes back dirty cache blocks to the block device
     void flush();
+
+    // Invalidates all cached blocks
+    void invalidate();
 
     // Operator overload for fetch
     const FSBlock &operator[](size_t nr) { return cache.fetch(BlockNr(nr)); }
@@ -345,6 +355,7 @@ public:
     // Extracts the data from a file
     isize extractData(BlockNr b, Buffer<u8> &buf) const;
     isize extractData(TSLink ts, Buffer<u8> &buf) const;
+    isize extractData(const FSDirEntry &entry, Buffer<u8> &buf) const;
 
     // Shrinks or expands an existing file (pad with 0)
     void resize(BlockNr at, isize size);

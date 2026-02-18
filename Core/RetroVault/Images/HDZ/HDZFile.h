@@ -29,7 +29,7 @@ public:
 public:
 
     explicit HDZFile(const fs::path& path) { init(path); }
-    explicit HDZFile(const class HDFFile &hdf) { init(hdf); }
+    // explicit HDZFile(const class HDFFile &hdf) { init(hdf); }
 
     using HardDiskImage::init;
     void init(const class HDFFile &hdf);
@@ -108,8 +108,8 @@ public:
 
     isize capacity() const override { return hdf.numBlocks(); }
     isize bsize() const override { return hdf.bsize(); }
-    void readBlock(u8 *dst, isize nr) const override { hdf.readBlock(dst, nr); }
-    void writeBlock(const u8 *src, isize nr) override { hdf.writeBlock(src, nr); }
+    void readBlocks(u8 *dst, Range<isize> r) const override { hdf.readBlocks(dst, r); }
+    void writeBlocks(const u8 *src, Range<isize> r) override { hdf.writeBlocks(src, r); }
 
 
     //

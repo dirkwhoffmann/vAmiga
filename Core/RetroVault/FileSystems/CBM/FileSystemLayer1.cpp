@@ -75,4 +75,10 @@ FileSystem::flush()
     cache.flush();
 }
 
+void
+FileSystem::invalidate()
+{
+    cache.invalidate();
+}
+
 }

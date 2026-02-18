@@ -55,27 +55,36 @@ AnyImage::init(const Buffer<u8> &buffer)
     init(buffer.ptr, buffer.size);
 }
 
+/*
 void
 AnyImage::init(const string &str)
 {
     init((const u8 *)str.c_str(), (isize)str.length());
 }
+*/
 
 void
 AnyImage::init(const fs::path &path)
 {
-    std::ifstream stream(path, std::ios::binary);
-
-    if (!stream.is_open()) {
-        throw IOError(IOError::FILE_NOT_FOUND, path);
-    }
-    if (!validateURL(path)) {
+    if (!validateURL(path))
         throw IOError(IOError::FILE_TYPE_MISMATCH, path);
-    }
-    std::ostringstream sstr(std::ios::binary);
-    sstr << stream.rdbuf();
-    init(sstr.str());
+
+    std::fstream stream(path, std::ios::binary | std::ios::in | std::ios::out);
+    
+    if (!stream)
+        throw IOError(IOError::FILE_NOT_FOUND, path);
+
+    // Read file into a vector
+    std::vector<u8> buffer((std::istreambuf_iterator<char>(stream)),
+                           std::istreambuf_iterator<char>());
+    
+    if (buffer.empty() && file.fail())
+        throw IOError(IOError::FILE_CANT_READ, path);
+    
+    // Initialize image with the vector contents
+    init(buffer.data(), isize(buffer.size()));
     this->path = path;
+    file = std::move(stream);
 }
 
 void
@@ -135,6 +144,68 @@ void
 AnyImage::copy(u8 *buf, isize offset) const
 {
     copy (buf, offset, data.size);
+}
+
+void
+AnyImage::save()
+{
+    save(Range<isize>{0,size()});
+}
+
+void
+AnyImage::save(const Range<BlockNr> range)
+{
+    if (!file) throw IOError(IOError::FILE_NOT_FOUND, path);
+    
+    printf("Saving range %ld - %ld...\n", range.lower, range.upper - 1);
+    
+    // Move to the correct position
+    file.seekp(range.lower, std::ios::beg);
+    
+    // Write the data to the stream
+    file.write((char *)(data.ptr + range.lower), range.size());
+    
+    // Update the file on disk
+    file.flush();
+}
+
+void
+AnyImage::save(const std::vector<Range<BlockNr>> ranges)
+{
+    for (auto &range: ranges) save(range);
+}
+
+void
+AnyImage::saveAs(const fs::path &newPath)
+{
+    // Fallback to the standard save function of paths match
+    if (newPath == path) { save(); return; }
+
+    // Make sure pending writes hit the disk
+    file.flush();
+    if (!file)
+        throw IOError(IOError::FILE_CANT_CREATE, path);
+
+    // Copy file
+    try {
+
+        fs::copy_file(path, newPath,
+                      fs::copy_options::overwrite_existing);
+
+    } catch (const fs::filesystem_error &) {
+
+        throw IOError(IOError::FILE_CANT_WRITE, newPath);
+    }
+
+    // Close current stream
+    file.close();
+
+    // Reopen the stream with the new file
+    file.open(newPath, std::ios::binary | std::ios::in | std::ios::out);
+    if (!file)
+        throw IOError(IOError::FILE_CANT_READ, newPath);
+
+    path = newPath;
 }
 
 isize

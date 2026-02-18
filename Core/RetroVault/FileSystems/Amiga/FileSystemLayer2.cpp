@@ -59,9 +59,7 @@ FileSystem::format(FSFormat dos) {
     // Mark free blocks as free in the bitmap block
     // TODO: SPEED THIS UP
     for (isize i = 0; i < blocks(); i++) {
-        if (cache.isEmpty(BlockNr(i))) {
-            allocator.markAsFree(BlockNr(i));
-        }
+        if (cache.isEmpty(BlockNr(i))) allocator.markAsFree(BlockNr(i));
     }
 
     // Rectify checksums
@@ -456,6 +454,7 @@ FileSystem::replace(BlockNr fhb,
     // Start with a clean reference area
     fhbNode.setNextListBlockRef(0);
     fhbNode.setNextDataBlockRef(0);
+    fhbNode.setNumDataBlockRefs(0);
     for (isize i = 0; i < numRefs; i++) fhbNode.setDataBlockRef(i, 0);
 
     // Set file size
@@ -581,24 +580,19 @@ FileSystem::reclaim(BlockNr fhb)
     if (node.isDirectory()) {
 
         // Remove user directory block
-        cache.erase(node.nr); allocator.markAsFree(node.nr);
-        return;
-    }
+        allocator.markAsFree(node.nr); cache.erase(node.nr);
 
-    if (node.isFile()) {
+    } else if (node.isFile()) {
 
         // Collect all blocks occupied by this file
         auto dataBlocks = collectDataBlocks(node.nr);
         auto listBlocks = collectListBlocks(node.nr);
 
         // Remove all blocks
-        cache.erase(node.nr); allocator.markAsFree(node.nr);
-        for (auto &it : dataBlocks) { cache.erase(it); allocator.markAsFree(it); }
-        for (auto &it : listBlocks) { cache.erase(it); allocator.markAsFree(it); }
-        return;
+        allocator.markAsFree(node.nr); cache.erase(node.nr);
+        for (auto &it : dataBlocks) { allocator.markAsFree(it); cache.erase(it); }
+        for (auto &it : listBlocks) { allocator.markAsFree(it); cache.erase(it); }
     }
-
-    throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY, node.absName());
 }
 
 std::vector<const FSBlock *>
@@ -695,7 +689,7 @@ FileSystem::collectListBlocks(const BlockNr ref) const
     std::vector<BlockNr> result;
 
     if (auto *ptr = tryFetch(ref)) {
-        for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
+        for (auto &it: collectListBlocks(*ptr)) result.push_back(it->nr);
     }
     return result;
 }

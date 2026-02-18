@@ -61,7 +61,6 @@ public:
 
     // Rectifies a single block
     void rectify(BlockNr ref, bool strict);
-    // void rectify(FSBlock &node, bool strict);
 
     // Rectifies the allocation table
     void rectifyBitmap(bool strict = false);

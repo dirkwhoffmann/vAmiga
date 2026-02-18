@@ -1216,25 +1216,18 @@ Amiga::loadSnapshot(const fs::path &path)
 void
 Amiga::loadSnapshot(const Snapshot &snapshot)
 {
-    try {
-
-        // Make a copy so we can modify the snapshot
-        Snapshot snap(snapshot);
-
-        // Uncompress the snapshot
-        snap.uncompress();
-
-        // Restore the saved state (may throw)
-        load(snap.getData()+ sizeof(SnapshotHeader));
-
-        // Inform the GUI
-        msgQueue.put(Msg::SNAPSHOT_RESTORED);
-        msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
-
-    } catch (const std::bad_cast &) {
-
-        throw IOError(IOError::FILE_TYPE_MISMATCH);
-    }
+    // Make a copy so we can modify the snapshot
+    Snapshot snap(snapshot);
+    
+    // Uncompress the snapshot
+    snap.uncompress();
+    
+    // Restore the saved state (may throw)
+    load(snap.getData() + sizeof(SnapshotHeader));
+    
+    // Inform the GUI
+    msgQueue.put(Msg::SNAPSHOT_RESTORED);
+    msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
 }
 
 void

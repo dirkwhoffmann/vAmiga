@@ -37,7 +37,8 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     loginfo(FS_DEBUG, "Creating file system...\n");
 
     auto layout = FSDescriptor(vol.capacity());
-
+    layout.bsize = vol.bsize();
+    
     // Check consistency (may throw)
     layout.checkCompatibility();
 
@@ -79,7 +80,7 @@ FileSystem::dumpState(std::ostream &os) const noexcept
 
     if (isFormatted()) {
 
-        auto fill = 100.0 * st.usedBlocks / st.blocks;
+        auto fill = 100.0 * st.usedBlocks / st.traits.blocks;
 
         os << std::setw(5) << std::left << ("DOS" + std::to_string(isize(traits.dos)));
         os << "  ";
@@ -116,14 +117,14 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
 
     auto st   = stat();
     auto bst  = bootStat();
-    auto fill = 100.0 * st.usedBlocks / st.blocks;
+    auto fill = 100.0 * st.usedBlocks / st.traits.blocks;
 
     os << tab("Name");
     os << st.name << std::endl;
     os << tab("Created");
-    os << st.btime << std::endl;
+    os << st.bDate.str() << std::endl;
     os << tab("Modified");
-    os << st.mtime << std::endl;
+    os << st.mDate.str() << std::endl;
     os << tab("Boot block");
     os << bst.name << std::endl;
     os << tab("Capacity");
@@ -153,6 +154,16 @@ FileSystem::dumpBlocks(std::ostream &os) const noexcept
     cache.dump(os);
 }
 
+vector<string>
+FileSystem::describe() const noexcept
+{
+    return {
+        
+        traits.ofs() ? "Original File System (OFS)" :
+        traits.ffs() ? "Fast File System (FFS)" : "Unknown File System"
+    };
+}
+
 bool
 FileSystem::isFormatted() const noexcept
 {
@@ -163,21 +174,29 @@ FileSystem::isFormatted() const noexcept
     return fetch(rootBlock).is(FSBlockType::ROOT);
 }
 
-FSPosixStat
+FSStat
 FileSystem::stat() const noexcept
 {
     auto &rb = fetch(rootBlock);
 
-    FSPosixStat result = {
+    auto numUnallocated = allocator.numUnallocated();
+    auto numAllocated   = allocator.numAllocated();
 
-        .bsize          = traits.bsize,
-        .blocks         = traits.blocks,
-        .freeBlocks     = allocator.numUnallocated(),
-        .usedBlocks     = allocator.numAllocated(),
-        .btime          = rb.isRoot() ? rb.getCreationDate().time() : FSTime().time(),
-        .mtime          = rb.isRoot() ? rb.getModificationDate().time() : FSTime().time(),
-        .blockReads     = 0, // Not yet supported
-        .blockWrites    = 0, // Not yet supported
+    FSStat result = {
+
+        .traits = traits,
+
+        .freeBlocks     = numUnallocated,
+        .usedBlocks     = numAllocated,
+        .cachedBlocks   = cache.cachedBlocks(),
+        .dirtyBlocks    = cache.dirtyBlocks(),
+        .fill           = (double)numAllocated / (double)traits.blocks,
+
+        .name           = rb.name(),
+        .bDate          = rb.getCreationDate(),
+        .mDate          = rb.getModificationDate(),
+
+        .generation     = 0 // TODO
     };
 
     return result;
@@ -198,23 +217,21 @@ FileSystem::bootStat() const noexcept
     return result;
 }
 
-FSPosixAttr
+FSAttr
 FileSystem::attr(BlockNr nr) const
 {
     auto &fhd   = fetch(nr);
     auto size   = isize(fhd.getFileSize());
     auto blocks = allocator.requiredBlocks(size);
 
-    FSPosixAttr result = {
-
+    FSAttr result = {
+        
         .size   = size,
         .blocks = blocks,
         .prot   = fhd.getProtectionBits(),
         .isDir  = fhd.isDirectory(),
-        .btime  = fhd.getCreationDate().time(),
-        .atime  = fhd.getModificationDate().time(),
-        .mtime  = fhd.getModificationDate().time(),
-        .ctime  = fhd.getCreationDate().time()
+        .ctime  = fhd.getCreationDate().time(),
+        .mtime  = fhd.getModificationDate().time()
     };
 
     return result;

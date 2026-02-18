@@ -1458,22 +1458,22 @@ ImageInfo scan(const fs::path &url)
 
 - (NSString *)creationDate
 {
-    auto time = [self fs]->stat().btime;
+    auto time = [self fs]->stat().bDate.time();
     if (time == 0) return @"-";
 
     return [NSDateFormatter localizedStringFromDate:
-            [NSDate dateWithTimeIntervalSince1970:[self fs]->stat().btime]
+            [NSDate dateWithTimeIntervalSince1970:time]
                                           dateStyle:NSDateFormatterMediumStyle
                                           timeStyle:NSDateFormatterMediumStyle];
 }
 
 - (NSString *)modificationDate
 {
-    auto time = [self fs]->stat().mtime;
+    auto time = [self fs]->stat().mDate.time();
     if (time == 0) return @"-";
 
     return [NSDateFormatter localizedStringFromDate:
-            [NSDate dateWithTimeIntervalSince1970:[self fs]->stat().btime]
+            [NSDate dateWithTimeIntervalSince1970:time]
                                           dateStyle:NSDateFormatterMediumStyle
                                           timeStyle:NSDateFormatterMediumStyle];
 }
@@ -1493,7 +1493,7 @@ ImageInfo scan(const fs::path &url)
 - (NSString *)fillLevelString
 {
     auto st = [self fs]->stat();
-    auto str = utl::fillLevelAsString(100.0 * st.usedBlocks / st.blocks);
+    auto str = utl::fillLevelAsString(100.0 * st.usedBlocks / st.traits.blocks);
     return @(str.c_str());
 }
 
@@ -1535,7 +1535,7 @@ ImageInfo scan(const fs::path &url)
 - (double)fillLevel
 {
     auto st = [self fs]->stat();
-    return 100.0 * st.usedBlocks / st.blocks;
+    return 100.0 * st.usedBlocks / st.traits.blocks;
 }
 
 - (BOOL)hasVirus
@@ -1897,12 +1897,12 @@ ImageInfo scan(const fs::path &url)
     return [self file]->fnv64();
 }
 
-- (void)setPath:(NSString *)path
+- (void)setPath:(NSURL *)path
 {
     [self file]->path = [path fileSystemRepresentation];
 }
 
-- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
+- (NSInteger)writeToFile:(NSURL *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self file]->writeToFile([path fileSystemRepresentation]); }
     catch(Error &error) { [ex save:error]; return 0; }
@@ -2285,7 +2285,7 @@ ImageInfo scan(const fs::path &url)
     return @(ss.str().c_str());
 }
 
-- (SnapshotProxy *) takeSnapshot:(Compressor)compressor
+- (SnapshotProxy *)takeSnapshot:(Compressor)compressor
 {
     try {
 

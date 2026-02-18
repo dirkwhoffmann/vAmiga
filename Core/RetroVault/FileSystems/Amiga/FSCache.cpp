@@ -214,7 +214,7 @@ FSCache::modify(BlockNr nr)
 {
     if (isize(nr) >= capacity()) throw FSError(FSError::FS_OUT_OF_RANGE);
     if (auto *result = tryModify(nr)) return *result;
-    throw FSError(FSError::FS_UNKNOWN);
+    throw FSError(FSError::FS_READ_ERROR);
 }
 
 FSBlock &
@@ -240,26 +240,53 @@ FSCache::erase(BlockNr nr)
 }
 
 void
-FSCache::flush(BlockNr nr)
+FSCache::markAsDirty(BlockNr nr)
 {
-    printf("FSCache: %ld\n", nr);
-
-    if (dirty.contains(nr)) {
-
-        printf("FSCache: (0)\n");
-        modify(nr).flush();
-        printf("FSCache: (1)\n");
-        dirty.erase(nr);
-    }
+    dirty.insert(nr);
+    fs.stepGeneration();
 }
 
 void
 FSCache::flush()
 {
     loginfo(FS_DEBUG, "Flushing %zd dirty blocks\n", dirty.size());
+    
+    std::vector<u8> buffer;
+    auto bs = bsize();
 
-    auto toFlush = dirty;
-    for (auto block: toFlush) { printf("Flushing block %ld\n", block); flush(block); }
+    // Arrage dirty blocks in segments
+    auto segments = Range<BlockNr>::coalesce(dirty);
+    
+    for (auto seg: segments) {
+
+        // Resize the flushing buffer
+        buffer.resize(seg.size() * bs);
+        
+        // Gather block data
+        for (isize i = seg.lower; i < seg.upper; ++i) {
+            
+            auto it = blocks.find(i);
+            
+            if (it == blocks.end())
+                throw FSError(FSError::FS_CORRUPTED, "Cache mismatch: " + std::to_string(i));
+            
+            memcpy(buffer.data() + (i - seg.lower) * bs, it->second->data(), bs);
+        }
+        
+        // Write the buffer back to the device
+        dev.writeBlocks(buffer.data(), seg);
+        
+    }
+    
+    // Mark all blocks as up-to-date
+    dirty.clear();
+}
+
+void
+FSCache::invalidate()
+{
+    blocks.clear();
+    dirty.clear();
 }
 
 }

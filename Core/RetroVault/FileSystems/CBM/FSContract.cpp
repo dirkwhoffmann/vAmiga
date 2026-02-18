@@ -32,7 +32,7 @@ void
 FSRequire::emptyDirectory() const
 {
     if (fs.numItems() != 0) {
-        throw FSError(FSError::FS_DIR_NOT_EMPTY);
+        throw FSError(FSError::FS_NOT_EMPTY);
     }
 }
 

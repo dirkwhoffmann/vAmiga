@@ -335,8 +335,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "471"
-            endingLineNumber = "471"
+            startingLineNumber = "473"
+            endingLineNumber = "473"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
          </BreakpointContent>
@@ -351,8 +351,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "517"
-            endingLineNumber = "517"
+            startingLineNumber = "519"
+            endingLineNumber = "519"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
          </BreakpointContent>
@@ -376,22 +376,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C734F4EF-F5E2-41E3-B199-498CBB505750"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "369"
-            endingLineNumber = "369"
-            landmarkName = "FloppyDisk::encodeDisk(image)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "EBB255B8-10EC-429C-B99E-D71554494AD7"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -399,8 +383,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "365"
-            endingLineNumber = "365"
+            startingLineNumber = "367"
+            endingLineNumber = "367"
             landmarkName = "FloppyDisk::encodeDisk(image)"
             landmarkType = "7">
          </BreakpointContent>

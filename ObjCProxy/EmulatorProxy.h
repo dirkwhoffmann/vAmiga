@@ -920,8 +920,8 @@ ImageInfo scan(const fs::path &url);
 @property (readonly) NSInteger size;
 @property (readonly) u64 fnv;
 
-- (void)setPath:(NSString *)path;
-- (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
+- (void)setPath:(NSURL *)path;
+- (NSInteger)writeToFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
 
 @end
 

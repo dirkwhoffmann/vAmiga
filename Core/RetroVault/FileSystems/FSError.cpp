@@ -7,10 +7,10 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FileSystems/CBM/FSError.h"
-#include "FileSystems/CBM/FileSystem.h"
+#include "FileSystems/FSError.h"
+// #include "FileSystems/Amiga/FileSystem.h"
 
-namespace retro::vault::cbm {
+namespace retro::vault {
 
 FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
 {
@@ -20,8 +20,8 @@ FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
             set_msg("Invalid path: " + s);
             break;
 
-        case FS_INVALID_REGEX:
-            set_msg("Invalid search pattern: " + s);
+        case FS_INVALID_ARGUMENT:
+            set_msg("Invalid argument: " + s);
             break;
 
         case FS_NOT_A_DIRECTORY:
@@ -32,20 +32,12 @@ FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
             set_msg(s.empty() ? "Not a file." : s + " is not a file.");
             break;
 
-        case FS_NOT_A_FILE_OR_DIRECTORY:
-            set_msg(s.empty() ? "Not a file or directory." : s + " is not a file or directory.");
-            break;
-
         case FS_NOT_FOUND:
             set_msg(s.empty() ? "Not found." : s + " not found.");
             break;
 
         case FS_EXISTS:
             set_msg(s.empty() ? "Item already exists." : s + " already exists.");
-            break;
-
-        case FS_CANNOT_OPEN:
-            set_msg("Cannot open file" + (s.empty() ? "" : " " + s) + ".");
             break;
 
         case FS_UNFORMATTED:
@@ -56,7 +48,7 @@ FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
             set_msg("Unsupported file system.");
             break;
 
-        case FS_READ_ONLY:
+        case FS_READ_ERROR:
             set_msg("Read-only file system.");
             break;
 
@@ -72,10 +64,6 @@ FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
             set_msg("Wrong file system capacity.");
             break;
 
-        case FS_HAS_CYCLES:
-            set_msg("Cyclic reference chain detected.");
-            break;
-
         case FS_CORRUPTED:
             set_msg("Corrupted file system.");
             break;
@@ -88,16 +76,8 @@ FSError::FSError(FSFault fault, const string &s) : utl::Error(fault)
             set_msg("File system capacity exceeded.");
             break;
 
-        case FS_DIR_NOT_EMPTY:
+        case FS_NOT_EMPTY:
             set_msg("Directory is not empty.");
-            break;
-
-        case FS_CANNOT_CREATE_DIR:
-            set_msg("Unable to create directory.");
-            break;
-
-        case FS_CANNOT_CREATE_FILE:
-            set_msg("Unable to create file.");
             break;
 
         default:

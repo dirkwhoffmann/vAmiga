@@ -53,6 +53,17 @@ public:
     ByteView byteView(TrackNr t, SectorNr s) const;
     MutableByteView byteView(TrackNr t);
     MutableByteView byteView(TrackNr t, SectorNr s);
+    
+    
+    //
+    // Exporting
+    //
+
+public:
+
+    // Update portions of the image file on disk with the current contents
+    void saveBlocks(const Range<BlockNr>);
+    void saveBlocks(const std::vector<Range<BlockNr>>);
 };
 
 }

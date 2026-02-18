@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "FileSystems/CBM/FSTraits.h"
-#include "FileSystems/CBM/FSError.h"
+#include "FileSystems/FSError.h"
 #include "BlockDevice.h"
 #include "D64File.h"
 #include "utl/io.h"

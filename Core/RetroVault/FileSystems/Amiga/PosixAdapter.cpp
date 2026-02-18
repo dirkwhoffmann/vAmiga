@@ -39,18 +39,55 @@ PosixAdapter::ensureMeta(HandleRef ref)
 FSPosixStat
 PosixAdapter::stat() const noexcept
 {
-    return fs.stat();
+    auto stat = fs.stat();
+    
+    return FSPosixStat {
+        
+        .name           = stat.name.cpp_str(),
+        .bsize          = stat.traits.bsize,
+        .blocks         = stat.traits.blocks,
+        
+        .freeBlocks     = stat.freeBlocks,
+        .usedBlocks     = stat.usedBlocks,
+        .cachedBlocks   = stat.cachedBlocks,
+        .dirtyBlocks    = stat.dirtyBlocks,
+        
+        .btime          = stat.bDate.time(),
+        .mtime          = stat.mDate.time(),
+        
+        .generation     = stat.generation
+    };
 }
 
 FSPosixAttr
 PosixAdapter::attr(const fs::path &path) const
 {
-    return fs.attr(fs.seek(path));
+    if (auto b = fs.trySeek(path)) {
+        
+        const auto &stat = fs.attr(*b);
+        
+        return FSPosixAttr {
+            
+            .size           = stat.size,
+            .blocks         = stat.blocks,
+            .prot           = stat.mode(),
+            .isDir          = stat.isDir,
+            
+            .btime          = stat.ctime.time(),
+            .atime          = stat.mtime.time(),
+            .mtime          = stat.mtime.time(),
+            .ctime          = stat.ctime.time()
+        };
+    }
+    
+    throw FSError(FSError::FS_NOT_FOUND);
 }
 
 void
 PosixAdapter::mkdir(const fs::path &path)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
     auto parent = path.parent_path();
     auto name = path.filename();
 
@@ -68,34 +105,36 @@ PosixAdapter::mkdir(const fs::path &path)
 void
 PosixAdapter::rmdir(const fs::path &path)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
     // Lookup directory
     auto node = fs.seek(path);
 
     // Only empty directories can be removed
+    auto dir = readDir(path);
+    for (auto &it : dir) { printf("DIR item: %s\n", it.c_str()); }
     require.emptyDirectory(node);
-
-    if (auto *info = getMeta(node); info) {
-
-        // Remove directory entry
-        fs.unlink(node);
-
-        // Decrement link count
-        if (info->linkCount > 0) info->linkCount--;
-
-        // Maybe delete
-        tryReclaim(node);
-    }
+        
+    // Remove directory entry
+    fs.unlink(node);
+    
+    // Decrement link count
+    auto &info = ensureMeta(node);
+    if (info.linkCount > 0) info.linkCount--;
+    
+    // Maybe delete
+    tryReclaim(node);
 }
 
 std::vector<string>
 PosixAdapter::readDir(const fs::path &path) const
 {
     std::vector<string> result;
-
+    
     for (auto &it : fs.getItems(fs.seek(path))) {
         result.push_back(fs.fetch(it).cppName());
     }
-
+    
     return result;
 }
 
@@ -104,13 +143,13 @@ PosixAdapter::open(const fs::path &path, u32 flags)
 {
     // Resolve path
     auto node = fs.seek(path);
-
+    
     // Create a unique identifier
-    auto ref = HandleRef { isize(nextHandle) + 1 };
-
+    auto ref = HandleRef { ++nextHandle };
+    
     // Create a new file handle
     handles[ref] = Handle {
-
+        
         .id = ref,
         .node = node,
         .offset = 0,
@@ -119,7 +158,7 @@ PosixAdapter::open(const fs::path &path, u32 flags)
     auto &handle = handles[ref];
     auto &info = ensureMeta(node);
     info.openHandles.insert(ref);
-
+    
     // Evaluate flags
     if ((flags & O_TRUNC) && (flags & (O_WRONLY | O_RDWR))) {
         fs.resize(node, 0);
@@ -127,7 +166,7 @@ PosixAdapter::open(const fs::path &path, u32 flags)
     if (flags & O_APPEND) {
         handle.offset = lseek(ref, 0, SEEK_END);
     }
-
+    
     return ref;
 }
 
@@ -137,14 +176,14 @@ PosixAdapter::close(HandleRef ref)
     // Lookup handle
     auto &handle = getHandle(ref);
     auto header = handle.node;
-
+    
     // Remove from metadata
     auto &info = ensureMeta(header);
     info.openHandles.erase(ref);
-
+    
     // Remove from global handle table
     handles.erase(ref);
-
+    
     // Attempt deletion after all references are gone
     tryReclaim(header);
 }
@@ -152,19 +191,19 @@ PosixAdapter::close(HandleRef ref)
 void
 PosixAdapter::unlink(const fs::path &path)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
     auto node = fs.seek(path);
-
-    if (auto *info = getMeta(node); info) {
-
-        // Remove directory entry
-        fs.unlink(node);
-
-        // Decrement link count
-        if (info->linkCount > 0) info->linkCount--;
-
-        // Maybe delete
-        tryReclaim(node);
-    }
+    
+    // Remove directory entry
+    auto &info = ensureMeta(node);
+    fs.unlink(node);
+    
+    // Decrement link count
+    if (info.linkCount > 0) info.linkCount--;
+    
+    // Maybe delete
+    tryReclaim(node);
 }
 
 void
@@ -222,6 +261,8 @@ PosixAdapter::ensureDirectory(const fs::path &path)
 void
 PosixAdapter::create(const fs::path &path)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     auto parent = path.parent_path();
     auto name   = path.filename();
 
@@ -252,11 +293,11 @@ PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
         case SEEK_END:  newOffset = fileSize + offset; break;
 
         default:
-            throw FSError(FSError::FS_UNKNOWN); // TODO: Throw, e.g., FS_INVALID_FLAG
+            throw FSError(FSError::FS_INVALID_ARGUMENT, "whence: " + std::to_string(whence));
     }
 
     // Ensure that the offset is not negative
-    newOffset = std::max(newOffset, (isize)0);
+    if (newOffset < 0) throw FSError(FSError::FS_OUT_OF_RANGE);
 
     // Update the file handle and return
     handle.offset = newOffset;
@@ -266,6 +307,8 @@ PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
 void
 PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     auto newDir  = newPath.parent_path();
     auto newName = newPath.filename();
     auto src     = fs.seek(oldPath);
@@ -277,6 +320,8 @@ PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 void
 PosixAdapter::chmod(const fs::path &path, u32 mode)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     auto &node = fs.fetch(ensureFile(path)).mutate();
 
     u32 prot = node.getProtectionBits();
@@ -291,6 +336,8 @@ PosixAdapter::chmod(const fs::path &path, u32 mode)
 void
 PosixAdapter::resize(const fs::path &path, isize size)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     fs.resize(ensureFile(path), size);
 }
 
@@ -322,6 +369,8 @@ PosixAdapter::read(HandleRef ref, std::span<u8> buffer)
 isize
 PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     auto &handle = getHandle(ref);
     auto &meta   = ensureMeta(handle.node);
 
@@ -344,6 +393,18 @@ PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
     fs.replace(handle.node, meta.cache);
 
     return isize(count);
+}
+
+void
+PosixAdapter::flush()
+{
+    fs.flush();
+}
+
+void
+PosixAdapter::invalidate()
+{
+    fs.invalidate();
 }
 
 }

@@ -315,25 +315,27 @@ FSDoctor::xrayBitmap(bool strict)
     used.insert(fs.getBmBlocks().begin(), fs.getBmBlocks().end());
     used.insert(fs.getBmExtBlocks().begin(), fs.getBmExtBlocks().end());
 
+    // Start from scratch
+    diagnosis.unusedButAllocated.clear();
+    diagnosis.usedButUnallocated.clear();
+
     // Check all blocks (ignoring the first two boot blocks)
     for (isize i = 2, capacity = fs.blocks(); i < capacity; i++) {
 
         bool allocated = allocator.isAllocated(BlockNr(i));
         bool contained = used.contains(BlockNr(i));
 
-        if (allocated && !contained) {
+        if (strict && allocated && !contained) {
 
             diagnosis.unusedButAllocated.push_back(BlockNr(i));
-            diagnosis.bitmapErrors[BlockNr(i)] = 1;
 
         } else if (!allocated && contained) {
 
             diagnosis.usedButUnallocated.push_back(BlockNr(i));
-            diagnosis.bitmapErrors[BlockNr(i)] = 2;
         }
     }
 
-    return (isize)diagnosis.bitmapErrors.size();
+    return isize(diagnosis.unusedButAllocated.size() + diagnosis.usedButUnallocated.size());
 }
 
 isize
@@ -667,9 +669,6 @@ FSDoctor::xray(BlockNr ref, bool strict, std::ostream &os) const
 void
 FSDoctor::rectify(bool strict)
 {
-    auto *mfs = dynamic_cast<FileSystem *>(&fs);
-    if (!mfs) throw FSError(FSError::FS_READ_ONLY);
-
     xray(strict);
 
     // Rectify all erroneous blocks

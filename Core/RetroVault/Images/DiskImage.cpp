@@ -64,6 +64,22 @@ DiskImage::write(const u8 *src, isize offset, isize count)
 {
     assert(offset + count <= data.size);
     memcpy((void *)(data.ptr + offset), (void *)src, count);
+    
+    /*
+    if (writeThrough && file) {
+        
+        printf("Write through...\n");
+        
+        // Move to the correct position
+        file.seekp(offset, std::ios::beg);
+
+        // Write the data to the stream
+        file.write((char *)(data.ptr + offset), count);
+        
+        // Update the file on disk
+        file.flush();
+    }
+    */
 }
 
 ByteView
@@ -88,6 +104,18 @@ MutableByteView
 DiskImage::byteView(TrackNr t, SectorNr s)
 {
     return MutableByteView(data.ptr + boffset(TS{t,s}), bsize());
+}
+
+void
+DiskImage::saveBlocks(const Range<BlockNr> range)
+{
+    save(Range<isize>{range.lower * bsize(), range.upper * bsize()});
+}
+
+void
+DiskImage::saveBlocks(const std::vector<Range<BlockNr>> ranges)
+{
+    for (auto &range: ranges) save(range);
 }
 
 }

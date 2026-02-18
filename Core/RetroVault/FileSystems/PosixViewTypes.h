@@ -63,7 +63,9 @@ struct FSPosixStat {
 
     isize freeBlocks;   // Available blocks
     isize usedBlocks;   // Occupied blocks
-
+    isize cachedBlocks; // Total number of cached blocks
+    isize dirtyBlocks;  // Number of modified cached blocks
+    
     // Access times
 
     time_t btime;       // Time of birth
@@ -71,8 +73,7 @@ struct FSPosixStat {
 
     // Access statistics
 
-    isize blockReads;   // Total number of read blocks
-    isize blockWrites;  // Total number of written blocks
+    isize generation;   // File system generation counter
 };
 
 enum class HandleRef : isize {};

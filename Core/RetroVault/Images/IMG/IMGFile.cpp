@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "IMGFile.h"
-#include "FloppyDrive.h"
 #include "DeviceError.h"
 #include "DOSEncoder.h"
 #include "DOSDecoder.h"

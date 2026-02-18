@@ -386,7 +386,7 @@ void
 FSAllocator::setAllocBit(BlockNr nr, bool value)
 {
     isize byte, bit;
-
+    
     if (auto *bm = locateAllocationBit(nr, &byte, &bit)) {
 
         auto *data = bm->mutate().data();

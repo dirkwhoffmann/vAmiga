@@ -105,7 +105,7 @@ public:
 
     isize numCyls() const noexcept override;
     isize numHeads() const noexcept override;
-    isize numSectors(isize) const noexcept override;
+    isize numSectors(isize track) const noexcept override;
 
 
     //

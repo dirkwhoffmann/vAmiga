@@ -171,10 +171,7 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func importScriptAction(_ sender: Any!) {
-        
-        // Power off the emulator if the user doesn't object
-        // if !askToPowerOff() { return }
-        
+                
         myOpenPanel.configure(types: [ .retrosh ], prompt: "Import")
         myOpenPanel.open(for: window, { result in
             

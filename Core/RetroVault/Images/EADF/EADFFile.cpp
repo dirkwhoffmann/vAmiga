@@ -10,8 +10,6 @@
 #include "config.h"
 #include "EADFFile.h"
 #include "DiskEncoder.h"
-#include "FloppyDisk.h"
-#include "FloppyDrive.h"
 #include "AmigaEncoder.h"
 #include "AmigaDecoder.h"
 #include "FileSystems/Amiga/FileSystem.h"
@@ -154,7 +152,7 @@ EADFFile::didInitialize()
 
         if (isExtendedTrack(t)) {
 
-            loginfo(ADF_DEBUG, "Reading extended track %ld from EADF\n", t);
+            loginfo(IMG_DEBUG, "Reading extended track %ld from EADF\n", t);
 
             // Copy MFM bits from the EADF
             track.mfm.assign(trackData(t), trackData(t) + availableBytesForTrack(t));
@@ -203,40 +201,48 @@ EADFFile::write(const u8 *src, isize offset, isize count)
 }
 
 void
-EADFFile::readBlock(u8 *dst, isize nr) const
+EADFFile::readBlocks(u8 *dst, Range<isize> r) const
 {
-    validateBlockNr(nr);
+    validateBlockNr(r.lower);
+    validateBlockNr(r.upper);
 
-    auto pos    = b2ts(nr);
-    auto &track = tracks.at(pos.track);
-    auto &bytes = track.data;
-    auto offset = pos.sector * bsize();
-
-    if (track.data.empty())
-        throw(DeviceError::DeviceError::READ_ERR);
-
-    assert(offset + bsize() <= isize(bytes.size()));
-    memcpy(dst, bytes.data() + offset, bsize());
+    for (auto nr = r.lower; nr < r.upper; ++nr) {
+        
+        auto pos    = b2ts(nr);
+        auto &track = tracks.at(pos.track);
+        auto &bytes = track.data;
+        auto offset = pos.sector * bsize();
+        
+        if (track.data.empty())
+            throw(DeviceError::DeviceError::READ_ERR);
+        
+        assert(offset + bsize() <= isize(bytes.size()));
+        memcpy(dst, bytes.data() + offset, bsize());
+    }
 }
 
 void
-EADFFile::writeBlock(const u8 *src, isize nr)
+EADFFile::writeBlocks(const u8 *src, Range<isize> r)
 {
-    validateBlockNr(nr);
+    validateBlockNr(r.lower);
+    validateBlockNr(r.upper);
 
-    auto pos    = b2ts(nr);
-    auto &track = tracks.at(pos.track);
-
-    if (track.data.empty())
-        track.data.resize(numSectors() * numBytes());
-
-    auto &bytes = track.data;
-    auto offset = pos.sector * bsize();
-
-    assert(offset + bsize() <= isize(bytes.size()));
-    memcpy(bytes.data() + offset, src, bsize());
-
-    // TODO: Update the MFM bit stream
+    for (auto nr = r.lower; nr < r.upper; ++nr) {
+        
+        auto pos    = b2ts(nr);
+        auto &track = tracks.at(pos.track);
+        
+        if (track.data.empty())
+            track.data.resize(numSectors() * numBytes());
+        
+        auto &bytes = track.data;
+        auto offset = pos.sector * bsize();
+        
+        assert(offset + bsize() <= isize(bytes.size()));
+        memcpy(bytes.data() + offset, src, bsize());
+        
+        // TODO: Update the MFM bit stream
+    }
 }
 
 Diameter

@@ -74,7 +74,15 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
     
     static const char *help(FSBlockType value)
     {
-        return "";
+        switch (value) {
+                
+            case FSBlockType::UNKNOWN:  return "Unknown";
+            case FSBlockType::EMPTY:    return "Empty block";
+            case FSBlockType::BAM:      return "Block Availability Map (BAM)";
+            case FSBlockType::DIR:      return "Directory block";
+            case FSBlockType::DATA:     return "Data block";
+        }
+        return "???";
     }
 };
 
@@ -240,9 +248,10 @@ struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
 //
 
 struct FSAttr {
-
+    
     isize size;         // File size in bytes
     isize blocks;       // Number of occupied blocks
+    bool isDir;         // Is it a directory?
 };
 
 struct FSStat {
@@ -257,11 +266,12 @@ struct FSStat {
 
     isize freeBlocks;   // Available blocks
     isize usedBlocks;   // Occupied blocks
+    isize cachedBlocks; // Total number of cached blocks
+    isize dirtyBlocks;  // Number of modified cached blocks
 
     // Access statistics
 
-    isize blockReads;   // Total number of read blocks
-    isize blockWrites;  // Total number of written blocks
+    isize generation;   // File system generation counter
 };
 
 struct FSDiagnosis

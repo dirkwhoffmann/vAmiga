@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "STFile.h"
-#include "FloppyDisk.h"
 #include "DeviceError.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"

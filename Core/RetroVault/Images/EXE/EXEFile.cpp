@@ -10,7 +10,6 @@
 #include "config.h"
 #include "EXEFile.h"
 #include "FileSystems/Amiga/FileSystem.h"
-#include "OSDescriptors.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
 #include <format>
@@ -57,7 +56,7 @@ EXEFile::didInitialize()
     bool hd = data.size > 853000;
 
     // Create a suitable ADF
-    adf = ADFFile(Diameter::INCH_35, hd ? Density::HD : Density::DD);
+    adf.init(Diameter::INCH_35, hd ? Density::HD : Density::DD);
 
     // Mount a file system on top of it
     auto vol = Volume(adf);

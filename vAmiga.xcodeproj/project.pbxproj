@@ -71,6 +71,8 @@
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		5020B38E295336E5009732AC /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B38C295336E5009732AC /* Host.cpp */; };
 		5020B38F295336E5009732AC /* Host.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B38C295336E5009732AC /* Host.cpp */; };
+		5020D0402F45E698006D3BF1 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020D03F2F45E698006D3BF1 /* FSError.cpp */; };
+		5020D0412F45E698006D3BF1 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020D03F2F45E698006D3BF1 /* FSError.cpp */; };
 		50210B2027CB6A41001193AA /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50210B1E27CB6A41001193AA /* Drive.cpp */; };
 		5023519024485BBF00F6C088 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5023518F24485BBF00F6C088 /* Preferences.swift */; };
 		5026EDBF2608DC8E00D90CE1 /* Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5026EDBE2608DC8E00D90CE1 /* Console.swift */; };
@@ -101,8 +103,6 @@
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		503E86A22EEEBBF100ED891D /* BlockDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */; };
 		503E86A32EEEBBF100ED891D /* BlockDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503E86A12EEEBBEF00ED891D /* BlockDevice.cpp */; };
-		503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
-		503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4B62EE06D0A00637C95 /* FSError.cpp */; };
 		503FC4BE2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
 		503FC4BF2EE091E300637C95 /* Reflectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4BD2EE091DC00637C95 /* Reflectable.cpp */; };
 		503FC4CA2EE0AB0D00637C95 /* Files.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4C92EE0AB0500637C95 /* Files.cpp */; };
@@ -384,7 +384,6 @@
 		50BF4BC22F0ADF3200F1B9F2 /* FSCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BAA2F0ADF3200F1B9F2 /* FSCache.cpp */; };
 		50BF4BC42F0ADF3200F1B9F2 /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */; };
 		50BF4BC52F0ADF3200F1B9F2 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA62F0ADF3200F1B9F2 /* FileSystemLayer3.cpp */; };
-		50BF4BC62F0ADF3200F1B9F2 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */; };
 		50BF4BC72F0ADF3200F1B9F2 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA32F0ADF3200F1B9F2 /* FileSystem.cpp */; };
 		50BF4BC82F0ADF3200F1B9F2 /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB42F0ADF3200F1B9F2 /* FSDoctor.cpp */; };
 		50BF4BC92F0ADF3200F1B9F2 /* FSExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB82F0ADF3200F1B9F2 /* FSExporter.cpp */; };
@@ -397,7 +396,6 @@
 		50BF4BD22F0ADF3200F1B9F2 /* FSContract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */; };
 		50BF4BD42F0ADF3200F1B9F2 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9B2F0ADF3200F1B9F2 /* FSObjects.cpp */; };
 		50BF4BD52F0ADF3200F1B9F2 /* PosixAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA82F0ADF3200F1B9F2 /* PosixAdapter.cpp */; };
-		50BF4BD62F0ADF3200F1B9F2 /* FSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */; };
 		50BF4BD72F0ADF3200F1B9F2 /* FileSystemLayer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA52F0ADF3200F1B9F2 /* FileSystemLayer2.cpp */; };
 		50BF4BD82F0ADF3200F1B9F2 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BA32F0ADF3200F1B9F2 /* FileSystem.cpp */; };
 		50BF4BDA2F0ADF3200F1B9F2 /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4BB42F0ADF3200F1B9F2 /* FSDoctor.cpp */; };
@@ -745,6 +743,8 @@
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
 		5020B38C295336E5009732AC /* Host.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Host.cpp; sourceTree = "<group>"; };
 		5020B38D295336E5009732AC /* Host.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Host.h; sourceTree = "<group>"; };
+		5020D03E2F45E698006D3BF1 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
+		5020D03F2F45E698006D3BF1 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		50210B1E27CB6A41001193AA /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
 		50210B1F27CB6A41001193AA /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 		5023518F24485BBF00F6C088 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
@@ -787,8 +787,6 @@
 		503E86A42EEF15A300ED891D /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		503FC4B02EE00FE400637C95 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		503FC4B42EE04C2B00637C95 /* Integers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Integers.h; sourceTree = "<group>"; };
-		503FC4B52EE06D0100637C95 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
-		503FC4B62EE06D0A00637C95 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		503FC4B92EE08B2B00637C95 /* Reflectable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflectable.h; sourceTree = "<group>"; };
 		503FC4BD2EE091DC00637C95 /* Reflectable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Reflectable.cpp; sourceTree = "<group>"; };
 		503FC4C22EE092D900637C95 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1214,8 +1212,6 @@
 		50BF4B992F0ADF3200F1B9F2 /* FSTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTypes.h; sourceTree = "<group>"; };
 		50BF4B9A2F0ADF3200F1B9F2 /* FSObjects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSObjects.h; sourceTree = "<group>"; };
 		50BF4B9B2F0ADF3200F1B9F2 /* FSObjects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSObjects.cpp; sourceTree = "<group>"; };
-		50BF4B9C2F0ADF3200F1B9F2 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
-		50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		50BF4B9E2F0ADF3200F1B9F2 /* FSContract.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSContract.h; sourceTree = "<group>"; };
 		50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSContract.cpp; sourceTree = "<group>"; };
 		50BF4BA22F0ADF3200F1B9F2 /* FileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
@@ -1796,6 +1792,8 @@
 				50BF4B662F055B6A00F1B9F2 /* CMakeLists.txt */,
 				50BF4B772F0AB26400F1B9F2 /* PosixView.h */,
 				50BF4B782F0AB26D00F1B9F2 /* PosixView.cpp */,
+				5020D03E2F45E698006D3BF1 /* FSError.h */,
+				5020D03F2F45E698006D3BF1 /* FSError.cpp */,
 				50BF4B652F055B6100F1B9F2 /* Amiga */,
 				50BF4BBB2F0ADF3200F1B9F2 /* CBM */,
 			);
@@ -2705,8 +2703,6 @@
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
-				503FC4B52EE06D0100637C95 /* FSError.h */,
-				503FC4B62EE06D0A00637C95 /* FSError.cpp */,
 				50392FAA2EF6ABF800DAE17A /* FSContract.h */,
 				50392FAB2EF6ABFF00DAE17A /* FSContract.cpp */,
 				505C01092577A8C000F9E05C /* FSDescriptor.h */,
@@ -2777,8 +2773,6 @@
 				50BF4B992F0ADF3200F1B9F2 /* FSTypes.h */,
 				50BF4B9A2F0ADF3200F1B9F2 /* FSObjects.h */,
 				50BF4B9B2F0ADF3200F1B9F2 /* FSObjects.cpp */,
-				50BF4B9C2F0ADF3200F1B9F2 /* FSError.h */,
-				50BF4B9D2F0ADF3200F1B9F2 /* FSError.cpp */,
 				50BF4B9E2F0ADF3200F1B9F2 /* FSContract.h */,
 				50BF4B9F2F0ADF3200F1B9F2 /* FSContract.cpp */,
 				50BF4BA22F0ADF3200F1B9F2 /* FileSystem.h */,
@@ -3206,7 +3200,6 @@
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
 				504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */,
 				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
-				50BF4BC62F0ADF3200F1B9F2 /* FSError.cpp in Sources */,
 				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
 				50FB49C42F1113A300369491 /* C64Decoder.cpp in Sources */,
 				50BF4BC12F0ADF3200F1B9F2 /* FileSystemLayer1.cpp in Sources */,
@@ -3307,7 +3300,6 @@
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
-				503FC4B82EE06D0B00637C95 /* FSError.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* EmulatorProxy.mm in Sources */,
 				501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */,
@@ -3355,6 +3347,7 @@
 				50AE6F8525D71FBE0004AFBC /* CoreError.cpp in Sources */,
 				501B00152C629A0500749664 /* Beamtraps.cpp in Sources */,
 				50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */,
+				5020D0402F45E698006D3BF1 /* FSError.cpp in Sources */,
 				50672CC02946100F004113F5 /* DebuggerConsole.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				2DE71F3A2F22F0B700C29588 /* MidiManager.cpp in Sources */,
@@ -3536,6 +3529,7 @@
 				50BF4BDE2F0ADF3200F1B9F2 /* FSAllocator.cpp in Sources */,
 				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
 				50FB49BF2F0FF48100369491 /* CBMNavigator.cpp in Sources */,
+				5020D0412F45E698006D3BF1 /* FSError.cpp in Sources */,
 				50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */,
 				50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */,
 				50FC04DD27DA1A1400C3E566 /* tables.c in Sources */,
@@ -3587,7 +3581,6 @@
 				50FC04A327DA197A00C3E566 /* SequencerRegs.cpp in Sources */,
 				50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */,
 				50CC209827ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
-				50BF4BD62F0ADF3200F1B9F2 /* FSError.cpp in Sources */,
 				50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */,
 				50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */,
 				50FC048527DA190400C3E566 /* CoreError.cpp in Sources */,
@@ -3614,7 +3607,6 @@
 				50BF4BCE2F0ADF3200F1B9F2 /* FSService.cpp in Sources */,
 				50FC049127DA196500C3E566 /* DeniseInfo.cpp in Sources */,
 				50FB49B42F0F1E2500369491 /* AmigaDecoder.cpp in Sources */,
-				503FC4B72EE06D0B00637C95 /* FSError.cpp in Sources */,
 				50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */,
 				509D076F2EDB2A0900355638 /* FileSystemLayer2.cpp in Sources */,
 				50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */,

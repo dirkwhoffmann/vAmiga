@@ -1,6 +1,6 @@
-target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(RetroVault PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(VACore PRIVATE
+target_sources(RetroVault PRIVATE
 
 FileSystem.cpp
 FileSystemLayer1.cpp
@@ -11,7 +11,6 @@ FSBlock.cpp
 FSBootBlockImage.cpp
 FSCache.cpp
 FSContract.cpp
-FSError.cpp
 FSDescriptor.cpp
 FSDoctor.cpp
 FSExporter.cpp

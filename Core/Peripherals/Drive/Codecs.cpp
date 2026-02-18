@@ -39,7 +39,8 @@ Codec::makeADF(const class FloppyDrive &drive)
 std::unique_ptr<ADZFile>
 Codec::makeADZ(const FloppyDisk &disk)
 {
-    return make_unique<ADZFile>(*Codec::makeADF(disk));
+    return nullptr;
+//    return make_unique<ADZFile>(*Codec::makeADF(disk));
 }
 
 std::unique_ptr<ADZFile>
@@ -106,7 +107,8 @@ Codec::makeHDF(const HardDrive &drive)
 std::unique_ptr<HDZFile>
 Codec::makeHDZ(const class HardDrive &hd)
 {
-    return make_unique<HDZFile>(*Codec::makeHDF(hd));
+    return nullptr;
+//    return make_unique<HDZFile>(*Codec::makeHDF(hd));
 }
 
 

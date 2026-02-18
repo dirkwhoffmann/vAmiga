@@ -16,7 +16,7 @@ namespace retro::vault {
 struct ImageError : public Error {
 
     static constexpr long OK                =  0;
-    static constexpr long UNKNOWN           =  1;
+    static constexpr long CUSTOM            =  1;
 
     // DMS images
     static constexpr long DMS_CANT_CREATE   = 10;
@@ -31,7 +31,8 @@ struct ImageError : public Error {
         switch (payload) {
 
             case OK:                          return "OK";
-            case UNKNOWN:                     return "UNKNOWN";
+            case CUSTOM:                      return "CUSTOM";
+                
             case DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
             case EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";

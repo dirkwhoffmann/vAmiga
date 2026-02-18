@@ -9,9 +9,9 @@
 
 #include "config.h"
 #include "FileSystems/Amiga/FSDescriptor.h"
+#include "FileSystems/FSError.h"
 #include "BlockDevice.h"
 #include "ADFFile.h"
-#include "FileSystems/Amiga/FSError.h"
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 

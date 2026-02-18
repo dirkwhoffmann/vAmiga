@@ -131,8 +131,9 @@ FileSystem::stat() const noexcept
         .blocks         = traits.blocks,
         .freeBlocks     = allocator.numUnallocated(),
         .usedBlocks     = allocator.numAllocated(),
-        .blockReads     = 0, // Not yet supported
-        .blockWrites    = 0, // Not yet supported
+        .cachedBlocks   = cache.cachedBlocks(),
+        .dirtyBlocks    = cache.dirtyBlocks(),
+        .generation     = generation
     };
 
     return result;
@@ -152,13 +153,14 @@ FileSystem::attr(const FSDirEntry &entry) const
         numBytes = (numBlocks - 1) * 254;
 
         // Add the byte count of the last block (encoded in the sector field)
-        numBytes += fetch(*blocks.end()).data()[1];
+        numBytes += fetch(blocks.back()).data()[1];
     }
 
     return FSAttr {
 
         .size   = numBytes,
-        .blocks = numBlocks
+        .blocks = numBlocks,
+        .isDir  = false
     };
 }
 
@@ -175,7 +177,17 @@ FileSystem::attr(const PETName<16> &name) const
 optional<FSAttr>
 FileSystem::attr(const fs::path &path) const
 {
-    return attr(PETName<16>(path.string()));
+    if (path == "/") {
+        
+        return FSAttr {
+            
+            .size   = 0,
+            .blocks = 0,
+            .isDir  = true
+        };
+    }
+    
+    return attr(PETName<16>(path));
 }
 
 }

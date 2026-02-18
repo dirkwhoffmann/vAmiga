@@ -11,8 +11,8 @@
 
 #include "FileSystems/CBM/FSService.h"
 #include "FileSystems/CBM/FSTypes.h"
-#include "FileSystems/CBM/FSError.h"
 #include "FileSystems/CBM/FSObjects.h"
+#include "FileSystems/FSError.h"
 #include "utl/storage.h"
 #include "utl/abilities/Dumpable.h"
 

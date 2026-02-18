@@ -153,7 +153,21 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
     
     static const char *help(FSBlockType value)
     {
-        return "";
+        switch (value) {
+                
+            case FSBlockType::UNKNOWN:     return "Unknown";
+            case FSBlockType::EMPTY:       return "Empty block";
+            case FSBlockType::BOOT:        return "Boot block";
+            case FSBlockType::ROOT:        return "Root block";
+            case FSBlockType::BITMAP:      return "Bitmap block";
+            case FSBlockType::BITMAP_EXT:  return "Bitmap extension block";
+            case FSBlockType::USERDIR:     return "User directory block";
+            case FSBlockType::FILEHEADER:  return "File header block";
+            case FSBlockType::FILELIST:    return "File list block";
+            case FSBlockType::DATA_OFS:    return "Data block (OFS)";
+            case FSBlockType::DATA_FFS:    return "Data block (FFS)";
+        }
+        return "???";
     }
 };
 
@@ -450,8 +464,6 @@ typedef struct
     // Bitmap errors
     std::vector<BlockNr> usedButUnallocated;
     std::vector<BlockNr> unusedButAllocated;
-
-    std::unordered_map<BlockNr,isize> bitmapErrors; // DEPRECATED
 }
 FSDiagnosis;
 

@@ -21,7 +21,7 @@
 
 namespace vamiga {
 
-using retro::vault::cbm::FSError;
+using retro::vault::FSError;
 using retro::vault::cbm::FSFormat;
 using retro::vault::cbm::FSPattern;
 using retro::vault::cbm::PETName;
@@ -265,7 +265,7 @@ CBMNavigator::import(const fs::path &path, bool recursive, bool contents)
 void
 CBMNavigator::requireFS() const
 {
-    if (!fs) throw FSError(FSError::FS_UNKNOWN, "No file system present");
+    if (!fs) throw FSError(FSError::FS_CUSTOM, "No file system present");
 }
 
 void

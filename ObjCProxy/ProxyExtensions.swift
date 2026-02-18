@@ -315,7 +315,7 @@ extension AnyFileProxy {
     func writeToFile(url: URL) throws -> Int {
         
         let exception = ExceptionWrapper()
-        let result = write(toFile: url.path, exception: exception)
+        let result = write(toFile: url, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
         
         return result

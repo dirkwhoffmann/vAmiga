@@ -24,26 +24,6 @@ HDZFile::about(const fs::path &path)
     return {{ ImageType::HARDDISK, ImageFormat::HDZ }};
 }
 
-void
-HDZFile::init(const class HDFFile &hdf)
-{
-    this->hdf = hdf;
-    data = hdf.data;
-    
-    loginfo(HDF_DEBUG, "Uncompressed HDF size: %ld bytes\n", data.size);
-
-    {   utl::StopWatch(debug::HDF_DEBUG, "Compressing HDF...");
-
-        try {
-            data.gzip();
-        } catch (std::runtime_error &err) {
-            throw IOError(IOError::ZLIB_ERROR, err.what());
-        }
-    }
-    
-    loginfo(HDF_DEBUG, "Compressed HDF size: %ld bytes.\n", data.size);
-}
-
 std::vector<string>
 HDZFile::describeImage() const noexcept
 {
@@ -53,9 +33,9 @@ HDZFile::describeImage() const noexcept
 void
 HDZFile::didInitialize()
 {
-    loginfo(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
+    loginfo(IMG_DEBUG, "Compressed size: %ld bytes.\n", data.size);
         
-    {   utl::StopWatch(debug::HDF_DEBUG, "Uncompressing...");
+    {   utl::StopWatch(debug::IMG_DEBUG, "Uncompressing...");
 
         try {
             data.gunzip();
@@ -64,7 +44,7 @@ HDZFile::didInitialize()
         }
     }
     
-    loginfo(HDF_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
+    loginfo(IMG_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
     
     // Initialize the ADF with the decompressed data (may throw)
     hdf.init(data.ptr, data.size);

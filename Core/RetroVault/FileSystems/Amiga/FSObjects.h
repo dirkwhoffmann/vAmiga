@@ -127,7 +127,6 @@ struct FSTime {
     string str() const;
 };
 
-// DEPRECATED
 struct FSAttr {
 
     isize size;         // File size in bytes
@@ -140,7 +139,6 @@ struct FSAttr {
     u32 mode() const;
 };
 
-// DEPRECATED
 struct FSStat {
 
     // Capacity information
@@ -148,9 +146,9 @@ struct FSStat {
 
     // Usage information
     isize freeBlocks;
-    isize freeBytes;
     isize usedBlocks;
-    isize usedBytes;
+    isize cachedBlocks;
+    isize dirtyBlocks;
     double fill;
     
     // Root block metadata
@@ -159,8 +157,7 @@ struct FSStat {
     FSTime mDate;
 
     // Access statistics
-    isize reads;
-    isize writes;
+    isize generation;
 };
 
 struct FSBootStat {

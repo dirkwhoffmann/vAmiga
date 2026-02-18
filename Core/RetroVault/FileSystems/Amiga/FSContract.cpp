@@ -73,7 +73,7 @@ FSRequire::emptyDirectory(BlockNr nr) const
 {
     directory(nr);
     if (fs.numItems(nr) != 0) {
-        throw FSError(FSError::FS_DIR_NOT_EMPTY);
+        throw FSError(FSError::FS_NOT_EMPTY);
     }
 }
 

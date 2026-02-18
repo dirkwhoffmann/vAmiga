@@ -15,26 +15,6 @@
 
 namespace retro::vault::image {
 
-void
-ADZFile::init(const class ADFFile &adf)
-{
-    this->adf = ADFFile(adf.data.ptr, adf.data.size);
-    data = adf.data;
-
-    loginfo(HDF_DEBUG, "Uncompressed ADF size: %ld bytes\n", data.size);
-    
-    {   utl::StopWatch(debug::HDF_DEBUG, "Compressing ADF...");
-        
-        try {
-            data.gzip();
-        } catch (std::runtime_error &err) {
-            throw IOError(IOError::ZLIB_ERROR, err.what());
-        }
-    }
-    
-    loginfo(HDF_DEBUG, "Compressed ADF size: %ld bytes.\n", data.size);
-}
-
 optional<ImageInfo>
 ADZFile::about(const fs::path &path)
 {
@@ -53,7 +33,7 @@ ADZFile::describeImage() const noexcept
 void
 ADZFile::didInitialize()
 {
-    loginfo(ADF_DEBUG, "Decompressing %ld bytes...\n", data.size);
+    loginfo(IMG_DEBUG, "Decompressing %ld bytes...\n", data.size);
     
     try {
         data.gunzip();
@@ -61,7 +41,7 @@ ADZFile::didInitialize()
         throw IOError(IOError::ZLIB_ERROR, err.what());
     }
     
-    loginfo(ADF_DEBUG, "Restored %ld bytes.\n", data.size);
+    loginfo(IMG_DEBUG, "Restored %ld bytes.\n", data.size);
     
     // Initialize the ADF with the decompressed data (may throw)
     adf.init(data.ptr, data.size);

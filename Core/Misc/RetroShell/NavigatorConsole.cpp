@@ -22,10 +22,10 @@ namespace vamiga {
 
 namespace accept = retro::vault::amiga::accept;
 namespace sort = retro::vault::amiga::sort;
+using retro::vault::FSError;
 using retro::vault::amiga::BootBlockId;
 using retro::vault::amiga::BootBlockIdEnum;
 using retro::vault::amiga::FSPath;
-using retro::vault::amiga::FSError;
 using retro::vault::amiga::FSPattern;
 using retro::vault::amiga::FSTree;
 
@@ -336,7 +336,7 @@ NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
 void
 NavigatorConsole::requireFS() const
 {
-    if (!fs) throw FSError(FSError::FS_UNKNOWN, "No file system present");
+    if (!fs) throw FSError(FSError::FS_CUSTOM, "No file system present");
 }
 
 void
@@ -795,14 +795,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                         auto item = parsePath(args, "file");
                         // auto &item = fs->fetch(itemNr);
                         auto name = fs->fetch(item).cppName();
-                        if (name.empty()) name = fs->stat().name;
+                        if (name.empty()) name = fs->stat().name.cpp_str();
                         fs->exporter.exportFiles(item, "/export", recursive, true);
                         msgQueue.setPayload( { "/export", name } );
                         
                     } else {
                         
                         fs->exporter.exportVolume("/export");
-                        auto name = fs->stat().name;
+                        auto name = fs->stat().name.cpp_str();
                         name += fs->getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );
                     }
@@ -1556,7 +1556,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 } else if (path.isDirectory()) {
                     throw FSError(FSError::FS_NOT_A_FILE, args.at("path"));
                 } else {
-                    throw FSError(FSError::FS_NOT_A_FILE_OR_DIRECTORY, args.at("path"));
+                    throw FSError(FSError::FS_INVALID_PATH, args.at("path"));
                 }
                 
             }

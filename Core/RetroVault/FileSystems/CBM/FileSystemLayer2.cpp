@@ -258,7 +258,7 @@ BlockNr
 FileSystem::createFile(const PETName<16> &name, const u8 *buf, isize size)
 {
     // Allocate required blocks
-    auto blocks = allocator.allocate(std::min(isize(1), (size + 253) / 254));
+    auto blocks = allocator.allocate(std::max(isize(1), (size + 253) / 254));
     auto first  = traits.tsLink(blocks[0]);
 
     // Add data
@@ -356,6 +356,12 @@ FileSystem::extractData(TSLink ts, Buffer<u8> &buf) const
     return b ? extractData(*b, buf) : 0;
 }
 
+isize
+FileSystem::extractData(const FSDirEntry &entry, Buffer<u8> &buf) const
+{
+    return extractData(entry.firstBlock(), buf);
+}
+
 void
 FileSystem::resize(BlockNr at, isize size)
 {
@@ -442,8 +448,8 @@ FileSystem::reclaim(BlockNr b)
 {
     for (auto &block : collectDataBlocks(b)) {
 
-        cache.erase(block);
         allocator.markAsFree(block);
+        cache.erase(block);
     }
 }
 

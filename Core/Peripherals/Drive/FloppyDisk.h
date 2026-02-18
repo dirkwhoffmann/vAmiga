@@ -116,7 +116,7 @@ private:
     
     void init(Diameter dia, Density den, bool wp);
     void init(const class FloppyDiskImage &file, bool wp);
-    void init(unique_ptr<FloppyDiskImage> file, bool wp);
+    // void init(unique_ptr<FloppyDiskImage> file, bool wp);
     void init(SerReader &reader, Diameter dia, Density den, bool wp);
 
     

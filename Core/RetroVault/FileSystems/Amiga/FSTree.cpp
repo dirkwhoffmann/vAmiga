@@ -31,7 +31,7 @@ FSTreeBuilder::buildRec(const FSBlock &node,
     auto& fs = *node.fs;
 
     // Check for cycles
-    if (!visited.insert(node.nr).second) throw FSError(FSError::FS_HAS_CYCLES);
+    if (!visited.insert(node.nr).second) throw FSError(FSError::FS_CORRUPTED);
 
     // Create a tree for the top-level node
     FSTree tree { .nr = node.nr };

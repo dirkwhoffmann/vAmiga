@@ -43,6 +43,9 @@ FSBlock::init(FSBlockType t)
     // Allocate memory
     auto *bdata = data();
 
+    // Wipe out existing data
+    memset(bdata, 0, bsize());
+    
     // Initialize
     switch (type) {
 
@@ -830,7 +833,7 @@ FSBlock::exportUserDirBlock(const fs::path &path) const
     loginfo(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
-    if (!utl::createDirectory(filename)) return FSError::FS_CANNOT_CREATE_DIR;
+    if (!utl::createDirectory(filename)) return FSError::FS_EXPORT_ERROR;
 
     return FSError::FS_OK;
 }
@@ -844,7 +847,7 @@ FSBlock::exportFileHeaderBlock(const fs::path &path) const
 
     // Open file
     std::ofstream file(filename, std::ofstream::binary);
-    if (!file.is_open()) return FSError::FS_CANNOT_CREATE_FILE;
+    if (!file.is_open()) return FSError::FS_EXPORT_ERROR;
 
     // Write data
     writeData(file);
@@ -1828,7 +1831,7 @@ FSBlock::getDataBlockRefs() const
 
 void
 FSBlock::addDataBlockRef(BlockNr first, BlockNr ref)
-{
+{    
     assert(getNumDataBlockRefs() < getMaxDataBlockRefs());
     
     switch (type) {

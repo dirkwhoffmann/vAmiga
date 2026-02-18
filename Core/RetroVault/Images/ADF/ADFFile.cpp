@@ -19,12 +19,12 @@
 
 namespace retro::vault::image {
 
+using retro::vault::FSError;
 using retro::vault::amiga::FSName;
 using retro::vault::amiga::FSFormatEnum;
 using retro::vault::amiga::FileSystem;
 using retro::vault::amiga::FSBlock;
 using retro::vault::amiga::FSDescriptor;
-using retro::vault::amiga::FSError;
 
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
@@ -235,7 +235,7 @@ ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
 {
     retro::vault::amiga::FSFormatEnum::validate(dos);
 
-    loginfo(ADF_DEBUG,
+    loginfo(IMG_DEBUG,
             "Formatting disk (%ld, %s)\n",
             numBlocks(), retro::vault::amiga::FSFormatEnum::key(dos));
 

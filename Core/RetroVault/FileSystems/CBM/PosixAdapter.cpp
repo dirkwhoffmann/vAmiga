@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "FileSystems/CBM/PosixAdapter.h"
+#include <sys/stat.h>
 
 namespace retro::vault::cbm {
 
@@ -49,12 +50,13 @@ PosixAdapter::stat() const noexcept
 
         .freeBlocks     = stat.freeBlocks,
         .usedBlocks     = stat.usedBlocks,
-
+        .cachedBlocks   = stat.cachedBlocks,
+        .dirtyBlocks    = stat.dirtyBlocks,
+        
         .btime          = time_t{0},
         .mtime          = time_t{0},
 
-        .blockReads     = stat.blockReads,
-        .blockWrites    = stat.blockWrites
+        .generation     = stat.generation
     };
 }
 
@@ -63,12 +65,14 @@ PosixAdapter::attr(const fs::path &path) const
 {
     if (auto stat = fs.attr(path)) {
 
+        u32 prot = 0777 | (stat->isDir ? S_IFDIR : S_IFREG);
+                
         return FSPosixAttr {
 
             .size           = stat->size,
             .blocks         = stat->blocks,
-            .prot           = u32{0},
-            .isDir          = false,
+            .prot           = prot,
+            .isDir          = stat->isDir,
 
             .btime          = time_t{0},
             .atime          = time_t{0},
@@ -83,12 +87,16 @@ PosixAdapter::attr(const fs::path &path) const
 void
 PosixAdapter::mkdir(const fs::path &path)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     throw FSError(FSError::FS_UNSUPPORTED);
 }
 
 void
 PosixAdapter::rmdir(const fs::path &path)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     throw FSError(FSError::FS_UNSUPPORTED);
 }
 
@@ -112,7 +120,7 @@ PosixAdapter::open(const fs::path &path, u32 flags)
     auto node = fs.seek(path);
 
     // Create a unique identifier
-    auto ref = HandleRef { isize(nextHandle) + 1 };
+    auto ref = HandleRef { ++nextHandle };
 
     // Create a new file handle
     handles[ref] = Handle {
@@ -158,6 +166,8 @@ PosixAdapter::close(HandleRef ref)
 void
 PosixAdapter::unlink(const fs::path &path)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+
     auto node = fs.seek(path);
 
     if (auto *info = getMeta(node); info) {
@@ -229,8 +239,11 @@ PosixAdapter::ensureDirectory(const fs::path &path)
 void
 PosixAdapter::create(const fs::path &path)
 {
-    auto parent = path.parent_path();
-    auto name   = path.filename();
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
+    auto rel    = path.relative_path();
+    auto parent = rel.parent_path();
+    auto name   = rel.filename();
 
     // Reject nested paths (CBM is flat)
     if (!parent.empty() && parent != ".")
@@ -264,7 +277,7 @@ PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
         case SEEK_END:  newOffset = fileSize + offset; break;
 
         default:
-            throw FSError(FSError::FS_UNKNOWN); // TODO: Throw, e.g., FS_INVALID_FLAG
+            throw FSError(FSError::FS_INVALID_ARGUMENT, "whence: " + std::to_string(whence));
     }
 
     // Ensure that the offset is not negative
@@ -278,6 +291,8 @@ PosixAdapter::lseek(HandleRef ref, isize offset, u16 whence)
 void
 PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
     auto oldName = PETName<16>(oldPath);
     auto newName = PETName<16>(newPath);
 
@@ -287,12 +302,16 @@ PosixAdapter::move(const fs::path &oldPath, const fs::path &newPath)
 void
 PosixAdapter::chmod(const fs::path &path, u32 mode)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
     throw FSError(FSError::FS_UNSUPPORTED);
 }
 
 void
 PosixAdapter::resize(const fs::path &path, isize size)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
     fs.resize(ensureFile(path), size);
 }
 
@@ -324,6 +343,8 @@ PosixAdapter::read(HandleRef ref, std::span<u8> buffer)
 isize
 PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
 {
+    if (wp) throw FSError(FSError::FS_READ_ONLY);
+    
     auto &handle = getHandle(ref);
     auto &meta   = ensureMeta(handle.node);
 
@@ -346,6 +367,18 @@ PosixAdapter::write(HandleRef ref, std::span<const u8> buffer)
     fs.replace(handle.node, meta.cache);
 
     return isize(count);
+}
+
+void
+PosixAdapter::flush()
+{
+    fs.flush();
+}
+
+void
+PosixAdapter::invalidate()
+{
+    fs.invalidate();
 }
 
 }

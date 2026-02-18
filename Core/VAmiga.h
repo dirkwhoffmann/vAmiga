@@ -727,8 +727,8 @@ public:
     void insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId id,
                          string name, const std::filesystem::path &path = {});
 
-    /** @brief  Inserts a disk created from a media file.
-     *  @param  path   Path to the media file.
+    /** @brief  Inserts a disk created from an image file.
+     *  @param  path   Path to the disk image.
      *  @param  wp      Write-protection status of the disk.
      */
     void insert(const std::filesystem::path& path, bool wp);

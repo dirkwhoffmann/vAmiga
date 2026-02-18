@@ -54,24 +54,10 @@ FileSystem::flush()
     cache.flush();
 }
 
-/*
-FSBlock &
-FileSystem::operator[](size_t nr)
+void
+FileSystem::invalidate()
 {
-    return cache[nr];
+    cache.invalidate();
 }
-
-const FSBlock &
-FileSystem::operator[](size_t nr) const
-{
-    return cache.fetch(Block(nr));
-}
-
-const FSBlock &
-FileSystem::operator[](size_t nr)
-{
-    return cache.fetch(BlockNr(nr));
-}
-*/
 
 }
