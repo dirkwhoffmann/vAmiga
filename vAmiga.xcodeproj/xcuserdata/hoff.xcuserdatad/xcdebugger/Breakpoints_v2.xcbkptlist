@@ -335,8 +335,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "473"
-            endingLineNumber = "473"
+            startingLineNumber = "482"
+            endingLineNumber = "482"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
          </BreakpointContent>
@@ -351,8 +351,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "519"
-            endingLineNumber = "519"
+            startingLineNumber = "528"
+            endingLineNumber = "528"
             landmarkName = "FloppyDisk::encode(img)"
             landmarkType = "7">
          </BreakpointContent>
@@ -383,8 +383,8 @@
             filePath = "Core/Peripherals/Drive/FloppyDisk.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "367"
-            endingLineNumber = "367"
+            startingLineNumber = "376"
+            endingLineNumber = "376"
             landmarkName = "FloppyDisk::encodeDisk(image)"
             landmarkType = "7">
          </BreakpointContent>
