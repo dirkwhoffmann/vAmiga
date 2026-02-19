@@ -1148,7 +1148,6 @@
 		50BCB9922EE1CDE6000C53CF /* storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = storage.h; sourceTree = "<group>"; };
 		50BCB9972EE1DB07000C53CF /* Bits.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bits.cpp; sourceTree = "<group>"; };
 		50BCB99A2EE229F6000C53CF /* support.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = support.h; sourceTree = "<group>"; };
-		50BCB99C2EE2C33B000C53CF /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		50BCB99D2EE2C53D000C53CF /* Reportable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reportable.h; sourceTree = "<group>"; };
 		50BCB99F2EE2C84D000C53CF /* io.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = io.h; sourceTree = "<group>"; };
 		50BCB9A22EE2CD39000C53CF /* Reportable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Reportable.cpp; sourceTree = "<group>"; };
@@ -1633,7 +1632,6 @@
 			isa = PBXGroup;
 			children = (
 				50BCBDCF2EE9581C000C53CF /* common.h */,
-				50BCB99C2EE2C33B000C53CF /* types.h */,
 				508FDDA02EF53BEF00FDBC32 /* primitives.h */,
 				50BCB9902EE1C84C000C53CF /* abilities.h */,
 				50BCB9912EE1CC86000C53CF /* chrono.h */,
