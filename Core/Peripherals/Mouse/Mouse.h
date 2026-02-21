@@ -78,8 +78,7 @@ class Mouse final : public SubComponent {
 public:
     
     // Mouse button states
-    // bool leftButton = false;
-    Sticky<bool> leftButton = Sticky<bool>(2);
+    Sticky<bool> leftButton = Sticky<bool>(200);
     Sticky<bool> middleButton = Sticky<bool>(2);
     Sticky<bool> rightButton = Sticky<bool>(2);
     

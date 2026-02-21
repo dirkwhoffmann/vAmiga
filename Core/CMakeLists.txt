@@ -30,7 +30,7 @@ add_library(VACore VAmiga.cpp debug.cpp)
 
 # Add the headless app
 add_executable(VAHeadless Headless.cpp debug.cpp)
-target_link_libraries(VAHeadless VACore)
+target_link_libraries(VAHeadless PUBLIC VACore)
 
 # Specify compile options
 target_compile_definitions(VACore PUBLIC _USE_MATH_DEFINES)
@@ -72,12 +72,26 @@ add_subdirectory(ThirdParty)
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(VACore utlib xdms Threads::Threads)
+
+if(APPLE)
+    find_library(COREMIDI_FRAMEWORK CoreMIDI REQUIRED)
+    find_library(COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+endif()
+
+# Link everything in a single call
+target_link_libraries(VACore
+    PUBLIC
+    utlib
+    RetroVault
+    Threads::Threads
+    $<$<PLATFORM_ID:Darwin>:${COREMIDI_FRAMEWORK}>
+    $<$<PLATFORM_ID:Darwin>:${COREFOUNDATION_FRAMEWORK}>
+)
 
 # Link zlib if available
 if(ZLIB_FOUND)
-  target_link_libraries(VACore ZLIB::ZLIB)
-  target_link_libraries(VAHeadless ZLIB::ZLIB)
+  target_link_libraries(VACore PUBLIC ZLIB::ZLIB)
+  target_link_libraries(VAHeadless PUBLIC ZLIB::ZLIB)
   target_compile_definitions(VACore PUBLIC USE_ZLIB=1)  # Optional define for conditional compilation
 endif()
 

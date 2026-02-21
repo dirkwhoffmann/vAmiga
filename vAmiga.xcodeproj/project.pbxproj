@@ -746,6 +746,7 @@
 		5020D03E2F45E698006D3BF1 /* FSError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSError.h; sourceTree = "<group>"; };
 		5020D03F2F45E698006D3BF1 /* FSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSError.cpp; sourceTree = "<group>"; };
 		5020D0432F472AEE006D3BF1 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMakeLists.txt; sourceTree = "<group>"; };
+		5020D0462F49B5C1006D3BF1 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		50210B1E27CB6A41001193AA /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
 		50210B1F27CB6A41001193AA /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 		5023518F24485BBF00F6C088 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
@@ -2689,6 +2690,7 @@
 		50BF4B642F055ADF00F1B9F2 /* RetroVault */ = {
 			isa = PBXGroup;
 			children = (
+				5020D0462F49B5C1006D3BF1 /* config.h */,
 				50BF4B682F055B7D00F1B9F2 /* CMakeLists.txt */,
 				50BF4B942F0ADA0F00F1B9F2 /* Devices.h */,
 				50BF4B952F0ADA1C00F1B9F2 /* Images.h */,
