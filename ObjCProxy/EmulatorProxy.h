@@ -872,7 +872,7 @@ ImageInfo scan(const fs::path &url);
 - (void)pressKey:(char)c;
 - (void)pressSpecialKey:(RSKey)key;
 - (void)pressSpecialKey:(RSKey)key shift:(BOOL)shift;
-- (void)executeScript:(NSURL *)url;
+- (void)executeScript:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)executeString:(NSString *)string;
 
 @end

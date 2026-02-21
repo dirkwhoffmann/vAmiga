@@ -1722,9 +1722,10 @@ ImageInfo scan(const fs::path &url)
     [self shell]->press(key, shift);
 }
 
-- (void)executeScript:(NSURL *)url
+- (void)executeScript:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    [self shell]->execScript(fs::path(url.fileSystemRepresentation));
+    try { [self shell]->execScript(fs::path(url.fileSystemRepresentation)); }
+    catch (std::exception &stdex) { [ex save:stdex]; }
 }
 
 - (void)executeString:(NSString *)str

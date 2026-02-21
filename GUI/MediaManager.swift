@@ -262,6 +262,28 @@ class MediaManager {
     }
     
     //
+    // Workspaces, Snapshots, Scripts
+    //
+
+    func loadWorkspace(url: URL, options: [Option] = []) throws {
+        
+        loginfo(.media, "url = \(url)")
+        try emu?.amiga.loadWorkspace(url: url)
+    }
+    
+    func loadSnapshot(url: URL, options: [Option] = []) throws {
+        
+        loginfo(.media, "url = \(url)")
+        try emu?.amiga.loadSnapshot(url: url)
+    }
+
+    func runScript(url: URL, options: [Option] = []) throws {
+        
+        loginfo(.media, "url = \(url)")
+        try emu?.retroShell.executeScript(url: url)
+    }
+    
+    //
     // Mouting media files
     //
 

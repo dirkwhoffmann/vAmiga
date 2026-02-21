@@ -228,8 +228,27 @@ class DropZone: Layer {
                 }
 
             } else {
-
-                // No non-disk types supported yet
+                
+                switch url.pathExtension.lowercased() {
+                    
+                case "vamiga":
+                    
+                    try mydocument.processWorkspaceFile(url: url)
+                    
+                case "vasnap":
+                    
+                    try mm.loadSnapshot(url: url)
+                    break
+                    
+                case "retrosh":
+                    
+                    try mm.runScript(url: url)
+                    mm.console.open()
+                    
+                default:
+                    
+                    NSSound.beep()
+                }
             }
             
         } catch {

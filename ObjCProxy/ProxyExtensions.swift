@@ -309,6 +309,17 @@ extension HardDriveProxy {
     }
 }
 
+@MainActor
+extension RetroShellProxy {
+  
+    func executeScript(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        executeScript(url, exception: exception)
+        if exception.fault != 0 { throw AppError(exception) }
+    }
+}
+
 extension AnyFileProxy {
     
     @discardableResult

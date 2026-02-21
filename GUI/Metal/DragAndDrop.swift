@@ -17,15 +17,13 @@ extension MetalView {
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         
-        // loginfo(.dragndrop, "draggingEntered \(sender)\n")
-        
-        dropZone = nil
-        dropUrl = nil
-
         let pasteBoard = sender.draggingPasteboard
         guard let type = pasteBoard.availableType(from: acceptedTypes()) else {
             return NSDragOperation()
         }
+        
+        dropZone = nil
+        dropUrl = nil
         
         switch type {
             
@@ -54,31 +52,23 @@ extension MetalView {
     
     override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
         
-        // loginfo(.dragndrop, "draggingUpdated \(sender)\n")
-
         parent.renderer.dropZone.draggingUpdated(sender)
         return NSDragOperation.copy
     }
 
     override func draggingExited(_ sender: NSDraggingInfo?) {
     
-        loginfo(.dragndrop, "draggingExited \(String(describing: sender))")
-        
         parent.renderer.dropZone.close(delay: 0.25)
     }
     
     override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        
-        loginfo(.dragndrop, "prepareForDragOperation \(sender)\n")
         
         parent.renderer.dropZone.close(delay: 0.25)
         return true
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        
-        loginfo(.dragndrop, "performDragOperation \(sender)\n")
-        
+                
         let pasteBoard = sender.draggingPasteboard
         
         if let type = pasteBoard.availableType(from: acceptedTypes()) {
@@ -113,18 +103,20 @@ extension MetalView {
 
     func performUrlDrag(_ sender: NSDraggingInfo) -> Bool {
                 
-        guard let url = dropUrl else { return false }
+        // Only proceed if an URL is given
+        if dropUrl == nil { return false }
 
         // Check drop zones
         var zone: Int?
-        for i in 0...3 {
-            if renderer.dropZone.isInside(sender, zone: i) { zone = i }
+        for i in 0...3 where renderer.dropZone.isInside(sender, zone: i) {
+            
+            if renderer.dropZone.enabled[i] {
+                zone = i
+            } else {
+                return false
+            }
         }
-
-        // Check file types
-        if !url.isDiskImage && !url.hasDirectoryPath { return false }
-        if zone == nil { return false }
-
+        
         dropZone = zone
         return true
     }
