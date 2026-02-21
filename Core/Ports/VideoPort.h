@@ -37,8 +37,8 @@ class VideoPort final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<VideoPortInfo> info;
-    utl::Memorized<VideoPortStats> metrics;
+    utl::Backed<VideoPortInfo> info;
+    utl::Backed<VideoPortStats> metrics;
 
 private:
 

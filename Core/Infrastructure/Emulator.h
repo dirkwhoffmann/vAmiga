@@ -29,8 +29,8 @@ public:
     static Defaults defaults;
 
     // Result of the latest inspection
-    utl::Memorized<EmulatorInfo> info;
-    utl::Memorized<EmulatorMetrics> metrics;
+    utl::Backed<EmulatorInfo> info;
+    utl::Backed<EmulatorMetrics> metrics;
 
 private:
 

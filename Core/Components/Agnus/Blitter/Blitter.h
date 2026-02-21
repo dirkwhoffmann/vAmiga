@@ -58,7 +58,7 @@ class Blitter final : public SubComponent
 public:
 
     // Result of the latest inspection
-    utl::Memorized<BlitterInfo> info;
+    utl::Backed<BlitterInfo> info;
 
 
     //

@@ -7,6 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #pragma once
 
 #include "utl/abilities/Synchronizable.h"
@@ -65,3 +67,5 @@ public:
 };
 
 }
+#endif
+

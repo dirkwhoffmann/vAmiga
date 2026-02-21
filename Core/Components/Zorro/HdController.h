@@ -54,8 +54,8 @@ class HdController : public ZorroBoard {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<HdcInfo> info;
-    utl::Memorized<HdcStats> metrics;
+    utl::Backed<HdcInfo> info;
+    utl::Backed<HdcStats> metrics;
 
 private:
 

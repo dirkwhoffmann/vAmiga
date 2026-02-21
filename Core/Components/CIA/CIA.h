@@ -52,8 +52,8 @@ protected:
 public:
 
     // State and metrics
-    utl::Memorized<CIAInfo> info;
-    utl::Memorized<CIAMetrics> metrics;
+    utl::Backed<CIAInfo> info;
+    utl::Backed<CIAMetrics> metrics;
 
 
     //

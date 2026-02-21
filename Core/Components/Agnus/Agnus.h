@@ -56,8 +56,8 @@ class Agnus : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<AgnusInfo> info;
-    utl::Memorized<AgnusMetrics> metrics;
+    utl::Backed<AgnusInfo> info;
+    utl::Backed<AgnusMetrics> metrics;
 
     // Internally stored metrics
     AgnusMetrics stats = {};

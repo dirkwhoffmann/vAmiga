@@ -163,7 +163,7 @@ const AgnusInfo &
 AgnusAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return agnus->info.cached();
+    return agnus->info.backed();
 }
 
 const AgnusMetrics &
@@ -177,7 +177,7 @@ const AgnusMetrics &
 AgnusAPI::getCachedMetrics() const
 {
     VAMIGA_PUBLIC
-    return agnus->metrics.cached();
+    return agnus->metrics.backed();
 }
 
 const AgnusTraits
@@ -203,7 +203,7 @@ const BlitterInfo &
 BlitterAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return blitter->info.cached();
+    return blitter->info.backed();
 }
 
 
@@ -229,7 +229,7 @@ const CIAInfo &
 CIAAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return cia->info.cached();
+    return cia->info.backed();
 }
 
 CIAMetrics
@@ -243,7 +243,7 @@ CIAMetrics
 CIAAPI::getCachedMetrics() const
 {
     VAMIGA_PUBLIC
-    return cia->metrics.cached();
+    return cia->metrics.backed();
 }
 
 
@@ -878,7 +878,7 @@ const AudioPortInfo &
 AudioPortAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return port->info.cached();
+    return port->info.backed();
 }
 
 const AudioPortMetrics &
@@ -892,7 +892,7 @@ const AudioPortMetrics &
 AudioPortAPI::getCachedStats() const
 {
     VAMIGA_PUBLIC
-    return port->metrics.cached();
+    return port->metrics.backed();
 }
 
 isize
@@ -1338,7 +1338,7 @@ const HdcInfo &
 HdControllerAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return controller->info.cached();
+    return controller->info.backed();
 }
 
 const HdcStats &
@@ -1352,7 +1352,7 @@ const HdcStats &
 HdControllerAPI::getCachedStats() const
 {
     VAMIGA_PUBLIC
-    return controller->metrics.cached();
+    return controller->metrics.backed();
 }
 
 
@@ -1964,7 +1964,7 @@ const EmulatorInfo &
 VAmiga::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return emu->info.cached();
+    return emu->info.backed();
 }
 
 const EmulatorMetrics &
@@ -1978,7 +1978,7 @@ const EmulatorMetrics &
 VAmiga::getCachedMetrics() const
 {
     VAMIGA_PUBLIC
-    return emu->metrics.cached();
+    return emu->metrics.backed();
 }
 
 bool

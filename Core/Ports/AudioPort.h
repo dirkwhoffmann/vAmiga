@@ -79,8 +79,8 @@ class AudioPort final : public SubComponent {
 public:
 
     // Result of the latest inspection
-    utl::Memorized<AudioPortInfo> info;
-    utl::Memorized<AudioPortMetrics> metrics;
+    utl::Backed<AudioPortInfo> info;
+    utl::Backed<AudioPortMetrics> metrics;
 
 private:
 
