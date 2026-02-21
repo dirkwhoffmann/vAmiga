@@ -46,24 +46,6 @@ public:
     virtual void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) = 0; // DEPRECATED
 };
 
-/*
-struct TooFewArgumentsError : public ParseError {
-    using ParseError::ParseError;
-};
-
-struct TooManyArgumentsError : public ParseError {
-    using ParseError::ParseError;
-};
-
-struct UnknownFlagError : public ParseError {
-    using ParseError::ParseError;
-};
-
-struct UnknownKeyValueError : public ParseError {
-    using ParseError::ParseError;
-};
-*/
-
 class HistoryBuffer {
     
     // History buffer storing old input strings and cursor positions

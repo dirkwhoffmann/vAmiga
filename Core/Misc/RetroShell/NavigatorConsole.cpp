@@ -244,7 +244,6 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
         try {
             // Treat the argument as a block number
-            // return (*fs)[parseBlock(argv.at(token))];
             return parseBlock(argv.at(token));
 
         } catch (...) {

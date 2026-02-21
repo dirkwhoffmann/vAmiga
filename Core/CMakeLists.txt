@@ -35,7 +35,7 @@ target_link_libraries(VAHeadless PUBLIC VACore)
 # Specify compile options
 target_compile_definitions(VACore PUBLIC _USE_MATH_DEFINES)
 if(WIN32)
-  target_link_libraries(VAHeadless ws2_32)
+  target_link_libraries(VAHeadless PUBLIC ws2_32)
 endif()
 if(MSVC)
   target_compile_options(VACore PUBLIC /W4 /WX /bigobj /Zc:preprocessor)
@@ -94,9 +94,6 @@ if(ZLIB_FOUND)
   target_link_libraries(VAHeadless PUBLIC ZLIB::ZLIB)
   target_compile_definitions(VACore PUBLIC USE_ZLIB=1)  # Optional define for conditional compilation
 endif()
-
-#target_link_libraries(VACore lz4)
-#target_link_libraries(VAHeadless lz4)
 
 # Add tests
 add_test(NAME SelfTest1 COMMAND VAHeadless --verbose --footprint)

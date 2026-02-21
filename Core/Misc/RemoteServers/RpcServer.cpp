@@ -153,7 +153,7 @@ RpcServer::didExecute(const InputLine& input, std::stringstream &ss, std::except
     i64 code = -32603;
 
     // For parse errors, use a value from the server-defined error range
-    if (dynamic_cast<const utl::NewParseError *>(&exc)) {
+    if (dynamic_cast<const utl::ParseError *>(&exc)) {
         code = -32000;
     }
 
