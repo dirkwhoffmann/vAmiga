@@ -371,14 +371,16 @@ Amiga::saveWorkspace(const fs::path &path)
                 
                 if (config.compressWorkspaces) {
 
-                    auto hdz = Codec::makeHDZ(drive);
-                    hdz->writeToFile(path / file);
+                    if (auto hdz = Codec::makeHDZ(drive)) {
+                        hdz->writeToFile(path / file);
+                    }
                     // HDZFile(HDFFile(drive)).writeToFile(path / file);
 
                 } else {
 
-                    auto hdf = Codec::makeHDF(drive);
-                    hdf->writeToFile(path / file);
+                    if (auto hdf = Codec::makeHDF(drive)) {
+                        hdf->writeToFile(path / file);
+                    }
                     // HDFFile(drive).writeToFile(path / file);
                 }
                 drive.markDiskAsUnmodified();

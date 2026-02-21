@@ -102,11 +102,12 @@ Mouse::_dump(Category category, std::ostream &os) const
     if (category == Category::State) {
 
         os << tab("leftButton");
-        os << bol(leftButton) << std::endl;
+        // os << bol(leftButton) << std::endl;
+        os << bol(leftButton.get(agnus.pos.frame)) << std::endl;
         os << tab("middleButton");
-        os << bol(middleButton) << std::endl;
+        os << bol(middleButton.get(agnus.pos.frame)) << std::endl;
         os << tab("rightButton");
-        os << bol(rightButton) << std::endl;
+        os << bol(rightButton.get(agnus.pos.frame)) << std::endl;
         os << tab("mouseX");
         os << mouseX << std::endl;
         os << tab("mouseY");
@@ -132,8 +133,8 @@ Mouse::changePotgo(u16 &potgo) const
     u16 maskR = port.isPort1() ? 0x0400 : 0x4000;
     u16 maskM = port.isPort1() ? 0x0100 : 0x1000;
 
-    bool rb = rightButton;
-    bool mb = middleButton;
+    bool rb = rightButton.get(agnus.pos.frame);
+    bool mb = middleButton.get(agnus.pos.frame);
 
     if constexpr (debug::HOLD_MOUSE_R) rb = true;
     if constexpr (debug::HOLD_MOUSE_M) mb = true;
@@ -156,7 +157,7 @@ Mouse::changePra(u8 &pra) const
 {
     u16 mask = port.isPort1() ? 0x0040 : 0x0080;
 
-    bool lb = leftButton;
+    bool lb = leftButton.get(agnus.pos.frame);
 
     if constexpr (debug::HOLD_MOUSE_L) lb = true;
 
@@ -187,6 +188,24 @@ Mouse::getDeltaY()
     oldMouseY = mouseY;
 
     return result;
+}
+
+bool
+Mouse::LMB() const
+{
+    return leftButton.get(agnus.pos.frame);
+}
+
+bool
+Mouse::MMB() const
+{
+    return middleButton.get(agnus.pos.frame);
+}
+
+bool
+Mouse::RMB() const
+{
+    return rightButton.get(agnus.pos.frame);
 }
 
 u16
@@ -248,7 +267,8 @@ Mouse::setLeftButton(bool value)
 {
     logdebug(PRT_DEBUG, "setLeftButton(%d)\n", value);
     
-    leftButton = value;
+    //leftButton = value;
+    leftButton.set(value, agnus.pos.frame);
     port.setDevice(ControlPortDevice::MOUSE);
 }
 
@@ -257,7 +277,7 @@ Mouse::setMiddleButton(bool value)
 {
     logdebug(PRT_DEBUG, "setMiddleButton(%d)\n", value);
 
-    middleButton = value;
+    middleButton.set(value, agnus.pos.frame);
     port.setDevice(ControlPortDevice::MOUSE);
 }
 
@@ -266,7 +286,7 @@ Mouse::setRightButton(bool value)
 {
     logdebug(PRT_DEBUG, "setRightButton(%d)\n", value);
     
-    rightButton = value;
+    rightButton.set(value, agnus.pos.frame);
     port.setDevice(ControlPortDevice::MOUSE);
 }
 

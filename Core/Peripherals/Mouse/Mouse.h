@@ -78,9 +78,10 @@ class Mouse final : public SubComponent {
 public:
     
     // Mouse button states
-    bool leftButton = false;
-    bool middleButton = false;
-    bool rightButton = false;
+    // bool leftButton = false;
+    Sticky<bool> leftButton = Sticky<bool>(2);
+    Sticky<bool> middleButton = Sticky<bool>(2);
+    Sticky<bool> rightButton = Sticky<bool>(2);
     
 private:
     
@@ -157,15 +158,16 @@ private:
 
             worker 
 
-            << leftButton
-            << middleButton
-            << rightButton
             << mouseX
             << mouseY
             << oldMouseX
             << oldMouseY
             << targetX
             << targetY;
+
+            leftButton.init();
+            middleButton.init();
+            rightButton.init();
 
         } else {
 
@@ -222,9 +224,10 @@ public:
     i64 getDeltaY();
 
     // Queries the button state
-    bool LMB() const { return leftButton; }
-    bool MMB() const { return middleButton; }
-    bool RMB() const { return rightButton; }
+    // bool LMB() const { return leftButton; }
+    bool LMB() const;
+    bool MMB() const;
+    bool RMB() const;
 
     // Returns the mouse coordinates as they appear in the JOYDAT register
     u16 getXY();

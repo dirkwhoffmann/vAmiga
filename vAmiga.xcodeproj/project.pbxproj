@@ -1156,8 +1156,7 @@
 		50BCB9A62EE2F344000C53CF /* Parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
 		50BCB9A92EE2F9FF000C53CF /* DeviceError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceError.h; sourceTree = "<group>"; };
 		50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceError.cpp; sourceTree = "<group>"; };
-		50BCB9B62EE43CAE000C53CF /* Cached.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cached.h; sourceTree = "<group>"; };
-		50BCB9B82EE43CC6000C53CF /* Memorized.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memorized.h; sourceTree = "<group>"; };
+		50BCB9B62EE43CAE000C53CF /* Sticky.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sticky.h; sourceTree = "<group>"; };
 		50BCB9BB2EE447B3000C53CF /* wrappers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wrappers.h; sourceTree = "<group>"; };
 		50BCB9C32EE573FE000C53CF /* Backed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Backed.h; sourceTree = "<group>"; };
 		50BCB9C42EE6BED6000C53CF /* IOError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOError.h; sourceTree = "<group>"; };
@@ -2594,8 +2593,7 @@
 			children = (
 				503FC4F62EE1C20A00637C95 /* Animated.h */,
 				50BCB9C32EE573FE000C53CF /* Backed.h */,
-				50BCB9B62EE43CAE000C53CF /* Cached.h */,
-				50BCB9B82EE43CC6000C53CF /* Memorized.h */,
+				50BCB9B62EE43CAE000C53CF /* Sticky.h */,
 			);
 			path = wrappers;
 			sourceTree = "<group>";
