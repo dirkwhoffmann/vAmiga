@@ -31,9 +31,13 @@ public:
     // Included device drivers
     std::vector <DriverDescriptor> drivers;
 
+    // Analyzes the type of the provided file
     static optional<ImageInfo> about(const fs::path &path);
 
+    // Checks if the buffer is in ADF format (throws if not)
+    static void ensureHDF(u8 *buf, isize len);
 
+    
     //
     // Initializing
     //
@@ -42,7 +46,7 @@ public:
 
     explicit HDFFile() { }
     explicit HDFFile(isize len) { init(len); }
-    explicit HDFFile(const u8 *buf, isize len) { init(len); }
+    explicit HDFFile(const u8 *buf, isize len) { init(buf, len); }
     explicit HDFFile(const Buffer<u8>& buffer) { init(buffer); }
     explicit HDFFile(const fs::path& path) { init(path); }
 

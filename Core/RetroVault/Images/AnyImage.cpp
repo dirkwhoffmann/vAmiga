@@ -78,7 +78,7 @@ AnyImage::init(const fs::path &path)
     std::vector<u8> buffer((std::istreambuf_iterator<char>(stream)),
                            std::istreambuf_iterator<char>());
     
-    if (buffer.empty() && file.fail())
+    if (buffer.empty())
         throw IOError(IOError::FILE_CANT_READ, path);
     
     this->path = path;

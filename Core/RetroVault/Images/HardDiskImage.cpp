@@ -10,11 +10,9 @@
 #include "config.h"
 #include "HardDiskImage.h"
 #include "HDFFile.h"
-#include "HDZFile.h"
 #include "utl/io.h"
 
 using retro::vault::image::HDFFile;
-using retro::vault::image::HDZFile;
 
 namespace retro::vault {
 
@@ -22,7 +20,6 @@ optional<ImageInfo>
 HardDiskImage::about(const fs::path& url)
 {
     if (auto info = HDFFile::about(url)) return info;
-    if (auto info = HDZFile::about(url)) return info;
 
     return {};
 }
@@ -31,7 +28,6 @@ unique_ptr<HardDiskImage>
 HardDiskImage::tryMake(const fs::path &path)
 {
     if (HDFFile::about(path).has_value()) return make_unique<HDFFile>(path);
-    if (HDZFile::about(path).has_value()) return make_unique<HDZFile>(path);
 
     return nullptr;
 }

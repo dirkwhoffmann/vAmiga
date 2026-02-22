@@ -15,7 +15,6 @@
 #include "D64File.h"
 #include "EADFFile.h"
 #include "HDFFile.h"
-#include "HDZFile.h"
 #include "IMGFile.h"
 #include "STFile.h"
 #include "DMSFile.h"
@@ -27,7 +26,6 @@ using retro::vault::image::ADFFile;
 using retro::vault::image::D64File;
 using retro::vault::image::EADFFile;
 using retro::vault::image::HDFFile;
-using retro::vault::image::HDZFile;
 using retro::vault::image::DMSFile;
 using retro::vault::image::EXEFile;
 
@@ -52,8 +50,6 @@ public:
     static std::unique_ptr<D64File> makeD64(const FloppyDrive &drive);
 
     static std::unique_ptr<HDFFile> makeHDF(const HardDrive &hd);
-
-    static std::unique_ptr<HDZFile> makeHDZ(const HardDrive &hd);
 
 
     // Encoders and Decoders

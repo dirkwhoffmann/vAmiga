@@ -201,12 +201,6 @@ HardDrive::init(const HDFFile &hdf)
 }
 
 void
-HardDrive::init(const HDZFile &hdz)
-{
-    init(hdz.hdf);
-}
-
-void
 HardDrive::init(const fs::path &path)
 {
     if (!fs::exists(path)) {
@@ -223,7 +217,6 @@ HardDrive::init(const fs::path &path)
     } else {
         
         try { init(HDFFile(path)); return; } catch(...) { }
-        try { init(HDZFile(path)); return; } catch(...) { }
         
         throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }

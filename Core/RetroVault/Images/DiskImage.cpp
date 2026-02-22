@@ -14,7 +14,6 @@
 #include "ADFFile.h"
 #include "EADFFile.h"
 #include "HDFFile.h"
-#include "HDZFile.h"
 #include "IMGFile.h"
 #include "STFile.h"
 #include "DMSFile.h"

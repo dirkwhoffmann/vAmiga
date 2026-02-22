@@ -20,7 +20,6 @@
 #include "Images/EADF/EADFFile.h"
 #include "Images/EXE/EXEFile.h"
 #include "Images/HDF/HDFFile.h"
-#include "Images/HDZ/HDZFile.h"
 #include "Images/IMG/IMGFile.h"
 #include "Images/ST/STFile.h"
 

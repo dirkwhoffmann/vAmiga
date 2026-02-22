@@ -7,13 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #pragma once
 
 #include "HDFFile.h"
 
 namespace retro::vault::image {
 
-class HDZFile : public HardDiskImage {
+class[[deprecated]] HDZFile : public HardDiskImage {
 
 public:
 
@@ -122,3 +124,4 @@ public:
 };
 
 }
+#endif

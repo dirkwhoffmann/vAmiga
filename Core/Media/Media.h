@@ -15,7 +15,6 @@
 #include "RomFile.h"
 #include "DiskImage.h"
 #include "HDFFile.h"
-#include "HDZFile.h"
 
 /* All media files are organized in the class hierarchy displayed below. AnyFile
  * provides basic functionalities for reading and writing files, streams, and

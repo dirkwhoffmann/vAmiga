@@ -30,7 +30,6 @@ using retro::vault::amiga::FSDescriptor;
 optional<ImageInfo>
 ADFFile::about(const fs::path &path)
 {
-    // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
 
     if (suffix == ".ADZ") {
@@ -217,7 +216,7 @@ ADFFile::didInitialize()
     // Add some empty cylinders if the file contains less than 80
     if (data.size < ADFSIZE_35_DD) data.resize(ADFSIZE_35_DD, 0);
     
-    // Run a final consistency check on the buffer contents
+    // Run a consistency check on the buffer contents
     ensureADF();
 }
 

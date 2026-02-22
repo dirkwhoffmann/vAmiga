@@ -91,22 +91,6 @@ Codec::makeHDF(const HardDrive &drive)
     return hdf;
 }
 
-std::unique_ptr<HDZFile>
-Codec::makeHDZ(const class HardDrive &hd)
-{
-    return nullptr;
-//    return make_unique<HDZFile>(*Codec::makeHDF(hd));
-}
-
-
-/*
-void
-Codec::encodeADZ(const ADZFile &adz, FloppyDisk &disk)
-{
-    disk.encode(adz.adf);
-}
-*/
-
 void
 Codec::encodeEADF(const EADFFile &eadf, FloppyDisk &disk)
 {

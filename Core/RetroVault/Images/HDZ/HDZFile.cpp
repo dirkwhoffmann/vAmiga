@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#if 0
 #include "config.h"
 #include "HDZFile.h"
 #include "utl/chrono.h"
@@ -72,3 +73,4 @@ HDZFile::writePartitionToFile(const fs::path &path, isize nr) const
 }
 
 }
+#endif
