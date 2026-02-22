@@ -28,9 +28,6 @@ public:
     // The location of this file (may be empty)
     fs::path path;
     
-    // File handle (if 'path' is provided)
-    std::fstream file;
-
     // The raw data of this file
     Buffer<u8> data;
 

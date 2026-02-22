@@ -69,7 +69,7 @@ AnyImage::init(const fs::path &path)
     if (!validateURL(path))
         throw IOError(IOError::FILE_TYPE_MISMATCH, path);
 
-    std::fstream stream(path, std::ios::binary | std::ios::in | std::ios::out);
+    std::fstream stream(path, std::ios::binary | std::ios::in);
     
     if (!stream)
         throw IOError(IOError::FILE_NOT_FOUND, path);
@@ -85,7 +85,6 @@ AnyImage::init(const fs::path &path)
 
     // Initialize image with the vector contents
     init(buffer.data(), isize(buffer.size()));
-    file = std::move(stream);
 }
 
 void
@@ -156,7 +155,8 @@ AnyImage::save()
 void
 AnyImage::save(const Range<BlockNr> range)
 {
-    if (!file) throw IOError(IOError::FILE_NOT_FOUND, path);
+    std::ofstream file(path, std::ios::binary);
+    if (!file) throw IOError(IOError::FILE_CANT_WRITE, path);
     
     printf("Saving range %ld - %ld...\n", range.lower, range.upper - 1);
     
@@ -179,34 +179,8 @@ AnyImage::save(const std::vector<Range<BlockNr>> ranges)
 void
 AnyImage::saveAs(const fs::path &newPath)
 {
-    // Fallback to the standard save function of paths match
-    if (newPath == path) { save(); return; }
-
-    // Make sure pending writes hit the disk
-    file.flush();
-    if (!file)
-        throw IOError(IOError::FILE_CANT_CREATE, path);
-
-    // Copy file
-    try {
-
-        fs::copy_file(path, newPath,
-                      fs::copy_options::overwrite_existing);
-
-    } catch (const fs::filesystem_error &) {
-
-        throw IOError(IOError::FILE_CANT_WRITE, newPath);
-    }
-
-    // Close current stream
-    file.close();
-
-    // Reopen the stream with the new file
-    file.open(newPath, std::ios::binary | std::ios::in | std::ios::out);
-    if (!file)
-        throw IOError(IOError::FILE_CANT_READ, newPath);
-
     path = newPath;
+    save();
 }
 
 isize
