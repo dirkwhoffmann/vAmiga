@@ -12,7 +12,6 @@
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "ADFFile.h"
-#include "ADZFile.h"
 #include "D64File.h"
 #include "EADFFile.h"
 #include "HDFFile.h"
@@ -25,7 +24,6 @@
 namespace vamiga {
 
 using retro::vault::image::ADFFile;
-using retro::vault::image::ADZFile;
 using retro::vault::image::D64File;
 using retro::vault::image::EADFFile;
 using retro::vault::image::HDFFile;
@@ -40,9 +38,6 @@ public:
     // Factory methods
     static std::unique_ptr<ADFFile> makeADF(const FloppyDisk &disk);
     static std::unique_ptr<ADFFile> makeADF(const FloppyDrive &drive);
-
-    static std::unique_ptr<ADZFile> makeADZ(const FloppyDisk &disk);
-    static std::unique_ptr<ADZFile> makeADZ(const FloppyDrive &drive);
 
     static std::unique_ptr<EADFFile> makeEADF(const FloppyDisk &disk);
     static std::unique_ptr<EADFFile> makeEADF(const FloppyDrive &drive);
@@ -62,7 +57,7 @@ public:
 
 
     // Encoders and Decoders
-    static void encodeADZ(const ADZFile &source, FloppyDisk &target);
+    // [[deprecated]] static void encodeADZ(const ADZFile &source, FloppyDisk &target);
 
     static void encodeEADF(const EADFFile &source, FloppyDisk &target);
     static void decodeEADF(EADFFile &target, const FloppyDisk &source);

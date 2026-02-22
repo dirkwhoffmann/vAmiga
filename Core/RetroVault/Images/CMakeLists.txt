@@ -10,7 +10,6 @@ target_sources(RetroVault PRIVATE
 )
 
 add_subdirectory(ADF)
-add_subdirectory(ADZ)
 add_subdirectory(D64)
 add_subdirectory(DMS)
 add_subdirectory(EADF)

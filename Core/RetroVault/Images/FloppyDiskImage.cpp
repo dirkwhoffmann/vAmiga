@@ -10,7 +10,6 @@
 #include "config.h"
 #include "FloppyDiskImage.h"
 #include "ADFFile.h"
-#include "ADZFile.h"
 #include "DMSFile.h"
 #include "EADFFile.h"
 #include "EXEFile.h"
@@ -27,7 +26,7 @@ optional<ImageInfo>
 FloppyDiskImage::about(const fs::path& url)
 {
     if (auto info = ADFFile::about(url))  return info;
-    if (auto info = ADZFile::about(url))  return info;
+    // if (auto info = ADZFile::about(url))  return info;
     if (auto info = EADFFile::about(url)) return info;
     if (auto info = IMGFile::about(url))  return info;
     if (auto info = STFile::about(url))   return info;
@@ -44,7 +43,7 @@ FloppyDiskImage::tryMake(const fs::path &path)
     unique_ptr<FloppyDiskImage> result;
 
     if (ADFFile::about(path).has_value())  return make_unique<ADFFile>(path);
-    if (ADZFile::about(path).has_value())  return make_unique<ADZFile>(path);
+    // if (ADZFile::about(path).has_value())  return make_unique<ADZFile>(path);
     if (EADFFile::about(path).has_value()) return make_unique<EADFFile>(path);
     if (IMGFile::about(path).has_value())  return make_unique<IMGFile>(path);
     if (STFile::about(path).has_value())   return make_unique<STFile>(path);
