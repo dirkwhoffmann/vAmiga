@@ -35,6 +35,18 @@ EADFFile::about(const fs::path &path)
     return {};
 }
 
+void
+EADFFile::ensureEADF()
+{
+    for (auto &header : extAdfHeaders) {
+
+        if (utl::matchingBufferHeader(data.ptr, data.size, header))
+            return;
+    }
+    
+    throw ImageError(ImageError::FORMAT_MISMATCH);
+}
+
 isize
 EADFFile::numCyls() const
 {

@@ -18,13 +18,17 @@ struct ImageError : public Error {
     static constexpr long OK                =  0;
     static constexpr long CUSTOM            =  1;
 
+    // General
+    static constexpr long SIZE_MISMATCH     = 10;
+    static constexpr long FORMAT_MISMATCH   = 11;
+
     // DMS images
-    static constexpr long DMS_CANT_CREATE   = 10;
+    static constexpr long DMS_CANT_CREATE   = 20;
 
     // Extended ADF images
-    static constexpr long EXT_FACTOR5       = 20;
-    static constexpr long EXT_INCOMPATIBLE  = 21;
-    static constexpr long EXT_CORRUPTED     = 22;
+    static constexpr long EXT_FACTOR5       = 30;
+    static constexpr long EXT_INCOMPATIBLE  = 31;
+    static constexpr long EXT_CORRUPTED     = 32;
 
     const char *errstr() const noexcept override {
 
@@ -32,7 +36,10 @@ struct ImageError : public Error {
 
             case OK:                          return "OK";
             case CUSTOM:                      return "CUSTOM";
-                
+
+            case SIZE_MISMATCH:               return "SIZE_MISMATCH";
+            case FORMAT_MISMATCH:             return "FORMAT_MISMATCH";
+
             case DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
             case EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";

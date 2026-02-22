@@ -310,6 +310,8 @@ Allocator<T>::uncompress(std::function<void(u8 *, isize, vector<u8> &, isize)> a
 // Template instantiations
 //
 
+// template Allocator<T>::Allocator(const Allocator&);
+
 #define INSTANTIATE_ALLOCATOR(T) \
 template Allocator<T>& Allocator<T>::operator=(const Allocator<T>& other); \
 template void Allocator<T>::alloc(isize bytes); \

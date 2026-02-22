@@ -337,17 +337,9 @@ Amiga::saveWorkspace(const fs::path &path)
             string file = name + (config.compressWorkspaces ? ".adz" : ".adf");
             
             try {
-                
-                if (config.compressWorkspaces) {
 
-                    auto adz = Codec::makeADZ(drive);
-                    adz->writeToFile(path / file);
-
-                } else {
-
-                    auto adf = Codec::makeADF(drive);
-                    adf->writeToFile(path / file);
-                }
+                auto adf = Codec::makeADF(drive);
+                adf->writeToFile(path / file);
                 drive.markDiskAsUnmodified();
                 
                 df << "try " << name << " insert " << file << "\n";
@@ -369,22 +361,10 @@ Amiga::saveWorkspace(const fs::path &path)
             
             try {
                 
-                if (config.compressWorkspaces) {
-
-                    if (auto hdz = Codec::makeHDZ(drive)) {
-                        hdz->writeToFile(path / file);
-                    }
-                    // HDZFile(HDFFile(drive)).writeToFile(path / file);
-
-                } else {
-
-                    if (auto hdf = Codec::makeHDF(drive)) {
-                        hdf->writeToFile(path / file);
-                    }
-                    // HDFFile(drive).writeToFile(path / file);
-                }
+                auto hdf = Codec::makeHDF(drive);
+                hdf->writeToFile(path / file);
                 drive.markDiskAsUnmodified();
-                
+                                
                 hd << "try " << name << " attach " << file << "\n";
                 hd << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
                 

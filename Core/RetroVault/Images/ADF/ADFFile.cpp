@@ -12,6 +12,7 @@
 #include "EADFFile.h"
 #include "AmigaEncoder.h"
 #include "AmigaDecoder.h"
+#include "Images/ImageError.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
@@ -31,24 +32,55 @@ ADFFile::about(const fs::path &path)
 {
     // Check suffix
     auto suffix = utl::uppercased(path.extension().string());
-    if (suffix != ".ADF") return {};
 
-    // Get file size
-    auto len = utl::getSizeOfFile(path);
+    if (suffix == ".ADZ") {
+        
+        return {{ ImageType::FLOPPY, ImageFormat::ADF }};
+    }
+    
+    if (suffix == ".ADF") {
+        
+        // Get file size
+        auto len = utl::getSizeOfFile(path);
+        
+        // Some ADFs contain an additional byte at the end. Ignore it.
+        len &= ~1;
+        
+        // The size must be a multiple of the cylinder size
+        if (len % 11264) return {};
+        
+        // Check some more limits
+        if (len > ADFSIZE_35_DD_84 && len != ADFSIZE_35_HD) return {};
+        
+        // Make sure it's not an extended ADF
+        if (EADFFile::about(path)) return {};
+        
+        return {{ ImageType::FLOPPY, ImageFormat::ADF }};
+    }
+    
+    return {};
+}
 
+void
+ADFFile::ensureADF()
+{
+    auto len = data.size;
+    
     // Some ADFs contain an additional byte at the end. Ignore it.
     len &= ~1;
-
+    
     // The size must be a multiple of the cylinder size
-    if (len % 11264) return {};
-
+    if (len % 11264)
+        throw ImageError(ImageError::SIZE_MISMATCH);
+    
     // Check some more limits
-    if (len > ADFSIZE_35_DD_84 && len != ADFSIZE_35_HD) return {};
-
+    if (len > ADFSIZE_35_DD_84 && len != ADFSIZE_35_HD)
+        throw ImageError(ImageError::SIZE_MISMATCH);
+    
     // Make sure it's not an extended ADF
-    if (EADFFile::about(path)) return {};
-
-    return {{ ImageType::FLOPPY, ImageFormat::ADF }};
+    if (utl::matchingBufferHeader(data.ptr, data.size, "UAE--ADF") ||
+        utl::matchingBufferHeader(data.ptr, data.size, "UAE--1ADF"))
+        throw ImageError(ImageError::FORMAT_MISMATCH);
 }
 
 isize
@@ -143,11 +175,50 @@ ADFFile::describeImage() const noexcept
     };
 }
 
+isize
+ADFFile::writeToFile(const fs::path &path) const
+{
+    return writeToFile(path, 0, size());
+}
+
+isize
+ADFFile::writeToFile(const fs::path &path, isize offset, isize len) const
+{
+    if (utl::lowercased(path.extension().string()) == ".adz") {
+     
+        auto copy = data;
+        copy.gzip();
+        copy.save(path, offset, len);
+        return copy.size;
+        
+    } else {
+        
+        data.save(path, offset, len);
+        return data.size;
+    }
+}
+
 void
 ADFFile::didInitialize()
 {
+    if (utl::lowercased(path.extension().string()) == ".adz") {
+        
+        loginfo(IMG_DEBUG, "Decompressing %ld bytes...\n", data.size);
+        
+        try {
+            data.gunzip();
+        } catch (std::runtime_error &err) {
+            throw IOError(IOError::ZLIB_ERROR, err.what());
+        }
+        
+        loginfo(IMG_DEBUG, "Restored %ld bytes.\n", data.size);
+    }
+    
     // Add some empty cylinders if the file contains less than 80
     if (data.size < ADFSIZE_35_DD) data.resize(ADFSIZE_35_DD, 0);
+    
+    // Run a final consistency check on the buffer contents
+    ensureADF();
 }
 
 isize

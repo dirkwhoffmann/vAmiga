@@ -31,6 +31,7 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     Allocator& operator= (const Allocator&);
     ~Allocator() { dealloc(); }
 
+    
     //
     // Methods from Hashable
     //
@@ -117,6 +118,37 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
         uncompress(Compressible::unrle3, offset, sizeEstimate);
     }
 
+    // Saves the buffer to a stream
+    void save(std::ostream &stream, isize offset, isize len) const
+    {
+        assert(offset >= 0 && len >= 0 && offset + len <= size);
+        stream.write((char *)ptr + offset, len);
+    }
+
+    void save(std::ostream &stream) const
+    {
+        save(stream, 0, size);
+    }
+    
+    // Saves the buffer to a file
+    void save(const fs::path &path, isize offset, isize len) const
+    {
+        if (utl::isDirectory(path))
+            throw IOError(IOError::FILE_IS_DIRECTORY);
+
+        std::ofstream stream(path, std::ofstream::binary);
+
+        if (!stream.is_open())
+            throw IOError(IOError::FILE_CANT_WRITE, path);
+
+        save(stream);
+    }
+    
+    void save(const fs::path &path) const
+    {
+        save(path, 0, size);
+    }
+    
 private:
 
     void compress(std::function<void(u8 *,isize,std::vector<u8>&)> algo, isize offset = 0);
@@ -128,6 +160,7 @@ template <class T> struct Buffer : public Allocator <T> {
     T *ptr = nullptr;
 
     Buffer() : Allocator<T>(ptr) { };
+    Buffer(const Buffer& other) : Allocator<T>(ptr) { this->init(other.ptr, other.size); }
     Buffer(isize bytes) : Allocator<T>(ptr) { this->init(bytes); }
     Buffer(isize bytes, T value) : Allocator<T>(ptr) { this->init(bytes, value); }
     Buffer(const T *buf, isize len) : Allocator<T>(ptr) { this->init(buf, len); }

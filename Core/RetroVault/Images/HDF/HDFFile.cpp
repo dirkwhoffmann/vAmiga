@@ -40,6 +40,29 @@ HDFFile::describeImage() const noexcept
     };
 }
 
+isize
+HDFFile::writeToFile(const fs::path &path) const
+{
+    return writeToFile(path, 0, size());
+}
+
+isize
+HDFFile::writeToFile(const fs::path &path, isize offset, isize len) const
+{
+    if (utl::lowercased(path.extension().string()) == ".adz") {
+     
+        auto copy = data;
+        copy.gzip();
+        copy.save(path, offset, len);
+        return copy.size;
+        
+    } else {
+        
+        data.save(path, offset, len);
+        return data.size;
+    }
+}
+
 void
 HDFFile::didInitialize()
 {

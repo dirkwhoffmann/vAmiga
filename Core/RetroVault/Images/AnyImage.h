@@ -145,11 +145,11 @@ public:
     // Create a new image file on disk and update it with the current contents
     void saveAs(const fs::path &path);
     
-    isize writeToStream(std::ostream &stream) const;
-    isize writeToFile(const fs::path &path) const;
+    virtual isize writeToStream(std::ostream &stream) const;
+    virtual isize writeToFile(const fs::path &path) const;
 
-    isize writeToStream(std::ostream &stream, isize offset, isize len) const;
-    isize writeToFile(const fs::path &path, isize offset, isize len) const;
+    virtual isize writeToStream(std::ostream &stream, isize offset, isize len) const;
+    virtual isize writeToFile(const fs::path &path, isize offset, isize len) const;
 
 private:
 

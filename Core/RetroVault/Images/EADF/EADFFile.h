@@ -76,7 +76,10 @@ public:
     explicit EADFFile(const fs::path &path) { init(path); }
     explicit EADFFile(const u8 *buf, isize len) { init(buf, len); }
 
+    // Checks if the buffer is in EADF format (throws if not)
+    void ensureEADF();
 
+    
     //
     // Methods from AnyImage
     //

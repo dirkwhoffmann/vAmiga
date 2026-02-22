@@ -81,9 +81,10 @@ AnyImage::init(const fs::path &path)
     if (buffer.empty() && file.fail())
         throw IOError(IOError::FILE_CANT_READ, path);
     
+    this->path = path;
+
     // Initialize image with the vector contents
     init(buffer.data(), isize(buffer.size()));
-    this->path = path;
     file = std::move(stream);
 }
 

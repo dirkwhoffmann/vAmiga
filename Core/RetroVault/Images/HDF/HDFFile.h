@@ -62,7 +62,8 @@ public:
     ImageType type() const noexcept override { return ImageType::HARDDISK; }
     ImageFormat format() const noexcept override { return ImageFormat::HDF; }
     std::vector<string> describeImage() const noexcept override;
-
+    isize writeToFile(const fs::path &path) const override;
+    isize writeToFile(const fs::path &path, isize offset, isize len) const override;
     void didInitialize() override;
 
 
