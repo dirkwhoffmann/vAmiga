@@ -33,8 +33,6 @@
 		500B0D402E8099AA008FC5E1 /* CapturesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D3F2E8099A1008FC5E1 /* CapturesSettings.swift */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
-		5012DCE02D5B33C200233B6A /* HDZFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCDF2D5B33C100233B6A /* HDZFile.cpp */; };
-		5012DCE12D5B33C200233B6A /* HDZFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCDF2D5B33C100233B6A /* HDZFile.cpp */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		50144E342E7BE4F1009E15B4 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50144E332E7BE4F1009E15B4 /* Settings.storyboard */; };
 		50144E362E7BE5EA009E15B4 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50144E352E7BE5E5009E15B4 /* SettingsWindowController.swift */; };
@@ -688,8 +686,6 @@
 		500DFFD32775A3AD00600744 /* RemoteServerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoteServerTypes.h; sourceTree = "<group>"; };
 		50104E8525ECD0EF0047A9AA /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
-		5012DCDE2D5B33BA00233B6A /* HDZFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDZFile.h; sourceTree = "<group>"; };
-		5012DCDF2D5B33C100233B6A /* HDZFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDZFile.cpp; sourceTree = "<group>"; };
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		50144E332E7BE4F1009E15B4 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		50144E352E7BE5E5009E15B4 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
@@ -866,7 +862,6 @@
 		505A133D2C3BA8A000FF8D2C /* MemoryDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryDebugger.cpp; sourceTree = "<group>"; };
 		505A133E2C3BA8A000FF8D2C /* MemoryDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryDebugger.h; sourceTree = "<group>"; };
 		505A19452EDDF6CF000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		505A19472EDDF6FC000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A19492EDDF715000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A194D2EDDF75C000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		505A194F2EDDF77B000BB9C2 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1827,16 +1822,6 @@
 			path = HDF;
 			sourceTree = "<group>";
 		};
-		505A193D2EDDF5FB000BB9C2 /* HDZ */ = {
-			isa = PBXGroup;
-			children = (
-				505A19472EDDF6FC000BB9C2 /* CMakeLists.txt */,
-				5012DCDE2D5B33BA00233B6A /* HDZFile.h */,
-				5012DCDF2D5B33C100233B6A /* HDZFile.cpp */,
-			);
-			path = HDZ;
-			sourceTree = "<group>";
-		};
 		505A193E2EDDF60B000BB9C2 /* ADF */ = {
 			isa = PBXGroup;
 			children = (
@@ -2745,7 +2730,6 @@
 				50BF4B2D2EFBF7C600F1B9F2 /* HardDiskImage.h */,
 				50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */,
 				505A193C2EDDF5ED000BB9C2 /* HDF */,
-				505A193D2EDDF5FB000BB9C2 /* HDZ */,
 				505A193E2EDDF60B000BB9C2 /* ADF */,
 				505A19402EDDF622000BB9C2 /* EADF */,
 				505A19412EDDF62A000BB9C2 /* IMG */,
@@ -3279,7 +3263,6 @@
 				500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */,
 				50392FAC2EF6AC0000DAE17A /* FSContract.cpp in Sources */,
 				50BF4BC92F0ADF3200F1B9F2 /* FSExporter.cpp in Sources */,
-				5012DCE02D5B33C200233B6A /* HDZFile.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* MyWindowDelegate.swift in Sources */,
 				50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */,
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
@@ -3657,7 +3640,6 @@
 				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
-				5012DCE12D5B33C200233B6A /* HDZFile.cpp in Sources */,
 				50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */,
 				50FC04E527DA1A1400C3E566 /* u_init.c in Sources */,
 				50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */,
