@@ -53,10 +53,10 @@ extension Renderer {
     func buildDescriptors() {
 
         // Get the default background color
-        let bgColor = NSColor.windowBackgroundColor.usingColorSpace(.deviceRGB) ?? .black
-        let r = Double(bgColor.redComponent)
-        let g = Double(bgColor.greenComponent)
-        let b = Double(bgColor.blueComponent)
+        // let bgColor = NSColor.windowBackgroundColor.usingColorSpace(.deviceRGB) ?? .black
+        let r = 0.0 // Double(bgColor.redComponent)
+        let g = 0.0 // Double(bgColor.greenComponent)
+        let b = 0.0 // Double(bgColor.blueComponent)
 
         // Create the render pass descriptor
         descriptor = MTLRenderPassDescriptor()
