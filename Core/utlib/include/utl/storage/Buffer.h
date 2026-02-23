@@ -19,17 +19,41 @@
 
 namespace utl {
 
-template <class T> struct Allocator : public Hashable, public Dumpable {
+template <class T> struct Buffer : public Hashable, public Dumpable {
 
     static constexpr isize maxCapacity = 512 * 1024 * 1024;
 
-    T *&ptr;
+    T *ptr;
     isize size;
+    T **managed;
+        
+    Buffer() : ptr(nullptr), size(0), managed(nullptr) { }
+    Buffer(T **managed) : ptr(nullptr), size(0), managed(managed) { *managed = nullptr; }
+    Buffer(const Buffer& other) : Buffer<T>() { init(other); }
+    Buffer(isize bytes) : Buffer<T>() { this->init(bytes); }
+    Buffer(isize bytes, T value) : Buffer<T>() { this->init(bytes, value); }
+    Buffer(const T *buf, isize len) : Buffer<T>() { this->init(buf, len); }
+    Buffer(const string &str) : Buffer<T>() { this->init(str); }
+    Buffer(const std::vector<T> &vec) : Buffer<T>() { this->init(vec); }
+    Buffer(const fs::path &path) : Buffer<T>() { this->init(path); }
+    Buffer(const fs::path &path, const string &name) : Buffer<T>() { this->init(path, name); }
+    ~Buffer() { dealloc(); }
+    
+    void init(const Buffer<T> &other);
+    void init(isize elements);
+    void init(isize elements, T value);
+    void init(const T *buf, isize elements);
+    void init(const string &str);
+    void init(const std::vector<T> &vector);
+    void init(const fs::path &path);
+    // void init(const fs::path &path, const string &name);
 
-    Allocator(T *&ptr) : ptr(ptr), size(0) { ptr = nullptr; }
-    Allocator(const Allocator&);
-    Allocator& operator= (const Allocator&);
-    ~Allocator() { dealloc(); }
+    void manage(T** p) { managed = p; *p = ptr; }
+
+    Buffer& operator = (const Buffer &other) { init(other); return *this; }
+    T operator [] (isize i) const { return ptr[i]; }
+    T &operator [] (isize i) { return ptr[i]; }
+    
 
     
     //
@@ -61,17 +85,9 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
     explicit operator bool() const { return !empty(); }
     ByteView byteView() const { return ByteView(ptr, size); }
 
-
-    // Initializers
+    // Allocates and frees memory
     void alloc(isize elements);
     void dealloc();
-    void init(isize elements, T value = 0);
-    void init(const T *buf, isize elements);
-    void init(const string &str);
-    void init(const Allocator<T> &other);
-    void init(const std::vector<T> &vector);
-    void init(const fs::path &path);
-    void init(const fs::path &path, const string &name);
 
     // Resizes an existing buffer
     void resize(isize elements);
@@ -118,36 +134,11 @@ template <class T> struct Allocator : public Hashable, public Dumpable {
         uncompress(Compressible::unrle3, offset, sizeEstimate);
     }
 
-    // Saves the buffer to a stream
-    void save(std::ostream &stream, isize offset, isize len) const
-    {
-        assert(offset >= 0 && len >= 0 && offset + len <= size);
-        stream.write((char *)ptr + offset, len);
-    }
-
-    void save(std::ostream &stream) const
-    {
-        save(stream, 0, size);
-    }
-    
-    // Saves the buffer to a file
-    void save(const fs::path &path, isize offset, isize len) const
-    {
-        if (utl::isDirectory(path))
-            throw IOError(IOError::FILE_IS_DIRECTORY);
-
-        std::ofstream stream(path, std::ofstream::binary);
-
-        if (!stream.is_open())
-            throw IOError(IOError::FILE_CANT_WRITE, path);
-
-        save(stream);
-    }
-    
-    void save(const fs::path &path) const
-    {
-        save(path, 0, size);
-    }
+    // Exports the buffer
+    void write(std::ostream &stream) const { write(stream, 0, size); }
+    void write(std::ostream &stream, isize offset, isize len) const;
+    void write(const fs::path &path) const { write(path, 0, size); }
+    void write(const fs::path &path, isize offset, isize len) const;
     
 private:
 
@@ -155,27 +146,9 @@ private:
     void uncompress(std::function<void(u8 *,isize,std::vector<u8>&, isize)> algo, isize offset = 0, isize sizeEstimate = 0);
 };
 
-template <class T> struct Buffer : public Allocator <T> {
-
-    T *ptr = nullptr;
-
-    Buffer() : Allocator<T>(ptr) { };
-    Buffer(const Buffer& other) : Allocator<T>(ptr) { this->init(other.ptr, other.size); }
-    Buffer(isize bytes) : Allocator<T>(ptr) { this->init(bytes); }
-    Buffer(isize bytes, T value) : Allocator<T>(ptr) { this->init(bytes, value); }
-    Buffer(const T *buf, isize len) : Allocator<T>(ptr) { this->init(buf, len); }
-    Buffer(const fs::path &path) : Allocator<T>(ptr) { this->init(path); }
-    Buffer(const fs::path &path, const string &name) : Allocator<T>(ptr) { this->init(path, name); }
-
-    Buffer& operator= (const Buffer& other) { Allocator<T>::operator=(other); return *this; }
-
-    T operator [] (isize i) const { return ptr[i]; }
-    T &operator [] (isize i) { return ptr[i]; }
-};
-
 // Stream operators
 template <class T>
-std::ostream &operator<<(std::ostream &os, const Allocator<T> &buffer) {
+std::ostream &operator<<(std::ostream &os, const Buffer<T> &buffer) {
 
     if (buffer.ptr && buffer.size > 0) {
         os.write((const char *)buffer.ptr, buffer.size * sizeof(T));

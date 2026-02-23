@@ -17,7 +17,6 @@
 
 namespace vamiga {
 
-using utl::Allocator;
 using utl::Buffer;
 
 #define SLOW_RAM_STRT 0xC00000
@@ -194,12 +193,12 @@ public:
     u8 *slow;
     u8 *fast;
 
-    Allocator<u8> romAllocator = Allocator(rom);
-    Allocator<u8> womAllocator = Allocator(wom);
-    Allocator<u8> extAllocator = Allocator(ext);
-    Allocator<u8> chipAllocator = Allocator(chip);
-    Allocator<u8> slowAllocator = Allocator(slow);
-    Allocator<u8> fastAllocator = Allocator(fast);
+    Buffer<u8> romAllocator = Buffer(&rom);
+    Buffer<u8> womAllocator = Buffer(&wom);
+    Buffer<u8> extAllocator = Buffer(&ext);
+    Buffer<u8> chipAllocator = Buffer(&chip);
+    Buffer<u8> slowAllocator = Buffer(&slow);
+    Buffer<u8> fastAllocator = Buffer(&fast);
 
     u32 romMask = 0;
     u32 womMask = 0;
@@ -380,8 +379,8 @@ public:
 
 private:
     
-    void alloc(Allocator<u8> &allocator, isize bytes, bool update);
-    void alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update);
+    void alloc(Buffer<u8> &buf, isize bytes, bool update);
+    void alloc(Buffer<u8> &buf, isize bytes, u32 &mask, bool update);
 
 
     //

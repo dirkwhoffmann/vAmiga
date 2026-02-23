@@ -187,12 +187,12 @@ ADFFile::writeToFile(const fs::path &path, isize offset, isize len) const
      
         auto copy = data;
         copy.gzip();
-        copy.save(path, offset, len);
+        copy.write(path, offset, len);
         return copy.size;
         
     } else {
         
-        data.save(path, offset, len);
+        data.write(path, offset, len);
         return data.size;
     }
 }

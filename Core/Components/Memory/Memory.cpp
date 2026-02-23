@@ -569,26 +569,26 @@ Memory::allocExt(i32 bytes, bool update)
 }
 
 void
-Memory::alloc(Allocator<u8> &allocator, isize bytes, bool update)
+Memory::alloc(Buffer<u8> &buf, isize bytes, bool update)
 {
     // Only proceed if memory layout will change
-    if (bytes == allocator.size) return;
+    if (bytes == buf.size) return;
 
     // Allocate memory
-    allocator.alloc(bytes);
+    buf.alloc(bytes);
 
     // Update the memory source tables if requested
     if (update) updateMemSrcTables();
 }
 
 void
-Memory::alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update)
+Memory::alloc(Buffer<u8> &buf, isize bytes, u32 &mask, bool update)
 {
     // Set the memory mask
     mask = bytes ? u32(bytes - 1) : 0;
 
     // Allocate
-    alloc(allocator, bytes, update);
+    alloc(buf, bytes, update);
 }
 
 void
