@@ -409,19 +409,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="8fO-nY-y8g"/>
-                            <menuItem title="Inspect Disk..." id="XTb-fA-6qj">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectFloppyDiskAction:" target="-1" id="Aix-JY-aGG"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." id="IDW-d2-3zo">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectDfnVolumeAction:" target="-1" id="dsZ-hU-nj2"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="mCe-2p-6gR"/>
                             <menuItem title="Write Protected" id="vbD-qh-Fhq">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -474,19 +461,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="jyn-pH-Tv0"/>
-                            <menuItem title="Inspect Disk..." tag="1" id="spZ-Jo-VzX">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectFloppyDiskAction:" target="-1" id="WAG-BP-bGQ"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." tag="1" id="V5K-J9-aFA">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectDfnVolumeAction:" target="-1" id="z3g-Is-AfC"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="7xn-Rq-hTf"/>
                             <menuItem title="Write Protected" tag="1" id="s7Y-nU-Hng">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -539,19 +513,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="0QR-VA-UY0"/>
-                            <menuItem title="Inspect Disk..." tag="2" id="WR6-M4-nqD">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectFloppyDiskAction:" target="-1" id="QtV-Vz-IeD"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." tag="2" id="nvt-r8-RWb">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectDfnVolumeAction:" target="-1" id="i9V-5S-evM"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="3ka-fe-IUs"/>
                             <menuItem title="Write Protected" tag="2" id="NqN-iv-Qgb">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -604,19 +565,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="HcB-7e-MEa"/>
-                            <menuItem title="Inspect Disk..." tag="3" id="xBw-K3-SqT">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectFloppyDiskAction:" target="-1" id="FL0-7q-nqb"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." tag="3" id="BBY-R1-DX7">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectDfnVolumeAction:" target="-1" id="cgL-kc-AP3"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="Syk-m4-IU0"/>
                             <menuItem title="Write Protected" tag="3" id="l5M-Sz-mYQ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -676,19 +624,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ieg-NM-Vj2"/>
-                            <menuItem title="Inspect Disk..." id="1m9-KG-jpf" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrDiskAction:" target="-1" id="AVN-YM-7qs"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." id="TeC-En-Kma" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrVolumeAction:" target="-1" id="VOg-UK-uyN"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="iOD-qI-pth"/>
                             <menuItem title="Write Protected" id="73e-Wr-cMm">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -748,19 +683,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="8e1-0R-Xgb"/>
-                            <menuItem title="Inspect Disk..." tag="1" id="ibt-uo-ppQ" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrDiskAction:" target="-1" id="Uzm-x1-eQh"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." tag="1" id="y1v-r5-qiP" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrVolumeAction:" target="-1" id="vbj-E2-1Q8"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="ax9-2h-7hk"/>
                             <menuItem title="Write Protected" tag="1" id="LFK-jK-NPP" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -820,19 +742,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="BA5-MK-XXw"/>
-                            <menuItem title="Inspect Disk..." tag="2" id="0E6-C2-ryM" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrDiskAction:" target="-1" id="oTJ-KH-poQ"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." tag="2" id="unW-JQ-lBo" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrVolumeAction:" target="-1" id="XFg-QU-xoZ"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="1BH-ag-PTI"/>
                             <menuItem title="Write Protected" tag="2" id="KcH-ih-oZX" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -892,19 +801,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="tzT-rv-xwa"/>
-                            <menuItem title="Inspect Disk..." tag="3" id="pFD-5y-I16" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrDiskAction:" target="-1" id="7YU-lu-vRG"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Inspect File System..." tag="3" id="15h-z1-NXW" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectHdrVolumeAction:" target="-1" id="GWC-eA-bxI"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="Jyn-ik-ww2"/>
                             <menuItem title="Write Protected" tag="3" id="Xmj-KC-ZiU" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

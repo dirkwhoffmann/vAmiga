@@ -82,9 +82,7 @@ extension MyController: NSMenuItemValidation {
             return true
             
         case #selector(MyController.ejectDiskAction(_:)),
-            #selector(MyController.exportFloppyDiskAction(_:)),
-            #selector(MyController.inspectFloppyDiskAction(_:)),
-            #selector(MyController.inspectDfnVolumeAction(_:)):
+            #selector(MyController.exportFloppyDiskAction(_:)):
             return dfn.info.hasDisk
             
         case #selector(MyController.writeProtectAction(_:)):
@@ -610,26 +608,6 @@ extension MyController: NSMenuItemValidation {
         exportPanel?.showSheet(diskDrive: sender.tag)
     }
     
-    @IBAction func inspectFloppyDiskAction(_ sender: NSMenuItem!) {
-        
-        let panel = DiskInspector(with: self, nibName: "DiskInspector")
-        panel?.show(diskDrive: sender.tag)
-    }
-    
-    @IBAction func inspectDfnVolumeAction(_ sender: NSMenuItem!) {
-        
-        let panel = VolumeInspector(with: self, nibName: "VolumeInspector")
-        
-        do {
-            
-            try panel?.show(diskDrive: sender.tag)
-            
-        } catch {
-            
-            showAlert(.cantDecode, error: error, window: window)
-        }
-    }
-    
     //
     // Action methods (Hard drive menus)
     //
@@ -744,26 +722,6 @@ extension MyController: NSMenuItemValidation {
         
         let exportPanel = DiskExporter(with: self, nibName: "DiskExporter")
         exportPanel?.showSheet(hardDrive: sender.tag)
-    }
-    
-    @IBAction func inspectHdrDiskAction(_ sender: NSMenuItem!) {
-        
-        let panel = DiskInspector(with: self, nibName: "DiskInspector")
-        panel?.show(hardDrive: sender.tag)
-    }
-    
-    @IBAction func inspectHdrVolumeAction(_ sender: NSMenuItem!) {
-        
-        let panel = VolumeInspector(with: self, nibName: "VolumeInspector")
-        
-        do {
-            
-            try panel?.show(hardDrive: sender.tag)
-            
-        } catch {
-            
-            showAlert(.cantDecode, error: error, window: window)
-        }
     }
     
     @IBAction func configureHdrAction(_ sender: NSMenuItem!) {
