@@ -168,9 +168,6 @@
 		50627FD3286EBA7300F2A835 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* Texture.cpp */; };
 		50627FD5286EBACA00F2A835 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* Texture.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
-		5062F1902D54F2E7004546A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5062F18A2D54F2E7004546A2 /* Assets.xcassets */; };
-		5062F1922D54F2E7004546A2 /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5062F18D2D54F2E7004546A2 /* PreviewViewController.xib */; };
-		5062F1932D54F2E7004546A2 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062F18C2D54F2E7004546A2 /* PreviewViewController.swift */; };
 		5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064051A2D19CA0C002FBC57 /* PromServer.cpp */; };
 		5064051C2D19CA0D002FBC57 /* PromServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064051A2D19CA0C002FBC57 /* PromServer.cpp */; };
 		506407CB2D1AC45A002FBC57 /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506407CA2D1AC455002FBC57 /* SocketServer.cpp */; };
@@ -285,8 +282,6 @@
 		509D07742EDB920100355638 /* FileSystemLayer3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07722EDB8CD200355638 /* FileSystemLayer3.cpp */; };
 		509D07772EDB993F00355638 /* PosixAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixAdapter.cpp */; };
 		509D07782EDB993F00355638 /* PosixAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D07762EDB993E00355638 /* PosixAdapter.cpp */; };
-		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
-		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
 		509F41EA243B0FF700AD0FE4 /* ScreenshotViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
@@ -616,16 +611,6 @@
 		9C47C0332D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		509EA5502D51EFD40001BC50 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 508FDE5C21EA1FA40043D0E9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 509EA5422D51EFD40001BC50;
-			remoteInfo = QuickLookPlugIn;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		509EA5532D51EFD40001BC50 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -633,7 +618,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -888,11 +872,6 @@
 		50627FD2286EBA7300F2A835 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
-		5062F18A2D54F2E7004546A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		5062F18B2D54F2E7004546A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5062F18C2D54F2E7004546A2 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
-		5062F18E2D54F2E7004546A2 /* QuickLookPlugIn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuickLookPlugIn.entitlements; sourceTree = "<group>"; };
-		5062F18F2D54F2E7004546A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreviewViewController.xib; sourceTree = "<group>"; };
 		5062F1942D550730004546A2 /* CoreObjectTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreObjectTypes.h; sourceTree = "<group>"; };
 		506405192D19CA05002FBC57 /* PromServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PromServer.h; sourceTree = "<group>"; };
 		5064051A2D19CA0C002FBC57 /* PromServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PromServer.cpp; sourceTree = "<group>"; };
@@ -1045,7 +1024,6 @@
 		509D07762EDB993E00355638 /* PosixAdapter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PosixAdapter.cpp; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
 		509E76102EDD74E400608FA7 /* DiskEncoder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskEncoder.h; sourceTree = "<group>"; };
-		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
 		509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotViewer.swift; sourceTree = "<group>"; };
@@ -1417,14 +1395,6 @@
 				508FDFE321EA21550043D0E9 /* Cocoa.framework in Frameworks */,
 				508FDFE021EA214A0043D0E9 /* MetalKit.framework in Frameworks */,
 				508FDFE121EA214A0043D0E9 /* Metal.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		509EA5402D51EFD40001BC50 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1930,18 +1900,6 @@
 			path = System;
 			sourceTree = "<group>";
 		};
-		5062F1952D566066004546A2 /* QuickLookPlugin */ = {
-			isa = PBXGroup;
-			children = (
-				5062F18A2D54F2E7004546A2 /* Assets.xcassets */,
-				5062F18B2D54F2E7004546A2 /* Info.plist */,
-				5062F18C2D54F2E7004546A2 /* PreviewViewController.swift */,
-				5062F18D2D54F2E7004546A2 /* PreviewViewController.xib */,
-				5062F18E2D54F2E7004546A2 /* QuickLookPlugIn.entitlements */,
-			);
-			path = QuickLookPlugin;
-			sourceTree = "<group>";
-		};
 		506436E129C1D82500768528 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
@@ -2046,7 +2004,6 @@
 				50B14C2421EB8F25002E32A6 /* ObjCProxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
-				5062F1952D566066004546A2 /* QuickLookPlugin */,
 				508FDE6521EA1FA40043D0E9 /* Products */,
 				508FDFDD21EA214A0043D0E9 /* Frameworks */,
 			);
@@ -2058,7 +2015,6 @@
 			children = (
 				508FDE6421EA1FA40043D0E9 /* vAmiga.app */,
 				50FC046D27DA0FA500C3E566 /* Headless */,
-				509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2942,7 +2898,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				509EA5512D51EFD40001BC50 /* PBXTargetDependency */,
 			);
 			name = vAmiga;
 			packageProductDependencies = (
@@ -2950,25 +2905,6 @@
 			productName = vAmiga;
 			productReference = 508FDE6421EA1FA40043D0E9 /* vAmiga.app */;
 			productType = "com.apple.product-type.application";
-		};
-		509EA5422D51EFD40001BC50 /* QuickLookPlugIn */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 509EA5572D51EFD40001BC50 /* Build configuration list for PBXNativeTarget "QuickLookPlugIn" */;
-			buildPhases = (
-				509EA53F2D51EFD40001BC50 /* Sources */,
-				509EA5402D51EFD40001BC50 /* Frameworks */,
-				509EA5412D51EFD40001BC50 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = QuickLookPlugIn;
-			packageProductDependencies = (
-			);
-			productName = QuickLookPlugIn;
-			productReference = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 		50FC046C27DA0FA500C3E566 /* Headless */ = {
 			isa = PBXNativeTarget;
@@ -3002,9 +2938,6 @@
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1020;
 					};
-					509EA5422D51EFD40001BC50 = {
-						CreatedOnToolsVersion = 16.2;
-					};
 					50FC046C27DA0FA500C3E566 = {
 						CreatedOnToolsVersion = 13.2.1;
 						LastSwiftMigration = 2620;
@@ -3028,7 +2961,6 @@
 			targets = (
 				508FDE6321EA1FA40043D0E9 /* vAmiga */,
 				50FC046C27DA0FA500C3E566 /* Headless */,
-				509EA5422D51EFD40001BC50 /* QuickLookPlugIn */,
 			);
 		};
 /* End PBXProject section */
@@ -3073,15 +3005,6 @@
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
 				50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */,
 				504E57C82D12ACFC002233D1 /* gamecontrollerdb.txt in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		509EA5412D51EFD40001BC50 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5062F1902D54F2E7004546A2 /* Assets.xcassets in Resources */,
-				5062F1922D54F2E7004546A2 /* PreviewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3435,14 +3358,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		509EA53F2D51EFD40001BC50 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5062F1932D54F2E7004546A2 /* PreviewViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		50FC046927DA0FA500C3E566 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3669,23 +3584,7 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		509EA5512D51EFD40001BC50 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 509EA5422D51EFD40001BC50 /* QuickLookPlugIn */;
-			targetProxy = 509EA5502D51EFD40001BC50 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
-		5062F18D2D54F2E7004546A2 /* PreviewViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5062F18F2D54F2E7004546A2 /* Base */,
-			);
-			name = PreviewViewController.xib;
-			sourceTree = "<group>";
-		};
 		508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3933,10 +3832,10 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 260214;
+				CURRENT_PROJECT_VERSION = 260223;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = UKB2M76T4L;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -3960,7 +3859,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 4.4b6;
+				MARKETING_VERSION = 4.4b7;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
@@ -3991,11 +3890,11 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 260214;
+				CURRENT_PROJECT_VERSION = 260223;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = UKB2M76T4L;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -4018,7 +3917,7 @@
 				);
 				LLVM_LTO = YES_THIN;
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 4.4b6;
+				MARKETING_VERSION = 4.4b7;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4034,77 +3933,6 @@
 			};
 			name = Release;
 		};
-		509EA5542D51EFD40001BC50 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = QuickLookPlugIn/QuickLookPlugIn.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 260214;
-				DEVELOPMENT_TEAM = UKB2M76T4L;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = QuickLookPlugIn/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = QuickLookPlugIn;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Dirk Hoffmann. All rights reserved.";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/../../../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.1;
-				MARKETING_VERSION = 4.4b6;
-				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga.QuickLookPlugIn;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		509EA5552D51EFD40001BC50 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CODE_SIGN_ENTITLEMENTS = QuickLookPlugIn/QuickLookPlugIn.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 260214;
-				DEVELOPMENT_TEAM = UKB2M76T4L;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = QuickLookPlugIn/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = QuickLookPlugIn;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Dirk Hoffmann. All rights reserved.";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/../../../../Frameworks",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 15.1;
-				MARKETING_VERSION = 4.4b6;
-				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga.QuickLookPlugIn;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 		50FC047227DA0FA500C3E566 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4114,7 +3942,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = UKB2M76T4L;
+				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				HEADER_SEARCH_PATHS = (
@@ -4139,7 +3967,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = UKB2M76T4L;
+				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				HEADER_SEARCH_PATHS = (
@@ -4171,15 +3999,6 @@
 			buildConfigurations = (
 				508FDE8D21EA1FA50043D0E9 /* Debug */,
 				508FDE8E21EA1FA50043D0E9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		509EA5572D51EFD40001BC50 /* Build configuration list for PBXNativeTarget "QuickLookPlugIn" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				509EA5542D51EFD40001BC50 /* Debug */,
-				509EA5552D51EFD40001BC50 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
