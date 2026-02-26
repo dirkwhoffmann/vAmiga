@@ -43,7 +43,6 @@ FloppyDiskImage::tryMake(const fs::path &path)
     unique_ptr<FloppyDiskImage> result;
 
     if (ADFFile::about(path).has_value())  return make_unique<ADFFile>(path);
-    // if (ADZFile::about(path).has_value())  return make_unique<ADZFile>(path);
     if (EADFFile::about(path).has_value()) return make_unique<EADFFile>(path);
     if (IMGFile::about(path).has_value())  return make_unique<IMGFile>(path);
     if (STFile::about(path).has_value())   return make_unique<STFile>(path);
@@ -57,7 +56,12 @@ FloppyDiskImage::tryMake(const fs::path &path)
 unique_ptr<FloppyDiskImage>
 FloppyDiskImage::make(const fs::path &path)
 {
-    if (auto img = tryMake(path)) return img;
+    if (!utl::fileExists(path))
+        throw IOError(IOError::FILE_NOT_FOUND, path.string());
+        
+    if (auto img = tryMake(path))
+        return img;
+
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
