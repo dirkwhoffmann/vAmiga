@@ -389,7 +389,7 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
 
     // In debug mode, also run the decoder
     /*
-    if constexpr (debug::ADF_DEBUG) {
+    if constexpr (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -403,7 +403,7 @@ FloppyDisk::decodeDisk(FloppyDiskImage &file) const
 {
     auto tracks = file.numTracks();
 
-    loginfo(ADF_DEBUG, "Decoding disk with %ld tracks\n", tracks);
+    loginfo(IMG_DEBUG, "Decoding disk with %ld tracks\n", tracks);
 
     if (getDiameter() != file.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -448,7 +448,7 @@ FloppyDisk::decode(ADFFile &adf) const
 {
     auto tracks = adf.numTracks();
 
-    loginfo(ADF_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
+    loginfo(IMG_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);

@@ -32,12 +32,15 @@ AmigaEncoder::encodeTrack(ByteView src, TrackNr t)
     loginfo(IMG_DEBUG, "Encoding Amiga track %ld with %ld sectors\n", t, count);
 
     // Start with a clean track
-    if (trackBuffer.empty()) trackBuffer.resize(16384, 0xAA);
-
+    auto trackBytes = count == 11 ? 12668  : 24636;
+    if (trackBuffer.empty()) trackBuffer.resize(trackBytes);
+    std::fill(trackBuffer.begin(), trackBuffer.end(), 0xAA);
+    
     // Create views
-    auto bitView = MutableBitView(trackBuffer.data(), count * ssize * 8);
+    auto trackBits = 8 * trackBytes;
+    auto bitView = MutableBitView(trackBuffer.data(), trackBits);
     auto view = bitView.byteView();
-
+    
     for (SectorNr s = 0; s < count; s++) {
 
         // Encode sector
@@ -51,7 +54,7 @@ AmigaEncoder::encodeTrack(ByteView src, TrackNr t)
         rectifyClockBit(bitView, 8 * ssize * s);
         rectifyClockBit(bitView, 8 * ssize * (s + 1));
     }
-
+    
     // Compute a debug checksum
     loginfo(IMG_DEBUG, "Track %ld checksum = %x\n", t, view.fnv32());
 

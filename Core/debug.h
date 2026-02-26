@@ -134,10 +134,9 @@ constexpr long HDR_DEBUG          = 0;
 constexpr long DBD_DEBUG          = 0;
 
 // Image files
-constexpr long ADF_DEBUG          = 1;
 constexpr long HDF_DEBUG          = 0;
 constexpr long DMS_DEBUG          = 0;
-constexpr long IMG_DEBUG          = 1;
+constexpr long IMG_DEBUG          = 0;
 
 // Real-time clock
 constexpr long RTC_DEBUG          = 0;
@@ -322,7 +321,6 @@ extern long HDR_DEBUG;
 extern long DBD_DEBUG;
 
 // Media types
-extern long ADF_DEBUG;
 extern long HDF_DEBUG;
 extern long DMS_DEBUG;
 extern long IMG_DEBUG;
