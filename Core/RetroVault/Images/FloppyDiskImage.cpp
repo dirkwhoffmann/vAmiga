@@ -26,7 +26,6 @@ optional<ImageInfo>
 FloppyDiskImage::about(const fs::path& url)
 {
     if (auto info = ADFFile::about(url))  return info;
-    // if (auto info = ADZFile::about(url))  return info;
     if (auto info = EADFFile::about(url)) return info;
     if (auto info = IMGFile::about(url))  return info;
     if (auto info = STFile::about(url))   return info;

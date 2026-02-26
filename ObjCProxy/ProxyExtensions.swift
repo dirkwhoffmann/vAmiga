@@ -374,7 +374,7 @@ extension DiskImageProxy {
 
         switch format {
 
-        case .ADF, .ADZ, .EADF, .IMG:
+        case .ADF, .EADF, .IMG:
 
             var name = (density == .HD ? "hd" : "dd") + (format == .IMG ? "_dos" : "_adf")
             if protected { name += "_protected" }
@@ -395,7 +395,7 @@ extension FloppyDiskImageProxy {
 
         switch format {
 
-        case .ADF, .ADZ, .EADF, .IMG:
+        case .ADF, .EADF, .IMG:
 
             name = (density == .HD ? "hd" : "dd") + (format == .IMG ? "_dos" : "_adf")
             // (format == .IMG ? "_dos" : info.dos == .NODOS ? "_other" : "_adf")

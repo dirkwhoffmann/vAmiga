@@ -53,8 +53,6 @@ public:
 
 
     // Encoders and Decoders
-    // [[deprecated]] static void encodeADZ(const ADZFile &source, FloppyDisk &target);
-
     static void encodeEADF(const EADFFile &source, FloppyDisk &target);
     static void decodeEADF(EADFFile &target, const FloppyDisk &source);
 

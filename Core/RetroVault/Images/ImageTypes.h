@@ -66,7 +66,6 @@ enum class ImageFormat : long
 {
     UNKNOWN,
     ADF,
-    ADZ,
     EADF,
     HDF,
     HDZ,
@@ -88,7 +87,6 @@ struct ImageFormatEnum : utl::Reflectable<ImageFormatEnum, ImageFormat>
 
             case ImageFormat::UNKNOWN: return "UNKNOWN";
             case ImageFormat::ADF:     return "ADF";
-            case ImageFormat::ADZ:     return "ADZ";
             case ImageFormat::EADF:    return "EADF";
             case ImageFormat::HDF:     return "HDF";
             case ImageFormat::HDZ:     return "HDZ";
@@ -106,7 +104,6 @@ struct ImageFormatEnum : utl::Reflectable<ImageFormatEnum, ImageFormat>
 
             case ImageFormat::UNKNOWN: return "Unknown";
             case ImageFormat::ADF:     return "Amiga Disk File";
-            case ImageFormat::ADZ:     return "Compressed Amiga Disk File";
             case ImageFormat::EADF:    return "Extended Amiga Disk File";
             case ImageFormat::HDF:     return "Hard Disk File";
             case ImageFormat::HDZ:     return "Compressed Hard Disk File";

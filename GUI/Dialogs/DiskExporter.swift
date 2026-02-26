@@ -64,9 +64,6 @@ class DiskExporter: DialogController {
         // Run the ADF decoder
         adf = try? FloppyDiskImageProxy.make(with: dfn!, format: .ADF)
 
-        // Run the ADZ decoder
-        adz = try? FloppyDiskImageProxy.make(with: dfn!, format: .ADZ)
-
         // Run the extended ADF decoder
         ext = try? FloppyDiskImageProxy.make(with: dfn!, format: .EADF)
 
@@ -150,7 +147,6 @@ class DiskExporter: DialogController {
         if hdf != nil { addItem("HDF", tag: Format.hdf) }
         if hdz != nil { addItem("HDZ", tag: Format.hdz) }
         if adf != nil { addItem("ADF", tag: Format.adf) }
-        if adz != nil { addItem("ADZ", tag: Format.adz) }
         if ext != nil { addItem("Extended ADF", tag: Format.ext) }
         if img != nil { addItem("IMG", tag: Format.img); addItem("IMA", tag: Format.ima) }
         if vol != nil { addItem("Folder", tag: Format.vol) }
@@ -291,7 +287,6 @@ class DiskExporter: DialogController {
         case Format.hdf: openExportToFilePanel(allowedTypes: ["hdf", "HDF"])
         case Format.hdz: openExportToFilePanel(allowedTypes: ["hdz", "HDZ"])
         case Format.adf: openExportToFilePanel(allowedTypes: ["adf", "ADF"])
-        case Format.adz: openExportToFilePanel(allowedTypes: ["adz", "ADZ"])
         case Format.ext: openExportToFilePanel(allowedTypes: ["adf", "ADF"])
         case Format.img: openExportToFilePanel(allowedTypes: ["img", "IMG"])
         case Format.ima: openExportToFilePanel(allowedTypes: ["ima", "IMA"])
@@ -362,12 +357,6 @@ class DiskExporter: DialogController {
                 loginfo(.media, "Exporting ADF")
                 try adf!.writeToFile(url: url)
                 // try parent.mydocument.export(fileProxy: adf!, to: url)
-
-            case Format.adz:
-                
-                loginfo(.media, "Exporting ADZ")
-                try adz!.writeToFile(url: url)
-                // try parent.mydocument.export(fileProxy: adz!, to: url)
 
             case Format.ext:
                 

@@ -216,7 +216,7 @@ class MyDocument: NSDocument {
         
         // Scan directory for additional media files
         let supportedTypes: [String : ImageFormat] =
-        ["adf": .ADF, "adz": .ADZ, "dms": .DMS, "exe": .EXE, "img": .IMG, "hdf": .HDF, "hdz": .HDZ, "st": .ST]
+        ["adf": .ADF, "dms": .DMS, "exe": .EXE, "img": .IMG, "hdf": .HDF, "hdz": .HDZ, "st": .ST]
         let exclude = ["df0", "df1", "df2", "df3", "hd0", "hd1", "hd2", "hd3"]
         
         let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)

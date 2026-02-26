@@ -241,8 +241,8 @@ class MediaManager {
 
         switch type {
             
-        case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: MediaManager.noteNewRecentlyInsertedDiskURL(url)
-        case .HDF, .HDZ:                               MediaManager.noteNewRecentlyAttachedHdrURL(url)
+        case .ADF, .EADF, .DMS, .EXE, .IMG, .ST: MediaManager.noteNewRecentlyInsertedDiskURL(url)
+        case .HDF, .HDZ:                         MediaManager.noteNewRecentlyAttachedHdrURL(url)
             
         default:
             break
@@ -253,8 +253,8 @@ class MediaManager {
         
         switch type {
             
-        case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyExportedDiskURL(url, df: nr)
-        case .HDF, .HDZ:                               noteNewRecentlyExportedHdrURL(url, hd: nr)
+        case .ADF, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyExportedDiskURL(url, df: nr)
+        case .HDF, .HDZ:                         noteNewRecentlyExportedHdrURL(url, hd: nr)
             
         default:
             break

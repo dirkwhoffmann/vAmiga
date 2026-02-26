@@ -14,7 +14,6 @@
 #include "Images/FloppyDiskImage.h"
 #include "Images/HardDiskImage.h"
 #include "Images/ADF/ADFFile.h"
-#include "Images/ADZ/ADZFile.h"
 #include "Images/D64/D64File.h"
 #include "Images/DMS/DMSFile.h"
 #include "Images/EADF/EADFFile.h"
