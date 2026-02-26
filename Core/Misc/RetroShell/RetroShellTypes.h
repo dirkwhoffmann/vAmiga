@@ -94,6 +94,7 @@ struct InputLine {
     bool isScriptCommand() const { return type == Source::SCRIPT; }
     bool isRpcCommand() const { return type == Source::RPC; }
     bool isRshCommand() const { return type == Source::RSH; }
+    bool isComment() const { return input.size() != 0 && input[0] == '#'; }
 };
 
 typedef struct

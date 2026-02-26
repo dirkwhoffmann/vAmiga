@@ -150,7 +150,25 @@ CommanderConsole::initCommands(RSCommand &root)
     });
     
     for (auto &it : ConfigSchemeEnum::elements()) {
+ 
+        root.add({
+            
+            .tokens = { "regression", "setup", ConfigSchemeEnum::key(it) },
+            .chelp  = { ConfigSchemeEnum::help(it) },
+            .args   = {
+                { .name = { "rom", "ROM file" } }
+            },
+                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+                    
+                    auto rom = args.contains("rom") ? host.makeAbsolute(args.at("rom")) : "";
+                    auto ext = args.contains("ext") ? host.makeAbsolute(args.at("ext")) : "";
+                    
+                    amiga.regressionTester.prepare(ConfigScheme(values[0]), rom, ext);
+                    emulator.set(ConfigScheme(values[0]));
+                }, .payload = { isize(it) }
+        });
         
+        /*
         root.add({
             
             .tokens = { "regression", "setup", ConfigSchemeEnum::key(it) },
@@ -168,6 +186,7 @@ CommanderConsole::initCommands(RSCommand &root)
                     emulator.set(ConfigScheme(values[0]));
                 }, .payload = { isize(it) }
         });
+        */
     }
     
     root.add({

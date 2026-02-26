@@ -769,11 +769,14 @@ Console::exec(const InputLine& cmd)
 {
     std::stringstream ss;
 
-    // Skip empty script lines
-    if (cmd.isScriptCommand() && cmd.input.empty()) return;
-
     // Inform the delegates
     for (auto &delegate: delegates) delegate->willExecute(cmd);
+
+    // Skip empty script lines
+    if (cmd.isScriptCommand() && cmd.input.empty()) { return; }
+
+    // Skip comments
+    if (cmd.isComment()) { return; }
 
     try {
 
@@ -1017,8 +1020,10 @@ Console::initCommands(RSCommand &root)
             .tokens = { "wait" },
             .chelp  = { "Pause the execution of a command script" },
             .flags  = vAmigaDOS ? rs::disabled : rs::hidden,
-            .args   = { { .name = { "seconds", "Delay" } } },
-            
+            .args   = {
+                { .name = { "seconds", "Delay" } },
+                { .name = { "unit", "Unit" } }
+            },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto seconds = parseNum(args.at("seconds"));
