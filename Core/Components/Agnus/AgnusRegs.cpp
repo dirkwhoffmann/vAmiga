@@ -471,8 +471,10 @@ Agnus::setSPRxPOS(u16 value)
     sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
 
     // Update sprite DMA status
-    if (sprVStrt[x] == v) sprDmaEnabled[x] = true;
-    if (sprVStop[x] == v) sprDmaEnabled[x] = false;
+    if (!inVBlankArea(v)) {
+        if (sprVStrt[x] == v) sprDmaEnabled[x] = true;
+        if (sprVStop[x] == v) sprDmaEnabled[x] = false;
+    }
 }
 
 template <int x, Accessor s> void
@@ -523,8 +525,10 @@ Agnus::setSPRxCTL(u16 value)
     }
 
     // Update sprite DMA status
-    if (sprVStrt[x] == v) sprDmaEnabled[x] = true;
-    if (sprVStop[x] == v) sprDmaEnabled[x] = false;
+    if (!inVBlankArea(v)) {
+        if (sprVStrt[x] == v) sprDmaEnabled[x] = true;
+        if (sprVStop[x] == v) sprDmaEnabled[x] = false;
+    }
 }
 
 void

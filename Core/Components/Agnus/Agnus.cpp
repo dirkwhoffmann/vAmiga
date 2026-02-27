@@ -671,9 +671,11 @@ Agnus::updateSpriteDMA()
     }
 
     // Update the DMA status for all sprites
-    for (isize i = 0; i < 8; i++) {
-        if (v == sprVStrt[i]) sprDmaEnabled[i] = true;
-        if (v == sprVStop[i]) sprDmaEnabled[i] = false;
+    if (!inVBlankArea(v)) {
+        for (isize i = 0; i < 8; i++) {
+            if (v == sprVStrt[i]) sprDmaEnabled[i] = true;
+            if (v == sprVStop[i]) sprDmaEnabled[i] = false;
+        }
     }
 }
 
