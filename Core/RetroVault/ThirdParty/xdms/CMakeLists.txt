@@ -1,5 +1,3 @@
-target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
 add_library(xdms
 
   u_heavy.c
@@ -14,3 +12,5 @@ add_library(xdms
   getbits.c
   u_quick.c
 )
+
+target_include_directories(xdms PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
