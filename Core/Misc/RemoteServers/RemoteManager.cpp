@@ -23,7 +23,8 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
         &rpcServer,
         &gdbServer,
         &promServer,
-        &serServer
+        &serServer,
+        &mcpServer
     };
 
     info.bind([this] { return cacheInfo(); } );
@@ -65,6 +66,7 @@ RemoteManager::cacheInfo() const
     info.gdbInfo = gdbServer.cacheInfo();
     info.promInfo = promServer.cacheInfo();
     info.serInfo = serServer.cacheInfo();
+    info.mcpInfo = mcpServer.cacheInfo();
 
     return info;
 }
@@ -126,6 +128,7 @@ RemoteManager::update()
     launchDaemon(gdbServer, gdbServer.config);
     launchDaemon(promServer, promServer.config);
     launchDaemon(serServer, serServer.config);
+    launchDaemon(mcpServer, mcpServer.config);
 }
 
 void
