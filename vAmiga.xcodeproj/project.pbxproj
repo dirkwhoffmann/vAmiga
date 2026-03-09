@@ -212,6 +212,8 @@
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50894D812593CF4400C0499D /* HIDExtensions.swift */; };
 		508AC36927B7F6FD006AD2E7 /* HdController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508AC36727B7F6FC006AD2E7 /* HdController.cpp */; };
+		508DE0A92F5ECA9100AEC51F /* McpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508DE0A82F5ECA9100AEC51F /* McpServer.cpp */; };
+		508DE0AA2F5ECA9100AEC51F /* McpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508DE0A82F5ECA9100AEC51F /* McpServer.cpp */; };
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		508FDD9E2EF40D3200FDBC32 /* Volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* Volume.cpp */; };
 		508FDD9F2EF40D3200FDBC32 /* Volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDD9D2EF40D3000FDBC32 /* Volume.cpp */; };
@@ -940,6 +942,8 @@
 		508AC36727B7F6FC006AD2E7 /* HdController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HdController.cpp; sourceTree = "<group>"; };
 		508AC36827B7F6FC006AD2E7 /* HdController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdController.h; sourceTree = "<group>"; };
 		508C6BCF23F7E77500D8938F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
+		508DE0A72F5ECA9100AEC51F /* McpServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = McpServer.h; sourceTree = "<group>"; };
+		508DE0A82F5ECA9100AEC51F /* McpServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = McpServer.cpp; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		508FDD9C2EF40D2B00FDBC32 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
@@ -2557,6 +2561,8 @@
 				50AD90582771B2770011ECCB /* RshServer.cpp */,
 				506D57BC2EC4BE5A00E21501 /* RpcServer.h */,
 				506D57BD2EC4BE6700E21501 /* RpcServer.cpp */,
+				508DE0A72F5ECA9100AEC51F /* McpServer.h */,
+				508DE0A82F5ECA9100AEC51F /* McpServer.cpp */,
 				50BF1CC7276D174200386540 /* GdbServer.h */,
 				50BF1CC6276D174200386540 /* GdbServer.cpp */,
 				50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */,
@@ -3152,6 +3158,7 @@
 				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
 				5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyApplication.swift in Sources */,
+				508DE0A92F5ECA9100AEC51F /* McpServer.cpp in Sources */,
 				50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */,
 				50E5BF7F2BB1D2510004712B /* STFile.cpp in Sources */,
 				50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */,
@@ -3527,6 +3534,7 @@
 				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
 				50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50FB49B72F0F1E2D00369491 /* DOSDecoder.cpp in Sources */,
+				508DE0AA2F5ECA9100AEC51F /* McpServer.cpp in Sources */,
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
 				50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */,
 				501B00162C629A0500749664 /* Beamtraps.cpp in Sources */,
