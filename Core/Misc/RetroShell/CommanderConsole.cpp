@@ -1062,6 +1062,7 @@ CommanderConsole::initCommands(RSCommand &root)
     cmd = registerComponent(remoteManager.gdbServer);
     cmd = registerComponent(remoteManager.promServer);
     cmd = registerComponent(remoteManager.serServer);
+    cmd = registerComponent(remoteManager.mcpServer);
 }
 
 }
