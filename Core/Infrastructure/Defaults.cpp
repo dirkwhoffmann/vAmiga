@@ -238,6 +238,11 @@ Defaults::fallbacks()
     registerDefaults(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::SER });
     registerDefaults(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::SER });
 
+    registerDefaults(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::MCP });
+    registerDefaults(Opt::SRV_PORT,                   8086,                   { (i64)ServerType::MCP });
+    registerDefaults(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::MCP });
+    registerDefaults(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::MCP });
+
     defaults.values["ROM_PATH"] = "";
     defaults.values["EXT_PATH"] = "";
     defaults.values["HD0_PATH"] = "";

@@ -44,6 +44,10 @@ class RemoteServer : public SubComponent {
         .name           = "SerServer",
         .description    = "Serial Port Server",
         .shell          = "server ser"
+    }, {
+        .name           = "McpServer",
+        .description    = "MCP Server",
+        .shell          = "server mcp"
     }};
 
     Options options = {
