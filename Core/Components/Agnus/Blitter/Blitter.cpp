@@ -126,7 +126,7 @@ Blitter::barrelShifter(u16 anew, u16 aold, u16 shift, bool desc) const
 u16
 Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
 {
-    u16 result = doMintermLogicQuick(a, b, c, minterm);
+    u16 result = (u16)doMintermLogicQuick(a, b, c, minterm);
 
     if constexpr (debug::BLT_DEBUG) {
 
@@ -147,7 +147,7 @@ Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
     return result;
 }
 
-u16
+int
 Blitter::doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm) const
 {
     switch (minterm) {

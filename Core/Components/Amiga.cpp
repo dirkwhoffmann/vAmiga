@@ -654,7 +654,7 @@ Amiga::refreshRate() const
     } else {
 
         auto boost = config.speedBoost ? config.speedBoost : 100;
-        return nativeRefreshRate() * boost / 100.0;
+        return nativeRefreshRate() * double(boost) / 100.0;
     }
 }
 
@@ -686,9 +686,9 @@ Amiga::_dump(Category category, std::ostream &os) const
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;
         os << tab("Native master clock");
-        os << flt(nativeMasterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
+        os << flt(float(nativeMasterClockFrequency()) / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Emulated master clock");
-        os << flt(masterClockFrequency() / float(1000000.0)) << " MHz" << std::endl;
+        os << flt(float(masterClockFrequency()) / float(1000000.0)) << " MHz" << std::endl;
         os << tab("Native refresh rate");
         os << flt(nativeRefreshRate()) << " Fps" << std::endl;
         os << tab("Emulated refresh rate");
@@ -1149,7 +1149,7 @@ Amiga::takeSnapshot(Compressor compressor, isize delay, bool repeat)
     if (delay != 0) {
 
         i64 payload = (i64)compressor << 24 | repeat << 16 | delay;
-        agnus.scheduleRel<SLOT_SNP>(Amiga::sec(delay), SNP_TAKE, payload);
+        agnus.scheduleRel<SLOT_SNP>(Amiga::sec(double(delay)), SNP_TAKE, payload);
         return nullptr;
     }
 

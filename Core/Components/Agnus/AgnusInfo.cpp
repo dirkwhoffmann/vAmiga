@@ -690,17 +690,17 @@ Agnus::updateStats()
 {
     constexpr double w = 0.5;
     
-    double copperUsage = stats.usage[BUS_COPPER];
-    double blitterUsage = stats.usage[BUS_BLITTER];
-    double diskUsage = stats.usage[BUS_DISK];
+    auto copperUsage = stats.usage[BUS_COPPER];
+    auto blitterUsage = stats.usage[BUS_BLITTER];
+    auto diskUsage = stats.usage[BUS_DISK];
     
-    double audioUsage =
+    auto audioUsage =
     stats.usage[BUS_AUD0] +
     stats.usage[BUS_AUD1] +
     stats.usage[BUS_AUD2] +
     stats.usage[BUS_AUD3];
 
-    double spriteUsage =
+    auto spriteUsage =
     stats.usage[BUS_SPRITE0] +
     stats.usage[BUS_SPRITE1] +
     stats.usage[BUS_SPRITE2] +
@@ -710,7 +710,7 @@ Agnus::updateStats()
     stats.usage[BUS_SPRITE6] +
     stats.usage[BUS_SPRITE7];
     
-    double bitplaneUsage =
+    auto bitplaneUsage =
     stats.usage[BUS_BPL1] +
     stats.usage[BUS_BPL2] +
     stats.usage[BUS_BPL3] +
@@ -718,12 +718,12 @@ Agnus::updateStats()
     stats.usage[BUS_BPL5] +
     stats.usage[BUS_BPL6];
 
-    stats.copperActivity = w * stats.copperActivity + (1 - w) * copperUsage;
-    stats.blitterActivity = w * stats.blitterActivity + (1 - w) * blitterUsage;
-    stats.diskActivity = w * stats.diskActivity + (1 - w) * diskUsage;
-    stats.audioActivity = w * stats.audioActivity + (1 - w) * audioUsage;
-    stats.spriteActivity = w * stats.spriteActivity + (1 - w) * spriteUsage;
-    stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplaneUsage;
+    stats.copperActivity = w * stats.copperActivity + (1 - w) * double(copperUsage);
+    stats.blitterActivity = w * stats.blitterActivity + (1 - w) * double(blitterUsage);
+    stats.diskActivity = w * stats.diskActivity + (1 - w) * double(diskUsage);
+    stats.audioActivity = w * stats.audioActivity + (1 - w) * double(audioUsage);
+    stats.spriteActivity = w * stats.spriteActivity + (1 - w) * double(spriteUsage);
+    stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * double(bitplaneUsage);
     
     for (isize i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
 }

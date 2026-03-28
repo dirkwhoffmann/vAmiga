@@ -113,7 +113,7 @@ Thread::computeStats()
         nonstopClock.restart();
 
         cpuLoad = 0.3 * cpuLoad + 0.7 * used / total;
-        fps = 0.3 * fps + 0.7 * statsCounter / total;
+        fps = 0.3 * fps + 0.7 * double(statsCounter) / total;
 
         statsCounter = 0;
     }

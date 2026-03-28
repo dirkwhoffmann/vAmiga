@@ -122,9 +122,9 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     if (palette == Palette::RGB) return;
     
     // Normalize adjustment parameters
-    double brightness =  (monitor.getConfig().brightness - 50.0);
-    double contrast = monitor.getConfig().contrast / 100.0;
-    double saturation = monitor.getConfig().saturation / 50.0;
+    double brightness = double(monitor.getConfig().brightness) - 50.0;
+    double contrast = double(monitor.getConfig().contrast) / 100.0;
+    double saturation = double(monitor.getConfig().saturation) / 50.0;
 
     // Convert RGB to YUV
     double y =  0.299 * r + 0.587 * g + 0.114 * b;

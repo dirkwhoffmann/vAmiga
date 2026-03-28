@@ -80,8 +80,8 @@ FileSystem::dumpState(std::ostream &os) const noexcept
 
     if (isFormatted()) {
 
-        auto fill = 100.0 * st.usedBlocks / st.traits.blocks;
-
+        auto fill = 100.0 * double(st.usedBlocks) / double(st.traits.blocks);
+        
         os << std::setw(5) << std::left << ("DOS" + std::to_string(isize(traits.dos)));
         os << "  ";
         os << std::setw(15) << std::left << std::setfill(' ') << size;
@@ -117,7 +117,7 @@ FileSystem::dumpProps(std::ostream &os) const noexcept
 
     auto st   = stat();
     auto bst  = bootStat();
-    auto fill = 100.0 * st.usedBlocks / st.traits.blocks;
+    auto fill = 100.0 * double(st.usedBlocks) / double(st.traits.blocks);
 
     os << tab("Name");
     os << st.name << std::endl;

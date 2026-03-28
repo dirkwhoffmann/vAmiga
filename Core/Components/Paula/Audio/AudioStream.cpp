@@ -30,7 +30,7 @@ AudioStream::eliminateCracks()
         loginfo(AUDVOL_DEBUG, "Eliminating cracks (%ld samples)...\n", count());
 
         float scale = 1.0f;
-        float delta = 1.0f / count();
+        float delta = 1.0f / float(count());
 
         // Rescale the existing samples
         for (isize i = begin(); i != end(); i = next(i)) {
@@ -180,14 +180,14 @@ float
 AudioStream::drawL(u32 *buffer, isize width, isize height, float highest, u32 color) const
 {
     return draw(buffer, width, height, highest,
-                [this](float x) { return std::abs(current(isize(cap() * x)).l); }, color);
+                [this](float x) { return std::abs(current(isize(float(cap()) * x)).l); }, color);
 }
 
 float
 AudioStream::drawR(u32 *buffer, isize width, isize height, float highest, u32 color) const
 {
     return draw(buffer, width, height, highest,
-                [this](float x) { return std::abs(current(isize(cap() * x)).r); }, color);
+                [this](float x) { return std::abs(current(isize(float(cap()) * x)).r); }, color);
 }
 
 float
@@ -223,7 +223,7 @@ AudioStream::draw(u32 *buffer, isize width, isize height, float highest,
             if (sample > newHighestAmplitude) newHighestAmplitude = sample;
 
             // Scale the sample
-            isize scaled = isize(sample * height / highest);
+            isize scaled = isize(sample * float(height) / highest);
             if (scaled > height) scaled = height;
 
             // Draw vertical line

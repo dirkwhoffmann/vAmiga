@@ -75,8 +75,8 @@ const VAmigaConstants VAMIGA = {
     .HBLANK.MIN = HBLANK_MIN,
     .HBLANK.MAX = HBLANK_MAX,
 
-    .HPIXELS = HPIXELS,
     .VPIXELS = VPIXELS,
+    .HPIXELS = HPIXELS,
     .PIXELS = PIXELS,
     
     .HDR.C_MIN = HDR_C_MIN,
@@ -1462,7 +1462,7 @@ ImageInfo scan(const fs::path &url)
     if (time == 0) return @"-";
 
     return [NSDateFormatter localizedStringFromDate:
-            [NSDate dateWithTimeIntervalSince1970:time]
+            [NSDate dateWithTimeIntervalSince1970:NSTimeInterval(time)]
                                           dateStyle:NSDateFormatterMediumStyle
                                           timeStyle:NSDateFormatterMediumStyle];
 }
@@ -1473,7 +1473,7 @@ ImageInfo scan(const fs::path &url)
     if (time == 0) return @"-";
 
     return [NSDateFormatter localizedStringFromDate:
-            [NSDate dateWithTimeIntervalSince1970:time]
+            [NSDate dateWithTimeIntervalSince1970:NSTimeInterval(time)]
                                           dateStyle:NSDateFormatterMediumStyle
                                           timeStyle:NSDateFormatterMediumStyle];
 }
@@ -1493,7 +1493,7 @@ ImageInfo scan(const fs::path &url)
 - (NSString *)fillLevelString
 {
     auto st = [self fs]->stat();
-    auto str = utl::fillLevelAsString(100.0 * st.usedBlocks / st.traits.blocks);
+    auto str = utl::fillLevelAsString(100.0 * double(st.usedBlocks) / double(st.traits.blocks));
     return @(str.c_str());
 }
 
@@ -1535,7 +1535,7 @@ ImageInfo scan(const fs::path &url)
 - (double)fillLevel
 {
     auto st = [self fs]->stat();
-    return 100.0 * st.usedBlocks / st.traits.blocks;
+    return 100.0 * double(st.usedBlocks) / double(st.traits.blocks);
 }
 
 - (BOOL)hasVirus

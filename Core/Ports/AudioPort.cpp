@@ -225,20 +225,20 @@ AudioPort::setOption(Opt option, i64 value)
         case Opt::AUD_VOL0:
 
             config.vol[channel] = std::clamp(value, 0LL, 100LL);
-            vol[channel] = float(pow(config.vol[channel] / 100.0, 1.4) * 0.000025);
+            vol[channel] = float(pow(double(config.vol[channel]) / 100.0, 1.4) * 0.000025);
             if (wasmBuild) vol[channel] *= 0.15f;
             return;
 
         case Opt::AUD_VOLL:
             
             config.volL = std::clamp(value, 0LL, 100LL);
-            volL = float(pow(value / 50.0, 1.4));
+            volL = float(pow(double(value) / 50.0, 1.4));
             return;
 
         case Opt::AUD_VOLR:
 
             config.volR = std::clamp(value, 0LL, 100LL);
-            volR = float(pow(value / 50.0, 1.4));
+            volR = float(pow(double(value) / 50.0, 1.4));
             return;
 
         case Opt::AUD_PAN3: channel++;
@@ -247,7 +247,7 @@ AudioPort::setOption(Opt option, i64 value)
         case Opt::AUD_PAN0:
 
             config.pan[channel] = value;
-            pan[channel] = float(0.5 * (sin(config.pan[channel] * M_PI / 200.0) + 1));
+            pan[channel] = float(0.5 * (sin(double(config.pan[channel]) * M_PI / 200.0) + 1));
             return;
 
         case Opt::AUD_BUFFER_SIZE:
@@ -515,7 +515,7 @@ AudioPort::handleBufferUnderflow()
         loginfo(AUDBUF_DEBUG, "Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
 
         // Adjust the sample rate
-        setSampleRate(host.getConfig().sampleRate);
+        setSampleRate(double(host.getConfig().sampleRate));
         loginfo(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
 
         // Inform the GUI
@@ -540,7 +540,7 @@ AudioPort::handleBufferOverflow()
         loginfo(AUDBUF_DEBUG, "Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
 
         // Adjust the sample rate
-        setSampleRate(host.getConfig().sampleRate);
+        setSampleRate(double(host.getConfig().sampleRate));
         loginfo(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
 
         // Inform the GUI

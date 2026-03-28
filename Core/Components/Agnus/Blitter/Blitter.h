@@ -491,7 +491,7 @@ private:
     
     // Emulates the minterm logic circuit
     u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm) const;
-    u16 doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm) const;
+    int doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm) const;
     
     // Emulates the fill logic circuit
     void doFill(u16 &data, bool &carry) const;
