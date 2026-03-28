@@ -30,7 +30,7 @@ extension Int {
     static let audio        = 0     // Audio unit
     static let config       = 0     // Configuration
     static let defaults     = 0     // User defaults
-    static let dragndrop    = 1     // Drag and drop
+    static let dragndrop    = 0     // Drag and drop
     static let events       = 0     // Event processing
     static let exec         = 0     // Execution of external tools
     static let hid          = 0     // Human interface devices

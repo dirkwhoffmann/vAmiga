@@ -367,7 +367,9 @@ extension MyController {
                 
                 if let url = mydocument.launchURL {
 
-                    if url.isFloppyDiskImage || url.hasDirectoryPath {
+                    if url.isWorkspace {
+                        try? mm.loadWorkspace(url: url)
+                    } else if url.isFloppyDiskImage || url.hasDirectoryPath {
                         try? mm.mount(df: 0, url: url, options: [.remember, .force])
                     } else if url.isHardDiskImage {
                         try? mm.mount(hd: 0, url: url, options: [.remember, .force])
