@@ -165,6 +165,10 @@ McpServer::processMessage(const string &message, bool &disconnectClient)
 
         auto req = json::parse(message);
 
+        if (!req.is_object()) {
+            return createErrorResponse(json(nullptr), -32600, "Invalid Request");
+        }
+
         if (!req.contains("method") || !req["method"].is_string()) {
 
             if (req.contains("id")) {
@@ -388,6 +392,10 @@ McpServer::handleCallTool(const json &req)
 
     const auto tool = params["name"].get<string>();
     const auto args = params.value("arguments", json::object());
+
+    if (!args.is_object()) {
+        return createErrorResponse(id, -32602, "Invalid arguments");
+    }
 
     bool isError = false;
     string text;
@@ -870,7 +878,7 @@ McpServer::base64Encode(const u8 *data, size_t size)
 bool
 McpServer::tryGetU32(const json &args, const char *key, u32 &value)
 {
-    if (!args.contains(key) || !args[key].is_number_integer()) return false;
+    if (!args.is_object() || !args.contains(key) || !args[key].is_number_integer()) return false;
 
     auto v = args[key].get<i64>();
     if (v < 0 || v > i64(std::numeric_limits<u32>::max())) return false;
