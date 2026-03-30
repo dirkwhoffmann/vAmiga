@@ -308,13 +308,13 @@ class HardwareSettingsViewController: SettingsViewController {
         }
 
         // Update the configuration
-        config?.applyChipsetUserDefaults()
+        config?.applyHardwareUserDefaults()
     }
 
     override func save() {
 
         log(.lifetime)
-        config?.saveChipsetUserDefaults()
+        config?.saveHardwareUserDefaults()
     }
 
     //
