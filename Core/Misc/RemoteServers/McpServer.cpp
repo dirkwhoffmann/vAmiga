@@ -31,9 +31,10 @@ using nlohmann::json;
 
 namespace {
 
-constexpr u32 MAX_AMIGA_ADDRESS = 0x01000000;
-constexpr u32 MAX_RW_BYTES = 65536;
-constexpr u32 MAX_DISASSEMBLY = 10000;
+static constexpr u32 MAX_AMIGA_ADDRESS = 0x01000000;
+static constexpr u32 MAX_RW_BYTES = 65536;
+static constexpr u32 MAX_DISASSEMBLY = 10000;
+static constexpr usize MAX_RX_BUFFER_SIZE = 10 * 1024 * 1024;
 
 }
 
@@ -55,6 +56,11 @@ void
 McpServer::didDisconnect()
 {
     rxBuffer.clear();
+    inString = false;
+    escaped = false;
+    braceStack.clear();
+    start = 0;
+    scanPos = 0;
 }
 
 string
@@ -84,8 +90,7 @@ McpServer::doProcess(const string &packet)
 {
     rxBuffer += packet;
 
-    // Basic DoS protection in case a client sends endless garbage.
-    if (rxBuffer.size() > 10 * 1024 * 1024) {
+    if (rxBuffer.size() > MAX_RX_BUFFER_SIZE) {
         disconnect();
         return;
     }
@@ -104,19 +109,21 @@ McpServer::doProcess(const string &packet)
             return;
         }
     }
+
+    const usize bytesToErase = braceStack.empty() ? scanPos : start;
+    if (bytesToErase > 0) {
+        rxBuffer.erase(0, bytesToErase);
+        scanPos -= bytesToErase;
+        start = braceStack.empty() ? 0 : (start - bytesToErase);
+    }
 }
 
 std::optional<string>
 McpServer::extractMessage()
 {
-    bool inString = false;
-    bool escaped = false;
-    isize depth = 0;
-    usize start = 0;
+    for (; scanPos < rxBuffer.size(); ++scanPos) {
 
-    for (usize i = 0; i < rxBuffer.size(); i++) {
-
-        const char c = rxBuffer[i];
+        const char c = rxBuffer[scanPos];
 
         if (inString) {
 
@@ -135,21 +142,36 @@ McpServer::extractMessage()
             continue;
         }
 
-        if (c == '{') {
-            if (depth == 0) start = i;
-            depth++;
-            continue;
-        }
+        switch (c) {
+            case '{':
+            case '[':
+                if (braceStack.empty()) start = scanPos;
+                braceStack.push_back(c);
+                break;
 
-        if (c == '}') {
-            if (depth > 0) depth--;
+            case '}':
+            case ']':
+                if (!braceStack.empty() && 
+                    ((c == '}' && braceStack.back() == '{') ||
+                     (c == ']' && braceStack.back() == '['))) {
+                    
+                    braceStack.pop_back();
 
-            if (depth == 0) {
+                    if (braceStack.empty()) {
 
-                string message = rxBuffer.substr(start, i - start + 1);
-                rxBuffer.erase(0, i + 1);
-                return message;
-            }
+                        string message = rxBuffer.substr(start, scanPos - start + 1);
+                        
+                        scanPos++;
+                        start = scanPos;
+                        
+                        inString = false;
+                        escaped = false;
+                        braceStack.clear();
+
+                        return message;
+                    }
+                }
+                break;
         }
     }
 
@@ -164,6 +186,10 @@ McpServer::processMessage(const string &message, bool &disconnectClient)
     try {
 
         auto req = json::parse(message);
+
+        if (!req.is_object()) {
+            return createErrorResponse(json(nullptr), -32600, "Invalid Request");
+        }
 
         if (!req.contains("method") || !req["method"].is_string()) {
 
@@ -254,7 +280,11 @@ McpServer::handleInitialize(const json &req)
     json result = {
 
         {"protocolVersion", "2024-11-05"},
-        {"capabilities", {{"tools", json::object()}}},
+        {"capabilities", {
+            {"tools", json::object()},
+            {"resources", json::object()},
+            {"prompts", json::object()}
+        }},
         {"serverInfo", {{"name", "vAmiga-MCP"}, {"version", "1.0.0"}}}
     };
 
@@ -389,6 +419,10 @@ McpServer::handleCallTool(const json &req)
     const auto tool = params["name"].get<string>();
     const auto args = params.value("arguments", json::object());
 
+    if (!args.is_object()) {
+        return createErrorResponse(id, -32602, "Invalid arguments");
+    }
+
     bool isError = false;
     string text;
     json payload = nullptr;
@@ -449,7 +483,10 @@ McpServer::handleCallTool(const json &req)
 
                 } else {
 
-                    for (usize i = 0; i < data.size(); i++) {
+                    std::vector<u8> buffer;
+                    buffer.reserve(data.size());
+
+                    for (usize i = 0; i < data.size(); ++i) {
 
                         if (!data[i].is_number_integer()) {
                             isError = true;
@@ -464,10 +501,20 @@ McpServer::handleCallTool(const json &req)
                             break;
                         }
 
-                        mem.poke8<Accessor::CPU>(u32(addr + i), u8(value));
+                        buffer.push_back(u8(value));
                     }
 
-                    if (!isError) text = "Memory written successfully.";
+                    if (!isError) {
+                        const bool wasRunning = isRunning();
+                        if (wasRunning) emulator.pause();
+
+                        for (usize i = 0; i < buffer.size(); ++i) {
+                            mem.poke8<Accessor::CPU>(u32(addr + i), buffer[i]);
+                        }
+                        
+                        if (wasRunning) emulator.run();
+                        text = "Memory written successfully.";
+                    }
                 }
             }
 
@@ -508,18 +555,30 @@ McpServer::handleCallTool(const json &req)
             } else {
 
                 auto name = utl::uppercased(args["name"].get<string>());
-                auto value = u32(args["value"].get<i64>());
+                auto value64 = args["value"].get<i64>();
 
-                if (name == "PC") cpu.setPC(value);
-                else if (name == "USP") cpu.setUSP(value);
-                else if (name == "ISP") cpu.setISP(value);
-                else if (name == "MSP") cpu.setMSP(value);
-                else if (name == "SR") cpu.setSR((u16)value);
-                else if (name.size() == 2 && name[0] == 'D' && name[1] >= '0' && name[1] <= '7') cpu.setD(name[1] - '0', value);
-                else if (name.size() == 2 && name[0] == 'A' && name[1] >= '0' && name[1] <= '7') cpu.setA(name[1] - '0', value);
-                else {
+                if (value64 < 0 || value64 > i64(std::numeric_limits<u32>::max())) {
                     isError = true;
-                    text = "Invalid register name.";
+                    text = "Register value out of bounds (must be 0..4294967295).";
+                } else {
+                    auto value = u32(value64);
+                    
+                    const bool wasRunning = isRunning();
+                    if (wasRunning) emulator.pause();
+
+                    if (name == "PC") cpu.setPC(value);
+                    else if (name == "USP") cpu.setUSP(value);
+                    else if (name == "ISP") cpu.setISP(value);
+                    else if (name == "MSP") cpu.setMSP(value);
+                    else if (name == "SR") cpu.setSR((u16)value);
+                    else if (name.size() == 2 && name[0] == 'D' && name[1] >= '0' && name[1] <= '7') cpu.setD(name[1] - '0', value);
+                    else if (name.size() == 2 && name[0] == 'A' && name[1] >= '0' && name[1] <= '7') cpu.setA(name[1] - '0', value);
+                    else {
+                        isError = true;
+                        text = "Invalid register name.";
+                    }
+
+                    if (wasRunning) emulator.run();
                 }
 
                 if (!isError) text = "Register updated.";
@@ -603,7 +662,12 @@ McpServer::handleCallTool(const json &req)
             } else {
 
                 std::stringstream ss;
-                for (u32 i = 0; i < count; i++) {
+                for (u32 i = 0; i < count; ++i) {
+
+                    if (addr >= MAX_AMIGA_ADDRESS) {
+                        ss << "\n[Disassembly aborted: Reached physical address boundary]\n";
+                        break;
+                    }
 
                     isize len = 0;
                     auto instr = cpu.disassembleInstr(addr, &len);
@@ -685,61 +749,77 @@ McpServer::handleReadResource(const json &req)
 
     if (uri == "amiga://screen/current") {
 
+        emulator.lockTexture();
+
         const auto &tex = videoPort.getTexture();
         const auto *src = tex.pixels.ptr;
 
         if (!src) {
+            emulator.unlockTexture();
             return createErrorResponse(id, -32603, "No frame buffer available");
         }
 
         const u32 width = (u32)HPIXELS;
         const u32 height = (u32)VPIXELS;
-        const usize pixelBytes = usize(width) * usize(height) * 4;
-        const u32 fileSize = u32(54 + pixelBytes);
+        const usize safePixelCount = std::min(usize(width * height), usize(tex.pixels.size));
+        
+        auto encodeBmpToVector = [width, height, safePixelCount](const auto* srcPtr) -> std::vector<u8> {
+            const usize pixelBytes = usize(width) * usize(height) * 4;
+            
+            constexpr u32 kBmpHeaderSize = 14;
+            constexpr u32 kInfoHeaderSize = 40;
+            constexpr u32 kDataOffset = kBmpHeaderSize + kInfoHeaderSize;
+            constexpr u16 kColorPlanes = 1;
+            constexpr u16 kBitsPerPixel = 32;
 
-        std::vector<u8> bmp;
-        bmp.reserve(fileSize);
+            const u32 fileSize = u32(kDataOffset + pixelBytes);
 
-        auto append32 = [&](u32 value) {
-            bmp.push_back(u8(value & 0xFF));
-            bmp.push_back(u8((value >> 8) & 0xFF));
-            bmp.push_back(u8((value >> 16) & 0xFF));
-            bmp.push_back(u8((value >> 24) & 0xFF));
+            std::vector<u8> bmp;
+            bmp.reserve(fileSize);
+
+            auto appendLE = [&](auto... values) {
+                auto appendOne = [&](auto value) {
+                    for (usize i = 0; i < sizeof(value); ++i) {
+                        bmp.push_back(u8((value >> (i * 8)) & 0xFF));
+                    }
+                };
+                (appendOne(values), ...);
+            };
+
+            appendLE(
+                u8('B'), u8('M'),
+                u32(fileSize),
+                u16(0),
+                u16(0),
+                u32(kDataOffset),
+
+                u32(kInfoHeaderSize),
+                u32(width),
+                u32(-i32(height)),
+                u16(kColorPlanes),
+                u16(kBitsPerPixel),
+                u32(0),
+                u32(pixelBytes),
+                u32(0),
+                u32(0),
+                u32(0),
+                u32(0)
+            );
+
+            for (usize i = 0; i < usize(width) * usize(height); ++i) {
+
+                GpuColor color = (i < safePixelCount) ? GpuColor(srcPtr[i]) : GpuColor(0xFF000000);
+                bmp.push_back(color.b());
+                bmp.push_back(color.g());
+                bmp.push_back(color.r());
+                bmp.push_back(color.a());
+            }
+
+            return bmp;
         };
-        auto append16 = [&](u16 value) {
-            bmp.push_back(u8(value & 0xFF));
-            bmp.push_back(u8((value >> 8) & 0xFF));
-        };
 
-        // BITMAPFILEHEADER
-        bmp.push_back('B');
-        bmp.push_back('M');
-        append32(fileSize);
-        append16(0);
-        append16(0);
-        append32(54);
-
-        // BITMAPINFOHEADER
-        append32(40);
-        append32(width);
-        append32(u32(-i32(height)));
-        append16(1);
-        append16(32);
-        append32(0);
-        append32((u32)pixelBytes);
-        append32(0);
-        append32(0);
-        append32(0);
-        append32(0);
-
-        for (usize i = 0; i < usize(width) * usize(height); i++) {
-
-            GpuColor color(src[i]);
-            bmp.push_back(color.b());
-            bmp.push_back(color.g());
-            bmp.push_back(color.r());
-            bmp.push_back(color.a());
-        }
+        const auto bmp = encodeBmpToVector(src);
+        emulator.unlockTexture();
 
         auto data = base64Encode(bmp.data(), bmp.size());
         return createSuccessResponse(id, {
@@ -843,25 +923,35 @@ McpServer::handleGetPrompt(const json &req)
 }
 
 string
-McpServer::base64Encode(const u8 *data, size_t size)
+McpServer::base64Encode(const u8 *data, usize size)
 {
-    static const char table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    static constexpr char kTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    
+    static constexpr usize kInputChunkSize = 3;
+    static constexpr usize kOutputChunkSize = 4;
+    
+    static constexpr u32 kShiftByte2 = 16;
+    static constexpr u32 kShiftByte3 = 8;
+    static constexpr u32 kShiftSextet1 = 18;
+    static constexpr u32 kShiftSextet2 = 12;
+    static constexpr u32 kShiftSextet3 = 6;
+    static constexpr u32 kSextetMask = 0x3F;
 
     string out;
-    out.reserve(4 * ((size + 2) / 3));
+    out.reserve(kOutputChunkSize * ((size + kInputChunkSize - 1) / kInputChunkSize));
 
-    for (size_t i = 0; i < size; i += 3) {
+    for (usize i = 0; i < size; i += kInputChunkSize) {
 
         u32 octetA = data[i];
         u32 octetB = (i + 1 < size) ? data[i + 1] : 0;
         u32 octetC = (i + 2 < size) ? data[i + 2] : 0;
 
-        u32 triple = (octetA << 16) | (octetB << 8) | octetC;
+        u32 triple = (octetA << kShiftByte2) | (octetB << kShiftByte3) | octetC;
 
-        out.push_back(table[(triple >> 18) & 0x3F]);
-        out.push_back(table[(triple >> 12) & 0x3F]);
-        out.push_back((i + 1 < size) ? table[(triple >> 6) & 0x3F] : '=');
-        out.push_back((i + 2 < size) ? table[triple & 0x3F] : '=');
+        out.push_back(kTable[(triple >> kShiftSextet1) & kSextetMask]);
+        out.push_back(kTable[(triple >> kShiftSextet2) & kSextetMask]);
+        out.push_back((i + 1 < size) ? kTable[(triple >> kShiftSextet3) & kSextetMask] : '=');
+        out.push_back((i + 2 < size) ? kTable[triple & kSextetMask] : '=');
     }
 
     return out;
@@ -870,7 +960,7 @@ McpServer::base64Encode(const u8 *data, size_t size)
 bool
 McpServer::tryGetU32(const json &args, const char *key, u32 &value)
 {
-    if (!args.contains(key) || !args[key].is_number_integer()) return false;
+    if (!args.is_object() || !args.contains(key) || !args[key].is_number_integer()) return false;
 
     auto v = args[key].get<i64>();
     if (v < 0 || v > i64(std::numeric_limits<u32>::max())) return false;
