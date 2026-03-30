@@ -25,6 +25,11 @@ public:
 
         SocketServer::operator = (other);
         rxBuffer = other.rxBuffer;
+        inString = other.inString;
+        escaped = other.escaped;
+        braceStack = other.braceStack;
+        start = other.start;
+        scanPos = other.scanPos;
         return *this;
     }
 
@@ -67,6 +72,11 @@ private:
 private:
 
     string rxBuffer;
+    bool inString = false;
+    bool escaped = false;
+    string braceStack;
+    usize start = 0;
+    usize scanPos = 0;
 
     std::optional<string> extractMessage();
     std::optional<string> processMessage(const string &message, bool &disconnectClient);
@@ -84,7 +94,7 @@ private:
     string handleListPrompts(const nlohmann::json &req) const;
     string handleGetPrompt(const nlohmann::json &req);
 
-    static string base64Encode(const u8 *data, size_t size);
+    static string base64Encode(const u8 *data, usize size);
     static bool tryGetU32(const nlohmann::json &args, const char *key, u32 &value);
 };
 
