@@ -573,28 +573,15 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
         auto vol = Volume(*hdf);
         auto fs = FileSystem(vol);
 
-        // Format the file system
+        // Format the file system and name it
         fs.format(fsType);
-
-        // Name the file system
         fs.setName(name);
 
-        /*
-        // Create a file system descriptor matching this drive
-        auto layout = FSDescriptor(geometry, fsType);
-
-        // Create an empty device
-        auto dev = Device(geometry);
-
-        // Create an empty file system
-        auto fs = FileSystem(dev, layout);
-
-        // Name the file system
-        fs.setName(name);
-        
+        // Write back all changes
+        fs.flush();
+    
         // Initialize the hard drive with the created file system
         init(fs);
-        */
     }
 }
 

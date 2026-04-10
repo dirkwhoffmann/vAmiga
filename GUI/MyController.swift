@@ -215,7 +215,9 @@ extension MyController {
             emu?.powerOff()
             
             // Open the onboarding agent
-            renderer.onboarding.open(delay: 1.0)
+            if mydocument.launchURL == nil {
+                renderer.onboarding.open(delay: 1.0)
+            }
         }
         
         // Update toolbar

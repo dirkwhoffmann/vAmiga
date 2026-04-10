@@ -329,6 +329,8 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noex
 isize
 FSAllocator::numUnallocated() const noexcept
 {
+    if (!fs.isFormatted()) return 0;
+    
     isize result = 0;
     for (auto &it : readBitmap()) result += std::popcount(it);
 
