@@ -115,6 +115,50 @@ GeometryDescriptor::driveGeometries(isize numBlocks)
 std::vector<GeometryDescriptor>
 GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
 {
+    // Typical number of sectors per track
+    // https://www.win.tue.nl/~aeb/linux/hdtypes/hdtypes-4.html
+    
+    static constexpr std::array<i8, 24> sizes = {
+        16, 17, 24, 26, 27, 28, 29, 32, 34,
+        35, 36, 38, 47, 50, 51, 52, 53, 55,
+        56, 59, 60, 61, 62, 63
+    };
+
+    printf("driveGeometries: numBlocks: %ld %ld %ld %ld\n", numBlocks, bsize, hMin, hMax);
+    
+    std::vector<GeometryDescriptor> result;
+    result.reserve(128);
+
+    for (isize h = hMin; h <= hMax; ++h) {
+        for (auto s_raw : sizes) {
+
+            isize s = isize(s_raw);
+            isize blocksPerCyl = h * s;
+
+            if (blocksPerCyl == 0) continue;
+
+            if (numBlocks % blocksPerCyl == 0) {
+
+                isize c = numBlocks / blocksPerCyl;
+
+                if (c > cMax) continue;
+                if (c < cMin && h > 1) continue;
+
+                printf("Found match %ld %ld %ld %ld\n", c, h, s, bsize);
+                result.emplace_back(c, h, s, bsize);
+            }
+        }
+    }
+
+    std::sort(result.begin(), result.end());
+    printf("NUm entries: %ld\n", result.size());
+    return result;
+}
+
+/*
+std::vector<GeometryDescriptor>
+GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
+{
     std::vector<GeometryDescriptor> result;
     
     // Typical number of sectors per track
@@ -151,6 +195,7 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
 
     return result;
 }
+*/
 
 bool
 GeometryDescriptor::unique() const

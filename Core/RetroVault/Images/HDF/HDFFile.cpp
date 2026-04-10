@@ -153,10 +153,14 @@ HDFFile::getGeometryDescriptor() const
         auto numBlocks = predictNumBlocks();
 
         // Predict the drive geometry
-        auto geometries = GeometryDescriptor::driveGeometries(numBlocks, result.bsize);
+        auto geometries = GeometryDescriptor::driveGeometries(numBlocks, 512);
 
         // Use the first match by default
-        if (geometries.size()) result = geometries.front();
+        if (geometries.size()) {
+            
+            result = geometries.front();
+            
+        }
     }
 
     return result;

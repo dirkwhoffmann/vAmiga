@@ -113,8 +113,8 @@ HardDrive::init(const GeometryDescriptor &geometry)
     ptable.push_back(partition);
 
     // Create the new drive
-    data.resize(geometry.numBytes());
-    dirty.resize(geometry.numBytes() / 512, true);
+    data.init(geometry.numBytes(), 0);
+    dirty.init(geometry.numBytes() / 512, true);
 }
 
 void

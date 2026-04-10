@@ -114,7 +114,7 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
             break;
 
         case HDR_UNKNOWN_GEOMETRY:
-            set_msg("Failed to derive to geometry of this drive.");
+            set_msg("Failed to derive the geometry of this drive.");
             break;
 
         case HDR_UNMATCHED_GEOMETRY:
