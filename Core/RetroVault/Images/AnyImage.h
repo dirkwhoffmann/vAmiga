@@ -57,7 +57,6 @@ public:
     void init(isize len);
     void init(const u8 *buf, isize len);
     void init(const Buffer<u8>& buffer);
-    // void init(const string& str);
     void init(const fs::path& path);
 
     // Checks if the URL points to an image of the same type

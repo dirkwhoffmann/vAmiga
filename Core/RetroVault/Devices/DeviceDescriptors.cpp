@@ -123,8 +123,6 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
         35, 36, 38, 47, 50, 51, 52, 53, 55,
         56, 59, 60, 61, 62, 63
     };
-
-    printf("driveGeometries: numBlocks: %ld %ld %ld %ld\n", numBlocks, bsize, hMin, hMax);
     
     std::vector<GeometryDescriptor> result;
     result.reserve(128);
@@ -144,14 +142,12 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
                 if (c > cMax) continue;
                 if (c < cMin && h > 1) continue;
 
-                printf("Found match %ld %ld %ld %ld\n", c, h, s, bsize);
                 result.emplace_back(c, h, s, bsize);
             }
         }
     }
 
     std::sort(result.begin(), result.end());
-    printf("NUm entries: %ld\n", result.size());
     return result;
 }
 
