@@ -46,7 +46,7 @@ FSImporter::importVolume(const u8 *src, isize size)
             block.importBlock(data, traits.bsize);
         }
     }
-
+    
     // Print some debug information
     loginfo(FS_DEBUG, "Success\n");
 }
@@ -64,7 +64,6 @@ FSImporter::import(BlockNr top, const fs::path &path, bool recursive, bool conte
 
     // Get the directory item
     try { dir = fs::directory_entry(path); } catch (...) {
-        // throw IOError(IOError::FILE_CANT_READ);
         throw IOError(IOError::FILE_CANT_READ, path);
     }
 
@@ -79,12 +78,12 @@ FSImporter::import(BlockNr top, const fs::path &path, bool recursive, bool conte
         import(top, dir, recursive);
     }
 
-    // Rectify the checksums of all blocks
-    // fs.importer.updateChecksums();
-
     // Verify the result
-    if constexpr (debug::FS_DEBUG)
+    if constexpr (debug::FS_DEBUG) {
+        
+        fs.flush();
         fs.doctor.xray(true, std::cout, false);
+    }
 }
 
 void

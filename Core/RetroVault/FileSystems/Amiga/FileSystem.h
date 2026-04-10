@@ -264,6 +264,9 @@ public:
     // Writes back dirty cache blocks to the block device
     void flush();
 
+    // Updates the checksums of all cached blocks
+    void updateChecksums();
+    
     // Invalidates all cached blocks
     void invalidate();
     

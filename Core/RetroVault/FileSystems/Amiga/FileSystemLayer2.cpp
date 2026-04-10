@@ -170,6 +170,7 @@ FileSystem::mkdir(BlockNr at, const FSName &name)
 
     auto udb = newUserDirBlock(name);
     fetch(udb).mutate().setParentDirRef(at);
+    fetch(udb).mutate().updateChecksum();
     addToHashTable(at, udb);
 
     return udb;

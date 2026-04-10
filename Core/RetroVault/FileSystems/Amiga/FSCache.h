@@ -146,6 +146,7 @@ public:
     void markAsDirty(BlockNr nr);
     
     void flush();
+    void updateChecksums();
     void invalidate();
 };
 

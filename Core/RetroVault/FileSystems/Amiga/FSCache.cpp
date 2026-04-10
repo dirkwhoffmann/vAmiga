@@ -254,6 +254,9 @@ FSCache::flush()
     std::vector<u8> buffer;
     auto bs = bsize();
 
+    // Update checksums of all cached blocks
+    updateChecksums();
+    
     // Arrage dirty blocks in segments
     auto segments = Range<BlockNr>::coalesce(dirty);
     
@@ -280,6 +283,12 @@ FSCache::flush()
     
     // Mark all blocks as up-to-date
     dirty.clear();
+}
+
+void
+FSCache::updateChecksums()
+{
+    for (auto b : dirty) blocks[b]->updateChecksum();
 }
 
 void

@@ -376,9 +376,7 @@ FSDoctor::xray(BlockNr ref, bool strict) const
 
         std::optional<u32> expected;
         if (auto error = xray32(ref, i, strict, expected); error != FSBlockError::OK) {
-
             count++;
-            loginfo(FS_DEBUG, "Block %ld [%ld]: %s\n", node.nr, i, FSBlockErrorEnum::key(error));
         }
     }
 

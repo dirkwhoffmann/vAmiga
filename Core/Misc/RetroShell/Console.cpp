@@ -1022,7 +1022,7 @@ Console::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::hidden,
             .args   = {
                 { .name = { "seconds", "Delay" } },
-                { .name = { "unit", "Unit" } }
+                { .name = { "unit", "Unit" }, .flags = rs::opt } // unused
             },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 

@@ -55,6 +55,12 @@ FileSystem::flush()
 }
 
 void
+FileSystem::updateChecksums()
+{
+    cache.updateChecksums();
+}
+
+void
 FileSystem::invalidate()
 {
     cache.invalidate();
