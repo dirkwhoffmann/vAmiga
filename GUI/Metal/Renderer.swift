@@ -292,5 +292,9 @@ class Renderer: NSObject, MTKViewDelegate {
 
         buffer.present(drawable)
         buffer.commit()
+        
+        if parent.statusBarIsDirty && frames % 4 == 0 {
+            parent.refreshStatusBar()
+        }
     }
 }

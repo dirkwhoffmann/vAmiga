@@ -135,6 +135,9 @@ class MyController: NSWindowController, MessageReceiver {
     var drvLED: [NSButton?] = Array(repeating: nil, count: 8)
     var drvCyl: [NSTextField?] = Array(repeating: nil, count: 8)
     var drvIcon: [NSButton?] = Array(repeating: nil, count: 8)
+    
+    // Refresh status
+    var statusBarIsDirty = true
 }
 
 extension MyController {
@@ -224,7 +227,7 @@ extension MyController {
         toolbar.validateVisibleItems()
         
         // Update status bar
-        refreshStatusBar()
+        // refreshStatusBar()
     }
     
     func configureWindow() {
@@ -357,7 +360,7 @@ extension MyController {
             
         case .CONFIG:
             
-            refreshStatusBar()
+            statusBarIsDirty = true
             settings?.refresh()
             
         case .POWER:
@@ -389,12 +392,12 @@ extension MyController {
             
         case .RUN:
             toolbar.updateToolbar()
-            refreshStatusBar()
+            statusBarIsDirty = true
             clearInfo()
 
         case .PAUSE:
             toolbar.updateToolbar()
-            refreshStatusBar()
+            statusBarIsDirty = true
 
         case .STEP:
             clearInfo()
@@ -430,10 +433,10 @@ extension MyController {
             
         case .MUTE:
             muted = value != 0
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .EASTER_EGG, .WARP, .TRACK:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .POWER_LED_ON:
             powerLED.image = NSImage(named: "ledRed")
@@ -488,7 +491,7 @@ extension MyController {
             setInfo("End of line reached", "Interrupted at location \(pos)")
             
         case .CPU_HALT:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .VIEWPORT:
             renderer.canvas.updateTextureRect(hstrt: Int(msg.viewport.hstrt),
@@ -505,76 +508,82 @@ extension MyController {
                 
                 hideOrShowDriveMenus()
                 assignSlots()
-                refreshStatusBar()
+                statusBarIsDirty = true
                 
             } else {
                 
                 hideOrShowDriveMenus()
                 assignSlots()
-                refreshStatusBar()
+                statusBarIsDirty = true
             }
             
         case .DRIVE_SELECT:
-            refreshStatusBar(writing: nil)
+            statusBarIsDirty = true
             
         case .DRIVE_READ:
-            refreshStatusBar(writing: false)
+            statusBarIsDirty = true
             
         case .DRIVE_WRITE:
-            refreshStatusBar(writing: true)
+            statusBarIsDirty = true
             
         case .DRIVE_LED:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .DRIVE_MOTOR:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .DRIVE_STEP:
             macAudio.playSound(MacAudio.Sounds.step, volume: volume, pan: pan)
-            refreshStatusBar(drive: nr, cylinder: cyl)
+            statusBarIsDirty = true
             
         case .DRIVE_POLL:
             macAudio.playSound(MacAudio.Sounds.step, volume: volume, pan: pan)
-            refreshStatusBar(drive: nr, cylinder: cyl)
+            statusBarIsDirty = true
             
         case .DISK_INSERT:
             macAudio.playSound(MacAudio.Sounds.insert, volume: volume, pan: pan)
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .DISK_EJECT:
             macAudio.playSound(MacAudio.Sounds.eject, volume: volume, pan: pan)
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .DISK_PROTECTED:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .HDC_CONNECT:
             
+            hideOrShowDriveMenus()
+            assignSlots()
+            statusBarIsDirty = true
+            
+            /*
             if msg.value != 0 {
                 
                 hideOrShowDriveMenus()
                 assignSlots()
-                refreshStatusBar()
+                statusBarIsDirty = true
                 
             } else {
                 
                 hideOrShowDriveMenus()
                 assignSlots()
-                refreshStatusBar()
+                statusBarIsDirty = true
             }
+            */
             
         case .HDC_STATE:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .HDR_STEP:
             macAudio.playSound(MacAudio.Sounds.move, volume: volume, pan: pan)
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .HDR_IDLE, .HDR_READ:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .HDR_WRITE:
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .MON_SETTING:
             renderer.process(message: msg)
@@ -607,7 +616,7 @@ extension MyController {
             renderer.flash(steps: 40)
             hideOrShowDriveMenus()
             assignSlots()
-            refreshStatusBar()
+            statusBarIsDirty = true
             
         case .WORKSPACE_SAVED, .WORKSPACE_LOADED:
             break
@@ -619,7 +628,7 @@ extension MyController {
             }
             
         case .SRV_STATE:
-            refreshStatusBar()
+            statusBarIsDirty = true
             settings?.refresh()
 
         case .SRV_RECEIVE, .SRV_SEND:
@@ -636,13 +645,15 @@ extension MyController {
         // Pass message to all open auxiliary panels
         for inspector in inspectors { inspector.processMessage(msg) }
         for dashboard in dashboards { dashboard.processMessage(msg) }
+
+        // print("=== AFTER process(message === \(Date())")
     }
     
     func setInfo(_ text: String?, _ text2: String? = nil) {
         
         infoText = text
         infoText2 = text2
-        refreshStatusBar()
+        statusBarIsDirty = true
     }
     
     func clearInfo() {

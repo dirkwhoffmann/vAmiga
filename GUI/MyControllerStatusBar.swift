@@ -25,6 +25,8 @@ extension MyController {
         
         guard let emu = emu else { return }
         
+        statusBarIsDirty = false
+        
         let info = emu.info
         let running = info.running
         let tracking = info.tracking

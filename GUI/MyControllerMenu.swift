@@ -427,6 +427,7 @@ extension MyController: NSMenuItemValidation {
             fatalError()
         }
         
+        statusBarIsDirty = true
         refreshStatusBar()
         myAppDelegate.settingsController?.refresh()
     }
