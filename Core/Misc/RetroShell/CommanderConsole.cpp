@@ -156,7 +156,8 @@ CommanderConsole::initCommands(RSCommand &root)
             .tokens = { "regression", "setup", ConfigSchemeEnum::key(it) },
             .chelp  = { ConfigSchemeEnum::help(it) },
             .args   = {
-                { .name = { "rom", "ROM file" } }
+                { .name = { "rom", "ROM file" }, .flags = rs::opt },
+                { .name = { "ext", "Extension ROM file" }, .flags = rs::opt }
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                     
