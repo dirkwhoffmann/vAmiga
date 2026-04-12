@@ -14,6 +14,7 @@
 #include "utl/io.h"
 #include "utl/types/Literals.h"
 #include <algorithm>
+#include <array>
 
 namespace retro::vault {
 
@@ -128,6 +129,7 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
     result.reserve(128);
 
     for (isize h = hMin; h <= hMax; ++h) {
+        
         for (auto s_raw : sizes) {
 
             isize s = isize(s_raw);
