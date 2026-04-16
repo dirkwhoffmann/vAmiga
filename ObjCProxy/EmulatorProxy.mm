@@ -2219,7 +2219,7 @@ ImageInfo scan(const fs::path &url)
                        format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex
 {
-    auto drive = (FloppyDriveAPI *)proxy->obj;
+    auto drive = (HardDriveAPI *)proxy->obj;
     try { return [self make: drive->drive->exportDisk(fmt).release()]; }
     catch(Error &error) { [ex save:error]; return nil; }
 }

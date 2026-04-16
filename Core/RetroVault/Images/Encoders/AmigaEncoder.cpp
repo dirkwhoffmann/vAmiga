@@ -34,7 +34,7 @@ AmigaEncoder::encodeTrack(ByteView src, TrackNr t)
     // Start with a clean track
     auto trackBytes = count == 11 ? 12668  : 24636;
     if (trackBuffer.empty()) trackBuffer.resize(trackBytes);
-    std::fill(trackBuffer.begin(), trackBuffer.end(), 0xAA);
+    std::fill(trackBuffer.begin(), trackBuffer.end(), (u8)0xAA);
     
     // Create views
     auto trackBits = 8 * trackBytes;
