@@ -10,7 +10,9 @@
 #include "config.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include <cstring>
-
+#include <algorithm>
+#include <ranges>
+#include <span>
 namespace retro::vault::amiga {
 
 void
@@ -21,15 +23,16 @@ FileSystem::format(FSFormat dos) {
     if (dos == FSFormat::NODOS) return;
 
     // Perform some consistency checks
-    assert(blocks() > 2);
+    assert(blocks() > reservedBootBlocks);
     assert(rootBlock > 0);
 
     // Create boot blocks
-    cache.modify(0).init(FSBlockType::BOOT);
-    cache.modify(1).init(FSBlockType::BOOT);
+    for (isize i = 0; i < reservedBootBlocks; i++) {
+        cache.modify(i).init(FSBlockType::BOOT);
+    }
 
     // Wipe out all other blocks
-    for (isize i = 2; i < traits.blocks; i++) {
+    for (isize i = reservedBootBlocks; i < traits.blocks; i++) {
         (*this)[i].mutate().init(FSBlockType::EMPTY);
     }
 
@@ -57,10 +60,21 @@ FileSystem::format(FSFormat dos) {
     (*this)[rootBlock].mutate().addBitmapBlockRefs(bmBlocks);
 
     // Mark free blocks as free in the bitmap block
-    // TODO: SPEED THIS UP
-    for (isize i = 0; i < blocks(); i++) {
-        if (cache.isEmpty(BlockNr(i))) allocator.markAsFree(BlockNr(i));
+    for (auto& ref : bmBlocks) {
+        std::span payload(cache.modify(ref).data() + bmHeaderSize, traits.bsize - bmHeaderSize);
+        std::ranges::fill(payload, bmFreeByte);
     }
+
+    // Mark trailing bits out of volume bounds as allocated
+    isize capacity = isize(bmBlocks.size()) * ((traits.bsize - bmHeaderSize) * bitsPerByte) + reservedBootBlocks;
+    for (auto i : std::views::iota(blocks(), capacity)) {
+        allocator.markAsAllocated(BlockNr(i));
+    }
+
+    // Explicitly mark metadata blocks as allocated
+    allocator.markAsAllocated(rootBlock);
+    for (auto& ref : bmBlocks) allocator.markAsAllocated(ref);
+    for (auto& ref : bmExtBlocks) allocator.markAsAllocated(ref);
 
     // Rectify checksums
     fetch(0).mutate().updateChecksum();
