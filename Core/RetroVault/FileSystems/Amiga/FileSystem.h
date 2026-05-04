@@ -111,6 +111,12 @@ class FileSystem : public Loggable {
 
     friend struct FSBlock;
 
+    // Formatting constants
+    static constexpr isize bmHeaderSize = 4;
+    static constexpr u8 bmFreeByte = 0xFF;
+    static constexpr isize bitsPerByte = 8;
+    static constexpr isize reservedBootBlocks = 2;
+
     // Immutable file system properties
     FSTraits traits;
 
