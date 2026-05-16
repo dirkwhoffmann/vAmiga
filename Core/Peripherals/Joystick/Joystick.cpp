@@ -11,6 +11,7 @@
 #include "Joystick.h"
 #include "Amiga.h"
 #include "utl/io.h"
+#include <climits>
 #include <sstream>
 
 namespace vamiga {

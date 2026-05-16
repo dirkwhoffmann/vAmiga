@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Beamtraps.h"
 #include "Amiga.h"
+#include <climits>
 
 namespace vamiga {
 
