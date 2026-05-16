@@ -16,6 +16,7 @@
 #include "utl/chrono.h"
 #include "utl/support.h"
 #include "utl/io.h"
+#include <climits>
 #include <format>
 #include <regex>
 

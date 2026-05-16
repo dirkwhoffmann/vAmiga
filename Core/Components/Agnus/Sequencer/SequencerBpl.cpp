@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Sequencer.h"
 #include "Agnus.h"
+#include <climits>
 
 namespace vamiga {
 
