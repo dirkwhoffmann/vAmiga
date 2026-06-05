@@ -218,7 +218,7 @@ HardDrive::init(const fs::path &path)
         
         try { init(HDFFile(path)); return; } catch(...) { }
         
-        throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+        //throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
 
@@ -346,9 +346,6 @@ HardDrive::isBootable()
 
         auto vol = Volume(*this);
         auto fs = FileSystem(vol);
-
-        // auto dev = make_unique<Device>(getGeometry());
-        // auto fs = FileSystemFactory::fromHardDrive(*dev, *this);
 
         if (fs.exists("s/startup-sequence")) {
 

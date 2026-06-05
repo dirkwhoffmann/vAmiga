@@ -360,10 +360,10 @@ DriverDescriptor::dump(std::ostream &os) const
     using namespace utl;
 
     os << tab("DOS type");
-    os << hex(dosType);
+    os << hex(dosType) << std::endl;
     // os << " (" << OSDebugger::dosTypeStr(dosType) << ")" << std::endl;
     os << tab("DOS version");
-    os << hex(dosVersion);
+    os << hex(dosVersion) << std::endl;
     // os << " (" << OSDebugger::dosVersionStr(dosVersion) << ")" << std::endl;
     os << tab("Patch flags");
     os << hex(patchFlags) << std::endl;

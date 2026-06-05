@@ -75,8 +75,18 @@ AnyImage::init(const fs::path &path)
         throw IOError(IOError::FILE_NOT_FOUND, path);
 
     // Read file into a vector
+    stream.seekg(0, std::ios::end);
+        size_t size = stream.tellg();
+        stream.seekg(0, std::ios::beg);
+
+        std::vector<u8> buffer(size);
+
+        stream.read(reinterpret_cast<char *>(buffer.data()), size);
+
+    /*
     std::vector<u8> buffer((std::istreambuf_iterator<char>(stream)),
                            std::istreambuf_iterator<char>());
+    */
     
     if (buffer.empty())
         throw IOError(IOError::FILE_CANT_READ, path);
