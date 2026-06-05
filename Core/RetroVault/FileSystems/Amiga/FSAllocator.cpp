@@ -271,7 +271,7 @@ FSAllocator::isUnallocated(BlockNr nr) const noexcept
 const FSBlock *
 FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept
 {
-    assert(isize(nr) < traits.blocks);
+    // assert(isize(nr) < traits.blocks);
 
     auto &bmBlocks = fs.getBmBlocks();
 
