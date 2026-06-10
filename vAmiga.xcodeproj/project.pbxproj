@@ -79,6 +79,10 @@
 		5029C6E627CA6209002F6CCC /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E427CA6209002F6CCC /* FileSystem.cpp */; };
 		502B303828469CF600673377 /* Beam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502B303728469CF600673377 /* Beam.cpp */; };
 		502B303928469CF600673377 /* Beam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502B303728469CF600673377 /* Beam.cpp */; };
+		502DD2D02F9CAE5B00ACBE45 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 502DD2CF2F9CAE5B00ACBE45 /* zip.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		502DD2D12F9CAE5B00ACBE45 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 502DD2CF2F9CAE5B00ACBE45 /* zip.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		502DD2D42F9CAED700ACBE45 /* UUID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502DD2D32F9CAED700ACBE45 /* UUID.cpp */; };
+		502DD2D52F9CAED700ACBE45 /* UUID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502DD2D32F9CAED700ACBE45 /* UUID.cpp */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
 		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
@@ -734,6 +738,14 @@
 		5029C6E527CA6209002F6CCC /* FileSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
 		502B303728469CF600673377 /* Beam.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Beam.cpp; sourceTree = "<group>"; };
 		502C135027C613DB009534BD /* HdControllerRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdControllerRom.h; sourceTree = "<group>"; };
+		502DD2CA2F9CAE5B00ACBE45 /* httplib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = httplib.h; sourceTree = "<group>"; };
+		502DD2CB2F9CAE5B00ACBE45 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		502DD2CC2F9CAE5B00ACBE45 /* json_fwd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_fwd.h; sourceTree = "<group>"; };
+		502DD2CD2F9CAE5B00ACBE45 /* miniz.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = miniz.h; sourceTree = "<group>"; };
+		502DD2CE2F9CAE5B00ACBE45 /* zip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		502DD2CF2F9CAE5B00ACBE45 /* zip.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		502DD2D22F9CAEAF00ACBE45 /* UUID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UUID.h; sourceTree = "<group>"; };
+		502DD2D32F9CAED700ACBE45 /* UUID.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UUID.cpp; sourceTree = "<group>"; };
 		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
 		502EFD0B2248ECAA00F0E118 /* EventTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableView.swift; sourceTree = "<group>"; };
 		502F7DCD2221706000AEEC65 /* Copper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Copper.cpp; sourceTree = "<group>"; };
@@ -2485,6 +2497,7 @@
 				503FC4B42EE04C2B00637C95 /* Integers.h */,
 				503FC4B02EE00FE400637C95 /* Exception.h */,
 				50BCBDD02EE9587C000C53CF /* Literals.h */,
+				502DD2D22F9CAEAF00ACBE45 /* UUID.h */,
 			);
 			path = types;
 			sourceTree = "<group>";
@@ -2505,6 +2518,7 @@
 		50BCB9B12EE346BA000C53CF /* types */ = {
 			isa = PBXGroup;
 			children = (
+				502DD2D32F9CAED700ACBE45 /* UUID.cpp */,
 			);
 			path = types;
 			sourceTree = "<group>";
@@ -2532,6 +2546,12 @@
 		50BCB9BF2EE4BDA3000C53CF /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				502DD2CA2F9CAE5B00ACBE45 /* httplib.h */,
+				502DD2CB2F9CAE5B00ACBE45 /* json.h */,
+				502DD2CC2F9CAE5B00ACBE45 /* json_fwd.h */,
+				502DD2CD2F9CAE5B00ACBE45 /* miniz.h */,
+				502DD2CE2F9CAE5B00ACBE45 /* zip.h */,
+				502DD2CF2F9CAE5B00ACBE45 /* zip.c */,
 				9C47C0302D6215B100E57B41 /* lz4.h */,
 				9C47C0312D6215B100E57B41 /* lz4.c */,
 			);
@@ -3159,6 +3179,7 @@
 				50BF4BC52F0ADF3200F1B9F2 /* FileSystemLayer3.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				509D076C2EDB295200355638 /* FileSystemLayer1.cpp in Sources */,
+				502DD2D42F9CAED700ACBE45 /* UUID.cpp in Sources */,
 				505DD69E2E0815B800D9E8B2 /* FSCache.cpp in Sources */,
 				50392FB12EF8052200DAE17A /* FSTree.cpp in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
@@ -3345,6 +3366,7 @@
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
 				50FB49BC2F0FAFBA00369491 /* C64Encoder.cpp in Sources */,
+				502DD2D12F9CAE5B00ACBE45 /* zip.c in Sources */,
 				50144E3D2E7BEA8D009E15B4 /* SidebarViewController.swift in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
@@ -3455,6 +3477,7 @@
 				50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */,
 				5020B38F295336E5009732AC /* Host.cpp in Sources */,
 				505A13402C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
+				502DD2D52F9CAED700ACBE45 /* UUID.cpp in Sources */,
 				50BF4B4A2F03D72800F1B9F2 /* MFM.cpp in Sources */,
 				50FC04CB27DA19E900C3E566 /* FloppyDiskImage.cpp in Sources */,
 				50FC04B627DA19A900C3E566 /* RamExpansion.cpp in Sources */,
@@ -3501,6 +3524,7 @@
 				50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */,
 				50BF4B752F09591C00F1B9F2 /* AnyImage.cpp in Sources */,
 				502B303928469CF600673377 /* Beam.cpp in Sources */,
+				502DD2D02F9CAE5B00ACBE45 /* zip.c in Sources */,
 				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
 				503FC4CD2EE0AB1600637C95 /* Streams.cpp in Sources */,
 				50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */,
@@ -3868,6 +3892,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "ObjCProxy/Bridging-Header.h";
 				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 				WARNING_CFLAGS = (
 					"-Wno-gnu-anonymous-struct",
 					"-Wno-gnu-zero-variadic-macro-arguments",
@@ -3925,6 +3950,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "ObjCProxy/Bridging-Header.h";
 				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 				WARNING_CFLAGS = (
 					"-Wno-gnu-anonymous-struct",
 					"-Wno-gnu-zero-variadic-macro-arguments",
