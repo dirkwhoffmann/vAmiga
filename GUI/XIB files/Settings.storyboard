@@ -6347,7 +6347,7 @@
                             <button tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xYM-0y-kTt">
                                 <rect key="frame" x="20" y="310" width="170" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="RPC Server" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="VXO-7v-gE9">
+                                <buttonCell key="cell" type="check" title="JSON RPC Server" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="VXO-7v-gE9">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="systemBold"/>
                                 </buttonCell>
@@ -6482,7 +6482,7 @@
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w98-6d-WLK">
-                                <rect key="frame" x="215" y="341" width="405" height="43"/>
+                                <rect key="frame" x="215" y="335" width="405" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" id="9mg-lT-gqX">
                                     <font key="font" metaFont="system"/>
@@ -6677,7 +6677,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="steeringwheel" catalog="system" width="20" height="20"/>
         <image name="trash" catalog="system" width="19" height="22"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>
