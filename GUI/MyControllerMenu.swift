@@ -106,6 +106,10 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.writeProtectHdrAction(_:)):
             item.state = hdn.info.hasProtectedDisk ? .on : .off
             return hdn.info.hasDisk
+
+        case #selector(MyController.bootableHdrAction(_:)):
+            item.state = hdn.getFlag(.BOOTABLE) ? .on : .off
+            return hdn.info.hasDisk
             
         default:
             return item.isEnabled
@@ -735,6 +739,13 @@ extension MyController: NSMenuItemValidation {
         
         if let hdn = emu?.hd(sender) {
             hdn.setFlag(.PROTECTED, value: !hdn.getFlag(.PROTECTED))
+        }
+    }
+
+    @IBAction func bootableHdrAction(_ sender: NSMenuItem!) {
+
+        if let hdn = emu?.hd(sender) {
+            hdn.setFlag(.BOOTABLE, value: !hdn.getFlag(.BOOTABLE))
         }
     }
     

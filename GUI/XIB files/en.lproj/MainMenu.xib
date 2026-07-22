@@ -624,6 +624,12 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ieg-NM-Vj2"/>
+                            <menuItem title="Bootable" id="fH0-Bt-978">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="bootableHdrAction:" target="-1" id="fH0-Bt-act"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Write Protected" id="73e-Wr-cMm">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -683,6 +689,12 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="8e1-0R-Xgb"/>
+                            <menuItem title="Bootable" tag="1" id="fH1-Bt-978">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="bootableHdrAction:" target="-1" id="fH1-Bt-act"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Write Protected" tag="1" id="LFK-jK-NPP" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -742,6 +754,12 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="BA5-MK-XXw"/>
+                            <menuItem title="Bootable" tag="2" id="fH2-Bt-978">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="bootableHdrAction:" target="-1" id="fH2-Bt-act"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Write Protected" tag="2" id="KcH-ih-oZX" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -801,6 +819,12 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="tzT-rv-xwa"/>
+                            <menuItem title="Bootable" tag="3" id="fH3-Bt-978">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="bootableHdrAction:" target="-1" id="fH3-Bt-act"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Write Protected" tag="3" id="Xmj-KC-ZiU" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

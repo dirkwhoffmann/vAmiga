@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HardDiskConfigurator">
             <connections>
+                <outlet property="bootableCheckbox" destination="QdC-9g-BtL" id="GHy-4X-TdP"/>
                 <outlet property="cylinderField" destination="Ivb-fr-DFo" id="bLv-P4-9E5"/>
                 <outlet property="cylinderStepper" destination="xXY-el-Faf" id="kHR-PH-bBA"/>
                 <outlet property="cylinderText" destination="eSF-5b-pdf" id="D2l-rz-2fe"/>
@@ -169,6 +170,14 @@ Gw
                             <action selector="geometryAction:" target="-2" id="yl9-4R-rjC"/>
                         </connections>
                     </popUpButton>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QdC-9g-BtL">
+                        <rect key="frame" x="164" y="125" width="88" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Bootable" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="ad9-Yt-7FL">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tpR-nX-JuM">
                         <rect key="frame" x="501" y="13" width="85" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
