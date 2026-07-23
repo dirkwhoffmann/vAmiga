@@ -88,6 +88,7 @@ HardDrive::init()
     ptable.clear();
     drivers.clear();
     head = {};
+    setFlag(DiskFlags::BOOTABLE, false);
     setFlag(DiskFlags::MODIFIED, force::HDR_MODIFIED);
 }
 
@@ -111,6 +112,9 @@ HardDrive::init(const GeometryDescriptor &geometry)
     
     // Add the descriptor to the partition table
     ptable.push_back(partition);
+
+    // User-provided disks are bootable by default
+    setFlag(DiskFlags::BOOTABLE, true);
 
     // Create the new drive
     data.init(geometry.numBytes(), 0);
@@ -311,6 +315,7 @@ HardDrive::connect()
         loginfo(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
         format(amiga::FSFormat::OFS, FSName(defaultName()));
+        setFlag(DiskFlags::BOOTABLE, false);
     }
 }
 
@@ -342,24 +347,7 @@ HardDrive::isCompatible() const
 bool
 HardDrive::isBootable()
 {
-    try {
-
-        auto vol = Volume(*this);
-        auto fs = FileSystem(vol);
-
-        if (fs.exists("s/startup-sequence")) {
-
-            loginfo(HDR_DEBUG, "Bootable drive\n");
-            return true;
-        }
-        
-    } catch (...) {
-        
-        loginfo(HDR_DEBUG, "No file system found\n");
-    }
-    
-    loginfo(HDR_DEBUG, "Unbootable drive\n");
-    return false;
+    return hasDisk() && getFlag(DiskFlags::BOOTABLE);
 }
 
 HardDriveInfo
