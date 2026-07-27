@@ -55,15 +55,7 @@ class MyDocument: NSDocument {
         loginfo(.lifetime)
         
         super.init()
-        
-        // Check for OS compatibility
-        if #available(macOS 27, *) {
-            
-            showAlert(.unsupportedOSVersion)
-            NSApp.terminate(self)
-            return
-        }
-        
+                
         // Check for Metal support
         if MTLCreateSystemDefaultDevice() == nil {
             
