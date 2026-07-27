@@ -564,8 +564,8 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
         
         let drive = sender.tag >> 16
-        let slot = sender.tag % 0xFFFF
-        
+        let slot = sender.tag & 0xFFFF
+
         exportRecentAction(df: drive, slot: slot)
     }
     
