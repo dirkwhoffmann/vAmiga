@@ -25,6 +25,7 @@ class HardDiskConfigurator: DialogController {
     @IBOutlet weak var sectorStepper: NSStepper!
 
     @IBOutlet weak var warningText: NSTextField!
+    @IBOutlet weak var bootableCheckbox: NSButton!
     @IBOutlet weak var okButton: NSButton!
 
     var nr = 0
@@ -104,6 +105,7 @@ class HardDiskConfigurator: DialogController {
         headStepper.maxValue = .greatestFiniteMagnitude
         sectorStepper.maxValue = .greatestFiniteMagnitude
         warningText.textColor = .warning
+        bootableCheckbox.state = drive.getFlag(.BOOTABLE) ? .on : .off
 
         geometryPopup.removeAllItems()
         geometryPopup.addItem(withTitle: "Custom")
@@ -235,6 +237,7 @@ class HardDiskConfigurator: DialogController {
         
         do {
             try drive.changeGeometry(c: cyls, h: heads, s: sectors)
+            drive.setFlag(.BOOTABLE, value: bootableCheckbox.state == .on)
             hide()
             
         } catch {

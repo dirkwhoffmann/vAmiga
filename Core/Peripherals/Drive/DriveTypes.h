@@ -23,13 +23,14 @@ using namespace retro::vault;
 enum class DiskFlags
 {
     PROTECTED  = 1,
-    MODIFIED   = 2
+    MODIFIED   = 2,
+    BOOTABLE   = 4
 };
 
 struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
-    static constexpr long maxVal = long(DiskFlags::MODIFIED);
+    static constexpr long maxVal = long(DiskFlags::BOOTABLE);
     
     static const char *_key(DiskFlags value)
     {
@@ -37,6 +38,7 @@ struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
                 
             case DiskFlags::PROTECTED:    return "PROTECTED";
             case DiskFlags::MODIFIED:     return "MODIFIED";
+            case DiskFlags::BOOTABLE:     return "BOOTABLE";
         }
         return "???";
     }
@@ -46,6 +48,7 @@ struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
                 
             case DiskFlags::PROTECTED:    return "Write protected disk";
             case DiskFlags::MODIFIED:     return "Modified disk contents";
+            case DiskFlags::BOOTABLE:     return "Bootable disk";
         }
         return "???";
     }

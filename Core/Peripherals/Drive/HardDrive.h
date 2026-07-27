@@ -370,7 +370,7 @@ public:
     // Checks whether the drive will work with the currently installed Rom
     bool isCompatible() const;
        
-    // Checks whether the drive is bootable
+    // Checks whether the drive is marked as bootable
     bool isBootable();
     
     //
