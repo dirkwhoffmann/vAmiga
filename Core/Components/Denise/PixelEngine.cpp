@@ -120,8 +120,21 @@ Texel
 PixelEngine::toTexel(const AmigaColor c) const
 {
     assert((c.r << 8 | c.g << 4 | c.b) < 4096);
-    return colorSpace[c.r << 8 | c.g << 4 | c.b];
+    // return colorSpace[c.r << 8 | c.g << 4 | c.b];
     
+    auto clamp = [](i32 v) {
+        return u8(v < 0 ? 0 : v > (255 << 16) ? 255 : v >> 16);
+    };
+
+    isize r8 = isize(c.r) << 4;
+    isize g8 = isize(c.g) << 4;
+    isize b8 = isize(c.b) << 4;
+
+    u8 r = clamp(adjLut[0 * 256 + r8] + adjLut[1 * 256 + g8] + adjLut[2 * 256 + b8]);
+    u8 g = clamp(adjLut[3 * 256 + r8] + adjLut[4 * 256 + g8] + adjLut[5 * 256 + b8]);
+    u8 b = clamp(adjLut[6 * 256 + r8] + adjLut[7 * 256 + g8] + adjLut[8 * 256 + b8]);
+
+    return TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
 }
 
 void
@@ -261,7 +274,7 @@ PixelEngine::updateAdjLut()
 
         default:
         {
-            assert(palette == Palette::COLOR);
+            // assert(palette == Palette::COLOR);
 
             double s = saturation * contrast;
             u[0] = -0.147 * s; u[1] = -0.289 * s; u[2] =  0.436 * s;

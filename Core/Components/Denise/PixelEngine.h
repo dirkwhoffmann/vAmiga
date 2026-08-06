@@ -68,7 +68,7 @@ private:
 
     /* The monitor adjustment is an affine transformation of the RGB components:
      *
-     *     output = M · input + offset
+     *     output = M * input + offset
      *
      * where input and output are RGB vectors. Since the transformation is linear
      * in each input component, it can be tabulated efficiently. Instead of storing
@@ -76,9 +76,9 @@ private:
      * span the full 24-bit range), the contribution of each input component to each
      * output component is stored separately:
      *
-     *     R' = lut(R→R) + lut(G→R) + lut(B→R)
-     *     G' = lut(R→G) + lut(G→G) + lut(B→G)
-     *     B' = lut(R→B) + lut(G→B) + lut(B→B)
+     *     R' = lut(R->R) + lut(G->R) + lut(B->R)
+     *     G' = lut(R->G) + lut(G->G) + lut(B->G)
+     *     B' = lut(R->B) + lut(G->B) + lut(B->B)
      *
      * The table is indexed by adjIdx(out, in) + value, where out selects the
      * output component, in selects the input component, and value is the 8-bit
