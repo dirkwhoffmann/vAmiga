@@ -202,7 +202,7 @@ class ControlsSettingsViewController: SettingsViewController {
 
     @IBAction func amigaKeysCombPopupAction(_ sender: NSButton!) {
 
-        pref.amigaKeysComb = sender.tag
+        pref.amigaKeysComb = sender.selectedTag()
         refresh()
     }
 
