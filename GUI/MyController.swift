@@ -115,6 +115,7 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var trackIcon: NSButton!
     @IBOutlet weak var serverIcon: NSButton!
     @IBOutlet weak var muteIcon: NSButton!
+    @IBOutlet weak var amigaKeyIcon: NSButton!
     
     @IBOutlet weak var warpIcon: NSButton!
     @IBOutlet weak var activityType: NSPopUpButton!
@@ -591,8 +592,12 @@ extension MyController {
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
 
-        case .KB_PRESS, .KB_RELEASE, .KB_LOCK, .KB_UNLOCK:
+        case .KB_PRESS, .KB_RELEASE:
             virtualKeyboard?.refreshIfVisible()
+
+        case .KB_LOCK, .KB_UNLOCK:
+            virtualKeyboard?.refreshIfVisible()
+            statusBarIsDirty = true
             
         case .SER_IN:
             var c = emu.serialPort.readIncomingPrintableByte()

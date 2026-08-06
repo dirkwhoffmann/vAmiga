@@ -12,6 +12,7 @@
                 <outlet property="activityBar" destination="212" id="Enu-fB-P92"/>
                 <outlet property="activityInfo" destination="oNV-mZ-JGc" id="HDY-Cq-tSN"/>
                 <outlet property="activityType" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
+                <outlet property="amigaKeyIcon" destination="Amg-Ky-Lck" id="Amg-Ky-Con"/>
                 <outlet property="cylSlot0" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
                 <outlet property="cylSlot1" destination="f7g-mT-LE7" id="L3Z-kO-mNv"/>
                 <outlet property="cylSlot2" destination="P62-wC-T1P" id="CiL-FT-qxc"/>
@@ -193,6 +194,14 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
+                    <button toolTip="Amiga key locked" tag="2" id="Amg-Ky-Lck" userLabel="Amiga Key Locked">
+                        <rect key="frame" x="459" y="3" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="amigaKeyTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Amg-Ky-Cel">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
                     <button tag="2" id="46l-A8-v8C" userLabel="Halt">
                         <rect key="frame" x="487" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -270,6 +279,7 @@
         </window>
     </objects>
     <resources>
+        <image name="amigaKeyTemplate" width="240" height="296"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="exclamationmark.brakesignal" catalog="system" width="26" height="19"/>
         <image name="hourglass1Template" width="240" height="241"/>

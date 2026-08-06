@@ -33,6 +33,8 @@ extension MyController {
         let warping = info.warping
         let boost = emu.get(.AMIGA_SPEED_BOOST)
         let width = renderer.parent.window?.frame.size.width ?? 0
+        let amigaKeyLocked = emu.keyboard.isLocked(AmigaKeycode.leftAmiga) ||
+                              emu.keyboard.isLocked(AmigaKeycode.rightAmiga)
         
         // Df0 - Df3
         for n in 0...3 where drv[n] != nil {
@@ -93,6 +95,7 @@ extension MyController {
             trackIcon: tracking,
             serverIcon: true,
             muteIcon: warping || muted,
+            amigaKeyIcon: amigaKeyLocked,
             
             warpIcon: running,
             activityType: running,
