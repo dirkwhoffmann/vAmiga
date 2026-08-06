@@ -63,9 +63,6 @@ private:
 
 private:
     
-    // Lookup table for all 4096 Amiga colors (DEPRECATED)
-    Texel colorSpace[4096];
-
     /* The monitor adjustment is an affine transformation of the RGB components:
      *
      *     output = M * input + offset
@@ -131,7 +128,6 @@ public:
     PixelEngine& operator= (const PixelEngine& other) {
 
         CLONE_ARRAY(adjLut)
-        CLONE_ARRAY(colorSpace)
         CLONE(colChanges)
         CLONE_ARRAY(color)
         CLONE(hamMode)
@@ -221,9 +217,6 @@ public:
     
 private:
     
-    // Adjusts the RGBA value according to the selected color parameters (DEPRECATED)
-    void adjustRGB(u8 &r, u8 &g, u8 &b);
-
     // Recomputes the color adjustment tables from the monitor settings
     void updateAdjLut();
     
@@ -282,9 +275,10 @@ private:
     void colorizeSHRES(Texel *dst, Pixel from, Pixel to);
     void colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham);
     
-    /* Hides some graphics layers. This function is an optional stage applied
-     * after colorize(). It can be used to hide some layers for debugging.
-     */
+    
+    //
+    // Hiding graphics layers
+    //
     
 public:
     

@@ -95,20 +95,6 @@ PixelEngine::setColor(isize reg, u16 value)
 void
 PixelEngine::updateRGBA()
 {
-    // Iterate through all 4096 colors (DEPRECATED)
-    for (u16 col = 0x000; col <= 0xFFF; col++) {
-
-        u8 r = (col >> 4) & 0xF0;
-        u8 g = (col >> 0) & 0xF0;
-        u8 b = (col << 4) & 0xF0;
-
-        // Adjust the RBG values according to the current video settings
-        adjustRGB(r, g, b);
-
-        // Write the result into the register lookup table
-        colorSpace[col] = TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
-    }
-
     // Recompute the adjustment coefficients
     updateAdjLut();
     
@@ -120,7 +106,6 @@ Texel
 PixelEngine::toTexel(const AmigaColor c) const
 {
     assert((c.r << 8 | c.g << 4 | c.b) < 4096);
-    // return colorSpace[c.r << 8 | c.g << 4 | c.b];
     
     auto clamp = [](i32 v) {
         return u8(v < 0 ? 0 : v > (255 << 16) ? 255 : v >> 16);
@@ -138,107 +123,22 @@ PixelEngine::toTexel(const AmigaColor c) const
 }
 
 void
-PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
-{
-    auto palette = monitor.getConfig().palette;
-
-    // The RGB palette does not alter anything. Return immediately
-    if (palette == Palette::RGB) return;
-    
-    // Normalize adjustment parameters
-    double brightness = double(monitor.getConfig().brightness) - 50.0;
-    double contrast = double(monitor.getConfig().contrast) / 100.0;
-    double saturation = double(monitor.getConfig().saturation) / 50.0;
-
-    // Convert RGB to YUV
-    double y =  0.299 * r + 0.587 * g + 0.114 * b;
-    double u = -0.147 * r - 0.289 * g + 0.436 * b;
-    double v =  0.615 * r - 0.515 * g - 0.100 * b;
-
-    // Adjust saturation
-    u *= saturation;
-    v *= saturation;
-
-    // Apply contrast
-    y *= contrast;
-    u *= contrast;
-    v *= contrast;
-
-    // Apply brightness
-    y += brightness;
-
-    // Translate to monochrome if applicable
-    switch(palette) {
-
-        case Palette::BLACK_WHITE:
-            u = 0.0;
-            v = 0.0;
-            break;
-
-        case Palette::PAPER_WHITE:
-            u = -128.0 + 120.0;
-            v = -128.0 + 133.0;
-            break;
-
-        case Palette::GREEN:
-            u = -128.0 + 29.0;
-            v = -128.0 + 64.0;
-            break;
-
-        case Palette::AMBER:
-            u = -128.0 + 24.0;
-            v = -128.0 + 178.0;
-            break;
-
-        case Palette::SEPIA:
-            u = -128.0 + 97.0;
-            v = -128.0 + 154.0;
-            break;
-
-        default:
-            assert(palette == Palette::COLOR);
-    }
-
-    // Convert YUV to RGB
-    double newR = y             + 1.140 * v;
-    double newG = y - 0.396 * u - 0.581 * v;
-    double newB = y + 2.029 * u;
-    newR = std::max(std::min(newR, 255.0), 0.0);
-    newG = std::max(std::min(newG, 255.0), 0.0);
-    newB = std::max(std::min(newB, 255.0), 0.0);
-
-    // Apply Gamma correction for PAL models
-    /*
-     r = gammaCorrect(r, 2.8, 2.2);
-     g = gammaCorrect(g, 2.8, 2.2);
-     b = gammaCorrect(b, 2.8, 2.2);
-     */
-
-    r = u8(newR);
-    g = u8(newG);
-    b = u8(newB);
-}
-
-void
 PixelEngine::updateAdjLut()
 {
     auto palette = monitor.getConfig().palette;
 
     if (palette == Palette::RGB) {
 
-        for (isize out = 0; out < 3; out++) {
+        std::memset(adjLut, 0, sizeof(adjLut));
 
-            for (isize in = 0; in < 3; in++) {
+        for (isize i = 0; i < 256; i++) {
 
-                auto adjIdx = (out * 3 + in) * 256;
-
-                for (isize val = 0; val < 256; val++) {
-
-                    double t = (out == in) ? double(val) : 0.0;
-                    adjLut[adjIdx + val] = i32(std::round(t * 65536.0));
-                }
-            }
+            auto value = i32(std::round(double(i) * 65536.0));
+            adjLut[0 * 256 + i] = value; // (0,0)
+            adjLut[4 * 256 + i] = value; // (1,1)
+            adjLut[8 * 256 + i] = value; // (2,2)
         }
+        
         return;
     }
 
@@ -257,44 +157,42 @@ PixelEngine::updateAdjLut()
     double u0 = 0.0, v0 = 0.0;
 
     switch (palette) {
-
+            
         case Palette::BLACK_WHITE:
-
+            
             break;
-
+            
         case Palette::PAPER_WHITE:
-
+            
             u0 = -128.0 + 120.0;
             v0 = -128.0 + 133.0;
             break;
-
+            
         case Palette::GREEN:
-
+            
             u0 = -128.0 + 29.0;
             v0 = -128.0 + 64.0;
             break;
-
+            
         case Palette::AMBER:
-
+            
             u0 = -128.0 + 24.0;
             v0 = -128.0 + 178.0;
             break;
-
+            
         case Palette::SEPIA:
-
+            
             u0 = -128.0 + 97.0;
             v0 = -128.0 + 154.0;
             break;
-
+            
         default:
-        {
-            // assert(palette == Palette::COLOR);
-
+            
+            assert(palette == Palette::COLOR);
             double s = saturation * contrast;
             u[0] = -0.147 * s; u[1] = -0.289 * s; u[2] =  0.436 * s;
             v[0] =  0.615 * s; v[1] = -0.515 * s; v[2] = -0.100 * s;
             break;
-        }
     }
 
     // Convert YUV back to RGB, which yields the affine transformation
@@ -311,13 +209,12 @@ PixelEngine::updateAdjLut()
     off[2] = brightness + 2.029 * u0;
 
     // Tabulate the transformation in 16.16 fixed point format
+    // The constant part is folded into the table of the red input
+
     for (isize out = 0; out < 3; out++) {
-
         for (isize in = 0; in < 3; in++) {
-
             for (isize val = 0; val < 256; val++) {
 
-                // The constant part is folded into the table of the red input
                 auto adjIdx = (out * 3 + in) * 256;
                 double t = m[out][in] * double(val) + (in == 0 ? off[out] : 0.0);
                 adjLut[adjIdx + val] = i32(std::round(t * 65536.0));
