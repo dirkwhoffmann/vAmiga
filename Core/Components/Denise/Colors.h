@@ -89,8 +89,6 @@ struct AmigaColor : Streamable
     u8 g;
     u8 b;
 
-    // template <class W> void operator<<(W& worker) { worker << r << g << b; }
-
     AmigaColor() : r(0), g(0), b(0) {}
     AmigaColor(u8 rv, u8 gv, u8 bv) : r(rv & 0xF), g(gv & 0xF), b(bv & 0xF) {}
     AmigaColor(u16 rgb) : AmigaColor(u8(rgb >> 8), u8(rgb >> 4), u8(rgb)) {}

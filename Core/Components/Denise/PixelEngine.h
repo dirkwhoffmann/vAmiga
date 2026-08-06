@@ -63,9 +63,32 @@ private:
 
 private:
     
-    // Lookup table for all 4096 Amiga colors
+    // Lookup table for all 4096 Amiga colors (DEPRECATED)
     Texel colorSpace[4096];
 
+    /* The monitor adjustment is an affine transformation of the RGB components:
+     *
+     *     output = M · input + offset
+     *
+     * where input and output are RGB vectors. Since the transformation is linear
+     * in each input component, it can be tabulated efficiently. Instead of storing
+     * a LUT for all possible colors (which would be impractical because AGA colors
+     * span the full 24-bit range), the contribution of each input component to each
+     * output component is stored separately:
+     *
+     *     R' = lut(R→R) + lut(G→R) + lut(B→R)
+     *     G' = lut(R→G) + lut(G→G) + lut(B→G)
+     *     B' = lut(R→B) + lut(G→B) + lut(B→B)
+     *
+     * The table is indexed by adjIdx(out, in) + value, where out selects the
+     * output component, in selects the input component, and value is the 8-bit
+     * input component value. Entries are stored in 16.16 fixed-point format.
+     *
+     * The constant offset of the affine transformation is folded into the tables
+     * of the red input component to avoid an additional addition during rendering.
+     */
+    i32 adjLut[9 * 256];
+    
     // Color register colors
     AmigaColor color[32];
 
@@ -107,6 +130,7 @@ public:
 
     PixelEngine& operator= (const PixelEngine& other) {
 
+        CLONE_ARRAY(adjLut)
         CLONE_ARRAY(colorSpace)
         CLONE(colChanges)
         CLONE_ARRAY(color)
@@ -192,11 +216,17 @@ public:
     // Updates the entire RGBA lookup table
     void updateRGBA();
 
+    // Converts an Amiga color into a texel, applying the monitor settings
+    Texel toTexel(const AmigaColor c) const;
+    
 private:
     
-    // Adjusts the RGBA value according to the selected color parameters
+    // Adjusts the RGBA value according to the selected color parameters (DEPRECATED)
     void adjustRGB(u8 &r, u8 &g, u8 &b);
 
+    // Recomputes the color adjustment tables from the monitor settings
+    void updateAdjLut();
+    
 
     //
     // Working with frame buffers

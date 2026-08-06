@@ -86,16 +86,16 @@ PixelEngine::setColor(isize reg, u16 value)
     color[reg] = newColor;
 
     // Update standard palette entry
-    palette[reg] = colorSpace[value & 0xFFF];
+    palette[reg] = toTexel(newColor); //  colorSpace[value & 0xFFF];
 
     // Update halfbright palette entry
-    palette[reg + 32] = colorSpace[newColor.ehb().rawValue()];
+    palette[reg + 32] = toTexel(newColor.ehb()); //  colorSpace[newColor.ehb().rawValue()];
 }
 
 void
 PixelEngine::updateRGBA()
 {
-    // Iterate through all 4096 colors
+    // Iterate through all 4096 colors (DEPRECATED)
     for (u16 col = 0x000; col <= 0xFFF; col++) {
 
         u8 r = (col >> 4) & 0xF0;
@@ -109,8 +109,19 @@ PixelEngine::updateRGBA()
         colorSpace[col] = TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
     }
 
+    // Recompute the adjustment coefficients
+    updateAdjLut();
+    
     // Update all cached RGBA values
     for (isize i = 0; i < 32; i++) setColor(i, color[i].rawValue());
+}
+
+Texel
+PixelEngine::toTexel(const AmigaColor c) const
+{
+    assert((c.r << 8 | c.g << 4 | c.b) < 4096);
+    return colorSpace[c.r << 8 | c.g << 4 | c.b];
+    
 }
 
 void
@@ -193,6 +204,99 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     r = u8(newR);
     g = u8(newG);
     b = u8(newB);
+}
+
+void
+PixelEngine::updateAdjLut()
+{
+    auto palette = monitor.getConfig().palette;
+
+    // The RGB palette does not alter anything
+    // adjIdentity = palette == Palette::RGB;
+    // if (adjIdentity) return;
+
+    // Normalize adjustment parameters
+    double brightness = double(monitor.getConfig().brightness) - 50.0;
+    double contrast = double(monitor.getConfig().contrast) / 100.0;
+    double saturation = double(monitor.getConfig().saturation) / 50.0;
+
+    /* Coefficients of the RGB to YUV conversion. The luminance always depends
+     * on the input color, whereas the chrominance is replaced by a constant
+     * for the monochrome palettes.
+     */
+    double y[3] = { 0.299 * contrast, 0.587 * contrast, 0.114 * contrast };
+    double u[3] = { 0.0, 0.0, 0.0 };
+    double v[3] = { 0.0, 0.0, 0.0 };
+    double u0 = 0.0, v0 = 0.0;
+
+    switch (palette) {
+
+        case Palette::BLACK_WHITE:
+
+            break;
+
+        case Palette::PAPER_WHITE:
+
+            u0 = -128.0 + 120.0;
+            v0 = -128.0 + 133.0;
+            break;
+
+        case Palette::GREEN:
+
+            u0 = -128.0 + 29.0;
+            v0 = -128.0 + 64.0;
+            break;
+
+        case Palette::AMBER:
+
+            u0 = -128.0 + 24.0;
+            v0 = -128.0 + 178.0;
+            break;
+
+        case Palette::SEPIA:
+
+            u0 = -128.0 + 97.0;
+            v0 = -128.0 + 154.0;
+            break;
+
+        default:
+        {
+            assert(palette == Palette::COLOR);
+
+            double s = saturation * contrast;
+            u[0] = -0.147 * s; u[1] = -0.289 * s; u[2] =  0.436 * s;
+            v[0] =  0.615 * s; v[1] = -0.515 * s; v[2] = -0.100 * s;
+            break;
+        }
+    }
+
+    // Convert YUV back to RGB, which yields the affine transformation
+    double m[3][3], off[3];
+
+    for (isize i = 0; i < 3; i++) {
+
+        m[0][i] = y[i]                + 1.140 * v[i];
+        m[1][i] = y[i] - 0.396 * u[i] - 0.581 * v[i];
+        m[2][i] = y[i] + 2.029 * u[i];
+    }
+    off[0] = brightness                + 1.140 * v0;
+    off[1] = brightness - 0.396 * u0   - 0.581 * v0;
+    off[2] = brightness + 2.029 * u0;
+
+    // Tabulate the transformation in 16.16 fixed point format
+    for (isize out = 0; out < 3; out++) {
+
+        for (isize in = 0; in < 3; in++) {
+
+            for (isize val = 0; val < 256; val++) {
+
+                // The constant part is folded into the table of the red input
+                auto adjIdx = (out * 3 + in) * 256;
+                double t = m[out][in] * double(val) + (in == 0 ? off[out] : 0.0);
+                adjLut[adjIdx + val] = i32(std::round(t * 65536.0));
+            }
+        }
+    }
 }
 
 const Texture &
@@ -443,7 +547,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         if (denise.spritePixelIsVisible(i)) {
             dst[i] = palette[mbuf[i]];
         } else {
-            dst[i] = colorSpace[ham.rawValue()];
+            dst[i] = toTexel(ham); //  colorSpace[ham.rawValue()];
         }
     }
 }
