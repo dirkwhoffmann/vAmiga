@@ -56,6 +56,9 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     // Preferences
     var pref: Preferences!
     var settingsController: SettingsWindowController?
+
+    // Indicates if the shared preferences have been loaded from disk.
+    var prefsLoaded = false
     
     // Information provider for connected HID devices
     var database = DeviceDatabase()
@@ -67,7 +70,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     var token: NSObjectProtocol!
     
     override init() {
-        
+
         super.init()
         pref = Preferences()
     }

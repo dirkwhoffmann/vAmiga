@@ -201,8 +201,14 @@ extension MyController {
         // Launch the emulator
         launch()
         
-        // Apply all GUI related user defaults
-        pref.applyUserDefaults()
+        // Load the shared preferences on the very first document window
+        if !myAppDelegate.prefsLoaded {
+            
+            pref.applyUserDefaults()
+            myAppDelegate.prefsLoaded = true
+        }
+
+        // Apply all instance-specific user defaults
         config.applyUserDefaults()
         
         do {
