@@ -12,6 +12,7 @@ import Carbon.HIToolbox
 @MainActor
 class KeyboardController: NSObject {
 
+    // var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     var parent: MyController!
 
     var keyboard: KeyboardProxy? { return parent.emu?.keyboard }
@@ -26,14 +27,9 @@ class KeyboardController: NSObject {
     var capsLock    = false
 
     // Remembers the state of the two virtual Amiga keys
-    var leftAmiga     = false, rightAmiga     = false
-    var holdLeftAmiga = false, holdRightAmiga = false
-    
-    var pressLeftAmiga: ContinuousClock.Instant?
-    var pressRightAmiga: ContinuousClock.Instant?
-    static let amigaKeyStickyDelay = Duration.milliseconds(500)
-    
-    // Remembers warp state when caps lock is pressed
+    var leftAmiga   = false, rightAmiga   = false
+
+    // Remembers the warp mode when caps lock is pressed
     var oldWarpMode: Warp?
 
     // Mapping from Unicode scalars to keycodes (used for auto-typing)
@@ -166,39 +162,6 @@ class KeyboardController: NSObject {
             if pref.disconnectJoyKeys { return }
         }
 
-        // Handle press of command key
-        let now = ContinuousClock.now
-
-        switch macKey {
-            
-        case .command:
-            if let pressLeftAmiga = pressLeftAmiga {
-                if now - pressLeftAmiga < Self.amigaKeyStickyDelay {
-                    holdLeftAmiga = true
-                }
-                self.pressLeftAmiga = nil
-            } else {
-                pressLeftAmiga = now
-                holdLeftAmiga = false
-            }
-            
-        case .rightCommand:
-            if let pressRightAmiga = pressRightAmiga {
-                if now - pressRightAmiga < Self.amigaKeyStickyDelay {
-                    holdRightAmiga = true
-                }
-                self.pressRightAmiga = nil
-            } else {
-                pressRightAmiga = now
-                holdRightAmiga = false
-            }
-            
-        default:
-            pressLeftAmiga = nil
-            pressRightAmiga = nil
-            break;
-        }
-        
         if let amigaKey = macKey.amigaKeyCode { keyboard?.press(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
@@ -220,23 +183,7 @@ class KeyboardController: NSObject {
             if pref.disconnectJoyKeys { return }
         }
 
-        // ignore release key for sticky Amiga key
-        if macKey == .command && holdLeftAmiga || macKey == .rightCommand && holdRightAmiga {
-            return
-        }
-        
         if let amigaKey = macKey.amigaKeyCode { keyboard?.release(amigaKey) }
-        
-        // release sticky Amiga keys
-        if holdLeftAmiga {
-            if let amigaKey = MacKey.command.amigaKeyCode { keyboard?.release(amigaKey, delay: 0.05) }
-            holdLeftAmiga = false
-        }
-        if holdRightAmiga {
-            if let amigaKey = MacKey.rightCommand.amigaKeyCode { keyboard?.release(amigaKey, delay: 0.05) }
-            holdRightAmiga = false
-        }
-        
         parent.virtualKeyboard?.refreshIfVisible()
     }
 
