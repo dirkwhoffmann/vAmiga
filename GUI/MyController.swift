@@ -591,7 +591,7 @@ extension MyController {
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
 
-        case .KB_PRESS, .KB_RELEASE:
+        case .KB_PRESS, .KB_RELEASE, .KB_LOCK, .KB_UNLOCK:
             virtualKeyboard?.refreshIfVisible()
             
         case .SER_IN:

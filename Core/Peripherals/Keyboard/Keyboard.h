@@ -61,6 +61,9 @@ private:
     // Remebers the keys that are currently held down
     bool keyDown[128];
 
+    // Marks keys that stay down when release() is called
+    bool locked[128] = { };
+
     // Delayed keyboard commands (used, e.g., for auto-typing)
     utl::SortedRingBuffer<Command, 1024> pending;
 
@@ -165,6 +168,15 @@ public:
     void release(KeyCode keycode);
     void toggle(KeyCode keycode);
     void releaseAll();
+
+    // Checks whether a certain key is locked
+    bool isLocked(KeyCode keycode) const;
+
+    // Locks or unlocks a key. A locked key stays down until it is unlocked,
+    // even if release() is called on it.
+    void lock(KeyCode keycode);
+    void unlock(KeyCode keycode);
+    void unlockAll();
 
     // Auto-types a string
     void autoType(const string &text);

@@ -59,10 +59,12 @@ enum class Cmd : long
     GUARD_DISABLE_ALL,      ///< Disable all guards
     
     // Keyboard
-    KEY_PRESS,              ///< Press a key on the C64 keyboard
-    KEY_RELEASE,            ///< Release a key on the C64 keyboard
+    KEY_PRESS,              ///< Press a key on the Amiga keyboard
+    KEY_RELEASE,            ///< Release a key on the Amiga keyboard
     KEY_RELEASE_ALL,        ///< Clear the keyboard matrix
-    KEY_TOGGLE,             ///< Press or release a key on the C64 keyboard
+    KEY_TOGGLE,             ///< Press or release a key on the Amiga keyboard
+    KEY_LOCK,               ///< Lock a key so it survives a release call
+    KEY_UNLOCK,             ///< Unlock a previously locked key
 
     // Mouse
     MOUSE_MOVE_ABS,         ///< Signal a mouse movement (absolute)
@@ -132,6 +134,8 @@ struct CmdEnum : Reflectable<CmdEnum, Cmd> {
             case Cmd::KEY_RELEASE:           return "KEY_RELEASE";
             case Cmd::KEY_RELEASE_ALL:       return "KEY_RELEASE_ALL";
             case Cmd::KEY_TOGGLE:            return "KEY_TOGGLE";
+            case Cmd::KEY_LOCK:              return "KEY_LOCK";
+            case Cmd::KEY_UNLOCK:            return "KEY_UNLOCK";
 
             case Cmd::MOUSE_MOVE_ABS:        return "MOUSE_MOVE_ABS";
             case Cmd::MOUSE_MOVE_REL:        return "MOUSE_MOVE_REL";

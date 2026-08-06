@@ -1111,6 +1111,29 @@ KeyboardAPI::releaseAll()
     emu->put(Command(Cmd::KEY_RELEASE_ALL));
 }
 
+bool
+KeyboardAPI::isLocked(KeyCode key) const
+{
+    VAMIGA_PUBLIC
+    return keyboard->isLocked(key);
+}
+
+void
+KeyboardAPI::lock(KeyCode key, double delay)
+{
+    VAMIGA_PUBLIC
+
+    emu->put(Command(Cmd::KEY_LOCK, KeyCmd { .keycode = key, .delay = delay }));
+}
+
+void
+KeyboardAPI::unlock(KeyCode key, double delay)
+{
+    VAMIGA_PUBLIC
+
+    emu->put(Command(Cmd::KEY_UNLOCK, KeyCmd { .keycode = key, .delay = delay }));
+}
+
 void KeyboardAPI::abortTyping()
 {
     VAMIGA_PUBLIC

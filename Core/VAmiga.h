@@ -944,6 +944,24 @@ public:
      */
     void releaseAll();
 
+    /** @brief  Checks if a key is currently locked.
+     *  @param  key     The key to check.
+     */
+    bool isLocked(KeyCode key) const;
+
+    /** @brief  Locks a key. A locked key stays down until it is unlocked,
+     *          even if release() is called on it.
+     *  @param  key     The key to lock.
+     *  @param  delay   An optional delay in seconds until the key is locked.
+     */
+    void lock(KeyCode key, double delay = 0.0);
+
+    /** @brief  Unlocks a previously locked key.
+     *  @param  key     The key to unlock.
+     *  @param  delay   An optional delay in seconds until the key is unlocked.
+     */
+    void unlock(KeyCode key, double delay = 0.0);
+
     /** @brief  Deletes all pending keyboard events
      */
     void abortTyping();

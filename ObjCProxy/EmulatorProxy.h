@@ -721,6 +721,12 @@ ImageInfo scan(const fs::path &url);
 - (void)toggle:(NSInteger)keycode;
 - (void)releaseAll;
 
+- (BOOL)isLocked:(NSInteger)keycode;
+- (void)lock:(NSInteger)keycode;
+- (void)lock:(NSInteger)keycode delay:(double)delay;
+- (void)unlock:(NSInteger)keycode;
+- (void)unlock:(NSInteger)keycode delay:(double)delay;
+
 @end
 
 

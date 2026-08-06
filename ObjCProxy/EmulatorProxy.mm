@@ -1253,6 +1253,31 @@ ImageInfo scan(const fs::path &url)
     [self kb]->releaseAll();
 }
 
+- (BOOL)isLocked:(NSInteger)keycode
+{
+    return [self kb]->isLocked((KeyCode)keycode);
+}
+
+- (void)lock:(NSInteger)keycode
+{
+    [self lock:keycode delay: 0.0];
+}
+
+- (void)lock:(NSInteger)keycode delay:(double)delay
+{
+    [self kb]->lock((KeyCode)keycode, delay);
+}
+
+- (void)unlock:(NSInteger)keycode
+{
+    [self unlock:keycode delay: 0.0];
+}
+
+- (void)unlock:(NSInteger)keycode delay:(double)delay
+{
+    [self kb]->unlock((KeyCode)keycode, delay);
+}
+
 @end
 
 

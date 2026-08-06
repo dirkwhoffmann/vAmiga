@@ -937,6 +937,8 @@ Amiga::update(CmdQueue &queue)
             case Cmd::KEY_RELEASE:
             case Cmd::KEY_RELEASE_ALL:
             case Cmd::KEY_TOGGLE:
+            case Cmd::KEY_LOCK:
+            case Cmd::KEY_UNLOCK:
 
                 keyboard.processCommand(cmd);
                 break;

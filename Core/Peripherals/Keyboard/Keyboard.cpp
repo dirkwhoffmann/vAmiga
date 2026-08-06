@@ -149,13 +149,14 @@ void
 Keyboard::release(KeyCode keycode)
 {
     assert(keycode < 0x80);
-    
+
     SYNCHRONIZED
-    
-    if (keyDown[keycode] && !queue.isFull()) {
-        
+
+    // Only proceed if the key is currently pressed and unlocked
+    if (keyDown[keycode] && !isLocked(keycode) && !queue.isFull()) {
+
         logdebug(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
-        
+
         keyDown[keycode] = false;
         queue.write(keycode | 0x80);
         wakeUp();
@@ -175,6 +176,49 @@ Keyboard::releaseAll()
 {
     for (KeyCode i = 0; i < 0x80; i++) {
         release(i);
+    }
+}
+
+bool
+Keyboard::isLocked(KeyCode keycode) const
+{
+    assert(keycode < 0x80);
+    return locked[keycode];
+}
+
+void
+Keyboard::lock(KeyCode keycode)
+{
+    assert(keycode < 0x80);
+
+    SYNCHRONIZED
+
+    if (!locked[keycode]) {
+
+        locked[keycode] = true;
+        msgQueue.put(Msg::KB_LOCK, keycode);
+    }
+}
+
+void
+Keyboard::unlock(KeyCode keycode)
+{
+    assert(keycode < 0x80);
+
+    SYNCHRONIZED
+
+    if (locked[keycode]) {
+
+        locked[keycode] = false;
+        msgQueue.put(Msg::KB_UNLOCK, keycode);
+    }
+}
+
+void
+Keyboard::unlockAll()
+{
+    for (KeyCode i = 0; i < 0x80; i++) {
+        unlock(i);
     }
 }
 
@@ -391,6 +435,8 @@ Keyboard::processCommand(const Command &cmd)
             case Cmd::KEY_RELEASE:       release(cmd.key.keycode); break;
             case Cmd::KEY_RELEASE_ALL:   releaseAll(); break;
             case Cmd::KEY_TOGGLE:        toggle(cmd.key.keycode); break;
+            case Cmd::KEY_LOCK:          lock(cmd.key.keycode); break;
+            case Cmd::KEY_UNLOCK:        unlock(cmd.key.keycode); break;
 
             default:
                 fatalError;

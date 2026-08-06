@@ -29,9 +29,6 @@ class KeyboardController: NSObject {
     // Remembers the state of the two virtual Amiga keys
     var leftAmiga   = false, rightAmiga   = false
 
-    // Remembers whether a virtual Amiga key is locked ("Toggle Amiga Key" action)
-    var leftAmigaLocked = false, rightAmigaLocked = false
-
     // Remembers the warp mode when caps lock is pressed
     var oldWarpMode: Warp?
 
@@ -79,8 +76,8 @@ class KeyboardController: NSObject {
         }
 
         // A locked Amiga key is released as soon as another key is typed
-        if leftAmigaLocked { unlockAmigaKey(right: false) }
-        if rightAmigaLocked { unlockAmigaKey(right: true) }
+        unlockAmigaKey(right: false)
+        unlockAmigaKey(right: true)
 
         keyDown(with: MacKey(event: event))
     }
@@ -156,18 +153,24 @@ class KeyboardController: NSObject {
         }
     }
 
+    // The Amiga keycode emulated by the left or right Cmd+Opt combination
+    func amigaKeyCode(right: Bool) -> Int {
+        return (right ? MacKey.rightCommand : MacKey.command).amigaKeyCode!
+    }
+
     // Handles the press of the Cmd+Opt key combination, i.e., emulates the
     // press of the left or right virtual Amiga key. The exact behavior is
     // controlled by the "Opt+Cmd action" preference (pref.amigaKeysComb):
     // Press the Amiga key for as long as the combo is held, or toggle it
-    // ("lock" it down until another key is typed or the combo fires again).
+    // (lock it down in the core until another key is typed or the combo
+    // fires again).
     func amigaComboDown(right: Bool) {
 
         let macKey = right ? MacKey.rightCommand : MacKey.command
-        let locked = right ? rightAmigaLocked : leftAmigaLocked
+        let amigaKey = amigaKeyCode(right: right)
 
         // A second press while locked toggles the Amiga key off again
-        if pref.amigaKeysComb == 1 && locked {
+        if pref.amigaKeysComb == 1 && keyboard?.isLocked(amigaKey) == true {
             unlockAmigaKey(right: right)
             return
         }
@@ -176,7 +179,7 @@ class KeyboardController: NSObject {
         if right { rightAmiga = true } else { leftAmiga = true }
 
         if pref.amigaKeysComb == 1 {
-            if right { rightAmigaLocked = true } else { leftAmigaLocked = true }
+            keyboard?.lock(amigaKey)
         }
     }
 
@@ -184,7 +187,7 @@ class KeyboardController: NSObject {
     func amigaComboUp(right: Bool) {
 
         // A locked Amiga key stays down until it gets unlocked elsewhere
-        if right ? rightAmigaLocked : leftAmigaLocked { return }
+        if keyboard?.isLocked(amigaKeyCode(right: right)) == true { return }
 
         if right {
             rightAmiga ? keyUp(with: MacKey.rightCommand) : keyUp(with: MacKey.rightOption)
@@ -198,18 +201,13 @@ class KeyboardController: NSObject {
     // Releases a locked ("toggled") virtual Amiga key
     func unlockAmigaKey(right: Bool) {
 
-        guard right ? rightAmigaLocked : leftAmigaLocked else { return }
+        let amigaKey = amigaKeyCode(right: right)
+        guard keyboard?.isLocked(amigaKey) == true else { return }
 
-        let macKey = right ? MacKey.rightCommand : MacKey.command
-        if let amigaKey = macKey.amigaKeyCode { keyboard?.release(amigaKey, delay: 0.05) }
+        keyboard?.unlock(amigaKey)
+        keyboard?.release(amigaKey, delay: 0.05)
 
-        if right {
-            rightAmigaLocked = false
-            rightAmiga = false
-        } else {
-            leftAmigaLocked = false
-            leftAmiga = false
-        }
+        if right { rightAmiga = false } else { leftAmiga = false }
     }
 
     func keyDown(with macKey: MacKey) {
