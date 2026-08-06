@@ -138,8 +138,6 @@ public:
 public:
 
     void update();
-
-    void serviceServerEvent();
 };
 
 }

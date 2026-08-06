@@ -121,7 +121,6 @@ Agnus::operator << (SerResetter &worker)
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
-    scheduleRel<SLOT_SRV>(SEC(0.5), SRV_LAUNCH_DAEMON);
     if (insEvent) scheduleRel <SLOT_INS> (0, insEvent);
 }
 
@@ -515,9 +514,6 @@ Agnus::executeUntil(Cycle cycle) {
             }
             if (isDue<SLOT_KEY>(cycle)) {
                 keyboard.serviceKeyEvent();
-            }
-            if (isDue<SLOT_SRV>(cycle)) {
-                remoteManager.serviceServerEvent();
             }
             if (isDue<SLOT_SER>(cycle)) {
                 remoteManager.serServer.serviceSerEvent();

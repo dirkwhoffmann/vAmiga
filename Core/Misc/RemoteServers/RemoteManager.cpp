@@ -128,11 +128,4 @@ RemoteManager::update()
     launchDaemon(serServer, serServer.config);
 }
 
-void
-RemoteManager::serviceServerEvent()
-{
-    // The server event slot is no longer used, as the launch demon is
-    // now run in update(). It is safe to remove the SRV_SLOT.
-}
-
 }

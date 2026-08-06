@@ -113,7 +113,6 @@ enum EventSlot : long
     SLOT_SNP,                       // Snapshots
     SLOT_RSH,                       // Retro Shell
     SLOT_KEY,                       // Auto-typing
-    SLOT_SRV,                       // Remote server manager
     SLOT_SER,                       // Serial remote server
     SLOT_BTR,                       // Beam traps
     SLOT_ALA,                       // Alarms (set by the GUI)
@@ -131,7 +130,7 @@ struct EventSlotEnum : Reflectable<EventSlotEnum, EventSlot>
     static constexpr long minVal = 0;
     static constexpr long maxVal = SLOT_COUNT - 1;
     
-    static long count() { return maxVal; }
+    static long count() { return SLOT_COUNT; }
     
     static const char *_key(long value)
     {
@@ -173,7 +172,6 @@ struct EventSlotEnum : Reflectable<EventSlotEnum, EventSlot>
             case SLOT_SNP:   return "SNP";
             case SLOT_RSH:   return "RSH";
             case SLOT_KEY:   return "KEY";
-            case SLOT_SRV:   return "SRV";
             case SLOT_SER:   return "SER";
             case SLOT_BTR:   return "BTR";
             case SLOT_ALA:   return "ALA";
@@ -222,7 +220,6 @@ struct EventSlotEnum : Reflectable<EventSlotEnum, EventSlot>
             case SLOT_SNP:   return "Snapshots";
             case SLOT_RSH:   return "Retro Shell";
             case SLOT_KEY:   return "Auto Typing";
-            case SLOT_SRV:   return "Server Daemon";
             case SLOT_SER:   return "Null Modem Cable";
             case SLOT_BTR:   return "Beam Traps";
             case SLOT_ALA:   return "Alarms";

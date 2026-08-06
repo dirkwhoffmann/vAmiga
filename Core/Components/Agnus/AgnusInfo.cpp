@@ -419,16 +419,6 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
-        case SLOT_SRV:
-            
-            switch (id) {
-                    
-                case EVENT_NONE:        return "none";
-                case SRV_LAUNCH_DAEMON: return "SRV_LAUNCH_DAEMON";
-                default:                return "*** INVALID ***";
-            }
-            break;
-
         case SLOT_SER:
             
             switch (id) {
