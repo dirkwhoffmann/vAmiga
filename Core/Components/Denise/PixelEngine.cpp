@@ -224,9 +224,23 @@ PixelEngine::updateAdjLut()
 {
     auto palette = monitor.getConfig().palette;
 
-    // The RGB palette does not alter anything
-    // adjIdentity = palette == Palette::RGB;
-    // if (adjIdentity) return;
+    if (palette == Palette::RGB) {
+
+        for (isize out = 0; out < 3; out++) {
+
+            for (isize in = 0; in < 3; in++) {
+
+                auto adjIdx = (out * 3 + in) * 256;
+
+                for (isize val = 0; val < 256; val++) {
+
+                    double t = (out == in) ? double(val) : 0.0;
+                    adjLut[adjIdx + val] = i32(std::round(t * 65536.0));
+                }
+            }
+        }
+        return;
+    }
 
     // Normalize adjustment parameters
     double brightness = double(monitor.getConfig().brightness) - 50.0;
