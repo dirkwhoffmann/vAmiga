@@ -202,7 +202,6 @@ class KeyboardController: NSObject {
 
         let macKey = right ? MacKey.rightCommand : MacKey.command
         if let amigaKey = macKey.amigaKeyCode { keyboard?.release(amigaKey, delay: 0.05) }
-        parent.virtualKeyboard?.refreshIfVisible()
 
         if right {
             rightAmigaLocked = false
@@ -231,9 +230,8 @@ class KeyboardController: NSObject {
         }
 
         if let amigaKey = macKey.amigaKeyCode { keyboard?.press(amigaKey) }
-        parent.virtualKeyboard?.refreshIfVisible()
     }
-    
+
     func keyUp(with macKey: MacKey) {
 
         /*
@@ -252,21 +250,18 @@ class KeyboardController: NSObject {
         }
 
         if let amigaKey = macKey.amigaKeyCode { keyboard?.release(amigaKey) }
-        parent.virtualKeyboard?.refreshIfVisible()
     }
 
     func keyDown(with keyCode: UInt16) {
 
         let macKey = MacKey(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard?.press(amigaKey) }
-        parent.virtualKeyboard?.refreshIfVisible()
     }
 
     func keyUp(with keyCode: UInt16) {
 
         let macKey = MacKey(keyCode: keyCode)
         if let amigaKey = macKey.amigaKeyCode { keyboard?.release(amigaKey) }
-        parent.virtualKeyboard?.refreshIfVisible()
     }
 
     func capsLockDown() {

@@ -135,11 +135,13 @@ Keyboard::press(KeyCode keycode)
         keyDown[keycode] = true;
         queue.write(keycode);
         wakeUp();
-        
+
         // Check for reset key combination (CTRL + Amiga Left + Amiga Right)
         if (keyDown[0x63] && keyDown[0x66] && keyDown[0x67]) {
             msgQueue.put(Msg::CTRL_AMIGA_AMIGA);
         }
+
+        msgQueue.put(Msg::KB_PRESS, keycode);
     }
 }
 
@@ -157,6 +159,8 @@ Keyboard::release(KeyCode keycode)
         keyDown[keycode] = false;
         queue.write(keycode | 0x80);
         wakeUp();
+
+        msgQueue.put(Msg::KB_RELEASE, keycode);
     }
 }
 

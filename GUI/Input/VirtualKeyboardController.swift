@@ -150,26 +150,23 @@ class VirtualKeyboardController: DialogController {
     func pressKey(keyCode: Int) {
 
         emu.keyboard.press(keyCode)
-        refresh()
-        
+
         DispatchQueue.main.async {
-            
+
             usleep(useconds_t(100000))
             self.emu.keyboard.releaseAll()
-            self.refresh()
         }
-        
+
         if autoClose {
             cancelAction(self)
         }
     }
-    
+
     func holdKey(keyCode: Int) {
-        
+
         guard let keyboard = emu.keyboard else { return }
-        
+
         keyboard.toggle(keyCode)
-        refresh()
     }
         
     @IBAction func pressVirtualKey(_ sender: NSButton!) {

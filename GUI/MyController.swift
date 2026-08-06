@@ -590,6 +590,9 @@ extension MyController {
             
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
+
+        case .KB_PRESS, .KB_RELEASE:
+            virtualKeyboard?.refreshIfVisible()
             
         case .SER_IN:
             var c = emu.serialPort.readIncomingPrintableByte()
