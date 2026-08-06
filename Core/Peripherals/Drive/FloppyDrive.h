@@ -422,6 +422,7 @@ public:
     void swapDisk(std::unique_ptr<FloppyDisk> disk);
     void swapDisk(class FloppyDiskImage &file);
     void swapDisk(const fs::path &path);
+    void swapDisk(const u8 *buf, isize len, ImageFormat fmt);
 
     // Replaces the current disk with a factory-fresh disk
     void insertNew(amiga::FSFormat fs, amiga::BootBlockId bb,

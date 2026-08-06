@@ -12,6 +12,7 @@
 #include "VAmigaTypes.h"
 #include "CoreError.h"
 #include "Snapshot.h"
+#include <span>
 
 namespace retro::vault::amiga { class FileSystem; }
 
@@ -732,6 +733,13 @@ public:
      *  @param  wp      Write-protection status of the disk.
      */
     void insert(const std::filesystem::path& path, bool wp);
+
+    /** @brief  Inserts a disk created from an image stored in memory.
+     *  @param  buffer  Buffer holding the raw image data.
+     *  @param  fmt     Format of the supplied image data.
+     *  @param  wp      Write-protection status of the disk.
+     */
+    void insert(std::span<const u8> buffer, ImageFormat fmt, bool wp);
 
     /** @brief  Inserts a disk created from a file system.
      *  @param  fs      A file system wrapper object.

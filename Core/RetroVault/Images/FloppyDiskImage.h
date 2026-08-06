@@ -22,6 +22,7 @@ public:
     static optional<ImageInfo> about(const fs::path& url);
     static unique_ptr<FloppyDiskImage> tryMake(const fs::path &path);
     static unique_ptr<FloppyDiskImage> make(const fs::path &path);
+    static unique_ptr<FloppyDiskImage> make(const u8 *buf, isize len, ImageFormat fmt);
 
 
     //

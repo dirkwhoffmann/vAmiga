@@ -1191,6 +1191,15 @@ FloppyDriveAPI::insert(const fs::path &path, bool wp)
 }
 
 void
+FloppyDriveAPI::insert(std::span<const u8> buffer, ImageFormat fmt, bool wp)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->swapDisk(buffer.data(), isize(buffer.size()), fmt);
+    if (drive->disk) drive->disk->setWriteProtection(wp);
+    emu->markAsDirty();
+}
+
+void
 FloppyDriveAPI::ejectDisk()
 {
     VAMIGA_PUBLIC_SUSPEND

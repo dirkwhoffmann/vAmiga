@@ -64,6 +64,28 @@ FloppyDiskImage::make(const fs::path &path)
     throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
 }
 
+unique_ptr<FloppyDiskImage>
+FloppyDiskImage::make(const u8 *buf, isize len, ImageFormat fmt)
+{
+    switch (fmt) {
+
+        case ImageFormat::ADF:  return make_unique<ADFFile>(buf, len);
+        case ImageFormat::EADF: return make_unique<EADFFile>(buf, len);
+        case ImageFormat::IMG:  return make_unique<IMGFile>(buf, len);
+        case ImageFormat::ST:   return make_unique<STFile>(buf, len);
+        case ImageFormat::DMS:  return make_unique<DMSFile>(buf, len);
+        case ImageFormat::EXE:  return make_unique<EXEFile>(buf, len);
+        case ImageFormat::D64:  return make_unique<D64File>(buf, len);
+
+        case ImageFormat::UNKNOWN:
+        case ImageFormat::HDF:
+        case ImageFormat::HDZ:
+            break;
+    }
+
+    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+}
+
 string
 FloppyDiskImage::getDiameterStr() const noexcept
 {

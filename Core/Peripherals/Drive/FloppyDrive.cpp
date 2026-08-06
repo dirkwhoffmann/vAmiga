@@ -1300,6 +1300,13 @@ FloppyDrive::swapDisk(const fs::path &path)
 }
 
 void
+FloppyDrive::swapDisk(const u8 *buf, isize len, ImageFormat fmt)
+{
+    auto file = FloppyDiskImage::make(buf, len, fmt);
+    swapDisk(*file);
+}
+
+void
 FloppyDrive::insertImage(const class FloppyDiskImage& image, bool wp)
 {
     swapDisk(std::make_unique<FloppyDisk>(image, wp));
