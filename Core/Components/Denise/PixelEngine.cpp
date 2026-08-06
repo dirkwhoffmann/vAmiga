@@ -15,9 +15,23 @@
 #include "DmaDebugger.h"
 #include "Emulator.h"
 
+#include <algorithm>
+#include <cmath>
 #include <fstream>
 
 namespace vamiga {
+
+namespace {
+
+/* Amiga video output targeted CRT displays with a gamma of roughly 2.8,
+ * while host displays are calibrated for the sRGB-ish standard gamma of
+ * 2.2. GAMMA_IN undoes the former to obtain linear light, GAMMA_OUT
+ * re-applies the latter to encode the result for the host display.
+ */
+constexpr double GAMMA_IN = 2.8;
+constexpr double GAMMA_OUT = 2.2;
+
+}
 
 void
 PixelEngine::clearAll()
@@ -106,9 +120,12 @@ Texel
 PixelEngine::toTexel(const AmigaColor c) const
 {
     assert((c.r << 8 | c.g << 4 | c.b) < 4096);
-    
-    auto clamp = [](i32 v) {
-        return u8(v < 0 ? 0 : v > (255 << 16) ? 255 : v >> 16);
+
+    // Clamps a 16.16 fixed-point linear-light value to an 8-bit range, then
+    // re-encodes it into the (non-linear) color space of the host display
+    auto clamp = [this](i32 v) {
+        u8 lin = u8(v < 0 ? 0 : v > (255 << 16) ? 255 : v >> 16);
+        return gammaLut[lin];
     };
 
     isize r8 = isize(c.r) << 4;
@@ -137,20 +154,22 @@ PixelEngine::updateAdjLut()
             adjLut[0 * 256 + i] = value; // (0,0)
             adjLut[4 * 256 + i] = value; // (1,1)
             adjLut[8 * 256 + i] = value; // (2,2)
+            gammaLut[i] = u8(i);
         }
-        
+
         return;
     }
 
     // Normalize adjustment parameters
+    
     double brightness = double(monitor.getConfig().brightness) - 50.0;
     double contrast = double(monitor.getConfig().contrast) / 100.0;
     double saturation = double(monitor.getConfig().saturation) / 50.0;
 
-    /* Coefficients of the RGB to YUV conversion. The luminance always depends
-     * on the input color, whereas the chrominance is replaced by a constant
-     * for the monochrome palettes.
-     */
+    // Coefficients of the RGB to YUV conversion. The luminance always depends
+    // on the input color, whereas the chrominance is replaced by a constant
+    // for the monochrome palettes.
+    
     double y[3] = { 0.299 * contrast, 0.587 * contrast, 0.114 * contrast };
     double u[3] = { 0.0, 0.0, 0.0 };
     double v[3] = { 0.0, 0.0, 0.0 };
@@ -196,6 +215,7 @@ PixelEngine::updateAdjLut()
     }
 
     // Convert YUV back to RGB, which yields the affine transformation
+    
     double m[3][3], off[3];
 
     for (isize i = 0; i < 3; i++) {
@@ -215,11 +235,27 @@ PixelEngine::updateAdjLut()
         for (isize in = 0; in < 3; in++) {
             for (isize val = 0; val < 256; val++) {
 
+                // Linearize the input value (undo the Amiga's assumed CRT
+                // gamma) before feeding it into the affine transformation,
+                // so brightness, contrast and saturation are applied to
+                // linear light rather than to gamma-encoded values
+                
+                double linear = std::pow(double(val) / 255.0, GAMMA_IN) * 255.0;
                 auto adjIdx = (out * 3 + in) * 256;
-                double t = m[out][in] * double(val) + (in == 0 ? off[out] : 0.0);
+                double t = m[out][in] * linear + (in == 0 ? off[out] : 0.0);
                 adjLut[adjIdx + val] = i32(std::round(t * 65536.0));
             }
         }
+    }
+
+    // Tabulate the re-encoding curve that converts the clamped linear-light
+    // result back into the color space expected by the host display
+    
+    for (isize i = 0; i < 256; i++) {
+
+        double linear = std::clamp(double(i) / 255.0, 0.0, 1.0);
+        double display = std::pow(linear, 1.0 / GAMMA_OUT) * 255.0;
+        gammaLut[i] = u8(std::round(std::clamp(display, 0.0, 255.0)));
     }
 }
 

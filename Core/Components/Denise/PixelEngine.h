@@ -85,7 +85,15 @@ private:
      * of the red input component to avoid an additional addition during rendering.
      */
     i32 adjLut[9 * 256];
-    
+
+    /* Gamma re-encoding table. adjLut is tabulated in a linearized color
+     * space (see updateAdjLut()), so the affine transformation above yields
+     * a linear-light result. This table converts that clamped 8-bit linear
+     * value back into the (non-linear) color space expected by the host
+     * display, completing the linearize -> adjust -> re-encode pipeline.
+     */
+    u8 gammaLut[256];
+
     // Color register colors
     AmigaColor color[32];
 
@@ -128,6 +136,7 @@ public:
     PixelEngine& operator= (const PixelEngine& other) {
 
         CLONE_ARRAY(adjLut)
+        CLONE_ARRAY(gammaLut)
         CLONE(colChanges)
         CLONE_ARRAY(color)
         CLONE(hamMode)
