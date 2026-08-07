@@ -741,12 +741,6 @@ public:
      */
     void insert(std::span<const u8> buffer, ImageFormat fmt, bool wp);
 
-    /** @brief  Inserts a disk created from a file system.
-     *  @param  fs      A file system wrapper object.
-     *  @param  wp      Write-protection status of the disk.
-     */
-    void insertFileSystem(const amiga::FileSystem& fs, bool wp);
-
     /** @brief  Ejects the current disk.
      */
     void ejectDisk();
