@@ -95,7 +95,7 @@ PixelEngine::setColor(isize reg, u16 value)
 {
     assert(reg < 32);
 
-    AmigaColor newColor(value & 0xFFF);
+    AmigaColor newColor(value & 0xFFF, 0);
 
     color[reg] = newColor;
 
@@ -113,14 +113,12 @@ PixelEngine::updateRGBA()
     updateAdjLut();
     
     // Update all cached RGBA values
-    for (isize i = 0; i < 32; i++) setColor(i, color[i].rawValue());
+    for (isize i = 0; i < 32; i++) setColor(i, color[i].getHiNibbles());
 }
 
 Texel
 PixelEngine::toTexel(const AmigaColor c) const
 {
-    assert((c.r << 8 | c.g << 4 | c.b) < 4096);
-
     // Clamps a 16.16 fixed-point linear-light value to an 8-bit range, then
     // re-encodes it into the (non-linear) color space of the host display
     auto clamp = [this](i32 v) {
@@ -128,9 +126,9 @@ PixelEngine::toTexel(const AmigaColor c) const
         return gammaLut[lin];
     };
 
-    isize r8 = isize(c.r) << 4;
-    isize g8 = isize(c.g) << 4;
-    isize b8 = isize(c.b) << 4;
+    isize r8 = isize(c.r);
+    isize g8 = isize(c.g);
+    isize b8 = isize(c.b);
 
     u8 r = clamp(adjLut[0 * 256 + r8] + adjLut[1 * 256 + g8] + adjLut[2 * 256 + b8]);
     u8 g = clamp(adjLut[3 * 256 + r8] + adjLut[4 * 256 + g8] + adjLut[5 * 256 + b8]);
@@ -351,7 +349,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
             auto nr = isize(change.reg) - isize(Reg::COLOR00);
             assert(0 <= nr && nr < 32);
 
-            if (color[nr].rawValue() != change.value) {
+            if (color[nr].getHiNibbles() != change.value) {
                 setColor(nr, change.value);
             }
             break;
@@ -486,17 +484,17 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
             case 0b01: // Modify blue
 
-                ham.b = index & 0xF;
+                ham.b = u8((index & 0xF) << 4);
                 break;
 
             case 0b10: // Modify red
 
-                ham.r = index & 0xF;
+                ham.r = u8((index & 0xF) << 4);
                 break;
 
             case 0b11: // Modify green
 
-                ham.g = index & 0xF;
+                ham.g = u8((index & 0xF) << 4);
                 break;
 
             default:
@@ -507,7 +505,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         if (denise.spritePixelIsVisible(i)) {
             dst[i] = palette[mbuf[i]];
         } else {
-            dst[i] = toTexel(ham); //  colorSpace[ham.rawValue()];
+            dst[i] = toTexel(ham);
         }
     }
 }

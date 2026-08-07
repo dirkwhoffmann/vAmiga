@@ -79,10 +79,6 @@ struct YuvColor {
     }
 };
 
-//
-// Amiga color (native Amiga RGB format)
-//
-
 struct AmigaColor : Streamable
 {
     u8 r;
@@ -90,8 +86,9 @@ struct AmigaColor : Streamable
     u8 b;
 
     AmigaColor() : r(0), g(0), b(0) {}
-    AmigaColor(u8 rv, u8 gv, u8 bv) : r(rv & 0xF), g(gv & 0xF), b(bv & 0xF) {}
-    AmigaColor(u16 rgb) : AmigaColor(u8(rgb >> 8), u8(rgb >> 4), u8(rgb)) {}
+    AmigaColor(u8 rv, u8 gv, u8 bv) : r(rv), g(gv), b(bv) {}
+    AmigaColor(u32 rgb) : r(u8(rgb >> 16)), g(u8(rgb >> 8)), b(u8(rgb)) {}
+    AmigaColor(u16 hi, u16 lo) : r(0), g(0), b(0) { setHiNibbles(hi); setLoNibbles(lo); }
     AmigaColor(const RgbColor &c);
     AmigaColor(const YuvColor &c) : AmigaColor(RgbColor(c)) { }
     AmigaColor(const GpuColor &c);
@@ -112,7 +109,24 @@ public:
         return worker;
     }
 
-    u16 rawValue() const { return u16(r << 8 | g << 4 | b); }
+    u16 getHiNibbles() const {
+        return u16((r >> 4) << 8 | (g >> 4) << 4 | (b >> 4));
+    }
+    u16 getLoNibbles() const {
+        return u16((r & 0xF) << 8 | (g & 0xF) << 4 | (b & 0xF));
+    }
+
+    // Replaces the high or low nibble of each channel, leaving the other half intact
+    void setHiNibbles(u16 hi) {
+        r = u8((r & 0x0F) | (((hi >> 8) & 0xF) << 4));
+        g = u8((g & 0x0F) | (((hi >> 4) & 0xF) << 4));
+        b = u8((b & 0x0F) | (((hi >> 0) & 0xF) << 4));
+    }
+    void setLoNibbles(u16 lo) {
+        r = u8((r & 0xF0) | ((lo >> 8) & 0xF));
+        g = u8((g & 0xF0) | ((lo >> 4) & 0xF));
+        b = u8((b & 0xF0) | ((lo >> 0) & 0xF));
+    }
 
     static const AmigaColor black;
     static const AmigaColor white;
@@ -131,10 +145,6 @@ public:
     AmigaColor shr() const;
     AmigaColor mix(const AmigaColor &c) const;
 };
-
-//
-// GPU color (native GPU RGBA format)
-//
 
 struct GpuColor {
 
