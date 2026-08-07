@@ -500,6 +500,7 @@ public:
 
     bool isOCS() const { return config.revision == DeniseRev::OCS; }
     bool isECS() const { return config.revision == DeniseRev::ECS; }
+    bool isAGA() const { return config.revision == DeniseRev::AGA; }
 
 
     //
@@ -713,7 +714,7 @@ public:
     
     // BPLCON0
     static bool shres(u16 v) { return GET_BIT(v, 6); }
-    bool shres() const { return ham(bplcon0); }
+    bool shres() const { return shres(bplcon0); }
     static bool hires(u16 v) { return GET_BIT(v, 15); }
     bool hires() const { return hires(bplcon0); }
     static bool lores(u16 v) { return !hires(v); }
@@ -734,11 +735,18 @@ public:
     u16 pf1px() const { return pf1px(bplcon2); }
     static u16 pf2px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
     u16 pf2px() const { return pf2px(bplcon2); }
-
+    static bool killehb(u16 v) { return GET_BIT(v, 9); }
+    bool killehb() const { return killehb(bplcon2); }
+    
     // BPLCON3
     static bool brdrblnk(u16 v) { return !!GET_BIT(v, 5); }
     bool brdrblnk() const { return brdrblnk(bplcon3); }
+    static u8 colorBank(u16 v) { return (v >> 13) & 0b111; }
+    u8 colorBank() const { return colorBank(bplcon3); }
+    static bool loct(u16 v) { return !!GET_BIT(v, 9); }
+    bool loct() const { return loct(bplcon3); }
 
+    
     // CLXCON
     template <int x> bool ensp() { return !!GET_BIT(clxcon, 12 + (x/2)); }
     u8 enbp1() const { return (u8)((clxcon >> 6) & 0b010101); }

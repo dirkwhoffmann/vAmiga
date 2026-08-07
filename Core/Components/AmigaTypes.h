@@ -260,7 +260,7 @@ struct RegEnum : Reflectable<RegEnum, Reg>
             "BPL8PTH (AGA)",  "BPL8PTL (AGA)",  "BPLCON0",
             "BPLCON1",        "BPLCON2",        "BPLCON3 (ECS)",
             "BPL1MOD",        "BPL2MOD",        "BPLCON4 (AGA)",
-            "BPLCON4 (AGA)",  "BPL1DAT",        "BPL2DAT",
+            "CLXCON2 (AGA)",  "BPL1DAT",        "BPL2DAT",
             "BPL3DAT",        "BPL4DAT",        "BPL5DAT",
             "BPL6DAT",        "BPL7DAT (AGA)",  "BPL8DAT (AGA)",
             "SPR0PTH",        "SPR0PTL",        "SPR1PTH",

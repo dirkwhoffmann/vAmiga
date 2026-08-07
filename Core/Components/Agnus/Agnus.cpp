@@ -237,6 +237,12 @@ Agnus::isECS() const
     return config.revision == AgnusRevision::ECS_1MB || config.revision == AgnusRevision::ECS_2MB;
 }
 
+bool
+Agnus::isAGA() const
+{
+    return config.revision == AgnusRevision::AGA;
+}
+
 u16
 Agnus::idBits() const
 {

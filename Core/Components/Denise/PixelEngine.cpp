@@ -100,10 +100,10 @@ PixelEngine::setColor(isize reg, u16 value)
     color[reg] = newColor;
 
     // Update standard palette entry
-    palette[reg] = toTexel(newColor); //  colorSpace[value & 0xFFF];
+    palette[reg] = toTexel(newColor);
 
     // Update halfbright palette entry
-    palette[reg + 32] = toTexel(newColor.ehb()); //  colorSpace[newColor.ehb().rawValue()];
+    palette[reg + 32] = toTexel(newColor.ehb());
 }
 
 void

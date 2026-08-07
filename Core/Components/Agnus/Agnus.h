@@ -341,6 +341,7 @@ public:
 
     bool isOCS() const;
     bool isECS() const;
+    bool isAGA() const;
     bool isPAL() const { return pos.type == TV::PAL; }
     bool isNTSC() const { return !isPAL(); }
 
