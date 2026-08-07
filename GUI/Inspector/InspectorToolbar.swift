@@ -19,8 +19,10 @@ class InspectorToolbar: NSToolbar {
     @IBOutlet weak var formatToolbarItem: NSToolbarItem!
 
     var emu: EmulatorProxy! { return inspector.parent.emu }
-    
+
     override func validateVisibleItems() {
+
+        guard let inspector = inspector, let emu = inspector.parent.emu else { return }
 
         // Update icons
         let running = emu.running

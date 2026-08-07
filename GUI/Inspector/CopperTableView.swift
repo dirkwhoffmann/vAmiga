@@ -56,6 +56,8 @@ class CopperTableView: NSTableView {
 
         assert(nr == 1 || nr == 2)
 
+        guard let inspector = inspector else { return }
+
         addrInRow = [:]
         instrInRow = [:]
         illegalInRow = [:]

@@ -64,10 +64,11 @@ class LogicView: NSView {
 
     func cacheData() {
 
+        guard let inspector = inspector, let emu = inspector.emu else { return }
+
         lock.lock()
-        
-        guard let emu = emu else { return }
-        
+        defer { lock.unlock() }
+
         let hpos = emu.amiga.info.hpos
         let laInfo = emu.logicAnalyzer.info
         let owners = laInfo.busOwner!
@@ -130,8 +131,6 @@ class LogicView: NSView {
                 }
             }
         }
- 
-        lock.unlock()
     }
 
     func getData(cycle: Int, channel: Int) -> Int? {
@@ -146,21 +145,20 @@ class LogicView: NSView {
     override func draw(_ dirtyRect: NSRect) {
 
         lock.lock()
-                
+        defer { lock.unlock() }
+
         super.draw(dirtyRect)
         context = NSGraphicsContext.current?.cgContext
-        
+
         NSColor.clear.setFill()
         bounds.fill()
 
-        if visible {
-            
+        if visible, inspector != nil {
+
             drawHairlines()
             drawLabels()
             for i in 0..<signals { drawSignal(i) }
         }
-        
-        lock.unlock()
     }
     
     func drawHairlines() {

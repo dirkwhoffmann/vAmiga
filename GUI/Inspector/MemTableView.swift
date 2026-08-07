@@ -34,6 +34,8 @@ class MemTableView: NSTableView {
         
     private func cache() {
 
+        guard let inspector = inspector else { return }
+
         addrInRow = [:]
         asciiInRow = [:]
         dataInAddr = [:]
@@ -101,6 +103,10 @@ extension MemTableView: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
 
+        // The window (and with it, the inspector) may already be gone by
+        // the time AppKit gets around to a deferred redraw of this table
+        guard let inspector = inspector else { return nil }
+
         var addr = inspector.displayedBank * 65536 + row * 16
      
         switch tableColumn?.identifier.rawValue {
@@ -129,7 +135,9 @@ extension MemTableView: NSTableViewDataSource {
 extension MemTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
-        
+
+        guard let inspector = inspector else { return }
+
         var addr = inspector.displayedBank * 65536 + row * 16
         let cell = cell as? NSTextFieldCell
         
