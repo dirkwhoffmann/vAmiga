@@ -124,8 +124,8 @@ public:
     Pixel pixelOffsetOdd;
     Pixel pixelOffsetEven;
 
-    // Color register index for the border color (0 = background color)
-    u8 borderColor;
+    // Palette index for the border color (0 = background color)
+    u16 borderColor;
     
     // Bitplane data registers
     u16 bpldat[6];
@@ -236,9 +236,10 @@ public:
      * bBuffer: Border pixel buffer
      *
      * This buffer is used to determine whether a border pixel has to be drawn.
-     * If the buffer contains a value of 0xFF, border drawing is off for this
-     * pixel. Otherwise, the buffer contains the number of the color register
-     * storing the border color.
+     * If the buffer contains NO_BORDER, border drawing is off for this pixel.
+     * Otherwise, the buffer contains a palette index: either the number of the
+     * color register storing the border color, or one of PixelEngine's special
+     * BRDRBLNK / debug palette entries.
      *
      * iBuffer: Color index buffer
      *
@@ -279,8 +280,11 @@ public:
      *  SPx : Set if the pixel is solid in sprite x.
      *  _x_ : Playfield priority derived from the current value in BPLCON2.
      */
+    // Sentinel bBuffer value indicating that no border pixel is drawn
+    static constexpr u16 NO_BORDER = 0xFFFF;
+
     u8 dBuffer[HPIXELS + (4 * 16) + 8];
-    u8 bBuffer[HPIXELS + (4 * 16) + 8];
+    u16 bBuffer[HPIXELS + (4 * 16) + 8];
     u8 iBuffer[HPIXELS + (4 * 16) + 8];
     u8 mBuffer[HPIXELS + (4 * 16) + 8];
     u16 zBuffer[HPIXELS + (4 * 16) + 8];

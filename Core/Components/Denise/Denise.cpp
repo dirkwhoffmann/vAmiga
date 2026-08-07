@@ -28,7 +28,7 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 void
 Denise::_didReset(bool hard)
 {
-    std::memset(bBuffer, 0xFF, sizeof(bBuffer));
+    std::fill(std::begin(bBuffer), std::end(bBuffer), NO_BORDER);
     std::memset(dBuffer, 0, sizeof(dBuffer));
     std::memset(iBuffer, 0, sizeof(iBuffer));
     std::memset(mBuffer, 0, sizeof(mBuffer));
@@ -1009,12 +1009,12 @@ void
 Denise::updateBorderColor()
 {
     if (isECS() && ecsena() && brdrblnk()) {
-        borderColor = 64; // Pure black
+        borderColor = PixelEngine::brdrblnkColor; // Pure black
     } else {
         borderColor = 0;  // Background color
     }
     if constexpr (debug::BORDER_DEBUG) {
-        borderColor = 65; // Debug color
+        borderColor = PixelEngine::borderDebugColor; // Debug color
     }
 }
 
@@ -1044,7 +1044,7 @@ Denise::updateBorderBuffer()
     // Initialize trigger position (position of first register change if any)
     auto trigger = diwChanges.trigger();
 
-    for (isize i = 0; i < isize(sizeof(bBuffer)); i++) {
+    for (isize i = 0; i < isize(std::size(bBuffer)); i++) {
 
         // Update comparison values if needed
         if (i == trigger) {
@@ -1098,8 +1098,8 @@ Denise::updateBorderBuffer()
             if (counter == 0x1C8 && (agnus.pos.v >= 9 || isECS())) counter = 2;
         }
 
-        // Set the border mask (0xFF = no border)
-        bBuffer[i] = hf ? 0xFF : borderColor;
+        // Set the border mask (NO_BORDER = no border)
+        bBuffer[i] = hf ? NO_BORDER : borderColor;
     }
 
     // Check if the hflop has a different value at the end of the line

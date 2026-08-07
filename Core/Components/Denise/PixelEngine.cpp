@@ -53,12 +53,12 @@ void
 PixelEngine::_initialize()
 {
     // Setup ECS BRDRBLNK color
-    palette[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
-    
+    palette[brdrblnkColor] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
+
     // Setup debug colors
-    palette[65] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
-    palette[66] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
-    palette[67] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
+    palette[borderDebugColor] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
+    palette[borderDebugColor + 1] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
+    palette[borderDebugColor + 2] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
 }
 
 void
@@ -93,7 +93,7 @@ PixelEngine::_powerOn()
 void
 PixelEngine::setColor(isize reg, u16 value)
 {
-    assert(reg < 32);
+    assert(reg < colorCnt);
 
     AmigaColor newColor(value & 0xFFF, 0);
 
@@ -103,7 +103,9 @@ PixelEngine::setColor(isize reg, u16 value)
     palette[reg] = toTexel(newColor);
 
     // Update halfbright palette entry
-    palette[reg + 32] = toTexel(newColor.ehb());
+    if (reg < 32) {
+        palette[reg + 32] = toTexel(newColor.ehb());
+    }
 }
 
 void
@@ -113,7 +115,7 @@ PixelEngine::updateRGBA()
     updateAdjLut();
     
     // Update all cached RGBA values
-    for (isize i = 0; i < 32; i++) setColor(i, color[i].getHiNibbles());
+    for (isize i = 0; i < colorCnt; i++) setColor(i, color[i].getHiNibbles());
 }
 
 Texel
@@ -410,7 +412,7 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
     }
     */
     for (Pixel i = from; i < to; i++) {
-        dst[i] = palette[bbuf[i] == 0xFF ? mbuf[i] : bbuf[i]];
+        dst[i] = palette[bbuf[i] == Denise::NO_BORDER ? mbuf[i] : bbuf[i]];
     }
 }
 
@@ -425,7 +427,7 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
         // Output two super-hires pixels as a single texel
         for (Pixel i = from; i < to; i++) {
-            dst[i] = palette[bbuf[i] == 0xFF ? mbuf[i] : bbuf[i]];
+            dst[i] = palette[bbuf[i] == Denise::NO_BORDER ? mbuf[i] : bbuf[i]];
         }
 
     } else {
@@ -435,7 +437,7 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
             u32 *p = (u32 *)(dst + i);
 
-            if (bbuf[i] != 0xFF) {
+            if (bbuf[i] != Denise::NO_BORDER) {
 
                 p[0] =
                 p[1] = u32(palette[bbuf[i]]);
@@ -465,10 +467,13 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
     for (Pixel i = from; i < to; i++) {
 
         // Check for border pixels
-        if (bbuf[i] != 0xFF) {
+        if (bbuf[i] != Denise::NO_BORDER) {
 
             dst[i] = palette[bbuf[i]];
-            ham = color[bbuf[i]];
+
+            // Only real color registers (not the BRDRBLNK/debug entries) hold
+            // a well-defined AmigaColor value that can seed the HAM register
+            if (bbuf[i] < colorCnt) ham = color[bbuf[i]];
             continue;
         }
 
