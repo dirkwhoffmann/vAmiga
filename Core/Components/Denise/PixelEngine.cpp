@@ -97,15 +97,56 @@ PixelEngine::setColor(isize reg, u16 value)
 
     AmigaColor newColor(value & 0xFFF, 0);
 
+    // Update color register
     color[reg] = newColor;
 
-    // Update standard palette entry
-    palette[reg] = toTexel(newColor);
-
+    // Update palette entry
+    updateRGBA(reg);
+    
     // Update halfbright palette entry
-    if (reg < 32) {
-        palette[reg + 32] = toTexel(newColor.ehb());
+    if (reg < 32) updateRGBA(reg + 32);
+}
+
+void
+PixelEngine::updateRGBA(isize nr)
+{
+    assert(nr < 256);
+ 
+    if (nr >= 32 && nr < 64) {
+        
+        //
+        // EHB range
+        //
+        
+        bool ehb = false;
+        
+        switch (denise.getConfig().revision) {
+                
+            case DeniseRev::OCS:
+                
+                ehb = true;
+                break;
+                
+            case DeniseRev::ECS:
+                
+                ehb = !denise.killehb();
+                break;
+                
+            default: { // AGA
+                
+                ehb = !denise.killehb() && (denise.bplcon0 & 0x7010) == 0x6000;
+                break;
+            }
+        }
+        
+        if (ehb) {
+            
+            palette[nr] = toTexel(color[nr - 32].ehb());
+            return;
+        }
     }
+    
+    palette[nr] = toTexel(color[nr]);
 }
 
 void
@@ -115,7 +156,14 @@ PixelEngine::updateRGBA()
     updateAdjLut();
     
     // Update all cached RGBA values
-    for (isize i = 0; i < 256; i++) setColor(i, color[i].getHiNibbles());
+    for (isize i = 0; i < 256; i++) updateRGBA(i); // setColor(i, color[i].getHiNibbles());
+}
+
+void
+PixelEngine::updateEHB()
+{
+    // TODO: This function is called frequently. Inline to speed it up
+    for (isize i = 32; i < 64; ++i) updateRGBA(i);
 }
 
 Texel
@@ -344,8 +392,14 @@ PixelEngine::applyRegisterChange(const RegChange &change)
 
             hamMode = Denise::ham(change.value);
             shresMode = Denise::shres(change.value);
+            updateEHB();
             break;
             
+        case Reg::BPLCON2:
+
+            updateEHB();
+            break;
+
         default: // It must be a color register then
             
             auto nr = isize(change.reg) - isize(Reg::COLOR00);

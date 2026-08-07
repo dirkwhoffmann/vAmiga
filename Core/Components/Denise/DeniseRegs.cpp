@@ -187,15 +187,21 @@ void
 Denise::setBPLCON2(u16 newValue)
 {
     logdebug(BPLREG_DEBUG, "setBPLCON2(%X)\n", newValue);
-
+    
+    auto oldValue = bplcon2;
     bplcon2 = newValue;
-
+    
     if (pf1px() > 4) { xfiles("BPLCON2: PF1P = %d\n", pf1px()); }
     if (pf2px() > 4) { xfiles("BPLCON2: PF2P = %d\n", pf2px()); }
     
     // Record the register change
     i64 pixel = agnus.pos.pixel() + 4;
     conChanges.insert(pixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
+
+    // Check if the KILLEHB bit has changed
+    if (killehb(oldValue) ^ killehb(newValue)) {
+       pixelEngine.colChanges.insert(pixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
+    }
 }
 
 template <Accessor s> void

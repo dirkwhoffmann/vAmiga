@@ -222,9 +222,15 @@ public:
 
 public:
 
+    // Updates a single entry in the RGBA lookup table
+    void updateRGBA(isize nr);
+    
     // Updates the entire RGBA lookup table
     void updateRGBA();
 
+    // Updates the EHB range in the RGBA lookup table
+    void updateEHB();
+    
     // Converts an Amiga color into a texel, applying the monitor settings
     Texel toTexel(const AmigaColor c) const;
     
