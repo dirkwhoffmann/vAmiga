@@ -94,19 +94,17 @@ private:
      */
     u8 gammaLut[256];
 
-    // Number of physical color registers (32 in OCS/ECS, up to 256 in AGA)
-    static const int colorCnt = 256;
 
     // Color register colors
-    AmigaColor color[colorCnt];
+    AmigaColor color[256];
 
     /* Active color palette
      *
-     *    0 .. colorCnt-1 : ABGR values of the color registers
-     *          colorCnt  : Pure black (used if the ECS BRDRBLNK bit is set)
-     *  colorCnt+1 .. +3  : Additional debug colors
+     *    0 .. 255 : ABGR values of the color registers
+     *         256 : Pure black (used if the ECS BRDRBLNK bit is set)
+     *  257 .. 259 : Additional debug colors
      */
-    static const int paletteCnt = colorCnt + 1 + 3;
+    static const int paletteCnt = 256 + 1 + 3;
     Texel palette[paletteCnt];
     
     // Indicates whether HAM mode or SHRES mode is enabled
@@ -204,8 +202,8 @@ public:
     static bool isPaletteIndex(isize nr) { return nr < paletteCnt; }
 
     // Special palette indices reserved for the ECS BRDRBLNK color and debugging
-    static const int brdrblnkColor = colorCnt;
-    static const int borderDebugColor = colorCnt + 1;
+    static const int brdrblnkColor = 256;
+    static const int borderDebugColor = 257;
     
     // Changes one of the 32 Amiga color registers
     void setColor(isize reg, u16 value);

@@ -93,7 +93,7 @@ PixelEngine::_powerOn()
 void
 PixelEngine::setColor(isize reg, u16 value)
 {
-    assert(reg < colorCnt);
+    assert(reg < 256);
 
     AmigaColor newColor(value & 0xFFF, 0);
 
@@ -115,7 +115,7 @@ PixelEngine::updateRGBA()
     updateAdjLut();
     
     // Update all cached RGBA values
-    for (isize i = 0; i < colorCnt; i++) setColor(i, color[i].getHiNibbles());
+    for (isize i = 0; i < 256; i++) setColor(i, color[i].getHiNibbles());
 }
 
 Texel
@@ -473,7 +473,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
             // Only real color registers (not the BRDRBLNK/debug entries) hold
             // a well-defined AmigaColor value that can seed the HAM register
-            if (bbuf[i] < colorCnt) ham = color[bbuf[i]];
+            if (bbuf[i] < 256) ham = color[bbuf[i]];
             continue;
         }
 
