@@ -14,9 +14,9 @@ namespace vamiga {
 
 RgbColor::RgbColor(const AmigaColor &c)
 {
-    r = c.r / 15.0;
-    g = c.g / 15.0;
-    b = c.b / 15.0;
+    r = c.r / 255.0;
+    g = c.g / 255.0;
+    b = c.b / 255.0;
 }
 
 RgbColor::RgbColor(const GpuColor &c)
@@ -82,16 +82,16 @@ const YuvColor YuvColor::cyan(RgbColor::cyan);
 
 AmigaColor::AmigaColor(const GpuColor &c)
 {
-    r = u8(c.rawValue >> 4  & 0xF);
-    g = u8(c.rawValue >> 12 & 0xF);
-    b = u8(c.rawValue >> 20 & 0xF);
+    r = c.r();
+    g = c.g();
+    b = c.b();
 }
 
 AmigaColor::AmigaColor(const struct RgbColor &c)
 {
-    r = u8(c.r * 0xF);
-    g = u8(c.g * 0xF);
-    b = u8(c.b * 0xF);
+    r = u8(c.r * 255);
+    g = u8(c.g * 255);
+    b = u8(c.b * 255);
 }
 
 const AmigaColor AmigaColor::black(RgbColor::black);
@@ -112,11 +112,14 @@ AmigaColor::ehb() const
 AmigaColor
 AmigaColor::shr() const
 {
+    // Replicates the high nibble of each channel into the low nibble,
+    // expanding a hi-nibble-only (OCS/ECS-range) color to a full 8-bit
+    // value instead of leaving the low nibble at 0
     return AmigaColor {
 
-        u8((r & 0xC) | r >> 2),
-        u8((g & 0xC) | g >> 2),
-        u8((b & 0xC) | b >> 2)
+        u8((r & 0xF0) | (r >> 4)),
+        u8((g & 0xF0) | (g >> 4)),
+        u8((b & 0xF0) | (b >> 4))
     };
 }
 
@@ -133,7 +136,7 @@ AmigaColor::mix(const AmigaColor &c) const
 
 GpuColor::GpuColor(const AmigaColor &c)
 {
-    rawValue = u32(0xFF << 24 | c.b << 20 | c.g << 12 | c.r << 4);
+    rawValue = u32(0xFF << 24 | c.b << 16 | c.g << 8 | c.r);
 }
 
 GpuColor::GpuColor(const RgbColor &c)
