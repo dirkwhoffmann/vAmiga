@@ -1975,6 +1975,7 @@
                                         <items>
                                             <menuItem title="OCS" state="on" id="qDb-tA-bNg"/>
                                             <menuItem title="ECS" tag="1" id="BGr-ed-8eX"/>
+                                            <menuItem title="AGA" tag="2" id="Co8-sX-Ipo"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
@@ -2059,6 +2060,9 @@
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                             <menuItem title="ECS (2 MB)" tag="3" id="SBd-gP-E1L">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="AGA" tag="4" id="hKY-PX-XUy">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -6680,7 +6684,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="steeringwheel" catalog="system" width="20" height="20"/>
         <image name="trash" catalog="system" width="19" height="22"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>

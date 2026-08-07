@@ -36,16 +36,17 @@ static constexpr double inspectionInterval = 0.1;
 
 enum class AgnusRevision : long
 {
-    OCS_OLD,          // Revision 8367 (A1000, A2000A)
-    OCS,              // Revision 8371 (A500, A2000B)
-    ECS_1MB,          // Revision 8372 (A500, A2000B)
-    ECS_2MB           // Revision 8375 (A500+, A600)
+    OCS_OLD,          // MOS 8367                (A1000, A2000A)
+    OCS,              // MOS 8371                (A500, A2000B)
+    ECS_1MB,          // MOS 8372 [Fat Agnus]    (A500, A2000B)
+    ECS_2MB,          // MOS 8375 [Fatter Agnus] (A500+, A600)
+    AGA               // MOS 8374 [Alice]        (A1200, A4000)
 };
 
 struct AgnusRevisionEnum : Reflectable<AgnusRevisionEnum, AgnusRevision>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(AgnusRevision::ECS_2MB);
+    static constexpr long maxVal = long(AgnusRevision::AGA);
     
     static const char *_key(AgnusRevision value)
     {
@@ -55,6 +56,7 @@ struct AgnusRevisionEnum : Reflectable<AgnusRevisionEnum, AgnusRevision>
             case AgnusRevision::OCS:      return "OCS";
             case AgnusRevision::ECS_1MB:  return "ECS_1MB";
             case AgnusRevision::ECS_2MB:  return "ECS_2MB";
+            case AgnusRevision::AGA:      return "AGA";
         }
         return "???";
     }
@@ -67,6 +69,7 @@ struct AgnusRevisionEnum : Reflectable<AgnusRevisionEnum, AgnusRevision>
             case AgnusRevision::OCS:      return "Amiga 500, Amiga 2000";
             case AgnusRevision::ECS_1MB:  return "Fat Agnus";
             case AgnusRevision::ECS_2MB:  return "Fatter Agnus";
+            case AgnusRevision::AGA:      return "Alice";
         }
         return "???";
     }

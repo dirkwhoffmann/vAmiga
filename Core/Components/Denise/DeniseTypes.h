@@ -19,14 +19,15 @@ namespace vamiga {
 
 enum class DeniseRev : long
 {
-    OCS,           // Revision 8362R8
-    ECS            // Revision 8373      (partially supported)
+    OCS,           // MOS 8362R8
+    ECS,           // MOS 8373      (partially supported)
+    AGA            // MOS 4203      (partially supported)
 };
 
 struct DeniseRevEnum : Reflectable<DeniseRevEnum, DeniseRev>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(DeniseRev::ECS);
+    static constexpr long maxVal = long(DeniseRev::AGA);
     
     static const char *_key(DeniseRev value)
     {
@@ -34,6 +35,7 @@ struct DeniseRevEnum : Reflectable<DeniseRevEnum, DeniseRev>
                 
             case DeniseRev::OCS:          return "OCS";
             case DeniseRev::ECS:          return "ECS";
+            case DeniseRev::AGA:          return "AGA";
         }
         return "???";
     }
@@ -43,6 +45,7 @@ struct DeniseRevEnum : Reflectable<DeniseRevEnum, DeniseRev>
                 
             case DeniseRev::OCS:          return "MOS 8362R8";
             case DeniseRev::ECS:          return "MOS 8373 (Super Denise)";
+            case DeniseRev::AGA:          return "MOS 4203 (Lisa)";
         }
         return "???";
     }
@@ -118,7 +121,7 @@ ViewPortInfo;
 
 typedef struct
 {
-    bool ecs;
+    // bool ecs;
     
     u16 bplcon0;
     u16 bplcon1;
