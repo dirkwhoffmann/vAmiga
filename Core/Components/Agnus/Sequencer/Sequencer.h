@@ -384,11 +384,9 @@ private:
 
     // Computes the layout of a single fetch unit
     void computeFetchUnit(u16 bplcon0, u16 fmode);
-    /*
-    template <u8 channels> void computeLoresFetchUnit();
-    template <u8 channels> void computeHiresFetchUnit();
-    template <u8 channels> void computeShresFetchUnit();
-    */
+    template <u8 channels> void computeLoresFetchUnit(u16 fmode = 0);
+    template <u8 channels> void computeHiresFetchUnit(u16 fmode = 0);
+    template <u8 channels> void computeShresFetchUnit(u16 fmode = 0);
 
     
     //

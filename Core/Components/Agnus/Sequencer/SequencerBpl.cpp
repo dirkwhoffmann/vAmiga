@@ -466,6 +466,7 @@ Sequencer::updateBplJumpTable(i16 end)
     }
 }
 
+#if 0
 void
 Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
 {
@@ -599,64 +600,122 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
         fetch[1][i] = last ? modIds[res][plane - 1] : ids[res][plane - 1];
     }
 }
+#endif
 
-/*
 void
-Sequencer::computeFetchUnit(u16 bplcon0)
+Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
 {
-    auto bpu = bplcon0 >> 12 & 0b111;
+    memset(fetch, 0, sizeof(fetch));
 
-    switch (agnus.resolution(bplcon0)) {
-
-        case Resolution::LORES:
-
-            switch (bpu) {
-
-                case 0: computeLoresFetchUnit <0> (); break;
-                case 1: computeLoresFetchUnit <1> (); break;
-                case 2: computeLoresFetchUnit <2> (); break;
-                case 3: computeLoresFetchUnit <3> (); break;
-                case 4: computeLoresFetchUnit <4> (); break;
-                case 5: computeLoresFetchUnit <5> (); break;
-                case 6: computeLoresFetchUnit <6> (); break;
-                case 7: computeLoresFetchUnit <4> (); break;
-            }
-            break;
-
-        case Resolution::HIRES:
-
-            switch (bpu) {
-
-                case 0: computeHiresFetchUnit <0> (); break;
-                case 1: computeHiresFetchUnit <1> (); break;
-                case 2: computeHiresFetchUnit <2> (); break;
-                case 3: computeHiresFetchUnit <3> (); break;
-                case 4: computeHiresFetchUnit <4> (); break;
-                case 5: computeHiresFetchUnit <0> (); break;
-                case 6: computeHiresFetchUnit <0> (); break;
-                case 7: computeHiresFetchUnit <0> (); break;
-            }
-            break;
-
-        case Resolution::SHRES:
-
-            switch (bpu) {
-
-                case 0: computeShresFetchUnit <0> (); break;
-                case 1: computeShresFetchUnit <1> (); break;
-                case 2: computeShresFetchUnit <2> (); break;
-                case 3: computeShresFetchUnit <0> (); break;
-                case 4: computeShresFetchUnit <0> (); break;
-                case 5: computeShresFetchUnit <0> (); break;
-                case 6: computeShresFetchUnit <0> (); break;
-                case 7: computeShresFetchUnit <0> (); break;
-            }
-            break;
+    if (agnus.isAGA()) {
+        
+        u16 bpu = (bplcon0 & 0x7000) >> 12 | (bplcon0 & 0x0010) >> 1;
+        u16 fm = agnus.fmode & 0b11;
+        
+        switch (agnus.resolution(bplcon0)) {
+                
+            case Resolution::LORES:
+                
+                switch (bpu) {
+                        
+                    case 0: computeLoresFetchUnit <0> (fm); break;
+                    case 1: computeLoresFetchUnit <1> (fm); break;
+                    case 2: computeLoresFetchUnit <2> (fm); break;
+                    case 3: computeLoresFetchUnit <3> (fm); break;
+                    case 4: computeLoresFetchUnit <4> (fm); break;
+                    case 5: computeLoresFetchUnit <5> (fm); break;
+                    case 6: computeLoresFetchUnit <6> (fm); break;
+                    case 7: computeLoresFetchUnit <4> (fm); break;
+                }
+                break;
+                
+            case Resolution::HIRES:
+                
+                switch (bpu) {
+                        
+                    case 0: computeHiresFetchUnit <0> (fm); break;
+                    case 1: computeHiresFetchUnit <1> (fm); break;
+                    case 2: computeHiresFetchUnit <2> (fm); break;
+                    case 3: computeHiresFetchUnit <3> (fm); break;
+                    case 4: computeHiresFetchUnit <4> (fm); break;
+                    case 5: computeHiresFetchUnit <0> (fm); break;
+                    case 6: computeHiresFetchUnit <0> (fm); break;
+                    case 7: computeHiresFetchUnit <0> (fm); break;
+                }
+                break;
+                
+            case Resolution::SHRES:
+                
+                switch (bpu) {
+                        
+                    case 0: computeShresFetchUnit <0> (fm); break;
+                    case 1: computeShresFetchUnit <1> (fm); break;
+                    case 2: computeShresFetchUnit <2> (fm); break;
+                    case 3: computeShresFetchUnit <0> (fm); break;
+                    case 4: computeShresFetchUnit <0> (fm); break;
+                    case 5: computeShresFetchUnit <0> (fm); break;
+                    case 6: computeShresFetchUnit <0> (fm); break;
+                    case 7: computeShresFetchUnit <0> (fm); break;
+                }
+                break;
+        }
+        
+    } else {
+        
+        auto bpu = (bplcon0 & 0x7000) >> 12;
+        
+        switch (agnus.resolution(bplcon0)) {
+                
+            case Resolution::LORES:
+                
+                switch (bpu) {
+                        
+                    case 0: computeLoresFetchUnit <0> (); break;
+                    case 1: computeLoresFetchUnit <1> (); break;
+                    case 2: computeLoresFetchUnit <2> (); break;
+                    case 3: computeLoresFetchUnit <3> (); break;
+                    case 4: computeLoresFetchUnit <4> (); break;
+                    case 5: computeLoresFetchUnit <5> (); break;
+                    case 6: computeLoresFetchUnit <6> (); break;
+                    case 7: computeLoresFetchUnit <4> (); break;
+                }
+                break;
+                
+            case Resolution::HIRES:
+                
+                switch (bpu) {
+                        
+                    case 0: computeHiresFetchUnit <0> (); break;
+                    case 1: computeHiresFetchUnit <1> (); break;
+                    case 2: computeHiresFetchUnit <2> (); break;
+                    case 3: computeHiresFetchUnit <3> (); break;
+                    case 4: computeHiresFetchUnit <4> (); break;
+                    case 5: computeHiresFetchUnit <0> (); break;
+                    case 6: computeHiresFetchUnit <0> (); break;
+                    case 7: computeHiresFetchUnit <0> (); break;
+                }
+                break;
+                
+            case Resolution::SHRES:
+                
+                switch (bpu) {
+                        
+                    case 0: computeShresFetchUnit <0> (); break;
+                    case 1: computeShresFetchUnit <1> (); break;
+                    case 2: computeShresFetchUnit <2> (); break;
+                    case 3: computeShresFetchUnit <0> (); break;
+                    case 4: computeShresFetchUnit <0> (); break;
+                    case 5: computeShresFetchUnit <0> (); break;
+                    case 6: computeShresFetchUnit <0> (); break;
+                    case 7: computeShresFetchUnit <0> (); break;
+                }
+                break;
+        }
     }
 }
 
 template <u8 channels> void
-Sequencer::computeLoresFetchUnit()
+Sequencer::computeLoresFetchUnit(u16 fmode)
 {
     fetch[0][0] = EVENT_NONE;
     fetch[0][1] = channels < 4 ? EVENT_NONE : BPL_L4;
@@ -678,7 +737,7 @@ Sequencer::computeLoresFetchUnit()
 }
 
 template <u8 channels> void
-Sequencer::computeHiresFetchUnit()
+Sequencer::computeHiresFetchUnit(u16 fmode)
 {
     fetch[0][0] = channels < 4 ? EVENT_NONE : BPL_H4;
     fetch[0][1] = channels < 2 ? EVENT_NONE : BPL_H2;
@@ -700,7 +759,7 @@ Sequencer::computeHiresFetchUnit()
 }
 
 template <u8 channels> void
-Sequencer::computeShresFetchUnit()
+Sequencer::computeShresFetchUnit(u16 fmode)
 {
     fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
     fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
@@ -720,6 +779,5 @@ Sequencer::computeShresFetchUnit()
     fetch[1][6] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
     fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
 }
-*/
 
 }
