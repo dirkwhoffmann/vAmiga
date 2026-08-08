@@ -43,7 +43,7 @@ Denise::setDIWHIGH(u16 value)
 {
     logdebug(DIW_DEBUG, "setDIWHIGH(%x)\n", value);
 
-    if (!isECS()) return;
+    if (isOCS()) return;
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- H8 -- -- -- -- -- -- -- H8 -- -- -- -- --
@@ -104,7 +104,8 @@ Denise::pokeJOYTEST(u16 value)
 u16
 Denise::peekDENISEID()
 {
-    u16 result = isECS() ? 0xFFFC : 0xFFFF;
+    u16 result = isAGA() ? 0x00F8 : isECS() ? 0xFFFC : 0xFFFF;
+
     logdebug(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
     return result;
 }
@@ -112,7 +113,7 @@ Denise::peekDENISEID()
 u16
 Denise::spypeekDENISEID() const
 {
-    return isECS() ? 0xFFFC : 0xFFFF;
+    return isAGA() ? 0x00F8 : isECS() ? 0xFFFC : 0xFFFF;
 }
 
 template <Accessor s> void
@@ -128,15 +129,26 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 {
     logdebug(BPLREG_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
 
+    auto pixel  = std::max(agnus.pos.pixel() - 4, Pixel(0));
+    auto change = RegChange { .reg = Reg::BPLCON0, .value = newValue };
+
     // Record the register change
-    i64 pixel = std::max(agnus.pos.pixel() - 4, (isize)0);
-    conChanges.insert(pixel, RegChange { .reg = Reg::BPLCON0, .value = newValue });
+    conChanges.insert(pixel, change);
+    
+    // If the change affects color, record it the change in the pixel engine, too
+    if ((oldValue ^ newValue) & 0x8C50) {
+        
+        change.accessor = Accessor::DENISE;
+        pixelEngine.colChanges.insert(pixel, change);
+    }
     
     // Check if the HAM bit or the SHRES bit have changed
-    if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
+    /*
+     if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
         pixelEngine.colChanges.insert(pixel, RegChange { .reg = Reg::BPLCON0, .value = newValue, .accessor = Accessor::DENISE } );
     }
-
+     */
+    
     // Update value
     bplcon0 = newValue;
 
@@ -429,7 +441,7 @@ Denise::recordColorChange(isize nr, u16 value)
 
     } else {
 
-        assert(reg < 256); 
+        assert(reg < 256);
         reg |= nr << 8;
     }
 
