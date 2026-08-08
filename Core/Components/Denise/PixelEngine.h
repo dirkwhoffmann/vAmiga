@@ -206,16 +206,19 @@ public:
     static const int borderDebugColor = 257;
     
     // Changes one of the 32 Amiga color registers
-    void setColor(isize reg, u16 value);
-    void setColor(isize reg, AmigaColor value);
-
+    void setColor(isize reg, u16 value, bool loct);
+    
     // Returns a color value in Amiga format
     u16 getColor(isize nr) const { return color[nr].getHiNibbles(); }
 
     // Returns sprite color in Amiga format
     u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
 
+private:
+    
+    void setColor(isize reg, AmigaColor value);
 
+    
     //
     // Using the color lookup table
     //

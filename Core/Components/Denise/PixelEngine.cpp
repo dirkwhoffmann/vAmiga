@@ -91,20 +91,44 @@ PixelEngine::_powerOn()
 }
 
 void
-PixelEngine::setColor(isize reg, u16 value)
+PixelEngine::setColor(isize reg, u16 value, bool loct)
 {
     assert(reg < 256);
 
-    AmigaColor newColor(value & 0xFFF, 0);
-
-    // Update color register
-    color[reg] = newColor;
-
-    // Update palette entry
-    updateRGBA(reg);
+    AmigaColor newColor = color[reg];
     
-    // Update halfbright palette entry
-    if (reg < 32) updateRGBA(reg + 32);
+    if (denise.isAGA()) {
+        
+        // In AGA, a write with LOCT cleared stores the given nibble in both
+        // halves of each component. A write with LOCT set replaces the lower
+        // nibbles and preserves the upper ones.
+        
+        if (!loct) newColor.setHiNibbles(value);
+        newColor.setLoNibbles(value);
+        
+    } else {
+        
+        newColor.setHiNibbles(value);
+        newColor.setLoNibbles(0);
+    }
+    
+    setColor(reg, newColor);
+}
+
+void
+PixelEngine::setColor(isize reg, AmigaColor value)
+{
+    if (color[reg] != value) {
+        
+        // Update color register
+        color[reg] = value;
+        
+        // Update palette entry
+        updateRGBA(reg);
+        
+        // Update halfbright palette entry
+        if (reg < 32) updateRGBA(reg + 32);
+    }
 }
 
 void
@@ -403,7 +427,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
         default:
             
             // It must be a color register then
-            setColor(BYTE1(isize(change.reg)), change.value);
+            setColor(BYTE1(isize(change.reg)), change.value, !!BYTE2(isize(change.reg)));
             break;
     }
 }
