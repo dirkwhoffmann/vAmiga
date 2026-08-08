@@ -128,15 +128,16 @@ public:
     u16 borderColor;
     
     // Bitplane data registers
-    u16 bpldat[6];
+    u16 bpldat[8];
     
     // Pipeline registers
-    u16 bpldatPipe[6];
+    u16 bpldatPipe[8];
 
     // Sprite collision registers
     u16 clxdat;
     u16 clxcon;
-
+    u16 clxcon2;
+    
     //
     // Shift registers
     //
@@ -145,7 +146,7 @@ public:
      * of the BPLDAT registers into these shift registers after BPLDAT1 is
      * written to. This is emulated in function fillShiftRegister().
      */
-    u16 shiftReg[6];
+    u16 shiftReg[8];
 
     // Flags indicating that the shift registers have been loaded
     bool armedOdd;
@@ -367,6 +368,7 @@ public:
         CLONE_ARRAY(bpldatPipe)
         CLONE(clxdat)
         CLONE(clxcon)
+        CLONE(clxcon2)
         CLONE_ARRAY(shiftReg)
         CLONE(armedOdd)
         CLONE(armedEven)
@@ -431,6 +433,7 @@ private:
         << bpldatPipe
         << clxdat
         << clxcon
+        << clxcon2
         << shiftReg
         << armedOdd
         << armedEven
@@ -695,10 +698,14 @@ public:
     template <Accessor s> void pokeBPLCON3(u16 value);
     void setBPLCON3(u16 value);
 
+    template <Accessor s> void pokeBPLCON4(u16 value);
+    void setBPLCON4(u16 value);
+
     u16 peekCLXDAT();
     u16 spypeekCLXDAT() const;
     void pokeCLXCON(u16 value);
-    
+    void pokeCLXCON2(u16 value);
+
     template <isize x, Accessor s> void pokeBPLxDAT(u16 value);
     template <isize x> void setBPLxDAT(u16 value);
 
@@ -707,6 +714,8 @@ public:
     template <isize x> void pokeSPRxDATA(u16 value);
     template <isize x> void pokeSPRxDATB(u16 value);
     
+    u16 peekCOLORxx(isize xx);
+    u16 spypeekCOLORxx(isize xx) const;
     template <isize xx, Accessor s> void pokeCOLORxx(u16 value);
     
     
@@ -716,43 +725,72 @@ public:
     
 public:
     
+    //
     // BPLCON0
+    //
+    
     static bool shres(u16 v) { return GET_BIT(v, 6); }
     bool shres() const { return shres(bplcon0); }
+    
     static bool hires(u16 v) { return GET_BIT(v, 15); }
     bool hires() const { return hires(bplcon0); }
+    
     static bool lores(u16 v) { return !hires(v); }
     bool lores() const { return lores(bplcon0); }
+    
     static bool dbplf(u16 v) { return GET_BIT(v, 10); }
     bool dbplf() const { return dbplf(bplcon0); }
+    
     static bool lace(u16 v) { return GET_BIT(v, 2); }
     bool lace() const { return lace(bplcon0); }
+    
     static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
     bool ham() const { return ham(bplcon0); }
+    
     static bool ecsena(u16 v) { return GET_BIT(v, 0); }
     bool ecsena() const { return ecsena(bplcon0); }
 
+    
+    //
     // BPLCON2
-    static bool pf2pri(u16 value) { return GET_BIT(value, 6); }
+    //
+    
+    static bool pf2pri(u16 v) { return GET_BIT(v, 6); }
     bool pf2pri() const { return pf2pri(bplcon2); }
-    static u16 pf1px(u16 bplcon2) { return (bplcon2 & 7); }
+    
+    static u16 pf1px(u16 v) { return (v & 7); }
     u16 pf1px() const { return pf1px(bplcon2); }
-    static u16 pf2px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
+    
+    static u16 pf2px(u16 v) { return (v >> 3) & 7; }
     u16 pf2px() const { return pf2px(bplcon2); }
+    
     static bool killehb(u16 v) { return GET_BIT(v, 9); }
     bool killehb() const { return killehb(bplcon2); }
     
+    static bool rdram(u16 v) { return GET_BIT(v, 8); }
+    bool rdram() const { return rdram(bplcon2); }
+
+    
+    //
     // BPLCON3
+    //
+    
     static bool brdrblnk(u16 v) { return !!GET_BIT(v, 5); }
     bool brdrblnk() const { return brdrblnk(bplcon3); }
+    
     static u8 colorBank(u16 v) { return (v >> 13) & 0b111; }
     u8 colorBank() const { return colorBank(bplcon3); }
+    
     static bool loct(u16 v) { return !!GET_BIT(v, 9); }
     bool loct() const { return loct(bplcon3); }
 
     
+    //
     // CLXCON
+    //
+    
     template <int x> bool ensp() { return !!GET_BIT(clxcon, 12 + (x/2)); }
+    
     u8 enbp1() const { return (u8)((clxcon >> 6) & 0b010101); }
     u8 enbp2() const { return (u8)((clxcon >> 6) & 0b101010); }
     u8 mvbp1() const { return (u8)(clxcon & 0b010101); }

@@ -536,7 +536,6 @@ Agnus::pokeBEAMCON0(u16 value)
 {
     xfiles("pokeBEAMCON0(%04x)\n", value);
 
-    // ECS only register
     if (agnus.isOCS()) return;
 
     // 15: unused       11: LOLDIS      7: VARBEAMEN    3: unused
@@ -551,6 +550,38 @@ Agnus::pokeBEAMCON0(u16 value)
     // LOLDIS
     bool loldis = GET_BIT(value, 11);
     if (pos.type == TV::NTSC) pos.lolToggle = !loldis;
+}
+
+template <Accessor s> void
+Agnus::pokeFMODE(u16 value)
+{
+    logdebug(DMA_DEBUG, "pokeFMODE(%04x)\n", value);
+
+    if (!isAGA()) return;
+
+    setFMODE(value);
+}
+
+void
+Agnus::setFMODE(u16 value)
+{
+    logdebug(DMA_DEBUG, "setFMODE(%04x)\n", value);
+
+    /* Bits 0 to 3 select the bitplane and sprite fetch width, bit 15 enables
+     * sprite scan doubling (SSCAN2). All other bits are unused.
+     */
+    /*
+    value &= 0x800f;
+    if (fmode == value) return;
+
+    fmode = value;
+
+    // The fetch width limits the AGA scroll range (see updateScrollOffsets)
+    denise.updateScrollOffsets();
+
+    sequencer.computeBplEventTable(sequencer.sigRecorder);
+    scheduleBplEventForCycle(pos.h);
+    */
 }
 
 template <Accessor s> void
@@ -744,6 +775,7 @@ DECLARE(pokeDMACON)
 DECLARE(pokeDIWSTRT)
 DECLARE(pokeDIWSTOP)
 DECLARE(pokeDIWHIGH)
+DECLARE(pokeFMODE)
 
 #undef DECLAREA
 
@@ -764,7 +796,9 @@ template void Agnus::x<2,y>(u16 value); \
 template void Agnus::x<3,y>(u16 value); \
 template void Agnus::x<4,y>(u16 value); \
 template void Agnus::x<5,y>(u16 value); \
-template void Agnus::x<6,y>(u16 value);
+template void Agnus::x<6,y>(u16 value); \
+template void Agnus::x<7,y>(u16 value); \
+template void Agnus::x<8,y>(u16 value);
 
 DECLARE(pokeBPLxPTH)
 DECLARE(pokeBPLxPTL)
@@ -795,7 +829,9 @@ template void Agnus::x<2>(u16 value); \
 template void Agnus::x<3>(u16 value); \
 template void Agnus::x<4>(u16 value); \
 template void Agnus::x<5>(u16 value); \
-template void Agnus::x<6>(u16 value);
+template void Agnus::x<6>(u16 value); \
+template void Agnus::x<7>(u16 value); \
+template void Agnus::x<8>(u16 value);
 
 DECLARE(setBPLxPTH)
 DECLARE(setBPLxPTL)

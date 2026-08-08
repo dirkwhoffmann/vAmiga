@@ -2193,6 +2193,71 @@ Memory::peekCustom16(u32 addr)
             result = paula.peekINTREQR(); break;
         case 0x07C >> 1: // DENISEID
             result = denise.peekDENISEID(); break;
+        case 0x180 >> 1: // COLOR00
+            result = denise.peekCOLORxx(0); break;
+        case 0x182 >> 1: // COLOR01
+            result = denise.peekCOLORxx(1); break;
+        case 0x184 >> 1: // COLOR02
+            result = denise.peekCOLORxx(2); break;
+        case 0x186 >> 1: // COLOR03
+            result = denise.peekCOLORxx(3); break;
+        case 0x188 >> 1: // COLOR04
+            result = denise.peekCOLORxx(4); break;
+        case 0x18A >> 1: // COLOR05
+            result = denise.peekCOLORxx(5); break;
+        case 0x18C >> 1: // COLOR06
+            result = denise.peekCOLORxx(6); break;
+        case 0x18E >> 1: // COLOR07
+            result = denise.peekCOLORxx(7); break;
+        case 0x190 >> 1: // COLOR08
+            result = denise.peekCOLORxx(8); break;
+        case 0x192 >> 1: // COLOR09
+            result = denise.peekCOLORxx(9); break;
+        case 0x194 >> 1: // COLOR10
+            result = denise.peekCOLORxx(10); break;
+        case 0x196 >> 1: // COLOR11
+            result = denise.peekCOLORxx(11); break;
+        case 0x198 >> 1: // COLOR12
+            result = denise.peekCOLORxx(12); break;
+        case 0x19A >> 1: // COLOR13
+            result = denise.peekCOLORxx(13); break;
+        case 0x19C >> 1: // COLOR14
+            result = denise.peekCOLORxx(14); break;
+        case 0x19E >> 1: // COLOR15
+            result = denise.peekCOLORxx(15); break;
+        case 0x1A0 >> 1: // COLOR16
+            result = denise.peekCOLORxx(16); break;
+        case 0x1A2 >> 1: // COLOR17
+            result = denise.peekCOLORxx(17); break;
+        case 0x1A4 >> 1: // COLOR18
+            result = denise.peekCOLORxx(18); break;
+        case 0x1A6 >> 1: // COLOR19
+            result = denise.peekCOLORxx(19); break;
+        case 0x1A8 >> 1: // COLOR20
+            result = denise.peekCOLORxx(20); break;
+        case 0x1AA >> 1: // COLOR21
+            result = denise.peekCOLORxx(21); break;
+        case 0x1AC >> 1: // COLOR22
+            result = denise.peekCOLORxx(22); break;
+        case 0x1AE >> 1: // COLOR23
+            result = denise.peekCOLORxx(23); break;
+        case 0x1B0 >> 1: // COLOR24
+            result = denise.peekCOLORxx(24); break;
+        case 0x1B2 >> 1: // COLOR25
+            result = denise.peekCOLORxx(25); break;
+        case 0x1B4 >> 1: // COLOR26
+            result = denise.peekCOLORxx(26); break;
+        case 0x1B6 >> 1: // COLOR27
+            result = denise.peekCOLORxx(27); break;
+        case 0x1B8 >> 1: // COLOR28
+            result = denise.peekCOLORxx(28); break;
+        case 0x1BA >> 1: // COLOR29
+            result = denise.peekCOLORxx(29); break;
+        case 0x1BC >> 1: // COLOR30
+            result = denise.peekCOLORxx(30); break;
+        case 0x1BE >> 1: // COLOR31
+            result = denise.peekCOLORxx(31); break;
+            
         default:
             result = peekCustomFaulty16(addr);
 
@@ -2265,7 +2330,71 @@ Memory::spypeekCustom16(u32 addr) const
             return paula.peekINTREQR();
         case 0x07C >> 1: // DENISEID
             return denise.spypeekDENISEID();
-
+        case 0x180 >> 1: // COLOR00
+            return denise.spypeekCOLORxx(0);
+        case 0x182 >> 1: // COLOR01
+            return denise.spypeekCOLORxx(1);
+        case 0x184 >> 1: // COLOR02
+            return denise.spypeekCOLORxx(2);
+        case 0x186 >> 1: // COLOR03
+            return denise.spypeekCOLORxx(3);
+        case 0x188 >> 1: // COLOR04
+            return denise.spypeekCOLORxx(4);
+        case 0x18A >> 1: // COLOR05
+            return denise.spypeekCOLORxx(5);
+        case 0x18C >> 1: // COLOR06
+            return denise.spypeekCOLORxx(6);
+        case 0x18E >> 1: // COLOR07
+            return denise.spypeekCOLORxx(7);
+        case 0x190 >> 1: // COLOR08
+            return denise.spypeekCOLORxx(8);
+        case 0x192 >> 1: // COLOR09
+            return denise.spypeekCOLORxx(9);
+        case 0x194 >> 1: // COLOR10
+            return denise.spypeekCOLORxx(10);
+        case 0x196 >> 1: // COLOR11
+            return denise.spypeekCOLORxx(11);
+        case 0x198 >> 1: // COLOR12
+            return denise.spypeekCOLORxx(12);
+        case 0x19A >> 1: // COLOR13
+            return denise.spypeekCOLORxx(13);
+        case 0x19C >> 1: // COLOR14
+            return denise.spypeekCOLORxx(14);
+        case 0x19E >> 1: // COLOR15
+            return denise.spypeekCOLORxx(15);
+        case 0x1A0 >> 1: // COLOR16
+            return denise.spypeekCOLORxx(16);
+        case 0x1A2 >> 1: // COLOR17
+            return denise.spypeekCOLORxx(17);
+        case 0x1A4 >> 1: // COLOR18
+            return denise.spypeekCOLORxx(18);
+        case 0x1A6 >> 1: // COLOR19
+            return denise.spypeekCOLORxx(19);
+        case 0x1A8 >> 1: // COLOR20
+            return denise.spypeekCOLORxx(20);
+        case 0x1AA >> 1: // COLOR21
+            return denise.spypeekCOLORxx(21);
+        case 0x1AC >> 1: // COLOR22
+            return denise.spypeekCOLORxx(22);
+        case 0x1AE >> 1: // COLOR23
+            return denise.spypeekCOLORxx(23);
+        case 0x1B0 >> 1: // COLOR24
+            return denise.spypeekCOLORxx(24);
+        case 0x1B2 >> 1: // COLOR25
+            return denise.spypeekCOLORxx(25);
+        case 0x1B4 >> 1: // COLOR26
+            return denise.spypeekCOLORxx(26);
+        case 0x1B6 >> 1: // COLOR27
+            return denise.spypeekCOLORxx(27);
+        case 0x1B8 >> 1: // COLOR28
+            return denise.spypeekCOLORxx(28);
+        case 0x1BA >> 1: // COLOR29
+            return denise.spypeekCOLORxx(29);
+        case 0x1BC >> 1: // COLOR30
+            return denise.spypeekCOLORxx(30);
+        case 0x1BE >> 1: // COLOR31
+            return denise.spypeekCOLORxx(31);
+            
         default:
             return 0;
     }
@@ -2488,11 +2617,14 @@ Memory::pokeCustom16(u32 addr, u16 value)
             agnus.pokeBPLxPTH<6,s>(value); return;
         case 0x0F6 >> 1: // BPL6PTL
             agnus.pokeBPLxPTL<6,s>(value); return;
-        case 0x0F8 >> 1: // Unused
-        case 0x0FA >> 1: // Unused
-        case 0x0FC >> 1: // Unused
-        case 0x0FE >> 1: // Unused
-            break;
+        case 0x0F8 >> 1: // BPL7PTH (AGA)
+            agnus.pokeBPLxPTH<7,s>(value); return;
+        case 0x0FA >> 1: // BPL7PTL (AGA)
+            agnus.pokeBPLxPTL<7,s>(value); return;
+        case 0x0FC >> 1: // BPL8PTH (AGA)
+            agnus.pokeBPLxPTH<8,s>(value); return;
+        case 0x0FE >> 1: // BPL8PTL (AGA)
+            agnus.pokeBPLxPTL<8,s>(value); return;
         case 0x100 >> 1: // BPLCON0
             agnus.pokeBPLCON0<s>(value);
             denise.pokeBPLCON0<s>(value);
@@ -2510,9 +2642,10 @@ Memory::pokeCustom16(u32 addr, u16 value)
             agnus.pokeBPL1MOD(value); return;
         case 0x10A >> 1: // BPL2MOD
             agnus.pokeBPL2MOD(value); return;
-        case 0x10C >> 1: // Unused
-        case 0x10E >> 1: // Unused
-            break;
+        case 0x10C >> 1: // BPLCON4 (AGA)
+            denise.pokeBPLCON4<s>(value); return;
+        case 0x10E >> 1: // CLXCON2 (AGA)
+            denise.pokeCLXCON2(value); return;
         case 0x110 >> 1: // BPL1DAT
             denise.pokeBPLxDAT<0,s>(value); return;
         case 0x112 >> 1: // BPL2DAT
@@ -2525,9 +2658,10 @@ Memory::pokeCustom16(u32 addr, u16 value)
             denise.pokeBPLxDAT<4,s>(value); return;
         case 0x11A >> 1: // BPL6DAT
             denise.pokeBPLxDAT<5,s>(value); return;
-        case 0x11C >> 1: // Unused
-        case 0x11E >> 1: // Unused
-            break;
+        case 0x11C >> 1: // BPL7DAT (AGA)
+            denise.pokeBPLxDAT<6,s>(value); return;
+        case 0x11E >> 1: // BPL8DAT (AGA)
+            denise.pokeBPLxDAT<7,s>(value); return;
         case 0x120 >> 1: // SPR0PTH
             agnus.pokeSPRxPTH<0,s>(value); return;
         case 0x122 >> 1: // SPR0PTL
@@ -2692,6 +2826,8 @@ Memory::pokeCustom16(u32 addr, u16 value)
             agnus.pokeBEAMCON0(value); return;
         case 0x1E4 >> 1: // DIWHIGH (ECS)
             agnus.pokeDIWHIGH<s>(value); return;
+        case 0x1FC >> 1: // FMODE (AGA)
+            agnus.pokeFMODE<s>(value); return;
         case 0x1FE >> 1: // NO-OP
             copper.pokeNOOP(value); return;
     }

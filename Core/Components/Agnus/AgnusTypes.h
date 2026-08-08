@@ -549,7 +549,7 @@ typedef struct
     
     u32 coppc0;
     u32 dskpt;
-    u32 bplpt[6];
+    u32 bplpt[8];
     u32 audpt[4];
     u32 audlc[4];
     u32 bltpt[4];

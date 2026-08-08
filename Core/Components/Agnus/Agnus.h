@@ -138,7 +138,7 @@ public:
     u32 audlc[4] = { };
 
     // The bitplane DMA pointers
-    u32 bplpt[6] = { };
+    u32 bplpt[8] = { };
 
     // The bitplane modulo registers for odd bitplanes
     i16 bpl1mod = 0;
@@ -569,6 +569,9 @@ public:
     template <int x> void setSPRxCTL(u16 value);
 
     void pokeBEAMCON0(u16 value);
+
+    template <Accessor s> void pokeFMODE(u16 value);
+    void setFMODE(u16 value);
 
     
     //

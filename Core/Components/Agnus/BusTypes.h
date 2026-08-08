@@ -29,6 +29,8 @@ enum class BusOwner : i8
     BPL4,
     BPL5,
     BPL6,
+    BPL7,
+    BPL8,
     SPRITE0,
     SPRITE1,
     SPRITE2,
@@ -58,6 +60,8 @@ static constexpr i8 BUS_BPL3 = i8(BusOwner::BPL3);
 static constexpr i8 BUS_BPL4 = i8(BusOwner::BPL4);
 static constexpr i8 BUS_BPL5 = i8(BusOwner::BPL5);
 static constexpr i8 BUS_BPL6 = i8(BusOwner::BPL6);
+static constexpr i8 BUS_BPL7 = i8(BusOwner::BPL7);
+static constexpr i8 BUS_BPL8 = i8(BusOwner::BPL8);
 static constexpr i8 BUS_SPRITE0 = i8(BusOwner::SPRITE0);
 static constexpr i8 BUS_SPRITE1 = i8(BusOwner::SPRITE1);
 static constexpr i8 BUS_SPRITE2 = i8(BusOwner::SPRITE2);
@@ -94,6 +98,8 @@ struct BusOwnerEnum : Reflectable<BusOwnerEnum, BusOwner>
             case BusOwner::BPL4:     return "BPL4";
             case BusOwner::BPL5:     return "BPL5";
             case BusOwner::BPL6:     return "BPL6";
+            case BusOwner::BPL7:     return "BPL7";
+            case BusOwner::BPL8:     return "BPL8";
             case BusOwner::SPRITE0:  return "SPRITE0";
             case BusOwner::SPRITE1:  return "SPRITE1";
             case BusOwner::SPRITE2:  return "SPRITE2";
@@ -127,6 +133,8 @@ struct BusOwnerEnum : Reflectable<BusOwnerEnum, BusOwner>
             case BusOwner::BPL4:     return "Bitplane 4 DMA access";
             case BusOwner::BPL5:     return "Bitplane 5 DMA access";
             case BusOwner::BPL6:     return "Bitplane 6 DMA access";
+            case BusOwner::BPL7:     return "Bitplane 7 DMA access";
+            case BusOwner::BPL8:     return "Bitplane 8 DMA access";
             case BusOwner::SPRITE0:  return "Sprite 0 DMA access";
             case BusOwner::SPRITE1:  return "Sprite 1 DMA access";
             case BusOwner::SPRITE2:  return "Sprite 2 DMA access";

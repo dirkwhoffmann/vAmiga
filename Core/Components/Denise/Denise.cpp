@@ -1348,12 +1348,6 @@ Denise::eofHandler()
     debugger.eofHandler();
 }
 
-/*
-template void Denise::drawOdd<false>(Pixel offset);
-template void Denise::drawOdd<true>(Pixel offset);
-template void Denise::drawEven<false>(Pixel offset);
-template void Denise::drawEven<true>(Pixel offset);
-*/
 template void Denise::translateDPF<true>(Pixel from, Pixel to, PFState &state);
 template void Denise::translateDPF<false>(Pixel from, Pixel to, PFState &state);
 

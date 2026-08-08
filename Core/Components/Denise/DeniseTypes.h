@@ -127,7 +127,7 @@ typedef struct
     u16 bplcon1;
     u16 bplcon2;
     i16 bpu;
-    u16 bpldat[6];
+    u16 bpldat[8];
     
     u16 diwstrt;
     u16 diwstop;

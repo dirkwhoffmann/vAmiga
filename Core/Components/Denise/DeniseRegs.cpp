@@ -223,6 +223,22 @@ Denise::setBPLCON3(u16 value)
     updateBorderColor();
 }
 
+template <Accessor s> void
+Denise::pokeBPLCON4(u16 value)
+{
+    logdebug(BPLREG_DEBUG, "pokeBPLCON4(%X)\n", value);
+    
+    setBPLCON4(value);
+}
+
+void
+Denise::setBPLCON4(u16 value)
+{
+    logdebug(BPLREG_DEBUG, "setBPLCON4(%X)\n", value);
+    
+    // TODO
+}
+
 u16
 Denise::peekCLXDAT()
 {
@@ -246,10 +262,19 @@ Denise::pokeCLXCON(u16 value)
     clxcon = value;
 }
 
+void
+Denise::pokeCLXCON2(u16 value)
+{
+    logdebug(CLXREG_DEBUG, "pokeCLXCON2(%x)\n", value);
+
+    if (!isAGA()) return;
+    clxcon2 = value;
+}
+
 template <isize x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
-    assert(x < 6);
+    assert(x < 8);
     logdebug(BPLREG_DEBUG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
 
     if constexpr (s == Accessor::AGNUS) {
@@ -264,7 +289,7 @@ Denise::pokeBPLxDAT(u16 value)
 template <isize x> void
 Denise::setBPLxDAT(u16 value)
 {
-    assert(x < 6);
+    assert(x < 8);
     logdebug(BPLDAT_DEBUG, "setBPL%ldDAT(%X)\n", x + 1, value);
 
     bpldat[x] = value;
@@ -272,7 +297,7 @@ Denise::setBPLxDAT(u16 value)
     if constexpr (x == 0) {
         
         // Feed data registers into pipe
-        for (isize i = 0; i < 6; i++) bpldatPipe[i] = bpldat[i];
+        for (isize i = 0; i < 8; i++) bpldatPipe[i] = bpldat[i];
 
         armedOdd = true;
         armedEven = true;
@@ -344,6 +369,31 @@ Denise::pokeSPRxDATB(u16 value)
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value });
 }
 
+u16
+Denise::peekCOLORxx(isize xx)
+{
+    u16 result;
+    
+    // OCS and ECS chipsets do not support reading back color registers.
+    // On AGA chipsets, color registers are readable when the RDRAM bit is set.
+
+    if (isAGA() && denise.rdram()) {
+        result = 0; // TODO
+    } else {
+        result = mem.peekCustomFaulty16(u32(0x180 + 2 * xx));
+    }
+    
+    logdebug(COLREG_DEBUG, "peekCOLOR%02ld = %x\n", xx, result);
+    return result;
+}
+
+u16
+Denise::spypeekCOLORxx(isize xx) const
+{
+    u16 result = 0; // TODO
+    return result;
+}
+
 template <isize xx, Accessor s> void
 Denise::pokeCOLORxx(u16 value)
 {
@@ -399,6 +449,8 @@ template void Denise::pokeBPLCON2<Accessor::CPU>(u16 value);
 template void Denise::pokeBPLCON2<Accessor::AGNUS>(u16 value);
 template void Denise::pokeBPLCON3<Accessor::CPU>(u16 value);
 template void Denise::pokeBPLCON3<Accessor::AGNUS>(u16 value);
+template void Denise::pokeBPLCON4<Accessor::CPU>(u16 value);
+template void Denise::pokeBPLCON4<Accessor::AGNUS>(u16 value);
 
 template void Denise::pokeBPLxDAT<0,Accessor::CPU>(u16 value);
 template void Denise::pokeBPLxDAT<0,Accessor::AGNUS>(u16 value);
@@ -412,6 +464,10 @@ template void Denise::pokeBPLxDAT<4,Accessor::CPU>(u16 value);
 template void Denise::pokeBPLxDAT<4,Accessor::AGNUS>(u16 value);
 template void Denise::pokeBPLxDAT<5,Accessor::CPU>(u16 value);
 template void Denise::pokeBPLxDAT<5,Accessor::AGNUS>(u16 value);
+template void Denise::pokeBPLxDAT<6,Accessor::CPU>(u16 value);
+template void Denise::pokeBPLxDAT<6,Accessor::AGNUS>(u16 value);
+template void Denise::pokeBPLxDAT<7,Accessor::CPU>(u16 value);
+template void Denise::pokeBPLxDAT<7,Accessor::AGNUS>(u16 value);
 
 template void Denise::setBPLxDAT<0>(u16 value);
 template void Denise::setBPLxDAT<1>(u16 value);
@@ -419,6 +475,8 @@ template void Denise::setBPLxDAT<2>(u16 value);
 template void Denise::setBPLxDAT<3>(u16 value);
 template void Denise::setBPLxDAT<4>(u16 value);
 template void Denise::setBPLxDAT<5>(u16 value);
+template void Denise::setBPLxDAT<6>(u16 value);
+template void Denise::setBPLxDAT<7>(u16 value);
 
 template void Denise::pokeSPRxPOS<0>(u16 value);
 template void Denise::pokeSPRxPOS<1>(u16 value);
