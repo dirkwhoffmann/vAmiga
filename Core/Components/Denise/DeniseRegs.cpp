@@ -400,8 +400,41 @@ Denise::pokeCOLORxx(u16 value)
     logdebug(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
 
     // Record the color change
-    constexpr auto reg = Reg(isize(Reg::COLOR00) + xx);
-    pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .reg = reg, .value = value } );
+    recordColorChange(xx, value);
+    
+    // constexpr auto reg = Reg(isize(Reg::COLOR00) + xx);
+    // pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .reg = reg, .value = value } );
+}
+
+void
+Denise::recordColorChange(isize nr, u16 value)
+{
+    assert(nr >= 0 && nr < 32);
+
+    auto reg = isize(Reg::COLOR00) + nr;
+    
+    if (isAGA()) {
+
+        // With RDRAM set, the color registers are read-only
+        if (rdram()) return;
+
+        /* AGA maintains 256 color registers with 8 bit per component. Writes
+         * are directed to one of eight 32-color banks (BPLCON3 bits 13-15).
+         * A write with the LOCT bit set carries the lower nibbles of the
+         * components, which is how a program supplies the full 8 bit range.
+         * We encode the actual target register and the value of the LOCT bit
+         * in the higher bytes of the recorded reg value.
+         */
+        reg |= isize(loct()) << 16 | colorBank() << 11 | nr << 8;
+
+    } else {
+
+        assert(reg < 256); 
+        reg |= nr << 8;
+    }
+
+    pixelEngine.colChanges.insert(agnus.pos.pixel(),
+                                  RegChange { .reg = Reg(reg), .value = value } );
 }
 
 Resolution

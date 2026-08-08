@@ -718,6 +718,9 @@ public:
     u16 spypeekCOLORxx(isize xx) const;
     template <isize xx, Accessor s> void pokeCOLORxx(u16 value);
     
+    // Records a write to one of the 32 color registers in the change history
+    void recordColorChange(isize nr, u16 value);
+    
     
     //
     // Accessing single bits

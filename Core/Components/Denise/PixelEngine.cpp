@@ -400,14 +400,10 @@ PixelEngine::applyRegisterChange(const RegChange &change)
             updateEHB();
             break;
 
-        default: // It must be a color register then
+        default:
             
-            auto nr = isize(change.reg) - isize(Reg::COLOR00);
-            assert(0 <= nr && nr < 32);
-
-            if (color[nr].getHiNibbles() != change.value) {
-                setColor(nr, change.value);
-            }
+            // It must be a color register then
+            setColor(BYTE1(isize(change.reg)), change.value);
             break;
     }
 }
