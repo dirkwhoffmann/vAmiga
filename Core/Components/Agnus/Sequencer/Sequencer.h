@@ -144,9 +144,19 @@ private:
     u16 dmaDAS;
 
     // Current layout of a fetch unit
-    EventID fetch[2][8];
+    // EventID fetch[2][8];
+    EventID fetch[2][32];
 
-public:
+     // Bit mask for wrapping the fetch unit counter (fetchUnit / 2 - 1)
+     u8 cntMask = 3;
+
+ public:
+
+     // Length of a fetch unit in DMA cycles
+     u8 fetchUnit = 8;
+
+     // Number of words read in a single bitplane DMA cycle
+     u8 fetchWords = 1;
 
     // Currently scheduled events
     EventID bplEvent[HPOS_CNT];
@@ -224,6 +234,9 @@ public:
         CLONE(dmaDAS)
         CLONE_ARRAY(fetch[0])
         CLONE_ARRAY(fetch[1])
+        CLONE(cntMask)
+        CLONE(fetchUnit)
+        CLONE(fetchWords)
         CLONE_ARRAY(bplEvent)
         CLONE_ARRAY(dasEvent)
         CLONE_ARRAY(nextBplEvent)
@@ -266,6 +279,9 @@ private:
 
         << dmaDAS
         << fetch
+        << cntMask
+        << fetchUnit
+        << fetchWords
         << bplEvent
         << dasEvent
         << nextBplEvent

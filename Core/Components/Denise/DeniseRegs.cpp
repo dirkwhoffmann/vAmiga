@@ -141,14 +141,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
         change.accessor = Accessor::DENISE;
         pixelEngine.colChanges.insert(pixel, change);
     }
-    
-    // Check if the HAM bit or the SHRES bit have changed
-    /*
-     if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
-        pixelEngine.colChanges.insert(pixel, RegChange { .reg = Reg::BPLCON0, .value = newValue, .accessor = Accessor::DENISE } );
-    }
-     */
-    
+        
     // Update value
     bplcon0 = newValue;
 
@@ -157,14 +150,6 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Update border color index, because the ECSENA bit might have changed
     updateBorderColor();
-    
-    // Check if the BPU bits have changed
-    u16 newBpuBits = (newValue >> 12) & 0b111;
-    
-    // Report a suspicious BPU value
-    if (newBpuBits > ((res == Resolution::LORES) ? 6 : (res == Resolution::HIRES) ? 4 : 2)) {
-        xfiles("BPLCON0: BPU set to irregular value %d\n", newBpuBits);
-    }
 }
 
 template <Accessor s> void

@@ -126,27 +126,34 @@ public:
     u16 bplcon1 = 0;
     u16 bplcon1Initial = 0;
 
-    // The DMA control register
+    // DMA control register
     u16 dmacon = 0;
     u16 dmaconInitial = 0;
     
-    // The disk DMA pointer
+    // AGA bitplane/sprite fetch mode register
+    u16 fmode = 0;
+
+    // Disk DMA pointer
     u32 dskpt = 0;
 
-    // The audio DMA pointers and pointer latches
+    // Audio DMA pointers and pointer latches
     u32 audpt[4] = { };
     u32 audlc[4] = { };
 
-    // The bitplane DMA pointers
+    // Bitplane DMA pointers
     u32 bplpt[8] = { };
 
-    // The bitplane modulo registers for odd bitplanes
+    // AGA bus prefetch buffer (up to 4 words per fetch)
+    u64 bpldatNext[8] = { };
+    u8 bpldatNextValid[8] = { };
+
+    // Bitplane modulo registers for odd bitplanes
     i16 bpl1mod = 0;
 
-    // The bitplane modulo registers for even bitplanes
+    // Bitplane modulo registers for even bitplanes
     i16 bpl2mod = 0;
 
-    // The sprite DMA pointers
+    // Sprite DMA pointers
     u32 sprpt[8] = { };
 
 
@@ -208,8 +215,11 @@ public:
     isize sprVStrt[8] = { };
     isize sprVStop[8] = { };
 
-    // The current DMA states of all 8 sprites
+    // Ccurrent DMA states of all 8 sprites
     bool sprDmaEnabled[8] = { };
+
+    // Scan doubling flags of all 8 sprites (AGA only)
+    bool sprSscan2[8] = { };
 
     
     //
@@ -256,10 +266,13 @@ private:
         << bplcon1Initial
         << dmacon
         << dmaconInitial
+        << fmode
         << dskpt
         << audpt
         << audlc
         << bplpt
+        << bpldatNext
+        << bpldatNextValid
         << bpl1mod
         << bpl2mod
         << sprpt
@@ -268,7 +281,6 @@ private:
         << scrollEven
 
         << busOwner
-        // << busAddr
         << busData
         << lastCtlWrite
 
@@ -278,7 +290,8 @@ private:
 
         << sprVStrt
         << sprVStop
-        << sprDmaEnabled;
+        << sprDmaEnabled
+        << sprSscan2;
 
         if (isSoftResetter(worker)) return;
 
@@ -401,6 +414,24 @@ public:
     bool hires() { return res == Resolution::HIRES; }
     bool shres() { return res == Resolution::SHRES; }
 
+    // Returns the number of words read in a single bitplane DMA cycle
+    u8 bplFetchWords() const;
+
+    // Returns the number of words read in a single sprite DMA cycle
+    u8 sprFetchWords() const;
+
+    // Returns the sprite width in pixels (16, 32 or 64)
+    isize spriteWidth() const { return 16 * sprFetchWords(); }
+
+    // Aligns a DMA pointer to the width of a single fetch
+    static u32 alignPtr(u32 ptr, u8 words);
+
+    // Adds the modulo to a bitplane pointer. AGA clears the low address bits
+    void addBplMod(isize plane);
+
+    // Returns the state of the AGA sprite scan doubling bit (FMODE bit 15)
+    bool sscan2() const;
+    
     // Returns the external synchronization bit from BPLCON0
     static bool ersy(u16 value) { return GET_BIT(value, 1); }
     bool ersy() { return ersy(bplcon0); }

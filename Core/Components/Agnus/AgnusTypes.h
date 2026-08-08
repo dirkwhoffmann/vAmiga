@@ -233,7 +233,7 @@ struct EventSlotEnum : Reflectable<EventSlotEnum, EventSlot>
     }
 };
 
-enum EventID : i8
+enum EventID : u8
 {
     EVENT_NONE          = 0,
     
@@ -275,7 +275,19 @@ enum EventID : i8
     BPL_S1_MOD          = 0x58,
     BPL_S2              = 0x5C,
     BPL_S2_MOD          = 0x60,
-    BPL_EVENT_COUNT     = 0x64,
+    BPL_L7              = 0x64,
+    BPL_L7_MOD          = 0x68,
+    BPL_L8              = 0x6C,
+    BPL_L8_MOD          = 0x70,
+    BPL_H5              = 0x74,
+    BPL_H5_MOD          = 0x78,
+    BPL_H6              = 0x7C,
+    BPL_H6_MOD          = 0x80,
+    BPL_H7              = 0x84,
+    BPL_H7_MOD          = 0x88,
+    BPL_H8              = 0x8C,
+    BPL_H8_MOD          = 0x90,
+    BPL_EVENT_COUNT     = 0x94,
     
     // DAS slot
     DAS_REFRESH         = 1,
@@ -333,6 +345,7 @@ enum EventID : i8
     BLT_COPY_FAKE,
     BLT_LINE_SLOW,
     BLT_LINE_FAKE,
+    BLT_BUSY,
     BLT_EVENT_COUNT,
     
     // SEC slot
@@ -460,8 +473,8 @@ static inline bool isBplxEvent(EventID id, int x)
         case BPL_L2: case BPL_H2: return x == 2;
         case BPL_L3: case BPL_H3: return x == 3;
         case BPL_L4: case BPL_H4: return x == 4;
-        case BPL_L5:              return x == 5;
-        case BPL_L6:              return x == 6;
+        case BPL_L5: case BPL_H5: return x == 5;
+        case BPL_L6: case BPL_H6: return x == 6;
             
         default:
             return false;
@@ -477,6 +490,7 @@ typedef struct
 {
     bool isOCS;
     bool isECS;
+    bool isAGA;
     bool isPAL;
     bool isNTSC;
     

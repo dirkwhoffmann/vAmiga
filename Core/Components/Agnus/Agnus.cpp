@@ -174,6 +174,7 @@ Agnus::setOption(Opt option, i64 value)
                 case AgnusRevision::OCS:     ptrMask = 0x07FFFF; break;
                 case AgnusRevision::ECS_1MB: ptrMask = 0x0FFFFF; break;
                 case AgnusRevision::ECS_2MB: ptrMask = 0x1FFFFF; break;
+                case AgnusRevision::AGA:     ptrMask = 0x1FFFFF; break;
 
                 default:
                     fatalError;
@@ -216,6 +217,7 @@ Agnus::getTraits() const
 
         .isOCS = isOCS(),
         .isECS = isECS(),
+        .isAGA = isAGA(),
         .isPAL = isPAL(),
         .isNTSC = isNTSC(),
         .idBits = idBits(),
@@ -248,9 +250,12 @@ Agnus::idBits() const
 {
     switch (config.revision) {
             
-        case AgnusRevision::ECS_2MB: return 0x2000; // TODO: CHECK ON REAL MACHINE
         case AgnusRevision::ECS_1MB: return 0x2000;
-        default:            return 0x0000;
+        case AgnusRevision::ECS_2MB: return 0x2000; // TODO: CHECK ON REAL MACHINE
+        case AgnusRevision::AGA:     return 0x2300;
+            
+        default:
+            return 0x0000;
     }
 }
 
@@ -259,22 +264,73 @@ Agnus::chipRamLimit() const
 {
     switch (config.revision) {
 
-        case AgnusRevision::ECS_2MB: return 2048;
         case AgnusRevision::ECS_1MB: return 1024;
-        default:            return 512;
+        case AgnusRevision::ECS_2MB: return 2048;
+        case AgnusRevision::AGA:     return 2048;
+
+        default:
+            return 512;
     }
 }
 
 Resolution
 Agnus::resolution(u16 v)
 {
-    if (GET_BIT(v,6) && isECS()) {
-        return Resolution::SHRES;
-    } else if (GET_BIT(v,15)) {
-        return Resolution::HIRES;
-    } else {
-        return Resolution::LORES;
+    if (GET_BIT(v,6) && !isOCS()) return Resolution::SHRES;
+    if (GET_BIT(v,15))            return Resolution::HIRES;
+    
+    return Resolution::LORES;
+}
+
+u8
+Agnus::bplFetchWords() const
+{
+    return sequencer.fetchWords;
+}
+
+u8
+Agnus::sprFetchWords() const {
+
+    // OCS and ECS support the classic 16 pixel sprite, only
+    if (!isAGA()) return 1;
+
+    // AGA widens sprites to 32 or 64 pixels via FMODE bits 2 and 3
+    switch ((fmode >> 2) & 0b11) {
+
+        case 0b00: return 1;
+        case 0b11: return 4;
+        default:   return 2;
     }
+}
+
+u32
+Agnus::alignPtr(u32 ptr, u8 words)
+{
+    // A 32 or 64 bit fetch ignores the low address bits, so an unaligned
+    // pointer is truncated by the hardware rather than honored. The mask
+    // is derived from the number of words per fetch: 1 word leaves the
+    // pointer untouched, 2 words align it to 4 bytes, 4 words to 8 bytes.
+    
+    return ptr & ~u32(2 * words - 1);
+}
+
+void
+Agnus::addBplMod(isize plane) {
+
+    // Adds the modulo to a bitplane pointer. AGA clears the low address
+    // bits before the addition, so a pointer that was set up unaligned
+    // stays truncated for the rest of the frame.
+
+    u32 p = bplpt[plane];
+    if (isAGA()) p = alignPtr(p, bplFetchWords());
+    U32_INC(p, (plane & 1) ? bpl2mod : bpl1mod);
+    bplpt[plane] = p;
+}
+
+bool
+Agnus::sscan2() const
+{
+    return isAGA() && GET_BIT(fmode, 15);
 }
 
 void
