@@ -717,20 +717,20 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
 template <u8 channels> void
 Sequencer::computeLoresFetchUnit(u16 fmode)
 {
-    fetch[0][0] = EVENT_NONE;
+    fetch[0][0] = channels < 8 ? EVENT_NONE : BPL_L8;
     fetch[0][1] = channels < 4 ? EVENT_NONE : BPL_L4;
     fetch[0][2] = channels < 6 ? EVENT_NONE : BPL_L6;
     fetch[0][3] = channels < 2 ? EVENT_NONE : BPL_L2;
-    fetch[0][4] = EVENT_NONE;
+    fetch[0][4] = channels < 7 ? EVENT_NONE : BPL_L7;
     fetch[0][5] = channels < 3 ? EVENT_NONE : BPL_L3;
     fetch[0][6] = channels < 5 ? EVENT_NONE : BPL_L5;
     fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_L1;
 
-    fetch[1][0] = EVENT_NONE;
+    fetch[1][0] = channels < 8 ? EVENT_NONE : BPL_L8_MOD;
     fetch[1][1] = channels < 4 ? EVENT_NONE : BPL_L4_MOD;
     fetch[1][2] = channels < 6 ? EVENT_NONE : BPL_L6_MOD;
     fetch[1][3] = channels < 2 ? EVENT_NONE : BPL_L2_MOD;
-    fetch[1][4] = EVENT_NONE;
+    fetch[1][4] = channels < 7 ? EVENT_NONE : BPL_L7_MOD;
     fetch[1][5] = channels < 3 ? EVENT_NONE : BPL_L3_MOD;
     fetch[1][6] = channels < 5 ? EVENT_NONE : BPL_L5_MOD;
     fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_L1_MOD;
@@ -739,45 +739,101 @@ Sequencer::computeLoresFetchUnit(u16 fmode)
 template <u8 channels> void
 Sequencer::computeHiresFetchUnit(u16 fmode)
 {
-    fetch[0][0] = channels < 4 ? EVENT_NONE : BPL_H4;
-    fetch[0][1] = channels < 2 ? EVENT_NONE : BPL_H2;
-    fetch[0][2] = channels < 3 ? EVENT_NONE : BPL_H3;
-    fetch[0][3] = channels < 1 ? EVENT_NONE : BPL_H1;
-    fetch[0][4] = channels < 4 ? EVENT_NONE : BPL_H4;
-    fetch[0][5] = channels < 2 ? EVENT_NONE : BPL_H2;
-    fetch[0][6] = channels < 3 ? EVENT_NONE : BPL_H3;
-    fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_H1;
-
-    fetch[1][0] = channels < 4 ? EVENT_NONE : BPL_H4;
-    fetch[1][1] = channels < 2 ? EVENT_NONE : BPL_H2;
-    fetch[1][2] = channels < 3 ? EVENT_NONE : BPL_H3;
-    fetch[1][3] = channels < 1 ? EVENT_NONE : BPL_H1;
-    fetch[1][4] = channels < 4 ? EVENT_NONE : BPL_H4_MOD;
-    fetch[1][5] = channels < 2 ? EVENT_NONE : BPL_H2_MOD;
-    fetch[1][6] = channels < 3 ? EVENT_NONE : BPL_H3_MOD;
-    fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_H1_MOD;
+    switch (fmode & 0b11) {
+            
+        case 0b00:
+            
+            fetch[0][0] = channels < 4 ? EVENT_NONE : BPL_H4;
+            fetch[0][1] = channels < 2 ? EVENT_NONE : BPL_H2;
+            fetch[0][2] = channels < 3 ? EVENT_NONE : BPL_H3;
+            fetch[0][3] = channels < 1 ? EVENT_NONE : BPL_H1;
+            fetch[0][4] = channels < 4 ? EVENT_NONE : BPL_H4;
+            fetch[0][5] = channels < 2 ? EVENT_NONE : BPL_H2;
+            fetch[0][6] = channels < 3 ? EVENT_NONE : BPL_H3;
+            fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_H1;
+            
+            fetch[1][0] = channels < 4 ? EVENT_NONE : BPL_H4;
+            fetch[1][1] = channels < 2 ? EVENT_NONE : BPL_H2;
+            fetch[1][2] = channels < 3 ? EVENT_NONE : BPL_H3;
+            fetch[1][3] = channels < 1 ? EVENT_NONE : BPL_H1;
+            fetch[1][4] = channels < 4 ? EVENT_NONE : BPL_H4_MOD;
+            fetch[1][5] = channels < 2 ? EVENT_NONE : BPL_H2_MOD;
+            fetch[1][6] = channels < 3 ? EVENT_NONE : BPL_H3_MOD;
+            fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_H1_MOD;
+            break;
+            
+        default:
+            
+            fetch[0][0] = channels < 8 ? EVENT_NONE : BPL_H8;
+            fetch[0][1] = channels < 4 ? EVENT_NONE : BPL_H4;
+            fetch[0][2] = channels < 6 ? EVENT_NONE : BPL_H6;
+            fetch[0][3] = channels < 2 ? EVENT_NONE : BPL_H2;
+            fetch[0][4] = channels < 7 ? EVENT_NONE : BPL_H7;
+            fetch[0][5] = channels < 3 ? EVENT_NONE : BPL_H3;
+            fetch[0][6] = channels < 5 ? EVENT_NONE : BPL_H5;
+            fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_H1;
+            
+            fetch[1][0] = channels < 8 ? EVENT_NONE : BPL_H8_MOD;
+            fetch[1][1] = channels < 4 ? EVENT_NONE : BPL_H4_MOD;
+            fetch[1][2] = channels < 6 ? EVENT_NONE : BPL_H6_MOD;
+            fetch[1][3] = channels < 2 ? EVENT_NONE : BPL_H2_MOD;
+            fetch[1][4] = channels < 7 ? EVENT_NONE : BPL_H7_MOD;
+            fetch[1][5] = channels < 3 ? EVENT_NONE : BPL_H3_MOD;
+            fetch[1][6] = channels < 5 ? EVENT_NONE : BPL_H5_MOD;
+            fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_H1_MOD;
+            break;
+    }
 }
 
 template <u8 channels> void
 Sequencer::computeShresFetchUnit(u16 fmode)
 {
-    fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
-    fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
-    fetch[0][2] = channels < 2 ? EVENT_NONE : BPL_S2;
-    fetch[0][3] = channels < 1 ? EVENT_NONE : BPL_S1;
-    fetch[0][4] = channels < 2 ? EVENT_NONE : BPL_S2;
-    fetch[0][5] = channels < 1 ? EVENT_NONE : BPL_S1;
-    fetch[0][6] = channels < 2 ? EVENT_NONE : BPL_S2;
-    fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_S1;
+    switch (fmode & 0b11) {
+            
+        case 0b00:
+            
+            fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[0][2] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][3] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[0][4] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][5] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[0][6] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_S1;
+            
+            fetch[1][0] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[1][1] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[1][2] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[1][3] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[1][4] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[1][5] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[1][6] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
+            fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
+            break;
+            
+        case 0b01:
+        case 0b10:
 
-    fetch[1][0] = channels < 2 ? EVENT_NONE : BPL_S2;
-    fetch[1][1] = channels < 1 ? EVENT_NONE : BPL_S1;
-    fetch[1][2] = channels < 2 ? EVENT_NONE : BPL_S2;
-    fetch[1][3] = channels < 1 ? EVENT_NONE : BPL_S1;
-    fetch[1][4] = channels < 2 ? EVENT_NONE : BPL_S2;
-    fetch[1][5] = channels < 1 ? EVENT_NONE : BPL_S1;
-    fetch[1][6] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
-    fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
+            fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[0][4] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][5] = channels < 1 ? EVENT_NONE : BPL_S1;
+            
+            fetch[1][0] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[1][1] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[1][4] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
+            fetch[1][5] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
+            break;
+            
+        case 0b11:
+
+            fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
+            
+            fetch[1][0] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
+            fetch[1][1] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
+            break;
+    }
 }
 
 }
