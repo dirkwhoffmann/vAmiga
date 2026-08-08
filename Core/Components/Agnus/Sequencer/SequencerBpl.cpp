@@ -52,7 +52,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     // Update the DMA and BMCTL bits
     state.bmapen = agnus.bpldma(agnus.dmaconInitial);
     state.bplcon0 = agnus.bplcon0Initial;
-    computeFetchUnit(state.bplcon0);
+    computeFetchUnit(state.bplcon0, agnus.fmode);
     
     // Evaluate the current state of the vertical DIW flipflop
     if (!state.bpv) { state.bprun = false; state.cnt = 0; }
@@ -258,7 +258,7 @@ Sequencer::processSignal <false> (u32 signal, DDFState &state)
     if (signal & SIG_CON) {
         
         state.bplcon0 = HI_WORD(signal);
-        computeFetchUnit(state.bplcon0);
+        computeFetchUnit(state.bplcon0, agnus.fmode);
     }
     switch (signal & (SIG_BMAPEN_CLR | SIG_BMAPEN_SET)) {
             
@@ -348,7 +348,7 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
     if (signal & SIG_CON) {
         
         state.bplcon0 = HI_WORD(signal);
-        computeFetchUnit(state.bplcon0);
+        computeFetchUnit(state.bplcon0, agnus.fmode);
     }
     switch (signal & (SIG_VFLOP_SET | SIG_VFLOP_CLR)) {
             
@@ -467,7 +467,7 @@ Sequencer::updateBplJumpTable(i16 end)
 }
 
 void
-Sequencer::computeFetchUnit(u16 bplcon0)
+Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
 {
     //
     // TODO: Precompute tables in constructor
@@ -492,7 +492,7 @@ Sequencer::computeFetchUnit(u16 bplcon0)
      */
     isize fm = 0;
     if (agnus.isAGA()) {
-        switch (agnus.fmode & 3) {
+        switch (fmode & 3) {
             case 1: case 2: fm = 1; break;
             case 3:         fm = 2; break;
         }

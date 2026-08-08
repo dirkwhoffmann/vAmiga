@@ -383,7 +383,7 @@ private:
     void updateBplJumpTable(i16 end = HPOS_MAX);
 
     // Computes the layout of a single fetch unit
-    void computeFetchUnit(u16 bplcon0);
+    void computeFetchUnit(u16 bplcon0, u16 fmode);
     /*
     template <u8 channels> void computeLoresFetchUnit();
     template <u8 channels> void computeHiresFetchUnit();
