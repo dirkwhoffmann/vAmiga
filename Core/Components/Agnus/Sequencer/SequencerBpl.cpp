@@ -38,7 +38,8 @@ Sequencer::initSigRecorder()
 void
 Sequencer::computeBplEventTable(const SigRecorder &sr)
 {
-    agnus.isECS() ? computeBplEventTable <true> (sr) : computeBplEventTable <false> (sr);
+    // AGA takes the ECS path
+    agnus.isOCS() ? computeBplEventTable<false>(sr) : computeBplEventTable<true>(sr);
 }
 
 template <bool ecs> void
@@ -203,10 +204,6 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         EventID id;
 
         auto counter = state.cnt << 1 | (j & 1);
-
-        /*
-         if (agnus.pos.v == 115) logdebug(true, "%d: %d %d %d %d %d %d %d %d %d %d\n", j, state.bpv, state.bmapen, state.shw, state.rhw, state.bphstart, state.bphstop, state.bprun, state.lastFu, state.bmctl, counter);
-         */
 
         if (counter == 0) {
 
@@ -442,6 +439,15 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
         state.rhw = false;
         state.shw = false;
         state.bphstop = false;
+        
+        // AGA hard stop
+        if (fetchUnit > 8) {
+            
+            state.bprun = false;
+            state.lastFu = false;
+            state.stopreq = false;
+            state.cnt = 0;
+        }
     }
 }
 
@@ -460,6 +466,141 @@ Sequencer::updateBplJumpTable(i16 end)
     }
 }
 
+void
+Sequencer::computeFetchUnit(u16 bplcon0)
+{
+    //
+    // TODO: Precompute tables in constructor
+    //
+    
+    auto bpu = bplcon0 >> 12 & 0b111;
+
+    /* In AGA, BPLCON0 bit 4 acts as the fourth BPU bit (BPU3). Setting it in
+     * combination with any of the traditional BPU bits would select more than
+     * eight bitplanes which disables the bitplanes (same logic as GET_PLANES
+     * in WinUAE / Amiberry).
+     */
+    if (agnus.isAGA() && (bplcon0 & 0x0010)) {
+        bpu = (bplcon0 & 0x7000) ? 0 : 8;
+    }
+
+    auto resol = agnus.resolution(bplcon0);
+    isize res = resol == Resolution::LORES ? 0 : resol == Resolution::HIRES ? 1 : 2;
+
+    /* Determine the width of the bitplane bus. In AGA, the FMODE register
+     * selects a 16, 32, or 64 bit wide bus (fetchmode 0, 1, and 2).
+     */
+    isize fm = 0;
+    if (agnus.isAGA()) {
+        switch (agnus.fmode & 3) {
+            case 1: case 2: fm = 1; break;
+            case 3:         fm = 2; break;
+        }
+    }
+
+    /* Fetch unit length, repetition period, and maximum number of bitplanes,
+     * indexed by fetchmode and resolution. These tables correspond to
+     * fetchunits[], fetchstarts[], and fm_maxplanes[] in WinUAE / Amiberry.
+     *
+     * A wider bus stretches the fetch unit, because a single fetch provides
+     * data for more pixels. At the same time, fewer fetches per plane are
+     * needed, which is why more bitplanes become possible.
+     */
+    static constexpr u8 fetchUnits[3][3] = { { 8,8,8 }, { 16,8,8 }, { 32,16,8 } };
+    static constexpr u8 fetchStarts[3][3] = { { 8,4,2 }, { 16,8,4 }, { 32,16,8 } };
+    static constexpr u8 maxPlanes[3][3] = { { 8,4,2 }, { 8,8,4 }, { 8,8,8 } };
+
+    // Cycle sequences for 2, 4, and 8 bitplanes (cycle_sequences[] in Amiberry)
+    static constexpr u8 sequences[3][8] = {
+
+        { 2,1,2,1,2,1,2,1 },
+        { 4,2,3,1,4,2,3,1 },
+        { 8,4,6,2,7,3,5,1 }
+    };
+
+    // Bitplane DMA events, indexed by resolution and bitplane number
+    static constexpr EventID ids[3][8] = {
+
+        { BPL_L1, BPL_L2, BPL_L3, BPL_L4, BPL_L5, BPL_L6, BPL_L7, BPL_L8 },
+        { BPL_H1, BPL_H2, BPL_H3, BPL_H4, BPL_H5, BPL_H6, BPL_H7, BPL_H8 },
+        { BPL_S1, BPL_S2, EVENT_NONE, EVENT_NONE,
+          EVENT_NONE, EVENT_NONE, EVENT_NONE, EVENT_NONE }
+    };
+    static constexpr EventID modIds[3][8] = {
+
+        { BPL_L1_MOD, BPL_L2_MOD, BPL_L3_MOD, BPL_L4_MOD,
+          BPL_L5_MOD, BPL_L6_MOD, BPL_L7_MOD, BPL_L8_MOD },
+        { BPL_H1_MOD, BPL_H2_MOD, BPL_H3_MOD, BPL_H4_MOD,
+          BPL_H5_MOD, BPL_H6_MOD, BPL_H7_MOD, BPL_H8_MOD },
+        { BPL_S1_MOD, BPL_S2_MOD, EVENT_NONE, EVENT_NONE,
+          EVENT_NONE, EVENT_NONE, EVENT_NONE, EVENT_NONE }
+    };
+
+    fetchUnit = fetchUnits[fm][res];
+    cntMask = u8(fetchUnit / 2 - 1);
+
+    auto start = isize(fetchStarts[fm][res]);
+    auto planes = isize(maxPlanes[fm][res]);
+
+    /* Number of words provided by a single fetch. Since the fetch unit grows
+     * with the bus width, each plane is fetched exactly (fetchUnit / start)
+     * times per fetch unit, no matter which mode is active.
+     */
+    fetchWords = u8(1 << fm);
+
+    // Super Hires is limited to two bitplanes, because BPL_S3 - BPL_S8 are missing
+    if (res == 2) planes = std::min(planes, isize(2));
+
+    // Disable the bitplanes if the current mode cannot feed them all
+    if (bpu > planes) bpu = 0;
+
+    // handle invalid modes.
+    // e.g. in lores seven bitplanes is an invalid mode; the hardware treats it as 4
+    if (!agnus.isAGA())
+    {
+        switch(resol)
+        {
+            case Resolution::LORES:
+                if(bpu == 7) bpu = 4;
+                break;
+            case Resolution::HIRES:
+                if(bpu > 4) bpu = 0;
+                break;
+            case Resolution::SHRES:
+                if(bpu > 2) bpu = 0;
+                break;
+        }
+    }
+
+    const u8 *seq = sequences[planes == 2 ? 0 : planes == 4 ? 1 : 2];
+
+    for (isize i = 0; i < 32; i++) {
+        fetch[0][i] = fetch[1][i] = EVENT_NONE;
+    }
+
+    for (isize i = 0; i < fetchUnit; i++) {
+
+        // Determine the position inside the current repetition
+        isize cycle = i % start;
+
+        // Cycles beyond the plane count of the current mode stay free
+        if (cycle >= planes) continue;
+
+        // Look up which bitplane is fetched in this cycle
+        isize plane = seq[cycle & 7];
+        if (bpu < plane) continue;
+
+        /* The modulo is added by the last repetition of the fetch unit, so
+         * that it is applied exactly once per bitplane and rasterline.
+         */
+        bool last = i >= fetchUnit - start;
+
+        fetch[0][i] = ids[res][plane - 1];
+        fetch[1][i] = last ? modIds[res][plane - 1] : ids[res][plane - 1];
+    }
+}
+
+/*
 void
 Sequencer::computeFetchUnit(u16 bplcon0)
 {
@@ -579,5 +720,6 @@ Sequencer::computeShresFetchUnit()
     fetch[1][6] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
     fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
 }
+*/
 
 }
