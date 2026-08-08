@@ -45,30 +45,16 @@ Sequencer::_dump(Category category, std::ostream &os) const
         os << std::endl;
     }
 
-    if (category == Category::State) {
+    if (category == Category::FetchUnit) {
         
-        os << tab("BPV");
-        os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;
-        os << tab("BMAPEN");
-        os << bol(ddf.bmapen) << " (" << bol(ddfInitial.bmapen) << ")" << std::endl;
-        os << tab("SHW");
-        os << bol(ddf.shw) << " (" << bol(ddfInitial.shw) << ")" << std::endl;
-        os << tab("RHW");
-        os << bol(ddf.rhw) << " (" << bol(ddfInitial.rhw) << ")" << std::endl;
-        os << tab("BPHSTART");
-        os << bol(ddf.bphstart) << " (" << bol(ddfInitial.bphstart) << ")" << std::endl;
-        os << tab("BPHSTOP");
-        os << bol(ddf.bphstop) << " (" << bol(ddfInitial.bphstop) << ")" << std::endl;
-        os << tab("STOPREQ");
-        os << bol(ddf.stopreq) << " (" << bol(ddfInitial.stopreq) << ")" << std::endl;
-        os << tab("BPRRUN");
-        os << bol(ddf.bprun) << " (" << bol(ddfInitial.bprun) << ")" << std::endl;
-        os << tab("LASTFU");
-        os << bol(ddf.lastFu) << " (" << bol(ddfInitial.lastFu) << ")" << std::endl;
-        os << tab("BPLCON0");
-        os << hex(ddf.bplcon0) << " (" << hex(ddfInitial.bplcon0) << ")" << std::endl;
-        os << tab("CNT");
-        os << dec(ddf.cnt) << " (" << dec(ddfInitial.cnt) << ")" << std::endl;
+        for (isize i = 0; i < 32; i++) {
+            
+            string slot = std::to_string(i) + " : ";
+            os << std::left << std::setw(4) << slot;
+            string bpl = Agnus::eventName(SLOT_BPL, fetch[0][i]);
+            os << std::left << std::setw(12) << bpl;
+            os << std::endl;
+        }
     }
 
     if (category == Category::Registers) {
@@ -114,6 +100,32 @@ Sequencer::_dump(Category category, std::ostream &os) const
             
             os << tab("Event at $" + trigger) << signal << std::endl;
         }
+    }
+    
+    if (category == Category::State) {
+        
+        os << tab("BPV");
+        os << bol(ddf.bpv) << " (" << bol(ddfInitial.bpv) << ")" << std::endl;
+        os << tab("BMAPEN");
+        os << bol(ddf.bmapen) << " (" << bol(ddfInitial.bmapen) << ")" << std::endl;
+        os << tab("SHW");
+        os << bol(ddf.shw) << " (" << bol(ddfInitial.shw) << ")" << std::endl;
+        os << tab("RHW");
+        os << bol(ddf.rhw) << " (" << bol(ddfInitial.rhw) << ")" << std::endl;
+        os << tab("BPHSTART");
+        os << bol(ddf.bphstart) << " (" << bol(ddfInitial.bphstart) << ")" << std::endl;
+        os << tab("BPHSTOP");
+        os << bol(ddf.bphstop) << " (" << bol(ddfInitial.bphstop) << ")" << std::endl;
+        os << tab("STOPREQ");
+        os << bol(ddf.stopreq) << " (" << bol(ddfInitial.stopreq) << ")" << std::endl;
+        os << tab("BPRRUN");
+        os << bol(ddf.bprun) << " (" << bol(ddfInitial.bprun) << ")" << std::endl;
+        os << tab("LASTFU");
+        os << bol(ddf.lastFu) << " (" << bol(ddfInitial.lastFu) << ")" << std::endl;
+        os << tab("BPLCON0");
+        os << hex(ddf.bplcon0) << " (" << hex(ddfInitial.bplcon0) << ")" << std::endl;
+        os << tab("CNT");
+        os << dec(ddf.cnt) << " (" << dec(ddfInitial.cnt) << ")" << std::endl;
     }
 }
 

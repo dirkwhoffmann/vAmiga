@@ -29,6 +29,7 @@ enum class Category : long
     Dma,
     Drive,
     Events,
+    FetchUnit,
     FileSystem,
     Geometry,
     Hunks,
