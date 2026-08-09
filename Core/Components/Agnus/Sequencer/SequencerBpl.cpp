@@ -227,7 +227,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         if (state.bprun) {
 
             id = fetch[state.lastFu ? 1 : 0][counter];
-            if (IS_ODD(j)) state.cnt = (state.cnt + 1) & 3;
+            if (IS_ODD(j)) state.cnt = (state.cnt + 1) & cntMask;
 
         } else {
 
@@ -606,6 +606,7 @@ void
 Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
 {
     memset(fetch, 0, sizeof(fetch));
+    fetchWords = 1;
 
     if (agnus.isAGA()) {
         
@@ -616,6 +617,8 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::LORES:
                 
+                if (fm) fetchWords = (fm == 0b11) ? 4 : 2;
+
                 switch (bpu) {
                         
                     case 0: computeLoresFetchUnit <0> (fm); break;
@@ -631,6 +634,8 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::HIRES:
                 
+                if (fm == 0b11) fetchWords = 2;
+
                 switch (bpu) {
                         
                     case 0: computeHiresFetchUnit <0> (fm); break;
@@ -712,6 +717,9 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 break;
         }
     }
+    
+    fetchUnit = fetchWords * 8;
+    cntMask   = u8(fetchWords * 4 - 1);
 }
 
 template <u8 channels> void
