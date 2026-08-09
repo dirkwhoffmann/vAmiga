@@ -143,7 +143,7 @@ public:
     // Bitplane DMA pointers
     u32 bplpt[8] = { };
 
-    // AGA bus prefetch buffer (up to 4 words per fetch)
+    // AGA bitplane prefetch buffer (up to 4 words, depending on fmode)
     u64 bpldatNext[8] = { };
     u8 bpldatNextValid[8] = { };
 
@@ -155,6 +155,9 @@ public:
 
     // Sprite DMA pointers
     u32 sprpt[8] = { };
+
+    // AGA sprite prefetch buffer (up to 4 words, depending on fmode)
+    u64 sprdatNext[8] = { };
 
 
     //
@@ -276,11 +279,13 @@ private:
         << bpl1mod
         << bpl2mod
         << sprpt
+        << sprdatNext
         << res
         << scrollOdd
         << scrollEven
 
         << busOwner
+        << busAddr
         << busData
         << lastCtlWrite
 
@@ -473,6 +478,9 @@ private:
 
     // Checks whether the sprite DMA cycle is blocked by bitplane DMA
     bool spriteCycleIsBlocked();
+
+    // Checks whether the sprite data fetch is skipped by AGA scan doubling
+    bool sscan2Skips(isize nr) const;
 
     // Updates the sprite DMA status in cycle 0xDF
     void updateSpriteDMA();

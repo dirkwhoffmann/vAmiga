@@ -54,20 +54,24 @@ Agnus::operator= (const Agnus& other) {
     CLONE(bplcon1Initial)
     CLONE(dmacon)
     CLONE(dmaconInitial)
+    CLONE(fmode)
     CLONE(dskpt)
     CLONE_ARRAY(audpt)
     CLONE_ARRAY(audlc)
     CLONE_ARRAY(bplpt)
+    CLONE_ARRAY(bpldatNext)
+    CLONE_ARRAY(bpldatNextValid)
     CLONE(bpl1mod)
     CLONE(bpl2mod)
     CLONE_ARRAY(sprpt)
+    CLONE_ARRAY(sprdatNext)
     CLONE(res)
     CLONE(scrollOdd)
     CLONE(scrollEven)
 
-    CLONE_ARRAY(busData)
-    CLONE_ARRAY(busAddr)
     CLONE_ARRAY(busOwner)
+    CLONE_ARRAY(busAddr)
+    CLONE_ARRAY(busData)
     CLONE_ARRAY(lastCtlWrite)
 
     CLONE_ARRAY(audxDR)
@@ -77,7 +81,8 @@ Agnus::operator= (const Agnus& other) {
     CLONE_ARRAY(sprVStrt)
     CLONE_ARRAY(sprVStop)
     CLONE_ARRAY(sprDmaEnabled)
-
+    CLONE_ARRAY(sprSscan2)
+    
     CLONE(clock)
 
     CLONE(config)
@@ -645,8 +650,15 @@ Agnus::executeFirstSpriteCycle()
             // Read in the next data word (part A)
             if (sprdma()) {
                 
-                auto value = doSpriteDmaRead<nr>();
-                denise.pokeSPRxDATA<nr>(value);
+                if (!isAGA() || !sscan2Skips(nr)) {
+                    
+                    auto value = doSpriteDmaRead<nr>();
+                    denise.pokeSPRxDATA<nr>(value);
+
+                } else {
+
+                    // Repeat the previous line (AGA SSCAN2 scan doubling)
+                }
                 
             } else {
 
@@ -667,9 +679,9 @@ Agnus::executeSecondSpriteCycle()
 
         if (!spriteCycleIsBlocked()) {
 
+            // Read in the next control word (CTL part)
             if (sprdma()) {
                 
-                // Read in the next control word (CTL part)
                 auto value = doSpriteDmaRead<nr>();
                 agnus.pokeSPRxCTL<nr, Accessor::AGNUS>(value);
                 denise.pokeSPRxCTL<nr>(value);
@@ -684,11 +696,18 @@ Agnus::executeSecondSpriteCycle()
 
         if (!spriteCycleIsBlocked()) {
 
+            // Read in the next data word (part B)
             if (sprdma()) {
                 
-                // Read in the next data word (part B)
-                auto value = doSpriteDmaRead<nr>();
-                denise.pokeSPRxDATB<nr>(value);
+                if (!isAGA() || !sscan2Skips(nr)) {
+                 
+                    auto value = doSpriteDmaRead<nr>();
+                    denise.pokeSPRxDATB<nr>(value);
+
+                } else {
+                    
+                    // Repeat the previous line (AGA SSCAN2 scan doubling)
+                }
                 
             } else {
 
@@ -698,7 +717,21 @@ Agnus::executeSecondSpriteCycle()
     }
 }
 
-bool 
+bool
+Agnus::sscan2Skips(isize nr) const
+{
+    /* AGA scan doubling (SSCAN2): the sprite data fetch is suppressed on every
+     * second line, so the previously fetched line is displayed once more. The
+     * sprite stays armed in Denise, hence skipping the fetch is all it takes.
+     * The parity is anchored at the vertical start position, which makes the
+     * first line of the sprite the first line of a doubled pair.
+     */
+    if (!sscan2() || !sprSscan2[nr]) return false;
+
+    return (pos.v & 1) != (sprVStrt[nr] & 1);
+}
+
+bool
 Agnus::spriteCycleIsBlocked()
 {
     if (isOCS()) {
@@ -748,6 +781,9 @@ Agnus::eolHandler()
     // Move to the next line
     pos.eol();
 
+    // Discard AGA bitplane prefetches at end of line
+    for (isize i = 0; i < 8; i++) bpldatNextValid[i] = 0;
+    
     // Update pot counters
     if (paula.chargeX0 < 1.0 || controlPort1.mouse.MMB()) U8_INC(paula.potCntX0, 1);
     if (paula.chargeY0 < 1.0 || controlPort1.mouse.RMB()) U8_INC(paula.potCntY0, 1);
