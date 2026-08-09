@@ -455,6 +455,8 @@ PixelEngine::colorize(isize line)
         // Colorize a chunk of pixels
         if (shresMode) {
             colorizeSHRES(dst, pixel, trigger);
+        } else if (hamMode8) {
+            colorizeHAM8(dst, pixel, trigger, hold);
         } else if (hamMode) {
             colorizeHAM(dst, pixel, trigger, hold);
         } else {
@@ -540,6 +542,9 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
     auto *mbuf = denise.mBuffer;
     auto *bbuf = denise.bBuffer;
 
+    // Let sprite shine through the border if enabled (AGA only)
+    if (denise.borderSprites()) removeBorderOverSprites(from, to);
+
     for (Pixel i = from; i < to; i++) {
 
         // Check for border pixels
@@ -547,8 +552,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
             dst[i] = palette[bbuf[i]];
 
-            // Only real color registers (not the BRDRBLNK/debug entries) hold
-            // a well-defined AmigaColor value that can seed the HAM register
+            // Track the border color in the hold register
             if (bbuf[i] < 256) ham = color[bbuf[i]];
             continue;
         }
@@ -577,9 +581,68 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
                 ham.g = u8((index & 0xF) << 4);
                 break;
+        }
 
-            default:
-                fatalError;
+        // Synthesize pixel
+        if (denise.spritePixelIsVisible(i)) {
+            dst[i] = palette[mbuf[i]];
+        } else {
+            dst[i] = toTexel(ham);
+        }
+    }
+}
+
+void
+PixelEngine::colorizeHAM8(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
+{
+    auto *dbuf = denise.dBuffer;
+    auto *ibuf = denise.iBuffer;
+    auto *mbuf = denise.mBuffer;
+    auto *bbuf = denise.bBuffer;
+
+    // Let sprite shine through the border if enabled (AGA only)
+    if (denise.borderSprites()) removeBorderOverSprites(from, to);
+
+    for (Pixel i = from; i < to; i++) {
+
+        // Check for border pixels
+        if (bbuf[i] != Denise::NO_BORDER) {
+
+            dst[i] = palette[bbuf[i]];
+
+            // Track the border color in the hold register
+            if (bbuf[i] < 256) ham = color[bbuf[i]];
+            continue;
+        }
+
+        u8 index = ibuf[i];
+        assert(isPaletteIndex(index));
+        
+        // HAM8 uses the lowest two bitplanes as control bits and the
+        // remaining six as data. Because a component holds eight bits,
+        // the two least significant ones are left untouched.
+        
+        switch (dbuf[i] & 0b11) {
+
+            case 0b00: // Get color from register
+
+                ham = color[index >> 2];
+                break;
+
+            case 0b01: // Modify blue
+
+                ham.b = (ibuf[i] & 0xFC) | (ham.b & 0x03);
+                break;
+
+            case 0b10: // Modify red
+
+                ham.r = (ibuf[i] & 0xFC) | (ham.r & 0x03);
+                break;
+
+            case 0b11: // Modify green
+
+                ham.g = (ibuf[i] & 0xFC) | (ham.g & 0x03);
+                break;
         }
 
         // Synthesize pixel
