@@ -50,7 +50,7 @@ DeniseDebugger::recordSprite(isize nr)
         spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(denise.sprctl[nr], 7) : 0;
         
         for (isize i = 0; i < 16; i++) {
-            spriteInfo[nr].colors[i] = pixelEngine.getColor(i + 16);
+            spriteInfo[nr].colors[i] = pixelEngine.getColor(denise.sprBase(nr) | i);
         }
     }
     

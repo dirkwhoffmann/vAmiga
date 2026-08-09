@@ -111,6 +111,7 @@ public:
     u16 bplcon1;
     u16 bplcon2;
     u16 bplcon3;
+    u16 bplcon4;
 
     // Bitplane control registers at cycle 0 in the current rasterline
     u16 initialBplcon0;
@@ -361,6 +362,7 @@ public:
         CLONE(bplcon1)
         CLONE(bplcon2)
         CLONE(bplcon3)
+        CLONE(bplcon4)
         CLONE(initialBplcon0)
         CLONE(initialBplcon1)
         CLONE(initialBplcon2)
@@ -428,6 +430,7 @@ private:
         << bplcon1
         << bplcon2
         << bplcon3
+        << bplcon4
         << initialBplcon0
         << initialBplcon1
         << initialBplcon2
@@ -757,16 +760,19 @@ public:
     
     static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
     bool ham() const { return ham(bplcon0); }
-    
+        
+    static bool ham8(u16 v) { return (v & 0xF810) == 0x0810; }
+    bool ham8() const { return ham8(bplcon0); }
+
     static bool ecsena(u16 v) { return GET_BIT(v, 0); }
     bool ecsena() const { return ecsena(bplcon0); }
 
     
     //
-    // BPLCON2
+    // BPLCON1
     //
     
-    // Derives the horizontal scroll offsets from BPLCON1
+    // Derives the horizontal scroll offsets
     void updateScrollOffsets();
 
     
@@ -794,14 +800,34 @@ public:
     // BPLCON3
     //
     
-    static bool brdrblnk(u16 v) { return !!GET_BIT(v, 5); }
-    bool brdrblnk() const { return brdrblnk(bplcon3); }
-    
     static u8 colorBank(u16 v) { return (v >> 13) & 0b111; }
     u8 colorBank() const { return colorBank(bplcon3); }
-    
+
+    static u8 pf2of(u16 v) { return (v >> 10) & 0b111; }
+    u8 pf2of() const { return pf2of(bplcon3); }
+
     static bool loct(u16 v) { return !!GET_BIT(v, 9); }
     bool loct() const { return loct(bplcon3); }
+
+    static bool brdrblnk(u16 v) { return !!GET_BIT(v, 5); }
+    bool brdrblnk() const { return brdrblnk(bplcon3); }
+
+    static bool brdsprt(u16 v) { return !!GET_BIT(v, 1); }
+    bool brdsprt() const { return brdsprt(bplcon3); }
+
+    
+    //
+    // BPLCON4
+    //
+
+    static u8 bplam(u16 v) { return HI_BYTE(v); }
+    u8 bplam() const { return bplam(bplcon4); }
+
+    static u8 esprm(u16 v) { return HI_NIBBLE(v); }
+    u8 esprm() const { return esprm(bplcon4); }
+
+    static u8 osprm(u16 v) { return LO_NIBBLE(v); }
+    u8 osprm() const { return osprm(bplcon4); }
 
     
     //
@@ -833,7 +859,7 @@ private:
     // Checks whether the BPU bits in BPLCON0 are an invalid combination
     static bool invBPU(u16 v) { return ((v >> 12) & 0b111) > (hires(v) ? 4 : 6); }
     bool invBPU() const { return invBPU(bplcon0); }
-
+    
     /* Returns the Denise view of the BPU bits. The value determines how many
      * shift registers are loaded with the values of their corresponding
      * BPLxDAT registers at the end of a fetch unit. It is computed out of the
@@ -842,6 +868,14 @@ private:
      */
     static u8 bpu(u16 v);
     u8 bpu() const { return bpu(bplcon0); }
+    
+    // Returns the first color register a sprite takes its colors from
+    u8 sprBase(isize x) const;
+    
+public:
+    
+    // Returns true when sprites can be displayed inside the border (AGA only)
+    bool borderSprites() const;
 };
 
 }

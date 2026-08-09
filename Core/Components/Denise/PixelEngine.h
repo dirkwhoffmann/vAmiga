@@ -109,6 +109,7 @@ private:
     
     // Indicates whether HAM mode or SHRES mode is enabled
     bool hamMode;
+    bool hamMode8;
     bool shresMode;
 
     
@@ -119,7 +120,7 @@ private:
 public:
 
     // Color register history
-    RegChangeRecorder<256> colChanges;
+    RegChangeRecorder<1024> colChanges;
 
 
     //
@@ -140,6 +141,7 @@ public:
         CLONE(colChanges)
         CLONE_ARRAY(color)
         CLONE(hamMode)
+        CLONE(hamMode8)
         CLONE(shresMode)
         CLONE_ARRAY(palette)
 
@@ -161,6 +163,7 @@ private:
         << colChanges
         << color
         << hamMode
+        << hamMode8
         << shresMode;
 
     } SERIALIZERS(serialize);
@@ -297,6 +300,8 @@ private:
     void colorizeSHRES(Texel *dst, Pixel from, Pixel to);
     void colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham);
     
+    // Removes the border pixels on top of sprites
+    void removeBorderOverSprites(Pixel from, Pixel to);
     
     //
     // Hiding graphics layers

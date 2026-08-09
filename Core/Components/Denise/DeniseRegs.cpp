@@ -493,6 +493,27 @@ Denise::bpu(u16 v)
     return  bpu < 7 ? bpu : 6;
 }
 
+u8
+Denise::sprBase(isize x) const
+{
+    /* On OCS and ECS machines, the value is hard-wired to 16. AGA lets
+     * BPLCON4 select one of 16 banks, separately for the even and the
+     * odd sprite of a pair (ESPRM and OSPRM). The reset value 0x0011
+     * selects bank 1 for both, which yields 16 again.
+     */
+    if (isAGA()) {
+        return u8((IS_ODD(x) ? osprm() : esprm()) << 4);
+    } else {
+        return 0x10;
+    }
+}
+
+bool
+Denise::borderSprites() const
+{
+    return isAGA() && GET_BIT(bplcon3, 1) && ecsena() && !brdrblnk();
+}
+
 template void Denise::pokeBPLCON0<Accessor::CPU>(u16 value);
 template void Denise::pokeBPLCON0<Accessor::AGNUS>(u16 value);
 template void Denise::pokeBPLCON1<Accessor::CPU>(u16 value);

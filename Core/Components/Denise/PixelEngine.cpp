@@ -415,6 +415,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
         case Reg::BPLCON0:
 
             hamMode = Denise::ham(change.value);
+            hamMode8 = Denise::ham8(change.value);
             shresMode = Denise::shres(change.value);
             updateEHB();
             break;
@@ -479,15 +480,13 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
 {
     auto *mbuf = denise.mBuffer;
     auto *bbuf = denise.bBuffer;
-
-    /*
-    for (Pixel i = from; i < to; i++) {
-        dst[i] = palette[mbuf[i]];
-    }
-    */
-    for (Pixel i = from; i < to; i++) {
+    
+    // Let sprite shine through the border if enabled (AGA only)
+    if (denise.borderSprites()) removeBorderOverSprites(from, to);
+            
+    // Colorize pixels
+    for (Pixel i = from; i < to; i++)
         dst[i] = palette[bbuf[i] == Denise::NO_BORDER ? mbuf[i] : bbuf[i]];
-    }
 }
 
 void
@@ -496,6 +495,9 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
     auto *mbuf = denise.mBuffer;
     auto *bbuf = denise.bBuffer;
     auto *zbuf = denise.zBuffer;
+
+    // Let sprite shine through the border if enabled (AGA only)
+    if (denise.borderSprites()) removeBorderOverSprites(from, to);
 
     if constexpr (sizeof(Texel) == 4) {
 
@@ -586,6 +588,17 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         } else {
             dst[i] = toTexel(ham);
         }
+    }
+}
+
+void
+PixelEngine::removeBorderOverSprites(Pixel from, Pixel to)
+{
+    auto *bbuf = denise.bBuffer;
+    auto *zbuf = denise.zBuffer;
+    
+    for (Pixel i = from; i < to; i++) {
+        if (Denise::isSpritePixel(zbuf[i])) bbuf[i] = Denise::NO_BORDER;
     }
 }
 

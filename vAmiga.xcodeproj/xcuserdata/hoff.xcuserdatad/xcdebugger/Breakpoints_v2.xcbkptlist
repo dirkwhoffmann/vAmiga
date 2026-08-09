@@ -463,8 +463,8 @@
             filePath = "Core/Components/Denise/PixelEngine.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "430"
-            endingLineNumber = "430"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "PixelEngine::applyRegisterChange(change)"
             landmarkType = "7">
          </BreakpointContent>

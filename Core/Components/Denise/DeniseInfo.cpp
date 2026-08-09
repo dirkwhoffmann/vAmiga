@@ -67,7 +67,25 @@ Denise::_dump(Category category, std::ostream &os) const
 
         os << tab("Resolution");
         os << ResolutionEnum::key(res) << std::endl;
-
+        os << tab("Bitplanes");
+        os << dec(bpu()) << std::endl;
+        os << tab("Mode");
+        os << (ham() ? (ham8() ? "HAM8" : "HAM6") :
+               dbplf() ? "Dual playfield" : "Single playfield") << std::endl;
+        os << tab("ECSENA");
+        os << bol(ecsena()) << std::endl;
+        os << tab("Color bank");
+        os << dec(colorBank()) << std::endl;
+        os << tab("LOCT");
+        os << bol(loct()) << std::endl;
+        os << tab("PF2 offset");
+        os << dec(pf2of()) << std::endl;
+        os << tab("BRDSPRT");
+        os << bol(brdsprt()) << std::endl;
+        os << tab("Sprite base (odd)");
+        os << dec(sprBase(0)) << std::endl;
+        os << tab("Sprite base (even)");
+        os << dec(sprBase(1)) << std::endl;
     }
 
     if (category == Category::Registers) {
@@ -80,6 +98,8 @@ Denise::_dump(Category category, std::ostream &os) const
         os << hex(bplcon2) << std::endl;
         os << tab("BPLCON3");
         os << hex(bplcon3) << std::endl;
+        os << tab("BPLCON4");
+        os << hex(bplcon4) << std::endl;
         os << std::endl;
         os << tab("DIWSTART");
         os << hex(diwstrt) << std::endl;
