@@ -114,12 +114,11 @@ Agnus::doAudioDmaRead()
 template <int bitplane> u16
 Agnus::doBitplaneDmaRead()
 {
-    assert(bitplane >= 0 && bitplane <= 5);
+    assert(bitplane >= 0 && bitplane <= 7);
     constexpr BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
         
     auto numWords = bplFetchWords();
     
-    // Number of words fetched in this DMA cycle (AGA FMODE)
     switch (numWords) {
             
         case 1:
@@ -179,14 +178,40 @@ Agnus::doSpriteDmaRead()
     assert(channel >= 0 && channel <= 7);
     constexpr BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
 
-    u16 result = mem.peek16 <Accessor::AGNUS> (sprpt[channel]);
+    auto numWords = sprFetchWords();
+    
+    switch (numWords) {
+            
+        case 1:
+          
+            sprdatNext[channel] = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
+            break;
+            
+        case 2:
+            
+            sprdatNext[channel] = mem.peek32rev<Accessor::AGNUS>(sprpt[channel]);
+            break;
+            
+        case 4:
+
+            sprdatNext[channel] = mem.peek64rev<Accessor::AGNUS>(sprpt[channel]);
+            break;
+
+        default:
+            fatalError;
+    }
+
+    u16 result = sprdatNext[channel] & 0xFFFF;
+    sprdatNext[channel] >>= 16;
+    
+    // u16 result = mem.peek16 <Accessor::AGNUS> (sprpt[channel]);
 
     busOwner[pos.h] = owner;
     busAddr[pos.h] = sprpt[channel];
     busData[pos.h] = result;
     stats.usage[isize(owner)]++;
 
-    sprpt[channel] += 2;
+    sprpt[channel] += 2 * numWords;
     return result;
 }
 
@@ -265,6 +290,8 @@ template u16 Agnus::doBitplaneDmaRead<2>();
 template u16 Agnus::doBitplaneDmaRead<3>();
 template u16 Agnus::doBitplaneDmaRead<4>();
 template u16 Agnus::doBitplaneDmaRead<5>();
+template u16 Agnus::doBitplaneDmaRead<6>();
+template u16 Agnus::doBitplaneDmaRead<7>();
 
 template u16 Agnus::doSpriteDmaRead<0>();
 template u16 Agnus::doSpriteDmaRead<1>();
