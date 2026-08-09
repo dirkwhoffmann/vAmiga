@@ -508,7 +508,20 @@ public:
     template <Accessor acc> void poke8(u32 addr, u8 value);
     template <Accessor acc> void poke16(u32 addr, u16 value);
     
+    
+    //
+    // Performing AGA accesses (32 or 64 bits)
+    //
+ 
+    // Reads two or four 16-bit words
+    template <Accessor acc> u32 peek32(u32 addr);
+    template <Accessor acc> u64 peek64(u32 addr);
 
+    // Reads two or four 16-bit words in reverse order
+    template <Accessor acc> u32 peek32rev(u32 addr);
+    template <Accessor acc> u64 peek64rev(u32 addr);
+
+    
     //
     // Accessing the CIA space
     //

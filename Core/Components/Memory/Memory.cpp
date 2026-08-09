@@ -1985,6 +1985,54 @@ Memory::poke16 <Accessor::AGNUS> (u32 addr, u16 value)
     }
 }
 
+template <Accessor acc> u32
+Memory::peek32(u32 addr)
+{
+    u32 aligned = addr & ~0b1;
+    
+    u16 b1 = peek16<acc>(aligned);
+    u16 b2 = peek16<acc>(aligned + 2);
+    
+    return b1 << 16 | b2;
+}
+
+template <Accessor acc> u64
+Memory::peek64(u32 addr)
+{
+    u32 aligned = addr & ~0b11;
+    
+    u16 b1 = peek16<acc>(aligned);
+    u16 b2 = peek16<acc>(aligned + 2);
+    u16 b3 = peek16<acc>(aligned + 4);
+    u16 b4 = peek16<acc>(aligned + 6);
+    
+    return b1 << 24 | b2 << 16 | b3 << 8 | b4;
+}
+
+template <Accessor acc> u32
+Memory::peek32rev(u32 addr)
+{
+    u32 aligned = addr & ~0b1;
+    
+    u16 b1 = peek16<acc>(aligned);
+    u16 b2 = peek16<acc>(aligned + 2);
+    
+    return b2 << 16 | b1;
+}
+
+template <Accessor acc> u64
+Memory::peek64rev(u32 addr)
+{
+    u32 aligned = addr & ~0b11;
+    
+    u16 b1 = peek16<acc>(aligned);
+    u16 b2 = peek16<acc>(aligned + 2);
+    u16 b3 = peek16<acc>(aligned + 4);
+    u16 b4 = peek16<acc>(aligned + 6);
+    
+    return b4 << 24 | b3 << 16 | b2 << 8 | b1;
+}
+
 u8
 Memory::peekCIA8(u32 addr)
 {
@@ -2975,5 +3023,17 @@ Memory::search(u64 pattern, isize bytes)
 
 template void Memory::pokeCustom16 <Accessor::CPU> (u32 addr, u16 value);
 template void Memory::pokeCustom16 <Accessor::AGNUS> (u32 addr, u16 value);
+
+template u32 Memory::peek32 <Accessor::CPU> (u32 addr);
+template u32 Memory::peek32 <Accessor::AGNUS> (u32 addr);
+
+template u64 Memory::peek64 <Accessor::CPU> (u32 addr);
+template u64 Memory::peek64 <Accessor::AGNUS> (u32 addr);
+
+template u32 Memory::peek32rev <Accessor::CPU> (u32 addr);
+template u32 Memory::peek32rev <Accessor::AGNUS> (u32 addr);
+
+template u64 Memory::peek64rev <Accessor::CPU> (u32 addr);
+template u64 Memory::peek64rev <Accessor::AGNUS> (u32 addr);
 
 }
