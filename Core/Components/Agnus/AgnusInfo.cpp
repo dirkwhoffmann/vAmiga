@@ -269,6 +269,7 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case BLT_COPY_FAKE: return "BLT_COPY_FAKE";
                 case BLT_LINE_SLOW: return "BLT_LINE_SLOW";
                 case BLT_LINE_FAKE: return "BLT_LINE_FAKE";
+                case BLT_BUSY:      return "BLT_BUSY";
                 default:            return "*** INVALID ***";
             }
             break;

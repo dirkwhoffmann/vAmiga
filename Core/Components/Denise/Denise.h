@@ -124,6 +124,10 @@ public:
     Pixel pixelOffsetOdd;
     Pixel pixelOffsetEven;
 
+    // The extended scroll values from BPLCON1, in units of whole words (AGA only)
+    u8 scrollWordOdd;
+    u8 scrollWordEven;
+    
     // Palette index for the border color (0 = background color)
     u16 borderColor;
     
@@ -363,6 +367,8 @@ public:
         CLONE(res)
         CLONE(pixelOffsetOdd)
         CLONE(pixelOffsetEven)
+        CLONE(scrollWordOdd)
+        CLONE(scrollWordEven)
         CLONE(borderColor)
         CLONE_ARRAY(bpldat)
         CLONE_ARRAY(bpldatPipe)
@@ -428,6 +434,8 @@ private:
         << res
         << pixelOffsetOdd
         << pixelOffsetEven
+        << scrollWordOdd
+        << scrollWordEven
         << borderColor
         << bpldat
         << bpldatPipe
@@ -752,6 +760,14 @@ public:
     
     static bool ecsena(u16 v) { return GET_BIT(v, 0); }
     bool ecsena() const { return ecsena(bplcon0); }
+
+    
+    //
+    // BPLCON2
+    //
+    
+    // Derives the horizontal scroll offsets from BPLCON1
+    void updateScrollOffsets();
 
     
     //

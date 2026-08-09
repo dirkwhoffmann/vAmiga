@@ -166,10 +166,13 @@ Denise::setBPLCON1(u16 oldValue, u16 newValue)
 {
     logdebug(BPLREG_DEBUG, "setBPLCON1(%x,%x)\n", oldValue, newValue);
 
-    bplcon1 = newValue & 0xFF;
+    // In AGA, the upper byte holds the extended scroll bits
+    bplcon1 = newValue & (isAGA() ? 0xFFFF : 0x00FF);
 
-    pixelOffsetOdd  = (i8)((bplcon1 & 0b00000001) << 1);
-    pixelOffsetEven = (i8)((bplcon1 & 0b00010000) >> 3);
+    updateScrollOffsets();
+
+    // pixelOffsetOdd  = (i8)((bplcon1 & 0b00000001) << 1);
+    // pixelOffsetEven = (i8)((bplcon1 & 0b00010000) >> 3);
 }
 
 template <Accessor s> void
@@ -432,6 +435,25 @@ Denise::recordColorChange(isize nr, u16 value)
 
     pixelEngine.colChanges.insert(agnus.pos.pixel(),
                                   RegChange { .reg = Reg(reg), .value = value } );
+}
+
+void
+Denise::updateScrollOffsets()
+{
+    pixelOffsetOdd  = Pixel((bplcon1 & 0b00000001) << 1);
+    pixelOffsetEven = Pixel((bplcon1 & 0b00010000) >> 3);
+
+    /* AGA widens the scroll range from 16 to 64 lores pixels. The additional
+     * bits are PF1H6 and PF1H7 in bits 11-10, and PF2H6 and PF2H7 in bits
+     * 15-14. They delay the output by whole 16 pixel words.
+     *
+     * This delay is not a pixel offset. It selects the drawing cycle that
+     * reloads the shift registers, which is why it is applied in prepareOdd()
+     * and prepareEven() instead.
+     */
+    scrollWordOdd  = isAGA() ? u8((bplcon1 & 0x0C00) >> 10) : 0;
+    scrollWordEven = isAGA() ? u8((bplcon1 & 0xC000) >> 14) : 0;
+
 }
 
 Resolution
