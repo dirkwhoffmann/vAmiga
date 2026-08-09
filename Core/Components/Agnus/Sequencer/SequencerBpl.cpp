@@ -227,7 +227,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         if (state.bprun) {
 
             id = fetch[state.lastFu ? 1 : 0][counter];
-            if (IS_ODD(j)) state.cnt = (state.cnt + 1) & cntMask;
+            if (IS_ODD(j)) state.cnt = (state.cnt + 1) & cntMask();
 
         } else {
 
@@ -441,7 +441,7 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
         state.bphstop = false;
         
         // AGA hard stop
-        if (fetchUnit > 8) {
+        if (fetchWords > 1) { // } fetchUnit() > 8) {
             
             state.bprun = false;
             state.lastFu = false;
@@ -606,8 +606,7 @@ void
 Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
 {
     memset(fetch, 0, sizeof(fetch));
-    fetchWords = 1;
-
+    
     if (agnus.isAGA()) {
         
         u16 bpu = (bplcon0 & 0x7000) >> 12 | (bplcon0 & 0x0010) >> 1;
@@ -617,50 +616,55 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::LORES:
                 
-                if (fm) fetchWords = (fm == 0b11) ? 4 : 2;
+                fetchWords = (fm == 0b11) ? 4 : (fm == 0b00) ? 1 : 2;
 
                 switch (bpu) {
                         
-                    case 0: computeLoresFetchUnit <0> (fm); break;
                     case 1: computeLoresFetchUnit <1> (fm); break;
                     case 2: computeLoresFetchUnit <2> (fm); break;
                     case 3: computeLoresFetchUnit <3> (fm); break;
                     case 4: computeLoresFetchUnit <4> (fm); break;
                     case 5: computeLoresFetchUnit <5> (fm); break;
                     case 6: computeLoresFetchUnit <6> (fm); break;
-                    case 7: computeLoresFetchUnit <4> (fm); break;
+                    case 7: computeLoresFetchUnit <7> (fm); break;
+                    case 8: computeLoresFetchUnit <8> (fm); break;
+
+                    default:
+                        computeLoresFetchUnit <0> (fm); break;
                 }
                 break;
                 
             case Resolution::HIRES:
                 
-                if (fm == 0b11) fetchWords = 2;
+                fetchWords = (fm == 0b11) ? 2 : 1;
 
                 switch (bpu) {
                         
-                    case 0: computeHiresFetchUnit <0> (fm); break;
                     case 1: computeHiresFetchUnit <1> (fm); break;
                     case 2: computeHiresFetchUnit <2> (fm); break;
                     case 3: computeHiresFetchUnit <3> (fm); break;
                     case 4: computeHiresFetchUnit <4> (fm); break;
-                    case 5: computeHiresFetchUnit <0> (fm); break;
-                    case 6: computeHiresFetchUnit <0> (fm); break;
-                    case 7: computeHiresFetchUnit <0> (fm); break;
+                    case 5: computeHiresFetchUnit <5> (fm); break;
+                    case 6: computeHiresFetchUnit <6> (fm); break;
+                    case 7: computeHiresFetchUnit <7> (fm); break;
+                    case 8: computeHiresFetchUnit <8> (fm); break;
+                        
+                    default:
+                        computeHiresFetchUnit <0> (fm); break;
                 }
                 break;
                 
             case Resolution::SHRES:
                 
+                fetchWords = 1;
+                
                 switch (bpu) {
                         
-                    case 0: computeShresFetchUnit <0> (fm); break;
                     case 1: computeShresFetchUnit <1> (fm); break;
                     case 2: computeShresFetchUnit <2> (fm); break;
-                    case 3: computeShresFetchUnit <0> (fm); break;
-                    case 4: computeShresFetchUnit <0> (fm); break;
-                    case 5: computeShresFetchUnit <0> (fm); break;
-                    case 6: computeShresFetchUnit <0> (fm); break;
-                    case 7: computeShresFetchUnit <0> (fm); break;
+                        
+                    default:
+                        computeShresFetchUnit <0> (fm); break;
                 }
                 break;
         }
@@ -668,14 +672,15 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
     } else {
         
         auto bpu = (bplcon0 & 0x7000) >> 12;
-        
+                
         switch (agnus.resolution(bplcon0)) {
                 
             case Resolution::LORES:
                 
+                fetchWords = 1;
+                
                 switch (bpu) {
                         
-                    case 0: computeLoresFetchUnit <0> (); break;
                     case 1: computeLoresFetchUnit <1> (); break;
                     case 2: computeLoresFetchUnit <2> (); break;
                     case 3: computeLoresFetchUnit <3> (); break;
@@ -683,43 +688,43 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                     case 5: computeLoresFetchUnit <5> (); break;
                     case 6: computeLoresFetchUnit <6> (); break;
                     case 7: computeLoresFetchUnit <4> (); break;
+
+                    default:
+                        computeLoresFetchUnit <0> (); break;
                 }
                 break;
                 
             case Resolution::HIRES:
                 
+                fetchWords = 1;
+                
                 switch (bpu) {
                         
-                    case 0: computeHiresFetchUnit <0> (); break;
                     case 1: computeHiresFetchUnit <1> (); break;
                     case 2: computeHiresFetchUnit <2> (); break;
                     case 3: computeHiresFetchUnit <3> (); break;
                     case 4: computeHiresFetchUnit <4> (); break;
-                    case 5: computeHiresFetchUnit <0> (); break;
-                    case 6: computeHiresFetchUnit <0> (); break;
-                    case 7: computeHiresFetchUnit <0> (); break;
+                        
+                    default:
+                        computeHiresFetchUnit <0> (); break;
                 }
                 break;
                 
             case Resolution::SHRES:
                 
+                fetchWords = 1;
+                
                 switch (bpu) {
                         
-                    case 0: computeShresFetchUnit <0> (); break;
                     case 1: computeShresFetchUnit <1> (); break;
                     case 2: computeShresFetchUnit <2> (); break;
-                    case 3: computeShresFetchUnit <0> (); break;
-                    case 4: computeShresFetchUnit <0> (); break;
-                    case 5: computeShresFetchUnit <0> (); break;
-                    case 6: computeShresFetchUnit <0> (); break;
-                    case 7: computeShresFetchUnit <0> (); break;
+                        
+                    default:
+                        computeShresFetchUnit <0> (); break;
                 }
                 break;
         }
     }
-    
-    fetchUnit = fetchWords * 8;
-    cntMask   = u8(fetchWords * 4 - 1);
 }
 
 template <u8 channels> void

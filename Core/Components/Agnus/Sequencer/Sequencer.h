@@ -147,13 +147,9 @@ private:
     // EventID fetch[2][8];
     EventID fetch[2][32];
 
-     // Bit mask for wrapping the fetch unit counter (fetchUnit / 2 - 1)
-     u8 cntMask = 3;
+  
 
  public:
-
-     // Length of a fetch unit in DMA cycles
-     u8 fetchUnit = 8;
 
      // Number of words read in a single bitplane DMA cycle
      u8 fetchWords = 1;
@@ -234,8 +230,6 @@ public:
         CLONE(dmaDAS)
         CLONE_ARRAY(fetch[0])
         CLONE_ARRAY(fetch[1])
-        CLONE(cntMask)
-        CLONE(fetchUnit)
         CLONE(fetchWords)
         CLONE_ARRAY(bplEvent)
         CLONE_ARRAY(dasEvent)
@@ -279,8 +273,6 @@ private:
 
         << dmaDAS
         << fetch
-        << cntMask
-        << fetchUnit
         << fetchWords
         << bplEvent
         << dasEvent
@@ -388,6 +380,12 @@ private:
     template <u8 channels> void computeHiresFetchUnit(u16 fmode = 0);
     template <u8 channels> void computeShresFetchUnit(u16 fmode = 0);
 
+    // Length of a fetch unit in DMA cycles
+    u8 fetchUnit() const { return fetchWords * 8; }
+    
+    // Returns the bit mask for wrapping the fetch unit counter
+    u8 cntMask() const { return fetchWords * 4 - 1; }
+    
     
     //
     // Managing the disk, audio, sprite time slot table (SequencerDas.cpp)
