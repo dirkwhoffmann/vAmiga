@@ -261,6 +261,8 @@ Agnus::serviceREGEvent(Cycle until)
             case Reg::BPL4PTH: setBPLxPTH<4>(change.value); break;
             case Reg::BPL5PTH: setBPLxPTH<5>(change.value); break;
             case Reg::BPL6PTH: setBPLxPTH<6>(change.value); break;
+            case Reg::BPL7PTH: setBPLxPTH<7>(change.value); break;
+            case Reg::BPL8PTH: setBPLxPTH<8>(change.value); break;
 
             case Reg::BPL1PTL: setBPLxPTL<1>(change.value); break;
             case Reg::BPL2PTL: setBPLxPTL<2>(change.value); break;
@@ -268,6 +270,8 @@ Agnus::serviceREGEvent(Cycle until)
             case Reg::BPL4PTL: setBPLxPTL<4>(change.value); break;
             case Reg::BPL5PTL: setBPLxPTL<5>(change.value); break;
             case Reg::BPL6PTL: setBPLxPTL<6>(change.value); break;
+            case Reg::BPL7PTL: setBPLxPTL<7>(change.value); break;
+            case Reg::BPL8PTL: setBPLxPTL<8>(change.value); break;
 
             case Reg::SPR0POS: setSPRxPOS<0>(change.value); break;
             case Reg::SPR1POS: setSPRxPOS<1>(change.value); break;
@@ -326,20 +330,20 @@ Agnus::serviceREGEvent(Cycle until)
 #define LO_EVEN(x)      { denise.drawLoresEven(); LO_NONE(x) }
 #define LO_BOTH(x)      { denise.drawLoresBoth(); LO_NONE(x) }
 
-#define LO_MOD(x)       { LO_NONE(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
-#define LO_MOD_ODD(x)   { LO_ODD(x);  U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
-#define LO_MOD_EVEN(x)  { LO_EVEN(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
-#define LO_MOD_BOTH(x)  { LO_BOTH(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define LO_MOD(x)       { LO_NONE(x); addBplMod(x); }
+#define LO_MOD_ODD(x)   { LO_ODD(x);  addBplMod(x); }
+#define LO_MOD_EVEN(x)  { LO_EVEN(x); addBplMod(x); }
+#define LO_MOD_BOTH(x)  { LO_BOTH(x); addBplMod(x); }
 
 #define HI_NONE(x)      { serviceBPLEventHires<x>(); }
 #define HI_ODD(x)       { denise.drawHiresOdd();  HI_NONE(x) }
 #define HI_EVEN(x)      { denise.drawHiresEven(); HI_NONE(x) }
 #define HI_BOTH(x)      { denise.drawHiresBoth(); HI_NONE(x) }
 
-#define HI_MOD(x)       { HI_NONE(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
-#define HI_MOD_ODD(x)   { HI_ODD(x);  U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
-#define HI_MOD_EVEN(x)  { HI_EVEN(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
-#define HI_MOD_BOTH(x)  { HI_BOTH(x); U32_INC(bplpt[x], (x & 1) ? bpl2mod : bpl1mod); }
+#define HI_MOD(x)       { HI_NONE(x); addBplMod(x); }
+#define HI_MOD_ODD(x)   { HI_ODD(x);  addBplMod(x); }
+#define HI_MOD_EVEN(x)  { HI_EVEN(x); addBplMod(x); }
+#define HI_MOD_BOTH(x)  { HI_BOTH(x); addBplMod(x); }
 
 #define SH_NONE(x)      { serviceBPLEventShres<x>(); }
 #define SH_ODD(x)       { denise.drawShresOdd();  SH_NONE(x) }
@@ -439,6 +443,24 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_L6_MOD | DRAW_EVEN:    LO_MOD_EVEN(5); break;
         case BPL_L6_MOD | DRAW_BOTH:    LO_MOD_BOTH(5); break;
 
+        case BPL_L7:                    LO_NONE(6);     break;
+        case BPL_L7     | DRAW_ODD:     LO_ODD(6);      break;
+        case BPL_L7     | DRAW_EVEN:    LO_EVEN(6);     break;
+        case BPL_L7     | DRAW_BOTH:    LO_BOTH(6);     break;
+        case BPL_L7_MOD:                LO_MOD(6);      break;
+        case BPL_L7_MOD | DRAW_ODD:     LO_MOD_ODD(6);  break;
+        case BPL_L7_MOD | DRAW_EVEN:    LO_MOD_EVEN(6); break;
+        case BPL_L7_MOD | DRAW_BOTH:    LO_MOD_BOTH(6); break;
+
+        case BPL_L8:                    LO_NONE(7);     break;
+        case BPL_L8     | DRAW_ODD:     LO_ODD(7);      break;
+        case BPL_L8     | DRAW_EVEN:    LO_EVEN(7);     break;
+        case BPL_L8     | DRAW_BOTH:    LO_BOTH(7);     break;
+        case BPL_L8_MOD:                LO_MOD(7);      break;
+        case BPL_L8_MOD | DRAW_ODD:     LO_MOD_ODD(7);  break;
+        case BPL_L8_MOD | DRAW_EVEN:    LO_MOD_EVEN(7); break;
+        case BPL_L8_MOD | DRAW_BOTH:    LO_MOD_BOTH(7); break;
+            
         case BPL_H1:                    HI_NONE(0);     break;
         case BPL_H1     | DRAW_ODD:     HI_ODD(0);      break;
         case BPL_H1     | DRAW_EVEN:    HI_EVEN(0);     break;
@@ -475,6 +497,42 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_H4_MOD | DRAW_EVEN:    HI_MOD_EVEN(3); break;
         case BPL_H4_MOD | DRAW_BOTH:    HI_MOD_BOTH(3); break;
 
+        case BPL_H5:                    HI_NONE(4);     break;
+        case BPL_H5     | DRAW_ODD:     HI_ODD(4);      break;
+        case BPL_H5     | DRAW_EVEN:    HI_EVEN(4);     break;
+        case BPL_H5     | DRAW_BOTH:    HI_BOTH(4);     break;
+        case BPL_H5_MOD:                HI_MOD(4);      break;
+        case BPL_H5_MOD | DRAW_ODD:     HI_MOD_ODD(4);  break;
+        case BPL_H5_MOD | DRAW_EVEN:    HI_MOD_EVEN(4); break;
+        case BPL_H5_MOD | DRAW_BOTH:    HI_MOD_BOTH(4); break;
+
+        case BPL_H6:                    HI_NONE(5);     break;
+        case BPL_H6     | DRAW_ODD:     HI_ODD(5);      break;
+        case BPL_H6     | DRAW_EVEN:    HI_EVEN(5);     break;
+        case BPL_H6     | DRAW_BOTH:    HI_BOTH(5);     break;
+        case BPL_H6_MOD:                HI_MOD(5);      break;
+        case BPL_H6_MOD | DRAW_ODD:     HI_MOD_ODD(5);  break;
+        case BPL_H6_MOD | DRAW_EVEN:    HI_MOD_EVEN(5); break;
+        case BPL_H6_MOD | DRAW_BOTH:    HI_MOD_BOTH(5); break;
+
+        case BPL_H7:                    HI_NONE(6);     break;
+        case BPL_H7     | DRAW_ODD:     HI_ODD(6);      break;
+        case BPL_H7     | DRAW_EVEN:    HI_EVEN(6);     break;
+        case BPL_H7     | DRAW_BOTH:    HI_BOTH(6);     break;
+        case BPL_H7_MOD:                HI_MOD(6);      break;
+        case BPL_H7_MOD | DRAW_ODD:     HI_MOD_ODD(6);  break;
+        case BPL_H7_MOD | DRAW_EVEN:    HI_MOD_EVEN(6); break;
+        case BPL_H7_MOD | DRAW_BOTH:    HI_MOD_BOTH(6); break;
+
+        case BPL_H8:                    HI_NONE(7);     break;
+        case BPL_H8     | DRAW_ODD:     HI_ODD(7);      break;
+        case BPL_H8     | DRAW_EVEN:    HI_EVEN(7);     break;
+        case BPL_H8     | DRAW_BOTH:    HI_BOTH(7);     break;
+        case BPL_H8_MOD:                HI_MOD(7);      break;
+        case BPL_H8_MOD | DRAW_ODD:     HI_MOD_ODD(7);  break;
+        case BPL_H8_MOD | DRAW_EVEN:    HI_MOD_EVEN(7); break;
+        case BPL_H8_MOD | DRAW_BOTH:    HI_MOD_BOTH(7); break;
+            
         case BPL_S1:                    SH_NONE(0);     break;
         case BPL_S1     | DRAW_ODD:     SH_ODD(0);      break;
         case BPL_S1     | DRAW_EVEN:    SH_EVEN(0);     break;

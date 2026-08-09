@@ -431,6 +431,8 @@ public:
     // Aligns a DMA pointer to the width of a single fetch
     static u32 alignPtr(u32 ptr, u8 words); // DEPRECATED
 
+    // TODO: Replace alignPtr by a ptrAlignMask
+    
     // Adds the modulo to a bitplane pointer. AGA clears the low address bits
     void addBplMod(isize plane);
 
