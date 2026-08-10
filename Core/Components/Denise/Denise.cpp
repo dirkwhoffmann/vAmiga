@@ -846,7 +846,8 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 void
 Denise::drawSprites()
 {
-    res == Resolution::SHRES ? drawSprites<Resolution::SHRES>() : drawSprites<Resolution::LORES>();
+    sprPixelWidth() == 1 ? drawSprites<Resolution::SHRES>() : drawSprites<Resolution::LORES>();
+    // res == Resolution::SHRES ? drawSprites<Resolution::SHRES>() : drawSprites<Resolution::LORES>();
 }
 
 template <Resolution R> void
@@ -883,8 +884,10 @@ Denise::drawSpritePair()
     constexpr Pixel hposMask = R == Resolution::SHRES ? ~0 : ~1;
 
     Pixel strt = 0;
-    Pixel strt1 = sprhppos[sprite1] & hposMask;
-    Pixel strt2 = sprhppos[sprite2] & hposMask;
+    Pixel strt1 = sprStrt(sprite1) & hposMask;
+    Pixel strt2 = sprStrt(sprite2) & hposMask;
+    // Pixel strt1 = sprhppos[sprite1] & hposMask;
+    // Pixel strt2 = sprhppos[sprite2] & hposMask;
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
@@ -1046,8 +1049,26 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     bool attached = GET_BIT(sprctl[sprite2], 7);
     Pixel offset = R == Resolution::SHRES ? 1 : 2;
 
+    /* Second trigger position of the horizontal comparator. Scan doubling
+     * shortens the comparator by one bit (see sprStrt), so the sprite is
+     * matched a second time half a comparator period further to the right.
+     * A value of zero disables the second trigger.
+     */
+    Pixel wrap = agnus.sscan2() ? 512 : 0;
+
     for (Pixel hpos = hstrt; hpos < hstop; hpos += offset) {
 
+        if (armed1 && (hpos == strt1 || (wrap && hpos == strt1 + wrap))) {
+                    
+            ssra[sprite1] = loadSSR(sprdata[sprite1], sprdataExt[sprite1]);
+            ssrb[sprite1] = loadSSR(sprdatb[sprite1], sprdatbExt[sprite1]);
+        }
+        if (armed2 && (hpos == strt2 || (wrap && hpos == strt2 + wrap))) {
+                    
+            ssra[sprite2] = loadSSR(sprdata[sprite2], sprdataExt[sprite2]);
+            ssrb[sprite2] = loadSSR(sprdatb[sprite2], sprdatbExt[sprite2]);
+        }
+        /*
         if (hpos == strt1 && armed1) {
             
             ssra[sprite1] = sprdata[sprite1];
@@ -1058,6 +1079,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
             ssra[sprite2] = sprdata[sprite2];
             ssrb[sprite2] = sprdatb[sprite2];
         }
+        */
 
         if (ssra[sprite1] | ssrb[sprite1] | ssra[sprite2] | ssrb[sprite2]) {
             
@@ -1074,23 +1096,35 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
                 }
             }
             
+            ssra[sprite1] <<= 1;
+            ssrb[sprite1] <<= 1;
+            ssra[sprite2] <<= 1;
+            ssrb[sprite2] <<= 1;
+            /*
             ssra[sprite1] = (u16)(ssra[sprite1] << 1);
             ssrb[sprite1] = (u16)(ssrb[sprite1] << 1);
             ssra[sprite2] = (u16)(ssra[sprite2] << 1);
             ssrb[sprite2] = (u16)(ssrb[sprite2] << 1);
+            */
         }
     }
 
     // Perform collision checks (if enabled)
+    Pixel width = isAGA() ? Pixel(agnus.spriteWidth() * offset) : 32;
+    
     if (config.clxSprSpr) {
         
-        checkS2SCollisions<2 * pair>(strt1, strt1 + 31);
-        checkS2SCollisions<2 * pair + 1>(strt2, strt2 + 31);
+        checkS2SCollisions<2 * pair>(strt1, strt1 + width - 1);
+        checkS2SCollisions<2 * pair + 1>(strt2, strt2 + width - 1);
+        // checkS2SCollisions<2 * pair>(strt1, strt1 + 31);
+        // checkS2SCollisions<2 * pair + 1>(strt2, strt2 + 31);
     }
     if (config.clxSprPlf) {
         
-        checkS2PCollisions<2 * pair>(strt1, strt1 + 31);
-        checkS2PCollisions<2 * pair + 1>(strt2, strt2 + 31);
+        checkS2PCollisions<2 * pair>(strt1, strt1 + width - 1);
+        checkS2PCollisions<2 * pair + 1>(strt2, strt2 + width - 1);
+        // checkS2PCollisions<2 * pair>(strt1, strt1 + 31);
+        // checkS2PCollisions<2 * pair + 1>(strt2, strt2 + 31);
     }
 }
 
@@ -1099,14 +1133,17 @@ Denise::drawSpritePixel(Pixel hpos)
 {
     assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
 
-    u8 a = (ssra[x] >> 15);
-    u8 b = (ssrb[x] >> 14) & 2;
+    // u8 a = (ssra[x] >> 15);
+    // u8 b = (ssrb[x] >> 14) & 2;
+    u8 a = u8(ssra[x] >> 63);
+    u8 b = u8(ssrb[x] >> 62) & 2;
     u8 col = a | b;
 
     if (col) {
 
         u16 z = Z_SP[x];
-        u8 base = 16 + 2 * (x & 6);
+        u8 base = u8(sprBase(x) + 2 * (x & 6));
+        // u8 base = 16 + 2 * (x & 6);
 
         if constexpr (R == Resolution::SHRES) {
 
@@ -1130,10 +1167,14 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
     assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
 
     u8 col =
-    ((ssra[x-1] >> 15) & 0b0001) |
-    ((ssrb[x-1] >> 14) & 0b0010) |
-    ((ssra[x]   >> 13) & 0b0100) |
-    ((ssrb[x]   >> 12) & 0b1000) ;
+    u8((ssra[x-1] >> 63) & 0b0001) |
+    u8((ssrb[x-1] >> 62) & 0b0010) |
+    u8((ssra[x]   >> 61) & 0b0100) |
+    u8((ssrb[x]   >> 60) & 0b1000) ;
+    // ((ssra[x-1] >> 15) & 0b0001) |
+    // ((ssrb[x-1] >> 14) & 0b0010) |
+    // ((ssra[x]   >> 13) & 0b0100) |
+    // ((ssrb[x]   >> 12) & 0b1000) ;
     
     if (col) {
 
@@ -1141,12 +1182,14 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 
         if (z > zBuffer[hpos]) {
             
-            mBuffer[hpos] = 0b10000 | col;
+            mBuffer[hpos] = sprBase(x) | col;
+            // mBuffer[hpos] = 0b10000 | col;
             zBuffer[hpos] |= z;
         }
         if (z > zBuffer[hpos+1]) {
             
-            mBuffer[hpos+1] = 0b10000 | col;
+            mBuffer[hpos+1] = sprBase(x) | col;
+            // mBuffer[hpos+1] = 0b10000 | col;
             zBuffer[hpos+1] |= z;
         }
     }
@@ -1155,7 +1198,7 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 void
 Denise::updateBorderColor()
 {
-    if (isECS() && ecsena() && brdrblnk()) {
+    if (!isOCS() && ecsena() && brdrblnk()) {
         borderColor = PixelEngine::brdrblnkColor; // Pure black
     } else {
         borderColor = 0;  // Background color

@@ -514,6 +514,35 @@ Denise::borderSprites() const
     return isAGA() && GET_BIT(bplcon3, 1) && ecsena() && !brdrblnk();
 }
 
+Pixel
+Denise::sprStrt(isize x) const
+{
+    /* With AGA scan doubling enabled, SPRxPOS bit 7 no longer contributes
+     * to the horizontal position, because it has been taken over by the
+     * scan doubling flag. The comparator ignores the corresponding bit
+     * instead of evaluating it, which is why the sprite is matched twice
+     * per line (see drawSpritePair).
+     */
+    return agnus.sscan2() ? sprhppos[x] - (sprhpos[x] & 512) : sprhppos[x];
+}
+
+isize
+Denise::sprPixelWidth() const
+{
+    if (isAGA()) {
+
+        switch ((bplcon3 >> 6) & 0b11) {
+
+            case 0b01: return 2;    // Lores
+            case 0b10: return 1;    // Hires
+            case 0b11: return 1;    // Super Hires
+            default:   break;       // Same as OCS/ECS
+        }
+    }
+
+    return res == Resolution::SHRES ? 1 : 2;
+}
+
 template void Denise::pokeBPLCON0<Accessor::CPU>(u16 value);
 template void Denise::pokeBPLCON0<Accessor::AGNUS>(u16 value);
 template void Denise::pokeBPLCON1<Accessor::CPU>(u16 value);

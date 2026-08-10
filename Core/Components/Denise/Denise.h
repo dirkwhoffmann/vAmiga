@@ -211,6 +211,10 @@ public:
     u16 sprdata[8];
     u16 sprdatb[8];
 
+    // Extended sprite data (AGA)
+    u64 sprdataExt[8];
+    u64 sprdatbExt[8];
+
     // The position and control registers of all 8 sprites
     u16 sprpos[8];
     u16 sprctl[8];
@@ -220,8 +224,8 @@ public:
     i16 sprhppos[8];
 
     // The serial shift registers of all 8 sprites
-    u16 ssra[8];
-    u16 ssrb[8];
+    u64 ssra[8];
+    u64 ssrb[8];
     
     /* Indicates which sprites are currently armed. An armed sprite is a sprite
      * that will be drawn in this line.
@@ -448,6 +452,8 @@ public:
 
         CLONE_ARRAY(sprdata)
         CLONE_ARRAY(sprdatb)
+        CLONE_ARRAY(sprdataExt)
+        CLONE_ARRAY(sprdatbExt)
         CLONE_ARRAY(sprpos)
         CLONE_ARRAY(sprctl)
         CLONE_ARRAY(sprhpos)
@@ -525,6 +531,8 @@ private:
 
         << sprdata
         << sprdatb
+        << sprdataExt
+        << sprdatbExt
         << sprpos
         << sprctl
         << sprhpos
@@ -807,6 +815,9 @@ public:
     template <isize x> void pokeSPRxDATA(u16 value);
     template <isize x> void pokeSPRxDATB(u16 value);
     
+    template <isize x> void setSPRxDATA(u16 value, u64 ext);
+    template <isize x> void setSPRxDATB(u16 value, u64 ext);
+    
     u16 peekCOLORxx(isize xx);
     u16 spypeekCOLORxx(isize xx) const;
     template <isize xx, Accessor s> void pokeCOLORxx(u16 value);
@@ -913,16 +924,21 @@ public:
 
     
     //
-    // CLXCON
+    // CLXCON, CLXCON2
     //
     
     template <int x> bool ensp() { return !!GET_BIT(clxcon, 12 + (x/2)); }
     
+    u8 enbp1() const { return (u8)(((clxcon >> 6) & 0b010101) | (clxcon2 & 0x40)); }
+    u8 enbp2() const { return (u8)(((clxcon >> 6) & 0b101010) | (clxcon2 & 0x80)); }
+    u8 mvbp1() const { return (u8)((clxcon & 0b010101) | ((clxcon2 << 6) & 0x40)); }
+    u8 mvbp2() const { return (u8)((clxcon & 0b101010) | ((clxcon2 << 6) & 0x80)); }
+    /*
     u8 enbp1() const { return (u8)((clxcon >> 6) & 0b010101); }
     u8 enbp2() const { return (u8)((clxcon >> 6) & 0b101010); }
     u8 mvbp1() const { return (u8)(clxcon & 0b010101); }
     u8 mvbp2() const { return (u8)(clxcon & 0b101010); }
-    
+    */
     
     //
     // Computing derived values
@@ -958,6 +974,17 @@ public:
     
     // Returns true when sprites can be displayed inside the border (AGA only)
     bool borderSprites() const;
+    
+private:
+    
+    // Returns the position at which a sprite starts to be drawn
+    Pixel sprStrt(isize x) const;
+
+    // Assembles a sprite shift register value
+    static u64 loadSSR(u16 value, u64 ext) { return (u64)value << 48 | ext; }
+
+    // Returns the width of a single sprite pixel
+    isize sprPixelWidth() const;
 };
 
 }
