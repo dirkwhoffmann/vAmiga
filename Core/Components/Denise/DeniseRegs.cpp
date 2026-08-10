@@ -236,7 +236,7 @@ Denise::setBPLCON4(u16 value)
 {
     logdebug(BPLREG_DEBUG, "setBPLCON4(%X)\n", value);
     
-    // TODO
+    bplcon4 = isAGA() ? value : 0;
 }
 
 u16

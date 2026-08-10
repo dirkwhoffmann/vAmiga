@@ -124,10 +124,6 @@ public:
     // Extracted from BPLCON1 to emulate horizontal scrolling
     Pixel pixelOffsetOdd;
     Pixel pixelOffsetEven;
-
-    // The extended scroll values from BPLCON1, in units of whole words (AGA only)
-    u8 scrollWordOdd;
-    u8 scrollWordEven;
     
     // Palette index for the border color (0 = background color)
     u16 borderColor;
@@ -156,6 +152,39 @@ public:
     // Flags indicating that the shift registers have been loaded
     bool armedOdd;
     bool armedEven;
+
+    
+    //
+    // AGA registers handling the extended graphics pipeline
+    //
+    
+    // AGA fetches up to four words per bitplane in a single DMA cycle.
+    // The first word is stored in bpldat, all remaining words are
+    // collected in bpldatExt (lowest word first). They are shifted into the
+    // pipeline one by one, each time a drawing cycle has been completed.
+    u64 bpldatExt[8];
+    u64 bpldatPipeExt[8];
+    u8 bpldatExtCnt;
+    u8 extCntOdd;
+    u8 extCntEven;
+
+    // In AGA, the pipeline is not reloaded when the fetched data arrives, but
+    // at the drawing cycle selected by the extended scroll bits in BPLCON1
+    // (see prepareOdd). Because Agnus fetches plane 1 last, the data registers
+    // hold a complete fetch at the time BPL1DAT is written, and only then. They
+    // are therefore snapshotted here, as the next fetch would otherwise
+    // overwrite them before the reload cycle is reached.
+    u16 bpldatLatch[8];
+    u64 bpldatLatchExt[8];
+    u8 latchExtCnt;
+
+    // Indicates that the latched data still waits for its reload cycle
+    bool latchedOdd;
+    bool latchedEven;
+
+    // The extended scroll values from BPLCON1, in units of whole words
+    u8 scrollWordOdd;
+    u8 scrollWordEven;
 
     
     //
@@ -286,14 +315,35 @@ public:
      *  SPx : Set if the pixel is solid in sprite x.
      *  _x_ : Playfield priority derived from the current value in BPLCON2.
      */
-    // Sentinel bBuffer value indicating that no border pixel is drawn
-    static constexpr u16 NO_BORDER = 0xFFFF;
+    /* Logical length of a rasterline in buffer entries. The horizontal DIW
+     * flipflop is derived by running Denise's horizontal counter across this
+     * range, so the value must not be changed (see updateBorderBuffer).
+     */
+    static constexpr isize LINE_CNT = HPIXELS + (4 * 16) + 8;
 
+    /* Additional space beyond the logical line length. It has to cover the
+     * largest pixel offset a drawing cycle can be shifted by. In AGA, the
+     * extended BPLCON1 scroll bits add up to three 16 pixel words, which is 96
+     * buffer entries (see Denise::setBPLCON1).
+     */
+    static constexpr isize OVERHANG = (4 * 16) + 8 + 96;
+
+    u8 dBuffer[HPIXELS + OVERHANG];
+    u16 bBuffer[HPIXELS + OVERHANG];
+    u8 iBuffer[HPIXELS + OVERHANG];
+    u8 mBuffer[HPIXELS + OVERHANG];
+    u16 zBuffer[HPIXELS + OVERHANG];
+    
+    /*
     u8 dBuffer[HPIXELS + (4 * 16) + 8];
     u16 bBuffer[HPIXELS + (4 * 16) + 8];
     u8 iBuffer[HPIXELS + (4 * 16) + 8];
     u8 mBuffer[HPIXELS + (4 * 16) + 8];
     u16 zBuffer[HPIXELS + (4 * 16) + 8];
+    */
+    
+    // Sentinel bBuffer value indicating that no border pixel is drawn
+    static constexpr u16 NO_BORDER = 0xFFFF;
 
     static constexpr u16 Z_0   = 0b10000000'00000000;
     static constexpr u16 Z_SP0 = 0b01000000'00000000;
@@ -369,8 +419,6 @@ public:
         CLONE(res)
         CLONE(pixelOffsetOdd)
         CLONE(pixelOffsetEven)
-        CLONE(scrollWordOdd)
-        CLONE(scrollWordEven)
         CLONE(borderColor)
         CLONE_ARRAY(bpldat)
         CLONE_ARRAY(bpldatPipe)
@@ -380,8 +428,21 @@ public:
         CLONE_ARRAY(shiftReg)
         CLONE(armedOdd)
         CLONE(armedEven)
+
+        CLONE_ARRAY(bpldatExt)
+        CLONE_ARRAY(bpldatPipeExt)
+        CLONE(bpldatExtCnt)
+        CLONE(extCntOdd)
+        CLONE(extCntEven)
+        CLONE_ARRAY(bpldatLatch)
+        CLONE_ARRAY(bpldatLatchExt)
+        CLONE(latchExtCnt)
+        CLONE(latchedOdd)
+        CLONE(latchedEven)
+        CLONE(scrollWordOdd)
+        CLONE(scrollWordEven)
+        
         CLONE(conChanges)
-        // for (isize i = 0; i < 4; i++) CLONE(sprChanges[i])
         CLONE_ARRAY(sprChanges)
         CLONE(diwChanges)
 
@@ -437,11 +498,21 @@ private:
         << res
         << pixelOffsetOdd
         << pixelOffsetEven
-        << scrollWordOdd
-        << scrollWordEven
         << borderColor
         << bpldat
         << bpldatPipe
+        << bpldatExt
+        << bpldatPipeExt
+        << bpldatExtCnt
+        << extCntOdd
+        << extCntEven
+        << bpldatLatch
+        << bpldatLatchExt
+        << latchExtCnt
+        << latchedOdd
+        << latchedEven
+        << scrollWordOdd
+        << scrollWordEven
         << clxdat
         << clxcon
         << clxcon2
@@ -534,7 +605,7 @@ public:
     // Working with the bitplane shift registers
     //
     
-public:
+private:
     
     // Transfers the bitplane pipeline registers to the shift registers
     void updateShiftRegistersOdd();
@@ -545,6 +616,17 @@ public:
     void extractSlicesOdd(u8 slices[16]);
     void extractSlicesEven(u8 slices[16]);
 
+    // AGA: Shifts the next word into the bitplane pipeline
+    void feedPipeOdd();
+    void feedPipeEven();
+
+    // AGA: Updates the pipeline in the AGA drawing path
+    void prepareOdd();
+    void prepareEven();
+
+    // Checks if the current drawing cycle is the reload cycle
+    bool isReloadCycle(u8 scrollWord) const;
+    
     
     //
     // Drawing bitplanes
