@@ -286,6 +286,7 @@ Denise::pokeBPLxDAT(u16 value)
     setBPLxDAT<x>(value);
 }
 
+/*
 template <isize x> void
 Denise::setBPLxDAT(u16 value)
 {
@@ -304,6 +305,56 @@ Denise::setBPLxDAT(u16 value)
 
         spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 4));
     }
+}
+*/
+
+template <isize x> void
+Denise::setBPLxDAT(u16 value)
+{
+    assert(x < 8);
+    logdebug(BPLDAT_DEBUG, "setBPL%ldDAT(%X)\n", x + 1, value);
+
+    bpldat[x] = value;
+
+    if constexpr (x == 0) {
+
+        if (agnus.sequencer.fetchWords > 1) {
+
+            /* In AGA, a single fetch provides data for several drawing cycles.
+             * The pipeline is not reloaded here, but at the drawing cycle
+             * selected by the extended scroll bits (see prepareOdd). Take a
+             * snapshot of the fetched data, because the next fetch may overwrite
+             * the data registers before that cycle is reached.
+             */
+            for (isize i = 0; i < 8; i++) bpldatLatch[i] = bpldat[i];
+            for (isize i = 0; i < 8; i++) bpldatLatchExt[i] = bpldatExt[i];
+            latchExtCnt = bpldatExtCnt;
+
+            latchedOdd = true;
+            latchedEven = true;
+
+        } else {
+
+            // Feed data registers into pipe
+            for (isize i = 0; i < 8; i++) bpldatPipe[i] = bpldat[i];
+            for (isize i = 0; i < 8; i++) bpldatPipeExt[i] = bpldatExt[i];
+            extCntOdd = extCntEven = bpldatExtCnt;
+
+            armedOdd = true;
+            armedEven = true;
+        }
+
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 4));
+    }
+}
+
+template <isize x> void
+Denise::setBPLxDATExt(u64 value, u8 count)
+{
+    assert(x < 8);
+
+    bpldatExt[x] = value;
+    bpldatExtCnt = count;
 }
 
 template <isize x> void
@@ -336,6 +387,7 @@ Denise::pokeSPRxCTL(u16 value)
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value } );
 }
 
+/*
 template <isize x> void
 Denise::pokeSPRxDATA(u16 value)
 {
@@ -362,6 +414,62 @@ Denise::pokeSPRxDATB(u16 value)
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
+
+    // Record the register change
+    i64 pos = agnus.pos.pixel() + 4;
+    constexpr auto reg = Reg(isize(Reg::SPR0DATB) + 4 * x);
+    sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value });
+}
+*/
+
+template <isize x> void
+Denise::pokeSPRxDATA(u16 value)
+{
+    setSPRxDATA<x>(value, 0);
+}
+
+template <isize x> void
+Denise::setSPRxDATA(u16 value, u64 ext)
+{
+    assert(x < 8);
+    logdebug(SPRREG_DEBUG, "setSPR%ldDATA(%X,%llX)\n", x, value, ext);
+    
+    // If requested, let this sprite disappear by making it transparent
+    if (GET_BIT(config.hiddenSprites, x)) { value = 0; ext = 0; }
+    
+    // Remember that the sprite was armed at least once in this rasterline
+    SET_BIT(wasArmed, x);
+
+    /* Store the AGA extension. Only the first word takes part in the register
+     * change history, because that history carries 16 bit values. The pairing
+     * is unambiguous as long as the sprite is fed by DMA, which performs a
+     * single data fetch per sprite and rasterline.
+     */
+    sprdataExt[x] = ext;
+
+    // Record the register change
+    i64 pos = agnus.pos.pixel() + 4;
+    constexpr auto reg = Reg(isize(Reg::SPR0DATA) + 4 * x);
+    sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value } );
+}
+
+template <isize x> void
+Denise::pokeSPRxDATB(u16 value)
+{
+    setSPRxDATB<x>(value, 0);
+}
+
+template <isize x> void
+Denise::setSPRxDATB(u16 value, u64 ext)
+{
+    assert(x < 8);
+    logdebug(SPRREG_DEBUG, "setSPR%ldDATB(%X,%llX)\n", x, value, ext);
+    
+    // If requested, let this sprite disappear by making it transparent
+    if (GET_BIT(config.hiddenSprites, x)) { value = 0; ext = 0; }
+
+    // Store the AGA extension (see setSPRxDATA)
+    sprdatbExt[x] = ext;
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 4;
@@ -459,7 +567,7 @@ Denise::updateScrollOffsets()
 Resolution
 Denise::resolution(u16 v)
 {
-    if (GET_BIT(v,6) && isECS()) {
+    if (GET_BIT(v,6) && !isOCS()) {
         return Resolution::SHRES;
     } else if (GET_BIT(v,15)) {
         return Resolution::HIRES;
@@ -580,6 +688,15 @@ template void Denise::setBPLxDAT<5>(u16 value);
 template void Denise::setBPLxDAT<6>(u16 value);
 template void Denise::setBPLxDAT<7>(u16 value);
 
+template void Denise::setBPLxDATExt<0>(u64 value, u8 count);
+template void Denise::setBPLxDATExt<1>(u64 value, u8 count);
+template void Denise::setBPLxDATExt<2>(u64 value, u8 count);
+template void Denise::setBPLxDATExt<3>(u64 value, u8 count);
+template void Denise::setBPLxDATExt<4>(u64 value, u8 count);
+template void Denise::setBPLxDATExt<5>(u64 value, u8 count);
+template void Denise::setBPLxDATExt<6>(u64 value, u8 count);
+template void Denise::setBPLxDATExt<7>(u64 value, u8 count);
+
 template void Denise::pokeSPRxPOS<0>(u16 value);
 template void Denise::pokeSPRxPOS<1>(u16 value);
 template void Denise::pokeSPRxPOS<2>(u16 value);
@@ -615,6 +732,24 @@ template void Denise::pokeSPRxDATB<4>(u16 value);
 template void Denise::pokeSPRxDATB<5>(u16 value);
 template void Denise::pokeSPRxDATB<6>(u16 value);
 template void Denise::pokeSPRxDATB<7>(u16 value);
+
+template void Denise::setSPRxDATA<0>(u16 value, u64 ext);
+template void Denise::setSPRxDATA<1>(u16 value, u64 ext);
+template void Denise::setSPRxDATA<2>(u16 value, u64 ext);
+template void Denise::setSPRxDATA<3>(u16 value, u64 ext);
+template void Denise::setSPRxDATA<4>(u16 value, u64 ext);
+template void Denise::setSPRxDATA<5>(u16 value, u64 ext);
+template void Denise::setSPRxDATA<6>(u16 value, u64 ext);
+template void Denise::setSPRxDATA<7>(u16 value, u64 ext);
+
+template void Denise::setSPRxDATB<0>(u16 value, u64 ext);
+template void Denise::setSPRxDATB<1>(u16 value, u64 ext);
+template void Denise::setSPRxDATB<2>(u16 value, u64 ext);
+template void Denise::setSPRxDATB<3>(u16 value, u64 ext);
+template void Denise::setSPRxDATB<4>(u16 value, u64 ext);
+template void Denise::setSPRxDATB<5>(u16 value, u64 ext);
+template void Denise::setSPRxDATB<6>(u16 value, u64 ext);
+template void Denise::setSPRxDATB<7>(u16 value, u64 ext);
 
 template void Denise::pokeCOLORxx<0, Accessor::CPU>(u16 value);
 template void Denise::pokeCOLORxx<0, Accessor::AGNUS>(u16 value);

@@ -809,7 +809,8 @@ public:
 
     template <isize x, Accessor s> void pokeBPLxDAT(u16 value);
     template <isize x> void setBPLxDAT(u16 value);
-
+    template <isize x> void setBPLxDATExt(u64 value, u8 count);
+    
     template <isize x> void pokeSPRxPOS(u16 value);
     template <isize x> void pokeSPRxCTL(u16 value);
     template <isize x> void pokeSPRxDATA(u16 value);
@@ -817,7 +818,7 @@ public:
     
     template <isize x> void setSPRxDATA(u16 value, u64 ext);
     template <isize x> void setSPRxDATB(u16 value, u64 ext);
-    
+        
     u16 peekCOLORxx(isize xx);
     u16 spypeekCOLORxx(isize xx) const;
     template <isize xx, Accessor s> void pokeCOLORxx(u16 value);
@@ -967,11 +968,11 @@ private:
     static u8 bpu(u16 v);
     u8 bpu() const { return bpu(bplcon0); }
     
+public:
+
     // Returns the first color register a sprite takes its colors from
     u8 sprBase(isize x) const;
-    
-public:
-    
+        
     // Returns true when sprites can be displayed inside the border (AGA only)
     bool borderSprites() const;
     

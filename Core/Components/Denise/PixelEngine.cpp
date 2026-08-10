@@ -115,6 +115,12 @@ PixelEngine::setColor(isize reg, u16 value, bool loct)
     setColor(reg, newColor);
 }
 
+u16
+PixelEngine::getSpriteColor(isize s, isize nr) const
+{
+    return getColor(denise.sprBase(s) + nr + 2 * (s & 6));
+}
+
 void
 PixelEngine::setColor(isize reg, AmigaColor value)
 {

@@ -564,21 +564,30 @@ template <isize nr> void
 Agnus::serviceBPLEventLores()
 {
     // Perform bitplane DMA
-    denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
+    auto value = doBitplaneDmaRead<nr>();
+    denise.setBPLxDATExt<nr>(bpldatNext[nr], bpldatNextValid[nr]);
+    denise.setBPLxDAT<nr>(value);
+    // denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
 }
 
 template <isize nr> void
 Agnus::serviceBPLEventHires()
 {
     // Perform bitplane DMA
-    denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
+    auto value = doBitplaneDmaRead<nr>();
+    denise.setBPLxDATExt<nr>(bpldatNext[nr], bpldatNextValid[nr]);
+    denise.setBPLxDAT<nr>(value);
+    // denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
 }
 
 template <isize nr> void
 Agnus::serviceBPLEventShres()
 {
     // Perform bitplane DMA
-    denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
+    auto value = doBitplaneDmaRead<nr>();
+    denise.setBPLxDATExt<nr>(bpldatNext[nr], bpldatNextValid[nr]);
+    denise.setBPLxDAT<nr>(value);
+    // denise.setBPLxDAT<nr>(doBitplaneDmaRead<nr>());
 }
 
 void

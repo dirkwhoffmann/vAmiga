@@ -215,7 +215,7 @@ public:
     u16 getColor(isize nr) const { return color[nr].getHiNibbles(); }
 
     // Returns sprite color in Amiga format
-    u16 getSpriteColor(isize s, isize nr) const { return getColor(16 + nr + 2 * (s & 6)); }
+    u16 getSpriteColor(isize s, isize nr) const;
 
 private:
     

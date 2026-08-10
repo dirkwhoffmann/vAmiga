@@ -1226,12 +1226,20 @@ Blitter::exec()
 
         } else {
 
-            clearBusyFlag();
+            if (agnus.isAGA()) {
+                if (!bltconUSED() || bltconLINE()) clearBusyFlag();
+            } else {
+                clearBusyFlag();
+            }
         }
     }
 
     if constexpr ((bool)(instr & BLTDONE)) {
 
+        if (agnus.isAGA()) {
+            if (bltconUSED() && !bltconLINE()) clearBusyFlag();
+        }
+        
         logdebug(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }

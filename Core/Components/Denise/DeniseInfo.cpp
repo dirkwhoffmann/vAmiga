@@ -120,6 +120,7 @@ Denise::_dump(Category category, std::ostream &os) const
         os << tab("SPRxCTL");
         for (isize i = 0; i < 8; i++) os << hex(sprctl[i]) << ' ';
         os << std::endl;
+        os << std::endl;
     }
 }
 
