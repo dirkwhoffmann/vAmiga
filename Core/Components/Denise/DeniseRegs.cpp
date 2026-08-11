@@ -533,7 +533,7 @@ Denise::recordColorChange(isize nr, u16 value)
          * We encode the actual target register and the value of the LOCT bit
          * in the higher bytes of the recorded reg value.
          */
-        reg |= isize(loct()) << 16 | colorBank() << 11 | nr << 8;
+        reg |= isize(loct()) << 16 | colorBank() << 13 | nr << 8;
 
     } else {
 
@@ -592,13 +592,24 @@ Denise::zPF(u16 prioBits)
 }
 
 u8
-Denise::bpu(u16 v)
+Denise::bpu(u16 v) const
 {
     // Extract the three BPU bits
     u8 bpu = (v >> 12) & 0b111;
-    
-    // An invalid value enables all 6 planes
-    return  bpu < 7 ? bpu : 6;
+ 
+    if (isAGA()) {
+        
+        // Add the fourth bit
+        if (GET_BIT(v, 4)) bpu |=0b1000;
+        
+        // An invalid value disabled all planes
+        return bpu <= 8 ? bpu : 0;
+        
+    } else {
+     
+        // An invalid value enables all 6 planes
+        return  bpu <= 6 ? bpu : 6;
+    }
 }
 
 u8

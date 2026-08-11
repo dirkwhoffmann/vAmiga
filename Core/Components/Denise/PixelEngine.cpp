@@ -129,6 +129,8 @@ PixelEngine::setColor(isize reg, AmigaColor value)
         // Update color register
         color[reg] = value;
         
+       //  printf("*** color[%ld] = %02X %02X %02X\n", reg, color[reg].r, color[reg].g, color[reg].b);
+
         // Update palette entry
         updateRGBA(reg);
         

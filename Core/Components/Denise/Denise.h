@@ -965,7 +965,7 @@ private:
      * three BPU bits stored in BPLCON0, but not identical with them. The value
      * differs if the BPU bits reflect an invalid bit pattern.
      */
-    static u8 bpu(u16 v);
+    u8 bpu(u16 v) const;
     u8 bpu() const { return bpu(bplcon0); }
     
 public:

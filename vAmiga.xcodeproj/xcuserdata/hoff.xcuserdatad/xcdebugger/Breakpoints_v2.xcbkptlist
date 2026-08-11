@@ -415,8 +415,8 @@
             filePath = "Core/Components/Denise/PixelEngine.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "PixelEngine::updateRGBA(nr)"
             landmarkType = "7">
          </BreakpointContent>
@@ -431,8 +431,8 @@
             filePath = "Core/Components/Denise/PixelEngine.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "PixelEngine::updateRGBA(nr)"
             landmarkType = "7">
          </BreakpointContent>
@@ -463,8 +463,8 @@
             filePath = "Core/Components/Denise/PixelEngine.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
             landmarkName = "PixelEngine::applyRegisterChange(change)"
             landmarkType = "7">
          </BreakpointContent>
