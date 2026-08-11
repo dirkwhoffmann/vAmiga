@@ -611,7 +611,7 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
         
         u16 bpu = (bplcon0 & 0x7000) >> 12 | (bplcon0 & 0x0010) >> 1;
         u16 fm = agnus.fmode & 0b11;
-        
+                
         switch (agnus.resolution(bplcon0)) {
                 
             case Resolution::LORES:
@@ -637,6 +637,8 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
             case Resolution::HIRES:
                 
                 fetchWords = (fm == 0b11) ? 2 : 1;
+
+                if (bpu > 4) bpu = 0;
 
                 switch (bpu) {
                         
