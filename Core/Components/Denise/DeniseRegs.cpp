@@ -197,7 +197,11 @@ Denise::setBPLCON2(u16 newValue)
 
     // Check if the KILLEHB bit has changed
     if (killehb(oldValue) ^ killehb(newValue)) {
-       pixelEngine.colChanges.insert(pixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
+
+        // The pixel engine's own timing is tuned independently of conChanges'
+        // (see translate(), which has its own, unrelated timing requirements)
+        auto colPixel = std::max(agnus.pos.pixel() - 2, Pixel(0));
+        pixelEngine.colChanges.insert(colPixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
     }
 }
 
