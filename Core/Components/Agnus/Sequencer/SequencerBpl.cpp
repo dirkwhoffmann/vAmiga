@@ -469,11 +469,7 @@ Sequencer::updateBplJumpTable(i16 end)
 #if 0
 void
 Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
-{
-    //
-    // TODO: Precompute tables in constructor
-    //
-    
+{    
     auto bpu = bplcon0 >> 12 & 0b111;
 
     /* In AGA, BPLCON0 bit 4 acts as the fourth BPU bit (BPU3). Setting it in
@@ -837,12 +833,6 @@ Sequencer::computeShresFetchUnit(u16 fmode)
         case 0b01:
         case 0b10:
 
-            /* A 32 bit fetch covers 32 super hires pixels, i.e. four color
-             * clocks, so one fetch group is four slots wide and there is room
-             * for four channels. Planes 1 and 2 keep the slots they occupied
-             * in the 16 bit case; planes 3 and 4 take the two that a 16 bit
-             * fetch had no time for.
-             */
             fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
             fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
             fetch[0][2] = channels < 4 ? EVENT_NONE : BPL_S4;
@@ -864,10 +854,6 @@ Sequencer::computeShresFetchUnit(u16 fmode)
             
         case 0b11:
 
-            /* A 64 bit fetch lasts eight color clocks, exactly one fetch
-             * unit, so every plane needs a single slot and all eight fit.
-             * The slot order is the one the lores unit uses.
-             */
             fetch[0][0] = channels < 8 ? EVENT_NONE : BPL_S8;
             fetch[0][1] = channels < 4 ? EVENT_NONE : BPL_S4;
             fetch[0][2] = channels < 6 ? EVENT_NONE : BPL_S6;

@@ -431,8 +431,8 @@ public:
     // Aligns a DMA pointer to the width of a single fetch
     // [[deprecated]] static u32 alignPtr(u32 ptr, u8 words);
     
-    // Adds the modulo to a bitplane pointer. AGA clears the low address bits
-    void addBplMod(isize plane);
+    // Adds the modulo to a bitplane pointer
+    void addBplMod(isize plane); // DEPRECATED. INLINE THIS FUNCTION
 
     // Returns the state of the AGA sprite scan doubling bit (FMODE bit 15)
     bool sscan2() const;

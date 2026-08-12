@@ -337,12 +337,8 @@ Agnus::alignPtr(u32 ptr, u8 words)
 */
 
 void
-Agnus::addBplMod(isize plane) {
-
-    // Adds the modulo to a bitplane pointer. AGA clears the low address
-    // bits before the addition, so a pointer that was set up unaligned
-    // stays truncated for the rest of the frame.
-
+Agnus::addBplMod(isize plane)
+{
     u32 p = bplpt[plane];
     U32_INC(p, (plane & 1) ? bpl2mod : bpl1mod);
     bplpt[plane] = p;
