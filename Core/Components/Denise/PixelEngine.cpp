@@ -496,7 +496,7 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
             
     // Colorize pixels
     for (Pixel i = from; i < to; i++)
-        dst[i] = palette[bbuf[i] == Denise::NO_BORDER ? mbuf[i] : bbuf[i]];
+        dst[i] = palette[bbuf[i] == BORDER_NONE ? mbuf[i] : borderPaletteIndex(bbuf[i])];
 }
 
 void
@@ -513,7 +513,7 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
         // Output two super-hires pixels as a single texel
         for (Pixel i = from; i < to; i++) {
-            dst[i] = palette[bbuf[i] == Denise::NO_BORDER ? mbuf[i] : bbuf[i]];
+            dst[i] = palette[bbuf[i] == BORDER_NONE ? mbuf[i] : borderPaletteIndex(bbuf[i])];
         }
 
     } else {
@@ -523,10 +523,10 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
             u32 *p = (u32 *)(dst + i);
 
-            if (bbuf[i] != Denise::NO_BORDER) {
+            if (bbuf[i] != BORDER_NONE) {
 
                 p[0] =
-                p[1] = u32(palette[bbuf[i]]);
+                p[1] = u32(palette[borderPaletteIndex(bbuf[i])]);
 
             } else if (Denise::isSpritePixel(zbuf[i])) {
 
@@ -556,12 +556,12 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
     for (Pixel i = from; i < to; i++) {
 
         // Check for border pixels
-        if (bbuf[i] != Denise::NO_BORDER) {
+        if (bbuf[i] != BORDER_NONE) {
 
-            dst[i] = palette[bbuf[i]];
+            dst[i] = palette[borderPaletteIndex(bbuf[i])];
 
-            // Track the border color in the hold register
-            if (bbuf[i] < 256) ham = color[bbuf[i]];
+            // Only the background code corresponds to a real color register
+            if (bbuf[i] == BORDER_BG) ham = color[0];
             continue;
         }
 
@@ -614,18 +614,18 @@ PixelEngine::colorizeHAM8(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
     for (Pixel i = from; i < to; i++) {
 
         // Check for border pixels
-        if (bbuf[i] != Denise::NO_BORDER) {
+        if (bbuf[i] != BORDER_NONE) {
 
-            dst[i] = palette[bbuf[i]];
+            dst[i] = palette[borderPaletteIndex(bbuf[i])];
 
-            // Track the border color in the hold register
-            if (bbuf[i] < 256) ham = color[bbuf[i]];
+            // Only the background code corresponds to a real color register
+            if (bbuf[i] == BORDER_BG) ham = color[0];
             continue;
         }
 
         u8 index = ibuf[i];
         assert(isPaletteIndex(index));
-        
+
         // HAM8 uses the lowest two bitplanes as control bits and the
         // remaining six as data. Because a component holds eight bits,
         // the two least significant ones are left untouched.
@@ -669,7 +669,7 @@ PixelEngine::removeBorderOverSprites(Pixel from, Pixel to)
     auto *zbuf = denise.zBuffer;
     
     for (Pixel i = from; i < to; i++) {
-        if (Denise::isSpritePixel(zbuf[i])) bbuf[i] = Denise::NO_BORDER;
+        if (Denise::isSpritePixel(zbuf[i])) bbuf[i] = BORDER_NONE;
     }
 }
 

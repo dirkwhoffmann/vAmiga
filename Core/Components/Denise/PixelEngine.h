@@ -207,7 +207,25 @@ public:
     // Special palette indices reserved for the ECS BRDRBLNK color and debugging
     static const int brdrblnkColor = 256;
     static const int borderDebugColor = 257;
-    
+
+    /* Codes stored in Denise's border pixel buffer (bBuffer). These are kept
+     * separate from the palette indices above so bBuffer can stay a single
+     * byte wide instead of having to represent the full palette range.
+     */
+    static constexpr u8 BORDER_NONE  = 0; // Not a border pixel
+    static constexpr u8 BORDER_BG    = 1; // Border drawn in the background color (register 0)
+    static constexpr u8 BORDER_BLNK  = 2; // Border drawn in pure black (ECS BRDRBLNK)
+    static constexpr u8 BORDER_DEBUG = 3; // Border drawn in the debug color
+
+    // Translates a BORDER_xxx code into the palette index it represents
+    static isize borderPaletteIndex(u8 code) {
+        switch (code) {
+            case BORDER_BLNK:  return brdrblnkColor;
+            case BORDER_DEBUG: return borderDebugColor;
+            default:           return 0; // BORDER_BG
+        }
+    }
+
     // Changes one of the 32 Amiga color registers
     void setColor(isize reg, u16 value, bool loct);
     

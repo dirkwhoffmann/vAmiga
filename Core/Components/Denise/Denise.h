@@ -125,8 +125,8 @@ public:
     Pixel pixelOffsetOdd;
     Pixel pixelOffsetEven;
     
-    // Palette index for the border color (0 = background color)
-    u16 borderColor;
+    // Border color code (one of PixelEngine::BORDER_xxx)
+    u8 borderColor;
     
     // Bitplane data registers
     u16 bpldat[8];
@@ -275,10 +275,10 @@ public:
      * bBuffer: Border pixel buffer
      *
      * This buffer is used to determine whether a border pixel has to be drawn.
-     * If the buffer contains NO_BORDER, border drawing is off for this pixel.
-     * Otherwise, the buffer contains a palette index: either the number of the
-     * color register storing the border color, or one of PixelEngine's special
-     * BRDRBLNK / debug palette entries.
+     * If the buffer contains PixelEngine::BORDER_NONE, border drawing is off
+     * for this pixel. Otherwise, it contains one of PixelEngine's other
+     * BORDER_xxx codes, which PixelEngine::borderPaletteIndex() translates
+     * into the actual palette index to draw.
      *
      * iBuffer: Color index buffer
      *
@@ -333,21 +333,18 @@ public:
     static constexpr isize OVERHANG = (4 * 16) + 8 + 96;
 
     u8 dBuffer[HPIXELS + OVERHANG];
-    u16 bBuffer[HPIXELS + OVERHANG];
+    u8 bBuffer[HPIXELS + OVERHANG];
     u8 iBuffer[HPIXELS + OVERHANG];
     u8 mBuffer[HPIXELS + OVERHANG];
     u16 zBuffer[HPIXELS + OVERHANG];
-    
+
     /*
     u8 dBuffer[HPIXELS + (4 * 16) + 8];
-    u16 bBuffer[HPIXELS + (4 * 16) + 8];
+    u8 bBuffer[HPIXELS + (4 * 16) + 8];
     u8 iBuffer[HPIXELS + (4 * 16) + 8];
     u8 mBuffer[HPIXELS + (4 * 16) + 8];
     u16 zBuffer[HPIXELS + (4 * 16) + 8];
     */
-    
-    // Sentinel bBuffer value indicating that no border pixel is drawn
-    static constexpr u16 NO_BORDER = 0xFFFF;
 
     static constexpr u16 Z_0   = 0b10000000'00000000;
     static constexpr u16 Z_SP0 = 0b01000000'00000000;

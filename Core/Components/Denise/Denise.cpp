@@ -28,7 +28,7 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 void
 Denise::_didReset(bool hard)
 {
-    std::fill(std::begin(bBuffer), std::end(bBuffer), NO_BORDER);
+    std::memset(bBuffer, PixelEngine::BORDER_NONE, sizeof(bBuffer));
     std::memset(dBuffer, 0, sizeof(dBuffer));
     std::memset(iBuffer, 0, sizeof(iBuffer));
     std::memset(mBuffer, 0, sizeof(mBuffer));
@@ -1199,12 +1199,12 @@ void
 Denise::updateBorderColor()
 {
     if (!isOCS() && ecsena() && brdrblnk()) {
-        borderColor = PixelEngine::brdrblnkColor; // Pure black
+        borderColor = PixelEngine::BORDER_BLNK; // Pure black
     } else {
-        borderColor = 0;  // Background color
+        borderColor = PixelEngine::BORDER_BG;   // Background color
     }
     if constexpr (debug::BORDER_DEBUG) {
-        borderColor = PixelEngine::borderDebugColor; // Debug color
+        borderColor = PixelEngine::BORDER_DEBUG; // Debug color
     }
 }
 
@@ -1235,7 +1235,6 @@ Denise::updateBorderBuffer()
     auto trigger = diwChanges.trigger();
 
     for (isize i = 0; i < LINE_CNT; i++) {
-    // for (isize i = 0; i < isize(std::size(bBuffer)); i++) {
 
         // Update comparison values if needed
         if (i == trigger) {
@@ -1290,7 +1289,7 @@ Denise::updateBorderBuffer()
         }
 
         // Set the border mask
-        bBuffer[i] = hf ? NO_BORDER : borderColor;
+        bBuffer[i] = hf ? PixelEngine::BORDER_NONE : borderColor;
     }
 
     // Check if the hflop has a different value at the end of the line
