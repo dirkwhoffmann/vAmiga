@@ -147,9 +147,6 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Determine the new bitmap resolution
     res = resolution(newValue);
-
-    // Update border color index, because the ECSENA bit might have changed
-    updateBorderColor();
 }
 
 template <Accessor s> void
@@ -218,9 +215,6 @@ Denise::setBPLCON3(u16 value)
     logdebug(BPLREG_DEBUG, "setBPLCON3(%X)\n", value);
 
     bplcon3 = value;
-    
-    // Update border color index, because the BRDRBLNK bit might have changed
-    updateBorderColor();
 }
 
 template <Accessor s> void

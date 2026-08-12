@@ -125,9 +125,6 @@ public:
     Pixel pixelOffsetOdd;
     Pixel pixelOffsetEven;
     
-    // Border color code (one of PixelEngine::BORDER_xxx)
-    u8 borderColor;
-    
     // Bitplane data registers
     u16 bpldat[8];
     
@@ -412,7 +409,6 @@ public:
         CLONE(res)
         CLONE(pixelOffsetOdd)
         CLONE(pixelOffsetEven)
-        CLONE(borderColor)
         CLONE_ARRAY(bpldat)
         CLONE_ARRAY(bpldatPipe)
         CLONE(clxdat)
@@ -493,7 +489,6 @@ private:
         << res
         << pixelOffsetOdd
         << pixelOffsetEven
-        << borderColor
         << bpldat
         << bpldatPipe
         << bpldatExt
@@ -671,8 +666,8 @@ private:
     
 private:
     
-    // Determines the color register index for drawing the border
-    void updateBorderColor();
+    // Determines the border color code (one of PixelEngine::BORDER_xxx)
+    u8 borderColor();
 
     // Updates the border pixel mask (called by the hsync handler)
     void updateBorderBuffer();

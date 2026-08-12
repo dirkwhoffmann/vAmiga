@@ -1195,17 +1195,18 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
     }
 }
 
-void
-Denise::updateBorderColor()
+u8
+Denise::borderColor()
 {
-    if (!isOCS() && ecsena() && brdrblnk()) {
-        borderColor = PixelEngine::BORDER_BLNK; // Pure black
-    } else {
-        borderColor = PixelEngine::BORDER_BG;   // Background color
-    }
     if constexpr (debug::BORDER_DEBUG) {
-        borderColor = PixelEngine::BORDER_DEBUG; // Debug color
+        return PixelEngine::BORDER_DEBUG; // Debug color
     }
+
+    if (!isOCS() && ecsena() && brdrblnk()) {
+        return PixelEngine::BORDER_BLNK; // Pure black
+    }
+
+    return PixelEngine::BORDER_BG; // Background color
 }
 
 void
@@ -1214,6 +1215,9 @@ Denise::updateBorderBuffer()
     // Only proceed if the buffer is dirty
     if (!borderBufferIsDirty) return;
     denise.borderBufferIsDirty--;
+
+    // Determine the border color for this rasterline
+    auto borderColor = this->borderColor();
 
     // Get the current value of the horizontal DIW flipflop
     auto hf = hflop;
