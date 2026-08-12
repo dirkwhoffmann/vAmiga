@@ -111,12 +111,18 @@ private:
      */
     Texel borderPalette[4];
 
-    // Indicates whether HAM mode or SHRES mode is enabled
-    bool hamMode;
-    bool hamMode8;
-    bool shresMode;
+    /* Snapshots of BPLCON0 and BPLCON2 as of the most recently replayed
+     * register change (see applyRegisterChange). All video-mode decisions
+     * that can change mid-rasterline (HAM, HAM8, SHRES, EHB) are computed
+     * from these two snapshots instead of Denise's live registers, since the
+     * live registers already hold the end-of-line value by the time a line
+     * is colorized and would give wrong answers for earlier register changes
+     * replayed within the same line.
+     */
+    u16 bplcon0;
+    u16 bplcon2;
 
-    
+
     //
     // Register change history buffer
     //
@@ -144,9 +150,8 @@ public:
         CLONE_ARRAY(gammaLut)
         CLONE(colChanges)
         CLONE_ARRAY(color)
-        CLONE(hamMode)
-        CLONE(hamMode8)
-        CLONE(shresMode)
+        CLONE(bplcon0)
+        CLONE(bplcon2)
         CLONE_ARRAY(palette)
         CLONE_ARRAY(borderPalette)
 
@@ -167,9 +172,8 @@ private:
 
         << colChanges
         << color
-        << hamMode
-        << hamMode8
-        << shresMode;
+        << bplcon0
+        << bplcon2;
 
     } SERIALIZERS(serialize);
 
@@ -227,10 +231,23 @@ public:
     u16 getSpriteColor(isize s, isize nr) const;
 
 private:
-    
+
     void setColor(isize reg, AmigaColor value);
 
-    
+
+    //
+    // Derived video modes
+    //
+
+private:
+
+    // Computed from the tracked bplcon0 / bplcon2 snapshots
+    bool hamMode() const;
+    bool hamMode8() const;
+    bool shresMode() const;
+    bool ehbMode() const;
+
+
     //
     // Using the color lookup table
     //

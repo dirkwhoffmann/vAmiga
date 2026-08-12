@@ -142,38 +142,10 @@ PixelEngine::updateRGBA(isize nr)
 {
     assert(nr < 256);
  
-    if (nr >= 32 && nr < 64) {
-        
-        //
-        // EHB range
-        //
-        
-        bool ehb = false;
-        
-        switch (denise.getConfig().revision) {
-                
-            case DeniseRev::OCS:
-                
-                ehb = true;
-                break;
-                
-            case DeniseRev::ECS:
-                
-                ehb = !denise.killehb();
-                break;
-                
-            default: { // AGA
-                
-                ehb = !denise.killehb() && (denise.bplcon0 & 0x7010) == 0x6000;
-                break;
-            }
-        }
-        
-        if (ehb) {
-            
-            palette[nr] = toTexel(color[nr - 32].ehb());
-            return;
-        }
+    if (nr >= 32 && nr < 64 && ehbMode()) {
+
+        palette[nr] = toTexel(color[nr - 32].ehb());
+        return;
     }
     
     palette[nr] = toTexel(color[nr]);
@@ -197,6 +169,43 @@ PixelEngine::updateEHB()
 {
     // TODO: This function is called frequently. Inline to speed it up
     for (isize i = 32; i < 64; ++i) updateRGBA(i);
+}
+
+bool
+PixelEngine::hamMode() const
+{
+    return Denise::ham(bplcon0);
+}
+
+bool
+PixelEngine::hamMode8() const
+{
+    return Denise::ham8(bplcon0);
+}
+
+bool
+PixelEngine::shresMode() const
+{
+    return Denise::shres(bplcon0);
+}
+
+bool
+PixelEngine::ehbMode() const
+{
+    switch (denise.getConfig().revision) {
+
+        case DeniseRev::OCS:
+
+            return true;
+
+        case DeniseRev::ECS:
+
+            return !Denise::killehb(bplcon2);
+
+        default: // AGA
+
+            return !Denise::killehb(bplcon2) && (bplcon0 & 0x7010) == 0x6000;
+    }
 }
 
 Texel
@@ -423,14 +432,13 @@ PixelEngine::applyRegisterChange(const RegChange &change)
 
         case Reg::BPLCON0:
 
-            hamMode = Denise::ham(change.value);
-            hamMode8 = Denise::ham8(change.value);
-            shresMode = Denise::shres(change.value);
+            bplcon0 = change.value;
             updateEHB();
             break;
-            
+
         case Reg::BPLCON2:
 
+            bplcon2 = change.value;
             updateEHB();
             break;
 
@@ -462,11 +470,11 @@ PixelEngine::colorize(isize line)
         RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
-        if (shresMode) {
+        if (shresMode()) {
             colorizeSHRES(dst, pixel, trigger);
-        } else if (hamMode8) {
+        } else if (hamMode8()) {
             colorizeHAM8(dst, pixel, trigger, hold);
-        } else if (hamMode) {
+        } else if (hamMode()) {
             colorizeHAM(dst, pixel, trigger, hold);
         } else {
             colorize(dst, pixel, trigger);
