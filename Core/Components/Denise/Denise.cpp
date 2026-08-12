@@ -611,7 +611,7 @@ void
 Denise::drawShresOdd()
 {
     if (isAGA()) prepareOdd();
-    
+
     if (armedOdd) {
 
         updateShiftRegistersOdd();

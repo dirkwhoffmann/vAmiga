@@ -287,7 +287,11 @@ enum EventID : u8
     BPL_H7_MOD          = 0x88,
     BPL_H8              = 0x8C,
     BPL_H8_MOD          = 0x90,
-    BPL_EVENT_COUNT     = 0x94,
+    BPL_S3              = 0x94,
+    BPL_S3_MOD          = 0x98,
+    BPL_S4              = 0x9C,
+    BPL_S4_MOD          = 0xA0,
+    BPL_EVENT_COUNT     = 0xA4,
     
     // DAS slot
     DAS_REFRESH         = 1,

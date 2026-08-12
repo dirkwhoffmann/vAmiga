@@ -551,6 +551,24 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_S2_MOD | DRAW_EVEN:    SH_MOD_EVEN(1); break;
         case BPL_S2_MOD | DRAW_BOTH:    SH_MOD_BOTH(1); break;
 
+        case BPL_S3:                    SH_NONE(2);     break;
+        case BPL_S3     | DRAW_ODD:     SH_ODD(2);      break;
+        case BPL_S3     | DRAW_EVEN:    SH_EVEN(2);     break;
+        case BPL_S3     | DRAW_BOTH:    SH_BOTH(2);     break;
+        case BPL_S3_MOD:                SH_MOD(2);      break;
+        case BPL_S3_MOD | DRAW_ODD:     SH_MOD_ODD(2);  break;
+        case BPL_S3_MOD | DRAW_EVEN:    SH_MOD_EVEN(2); break;
+        case BPL_S3_MOD | DRAW_BOTH:    SH_MOD_BOTH(2); break;
+
+        case BPL_S4:                    SH_NONE(3);     break;
+        case BPL_S4     | DRAW_ODD:     SH_ODD(3);      break;
+        case BPL_S4     | DRAW_EVEN:    SH_EVEN(3);     break;
+        case BPL_S4     | DRAW_BOTH:    SH_BOTH(3);     break;
+        case BPL_S4_MOD:                SH_MOD(3);      break;
+        case BPL_S4_MOD | DRAW_ODD:     SH_MOD_ODD(3);  break;
+        case BPL_S4_MOD | DRAW_EVEN:    SH_MOD_EVEN(3); break;
+        case BPL_S4_MOD | DRAW_BOTH:    SH_MOD_BOTH(3); break;
+
         default:
             dump(Category::Dma);
             fatalError;

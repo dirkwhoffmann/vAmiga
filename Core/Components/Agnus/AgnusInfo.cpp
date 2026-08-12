@@ -195,6 +195,24 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case BPL_S2_MOD | DRAW_EVEN:    return "BPL_S2*[E]";
                 case BPL_S2_MOD | DRAW_BOTH:    return "BPL_S2*[OE]";
 
+                case BPL_S3:                    return "BPL_S3";
+                case BPL_S3 | DRAW_ODD:         return "BPL_S3 [O]";
+                case BPL_S3 | DRAW_EVEN:        return "BPL_S3 [E]";
+                case BPL_S3 | DRAW_BOTH:        return "BPL_S3 [OE]";
+                case BPL_S3_MOD:                return "BPL_S3*";
+                case BPL_S3_MOD | DRAW_ODD:     return "BPL_S3*[O]";
+                case BPL_S3_MOD | DRAW_EVEN:    return "BPL_S3*[E]";
+                case BPL_S3_MOD | DRAW_BOTH:    return "BPL_S3*[OE]";
+
+                case BPL_S4:                    return "BPL_S4";
+                case BPL_S4 | DRAW_ODD:         return "BPL_S4 [O]";
+                case BPL_S4 | DRAW_EVEN:        return "BPL_S4 [E]";
+                case BPL_S4 | DRAW_BOTH:        return "BPL_S4 [OE]";
+                case BPL_S4_MOD:                return "BPL_S4*";
+                case BPL_S4_MOD | DRAW_ODD:     return "BPL_S4*[O]";
+                case BPL_S4_MOD | DRAW_EVEN:    return "BPL_S4*[E]";
+                case BPL_S4_MOD | DRAW_BOTH:    return "BPL_S4*[OE]";
+
                 default:                        return "*** INVALID ***";
             }
             break;
