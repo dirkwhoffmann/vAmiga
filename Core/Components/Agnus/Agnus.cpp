@@ -323,6 +323,7 @@ Agnus::sprFetchWords() const
     return 1;
 }
 
+/*
 u32
 Agnus::alignPtr(u32 ptr, u8 words)
 {
@@ -333,6 +334,7 @@ Agnus::alignPtr(u32 ptr, u8 words)
     
     return ptr & ~u32(2 * words - 1);
 }
+*/
 
 void
 Agnus::addBplMod(isize plane) {
@@ -342,7 +344,6 @@ Agnus::addBplMod(isize plane) {
     // stays truncated for the rest of the frame.
 
     u32 p = bplpt[plane];
-    if (isAGA()) p = alignPtr(p, bplFetchWords());
     U32_INC(p, (plane & 1) ? bpl2mod : bpl1mod);
     bplpt[plane] = p;
 }

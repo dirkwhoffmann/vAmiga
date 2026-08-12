@@ -127,17 +127,27 @@ Agnus::doBitplaneDmaRead()
             bpldatNextValid[bitplane] = 0;
             break;
             
-        case 2:
+        case 2: {
             
-            bpldatNext[bitplane] = mem.peek32rev<Accessor::AGNUS>(bplpt[bitplane]);
+            u64 w0 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane]);
+            u64 w1 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane] | 0b010);
+
+            bpldatNext[bitplane] = w1 << 16 | w0;
             bpldatNextValid[bitplane] = 1;
             break;
+        }
             
-        case 4:
+        case 4: {
+            
+            u64 w0 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane]);
+            u64 w1 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane] | 0b010);
+            u64 w2 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane] | 0b100);
+            u64 w3 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane] | 0b110);
 
-            bpldatNext[bitplane] = mem.peek64rev<Accessor::AGNUS>(bplpt[bitplane]);
+            bpldatNext[bitplane] = w3 << 48 | w2 << 32 | w1 << 16 | w0;
             bpldatNextValid[bitplane] = 3;
             break;
+        }
 
         default:
             fatalError;
