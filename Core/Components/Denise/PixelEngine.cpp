@@ -132,7 +132,7 @@ PixelEngine::setColor(isize reg, AmigaColor value)
         // Update palette entry
         updateRGBA(reg);
         
-        // Update halfbright palette entry
+        // Update halfbright palette entry if needed
         if (reg < 32) updateRGBA(reg + 32);
     }
 }

@@ -136,7 +136,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     conChanges.insert(pixel, change);
     
     // If the change affects color, record it the change in the pixel engine, too
-    if ((oldValue ^ newValue) & 0x8C50) {
+    if ((oldValue ^ newValue) & 0xFC50) {
         
         change.accessor = Accessor::DENISE;
         pixelEngine.colChanges.insert(pixel, change);
