@@ -569,6 +569,42 @@ Agnus::serviceBPLEvent(EventID id)
         case BPL_S4_MOD | DRAW_EVEN:    SH_MOD_EVEN(3); break;
         case BPL_S4_MOD | DRAW_BOTH:    SH_MOD_BOTH(3); break;
 
+        case BPL_S5:                    SH_NONE(4);     break;
+        case BPL_S5     | DRAW_ODD:     SH_ODD(4);      break;
+        case BPL_S5     | DRAW_EVEN:    SH_EVEN(4);     break;
+        case BPL_S5     | DRAW_BOTH:    SH_BOTH(4);     break;
+        case BPL_S5_MOD:                SH_MOD(4);      break;
+        case BPL_S5_MOD | DRAW_ODD:     SH_MOD_ODD(4);  break;
+        case BPL_S5_MOD | DRAW_EVEN:    SH_MOD_EVEN(4); break;
+        case BPL_S5_MOD | DRAW_BOTH:    SH_MOD_BOTH(4); break;
+
+        case BPL_S6:                    SH_NONE(5);     break;
+        case BPL_S6     | DRAW_ODD:     SH_ODD(5);      break;
+        case BPL_S6     | DRAW_EVEN:    SH_EVEN(5);     break;
+        case BPL_S6     | DRAW_BOTH:    SH_BOTH(5);     break;
+        case BPL_S6_MOD:                SH_MOD(5);      break;
+        case BPL_S6_MOD | DRAW_ODD:     SH_MOD_ODD(5);  break;
+        case BPL_S6_MOD | DRAW_EVEN:    SH_MOD_EVEN(5); break;
+        case BPL_S6_MOD | DRAW_BOTH:    SH_MOD_BOTH(5); break;
+
+        case BPL_S7:                    SH_NONE(6);     break;
+        case BPL_S7     | DRAW_ODD:     SH_ODD(6);      break;
+        case BPL_S7     | DRAW_EVEN:    SH_EVEN(6);     break;
+        case BPL_S7     | DRAW_BOTH:    SH_BOTH(6);     break;
+        case BPL_S7_MOD:                SH_MOD(6);      break;
+        case BPL_S7_MOD | DRAW_ODD:     SH_MOD_ODD(6);  break;
+        case BPL_S7_MOD | DRAW_EVEN:    SH_MOD_EVEN(6); break;
+        case BPL_S7_MOD | DRAW_BOTH:    SH_MOD_BOTH(6); break;
+
+        case BPL_S8:                    SH_NONE(7);     break;
+        case BPL_S8     | DRAW_ODD:     SH_ODD(7);      break;
+        case BPL_S8     | DRAW_EVEN:    SH_EVEN(7);     break;
+        case BPL_S8     | DRAW_BOTH:    SH_BOTH(7);     break;
+        case BPL_S8_MOD:                SH_MOD(7);      break;
+        case BPL_S8_MOD | DRAW_ODD:     SH_MOD_ODD(7);  break;
+        case BPL_S8_MOD | DRAW_EVEN:    SH_MOD_EVEN(7); break;
+        case BPL_S8_MOD | DRAW_BOTH:    SH_MOD_BOTH(7); break;
+
         default:
             dump(Category::Dma);
             fatalError;

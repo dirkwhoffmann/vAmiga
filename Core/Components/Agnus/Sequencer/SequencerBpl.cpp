@@ -660,19 +660,7 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
                 fetchUnitSize = 1;
 
-                /* Super hires supports at most four bitplanes, and only two
-                 * of them fit into a 16 bit fetch: a super hires pixel is a
-                 * quarter of a lores pixel, so a plane needs a word every two
-                 * color clocks and there is no room for more channels. A
-                 * wider fetch buys the slots for the other two.
-                 *
-                 * Measured on an A1200 (Agnus/AGA/shres): two bitplanes at
-                 * FMODE = 0, four at FMODE = 1. Asking for more paints
-                 * nothing at all rather than degrading, which is how the
-                 * hires path behaves above.
-                 */
-                if (bpu > 4) bpu = 0;
-                if (fm == 0b00 && bpu > 2) bpu = 0;
+                if (bpu > ((fm == 0b11) ? 8 : (fm == 0b00) ? 2 : 4)) bpu = 0;
 
                 switch (bpu) {
                         
@@ -680,6 +668,10 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                     case 2: computeShresFetchUnit <2> (fm); break;
                     case 3: computeShresFetchUnit <3> (fm); break;
                     case 4: computeShresFetchUnit <4> (fm); break;
+                    case 5: computeShresFetchUnit <5> (fm); break;
+                    case 6: computeShresFetchUnit <6> (fm); break;
+                    case 7: computeShresFetchUnit <7> (fm); break;
+                    case 8: computeShresFetchUnit <8> (fm); break;
                         
                     default:
                         computeShresFetchUnit <0> (fm); break;
@@ -872,17 +864,27 @@ Sequencer::computeShresFetchUnit(u16 fmode)
             
         case 0b11:
 
-            // A 64 bit fetch covers eight color clocks, so the whole unit is
-            // one fetch group and the four channels sit in its first slots.
-            fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
-            fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
-            fetch[0][2] = channels < 4 ? EVENT_NONE : BPL_S4;
-            fetch[0][3] = channels < 3 ? EVENT_NONE : BPL_S3;
-            
-            fetch[1][0] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
-            fetch[1][1] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
-            fetch[1][2] = channels < 4 ? EVENT_NONE : BPL_S4_MOD;
-            fetch[1][3] = channels < 3 ? EVENT_NONE : BPL_S3_MOD;
+            /* A 64 bit fetch lasts eight color clocks, exactly one fetch
+             * unit, so every plane needs a single slot and all eight fit.
+             * The slot order is the one the lores unit uses.
+             */
+            fetch[0][0] = channels < 8 ? EVENT_NONE : BPL_S8;
+            fetch[0][1] = channels < 4 ? EVENT_NONE : BPL_S4;
+            fetch[0][2] = channels < 6 ? EVENT_NONE : BPL_S6;
+            fetch[0][3] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][4] = channels < 7 ? EVENT_NONE : BPL_S7;
+            fetch[0][5] = channels < 3 ? EVENT_NONE : BPL_S3;
+            fetch[0][6] = channels < 5 ? EVENT_NONE : BPL_S5;
+            fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_S1;
+
+            fetch[1][0] = channels < 8 ? EVENT_NONE : BPL_S8_MOD;
+            fetch[1][1] = channels < 4 ? EVENT_NONE : BPL_S4_MOD;
+            fetch[1][2] = channels < 6 ? EVENT_NONE : BPL_S6_MOD;
+            fetch[1][3] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
+            fetch[1][4] = channels < 7 ? EVENT_NONE : BPL_S7_MOD;
+            fetch[1][5] = channels < 3 ? EVENT_NONE : BPL_S3_MOD;
+            fetch[1][6] = channels < 5 ? EVENT_NONE : BPL_S5_MOD;
+            fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
             break;
     }
 }

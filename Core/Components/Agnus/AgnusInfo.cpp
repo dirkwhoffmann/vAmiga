@@ -213,6 +213,42 @@ Agnus::eventName(EventSlot slot, EventID id)
                 case BPL_S4_MOD | DRAW_EVEN:    return "BPL_S4*[E]";
                 case BPL_S4_MOD | DRAW_BOTH:    return "BPL_S4*[OE]";
 
+                case BPL_S5:                    return "BPL_S5";
+                case BPL_S5 | DRAW_ODD:         return "BPL_S5 [O]";
+                case BPL_S5 | DRAW_EVEN:        return "BPL_S5 [E]";
+                case BPL_S5 | DRAW_BOTH:        return "BPL_S5 [OE]";
+                case BPL_S5_MOD:                return "BPL_S5*";
+                case BPL_S5_MOD | DRAW_ODD:     return "BPL_S5*[O]";
+                case BPL_S5_MOD | DRAW_EVEN:    return "BPL_S5*[E]";
+                case BPL_S5_MOD | DRAW_BOTH:    return "BPL_S5*[OE]";
+
+                case BPL_S6:                    return "BPL_S6";
+                case BPL_S6 | DRAW_ODD:         return "BPL_S6 [O]";
+                case BPL_S6 | DRAW_EVEN:        return "BPL_S6 [E]";
+                case BPL_S6 | DRAW_BOTH:        return "BPL_S6 [OE]";
+                case BPL_S6_MOD:                return "BPL_S6*";
+                case BPL_S6_MOD | DRAW_ODD:     return "BPL_S6*[O]";
+                case BPL_S6_MOD | DRAW_EVEN:    return "BPL_S6*[E]";
+                case BPL_S6_MOD | DRAW_BOTH:    return "BPL_S6*[OE]";
+
+                case BPL_S7:                    return "BPL_S7";
+                case BPL_S7 | DRAW_ODD:         return "BPL_S7 [O]";
+                case BPL_S7 | DRAW_EVEN:        return "BPL_S7 [E]";
+                case BPL_S7 | DRAW_BOTH:        return "BPL_S7 [OE]";
+                case BPL_S7_MOD:                return "BPL_S7*";
+                case BPL_S7_MOD | DRAW_ODD:     return "BPL_S7*[O]";
+                case BPL_S7_MOD | DRAW_EVEN:    return "BPL_S7*[E]";
+                case BPL_S7_MOD | DRAW_BOTH:    return "BPL_S7*[OE]";
+
+                case BPL_S8:                    return "BPL_S8";
+                case BPL_S8 | DRAW_ODD:         return "BPL_S8 [O]";
+                case BPL_S8 | DRAW_EVEN:        return "BPL_S8 [E]";
+                case BPL_S8 | DRAW_BOTH:        return "BPL_S8 [OE]";
+                case BPL_S8_MOD:                return "BPL_S8*";
+                case BPL_S8_MOD | DRAW_ODD:     return "BPL_S8*[O]";
+                case BPL_S8_MOD | DRAW_EVEN:    return "BPL_S8*[E]";
+                case BPL_S8_MOD | DRAW_BOTH:    return "BPL_S8*[OE]";
+
                 default:                        return "*** INVALID ***";
             }
             break;
