@@ -52,13 +52,11 @@ PixelEngine::_dump(Category category, std::ostream &os) const
 void
 PixelEngine::_initialize()
 {
-    // Setup ECS BRDRBLNK color
-    palette[brdrblnkColor] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
+    // Setup the ECS BRDRBLNK color (BORDER_BG is mirrored in updateRGBA)
+    borderPalette[BORDER_BLNK] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
 
-    // Setup debug colors
-    palette[borderDebugColor] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
-    palette[borderDebugColor + 1] = TEXEL(GpuColor(0xA0, 0x00, 0x00).rawValue);
-    palette[borderDebugColor + 2] = TEXEL(GpuColor(0x90, 0x00, 0x00).rawValue);
+    // Setup the border debug color
+    borderPalette[BORDER_DEBUG] = TEXEL(GpuColor(0xD0, 0x00, 0x00).rawValue);
 }
 
 void
@@ -179,6 +177,9 @@ PixelEngine::updateRGBA(isize nr)
     }
     
     palette[nr] = toTexel(color[nr]);
+
+    // Keep the background border color in sync with color register 0
+    if (nr == 0) borderPalette[BORDER_BG] = palette[0];
 }
 
 void
@@ -496,7 +497,7 @@ PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
             
     // Colorize pixels
     for (Pixel i = from; i < to; i++)
-        dst[i] = palette[bbuf[i] == BORDER_NONE ? mbuf[i] : borderPaletteIndex(bbuf[i])];
+        dst[i] = bbuf[i] == BORDER_NONE ? palette[mbuf[i]] : borderPalette[bbuf[i]];
 }
 
 void
@@ -513,7 +514,7 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
 
         // Output two super-hires pixels as a single texel
         for (Pixel i = from; i < to; i++) {
-            dst[i] = palette[bbuf[i] == BORDER_NONE ? mbuf[i] : borderPaletteIndex(bbuf[i])];
+            dst[i] = bbuf[i] == BORDER_NONE ? palette[mbuf[i]] : borderPalette[bbuf[i]];
         }
 
     } else {
@@ -526,7 +527,7 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
             if (bbuf[i] != BORDER_NONE) {
 
                 p[0] =
-                p[1] = u32(palette[borderPaletteIndex(bbuf[i])]);
+                p[1] = u32(borderPalette[bbuf[i]]);
 
             } else if (Denise::isSpritePixel(zbuf[i])) {
 
@@ -558,7 +559,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         // Check for border pixels
         if (bbuf[i] != BORDER_NONE) {
 
-            dst[i] = palette[borderPaletteIndex(bbuf[i])];
+            dst[i] = borderPalette[bbuf[i]];
 
             // Only the background code corresponds to a real color register
             if (bbuf[i] == BORDER_BG) ham = color[0];
@@ -616,7 +617,7 @@ PixelEngine::colorizeHAM8(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         // Check for border pixels
         if (bbuf[i] != BORDER_NONE) {
 
-            dst[i] = palette[borderPaletteIndex(bbuf[i])];
+            dst[i] = borderPalette[bbuf[i]];
 
             // Only the background code corresponds to a real color register
             if (bbuf[i] == BORDER_BG) ham = color[0];

@@ -277,8 +277,8 @@ public:
      * This buffer is used to determine whether a border pixel has to be drawn.
      * If the buffer contains PixelEngine::BORDER_NONE, border drawing is off
      * for this pixel. Otherwise, it contains one of PixelEngine's other
-     * BORDER_xxx codes, which PixelEngine::borderPaletteIndex() translates
-     * into the actual palette index to draw.
+     * BORDER_xxx codes, which directly indexes PixelEngine::borderPalette[]
+     * to obtain the color to draw.
      *
      * iBuffer: Color index buffer
      *
@@ -337,14 +337,6 @@ public:
     u8 iBuffer[HPIXELS + OVERHANG];
     u8 mBuffer[HPIXELS + OVERHANG];
     u16 zBuffer[HPIXELS + OVERHANG];
-
-    /*
-    u8 dBuffer[HPIXELS + (4 * 16) + 8];
-    u8 bBuffer[HPIXELS + (4 * 16) + 8];
-    u8 iBuffer[HPIXELS + (4 * 16) + 8];
-    u8 mBuffer[HPIXELS + (4 * 16) + 8];
-    u16 zBuffer[HPIXELS + (4 * 16) + 8];
-    */
 
     static constexpr u16 Z_0   = 0b10000000'00000000;
     static constexpr u16 Z_SP0 = 0b01000000'00000000;
