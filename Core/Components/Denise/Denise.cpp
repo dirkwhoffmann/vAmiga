@@ -249,7 +249,7 @@ bool
 Denise::isReloadCycle(u8 scrollWord) const
 {
     // Determine the size of the fetch unit
-    auto words = agnus.sequencer.fetchWords;
+    auto words = agnus.sequencer.getFetchUnitSize();
     assert(words == 1 || words == 2 || words == 4);
     
     // Determine the length of a drawing cycle in DMA cycles

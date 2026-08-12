@@ -1999,23 +1999,19 @@ Memory::peek32(u32 addr)
 template <Accessor acc> u64
 Memory::peek64(u32 addr)
 {
-    u32 aligned = addr & ~0b11;
+    u64 b1 = peek16<acc>(addr);
+    u64 b2 = peek16<acc>(addr + 2);
+    u64 b3 = peek16<acc>(addr + 4);
+    u64 b4 = peek16<acc>(addr + 6);
     
-    u16 b1 = peek16<acc>(aligned);
-    u16 b2 = peek16<acc>(aligned + 2);
-    u16 b3 = peek16<acc>(aligned + 4);
-    u16 b4 = peek16<acc>(aligned + 6);
-    
-    return b1 << 24 | b2 << 16 | b3 << 8 | b4;
+    return b1 << 48 | b2 << 32 | b3 << 16 | b4;
 }
 
 template <Accessor acc> u32
 Memory::peek32rev(u32 addr)
 {
-    u32 aligned = addr & ~0b1;
-    
-    u16 b1 = peek16<acc>(aligned);
-    u16 b2 = peek16<acc>(aligned + 2);
+    u32 b1 = peek16<acc>(addr);
+    u32 b2 = peek16<acc>(addr + 2);
     
     return b2 << 16 | b1;
 }
@@ -2023,14 +2019,12 @@ Memory::peek32rev(u32 addr)
 template <Accessor acc> u64
 Memory::peek64rev(u32 addr)
 {
-    u32 aligned = addr & ~0b11;
+    u64 b1 = peek16<acc>(addr);
+    u64 b2 = peek16<acc>(addr + 2);
+    u64 b3 = peek16<acc>(addr + 4);
+    u64 b4 = peek16<acc>(addr + 6);
     
-    u16 b1 = peek16<acc>(aligned);
-    u16 b2 = peek16<acc>(aligned + 2);
-    u16 b3 = peek16<acc>(aligned + 4);
-    u16 b4 = peek16<acc>(aligned + 6);
-    
-    return b4 << 24 | b3 << 16 | b2 << 8 | b1;
+    return b4 << 48 | b3 << 32 | b2 << 16 | b1;
 }
 
 u8

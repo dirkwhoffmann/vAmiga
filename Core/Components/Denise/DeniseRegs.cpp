@@ -318,7 +318,7 @@ Denise::setBPLxDAT(u16 value)
 
     if constexpr (x == 0) {
 
-        if (agnus.sequencer.fetchWords > 1) {
+        if (agnus.bplFetchWords() > 1) {
 
             /* In AGA, a single fetch provides data for several drawing cycles.
              * The pipeline is not reloaded here, but at the drawing cycle

@@ -290,22 +290,37 @@ Agnus::resolution(u16 v)
 u8
 Agnus::bplFetchWords() const
 {
-    return sequencer.fetchWords;
+    if (isAGA()) {
+        
+        // AGA encodes the sprite width in FMODE bits 0 and 1
+        switch (fmode & 0b11) {
+                
+            case 0b00: return 1;
+            case 0b01:
+            case 0b10: return 2;
+            case 0b11: return 4;
+        }
+    }
+    
+    return 1;
 }
 
 u8
-Agnus::sprFetchWords() const {
-
-    // OCS and ECS support the classic 16 pixel sprite, only
-    if (!isAGA()) return 1;
-
-    // AGA widens sprites to 32 or 64 pixels via FMODE bits 2 and 3
-    switch ((fmode >> 2) & 0b11) {
-
-        case 0b00: return 1;
-        case 0b11: return 4;
-        default:   return 2;
+Agnus::sprFetchWords() const
+{
+    if (isAGA()) {
+        
+        // AGA encodes the sprite width in FMODE bits 2 and 3
+        switch ((fmode >> 2) & 0b11) {
+                
+            case 0b00: return 1;
+            case 0b01:
+            case 0b10: return 2;
+            case 0b11: return 4;
+        }
     }
+    
+    return 1;
 }
 
 u32

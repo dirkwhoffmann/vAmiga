@@ -441,7 +441,7 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
         state.bphstop = false;
         
         // AGA hard stop
-        if (fetchWords > 1) { // } fetchUnit() > 8) {
+        if (fetchUnitSize > 1) {
             
             state.bprun = false;
             state.lastFu = false;
@@ -616,7 +616,7 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::LORES:
                 
-                fetchWords = (fm == 0b11) ? 4 : (fm == 0b00) ? 1 : 2;
+                fetchUnitSize = (fm == 0b11) ? 4 : (fm == 0b00) ? 1 : 2;
 
                 switch (bpu) {
                         
@@ -636,9 +636,9 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::HIRES:
                 
-                fetchWords = (fm == 0b11) ? 2 : 1;
+                fetchUnitSize = (fm == 0b11) ? 2 : 1;
 
-                if (bpu > 4) bpu = 0;
+                if (fm == 0b00 && bpu > 4) bpu = 0;
 
                 switch (bpu) {
                         
@@ -658,7 +658,7 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::SHRES:
                 
-                fetchWords = 1;
+                fetchUnitSize = 1;
                 
                 switch (bpu) {
                         
@@ -679,7 +679,7 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::LORES:
                 
-                fetchWords = 1;
+                fetchUnitSize = 1;
                 
                 switch (bpu) {
                         
@@ -698,7 +698,7 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::HIRES:
                 
-                fetchWords = 1;
+                fetchUnitSize = 1;
                 
                 switch (bpu) {
                         
@@ -714,7 +714,7 @@ Sequencer::computeFetchUnit(u16 bplcon0, u16 fmode)
                 
             case Resolution::SHRES:
                 
-                fetchWords = 1;
+                fetchUnitSize = 1;
                 
                 switch (bpu) {
                         
