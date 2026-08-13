@@ -117,6 +117,7 @@ public:
     u16 initialBplcon0;
     u16 initialBplcon1;
     u16 initialBplcon2;
+    u16 initialBplcon3;
     u16 initialBplcon4;
 
     // Bitplane resolution (derived from bplcon0)
@@ -436,6 +437,7 @@ public:
         CLONE(initialBplcon0)
         CLONE(initialBplcon1)
         CLONE(initialBplcon2)
+        CLONE(initialBplcon3)
         CLONE(initialBplcon4)
         CLONE(res)
         CLONE(pixelOffsetOdd)
@@ -517,6 +519,7 @@ private:
         << initialBplcon0
         << initialBplcon1
         << initialBplcon2
+        << initialBplcon3
         << initialBplcon4
         << res
         << pixelOffsetOdd
@@ -699,7 +702,7 @@ private:
 private:
     
     // Determines the border color code (one of PixelEngine::BORDER_xxx)
-    u8 borderColor();
+    u8 borderColor(u16 con0, u16 con3) const;
 
     // Updates the border pixel mask (called by the hsync handler)
     void updateBorderBuffer();

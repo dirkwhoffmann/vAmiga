@@ -1228,13 +1228,21 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 }
 
 u8
-Denise::borderColor()
+Denise::borderColor(u16 con0, u16 con3) const
 {
+    /* The caller passes the register values in force at the start of the
+     * rasterline, not the live ones. updateBorderBuffer runs in the hsync
+     * handler, which finishes the line that just ended, so reading the
+     * registers directly would pick up writes the Copper has already made
+     * at the top of the NEXT line and leak them one line backwards.
+     *
+     * Relevant test in the vAmigaTS test suite: Agnus/AGA/brdrblnk
+     */
     if constexpr (debug::BORDER_DEBUG) {
         return PixelEngine::BORDER_DEBUG; // Debug color
     }
 
-    if (!isOCS() && ecsena() && brdrblnk()) {
+    if (!isOCS() && ecsena(con0) && brdrblnk(con3)) {
         return PixelEngine::BORDER_BLNK; // Pure black
     }
 
@@ -1249,7 +1257,7 @@ Denise::updateBorderBuffer()
     denise.borderBufferIsDirty--;
 
     // Determine the border color for this rasterline
-    auto borderColor = this->borderColor();
+    auto borderColor = this->borderColor(initialBplcon0, initialBplcon3);
 
     // Get the current value of the horizontal DIW flipflop
     auto hf = hflop;
@@ -1557,6 +1565,7 @@ Denise::hsyncHandler(isize vpos)
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
+    initialBplcon3 = bplcon3;
     initialBplcon4 = bplcon4;
 
     // Hand control over to the debugger

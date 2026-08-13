@@ -147,6 +147,11 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Determine the new bitmap resolution
     res = resolution(newValue);
+
+    /* ECSENA gates BRDRBLNK, so it invalidates the border mask for the same
+     * reason a BRDRBLNK change does (see setBPLCON3).
+     */
+    if (ecsena(oldValue) != ecsena(newValue)) markBorderBufferAsDirty();
 }
 
 template <Accessor s> void
@@ -218,7 +223,17 @@ Denise::setBPLCON3(u16 value)
 {
     logdebug(BPLREG_DEBUG, "setBPLCON3(%X)\n", value);
 
+    auto oldValue = bplcon3;
     bplcon3 = value;
+
+    /* BRDRBLNK decides whether the border is painted in the background color
+     * or in black, so a change to it invalidates the border mask. Without
+     * this, the mask is only ever recomputed when the display window moves,
+     * and BRDRBLNK appears frozen at whatever it was at that moment.
+     *
+     * Relevant test in the vAmigaTS test suite: Agnus/AGA/brdrblnk
+     */
+    if (brdrblnk(oldValue) != brdrblnk(value)) markBorderBufferAsDirty();
 }
 
 template <Accessor s> void
