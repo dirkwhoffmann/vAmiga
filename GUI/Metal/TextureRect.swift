@@ -24,7 +24,7 @@ extension Canvas {
     // Returns the entire texture area (including HBLANK and VBLANK)
     var entire: CGRect {
         
-        return CGRect(x: 0, y: 0, width: 4 * Int(TPP) * VAMIGA.HPOS.CNT, height: VAMIGA.VPOS.CNT)
+        return CGRect(x: 0, y: 0, width: 8 * VAMIGA.HPOS.CNT, height: VAMIGA.VPOS.CNT)
     }
     
     var entireNormalized: CGRect {
@@ -36,8 +36,8 @@ extension Canvas {
     var largestVisible: CGRect {
 
         let pal = emu?.agnus.traits.isPAL ?? true
-        let x1 = 4 * Int(TPP) * VAMIGA.HBLANK.CNT
-        let x2 = 4 * Int(TPP) * VAMIGA.PAL.HPOS.CNT
+        let x1 = 8 * VAMIGA.HBLANK.CNT
+        let x2 = 8 * VAMIGA.PAL.HPOS.CNT
         let y1 = pal ? VAMIGA.PAL.VBLANK.CNT : VAMIGA.NTSC.VBLANK.CNT
         let y2 = pal ? VAMIGA.PAL.VPOS.CNT : VAMIGA.NTSC.VPOS.CNT
 
@@ -136,14 +136,14 @@ extension Canvas {
         loginfo(.metal, "updateTextureRect(\(hstrt), \(vstrt), \(hstop), \(vstop))")
 
         // Convert to pixel coordinates
-        x1 = CGFloat(2 * Int(TPP) * hstrt)
-        x2 = CGFloat(2 * Int(TPP) * hstop)
+        x1 = CGFloat(4 * hstrt)
+        x2 = CGFloat(4 * hstop)
         y1 = CGFloat(vstrt)
         y2 = CGFloat(vstop)
 
         // Compensate the texture shift
-        x1 -= CGFloat(VAMIGA.HBLANK.MIN) * CGFloat(TPP) * 4
-        x2 -= CGFloat(VAMIGA.HBLANK.MIN) * CGFloat(TPP) * 4
+        x1 -= CGFloat(VAMIGA.HBLANK.MIN) * 8
+        x2 -= CGFloat(VAMIGA.HBLANK.MIN) * 8
 
         // Crop
         let max = largestVisible

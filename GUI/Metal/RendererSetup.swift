@@ -12,7 +12,7 @@ import simd
 struct TextureSize {
 
     static let background = MTLSizeMake(512, 512, 0)
-    static let original = MTLSizeMake(Int(TPP) * VAMIGA.HPIXELS, VAMIGA.VPIXELS, 0)
+    static let original = MTLSizeMake(2 * VAMIGA.HPIXELS, VAMIGA.VPIXELS, 0)
     static let merged = MTLSizeMake(2 * VAMIGA.HPIXELS, 4 * VAMIGA.VPIXELS, 0)
     static let upscaled = MTLSizeMake(2 * VAMIGA.HPIXELS, 4 * VAMIGA.VPIXELS, 0)
 }

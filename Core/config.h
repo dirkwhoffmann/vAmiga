@@ -29,18 +29,6 @@ static constexpr int SNP_BETA       = 0;
 
 
 //
-// Video settings
-//
-
-/* Texels per pixel. Set to 1 to create a texture in hires resolution where
- * every hires pixel is represented by a single texel). Set to 2 to generate a
- * texture in super-hires resolution where every hires pixel is represented by
- * two texels.
- */
-#define TPP 1
-
-
-//
 // Execution settings
 //
 

@@ -206,7 +206,7 @@ class BypassFilter: ComputeKernel {
 class MergeFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
-        self.init(name: "merge\(3 - TPP)X4Y",
+        self.init(name: "merge1X4Y",
                   device: device, library: library, cutout: cutout)
     }
 }
@@ -214,7 +214,7 @@ class MergeFilter: ComputeKernel {
 class ScaleFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
-        self.init(name: "scale\(3 - TPP)X4Y",
+        self.init(name: "scale1X4Y",
                   device: device, library: library, cutout: cutout)
     }
 }

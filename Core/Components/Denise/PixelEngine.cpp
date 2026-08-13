@@ -518,35 +518,25 @@ PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
     // Let sprite shine through the border if enabled (AGA only)
     if (denise.borderSprites()) removeBorderOverSprites(from, to);
 
-    if constexpr (sizeof(Texel) == 4) {
+    // Output each super-hires pixel as a seperate texel
+    for (Pixel i = from; i < to; i++) {
 
-        // Output two super-hires pixels as a single texel
-        for (Pixel i = from; i < to; i++) {
-            dst[i] = bbuf[i] == BORDER_NONE ? palette[mbuf[i]] : borderPalette[bbuf[i]];
-        }
+        u32 *p = (u32 *)(dst + i);
 
-    } else {
+        if (bbuf[i] != BORDER_NONE) {
 
-        // Output each super-hires pixel as a seperate texel
-        for (Pixel i = from; i < to; i++) {
+            p[0] =
+            p[1] = u32(borderPalette[bbuf[i]]);
 
-            u32 *p = (u32 *)(dst + i);
+        } else if (Denise::isSpritePixel(zbuf[i])) {
 
-            if (bbuf[i] != BORDER_NONE) {
+            p[0] =
+            p[1] = u32(palette[mbuf[i]]);
 
-                p[0] =
-                p[1] = u32(borderPalette[bbuf[i]]);
+        } else {
 
-            } else if (Denise::isSpritePixel(zbuf[i])) {
-
-                p[0] =
-                p[1] = u32(palette[mbuf[i]]);
-
-            } else {
-
-                p[0] = u32(palette[mbuf[i] >> 2]);
-                p[1] = u32(palette[mbuf[i] & 3]);
-            }
+            p[0] = u32(palette[mbuf[i] >> 2]);
+            p[1] = u32(palette[mbuf[i] & 3]);
         }
     }
 }
