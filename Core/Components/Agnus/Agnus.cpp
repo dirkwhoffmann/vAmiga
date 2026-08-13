@@ -663,9 +663,9 @@ Agnus::executeFirstSpriteCycle()
             if (sprdma()) {
                 
                 if (!isAGA() || !sscan2Skips(nr)) {
-                    
+
                     auto value = doSpriteDmaRead<nr>();
-                    denise.pokeSPRxDATA<nr>(value);
+                    denise.setSPRxDATA<nr>(value, spriteDmaExt<nr>());
 
                 } else {
 
@@ -712,9 +712,9 @@ Agnus::executeSecondSpriteCycle()
             if (sprdma()) {
                 
                 if (!isAGA() || !sscan2Skips(nr)) {
-                 
+
                     auto value = doSpriteDmaRead<nr>();
-                    denise.pokeSPRxDATB<nr>(value);
+                    denise.setSPRxDATB<nr>(value, spriteDmaExt<nr>());
 
                 } else {
                     

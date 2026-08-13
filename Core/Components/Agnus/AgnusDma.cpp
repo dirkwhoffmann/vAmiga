@@ -189,23 +189,38 @@ Agnus::doSpriteDmaRead()
     constexpr BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
 
     auto numWords = sprFetchWords();
-    
+
+    /* The words are read individually and the low address bits are supplied
+     * by the fetch, not by the pointer. A wide fetch therefore truncates an
+     * unaligned pointer rather than honoring it, exactly as a wide bitplane
+     * fetch does (see doBitplaneDmaRead).
+     */
     switch (numWords) {
-            
+
         case 1:
-          
+
             sprdatNext[channel] = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
             break;
-            
-        case 2:
-            
-            sprdatNext[channel] = mem.peek32rev<Accessor::AGNUS>(sprpt[channel]);
-            break;
-            
-        case 4:
 
-            sprdatNext[channel] = mem.peek64rev<Accessor::AGNUS>(sprpt[channel]);
+        case 2: {
+
+            u64 w0 = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
+            u64 w1 = mem.peek16<Accessor::AGNUS>(sprpt[channel] | 0b010);
+
+            sprdatNext[channel] = w1 << 16 | w0;
             break;
+        }
+
+        case 4: {
+
+            u64 w0 = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
+            u64 w1 = mem.peek16<Accessor::AGNUS>(sprpt[channel] | 0b010);
+            u64 w2 = mem.peek16<Accessor::AGNUS>(sprpt[channel] | 0b100);
+            u64 w3 = mem.peek16<Accessor::AGNUS>(sprpt[channel] | 0b110);
+
+            sprdatNext[channel] = w3 << 48 | w2 << 32 | w1 << 16 | w0;
+            break;
+        }
 
         default:
             fatalError;
@@ -213,8 +228,6 @@ Agnus::doSpriteDmaRead()
 
     u16 result = sprdatNext[channel] & 0xFFFF;
     sprdatNext[channel] >>= 16;
-    
-    // u16 result = mem.peek16 <Accessor::AGNUS> (sprpt[channel]);
 
     busOwner[pos.h] = owner;
     busAddr[pos.h] = sprpt[channel];
@@ -223,6 +236,26 @@ Agnus::doSpriteDmaRead()
 
     sprpt[channel] += 2 * numWords;
     return result;
+}
+
+template <int channel> u64
+Agnus::spriteDmaExt() const
+{
+    assert(channel >= 0 && channel <= 7);
+
+    /* The shift register is filled from the top: the word returned by
+     * doSpriteDmaRead occupies bits 63-48, the next one bits 47-32, and so
+     * on. sprdatNext holds those remaining words the other way round, with
+     * the next one in the low 16 bits, so the order has to be flipped.
+     */
+    u64 rest = sprdatNext[channel];
+    u64 ext = 0;
+
+    for (isize i = 0; i < sprFetchWords() - 1; i++, rest >>= 16) {
+        ext |= (rest & 0xFFFF) << (32 - 16 * i);
+    }
+
+    return ext;
 }
 
 u16
@@ -311,6 +344,15 @@ template u16 Agnus::doSpriteDmaRead<4>();
 template u16 Agnus::doSpriteDmaRead<5>();
 template u16 Agnus::doSpriteDmaRead<6>();
 template u16 Agnus::doSpriteDmaRead<7>();
+
+template u64 Agnus::spriteDmaExt<0>() const;
+template u64 Agnus::spriteDmaExt<1>() const;
+template u64 Agnus::spriteDmaExt<2>() const;
+template u64 Agnus::spriteDmaExt<3>() const;
+template u64 Agnus::spriteDmaExt<4>() const;
+template u64 Agnus::spriteDmaExt<5>() const;
+template u64 Agnus::spriteDmaExt<6>() const;
+template u64 Agnus::spriteDmaExt<7>() const;
 
 template bool Agnus::allocateBus<BusOwner::COPPER>();
 template bool Agnus::allocateBus<BusOwner::BLITTER>();

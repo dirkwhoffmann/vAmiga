@@ -541,6 +541,10 @@ public:
     template <int channel> u16 doAudioDmaRead();
     template <int channel> u16 doBitplaneDmaRead();
     template <int channel> u16 doSpriteDmaRead();
+
+    // Returns the AGA extension words of the most recent sprite fetch
+    template <int channel> u64 spriteDmaExt() const;
+
     u16 doCopperDmaRead(u32 addr);
     u16 doBlitterDmaRead(u32 addr);
 
