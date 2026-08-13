@@ -453,15 +453,20 @@ PixelEngine::applyRegisterChange(const RegChange &change)
 void
 PixelEngine::colorize(isize line)
 {
-    // Jump to the first pixel in the specified line in the active frame buffer
-    auto *dst = workingPtr(line);
+    /* Jump to the first pixel in the specified line in the active frame
+     * buffer. Denise's buffers run at super-hires resolution while one Texel
+     * covers a hires pixel and holds two RGBA values, so the line is written
+     * through a u32 pointer with twice as many entries. Pixel coordinates
+     * index that pointer directly.
+     */
+    auto *dst = (u32 *)workingPtr(line);
     Pixel pixel = 0;
 
     // Initialize the HAM mode hold register with the current background color
     AmigaColor hold = color[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colChanges.insert(HPIXELS, RegChange { .reg = Reg(0), .value = 0 } );
+    colChanges.insert(Denise::PIXEL_CNT, RegChange { .reg = Reg(0), .value = 0 } );
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = colChanges.end(); i < end; i++) {
@@ -470,9 +475,7 @@ PixelEngine::colorize(isize line)
         RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
-        if (shresMode()) {
-            colorizeSHRES(dst, pixel, trigger);
-        } else if (hamMode8()) {
+        if (hamMode8()) {
             colorizeHAM8(dst, pixel, trigger, hold);
         } else if (hamMode()) {
             colorizeHAM(dst, pixel, trigger, hold);
@@ -491,58 +494,25 @@ PixelEngine::colorize(isize line)
     // Wipe out the HBLANK area
     auto start = agnus.pos.pixel(HBLANK_MIN);
     auto stop  = agnus.pos.pixel(HBLANK_MAX);
-    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = Texture::hblank;
+    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = u32(Texture::hblank);
 }
 
 void
-PixelEngine::colorize(Texel *dst, Pixel from, Pixel to)
+PixelEngine::colorize(u32 *dst, Pixel from, Pixel to)
 {
     auto *mbuf = denise.mBuffer;
     auto *bbuf = denise.bBuffer;
-    
+
     // Let sprite shine through the border if enabled (AGA only)
     if (denise.borderSprites()) removeBorderOverSprites(from, to);
-            
+
     // Colorize pixels
     for (Pixel i = from; i < to; i++)
-        dst[i] = bbuf[i] == BORDER_NONE ? palette[mbuf[i]] : borderPalette[bbuf[i]];
+        dst[i] = u32(bbuf[i] == BORDER_NONE ? palette[mbuf[i]] : borderPalette[bbuf[i]]);
 }
 
 void
-PixelEngine::colorizeSHRES(Texel *dst, Pixel from, Pixel to)
-{
-    auto *mbuf = denise.mBuffer;
-    auto *bbuf = denise.bBuffer;
-    auto *zbuf = denise.zBuffer;
-
-    // Let sprite shine through the border if enabled (AGA only)
-    if (denise.borderSprites()) removeBorderOverSprites(from, to);
-
-    // Output each super-hires pixel as a seperate texel
-    for (Pixel i = from; i < to; i++) {
-
-        u32 *p = (u32 *)(dst + i);
-
-        if (bbuf[i] != BORDER_NONE) {
-
-            p[0] =
-            p[1] = u32(borderPalette[bbuf[i]]);
-
-        } else if (Denise::isSpritePixel(zbuf[i])) {
-
-            p[0] =
-            p[1] = u32(palette[mbuf[i]]);
-
-        } else {
-
-            p[0] = u32(palette[mbuf[i] >> 2]);
-            p[1] = u32(palette[mbuf[i] & 3]);
-        }
-    }
-}
-
-void
-PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
+PixelEngine::colorizeHAM(u32 *dst, Pixel from, Pixel to, AmigaColor& ham)
 {
     auto *dbuf = denise.dBuffer;
     auto *ibuf = denise.iBuffer;
@@ -557,7 +527,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         // Check for border pixels
         if (bbuf[i] != BORDER_NONE) {
 
-            dst[i] = borderPalette[bbuf[i]];
+            dst[i] = u32(borderPalette[bbuf[i]]);
 
             // Only the background code corresponds to a real color register
             if (bbuf[i] == BORDER_BG) ham = color[0];
@@ -592,15 +562,15 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
         // Synthesize pixel
         if (denise.spritePixelIsVisible(i)) {
-            dst[i] = palette[mbuf[i]];
+            dst[i] = u32(palette[mbuf[i]]);
         } else {
-            dst[i] = toTexel(ham);
+            dst[i] = u32(toTexel(ham));
         }
     }
 }
 
 void
-PixelEngine::colorizeHAM8(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
+PixelEngine::colorizeHAM8(u32 *dst, Pixel from, Pixel to, AmigaColor& ham)
 {
     auto *dbuf = denise.dBuffer;
     auto *ibuf = denise.iBuffer;
@@ -615,7 +585,7 @@ PixelEngine::colorizeHAM8(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         // Check for border pixels
         if (bbuf[i] != BORDER_NONE) {
 
-            dst[i] = borderPalette[bbuf[i]];
+            dst[i] = u32(borderPalette[bbuf[i]]);
 
             // Only the background code corresponds to a real color register
             if (bbuf[i] == BORDER_BG) ham = color[0];
@@ -654,9 +624,9 @@ PixelEngine::colorizeHAM8(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
 
         // Synthesize pixel
         if (denise.spritePixelIsVisible(i)) {
-            dst[i] = palette[mbuf[i]];
+            dst[i] = u32(palette[mbuf[i]]);
         } else {
-            dst[i] = toTexel(ham);
+            dst[i] = u32(toTexel(ham));
         }
     }
 }
@@ -675,9 +645,10 @@ PixelEngine::removeBorderOverSprites(Pixel from, Pixel to)
 void
 PixelEngine::hide(isize line, u16 layers, u8 alpha)
 {
-    auto *p = workingPtr(line);
+    // Pixel coordinates address super-hires pixels (see colorize)
+    auto *p = (u32 *)workingPtr(line);
 
-    for (Pixel i = 0; i < HPIXELS; i++) {
+    for (Pixel i = 0; i < Denise::PIXEL_CNT; i++) {
 
         u16 z = denise.zBuffer[i];
 
@@ -707,7 +678,7 @@ PixelEngine::hide(isize line, u16 layers, u8 alpha)
         u8 b = (p[i] >> 16) & 0xFF;
 
         double scale = alpha / 255.0;
-        u8 bg = (line / 4) % 2 == (i / 8) % 2 ? 0x22 : 0x44;
+        u8 bg = (line / 4) % 2 == (i / 16) % 2 ? 0x22 : 0x44;
         u8 newr = (u8)(r * (1 - scale) + bg * scale);
         u8 newg = (u8)(g * (1 - scale) + bg * scale);
         u8 newb = (u8)(b * (1 - scale) + bg * scale);

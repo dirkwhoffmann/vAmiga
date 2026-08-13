@@ -322,10 +322,9 @@ public:
     
 private:
     
-    void colorize(Texel *dst, Pixel from, Pixel to);
-    void colorizeSHRES(Texel *dst, Pixel from, Pixel to);
-    void colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham);
-    void colorizeHAM8(Texel *dst, Pixel from, Pixel to, AmigaColor& ham);
+    void colorize(u32 *dst, Pixel from, Pixel to);
+    void colorizeHAM(u32 *dst, Pixel from, Pixel to, AmigaColor& ham);
+    void colorizeHAM8(u32 *dst, Pixel from, Pixel to, AmigaColor& ham);
 
     // Removes the border pixels on top of sprites
     void removeBorderOverSprites(Pixel from, Pixel to);

@@ -129,7 +129,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 {
     logdebug(BPLREG_DEBUG, "setBPLCON0(%04x,%04x)\n", oldValue, newValue);
 
-    auto pixel  = std::max(agnus.pos.pixel() - 4, Pixel(0));
+    auto pixel  = std::max(agnus.pos.pixel() - 8, Pixel(0));
     auto change = RegChange { .reg = Reg::BPLCON0, .value = newValue };
 
     // Record the register change
@@ -192,7 +192,7 @@ Denise::setBPLCON2(u16 newValue)
     if (pf2px() > 4) { xfiles("BPLCON2: PF2P = %d\n", pf2px()); }
     
     // Record the register change
-    i64 pixel = agnus.pos.pixel() + 4;
+    i64 pixel = agnus.pos.pixel() + 8;
     conChanges.insert(pixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
 
     // Check if the KILLEHB bit has changed
@@ -200,7 +200,7 @@ Denise::setBPLCON2(u16 newValue)
 
         // The pixel engine's own timing is tuned independently of conChanges'
         // (see translate(), which has its own, unrelated timing requirements)
-        auto colPixel = std::max(agnus.pos.pixel() - 2, Pixel(0));
+        auto colPixel = std::max(agnus.pos.pixel() - 4, Pixel(0));
         pixelEngine.colChanges.insert(colPixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
     }
 }
@@ -301,7 +301,7 @@ Denise::setBPLxDAT(u16 value)
         armedOdd = true;
         armedEven = true;
 
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 4));
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 8));
     }
 }
 */
@@ -342,7 +342,7 @@ Denise::setBPLxDAT(u16 value)
             armedEven = true;
         }
 
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 4));
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 8));
     }
 }
 
@@ -365,7 +365,7 @@ Denise::pokeSPRxPOS(u16 value)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 6;
+    i64 pos = agnus.pos.pixel() + 12;
     constexpr auto reg = Reg(isize(Reg::SPR0POS) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value } );
 }
@@ -380,7 +380,7 @@ Denise::pokeSPRxCTL(u16 value)
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 6;
+    i64 pos = agnus.pos.pixel() + 12;
     constexpr auto reg = Reg(isize(Reg::SPR0CTL) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value } );
 }
@@ -399,7 +399,7 @@ Denise::pokeSPRxDATA(u16 value)
     SET_BIT(wasArmed, x);
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 4;
+    i64 pos = agnus.pos.pixel() + 8;
     constexpr auto reg = Reg(isize(Reg::SPR0DATA) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value } );
 }
@@ -414,7 +414,7 @@ Denise::pokeSPRxDATB(u16 value)
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 4;
+    i64 pos = agnus.pos.pixel() + 8;
     constexpr auto reg = Reg(isize(Reg::SPR0DATB) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value });
 }
@@ -446,7 +446,7 @@ Denise::setSPRxDATA(u16 value, u64 ext)
     sprdataExt[x] = ext;
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 4;
+    i64 pos = agnus.pos.pixel() + 8;
     constexpr auto reg = Reg(isize(Reg::SPR0DATA) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value } );
 }
@@ -470,7 +470,7 @@ Denise::setSPRxDATB(u16 value, u64 ext)
     sprdatbExt[x] = ext;
 
     // Record the register change
-    i64 pos = agnus.pos.pixel() + 4;
+    i64 pos = agnus.pos.pixel() + 8;
     constexpr auto reg = Reg(isize(Reg::SPR0DATB) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .reg = reg, .value = value });
 }
@@ -546,8 +546,8 @@ Denise::recordColorChange(isize nr, u16 value)
 void
 Denise::updateScrollOffsets()
 {
-    pixelOffsetOdd  = Pixel((bplcon1 & 0b00000001) << 1);
-    pixelOffsetEven = Pixel((bplcon1 & 0b00010000) >> 3);
+    pixelOffsetOdd  = Pixel((bplcon1 & 0b00000001) << 2);
+    pixelOffsetEven = Pixel((bplcon1 & 0b00010000) >> 2);
 
     /* AGA widens the scroll range from 16 to 64 lores pixels. The additional
      * bits are PF1H6 and PF1H7 in bits 11-10, and PF2H6 and PF2H7 in bits
@@ -639,8 +639,12 @@ Denise::sprStrt(isize x) const
      * scan doubling flag. The comparator ignores the corresponding bit
      * instead of evaluating it, which is why the sprite is matched twice
      * per line (see drawSpritePair).
+     *
+     * The bit is read from sprhpos, which is in hires units, but subtracted
+     * from sprhppos, which is a buffer coordinate at super-hires resolution.
+     * Hence the factor of two.
      */
-    return agnus.sscan2() ? sprhppos[x] - (sprhpos[x] & 512) : sprhppos[x];
+    return agnus.sscan2() ? sprhppos[x] - 2 * (sprhpos[x] & 512) : sprhppos[x];
 }
 
 isize

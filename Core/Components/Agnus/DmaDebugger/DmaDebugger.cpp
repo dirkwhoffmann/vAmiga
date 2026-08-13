@@ -360,7 +360,8 @@ DmaDebugger::hsyncHandler(isize vpos)
         computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busData);
         
         // Draw second chunk (data from current DMA line)
-        auto *ptr2 = ptr1 + agnus.pos.pixel(0);
+        // pos.pixel() counts super-hires pixels, ptr1 counts Texels (hires)
+        auto *ptr2 = ptr1 + agnus.pos.pixel(0) / 2;
         computeOverlay(ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busData);
     }
 }

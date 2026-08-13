@@ -233,15 +233,20 @@ Beam::cyclesPerFrames(isize count) const
 Pixel
 Beam::pixel(isize hpos) const
 {
+    /* One DMA cycle covers eight super-hires pixels, which is the resolution
+     * Denise's rasterline buffers run at (see Denise::PIXEL_CNT). Note that
+     * this is not the resolution of the GPU texture as seen from the
+     * emulator, where one Texel covers a hires pixel.
+     */
     if (hpos >= HBLANK_MIN) {
 
         // Every texture line starts with the HBLANK area
-        return 4 * (hpos - HBLANK_MIN);
-        
+        return 8 * (hpos - HBLANK_MIN);
+
     } else {
 
         // Everything left to the HBLANK area belongs to the previous line
-        return 4 * (hpos - HBLANK_MIN + hLatched);
+        return 8 * (hpos - HBLANK_MIN + hLatched);
     }
 }
 

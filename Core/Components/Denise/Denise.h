@@ -316,24 +316,53 @@ public:
      *  SPx : Set if the pixel is solid in sprite x.
      *  _x_ : Playfield priority derived from the current value in BPLCON2.
      */
+    /* Resolution of the rasterline buffers below.
+     *
+     * All buffers run at super-hires resolution, i.e. one entry per super-
+     * hires pixel, which is the finest pixel the Amiga can produce. A lores
+     * pixel therefore occupies four entries, a hires pixel two, and a super-
+     * hires pixel one. Buffer coordinates (type Pixel, as returned by
+     * Beam::pixel) are counted in these units throughout.
+     *
+     * Note that this is twice the horizontal resolution of the GPU texture as
+     * seen from the emulator, because one Texel covers a hires pixel and
+     * holds two RGBA values (see FrameBufferTypes.h). Converting between the
+     * two is a division or multiplication by two, and the only places that
+     * need it are the ones that index the texture with a buffer coordinate.
+     *
+     * Running the buffers at this resolution is what allows a super-hires
+     * pixel to carry a full eight bit color index. The buffers used to be
+     * hires resolution, which forced two super-hires pixels to share one
+     * entry and capped them at two bitplanes.
+     */
+    static constexpr isize PIXEL_CNT = 2 * HPIXELS;
+
     /* Logical length of a rasterline in buffer entries. The horizontal DIW
      * flipflop is derived by running Denise's horizontal counter across this
      * range, so the value must not be changed (see updateBorderBuffer).
      */
-    static constexpr isize LINE_CNT = HPIXELS + (4 * 16) + 8;
+    static constexpr isize LINE_CNT = PIXEL_CNT + (8 * 16) + 16;
 
     /* Additional space beyond the logical line length. It has to cover the
      * largest pixel offset a drawing cycle can be shifted by. In AGA, the
-     * extended BPLCON1 scroll bits add up to three 16 pixel words, which is 96
-     * buffer entries (see Denise::setBPLCON1).
+     * extended BPLCON1 scroll bits add up to three 16 pixel words, which is
+     * 192 buffer entries (see Denise::setBPLCON1).
      */
-    static constexpr isize OVERHANG = (4 * 16) + 8 + 96;
+    static constexpr isize OVERHANG = (8 * 16) + 16 + 192;
 
-    u8 dBuffer[HPIXELS + OVERHANG];
-    u8 bBuffer[HPIXELS + OVERHANG];
-    u8 iBuffer[HPIXELS + OVERHANG];
-    u8 mBuffer[HPIXELS + OVERHANG];
-    u16 zBuffer[HPIXELS + OVERHANG];
+    /* Number of entries in each of the rasterline buffers below. Use this
+     * constant whenever a buffer index or a pixel coordinate is meant. Do not
+     * write sizeof(dBuffer) for that purpose: sizeof yields a byte count,
+     * which only coincides with the entry count as long as the element type
+     * is one byte wide, and which is already wrong for zBuffer.
+     */
+    static constexpr isize BUF_CNT = PIXEL_CNT + OVERHANG;
+
+    u8 dBuffer[BUF_CNT];
+    u8 bBuffer[BUF_CNT];
+    u8 iBuffer[BUF_CNT];
+    u8 mBuffer[BUF_CNT];
+    u16 zBuffer[BUF_CNT];
 
     static constexpr u16 Z_0   = 0b10000000'00000000;
     static constexpr u16 Z_SP0 = 0b01000000'00000000;

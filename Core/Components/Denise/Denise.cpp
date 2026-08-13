@@ -160,8 +160,8 @@ Denise::updateSprHCoords(isize x)
                      (sprctl[x] & 0x01) << 1 |  // SH0
                      (sprctl[x] & 0x10) >> 4);  // SHSH1 (ECS only)
 
-    // Convert to a pixel position
-    sprhppos[x] = sprhpos[x] + 2 - 4 * HBLANK_MIN;
+    // Convert to a buffer position (super-hires resolution)
+    sprhppos[x] = 2 * sprhpos[x] + 4 - 8 * HBLANK_MIN;
 }
 
 bool
@@ -350,21 +350,25 @@ Denise::drawOdd(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel pixel = agnus.pos.pixel() + offset + 2;
+    Pixel pixel = agnus.pos.pixel() + offset + 4;
 
     u8 slices[16];
     extractSlicesOdd(slices);
-    
+
     for (isize i = 0; i < 16; i++) {
-        
+
         u8 index = slices[i] & mask;
 
         switch (mode) {
 
             case Resolution::LORES:
 
-                // Synthesize two lores pixels
-                assert(pixel + 1 < isize(sizeof(dBuffer)));
+                // Synthesize a lores pixel (four buffer entries)
+                assert(pixel + 3 < BUF_CNT);
+                dBuffer[pixel] = (dBuffer[pixel] & 0b10101010) | index;
+                pixel++;
+                dBuffer[pixel] = (dBuffer[pixel] & 0b10101010) | index;
+                pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b10101010) | index;
                 pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b10101010) | index;
@@ -373,22 +377,20 @@ Denise::drawOdd(Pixel offset)
 
             case Resolution::HIRES:
 
-                // Synthesize one hires pixel
-                assert(pixel < isize(sizeof(dBuffer)));
+                // Synthesize a hires pixel (two buffer entries)
+                assert(pixel + 1 < BUF_CNT);
+                dBuffer[pixel] = (dBuffer[pixel] & 0b10101010) | index;
+                pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b10101010) | index;
                 pixel++;
                 break;
 
             case Resolution::SHRES:
 
-                // Synthesize a superHires pixel
-                assert(pixel < isize(sizeof(dBuffer)));
-                if (i % 2 == 0) {
-                    dBuffer[pixel] = u8((dBuffer[pixel] & 0b00111011) | index << 2);
-                } else {
-                    dBuffer[pixel] = u8((dBuffer[pixel] & 0b00111110) | index);
-                    pixel++;
-                }
+                // Synthesize a superHires pixel (one buffer entry)
+                assert(pixel < BUF_CNT);
+                dBuffer[pixel] = (dBuffer[pixel] & 0b10101010) | index;
+                pixel++;
                 break;
 
             default:
@@ -417,11 +419,11 @@ Denise::drawEven(Pixel offset)
     };
     
     u16 mask = masks[bpu()];
-    Pixel pixel = agnus.pos.pixel() + offset + 2;
+    Pixel pixel = agnus.pos.pixel() + offset + 4;
 
     u8 slices[16];
     extractSlicesEven(slices);
-    
+
     for (isize i = 0; i < 16; i++) {
 
         u8 index = slices[i] & mask;
@@ -430,8 +432,12 @@ Denise::drawEven(Pixel offset)
 
             case Resolution::LORES:
 
-                // Synthesize s lores pixel
-                assert(pixel + 1 < isize(sizeof(dBuffer)));
+                // Synthesize a lores pixel (four buffer entries)
+                assert(pixel + 3 < BUF_CNT);
+                dBuffer[pixel] = (dBuffer[pixel] & 0b01010101) | index;
+                pixel++;
+                dBuffer[pixel] = (dBuffer[pixel] & 0b01010101) | index;
+                pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b01010101) | index;
                 pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b01010101) | index;
@@ -440,22 +446,20 @@ Denise::drawEven(Pixel offset)
 
             case Resolution::HIRES:
 
-                // Synthesize a hires pixel
-                assert(pixel < isize(sizeof(dBuffer)));
+                // Synthesize a hires pixel (two buffer entries)
+                assert(pixel + 1 < BUF_CNT);
+                dBuffer[pixel] = (dBuffer[pixel] & 0b01010101) | index;
+                pixel++;
                 dBuffer[pixel] = (dBuffer[pixel] & 0b01010101) | index;
                 pixel++;
                 break;
 
             case Resolution::SHRES:
 
-                // Synthesize a superHires pixel
-                assert(pixel < isize(sizeof(dBuffer)));
-                if (i % 2 == 0) {
-                    dBuffer[pixel] = u8((dBuffer[pixel] & 0b00110111) | index << 2);
-                } else {
-                    dBuffer[pixel] = u8((dBuffer[pixel] & 0b00111101) | index);
-                    pixel++;
-                }
+                // Synthesize a superHires pixel (one buffer entry)
+                assert(pixel < BUF_CNT);
+                dBuffer[pixel] = (dBuffer[pixel] & 0b01010101) | index;
+                pixel++;
                 break;
 
             default:
@@ -491,7 +495,7 @@ Denise::drawBoth(Pixel offset)
     };
 
     u16 mask = masks[bpu()];
-    Pixel pixel = agnus.pos.pixel() + offset + 2;
+    Pixel pixel = agnus.pos.pixel() + offset + 4;
 
     u8 slices[16];
     extractSlices(slices);
@@ -504,8 +508,12 @@ Denise::drawBoth(Pixel offset)
 
             case Resolution::LORES:
 
-                // Synthesize s lores pixel
-                assert(pixel + 1 < isize(sizeof(dBuffer)));
+                // Synthesize a lores pixel (four buffer entries)
+                assert(pixel + 3 < BUF_CNT);
+                dBuffer[pixel] = index;
+                pixel++;
+                dBuffer[pixel] = index;
+                pixel++;
                 dBuffer[pixel] = index;
                 pixel++;
                 dBuffer[pixel] = index;
@@ -514,22 +522,20 @@ Denise::drawBoth(Pixel offset)
 
             case Resolution::HIRES:
 
-                // Synthesize a hires pixel
-                assert(pixel < isize(sizeof(dBuffer)));
+                // Synthesize a hires pixel (two buffer entries)
+                assert(pixel + 1 < BUF_CNT);
+                dBuffer[pixel] = index;
+                pixel++;
                 dBuffer[pixel] = index;
                 pixel++;
                 break;
 
             case Resolution::SHRES:
 
-                // Synthesize a superHires pixel
-                assert(pixel < isize(sizeof(dBuffer)));
-                if (i % 2 == 0) {
-                    dBuffer[pixel] = u8(index << 2);
-                } else {
-                    dBuffer[pixel] = u8(dBuffer[pixel] | index);
-                    pixel++;
-                }
+                // Synthesize a superHires pixel (one buffer entry)
+                assert(pixel < BUF_CNT);
+                dBuffer[pixel] = index;
+                pixel++;
                 break;
 
             default:
@@ -648,7 +654,7 @@ Denise::translate()
     // Wipe out some bitplane data if requested
     if (config.hiddenBitplanes) {
 
-        for (usize i = 0; i < sizeof(dBuffer); i++) {
+        for (isize i = 0; i < BUF_CNT; i++) {
             dBuffer[i] &= ~config.hiddenBitplanes;
         }
     }
@@ -667,7 +673,7 @@ Denise::translate()
     bool hamLine = state.ham;
 
     // Add a dummy register change to ensure we draw until the line ends
-    conChanges.insert(sizeof(dBuffer), RegChange { .reg = Reg(0), .value = 0 });
+    conChanges.insert(BUF_CNT, RegChange { .reg = Reg(0), .value = 0 });
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = conChanges.end(); i < end; i++) {
@@ -881,7 +887,7 @@ Denise::drawSpritePair()
 {
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
-    constexpr Pixel hposMask = R == Resolution::SHRES ? ~0 : ~1;
+    constexpr Pixel hposMask = R == Resolution::SHRES ? ~1 : ~3;
 
     Pixel strt = 0;
     Pixel strt1 = sprStrt(sprite1) & hposMask;
@@ -959,7 +965,7 @@ Denise::drawSpritePair()
     }
     
     // Draw until the end of the line
-    drawSpritePair <pair,R> (strt, sizeof(mBuffer) - 1, strt1, strt2);
+    drawSpritePair <pair,R> (strt, BUF_CNT - 1, strt1, strt2);
     
     sprChanges[pair].clear();
 }
@@ -1040,21 +1046,21 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
 
-    assert(hstrt <= isize(sizeof(mBuffer)));
-    assert(hstop <= isize(sizeof(mBuffer)));
+    assert(hstrt <= BUF_CNT);
+    assert(hstop <= BUF_CNT);
 
     bool armed1 = GET_BIT(armed, sprite1);
     bool armed2 = GET_BIT(armed, sprite2);
 
     bool attached = GET_BIT(sprctl[sprite2], 7);
-    Pixel offset = R == Resolution::SHRES ? 1 : 2;
+    Pixel offset = R == Resolution::SHRES ? 2 : 4;
 
     /* Second trigger position of the horizontal comparator. Scan doubling
      * shortens the comparator by one bit (see sprStrt), so the sprite is
      * matched a second time half a comparator period further to the right.
      * A value of zero disables the second trigger.
      */
-    Pixel wrap = agnus.sscan2() ? 512 : 0;
+    Pixel wrap = agnus.sscan2() ? 1024 : 0;
 
     for (Pixel hpos = hstrt; hpos < hstop; hpos += offset) {
 
@@ -1110,7 +1116,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     }
 
     // Perform collision checks (if enabled)
-    Pixel width = isAGA() ? Pixel(agnus.spriteWidth() * offset) : 32;
+    Pixel width = isAGA() ? Pixel(agnus.spriteWidth() * offset) : 64;
     
     if (config.clxSprSpr) {
         
@@ -1145,17 +1151,16 @@ Denise::drawSpritePixel(Pixel hpos)
         u8 base = u8(sprBase(x) + 2 * (x & 6));
         // u8 base = 16 + 2 * (x & 6);
 
-        if constexpr (R == Resolution::SHRES) {
+        /* A sprite pixel covers as many buffer entries as it is wide: two for
+         * a hires sprite pixel, four for a lores one (see drawSpritePair,
+         * which advances hpos by the same amount).
+         */
+        constexpr Pixel width = R == Resolution::SHRES ? 2 : 4;
 
-            if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
-            zBuffer[hpos] |= z;
+        for (Pixel i = 0; i < width; i++) {
 
-        } else {
-
-            if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
-            if (z > zBuffer[hpos + 1]) mBuffer[hpos + 1] = base | col;
-            zBuffer[hpos] |= z;
-            zBuffer[hpos + 1] |= z;
+            if (z > zBuffer[hpos + i]) mBuffer[hpos + i] = base | col;
+            zBuffer[hpos + i] |= z;
         }
     }
 }
@@ -1180,17 +1185,16 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 
         u16 z = Z_SP[x];
 
-        if (z > zBuffer[hpos]) {
-            
-            mBuffer[hpos] = sprBase(x) | col;
-            // mBuffer[hpos] = 0b10000 | col;
-            zBuffer[hpos] |= z;
-        }
-        if (z > zBuffer[hpos+1]) {
-            
-            mBuffer[hpos+1] = sprBase(x) | col;
-            // mBuffer[hpos+1] = 0b10000 | col;
-            zBuffer[hpos+1] |= z;
+        // See drawSpritePixel for the width of a sprite pixel
+        constexpr Pixel width = R == Resolution::SHRES ? 2 : 4;
+
+        for (Pixel i = 0; i < width; i++) {
+
+            if (z > zBuffer[hpos + i]) {
+
+                mBuffer[hpos + i] = sprBase(x) | col;
+                zBuffer[hpos + i] |= z;
+            }
         }
     }
 }
@@ -1283,7 +1287,7 @@ Denise::updateBorderBuffer()
             hf = false;
         }
 
-        if (i % 2 == 1) {
+        if (i % 4 == 3) {
 
             // Advance the horizontal counter
             counter = (counter + 1) & 0x1FF;
@@ -1330,7 +1334,7 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
     u16 comp67 = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0);
 
     // Iterate over all sprite pixels
-    for (Pixel pos = end; pos >= start; pos -= 2) {
+    for (Pixel pos = end; pos >= start; pos -= 4) {
 
         u16 z = zBuffer[pos];
         
@@ -1374,7 +1378,7 @@ Denise::checkS2PCollisions(Pixel start, Pixel end)
     u8 compare2 = mvbp2() & enabled2;
 
     // Check for sprite-playfield collisions
-    for (Pixel pos = end; pos >= start; pos -= 2) {
+    for (Pixel pos = end; pos >= start; pos -= 4) {
 
         u16 z = zBuffer[pos];
 
@@ -1418,7 +1422,7 @@ Denise::checkP2PCollisions()
     u8 compare2 = mvbp2() & enabled2;
 
     // Check all pixels one by one
-    for (isize pos = 0; pos < HPIXELS; pos++) {
+    for (isize pos = 0; pos < PIXEL_CNT; pos++) {
 
         u16 b = dBuffer[pos];
 
@@ -1517,9 +1521,9 @@ Denise::hsyncHandler(isize vpos)
     latchedEven = false;
 
     // Reset the sprite clipping range
-    // spriteClipBegin = HPIXELS;
-    spriteClipBegin = borderSprites() ? 0 : HPIXELS;
-    spriteClipEnd = HPIXELS + 32;
+    // spriteClipBegin = PIXEL_CNT;
+    spriteClipBegin = borderSprites() ? 0 : PIXEL_CNT;
+    spriteClipEnd = PIXEL_CNT + 64;
 
     // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;
