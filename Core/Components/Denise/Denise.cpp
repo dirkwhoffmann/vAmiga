@@ -248,17 +248,36 @@ Denise::extractSlicesEven(u8 slices[16])
 bool
 Denise::isReloadCycle(u8 scrollWord) const
 {
-    // Determine the size of the fetch unit
-    auto words = agnus.sequencer.getFetchUnitSize();
-    assert(words == 1 || words == 2 || words == 4);
-    
-    // Determine the length of a drawing cycle in DMA cycles
+    /* The shift registers have to be reloadable as often as a new fetch
+     * completes, because data that finds no reload cycle before the next
+     * fetch arrives is simply lost. One fetch delivers as many words as FMODE
+     * selects and each word feeds one drawing cycle, so a fetch spans
+     *
+     *     words * step
+     *
+     * DMA cycles, where step is the length of a drawing cycle. Note that this
+     * is not the fetch unit size reported by the sequencer: that one counts
+     * in units of eight DMA cycles and is always 1 for super hires, which
+     * says nothing about how long a super hires fetch actually lasts.
+     *
+     * Relevant tests in the vAmigaTS test suite:
+     * Agnus/AGA/shres/shres00 to shres11 and Agnus/AGA/FMODE
+     */
+    auto fm = agnus.fmode & 0b11;
+
+    // Number of words delivered by a single fetch
+    auto words = fm == 0b11 ? 4 : fm == 0b00 ? 1 : 2;
+
+    // Length of a drawing cycle in DMA cycles
     auto step = res == Resolution::LORES ? 8 : res == Resolution::HIRES ? 4 : 2;
 
-    // Convert the delay from words into drawing cycles
-    auto slot = (scrollWord & (words - 1)) * 8 / step;
+    /* Convert the delay from words into drawing cycles. The scroll delay is
+     * measured in whole 16 lores pixel words, hence in units of eight DMA
+     * cycles, so a delay that exceeds the length of a fetch wraps around.
+     */
+    auto slot = (scrollWord * 8 / step) % words;
 
-    return ((agnus.pos.h % (8 * words)) / step) == slot;
+    return ((agnus.pos.h % (words * step)) / step) == slot;
 }
 
 void
