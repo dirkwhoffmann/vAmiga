@@ -650,18 +650,25 @@ Denise::sprStrt(isize x) const
 isize
 Denise::sprPixelWidth() const
 {
+    /* Width of a sprite pixel in buffer entries, i.e. in super-hires pixels.
+     * In AGA, BPLCON3 bits 7-6 (SPRES) set it independently of the playfield
+     * resolution and of how many bits of data the sprite fetches.
+     *
+     * Relevant test in the vAmigaTS test suite:
+     * Agnus/AGA/agasprites/simple2
+     */
     if (isAGA()) {
 
         switch ((bplcon3 >> 6) & 0b11) {
 
-            case 0b01: return 2;    // Lores
-            case 0b10: return 1;    // Hires
+            case 0b01: return 4;    // Lores
+            case 0b10: return 2;    // Hires
             case 0b11: return 1;    // Super Hires
             default:   break;       // Same as OCS/ECS
         }
     }
 
-    return res == Resolution::SHRES ? 1 : 2;
+    return res == Resolution::SHRES ? 2 : 4;
 }
 
 template void Denise::pokeBPLCON0<Accessor::CPU>(u16 value);

@@ -722,7 +722,20 @@ public:
     bool spritePixelIsVisible(Pixel hpos) const;
 
 private:
-    
+
+    /* Width of a sprite pixel in buffer entries, and the mask that aligns a
+     * sprite's start position to that width. Both follow from the sprite
+     * resolution alone (see sprPixelWidth, which picks R).
+     */
+    template <Resolution R> static constexpr Pixel sprPixelSize()
+    {
+        return R == Resolution::SHRES ? 1 : R == Resolution::HIRES ? 2 : 4;
+    }
+    template <Resolution R> static constexpr Pixel sprPixelMask()
+    {
+        return ~(sprPixelSize<R>() - 1);
+    }
+
     // Draws all sprites
     void drawSprites();
     template <Resolution R> void drawSprites();

@@ -126,10 +126,15 @@ DeniseDebugger::hsyncHandler(isize vpos)
 
         if (debug::LINE_DEBUG == vpos) {
 
+            /* One Texel holds two RGBA values, so the color has to be run
+             * through the TEXEL macro. Assigning a plain 32 bit value would
+             * only fill the first half of each texel and leave the debug
+             * line half transparent.
+             */
             auto *ptr = pixelEngine.workingPtr(vpos);
 
             for (Pixel i = 0; i < HPIXELS; i++) {
-                ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
+                ptr[i] = (i & 1) ? TEXEL(0xFF0000FF) : TEXEL(0xFFFFFFFF);
             }
         }
     }

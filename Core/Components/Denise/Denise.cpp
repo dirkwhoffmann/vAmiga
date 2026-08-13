@@ -852,8 +852,12 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 void
 Denise::drawSprites()
 {
-    sprPixelWidth() == 1 ? drawSprites<Resolution::SHRES>() : drawSprites<Resolution::LORES>();
-    // res == Resolution::SHRES ? drawSprites<Resolution::SHRES>() : drawSprites<Resolution::LORES>();
+    switch (sprPixelWidth()) {
+
+        case 1:  drawSprites<Resolution::SHRES>(); break;
+        case 2:  drawSprites<Resolution::HIRES>(); break;
+        default: drawSprites<Resolution::LORES>(); break;
+    }
 }
 
 template <Resolution R> void
@@ -887,7 +891,7 @@ Denise::drawSpritePair()
 {
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
-    constexpr Pixel hposMask = R == Resolution::SHRES ? ~1 : ~3;
+    constexpr Pixel hposMask = sprPixelMask<R>();
 
     Pixel strt = 0;
     Pixel strt1 = sprStrt(sprite1) & hposMask;
@@ -1053,7 +1057,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     bool armed2 = GET_BIT(armed, sprite2);
 
     bool attached = GET_BIT(sprctl[sprite2], 7);
-    Pixel offset = R == Resolution::SHRES ? 2 : 4;
+    constexpr Pixel offset = sprPixelSize<R>();
 
     /* Second trigger position of the horizontal comparator. Scan doubling
      * shortens the comparator by one bit (see sprStrt), so the sprite is
@@ -1151,11 +1155,10 @@ Denise::drawSpritePixel(Pixel hpos)
         u8 base = u8(sprBase(x) + 2 * (x & 6));
         // u8 base = 16 + 2 * (x & 6);
 
-        /* A sprite pixel covers as many buffer entries as it is wide: two for
-         * a hires sprite pixel, four for a lores one (see drawSpritePair,
-         * which advances hpos by the same amount).
+        /* A sprite pixel covers as many buffer entries as it is wide (see
+         * drawSpritePair, which advances hpos by the same amount).
          */
-        constexpr Pixel width = R == Resolution::SHRES ? 2 : 4;
+        constexpr Pixel width = sprPixelSize<R>();
 
         for (Pixel i = 0; i < width; i++) {
 
@@ -1186,7 +1189,7 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
         u16 z = Z_SP[x];
 
         // See drawSpritePixel for the width of a sprite pixel
-        constexpr Pixel width = R == Resolution::SHRES ? 2 : 4;
+        constexpr Pixel width = sprPixelSize<R>();
 
         for (Pixel i = 0; i < width; i++) {
 
