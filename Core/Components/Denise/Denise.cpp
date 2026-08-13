@@ -687,6 +687,7 @@ Denise::translate()
     state.zpf2 = zPF2(initialBplcon2);
     state.prio = pf2pri(initialBplcon2);
     state.ham = ham(initialBplcon0);
+    state.colxor = bplam(initialBplcon4);
 
     bool dual = dbplf(initialBplcon0);
     bool hamLine = state.ham;
@@ -725,6 +726,11 @@ Denise::translate()
                 state.zpf2 = zPF2(change.value);
                 break;
 
+            case Reg::BPLCON4:
+
+                state.colxor = bplam(change.value);
+                break;
+
             default:
                 
                 assert(change.reg == Reg(0));
@@ -742,7 +748,7 @@ Denise::translate()
 void
 Denise::translateSPF(Pixel from, Pixel to, PFState &state)
 {
-    u8 colxor = bplam();
+    u8 colxor = state.colxor;
     
     /* Check for invalid bitplane modes. If the priority of the second bitplane
      * is set to an invalid value (> 4), Denise ignores the data from the first
@@ -791,7 +797,7 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 template <bool prio> void
 Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 {
-    u8 colxor = bplam();
+    u8 colxor = state.colxor;
     
     /* If the priority of a playfield is set to an illegal value (zpf1 or
      * zpf2 will be 0 in that case), all pixels are drawn transparent.
@@ -1551,6 +1557,7 @@ Denise::hsyncHandler(isize vpos)
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
+    initialBplcon4 = bplcon4;
 
     // Hand control over to the debugger
     debugger.hsyncHandler(vpos);

@@ -233,8 +233,18 @@ void
 Denise::setBPLCON4(u16 value)
 {
     logdebug(BPLREG_DEBUG, "setBPLCON4(%X)\n", value);
-    
+
     bplcon4 = isAGA() ? value : 0;
+
+    /* Record the register change. BPLAM, the color XOR in the high byte, is
+     * applied while the rasterline is translated, so a change has to take
+     * effect at the pixel where it was written instead of retroactively
+     * covering the whole line (see translate).
+     *
+     * Relevant test in the vAmigaTS test suite: Agnus/AGA/bplam2
+     */
+    i64 pixel = agnus.pos.pixel() + 8;
+    conChanges.insert(pixel, RegChange { .reg = Reg::BPLCON4, .value = bplcon4 });
 }
 
 u16

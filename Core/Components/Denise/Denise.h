@@ -117,6 +117,7 @@ public:
     u16 initialBplcon0;
     u16 initialBplcon1;
     u16 initialBplcon2;
+    u16 initialBplcon4;
 
     // Bitplane resolution (derived from bplcon0)
     Resolution res;
@@ -435,6 +436,7 @@ public:
         CLONE(initialBplcon0)
         CLONE(initialBplcon1)
         CLONE(initialBplcon2)
+        CLONE(initialBplcon4)
         CLONE(res)
         CLONE(pixelOffsetOdd)
         CLONE(pixelOffsetEven)
@@ -515,6 +517,7 @@ private:
         << initialBplcon0
         << initialBplcon1
         << initialBplcon2
+        << initialBplcon4
         << res
         << pixelOffsetOdd
         << pixelOffsetEven
@@ -674,7 +677,7 @@ private:
     template <Resolution mode> void drawBoth(Pixel offset);
 
     // Data type used by the translation functions
-    typedef struct { u16 zpf1; u16 zpf2; bool prio; bool ham; } PFState;
+    typedef struct { u16 zpf1; u16 zpf2; bool prio; bool ham; u8 colxor; } PFState;
 
     // Translates the bitplane data to color register indices
     void translate();
