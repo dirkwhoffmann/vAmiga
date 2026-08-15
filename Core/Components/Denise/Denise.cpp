@@ -1294,8 +1294,15 @@ Denise::updateBorderBuffer()
     if (!borderBufferIsDirty) return;
     denise.borderBufferIsDirty--;
 
-    // Determine the border color for this rasterline
-    auto borderColor = this->borderColor(initialBplcon0, initialBplcon3);
+    /* Determine the border color at the start of this rasterline. BRDRBLNK
+     * and ECSENA are not line-wide quantities: a write in the middle of a
+     * line changes the border from that pixel onwards. Both registers are
+     * therefore tracked while the mask is built, and the values are seeded
+     * with the ones in force when the line began.
+     */
+    auto con0 = initialBplcon0;
+    auto con3 = initialBplcon3;
+    auto borderColor = this->borderColor(con0, con3);
 
     // Get the current value of the horizontal DIW flipflop
     auto hf = hflop;
@@ -1332,20 +1339,31 @@ Denise::updateBorderBuffer()
 
                         hstrt = r.value;
                         logdebug(DIW_DEBUG, "hstrt -> %ld (%lx)\n", hstrt, hstrt);
+                        debugger.updateDiwH(hstrt, hstop);
                         break;
 
                     case Reg::DIWSTOP:
 
                         hstop = r.value;
                         logdebug(DIW_DEBUG, "hstop -> %ld (%lx)\n", hstop, hstop);
+                        debugger.updateDiwH(hstrt, hstop);
+                        break;
+
+                    case Reg::BPLCON0:
+
+                        con0 = r.value;
+                        borderColor = this->borderColor(con0, con3);
+                        break;
+
+                    case Reg::BPLCON3:
+
+                        con3 = r.value;
+                        borderColor = this->borderColor(con0, con3);
                         break;
 
                     default:
                         break;
                 }
-
-                // Inform the debugger about the changed display window
-                debugger.updateDiwH(hstrt, hstop);
             }
         }
 

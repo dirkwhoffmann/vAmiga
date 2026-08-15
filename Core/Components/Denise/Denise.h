@@ -733,8 +733,19 @@ private:
     // Drawing the border
     //
     
+public:
+
+    /* Buffer position from which a write to BPLCON0 or BPLCON3 changes the
+     * border. Both registers reach Denise one DMA cycle after the write, so
+     * the offset below is measured from there and comes out negative, just
+     * as it does for the conChanges record in setBPLCON0.
+     */
+    Pixel borderChangePixel() const;
+
+    static constexpr Pixel BORDER_LATENCY = -8;
+
 private:
-    
+
     // Determines the border color code (one of PixelEngine::BORDER_xxx)
     u8 borderColor(u16 con0, u16 con3) const;
 

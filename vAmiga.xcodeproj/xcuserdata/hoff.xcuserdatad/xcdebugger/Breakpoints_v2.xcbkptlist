@@ -449,7 +449,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "540"
             endingLineNumber = "540"
-            landmarkName = "Denise::pokeCOLORxx(value)"
+            landmarkName = "Denise::peekCOLORxx(xx)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

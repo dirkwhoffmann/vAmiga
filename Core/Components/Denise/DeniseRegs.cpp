@@ -116,6 +116,12 @@ Denise::spypeekDENISEID() const
     return isAGA() ? 0x00F8 : isECS() ? 0xFFFC : 0xFFFF;
 }
 
+Pixel
+Denise::borderChangePixel() const
+{
+    return std::max(agnus.pos.pixel() + BORDER_LATENCY, Pixel(0));
+}
+
 template <Accessor s> void
 Denise::pokeBPLCON0(u16 value)
 {
@@ -150,10 +156,15 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     updateScrollOffsets();
     
-    /* ECSENA gates BRDRBLNK, so it invalidates the border mask for the same
-     * reason a BRDRBLNK change does (see setBPLCON3).
+    /* ECSENA gates BRDRBLNK, so it changes the border for the same reason a
+     * BRDRBLNK write does, and it takes effect at the same place (see
+     * setBPLCON3).
      */
-    if (ecsena(oldValue) != ecsena(newValue)) markBorderBufferAsDirty();
+    if (ecsena(oldValue) != ecsena(newValue)) {
+
+        diwChanges.insert(borderChangePixel(), change);
+        markBorderBufferAsDirty();
+    }
 }
 
 template <Accessor s> void
@@ -229,13 +240,22 @@ Denise::setBPLCON3(u16 value)
     bplcon3 = value;
 
     /* BRDRBLNK decides whether the border is painted in the background color
-     * or in black, so a change to it invalidates the border mask. Without
-     * this, the mask is only ever recomputed when the display window moves,
-     * and BRDRBLNK appears frozen at whatever it was at that moment.
+     * or in black, and it does so from the pixel it is written at rather
+     * than for the whole line. The change is therefore recorded together
+     * with the DIW changes, which is where the border mask is built, and the
+     * mask is invalidated so that it is actually rebuilt. Without the record
+     * the bit would only ever be sampled at the start of a line; without the
+     * invalidation the mask would be recomputed only when the display window
+     * moves, and BRDRBLNK would appear frozen at whatever it was then.
      *
-     * Relevant test in the vAmigaTS test suite: Agnus/AGA/brdrblnk
+     * Relevant tests: Denise/Registers/BPLCON3/brdrblnk1 and brdrblnk2
      */
-    if (brdrblnk(oldValue) != brdrblnk(value)) markBorderBufferAsDirty();
+    if (brdrblnk(oldValue) != brdrblnk(value)) {
+
+        diwChanges.insert(borderChangePixel(),
+                          RegChange { .reg = Reg::BPLCON3, .value = value });
+        markBorderBufferAsDirty();
+    }
 }
 
 template <Accessor s> void
