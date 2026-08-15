@@ -447,9 +447,9 @@
             filePath = "Core/Components/Denise/DeniseRegs.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "541"
-            endingLineNumber = "541"
-            landmarkName = "Denise::recordColorChange(nr, value)"
+            startingLineNumber = "540"
+            endingLineNumber = "540"
+            landmarkName = "Denise::pokeCOLORxx(value)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -248,6 +248,31 @@ Denise::extractSlicesEven(u8 slices[16])
 bool
 Denise::isReloadCycle(u8 scrollWord) const
 {
+    /* The extended scroll bits delay the output by whole words. Real hardware
+     * implements this delay by reloading the shift registers at a drawing cycle
+     * whose position matches the scroll value. The relevant positions repeat
+     * with the length of a fetch unit.
+     */
+    // Length of a drawing cycle in DMA cycles
+    auto step = res == Resolution::LORES ? 8 : res == Resolution::HIRES ? 4 : 2;
+
+    /* Number of words delivered by a single fetch. The delay cannot exceed this
+     * amount, which is why the extended bits stay without effect in 16 bit
+     * fetch mode (bplcon1_shift_mask in Amiberry).
+     */
+    auto words = isize(agnus.bplFetchWords()); //  sequencer.fetchWords);
+    if (words < 2) return true;
+
+    // The scroll value selects one of the words of the fetch
+    auto slot = scrollWord & (words - 1);
+
+    return ((agnus.pos.h / step) % words) == slot;
+}
+
+#if 0
+bool
+Denise::isReloadCycle(u8 scrollWord) const
+{
     /* The shift registers have to be reloadable as often as a new fetch
      * completes, because data that finds no reload cycle before the next
      * fetch arrives is simply lost. One fetch delivers as many words as FMODE
@@ -279,6 +304,7 @@ Denise::isReloadCycle(u8 scrollWord) const
 
     return ((agnus.pos.h % (words * step)) / step) == slot;
 }
+#endif
 
 void
 Denise::prepareOdd()

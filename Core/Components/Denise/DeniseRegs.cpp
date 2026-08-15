@@ -148,6 +148,8 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     // Determine the new bitmap resolution
     res = resolution(newValue);
 
+    updateScrollOffsets();
+    
     /* ECSENA gates BRDRBLNK, so it invalidates the border mask for the same
      * reason a BRDRBLNK change does (see setBPLCON3).
      */
@@ -573,6 +575,37 @@ Denise::updateScrollOffsets()
 {
     pixelOffsetOdd  = Pixel((bplcon1 & 0b00000001) << 2);
     pixelOffsetEven = Pixel((bplcon1 & 0b00010000) >> 2);
+    
+    /* AGA widens the scroll range from 16 to 64 lores pixels. The additional
+     * bits are PF1H6 and PF1H7 in bits 11-10, and PF2H6 and PF2H7 in bits
+     * 15-14, i.e. they extend the delay by two high-order bits (delay1 and
+     * delay2 in Amiberry).
+     *
+     * The lower part of the delay is handled elsewhere: bits 3-1 shift the
+     * drawing cycle (Agnus::scrollOdd / scrollEven), bit 0 becomes a pixel
+     * offset. Everything above the length of one drawing cycle selects the
+     * drawing cycle that reloads the shift registers, which is applied in
+     * prepareOdd() and prepareEven() (see there).
+     *
+     * A drawing cycle emits 16 pixels, which corresponds to 16, 8, or 4 lores
+     * pixels, depending on the resolution. Hence, the delay has to be divided
+     * by that amount to obtain the number of words to wait.
+     */
+    u8 pf1h = u8( (bplcon1        & 0x000F) | ((bplcon1 & 0x0C00) >> 6));
+    u8 pf2h = u8(((bplcon1 >> 4)  & 0x000F) | ((bplcon1 & 0xC000) >> 10));
+
+    auto shift = res == Resolution::LORES ? 4 : res == Resolution::HIRES ? 3 : 2;
+
+    scrollWordOdd  = isAGA() ? u8(pf1h >> shift) : 0;
+    scrollWordEven = isAGA() ? u8(pf2h >> shift) : 0;
+}
+
+#if 0
+void
+Denise::updateScrollOffsets()
+{
+    pixelOffsetOdd  = Pixel((bplcon1 & 0b00000001) << 2);
+    pixelOffsetEven = Pixel((bplcon1 & 0b00010000) >> 2);
 
     /* AGA widens the scroll range from 16 to 64 lores pixels. The additional
      * bits are PF1H6 and PF1H7 in bits 11-10, and PF2H6 and PF2H7 in bits
@@ -586,6 +619,7 @@ Denise::updateScrollOffsets()
     scrollWordEven = isAGA() ? u8((bplcon1 & 0xC000) >> 14) : 0;
 
 }
+#endif
 
 Resolution
 Denise::resolution(u16 v)
