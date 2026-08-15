@@ -127,6 +127,14 @@ public:
     // The value of bplDatBegin the current border buffer was built from
     Pixel bBufferBplDatBegin;
 
+    /* Position at which the DIW flipflop opened the window in the current
+     * border buffer, or PIXEL_CNT if it never did. The buffer merges the two
+     * gates that close the window, and a sprite is subject to only one of
+     * them, so the composite step needs to tell them apart again (see
+     * PixelEngine::colorize).
+     */
+    Pixel bBufferDiwOpen;
+
     // Bitplane control registers
     u16 bplcon0;
     u16 bplcon1;
@@ -461,6 +469,7 @@ public:
         CLONE(borderBufferIsDirty)
         CLONE(bplDatBegin)
         CLONE(bBufferBplDatBegin)
+        CLONE(bBufferDiwOpen)
         CLONE(bplcon0)
         CLONE(bplcon1)
         CLONE(bplcon2)
@@ -545,6 +554,7 @@ private:
         << borderBufferIsDirty
         << bplDatBegin
         << bBufferBplDatBegin
+        << bBufferDiwOpen
         << bplcon0
         << bplcon1
         << bplcon2

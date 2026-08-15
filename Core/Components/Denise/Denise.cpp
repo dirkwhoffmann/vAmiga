@@ -37,6 +37,7 @@ Denise::_didReset(bool hard)
     // No BPL1DAT write has happened yet, so the display window is closed
     bplDatBegin = PIXEL_CNT;
     bBufferBplDatBegin = PIXEL_CNT;
+    bBufferDiwOpen = PIXEL_CNT;
 
     // AGA: Reset color offset for the second playfield (PF2OF = b011)
     bplcon3 = 0x0C00;
@@ -1307,6 +1308,9 @@ Denise::updateBorderBuffer()
     // Get the current value of the horizontal DIW flipflop
     auto hf = hflop;
 
+    // Remember where it opens the window, for the benefit of the sprites
+    bBufferDiwOpen = hf ? 0 : PIXEL_CNT;
+
     // Print some debug info if requested
     if constexpr (debug::DIW_DEBUG) {
 
@@ -1372,6 +1376,7 @@ Denise::updateBorderBuffer()
 
             logdebug(DIW_DEBUG, "hflop -> 1 at %ld (%lx)\n", counter, counter);
             hf = true;
+            bBufferDiwOpen = std::min(bBufferDiwOpen, Pixel(i));
         }
         if (counter == hstop) {
 

@@ -462,15 +462,23 @@ PixelEngine::colorize(isize line)
     auto *dst = (u32 *)workingPtr(line);
     Pixel pixel = 0;
 
-    /* BPL1DAT arms the sprites a little earlier than it opens the display
-     * window (see Denise::bplDatBegin and Denise::spriteClipBegin). In the
-     * gap between the two, Denise emits border pixels while the sprites are
-     * already live, and a sprite drawn there wins over the border instead of
-     * being swallowed by it.
+    /* The border buffer closes the display window on two counts, the DIW
+     * flipflop and the first BPL1DAT write, but a sprite answers to the DIW
+     * flipflop and to its own arming position only. BPL1DAT arms the sprites
+     * a little before it lets the bitplanes through, and in that gap Denise
+     * emits border pixels while the sprites are already live, so a sprite
+     * drawn there wins over the border instead of being swallowed by it.
      *
-     * Relevant tests: Denise/Sprites/clip, Denise/Sprites/general/sprbpu1
+     * The gap is four buffer entries wide and it only exists where the
+     * window is open, hence the clamp against bBufferDiwOpen: without it a
+     * DIWSTRT sitting right of the bitplane data would let the sprite
+     * through in front of its own window edge.
+     *
+     * Relevant tests: Denise/Sprites/clip (diwclip and newclip),
+     * Denise/Sprites/general/sprbpu1
      */
-    removeBorderOverSprites(denise.spriteClipBegin, denise.bplDatBegin);
+    removeBorderOverSprites(std::max(denise.spriteClipBegin, denise.bBufferDiwOpen),
+                            denise.bplDatBegin);
 
     // Initialize the HAM mode hold register with the current background color
     AmigaColor hold = color[0];
