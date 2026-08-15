@@ -370,6 +370,9 @@ Denise::setBPLxDAT(u16 value)
         }
 
         spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 8));
+
+        // The first write of a line is what opens the display window
+        bplDatBegin = std::min(bplDatBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));
     }
 }
 

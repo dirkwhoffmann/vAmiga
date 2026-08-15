@@ -34,6 +34,10 @@ Denise::_didReset(bool hard)
     std::memset(mBuffer, 0, sizeof(mBuffer));
     std::memset(zBuffer, 0, sizeof(zBuffer));
 
+    // No BPL1DAT write has happened yet, so the display window is closed
+    bplDatBegin = PIXEL_CNT;
+    bBufferBplDatBegin = PIXEL_CNT;
+
     // AGA: Reset color offset for the second playfield (PF2OF = b011)
     bplcon3 = 0x0C00;
 
@@ -1278,6 +1282,14 @@ Denise::borderColor(u16 con0, u16 con3) const
 void
 Denise::updateBorderBuffer()
 {
+    /* The buffer depends on where the display window was opened, which is a
+     * property of the line that just ended and not of the DIW registers. A
+     * line that opens it at a different position than the previous one needs
+     * a rebuild even if nothing else has changed.
+     */
+    if (bplDatBegin != bBufferBplDatBegin) markBorderBufferAsDirty(1);
+    bBufferBplDatBegin = bplDatBegin;
+
     // Only proceed if the buffer is dirty
     if (!borderBufferIsDirty) return;
     denise.borderBufferIsDirty--;
@@ -1358,8 +1370,13 @@ Denise::updateBorderBuffer()
             if (counter == 0x1C8 && (agnus.pos.v >= 9 || !isOCS())) counter = 2;
         }
 
-        // Set the border mask
-        bBuffer[i] = hf ? PixelEngine::BORDER_NONE : borderColor;
+        /* Set the border mask. The display window needs both a set flipflop
+         * and a BPL1DAT write to open; everything before the first write is
+         * border no matter what DIWSTRT says. The write is not undone until
+         * the end of the line, so the area between the last bitplane pixel
+         * and DIWSTOP stays inside the window and keeps showing COLOR00.
+         */
+        bBuffer[i] = hf && i >= bplDatBegin ? PixelEngine::BORDER_NONE : borderColor;
     }
 
     // Check if the hflop has a different value at the end of the line
@@ -1586,6 +1603,9 @@ Denise::hsyncHandler(isize vpos)
     // spriteClipBegin = PIXEL_CNT;
     spriteClipBegin = borderSprites() ? 0 : PIXEL_CNT;
     spriteClipEnd = PIXEL_CNT + 64;
+
+    // Close the display window again (BPL1DAT reopens it)
+    bplDatBegin = PIXEL_CNT;
 
     // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;

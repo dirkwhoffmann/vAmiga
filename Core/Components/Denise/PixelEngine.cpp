@@ -462,6 +462,16 @@ PixelEngine::colorize(isize line)
     auto *dst = (u32 *)workingPtr(line);
     Pixel pixel = 0;
 
+    /* BPL1DAT arms the sprites a little earlier than it opens the display
+     * window (see Denise::bplDatBegin and Denise::spriteClipBegin). In the
+     * gap between the two, Denise emits border pixels while the sprites are
+     * already live, and a sprite drawn there wins over the border instead of
+     * being swallowed by it.
+     *
+     * Relevant tests: Denise/Sprites/clip, Denise/Sprites/general/sprbpu1
+     */
+    removeBorderOverSprites(denise.spriteClipBegin, denise.bplDatBegin);
+
     // Initialize the HAM mode hold register with the current background color
     AmigaColor hold = color[0];
 

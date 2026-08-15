@@ -106,6 +106,27 @@ public:
     // Indicates whether the border mask needs an update
     isize borderBufferIsDirty;
 
+    /* Position of the first bitplane pixel in the current rasterline
+     *
+     * DIWSTRT alone does not open the display window. Denise keeps emitting
+     * border pixels until BPL1DAT is written for the first time in a line,
+     * and only the combination of a set DIW flipflop and that write lets
+     * bitplane data reach the screen. This variable holds the buffer
+     * coordinate of the first BPL1DAT write plus the latency between the
+     * write and the pixel it enables. It is PIXEL_CNT as long as no write
+     * has occured, which turns the whole line into border.
+     *
+     * This is what makes a line with no bitplanes at all a border line
+     * across its full width, which is why BRDRBLNK blackens such a line
+     * completely instead of leaving the display window in COLOR00.
+     *
+     * Relevant tests: Denise/Registers/BPLCON3/brdrblnk2, Agnus/AGA/AGADDF
+     */
+    Pixel bplDatBegin;
+
+    // The value of bplDatBegin the current border buffer was built from
+    Pixel bBufferBplDatBegin;
+
     // Bitplane control registers
     u16 bplcon0;
     u16 bplcon1;
@@ -360,6 +381,15 @@ public:
      */
     static constexpr isize BUF_CNT = PIXEL_CNT + OVERHANG;
 
+    /* Latency between a BPL1DAT write and the first pixel it lets through.
+     * The write opens the display window a fixed time before the data it
+     * carries appears, which is the same mechanism that arms the sprites a
+     * little earlier still (see spriteClipBegin, which uses 8). The value is
+     * given in buffer entries, of which there are eight per DMA cycle and
+     * four per lores pixel (see bplDatBegin).
+     */
+    static constexpr Pixel BPLDAT_LATENCY = 12;
+
     u8 dBuffer[BUF_CNT];
     u8 bBuffer[BUF_CNT];
     u8 iBuffer[BUF_CNT];
@@ -429,6 +459,8 @@ public:
         CLONE(hstop)
         CLONE(hflop)
         CLONE(borderBufferIsDirty)
+        CLONE(bplDatBegin)
+        CLONE(bBufferBplDatBegin)
         CLONE(bplcon0)
         CLONE(bplcon1)
         CLONE(bplcon2)
@@ -511,6 +543,8 @@ private:
         << hstop
         << hflop
         << borderBufferIsDirty
+        << bplDatBegin
+        << bBufferBplDatBegin
         << bplcon0
         << bplcon1
         << bplcon2
