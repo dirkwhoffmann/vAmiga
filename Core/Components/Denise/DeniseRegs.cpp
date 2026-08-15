@@ -589,7 +589,7 @@ Denise::recordColorChange(isize nr, u16 value)
         reg |= nr << 8;
     }
 
-    pixelEngine.colChanges.insert(agnus.pos.pixel(),
+    pixelEngine.colChanges.insert(agnus.pos.pixel() + (isAGA() ? 2 : 0),
                                   RegChange { .reg = Reg(reg), .value = value } );
 }
 
