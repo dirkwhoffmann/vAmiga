@@ -278,6 +278,7 @@ class HardwareSettingsViewController: SettingsViewController {
         case 0:
 
             // Amiga 500
+            defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_1MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
@@ -285,6 +286,7 @@ class HardwareSettingsViewController: SettingsViewController {
         case 1:
 
             // Amiga 1000
+            defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.OCS_OLD.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
@@ -292,6 +294,7 @@ class HardwareSettingsViewController: SettingsViewController {
         case 2:
 
             // Amiga 2000
+            defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
@@ -299,10 +302,19 @@ class HardwareSettingsViewController: SettingsViewController {
         case 3:
 
             // Amiga 500+
+            defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.ECS.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
+        case 4:
+
+            // Amiga 1200
+            defaults.set(.CPU_REVISION, CPURevision._68EC020.rawValue)
+            defaults.set(.AGNUS_REVISION, AgnusRevision.AGA.rawValue)
+            defaults.set(.DENISE_REVISION, DeniseRevision.AGA.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
+            
         default:
             fatalError()
         }

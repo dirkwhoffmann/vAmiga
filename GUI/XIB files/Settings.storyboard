@@ -1865,7 +1865,7 @@
                                         <popUpButton id="q7f-oT-loi" userLabel="System">
                                             <rect key="frame" x="17" y="11" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="6Eb-jH-Sog" id="n3J-DY-92G" userLabel="System">
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="n3J-DY-92G" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="Cl5-cU-aZM">
@@ -1879,8 +1879,8 @@
                                                         </menuItem>
                                                         <menuItem title="Amiga 1000" tag="1" id="UHt-ii-Ahq"/>
                                                         <menuItem title="Amiga 2000" tag="2" id="8e3-TI-fpp"/>
-                                                        <menuItem isSeparatorItem="YES" id="YYH-lu-COZ"/>
                                                         <menuItem title="Amiga 500+" tag="3" id="oSD-2S-zcy"/>
+                                                        <menuItem title="Amiga 1200" tag="4" id="LKt-ef-f01"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
