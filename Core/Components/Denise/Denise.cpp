@@ -28,7 +28,7 @@ Denise::Denise(Amiga& ref) : SubComponent(ref)
 void
 Denise::_didReset(bool hard)
 {
-    std::memset(bBuffer, PixelEngine::BORDER_NONE, sizeof(bBuffer));
+    std::memset(bBuffer, 0, sizeof(bBuffer));
     std::memset(dBuffer, 0, sizeof(dBuffer));
     std::memset(iBuffer, 0, sizeof(iBuffer));
     std::memset(mBuffer, 0, sizeof(mBuffer));
