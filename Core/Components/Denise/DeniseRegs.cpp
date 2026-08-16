@@ -348,7 +348,7 @@ Denise::setBPLxDAT(u16 value)
         armedOdd = true;
         armedEven = true;
 
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 8));
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + SPRITE_LATENCY));
     }
 }
 */
@@ -389,7 +389,7 @@ Denise::setBPLxDAT(u16 value)
             armedEven = true;
         }
 
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + 8));
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + SPRITE_LATENCY));
 
         // The first write of a line is what opens the display window
         bplDatBegin = std::min(bplDatBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));

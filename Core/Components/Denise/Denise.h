@@ -391,12 +391,20 @@ public:
 
     /* Latency between a BPL1DAT write and the first pixel it lets through.
      * The write opens the display window a fixed time before the data it
-     * carries appears, which is the same mechanism that arms the sprites a
-     * little earlier still (see spriteClipBegin, which uses 8). The value is
-     * given in buffer entries, of which there are eight per DMA cycle and
-     * four per lores pixel (see bplDatBegin).
+     * carries appears. The value is given in buffer entries, of which there
+     * are eight per DMA cycle and four per lores pixel (see bplDatBegin).
      */
     static constexpr Pixel BPLDAT_LATENCY = 8; // 12;
+
+    /* The same write arms the sprites, one lores pixel earlier than it opens
+     * the window for the bitplanes. This has to be derived from the value
+     * above rather than written out, or changing one gate silently closes the
+     * gap and the sprites lose their head start.
+     *
+     * Relevant test: Agnus/AGA/BPLAM/bplam5, whose left Pacman column is
+     * clipped by this value and by nothing else.
+     */
+    static constexpr Pixel SPRITE_LATENCY = BPLDAT_LATENCY - 4;
 
     u8 dBuffer[BUF_CNT];
     u8 bBuffer[BUF_CNT];
