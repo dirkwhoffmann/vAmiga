@@ -396,7 +396,7 @@ public:
      * given in buffer entries, of which there are eight per DMA cycle and
      * four per lores pixel (see bplDatBegin).
      */
-    static constexpr Pixel BPLDAT_LATENCY = 12;
+    static constexpr Pixel BPLDAT_LATENCY = 8; // 12;
 
     u8 dBuffer[BUF_CNT];
     u8 bBuffer[BUF_CNT];

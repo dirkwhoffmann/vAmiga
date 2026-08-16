@@ -833,23 +833,23 @@ Sequencer::computeShresFetchUnit(u16 fmode)
         case 0b01:
         case 0b10:
 
-            fetch[0][0] = channels < 2 ? EVENT_NONE : BPL_S2;
-            fetch[0][1] = channels < 1 ? EVENT_NONE : BPL_S1;
-            fetch[0][2] = channels < 4 ? EVENT_NONE : BPL_S4;
-            fetch[0][3] = channels < 3 ? EVENT_NONE : BPL_S3;
-            fetch[0][4] = channels < 2 ? EVENT_NONE : BPL_S2;
-            fetch[0][5] = channels < 1 ? EVENT_NONE : BPL_S1;
-            fetch[0][6] = channels < 4 ? EVENT_NONE : BPL_S4;
-            fetch[0][7] = channels < 3 ? EVENT_NONE : BPL_S3;
-            
-            fetch[1][0] = channels < 2 ? EVENT_NONE : BPL_S2;
-            fetch[1][1] = channels < 1 ? EVENT_NONE : BPL_S1;
-            fetch[1][2] = channels < 4 ? EVENT_NONE : BPL_S4;
-            fetch[1][3] = channels < 3 ? EVENT_NONE : BPL_S3;
-            fetch[1][4] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
-            fetch[1][5] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
-            fetch[1][6] = channels < 4 ? EVENT_NONE : BPL_S4_MOD;
-            fetch[1][7] = channels < 3 ? EVENT_NONE : BPL_S3_MOD;
+            fetch[0][0] = channels < 4 ? EVENT_NONE : BPL_S4;
+            fetch[0][1] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][2] = channels < 3 ? EVENT_NONE : BPL_S3;
+            fetch[0][3] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[0][4] = channels < 4 ? EVENT_NONE : BPL_S4;
+            fetch[0][5] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[0][6] = channels < 3 ? EVENT_NONE : BPL_S3;
+            fetch[0][7] = channels < 1 ? EVENT_NONE : BPL_S1;
+
+            fetch[1][0] = channels < 4 ? EVENT_NONE : BPL_S4;
+            fetch[1][1] = channels < 2 ? EVENT_NONE : BPL_S2;
+            fetch[1][2] = channels < 3 ? EVENT_NONE : BPL_S3;
+            fetch[1][3] = channels < 1 ? EVENT_NONE : BPL_S1;
+            fetch[1][4] = channels < 4 ? EVENT_NONE : BPL_S4_MOD;
+            fetch[1][5] = channels < 2 ? EVENT_NONE : BPL_S2_MOD;
+            fetch[1][6] = channels < 3 ? EVENT_NONE : BPL_S3_MOD;
+            fetch[1][7] = channels < 1 ? EVENT_NONE : BPL_S1_MOD;
             break;
             
         case 0b11:
