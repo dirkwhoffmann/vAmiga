@@ -394,7 +394,7 @@ public:
      * carries appears. The value is given in buffer entries, of which there
      * are eight per DMA cycle and four per lores pixel (see bplDatBegin).
      */
-    static constexpr Pixel BPLDAT_LATENCY = 8; // 12;
+    static constexpr Pixel BPLDAT_LATENCY = 6;
 
     /* The same write arms the sprites, one lores pixel earlier than it opens
      * the window for the bitplanes. This has to be derived from the value

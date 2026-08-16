@@ -736,12 +736,20 @@ Denise::sprPixelWidth() const
      * In AGA, BPLCON3 bits 7-6 (SPRES) set it independently of the playfield
      * resolution and of how many bits of data the sprite fetches.
      *
-     * Relevant test in the vAmigaTS test suite:
-     * Agnus/AGA/agasprites/simple2
+     * The values in force when the rasterline BEGAN are the ones that count,
+     * not the live registers. drawSprites runs in the hsync handler, which
+     * finishes the line that just ended, so reading bplcon0 or bplcon3
+     * directly would pick up writes the Copper has already made at the top of
+     * the next line and apply them backwards to the line being drawn. Losing
+     * SHRES that way quadruples the width of every sprite in the line -- the
+     * same hazard updateBorderBuffer avoids by reading initialBplcon0.
+     *
+     * Relevant tests in the vAmigaTS test suite:
+     * Agnus/AGA/agasprites/simple2, Agnus/AGA/BPLAM/bplam5
      */
     if (isAGA()) {
 
-        switch ((bplcon3 >> 6) & 0b11) {
+        switch ((initialBplcon3 >> 6) & 0b11) {
 
             case 0b01: return 4;    // Lores
             case 0b10: return 2;    // Hires
@@ -750,7 +758,7 @@ Denise::sprPixelWidth() const
         }
     }
 
-    return res == Resolution::SHRES ? 2 : 4;
+    return shres(initialBplcon0) ? 2 : 4;
 }
 
 template void Denise::pokeBPLCON0<Accessor::CPU>(u16 value);
