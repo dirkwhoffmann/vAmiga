@@ -269,6 +269,7 @@ Headless::smokeTestScript[] = {
     "regression setup A500_OCS_1MB",
     "regression setup A500_ECS_1MB",
     "regression setup A500_PLUS_1MB",
+    "regression setup A1200_2MB",
 #endif
 
     // Test console switching
@@ -296,6 +297,7 @@ Headless::smokeTestScript[] = {
     "amiga init A500_OCS_1MB",
     "amiga init A500_ECS_1MB",
     "amiga init A500_PLUS_1MB",
+    "amiga init A1200_2MB",
     "amiga power off",
     "amiga reset",
 

@@ -578,6 +578,16 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
             break;
+ 
+        case ConfigScheme::A1200_2MB:
+            
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68EC020);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::AGA);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::AGA);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_CHIP_RAM, 2048);
+            set(Opt::MEM_SLOW_RAM, 0);
+            break;
             
         default:
             fatalError;

@@ -117,13 +117,14 @@ enum class ConfigScheme : long
     A1000_OCS_1MB,
     A500_OCS_1MB,
     A500_ECS_1MB,
-    A500_PLUS_1MB
+    A500_PLUS_1MB,
+    A1200_2MB
 };
 
 struct ConfigSchemeEnum : Reflectable<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(ConfigScheme::A500_PLUS_1MB);
+    static constexpr long maxVal = long(ConfigScheme::A1200_2MB);
 
     static const char *_key(ConfigScheme value)
     {
@@ -133,6 +134,7 @@ struct ConfigSchemeEnum : Reflectable<ConfigSchemeEnum, ConfigScheme>
             case ConfigScheme::A500_OCS_1MB:   return "A500_OCS_1MB";
             case ConfigScheme::A500_ECS_1MB:   return "A500_ECS_1MB";
             case ConfigScheme::A500_PLUS_1MB:  return "A500_PLUS_1MB";
+            case ConfigScheme::A1200_2MB:      return "A1200_2MB";
         }
         return "???";
     }
@@ -144,6 +146,7 @@ struct ConfigSchemeEnum : Reflectable<ConfigSchemeEnum, ConfigScheme>
             case ConfigScheme::A500_OCS_1MB:   return "Amiga 500, OCS Chipset, 1MB RAM";
             case ConfigScheme::A500_ECS_1MB:   return "Amiga 500, ECS Chipset, 1MB RAM";
             case ConfigScheme::A500_PLUS_1MB:  return "Amiga 500+, ECS Chipset, 1MB RAM";
+            case ConfigScheme::A1200_2MB:      return "Amiga 1200, AGA Chipset, 2MB RAM";
         }
         return "???";
     }
