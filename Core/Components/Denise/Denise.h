@@ -393,18 +393,33 @@ public:
      * The write opens the display window a fixed time before the data it
      * carries appears. The value is given in buffer entries, of which there
      * are eight per DMA cycle and four per lores pixel (see bplDatBegin).
+     *
+     * The same write arms the sprites, and it does so at the same position:
+     * there is no head start. Earlier versions gave the sprites a lead of
+     * four entries, one lores pixel, which left a strip where Denise emitted
+     * border while the sprites were already live, so a sprite pixel there
+     * punched a hole in the border. Agnus/AGA/BPLAM/bplam8 alternates bands
+     * that carry a sprite with bands that carry none at a fixed window
+     * position, and on an A1200 the border ends in the same column in both
+     * -- 0.12 screen columns apart in lores, 0.01 in super hires, measured
+     * against the ruler. A lead of four entries would show up there as one
+     * column in lores and two in super hires.
+     *
+     * That the sprite-free edge is the calibrated one, rather than the other
+     * way round, comes from Agnus/AGA/BPLAM/bplam6, which has no sprites at
+     * all. Its A1200 fit measures the data-limited edge against the
+     * DIW-limited edge on the same rows, which is immune to the residuals of
+     * the affine map:
+     *
+     *              photo    latency 8   latency 6   latency 2
+     *   lores      -15.30      -14         -15         -17
+     *   hires      -15.20      -14         -15         -17
+     *   shres       -7.25       -6          -7          -9
+     *
+     * Row-to-row scatter there is 0.05 to 0.11 columns, so 6 is within 0.3
+     * and 2 is out by 1.7.
      */
     static constexpr Pixel BPLDAT_LATENCY = 6;
-
-    /* The same write arms the sprites, one lores pixel earlier than it opens
-     * the window for the bitplanes. This has to be derived from the value
-     * above rather than written out, or changing one gate silently closes the
-     * gap and the sprites lose their head start.
-     *
-     * Relevant test: Agnus/AGA/BPLAM/bplam5, whose left Pacman column is
-     * clipped by this value and by nothing else.
-     */
-    static constexpr Pixel SPRITE_LATENCY = BPLDAT_LATENCY - 4;
 
     u8 dBuffer[BUF_CNT];
     u8 bBuffer[BUF_CNT];

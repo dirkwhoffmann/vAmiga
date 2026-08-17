@@ -348,7 +348,7 @@ Denise::setBPLxDAT(u16 value)
         armedOdd = true;
         armedEven = true;
 
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + SPRITE_LATENCY));
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));
     }
 }
 */
@@ -389,9 +389,11 @@ Denise::setBPLxDAT(u16 value)
             armedEven = true;
         }
 
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + SPRITE_LATENCY));
-
-        // The first write of a line is what opens the display window
+        /* The first write of a line is what opens the display window, and the
+         * same write arms the sprites. Both gates sit at the same position;
+         * see BPLDAT_LATENCY for the two photographs that pin it there.
+         */
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));
         bplDatBegin = std::min(bplDatBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));
     }
 }

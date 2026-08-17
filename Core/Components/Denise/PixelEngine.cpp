@@ -463,22 +463,26 @@ PixelEngine::colorize(isize line)
     Pixel pixel = 0;
 
     /* The border buffer closes the display window on two counts, the DIW
-     * flipflop and the first BPL1DAT write, but a sprite answers to the DIW
-     * flipflop and to its own arming position only. BPL1DAT arms the sprites
-     * a little before it lets the bitplanes through, and in that gap Denise
-     * emits border pixels while the sprites are already live, so a sprite
-     * drawn there wins over the border instead of being swallowed by it.
+     * flipflop and the first BPL1DAT write, and a sprite answers to the DIW
+     * flipflop and to its own arming position. The arming position is the
+     * BPL1DAT write itself (see BPLDAT_LATENCY), so spriteClipBegin equals
+     * bplDatBegin and there is no strip in which a sprite could get in front
+     * of the border: a sprite left of the window edge is swallowed by it,
+     * which is what an A1200 does, measured in Agnus/AGA/BPLAM/bplam8.
      *
-     * The gap is four buffer entries wide and it only exists where the
-     * window is open, hence the clamp against bBufferDiwOpen: without it a
-     * DIWSTRT sitting right of the bitplane data would let the sprite
-     * through in front of its own window edge.
+     * The call below is therefore a no-op with the default configuration. It
+     * is not dead code, though: borderSprites() seeds spriteClipBegin to 0 in
+     * the hsync handler, and this is where a sprite gets in front of the
+     * border strip between the window edge and the first bitplane pixel. The
+     * clamp against bBufferDiwOpen keeps it inside the window even then;
+     * without it a DIWSTRT sitting right of the bitplane data would let the
+     * sprite through in front of its own window edge.
      *
      * Relevant tests: Denise/Sprites/clip (diwclip and newclip),
      * Denise/Sprites/general/sprbpu1
      */
-    removeBorderOverSprites(std::max(denise.spriteClipBegin, denise.bBufferDiwOpen),
-                            denise.bplDatBegin);
+    // removeBorderOverSprites(std::max(denise.spriteClipBegin, denise.bBufferDiwOpen),
+    //                         denise.bplDatBegin);
 
     // Initialize the HAM mode hold register with the current background color
     AmigaColor hold = color[0];
