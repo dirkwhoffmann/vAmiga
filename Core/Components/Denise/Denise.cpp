@@ -1156,8 +1156,26 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
         */
 
         if (ssra[sprite1] | ssrb[sprite1] | ssra[sprite2] | ssrb[sprite2]) {
-            
-            if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
+
+            /* A sprite pixel covers several buffer entries -- four in lores,
+             * two in super hires -- and nothing guarantees that the clipping
+             * range falls on one of its boundaries. The pixel is therefore
+             * admitted as soon as ANY of its entries lies inside the range,
+             * and the entries outside are dropped one by one further down.
+             * Testing hpos alone discards a straddling pixel whole, which is
+             * wrong in principle: the hardware clips where the window edge
+             * is, not at the next sprite pixel boundary.
+             *
+             * In practice this is currently a no-op. No test in the suite
+             * produces a sprite pixel that straddles either end of the range
+             * -- the whole of Denise/Sprites/clip and Agnus/AGA/BPLAM is
+             * unchanged by it, to the pixel. It was written while chasing the
+             * one column strip of playfield that Denise/Sprites/clip/sprgate
+             * shows between the border and a clipped sprite, and which an
+             * A1200 and an A500+ do not show. It is NOT the cause of that
+             * strip; the cause is still unknown.
+             */
+            if (hpos + offset > spriteClipBegin && hpos < spriteClipEnd) {
 
                 if (attached) {
                     
@@ -1205,7 +1223,8 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
 template <isize x, Resolution R> void
 Denise::drawSpritePixel(Pixel hpos)
 {
-    assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
+    // The pixel may straddle either end of the range; see drawSpritePair
+    assert(hpos + sprPixelSize<R>() > spriteClipBegin && hpos < spriteClipEnd);
 
     // u8 a = (ssra[x] >> 15);
     // u8 b = (ssrb[x] >> 14) & 2;
@@ -1226,6 +1245,10 @@ Denise::drawSpritePixel(Pixel hpos)
 
         for (Pixel i = 0; i < width; i++) {
 
+            // Drop the entries of this pixel that fall outside the range
+            if (hpos + i < spriteClipBegin) continue;
+            if (hpos + i >= spriteClipEnd) break;
+
             if (z > zBuffer[hpos + i]) mBuffer[hpos + i] = base | col;
             zBuffer[hpos + i] |= z;
         }
@@ -1236,7 +1259,8 @@ template <isize x, Resolution R> void
 Denise::drawAttachedSpritePixelPair(Pixel hpos)
 {
     assert(IS_ODD(x));
-    assert(hpos >= spriteClipBegin && hpos < spriteClipEnd);
+    // The pixel may straddle either end of the range; see drawSpritePair
+    assert(hpos + sprPixelSize<R>() > spriteClipBegin && hpos < spriteClipEnd);
 
     u8 col =
     u8((ssra[x-1] >> 63) & 0b0001) |
@@ -1256,6 +1280,10 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
         constexpr Pixel width = sprPixelSize<R>();
 
         for (Pixel i = 0; i < width; i++) {
+
+            // Drop the entries of this pixel that fall outside the range
+            if (hpos + i < spriteClipBegin) continue;
+            if (hpos + i >= spriteClipEnd) break;
 
             if (z > zBuffer[hpos + i]) {
 
