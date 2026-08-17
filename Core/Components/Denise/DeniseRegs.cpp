@@ -761,6 +761,27 @@ Denise::sprPixelWidth() const
     return shres(initialBplcon0) ? 2 : 4;
 }
 
+isize
+Denise::colorOffset(u16 bits) const
+{
+    /* PF2OF is an encoded field:
+     *
+     *   000 : none
+     *   001 : 2    (plane 2 affected)
+     *   010 : 4    (plane 3 affected)
+     *   011 : 8    (plane 3 affected) (default)
+     *   100 : 16   (plane 5 affected)
+     *   101 : 32   (plane 6 affected)
+     *   110 : 64   (plane 7 affected)
+     *   111 : 128  (plane 8 affected)
+     */
+    
+    if (isAGA()) return bits ? (1 << bits) : 0;
+    
+    // On OCS/ECS, the color offset is hard-coded to 8
+    return 8;
+}
+
 template void Denise::pokeBPLCON0<Accessor::CPU>(u16 value);
 template void Denise::pokeBPLCON0<Accessor::AGNUS>(u16 value);
 template void Denise::pokeBPLCON1<Accessor::CPU>(u16 value);

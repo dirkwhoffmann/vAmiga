@@ -851,7 +851,7 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
     u8 bpMask = isAGA() ? 0xFF : 0x3F;
     
     // Color offset of the second playfield
-    u8 ofs2 = pf2of();
+    u8 ofs2 = (u8)colorOffset(pf2of());
     
     for (Pixel i = from; i < to; i++) {
 

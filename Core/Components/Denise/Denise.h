@@ -993,8 +993,8 @@ public:
     u8 colorBank() const { return colorBank(bplcon3); }
 
     // PF2OF is an encoded field: 010 -> 4, 011 -> 8, 100 -> 16 ... 111 -> 128
-    static u8 pf2of(u16 v) { auto n = (v >> 10) & 0b111; return u8(n ? 1 << n : 0); }
-    u8 pf2of() const { return isAGA() ? pf2of(bplcon3) : 8; }
+    static u8 pf2of(u16 v) { return (v >> 10) & 0b111; }
+    u8 pf2of() const { return pf2of(bplcon3); }
 
     static bool loct(u16 v) { return !!GET_BIT(v, 9); }
     bool loct() const { return loct(bplcon3); }
@@ -1038,7 +1038,7 @@ public:
     */
     
     //
-    // Computing derived values
+    // Derived values
     //
 
 private:
@@ -1082,6 +1082,9 @@ private:
 
     // Returns the width of a single sprite pixel
     isize sprPixelWidth() const;
+    
+    // Computes the color offset out of the encoded PF2OF bits
+    isize colorOffset(u16 bits) const;
 };
 
 }

@@ -78,8 +78,8 @@ Denise::_dump(Category category, std::ostream &os) const
         os << dec(colorBank()) << std::endl;
         os << tab("LOCT");
         os << bol(loct()) << std::endl;
-        os << tab("PF2 offset");
-        os << dec(pf2of()) << std::endl;
+        os << tab("PF2");
+        os << dec(pf2of()) << " (offset " << dec(colorOffset(pf2of())) << ")" << std::endl;
         os << tab("BRDSPRT");
         os << bol(brdsprt()) << std::endl;
         os << tab("Sprite base (odd)");
