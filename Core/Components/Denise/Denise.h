@@ -23,6 +23,12 @@ class Denise final : public SubComponent {
 
     friend class DeniseDebugger;
 
+    /* PixelEngine::removeBorderOverSprites writes into bBuffer and has to
+     * invalidate it for the next line afterwards, since what it writes depends
+     * on the sprite data of the line it just drew.
+     */
+    friend class PixelEngine;
+
     Descriptions descriptions = {{
 
         .type           = Class::Denise,
@@ -394,32 +400,47 @@ public:
      * carries appears. The value is given in buffer entries, of which there
      * are eight per DMA cycle and four per lores pixel (see bplDatBegin).
      *
-     * The same write arms the sprites, and it does so at the same position:
-     * there is no head start. Earlier versions gave the sprites a lead of
-     * four entries, one lores pixel, which left a strip where Denise emitted
-     * border while the sprites were already live, so a sprite pixel there
-     * punched a hole in the border. Agnus/AGA/BPLAM/bplam8 alternates bands
-     * that carry a sprite with bands that carry none at a fixed window
-     * position, and on an A1200 the border ends in the same column in both
-     * -- 0.12 screen columns apart in lores, 0.01 in super hires, measured
-     * against the ruler. A lead of four entries would show up there as one
-     * column in lores and two in super hires.
-     *
-     * That the sprite-free edge is the calibrated one, rather than the other
-     * way round, comes from Agnus/AGA/BPLAM/bplam6, which has no sprites at
-     * all. Its A1200 fit measures the data-limited edge against the
+     * The value is pinned by Agnus/AGA/BPLAM/bplam6, which has no sprites in
+     * it at all. Its A1200 fit measures the data-limited edge against the
      * DIW-limited edge on the same rows, which is immune to the residuals of
      * the affine map:
      *
-     *              photo    latency 8   latency 6   latency 2
-     *   lores      -15.30      -14         -15         -17
-     *   hires      -15.20      -14         -15         -17
-     *   shres       -7.25       -6          -7          -9
+     *              photo    latency 8   latency 6   latency 4
+     *   lores      -15.30      -14         -15         -16
+     *   hires      -15.20      -14         -15         -16
+     *   shres       -7.25       -6          -7          -8
      *
-     * Row-to-row scatter there is 0.05 to 0.11 columns, so 6 is within 0.3
-     * and 2 is out by 1.7.
+     * Row-to-row scatter there is 0.05 to 0.11 columns, so 6 is within 0.3.
      */
     static constexpr Pixel BPLDAT_LATENCY = 6;
+
+    /* The same write arms the sprites, but two buffer entries -- one screen
+     * column, half a lores pixel -- AFTER it opens the window for the
+     * bitplanes, not before. The window therefore gets one column of
+     * playfield in before the leftmost sprite pixel can appear.
+     *
+     * This is measured in Agnus/AGA/BPLAM/bplam9, whose Pacman body is
+     * black. That is the only colour scheme in which the column separates
+     * from the sprite: with the body painted in the playfield's own index 0
+     * -- bplam7 and bplam8 -- a column of playfield is invisible against the
+     * body and merely makes it look one wider, which is why bplam8 appeared
+     * to show nothing here at all.
+     *
+     * In bplam9's super hires band at lines $102 to $111 the A1200 puts one
+     * column of light between the black border and the black sprite, on
+     * every sprite line and on no sprite-free line. Fitted against the ruler
+     * (5.109 photo px per column, blur sigma 1.64 columns) its integrated
+     * brightness is 65 +/- 10, against 76 for one full column of picture
+     * colour and 47 for one column of index 0. It is the picture.
+     *
+     * The sign was wrong here for a while and the reason is worth keeping. A
+     * LEAD of four entries, which is what this constant originally was, lets
+     * the sprite reach two columns into the border; a lead of two lets it
+     * reach one. Both put the sprite before the picture. Only a LAG puts a
+     * column of picture between the border and the sprite, which is what the
+     * photograph shows.
+     */
+    static constexpr Pixel SPRITE_LATENCY = BPLDAT_LATENCY + 2;
 
     u8 dBuffer[BUF_CNT];
     u8 bBuffer[BUF_CNT];

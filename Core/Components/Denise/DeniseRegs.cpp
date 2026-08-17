@@ -348,7 +348,7 @@ Denise::setBPLxDAT(u16 value)
         armedOdd = true;
         armedEven = true;
 
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + SPRITE_LATENCY));
     }
 }
 */
@@ -390,10 +390,10 @@ Denise::setBPLxDAT(u16 value)
         }
 
         /* The first write of a line is what opens the display window, and the
-         * same write arms the sprites. Both gates sit at the same position;
-         * see BPLDAT_LATENCY for the two photographs that pin it there.
+         * same write arms the sprites two entries earlier. See BPLDAT_LATENCY
+         * and SPRITE_LATENCY for the photographs that pin both.
          */
-        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));
+        spriteClipBegin = std::min(spriteClipBegin, Pixel(agnus.pos.pixel() + SPRITE_LATENCY));
         bplDatBegin = std::min(bplDatBegin, Pixel(agnus.pos.pixel() + BPLDAT_LATENCY));
     }
 }
