@@ -723,6 +723,13 @@ Denise::translate()
     bool dual = dbplf(initialBplcon0);
     bool hamLine = state.ham;
 
+    /* The sprites of this line are drawn straight after this walk, and they
+     * need the BPLCON0 in force where they appear rather than the one from the
+     * start of the line. This loop already visits every BPLCON0 change in
+     * order, so it is the cheapest place to pick that up. See spriteBplcon0.
+     */
+    spriteBplcon0 = initialBplcon0;
+
     // Add a dummy register change to ensure we draw until the line ends
     conChanges.insert(BUF_CNT, RegChange { .reg = Reg(0), .value = 0 });
 
@@ -744,10 +751,11 @@ Denise::translate()
         switch (change.reg) {
 
             case Reg::BPLCON0:
-                
+
                 dual = dbplf(bplcon0);
                 state.ham = ham(change.value);
                 hamLine |= state.ham;
+                if (trigger <= spriteClipBegin) spriteBplcon0 = change.value;
                 break;
 
             case Reg::BPLCON2:
@@ -1573,6 +1581,12 @@ Denise::hsyncHandler(isize vpos)
 
     // Update border buffer if neccessary
     updateBorderBuffer();
+
+    /* Seed the value the sprites are drawn at. translate() refines it by
+     * walking this line's BPLCON0 changes; the VBLANK path below skips
+     * translate(), so it keeps the start-of-line value.
+     */
+    spriteBplcon0 = initialBplcon0;
 
     // Check if we are below the VBLANK area
     if (!agnus.inVBlankArea(vpos) && !frameSkips) {

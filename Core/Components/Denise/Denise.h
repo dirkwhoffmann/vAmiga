@@ -155,6 +155,24 @@ public:
     u16 initialBplcon3;
     u16 initialBplcon4;
 
+    /* BPLCON0 as it stands where the sprites of this line are drawn, which is
+     * neither of the two values above and cannot be either of them.
+     * hsyncHandler runs at h = $12, so by the time the sprites are drawn the
+     * live bplcon0 already carries the NEXT line's Copper writes, while
+     * initialBplcon0 does not yet carry THIS line's. A Copper list that
+     * switches resolution at the top of a line -- which is how they all do it
+     * -- therefore draws the sprites of that one line at the previous line's
+     * resolution.
+     *
+     * This is seeded from initialBplcon0 and then advanced by translate(),
+     * which is already walking conChanges, up to spriteClipBegin: the first
+     * position at which a sprite pixel can appear.
+     *
+     * Relevant test: Agnus/AGA/BPLAM/bplam5, line $D8, the first line of the
+     * super hires section, where the left Pacman came out four times too wide.
+     */
+    u16 spriteBplcon0;
+
     // Bitplane resolution (derived from bplcon0)
     Resolution res;
 
@@ -524,6 +542,7 @@ public:
         CLONE(initialBplcon2)
         CLONE(initialBplcon3)
         CLONE(initialBplcon4)
+        CLONE(spriteBplcon0)
         CLONE(res)
         CLONE(pixelOffsetOdd)
         CLONE(pixelOffsetEven)
@@ -609,6 +628,7 @@ private:
         << initialBplcon2
         << initialBplcon3
         << initialBplcon4
+        << spriteBplcon0
         << res
         << pixelOffsetOdd
         << pixelOffsetEven

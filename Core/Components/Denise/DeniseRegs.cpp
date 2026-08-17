@@ -738,16 +738,24 @@ Denise::sprPixelWidth() const
      * In AGA, BPLCON3 bits 7-6 (SPRES) set it independently of the playfield
      * resolution and of how many bits of data the sprite fetches.
      *
-     * The values in force when the rasterline BEGAN are the ones that count,
-     * not the live registers. drawSprites runs in the hsync handler, which
-     * finishes the line that just ended, so reading bplcon0 or bplcon3
-     * directly would pick up writes the Copper has already made at the top of
-     * the next line and apply them backwards to the line being drawn. Losing
-     * SHRES that way quadruples the width of every sprite in the line -- the
-     * same hazard updateBorderBuffer avoids by reading initialBplcon0.
+     * Neither the live bplcon0 nor initialBplcon0 is the right thing to read
+     * here, and the two fail in opposite directions. drawSprites runs from the
+     * hsync handler at h = $12, so the live register already carries the NEXT
+     * line's Copper writes -- reading it applies them backwards and loses
+     * SHRES for the whole line. initialBplcon0 is a snapshot taken before THIS
+     * line's Copper writes, so on the one line where a list switches
+     * resolution it hands back the PREVIOUS line's setting, which is the same
+     * error one line earlier. spriteBplcon0 is initialBplcon0 advanced by
+     * translate() up to spriteClipBegin, which is the value actually in force
+     * where a sprite pixel can first appear.
+     *
+     * SPRES is still read from the start of the line. It is not tracked
+     * positionally anywhere -- setBPLCON3 only records a change when BRDRBLNK
+     * flips -- so a mid-line SPRES write is not modelled at all. Nothing in
+     * the test suite exercises one.
      *
      * Relevant tests in the vAmigaTS test suite:
-     * Agnus/AGA/agasprites/simple2, Agnus/AGA/BPLAM/bplam5
+     * Agnus/AGA/agasprites/simple2, Agnus/AGA/BPLAM/bplam5 (line $D8)
      */
     if (isAGA()) {
 
@@ -760,7 +768,7 @@ Denise::sprPixelWidth() const
         }
     }
 
-    return shres(initialBplcon0) ? 2 : 4;
+    return shres(spriteBplcon0) ? 2 : 4;
 }
 
 isize
