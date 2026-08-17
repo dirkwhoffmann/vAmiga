@@ -1158,22 +1158,27 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
         if (ssra[sprite1] | ssrb[sprite1] | ssra[sprite2] | ssrb[sprite2]) {
 
             /* A sprite pixel covers several buffer entries -- four in lores,
-             * two in super hires -- and nothing guarantees that the clipping
-             * range falls on one of its boundaries. The pixel is therefore
-             * admitted as soon as ANY of its entries lies inside the range,
-             * and the entries outside are dropped one by one further down.
-             * Testing hpos alone discards a straddling pixel whole, which is
-             * wrong in principle: the hardware clips where the window edge
-             * is, not at the next sprite pixel boundary.
+             * two in hires, one in super hires -- and the window edge does
+             * not land on one of its boundaries. bplDatBegin is the first
+             * BPL1DAT write plus BPLDAT_LATENCY, which puts it two entries
+             * into a four entry lores pixel. Testing hpos alone discards that
+             * straddling pixel whole and starts the sprite a grid step later,
+             * leaving one screen column of playfield between the border and
+             * the sprite. Admitting the pixel as soon as ANY of its entries is
+             * inside the range, and dropping the outside entries one by one
+             * below, draws the part that belongs on screen.
              *
-             * In practice this is currently a no-op. No test in the suite
-             * produces a sprite pixel that straddles either end of the range
-             * -- the whole of Denise/Sprites/clip and Agnus/AGA/BPLAM is
-             * unchanged by it, to the pixel. It was written while chasing the
-             * one column strip of playfield that Denise/Sprites/clip/sprgate
-             * shows between the border and a clipped sprite, and which an
-             * A1200 and an A500+ do not show. It is NOT the cause of that
-             * strip; the cause is still unknown.
+             * An A1200 and an A500+ show no such column: the sprite runs
+             * straight into the border. Measured in
+             * Denise/Sprites/clip/sprgate, whose clipped bands read 0 in
+             * lores and hires on both machines. This is what makes them 0 --
+             * SPRITE_LATENCY alone does not. With the latency at zero but the
+             * pixel discarded whole they still read 1.
+             *
+             * NOTE: only the left edge is governed from here. spriteClipEnd is
+             * PIXEL_CNT + 64, so the right hand test never fires; a sprite is
+             * bounded on the right by hstop in the loop above, which cuts on
+             * the same pixel granularity and has the same defect unaddressed.
              */
             if (hpos + offset > spriteClipBegin && hpos < spriteClipEnd) {
 
