@@ -432,33 +432,33 @@ public:
      */
     static constexpr Pixel BPLDAT_LATENCY = 6;
 
-    /* The same write arms the sprites, but two buffer entries -- one screen
-     * column, half a lores pixel -- AFTER it opens the window for the
-     * bitplanes, not before. The window therefore gets one column of
-     * playfield in before the leftmost sprite pixel can appear.
+    /* The same write arms the sprites, and it does so at the same position:
+     * there is no lead and no lag. Denise/Sprites/clip/sprgate settles this.
+     * Its clipped bands put a sprite that starts left of the window edge hard
+     * against the border, and the strip of playfield between the two is
+     * counted rather than measured:
      *
-     * This is measured in Agnus/AGA/BPLAM/bplam9, whose Pacman body is
-     * black. That is the only colour scheme in which the column separates
-     * from the sprite: with the body painted in the playfield's own index 0
-     * -- bplam7 and bplam8 -- a column of playfield is invisible against the
-     * body and merely makes it look one wider, which is why bplam8 appeared
-     * to show nothing here at all.
+     *                          g0  g1  g2  g3   g4  g5  g6  g7  g8  g9
+     *   A1200  lores            0   0   0   0  1.1 2.8 4.4 6.6 8.7 10.6
+     *   A1200  hires            0   0   0   0  1.4 3.1 4.9 7.1 8.9 10.9
+     *   A500+  lores            0   0   0   0  1.3 3.2 5.3 7.3 9.3 11.5
+     *   A500+  hires            0   0   0   0  1.4 3.5 5.6 7.5 9.6 11.3
+     *   this value              0   0   0   0   1   3   5   7   9  11
+     *   value + 2               1   1   1   1   1   3   5   7   9  11
      *
-     * In bplam9's super hires band at lines $102 to $111 the A1200 puts one
-     * column of light between the black border and the black sprite, on
-     * every sprite line and on no sprite-free line. Fitted against the ruler
-     * (5.109 photo px per column, blur sigma 1.64 columns) its integrated
-     * brightness is 65 +/- 10, against 76 for one full column of picture
-     * colour and 47 for one column of index 0. It is the picture.
+     * Four readings, two machines, two resolutions, all with a plateau of
+     * zero. Groups 0 to 3 have the sprite clipped, so their strip cannot be
+     * the sprite sticking out -- it is this constant, and it is zero. Groups
+     * 4 upward are unclipped and measure the geometry instead, which agrees
+     * either way.
      *
-     * The sign was wrong here for a while and the reason is worth keeping. A
-     * LEAD of four entries, which is what this constant originally was, lets
-     * the sprite reach two columns into the border; a lead of two lets it
-     * reach one. Both put the sprite before the picture. Only a LAG puts a
-     * column of picture between the border and the sprite, which is what the
-     * photograph shows.
+     * Still unexplained: Agnus/AGA/BPLAM/bplam9 photographs one column of
+     * playfield between border and sprite in SUPER HIRES on an A1200, which
+     * this value does not produce. sprgate has no super hires section -- ECS
+     * Denise has no super hires -- so the two do not overlap and nothing yet
+     * rules out the gate being resolution dependent.
      */
-    static constexpr Pixel SPRITE_LATENCY = BPLDAT_LATENCY + 2;
+    static constexpr Pixel SPRITE_LATENCY = BPLDAT_LATENCY;
 
     u8 dBuffer[BUF_CNT];
     u8 bBuffer[BUF_CNT];
