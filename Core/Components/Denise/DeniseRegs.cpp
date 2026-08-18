@@ -216,37 +216,7 @@ Denise::setBPLCON2(u16 newValue)
     // Check if the KILLEHB bit has changed
     if (killehb(oldValue) ^ killehb(newValue)) {
 
-        /* The pixel engine's own timing is tuned independently of conChanges'
-         * (see translate(), which has its own, unrelated timing requirements).
-         *
-         * The offset is measured, not derived. Denise/Registers/BPLCON2/killehb
-         * switches KILLEHB from the Copper at 24 positions in a LORES region
-         * and 24 more in a HIRES one, and the A1200 photograph puts every one
-         * of those edges later than the -4 this line used to carry:
-         *
-         *                        hardware edge, in screenshot columns
-         *   LORES   59 edges     78 + 1.21 (+/- 0.10)
-         *   HIRES   46 edges     94 + 1.80 (+/- 0.10)
-         *
-         * calibrated against the stripe grid of the same photograph, which is
-         * painted from bitplane data and so is independent of the timing under
-         * test. Edges where the red run is bounded by the display window
-         * rather than by a write are excluded: they do not move with this
-         * constant, and including them biases the fit.
-         *
-         * Two entries is one column here, so -2 puts LORES at 79 and HIRES at
-         * 95. LORES then sits 0.21 columns from the measurement and HIRES
-         * 0.80. -1 would move both up one column and reverse that (0.79 and
-         * 0.20); the two settings are a statistical tie, and -2 wins only
-         * because the LORES measurement is the sounder of the pair -- its
-         * stripe period is twice as long, and its grid fit half as noisy.
-         *
-         * What no single constant can fix is that the two regions disagree:
-         * hardware puts its HIRES edge 16.6 columns after its LORES one and
-         * vAmiga puts it at exactly 16. That residual is well under one lores
-         * pixel and under one DMA cycle, so it is left alone.
-         */
-        auto colPixel = std::max(agnus.pos.pixel() - 2, Pixel(0));
+        auto colPixel = std::max(agnus.pos.pixel() - (lores() ? 2 : 1), Pixel(0));
         pixelEngine.colChanges.insert(colPixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
     }
 }
