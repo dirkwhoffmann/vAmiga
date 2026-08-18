@@ -530,11 +530,12 @@ Denise::peekCOLORxx(isize xx)
 {
     u16 result;
     
-    // OCS and ECS chipsets do not support reading back color registers.
-    // On AGA chipsets, color registers are readable when the RDRAM bit is set.
-
     if (isAGA() && denise.rdram()) {
-        result = 0; // TODO
+
+        auto reg = isize(colorBank()) * 32 + xx;
+        result = loct() ? pixelEngine.color[reg].getLoNibbles()
+                        : pixelEngine.color[reg].getHiNibbles();
+
     } else {
         result = mem.peekCustomFaulty16(u32(0x180 + 2 * xx));
     }
@@ -546,8 +547,14 @@ Denise::peekCOLORxx(isize xx)
 u16
 Denise::spypeekCOLORxx(isize xx) const
 {
-    u16 result = 0; // TODO
-    return result;
+    // Same as peekCOLORxx, minus the side effect of a faulty-bus read
+    if (isAGA() && rdram()) {
+
+        auto reg = isize(colorBank()) * 32 + xx;
+        return loct() ? pixelEngine.color[reg].getLoNibbles()
+                      : pixelEngine.color[reg].getHiNibbles();
+    }
+    return 0;
 }
 
 template <isize xx, Accessor s> void
