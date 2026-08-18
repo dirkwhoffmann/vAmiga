@@ -126,7 +126,7 @@ public:
      * across its full width, which is why BRDRBLNK blackens such a line
      * completely instead of leaving the display window in COLOR00.
      *
-     * Relevant tests: Denise/Registers/BPLCON3/brdrblnk2, Agnus/AGA/AGADDF
+     * Relevant tests: Denise/Registers/BPLCON3/brdrblnk2, Agnus/DDF/AGADDF
      */
     Pixel bplDatBegin;
 
@@ -168,7 +168,7 @@ public:
      * which is already walking conChanges, up to spriteClipBegin: the first
      * position at which a sprite pixel can appear.
      *
-     * Relevant test: Agnus/AGA/BPLAM/bplam5, line $D8, the first line of the
+     * Relevant test: Denise/Registers/BPLCON4/bplam5, line $D8, the first line of the
      * super hires section, where the left Pacman came out four times too wide.
      */
     u16 spriteBplcon0;
@@ -418,7 +418,7 @@ public:
      * carries appears. The value is given in buffer entries, of which there
      * are eight per DMA cycle and four per lores pixel (see bplDatBegin).
      *
-     * The value is pinned by Agnus/AGA/BPLAM/bplam6, which has no sprites in
+     * The value is pinned by Denise/Registers/BPLCON4/bplam6, which has no sprites in
      * it at all. Its A1200 fit measures the data-limited edge against the
      * DIW-limited edge on the same rows, which is immune to the residuals of
      * the affine map:
@@ -452,7 +452,7 @@ public:
      * 4 upward are unclipped and measure the geometry instead, which agrees
      * either way.
      *
-     * Still unexplained: Agnus/AGA/BPLAM/bplam9 photographs one column of
+     * Still unexplained: Denise/Registers/BPLCON4/bplam9 photographs one column of
      * playfield between border and sprite in SUPER HIRES on an A1200, which
      * this value does not produce. sprgate has no super hires section -- ECS
      * Denise has no super hires -- so the two do not overlap and nothing yet

@@ -291,7 +291,7 @@ Denise::isReloadCycle(u8 scrollWord) const
      * says nothing about how long a super hires fetch actually lasts.
      *
      * Relevant tests in the vAmigaTS test suite:
-     * Agnus/AGA/shres/shres00 to shres11 and Agnus/AGA/FMODE
+     * Denise/Modes/shres/shres00 to shres11 and Agnus/Registers/FMODE
      */
     auto fm = agnus.fmode & 0b11;
 
@@ -1308,7 +1308,7 @@ Denise::borderColor(u16 con0, u16 con3) const
      * registers directly would pick up writes the Copper has already made
      * at the top of the NEXT line and leak them one line backwards.
      *
-     * Relevant test in the vAmigaTS test suite: Agnus/AGA/brdrblnk
+     * Relevant test in the vAmigaTS test suite: Denise/Modes/brdrblnk
      */
     if constexpr (debug::BORDER_DEBUG) {
         return PixelEngine::BORDER_DEBUG; // Debug color

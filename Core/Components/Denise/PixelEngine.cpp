@@ -469,7 +469,7 @@ PixelEngine::colorize(isize line)
      * strip Denise emits border pixels while the sprites are already live, so
      * the border is lifted where a sprite pixel sits and the column shows the
      * playfield instead. One screen column wide, measured on an A1200 in
-     * Agnus/AGA/BPLAM/bplam9; see SPRITE_LATENCY.
+     * Denise/Registers/BPLCON4/bplam9; see SPRITE_LATENCY.
      *
      * The strip only exists where the window is open, hence the clamp against
      * bBufferDiwOpen: without it a DIWSTRT sitting right of the bitplane data
@@ -479,7 +479,7 @@ PixelEngine::colorize(isize line)
      * spriteClipBegin to 0 in the hsync handler, so the sprite gets in front
      * of the whole border strip rather than one column of it.
      *
-     * Relevant tests: Agnus/AGA/BPLAM/bplam9, Denise/Sprites/clip (diwclip
+     * Relevant tests: Denise/Registers/BPLCON4/bplam9, Denise/Sprites/clip (diwclip
      * and newclip), Denise/Sprites/general/sprbpu1
      */
     removeBorderOverSprites(std::max(denise.spriteClipBegin, denise.bBufferDiwOpen),
@@ -670,7 +670,7 @@ PixelEngine::removeBorderOverSprites(Pixel from, Pixel to)
      * on the sprite data of THIS line. Left alone, a punched column stays
      * punched for every following line until the buffer happens to be rebuilt
      * for another reason -- eleven lines of false picture below a Pacman, in
-     * Agnus/AGA/BPLAM/bplam9. So a line that punched has to invalidate the
+     * Denise/Registers/BPLCON4/bplam9. So a line that punched has to invalidate the
      * buffer for the next one.
      */
     if (punched) denise.markBorderBufferAsDirty(1);
