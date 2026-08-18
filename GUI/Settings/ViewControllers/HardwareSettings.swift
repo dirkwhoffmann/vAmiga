@@ -314,6 +314,7 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.AGNUS_REVISION, AgnusRevision.AGA.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.AGA.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
+            defaults.set(.MEM_CHIP_RAM, 2048);
             
         default:
             fatalError()

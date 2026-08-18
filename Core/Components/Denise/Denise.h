@@ -972,6 +972,9 @@ public:
         
     u16 peekCOLORxx(isize xx);
     u16 spypeekCOLORxx(isize xx) const;
+
+    // Reads back a color register, honouring writes not yet replayed
+    u16 colorRegValue(isize xx) const;
     template <isize xx, Accessor s> void pokeCOLORxx(u16 value);
     
     // Records a write to one of the 32 color registers in the change history

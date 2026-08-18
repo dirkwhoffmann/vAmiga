@@ -216,7 +216,11 @@ Denise::setBPLCON2(u16 newValue)
     // Check if the KILLEHB bit has changed
     if (killehb(oldValue) ^ killehb(newValue)) {
 
-        auto colPixel = std::max(agnus.pos.pixel() - (lores() ? 2 : 1), Pixel(0));
+        /* The offset is measured, not derived: killehb2 puts the A1200
+         * switch within +0.3 columns of this in LORES, HIRES and SHRES
+         * alike, so one constant serves all three.
+         */
+        auto colPixel = std::max(agnus.pos.pixel() - 2, Pixel(0));
         pixelEngine.colChanges.insert(colPixel, RegChange { .reg = Reg::BPLCON2, .value = newValue });
     }
 }
@@ -530,12 +534,11 @@ Denise::peekCOLORxx(isize xx)
 {
     u16 result;
     
+    // OCS and ECS chipsets do not support reading back color registers.
+    // On AGA chipsets, color registers are readable when the RDRAM bit is set.
+
     if (isAGA() && denise.rdram()) {
-
-        auto reg = isize(colorBank()) * 32 + xx;
-        result = loct() ? pixelEngine.color[reg].getLoNibbles()
-                        : pixelEngine.color[reg].getHiNibbles();
-
+        result = colorRegValue(xx);
     } else {
         result = mem.peekCustomFaulty16(u32(0x180 + 2 * xx));
     }
@@ -547,14 +550,53 @@ Denise::peekCOLORxx(isize xx)
 u16
 Denise::spypeekCOLORxx(isize xx) const
 {
-    // Same as peekCOLORxx, minus the side effect of a faulty-bus read
-    if (isAGA() && rdram()) {
+    return isAGA() && rdram() ? colorRegValue(xx) : 0;
+}
 
-        auto reg = isize(colorBank()) * 32 + xx;
-        return loct() ? pixelEngine.color[reg].getLoNibbles()
-                      : pixelEngine.color[reg].getHiNibbles();
+u16
+Denise::colorRegValue(isize xx) const
+{
+    /* A read is addressed exactly like a write: BPLCON3 selects one of the
+     * eight 32-color banks, and LOCT selects which nibble of each component
+     * comes back.
+     *
+     * The register file is not updated as a write is issued. Color writes
+     * queue in colChanges and are replayed once per line (see
+     * PixelEngine::colorize and replayColRegChanges), so the file holds the
+     * state as of the end of the previous line. A read therefore starts from
+     * the file and applies, in order, every queued write to this register
+     * recorded AT OR BEFORE the read position. Position matters: a write
+     * recorded later in the same line has not happened yet and must stay
+     * invisible, which is why this cannot simply take the newest entry.
+     *
+     * Relevant test: Denise/Registers/COLOR/rdram2, whose three sections are
+     * write-before-read, write-after-read, and a write a line earlier.
+     */
+    auto reg = isize(colorBank()) * 32 + xx;
+    auto now = agnus.pos.pixel();
+
+    AmigaColor c = pixelEngine.color[reg];
+
+    for (isize i = 0, end = pixelEngine.colChanges.end(); i < end; i++) {
+
+        // The buffer is sorted by position, so the rest is in the future
+        if (pixelEngine.colChanges.keys[i] > now) break;
+
+        const RegChange &change = pixelEngine.colChanges.elements[i];
+
+        // Skip the entries that are not color registers (see applyRegisterChange)
+        if (change.reg == Reg(0)) continue;
+        if (change.reg == Reg::BPLCON0) continue;
+        if (change.reg == Reg::BPLCON2) continue;
+
+        // The register number and the LOCT bit are encoded in the reg field
+        if (((isize(change.reg) >> 8) & 0xFF) != reg) continue;
+
+        if (!((isize(change.reg) >> 16) & 0xFF)) c.setHiNibbles(change.value);
+        c.setLoNibbles(change.value);
     }
-    return 0;
+
+    return loct() ? c.getLoNibbles() : c.getHiNibbles();
 }
 
 template <isize xx, Accessor s> void
