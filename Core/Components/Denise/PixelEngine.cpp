@@ -517,7 +517,8 @@ PixelEngine::colorize(isize line)
     // Wipe out the HBLANK area
     auto start = agnus.pos.pixel(HBLANK_MIN);
     auto stop  = agnus.pos.pixel(HBLANK_MAX);
-    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = u32(Texture::hblank);
+    auto hbcol = Texture::hblank;
+    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = u32(hbcol);
 }
 
 void
