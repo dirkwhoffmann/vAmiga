@@ -150,8 +150,29 @@ PixelEngine::updateRGBA(isize nr)
     
     palette[nr] = toTexel(color[nr]);
 
+    // Keep the ECS super hires half-color tables in sync (see colorizeShres)
+    if (nr < 32) updateShresRGBA(nr);
+
     // Keep the background border color in sync with color register 0
     if (nr == 0) borderPalette[BORDER_BG] = palette[0];
+}
+
+void
+PixelEngine::updateShresRGBA(isize nr)
+{
+    /* ECS super hires shows a single color register in two adjacent pixels:
+     * the first gets the high bit pair of each RGB nibble, the second the low
+     * bit pair, and each pair is replicated into both halves of the nibble it
+     * ends up in. Two bits per channel is all the color depth that survives,
+     * which is the price ECS pays for the extra horizontal resolution.
+     */
+    u16 v = color[nr].getHiNibbles();
+
+    u16 hi = u16(v & 0xCCC); hi = u16(hi | (hi >> 2));
+    u16 lo = u16((v & 0x333) << 2); lo = u16(lo | (lo >> 2));
+
+    shresPaletteHi[nr] = toTexel(AmigaColor(hi, u16(0)));
+    shresPaletteLo[nr] = toTexel(AmigaColor(lo, u16(0)));
 }
 
 void
@@ -187,6 +208,16 @@ bool
 PixelEngine::shresMode() const
 {
     return Denise::shres(bplcon0);
+}
+
+bool
+PixelEngine::shresModeEcs() const
+{
+    /* Only ECS Denise pairs pixels up. OCS has no super hires at all, and AGA
+     * does a full color lookup for every super hires pixel, so both stay on
+     * the ordinary colorization path.
+     */
+    return denise.getConfig().revision == DeniseRev::ECS && shresMode();
 }
 
 bool
@@ -498,7 +529,9 @@ PixelEngine::colorize(isize line)
         RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
-        if (hamMode8()) {
+        if (shresModeEcs()) {
+            colorizeShres(dst, pixel, trigger);
+        } else if (hamMode8()) {
             colorizeHAM8(dst, pixel, trigger, hold);
         } else if (hamMode()) {
             colorizeHAM(dst, pixel, trigger, hold);
@@ -533,6 +566,44 @@ PixelEngine::colorize(u32 *dst, Pixel from, Pixel to)
     // Colorize pixels
     for (Pixel i = from; i < to; i++)
         dst[i] = u32(bbuf[i] == BORDER_NONE ? palette[mbuf[i]] : borderPalette[bbuf[i]]);
+}
+
+void
+PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
+{
+    auto *mbuf = denise.mBuffer;
+    auto *bbuf = denise.bBuffer;
+
+    /* ECS super hires colorization. Denise takes the pixels in pairs and
+     * concatenates them into a single register number
+     *
+     *     reg = (p1 & 3) * 4 + (p0 & 3) + ((p0 | p1) & 16)
+     *
+     * so two bitplanes reach COLOR00 to COLOR15 rather than COLOR00 to
+     * COLOR03, and bitplane 5 adds bit 4 on top of that. The register is then
+     * split across the pair, which is what shresPaletteHi and shresPaletteLo
+     * hold (see updateShresRGBA).
+     *
+     * Relevant tests in the vAmigaTS test suite:
+     * Denise/Modes/shres/shpattern1 to shpattern8
+     */
+    for (Pixel i = from; i < to; i++) {
+
+        if (bbuf[i] != BORDER_NONE) { dst[i] = u32(borderPalette[bbuf[i]]); continue; }
+
+        /* Pairs sit on the absolute pixel grid, not on the chunk boundaries
+         * this function is called with, so the partner is found by clearing
+         * the low bit. Reading it is safe even when it falls outside
+         * [from, to): translate() has already filled the whole line, and
+         * BUF_CNT carries enough overhang for the final pixel's partner.
+         */
+        Pixel base = i & ~1;
+        u8 p0 = mbuf[base];
+        u8 p1 = mbuf[base + 1];
+
+        auto reg = ((p1 & 3) * 4) + (p0 & 3) + ((p0 | p1) & 16);
+        dst[i] = u32((i & 1) ? shresPaletteLo[reg] : shresPaletteHi[reg]);
+    }
 }
 
 void
