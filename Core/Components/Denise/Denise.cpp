@@ -52,6 +52,7 @@ Denise::getOption(Opt option) const
     switch (option) {
             
         case Opt::DENISE_REVISION:           return (i64)config.revision;
+        case Opt::DENISE_SHRES_BLEND:        return config.shresBlend;
         case Opt::DENISE_VIEWPORT_TRACKING:  return config.viewportTracking;
         case Opt::DENISE_FRAME_SKIPPING:     return config.frameSkipping;
         case Opt::DENISE_HIDDEN_BITPLANES:   return config.hiddenBitplanes;
@@ -79,6 +80,7 @@ Denise::checkOption(Opt opt, i64 value)
             }
             return;
 
+        case Opt::DENISE_SHRES_BLEND:
         case Opt::DENISE_VIEWPORT_TRACKING:
         case Opt::DENISE_FRAME_SKIPPING:
         case Opt::DENISE_HIDDEN_BITPLANES:
@@ -104,6 +106,11 @@ Denise::setOption(Opt option, i64 value)
         case Opt::DENISE_REVISION:
 
             config.revision = (DeniseRev)value;
+            return;
+
+        case Opt::DENISE_SHRES_BLEND:
+
+            config.shresBlend = (bool)value;
             return;
 
         case Opt::DENISE_VIEWPORT_TRACKING:

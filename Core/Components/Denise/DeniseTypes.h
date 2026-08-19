@@ -67,6 +67,14 @@ typedef struct
     // Number of frames to be skipped in warp mode
     isize frameSkipping;
     
+    /* Merges each pair of super hires pixels into their average colour.
+     * ECS super hires emits two pixels where a hires display has one, and a
+     * real monitor blurs them together; a framebuffer sampled at hires
+     * resolution otherwise keeps only one of the two. Off by default, since
+     * it trades detail for fidelity to what a CRT shows.
+     */
+    bool shresBlend;
+
     // Hides certain bitplanes
     u8 hiddenBitplanes;
     

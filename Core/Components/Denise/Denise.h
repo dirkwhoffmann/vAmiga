@@ -40,6 +40,7 @@ class Denise final : public SubComponent {
     Options options = {
 
         Opt::DENISE_REVISION,
+        Opt::DENISE_SHRES_BLEND,
         Opt::DENISE_VIEWPORT_TRACKING,
         Opt::DENISE_FRAME_SKIPPING,
         Opt::DENISE_HIDDEN_BITPLANES,

@@ -576,12 +576,35 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
      * patterns have period 16; shindex1 to shindex5 and sh1bpl1 to sh1bpl5
      * pin down the index arithmetic itself.
      */
-    for (Pixel i = from; i < to; i++) {
+    auto colorAt = [&](Pixel k) -> u32 {
 
-        if (bbuf[i] != BORDER_NONE) { dst[i] = u32(borderPalette[bbuf[i]]); continue; }
+        if (bbuf[k] != BORDER_NONE) return u32(borderPalette[bbuf[k]]);
+        return u32(palette[((mbuf[k + 2] & 3) * 4) + (mbuf[k] & 3)]);
+    };
 
-        auto reg = ((mbuf[i + 2] & 3) * 4) + (mbuf[i] & 3);
-        dst[i] = u32(palette[reg]);
+    if (denise.getConfig().shresBlend) {
+
+        /* Super hires emits two pixels where a hires display has one, and a
+         * real monitor blurs the pair together. The frame buffer stores both,
+         * but anything sampling it at hires resolution -- the regression
+         * screenshots among others -- keeps only the first and drops the
+         * second, which is why an emulator picture can differ from a photo of
+         * the same test even when the emulation is right. Averaging the pair
+         * matches what a CRT shows at the cost of the finer detail.
+         */
+        for (Pixel i = from; i < to; i++) {
+
+            u32 a = colorAt(i & ~1), b = colorAt(i | 1);
+            u32 c = 0;
+            for (isize s = 0; s < 32; s += 8) {
+                c |= ((((a >> s) & 0xFF) + ((b >> s) & 0xFF)) / 2) << s;
+            }
+            dst[i] = c;
+        }
+
+    } else {
+
+        for (Pixel i = from; i < to; i++) dst[i] = colorAt(i);
     }
 }
 
