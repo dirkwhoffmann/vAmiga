@@ -555,31 +555,33 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
 
     /* ECS super hires colorization.
      *
-     * The two bit pixel value is replicated into both halves of a four bit
-     * color index:
+     * Two pixels are combined into a single color index, but the partner is
+     * not the neighbouring pixel: it is the one TWO positions further on.
      *
-     *     index = v | (v << 2) = 5 * v,   v = bitplane2 * 2 + bitplane1
+     *     index = (pixel[i + 2] & 3) * 4 + (pixel[i] & 3)
      *
-     * so super hires reaches COLOR00, COLOR05, COLOR10 and COLOR15 and no
-     * other register. Two bitplanes still yield four colors; they simply sit
-     * at those register numbers instead of at 0 to 3.
+     * A pattern whose period is 2, or which is constant, has pixel[i + 2]
+     * equal to pixel[i], so it collapses to 5 * v and reaches only COLOR00,
+     * COLOR05, COLOR10 and COLOR15. That is what the shindex family measures,
+     * and why it cannot see the stride at all: every pattern it draws is
+     * period 2 by construction. Richer patterns pair unequal pixels and reach
+     * the whole of COLOR00 to COLOR15.
      *
-     * Adjacent pixels are NOT paired. An earlier version of this function,
-     * following Amiberry, built the index out of two neighbouring pixels.
-     * That agrees with the rule above whenever both pixels happen to carry
-     * the same value and disagrees everywhere else, which is why it survived
-     * several rounds of testing before the shindex family pinned it down.
+     * Reading mbuf[i + 2] past the chunk this call covers is safe: translate()
+     * has already filled the whole line, and BUF_CNT carries enough overhang
+     * for the last pixels of it.
      *
      * Relevant tests in the vAmigaTS test suite:
-     * Denise/Modes/shres/shindex1 to shindex5, which read the index out one
-     * bit at a time. All 16 pixel value combinations times 5 index bits agree
-     * with this rule on an A500+.
+     * Denise/Modes/shres/shspot1 to shspot16 pin down the stride, since their
+     * patterns have period 16; shindex1 to shindex5 and sh1bpl1 to sh1bpl5
+     * pin down the index arithmetic itself.
      */
     for (Pixel i = from; i < to; i++) {
 
         if (bbuf[i] != BORDER_NONE) { dst[i] = u32(borderPalette[bbuf[i]]); continue; }
 
-        dst[i] = u32(palette[(mbuf[i] & 3) * 5]);
+        auto reg = ((mbuf[i + 2] & 3) * 4) + (mbuf[i] & 3);
+        dst[i] = u32(palette[reg]);
     }
 }
 
