@@ -111,16 +111,6 @@ private:
      */
     Texel borderPalette[4];
 
-    /* ABGR values for ECS super hires. ECS Denise cannot look a color up per
-     * pixel at the super hires dot rate, so it takes pixels in pairs: the two
-     * pixels of a pair select one register together and that register is then
-     * split across them, the first pixel showing the high bit pair of each RGB
-     * nibble and the second the low bit pair. These two tables hold the
-     * resulting half-precision colors, indexed by register number. AGA does a
-     * full lookup per pixel and never touches them. See colorizeShres.
-     */
-    Texel shresPaletteHi[32];
-    Texel shresPaletteLo[32];
 
     /* Snapshots of BPLCON0 and BPLCON2 as of the most recently replayed
      * register change (see applyRegisterChange). All video-mode decisions
@@ -165,8 +155,6 @@ public:
         CLONE(bplcon2)
         CLONE_ARRAY(palette)
         CLONE_ARRAY(borderPalette)
-        CLONE_ARRAY(shresPaletteHi)
-        CLONE_ARRAY(shresPaletteLo)
 
         return *this;
     }
@@ -270,9 +258,6 @@ public:
 
     // Updates a single entry in the RGBA lookup table
     void updateRGBA(isize nr);
-
-    // Recomputes the two ECS super hires half-colors of a color register
-    void updateShresRGBA(isize nr);
     
     // Updates the entire RGBA lookup table
     void updateRGBA();

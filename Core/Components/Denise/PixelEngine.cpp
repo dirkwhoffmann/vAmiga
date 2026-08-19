@@ -150,29 +150,8 @@ PixelEngine::updateRGBA(isize nr)
     
     palette[nr] = toTexel(color[nr]);
 
-    // Keep the ECS super hires half-color tables in sync (see colorizeShres)
-    if (nr < 32) updateShresRGBA(nr);
-
     // Keep the background border color in sync with color register 0
     if (nr == 0) borderPalette[BORDER_BG] = palette[0];
-}
-
-void
-PixelEngine::updateShresRGBA(isize nr)
-{
-    /* ECS super hires shows a single color register in two adjacent pixels:
-     * the first gets the high bit pair of each RGB nibble, the second the low
-     * bit pair, and each pair is replicated into both halves of the nibble it
-     * ends up in. Two bits per channel is all the color depth that survives,
-     * which is the price ECS pays for the extra horizontal resolution.
-     */
-    u16 v = color[nr].getHiNibbles();
-
-    u16 hi = u16(v & 0xCCC); hi = u16(hi | (hi >> 2));
-    u16 lo = u16((v & 0x333) << 2); lo = u16(lo | (lo >> 2));
-
-    shresPaletteHi[nr] = toTexel(AmigaColor(hi, u16(0)));
-    shresPaletteLo[nr] = toTexel(AmigaColor(lo, u16(0)));
 }
 
 void
@@ -182,7 +161,7 @@ PixelEngine::updateRGBA()
     updateAdjLut();
     
     // Update all cached RGBA values
-    for (isize i = 0; i < 256; i++) updateRGBA(i); // setColor(i, color[i].getHiNibbles());
+    for (isize i = 0; i < 256; i++) updateRGBA(i);
 }
 
 void
@@ -574,35 +553,33 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
     auto *mbuf = denise.mBuffer;
     auto *bbuf = denise.bBuffer;
 
-    /* ECS super hires colorization. Denise takes the pixels in pairs and
-     * concatenates them into a single register number
+    /* ECS super hires colorization.
      *
-     *     reg = (p1 & 3) * 4 + (p0 & 3) + ((p0 | p1) & 16)
+     * The two bit pixel value is replicated into both halves of a four bit
+     * color index:
      *
-     * so two bitplanes reach COLOR00 to COLOR15 rather than COLOR00 to
-     * COLOR03, and bitplane 5 adds bit 4 on top of that. The register is then
-     * split across the pair, which is what shresPaletteHi and shresPaletteLo
-     * hold (see updateShresRGBA).
+     *     index = v | (v << 2) = 5 * v,   v = bitplane2 * 2 + bitplane1
+     *
+     * so super hires reaches COLOR00, COLOR05, COLOR10 and COLOR15 and no
+     * other register. Two bitplanes still yield four colors; they simply sit
+     * at those register numbers instead of at 0 to 3.
+     *
+     * Adjacent pixels are NOT paired. An earlier version of this function,
+     * following Amiberry, built the index out of two neighbouring pixels.
+     * That agrees with the rule above whenever both pixels happen to carry
+     * the same value and disagrees everywhere else, which is why it survived
+     * several rounds of testing before the shindex family pinned it down.
      *
      * Relevant tests in the vAmigaTS test suite:
-     * Denise/Modes/shres/shpattern1 to shpattern8
+     * Denise/Modes/shres/shindex1 to shindex5, which read the index out one
+     * bit at a time. All 16 pixel value combinations times 5 index bits agree
+     * with this rule on an A500+.
      */
     for (Pixel i = from; i < to; i++) {
 
         if (bbuf[i] != BORDER_NONE) { dst[i] = u32(borderPalette[bbuf[i]]); continue; }
 
-        /* Pairs sit on the absolute pixel grid, not on the chunk boundaries
-         * this function is called with, so the partner is found by clearing
-         * the low bit. Reading it is safe even when it falls outside
-         * [from, to): translate() has already filled the whole line, and
-         * BUF_CNT carries enough overhang for the final pixel's partner.
-         */
-        Pixel base = i & ~1;
-        u8 p0 = mbuf[base];
-        u8 p1 = mbuf[base + 1];
-
-        auto reg = ((p1 & 3) * 4) + (p0 & 3) + ((p0 | p1) & 16);
-        dst[i] = u32((i & 1) ? shresPaletteLo[reg] : shresPaletteHi[reg]);
+        dst[i] = u32(palette[(mbuf[i] & 3) * 5]);
     }
 }
 
