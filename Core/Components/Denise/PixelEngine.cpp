@@ -577,24 +577,29 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
 
     /* ECS super hires colorization.
      *
-     * Two pixels are combined into a single color index, but the partner is
-     * not the neighbouring pixel: it is the one TWO positions further on.
+     * Two pixels are combined into a single color index. The pairing works on
+     * aligned groups of four super hires pixels -- one lores pixel -- and
+     * within a group it pairs across, not side by side:
      *
-     *     index = (pixel[i + 2] & 3) * 4 + (pixel[i] & 3)
+     *     pixels 0 and 2 give one index, pixels 1 and 3 give the other
+     *     index = (pixel[base + 2] & 3) * 4 + (pixel[base] & 3)
      *
-     * A pattern whose period is 2, or which is constant, has pixel[i + 2]
-     * equal to pixel[i], so it collapses to 5 * v and reaches only COLOR00,
+     * A pattern whose period is 2, or which is constant, has pixel[base + 2]
+     * equal to pixel[base], so it collapses to 5 * v and reaches only COLOR00,
      * COLOR05, COLOR10 and COLOR15. That is what the shindex family measures,
-     * and why it cannot see the stride at all: every pattern it draws is
+     * and why it cannot see the pairing at all: every pattern it draws is
      * period 2 by construction. Richer patterns pair unequal pixels and reach
      * the whole of COLOR00 to COLOR15.
      *
-     * Reading mbuf[i + 2] past the chunk this call covers is safe: translate()
-     * has already filled the whole line, and BUF_CNT carries enough overhang
-     * for the last pixels of it.
+     * The groups are what keeps the edges clean. A sliding partner two pixels
+     * ahead fits the interior just as well, but it straddles the end of the
+     * fetched bitplane data, where the buffer holds zeros, and paints a stray
+     * column of an otherwise unreachable color there. An A500+ shows no such
+     * column, and a group never straddles: the fetched region always starts
+     * and ends on a word boundary, hence on a group boundary too.
      *
      * Relevant tests in the vAmigaTS test suite:
-     * Denise/Modes/shres/shspot1 to shspot16 pin down the stride, since their
+     * Denise/Modes/shres/shspot1 to shspot16 pin down the pairing, since their
      * patterns have period 16; shindex1 to shindex5 and sh1bpl1 to sh1bpl5
      * pin down the index arithmetic itself.
      *
@@ -612,8 +617,7 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
 
         if (bbuf[k] != BORDER_NONE) return u32(borderPalette[bbuf[k]]);
 
-        auto idx = ((mbuf[k + 2] & 3) * 4) + (mbuf[k] & 3);
-        return u32(shresPalette[k & 1][idx]);
+        return u32(shresPalette[k & 1][shresIndex(mbuf, k)]);
     };
 
     if (denise.getConfig().shresBlend) {
@@ -645,9 +649,8 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
 
             } else {
 
-                auto i0 = ((mbuf[lo + 2] & 3) * 4) + (mbuf[lo] & 3);
-                auto i1 = ((mbuf[hi + 2] & 3) * 4) + (mbuf[hi] & 3);
-                dst[i] = u32(shresPaletteBlend[i0][i1]);
+                dst[i] = u32(shresPaletteBlend[shresIndex(mbuf, lo)]
+                                               [shresIndex(mbuf, hi)]);
             }
         }
 

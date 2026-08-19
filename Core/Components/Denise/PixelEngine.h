@@ -292,6 +292,18 @@ private:
     // Rebuilds shresPaletteBlend if a register below 16 has changed
     void updateShresBlend();
 
+    /* Color index of an ECS super hires pixel. Super hires pixels are paired
+     * up within aligned groups of four (one lores pixel), pixel 0 with pixel 2
+     * and pixel 1 with pixel 3, so both members of a pair are always fetched
+     * together and a pair never reaches beyond the bitplane data. See the
+     * comment in colorizeShres.
+     */
+    static isize shresIndex(const u8 *mbuf, Pixel k) {
+
+        Pixel base = (k & ~3) | (k & 1);
+        return ((mbuf[base + 2] & 3) * 4) + (mbuf[base] & 3);
+    }
+
 public:
     
     // Converts an Amiga color into a texel, applying the monitor settings
