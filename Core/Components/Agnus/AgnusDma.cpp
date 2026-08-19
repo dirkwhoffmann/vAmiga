@@ -118,16 +118,16 @@ Agnus::doBitplaneDmaRead()
     constexpr BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
         
     auto numWords = bplFetchWords();
-    
-    switch (numWords) {
+        
+    switch (isAGA() ? fmode & 0b11 : 0) {
             
-        case 1:
+        case 0:
           
             bpldatNext[bitplane] = mem.peek16<Accessor::AGNUS>(bplpt[bitplane]);
             bpldatNextValid[bitplane] = 0;
             break;
             
-        case 2: {
+        case 1: {
             
             u64 w0 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane]);
             u64 w1 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane] | 0b010);
@@ -136,8 +136,17 @@ Agnus::doBitplaneDmaRead()
             bpldatNextValid[bitplane] = 1;
             break;
         }
+
+        case 2: {
             
-        case 4: {
+            u64 w0 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane]);
+
+            bpldatNext[bitplane] = w0 << 16 | w0;
+            bpldatNextValid[bitplane] = 1;
+            break;
+        }
+
+        case 3: {
             
             u64 w0 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane]);
             u64 w1 = mem.peek16<Accessor::AGNUS>(bplpt[bitplane] | 0b010);
@@ -156,23 +165,6 @@ Agnus::doBitplaneDmaRead()
     u16 result = bpldatNext[bitplane] & 0xFFFF;
     bpldatNext[bitplane] >>= 16;
     
-    /*
-    // A wide fetch ignores the low address bits, so an unaligned pointer is
-    // truncated rather than honored (see alignPtr).
-    u32 a = alignPtr(bplpt[bitplane], words);
-    u16 result = mem.peek16 <Accessor::AGNUS> (a);
-
-    // Collect the remaining words of the fetch. They are handed over to Denise
-    //separately and shifted into the bitplane pipeline one by one.
-    bpldatNext[bitplane] = 0;
-    for (u8 i = 1; i < words; i++) {
-        u16 w = mem.peek16 <Accessor::AGNUS> (a + 2 * i);
-        bpldatNext[bitplane] |= (u64)w << (16 * (i - 1));
-    }
-    bpldatNextValid[bitplane] = words - 1;
-    */
-    // u16 result = mem.peek16 <Accessor::AGNUS> (bplpt[bitplane]);
-
     busOwner[pos.h] = owner;
     busAddr[pos.h] = bplpt[bitplane];
     busData[pos.h] = result;
@@ -195,19 +187,27 @@ Agnus::doSpriteDmaRead()
      * unaligned pointer rather than honoring it, exactly as a wide bitplane
      * fetch does (see doBitplaneDmaRead).
      */
-    switch (numWords) {
+    switch (isAGA() ? (fmode >> 2) & 0b11 : 0) {
 
-        case 1:
+        case 0:
 
             sprdatNext[channel] = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
             break;
 
-        case 2: {
+        case 1: {
 
             u64 w0 = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
             u64 w1 = mem.peek16<Accessor::AGNUS>(sprpt[channel] | 0b010);
 
             sprdatNext[channel] = w1 << 16 | w0;
+            break;
+        }
+
+        case 2: {
+
+            u64 w0 = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
+
+            sprdatNext[channel] = w0 << 16 | w0;
             break;
         }
 
