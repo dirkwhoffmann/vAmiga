@@ -143,6 +143,22 @@ public:
 
     AmigaColor ehb() const;
     AmigaColor shr() const;
+
+    /* Sub-pixel colors for ECS super hires.
+     *
+     * Super hires emits two pixels where hires emits one, and Denise has no
+     * time to put a full 4 bit component on the DAC twice. It sends each
+     * component's high bit pair to the first sub-pixel and its low bit pair
+     * to the second, each pair replicated across the whole component. So a
+     * component of $3 shows as $0 then $F, and $C as $F then $0 -- the same
+     * pair of sub-pixels in the opposite order, which is why the two are
+     * indistinguishable once a monitor blurs them together.
+     *
+     * Measured on an A500+ by Denise/Modes/shres/shramp1 to shramp7.
+     */
+    AmigaColor shresHi() const;
+    AmigaColor shresLo() const;
+
     AmigaColor mix(const AmigaColor &c) const;
 };
 

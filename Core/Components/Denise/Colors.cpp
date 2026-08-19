@@ -124,6 +124,30 @@ AmigaColor::shr() const
 }
 
 AmigaColor
+AmigaColor::shresHi() const
+{
+    // Bits 7 and 6 of each channel, replicated (0, 1, 2, 3 -> $00, $55, $AA, $FF)
+    return AmigaColor {
+
+        u8(((r >> 6) & 3) * 0x55),
+        u8(((g >> 6) & 3) * 0x55),
+        u8(((b >> 6) & 3) * 0x55)
+    };
+}
+
+AmigaColor
+AmigaColor::shresLo() const
+{
+    // Bits 5 and 4 of each channel, replicated the same way
+    return AmigaColor {
+
+        u8(((r >> 4) & 3) * 0x55),
+        u8(((g >> 4) & 3) * 0x55),
+        u8(((b >> 4) & 3) * 0x55)
+    };
+}
+
+AmigaColor
 AmigaColor::mix(const AmigaColor &c) const
 {
     return AmigaColor { u8((r+c.r)/2), u8((g+c.g)/2), u8((b+c.b)/2) };

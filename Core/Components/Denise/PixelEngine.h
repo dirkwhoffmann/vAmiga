@@ -111,6 +111,28 @@ private:
      */
     Texel borderPalette[4];
 
+    /* ABGR values for the two sub-pixels of an ECS super hires pixel (see
+     * AmigaColor::shresHi and shresLo). Only the first 16 registers are
+     * reachable in that mode, so the tables stop there. Kept precomputed
+     * because colorizeShres would otherwise redo the bit twiddling and the
+     * monitor adjustment for every sub-pixel of every line.
+     */
+    Texel shresPalette[2][16];
+
+    /* ABGR values for a blended super hires pixel pair, indexed by the color
+     * index of the first sub-pixel and that of the second (see the shresBlend
+     * option). The two are averaged in Amiga color space rather than in the
+     * host's, because what smears the sub-pixels together on real hardware is
+     * the monitor's video amplifier, which low-passes the signal before the
+     * phosphor's non-linearity, not after it. Averaging the finished texels
+     * instead would make a $5,$5 pair noticeably darker than a $0,$A one, and
+     * the A500+ shows them as equal (Denise/Modes/shres/shramp1 to shramp7).
+     */
+    Texel shresPaletteBlend[16][16];
+
+    // Indicates that shresPaletteBlend is out of date (see updateShresBlend)
+    bool shresBlendDirty = true;
+
 
     /* Snapshots of BPLCON0 and BPLCON2 as of the most recently replayed
      * register change (see applyRegisterChange). All video-mode decisions
@@ -264,6 +286,13 @@ public:
 
     // Updates the EHB range in the RGBA lookup table
     void updateEHB();
+
+private:
+
+    // Rebuilds shresPaletteBlend if a register below 16 has changed
+    void updateShresBlend();
+
+public:
     
     // Converts an Amiga color into a texel, applying the monitor settings
     Texel toTexel(const AmigaColor c) const;

@@ -150,6 +150,14 @@ PixelEngine::updateRGBA(isize nr)
     
     palette[nr] = toTexel(color[nr]);
 
+    // Keep the super hires sub-pixel colors in sync
+    if (nr < 16) {
+
+        shresPalette[0][nr] = toTexel(color[nr].shresHi());
+        shresPalette[1][nr] = toTexel(color[nr].shresLo());
+        shresBlendDirty = true;
+    }
+
     // Keep the background border color in sync with color register 0
     if (nr == 0) borderPalette[BORDER_BG] = palette[0];
 }
@@ -162,6 +170,20 @@ PixelEngine::updateRGBA()
     
     // Update all cached RGBA values
     for (isize i = 0; i < 256; i++) updateRGBA(i);
+}
+
+void
+PixelEngine::updateShresBlend()
+{
+    for (isize i = 0; i < 16; i++) {
+
+        auto hi = color[i].shresHi();
+        for (isize j = 0; j < 16; j++) {
+
+            shresPaletteBlend[i][j] = toTexel(hi.mix(color[j].shresLo()));
+        }
+    }
+    shresBlendDirty = false;
 }
 
 void
@@ -575,31 +597,58 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
      * Denise/Modes/shres/shspot1 to shspot16 pin down the stride, since their
      * patterns have period 16; shindex1 to shindex5 and sh1bpl1 to sh1bpl5
      * pin down the index arithmetic itself.
+     *
+     * The register is then not shown in full. Denise cannot drive the DAC
+     * with a whole 4 bit component twice per hires cell, so it sends the high
+     * bit pair of each component to the first sub-pixel and the low bit pair
+     * to the second (AmigaColor::shresHi and shresLo). A monitor blurs the
+     * two back together, which is why the perceived brightness follows the
+     * SUM of the two bit pairs rather than the register value: $3 comes out
+     * brighter than $4, $7 brighter than $8 and $B brighter than $C. All
+     * seven shramp tests show that inversion on an A500+, and it is what
+     * shsplit1 was looking for and failed to find with only two data points.
      */
     auto colorAt = [&](Pixel k) -> u32 {
 
         if (bbuf[k] != BORDER_NONE) return u32(borderPalette[bbuf[k]]);
-        return u32(palette[((mbuf[k + 2] & 3) * 4) + (mbuf[k] & 3)]);
+
+        auto idx = ((mbuf[k + 2] & 3) * 4) + (mbuf[k] & 3);
+        return u32(shresPalette[k & 1][idx]);
     };
 
     if (denise.getConfig().shresBlend) {
 
-        /* Super hires emits two pixels where a hires display has one, and a
-         * real monitor blurs the pair together. The frame buffer stores both,
-         * but anything sampling it at hires resolution -- the regression
-         * screenshots among others -- keeps only the first and drops the
-         * second, which is why an emulator picture can differ from a photo of
-         * the same test even when the emulation is right. Averaging the pair
-         * matches what a CRT shows at the cost of the finer detail.
+        /* A real monitor cannot resolve the two sub-pixels and shows their
+         * average instead. The frame buffer keeps both, but anything sampling
+         * it at hires resolution -- the regression screenshots among others --
+         * keeps only the first and drops the second, so an emulator picture
+         * can differ from a photo of the same test even when the emulation is
+         * right. Blending matches what a CRT shows at the cost of the detail,
+         * and it is the only setting in which the brightness inversion
+         * described above is visible at all: unblended, the screenshot holds
+         * the high bit pair alone.
          */
+        if (shresBlendDirty) updateShresBlend();
+
         for (Pixel i = from; i < to; i++) {
 
-            u32 a = colorAt(i & ~1), b = colorAt(i | 1);
-            u32 c = 0;
-            for (isize s = 0; s < 32; s += 8) {
-                c |= ((((a >> s) & 0xFF) + ((b >> s) & 0xFF)) / 2) << s;
+            Pixel lo = i & ~1, hi = i | 1;
+
+            if (bbuf[lo] != BORDER_NONE || bbuf[hi] != BORDER_NONE) {
+
+                // Averaging the finished texels is good enough for the border
+                u32 a = colorAt(lo), b = colorAt(hi), c = 0;
+                for (isize s = 0; s < 32; s += 8) {
+                    c |= ((((a >> s) & 0xFF) + ((b >> s) & 0xFF)) / 2) << s;
+                }
+                dst[i] = c;
+
+            } else {
+
+                auto i0 = ((mbuf[lo + 2] & 3) * 4) + (mbuf[lo] & 3);
+                auto i1 = ((mbuf[hi + 2] & 3) * 4) + (mbuf[hi] & 3);
+                dst[i] = u32(shresPaletteBlend[i0][i1]);
             }
-            dst[i] = c;
         }
 
     } else {
