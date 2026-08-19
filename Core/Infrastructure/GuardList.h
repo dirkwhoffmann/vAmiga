@@ -25,9 +25,6 @@ class GuardList {
 
 protected:
 
-    // Reference to the emulator object
-    // class Emulator &emu;
-
     // Reference to the emulator core
     class Amiga &amiga;
 
