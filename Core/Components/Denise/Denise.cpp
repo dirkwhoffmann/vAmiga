@@ -1577,6 +1577,9 @@ Denise::checkP2PCollisions()
     // Check all pixels one by one
     for (isize pos = 0; pos < PIXEL_CNT; pos++) {
 
+        // Skip pixels outside the display window
+        if (bBuffer[pos] != PixelEngine::BORDER_NONE) continue;
+
         u16 b = dBuffer[pos];
 
         // Check if there is a hit with playfield 1
