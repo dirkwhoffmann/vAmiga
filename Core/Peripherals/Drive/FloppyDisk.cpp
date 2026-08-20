@@ -593,13 +593,16 @@ FloppyDisk::writeToFile(const fs::path& path) const
 {
     auto ext = utl::uppercased(path.extension().string());
 
-    if (ext == ".ADF")  writeToFile(path, ImageFormat::ADF);
-    if (ext == ".EADF") writeToFile(path, ImageFormat::EADF);
-    if (ext == ".IMG")  writeToFile(path, ImageFormat::IMG);
-    if (ext == ".IMA")  writeToFile(path, ImageFormat::IMG);
-    if (ext == ".ST")   writeToFile(path, ImageFormat::ST);
+    ImageFormat format;
 
-    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+    if      (ext == ".ADF")  format = ImageFormat::ADF;
+    else if (ext == ".EADF") format = ImageFormat::EADF;
+    else if (ext == ".IMG")  format = ImageFormat::IMG;
+    else if (ext == ".IMA")  format = ImageFormat::IMG;
+    else if (ext == ".ST")   format = ImageFormat::ST;
+    else throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+
+    writeToFile(path, format);
 }
 
 void
