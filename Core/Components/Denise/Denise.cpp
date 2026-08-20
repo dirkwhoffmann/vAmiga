@@ -1535,6 +1535,9 @@ Denise::checkS2PCollisions(Pixel start, Pixel end)
         // Skip if the sprite is transparent at this pixel coordinate
         if (!(z & Z_SP[x])) continue;
 
+        // Skip if the pixel lies outside the display window
+        if (bBuffer[pos] != PixelEngine::BORDER_NONE) continue;
+
         // Check for a collision with playfield 2
         if ((dBuffer[pos] & enabled2) == compare2) {
             
