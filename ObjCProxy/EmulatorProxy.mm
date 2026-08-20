@@ -20,71 +20,93 @@ using namespace vamiga;
 using namespace vamiga::moira;
 
 const VAmigaConstants VAMIGA = {
-    
-    .PAL.FREQUENCY.CLK = PAL::CLK_FREQUENCY,
-    .PAL.FREQUENCY.DMA = PAL::DMA_FREQUENCY,
-    .PAL.FREQUENCY.CPU = PAL::CPU_FREQUENCY,
 
-    .PAL.VPOS.CNT_LF = PAL::VPOS_CNT_LF,
-    .PAL.VPOS.CNT_SF = PAL::VPOS_CNT_SF,
-    .PAL.VPOS.CNT = PAL::VPOS_CNT,
-    .PAL.VPOS.MAX_LF = PAL::VPOS_MAX_LF,
-    .PAL.VPOS.MAX_SF = PAL::VPOS_MAX_SF,
-    .PAL.VPOS.MAX = PAL::VPOS_MAX,
+    .PAL = {
+        .FREQUENCY = {
+            .CLK = PAL::CLK_FREQUENCY,
+            .DMA = PAL::DMA_FREQUENCY,
+            .CPU = PAL::CPU_FREQUENCY
+        },
+        .VPOS = {
+            .CNT_LF = PAL::VPOS_CNT_LF,
+            .CNT_SF = PAL::VPOS_CNT_SF,
+            .CNT    = PAL::VPOS_CNT,
+            .MAX_LF = PAL::VPOS_MAX_LF,
+            .MAX_SF = PAL::VPOS_MAX_SF,
+            .MAX    = PAL::VPOS_MAX
+        },
+        .HPOS = {
+            .CNT_LL = PAL::HPOS_CNT,
+            .CNT_SL = PAL::HPOS_CNT,
+            .CNT    = PAL::HPOS_CNT,
+            .MAX_LL = PAL::HPOS_MAX,
+            .MAX_SL = PAL::HPOS_MAX,
+            .MAX    = PAL::HPOS_MAX
+        },
+        .VBLANK = {
+            .MIN = PAL::VBLANK_MIN,
+            .MAX = PAL::VBLANK_MAX,
+            .CNT = PAL::VBLANK_CNT
+        }
+    },
 
-    .PAL.HPOS.CNT_LL = PAL::HPOS_CNT,
-    .PAL.HPOS.CNT_SL = PAL::HPOS_CNT,
-    .PAL.HPOS.MAX_LL = PAL::HPOS_MAX,
-    .PAL.HPOS.MAX_SL = PAL::HPOS_MAX,
-    .PAL.HPOS.CNT = PAL::HPOS_CNT,
-    .PAL.HPOS.MAX = PAL::HPOS_MAX,
-    
-    .PAL.VBLANK.MIN = PAL::VBLANK_MIN,
-    .PAL.VBLANK.MAX = PAL::VBLANK_MAX,
-    .PAL.VBLANK.CNT = PAL::VBLANK_CNT,
+    .NTSC = {
+        .FREQUENCY = {
+            .CLK = NTSC::CLK_FREQUENCY,
+            .DMA = NTSC::DMA_FREQUENCY,
+            .CPU = NTSC::CPU_FREQUENCY
+        },
+        .VPOS = {
+            .CNT_LF = NTSC::VPOS_CNT_LF,
+            .CNT_SF = NTSC::VPOS_CNT_SF,
+            .CNT    = NTSC::VPOS_CNT,
+            .MAX_LF = NTSC::VPOS_MAX_LF,
+            .MAX_SF = NTSC::VPOS_MAX_SF,
+            .MAX    = NTSC::VPOS_MAX
+        },
+        .HPOS = {
+            .CNT_LL = NTSC::HPOS_CNT_LL,
+            .CNT_SL = NTSC::HPOS_CNT_SL,
+            .CNT    = NTSC::HPOS_CNT,
+            .MAX_LL = NTSC::HPOS_MAX_LL,
+            .MAX_SL = NTSC::HPOS_MAX_SL,
+            .MAX    = NTSC::HPOS_MAX
+        },
+        .VBLANK = {
+            .MIN = NTSC::VBLANK_MIN,
+            .MAX = NTSC::VBLANK_MAX,
+            .CNT = NTSC::VBLANK_CNT
+        }
+    },
 
-    .NTSC.FREQUENCY.CLK = NTSC::CLK_FREQUENCY,
-    .NTSC.FREQUENCY.DMA = NTSC::DMA_FREQUENCY,
-    .NTSC.FREQUENCY.CPU = NTSC::CPU_FREQUENCY,
+    .VPOS = {
+        .CNT = VPOS_CNT,
+        .MAX = VPOS_MAX
+    },
 
-    .NTSC.VPOS.CNT_LF = NTSC::VPOS_CNT_LF,
-    .NTSC.VPOS.CNT_SF = NTSC::VPOS_CNT_SF,
-    .NTSC.VPOS.CNT = NTSC::VPOS_CNT,
-    .NTSC.VPOS.MAX_LF = NTSC::VPOS_MAX_LF,
-    .NTSC.VPOS.MAX_SF = NTSC::VPOS_MAX_SF,
-    .NTSC.VPOS.MAX = NTSC::VPOS_MAX,
-    
-    .NTSC.HPOS.CNT_LL = NTSC::HPOS_CNT_LL,
-    .NTSC.HPOS.CNT_SL = NTSC::HPOS_CNT_SL,
-    .NTSC.HPOS.MAX_LL = NTSC::HPOS_MAX_LL,
-    .NTSC.HPOS.MAX_SL = NTSC::HPOS_MAX_SL,
-    .NTSC.HPOS.CNT = NTSC::HPOS_CNT,
-    .NTSC.HPOS.MAX = NTSC::HPOS_MAX,
-    
-    .NTSC.VBLANK.MIN = NTSC::VBLANK_MIN,
-    .NTSC.VBLANK.MAX = NTSC::VBLANK_MAX,
-    .NTSC.VBLANK.CNT = NTSC::VBLANK_CNT,
-    
-    .VPOS.MAX = VPOS_MAX,
-    .VPOS.CNT = VPOS_CNT,
+    .HPOS = {
+        .CNT = HPOS_CNT,
+        .MAX = HPOS_MAX
+    },
 
-    .HPOS.MAX = HPOS_MAX,
-    .HPOS.CNT = HPOS_CNT,
-
-    .HBLANK.CNT = HBLANK_CNT,
-    .HBLANK.MIN = HBLANK_MIN,
-    .HBLANK.MAX = HBLANK_MAX,
+    .HBLANK = {
+        .MIN = HBLANK_MIN,
+        .MAX = HBLANK_MAX,
+        .CNT = HBLANK_CNT
+    },
 
     .VPIXELS = VPIXELS,
     .HPIXELS = HPIXELS,
-    .PIXELS = PIXELS,
-    
-    .HDR.C_MIN = HDR_C_MIN,
-    .HDR.C_MAX = HDR_C_MAX,
-    .HDR.H_MIN = HDR_H_MIN,
-    .HDR.H_MAX = HDR_H_MAX,
-    .HDR.S_MIN = HDR_S_MIN,
-    .HDR.S_MAX = HDR_S_MAX,
+    .PIXELS  = PIXELS,
+
+    .HDR = {
+        .C_MIN = HDR_C_MIN,
+        .C_MAX = HDR_C_MAX,
+        .H_MIN = HDR_H_MIN,
+        .H_MAX = HDR_H_MAX,
+        .S_MIN = HDR_S_MIN,
+        .S_MAX = HDR_S_MAX
+    }
 };
 
 NSString *EventSlotName(EventSlot slot)
