@@ -878,14 +878,12 @@ Memory::updateCpuMemSrcTable()
     // Real-time clock (newer Amigas)
     cpuMemSrc[0xDC] = old ? MemSrc::CUSTOM : MemSrc::RTC;
     
-    
     // Reserved
     cpuMemSrc[0xDD] = MemSrc::NONE;
 
     // Custom chip set
-    for (isize i = 0xDE; i <= 0xDF; i++) {
-        cpuMemSrc[i] = MemSrc::CUSTOM;
-    }
+    cpuMemSrc[0xDE] = config.bankMap == BankMap::A1200 ? MemSrc::NONE : MemSrc::CUSTOM;
+    cpuMemSrc[0xDF] = MemSrc::CUSTOM;
     
     // Kickstart mirror, unmapped, or Extended Rom
     if (config.bankMap != BankMap::A1000) {

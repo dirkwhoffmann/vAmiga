@@ -281,6 +281,8 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_1MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
+            defaults.set(.MEM_CHIP_RAM, 512);
+            defaults.set(.MEM_BANKMAP, BankMap.A500.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 1:
@@ -289,6 +291,8 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.OCS_OLD.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
+            defaults.set(.MEM_CHIP_RAM, 512);
+            defaults.set(.MEM_BANKMAP, BankMap.A1000.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 2:
@@ -297,6 +301,8 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
+            defaults.set(.MEM_CHIP_RAM, 512);
+            defaults.set(.MEM_BANKMAP, BankMap.A2000B.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
         case 3:
@@ -305,6 +311,8 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.ECS.rawValue)
+            defaults.set(.MEM_CHIP_RAM, 1024);
+            defaults.set(.MEM_BANKMAP, BankMap.A500.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
         case 4:
@@ -313,9 +321,10 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_REVISION, CPURevision._68EC020.rawValue)
             defaults.set(.AGNUS_REVISION, AgnusRevision.AGA.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.AGA.rawValue)
-            defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
             defaults.set(.MEM_CHIP_RAM, 2048);
-            
+            defaults.set(.MEM_BANKMAP, BankMap.A1200.rawValue)
+            defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
+
         default:
             fatalError()
         }

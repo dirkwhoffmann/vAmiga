@@ -128,13 +128,14 @@ enum class BankMap : long
     A500,
     A1000,
     A2000A,
-    A2000B
+    A2000B,
+    A1200
 };
 
 struct BankMapEnum : Reflectable<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(BankMap::A2000B);
+    static constexpr long maxVal = long(BankMap::A1200);
     
     static const char *_key(BankMap value)
     {
@@ -144,6 +145,7 @@ struct BankMapEnum : Reflectable<BankMapEnum, BankMap>
             case BankMap::A1000:   return "A1000";
             case BankMap::A2000A:  return "A2000A";
             case BankMap::A2000B:  return "A2000B";
+            case BankMap::A1200:   return "A1200";
         }
         return "???";
     }
@@ -155,6 +157,7 @@ struct BankMapEnum : Reflectable<BankMapEnum, BankMap>
             case BankMap::A1000:   return "Amiga 1000 memory layout";
             case BankMap::A2000A:  return "Amiga 2000A memory layout";
             case BankMap::A2000B:  return "Amiga 2000B memory layout";
+            case BankMap::A1200:   return "Amiga 1200 memory layout";
         }
         return "???";
     }

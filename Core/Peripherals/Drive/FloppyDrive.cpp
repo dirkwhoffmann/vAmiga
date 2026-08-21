@@ -571,7 +571,7 @@ FloppyDrive::getDriveId() const
         //     3.5" DD: 0xFFFFFFFF
         //     3.5" HD: 0xAAAAAAAA if an HD disk is inserted
         //              0xFFFFFFFF if no disk or a DD disk is inserted
-        //     5.25"SD: 0x55555555
+        //     5.25"DD: 0x55555555
         
         switch(config.type) {
                 
