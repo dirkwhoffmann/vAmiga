@@ -24,6 +24,7 @@ namespace utl {
 
 enum class LogLevel : long
 {
+    LOG_NONE    = -1,
     LOG_EMERG   = 0,
     LOG_ALERT   = 1,
     LOG_CRIT    = 2,
@@ -36,7 +37,7 @@ enum class LogLevel : long
 
 struct LogLevelEnum : Reflectable<LogLevelEnum, LogLevel>
 {
-    static constexpr long minVal = 0;
+    static constexpr long minVal = -1;
     static constexpr long maxVal = (long)LogLevel::LOG_DEBUG;
 
     static const char *_key(long value) { return _key(LogLevel(value)); }
@@ -44,6 +45,7 @@ struct LogLevelEnum : Reflectable<LogLevelEnum, LogLevel>
     {
         switch (value) {
 
+            case LogLevel::LOG_NONE:    return "LV_NONE";
             case LogLevel::LOG_EMERG:   return "LV_EMERGENCY";
             case LogLevel::LOG_ALERT:   return "LV_ALERT";
             case LogLevel::LOG_CRIT:    return "LV_CRITICAL";
@@ -60,6 +62,7 @@ struct LogLevelEnum : Reflectable<LogLevelEnum, LogLevel>
     {
         switch (value) {
 
+            case LogLevel::LOG_NONE:    return "Logging disabled";
             case LogLevel::LOG_EMERG:   return "System is unusable";
             case LogLevel::LOG_ALERT:   return "Immediate action required";
             case LogLevel::LOG_CRIT:    return "Critical condition";

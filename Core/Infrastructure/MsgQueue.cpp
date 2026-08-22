@@ -67,7 +67,7 @@ MsgQueue::put(const Message &msg)
 
         SYNCHRONIZED
 
-        logme(MSG_DEBUG, "%s [%llx]\n", MsgEnum::key(msg.type), msg.value);
+        logme(LOG_MSG, "%s [%llx]\n", MsgEnum::key(msg.type), msg.value);
 
         if (listener) {
 

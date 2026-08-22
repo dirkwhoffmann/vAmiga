@@ -157,14 +157,14 @@ SerialPort::getPin(isize nr) const
 
     bool result = GET_BIT(port, nr);
 
-    // logme(SER_DEBUG, "getPin(%d) = %d port = %X\n", nr, result, port);
+    // logme(LOG_SER, "getPin(%d) = %d port = %X\n", nr, result, port);
     return result;
 }
 
 void
 SerialPort::setPin(isize nr, bool value)
 {
-    // logme(SER_DEBUG, "setPin(%d,%d)\n", nr, value);
+    // logme(LOG_SER, "setPin(%d,%d)\n", nr, value);
     assert(nr >= 1 && nr <= 25);
 
     setPort(1 << nr, value);
@@ -290,7 +290,7 @@ SerialPort::recordIncomingByte(int byte)
 {
     {   SYNCHRONIZED
 
-        logme(SER_DEBUG, "Incoming: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+        logme(LOG_SER, "Incoming: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
 
         // Record the incoming byte
         incoming += char(byte);
@@ -308,7 +308,7 @@ SerialPort::recordOutgoingByte(int byte)
 {
     {   SYNCHRONIZED
 
-        logme(SER_DEBUG, "Outgoing: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
+        logme(LOG_SER, "Outgoing: %02X ('%c')\n", byte, isprint(byte) ? char(byte) : '?');
 
         // Record the incoming byte
         outgoing += char(byte);

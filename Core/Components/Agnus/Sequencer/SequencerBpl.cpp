@@ -45,7 +45,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
 template <bool ecs> void
 Sequencer::computeBplEventTable(const SigRecorder &sr)
 {
-    logme(SEQ_DEBUG, "computeBplEvents\n");
+    logme(LOG_SEQ, "computeBplEvents\n");
 
     auto state = ddfInitial;
 
@@ -76,7 +76,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     // Check if we need to recompute all events in the next scanline
     if (state != ddfInitial) {
 
-        logme(SEQ_DEBUG, "Recompute table in next line\n");
+        logme(LOG_SEQ, "Recompute table in next line\n");
         hsyncActions |= UPDATE_BPL_TABLE;
     }
 }
@@ -88,7 +88,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
     assert(!sr.modified);
     assert(!state.bpv || !state.bmapen);
 
-    logme(SEQ_DEBUG, "Fast path (no bitplane DMA in this line)\n");
+    logme(LOG_SEQ, "Fast path (no bitplane DMA in this line)\n");
 
     // Erase all events
     for (isize i = 0; i < HPOS_CNT; i++) bplEvent[i] = EVENT_NONE;
@@ -155,7 +155,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
 template <bool ecs> void
 Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
 {
-    logme(SEQ_DEBUG, "Slow path\n");
+    logme(LOG_SEQ, "Slow path\n");
 
     bprunUp = LONG_MAX;
 

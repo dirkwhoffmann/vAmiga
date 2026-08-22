@@ -29,7 +29,7 @@ AmigaEncoder::encodeTrack(ByteView src, TrackNr t)
     if (count != 11 && count != 22)
         throw DeviceError(DeviceError::DSK_WRONG_SECTOR_CNT);
 
-    logme(IMG_DEBUG, "Encoding Amiga track %ld with %ld sectors\n", t, count);
+    logme(LOG_IMG, "Encoding Amiga track %ld with %ld sectors\n", t, count);
 
     // Start with a clean track
     auto trackBytes = count == 11 ? 12668  : 24636;
@@ -56,7 +56,7 @@ AmigaEncoder::encodeTrack(ByteView src, TrackNr t)
     }
     
     // Compute a debug checksum
-    logme(IMG_DEBUG, "Track %ld checksum = %x\n", t, view.fnv32());
+    logme(LOG_IMG, "Track %ld checksum = %x\n", t, view.fnv32());
 
     return BitView(view.data(), view.size() * 8);
 }
@@ -66,7 +66,7 @@ AmigaEncoder::encodeSector(ByteView bytes, TrackNr t, SectorNr s)
 {
     assert(bytes.size() == bsize);
 
-    logme(IMG_DEBUG, "Encoding Amiga sector %ld:%ld\n", t, s);
+    logme(LOG_IMG, "Encoding Amiga sector %ld:%ld\n", t, s);
 
     // Start with a clean track
     if (sectorBuffer.empty()) sectorBuffer.resize(ssize, 0xAA);

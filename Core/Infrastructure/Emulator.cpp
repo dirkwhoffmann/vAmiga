@@ -326,7 +326,7 @@ Emulator::recreateRunAheadInstance()
     auto &config = main.getConfig();
 
     // Clone the main instance
-    if CONSTEXPR (debug::RUA_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_RUA != LogLevel::LOG_NONE) {
         utl::StopWatch watch("Run-ahead: Clone");
         cloneRunAheadInstance();
     } else {
@@ -334,7 +334,7 @@ Emulator::recreateRunAheadInstance()
     }
 
     // Advance to the proper frame
-    if CONSTEXPR (debug::RUA_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_RUA != LogLevel::LOG_NONE) {
         utl::StopWatch watch("Run-ahead: Fast-forward");
         ahead.fastForward(config.runAhead - 1);
     } else {

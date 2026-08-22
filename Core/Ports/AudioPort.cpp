@@ -135,7 +135,7 @@ AudioPort::_unfocus()
 void
 AudioPort::clear()
 {
-    logme(AUDBUF_DEBUG, "Clearing the audio sample buffer\n");
+    logme(LOG_AUDBUF, "Clearing the audio sample buffer\n");
 
     // Wipe out the ringbuffer
     stream.wipeOut();
@@ -283,12 +283,12 @@ AudioPort::setSampleRate(double hz)
     if (hz != 0.0) {
 
         sampleRate = hz;
-        logme(AUD_DEBUG, "setSampleRate(%.2f)\n", sampleRate);
+        logme(LOG_AUD, "setSampleRate(%.2f)\n", sampleRate);
 
     } else {
 
         sampleRate = detector.sampleRate();
-        logme(AUD_DEBUG, "setSampleRate(%.2f) (predicted)\n", sampleRate);
+        logme(LOG_AUD, "setSampleRate(%.2f) (predicted)\n", sampleRate);
     }
 
     // Inform the audio filter about the new sample rate
@@ -388,7 +388,7 @@ AudioPort::updateSampleRateCorrection()
     // Smooth it out
     sampleRateCorrection = (sampleRateCorrection * 0.75) + (correction * 0.25);
     
-    logme(AUDBUF_DEBUG, "ASR correction: %.0f Hz (fill: %.2f)\n",
+    logme(LOG_AUDBUF, "ASR correction: %.0f Hz (fill: %.2f)\n",
           sampleRateCorrection, stream.fillLevel());
 }
 
@@ -512,11 +512,11 @@ AudioPort::handleBufferUnderflow()
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferUnderflows++;
-        logme(AUDBUF_DEBUG, "Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
+        logme(LOG_AUDBUF, "Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
 
         // Adjust the sample rate
         setSampleRate(double(host.getConfig().sampleRate));
-        logme(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
+        logme(LOG_AUDBUF, "New sample rate = %.2f\n", sampleRate);
 
         // Inform the GUI
         msgQueue.put(Msg::AUDBUF_UNDERFLOW, elapsedTime.asMilliseconds());
@@ -537,11 +537,11 @@ AudioPort::handleBufferOverflow()
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferOverflows++;
-        logme(AUDBUF_DEBUG, "Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
+        logme(LOG_AUDBUF, "Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
 
         // Adjust the sample rate
         setSampleRate(double(host.getConfig().sampleRate));
-        logme(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
+        logme(LOG_AUDBUF, "New sample rate = %.2f\n", sampleRate);
 
         // Inform the GUI
         msgQueue.put(Msg::AUDBUF_OVERFLOW, elapsedTime.asMilliseconds());

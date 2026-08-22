@@ -103,7 +103,7 @@ DiagBoard::peek8(u32 addr)
 {
     auto result = spypeek8(addr);
 
-    logme(ZOR_DEBUG, "peek8(%06x) = %02x\n", addr, result);
+    logme(LOG_ZOR, "peek8(%06x) = %02x\n", addr, result);
     return result;
 }
 
@@ -112,7 +112,7 @@ DiagBoard::peek16(u32 addr)
 {
     auto result = spypeek16(addr);
 
-    logme(ZOR_DEBUG, "peek16(%06x) = %04x\n", addr, result);
+    logme(LOG_ZOR, "peek16(%06x) = %04x\n", addr, result);
     return result;
 }
 
@@ -133,13 +133,13 @@ DiagBoard::spypeek16(u32 addr) const
 void
 DiagBoard::poke8(u32 addr, u8 value)
 {
-    logme(ZOR_DEBUG, "poke8(%06x,%02x)\n", addr, value);
+    logme(LOG_ZOR, "poke8(%06x,%02x)\n", addr, value);
 }
 
 void
 DiagBoard::poke16(u32 addr, u16 value)
 {
-    logme(ZOR_DEBUG, "poke16(%06x,%04x)\n", addr, value);
+    logme(LOG_ZOR, "poke16(%06x,%04x)\n", addr, value);
 
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
 
@@ -193,7 +193,7 @@ DiagBoard::processInit(u32 ptr1)
 {
     try {
         
-        logme(DBD_DEBUG, "processInit\n");
+        logme(LOG_DBD, "processInit\n");
         
         auto exec = osDebugger.getExecBase();
         tasks.push_back(exec.ThisTask);
@@ -209,7 +209,7 @@ DiagBoard::processAddTask(u32 ptr1)
 {
     try {
         
-        logme(DBD_DEBUG, "processAddTask\n");
+        logme(LOG_DBD, "processAddTask\n");
 
         // Read task
         os::Task task;
@@ -238,7 +238,7 @@ DiagBoard::processAddTask(u32 ptr1)
 
         // Add task
         tasks.push_back(ptr1);
-        logme(DBD_DEBUG, "Added %s '%s'\n",
+        logme(LOG_DBD, "Added %s '%s'\n",
               type == os::NT_TASK ? "task" : "process", name.c_str());
 
     } catch (...) {
@@ -252,7 +252,7 @@ DiagBoard::processRemTask(u32 ptr1)
 {
     try {
         
-        logme(DBD_DEBUG, "processRemTask\n");
+        logme(LOG_DBD, "processRemTask\n");
         
         // Read task
         os::Task task;
@@ -272,7 +272,7 @@ DiagBoard::processRemTask(u32 ptr1)
 
         // Remove task
         tasks.erase(it);
-        logme(DBD_DEBUG, "Removed '%s'\n", name.c_str());
+        logme(LOG_DBD, "Removed '%s'\n", name.c_str());
         
     } catch (...) {
         
@@ -285,18 +285,18 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
 {
     try {
         
-        logme(DBD_DEBUG, "processLoadSeg(%x,%x)\n", ptr1, ptr2);
+        logme(LOG_DBD, "processLoadSeg(%x,%x)\n", ptr1, ptr2);
 
         // Read task name
         string name;
         if (bstr) {
             auto length = (isize)mem.spypeek8 <Accessor::CPU> (4 * ptr1);
-            logme(DBD_DEBUG, "Length = %ld\n", length);
+            logme(LOG_DBD, "Length = %ld\n", length);
             osDebugger.read(4 * ptr1 + 1, name, length);
         } else {
             osDebugger.read(ptr1, name);
         }
-        logme(DBD_DEBUG, "LoadSeg: '%s' (%x)\n", name.c_str(), ptr2);
+        logme(LOG_DBD, "LoadSeg: '%s' (%x)\n", name.c_str(), ptr2);
         
         auto it = std::find(targets.begin(), targets.end(), name);
         if (it != targets.end()) {
@@ -304,7 +304,7 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
             targets.erase(it);
             auto addr = 4 * (ptr2 + 1);
             cpu.debugger.breakpoints.setAt(addr);
-            logme(DBD_DEBUG, "Setting breakpoint at %x\n", addr);
+            logme(LOG_DBD, "Setting breakpoint at %x\n", addr);
         }
 
     } catch (...) {

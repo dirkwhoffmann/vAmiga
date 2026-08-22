@@ -26,11 +26,11 @@
  * ordinary (inline) variables that can be switched on and off at runtime,
  * and 'if CONSTEXPR' becomes a plain 'if', evaluated every time.
  *
- * Logging flags are typed 'long': their value doubles as the severity a
- * logme() call is issued with. -1 disables the call, 0...7 enables it at
- * the corresponding LogLevel (see LV_EMERGENCY...LV_DEBUG below, mirroring
- * the BSD syslog levels). E.g., 'CPU_DEBUG = LV_DEBUG' enables every
- * logme() call gated by CPU_DEBUG at severity LV_DEBUG.
+ * Logging flags are typed 'LogLevel': their value doubles as the severity
+ * a logme() call is issued with. LOG_NONE disables the call, any other
+ * LogLevel enables it at that severity. E.g., 'LOG_CPU = LogLevel::LOG_DEBUG'
+ * enables every logme() call gated by LOG_CPU at severity LOG_DEBUG. All
+ * logging flags are prefixed 'LOG_' to set them apart from action flags.
  *
  * Action flags are typed 'bool' - see the comment above their section.
  */
@@ -41,8 +41,8 @@
 
 #define logme(key, format, ...) \
     do { \
-        if CONSTEXPR (debug::key != -1) \
-            log((LogLevel)debug::key, std::source_location::current(), \
+        if CONSTEXPR (debug::key != LogLevel::LOG_NONE) \
+            log(debug::key, std::source_location::current(), \
                 format __VA_OPT__(,) __VA_ARGS__); \
     } while (0)
 
@@ -50,20 +50,20 @@
 namespace utl::debug {
 
 //
-// Fixed severities (always active, never -1)
+// Fixed severities (always active, never LOG_NONE)
 //
 
-inline constexpr long LV_EMERGENCY = (long)utl::LogLevel::LOG_EMERG;
-inline constexpr long LV_ALERT     = (long)utl::LogLevel::LOG_ALERT;
-inline constexpr long LV_CRITICAL  = (long)utl::LogLevel::LOG_CRIT;
-inline constexpr long LV_ERROR     = (long)utl::LogLevel::LOG_ERR;
-inline constexpr long LV_WARNING   = (long)utl::LogLevel::LOG_WARNING;
-inline constexpr long LV_NOTICE    = (long)utl::LogLevel::LOG_NOTICE;
-inline constexpr long LV_INFO      = (long)utl::LogLevel::LOG_INFO;
-inline constexpr long LV_DEBUG     = (long)utl::LogLevel::LOG_DEBUG;
+inline constexpr LogLevel LV_EMERGENCY = LogLevel::LOG_EMERG;
+inline constexpr LogLevel LV_ALERT     = LogLevel::LOG_ALERT;
+inline constexpr LogLevel LV_CRITICAL  = LogLevel::LOG_CRIT;
+inline constexpr LogLevel LV_ERROR     = LogLevel::LOG_ERR;
+inline constexpr LogLevel LV_WARNING   = LogLevel::LOG_WARNING;
+inline constexpr LogLevel LV_NOTICE    = LogLevel::LOG_NOTICE;
+inline constexpr LogLevel LV_INFO      = LogLevel::LOG_INFO;
+inline constexpr LogLevel LV_DEBUG     = LogLevel::LOG_DEBUG;
 
 // Always-off placeholder, used to permanently silence a log call
-inline constexpr long NULLDEV            = -1;
+inline constexpr LogLevel LOG_NULLDEV = LogLevel::LOG_NONE;
 
 /* Debug flags come in two kinds:
  *
@@ -83,116 +83,116 @@ inline constexpr long NULLDEV            = -1;
 //
 
 // General
-inline CONSTEXPR long XFILES             = -1;
-inline CONSTEXPR long CNF_DEBUG          = -1;
-inline CONSTEXPR long OBJ_DEBUG          = -1;
-inline CONSTEXPR long DEF_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_XFILES  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_CNF     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_OBJ     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_DEF     = LogLevel::LOG_NONE;
 
 // Emulator
-inline CONSTEXPR long RUN_DEBUG          = -1;
-inline CONSTEXPR long TIM_DEBUG          = -1;
-inline CONSTEXPR long WARP_DEBUG         = -1;
-inline CONSTEXPR long CMD_DEBUG          = -1;
-inline CONSTEXPR long MSG_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_RUN     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_TIM     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_WARP    = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_CMD     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_MSG     = LogLevel::LOG_NONE;
 
 // Run ahead
-inline CONSTEXPR long RUA_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_RUA     = LogLevel::LOG_NONE;
 
 // CPU
-inline CONSTEXPR long CPU_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_CPU     = LogLevel::LOG_NONE;
 
 // Memory access
-inline CONSTEXPR long OCSREG_DEBUG       = -1;
-inline CONSTEXPR long ECSREG_DEBUG       = -1;
-inline CONSTEXPR long INVREG_DEBUG       = -1;
-inline CONSTEXPR long MEM_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_OCSREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_ECSREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_INVREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_MEM     = LogLevel::LOG_NONE;
 
 // Agnus
-inline CONSTEXPR long DMA_DEBUG          = -1;
-inline CONSTEXPR long DDF_DEBUG          = -1;
-inline CONSTEXPR long SEQ_DEBUG          = -1;
-inline CONSTEXPR long NTSC_DEBUG         = -1;
+inline CONSTEXPR LogLevel LOG_DMA     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_DDF     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_SEQ     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_NTSC    = LogLevel::LOG_NONE;
 
 // Copper
-inline CONSTEXPR long COPREG_DEBUG       = -1;
-inline CONSTEXPR long COP_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_COPREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_COP     = LogLevel::LOG_NONE;
 
 // Blitter
-inline CONSTEXPR long BLTREG_DEBUG       = -1;
-inline CONSTEXPR long BLT_REG_GUARD      = -1;
-inline CONSTEXPR long BLT_DEBUG          = -1;
-inline CONSTEXPR long BLTTIM_DEBUG       = -1;
+inline CONSTEXPR LogLevel LOG_BLTREG        = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_BLT_REG_GUARD = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_BLT           = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_BLTTIM        = LogLevel::LOG_NONE;
 
 // Denise
-inline CONSTEXPR long BPLREG_DEBUG       = -1;
-inline CONSTEXPR long BPLDAT_DEBUG       = -1;
-inline CONSTEXPR long BPLMOD_DEBUG       = -1;
-inline CONSTEXPR long SPRREG_DEBUG       = -1;
-inline CONSTEXPR long COLREG_DEBUG       = -1;
-inline CONSTEXPR long CLXREG_DEBUG       = -1;
-inline CONSTEXPR long DIW_DEBUG          = -1;
-inline CONSTEXPR long SPR_DEBUG          = -1;
-inline CONSTEXPR long CLX_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_BPLREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_BPLDAT  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_BPLMOD  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_SPRREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_COLREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_CLXREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_DIW     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_SPR     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_CLX     = LogLevel::LOG_NONE;
 
 // Paula
-inline CONSTEXPR long INTREG_DEBUG       = -1;
-inline CONSTEXPR long INT_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_INTREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_INT     = LogLevel::LOG_NONE;
 
 // CIAs
-inline CONSTEXPR long CIAREG_DEBUG       = -1;
-inline CONSTEXPR long CIASER_DEBUG       = -1;
-inline CONSTEXPR long CIA_DEBUG          = -1;
-inline CONSTEXPR long TOD_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_CIAREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_CIASER  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_CIA     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_TOD     = LogLevel::LOG_NONE;
 
 // Floppy Drives
-inline CONSTEXPR long DSKREG_DEBUG       = -1;
-inline CONSTEXPR long DSK_DEBUG          = -1;
-inline CONSTEXPR long MFM_DEBUG          = -1;
-inline CONSTEXPR long FS_DEBUG           = -1;
+inline CONSTEXPR LogLevel LOG_DSKREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_DSK     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_MFM     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_FS      = LogLevel::LOG_NONE;
 
 // Hard Drives
-inline CONSTEXPR long WT_DEBUG           = -1;
+inline CONSTEXPR LogLevel LOG_WT      = LogLevel::LOG_NONE;
 
 // Audio
-inline CONSTEXPR long AUDREG_DEBUG       = -1;
-inline CONSTEXPR long AUD_DEBUG          = -1;
-inline CONSTEXPR long AUDBUF_DEBUG       = -1;
-inline CONSTEXPR long AUDVOL_DEBUG       = -1;
+inline CONSTEXPR LogLevel LOG_AUDREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_AUD     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_AUDBUF  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_AUDVOL  = LogLevel::LOG_NONE;
 
 // Ports
-inline CONSTEXPR long POSREG_DEBUG       = -1;
-inline CONSTEXPR long JOYREG_DEBUG       = -1;
-inline CONSTEXPR long POTREG_DEBUG       = -1;
-inline CONSTEXPR long VID_DEBUG          = -1;
-inline CONSTEXPR long PRT_DEBUG          = -1;
-inline CONSTEXPR long SER_DEBUG          = -1;
-inline CONSTEXPR long POT_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_POSREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_JOYREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_POTREG  = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_VID     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_PRT     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_SER     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_POT     = LogLevel::LOG_NONE;
 
 // Expansion boards
-inline CONSTEXPR long ZOR_DEBUG          = -1;
-inline CONSTEXPR long ACF_DEBUG          = -1;
-inline CONSTEXPR long FAS_DEBUG          = -1;
-inline CONSTEXPR long HDR_DEBUG          = -1;
-inline CONSTEXPR long DBD_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_ZOR     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_ACF     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_FAS     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_HDR     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_DBD     = LogLevel::LOG_NONE;
 
 // Image files
-inline CONSTEXPR long HDF_DEBUG          = -1;
-inline CONSTEXPR long DMS_DEBUG          = -1;
-inline CONSTEXPR long IMG_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_HDF     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_DMS     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_IMG     = LogLevel::LOG_NONE;
 
 // Real-time clock
-inline CONSTEXPR long RTC_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_RTC     = LogLevel::LOG_NONE;
 
 // Keyboard
-inline CONSTEXPR long KBD_DEBUG          = -1;
-inline CONSTEXPR long KEY_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_KBD     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_KEY     = LogLevel::LOG_NONE;
 
 // Misc
-inline CONSTEXPR long RSH_DEBUG          = -1;
-inline CONSTEXPR long REC_DEBUG          = -1;
-inline CONSTEXPR long SCK_DEBUG          = -1;
-inline CONSTEXPR long SRV_DEBUG          = -1;
-inline CONSTEXPR long GDB_DEBUG          = -1;
+inline CONSTEXPR LogLevel LOG_RSH     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_REC     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_SCK     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_SRV     = LogLevel::LOG_NONE;
+inline CONSTEXPR LogLevel LOG_GDB     = LogLevel::LOG_NONE;
 
 /* Action flags are plain bools: unlike logging flags, "how loud" never
  * applies to them, only "on or off". The exception is LINE_DEBUG, which
@@ -301,4 +301,4 @@ constexpr long DMS_CANT_CREATE        = 0;
     } while(0)
 
 #define xfiles(format, ...) \
-    logme(XFILES, format __VA_OPT__(,) __VA_ARGS__)
+    logme(LOG_XFILES, format __VA_OPT__(,) __VA_ARGS__)

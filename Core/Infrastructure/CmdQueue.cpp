@@ -17,7 +17,7 @@ CmdQueue::put(const Command &cmd)
 {
     {   SYNCHRONIZED
 
-        logme(CMD_DEBUG, "%s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
+        logme(LOG_CMD, "%s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
 
         if (!queue.isFull()) {
             queue.write(cmd);

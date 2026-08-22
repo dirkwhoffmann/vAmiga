@@ -63,7 +63,7 @@ HardDrive::operator= (const HardDrive& other) {
 
             if (other.dirty[i]) {
 
-                logme(RUA_DEBUG, "Cloning block %ld\n", i);
+                logme(LOG_RUA, "Cloning block %ld\n", i);
                 memcpy(data.ptr + 512 * i, other.data.ptr + 512 * i, 512);
             }
         }
@@ -185,12 +185,12 @@ HardDrive::init(const HDFFile &hdf)
     
     if (data.size < numBytes) {
         
-        logme(HDR_DEBUG, "HDF is too large. Ignoring excess bytes.\n");
+        logme(LOG_HDR, "HDF is too large. Ignoring excess bytes.\n");
         numBytes = data.size;
     }
     if (data.size > hdf.data.size) {
         
-        logme(HDR_DEBUG, "HDF is too small. Padding with zeroes.");
+        logme(LOG_HDR, "HDF is too small. Padding with zeroes.");
         data.clear(0, hdf.data.size);
     }
     
@@ -198,8 +198,8 @@ HardDrive::init(const HDFFile &hdf)
     hdf.copy(data.ptr, 0, numBytes);
         
     // Print some debug information
-    logme(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
-    if CONSTEXPR (debug::HDR_DEBUG != -1) {
+    logme(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
+    if CONSTEXPR (debug::LOG_HDR != LogLevel::LOG_NONE) {
         for (auto &driver : drivers) driver.dump();
     }
 }
@@ -214,7 +214,7 @@ HardDrive::init(const fs::path &path)
 
     if (fs::is_directory(path)) {
         
-        logme(HDR_DEBUG, "Importing directory...\n");
+        logme(LOG_HDR, "Importing directory...\n");
         
         importFolder(path);
         
@@ -312,7 +312,7 @@ HardDrive::connect()
     // Attach a small default disk
     if (!hasDisk()) {
         
-        logme(WT_DEBUG, "Creating default disk...\n");
+        logme(LOG_WT, "Creating default disk...\n");
         init(MB(10));
         format(amiga::FSFormat::OFS, FSName(defaultName()));
         setFlag(DiskFlags::BOOTABLE, false);
@@ -539,11 +539,11 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
 {
     using amiga::FSFormat;
 
-    if CONSTEXPR (debug::HDR_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_HDR != LogLevel::LOG_NONE) {
 
-        logme(HDR_DEBUG, "Formatting hard drive\n");
-        logme(HDR_DEBUG, "    File system : %s\n", amiga::FSFormatEnum::key(fsType));
-        logme(HDR_DEBUG, "           Name : %s\n", name.c_str());
+        logme(LOG_HDR, "Formatting hard drive\n");
+        logme(LOG_HDR, "    File system : %s\n", amiga::FSFormatEnum::key(fsType));
+        logme(LOG_HDR, "           Name : %s\n", name.c_str());
     }
     
     // Only proceed if a disk is present
@@ -595,7 +595,7 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 i8
 HardDrive::read(isize offset, isize length, u32 addr)
 {
-    logme(HDR_DEBUG, "read(%ld, %ld, %u)\n", offset, length, addr);
+    logme(LOG_HDR, "read(%ld, %ld, %u)\n", offset, length, addr);
 
     // Check arguments
     auto error = verify(offset, length, addr);
@@ -623,7 +623,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
 i8
 HardDrive::write(isize offset, isize length, u32 addr)
 {
-    logme(HDR_DEBUG, "write(%ld, %ld, %u)\n", offset, length, addr);
+    logme(LOG_HDR, "write(%ld, %ld, %u)\n", offset, length, addr);
 
     // Check arguments
     auto error = verify(offset, length, addr);
@@ -684,25 +684,25 @@ HardDrive::verify(isize offset, isize length, u32 addr)
 
     if (length % 512) {
         
-        logme(HDR_DEBUG, "Length must be a multiple of 512 bytes");
+        logme(LOG_HDR, "Length must be a multiple of 512 bytes");
         return IOERR_BADLENGTH;
     }
 
     if (offset % 512) {
         
-        logme(HDR_DEBUG, "Offset is not aligned");
+        logme(LOG_HDR, "Offset is not aligned");
         return IOERR_BADADDRESS;
     }
 
     if (offset + length > geometry.numBytes()) {
         
-        logme(HDR_DEBUG, "Invalid block location");
+        logme(LOG_HDR, "Invalid block location");
         return IOERR_BADADDRESS;
     }
 
     if (!mem.inRam(addr) || !mem.inRam(u32(addr + length))) {
         
-        logme(HDR_DEBUG, "Invalid RAM location");
+        logme(LOG_HDR, "Invalid RAM location");
         return IOERR_BADADDRESS;
     }
 
@@ -745,7 +745,7 @@ HardDrive::importFolder(const fs::path &path)
     
     if (fs::is_directory(path)) {
         
-        logme(HDR_DEBUG, "Importing directory...\n");
+        logme(LOG_HDR, "Importing directory...\n");
 
         // Retrieve some information about the first partition
         auto traits = getPartitionTraits(0);

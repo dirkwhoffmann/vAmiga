@@ -758,7 +758,7 @@ FloppyDrive::setMotor(bool value)
     msgQueue.put(Msg::DRIVE_LED, DriveMsg { i16(objid), value, 0, 0 });
     msgQueue.put(Msg::DRIVE_MOTOR, DriveMsg { i16(objid), value, 0, 0 });
 
-    logme(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
+    logme(LOG_DSK, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
 
 bool
@@ -875,7 +875,7 @@ FloppyDrive::findSyncMark()
         break;
     }
 
-    logme(DSK_DEBUG, "Moving to SYNC mark at offset %ld\n", head.offset);
+    logme(LOG_DSK, "Moving to SYNC mark at offset %ld\n", head.offset);
 }
 
 bool
@@ -1045,7 +1045,7 @@ FloppyDrive::getDisk()
 bool
 FloppyDrive::isInsertable(Diameter t, Density d) const
 {
-    logme(DSK_DEBUG,
+    logme(LOG_DSK,
           "isInsertable(%s, %s)\n", DiameterEnum::key(t), DensityEnum::key(d));
     
     switch (config.type) {
@@ -1079,7 +1079,7 @@ FloppyDrive::isInsertable(const FloppyDisk &disk) const
 template <EventSlot s> void
 FloppyDrive::ejectDisk(Cycle delay)
 {
-    logme(DSK_DEBUG, "ejectDisk <%ld> (%lld)\n", s, delay);
+    logme(LOG_DSK, "ejectDisk <%ld> (%lld)\n", s, delay);
     
     // Schedule an ejection event
     agnus.scheduleRel <s> (delay, DCH_EJECT);
@@ -1091,7 +1091,7 @@ FloppyDrive::ejectDisk(Cycle delay)
 void
 FloppyDrive::ejectDisk(Cycle delay)
 {
-    logme(DSK_DEBUG, "ejectDisk(%lld)\n", delay);
+    logme(LOG_DSK, "ejectDisk(%lld)\n", delay);
     
     if (objid == 0) ejectDisk <SLOT_DC0> (delay);
     if (objid == 1) ejectDisk <SLOT_DC1> (delay);
@@ -1104,7 +1104,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 {
     assert(disk != nullptr);
     
-    logme(DSK_DEBUG, "insertDisk <%ld> (%lld)\n", s, delay);
+    logme(LOG_DSK, "insertDisk <%ld> (%lld)\n", s, delay);
 
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw DeviceError(DeviceError::DSK_INCOMPATIBLE);
@@ -1195,7 +1195,7 @@ FloppyDrive::catchFile(const fs::path &path)
 void
 FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 {
-    logme(DSK_DEBUG, "insertDisk(%lld)\n", delay);
+    logme(LOG_DSK, "insertDisk(%lld)\n", delay);
     
     if (objid == 0) insertDisk <SLOT_DC0> (std::move(disk), delay);
     if (objid == 1) insertDisk <SLOT_DC1> (std::move(disk), delay);
@@ -1206,7 +1206,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 void
 FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path &path)
 {
-    logme(DSK_DEBUG,
+    logme(LOG_DSK,
           "insertNew(%s, %s, %s, %s)\n",
           FSFormatEnum::key(dos), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
 
@@ -1244,7 +1244,7 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
 void
 FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
 {
-    logme(DSK_DEBUG, "swapDisk()\n");
+    logme(LOG_DSK, "swapDisk()\n");
     
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw DeviceError(DeviceError::DSK_INCOMPATIBLE);

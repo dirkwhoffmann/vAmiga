@@ -416,7 +416,7 @@ Blitter::doFill(u16 &data, bool &carry) const
 {
     assert(carry == 0 || carry == 1);
 
-    logme(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
+    logme(LOG_BLT, "data = %X carry = %X\n", data, carry);
     
     u8 dataHi = HI_BYTE(data);
     u8 dataLo = LO_BYTE(data);
@@ -591,7 +591,7 @@ Blitter::beginCopyBlit(isize level)
 void
 Blitter::clearBusyFlag()
 {
-    logme(BLTTIM_DEBUG, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
+    logme(LOG_BLTTIM, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -600,7 +600,7 @@ Blitter::clearBusyFlag()
 void
 Blitter::endBlit()
 {
-    logme(BLTTIM_DEBUG, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+    logme(LOG_BLTTIM, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
     if CONSTEXPR (debug::BLT_MEM_GUARD) blitcount++;

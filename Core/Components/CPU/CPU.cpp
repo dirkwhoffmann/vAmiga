@@ -99,7 +99,7 @@ Moira::read16OnReset(u32 addr) const
 void
 Moira::write8(u32 addr, u8 val) const
 {
-    if CONSTEXPR (debug::XFILES != -1) {
+    if CONSTEXPR (debug::LOG_XFILES != LogLevel::LOG_NONE) {
         if (addr - reg.pc < 5) xfiles("write8 close to PC %x\n", reg.pc);
     }
     mem.poke8 <Accessor::CPU> (addr, val);
@@ -108,7 +108,7 @@ Moira::write8(u32 addr, u8 val) const
 void
 Moira::write16(u32 addr, u16 val) const
 {
-    if CONSTEXPR (debug::XFILES != -1) {
+    if CONSTEXPR (debug::LOG_XFILES != LogLevel::LOG_NONE) {
         if (addr - reg.pc < 5) xfiles("write16 close to PC %x\n", reg.pc);
     }
     mem.poke16 <Accessor::CPU> (addr, val);
@@ -218,7 +218,7 @@ Moira::cpuDidHalt()
 void
 Moira::willInterrupt(u8 level)
 {
-    logme(INT_DEBUG, "Executing level %d IRQ\n", level);
+    logme(LOG_INT, "Executing level %d IRQ\n", level);
 }
 
 void
@@ -227,7 +227,7 @@ Moira::didJumpToVector(int nr, u32 addr)
     bool isIrqException = nr >= 24 && nr <= 31;
 
     if (isIrqException) {
-        logme(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
+        logme(LOG_INT, "Exception %d: Changing PC to %x\n", nr, addr);
     }
 }
 
@@ -645,14 +645,14 @@ CPU::_dump(Category category, std::ostream &os) const
 void
 CPU::_trackOn()
 {
-    logme(RUN_DEBUG, "Enabling debug mode\n");
+    logme(LOG_RUN, "Enabling debug mode\n");
     debugger.enableLogging();
 }
 
 void
 CPU::_trackOff()
 {
-    logme(RUN_DEBUG, "Disabling debug mode\n");
+    logme(LOG_RUN, "Disabling debug mode\n");
     debugger.disableLogging();
 }
 

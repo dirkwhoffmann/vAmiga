@@ -73,7 +73,7 @@ FloppyDisk::init(SerReader &reader, Diameter dia, Density den, bool wp)
 
 FloppyDisk::~FloppyDisk()
 {
-    logme(OBJ_DEBUG, "Deleting disk\n");
+    logme(LOG_OBJ, "Deleting disk\n");
 }
 
 void
@@ -119,7 +119,7 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
     AmigaDecoder decoder;
 
     auto [t,s] = b2ts(nr);
-    logme(MFM_DEBUG, "readBlock: %ld (%ld,%ld)\n", nr, t, s);
+    logme(LOG_MFM, "readBlock: %ld (%ld,%ld)\n", nr, t, s);
 
     auto bytes = decoder.decodeSector(track[t], t, s);
     assert(bytes.size() == bsize());
@@ -145,7 +145,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
     AmigaDecoder decoder;
 
     auto [t,s]  = b2ts(nr);
-    logme(MFM_DEBUG, "writeBlock: %ld (%ld,%ld)\n", nr, t, s);
+    logme(LOG_MFM, "writeBlock: %ld (%ld,%ld)\n", nr, t, s);
 
     // Compute the MFM bit stream
     auto mfm = encoder.encodeSector(ByteView(src, bsize()), t, s);
@@ -353,7 +353,7 @@ FloppyDisk::clearTrack(TrackNr t, u8 value1, u8 value2)
 void
 FloppyDisk::encodeDisk(const FloppyDiskImage &image)
 {
-    logme(DSK_DEBUG,
+    logme(LOG_DSK,
             "Encoding floppy disk image %s...\n", image.path.string().c_str());
 
     if (getDiameter() != image.getDiameter())
@@ -370,14 +370,14 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
         replaceTrack(t, image.encode(t));
 
     /*
-    if CONSTEXPR (debug::IMG_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
         Codec::makeIMG(*this)->writeToFile(tmp);
     }
      */
-    if CONSTEXPR (debug::IMG_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
 
         /*
         string tmp = "/tmp/debug.img";
@@ -389,7 +389,7 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
 
     // In debug mode, also run the decoder
     /*
-    if CONSTEXPR (debug::IMG_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -403,7 +403,7 @@ FloppyDisk::decodeDisk(FloppyDiskImage &file) const
 {
     auto tracks = file.numTracks();
 
-    logme(IMG_DEBUG, "Decoding disk with %ld tracks\n", tracks);
+    logme(LOG_IMG, "Decoding disk with %ld tracks\n", tracks);
 
     if (getDiameter() != file.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -420,7 +420,7 @@ void
 FloppyDisk::encode(const ADFFile &adf)
 {
     isize tracks = adf.numTracks();
-    logme(IMG_DEBUG, "Encoding Amiga disk with %ld tracks\n", tracks);
+    logme(LOG_IMG, "Encoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter())
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -435,7 +435,7 @@ FloppyDisk::encode(const ADFFile &adf)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, adf.encode(t));
 
     // In debug mode, also run the decoder
-    if CONSTEXPR (debug::IMG_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -448,7 +448,7 @@ FloppyDisk::decode(ADFFile &adf) const
 {
     auto tracks = adf.numTracks();
 
-    logme(IMG_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
+    logme(LOG_IMG, "Decoding Amiga disk with %ld tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -466,7 +466,7 @@ FloppyDisk::encode(const class IMGFile &img)
 {
     isize tracks = img.numTracks();
 
-    logme(IMG_DEBUG, "Encoding DOS disk with %ld tracks\n", tracks);
+    logme(LOG_IMG, "Encoding DOS disk with %ld tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -482,7 +482,7 @@ FloppyDisk::encode(const class IMGFile &img)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
-    if CONSTEXPR (debug::IMG_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -495,7 +495,7 @@ FloppyDisk::decode(class IMGFile &img) const
 {
     auto tracks = img.numTracks();
 
-    logme(IMG_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
+    logme(LOG_IMG, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -512,7 +512,7 @@ void
 FloppyDisk::encode(const class STFile &img)
 {
     isize tracks = img.numTracks();
-    logme(IMG_DEBUG, "Encoding ST disk with %ld tracks\n", tracks);
+    logme(LOG_IMG, "Encoding ST disk with %ld tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -528,7 +528,7 @@ FloppyDisk::encode(const class STFile &img)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
-    if CONSTEXPR (debug::IMG_DEBUG != -1) {
+    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -541,7 +541,7 @@ FloppyDisk::decode(class STFile &st) const
 {
     auto tracks = st.numTracks();
 
-    logme(IMG_DEBUG, "Decoding Atari ST disk (%ld tracks)\n", tracks);
+    logme(LOG_IMG, "Decoding Atari ST disk (%ld tracks)\n", tracks);
 
     if (getDiameter() != st.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -572,7 +572,7 @@ FloppyDisk::replaceTrack(TrackNr t, BitView mfm)
 void
 FloppyDisk::shiftTracks(isize offset)
 {
-    logme(DSK_DEBUG, "Shifting tracks by %ld bytes against each other\n", offset);
+    logme(LOG_DSK, "Shifting tracks by %ld bytes against each other\n", offset);
 
     u8 spare[2 * 32768];
 

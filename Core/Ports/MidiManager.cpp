@@ -234,7 +234,7 @@ MidiManager::initMidi()
     
    // Useful to debug CoreMIDI
    // printf("MIDI client initialized successfully - clientCreated=%d\n", clientCreated);
-    logme(SER_DEBUG, "MIDI client initialized successfully\n");
+    logme(LOG_SER, "MIDI client initialized successfully\n");
     return true;
 }
 
@@ -260,7 +260,7 @@ MidiManager::shutdownMidi()
     }
     
     clientCreated = false;
-    logme(SER_DEBUG, "MIDI client shut down\n");
+    logme(LOG_SER, "MIDI client shut down\n");
 }
 
 bool
@@ -271,7 +271,7 @@ MidiManager::openOutput(MIDIEndpointRef endpoint)
     closeOutput();
     currentOutputEndpoint = endpoint;
 
-    logme(SER_DEBUG, "MIDI output opened\n");
+    logme(LOG_SER, "MIDI output opened\n");
     return true;
 }
 
@@ -290,7 +290,7 @@ MidiManager::openInput(MIDIEndpointRef endpoint)
     }
     
     currentInputEndpoint = endpoint;
-    logme(SER_DEBUG, "MIDI input opened\n");
+    logme(LOG_SER, "MIDI input opened\n");
     return true;
 }
 

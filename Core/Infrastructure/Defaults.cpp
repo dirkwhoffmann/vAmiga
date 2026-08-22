@@ -280,7 +280,7 @@ Defaults::load(const fs::path &path)
         throw IOError(IOError::FILE_NOT_FOUND);
     }
 
-    logme(DEF_DEBUG, "Loading user defaults from %s...\n", path.string().c_str());
+    logme(LOG_DEF, "Loading user defaults from %s...\n", path.string().c_str());
     load(fs);
 }
 
@@ -304,7 +304,7 @@ Defaults::load(std::stringstream &stream)
         string input;
         string section;
 
-        logme(DEF_DEBUG, "Loading user defaults from string stream...\n");
+        logme(LOG_DEF, "Loading user defaults from string stream...\n");
 
         while(std::getline(stream, input)) {
 
@@ -359,7 +359,7 @@ Defaults::load(std::stringstream &stream)
         }
 
         if (accepted || skipped) {
-            logme(DEF_DEBUG, "%ld keys accepted, %ld ignored\n", accepted, skipped);
+            logme(LOG_DEF, "%ld keys accepted, %ld ignored\n", accepted, skipped);
         }
     }
 }
@@ -390,7 +390,7 @@ Defaults::save(std::stringstream &stream)
 {
     {   SYNCHRONIZED
 
-        logme(DEF_DEBUG, "Saving user defaults...\n");
+        logme(LOG_DEF, "Saving user defaults...\n");
 
         std::map <string, std::map <string, string>> groups;
 
@@ -513,7 +513,7 @@ Defaults::set(const string &key, const string &value)
 {
     {   SYNCHRONIZED
 
-        logme(DEF_DEBUG, "%s = %s\n", key.c_str(), value.c_str());
+        logme(LOG_DEF, "%s = %s\n", key.c_str(), value.c_str());
 
         if (!fallbacks().values.contains(key)) {
 
@@ -559,7 +559,7 @@ Defaults::setFallback(const string &key, const string &value)
 {
     {   SYNCHRONIZED
 
-        logme(DEF_DEBUG, "Fallback: %s = %s\n", key.c_str(), value.c_str());
+        logme(LOG_DEF, "Fallback: %s = %s\n", key.c_str(), value.c_str());
         fallbacks().values[key] = value;
     }
 }

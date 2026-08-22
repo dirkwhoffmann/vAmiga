@@ -199,7 +199,7 @@ RTC::spypeek(isize nr) const
             result = reg[bank()][nr];
     }
 
-    logme(RTC_DEBUG, "peek(%ld) = $%X [bank %ld]\n", nr, result, bank());
+    logme(LOG_RTC, "peek(%ld) = $%X [bank %ld]\n", nr, result, bank());
     return result;
 }
 
@@ -208,7 +208,7 @@ RTC::poke(isize nr, u8 value)
 {
     assert(nr < 16);
 
-    logme(RTC_DEBUG, "poke(%ld, $%02X) [bank %ld]\n", nr, value, bank());
+    logme(LOG_RTC, "poke(%ld, $%02X) [bank %ld]\n", nr, value, bank());
 
     // Ony proceed if a real-time clock is installed
     if (config.model == RTCRevision::NONE) return;
