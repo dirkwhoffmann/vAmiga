@@ -1275,7 +1275,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr)
     ASSERT_AUTO_ADDR(addr);
     
     // Experimental code to match UAE output (for debugging)
-    if CONSTEXPR (debug::MIMIC_UAE != -1) {
+    if CONSTEXPR (debug::MIMIC_UAE) {
 
         if (fastRamSize() == 0) {
             dataBus = (addr & 0b10) ? 0xE8 : 0x02;
@@ -1625,9 +1625,9 @@ Memory::poke8 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if CONSTEXPR (debug::BLT_MEM_GUARD != -1) {
+    if CONSTEXPR (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
-            logme(BLT_MEM_GUARD, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
+            logme(LV_WARNING, "CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }
 
@@ -1647,9 +1647,9 @@ Memory::poke16 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if CONSTEXPR (debug::BLT_MEM_GUARD != -1) {
+    if CONSTEXPR (debug::BLT_MEM_GUARD) {
         if (blitter.checkMemguard(addr & mem.chipMask)) {
-            logme(BLT_MEM_GUARD, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
+            logme(LV_WARNING, "CPU(16) OVERWRITES BLITTER AT ADDR %x\n", addr);
         }
     }
 

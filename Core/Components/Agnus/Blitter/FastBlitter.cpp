@@ -149,7 +149,7 @@ void Blitter::doFastCopyBlit()
             if (useD) {
                 mem.poke16 <Accessor::AGNUS> (dpt, dhold);
 
-                if (debug::BLT_CHECKSUM != -1) {
+                if (debug::BLT_CHECKSUM) {
                     
                     check1 = Hashable::fnvIt32(check1, dhold);
                     check2 = Hashable::fnvIt32(check2, dpt & agnus.ptrMask);
@@ -286,7 +286,7 @@ Blitter::doFastLineBlit()
 
             mem.poke16 <Accessor::AGNUS> (bltdpt, dhold);
             
-            if CONSTEXPR (debug::BLT_CHECKSUM != -1) {
+            if CONSTEXPR (debug::BLT_CHECKSUM) {
 
                 check1 = Hashable::fnvIt32(check1, dhold);
                 check2 = Hashable::fnvIt32(check2, bltdpt & agnus.ptrMask);

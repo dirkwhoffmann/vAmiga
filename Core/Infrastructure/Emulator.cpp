@@ -276,7 +276,7 @@ Emulator::computeFrame()
             main.computeFrame();
 
             // Recreate the run-ahead instance if necessary
-            if (isDirty || debug::RUA_ON_STEROIDS != -1) recreateRunAheadInstance();
+            if (isDirty || debug::RUA_ON_STEROIDS) recreateRunAheadInstance();
 
             // Run the runahead instance
             ahead.computeFrame();
@@ -308,7 +308,7 @@ Emulator::cloneRunAheadInstance()
     // Recreate the runahead instance from scratch
     ahead = main; isDirty = false;
 
-    if CONSTEXPR (debug::RUA_CHECKSUM != -1) {
+    if CONSTEXPR (debug::RUA_CHECKSUM) {
 
         if (ahead != main) {
             

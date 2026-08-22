@@ -136,8 +136,8 @@ Mouse::changePotgo(u16 &potgo) const
     bool rb = rightButton.get(agnus.pos.frame);
     bool mb = middleButton.get(agnus.pos.frame);
 
-    if CONSTEXPR (debug::HOLD_MOUSE_R != -1) rb = true;
-    if CONSTEXPR (debug::HOLD_MOUSE_M != -1) mb = true;
+    if CONSTEXPR (debug::HOLD_MOUSE_R) rb = true;
+    if CONSTEXPR (debug::HOLD_MOUSE_M) mb = true;
 
     if (rb) {
         potgo &= ~maskR;
@@ -159,7 +159,7 @@ Mouse::changePra(u8 &pra) const
 
     bool lb = leftButton.get(agnus.pos.frame);
 
-    if CONSTEXPR (debug::HOLD_MOUSE_L != -1) lb = true;
+    if CONSTEXPR (debug::HOLD_MOUSE_L) lb = true;
 
     if (lb) {
         pra &= ~mask;

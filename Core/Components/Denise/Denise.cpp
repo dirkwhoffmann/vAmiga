@@ -531,7 +531,7 @@ Denise::drawEven(Pixel offset)
 template <Resolution mode> void
 Denise::drawBoth(Pixel offset)
 {
-    if CONSTEXPR (debug::BPL_ON_STEROIDS != -1) {
+    if CONSTEXPR (debug::BPL_ON_STEROIDS) {
 
         drawOdd <mode> (offset);
         drawEven <mode> (offset);
@@ -1317,7 +1317,7 @@ Denise::borderColor(u16 con0, u16 con3) const
      *
      * Relevant test in the vAmigaTS test suite: Denise/Modes/brdrblnk
      */
-    if CONSTEXPR (debug::BORDER_DEBUG != -1) {
+    if CONSTEXPR (debug::BORDER_DEBUG) {
         return PixelEngine::BORDER_DEBUG; // Debug color
     }
 

@@ -19,18 +19,20 @@
 
 /* In release builds (NDEBUG), CONSTEXPR expands to 'constexpr'. Every debug
  * flag below then becomes a compile-time constant, and 'if CONSTEXPR' below
- * becomes 'if constexpr', so the compiler removes each guarded log call
- * entirely when its flag is off.
+ * becomes 'if constexpr', so the compiler removes each guarded log call (or
+ * action) entirely when its flag is off.
  *
  * In debug builds, CONSTEXPR expands to nothing. The same flags become
  * ordinary (inline) variables that can be switched on and off at runtime,
  * and 'if CONSTEXPR' becomes a plain 'if', evaluated every time.
  *
- * A flag's value doubles as the severity a log call is issued with: -1
- * disables the call, 0...7 enables it at the corresponding LogLevel (see
- * LV_EMERGENCY...LV_DEBUG below, mirroring the BSD syslog levels). E.g.,
- * 'CPU_DEBUG = LV_DEBUG' enables every logme() call gated by CPU_DEBUG at
- * severity LV_DEBUG.
+ * Logging flags are typed 'long': their value doubles as the severity a
+ * logme() call is issued with. -1 disables the call, 0...7 enables it at
+ * the corresponding LogLevel (see LV_EMERGENCY...LV_DEBUG below, mirroring
+ * the BSD syslog levels). E.g., 'CPU_DEBUG = LV_DEBUG' enables every
+ * logme() call gated by CPU_DEBUG at severity LV_DEBUG.
+ *
+ * Action flags are typed 'bool' - see the comment above their section.
  */
 
 //
@@ -93,6 +95,9 @@ inline CONSTEXPR long WARP_DEBUG         = -1;
 inline CONSTEXPR long CMD_DEBUG          = -1;
 inline CONSTEXPR long MSG_DEBUG          = -1;
 
+// Run ahead
+inline CONSTEXPR long RUA_DEBUG          = -1;
+
 // CPU
 inline CONSTEXPR long CPU_DEBUG          = -1;
 
@@ -115,6 +120,7 @@ inline CONSTEXPR long COP_DEBUG          = -1;
 // Blitter
 inline CONSTEXPR long BLTREG_DEBUG       = -1;
 inline CONSTEXPR long BLT_REG_GUARD      = -1;
+inline CONSTEXPR long BLT_DEBUG          = -1;
 inline CONSTEXPR long BLTTIM_DEBUG       = -1;
 
 // Denise
@@ -142,6 +148,7 @@ inline CONSTEXPR long TOD_DEBUG          = -1;
 inline CONSTEXPR long DSKREG_DEBUG       = -1;
 inline CONSTEXPR long DSK_DEBUG          = -1;
 inline CONSTEXPR long MFM_DEBUG          = -1;
+inline CONSTEXPR long FS_DEBUG           = -1;
 
 // Hard Drives
 inline CONSTEXPR long WT_DEBUG           = -1;
@@ -187,55 +194,65 @@ inline CONSTEXPR long SCK_DEBUG          = -1;
 inline CONSTEXPR long SRV_DEBUG          = -1;
 inline CONSTEXPR long GDB_DEBUG          = -1;
 
+/* Action flags are plain bools: unlike logging flags, "how loud" never
+ * applies to them, only "on or off". The exception is LINE_DEBUG, which
+ * holds a scanline number rather than an on/off switch (-1 = disabled).
+ *
+ * A few of these also print a message reporting on the action they
+ * triggered (e.g. a computed checksum). Rather than force that message
+ * through a severity encoded in a now-boolean flag, those call sites
+ * gate a logme() call with a fixed LV_* severity on the action flag
+ * directly - see e.g. Copper::eofHandler() or Blitter::beginLineBlit().
+ */
+
 //
 // Flags that enable a debug action
 //
 
 // General
-inline CONSTEXPR long MIMIC_UAE          = -1;
+inline CONSTEXPR bool MIMIC_UAE          = false;
 
 // Emulator
-inline CONSTEXPR long SNP_DEBUG          = -1;
+inline CONSTEXPR bool SNP_DEBUG          = false;
 
 // Run ahead
-inline CONSTEXPR long RUA_DEBUG          = -1;
-inline CONSTEXPR long RUA_CHECKSUM       = -1;
-inline CONSTEXPR long RUA_ON_STEROIDS    = -1;
+inline CONSTEXPR bool RUA_CHECKSUM       = false;
+inline CONSTEXPR bool RUA_ON_STEROIDS    = false;
 
 // Agnus
-inline CONSTEXPR long SEQ_ON_STEROIDS    = -1;
+inline CONSTEXPR bool SEQ_ON_STEROIDS    = false;
 
 // Copper
-inline CONSTEXPR long COP_CHECKSUM       = -1;
+inline CONSTEXPR bool COP_CHECKSUM       = false;
 
 // Blitter
-inline CONSTEXPR long BLT_CHECKSUM       = -1;
-inline CONSTEXPR long BLT_MEM_GUARD      = -1;
-inline CONSTEXPR long BLT_DEBUG          = -1;
-inline CONSTEXPR long SLOW_BLT_DEBUG     = -1;
+inline CONSTEXPR bool BLT_CHECKSUM       = false;
+inline CONSTEXPR bool BLT_MEM_GUARD      = false;
+inline CONSTEXPR bool BLT_MINTERM_CHECK  = false;
+inline CONSTEXPR bool SLOW_BLT_DEBUG     = false;
 
 // Denise
-inline CONSTEXPR long BPL_ON_STEROIDS    = -1;
-inline CONSTEXPR long BORDER_DEBUG       = -1;
+inline CONSTEXPR bool BPL_ON_STEROIDS    = false;
+inline CONSTEXPR bool BORDER_DEBUG       = false;
 inline CONSTEXPR long LINE_DEBUG         = -1;
-inline CONSTEXPR long DENISE_ON_STEROIDS = -1;
+inline CONSTEXPR bool DENISE_ON_STEROIDS = false;
 
 // Floppy Drives
-inline CONSTEXPR long ALIGN_HEAD         = -1;
-inline CONSTEXPR long DSK_CHECKSUM       = -1;
-inline CONSTEXPR long FS_DEBUG           = -1;
+inline CONSTEXPR bool ALIGN_HEAD         = false;
+inline CONSTEXPR bool DSK_CHECKSUM       = false;
+inline CONSTEXPR bool FS_VERIFY          = false;
 
 // Hard Drives
-inline CONSTEXPR long HDR_ACCEPT_ALL     = -1;
-inline CONSTEXPR long HDR_FS_LOAD_ALL    = -1;
+inline CONSTEXPR bool HDR_ACCEPT_ALL     = false;
+inline CONSTEXPR bool HDR_FS_LOAD_ALL    = false;
 
 // Audio
-inline CONSTEXPR long DISABLE_AUDIRQ     = -1;
+inline CONSTEXPR bool DISABLE_AUDIRQ     = false;
 
 // Ports
-inline CONSTEXPR long HOLD_MOUSE_L       = -1;
-inline CONSTEXPR long HOLD_MOUSE_M       = -1;
-inline CONSTEXPR long HOLD_MOUSE_R       = -1;
+inline CONSTEXPR bool HOLD_MOUSE_L       = false;
+inline CONSTEXPR bool HOLD_MOUSE_M       = false;
+inline CONSTEXPR bool HOLD_MOUSE_R       = false;
 
 }
 

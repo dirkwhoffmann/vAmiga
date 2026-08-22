@@ -391,7 +391,7 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
         u16 word = readFifo16();
         
         // Write word into memory
-        if CONSTEXPR (debug::DSK_CHECKSUM != -1) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check1 = Hashable::fnvIt32(check1, word);
@@ -405,7 +405,7 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
             paula.raiseIrq(IrqSource::DSKBLK);
             setState(DriveDmaState::OFF);
             
-            logme(DSK_CHECKSUM,
+            if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG,
                   "read: cnt = %llu check1 = %x check2 = %x\n", checkcnt, check1, check2);
             
             return;
@@ -431,14 +431,14 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
     do {
 
         // Read next word from memory
-        if CONSTEXPR (debug::DSK_CHECKSUM != -1) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check2 = Hashable::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
         u16 word = agnus.doDiskDmaRead();
         
-        if CONSTEXPR (debug::DSK_CHECKSUM != -1) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             check1 = Hashable::fnvIt32(check1, word);
         }
@@ -472,8 +472,10 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
             }
             setState(DriveDmaState::OFF);
             
-            logme(DSK_CHECKSUM, "write: cnt = %llu ", checkcnt);
-            logme(DSK_CHECKSUM, "check1 = %x check2 = %x\n", check1, check2);
+            if CONSTEXPR (debug::DSK_CHECKSUM) {
+                logme(LV_DEBUG, "write: cnt = %llu ", checkcnt);
+                logme(LV_DEBUG, "check1 = %x check2 = %x\n", check1, check2);
+            }
 
             return;
         }
@@ -521,7 +523,7 @@ DiskController::performTurboDMA(FloppyDrive *drive)
     // Trigger disk interrupt with some delay
     Cycle delay = 512;
 
-    if CONSTEXPR (debug::MIMIC_UAE != -1)
+    if CONSTEXPR (debug::MIMIC_UAE)
         delay = 2 * PAL::HPOS_CNT - agnus.pos.h + 30;
 
     paula.scheduleIrqRel(IrqSource::DSKBLK, DMA_CYCLES(delay));
@@ -538,7 +540,7 @@ DiskController::performTurboRead(FloppyDrive *drive)
         u16 word = drive->read16AndRotate();
         
         // Write word into memory
-        if CONSTEXPR (debug::DSK_CHECKSUM != -1) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check1 = Hashable::fnvIt32(check1, word);
@@ -548,14 +550,17 @@ DiskController::performTurboRead(FloppyDrive *drive)
         agnus.dskpt += 2;
     }
     
-    logme(DSK_CHECKSUM, "Turbo read %s: cyl: %ld side: %ld offset: %ld ",
-          drive->objectName(),
-          drive->head.cylinder,
-          drive->head.head,
-          drive->head.offset);
-    
-    logme(DSK_CHECKSUM, "checkcnt = %llu check1 = %x check2 = %x\n",
-          checkcnt, check1, check2);
+    if CONSTEXPR (debug::DSK_CHECKSUM) {
+
+        logme(LV_DEBUG, "Turbo read %s: cyl: %ld side: %ld offset: %ld ",
+              drive->objectName(),
+              drive->head.cylinder,
+              drive->head.head,
+              drive->head.offset);
+
+        logme(LV_DEBUG, "checkcnt = %llu check1 = %x check2 = %x\n",
+              checkcnt, check1, check2);
+    }
 }
 
 void
@@ -566,7 +571,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
         // Read word from memory
         u16 word = mem.peek16 <Accessor::AGNUS> (agnus.dskpt);
         
-        if CONSTEXPR (debug::DSK_CHECKSUM != -1) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check1 = Hashable::fnvIt32(check1, word);
@@ -579,7 +584,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
         drive->write16AndRotate(word);
     }
     
-    logme(DSK_CHECKSUM,
+    if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG,
           "Turbo write %s: checkcnt = %llu check1 = %x check2 = %x\n",
           drive->objectName(), checkcnt, check1, check2);
 }
