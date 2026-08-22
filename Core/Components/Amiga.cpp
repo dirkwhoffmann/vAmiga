@@ -83,10 +83,6 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
     };
 
     info.bind([this] { return cacheInfo(); } );
-    
-    // Remove asap
-    logme(X_FILES, "*** Logging test %d ***\n", 42);
-    
 }
 
 Amiga::~Amiga()

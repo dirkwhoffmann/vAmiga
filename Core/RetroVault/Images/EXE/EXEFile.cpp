@@ -74,7 +74,7 @@ EXEFile::didInitialize()
     // Finalize
     fs.flush();
 
-    if constexpr (debug::FS_DEBUG) {
+    if CONSTEXPR (debug::FS_DEBUG) {
 
         // Print some debug information about the volume
         fs.dumpState();

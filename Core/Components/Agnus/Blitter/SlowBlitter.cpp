@@ -995,7 +995,7 @@ Blitter::beginSlowCopyBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
-    if constexpr (debug::SLOW_BLT_DEBUG) {
+    if CONSTEXPR (debug::SLOW_BLT_DEBUG) {
 
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
@@ -1052,7 +1052,7 @@ Blitter::beginSlowLineBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
-    if constexpr (debug::SLOW_BLT_DEBUG) {
+    if CONSTEXPR (debug::SLOW_BLT_DEBUG) {
 
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
@@ -1104,11 +1104,11 @@ Blitter::exec()
 
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
-            if constexpr (debug::BLT_MEM_GUARD) {
+            if CONSTEXPR (debug::BLT_MEM_GUARD) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
-            if constexpr (debug::BLT_CHECKSUM) {
+            if CONSTEXPR (debug::BLT_CHECKSUM) {
                 check1 = Hashable::fnvIt32(check1, dhold);
                 check2 = Hashable::fnvIt32(check2, bltdpt);
             }
@@ -1190,7 +1190,7 @@ Blitter::exec()
         // Run the minterm logic circuit
         dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
 
-        if constexpr (debug::BLT_DEBUG) {
+        if CONSTEXPR (debug::BLT_DEBUG) {
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
         }
 
@@ -1375,11 +1375,11 @@ Blitter::execLine()
 
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
-            if constexpr (debug::BLT_MEM_GUARD) {
+            if CONSTEXPR (debug::BLT_MEM_GUARD) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
-            if constexpr (debug::BLT_CHECKSUM) {
+            if CONSTEXPR (debug::BLT_CHECKSUM) {
                 check1 = Hashable::fnvIt32(check1, dhold);
                 check2 = Hashable::fnvIt32(check2, bltdpt);
             }

@@ -391,7 +391,7 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
         u16 word = readFifo16();
         
         // Write word into memory
-        if constexpr (debug::DSK_CHECKSUM) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check1 = Hashable::fnvIt32(check1, word);
@@ -431,14 +431,14 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
     do {
 
         // Read next word from memory
-        if constexpr (debug::DSK_CHECKSUM) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check2 = Hashable::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
         u16 word = agnus.doDiskDmaRead();
         
-        if constexpr (debug::DSK_CHECKSUM) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             check1 = Hashable::fnvIt32(check1, word);
         }
@@ -521,7 +521,7 @@ DiskController::performTurboDMA(FloppyDrive *drive)
     // Trigger disk interrupt with some delay
     Cycle delay = 512;
 
-    if constexpr (debug::MIMIC_UAE)
+    if CONSTEXPR (debug::MIMIC_UAE)
         delay = 2 * PAL::HPOS_CNT - agnus.pos.h + 30;
 
     paula.scheduleIrqRel(IrqSource::DSKBLK, DMA_CYCLES(delay));
@@ -538,7 +538,7 @@ DiskController::performTurboRead(FloppyDrive *drive)
         u16 word = drive->read16AndRotate();
         
         // Write word into memory
-        if constexpr (debug::DSK_CHECKSUM) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check1 = Hashable::fnvIt32(check1, word);
@@ -566,7 +566,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
         // Read word from memory
         u16 word = mem.peek16 <Accessor::AGNUS> (agnus.dskpt);
         
-        if constexpr (debug::DSK_CHECKSUM) {
+        if CONSTEXPR (debug::DSK_CHECKSUM) {
 
             checkcnt++;
             check1 = Hashable::fnvIt32(check1, word);

@@ -268,7 +268,7 @@ CoreComponent::load(const u8 *buf)
 
             logcritical("Loaded %llu bytes (expected %llu)\n", count, size);
             logcritical("Hash: %llx (expected %llx)\n", hash, c->checksum(false));
-            if constexpr (debug::SNP_DEBUG) { fatalError; }
+            if CONSTEXPR (debug::SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
@@ -305,7 +305,7 @@ CoreComponent::save(u8 *buffer)
         if (count != c->size(false) || force::SNAP_CORRUPTED) {
 
             logcritical("Saved %ld bytes (expected %ld)\n", count, c->size(false));
-            if constexpr (debug::SNP_DEBUG) { fatalError; }
+            if CONSTEXPR (debug::SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }

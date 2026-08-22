@@ -122,7 +122,7 @@ DeniseDebugger::getSpriteInfo(isize nr)
 void
 DeniseDebugger::hsyncHandler(isize vpos)
 {
-    if constexpr (debug::LINE_DEBUG) {
+    if CONSTEXPR (debug::LINE_DEBUG) {
 
         if (debug::LINE_DEBUG == vpos) {
 

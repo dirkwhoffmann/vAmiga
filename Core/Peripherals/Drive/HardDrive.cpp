@@ -50,7 +50,7 @@ HardDrive::operator= (const HardDrive& other) {
     CLONE(state)
     CLONE(flags)
 
-    if constexpr (debug::RUA_ON_STEROIDS) {
+    if CONSTEXPR (debug::RUA_ON_STEROIDS) {
 
         // Clone all blocks
         CLONE(data)
@@ -199,7 +199,7 @@ HardDrive::init(const HDFFile &hdf)
         
     // Print some debug information
     loginfo(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
-    if constexpr (debug::HDR_DEBUG) {
+    if CONSTEXPR (debug::HDR_DEBUG) {
         for (auto &driver : drivers) driver.dump();
     }
 }
@@ -539,7 +539,7 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
 {
     using amiga::FSFormat;
 
-    if constexpr (debug::HDR_DEBUG) {
+    if CONSTEXPR (debug::HDR_DEBUG) {
 
         loginfo(HDR_DEBUG, "Formatting hard drive\n");
         loginfo(HDR_DEBUG, "    File system : %s\n", amiga::FSFormatEnum::key(fsType));

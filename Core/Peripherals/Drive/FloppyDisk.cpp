@@ -370,14 +370,14 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
         replaceTrack(t, image.encode(t));
 
     /*
-    if constexpr (debug::IMG_DEBUG) {
+    if CONSTEXPR (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
         Codec::makeIMG(*this)->writeToFile(tmp);
     }
      */
-    if constexpr (debug::IMG_DEBUG) {
+    if CONSTEXPR (debug::IMG_DEBUG) {
 
         /*
         string tmp = "/tmp/debug.img";
@@ -389,7 +389,7 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
 
     // In debug mode, also run the decoder
     /*
-    if constexpr (debug::IMG_DEBUG) {
+    if CONSTEXPR (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -435,7 +435,7 @@ FloppyDisk::encode(const ADFFile &adf)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, adf.encode(t));
 
     // In debug mode, also run the decoder
-    if constexpr (debug::IMG_DEBUG) {
+    if CONSTEXPR (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -482,7 +482,7 @@ FloppyDisk::encode(const class IMGFile &img)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
-    if constexpr (debug::IMG_DEBUG) {
+    if CONSTEXPR (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -528,7 +528,7 @@ FloppyDisk::encode(const class STFile &img)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
-    if constexpr (debug::IMG_DEBUG) {
+    if CONSTEXPR (debug::IMG_DEBUG) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());

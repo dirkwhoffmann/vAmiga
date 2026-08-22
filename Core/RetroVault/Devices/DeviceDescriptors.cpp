@@ -221,7 +221,7 @@ GeometryDescriptor::dump(std::ostream &os) const
 void
 GeometryDescriptor::checkCompatibility() const
 {
-    // if constexpr (debug::HDR_ACCEPT_ALL) return;
+    // if CONSTEXPR (debug::HDR_ACCEPT_ALL) return;
 
     // Check forced error conditions
     if constexpr (force::HDR_UNKNOWN_GEOMETRY) {

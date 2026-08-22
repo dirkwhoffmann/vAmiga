@@ -531,7 +531,7 @@ Denise::drawEven(Pixel offset)
 template <Resolution mode> void
 Denise::drawBoth(Pixel offset)
 {
-    if constexpr (debug::BPL_ON_STEROIDS) {
+    if CONSTEXPR (debug::BPL_ON_STEROIDS) {
 
         drawOdd <mode> (offset);
         drawEven <mode> (offset);
@@ -1317,7 +1317,7 @@ Denise::borderColor(u16 con0, u16 con3) const
      *
      * Relevant test in the vAmigaTS test suite: Denise/Modes/brdrblnk
      */
-    if constexpr (debug::BORDER_DEBUG) {
+    if CONSTEXPR (debug::BORDER_DEBUG) {
         return PixelEngine::BORDER_DEBUG; // Debug color
     }
 
@@ -1360,7 +1360,7 @@ Denise::updateBorderBuffer()
     bBufferDiwOpen = hf ? 0 : PIXEL_CNT;
 
     // Print some debug info if requested
-    if constexpr (debug::DIW_DEBUG) {
+    if CONSTEXPR (debug::DIW_DEBUG) {
 
         logdebug(DIW_DEBUG, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
         diwChanges.dump();
@@ -1502,7 +1502,7 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
         
-        if constexpr (debug::CLX_DEBUG) {
+        if CONSTEXPR (debug::CLX_DEBUG) {
             
             if ((z & comp45) && (z & comp67)) logdebug(CLX_DEBUG, "Coll: 45 and 67\n");
             if ((z & comp23) && (z & comp67)) logdebug(CLX_DEBUG, "Coll: 23 and 67\n");

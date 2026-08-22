@@ -972,7 +972,7 @@ FloppyDrive::step(isize dir)
     if (didStep) {
 
         // Push drive head forward
-        if constexpr (debug::ALIGN_HEAD) head.offset = 0;
+        if CONSTEXPR (debug::ALIGN_HEAD) head.offset = 0;
 
         // Notify the GUI
         if (pollsForDisk()) {
@@ -1232,7 +1232,7 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     fs.makeBootable(bb);
 
     // Check file system consistency
-    if constexpr (debug::FS_DEBUG) fs.doctor.xray(true, std::cout, false);
+    if CONSTEXPR (debug::FS_DEBUG) fs.doctor.xray(true, std::cout, false);
 
     // Force the ADF to update
     fs.flush();
