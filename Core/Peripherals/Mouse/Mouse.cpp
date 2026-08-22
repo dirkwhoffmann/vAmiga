@@ -136,8 +136,8 @@ Mouse::changePotgo(u16 &potgo) const
     bool rb = rightButton.get(agnus.pos.frame);
     bool mb = middleButton.get(agnus.pos.frame);
 
-    if CONSTEXPR (debug::HOLD_MOUSE_R) rb = true;
-    if CONSTEXPR (debug::HOLD_MOUSE_M) mb = true;
+    if CONSTEXPR (debug::HOLD_MOUSE_R != -1) rb = true;
+    if CONSTEXPR (debug::HOLD_MOUSE_M != -1) mb = true;
 
     if (rb) {
         potgo &= ~maskR;
@@ -159,7 +159,7 @@ Mouse::changePra(u8 &pra) const
 
     bool lb = leftButton.get(agnus.pos.frame);
 
-    if CONSTEXPR (debug::HOLD_MOUSE_L) lb = true;
+    if CONSTEXPR (debug::HOLD_MOUSE_L != -1) lb = true;
 
     if (lb) {
         pra &= ~mask;
@@ -241,7 +241,7 @@ Mouse::detectShakeDxDy(double dx, double dy)
 void
 Mouse::setXY(double x, double y)
 {
-    loginfo(PRT_DEBUG, "setXY(%f,%f)\n", x, y);
+    logme(PRT_DEBUG, "setXY(%f,%f)\n", x, y);
 
     targetX = x * scaleX;
     targetY = y * scaleY;
@@ -253,7 +253,7 @@ Mouse::setXY(double x, double y)
 void
 Mouse::setDxDy(double dx, double dy)
 {
-    loginfo(PRT_DEBUG, "setDxDy(%f,%f)\n", dx, dy);
+    logme(PRT_DEBUG, "setDxDy(%f,%f)\n", dx, dy);
     
     targetX += dx * scaleX;
     targetY += dy * scaleY;
@@ -265,7 +265,7 @@ Mouse::setDxDy(double dx, double dy)
 void
 Mouse::setLeftButton(bool value)
 {
-    logdebug(PRT_DEBUG, "setLeftButton(%d)\n", value);
+    logme(PRT_DEBUG, "setLeftButton(%d)\n", value);
     
     //leftButton = value;
     leftButton.set(value, agnus.pos.frame);
@@ -275,7 +275,7 @@ Mouse::setLeftButton(bool value)
 void
 Mouse::setMiddleButton(bool value)
 {
-    logdebug(PRT_DEBUG, "setMiddleButton(%d)\n", value);
+    logme(PRT_DEBUG, "setMiddleButton(%d)\n", value);
 
     middleButton.set(value, agnus.pos.frame);
     port.setDevice(ControlPortDevice::MOUSE);
@@ -284,7 +284,7 @@ Mouse::setMiddleButton(bool value)
 void
 Mouse::setRightButton(bool value)
 {
-    logdebug(PRT_DEBUG, "setRightButton(%d)\n", value);
+    logme(PRT_DEBUG, "setRightButton(%d)\n", value);
     
     rightButton.set(value, agnus.pos.frame);
     port.setDevice(ControlPortDevice::MOUSE);
@@ -295,7 +295,7 @@ Mouse::trigger(GamePadAction event)
 {
     GamePadActionEnum::validate(event);
 
-    loginfo(PRT_DEBUG, "trigger(%s)\n", GamePadActionEnum::key(event));
+    logme(PRT_DEBUG, "trigger(%s)\n", GamePadActionEnum::key(event));
 
     switch (event) {
 
@@ -349,7 +349,7 @@ ShakeDetector::isShakingRel(double dx) {
                 // Report a shake if the threshold has been reached.
                 if (dxturns > 3) {
                     
-                    // loginfo(PRT_DEBUG, "Mouse shake detected\n");
+                    // logme(PRT_DEBUG, "Mouse shake detected\n");
                     lastShake = utl::Time::now().asNanoseconds();
                     dxturns = 0;
                     return true;

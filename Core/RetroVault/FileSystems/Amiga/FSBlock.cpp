@@ -830,7 +830,7 @@ FSBlock::exportUserDirBlock(const fs::path &path) const
 {
     // Assemble the host file name
     auto filename = path / sanitizedPath();
-    loginfo(FS_DEBUG, "Creating directory %s\n", filename.string().c_str());
+    logme(FS_DEBUG, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
     if (!utl::createDirectory(filename)) return FSError::FS_EXPORT_ERROR;
@@ -843,7 +843,7 @@ FSBlock::exportFileHeaderBlock(const fs::path &path) const
 {
     // Assemble the host file name
     auto filename = path; //  / sanitizedPath();
-    loginfo(FS_DEBUG, "  Exporting file %s\n", filename.string().c_str());
+    logme(FS_DEBUG, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file
     std::ofstream file(filename, std::ofstream::binary);
@@ -1622,7 +1622,7 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
     assert(page == 0 || page == 1);
     assert(type == FSBlockType::BOOT);
     
-    loginfo(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
+    logme(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
     
     if (id != BootBlockId::NONE) {
 
@@ -1937,7 +1937,7 @@ FSBlock::extractData(Buffer<u8> &buf) const
     }
 
     if (bytesRemaining != 0) {
-        logwarn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+        logme(LV_WARNING, "%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
 
     return bytesTotal;
@@ -2040,7 +2040,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
                 
             } else {
                 
-                logwarn("Ignoring block %ld (no data block)\n", ref);
+                logme(LV_WARNING, "Ignoring block %ld (no data block)\n", ref);
             }
         }
         
@@ -2049,7 +2049,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
     }
     
     if (bytesRemaining != 0) {
-        logwarn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+        logme(LV_WARNING, "%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
     
     return bytesTotal;

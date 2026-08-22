@@ -36,7 +36,7 @@ SampleRateDetector::feed(isize samples)
         // Measure how much time has passed since the previous call
         double delay = delta.restart().asSeconds();
     
-        logdebug(TIM_DEBUG, "Requested %ld samples in %f seconds (%.0f)\n",
+        logme(TIM_DEBUG, "Requested %ld samples in %f seconds (%.0f)\n",
                  samples, delay, double(samples) / delay);
 
         // Record the measured value
@@ -66,7 +66,7 @@ SampleRateDetector::sampleRate()
     for (usize i = trash; i < size - trash; i++) result += samples[i];
     result /= double(size) - double(2 * trash);
 
-    logdebug(TIM_DEBUG, "Sample rate = %.2f\n", result);
+    logme(TIM_DEBUG, "Sample rate = %.2f\n", result);
     return result;
 }
 

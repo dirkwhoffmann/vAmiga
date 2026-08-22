@@ -108,21 +108,21 @@ void Blitter::doFastCopyBlit()
             // Fetch A
             if (useA) {
                 anew = mem.peek16 <Accessor::AGNUS> (apt);
-                logdebug(BLT_DEBUG, "    A = %X <- %X\n", anew, apt);
+                logme(BLT_DEBUG, "    A = %X <- %X\n", anew, apt);
                 apt = U32_ADD(apt, incr);
             }
 
             // Fetch B
             if (useB) {
                 bnew = mem.peek16 <Accessor::AGNUS> (bpt);
-                logdebug(BLT_DEBUG, "    B = %X <- %X\n", bnew, bpt);
+                logme(BLT_DEBUG, "    B = %X <- %X\n", bnew, bpt);
                 bpt = U32_ADD(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
                 chold = mem.peek16 <Accessor::AGNUS> (cpt);
-                logdebug(BLT_DEBUG, "    C = %X <- %X\n", chold, cpt);
+                logme(BLT_DEBUG, "    C = %X <- %X\n", chold, cpt);
                 cpt = U32_ADD(cpt, incr);
             }
             
@@ -149,12 +149,12 @@ void Blitter::doFastCopyBlit()
             if (useD) {
                 mem.poke16 <Accessor::AGNUS> (dpt, dhold);
 
-                if (debug::BLT_CHECKSUM) {
+                if (debug::BLT_CHECKSUM != -1) {
                     
                     check1 = Hashable::fnvIt32(check1, dhold);
                     check2 = Hashable::fnvIt32(check2, dpt & agnus.ptrMask);
                 }
-                logdebug(BLT_DEBUG, "    D = %X -> %X\n", dhold, dpt);
+                logme(BLT_DEBUG, "    D = %X -> %X\n", dhold, dpt);
                 
                 dpt = U32_ADD(dpt, incr);
             }
@@ -286,7 +286,7 @@ Blitter::doFastLineBlit()
 
             mem.poke16 <Accessor::AGNUS> (bltdpt, dhold);
             
-            if CONSTEXPR (debug::BLT_CHECKSUM) {
+            if CONSTEXPR (debug::BLT_CHECKSUM != -1) {
 
                 check1 = Hashable::fnvIt32(check1, dhold);
                 check2 = Hashable::fnvIt32(check2, bltdpt & agnus.ptrMask);

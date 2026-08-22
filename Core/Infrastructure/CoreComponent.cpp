@@ -266,14 +266,14 @@ CoreComponent::load(const u8 *buf)
         // Check integrity
         if (size != count || hash != c->checksum(false) || force::SNAP_CORRUPTED) {
 
-            logcritical("Loaded %llu bytes (expected %llu)\n", count, size);
-            logcritical("Hash: %llx (expected %llx)\n", hash, c->checksum(false));
-            if CONSTEXPR (debug::SNP_DEBUG) { fatalError; }
+            logme(LV_CRITICAL, "Loaded %llu bytes (expected %llu)\n", count, size);
+            logme(LV_CRITICAL, "Hash: %llx (expected %llx)\n", hash, c->checksum(false));
+            if CONSTEXPR (debug::SNP_DEBUG != -1) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
 
-        loginfo(NULLDEV, "Loaded %llu bytes (expected %llu)\n", count, size);
+        logme(NULLDEV, "Loaded %llu bytes (expected %llu)\n", count, size);
         result += isize(count);
     });
 
@@ -304,13 +304,13 @@ CoreComponent::save(u8 *buffer)
         // Check integrity
         if (count != c->size(false) || force::SNAP_CORRUPTED) {
 
-            logcritical("Saved %ld bytes (expected %ld)\n", count, c->size(false));
-            if CONSTEXPR (debug::SNP_DEBUG) { fatalError; }
+            logme(LV_CRITICAL, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
+            if CONSTEXPR (debug::SNP_DEBUG != -1) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
 
-        loginfo(NULLDEV, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
+        logme(NULLDEV, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
         result += count;
     });
 
@@ -361,7 +361,7 @@ CoreComponent::diff(CoreComponent &other)
 
     // Compare this component
     if (auto check1 = checksum(false), check2 = other.checksum(false); check1 != check2) {
-        logerror("Checksum mismatch: %llx != %llx\n", check1, check2);
+        logme(LV_ERROR, "Checksum mismatch: %llx != %llx\n", check1, check2);
     }
 }
 

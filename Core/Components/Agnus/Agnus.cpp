@@ -200,7 +200,7 @@ Agnus::setOption(Opt option, i64 value)
 void
 Agnus::setVideoFormat(TV newFormat)
 {
-    logdebug(NTSC_DEBUG, "Video format = %s\n", TVEnum::key(newFormat));
+    logme(NTSC_DEBUG, "Video format = %s\n", TVEnum::key(newFormat));
 
     // Change the frame type
     agnus.pos.switchMode(newFormat);
@@ -634,7 +634,7 @@ Agnus::executeUntil(Cycle cycle) {
 template <isize nr> void
 Agnus::executeFirstSpriteCycle()
 {
-    logdebug(SPR_DEBUG, "executeFirstSpriteCycle<%ld>\n", nr);
+    logme(SPR_DEBUG, "executeFirstSpriteCycle<%ld>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 
@@ -683,7 +683,7 @@ Agnus::executeFirstSpriteCycle()
 template <isize nr> void
 Agnus::executeSecondSpriteCycle()
 {
-    logdebug(SPR_DEBUG, "executeSecondSpriteCycle<%ld>\n", nr);
+    logme(SPR_DEBUG, "executeSecondSpriteCycle<%ld>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 

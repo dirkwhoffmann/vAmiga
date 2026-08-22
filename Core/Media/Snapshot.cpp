@@ -68,11 +68,11 @@ Snapshot::Snapshot(isize capacity)
 
 Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 {
-    {   utl::StopWatch(debug::SNP_DEBUG, "Taking screenshot...");
+    {   utl::StopWatch(debug::SNP_DEBUG != -1, "Taking screenshot...");
 
         takeScreenshot(amiga);
     }
-    {   utl::StopWatch(debug::SNP_DEBUG, "Saving state...");
+    {   utl::StopWatch(debug::SNP_DEBUG != -1, "Saving state...");
 
         amiga.save(getData() + sizeof(SnapshotHeader));
     }
@@ -154,13 +154,13 @@ Snapshot::takeScreenshot(Amiga &amiga)
 void
 Snapshot::compress(Compressor compressor)
 {
-    loginfo(SNP_DEBUG, "compress(%s)\n", CompressorEnum::key(compressor));
+    logme(SNP_DEBUG, "compress(%s)\n", CompressorEnum::key(compressor));
 
     if (!isCompressed()) {
 
-        loginfo(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
+        logme(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
-        {   auto watch = utl::StopWatch(debug::SNP_DEBUG, "");
+        {   auto watch = utl::StopWatch(debug::SNP_DEBUG != -1, "");
 
             switch (compressor) {
                     
@@ -173,21 +173,21 @@ Snapshot::compress(Compressor compressor)
             
             getHeader()->compressor = u8(compressor);
         }
-        loginfo(SNP_DEBUG, "Compressed size: %ld bytes\n", data.size);
+        logme(SNP_DEBUG, "Compressed size: %ld bytes\n", data.size);
     }
 }
 void
 Snapshot::uncompress()
 {
-    loginfo(SNP_DEBUG, "uncompress(%s)\n", CompressorEnum::key(compressor()));
+    logme(SNP_DEBUG, "uncompress(%s)\n", CompressorEnum::key(compressor()));
 
     if (isCompressed()) {
         
         isize expectedSize = getHeader()->rawSize;
         
-        loginfo(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
+        logme(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
         
-        {   auto watch = utl::StopWatch(debug::SNP_DEBUG, "");
+        {   auto watch = utl::StopWatch(debug::SNP_DEBUG != -1, "");
         
             switch (compressor()) {
                     
@@ -200,11 +200,11 @@ Snapshot::uncompress()
             
             getHeader()->compressor = u8(Compressor::NONE);
         }
-        loginfo(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
+        logme(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
         
         if (getHeader()->rawSize != expectedSize) {
          
-            logwarn("Snaphot size: %ld. Expected: %ld\n", data.size, expectedSize);
+            logme(LV_WARNING, "Snaphot size: %ld. Expected: %ld\n", data.size, expectedSize);
             fatalError;
         }
     }

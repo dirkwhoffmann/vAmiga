@@ -94,7 +94,7 @@ HDFFile::didInitialize()
 {
     if (utl::lowercased(path.extension().string()) == ".hdz") {
         
-        loginfo(IMG_DEBUG, "Decompressing %ld bytes...\n", data.size);
+        logme(IMG_DEBUG, "Decompressing %ld bytes...\n", data.size);
         
         try {
             data.gunzip();
@@ -103,7 +103,7 @@ HDFFile::didInitialize()
             throw IOError(IOError::ZLIB_ERROR, err.what());
         }
         
-        loginfo(IMG_DEBUG, "Restored %ld bytes.\n", data.size);
+        logme(IMG_DEBUG, "Restored %ld bytes.\n", data.size);
     }
         
     // Run a consistency check on the buffer contents

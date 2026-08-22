@@ -56,7 +56,7 @@ StateMachine<nr>::cacheInfo() const
 template <isize nr> void
 StateMachine<nr>::enableDMA()
 {
-    logdebug(AUD_DEBUG, "Enable DMA\n");
+    logme(AUD_DEBUG, "Enable DMA\n");
 
     switch (state) {
 
@@ -70,7 +70,7 @@ StateMachine<nr>::enableDMA()
 template <isize nr> void
 StateMachine<nr>::disableDMA()
 {
-    logdebug(AUD_DEBUG, "Disable DMA\n");
+    logme(AUD_DEBUG, "Disable DMA\n");
 
     switch (state) {
 
@@ -95,7 +95,7 @@ StateMachine<nr>::AUDxIP() const
 template <isize nr> void
 StateMachine<nr>::AUDxIR() const
 {
-    if CONSTEXPR(debug::DISABLE_AUDIRQ) return;
+    if CONSTEXPR (debug::DISABLE_AUDIRQ != -1) return;
     
     if constexpr (nr == 0) { paula.scheduleIrqRel(IrqSource::AUD0, DMA_CYCLES(1)); }
     if constexpr (nr == 1) { paula.scheduleIrqRel(IrqSource::AUD1, DMA_CYCLES(1)); }
@@ -159,12 +159,12 @@ StateMachine<nr>::penhi()
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = (i16)(sample * audvol);
     
-    logdebug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
+    logme(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
 
     if (!sampler.isFull()) {
         sampler.append(agnus.clock, scaled);
     } else {
-        logdebug(AUD_DEBUG, "penhi: Sample buffer is full\n");
+        logme(AUD_DEBUG, "penhi: Sample buffer is full\n");
     }
     
     enablePenhi = false;
@@ -183,12 +183,12 @@ StateMachine<nr>::penlo()
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = (i16)(sample * audvol);
 
-    logdebug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
+    logme(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
     if (!sampler.isFull()) {
         sampler.append(agnus.clock, scaled);
     } else {
-        logdebug(AUD_DEBUG, "penlo: Sample buffer is full\n");
+        logme(AUD_DEBUG, "penlo: Sample buffer is full\n");
     }
     
     enablePenlo = false;
@@ -197,7 +197,7 @@ StateMachine<nr>::penlo()
 template <isize nr> void
 StateMachine<nr>::move_000_010() {
 
-    logdebug(AUD_DEBUG, "move_000_010\n");
+    logme(AUD_DEBUG, "move_000_010\n");
 
     // This transition is taken in IRQ mode only
     assert(!AUDxON());
@@ -215,7 +215,7 @@ StateMachine<nr>::move_000_010() {
 template <isize nr> void
 StateMachine<nr>::move_000_001() {
 
-    logdebug(AUD_DEBUG, "move_000_001\n");
+    logme(AUD_DEBUG, "move_000_001\n");
 
     // This transition is taken in DMA mode only
     assert(AUDxON());
@@ -229,7 +229,7 @@ StateMachine<nr>::move_000_001() {
 template <isize nr> void
 StateMachine<nr>::move_001_000() {
 
-    logdebug(AUD_DEBUG, "move_001_000\n");
+    logme(AUD_DEBUG, "move_001_000\n");
 
     // This transition is taken in IRQ mode only
     assert(!AUDxON());
@@ -240,7 +240,7 @@ StateMachine<nr>::move_001_000() {
 template <isize nr> void
 StateMachine<nr>::move_001_101() {
 
-    logdebug(AUD_DEBUG, "move_001_101\n");
+    logme(AUD_DEBUG, "move_001_101\n");
 
     // This transition is taken in DMA mode only
     assert(AUDxON());
@@ -256,7 +256,7 @@ StateMachine<nr>::move_001_101() {
 template <isize nr> void
 StateMachine<nr>::move_101_000() {
 
-    logdebug(AUD_DEBUG, "move_101_000\n");
+    logme(AUD_DEBUG, "move_101_000\n");
 
     // This transition is taken in IRQ mode only
     assert(!AUDxON());
@@ -267,7 +267,7 @@ StateMachine<nr>::move_101_000() {
 template <isize nr> void
 StateMachine<nr>::move_101_010() {
 
-    logdebug(AUD_DEBUG, "move_101_010\n");
+    logme(AUD_DEBUG, "move_101_010\n");
 
     // This transition is taken in DMA mode only
     assert(AUDxON());
@@ -284,7 +284,7 @@ StateMachine<nr>::move_101_010() {
 template <isize nr> void
 StateMachine<nr>::move_010_011() {
 
-    logdebug(AUD_DEBUG, "move_010_011\n");
+    logme(AUD_DEBUG, "move_010_011\n");
     
     percntrld();
     
@@ -313,7 +313,7 @@ StateMachine<nr>::move_010_011() {
 template <isize nr> void
 StateMachine<nr>::move_011_000() {
 
-    logdebug(AUD_DEBUG, "move_011_000\n");
+    logme(AUD_DEBUG, "move_011_000\n");
 
     constexpr EventSlot slot = (EventSlot)(SLOT_CH0 + nr);
     agnus.cancel<slot>();
@@ -325,7 +325,7 @@ StateMachine<nr>::move_011_000() {
 template <isize nr> void
 StateMachine<nr>::move_011_010()
 {
-    logdebug(AUD_DEBUG, "move_011_010\n");
+    logme(AUD_DEBUG, "move_011_010\n");
 
     percntrld();
     pbufld1();

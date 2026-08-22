@@ -995,7 +995,7 @@ Blitter::beginSlowCopyBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
-    if CONSTEXPR (debug::SLOW_BLT_DEBUG) {
+    if CONSTEXPR (debug::SLOW_BLT_DEBUG != -1) {
 
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
@@ -1052,7 +1052,7 @@ Blitter::beginSlowLineBlit()
 
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the FastBlitter.
-    if CONSTEXPR (debug::SLOW_BLT_DEBUG) {
+    if CONSTEXPR (debug::SLOW_BLT_DEBUG != -1) {
 
         BusOwner owner = agnus.busOwner[agnus.pos.h];
         agnus.setBLS(false);
@@ -1104,15 +1104,15 @@ Blitter::exec()
 
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
-            if CONSTEXPR (debug::BLT_MEM_GUARD) {
+            if CONSTEXPR (debug::BLT_MEM_GUARD != -1) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
-            if CONSTEXPR (debug::BLT_CHECKSUM) {
+            if CONSTEXPR (debug::BLT_CHECKSUM != -1) {
                 check1 = Hashable::fnvIt32(check1, dhold);
                 check2 = Hashable::fnvIt32(check2, bltdpt);
             }
-            logdebug(BLT_DEBUG, "    D = %X -> %X\n", dhold, bltdpt);
+            logme(BLT_DEBUG, "    D = %X -> %X\n", dhold, bltdpt);
             
             bltdpt = U32_ADD(bltdpt, desc ? -2 : 2);
             if (--cntD == 0) {
@@ -1125,10 +1125,10 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & FETCH_A)) {
 
-        logdebug(BLT_DEBUG, "FETCH_A\n");
+        logme(BLT_DEBUG, "FETCH_A\n");
 
         anew = agnus.doBlitterDmaRead(bltapt);
-        logdebug(BLT_DEBUG, "    A = %X <- %X\n", anew, bltapt);
+        logme(BLT_DEBUG, "    A = %X <- %X\n", anew, bltapt);
         
         bltapt = U32_ADD(bltapt, desc ? -2 : 2);
         if (--cntA == 0) {
@@ -1139,10 +1139,10 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & FETCH_B)) {
 
-        logdebug(BLT_DEBUG, "FETCH_B\n");
+        logme(BLT_DEBUG, "FETCH_B\n");
 
         bnew = agnus.doBlitterDmaRead(bltbpt);
-        logdebug(BLT_DEBUG, "    B = %X <- %X\n", bnew, bltbpt);
+        logme(BLT_DEBUG, "    B = %X <- %X\n", bnew, bltbpt);
         
         bltbpt = U32_ADD(bltbpt, desc ? -2 : 2);
         if (--cntB == 0) {
@@ -1153,10 +1153,10 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & FETCH_C)) {
 
-        logdebug(BLT_DEBUG, "FETCH_C\n");
+        logme(BLT_DEBUG, "FETCH_C\n");
 
         chold = agnus.doBlitterDmaRead(bltcpt);
-        logdebug(BLT_DEBUG, "    C = %X <- %X\n", chold, bltcpt);
+        logme(BLT_DEBUG, "    C = %X <- %X\n", chold, bltcpt);
         
         bltcpt = U32_ADD(bltcpt, desc ? -2 : 2);
         if (--cntC == 0) {
@@ -1167,7 +1167,7 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & HOLD_A)) {
 
-        logdebug(BLT_DEBUG, "HOLD_A\n");
+        logme(BLT_DEBUG, "HOLD_A\n");
 
         // Run the barrel shifter on data path A
         ahold = barrelShifter(anew & mask, aold, bltconASH(), desc);
@@ -1176,7 +1176,7 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & HOLD_B)) {
 
-        logdebug(BLT_DEBUG, "HOLD_B\n");
+        logme(BLT_DEBUG, "HOLD_B\n");
 
         // Run the barrel shifter on data path B
         bhold = barrelShifter(bnew, bold, bltconBSH(), desc);
@@ -1185,12 +1185,12 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & HOLD_D)) {
 
-        logdebug(BLT_DEBUG, "HOLD_D\n");
+        logme(BLT_DEBUG, "HOLD_D\n");
 
         // Run the minterm logic circuit
         dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
 
-        if CONSTEXPR (debug::BLT_DEBUG) {
+        if CONSTEXPR (debug::BLT_DEBUG != -1) {
             assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
         }
 
@@ -1209,7 +1209,7 @@ Blitter::exec()
 
         u16 newpc = 0;
 
-        logdebug(BLT_DEBUG, "REPEAT\n");
+        logme(BLT_DEBUG, "REPEAT\n");
         iteration++;
         lockD = false;
 
@@ -1240,7 +1240,7 @@ Blitter::exec()
             if (bltconUSED() && !bltconLINE()) clearBusyFlag();
         }
         
-        logdebug(BLT_DEBUG, "BLTDONE\n");
+        logme(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }
 }
@@ -1286,7 +1286,7 @@ Blitter::fakeExec()
 
         u16 newpc = 0;
 
-        logdebug(BLT_DEBUG, "REPEAT\n");
+        logme(BLT_DEBUG, "REPEAT\n");
         iteration++;
         lockD = false;
 
@@ -1309,7 +1309,7 @@ Blitter::fakeExec()
 
     if constexpr ((bool)(instr & BLTDONE)) {
 
-        logdebug(BLT_DEBUG, "BLTDONE\n");
+        logme(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }
 }
@@ -1375,11 +1375,11 @@ Blitter::execLine()
 
             agnus.doBlitterDmaWrite(bltdpt, dhold);
 
-            if CONSTEXPR (debug::BLT_MEM_GUARD) {
+            if CONSTEXPR (debug::BLT_MEM_GUARD != -1) {
                 memguard[bltdpt & agnus.ptrMask & mem.chipMask] = blitcount;
             }
 
-            if CONSTEXPR (debug::BLT_CHECKSUM) {
+            if CONSTEXPR (debug::BLT_CHECKSUM != -1) {
                 check1 = Hashable::fnvIt32(check1, dhold);
                 check2 = Hashable::fnvIt32(check2, bltdpt);
             }

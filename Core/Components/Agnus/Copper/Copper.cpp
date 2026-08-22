@@ -197,13 +197,13 @@ Copper::move(u32 addr, u16 value)
     assert(IS_EVEN(addr));
     assert(addr < 0x1FF);
     
-    logdebug(COP_DEBUG,
+    logme(COP_DEBUG,
           "COPPC: %X move(%s, $%X) (%d)\n", coppc0, MemoryDebugger::regName(addr), value, value);
 
     // Catch registers with special timing needs
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-        logdebug(OCSREG_DEBUG,
+        logme(OCSREG_DEBUG,
               "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
 
         // Color registers
@@ -418,10 +418,10 @@ Copper::eofHandler()
      */
     agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(0), COP_VBLANK);
     
-    if CONSTEXPR (debug::COP_CHECKSUM) {
+    if CONSTEXPR (debug::COP_CHECKSUM != -1) {
 
         if (checkcnt)
-            loginfo(COP_CHECKSUM, "[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",
+            logme(COP_CHECKSUM, "[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",
                     agnus.pos.frame, checksum, checkcnt, cop1lc, cop2lc);
 
         checkcnt = 0;

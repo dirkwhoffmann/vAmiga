@@ -181,11 +181,11 @@ FSAllocator::numUnallocated() const noexcept
     for (isize i = 0x04; i < 0x8F; i += 4)
         result += data[i];
 
-    if CONSTEXPR (debug::FS_DEBUG) {
+    if CONSTEXPR (debug::FS_DEBUG != -1) {
 
         isize count = 0;
         for (isize i = 0; i < fs.blocks(); ++i) { if (isFree(BlockNr(i))) count++; }
-        loginfo(FS_DEBUG, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
+        logme(FS_DEBUG, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
         assert(count == result);
     }
 

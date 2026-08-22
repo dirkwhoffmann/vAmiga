@@ -21,7 +21,7 @@ FSImporter::importVolume(const u8 *src, isize size)
 {
     assert(src != nullptr);
 
-    loginfo(FS_DEBUG, "Importing file system...\n");
+    logme(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
     if (size % traits.bsize != 0) throw FSError(FSError::FS_WRONG_BSIZE);
@@ -48,7 +48,7 @@ FSImporter::importVolume(const u8 *src, isize size)
     }
 
     // Print some debug information
-    loginfo(FS_DEBUG, "Success\n");
+    logme(FS_DEBUG, "Success\n");
 }
 
 void FSImporter::import(const fs::path &path)
@@ -77,7 +77,7 @@ void FSImporter::import(const fs::path &path)
     }
 
     // Verify the result
-    if CONSTEXPR (debug::FS_DEBUG) fs.doctor.xray(true, std::cout, false);
+    if CONSTEXPR (debug::FS_DEBUG != -1) fs.doctor.xray(true, std::cout, false);
 }
 
 void
@@ -96,7 +96,7 @@ FSImporter::import(const fs::directory_entry &entry)
     // Skip hidden files
     if (isHidden(name)) return;
 
-    loginfo(FS_DEBUG, "  Importing file %s\n", path.c_str());
+    logme(FS_DEBUG, "  Importing file %s\n", path.c_str());
 
     Buffer<u8> buffer(entry.path());
     if (buffer) {

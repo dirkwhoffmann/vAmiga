@@ -758,7 +758,7 @@ FloppyDrive::setMotor(bool value)
     msgQueue.put(Msg::DRIVE_LED, DriveMsg { i16(objid), value, 0, 0 });
     msgQueue.put(Msg::DRIVE_MOTOR, DriveMsg { i16(objid), value, 0, 0 });
 
-    loginfo(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
+    logme(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
 
 bool
@@ -875,7 +875,7 @@ FloppyDrive::findSyncMark()
         break;
     }
 
-    logdebug(DSK_DEBUG, "Moving to SYNC mark at offset %ld\n", head.offset);
+    logme(DSK_DEBUG, "Moving to SYNC mark at offset %ld\n", head.offset);
 }
 
 bool
@@ -884,14 +884,14 @@ FloppyDrive::readyToStepUp() const
     // Check step delay
     if (agnus.clock - latestStep < getStepPulseDelay()) {
 
-        loginfo(DSK_CHECKSUM, "Ignoring head step\n");
+        logme(DSK_CHECKSUM, "Ignoring head step\n");
         return false;
     }
 
     // If the step direction reverses, some extra-time is needed (?)
     if (agnus.clock - latestStepDown < getRevStepPulseDelay()) {
 
-        loginfo(DSK_CHECKSUM, "Ignoring reverse head step\n");
+        logme(DSK_CHECKSUM, "Ignoring reverse head step\n");
         return false;
     }
 
@@ -904,14 +904,14 @@ FloppyDrive::readyToStepDown() const
     // Check step delay
     if (agnus.clock - latestStep < getStepPulseDelay()) {
 
-        loginfo(DSK_CHECKSUM, "Ignoring head step\n");
+        logme(DSK_CHECKSUM, "Ignoring head step\n");
         return false;
     }
 
     // If the step direction reverses, some extra-time is needed (?)
     if (agnus.clock - latestStepUp < getRevStepPulseDelay()) {
 
-        loginfo(DSK_CHECKSUM, "Ignoring reverse head step\n");
+        logme(DSK_CHECKSUM, "Ignoring reverse head step\n");
         return false;
     }
 
@@ -945,7 +945,7 @@ FloppyDrive::step(isize dir)
             latestStep = latestStepDown = agnus.clock;
         }
 
-        loginfo(DSK_CHECKSUM, "Stepping down to cylinder %ld\n", head.cylinder);
+        logme(DSK_CHECKSUM, "Stepping down to cylinder %ld\n", head.cylinder);
 
     } else {
 
@@ -966,13 +966,13 @@ FloppyDrive::step(isize dir)
             latestStep = latestStepUp = agnus.clock;
         }
 
-        loginfo(DSK_CHECKSUM, "Stepping up to cylinder %ld\n", head.cylinder);
+        logme(DSK_CHECKSUM, "Stepping up to cylinder %ld\n", head.cylinder);
     }
     
     if (didStep) {
 
         // Push drive head forward
-        if CONSTEXPR (debug::ALIGN_HEAD) head.offset = 0;
+        if CONSTEXPR (debug::ALIGN_HEAD != -1) head.offset = 0;
 
         // Notify the GUI
         if (pollsForDisk()) {
@@ -1045,7 +1045,7 @@ FloppyDrive::getDisk()
 bool
 FloppyDrive::isInsertable(Diameter t, Density d) const
 {
-    loginfo(DSK_DEBUG,
+    logme(DSK_DEBUG,
           "isInsertable(%s, %s)\n", DiameterEnum::key(t), DensityEnum::key(d));
     
     switch (config.type) {
@@ -1079,7 +1079,7 @@ FloppyDrive::isInsertable(const FloppyDisk &disk) const
 template <EventSlot s> void
 FloppyDrive::ejectDisk(Cycle delay)
 {
-    loginfo(DSK_DEBUG, "ejectDisk <%ld> (%lld)\n", s, delay);
+    logme(DSK_DEBUG, "ejectDisk <%ld> (%lld)\n", s, delay);
     
     // Schedule an ejection event
     agnus.scheduleRel <s> (delay, DCH_EJECT);
@@ -1091,7 +1091,7 @@ FloppyDrive::ejectDisk(Cycle delay)
 void
 FloppyDrive::ejectDisk(Cycle delay)
 {
-    loginfo(DSK_DEBUG, "ejectDisk(%lld)\n", delay);
+    logme(DSK_DEBUG, "ejectDisk(%lld)\n", delay);
     
     if (objid == 0) ejectDisk <SLOT_DC0> (delay);
     if (objid == 1) ejectDisk <SLOT_DC1> (delay);
@@ -1104,7 +1104,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 {
     assert(disk != nullptr);
     
-    loginfo(DSK_DEBUG, "insertDisk <%ld> (%lld)\n", s, delay);
+    logme(DSK_DEBUG, "insertDisk <%ld> (%lld)\n", s, delay);
 
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw DeviceError(DeviceError::DSK_INCOMPATIBLE);
@@ -1195,7 +1195,7 @@ FloppyDrive::catchFile(const fs::path &path)
 void
 FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 {
-    loginfo(DSK_DEBUG, "insertDisk(%lld)\n", delay);
+    logme(DSK_DEBUG, "insertDisk(%lld)\n", delay);
     
     if (objid == 0) insertDisk <SLOT_DC0> (std::move(disk), delay);
     if (objid == 1) insertDisk <SLOT_DC1> (std::move(disk), delay);
@@ -1206,7 +1206,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 void
 FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path &path)
 {
-    loginfo(DSK_DEBUG,
+    logme(DSK_DEBUG,
           "insertNew(%s, %s, %s, %s)\n",
           FSFormatEnum::key(dos), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
 
@@ -1232,7 +1232,7 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     fs.makeBootable(bb);
 
     // Check file system consistency
-    if CONSTEXPR (debug::FS_DEBUG) fs.doctor.xray(true, std::cout, false);
+    if CONSTEXPR (debug::FS_DEBUG != -1) fs.doctor.xray(true, std::cout, false);
 
     // Force the ADF to update
     fs.flush();
@@ -1244,7 +1244,7 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
 void
 FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
 {
-    loginfo(DSK_DEBUG, "swapDisk()\n");
+    logme(DSK_DEBUG, "swapDisk()\n");
     
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw DeviceError(DeviceError::DSK_INCOMPATIBLE);

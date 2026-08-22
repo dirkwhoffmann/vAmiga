@@ -21,7 +21,7 @@ FSImporter::importVolume(const u8 *src, isize size)
 {
     assert(src != nullptr);
 
-    loginfo(FS_DEBUG, "Importing file system...\n");
+    logme(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
     if (size % traits.bsize != 0) throw FSError(FSError::FS_WRONG_BSIZE);
@@ -48,7 +48,7 @@ FSImporter::importVolume(const u8 *src, isize size)
     }
     
     // Print some debug information
-    loginfo(FS_DEBUG, "Success\n");
+    logme(FS_DEBUG, "Success\n");
 }
 
 void
@@ -79,7 +79,7 @@ FSImporter::import(BlockNr top, const fs::path &path, bool recursive, bool conte
     }
 
     // Verify the result
-    if CONSTEXPR (debug::FS_DEBUG) {
+    if CONSTEXPR (debug::FS_DEBUG != -1) {
         
         fs.flush();
         fs.doctor.xray(true, std::cout, false);
@@ -104,7 +104,7 @@ FSImporter::import(BlockNr top, const fs::directory_entry &entry, bool recursive
 
     if (entry.is_regular_file()) {
 
-        loginfo(FS_DEBUG, "  Importing file %s\n", path.c_str());
+        logme(FS_DEBUG, "  Importing file %s\n", path.c_str());
 
         Buffer<u8> buffer(entry.path());
         if (buffer) {
@@ -115,7 +115,7 @@ FSImporter::import(BlockNr top, const fs::directory_entry &entry, bool recursive
 
     } else {
 
-        loginfo(FS_DEBUG, "Importing directory %s\n", fsname.c_str());
+        logme(FS_DEBUG, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
         auto subdir = fs.mkdir(top, fsname);

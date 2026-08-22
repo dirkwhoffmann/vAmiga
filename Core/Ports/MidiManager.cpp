@@ -190,7 +190,7 @@ MidiManager::initMidi()
     
     if (status != noErr) {
         
-        logwarn("Failed to create MIDI client: %d\n", (int)status);
+        logme(LV_WARNING, "Failed to create MIDI client: %d\n", (int)status);
         return false;
     }
     
@@ -206,7 +206,7 @@ MidiManager::initMidi()
     
     if (status != noErr) {
         
-        logwarn("Failed to create MIDI input port: %d\n", (int)status);
+        logme(LV_WARNING, "Failed to create MIDI input port: %d\n", (int)status);
         MIDIClientDispose(midiClient);
         midiClient = 0;
         return false;
@@ -222,7 +222,7 @@ MidiManager::initMidi()
     
     if (status != noErr) {
         
-        logwarn("Failed to create MIDI output port: %d\n", (int)status);
+        logme(LV_WARNING, "Failed to create MIDI output port: %d\n", (int)status);
         MIDIPortDispose(inputPort);
         inputPort = 0;
         MIDIClientDispose(midiClient);
@@ -234,7 +234,7 @@ MidiManager::initMidi()
     
    // Useful to debug CoreMIDI
    // printf("MIDI client initialized successfully - clientCreated=%d\n", clientCreated);
-    logdebug(SER_DEBUG, "MIDI client initialized successfully\n");
+    logme(SER_DEBUG, "MIDI client initialized successfully\n");
     return true;
 }
 
@@ -260,7 +260,7 @@ MidiManager::shutdownMidi()
     }
     
     clientCreated = false;
-    logdebug(SER_DEBUG, "MIDI client shut down\n");
+    logme(SER_DEBUG, "MIDI client shut down\n");
 }
 
 bool
@@ -271,7 +271,7 @@ MidiManager::openOutput(MIDIEndpointRef endpoint)
     closeOutput();
     currentOutputEndpoint = endpoint;
 
-    logdebug(SER_DEBUG, "MIDI output opened\n");
+    logme(SER_DEBUG, "MIDI output opened\n");
     return true;
 }
 
@@ -285,12 +285,12 @@ MidiManager::openInput(MIDIEndpointRef endpoint)
     OSStatus status = MIDIPortConnectSource(inputPort, endpoint, nullptr);
     if (status != noErr) {
 
-        logwarn("Failed to connect MIDI input source: %d\n", (int)status);
+        logme(LV_WARNING, "Failed to connect MIDI input source: %d\n", (int)status);
         return false;
     }
     
     currentInputEndpoint = endpoint;
-    logdebug(SER_DEBUG, "MIDI input opened\n");
+    logme(SER_DEBUG, "MIDI input opened\n");
     return true;
 }
 
@@ -501,7 +501,7 @@ MidiManager::sendMidiMessage(const uint8_t *data, size_t length)
         
         if (status != noErr) {
             
-            logwarn("MIDI send failed: %d\n", (int)status);
+            logme(LV_WARNING, "MIDI send failed: %d\n", (int)status);
             closeOutput();
         }
     }
