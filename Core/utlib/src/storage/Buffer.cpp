@@ -289,6 +289,7 @@ template void Buffer<T>::init(const Buffer<T> &other); \
 template void Buffer<T>::init(const fs::path &path); \
 template void Buffer<T>::resize(isize elements); \
 template void Buffer<T>::resize(isize elements, T value); \
+template void Buffer<T>::strip(isize elements); \
 template void Buffer<T>::clear(T value, isize offset, isize len); \
 template void Buffer<T>::copy(T *buf, isize offset, isize len) const; \
 template void Buffer<T>::patch(const u8 *seq, const u8 *subst); \

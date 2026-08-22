@@ -22,10 +22,24 @@ struct UUID {
     static UUID fromString(const string& str);
     string toString() const;
 
-    UUID(const u64 high = 0, const u64 low = 0) : high(high), low(low) {}
+    constexpr UUID(const u64 high = 0, const u64 low = 0) : high(high), low(low) {}
+    UUID(const string &str);
 
     bool operator==(const UUID&) const = default;
     auto operator<=>(const UUID&) const = default;
+    explicit operator bool() const { return !isZero(); }
+
+    bool isZero() const { return high == 0 && low == 0; }
 };
 
+}
+
+namespace std {
+
+    template<>
+    struct hash<utl::UUID> {
+        std::size_t operator()(const utl::UUID& uuid) const noexcept {
+            return std::hash<utl::u64>{}(uuid.high) ^ (std::hash<utl::u64>{}(uuid.low) << 1);
+        }
+    };
 }

@@ -34,7 +34,7 @@ HDFFile::about(const fs::path &path)
         
         if (suffix == ".HDF") {
             
-            ensureHDF(nullptr, utl::getSizeOfFile(path));
+            // ensureHDF(nullptr, utl::getSizeOfFile(path));
             return {{ ImageType::HARDDISK, ImageFormat::HDF }};
         }
         

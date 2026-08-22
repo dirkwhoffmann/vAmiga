@@ -17,6 +17,12 @@
 #include <string>
 
 namespace utl {
+
+UUID::UUID(const string &str)
+{
+    *this = UUID::fromString(str);
+}
+
 UUID
 UUID::v4() {
 
