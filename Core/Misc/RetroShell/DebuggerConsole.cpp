@@ -1568,9 +1568,140 @@ DebuggerConsole::initCommands(RSCommand &root)
         }
     });
 
-    
+#ifndef NDEBUG
+
+    /* Logging and debug flags can only be changed in debug builds. In
+     * release builds they are compile-time constants, so the commands
+     * below are not registered at all.
+     */
+
     root.add({
-        
+
+        .tokens = { "log" },
+        .ghelp  = { "Logging flags" },
+        .chelp  = { "Display all logging flags" },
+
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            for (const auto &flag : utl::debug::logFlags) {
+
+                os << utl::tab(flag.name);
+                os << LogLevelEnum::key(LogLevel(flag.get())) << std::endl;
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "log", "set" },
+        .ghelp  = { "Change a logging flag" }
+    });
+
+    for (isize i = 0; i < isize(utl::debug::logFlags.size()); i++) {
+
+        const auto &flag = utl::debug::logFlags[i];
+
+        root.add({
+
+            .tokens = { "log", "set", flag.name },
+            .ghelp  = { flag.help }
+        });
+
+        // Register a setter for every severity level
+        for (const auto &[key, value] : LogLevelEnum::pairs()) {
+
+            root.add({
+
+                .tokens = { "log", "set", flag.name, key },
+                .chelp  = { LogLevelEnum::help(value) },
+
+                .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    utl::debug::logFlags[values[0]].set(values[1]);
+
+                }, .payload = { i, value }
+            });
+        }
+    }
+
+    root.add({
+
+        .tokens = { "debug" },
+        .ghelp  = { "Debug flags" },
+        .chelp  = { "Display all debug flags" },
+
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            for (const auto &flag : utl::debug::debugFlags) {
+
+                os << utl::tab(flag.name);
+                if (flag.boolean) {
+                    os << utl::bol(flag.get() != 0) << std::endl;
+                } else {
+                    os << utl::dec(flag.get()) << std::endl;
+                }
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "debug", "set" },
+        .ghelp  = { "Change a debug flag" }
+    });
+
+    for (isize i = 0; i < isize(utl::debug::debugFlags.size()); i++) {
+
+        const auto &flag = utl::debug::debugFlags[i];
+
+        if (flag.boolean) {
+
+            root.add({
+
+                .tokens = { "debug", "set", flag.name },
+                .ghelp  = { flag.help }
+            });
+
+            // Register a setter for both boolean values
+            for (const auto &[key, value] : std::vector<std::pair<string,isize>>
+                 { { "false", 0 }, { "true", 1 } }) {
+
+                root.add({
+
+                    .tokens = { "debug", "set", flag.name, key },
+                    .chelp  = { value ? "Enable the flag" : "Disable the flag" },
+
+                    .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                        utl::debug::debugFlags[values[0]].set(values[1]);
+
+                    }, .payload = { i, value }
+                });
+            }
+
+        } else {
+
+            // The flag holds a parameter value. Register a single setter
+            root.add({
+
+                .tokens = { "debug", "set", flag.name },
+                .chelp  = { flag.help },
+                .args   = {
+                    { .name = { "value", "Parameter value" } }
+                },
+                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    utl::debug::debugFlags[values[0]].set(parseNum(args, "value"));
+
+                }, .payload = { i }
+            });
+        }
+    }
+
+#endif
+
+    root.add({
+
         .tokens = {"%"},
         .chelp  = { "Convert a value into different formats" },
         .args   = {
