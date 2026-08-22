@@ -23,18 +23,26 @@ namespace retro::vault::image {
 optional<ImageInfo>
 HDFFile::about(const fs::path &path)
 {
-    auto suffix = utl::uppercased(path.extension().string());
-
-    if (suffix == ".HDZ") {
+    try {
         
-        return {{ ImageType::HARDDISK, ImageFormat::HDF }};
-    }
-    
-    if (suffix == ".HDF") {
+        auto suffix = utl::uppercased(path.extension().string());
         
-        ensureHDF(nullptr, utl::getSizeOfFile(path));
-        return {{ ImageType::HARDDISK, ImageFormat::HDF }};
-    }
+        if (suffix == ".HDZ") {
+            
+            return {{ ImageType::HARDDISK, ImageFormat::HDF }};
+        }
+        
+        if (suffix == ".HDF") {
+            
+            ensureHDF(nullptr, utl::getSizeOfFile(path));
+            return {{ ImageType::HARDDISK, ImageFormat::HDF }};
+        }
+        
+    } catch (...) {
+        
+        // We have no means to signal a corrupted HDF. We treat it as unknown.
+        return {};
+    };
     
     return {};
 }
