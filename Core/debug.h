@@ -9,10 +9,39 @@
 
 #pragma once
 
-namespace utl::debug {
+#ifdef NDEBUG
+#define CONSTEXPR constexpr
+#else
+#define CONSTEXPR
+#endif
+
+//
+// Logging macros
+//
+
+#define logme(key, format, ...) \
+    do { \
+        if CONSTEXPR (key != -1) \
+            log(1, (LogLevel)key, std::source_location::current(), \
+                format __VA_OPT__(,) __VA_ARGS__); \
+    } while (0)
+
+
+namespace vamiga {
 
 //
 // Debug settings
+//
+
+// General
+static CONSTEXPR long X_FILES             = 7;
+
+}
+
+namespace utl::debug {
+
+//
+// Debug settings (deprecated)
 //
 
 // Default channels

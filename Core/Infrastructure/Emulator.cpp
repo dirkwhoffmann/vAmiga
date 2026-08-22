@@ -85,6 +85,7 @@ Emulator::_dump(Category category, std::ostream &os) const
 {
     using namespace utl;
 
+    /*
     if (category == Category::Debug) {
 
         auto cs = getChannels();
@@ -101,6 +102,7 @@ Emulator::_dump(Category category, std::ostream &os) const
             }
         }
     }
+    */
     
     if (category == Category::Defaults) {
 

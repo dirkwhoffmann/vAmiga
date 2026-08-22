@@ -1568,6 +1568,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         }
     });
 
+    /*
     root.add({
         
         .tokens = { "debug" },
@@ -1605,6 +1606,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             });
         }
     }
+    */
     
     root.add({
         
