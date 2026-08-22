@@ -1697,7 +1697,6 @@
 			isa = PBXGroup;
 			children = (
 				50BCB9972EE1DB07000C53CF /* Bits.cpp */,
-				503FC4C92EE0AB0500637C95 /* Files.cpp */,
 				503FC4E52EE1B36000637C95 /* Strings.cpp */,
 			);
 			path = support;
@@ -2506,8 +2505,8 @@
 			isa = PBXGroup;
 			children = (
 				50BCB9C42EE6BED6000C53CF /* IOError.h */,
-				50BCB9C52EE6BF58000C53CF /* ParseError.h */,
 				503FC4C62EE0A95000637C95 /* Files.h */,
+				50BCB9C52EE6BF58000C53CF /* ParseError.h */,
 				50392FB22EF9306100DAE17A /* Formatter.h */,
 				50BCB9A52EE2F335000C53CF /* Parser.h */,
 				503FC4C82EE0A97D00637C95 /* Streams.h */,
@@ -2537,6 +2536,7 @@
 			isa = PBXGroup;
 			children = (
 				50392FB32EF9857900DAE17A /* Formatter.cpp */,
+				503FC4C92EE0AB0500637C95 /* Files.cpp */,
 				50BCB9A62EE2F344000C53CF /* Parser.cpp */,
 				503FC4CC2EE0AB1000637C95 /* Streams.cpp */,
 			);
