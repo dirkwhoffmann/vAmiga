@@ -1568,45 +1568,6 @@ DebuggerConsole::initCommands(RSCommand &root)
         }
     });
 
-    /*
-    root.add({
-        
-        .tokens = { "debug" },
-        .ghelp  = { "Debug variables" },
-        .chelp  = { "Display all debug variables" },
-        
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-            
-            dump(os, emulator, Category::Debug);
-        }
-    });
-
-    if (debugBuild) {
-
-        auto& channels = Loggable::getChannels();
-
-        for (isize i = 0; i < isize(channels.size()); ++i) {
-
-            root.add({
-                
-                .tokens = { "debug", channels[i].name },
-                .chelp  = { channels[i].description },
-                .args   = {
-                    { .name = { "level", "Debug level" } }
-                },
-                    .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                        auto level = parseNum(args, "level");
-                        if (level >= 0 && level <= 8) {
-                            Loggable::setLevel(values[0], LogLevel(level));
-                        } else {
-                            Loggable::setLevel(values[0], {});
-                        }
-                    }, .payload = { i }
-            });
-        }
-    }
-    */
     
     root.add({
         

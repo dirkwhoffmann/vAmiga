@@ -8,16 +8,4 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "utl/abilities/Loggable.h"
-
-namespace utl::channel {
-
-/* Every log call now decides whether to print via its own debug flag
- * (see debug.h), so a single always-on output channel is all that's left
- * to register. Channel 0 is reserved by convention as a disabled sink.
- */
-
-LogChannel NULLDEV = Loggable::subscribe("NULLDEV", std::optional<LogLevel>(std::nullopt), "Message sink");
-LogChannel STDERR  = Loggable::subscribe("STDERR",  std::optional<LogLevel>(LogLevel::LOG_DEBUG), "Standard error");
-
-}
+#include "debug.h"

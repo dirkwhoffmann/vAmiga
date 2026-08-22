@@ -9,17 +9,10 @@
 
 /* The Loggable interface provides a framework for printing log messages.
  *
- * The framework maintains a list of output channels. The `subscribe` method
- * returns a handle to a channel and creates a new channel on-the-fly if it
- * does not exist yet. Each output channel consists of an identifier, an
- * optional severity threshold, and an optional human-readable description.
- *
- * The severity threshold is used to filter messages based on their severity.
- * Severity levels are based on BSD syslog conventions, where lower numbers
- * indicate higher urgency. If no threshold is set, the channel is disabled;
- * no output is printed.
- *
- * Messages are generated via the log function.
+ * Messages are generated via the log function and are always written to
+ * stderr. Whether a call site actually calls log() at all is decided at
+ * the call site itself (see the logging macros in debug.h), based on a
+ * per-flag debug setting rather than a runtime channel lookup.
  */
 
 #pragma once
@@ -28,8 +21,6 @@
 #include <source_location>
 
 namespace utl {
-
-using LogChannel = isize;
 
 enum class LogLevel : long
 {
@@ -82,45 +73,15 @@ struct LogLevelEnum : Reflectable<LogLevelEnum, LogLevel>
     }
 };
 
-struct LogChannelInfo {
-
-    // Channel identifier
-    string name;
-
-    // Severity threshold (empty optional blocks everything)
-    optional<LogLevel> level;
-
-    // Optional description
-    string description;
-};
-
 class Loggable {
-
-    // Returns a reference to the channel pool
-    static std::vector<LogChannelInfo> &channels();
 
 public:
 
-    // Returns the number of registered channels
-    static isize size() noexcept { return isize(channels().size()); }
-
-    // Returns all registered channels
-    static const std::vector<LogChannelInfo> &getChannels() noexcept { return channels(); }
-
-    // Looks up an existing channel or creates a new one if it does not exist
-    static LogChannel subscribe(string name, optional<long> level, string description = "");
-    static LogChannel subscribe(string name, optional<LogLevel> level, string description = "");
-
-    // Modifies the severity threshold of an existing channel
-    static void setLevel(isize nr, optional<LogLevel> level);
-    static void setLevel(string name, optional<LogLevel> level);
-
-    // Output functions (called by macro wrappers)
+    // Output function (called by macro wrappers)
 #if defined(__clang__)
-    __attribute__((format(printf, 5, 6)))
+    __attribute__((format(printf, 4, 5)))
 #endif
-    void log(LogChannel channel,
-             LogLevel level,
+    void log(LogLevel level,
              const std::source_location &loc,
              const char *fmt, ...) const;
 

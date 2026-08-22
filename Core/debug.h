@@ -31,14 +31,14 @@
 
 #define logRaw(level, format, ...) \
     do { \
-        log(1, level, std::source_location::current(), \
+        log(level, std::source_location::current(), \
             format __VA_OPT__(,) __VA_ARGS__); \
     } while (0)
 
 #define logMsg(key, level, format, ...) \
     do { \
         if CONSTEXPR (debug::key) \
-            log(1, level, std::source_location::current(), \
+            log(level, std::source_location::current(), \
                 format __VA_OPT__(,) __VA_ARGS__); \
     } while (0)
 

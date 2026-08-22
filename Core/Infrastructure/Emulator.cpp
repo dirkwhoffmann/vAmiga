@@ -85,25 +85,6 @@ Emulator::_dump(Category category, std::ostream &os) const
 {
     using namespace utl;
 
-    /*
-    if (category == Category::Debug) {
-
-        auto cs = getChannels();
-        std::sort(cs.begin(), cs.end(),
-                  [](const auto& a, const auto& b) { return a.name < b.name; });
-
-        for (auto c : cs) {
-
-            os << tab(c.name);
-            if (c.level.has_value()) {
-                os << LogLevelEnum::key(*c.level) << std::endl;
-            } else {
-                os << "-" << std::endl;
-            }
-        }
-    }
-    */
-    
     if (category == Category::Defaults) {
 
         defaults.dump(category, os);
