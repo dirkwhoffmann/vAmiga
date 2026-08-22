@@ -60,19 +60,31 @@ inline constexpr long LV_NOTICE    = (long)utl::LogLevel::LOG_NOTICE;
 inline constexpr long LV_INFO      = (long)utl::LogLevel::LOG_INFO;
 inline constexpr long LV_DEBUG     = (long)utl::LogLevel::LOG_DEBUG;
 
-//
-// Debug settings
-//
-
 // Always-off placeholder, used to permanently silence a log call
 inline constexpr long NULLDEV            = -1;
+
+/* Debug flags come in two kinds:
+ *
+ * - Logging flags gate a logme() call and nothing else. Disabling one
+ *   removes the call (release builds) or simply keeps it silent (debug
+ *   builds); the emulator behaves identically either way.
+ *
+ * - Action flags enable extra debug behavior with a real side effect
+ *   (an integrity check, a redundant computation compared against the
+ *   fast path, a memory guard, forcing a specific code path, ...). Some
+ *   of these also log a message as part of that action, but disabling
+ *   the flag changes what the emulator *does*, not just what it prints.
+ */
+
+//
+// Flags that control logging
+//
 
 // General
 inline CONSTEXPR long XFILES             = -1;
 inline CONSTEXPR long CNF_DEBUG          = -1;
 inline CONSTEXPR long OBJ_DEBUG          = -1;
 inline CONSTEXPR long DEF_DEBUG          = -1;
-inline CONSTEXPR long MIMIC_UAE          = -1;
 
 // Emulator
 inline CONSTEXPR long RUN_DEBUG          = -1;
@@ -80,12 +92,6 @@ inline CONSTEXPR long TIM_DEBUG          = -1;
 inline CONSTEXPR long WARP_DEBUG         = -1;
 inline CONSTEXPR long CMD_DEBUG          = -1;
 inline CONSTEXPR long MSG_DEBUG          = -1;
-inline CONSTEXPR long SNP_DEBUG          = -1;
-
-// Run ahead
-inline CONSTEXPR long RUA_DEBUG          = -1;
-inline CONSTEXPR long RUA_CHECKSUM       = -1;
-inline CONSTEXPR long RUA_ON_STEROIDS    = -1;
 
 // CPU
 inline CONSTEXPR long CPU_DEBUG          = -1;
@@ -100,22 +106,16 @@ inline CONSTEXPR long MEM_DEBUG          = -1;
 inline CONSTEXPR long DMA_DEBUG          = -1;
 inline CONSTEXPR long DDF_DEBUG          = -1;
 inline CONSTEXPR long SEQ_DEBUG          = -1;
-inline CONSTEXPR long SEQ_ON_STEROIDS    = -1;
 inline CONSTEXPR long NTSC_DEBUG         = -1;
 
 // Copper
-inline CONSTEXPR long COP_CHECKSUM       = -1;
 inline CONSTEXPR long COPREG_DEBUG       = -1;
 inline CONSTEXPR long COP_DEBUG          = -1;
 
 // Blitter
-inline CONSTEXPR long BLT_CHECKSUM       = -1;
 inline CONSTEXPR long BLTREG_DEBUG       = -1;
 inline CONSTEXPR long BLT_REG_GUARD      = -1;
-inline CONSTEXPR long BLT_MEM_GUARD      = -1;
-inline CONSTEXPR long BLT_DEBUG          = -1;
 inline CONSTEXPR long BLTTIM_DEBUG       = -1;
-inline CONSTEXPR long SLOW_BLT_DEBUG     = -1;
 
 // Denise
 inline CONSTEXPR long BPLREG_DEBUG       = -1;
@@ -124,13 +124,9 @@ inline CONSTEXPR long BPLMOD_DEBUG       = -1;
 inline CONSTEXPR long SPRREG_DEBUG       = -1;
 inline CONSTEXPR long COLREG_DEBUG       = -1;
 inline CONSTEXPR long CLXREG_DEBUG       = -1;
-inline CONSTEXPR long BPL_ON_STEROIDS    = -1;
 inline CONSTEXPR long DIW_DEBUG          = -1;
 inline CONSTEXPR long SPR_DEBUG          = -1;
 inline CONSTEXPR long CLX_DEBUG          = -1;
-inline CONSTEXPR long BORDER_DEBUG       = -1;
-inline CONSTEXPR long LINE_DEBUG         = -1;
-inline CONSTEXPR long DENISE_ON_STEROIDS = -1;
 
 // Paula
 inline CONSTEXPR long INTREG_DEBUG       = -1;
@@ -143,16 +139,11 @@ inline CONSTEXPR long CIA_DEBUG          = -1;
 inline CONSTEXPR long TOD_DEBUG          = -1;
 
 // Floppy Drives
-inline CONSTEXPR long ALIGN_HEAD         = -1;
-inline CONSTEXPR long DSK_CHECKSUM       = -1;
 inline CONSTEXPR long DSKREG_DEBUG       = -1;
 inline CONSTEXPR long DSK_DEBUG          = -1;
 inline CONSTEXPR long MFM_DEBUG          = -1;
-inline CONSTEXPR long FS_DEBUG           = -1;
 
 // Hard Drives
-inline CONSTEXPR long HDR_ACCEPT_ALL     = -1;
-inline CONSTEXPR long HDR_FS_LOAD_ALL    = -1;
 inline CONSTEXPR long WT_DEBUG           = -1;
 
 // Audio
@@ -160,7 +151,6 @@ inline CONSTEXPR long AUDREG_DEBUG       = -1;
 inline CONSTEXPR long AUD_DEBUG          = -1;
 inline CONSTEXPR long AUDBUF_DEBUG       = -1;
 inline CONSTEXPR long AUDVOL_DEBUG       = -1;
-inline CONSTEXPR long DISABLE_AUDIRQ     = -1;
 
 // Ports
 inline CONSTEXPR long POSREG_DEBUG       = -1;
@@ -170,9 +160,6 @@ inline CONSTEXPR long VID_DEBUG          = -1;
 inline CONSTEXPR long PRT_DEBUG          = -1;
 inline CONSTEXPR long SER_DEBUG          = -1;
 inline CONSTEXPR long POT_DEBUG          = -1;
-inline CONSTEXPR long HOLD_MOUSE_L       = -1;
-inline CONSTEXPR long HOLD_MOUSE_M       = -1;
-inline CONSTEXPR long HOLD_MOUSE_R       = -1;
 
 // Expansion boards
 inline CONSTEXPR long ZOR_DEBUG          = -1;
@@ -199,6 +186,56 @@ inline CONSTEXPR long REC_DEBUG          = -1;
 inline CONSTEXPR long SCK_DEBUG          = -1;
 inline CONSTEXPR long SRV_DEBUG          = -1;
 inline CONSTEXPR long GDB_DEBUG          = -1;
+
+//
+// Flags that enable a debug action
+//
+
+// General
+inline CONSTEXPR long MIMIC_UAE          = -1;
+
+// Emulator
+inline CONSTEXPR long SNP_DEBUG          = -1;
+
+// Run ahead
+inline CONSTEXPR long RUA_DEBUG          = -1;
+inline CONSTEXPR long RUA_CHECKSUM       = -1;
+inline CONSTEXPR long RUA_ON_STEROIDS    = -1;
+
+// Agnus
+inline CONSTEXPR long SEQ_ON_STEROIDS    = -1;
+
+// Copper
+inline CONSTEXPR long COP_CHECKSUM       = -1;
+
+// Blitter
+inline CONSTEXPR long BLT_CHECKSUM       = -1;
+inline CONSTEXPR long BLT_MEM_GUARD      = -1;
+inline CONSTEXPR long BLT_DEBUG          = -1;
+inline CONSTEXPR long SLOW_BLT_DEBUG     = -1;
+
+// Denise
+inline CONSTEXPR long BPL_ON_STEROIDS    = -1;
+inline CONSTEXPR long BORDER_DEBUG       = -1;
+inline CONSTEXPR long LINE_DEBUG         = -1;
+inline CONSTEXPR long DENISE_ON_STEROIDS = -1;
+
+// Floppy Drives
+inline CONSTEXPR long ALIGN_HEAD         = -1;
+inline CONSTEXPR long DSK_CHECKSUM       = -1;
+inline CONSTEXPR long FS_DEBUG           = -1;
+
+// Hard Drives
+inline CONSTEXPR long HDR_ACCEPT_ALL     = -1;
+inline CONSTEXPR long HDR_FS_LOAD_ALL    = -1;
+
+// Audio
+inline CONSTEXPR long DISABLE_AUDIRQ     = -1;
+
+// Ports
+inline CONSTEXPR long HOLD_MOUSE_L       = -1;
+inline CONSTEXPR long HOLD_MOUSE_M       = -1;
+inline CONSTEXPR long HOLD_MOUSE_R       = -1;
 
 }
 
