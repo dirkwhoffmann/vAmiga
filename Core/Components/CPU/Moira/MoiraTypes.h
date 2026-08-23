@@ -31,13 +31,13 @@ using u64 = unsigned long long;
 // Address sizes for various instructions.
 //
 
-using Size = int;
-static constexpr int Unsized     = 0;  // No specific size.
-static constexpr int Byte        = 1;  // Byte addressing (.b)
-static constexpr int Word        = 2;  // Word addressing (.w)
-static constexpr int Long        = 4;  // Long word addressing (.l)
-static constexpr int Quad        = 8;  // Quad word (FPU)
-static constexpr int Extended    = 12; // Extended precision (FPU)
+using Size = u8;
+static constexpr Size Unsized    = 0;  // No specific size.
+static constexpr Size Byte       = 1;  // Byte addressing (.b)
+static constexpr Size Word       = 2;  // Word addressing (.w)
+static constexpr Size Long       = 4;  // Long word addressing (.l)
+static constexpr Size Quad       = 8;  // Quad word (FPU)
+static constexpr Size Extended   = 12; // Extended precision (FPU)
 
 
 //
@@ -85,7 +85,7 @@ enum class LetterCase
 };
 
 // Processor instructions
-enum class Instr
+enum class Instr : u16
 {
     // 68000 instructions
     ABCD,       ADD,        ADDA,       ADDI,       ADDQ,       ADDX,
@@ -159,7 +159,7 @@ enum class Instr
 };
 
 // Addressing modes
-enum class Mode
+enum class Mode : u8
 {
     DN,                 //  0: Dn, Data register direct.
     AN,                 //  1: An, Address register direct.
@@ -316,6 +316,10 @@ struct PrefetchQueue {
     u16 ird;                    // The instruction currently being executed
 };
 
+/* Note: Instr, Mode and Size carry narrow underlying types so that this
+ * struct occupies four bytes. The disassembler reads its operand attributes
+ * from a table of 65536 of these.
+ */
 struct InstrInfo
 {
     Instr I;
