@@ -17,10 +17,12 @@
 #define CONSTEXPR
 #endif
 
-/* In release builds (NDEBUG), CONSTEXPR expands to 'constexpr'. Every debug
+/* How the debug system works:
+ *
+ * In release builds (NDEBUG), CONSTEXPR expands to 'constexpr'. Every debug
  * flag below then becomes a compile-time constant, and 'if CONSTEXPR' below
  * becomes 'if constexpr', so the compiler removes each guarded log call (or
- * action) entirely when its flag is off.
+ * debug action) entirely when its flag is off.
  *
  * In debug builds, CONSTEXPR expands to nothing. The same flags become
  * ordinary (inline) variables that can be switched on and off at runtime,
@@ -33,21 +35,20 @@
  *   builds); the emulator behaves identically either way. They are typed
  *   'LogLevel', because their value doubles as the severity the message is
  *   issued with. OFF disables the call, any other LogLevel enables it
- *   at that severity. All logging flags are prefixed 'LOG_'.
+ *   at that severity.
  *
  * - Debug flags enable extra behavior with a real side effect (an
  *   integrity check, a redundant computation compared against the fast
- *   path, a memory guard, forcing a specific code path, simulating an
- *   error condition, ...). Some of these also log a message as part of
- *   that action, but disabling the flag changes what the emulator
- *   *does*, not just what it prints. They are all typed 'bool'.
+ *   path, forcing a specific code path, simulating an error condition,
+ *   ...). Some of these also log a message as part of that action, but
+ *   disabling the flag changes what the emulator *does*, not just what
+ *   it prints. They are all typed 'bool'.
  *
  * Both tables are X-macro lists: each entry names a flag exactly once, and
  * is expanded both into the variable declaration and (in debug builds) into
  * a descriptor table used by RetroShell. To add a flag, add one line here.
  *
- * Note that RetroVault maintains its own, independent set of flags
- * (RetroVault/rvdebug.h).
+ * Note that rvlib maintains its own, independent set of flags (rvdebug.h).
  */
 
 
