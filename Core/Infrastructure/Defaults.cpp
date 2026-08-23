@@ -27,16 +27,11 @@ Defaults::fallbacks()
 
     if (!defaults.values.empty()) return defaults;
 
-    /*
-    auto setKeyVal = [&](const string &key, const string &value) {
-        defaults.values[key] = value;
-    };
-    */
-    auto registerDefault = [&](Opt option, u64 value) {
+    auto registerDefault = [&](Opt option, i64 value) {
         defaults.values[OptEnum::fullKey(option)] = std::to_string(value);
     };
 
-    auto registerDefaults = [&](Opt option, u64 value, std::vector <isize> objids) {
+    auto registerDefaults = [&](Opt option, i64 value, std::vector <isize> objids) {
         auto key = string(OptEnum::fullKey(option));
         for (auto &nr : objids)
             defaults.values[key + std::to_string(nr)] = std::to_string(value);
