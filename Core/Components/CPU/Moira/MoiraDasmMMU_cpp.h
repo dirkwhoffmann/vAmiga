@@ -5,55 +5,55 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPGen(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPGen(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
-    auto ext = dasmIncRead<Word>(addr);
+    auto ext = dasmIncRead(addr, Word);
     addr -= 2;
 
     // PLOAD: 0010 00x0 000x xxxx
     if ((ext & 0xFDE0) == 0x2000) {
 
-        dasmPLoad<Instr::PLOAD, M, Long>(str, addr, op);
+        dasmPLoad(str, addr, op, Instr::PLOAD, M, Long);
         return;
     }
 
     // PFLUSHA: 0010 010x xxxx xxxx
     if ((ext & 0xFE00) == 0x2400) {
 
-        dasmPFlusha<Instr::PFLUSHA, M, Long>(str, addr, op);
+        dasmPFlusha(str, addr, op, Instr::PFLUSHA, M, Long);
         return;
     }
 
     // PFLUSH: 001x xx0x xxxx xxxx
     if ((ext & 0xE200) == 0x2000) {
 
-        dasmPFlush<Instr::PFLUSH, M, Long>(str, addr, op);
+        dasmPFlush(str, addr, op, Instr::PFLUSH, M, Long);
         return;
     }
 
     // PTEST: 100x xxxx xxxx xxxx
     if ((ext & 0xE000) == 0x8000) {
 
-        dasmPTest<Instr::PTEST, M, Long>(str, addr, op);
+        dasmPTest(str, addr, op, Instr::PTEST, M, Long);
         return;
     }
 
     // PMOVE: 010x xxxx 0000 0000 || 0110 00x0 0000 0000 || 000x xxxx 0000 0000
     if ((ext & 0xE0FF) == 0x4000 || (ext & 0xFDFF) == 0x6000 || (ext & 0xE0FF) == 0x0000) {
 
-        dasmPMove<Instr::PMOVE, M, S>(str, addr, op);
+        dasmPMove(str, addr, op, Instr::PMOVE, M, S);
         return;
     }
 
-    dasmIllegal<I, M, S>(str, addr, op);
+    dasmIllegal(str, addr, op, I, M, S);
 }
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
     auto old  = addr;
-    auto ext  = dasmIncRead<Word>(addr);
+    auto ext  = dasmIncRead(addr, Word);
     auto reg  = _____________xxx (op);
     auto mode = ___xxx__________ (ext);
     auto mask = _______xxxx_____ (ext);
@@ -68,21 +68,21 @@ Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op) const
         if (!isValidExtMMU(I, M, op, ext)) {
 
             addr = old;
-            dasmIllegal<I, M, S>(str, addr, op);
+            dasmIllegal(str, addr, op, I, M, S);
             return;
         }
     }
 
-    str << Ins<I>{} << str.tab;
+    str << Ins{I} << str.tab;
     str << Fc{fc} << Sep{} << Imu{mask};
-    if (mode == 0b110) str << Sep{} << Op<M>(reg, addr);
+    if (mode == 0b110) str << Sep{} << Op(M, Word, reg, addr);
 }
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
     auto old = addr;
-    auto ext = dasmIncRead<Word>(addr);
+    auto ext = dasmIncRead(addr, Word);
 
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
@@ -90,35 +90,35 @@ Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op) const
         if (!isValidExtMMU(I, M, op, ext)) {
 
             addr = old;
-            dasmIllegal<I, M, S>(str, addr, op);
+            dasmIllegal(str, addr, op, I, M, S);
             return;
         }
     }
 
-    str << Ins<I>{};
+    str << Ins{I};
 }
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op, [[maybe_unused]] Instr I, Mode M, [[maybe_unused]] Size S) const
 {
     auto reg  = _____________xxx (op);
     auto mode = ___________xx___ (op);
 
     switch (mode) {
 
-        case 0: str << Ins<Instr::PFLUSHN>{} << str.tab << Op<M>(reg, addr); break;
-        case 1: str << Ins<Instr::PFLUSH>{} << str.tab << Op<M>(reg, addr); break;
-        case 2: str << Ins<Instr::PFLUSHAN>{}; break;
-        case 3: str << Ins<Instr::PFLUSHA>{}; break;
+        case 0: str << Ins{Instr::PFLUSHN} << str.tab << Op(M, Word, reg, addr); break;
+        case 1: str << Ins{Instr::PFLUSH} << str.tab << Op(M, Word, reg, addr); break;
+        case 2: str << Ins{Instr::PFLUSHAN}; break;
+        case 3: str << Ins{Instr::PFLUSHA}; break;
     }
 }
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
     auto old = addr;
-    auto ext = dasmIncRead<Word>(addr);
-    auto ea  = Op <M,S> ( _____________xxx(op), addr );
+    auto ext = dasmIncRead(addr, Word);
+    auto ea  = Op(M, S, _____________xxx(op), addr);
 
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
@@ -126,20 +126,20 @@ Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op) const
         if (!isValidExtMMU(I, M, op, ext)) {
 
             addr = old;
-            dasmIllegal<I, M, S>(str, addr, op);
+            dasmIllegal(str, addr, op, I, M, S);
             return;
         }
     }
 
-    str << Ins<I>{} << ((ext & 0x200) ? "r" : "w") << str.tab;
+    str << Ins{I} << ((ext & 0x200) ? "r" : "w") << str.tab;
     str << Fc(ext & 0b11111) << Sep{} << ea;
 }
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
     auto old  = addr;
-    auto ext  = dasmIncRead<Word>(addr);
+    auto ext  = dasmIncRead(addr, Word);
     auto reg  = _____________xxx (op);
     auto fmt  = xxx_____________ (ext);
     auto preg = ___xxx__________ (ext);
@@ -151,7 +151,7 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op) const
         if (!isValidExtMMU(I, M, op, ext)) {
 
             addr = old;
-            dasmIllegal<I, M, S>(str, addr, op);
+            dasmIllegal(str, addr, op, I, M, S);
             return;
         }
     }
@@ -201,27 +201,27 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op) const
 
     if (!(ext & 0x200)) {
 
-        str << Ins<I>{} << suffix << str.tab;
-        if (s == Word) str << Op<M, Word>(reg, addr) << Sep{};
-        if (s == Long) str << Op<M, Long>(reg, addr) << Sep{};
+        str << Ins{I} << suffix << str.tab;
+        if (s == Word) str << Op(M, Word, reg, addr) << Sep{};
+        if (s == Long) str << Op(M, Long, reg, addr) << Sep{};
         str << prefix << r;
         if (fmt == 3 && preg > 1) str << Int(nr);
 
     } else {
 
-        str << Ins<I>{} << suffix << str.tab;
+        str << Ins{I} << suffix << str.tab;
         if (fmt == 3 && preg > 1) str << Int(nr);
         str << prefix << r;
-        if (s == Word) str << Sep{} << Op<M, Word>(reg, addr);
-        if (s == Long) str << Sep{} << Op<M, Long>(reg, addr);
+        if (s == Word) str << Sep{} << Op(M, Word, reg, addr);
+        if (s == Long) str << Sep{} << Op(M, Long, reg, addr);
     }
 }
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
     auto old = addr;
-    auto ext = dasmIncRead<Word>(addr);
+    auto ext = dasmIncRead(addr, Word);
     auto reg = _____________xxx (op);
     auto lev = ___xxx__________ (ext);
     auto rw  = ______x_________ (ext);
@@ -235,22 +235,22 @@ Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op) const
         if (!isValidExtMMU(I, M, op, ext)) {
 
             addr = old;
-            dasmIllegal<I, M, S>(str, addr, op);
+            dasmIllegal(str, addr, op, I, M, S);
             return;
         }
     }
 
-    str << Ins<I>{} << (rw ? "r" : "w") << str.tab;
-    str << Fc{fc} << Sep{} << Op<M>(reg, addr) << Sep{} << lev;
+    str << Ins{I} << (rw ? "r" : "w") << str.tab;
+    str << Fc{fc} << Sep{} << Op(M, Word, reg, addr) << Sep{} << lev;
     if (a) { str << Sep{} << An{an}; }
 }
 
-template <Instr I, Mode M, Size S> void
-Moira::dasmPTest40(StrWriter &str, u32 &addr, u16 op) const
+void
+Moira::dasmPTest40(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe_unused]] Size S) const
 {
     auto reg = _____________xxx(op);
     auto rw  = __________x_____(op);
 
-    str << Ins<I>{} << (rw ? "r" : "w") << str.tab;
-    str << Op<M>(reg, addr);
+    str << Ins{I} << (rw ? "r" : "w") << str.tab;
+    str << Op(M, Word, reg, addr);
 }

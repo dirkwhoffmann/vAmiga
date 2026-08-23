@@ -55,7 +55,7 @@
 
 /* Set to true to enable the disassembler.
  *
- * The disassembler requires a jump table which consumes about 1MB of memory.
+ * The disassembler requires a jump table which consumes about 1.5MB of memory.
  *
  * Disable to save space.
  */

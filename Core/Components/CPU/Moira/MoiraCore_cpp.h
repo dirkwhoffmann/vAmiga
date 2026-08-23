@@ -42,8 +42,12 @@ using namespace Flag;
 #include "MoiraDataflow_cpp.h"
 #include "MoiraExceptions_cpp.h"
 #include "MoiraExec_cpp.h"
-#include "StrWriter_cpp.h"
-#include "MoiraDasm_cpp.h"
+
+/* Note: StrWriter_cpp.h and MoiraDasm_cpp.h are deliberately not included
+ * here. The disassembler is not templated, so it is compiled once, in
+ * Moira.cpp. Registering a disassembler handler only takes its address,
+ * for which the declaration in MoiraInit.h is enough.
+ */
 
 template void Moira::createJumpTable<MOIRA_CORE>(Model, bool);
 

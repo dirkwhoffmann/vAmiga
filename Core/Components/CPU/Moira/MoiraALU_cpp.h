@@ -19,6 +19,32 @@ template <Size S> u32 CLIP(u64 data) {
     if constexpr (S == Long) return data & 0xFFFFFFFF;
 }
 
+/* Runtime variants of CLIP and SEXT.
+ *
+ * The disassembler is not templated on the size attribute, so it needs
+ * variants that take the size as an ordinary argument.
+ */
+inline u32 CLIP(u64 data, Size S) {
+
+    switch (S) {
+
+        case Byte: return u32(data & 0x000000FF);
+        case Word: return u32(data & 0x0000FFFF);
+        default:   return u32(data & 0xFFFFFFFF);
+    }
+}
+
+inline i32 SEXT(u64 data, Size S) {
+
+    switch (S) {
+
+        case 0:    return (i32)data;
+        case Byte: return (i8)data;
+        case Word: return (i16)data;
+        default:   return (i32)data;
+    }
+}
+
 template <Size S> u32 CLEAR(u64 data) {
 
     if constexpr (S == Byte) return data & 0xFFFFFF00;

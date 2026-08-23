@@ -15,8 +15,12 @@
 #define MOIRA_DECLARE_EXEC(x) \
 template <Core C, Instr I, Mode M, Size S> void exec##x(u16);
 
+/* Note: The disassembler handlers are not templated. I, M and S are passed
+ * in as ordinary arguments, which keeps the number of compiled disassembler
+ * functions at about 150 instead of several thousand.
+ */
 #define MOIRA_DECLARE_DASM(x) \
-template <Instr I, Mode M, Size S> void dasm##x(StrWriter &, u32 &, u16) const;
+void dasm##x(StrWriter &, u32 &, u16, Instr I, Mode M, Size S) const;
 
 #define MOIRA_DECLARE(x) \
 MOIRA_DECLARE_EXEC(x) \

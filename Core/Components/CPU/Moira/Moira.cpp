@@ -39,7 +39,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     exec = new ExecPtr[65536];
     loop = new ExecPtr[65536];
     if (MOIRA_BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
-    if (MOIRA_ENABLE_DASM) dasm = new DasmPtr[65536];
+    if (MOIRA_ENABLE_DASM) dasm = new DasmEntry[65536];
 
     createJumpTable(cpuModel, dasmModel);
 

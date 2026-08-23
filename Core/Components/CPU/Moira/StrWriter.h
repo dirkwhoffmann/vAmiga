@@ -22,14 +22,14 @@ struct UInt24 { u32 raw; UInt24(u32 v) : raw(v) { } };
 struct UInt32 { u32 raw; UInt32(u32 v) : raw(v) { } };
 
 // Immediate operands
-template <Size S = Long> struct Imu { u32 raw; Imu(u32 v) : raw(v) { } };
-template <Size S = Long> struct Ims { i32 raw; Ims(i32 v) : raw(v) { } };
+struct Imu { u32 raw; Size sz; Imu(u32 v, Size s = Long) : raw(v), sz(s) { } };
+struct Ims { i32 raw; Size sz; Ims(i32 v, Size s = Long) : raw(v), sz(s) { } };
 struct Imd { u32 raw; Imd(u32 v) : raw(v) { } };
 
 // Mnemonics
-template <Instr I> struct Ins { };
-template <Size S> struct Sz { };
-template <Size S> struct Szb { };
+struct Ins { Instr raw; Ins(Instr v) : raw(v) { } };
+struct Sz { Size raw; Sz(Size v) : raw(v) { } };
+struct Szb { Size raw; Szb(Size v) : raw(v) { } };
 struct Cc { int raw; Cc(int v) : raw(v) { } };
 struct Cpcc { int raw; Cpcc(int v) : raw(v) { } };
 struct Fcc { int raw; Fcc(int v) : raw(v) { } };
@@ -52,22 +52,23 @@ struct RegRegList { u16 raw; RegRegList(u16 v) : raw(v) { } };
 struct FRegList { u16 raw; FRegList(u16 v) : raw(v) { } };
 
 // Addressing modes
-template <Mode M, Size S = Word> struct Ea {
+struct Ea {
+    Mode m; Size sz;
     u32 pc; u16 reg; u8 dw; u8 ow; u32 ext1; i32 ext2; i32 ext3;
 };
-template <Mode M, Size S> struct Ai { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Pi { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Pd { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Di { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Ix { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct IxMot { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct IxMit { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct IxMus { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Aw { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Al { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct DiPc { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Im { const Ea<M,S> &ea; };
-template <Mode M, Size S> struct Ip { const Ea<M,S> &ea; };
+struct Ai { const Ea &ea; };
+struct Pi { const Ea &ea; };
+struct Pd { const Ea &ea; };
+struct Di { const Ea &ea; };
+struct Ix { const Ea &ea; };
+struct IxMot { const Ea &ea; };
+struct IxMit { const Ea &ea; };
+struct IxMus { const Ea &ea; };
+struct Aw { const Ea &ea; };
+struct Al { const Ea &ea; };
+struct DiPc { const Ea &ea; };
+struct Im { const Ea &ea; };
+struct Ip { const Ea &ea; };
 
 struct Scale { int raw; Scale(int v) : raw(v) { } };
 
@@ -86,7 +87,7 @@ struct Tab { int raw;  Tab(int v) : raw(v) { } };
 struct Sep { };
 
 // Misc
-template <Instr I, Mode M, Size S> struct Av { u32 ext1 = 0; };
+struct Av { Instr I; Mode M; Size S; u32 ext1 = 0; };
 struct Finish { };
 
 class StrWriter
@@ -121,13 +122,13 @@ public:
     StrWriter& operator<<(UInt24);
     StrWriter& operator<<(UInt32);
 
-    template <Size S> StrWriter& operator<<(Imu<S>);
-    template <Size S> StrWriter& operator<<(Ims<S>);
+    StrWriter& operator<<(Imu);
+    StrWriter& operator<<(Ims);
     StrWriter& operator<<(Imd);
 
-    template <Instr I> StrWriter& operator<<(Ins<I>);
-    template <Size S> StrWriter& operator<<(Sz<S>);
-    template <Size S> StrWriter& operator<<(Szb<S>);
+    StrWriter& operator<<(Ins);
+    StrWriter& operator<<(Sz);
+    StrWriter& operator<<(Szb);
     StrWriter& operator<<(Cc);
     StrWriter& operator<<(Cpcc);
     StrWriter& operator<<(Fcc);
@@ -147,21 +148,21 @@ public:
     StrWriter& operator<<(RegRegList);
     StrWriter& operator<<(FRegList);
 
-    template <Mode M, Size S> StrWriter& operator<<(const Ea<M,S> &);
+    StrWriter& operator<<(const Ea &);
 
-    template <Mode M, Size S> StrWriter& operator<<(Ai<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Pi<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Pd<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Di<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Ix<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(IxMot<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(IxMit<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(IxMus<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Aw<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Al<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(DiPc<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Im<M,S>);
-    template <Mode M, Size S> StrWriter& operator<<(Ip<M,S>);
+    StrWriter& operator<<(Ai);
+    StrWriter& operator<<(Pi);
+    StrWriter& operator<<(Pd);
+    StrWriter& operator<<(Di);
+    StrWriter& operator<<(Ix);
+    StrWriter& operator<<(IxMot);
+    StrWriter& operator<<(IxMit);
+    StrWriter& operator<<(IxMus);
+    StrWriter& operator<<(Aw);
+    StrWriter& operator<<(Al);
+    StrWriter& operator<<(DiPc);
+    StrWriter& operator<<(Im);
+    StrWriter& operator<<(Ip);
 
     StrWriter& operator<<(Scale);
     StrWriter& operator<<(Fc);
@@ -172,7 +173,7 @@ public:
     StrWriter& operator<<(Fctrl);
     StrWriter& operator<<(Tab);
     StrWriter& operator<<(Sep);
-    template <Instr I, Mode M, Size S> StrWriter& operator<<(const Av<I,M,S> &);
+    StrWriter& operator<<(const Av &);
     StrWriter& operator<<(Finish);
 };
 

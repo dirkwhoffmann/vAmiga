@@ -7,7 +7,8 @@
 
 // Assembles an instruction handler name
 #define EXEC_HANDLER(func,C,I,M,S) &Moira::exec##func<C,I,M,S>
-#define DASM_HANDLER(func,I,M,S) &Moira::dasm##func<I,M,S>
+#define DASM_HANDLER(func,I,M,S) \
+DasmEntry { &Moira::dasm##func, u16(I), u8(M), u8(S) }
 
 // Registers an instruction handler
 #if MOIRA_ENABLE_DASM == true
@@ -194,7 +195,7 @@ Moira::createJumpTable(Model cpuModel, Model dasmModel)
 // Registers the instruction handlers for a subset of the instruction set
 // (prologue ... AND)
 template <Core C> void
-Moira::createJumpTable1(Model model, bool regDasm)
+Moira::createJumpTable1([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -329,7 +330,7 @@ Moira::createJumpTable1(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (AND ... BKPT (68010+))
 template <Core C> void
-Moira::createJumpTable2(Model model, bool regDasm)
+Moira::createJumpTable2([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -765,7 +766,7 @@ Moira::createJumpTable3(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (CLR ... EOR)
 template <Core C> void
-Moira::createJumpTable4(Model model, bool regDasm)
+Moira::createJumpTable4([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -915,7 +916,7 @@ Moira::createJumpTable4(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (EOR ... LINK)
 template <Core C> void
-Moira::createJumpTable5(Model model, bool regDasm)
+Moira::createJumpTable5([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -1010,7 +1011,7 @@ Moira::createJumpTable5(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (LINK ... MOVEC)
 template <Core C> void
-Moira::createJumpTable6(Model model, bool regDasm)
+Moira::createJumpTable6([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -1186,7 +1187,7 @@ Moira::createJumpTable6(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (MOVEC ... MOVE from SR)
 template <Core C> void
-Moira::createJumpTable7(Model model, bool regDasm)
+Moira::createJumpTable7([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -1307,7 +1308,7 @@ Moira::createJumpTable7(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (MOVE from SR ... OR)
 template <Core C> void
-Moira::createJumpTable8(Model model, bool regDasm)
+Moira::createJumpTable8([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -1428,7 +1429,7 @@ Moira::createJumpTable8(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (OR ... RESET)
 template <Core C> void
-Moira::createJumpTable9(Model model, bool regDasm)
+Moira::createJumpTable9([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
@@ -1665,7 +1666,7 @@ Moira::createJumpTable10(Model model, bool regDasm)
 // Registers the instruction handlers for a subset of the instruction set
 // (Scc ... TAS)
 template <Core C> void
-Moira::createJumpTable11(Model model, bool regDasm)
+Moira::createJumpTable11([[maybe_unused]] Model model, bool regDasm)
 {
     [[maybe_unused]] u16 opcode;
 
