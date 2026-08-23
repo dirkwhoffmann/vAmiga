@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "DeviceDescriptors.h"
 #include "DeviceError.h"
 #include "FileSystems/Amiga/FSTypes.h"
@@ -221,25 +221,25 @@ GeometryDescriptor::dump(std::ostream &os) const
 void
 GeometryDescriptor::checkCompatibility() const
 {
-    // if CONSTEXPR (debug::HDR_ACCEPT_ALL) return;
+    // if CONSTEXPR (HDR_ACCEPT_ALL) return;
 
     // Check forced error conditions
-    if constexpr (force::HDR_UNKNOWN_GEOMETRY) {
+    if CONSTEXPR (HDR_UNKNOWN_GEOMETRY) {
         throw DeviceError(DeviceError::HDR_UNKNOWN_GEOMETRY);
     }
-    if constexpr (force::HDR_TOO_LARGE) {
+    if CONSTEXPR (HDR_TOO_LARGE) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE);
     }
-    if constexpr (force::HDR_UNSUPPORTED_C) {
+    if CONSTEXPR (HDR_UNSUPPORTED_C) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_CNT, cylinders);
     }
-    if constexpr (force::HDR_UNSUPPORTED_H) {
+    if CONSTEXPR (HDR_UNSUPPORTED_H) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_CNT, heads);
     }
-    if constexpr (force::HDR_UNSUPPORTED_S) {
+    if CONSTEXPR (HDR_UNSUPPORTED_S) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_CNT, sectors);
     }
-    if constexpr (force::HDR_UNSUPPORTED_B) {
+    if CONSTEXPR (HDR_UNSUPPORTED_B) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);
     }
     

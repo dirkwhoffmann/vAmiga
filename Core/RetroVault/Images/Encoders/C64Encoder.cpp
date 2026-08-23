@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "C64Encoder.h"
 #include "DeviceError.h"
 #include "GCR.h"
@@ -137,7 +137,7 @@ C64Encoder::encodeTrack(ByteView src, TrackNr t)
         totalBits += encodedBits;
     }
 
-    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_IMG != LogLevel::LV_OFF) {
 
         logme(LOG_IMG,
                 "\nTrack size: %ld Encoded: %ld Checksum: %x\n",

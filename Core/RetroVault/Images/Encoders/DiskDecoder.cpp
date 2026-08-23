@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "DiskDecoder.h"
 
 namespace retro::vault {

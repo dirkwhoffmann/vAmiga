@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
+#include "RetroVault/rvdebug.h"
 #include "Console.h"
 #include "Emulator.h"
 #include "utl/abilities/Loggable.h"
@@ -1573,7 +1574,17 @@ DebuggerConsole::initCommands(RSCommand &root)
     /* Logging and debug flags can only be changed in debug builds. In
      * release builds they are compile-time constants, so the commands
      * below are not registered at all.
+     *
+     * vAmiga and RetroVault maintain their own, independent flag tables.
+     * Both are listed and made settable here, addressed by table index.
      */
+
+    static const std::vector<const std::vector<utl::FlagInfo> *> logTables = {
+        &vamiga::logFlags, &retro::vault::logFlags
+    };
+    static const std::vector<const std::vector<utl::FlagInfo> *> debugTables = {
+        &vamiga::debugFlags, &retro::vault::debugFlags
+    };
 
     root.add({
 
@@ -1583,10 +1594,12 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            for (const auto &flag : utl::debug::logFlags) {
+            for (const auto *table : logTables) {
+                for (const auto &flag : *table) {
 
-                os << utl::tab(flag.name);
-                os << LogLevelEnum::key(LogLevel(flag.get())) << std::endl;
+                    os << utl::tab(flag.name);
+                    os << LogLevelEnum::key(LogLevel(flag.get())) << std::endl;
+                }
             }
         }
     });
@@ -1597,30 +1610,33 @@ DebuggerConsole::initCommands(RSCommand &root)
         .ghelp  = { "Change a logging flag" }
     });
 
-    for (isize i = 0; i < isize(utl::debug::logFlags.size()); i++) {
+    for (isize t = 0; t < isize(logTables.size()); t++) {
 
-        const auto &flag = utl::debug::logFlags[i];
+        for (isize i = 0; i < isize(logTables[t]->size()); i++) {
 
-        root.add({
-
-            .tokens = { "log", "set", flag.name },
-            .ghelp  = { flag.help }
-        });
-
-        // Register a setter for every severity level
-        for (const auto &[key, value] : LogLevelEnum::pairs()) {
+            const auto &flag = (*logTables[t])[i];
 
             root.add({
 
-                .tokens = { "log", "set", flag.name, key },
-                .chelp  = { LogLevelEnum::help(value) },
-
-                .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                    utl::debug::logFlags[values[0]].set(values[1]);
-
-                }, .payload = { i, value }
+                .tokens = { "log", "set", flag.name },
+                .ghelp  = { flag.help }
             });
+
+            // Register a setter for every severity level
+            for (const auto &[key, value] : LogLevelEnum::pairs()) {
+
+                root.add({
+
+                    .tokens = { "log", "set", flag.name, key },
+                    .chelp  = { LogLevelEnum::help(value) },
+
+                    .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                        (*logTables[values[0]])[values[1]].set(values[2]);
+
+                    }, .payload = { t, i, value }
+                });
+            }
         }
     }
 
@@ -1632,13 +1648,15 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            for (const auto &flag : utl::debug::debugFlags) {
+            for (const auto *table : debugTables) {
+                for (const auto &flag : *table) {
 
-                os << utl::tab(flag.name);
-                if (flag.boolean) {
-                    os << utl::bol(flag.get() != 0) << std::endl;
-                } else {
-                    os << utl::dec(flag.get()) << std::endl;
+                    os << utl::tab(flag.name);
+                    if (flag.boolean) {
+                        os << utl::bol(flag.get() != 0) << std::endl;
+                    } else {
+                        os << utl::dec(flag.get()) << std::endl;
+                    }
                 }
             }
         }
@@ -1650,51 +1668,54 @@ DebuggerConsole::initCommands(RSCommand &root)
         .ghelp  = { "Change a debug flag" }
     });
 
-    for (isize i = 0; i < isize(utl::debug::debugFlags.size()); i++) {
+    for (isize t = 0; t < isize(debugTables.size()); t++) {
 
-        const auto &flag = utl::debug::debugFlags[i];
+        for (isize i = 0; i < isize(debugTables[t]->size()); i++) {
 
-        if (flag.boolean) {
+            const auto &flag = (*debugTables[t])[i];
 
-            root.add({
-
-                .tokens = { "debug", "set", flag.name },
-                .ghelp  = { flag.help }
-            });
-
-            // Register a setter for both boolean values
-            for (const auto &[key, value] : std::vector<std::pair<string,isize>>
-                 { { "false", 0 }, { "true", 1 } }) {
+            if (flag.boolean) {
 
                 root.add({
 
-                    .tokens = { "debug", "set", flag.name, key },
-                    .chelp  = { value ? "Enable the flag" : "Disable the flag" },
+                    .tokens = { "debug", "set", flag.name },
+                    .ghelp  = { flag.help }
+                });
 
-                    .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+                // Register a setter for both boolean values
+                for (const auto &[key, value] : std::vector<std::pair<string,isize>>
+                     { { "false", 0 }, { "true", 1 } }) {
 
-                        utl::debug::debugFlags[values[0]].set(values[1]);
+                    root.add({
 
-                    }, .payload = { i, value }
+                        .tokens = { "debug", "set", flag.name, key },
+                        .chelp  = { value ? "Enable the flag" : "Disable the flag" },
+
+                        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                            (*debugTables[values[0]])[values[1]].set(values[2]);
+
+                        }, .payload = { t, i, value }
+                    });
+                }
+
+            } else {
+
+                // The flag holds a parameter value. Register a single setter
+                root.add({
+
+                    .tokens = { "debug", "set", flag.name },
+                    .chelp  = { flag.help },
+                    .args   = {
+                        { .name = { "value", "Parameter value" } }
+                    },
+                    .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                        (*debugTables[values[0]])[values[1]].set(parseNum(args, "value"));
+
+                    }, .payload = { t, i }
                 });
             }
-
-        } else {
-
-            // The flag holds a parameter value. Register a single setter
-            root.add({
-
-                .tokens = { "debug", "set", flag.name },
-                .chelp  = { flag.help },
-                .args   = {
-                    { .name = { "value", "Parameter value" } }
-                },
-                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                    utl::debug::debugFlags[values[0]].set(parseNum(args, "value"));
-
-                }, .payload = { i }
-            });
         }
     }
 

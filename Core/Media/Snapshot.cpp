@@ -68,11 +68,11 @@ Snapshot::Snapshot(isize capacity)
 
 Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 {
-    {   utl::StopWatch(debug::SNP_DEBUG, "Taking screenshot...");
+    {   utl::StopWatch(SNP_DEBUG, "Taking screenshot...");
 
         takeScreenshot(amiga);
     }
-    {   utl::StopWatch(debug::SNP_DEBUG, "Saving state...");
+    {   utl::StopWatch(SNP_DEBUG, "Saving state...");
 
         amiga.save(getData() + sizeof(SnapshotHeader));
     }
@@ -86,9 +86,9 @@ Snapshot::Snapshot(Amiga &amiga, Compressor compressor) : Snapshot(amiga)
 void
 Snapshot::didLoad()
 {
-    if (force::SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
-    if (force::SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);
-    if (force::SNAP_IS_BETA) throw MediaError(MediaError::SNAP_IS_BETA);
+    if (SNAP_TOO_OLD) throw MediaError(MediaError::SNAP_TOO_OLD);
+    if (SNAP_TOO_NEW) throw MediaError(MediaError::SNAP_TOO_NEW);
+    if (SNAP_IS_BETA) throw MediaError(MediaError::SNAP_IS_BETA);
 
     if (isTooOld()) throw MediaError(MediaError::SNAP_TOO_OLD);
     if (isTooNew()) throw MediaError(MediaError::SNAP_TOO_NEW);
@@ -154,13 +154,13 @@ Snapshot::takeScreenshot(Amiga &amiga)
 void
 Snapshot::compress(Compressor compressor)
 {
-    if CONSTEXPR (debug::SNP_DEBUG) logme(LV_DEBUG, "compress(%s)\n", CompressorEnum::key(compressor));
+    if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "compress(%s)\n", CompressorEnum::key(compressor));
 
     if (!isCompressed()) {
 
-        if CONSTEXPR (debug::SNP_DEBUG) logme(LV_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
+        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
-        {   auto watch = utl::StopWatch(debug::SNP_DEBUG, "");
+        {   auto watch = utl::StopWatch(SNP_DEBUG, "");
 
             switch (compressor) {
                     
@@ -173,21 +173,21 @@ Snapshot::compress(Compressor compressor)
             
             getHeader()->compressor = u8(compressor);
         }
-        if CONSTEXPR (debug::SNP_DEBUG) logme(LV_DEBUG, "Compressed size: %ld bytes\n", data.size);
+        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Compressed size: %ld bytes\n", data.size);
     }
 }
 void
 Snapshot::uncompress()
 {
-    if CONSTEXPR (debug::SNP_DEBUG) logme(LV_DEBUG, "uncompress(%s)\n", CompressorEnum::key(compressor()));
+    if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "uncompress(%s)\n", CompressorEnum::key(compressor()));
 
     if (isCompressed()) {
         
         isize expectedSize = getHeader()->rawSize;
         
-        if CONSTEXPR (debug::SNP_DEBUG) logme(LV_DEBUG, "Uncompressing %ld bytes...", data.size);
+        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Uncompressing %ld bytes...", data.size);
         
-        {   auto watch = utl::StopWatch(debug::SNP_DEBUG, "");
+        {   auto watch = utl::StopWatch(SNP_DEBUG, "");
         
             switch (compressor()) {
                     
@@ -200,7 +200,7 @@ Snapshot::uncompress()
             
             getHeader()->compressor = u8(Compressor::NONE);
         }
-        if CONSTEXPR (debug::SNP_DEBUG) logme(LV_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
+        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
         
         if (getHeader()->rawSize != expectedSize) {
          

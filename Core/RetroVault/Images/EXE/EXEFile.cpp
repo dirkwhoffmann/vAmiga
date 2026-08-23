@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "EXEFile.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"
@@ -74,7 +74,7 @@ EXEFile::didInitialize()
     // Finalize
     fs.flush();
 
-    if CONSTEXPR (debug::FS_VERIFY) {
+    if CONSTEXPR (FS_VERIFY) {
 
         // Print some debug information about the volume
         fs.dumpState();

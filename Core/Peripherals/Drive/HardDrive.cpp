@@ -50,7 +50,7 @@ HardDrive::operator= (const HardDrive& other) {
     CLONE(state)
     CLONE(flags)
 
-    if CONSTEXPR (debug::RUA_ON_STEROIDS) {
+    if CONSTEXPR (RUA_ON_STEROIDS) {
 
         // Clone all blocks
         CLONE(data)
@@ -89,7 +89,7 @@ HardDrive::init()
     drivers.clear();
     head = {};
     setFlag(DiskFlags::BOOTABLE, false);
-    setFlag(DiskFlags::MODIFIED, force::HDR_MODIFIED);
+    setFlag(DiskFlags::MODIFIED, HDR_MODIFIED);
 }
 
 void
@@ -168,7 +168,7 @@ HardDrive::init(const HDFFile &hdf)
     // Copy over all needed file system drivers
     for (const auto &driver : hdf.drivers) {
 
-        bool needed = debug::HDR_FS_LOAD_ALL;
+        bool needed = HDR_FS_LOAD_ALL;
 
         for (const auto &part : ptable) {
             if (driver.dosType == part.dosType) {
@@ -199,7 +199,7 @@ HardDrive::init(const HDFFile &hdf)
         
     // Print some debug information
     logme(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
-    if CONSTEXPR (debug::LOG_HDR != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_HDR != LogLevel::LV_OFF) {
         for (auto &driver : drivers) driver.dump();
     }
 }
@@ -235,7 +235,7 @@ HardDrive::_initialize()
 void
 HardDrive::_didReset(bool hard)
 {
-    if constexpr (force::HDR_MODIFIED)
+    if CONSTEXPR (HDR_MODIFIED)
         setFlag(DiskFlags::MODIFIED, true);
 
     // Mark all blocks as dirty
@@ -539,7 +539,7 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
 {
     using amiga::FSFormat;
 
-    if CONSTEXPR (debug::LOG_HDR != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_HDR != LogLevel::LV_OFF) {
 
         logme(LOG_HDR, "Formatting hard drive\n");
         logme(LOG_HDR, "    File system : %s\n", amiga::FSFormatEnum::key(fsType));

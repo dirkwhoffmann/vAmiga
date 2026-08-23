@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/Amiga/FSDoctor.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"

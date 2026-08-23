@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/CBM/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
@@ -32,7 +32,7 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     // Derive persistant file system properties
     traits.init(cache.predictDOS(vol), vol.capacity());
 
-    if CONSTEXPR (debug::FS_VERIFY) dumpStatfs();
+    if CONSTEXPR (FS_VERIFY) dumpStatfs();
     logme(LOG_FS, "Success\n");
 }
 

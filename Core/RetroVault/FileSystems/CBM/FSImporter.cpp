@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/CBM/FileSystem.h"
 #include "utl/io.h"
 #include <fstream>
@@ -77,7 +77,7 @@ void FSImporter::import(const fs::path &path)
     }
 
     // Verify the result
-    if CONSTEXPR (debug::FS_VERIFY) fs.doctor.xray(true, std::cout, false);
+    if CONSTEXPR (FS_VERIFY) fs.doctor.xray(true, std::cout, false);
 }
 
 void

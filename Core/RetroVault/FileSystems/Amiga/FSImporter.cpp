@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"
 #include <fstream>
@@ -79,7 +79,7 @@ FSImporter::import(BlockNr top, const fs::path &path, bool recursive, bool conte
     }
 
     // Verify the result
-    if CONSTEXPR (debug::FS_VERIFY) {
+    if CONSTEXPR (FS_VERIFY) {
         
         fs.flush();
         fs.doctor.xray(true, std::cout, false);

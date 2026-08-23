@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------------
-// This file is part of vAmiga
+// This file is part of RetroVault
 //
 // Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
 // Licensed under the Mozilla Public License v2
@@ -7,15 +7,15 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
-#include "debug.h"
+#include "rvconfig.h"
+#include "utl/abilities/Loggable.h"
 #include <type_traits>
 
 #ifndef NDEBUG
 
-namespace vamiga {
+namespace retro::vault {
 
-/* The flag descriptor tables, generated from the X-macro lists in debug.h.
+/* The flag descriptor tables, generated from the X-macro lists in rvdebug.h.
  * Each entry wraps its flag in a pair of captureless lambdas, so that flags
  * of different types can be read and written through a common interface.
  */
@@ -30,8 +30,8 @@ namespace vamiga {
       []() -> long { return (long)name; }, \
       [](long value) { name = (type)value; } },
 
-const std::vector<FlagInfo> logFlags = { LOG_FLAGS(LOG_FLAG_ENTRY) };
-const std::vector<FlagInfo> debugFlags = { DEBUG_FLAGS(DEBUG_FLAG_ENTRY) };
+const std::vector<FlagInfo> logFlags = { RV_LOG_FLAGS(LOG_FLAG_ENTRY) };
+const std::vector<FlagInfo> debugFlags = { RV_DEBUG_FLAGS(DEBUG_FLAG_ENTRY) };
 
 #undef LOG_FLAG_ENTRY
 #undef DEBUG_FLAG_ENTRY

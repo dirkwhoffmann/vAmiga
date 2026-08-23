@@ -122,9 +122,9 @@ DeniseDebugger::getSpriteInfo(isize nr)
 void
 DeniseDebugger::hsyncHandler(isize vpos)
 {
-    if CONSTEXPR (debug::LINE_DEBUG != -1) {
+    if CONSTEXPR (LINE_DEBUG != -1) {
 
-        if (debug::LINE_DEBUG == vpos) {
+        if (LINE_DEBUG == vpos) {
 
             /* One Texel holds two RGBA values, so the color has to be run
              * through the TEXEL macro. Assigning a plain 32 bit value would

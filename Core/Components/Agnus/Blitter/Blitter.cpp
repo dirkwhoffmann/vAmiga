@@ -62,7 +62,7 @@ Blitter::_didReset(bool hard)
 void
 Blitter::_run()
 {
-    if CONSTEXPR (debug::BLT_MEM_GUARD) {
+    if CONSTEXPR (BLT_MEM_GUARD) {
 
         memguard.resize(mem.getConfig().chipSize);
         memguard.clear();
@@ -128,7 +128,7 @@ Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
 {
     u16 result = (u16)doMintermLogicQuick(a, b, c, minterm);
 
-    if CONSTEXPR (debug::BLT_MINTERM_CHECK) {
+    if CONSTEXPR (BLT_MINTERM_CHECK) {
 
         u16 result2 = 0;
         
@@ -502,7 +502,7 @@ Blitter::beginBlit()
 
     if (bltconLINE()) {
 
-        if CONSTEXPR (debug::BLT_CHECKSUM) {
+        if CONSTEXPR (BLT_CHECKSUM) {
 
             linecount++;
             check1 = check2 = Hashable::fnvInit32();
@@ -521,7 +521,7 @@ Blitter::beginBlit()
 
     } else {
 
-        if CONSTEXPR (debug::BLT_CHECKSUM) {
+        if CONSTEXPR (BLT_CHECKSUM) {
 
             copycount++;
             check1 = check2 = Hashable::fnvInit32();
@@ -548,7 +548,7 @@ Blitter::beginLineBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        if CONSTEXPR (debug::BLT_CHECKSUM) logme(LV_DEBUG, "Performing level %ld line blits.\n", level);
+        if CONSTEXPR (BLT_CHECKSUM) logme(LV_DEBUG, "Performing level %ld line blits.\n", level);
     }
     if (bltcon0 & BLTCON0_USEB) {
         xfiles("Performing line blit with channel B enabled\n");
@@ -574,7 +574,7 @@ Blitter::beginCopyBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        if CONSTEXPR (debug::BLT_CHECKSUM) logme(LV_DEBUG, "Performing level %ld copy blits.\n", level);
+        if CONSTEXPR (BLT_CHECKSUM) logme(LV_DEBUG, "Performing level %ld copy blits.\n", level);
     }
 
     switch (level) {
@@ -603,13 +603,13 @@ Blitter::endBlit()
     logme(LOG_BLTTIM, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
-    if CONSTEXPR (debug::BLT_MEM_GUARD) blitcount++;
+    if CONSTEXPR (BLT_MEM_GUARD) blitcount++;
     
     // Clear the Blitter slot
     agnus.cancel<SLOT_BLT>();
     
     // Dump checksums if requested
-    if CONSTEXPR (debug::BLT_CHECKSUM) {
+    if CONSTEXPR (BLT_CHECKSUM) {
         logme(LV_DEBUG,
               "check1: %x check2: %x ABCD: %x %x %x %x\n",
               check1, check2,

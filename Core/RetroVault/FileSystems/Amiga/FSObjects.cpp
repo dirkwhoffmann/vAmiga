@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/PosixViewTypes.h"
 #include "FileSystems/Amiga/FSObjects.h"
 #include "FileSystems/Amiga/FSBlock.h"

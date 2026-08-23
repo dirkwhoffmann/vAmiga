@@ -38,6 +38,7 @@ target_compile_options(RetroVault PUBLIC
 )
 
 # Source files
+target_sources(RetroVault PRIVATE rvdebug.cpp)
 add_subdirectory(Devices)
 add_subdirectory(Images)
 add_subdirectory(FileSystems)

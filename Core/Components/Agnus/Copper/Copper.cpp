@@ -418,7 +418,7 @@ Copper::eofHandler()
      */
     agnus.scheduleRel <SLOT_COP> (DMA_CYCLES(0), COP_VBLANK);
     
-    if CONSTEXPR (debug::COP_CHECKSUM) {
+    if CONSTEXPR (COP_CHECKSUM) {
 
         if (checkcnt)
             logme(LV_DEBUG, "[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",

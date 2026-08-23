@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/CBM/FileSystem.h"
 #include "utl/support.h"
 #include <bit>
@@ -181,7 +181,7 @@ FSAllocator::numUnallocated() const noexcept
     for (isize i = 0x04; i < 0x8F; i += 4)
         result += data[i];
 
-    if CONSTEXPR (debug::FS_VERIFY) {
+    if CONSTEXPR (FS_VERIFY) {
 
         isize count = 0;
         for (isize i = 0; i < fs.blocks(); ++i) { if (isFree(BlockNr(i))) count++; }

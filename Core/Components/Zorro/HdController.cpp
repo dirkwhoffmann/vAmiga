@@ -348,7 +348,7 @@ HdController::processCmd(u32 ptr)
     auto length = isize(stdReq.io_Length);
     auto addr = u32(stdReq.io_Data);
     
-    if CONSTEXPR (debug::LOG_HDR != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_HDR != LogLevel::LV_OFF) {
 
         [[maybe_unused]] auto unit = mem.spypeek32 <Accessor::CPU> (stdReq.io_Unit + 0x2A);
         [[maybe_unused]] auto blck = offset / 512;
@@ -530,7 +530,7 @@ HdController::processResource(u32 ptr)
         
         for (auto it = drivers.begin(); it != drivers.end(); ) {
 
-            if CONSTEXPR (debug::HDR_FS_LOAD_ALL) {
+            if CONSTEXPR (HDR_FS_LOAD_ALL) {
 
                 it++;
                 continue;

@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/Amiga/FSDescriptor.h"
 #include "FileSystems/FSError.h"
 #include "BlockDevice.h"
@@ -126,10 +126,10 @@ FSDescriptor::dump(std::ostream &os) const
 void
 FSDescriptor::checkCompatibility() const
 {
-    if constexpr (force::FS_WRONG_CAPACITY)
+    if CONSTEXPR (FS_WRONG_CAPACITY)
         throw FSError(FSError::FS_WRONG_CAPACITY);
 
-    if constexpr (force::FS_WRONG_BSIZE)
+    if CONSTEXPR (FS_WRONG_BSIZE)
         throw FSError(FSError::FS_WRONG_BSIZE);
 
     if (numBytes() > 504_MB)

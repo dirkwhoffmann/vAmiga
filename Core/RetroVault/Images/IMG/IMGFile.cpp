@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "IMGFile.h"
 #include "DeviceError.h"
 #include "DOSEncoder.h"

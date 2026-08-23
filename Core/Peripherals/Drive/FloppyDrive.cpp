@@ -884,14 +884,14 @@ FloppyDrive::readyToStepUp() const
     // Check step delay
     if (agnus.clock - latestStep < getStepPulseDelay()) {
 
-        if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring head step\n");
+        if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring head step\n");
         return false;
     }
 
     // If the step direction reverses, some extra-time is needed (?)
     if (agnus.clock - latestStepDown < getRevStepPulseDelay()) {
 
-        if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring reverse head step\n");
+        if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring reverse head step\n");
         return false;
     }
 
@@ -904,14 +904,14 @@ FloppyDrive::readyToStepDown() const
     // Check step delay
     if (agnus.clock - latestStep < getStepPulseDelay()) {
 
-        if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring head step\n");
+        if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring head step\n");
         return false;
     }
 
     // If the step direction reverses, some extra-time is needed (?)
     if (agnus.clock - latestStepUp < getRevStepPulseDelay()) {
 
-        if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring reverse head step\n");
+        if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG, "Ignoring reverse head step\n");
         return false;
     }
 
@@ -945,7 +945,7 @@ FloppyDrive::step(isize dir)
             latestStep = latestStepDown = agnus.clock;
         }
 
-        if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG, "Stepping down to cylinder %ld\n", head.cylinder);
+        if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG, "Stepping down to cylinder %ld\n", head.cylinder);
 
     } else {
 
@@ -966,13 +966,13 @@ FloppyDrive::step(isize dir)
             latestStep = latestStepUp = agnus.clock;
         }
 
-        if CONSTEXPR (debug::DSK_CHECKSUM) logme(LV_DEBUG, "Stepping up to cylinder %ld\n", head.cylinder);
+        if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG, "Stepping up to cylinder %ld\n", head.cylinder);
     }
     
     if (didStep) {
 
         // Push drive head forward
-        if CONSTEXPR (debug::ALIGN_HEAD) head.offset = 0;
+        if CONSTEXPR (ALIGN_HEAD) head.offset = 0;
 
         // Notify the GUI
         if (pollsForDisk()) {
@@ -1232,7 +1232,7 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     fs.makeBootable(bb);
 
     // Check file system consistency
-    if CONSTEXPR (debug::FS_VERIFY) fs.doctor.xray(true, std::cout, false);
+    if CONSTEXPR (FS_VERIFY) fs.doctor.xray(true, std::cout, false);
 
     // Force the ADF to update
     fs.flush();

@@ -264,11 +264,11 @@ CoreComponent::load(const u8 *buf)
         auto count = u64(reader.ptr - (buf + result));
 
         // Check integrity
-        if (size != count || hash != c->checksum(false) || force::SNAP_CORRUPTED) {
+        if (size != count || hash != c->checksum(false) || SNAP_CORRUPTED) {
 
-            logme(LV_CRITICAL, "Loaded %llu bytes (expected %llu)\n", count, size);
-            logme(LV_CRITICAL, "Hash: %llx (expected %llx)\n", hash, c->checksum(false));
-            if CONSTEXPR (debug::SNP_DEBUG) { fatalError; }
+            logme(LV_ERROR, "Loaded %llu bytes (expected %llu)\n", count, size);
+            logme(LV_ERROR, "Hash: %llx (expected %llx)\n", hash, c->checksum(false));
+            if CONSTEXPR (SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
@@ -302,10 +302,10 @@ CoreComponent::save(u8 *buffer)
         isize count = (isize)(writer.ptr - (buffer + result));
 
         // Check integrity
-        if (count != c->size(false) || force::SNAP_CORRUPTED) {
+        if (count != c->size(false) || SNAP_CORRUPTED) {
 
-            logme(LV_CRITICAL, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
-            if CONSTEXPR (debug::SNP_DEBUG) { fatalError; }
+            logme(LV_ERROR, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
+            if CONSTEXPR (SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }

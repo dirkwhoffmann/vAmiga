@@ -37,7 +37,7 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
     if (dia == Diameter::INCH_35  && den == Density::HD) numTrackBytes = 24636;
     if (dia == Diameter::INCH_525 && den == Density::DD) numTrackBytes = 12668;
 
-    if (numTrackBytes == 0 || force::DISK_INVALID_LAYOUT) {
+    if (numTrackBytes == 0 || DISK_INVALID_LAYOUT) {
         throw DeviceError(DeviceError::DSK_INVALID_LAYOUT);
     }
 
@@ -291,7 +291,7 @@ FloppyDisk::write8(CylNr c, HeadNr h, isize offset, u8 value)
 void
 FloppyDisk::clearDisk()
 {
-    setModified(force::DISK_MODIFIED);
+    setModified(DISK_MODIFIED);
 
     // Initialize with random data
     srand(0);
@@ -370,14 +370,14 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
         replaceTrack(t, image.encode(t));
 
     /*
-    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_IMG != LogLevel::LV_OFF) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
         Codec::makeIMG(*this)->writeToFile(tmp);
     }
      */
-    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_IMG != LogLevel::LV_OFF) {
 
         /*
         string tmp = "/tmp/debug.img";
@@ -389,7 +389,7 @@ FloppyDisk::encodeDisk(const FloppyDiskImage &image)
 
     // In debug mode, also run the decoder
     /*
-    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_IMG != LogLevel::LV_OFF) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -435,7 +435,7 @@ FloppyDisk::encode(const ADFFile &adf)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, adf.encode(t));
 
     // In debug mode, also run the decoder
-    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_IMG != LogLevel::LV_OFF) {
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -482,7 +482,7 @@ FloppyDisk::encode(const class IMGFile &img)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
-    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_IMG != LogLevel::LV_OFF) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
@@ -528,7 +528,7 @@ FloppyDisk::encode(const class STFile &img)
     for (TrackNr t = 0; t < tracks; ++t) replaceTrack(t, img.encode(t));
 
     // In debug mode, also run the decoder
-    if CONSTEXPR (debug::LOG_IMG != LogLevel::LOG_NONE) {
+    if CONSTEXPR (LOG_IMG != LogLevel::LV_OFF) {
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());

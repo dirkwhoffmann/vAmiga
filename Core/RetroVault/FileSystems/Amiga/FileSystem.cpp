@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/io.h"
 #include "utl/support/Strings.h"
@@ -54,7 +54,7 @@ FileSystem::FileSystem(Volume &vol) : cache(*this, vol)
     bmBlocks        = layout.bmBlocks;
     bmExtBlocks     = layout.bmExtBlocks;
 
-    if CONSTEXPR (debug::FS_VERIFY) dumpState();
+    if CONSTEXPR (FS_VERIFY) dumpState();
 
     // Set the current directory to '/'
     current = rootBlock;

@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "rvconfig.h"
 #include "FileSystems/CBM/FSTraits.h"
 #include "FileSystems/FSError.h"
 #include "BlockDevice.h"
@@ -65,10 +65,10 @@ FSTraits::checkCompatibility() const
 {
     auto blocks = numBlocks();
 
-    if constexpr (force::FS_WRONG_CAPACITY)
+    if CONSTEXPR (FS_WRONG_CAPACITY)
         throw FSError(FSError::FS_WRONG_CAPACITY);
 
-    if constexpr (force::FS_WRONG_BSIZE)
+    if CONSTEXPR (FS_WRONG_BSIZE)
         throw FSError(FSError::FS_WRONG_BSIZE);
 
     if (blocks != 683 && blocks != 768 && blocks != 802)
