@@ -17,9 +17,8 @@ Moira::disassemble(char *str, u32 addr) const
 
     StrWriter writer(str, instrStyle);
 
-    auto &entry = dasm[opcode];
-    (this->*entry.fn)(writer, pc, opcode,
-                      Instr(entry.i), Mode(entry.m), Size(entry.s));
+    auto &nfo = info[opcode];
+    (this->*dasm[opcode])(writer, pc, opcode, nfo.I, nfo.M, nfo.S);
     writer << Finish{};
 
     // Post process disassembler output

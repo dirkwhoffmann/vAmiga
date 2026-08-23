@@ -114,21 +114,12 @@ private:
     /* Jump table holding the disassembler handlers.
      *
      * Since the handlers are not templated, the instruction, addressing mode
-     * and size attributes that used to be template arguments are stored next
-     * to the function pointer and passed in at call time. The attributes are
-     * narrowed to keep the table small; it holds 65536 entries.
+     * and size attributes that used to be template arguments are passed in at
+     * call time. They are read from the InstrInfo table, which is built
+     * alongside this one.
      */
     typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16, Instr, Mode, Size) const;
-
-    struct DasmEntry {
-
-        DasmPtr fn;
-        u16 i;              // Instr
-        u8  m;              // Mode
-        u8  s;              // Size
-    };
-
-    DasmEntry *dasm = nullptr;
+    DasmPtr *dasm = nullptr;
     
     // Table holding instruction information
     InstrInfo *info = nullptr;
