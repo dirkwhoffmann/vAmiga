@@ -22,9 +22,7 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<CoreComponent *> {
         
-        &commander,
-        &debugger,
-        &navigator
+        &console
     };
 
     info.bind([this] { return cacheInfo(); } );
@@ -41,34 +39,20 @@ RetroShell::cacheInfo() const
 {
     RetroShellInfo info;
 
-    info.console = current->objid;
-    info.cursorRel = current->cursorRel();
+    info.console = isize(console.getCommandSet());
+    info.cursorRel = console.cursorRel();
 
     return info;
 }
 
 void
-RetroShell::enterConsole(isize nr)
+RetroShell::enterConsole(CommandSet cs)
 {
-    Console *newConsole = nullptr;
-    
-    switch (nr) {
-            
-        case 0: newConsole = &commander; break;
-        case 1: newConsole = &debugger; break;
-        case 2: newConsole = &navigator; break;
-            
-        default:
-            fatalError;
-    }
-
-    // Switch to the new console
-    if (current) current->didDeactivate();
-    current = newConsole;
-    current->didActivate();
+    // Replace the command tree
+    console.setCommandSet(cs);
     
     // Inform the GUI about the change
-    msgQueue.put(Msg::RSH_SWITCH, nr);
+    msgQueue.put(Msg::RSH_SWITCH, isize(cs));
 }
 
 void
@@ -180,7 +164,7 @@ RetroShell::exec()
         }
 
         // Print prompt
-        if (current->lastLineIsEmpty()) *this << current->prompt();
+        if (console.lastLineIsEmpty()) *this << console.prompt();
     }
 }
 
@@ -190,7 +174,7 @@ RetroShell::exec(const InputLine &cmd)
     try {
 
         // Call the interpreter
-        current->exec(cmd);
+        console.exec(cmd);
 
     } catch (ScriptInterruption &) {
 
@@ -207,90 +191,90 @@ RetroShell::exec(const InputLine &cmd)
 RetroShell &
 RetroShell::operator<<(char value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(const char *value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(const string &value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(int value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(unsigned int value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(long value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(unsigned long value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(long long value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(unsigned long long value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 RetroShell &
 RetroShell::operator<<(std::stringstream &stream)
 {
-    *current << stream;
+    console << stream;
     return *this;
 }
 
 RetroShell&
 RetroShell::operator<<(const vspace &value)
 {
-    *current << value;
+    console << value;
     return *this;
 }
 
 const char *
 RetroShell::text()
 {
-    return current->text();
+    return console.text();
 }
 
 isize
 RetroShell::cursorRel()
 {
-    return current->cursorRel();
+    return console.cursorRel();
 }
 
 void
@@ -302,10 +286,15 @@ RetroShell::press(RSKey key, bool shift)
                 
             case RSKey::TAB:
                 
-                if (current->objid == 0) current->input = "debugger";
-                if (current->objid == 1) current->input = "navigator";
-                if (current->objid == 2) current->input = "commander";
-                current->pressReturn(false);
+                // Cycle through the available command sets
+                switch (console.getCommandSet()) {
+                        
+                    case CommandSet::Commander:     console.input = "debugger"; break;
+                    case CommandSet::Debugger:      console.input = "navigator"; break;
+                    case CommandSet::Navigator:     console.input = "cbmnavigator"; break;
+                    case CommandSet::CBMNavigator:  console.input = "commander"; break;
+                }
+                console.pressReturn(false);
                 return;
                 
             default:
@@ -313,27 +302,25 @@ RetroShell::press(RSKey key, bool shift)
         }
     }
     
-    current->press(key, shift);
+    console.press(key, shift);
 }
 
 void
 RetroShell::press(char c)
 {
-    current->press(c);
+    console.press(c);
 }
 
 void
 RetroShell::press(const string &s)
 {
-    current->press(s);
+    console.press(s);
 }
 
 void
 RetroShell::setStream(std::ostream &os)
 {
-    commander.setStream(os);
-    debugger.setStream(os);
-    navigator.setStream(os);
+    console.setStream(os);
 }
 
 void

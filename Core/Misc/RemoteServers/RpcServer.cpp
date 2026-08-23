@@ -21,8 +21,7 @@ using nlohmann::json;
 void
 RpcServer::_initialize()
 {
-    retroShell.commander.delegates.push_back(this);
-    retroShell.debugger.delegates.push_back(this);
+    retroShell.console.delegates.push_back(this);
 }
 
 

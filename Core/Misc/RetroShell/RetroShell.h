@@ -19,23 +19,28 @@
 #include <functional>
 
 /* RetroShell is a text-based command shell capable of controlling the emulator.
- * The shell's functionality is split among multiple consoles:
+ * The shell consists of a single console whose command tree is replaced when
+ * the user switches between the following command sets:
  *
  * 1. Commmander:
  *
- *    This console is the default console and offers various command for
+ *    This command set is the default and offers various command for
  *    configuring the emulator and performing actions such as ejecting a disk.
  *
  * 2. Debugger:
  *
- *    This console offers multiple debug command similar to the ones found in
+ *    This command set offers multiple debug command similar to the ones found in
  *    debug monitor. E.g., it is possible to inspect the registers of various
  *    components or generating a memory dump.
  *
  * 3. Navigator:
  *
- *    This console allows to import disks and hard drives and analyze their
- *    file system. 
+ *    This command set allows to import disks and hard drives and analyze their
+ *    Amiga file system.
+ *
+ * 4. CBM Navigator:
+ *
+ *    The counterpart of the Navigator for CBM file systems.
  */
 
 namespace vamiga {
@@ -63,17 +68,14 @@ public:
 
 private:
 
-    TextStorage s1, s2, s3;
+    TextStorage storage;
     
 public:
     
-    // Consoles
-    CommanderConsole commander = CommanderConsole(amiga, 0, s1);
-    DebuggerConsole debugger = DebuggerConsole(amiga, 1, s1);
-    // NavigatorConsole navigator = NavigatorConsole(amiga, 2, s1);
-    CBMNavigator navigator = CBMNavigator(amiga, 2, s1);
+    // The console
+    Console console = Console(amiga, 0, storage);
 
-    // Indicates if one of the consoles has new contents
+    // Indicates if the console has new contents
     bool isDirty = false;
     
 private:
@@ -81,14 +83,14 @@ private:
     // Command queue (stores all pending commands)
     std::vector<InputLine> commands = { InputLine {.input = "commander"}};
 
-    // The currently active console
-    Console *current = &debugger;
-
 public:
     
-    bool inCommandShell() { return current == &commander; }
-    bool inDebugShell() { return current == &debugger; }
-    bool inNavigator() { return current == &navigator; }
+    CommandSet commandSet() const { return console.getCommandSet(); }
+
+    bool inCommandShell() const { return commandSet() == CommandSet::Commander; }
+    bool inDebugShell() const { return commandSet() == CommandSet::Debugger; }
+    bool inNavigator() const { return commandSet() == CommandSet::Navigator; }
+    bool inCBMNavigator() const { return commandSet() == CommandSet::CBMNavigator; }
     
     
     //
@@ -143,15 +145,16 @@ public:
     
     
     //
-    // Managing consoles
+    // Managing the command set
     //
     
 public:
     
-    void enterConsole(isize nr);
-    void enterCommander() { enterConsole(0); }
-    void enterDebugger() { enterConsole(1); }
-    void enterNavigator() { enterConsole(2); }
+    void enterConsole(CommandSet cs);
+    void enterCommander() { enterConsole(CommandSet::Commander); }
+    void enterDebugger() { enterConsole(CommandSet::Debugger); }
+    void enterNavigator() { enterConsole(CommandSet::Navigator); }
+    void enterCBMNavigator() { enterConsole(CommandSet::CBMNavigator); }
     
     
     //
@@ -199,7 +202,7 @@ public:
     RetroShell &operator<<(unsigned long long value);
     RetroShell &operator<<(std::stringstream &stream);
     RetroShell &operator<<(const vspace &value);
-    string prompt() { return current ? current->prompt() : ""; }
+    string prompt() { return console.prompt(); }
     const char *text();
     isize cursorRel();
     void press(RSKey key, bool shift = false);

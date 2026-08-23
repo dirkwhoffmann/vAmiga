@@ -17,6 +17,36 @@ namespace vamiga {
 // Enumerations
 //
 
+enum class CommandSet
+{
+    Commander,      // Commands for controlling the emulator
+    Debugger,       // Commands for debugging the emulator
+    Navigator,      // Commands for browsing Amiga file systems
+    CBMNavigator    // Commands for browsing CBM file systems
+};
+
+struct CommandSetEnum : Reflectable<CommandSetEnum, CommandSet>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(CommandSet::CBMNavigator);
+
+    static const char *_key(CommandSet value)
+    {
+        switch (value) {
+
+            case CommandSet::Commander:     return "COMMANDER";
+            case CommandSet::Debugger:      return "DEBUGGER";
+            case CommandSet::Navigator:     return "NAVIGATOR";
+            case CommandSet::CBMNavigator:  return "CBM_NAVIGATOR";
+        }
+        return "???";
+    }
+    static const char *help(CommandSet value)
+    {
+        return "";
+    }
+};
+
 enum class RSKey
 {
     UP,

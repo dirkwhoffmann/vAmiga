@@ -27,27 +27,21 @@ using retro::vault::cbm::FSFormat;
 using retro::vault::cbm::FSPattern;
 using retro::vault::cbm::PETName;
 
-void
-CBMNavigator::_pause()
-{
-
-}
-
 string
-CBMNavigator::prompt()
+Console::cbmPrompt()
 {
     std::stringstream ss;
 
-    if (fs) {
+    if (cbmFs) {
 
         ss << "[" << std::to_string(cb);
 
-        if (auto ts = fs->getTraits().tsLink(cb))
+        if (auto ts = cbmFs->getTraits().tsLink(cb))
             ss << " (" << std::to_string(ts->t) << ":" << std::to_string(ts->s) << ")";
 
         ss << "]";
 
-        auto fsName = fs->stat().name;
+        auto fsName = cbmFs->stat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
     }
 
@@ -57,19 +51,7 @@ CBMNavigator::prompt()
 }
 
 void
-CBMNavigator::didActivate()
-{
-
-}
-
-void
-CBMNavigator::didDeactivate()
-{
-
-}
-
-void
-CBMNavigator::autoComplete(Tokens &argv)
+Console::cbmAutoComplete(Tokens &argv)
 {
     // Only proceed if there is anything to complete
     if (argv.empty()) return;
@@ -82,7 +64,7 @@ CBMNavigator::autoComplete(Tokens &argv)
             // If that didn't work, try to auto-complete with a file name
             try {
 
-                auto prefix = autoCompleteFilename(argv.back(), cmd->flags);
+                auto prefix = cbmAutoCompleteFilename(argv.back(), cmd->flags);
                 if (prefix.size() > argv.back().size()) argv.back() = prefix;
 
             } catch (...) { }
@@ -91,14 +73,14 @@ CBMNavigator::autoComplete(Tokens &argv)
 }
 
 string
-CBMNavigator::autoCompleteFilename(const string &input, usize flags) const
+Console::cbmAutoCompleteFilename(const string &input, usize flags) const
 {
     try {
 
-        requireFormattedFS();
+        cbmRequireFormattedFS();
 
         // Find matching items
-        auto matches = fs->searchDir(FSPattern(input + "*"));
+        auto matches = cbmFs->searchDir(FSPattern(input + "*"));
 
         if (!matches.empty()) {
 
@@ -116,27 +98,27 @@ CBMNavigator::autoCompleteFilename(const string &input, usize flags) const
 }
 
 void
-CBMNavigator::help(std::ostream &os, const string &argv, isize tabs)
+Console::cbmHelp(std::ostream &os, const string &argv, isize tabs)
 {
     try {
 
         auto [cmd, args] = seekCommand(argv);
 
         // Determine the kind of help to display
-        bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
+        bool displayFiles = cbmFs && cbmFs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
         bool displayCmds  = true;
 
         if (displayCmds) {
 
             // Display the standard command help
-            Console::help(os, argv, tabs);
+            defaultHelp(os, argv, tabs);
         }
 
         if (displayFiles) {
 
             // Find matching items
             auto pattern = FSPattern(args.empty() ? "*" : args.back() + "*");
-            auto matches = fs->searchDir(pattern);
+            auto matches = cbmFs->searchDir(pattern);
 
             // Extract names
             std::vector<string> names;
@@ -172,7 +154,7 @@ CBMNavigator::help(std::ostream &os, const string &argv, isize tabs)
 }
 
 BlockNr
-CBMNavigator::parseBlock(const std::string &argv)
+Console::cbmParseBlock(const std::string &argv)
 {
     if (auto pos = argv.find(':'); pos != std::string::npos) {
 
@@ -186,7 +168,7 @@ CBMNavigator::parseBlock(const std::string &argv)
         auto t = parseNum(lhs);
         auto s = parseNum(rhs);
 
-        if (auto nr = fs->getTraits().blockNr(TSLink{t,s}))
+        if (auto nr = cbmFs->getTraits().blockNr(TSLink{t,s}))
             return *nr;
 
     } else {
@@ -194,96 +176,96 @@ CBMNavigator::parseBlock(const std::string &argv)
         // Block syntax (single number)
         BlockNr nr = parseNum(argv);
 
-        if (fs->tryFetch(nr))
+        if (cbmFs->tryFetch(nr))
             return nr;
     }
 
     throw CoreError(CoreError::OPT_INV_ARG,
-                    "0..." + std::to_string(fs->blocks()));
+                    "0..." + std::to_string(cbmFs->blocks()));
 }
 
 BlockNr
-CBMNavigator::parseBlock(const Arguments &argv, const string &token, BlockNr fallback)
+Console::cbmParseBlock(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    auto nr = argv.contains(token) ? BlockNr(parseBlock(argv.at(token))) : fallback;
+    auto nr = argv.contains(token) ? BlockNr(cbmParseBlock(argv.at(token))) : fallback;
 
-    if (!fs->tryFetch(nr)) {
-        throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
+    if (!cbmFs->tryFetch(nr)) {
+        throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(cbmFs->blocks()));
     }
     return nr;
 }
 
 BlockNr
-CBMNavigator::parseBlock(const Arguments &argv, const string &token)
+Console::cbmParseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, cb);
+    return cbmParseBlock(argv, token, cb);
 }
 
 BlockNr
-CBMNavigator::parseFile(const string &arg)
+Console::cbmParseFile(const string &arg)
 {
-    return fs->seek(arg);
+    return cbmFs->seek(arg);
 }
 
 BlockNr
-CBMNavigator::parseFile(const Arguments &argv, const string &token)
+Console::cbmParseFile(const Arguments &argv, const string &token)
 {
     assert(argv.contains(token));
-    return parseFile(argv.at(token));
+    return cbmParseFile(argv.at(token));
 }
 
 BlockNr
-CBMNavigator::parseFile(const Arguments &argv, const string &token, BlockNr fallback)
+Console::cbmParseFile(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    return argv.contains(token) ? parseFile(argv, token) : fallback;
+    return argv.contains(token) ? cbmParseFile(argv, token) : fallback;
 }
 
 BlockNr
-CBMNavigator::parseFileOrBlock(const string &arg)
+Console::cbmParseFileOrBlock(const string &arg)
 {
-    try { return parseFile(arg); } catch (...) { return parseBlock(arg); }
+    try { return cbmParseFile(arg); } catch (...) { return cbmParseBlock(arg); }
 }
 
 BlockNr
-CBMNavigator::parseFileOrBlock(const Arguments &argv, const string &token)
+Console::cbmParseFileOrBlock(const Arguments &argv, const string &token)
 {
     assert(argv.contains(token));
-    return parseFileOrBlock(argv.at(token));
+    return cbmParseFileOrBlock(argv.at(token));
 }
 
 BlockNr
-CBMNavigator::parseFileOrBlock(const Arguments &argv, const string &token, BlockNr fallback)
+Console::cbmParseFileOrBlock(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    return argv.contains(token) ? parseFileOrBlock(argv, token) : fallback;
+    return argv.contains(token) ? cbmParseFileOrBlock(argv, token) : fallback;
 }
 
 void
-CBMNavigator::import(const fs::path &path, bool recursive, bool contents)
+Console::cbmImport(const fs::path &path, bool recursive, bool contents)
 {
-    fs->importer.import(path);
+    cbmFs->importer.import(path);
 }
 
 void
-CBMNavigator::requireFS() const
+Console::cbmRequireFS() const
 {
-    if (!fs) throw FSError(FSError::FS_CUSTOM, "No file system present");
+    if (!cbmFs) throw FSError(FSError::FS_CUSTOM, "No file system present");
 }
 
 void
-CBMNavigator::requireFormattedFS() const
+Console::cbmRequireFormattedFS() const
 {
-    requireFS();
-    fs->require.isFormatted();
+    cbmRequireFS();
+    cbmFs->require.isFormatted();
 }
 
 void
-CBMNavigator::exportBlocks(fs::path path)
+Console::cbmExportBlocks(fs::path path)
 {
-    fs->exporter.exportVolume(path);
+    cbmFs->exporter.exportVolume(path);
 }
 
 std::pair<DumpOpt,DumpFmt>
-CBMNavigator::parseDumpOpts(const Arguments &argv)
+Console::cbmParseDumpOpts(const Arguments &argv)
 {
     DumpOpt opt; DumpFmt fmt;
 
@@ -326,12 +308,9 @@ CBMNavigator::parseDumpOpts(const Arguments &argv)
 }
 
 void
-CBMNavigator::initCommands(RSCommand &root)
+Console::initCBMNavigatorCommands(RSCommand &root)
 {
     std::vector<string> help;
-
-    Console::initCommands(root);
-
 
     //
     // Empty command
@@ -344,9 +323,9 @@ CBMNavigator::initCommands(RSCommand &root)
         .flags  = rs::hidden,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            if (fs) {
+            if (cbmFs) {
 
-                fs->dumpStatfs(os);
+                cbmFs->dumpStatfs(os);
 
             } else {
 
@@ -402,7 +381,7 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFS();
+                cbmRequireFS();
 
                 // Determine the DOS type
                 auto type = FSFormat::NODOS;
@@ -414,9 +393,9 @@ CBMNavigator::initCommands(RSCommand &root)
 
                 // Format the device
                 auto name = args.contains("name") ? args.at("name") : "New Disk";
-                fs->format(type);
-                fs->setName(PETName<16>(name));
-                fs->dumpStatfs(os);
+                cbmFs->format(type);
+                cbmFs->setName(PETName<16>(name));
+                cbmFs->dumpStatfs(os);
             }
     });
 
@@ -444,10 +423,10 @@ CBMNavigator::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                vol = make_unique<Volume>(*df[values[0]]);
-                fs  = make_unique<retro::vault::cbm::FileSystem>(*vol);
+                cbmVol = make_unique<Volume>(*df[values[0]]);
+                cbmFs  = make_unique<retro::vault::cbm::FileSystem>(*cbmVol);
 
-                fs->dumpInfo(os);
+                cbmFs->dumpInfo(os);
 
             }, .payload = {i}
         });
@@ -460,10 +439,10 @@ CBMNavigator::initCommands(RSCommand &root)
         .flags  = vAmigaDOS ? rs::disabled : 0,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            requireFS();
+            cbmRequireFS();
 
-            fs->flush();
-            fs = nullptr;
+            cbmFs->flush();
+            cbmFs = nullptr;
         }
     });
     */
@@ -475,8 +454,8 @@ CBMNavigator::initCommands(RSCommand &root)
         .flags  = vAmigaDOS ? rs::disabled : 0,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            requireFS();
-            fs->flush();
+            cbmRequireFS();
+            cbmFs->flush();
         }
     });
 
@@ -491,12 +470,12 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
                 auto path = args.at("path");
                 auto hostPath = host.makeAbsolute(args.at("path"));
 
-                fs->importer.import(hostPath);
+                cbmFs->importer.import(hostPath);
             }
     });
 
@@ -518,13 +497,13 @@ CBMNavigator::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 d64 = Codec::makeD64(*df[values[0]]);
-                vol = make_unique<Volume>(*d64);
-                fs  = make_unique<retro::vault::cbm::FileSystem>(*vol);
+                cbmVol = make_unique<Volume>(*d64);
+                cbmFs  = make_unique<retro::vault::cbm::FileSystem>(*cbmVol);
 
                 // Select the BAM as current working block
-                cb = fs->bam();
+                cb = cbmFs->bam();
 
-                fs->dumpStatfs(os);
+                cbmFs->dumpStatfs(os);
 
             }, .payload = {i}
         });
@@ -541,12 +520,12 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFS();
+                cbmRequireFS();
 
                 auto path = host.makeAbsolute(args.at("path"));
-                auto nr = parseBlock(args, "nr", cb);
+                auto nr = cbmParseBlock(args, "nr", cb);
 
-                fs->importer.importBlock(nr, path);
+                cbmFs->importer.importBlock(nr, path);
             }
     });
 
@@ -564,7 +543,7 @@ CBMNavigator::initCommands(RSCommand &root)
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    requireFormattedFS();
+                    cbmRequireFormattedFS();
 
                     throw FSError(FSError::FS_UNSUPPORTED);
                 }
@@ -584,13 +563,13 @@ CBMNavigator::initCommands(RSCommand &root)
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    requireFormattedFS();
+                    cbmRequireFormattedFS();
 
                     auto path = args.at("path");
                     auto hostPath = host.makeAbsolute(args.at("path"));
 
                     auto pattern = FSPattern(args.at("pattern"));
-                    fs->exporter.exportFiles(pattern, hostPath);
+                    cbmFs->exporter.exportFiles(pattern, hostPath);
                 }
         });
     }
@@ -612,10 +591,10 @@ CBMNavigator::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                ADFFile adf(fs->getTraits().blocks);
-                fs->exporter.exportVolume(adf);
+                ADFFile adf(cbmFs->getTraits().blocks);
+                cbmFs->exporter.exportVolume(adf);
                 df[values[0]]->insertImage(adf, false);
 
             }, .payload = {i}
@@ -632,20 +611,20 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                auto nr = parseBlock(args, "nr", cb);
+                auto nr = cbmParseBlock(args, "nr", cb);
 
                 if constexpr (vAmigaDOS) {
 
-                    fs->exporter.exportBlock(nr, "blob");
+                    cbmFs->exporter.exportBlock(nr, "blob");
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT);
 
                 } else {
 
                     auto path = host.makeAbsolute(args.at("path"));
-                    fs->exporter.exportBlock(nr, path);
+                    cbmFs->exporter.exportBlock(nr, path);
                 }
             }
     });
@@ -663,10 +642,10 @@ CBMNavigator::initCommands(RSCommand &root)
         .args   = { },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            requireFormattedFS();
+            cbmRequireFormattedFS();
 
             // Read directory
-            auto dir = fs->readDir();
+            auto dir = cbmFs->readDir();
 
             // Print items
             std::stringstream ss;
@@ -695,9 +674,9 @@ CBMNavigator::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 if (args.contains("b")) {
-                    fs->dumpBlocks(os);
+                    cbmFs->dumpBlocks(os);
                 } else {
-                    fs->dumpStatfs(os);
+                    cbmFs->dumpStatfs(os);
                 }
 
             }
@@ -712,10 +691,10 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                auto block = parseFileOrBlock(args, "file", cb);
-                fs->doctor.dump(block, os);
+                auto block = cbmParseFileOrBlock(args, "file", cb);
+                cbmFs->doctor.dump(block, os);
             }
     });
 
@@ -732,9 +711,9 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                auto &file = fs->fetch(parseFile(args, "path"));
+                auto &file = cbmFs->fetch(cbmParseFile(args, "path"));
                 args.contains("v") ? file.dumpBlocks(os) : file.dumpInfo(os);
             }
     });
@@ -756,15 +735,15 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                auto nr    = parseBlock(args, "nr", cb);
-                auto opt   = parseDumpOpts(args);
+                auto nr    = cbmParseBlock(args, "nr", cb);
+                auto opt   = cbmParseDumpOpts(args);
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
                 auto t     = args.contains("t");
 
                 std::stringstream ss;
-                fs->fetch(nr).dump(ss, opt.first, opt.second);
+                cbmFs->fetch(nr).dump(ss, opt.first, opt.second);
 
                 t ? tail(ss, os, lines) : head(ss, os, lines);
             }
@@ -781,10 +760,10 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                auto nr = parseBlock(args, "nr");
-                fs->doctor.dump(nr, os);
+                auto nr = cbmParseBlock(args, "nr");
+                cbmFs->doctor.dump(nr, os);
             }
     });
     */
@@ -799,11 +778,11 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
-                auto file = parseFile(args, "file");
+                cbmRequireFormattedFS();
+                auto file = cbmParseFile(args, "file");
 
                 Buffer<u8> buffer;
-                fs->extractData(file, buffer);
+                cbmFs->extractData(file, buffer);
                 buffer.txtDump(os);
             }
     });
@@ -825,14 +804,14 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
-                auto file  = parseFile(args, "file");
-                auto opt   = parseDumpOpts(args);
+                cbmRequireFormattedFS();
+                auto file  = cbmParseFile(args, "file");
+                auto opt   = cbmParseDumpOpts(args);
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
                 auto t     = args.contains("t");
 
                 Buffer<u8> buffer;
-                fs->extractData(file, buffer);
+                cbmFs->extractData(file, buffer);
                 std::stringstream ss;
                 buffer.dump(ss, opt.first, opt.second);
                 t ? tail(ss, os, lines) : head(ss, os, lines);
@@ -853,23 +832,23 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
                 bool strict = args.contains("s");
 
                 if (args.contains("nr")) {
 
-                    auto nr = parseBlock(args, "nr");
+                    auto nr = cbmParseBlock(args, "nr");
 
-                    if (args.contains("r")) fs->doctor.rectify(nr, strict);
-                    if (auto errors = fs->doctor.xray(nr, strict, os); !errors) {
+                    if (args.contains("r")) cbmFs->doctor.rectify(nr, strict);
+                    if (auto errors = cbmFs->doctor.xray(nr, strict, os); !errors) {
                         os << "No findings." << std::endl;
                     }
 
                 } else {
 
-                    if (args.contains("r")) fs->doctor.rectify(strict);
-                    if (auto errors = fs->doctor.xray(strict, os, args.contains("v")); !errors) {
+                    if (args.contains("r")) cbmFs->doctor.rectify(strict);
+                    if (auto errors = cbmFs->doctor.xray(strict, os, args.contains("v")); !errors) {
                         os << "No findings." << std::endl;
                     }
                 }
@@ -885,10 +864,10 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                if (args.contains("r")) fs->doctor.rectifyBitmap();
-                if (auto errors = fs->doctor.xrayBitmap(os); !errors) {
+                if (args.contains("r")) cbmFs->doctor.rectifyBitmap();
+                if (auto errors = cbmFs->doctor.xrayBitmap(os); !errors) {
                     os << "No findings." << std::endl;
                 }
             }
@@ -911,9 +890,9 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                cb = parseFileOrBlock(args, "file");
+                cb = cbmParseFileOrBlock(args, "file");
             }
     });
 
@@ -923,10 +902,10 @@ CBMNavigator::initCommands(RSCommand &root)
         .chelp  = { "Take the TS link to the next block" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            requireFormattedFS();
+            cbmRequireFormattedFS();
 
-            auto ts = fs->fetch(cb).tsLink();
-            if (auto b = fs->getTraits().blockNr(ts)) {
+            auto ts = cbmFs->fetch(cb).tsLink();
+            if (auto b = cbmFs->getTraits().blockNr(ts)) {
                 cb = *b;
             }
         }
@@ -950,20 +929,20 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
                 auto oldName = PETName<16>(args.at("source"));
                 auto newName = PETName<16>(args.at("target"));
 
                 // Make sure the source file exists
-                if (!fs->trySeek(oldName))
+                if (!cbmFs->trySeek(oldName))
                     throw FSError(FSError::FS_NOT_FOUND, oldName.str());
 
                 // Make sure the target file does not exist
-                if (fs->trySeek(newName))
+                if (cbmFs->trySeek(newName))
                     throw FSError(FSError::FS_EXISTS, newName.str());
 
-                fs->rename(oldName, newName);
+                cbmFs->rename(oldName, newName);
             }
     });
 
@@ -977,10 +956,10 @@ CBMNavigator::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                cbmRequireFormattedFS();
 
-                auto &path = fs->fetch(parseFile(args, "path"));
-                fs->rm(path.nr);
+                auto &path = cbmFs->fetch(cbmParseFile(args, "path"));
+                cbmFs->rm(path.nr);
             }
     });
 }

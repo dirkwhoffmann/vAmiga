@@ -18,9 +18,7 @@ namespace vamiga {
 void
 RshServer::_initialize()
 {
-    retroShell.commander.delegates.push_back(this);
-    retroShell.debugger.delegates.push_back(this);
-    retroShell.navigator.delegates.push_back(this);
+    retroShell.console.delegates.push_back(this);
 }
 
 void

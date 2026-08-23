@@ -30,24 +30,18 @@ using retro::vault::amiga::FSPath;
 using retro::vault::amiga::FSPattern;
 using retro::vault::amiga::FSTree;
 
-void
-NavigatorConsole::_pause()
-{
-
-}
-
 string
-NavigatorConsole::prompt()
+Console::navPrompt()
 {
     std::stringstream ss;
 
-    if (fs) {
+    if (amigaFs) {
 
-        auto &pwd = fs->fetch(fs->pwd());
+        auto &pwd = amigaFs->fetch(amigaFs->pwd());
 
         ss << "[" << std::to_string(pwd.nr) << "]";
 
-        auto fsName = fs->stat().name;
+        auto fsName = amigaFs->stat().name;
         if (!fsName.empty()) ss << " " << fsName << ":";
         if (pwd.isDirectory()) ss << " " << pwd.absName();
     }
@@ -57,19 +51,7 @@ NavigatorConsole::prompt()
 }
 
 void
-NavigatorConsole::didActivate()
-{
-
-}
-
-void
-NavigatorConsole::didDeactivate()
-{
-
-}
-
-void
-NavigatorConsole::autoComplete(Tokens &argv)
+Console::navAutoComplete(Tokens &argv)
 {
     // Only proceed if there is anything to complete
     if (argv.empty()) return;
@@ -81,7 +63,7 @@ NavigatorConsole::autoComplete(Tokens &argv)
 
             // If that didn't work, try to auto-complete with a file name
             try {
-                auto prefix = autoCompleteFilename(argv.back(), cmd->flags);
+                auto prefix = navAutoCompleteFilename(argv.back(), cmd->flags);
                 if (prefix.size() > argv.back().size()) argv.back() = prefix;
 
             } catch (...) { }
@@ -90,22 +72,22 @@ NavigatorConsole::autoComplete(Tokens &argv)
 }
 
 string
-NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
+Console::navAutoCompleteFilename(const string &input, usize flags) const
 {
     try {
 
-        requireFormattedFS();
+        navRequireFormattedFS();
 
         auto path = FSPath(input);
         auto dir  = path.parentPath();
 
         // Find all matching items
-        auto matches = fs->match(input + "*");
+        auto matches = amigaFs->match(input + "*");
 
         // Case 1: The completion was unique
         if (matches.size() == 1) {
 
-            auto &node = fs->fetch(matches[0]);
+            auto &node = amigaFs->fetch(matches[0]);
             auto name = dir / node.name();
             return name.cpp_str() + (node.isDirectory() ? "/" : "");
         }
@@ -114,7 +96,7 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
         std::vector<string> names;
         for (auto &it : matches) {
 
-            auto name = dir / fs->fetch(it).name();
+            auto name = dir / amigaFs->fetch(it).name();
             names.push_back(name.cpp_str());
         }
 
@@ -128,32 +110,32 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 }
 
 void
-NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
+Console::navHelp(std::ostream &os, const string &argv, isize tabs)
 {
     try {
 
         auto [cmd, args] = seekCommand(argv);
 
         // Determine the kind of help to display
-        bool displayFiles = fs && fs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
+        bool displayFiles = amigaFs && amigaFs->isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
         bool displayCmds  = true;
 
         if (displayCmds) {
 
             // Display the standard command help
-            Console::help(os, argv, tabs);
+            defaultHelp(os, argv, tabs);
         }
 
         if (displayFiles) {
 
             // Find matching items
-            auto matches = fs->match(args.empty() ? "*" : args.back() + "*");
+            auto matches = amigaFs->match(args.empty() ? "*" : args.back() + "*");
 
             // Extract names
             vector<string> dirs, files;
             for (auto &it : matches) {
 
-                auto &block = fs->fetch(it);
+                auto &block = amigaFs->fetch(it);
                 auto name = block.name().cpp_str();
 
                 if (block.isDirectory()) {
@@ -204,48 +186,48 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 }
 
 BlockNr
-NavigatorConsole::parseBlock(const string &argv)
+Console::navParseBlock(const string &argv)
 {
-    if (auto nr = BlockNr(parseNum(argv)); fs->tryFetch(nr)) {
+    if (auto nr = BlockNr(parseNum(argv)); amigaFs->tryFetch(nr)) {
         return nr;
     }
 
-    throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
+    throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(amigaFs->blocks()));
 }
 
 BlockNr
-NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
+Console::navParseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, fs->pwd());
+    return navParseBlock(argv, token, amigaFs->pwd());
 }
 
 BlockNr
-NavigatorConsole::parseBlock(const Arguments &argv, const string &token, BlockNr fallback)
+Console::navParseBlock(const Arguments &argv, const string &token, BlockNr fallback)
 {
     auto nr = argv.contains(token) ? BlockNr(parseNum(argv.at(token))) : fallback;
 
-    if (!fs->tryFetch(nr)) {
-        throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(fs->blocks()));
+    if (!amigaFs->tryFetch(nr)) {
+        throw CoreError(CoreError::OPT_INV_ARG, "0..." + std::to_string(amigaFs->blocks()));
     }
     return nr;
 }
 
 BlockNr
-NavigatorConsole::parsePath(const Arguments &argv, const string &token)
+Console::navParsePath(const Arguments &argv, const string &token)
 {
-    fs->require.isFormatted();
+    amigaFs->require.isFormatted();
 
     assert(argv.contains(token));
 
     try {
         // Try to find the directory by name
-        return fs->seek(argv.at(token));
+        return amigaFs->seek(argv.at(token));
 
     } catch (...) {
 
         try {
             // Treat the argument as a block number
-            return parseBlock(argv.at(token));
+            return navParseBlock(argv.at(token));
 
         } catch (...) {
 
@@ -256,43 +238,43 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 }
 
 BlockNr
-NavigatorConsole::parsePath(const Arguments &argv, const string &token, BlockNr fallback)
+Console::navParsePath(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    return argv.contains(token) ? parsePath(argv, token) : fallback;
+    return argv.contains(token) ? navParsePath(argv, token) : fallback;
 }
 
 BlockNr
-NavigatorConsole::parseFile(const Arguments &argv, const string &token)
+Console::navParseFile(const Arguments &argv, const string &token)
 {
-    return parseFile(argv, token, fs->pwd());
+    return navParseFile(argv, token, amigaFs->pwd());
 }
 
 BlockNr
-NavigatorConsole::parseFile(const Arguments &argv, const string &token, BlockNr fallback)
+Console::navParseFile(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    auto path = parsePath(argv, token, fallback);
-    fs->require.file(path);
+    auto path = navParsePath(argv, token, fallback);
+    amigaFs->require.file(path);
 
     return path;
 }
 
 BlockNr
-NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
+Console::navParseDirectory(const Arguments &argv, const string &token)
 {
-    return parseDirectory(argv, token, fs->pwd());
+    return navParseDirectory(argv, token, amigaFs->pwd());
 }
 
 BlockNr
-NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, BlockNr fallback)
+Console::navParseDirectory(const Arguments &argv, const string &token, BlockNr fallback)
 {
-    auto path = parsePath(argv, token, fallback);
-    fs->require.directory(path);
+    auto path = navParsePath(argv, token, fallback);
+    amigaFs->require.directory(path);
 
     return path;
 }
 
 void
-NavigatorConsole::import(const FloppyDrive &dfn)
+Console::navImport(const FloppyDrive &dfn)
 {
     // Later: Directly mount the file system on top of the drive
 
@@ -300,82 +282,82 @@ NavigatorConsole::import(const FloppyDrive &dfn)
     adf = Codec::makeADF(dfn);
 
     // Create a file system on top
-    auto vol = Volume(*adf);
-    fs = make_unique<FileSystem>(vol);
+    amigaVol = make_unique<Volume>(*adf);
+    amigaFs = make_unique<FileSystem>(*amigaVol);
 }
 
 void
-NavigatorConsole::import(const HardDrive &hdn, isize part)
+Console::navImport(const HardDrive &hdn, isize part)
 {
     throw FSError(FSError::FS_UNSUPPORTED);
     /*
-     FileSystemFactory::initFromHardDrive(*fs, hdn);
+     FileSystemFactory::initFromHardDrive(*amigaFs, hdn);
      */
 }
 
 void
-NavigatorConsole::importDf(isize n)
+Console::navImportDf(isize n)
 {
     assert(n >= 0 && n <= 3);
-    import(*amiga.df[n]);
+    navImport(*amiga.df[n]);
 }
 
 void
-NavigatorConsole::importHd(isize n, isize part)
+Console::navImportHd(isize n, isize part)
 {
     assert(n >= 0 && n <= 3);
-    import(*amiga.hd[n], part);
+    navImport(*amiga.hd[n], part);
 }
 
 void
-NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
+Console::navImport(const fs::path &path, bool recursive, bool contents)
 {
-    fs->importer.import(path, recursive, contents);
+    amigaFs->importer.import(path, recursive, contents);
 }
 
 void
-NavigatorConsole::requireFS() const
+Console::navRequireFS() const
 {
-    if (!fs) throw FSError(FSError::FS_CUSTOM, "No file system present");
+    if (!amigaFs) throw FSError(FSError::FS_CUSTOM, "No file system present");
 }
 
 void
-NavigatorConsole::requireFormattedFS() const
+Console::navRequireFormattedFS() const
 {
-    requireFS();
-    fs->require.isFormatted();
+    navRequireFS();
+    amigaFs->require.isFormatted();
 }
 
 void
-NavigatorConsole::exportBlocks(fs::path path)
+Console::navExportBlocks(fs::path path)
 {
-    fs->exporter.exportVolume(path);
+    amigaFs->exporter.exportVolume(path);
 }
 
 BlockNr
-NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound)
+Console::navMatchPath(const Arguments &argv, const string &token, Tokens &notFound)
 {
-    return matchPath(argv.at(token), notFound);
+    return navMatchPath(argv.at(token), notFound);
 }
 
 BlockNr
-NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback)
+Console::navMatchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback)
 {
-    return argv.contains(token) ? matchPath(argv, token, notFound) : fallback;
+    return argv.contains(token) ? navMatchPath(argv, token, notFound) : fallback;
 }
 
 BlockNr
-NavigatorConsole::matchPath(const string &path, Tokens &notFound)
+Console::navMatchPath(const string &path, Tokens &notFound)
 {
-    fs->require.isFormatted();
+    amigaFs->require.isFormatted();
 
     auto tokens = utl::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
 
-    auto p = fs->pwd();
+    auto p = amigaFs->pwd();
     while (!tokens.empty()) {
 
-        auto next = fs->trySeek(tokens.front());
+        auto next = amigaFs->trySeek(tokens.front());
         if (!next) break;
 
         tokens.erase(tokens.begin());
@@ -387,7 +369,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 }
 
 std::pair<DumpOpt,DumpFmt>
-NavigatorConsole::parseDumpOpts(const Arguments &argv)
+Console::navParseDumpOpts(const Arguments &argv)
 {
     DumpOpt opt; DumpFmt fmt;
 
@@ -430,13 +412,10 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
 }
 
 void
-NavigatorConsole::initCommands(RSCommand &root)
+Console::initNavigatorCommands(RSCommand &root)
 {
     std::vector<string> help;
     
-    Console::initCommands(root);
-
-
     //
     // Empty command
     //
@@ -448,9 +427,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = rs::hidden,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            if (fs) {
+            if (amigaFs) {
 
-                fs->dumpInfo(os);
+                amigaFs->dumpInfo(os);
 
             } else {
 
@@ -509,8 +488,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a single-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs->init(FSDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
-            fs->dumpInfo(os);
+            amigaFs->init(FSDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
+            amigaFs->dumpInfo(os);
         }
     });
     
@@ -520,8 +499,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a double-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs->init(FSDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
-            fs->dumpInfo(os);
+            amigaFs->init(FSDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
+            amigaFs->dumpInfo(os);
         }
     });
     
@@ -531,8 +510,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a high-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs->init(FSDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
-            fs->dumpInfo(os);
+            amigaFs->init(FSDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
+            amigaFs->dumpInfo(os);
         }
     });
     
@@ -552,8 +531,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto blocks = (mb + 511) / 512;
 
                 dev = make_unique<Device>(GeometryDescriptor(blocks));
-                fs = make_unique<FileSystem>(*dev, FSDescriptor(blocks, FSFormat::NODOS));
-                fs->dumpInfo(os);
+                amigaFs = make_unique<FileSystem>(*dev, FSDescriptor(blocks, FSFormat::NODOS));
+                amigaFs->dumpInfo(os);
             }
     });
     
@@ -575,8 +554,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 auto geometry = GeometryDescriptor(c, h, s, b);
                 dev = make_unique<Device>(geometry);
-                fs = make_unique<FileSystem>(*dev, FSDescriptor(geometry, FSFormat::NODOS));
-                fs->dumpInfo(os);
+                amigaFs = make_unique<FileSystem>(*dev, FSDescriptor(geometry, FSFormat::NODOS));
+                amigaFs->dumpInfo(os);
             }
     });
     */
@@ -591,7 +570,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFS();
+                navRequireFS();
 
                 // Determine the DOS type
                 auto type = amiga::FSFormat::NODOS;
@@ -605,9 +584,9 @@ NavigatorConsole::initCommands(RSCommand &root)
                 
                 // Format the device
                 auto name = args.contains("name") ? args.at("name") : "New Disk";
-                fs->format(type);
-                fs->setName(FSName(name));
-                fs->dumpInfo(os);
+                amigaFs->format(type);
+                amigaFs->setName(FSName(name));
+                amigaFs->dumpInfo(os);
             }
     });
 
@@ -634,10 +613,10 @@ NavigatorConsole::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                vol = make_unique<Volume>(*df[values[0]]);
-                fs  = make_unique<FileSystem>(*vol);
+                amigaVol = make_unique<Volume>(*df[values[0]]);
+                amigaFs  = make_unique<FileSystem>(*amigaVol);
 
-                fs->dumpInfo(os);
+                amigaFs->dumpInfo(os);
 
             }, .payload = {i}
         });
@@ -650,10 +629,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = vAmigaDOS ? rs::disabled : 0,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            requireFS();
+            navRequireFS();
 
-            fs->flush();
-            fs = nullptr;
+            amigaFs->flush();
+            amigaFs = nullptr;
         }
     });
 
@@ -664,9 +643,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = vAmigaDOS ? rs::disabled : 0,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            requireFS();
+            navRequireFS();
 
-            fs->flush();
+            amigaFs->flush();
         }
     });
 
@@ -681,14 +660,14 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
                 auto path = args.at("path");
                 auto hostPath = host.makeAbsolute(args.at("path"));
                 bool recursive = true;
                 bool contents = path.back() == '/';
                 
-                fs->importer.import(fs->pwd(), hostPath, recursive, contents);
+                amigaFs->importer.import(amigaFs->pwd(), hostPath, recursive, contents);
             }
     });
     
@@ -712,10 +691,10 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto n = values[0];
 
                 adf = Codec::makeADF(*df[n]);
-                vol = make_unique<Volume>(*adf);
-                fs  = make_unique<FileSystem>(*vol);
+                amigaVol = make_unique<Volume>(*adf);
+                amigaFs  = make_unique<FileSystem>(*amigaVol);
 
-                fs->dumpInfo(os);
+                amigaFs->dumpInfo(os);
 
             }, .payload = {i}
         });
@@ -743,8 +722,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 auto desc = hd[n]->getPartitionDescriptor(0);
                 dev = make_unique<Device>(desc.geometry());
-                fs = FileSystemFactory::fromHardDrive(*dev, *hd[n]);
-                fs->dumpInfo(os);
+                amigaFs = FileSystemFactory::fromHardDrive(*dev, *hd[n]);
+                amigaFs->dumpInfo(os);
 
             }, .payload = {i}
         });
@@ -762,12 +741,12 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFS();
+                navRequireFS();
 
                 auto path = host.makeAbsolute(args.at("path"));
-                auto nr = parseBlock(args, "nr", fs->pwd());
+                auto nr = navParseBlock(args, "nr", amigaFs->pwd());
 
-                fs->importer.importBlock(nr, path);
+                amigaFs->importer.importBlock(nr, path);
             }
     });
     
@@ -785,25 +764,25 @@ NavigatorConsole::initCommands(RSCommand &root)
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    requireFormattedFS();
+                    navRequireFormattedFS();
 
                     bool recursive = args.contains("r");
                     std::filesystem::remove_all("/export");
                     
                     if (args.contains("file")) {
                         
-                        auto item = parsePath(args, "file");
-                        // auto &item = fs->fetch(itemNr);
-                        auto name = fs->fetch(item).cppName();
-                        if (name.empty()) name = fs->stat().name.cpp_str();
-                        fs->exporter.exportFiles(item, "/export", recursive, true);
+                        auto item = navParsePath(args, "file");
+                        // auto &item = amigaFs->fetch(itemNr);
+                        auto name = amigaFs->fetch(item).cppName();
+                        if (name.empty()) name = amigaFs->stat().name.cpp_str();
+                        amigaFs->exporter.exportFiles(item, "/export", recursive, true);
                         msgQueue.setPayload( { "/export", name } );
                         
                     } else {
                         
-                        fs->exporter.exportVolume("/export");
-                        auto name = fs->stat().name.cpp_str();
-                        name += fs->getTraits().adf() ? ".adf" : ".hdf";
+                        amigaFs->exporter.exportVolume("/export");
+                        auto name = amigaFs->stat().name.cpp_str();
+                        name += amigaFs->getTraits().adf() ? ".adf" : ".hdf";
                         msgQueue.setPayload( { "/export", name } );
                     }
                     
@@ -826,15 +805,15 @@ NavigatorConsole::initCommands(RSCommand &root)
             },
                 .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    requireFormattedFS();
+                    navRequireFormattedFS();
 
-                    auto itemNr = parsePath(args, "file");
+                    auto itemNr = navParsePath(args, "file");
                     bool recursive = args.contains("r");
                     bool contents = args.at("file").back() == '/';
                     
                     auto path = args.at("path");
                     auto hostPath = host.makeAbsolute(args.at("path"));
-                    fs->exporter.exportFiles(itemNr, hostPath, recursive, contents);
+                    amigaFs->exporter.exportFiles(itemNr, hostPath, recursive, contents);
                 }
         });
     }
@@ -856,10 +835,10 @@ NavigatorConsole::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                ADFFile adf(fs->getTraits().blocks);
-                fs->exporter.exportVolume(adf);
+                ADFFile adf(amigaFs->getTraits().blocks);
+                amigaFs->exporter.exportVolume(adf);
                 df[values[0]]->insertImage(adf, false);
 
             }, .payload = {i}
@@ -883,10 +862,10 @@ NavigatorConsole::initCommands(RSCommand &root)
             .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
                 auto n = values[0];
-                hd[n]->init(*fs);
+                hd[n]->init(*amigaFs);
 
             }, .payload = {i}
         });
@@ -902,20 +881,20 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto nr = parseBlock(args, "nr", fs->pwd());
+                auto nr = navParseBlock(args, "nr", amigaFs->pwd());
 
                 if constexpr (vAmigaDOS) {
                     
-                    fs->exporter.exportBlock(nr, "blob");
+                    amigaFs->exporter.exportBlock(nr, "blob");
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT);
                     
                 } else {
                     
                     auto path = host.makeAbsolute(args.at("path"));
-                    fs->exporter.exportBlock(nr, path);
+                    amigaFs->exporter.exportBlock(nr, path);
                 }
             }
     });
@@ -932,10 +911,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto path = parsePath(args, "path", fs->root());
-                fs->cd(path);
+                auto path = navParsePath(args, "path", amigaFs->root());
+                amigaFs->cd(path);
             }
     });
     
@@ -952,15 +931,15 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto path = parseDirectory(args, "path");
+                auto path = navParseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
 
                 // Collect the directories to print
-                FSTree tree = fs->build(path, {
+                FSTree tree = amigaFs->build(path, {
                     .accept = accept::directories,
                     .sort   = sort::alpha,
                     .depth  = r ? MAX_ISIZE : 0
@@ -971,12 +950,12 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                     // Print header
                     if (node.nr != tree.nr) os << "\n";
-                    os << "Directory " << fs->fetch(node.nr).absName() << ":\n\n";
+                    os << "Directory " << amigaFs->fetch(node.nr).absName() << ":\n\n";
 
                     if (!f) {
 
                         // Collect directory items
-                        FSTree items = fs->build(node.nr, {
+                        FSTree items = amigaFs->build(node.nr, {
                             .accept = accept::directories,
                             .sort   = sort::alpha,
                             .depth  = 1
@@ -985,7 +964,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         // Extract names
                         vector<string> names;
                         for (const auto &child : items.children) {
-                            names.push_back(fs->fetch(child.nr).cppName() + " (dir)");
+                            names.push_back(amigaFs->fetch(child.nr).cppName() + " (dir)");
                         }
 
                         // Print names
@@ -999,7 +978,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     if (!d) {
 
                         // Collect file items
-                        FSTree items = fs->build(node.nr, {
+                        FSTree items = amigaFs->build(node.nr, {
                             .accept = accept::files,
                             .sort   = sort::alpha,
                             .depth  = 1
@@ -1008,7 +987,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                         // Extract names
                         vector<string> names;
                         for (const auto &child : items.children) {
-                            names.push_back(fs->fetch(child.nr).cppName());
+                            names.push_back(amigaFs->fetch(child.nr).cppName());
                         }
 
                         // Print names
@@ -1038,9 +1017,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto path = parseDirectory(args, "path");
+                auto path = navParseDirectory(args, "path");
                 auto d = args.contains("d");
                 auto f = args.contains("f");
                 auto r = args.contains("r");
@@ -1050,7 +1029,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 // Formats the output for a single item
                 auto formatted = [&](BlockNr nr) {
 
-                    auto &node = fs->fetch(nr);
+                    auto &node = amigaFs->fetch(nr);
 
                     std::stringstream ss;
                     ss << std::left << std::setw(25) << node.cppName();
@@ -1069,7 +1048,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 };
 
                 // Collect the directories to print
-                FSTree tree = fs->build(path, {
+                FSTree tree = amigaFs->build(path, {
                     .accept = accept::directories,
                     .sort   = s ? sort::alpha : sort::none,
                     .depth  = r ? MAX_ISIZE : 0
@@ -1080,10 +1059,10 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                     // Print header
                     if (node.nr != tree.nr) os << "\n";
-                    os << "Directory " << fs->fetch(node.nr).absName() << ":\n\n";
+                    os << "Directory " << amigaFs->fetch(node.nr).absName() << ":\n\n";
 
                     // Collect items
-                    FSTree items = fs->build(node.nr, {
+                    FSTree items = amigaFs->build(node.nr, {
                         .accept = f ? accept::files : d ? accept::directories : accept::all,
                         .sort   = sort::alpha,
                         .depth  = 1
@@ -1109,7 +1088,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
                 auto pattern = FSPattern(args.at("name"));
                 auto d = args.contains("d");
@@ -1117,10 +1096,10 @@ NavigatorConsole::initCommands(RSCommand &root)
                 auto s = args.contains("s");
 
                 // Determine the start node
-                auto start = fs->pwd();
+                auto start = amigaFs->pwd();
 
                 // Build a directory tree
-                FSTree tree = fs->build(start, {
+                FSTree tree = amigaFs->build(start, {
                     .accept = accept::all,
                     .sort   = sort::none,
                     .depth  = MAX_ISIZE
@@ -1130,7 +1109,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 vector<const FSBlock *> matching;
                 for (const auto &node : tree.bfs()) {
 
-                    auto &block = fs->fetch(node.nr);
+                    auto &block = amigaFs->fetch(node.nr);
 
                     if (!pattern.match(block.cppName())) continue;
                     if (d && !block.isDirectory())       continue;
@@ -1170,13 +1149,13 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
                 // Find matches
-                vector <BlockNr> matches = fs->match(args.at("name"));
+                vector <BlockNr> matches = amigaFs->match(args.at("name"));
 
                 // Print the result
-                for (auto &it : matches) { os << fs->fetch(it).absName() << '\n'; }
+                for (auto &it : matches) { os << amigaFs->fetch(it).absName() << '\n'; }
             }
     });
 
@@ -1191,10 +1170,12 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+                navRequireFS();
+
                 if (args.contains("b")) {
-                    fs->dumpBlocks(os);
+                    amigaFs->dumpBlocks(os);
                 } else {
-                    fs->dumpInfo(os);
+                    amigaFs->dumpInfo(os);
                 }
                 
             }
@@ -1212,9 +1193,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto &file = fs->fetch(parseFile(args, "path"));
+                auto &file = amigaFs->fetch(navParseFile(args, "path"));
                 args.contains("v") ? file.dumpBlocks(os) : file.dumpInfo(os);
             }
     });
@@ -1229,10 +1210,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto nr = parseBlock(args, "nr");
-                fs->doctor.dump(nr, os);
+                auto nr = navParseBlock(args, "nr");
+                amigaFs->doctor.dump(nr, os);
             }
     });
     
@@ -1256,9 +1237,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             .chelp  = { BootBlockIdEnum::help(BootBlockId(value)) },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                fs->makeBootable(BootBlockId(values[0]));
+                amigaFs->makeBootable(BootBlockId(values[0]));
 
             },  .payload = { value }
         });
@@ -1270,9 +1251,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Scan a boot block for viruses" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            requireFormattedFS();
+            navRequireFormattedFS();
 
-            os << "Boot block: " << fs->bootStat().name << std::endl;
+            os << "Boot block: " << amigaFs->bootStat().name << std::endl;
         }
     });
     
@@ -1282,9 +1263,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Kills a boot block virus" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            requireFormattedFS();
+            navRequireFormattedFS();
 
-            fs->killVirus();
+            amigaFs->killVirus();
         }
     });
     
@@ -1298,9 +1279,9 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto &file = fs->fetch(parsePath(args, "path", fs->pwd()));
+                auto &file = amigaFs->fetch(navParsePath(args, "path", amigaFs->pwd()));
                 if (!file.isFile()) {
                     throw FSError(FSError::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
                 }
@@ -1328,10 +1309,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto &file = fs->fetch(parseFile(args, "path", fs->pwd()));
-                auto opt   = parseDumpOpts(args);
+                auto &file = amigaFs->fetch(navParseFile(args, "path", amigaFs->pwd()));
+                auto opt   = navParseDumpOpts(args);
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
                 auto t     = args.contains("t");
 
@@ -1361,15 +1342,15 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto nr    = parseBlock(args, "nr", fs->pwd());
-                auto opt   = parseDumpOpts(args);
+                auto nr    = navParseBlock(args, "nr", amigaFs->pwd());
+                auto opt   = navParseDumpOpts(args);
                 auto lines = args.contains("lines") ? parseNum(args.at("lines")) : LONG_MAX;
                 auto t     = args.contains("t");
 
                 std::stringstream ss;
-                fs->fetch(nr).dump(ss, opt.first, opt.second);
+                amigaFs->fetch(nr).dump(ss, opt.first, opt.second);
 
                 t ? tail(ss, os, lines) : head(ss, os, lines);
             }
@@ -1389,23 +1370,23 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
                 bool strict = args.contains("s");
                 
                 if (args.contains("nr")) {
                     
-                    auto nr = parseBlock(args, "nr");
+                    auto nr = navParseBlock(args, "nr");
                     
-                    if (args.contains("r")) fs->doctor.rectify(nr, strict);
-                    if (auto errors = fs->doctor.xray(nr, strict, os); !errors) {
+                    if (args.contains("r")) amigaFs->doctor.rectify(nr, strict);
+                    if (auto errors = amigaFs->doctor.xray(nr, strict, os); !errors) {
                         os << "No findings." << std::endl;
                     }
                     
                 } else {
                     
-                    if (args.contains("r")) fs->doctor.rectify(strict);
-                    if (auto errors = fs->doctor.xray(strict, os, args.contains("v")); !errors) {
+                    if (args.contains("r")) amigaFs->doctor.rectify(strict);
+                    if (auto errors = amigaFs->doctor.xray(strict, os, args.contains("v")); !errors) {
                         os << "No findings." << std::endl;
                     }
                 }
@@ -1424,10 +1405,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
                 Tokens missing;
-                auto path = matchPath(args.at("name"), missing);
+                auto path = navMatchPath(args.at("name"), missing);
                 
                 if (missing.empty()) {
                     throw(FSError(FSError::FS_EXISTS, args.at("name")));
@@ -1435,13 +1416,13 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 auto p = path;
                 for (auto &it: missing) {
-                    p = fs->mkdir(p, FSName(it));
+                    p = amigaFs->mkdir(p, FSName(it));
                 }
                 
                 /*
                 auto *p = &path.mutate();
                 for (auto &it: missing) {
-                    if (p) p = &fs->mkdir(*p, FSName(it));
+                    if (p) p = &amigaFs->mkdir(*p, FSName(it));
                 }
                 */
             }
@@ -1458,14 +1439,14 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto sourceNr = parsePath(args, "source");
-                auto &source = fs->fetch(sourceNr);
+                auto sourceNr = navParsePath(args, "source");
+                auto &source = amigaFs->fetch(sourceNr);
 
                 Tokens missing;
-                auto pathNr = matchPath(args.at("target"), missing);
-                auto &path = fs->fetch(pathNr);
+                auto pathNr = navMatchPath(args.at("target"), missing);
+                auto &path = amigaFs->fetch(pathNr);
 
                 printf("%s -> '%s' {", source.absName().c_str(), path.absName().c_str());
                 for (auto &it : missing) printf(" %s", it.c_str());
@@ -1480,14 +1461,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                     if (path.isDirectory()) {
                         
                         logmsg(LOG_RSH, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
-                        fs->move(sourceNr, pathNr);
+                        amigaFs->move(sourceNr, pathNr);
                     }
                     
                 } else if (missing.size() == 1) {
                     
                     logmsg(LOG_RSH, "Moving '%s' to '%s' / '%s'\n",
                           source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
-                    fs->move(sourceNr, pathNr, FSName(missing.back()));
+                    amigaFs->move(sourceNr, pathNr, FSName(missing.back()));
 
                 } else {
                     
@@ -1507,13 +1488,13 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto sourceNr = parsePath(args, "source");
+                auto sourceNr = navParsePath(args, "source");
 
                 Tokens missing;
-                auto pathNr = matchPath(args.at("target"), missing);
-                auto &path = fs->fetch(pathNr);
+                auto pathNr = navMatchPath(args.at("target"), missing);
+                auto &path = amigaFs->fetch(pathNr);
 
                 if (missing.empty()) {
                     
@@ -1523,12 +1504,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                     }
                     if (path.isDirectory()) {
                         
-                        fs->copy(sourceNr, pathNr);
+                        amigaFs->copy(sourceNr, pathNr);
                     }
                     
                 } else if (missing.size() == 1) {
                     
-                    fs->copy(sourceNr, pathNr, FSName(missing.back()));
+                    amigaFs->copy(sourceNr, pathNr, FSName(missing.back()));
 
                 } else {
                     
@@ -1547,12 +1528,12 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                requireFormattedFS();
+                navRequireFormattedFS();
 
-                auto &path = fs->fetch(parsePath(args, "path"));
+                auto &path = amigaFs->fetch(navParsePath(args, "path"));
 
                 if (path.isFile()) {
-                    fs->rm(path.nr);
+                    amigaFs->rm(path.nr);
                 } else if (path.isDirectory()) {
                     throw FSError(FSError::FS_NOT_A_FILE, args.at("path"));
                 } else {

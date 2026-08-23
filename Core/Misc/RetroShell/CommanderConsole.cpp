@@ -14,22 +14,16 @@
 
 namespace vamiga {
 
-void
-CommanderConsole::_pause()
-{
-    
-}
-
 string
-CommanderConsole::prompt()
+Console::commanderPrompt()
 {
     return "vAmiga% ";
 }
 
 void
-CommanderConsole::didActivate()
+Console::commanderDidActivate()
 {
-    if (!activated) {
+    if (!welcomed) {
 
         *this << "RetroShell " << Amiga::build() << '\n';
         *this << '\n';
@@ -38,18 +32,12 @@ CommanderConsole::didActivate()
         *this << '\n';
     }
 
-    activated = true;
-}
-
-void
-CommanderConsole::didDeactivate()
-{
-
+    welcomed = true;
 }
 
 /*
 void
-CommanderConsole::summary()
+Console::commanderSummary()
 {
     std::stringstream ss;
     
@@ -73,11 +61,8 @@ CommanderConsole::summary()
 */
 
 void
-CommanderConsole::initCommands(RSCommand &root)
+Console::initCommanderCommands(RSCommand &root)
 {
-    Console::initCommands(root);
-
-
     //
     // Empty command
     //

@@ -1807,7 +1807,7 @@ void
 RetroShellAPI::import(const fs::path &path, bool recursive, bool contents)
 {
     VAMIGA_PUBLIC_SUSPEND
-    retroShell->navigator.import(path, recursive, contents);
+    retroShell->console.navImport(path, recursive, contents);
 }
 */
 
@@ -1815,7 +1815,7 @@ void
 RetroShellAPI::exportBlocks(const std::filesystem::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
-    retroShell->navigator.exportBlocks(path);
+    retroShell->console.exportBlocks(path);
 }
 
 void

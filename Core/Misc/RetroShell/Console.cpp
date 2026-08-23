@@ -83,13 +83,106 @@ void
 Console::_initialize()
 {
     // Register commands
-    initCommands(root);
+    initCommands();
     
     // Initialize the text storage
     clear();
 
     // Register as delegate to receive command output
     delegates.push_back(this);
+}
+
+void
+Console::_pause()
+{
+    if (commandSet == CommandSet::Debugger) debuggerPause();
+}
+
+void
+Console::didActivate()
+{
+    switch (commandSet) {
+
+        case CommandSet::Commander:     commanderDidActivate(); break;
+        case CommandSet::Debugger:      debuggerDidActivate(); break;
+
+        default:
+            break;
+    }
+}
+
+void
+Console::didDeactivate()
+{
+    switch (commandSet) {
+
+        case CommandSet::Debugger:      debuggerDidDeactivate(); break;
+
+        default:
+            break;
+    }
+}
+
+string
+Console::prompt()
+{
+    switch (commandSet) {
+
+        case CommandSet::Commander:     return commanderPrompt();
+        case CommandSet::Debugger:      return debuggerPrompt();
+        case CommandSet::Navigator:     return navPrompt();
+        case CommandSet::CBMNavigator:  return cbmPrompt();
+    }
+    return "";
+}
+
+void
+Console::setCommandSet(CommandSet cs)
+{
+    CommandSetEnum::validate(cs);
+
+    // Leave the old command set
+    didDeactivate();
+
+    // Replace the command tree
+    commandSet = cs;
+    initCommands();
+
+    // Enter the new command set
+    didActivate();
+}
+
+void
+Console::exportBlocks(const fs::path &path)
+{
+    switch (commandSet) {
+
+        case CommandSet::Navigator:     navExportBlocks(path); break;
+        case CommandSet::CBMNavigator:  cbmExportBlocks(path); break;
+
+        default:
+            throw RSError(RSError::GENERIC, "No file system console is active");
+    }
+}
+
+void
+Console::initCommands()
+{
+    // Wipe out the old command tree
+    root = RSCommand();
+    RSCommand::currentGroup = "";
+
+    // Register the commands that are available in all command sets
+    initCommonCommands(root);
+
+    // Register the commands of the selected command set
+    switch (commandSet) {
+
+        case CommandSet::Commander:     initCommanderCommands(root); break;
+        case CommandSet::Debugger:      initDebuggerCommands(root); break;
+        case CommandSet::Navigator:     initNavigatorCommands(root); break;
+        case CommandSet::CBMNavigator:  initCBMNavigatorCommands(root); break;
+    }
 }
 
 Console&
@@ -411,7 +504,7 @@ Console::press(const string &s)
 }
 
 isize
-Console::cursorRel()
+Console::cursorRel() const
 {
     assert(cursor >= 0 && cursor <= inputLength());
     return cursor - (isize)input.length();
@@ -518,6 +611,17 @@ Console::autoComplete(const string& userInput)
 
 void
 Console::autoComplete(Tokens &argv)
+{
+    switch (commandSet) {
+
+        case CommandSet::Navigator:     navAutoComplete(argv); break;
+        case CommandSet::CBMNavigator:  cbmAutoComplete(argv); break;
+        default:                        defaultAutoComplete(argv); break;
+    }
+}
+
+void
+Console::defaultAutoComplete(Tokens &argv)
 {
     RSCommand *current = &getRoot();
     string prefix, token;
@@ -829,6 +933,17 @@ Console::argUsage(const RSCommand& current, const string &prefix)
 void
 Console::help(std::ostream &os, const string& userInput, isize tabs)
 {
+    switch (commandSet) {
+
+        case CommandSet::Navigator:     navHelp(os, userInput, tabs); break;
+        case CommandSet::CBMNavigator:  cbmHelp(os, userInput, tabs); break;
+        default:                        defaultHelp(os, userInput, tabs); break;
+    }
+}
+
+void
+Console::defaultHelp(std::ostream &os, const string& userInput, isize tabs)
+{
     if (auto [cmd, args] = seekCommand(userInput); cmd) {
         cmd->printHelp(os);
     }
@@ -887,7 +1002,7 @@ Console::_dump(std::ostream &os, CoreObject &component, Category category)
 }
 
 void
-Console::initCommands(RSCommand &root)
+Console::initCommonCommands(RSCommand &root)
 {
     //
     // Common commands
@@ -932,6 +1047,18 @@ Console::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 retroShell.enterNavigator();
+            }
+        });
+        
+        root.add({
+            
+            .tokens = { "cbmnavigator" },
+            .chelp  = { "Enter the CBM file system console" },
+            .flags  = rs::hidden,
+            
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+                
+                retroShell.enterCBMNavigator();
             }
         });
         
@@ -1081,7 +1208,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, usize flags)
 
             .func   = [this, &c] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                retroShell.commander.dump(os, c, Category::Config);
+                dump(os, c, Category::Config);
             }
         });
         

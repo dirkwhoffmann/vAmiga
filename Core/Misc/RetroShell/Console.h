@@ -67,32 +67,25 @@ public:
     void add(const string &input);
 };
 
-class Console : public SubComponent, public ConsoleDelegate {
+/* The console is the text-based front end of RetroShell. It manages the text
+ * storage, the user input line, and the command tree. Which commands are
+ * available is determined by the currently active command set. Switching
+ * between the different shells (Commander, Debugger, Navigator, ...) is
+ * implemented by rebuilding the command tree from scratch.
+ */
+class Console final : public SubComponent, public ConsoleDelegate {
 
     friend class RetroShell;
     friend class RshServer;
     friend class Interpreter;
     
-    Descriptions descriptions = {
-        {
-            .type           = Class::Console,
-            .name           = "CmdConsole",
-            .description    = "Commander",
-            .shell          = ""
-        },
-        {
-            .type           = Class::Console,
-            .name           = "DbgConsole",
-            .description    = "Debugger",
-            .shell          = ""
-        },
-        {
-            .type           = Class::Console,
-            .name           = "NavConsole",
-            .description    = "Navigator",
-            .shell          = ""
-        }
-    };
+    Descriptions descriptions = {{
+        
+        .type           = Class::Console,
+        .name           = "Console",
+        .description    = "Console",
+        .shell          = ""
+    }};
     
     Options options = {
         
@@ -105,11 +98,37 @@ public:
 
 protected:
     
+    // The currently active command set
+    CommandSet commandSet = CommandSet::Commander;
+    
     // Root node of the command tree
     RSCommand root;
     
     // Memory pointer for commands accpeting default addresses
     u32 current = 0;
+
+    
+    //
+    // Command-set specific state
+    //
+    
+protected:
+    
+    // Commander: Indicates if the welcome message has been printed
+    bool welcomed = false;
+    
+    // Navigator: The imported Amiga volume
+    unique_ptr<ADFFile> adf;
+    unique_ptr<Volume> amigaVol;
+    unique_ptr<FileSystem> amigaFs;
+    
+    // CBM Navigator: The imported CBM volume
+    unique_ptr<D64File> d64;
+    unique_ptr<Volume> cbmVol;
+    unique_ptr<retro::vault::cbm::FileSystem> cbmFs;
+    
+    // CBM Navigator: Currently observed block
+    BlockNr cb = 0;
 
     
     //
@@ -149,18 +168,10 @@ protected:
     
 public:
     
-    // using SubComponent::SubComponent;
-    
     Console(Amiga &amiga, isize id, TextStorage &storage) : SubComponent(amiga, id), storage(storage) { };
     
     Console& operator= (const Console& other) { return *this; }
     
-protected:
-    
-    virtual void initCommands(RSCommand &root);
-    const char *registerComponent(CoreComponent &c, usize flags = 0);
-    const char *registerComponent(CoreComponent &c, RSCommand &root, usize flags = 0);
-
     
     //
     // Methods from Serializable
@@ -183,6 +194,7 @@ protected:
     
     void _dump(Category category, std::ostream &os) const override { }
     void _initialize() override;
+    void _pause() override;
     
     
     //
@@ -198,9 +210,28 @@ public:
     // Methods from ConsoleDelegate
     //
 
+    void didActivate() override;
+    void didDeactivate() override;
     void willExecute(const InputLine &input) override;
     void didExecute(const InputLine &input, std::stringstream &ss) override;
     void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) override;
+    
+    
+    //
+    // Switching command sets
+    //
+    
+public:
+    
+    // Returns the currently active command set
+    CommandSet getCommandSet() const { return commandSet; }
+    
+    // Activates another command set (rebuilds the command tree)
+    void setCommandSet(CommandSet cs);
+    
+    // Exports the file system of the active navigator
+    void exportBlocks(const fs::path &path);
+    
     
     //
     // Working with the text storage
@@ -225,7 +256,7 @@ public:
     Console &operator<<(const vspace &value);
     
     // Returns the prompt
-    virtual string prompt() = 0;
+    string prompt();
     
     // Returns the contents of the whole storage as a single C string
     const char *text();
@@ -258,7 +289,7 @@ protected:
 public:
     
     // Returns the size of the current user-input string
-    isize inputLength() { return (isize)input.length(); }
+    isize inputLength() const { return (isize)input.length(); }
     
     // Presses a key or a series of keys
     void press(RSKey key, bool shift = false);
@@ -266,11 +297,11 @@ public:
     void press(const string &s);
     
     // Returns the cursor position relative to the line end
-    isize cursorRel();
+    isize cursorRel() const;
     
 protected:
     
-    virtual void pressReturn(bool shift);
+    void pressReturn(bool shift);
     
     
     //
@@ -288,7 +319,8 @@ protected:
     Tokens split(const string& userInput);
     
     // Auto-completes an argument list
-    virtual void autoComplete(Tokens &argv);
+    void autoComplete(Tokens &argv);
+    void defaultAutoComplete(Tokens &argv);
     
     // Strips off the command tokens and returns a pointer to the command
     std::pair<RSCommand *, std::vector<string>> seekCommand(const string &argv);
@@ -339,13 +371,33 @@ protected:
     
     
     //
-    // Managing the interpreter
+    // Managing the command tree
     //
     
 public:
     
     // Returns the root node of the instruction tree
     RSCommand &getRoot() { return root; }
+    
+protected:
+    
+    // Rebuilds the command tree for the currently active command set
+    void initCommands();
+    
+    // Registers the commands of a certain command set
+    void initCommonCommands(RSCommand &root);
+    void initCommanderCommands(RSCommand &root);
+    void initDebuggerCommands(RSCommand &root);
+    void initNavigatorCommands(RSCommand &root);
+    void initCBMNavigatorCommands(RSCommand &root);
+    
+    const char *registerComponent(CoreComponent &c, usize flags = 0);
+    const char *registerComponent(CoreComponent &c, RSCommand &root, usize flags = 0);
+
+    
+    //
+    // Executing commands
+    //
     
 protected:
     
@@ -357,7 +409,8 @@ protected:
     void argUsage(const RSCommand &cmd, const string &prefix);
     
     // Displays a help text for a (partially typed in) command
-    virtual void help(std::ostream &os, const string &cmd, isize tabs);
+    void help(std::ostream &os, const string &cmd, isize tabs);
+    void defaultHelp(std::ostream &os, const string &cmd, isize tabs);
     
     // Creates a textual description of an error
     void describe(const std::exception &exc, isize line = 0, const string &cmd = "");
@@ -376,193 +429,109 @@ public:
 protected:
     
     void _dump(std::ostream &os, CoreObject &component, Category category);
-};
 
-class CommanderConsole final : public Console
-{
-    bool activated = false;
-
-    using Console::Console;
-
-    //
-    // Methods from Console
-    //
-
-    virtual void initCommands(RSCommand &root) override;
-    void _pause() override;
-    string prompt() override;
-
-
-    //
-    // Methods from ConsoleDelegate
-    //
-
-    void didActivate() override;
-    void didDeactivate() override;
-};
-
-class DebuggerConsole final : public Console
-{
-    using Console::Console;
     
     //
-    // Methods from Console
+    // Command set: Commander
     //
     
-    virtual void initCommands(RSCommand &root) override;
-    void _pause() override;
-    string prompt() override;
+protected:
+    
+    string commanderPrompt();
+    void commanderDidActivate();
 
-
-    //
-    // Methods from ConsoleDelegate
-    //
-
-    void didActivate() override;
-    void didDeactivate() override;
-};
-
-class NavigatorConsole final : public Console
-{
-    unique_ptr<ADFFile> adf;
-    unique_ptr<Volume> vol;
-    unique_ptr<FileSystem> fs;
-
-    using Console::Console;
     
     //
-    // Methods from Console
+    // Command set: Debugger
     //
     
-    virtual void initCommands(RSCommand &root) override;
-    void _pause() override;
-    string prompt() override;
-    void autoComplete(Tokens &argv) override;
-    void help(std::ostream &os, const string &argv, isize tabs) override;
-    string autoCompleteFilename(const string &input, usize flags) const;
+protected:
+    
+    string debuggerPrompt();
+    void debuggerDidActivate();
+    void debuggerDidDeactivate();
+    void debuggerPause();
 
-
+    
     //
-    // Methods from ConsoleDelegate
-    //
-
-    void didActivate() override;
-    void didDeactivate() override;
-
-
-    //
-    // Parsing input
+    // Command set: Navigator
     //
     
-    BlockNr parseBlock(const string &arg);
-    BlockNr parseBlock(const Arguments &argv, const string &token);
-    BlockNr parseBlock(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parsePath(const Arguments &argv, const string &token);
-    BlockNr parsePath(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parseFile(const Arguments &argv, const string &token);
-    BlockNr parseFile(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parseDirectory(const Arguments &argv, const string &token);
-    BlockNr parseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
+protected:
     
-    std::pair<DumpOpt,DumpFmt> parseDumpOpts(const Arguments &argv);
+    string navPrompt();
+    void navAutoComplete(Tokens &argv);
+    void navHelp(std::ostream &os, const string &argv, isize tabs);
+    string navAutoCompleteFilename(const string &input, usize flags) const;
+
+    BlockNr navParseBlock(const string &arg);
+    BlockNr navParseBlock(const Arguments &argv, const string &token);
+    BlockNr navParseBlock(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr navParsePath(const Arguments &argv, const string &token);
+    BlockNr navParsePath(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr navParseFile(const Arguments &argv, const string &token);
+    BlockNr navParseFile(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr navParseDirectory(const Arguments &argv, const string &token);
+    BlockNr navParseDirectory(const Arguments &argv, const string &token, BlockNr fallback);
+    
+    std::pair<DumpOpt,DumpFmt> navParseDumpOpts(const Arguments &argv);
 
     // Experimental
-    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound);
-    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
-    BlockNr matchPath(const string &path, Tokens &notFound);
+    BlockNr navMatchPath(const Arguments &argv, const string &token, Tokens &notFound);
+    BlockNr navMatchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
+    BlockNr navMatchPath(const string &path, Tokens &notFound);
     
 public:
 
     // Imports the file system from a floppy drive or hard drive
-    void import(const FloppyDrive &dfn);
-    void import(const HardDrive &hdn, isize part);
-    void importDf(isize n);
-    void importHd(isize n, isize part);
-    void import(const fs::path &path, bool recursive = true, bool contents = false);
+    void navImport(const FloppyDrive &dfn);
+    void navImport(const HardDrive &hdn, isize part);
+    void navImportDf(isize n);
+    void navImportHd(isize n, isize part);
+    void navImport(const fs::path &path, bool recursive = true, bool contents = false);
 
     // Throws an exception if the file system fails to match the condition
-    void requireFS() const;
-    void requireFormattedFS() const;
+    void navRequireFS() const;
+    void navRequireFormattedFS() const;
 
     // Exports the file system
-    void exportBlocks(fs::path path);
-};
+    void navExportBlocks(fs::path path);
 
-//
-// Experimental console for CBM images
-//
-
-class CBMNavigator final : public Console
-{
-    unique_ptr<D64File> d64;
-    unique_ptr<Volume> vol;
-    unique_ptr<retro::vault::cbm::FileSystem> fs;
-
-    // Currently observed block
-    BlockNr cb = 0;
-
-    using Console::Console;
-
+    
     //
-    // Methods from Console
+    // Command set: CBM Navigator
     //
+    
+protected:
+    
+    string cbmPrompt();
+    void cbmAutoComplete(Tokens &argv);
+    void cbmHelp(std::ostream &os, const string &argv, isize tabs);
+    string cbmAutoCompleteFilename(const string &input, usize flags) const;
 
-    virtual void initCommands(RSCommand &root) override;
-    void _pause() override;
-    string prompt() override;
-    void autoComplete(Tokens &argv) override;
-    void help(std::ostream &os, const string &argv, isize tabs) override;
-    string autoCompleteFilename(const string &input, usize flags) const;
+    BlockNr cbmParseBlock(const string &arg);
+    BlockNr cbmParseBlock(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr cbmParseBlock(const Arguments &argv, const string &token);
+    BlockNr cbmParseFile(const string &arg);
+    BlockNr cbmParseFile(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr cbmParseFile(const Arguments &argv, const string &token);
+    BlockNr cbmParseFileOrBlock(const string &arg);
+    BlockNr cbmParseFileOrBlock(const Arguments &argv, const string &token, BlockNr fallback);
+    BlockNr cbmParseFileOrBlock(const Arguments &argv, const string &token);
 
-
-    //
-    // Methods from ConsoleDelegate
-    //
-
-    void didActivate() override;
-    void didDeactivate() override;
-
-
-    //
-    // Parsing input
-    //
-
-    BlockNr parseBlock(const string &arg);
-    BlockNr parseBlock(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parseBlock(const Arguments &argv, const string &token);
-    BlockNr parseFile(const string &arg);
-    BlockNr parseFile(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parseFile(const Arguments &argv, const string &token);
-    BlockNr parseFileOrBlock(const string &arg);
-    BlockNr parseFileOrBlock(const Arguments &argv, const string &token, BlockNr fallback);
-    BlockNr parseFileOrBlock(const Arguments &argv, const string &token);
-
-    std::pair<DumpOpt,DumpFmt> parseDumpOpts(const Arguments &argv);
-
-    // Experimental
-    /*
-    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound);
-    BlockNr matchPath(const Arguments &argv, const string &token, Tokens &notFound, BlockNr fallback);
-    BlockNr matchPath(const string &path, Tokens &notFound);
-    */
+    std::pair<DumpOpt,DumpFmt> cbmParseDumpOpts(const Arguments &argv);
 
 public:
 
-    // Imports the file system from a floppy drive or hard drive
-    /*
-    void import(const FloppyDrive &dfn);
-    void import(const HardDrive &hdn, isize part);
-    void importDf(isize n);
-    void importHd(isize n, isize part);
-     */
-    void import(const fs::path &path, bool recursive = true, bool contents = false);
+    // Imports the file system from a file
+    void cbmImport(const fs::path &path, bool recursive = true, bool contents = false);
 
     // Throws an exception if the file system fails to match the condition
-    void requireFS() const;
-    void requireFormattedFS() const;
+    void cbmRequireFS() const;
+    void cbmRequireFormattedFS() const;
 
     // Exports the file system
-    void exportBlocks(fs::path path);
+    void cbmExportBlocks(fs::path path);
 };
 
 }

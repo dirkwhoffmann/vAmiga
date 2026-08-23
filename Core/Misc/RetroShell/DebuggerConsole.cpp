@@ -18,18 +18,15 @@
 namespace vamiga {
 
 void
-DebuggerConsole::_pause()
+Console::debuggerPause()
 {
-    if (retroShell.inDebugShell()) {
-        
-        *this << '\n';
-        exec(InputLine {.input = "state"});
-        *this << prompt();
-    }
+    *this << '\n';
+    exec(InputLine {.input = "state"});
+    *this << prompt();
 }
 
 string
-DebuggerConsole::prompt()
+Console::debuggerPrompt()
 {
     std::stringstream ss;
     
@@ -45,22 +42,20 @@ DebuggerConsole::prompt()
 }
 
 void
-DebuggerConsole::didActivate()
+Console::debuggerDidActivate()
 {
     emulator.trackOn(1);
 }
 
 void
-DebuggerConsole::didDeactivate()
+Console::debuggerDidDeactivate()
 {
     emulator.trackOff(1);
 }
 
 void
-DebuggerConsole::initCommands(RSCommand &root)
+Console::initDebuggerCommands(RSCommand &root)
 {
-    Console::initCommands(root);
-
     //
     // Empty command
     //
