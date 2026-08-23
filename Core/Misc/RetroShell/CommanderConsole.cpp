@@ -20,6 +20,7 @@ Console::commanderPrompt()
     return "vAmiga% ";
 }
 
+/*
 void
 Console::commanderDidActivate()
 {
@@ -34,6 +35,7 @@ Console::commanderDidActivate()
 
     welcomed = true;
 }
+*/
 
 /*
 void

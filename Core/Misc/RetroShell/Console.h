@@ -438,7 +438,7 @@ protected:
 protected:
     
     string commanderPrompt();
-    void commanderDidActivate();
+    // void commanderDidActivate();
 
     
     //
@@ -448,8 +448,8 @@ protected:
 protected:
     
     string debuggerPrompt();
-    void debuggerDidActivate();
-    void debuggerDidDeactivate();
+    // void debuggerDidActivate();
+    // void debuggerDidDeactivate();
     void debuggerPause();
 
     

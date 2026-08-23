@@ -103,11 +103,42 @@ Console::didActivate()
 {
     switch (commandSet) {
 
-        case CommandSet::Commander:     commanderDidActivate(); break;
-        case CommandSet::Debugger:      debuggerDidActivate(); break;
+        case CommandSet::Commander:
+            
+            *this << "RetroShell Commander " << Amiga::build() << '\n';
+            *this << '\n';
+            break;
+            
+        case CommandSet::Debugger:
+            
+            *this << "RetroShell Debugger " << Amiga::build() << '\n';
+            *this << '\n';
+            emulator.trackOn(1);
+            break;
 
+        case CommandSet::Navigator:
+            
+            *this << "RetroShell Navigator " << Amiga::build() << '\n';
+            *this << '\n';
+            break;
+ 
+        case CommandSet::CBMNavigator:
+            
+            *this << "RetroShell CBM Navigator " << Amiga::build() << '\n';
+            *this << '\n';
+            break;
+            
         default:
             break;
+    }
+    
+    if (!welcomed) {
+        
+        *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+        *this << "https://github.com/dirkwhoffmann/vamiga" << '\n';
+        *this << '\n';
+        
+        welcomed = true;
     }
 }
 
@@ -116,7 +147,10 @@ Console::didDeactivate()
 {
     switch (commandSet) {
 
-        case CommandSet::Debugger:      debuggerDidDeactivate(); break;
+        case CommandSet::Debugger:
+            
+            emulator.trackOff(1);
+            break;
 
         default:
             break;

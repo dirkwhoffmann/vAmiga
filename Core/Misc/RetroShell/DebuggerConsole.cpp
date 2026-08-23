@@ -41,17 +41,20 @@ Console::debuggerPrompt()
     return ss.str();
 }
 
+/*
 void
 Console::debuggerDidActivate()
 {
     emulator.trackOn(1);
 }
-
+*/
+/*
 void
 Console::debuggerDidDeactivate()
 {
     emulator.trackOff(1);
 }
+*/
 
 void
 Console::initDebuggerCommands(RSCommand &root)
