@@ -59,6 +59,7 @@ Denise::getOption(Opt option) const
         case Opt::DENISE_HIDDEN_SPRITES:     return config.hiddenSprites;
         case Opt::DENISE_HIDDEN_LAYERS:      return config.hiddenLayers;
         case Opt::DENISE_HIDDEN_LAYER_ALPHA: return config.hiddenLayerAlpha;
+        case Opt::DENISE_LINE_MARKER:        return config.lineMarker;
         case Opt::DENISE_CLX_SPR_SPR:        return config.clxSprSpr;
         case Opt::DENISE_CLX_SPR_PLF:        return config.clxSprPlf;
         case Opt::DENISE_CLX_PLF_PLF:        return config.clxPlfPlf;
@@ -87,6 +88,7 @@ Denise::checkOption(Opt opt, i64 value)
         case Opt::DENISE_HIDDEN_SPRITES:
         case Opt::DENISE_HIDDEN_LAYERS:
         case Opt::DENISE_HIDDEN_LAYER_ALPHA:
+        case Opt::DENISE_LINE_MARKER:
         case Opt::DENISE_CLX_SPR_SPR:
         case Opt::DENISE_CLX_SPR_PLF:
         case Opt::DENISE_CLX_PLF_PLF:
@@ -140,8 +142,13 @@ Denise::setOption(Opt option, i64 value)
             return;
             
         case Opt::DENISE_HIDDEN_LAYER_ALPHA:
-            
+
             config.hiddenLayerAlpha = (u8)value;
+            return;
+
+        case Opt::DENISE_LINE_MARKER:
+
+            config.lineMarker = (isize)value;
             return;
 
         case Opt::DENISE_CLX_SPR_SPR:

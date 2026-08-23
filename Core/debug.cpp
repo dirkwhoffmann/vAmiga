@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "debug.h"
-#include <type_traits>
 
 #ifndef NDEBUG
 
@@ -25,10 +24,10 @@ namespace vamiga {
       []() -> long { return (long)name; }, \
       [](long value) { name = LogLevel(value); } },
 
-#define DEBUG_FLAG_ENTRY(type, name, dflt, help) \
-    { #name, help, std::is_same_v<type, bool>, \
+#define DEBUG_FLAG_ENTRY(name, dflt, help) \
+    { #name, help, true, \
       []() -> long { return (long)name; }, \
-      [](long value) { name = (type)value; } },
+      [](long value) { name = (bool)value; } },
 
 const std::vector<FlagInfo> logFlags = { LOG_FLAGS(LOG_FLAG_ENTRY) };
 const std::vector<FlagInfo> debugFlags = { DEBUG_FLAGS(DEBUG_FLAG_ENTRY) };

@@ -173,6 +173,7 @@ Defaults::fallbacks()
     registerDefault(Opt::DENISE_HIDDEN_SPRITES,      0);
     registerDefault(Opt::DENISE_HIDDEN_LAYERS,       0);
     registerDefault(Opt::DENISE_HIDDEN_LAYER_ALPHA,  128);
+    registerDefault(Opt::DENISE_LINE_MARKER,         -1);
     registerDefault(Opt::DENISE_SHRES_BLEND,         false);
     registerDefault(Opt::DENISE_CLX_SPR_SPR,         false);
     registerDefault(Opt::DENISE_CLX_SPR_PLF,         false);
