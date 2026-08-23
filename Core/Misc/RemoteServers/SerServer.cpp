@@ -92,7 +92,7 @@ SerServer::processIncomingByte(u8 byte)
     } else {
 
         lostBytes++;
-        logme(LOG_SRV, "Buffer overflow\n");
+        logmsg(LOG_SRV, "Buffer overflow\n");
     }
 }
 
@@ -172,7 +172,7 @@ SerServer::scheduleNextEvent()
     // If the pulseWidth is extremely low, fallback to a default value
     if (pulseWidth < 40) {
         
-        logme(LOG_SRV, "Very low SERPER value\n");
+        logmsg(LOG_SRV, "Very low SERPER value\n");
         pulseWidth = 12000;
     }
     

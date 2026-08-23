@@ -1112,7 +1112,7 @@ Blitter::exec()
                 check1 = Hashable::fnvIt32(check1, dhold);
                 check2 = Hashable::fnvIt32(check2, bltdpt);
             }
-            logme(LOG_BLT, "    D = %X -> %X\n", dhold, bltdpt);
+            logmsg(LOG_BLT, "    D = %X -> %X\n", dhold, bltdpt);
             
             bltdpt = U32_ADD(bltdpt, desc ? -2 : 2);
             if (--cntD == 0) {
@@ -1125,10 +1125,10 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & FETCH_A)) {
 
-        logme(LOG_BLT, "FETCH_A\n");
+        logmsg(LOG_BLT, "FETCH_A\n");
 
         anew = agnus.doBlitterDmaRead(bltapt);
-        logme(LOG_BLT, "    A = %X <- %X\n", anew, bltapt);
+        logmsg(LOG_BLT, "    A = %X <- %X\n", anew, bltapt);
         
         bltapt = U32_ADD(bltapt, desc ? -2 : 2);
         if (--cntA == 0) {
@@ -1139,10 +1139,10 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & FETCH_B)) {
 
-        logme(LOG_BLT, "FETCH_B\n");
+        logmsg(LOG_BLT, "FETCH_B\n");
 
         bnew = agnus.doBlitterDmaRead(bltbpt);
-        logme(LOG_BLT, "    B = %X <- %X\n", bnew, bltbpt);
+        logmsg(LOG_BLT, "    B = %X <- %X\n", bnew, bltbpt);
         
         bltbpt = U32_ADD(bltbpt, desc ? -2 : 2);
         if (--cntB == 0) {
@@ -1153,10 +1153,10 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & FETCH_C)) {
 
-        logme(LOG_BLT, "FETCH_C\n");
+        logmsg(LOG_BLT, "FETCH_C\n");
 
         chold = agnus.doBlitterDmaRead(bltcpt);
-        logme(LOG_BLT, "    C = %X <- %X\n", chold, bltcpt);
+        logmsg(LOG_BLT, "    C = %X <- %X\n", chold, bltcpt);
         
         bltcpt = U32_ADD(bltcpt, desc ? -2 : 2);
         if (--cntC == 0) {
@@ -1167,7 +1167,7 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & HOLD_A)) {
 
-        logme(LOG_BLT, "HOLD_A\n");
+        logmsg(LOG_BLT, "HOLD_A\n");
 
         // Run the barrel shifter on data path A
         ahold = barrelShifter(anew & mask, aold, bltconASH(), desc);
@@ -1176,7 +1176,7 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & HOLD_B)) {
 
-        logme(LOG_BLT, "HOLD_B\n");
+        logmsg(LOG_BLT, "HOLD_B\n");
 
         // Run the barrel shifter on data path B
         bhold = barrelShifter(bnew, bold, bltconBSH(), desc);
@@ -1185,7 +1185,7 @@ Blitter::exec()
 
     if constexpr ((bool)(instr & HOLD_D)) {
 
-        logme(LOG_BLT, "HOLD_D\n");
+        logmsg(LOG_BLT, "HOLD_D\n");
 
         // Run the minterm logic circuit
         dhold = doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF);
@@ -1209,7 +1209,7 @@ Blitter::exec()
 
         u16 newpc = 0;
 
-        logme(LOG_BLT, "REPEAT\n");
+        logmsg(LOG_BLT, "REPEAT\n");
         iteration++;
         lockD = false;
 
@@ -1240,7 +1240,7 @@ Blitter::exec()
             if (bltconUSED() && !bltconLINE()) clearBusyFlag();
         }
         
-        logme(LOG_BLT, "BLTDONE\n");
+        logmsg(LOG_BLT, "BLTDONE\n");
         endBlit();
     }
 }
@@ -1286,7 +1286,7 @@ Blitter::fakeExec()
 
         u16 newpc = 0;
 
-        logme(LOG_BLT, "REPEAT\n");
+        logmsg(LOG_BLT, "REPEAT\n");
         iteration++;
         lockD = false;
 
@@ -1309,7 +1309,7 @@ Blitter::fakeExec()
 
     if constexpr ((bool)(instr & BLTDONE)) {
 
-        logme(LOG_BLT, "BLTDONE\n");
+        logmsg(LOG_BLT, "BLTDONE\n");
         endBlit();
     }
 }

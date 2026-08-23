@@ -297,7 +297,7 @@ public:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-    string prefix(LogLevel, const std::source_location &) const override;
+    string prefix(long, const std::source_location &) const override;
     void report(std::ostream &os, isize category) const override;
 
 private:

@@ -29,12 +29,12 @@
  *
  * Debug flags come in two kinds, declared in the two tables below:
  *
- * - Logging flags gate a logme() call and nothing else. Disabling one
+ * - Logging flags gate a logmsg() call and nothing else. Disabling one
  *   removes the call (release builds) or simply keeps it silent (debug
  *   builds); the library behaves identically either way. They are typed
- *   'LogLevel', because their value doubles as the severity the message is
- *   issued with. OFF disables the call, any other LogLevel enables it
- *   at that severity. All logging flags are prefixed 'LOG_'.
+ *   'long', because their value doubles as the severity the message is
+ *   issued with. LOG_OFF disables the call, any other severity enables it
+ *   at that level. All logging flags are prefixed 'LOG_'.
  *
  * - Debug flags enable extra behavior with a real side effect (an
  *   integrity check, a redundant computation compared against the fast
@@ -57,12 +57,12 @@
 #define RV_LOG_FLAGS(E)                                                       \
                                                                               \
     /* File systems */                                                        \
-    E(LOG_FS,         Off,  "File system classes (OFS / FFS)")           \
+    E(LOG_FS,         LOG_OFF,  "File system classes (OFS / FFS)")        \
                                                                               \
     /* Image files */                                                         \
-    E(LOG_HDF,        Off,  "HDF and HDZ files")                         \
-    E(LOG_DMS,        Off,  "DMS files")                                 \
-    E(LOG_IMG,        Off,  "Disk images")
+    E(LOG_HDF,        LOG_OFF,  "HDF and HDZ files")                      \
+    E(LOG_DMS,        LOG_OFF,  "DMS files")                              \
+    E(LOG_IMG,        LOG_OFF,  "Disk images")
 
 
 //
@@ -94,9 +94,9 @@
 // Logging macro
 //
 
-#define logme(key, format, ...) \
+#define logmsg(key, format, ...) \
     do { \
-        if CONSTEXPR (key != LogLevel::Off) \
+        if CONSTEXPR (key != LOG_OFF) \
             log(key, std::source_location::current(), \
                 format __VA_OPT__(,) __VA_ARGS__); \
     } while (0)
@@ -104,21 +104,20 @@
 
 namespace retro::vault {
 
-using utl::LogLevel;
 using utl::FlagInfo;
 
 
 //
-// Fixed severities (always active, never OFF)
+// Fixed severities (always active, never LOG_OFF)
 //
 
-inline constexpr LogLevel LV_OFF     = LogLevel::Off;
-inline constexpr LogLevel LV_FATAL   = LogLevel::Fatal;
-inline constexpr LogLevel LV_ERROR   = LogLevel::Error;
-inline constexpr LogLevel LV_WARNING = LogLevel::Warn;
-inline constexpr LogLevel LV_INFO    = LogLevel::Info;
-inline constexpr LogLevel LV_DEBUG   = LogLevel::Debug;
-inline constexpr LogLevel LV_TRACE   = LogLevel::Trace;
+inline constexpr long LOG_OFF     = 0;
+inline constexpr long LOG_FATAL   = 1;
+inline constexpr long LOG_ERROR   = 2;
+inline constexpr long LOG_WARN = 3;
+inline constexpr long LOG_INFO    = 4;
+inline constexpr long LOG_DEBUG   = 5;
+inline constexpr long LOG_TRACE   = 6;
 
 
 //
@@ -126,7 +125,7 @@ inline constexpr LogLevel LV_TRACE   = LogLevel::Trace;
 //
 
 #define DECLARE_LOG_FLAG(name, dflt, help) \
-    inline CONSTEXPR LogLevel name = LogLevel::dflt;
+    inline CONSTEXPR long name = dflt;
 RV_LOG_FLAGS(DECLARE_LOG_FLAG)
 #undef DECLARE_LOG_FLAG
 

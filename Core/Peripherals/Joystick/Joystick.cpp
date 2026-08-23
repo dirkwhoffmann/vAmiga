@@ -127,7 +127,7 @@ Joystick::_didLoad()
 void
 Joystick::setButton(bool value)
 {
-    logme(LOG_PRT, "Button = %d\n", value);
+    logmsg(LOG_PRT, "Button = %d\n", value);
     button = value;
 }
 
@@ -140,7 +140,7 @@ Joystick::isAutofiring()
 void
 Joystick::startAutofire()
 {
-    logme(LOG_PRT, "startAutofire()\n");
+    logmsg(LOG_PRT, "startAutofire()\n");
 
     // Load magazine
     reload(config.autofireBursts ? config.autofireBullets : INT_MAX);
@@ -155,7 +155,7 @@ Joystick::startAutofire()
 void
 Joystick::stopAutofire()
 {
-    logme(LOG_PRT, "stopAutofire()\n");
+    logmsg(LOG_PRT, "stopAutofire()\n");
 
     // Release button and empty the bullet counter
     setButton(false);
@@ -201,7 +201,7 @@ Joystick::changePra(u8 &pra) const
 u16
 Joystick::joydat() const
 {
-    // logme("joydat\n");
+    // logmsg("joydat\n");
 
     u16 result = 0;
 
@@ -234,7 +234,7 @@ Joystick::trigger(GamePadAction event)
 {
     GamePadActionEnum::validate(event);
 
-    logme(LOG_PRT, "trigger(%s)\n", GamePadActionEnum::key(event));
+    logmsg(LOG_PRT, "trigger(%s)\n", GamePadActionEnum::key(event));
 
     switch (event) {
 

@@ -108,21 +108,21 @@ void Blitter::doFastCopyBlit()
             // Fetch A
             if (useA) {
                 anew = mem.peek16 <Accessor::AGNUS> (apt);
-                logme(LOG_BLT, "    A = %X <- %X\n", anew, apt);
+                logmsg(LOG_BLT, "    A = %X <- %X\n", anew, apt);
                 apt = U32_ADD(apt, incr);
             }
 
             // Fetch B
             if (useB) {
                 bnew = mem.peek16 <Accessor::AGNUS> (bpt);
-                logme(LOG_BLT, "    B = %X <- %X\n", bnew, bpt);
+                logmsg(LOG_BLT, "    B = %X <- %X\n", bnew, bpt);
                 bpt = U32_ADD(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
                 chold = mem.peek16 <Accessor::AGNUS> (cpt);
-                logme(LOG_BLT, "    C = %X <- %X\n", chold, cpt);
+                logmsg(LOG_BLT, "    C = %X <- %X\n", chold, cpt);
                 cpt = U32_ADD(cpt, incr);
             }
             
@@ -154,7 +154,7 @@ void Blitter::doFastCopyBlit()
                     check1 = Hashable::fnvIt32(check1, dhold);
                     check2 = Hashable::fnvIt32(check2, dpt & agnus.ptrMask);
                 }
-                logme(LOG_BLT, "    D = %X -> %X\n", dhold, dpt);
+                logmsg(LOG_BLT, "    D = %X -> %X\n", dhold, dpt);
                 
                 dpt = U32_ADD(dpt, incr);
             }

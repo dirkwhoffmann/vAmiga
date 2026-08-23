@@ -10,65 +10,34 @@
 /* The Loggable interface provides a framework for printing log messages.
  *
  * Messages are generated via the log function and are always written to
- * stderr. Whether a call site actually calls log() at all is decided at
- * the call site itself (see the logging macros in debug.h), based on a
- * per-flag debug setting rather than a runtime channel lookup.
+ * stderr.
+ *
+ * The log levels follow the conventional log4j-style hierarchy:
+ *
+ *   OFF:   The highest possible rank. Intended to turn off logging.
+ *   FATAL: Severe errors that cause premature termination.
+ *   ERROR: Other runtime errors or unexpected conditions.
+ *   WARN:  Runtime situations that are undesirable or unexpected.
+ *   INFO:  Interesting runtime events.
+ *   DEBUG: Detailed information on the flow through the system.
+ *   TRACE: Most detailed information.
  */
 
 #pragma once
 
-#include "utl/abilities/Reflectable.h"
+#include "utl/common.h"
 #include <source_location>
 
 namespace utl {
 
-enum class LogLevel : long
-{
-    Off   = 0,
-    Fatal = 1,
-    Error = 2,
-    Warn  = 3,
-    Info  = 4,
-    Debug = 5,
-    Trace = 6
-};
+inline constexpr long LOG_OFF   = 0;
+inline constexpr long LOG_FATAL = 1;
+inline constexpr long LOG_ERROR = 2;
+inline constexpr long LOG_WARN  = 3;
+inline constexpr long LOG_INFO  = 4;
+inline constexpr long LOG_DEBUG = 5;
+inline constexpr long LOG_TRACE = 6;
 
-struct LogLevelEnum : Reflectable<LogLevelEnum, LogLevel>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = (long)LogLevel::Trace;
-
-    static const char *_key(long value) { return _key(LogLevel(value)); }
-    static const char *_key(LogLevel value)
-    {
-        switch (value) {
-
-            case LogLevel::Off:   return "OFF";
-            case LogLevel::Fatal: return "FATAL";
-            case LogLevel::Error: return "ERROR";
-            case LogLevel::Warn:  return "WARN";
-            case LogLevel::Info:  return "INFO";
-            case LogLevel::Debug: return "DEBUG";
-            case LogLevel::Trace: return "TRACE";
-        }
-        return "???";
-    }
-    static const char *help(long value) { return help(LogLevel(value)); }
-    static const char *help(LogLevel value)
-    {
-        switch (value) {
-
-            case LogLevel::Off:   return "Logging disabled";
-            case LogLevel::Fatal: return "Unrecoverable error";
-            case LogLevel::Error: return "Error condition";
-            case LogLevel::Warn:  return "Warning condition";
-            case LogLevel::Info:  return "Informational message";
-            case LogLevel::Debug: return "Debug message";
-            case LogLevel::Trace: return "Fine-grained trace message";
-        }
-        return "???";
-    }
-};
 
 /* Descriptor of a single debug flag.
  *
@@ -77,7 +46,7 @@ struct LogLevelEnum : Reflectable<LogLevelEnum, LogLevel>
  * combine several independent libraries, each with its own debug flags,
  * the descriptor gives RetroShell a uniform way to list and modify all of
  * them without any library having to know about the others. Both accessors
- * funnel through 'long', so that LogLevel, bool, and plain value flags can
+ * funnel through 'long', so that logging, bool, and plain value flags can
  * share a single descriptor type.
  *
  * Descriptor tables exist in debug builds only. In release builds the flags
@@ -109,7 +78,7 @@ public:
 #if defined(__clang__)
     __attribute__((format(printf, 4, 5)))
 #endif
-    void log(LogLevel level,
+    void log(long level,
              const std::source_location &loc,
              const char *fmt, ...) const;
 
@@ -120,7 +89,26 @@ public:
 protected:
 
     // Optional prefix printed prior to the debug message
-    virtual string prefix(LogLevel, const std::source_location &) const;
+    virtual string prefix(long, const std::source_location &) const;
 };
+
+
+//
+// Logging macros
+//
+
+#ifdef logmsg
+#undef logmsg
+#endif
+
+#define logmsg(key, format, ...) \
+    do { \
+        if CONSTEXPR (key != LOG_OFF) \
+            log(key, std::source_location::current(), \
+                format __VA_OPT__(,) __VA_ARGS__); \
+    } while (0)
+
+#define xfiles(format, ...) \
+    logmsg(LOG_XFILES, format __VA_OPT__(,) __VA_ARGS__)
 
 }

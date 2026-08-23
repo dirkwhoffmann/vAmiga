@@ -141,7 +141,7 @@ Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm) const
         if (minterm & 0b00000010) result2 |= ~a & ~b &  c;
         if (minterm & 0b00000001) result2 |= ~a & ~b & ~c;
 
-        if (result != result2) logme(LV_FATAL, "Blitter minterm error\n");
+        if (result != result2) logmsg(LOG_FATAL, "Blitter minterm error\n");
     }
     
     return result;
@@ -416,7 +416,7 @@ Blitter::doFill(u16 &data, bool &carry) const
 {
     assert(carry == 0 || carry == 1);
 
-    logme(LOG_BLT, "data = %X carry = %X\n", data, carry);
+    logmsg(LOG_BLT, "data = %X carry = %X\n", data, carry);
     
     u8 dataHi = HI_BYTE(data);
     u8 dataLo = LO_BYTE(data);
@@ -506,7 +506,7 @@ Blitter::beginBlit()
 
             linecount++;
             check1 = check2 = Hashable::fnvInit32();
-            logme(LV_DEBUG, "Line %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+            logmsg(LOG_DEBUG, "Line %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                     linecount, bltsizeH, bltsizeV,
                     bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                     bltcon0,
@@ -525,7 +525,7 @@ Blitter::beginBlit()
 
             copycount++;
             check1 = check2 = Hashable::fnvInit32();
-            logme(LV_DEBUG, "Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+            logmsg(LOG_DEBUG, "Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                     copycount,
                     bltsizeH, bltsizeV,
                     bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
@@ -548,7 +548,7 @@ Blitter::beginLineBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        if CONSTEXPR (BLT_CHECKSUM) logme(LV_DEBUG, "Performing level %ld line blits.\n", level);
+        if CONSTEXPR (BLT_CHECKSUM) logmsg(LOG_DEBUG, "Performing level %ld line blits.\n", level);
     }
     if (bltcon0 & BLTCON0_USEB) {
         xfiles("Performing line blit with channel B enabled\n");
@@ -574,7 +574,7 @@ Blitter::beginCopyBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        if CONSTEXPR (BLT_CHECKSUM) logme(LV_DEBUG, "Performing level %ld copy blits.\n", level);
+        if CONSTEXPR (BLT_CHECKSUM) logmsg(LOG_DEBUG, "Performing level %ld copy blits.\n", level);
     }
 
     switch (level) {
@@ -591,7 +591,7 @@ Blitter::beginCopyBlit(isize level)
 void
 Blitter::clearBusyFlag()
 {
-    logme(LOG_BLTTIM, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
+    logmsg(LOG_BLTTIM, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -600,7 +600,7 @@ Blitter::clearBusyFlag()
 void
 Blitter::endBlit()
 {
-    logme(LOG_BLTTIM, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+    logmsg(LOG_BLTTIM, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
     if CONSTEXPR (BLT_MEM_GUARD) blitcount++;
@@ -610,7 +610,7 @@ Blitter::endBlit()
     
     // Dump checksums if requested
     if CONSTEXPR (BLT_CHECKSUM) {
-        logme(LV_DEBUG,
+        logmsg(LOG_DEBUG,
               "check1: %x check2: %x ABCD: %x %x %x %x\n",
               check1, check2,
               bltapt & agnus.ptrMask, bltbpt & agnus.ptrMask,

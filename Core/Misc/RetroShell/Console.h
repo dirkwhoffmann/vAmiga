@@ -125,7 +125,7 @@ protected:
     static HistoryBuffer historyBuffer;
     
     // Additional output inserted before and after command execution
-    string vdelim = LOG_RSH != utl::LogLevel::Off ? "[DEBUG]\n" : "\n";
+    string vdelim = LOG_RSH != LOG_OFF ? "[DEBUG]\n" : "\n";
     
     //
     // User input

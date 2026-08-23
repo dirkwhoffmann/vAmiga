@@ -182,7 +182,7 @@ DiskController::setState(DriveDmaState newState)
 void
 DiskController::setState(DriveDmaState oldState, DriveDmaState newState)
 {
-    logme(LOG_DSK, "%s -> %s\n",
+    logmsg(LOG_DSK, "%s -> %s\n",
           DriveStateEnum::key(oldState), DriveStateEnum::key(newState));
     
     state = newState;
@@ -311,7 +311,7 @@ DiskController::readBit(bool bit)
         syncCycle = agnus.clock;
 
         // Trigger a word SYNC interrupt
-        logme(LOG_DSK, "SYNC IRQ (dsklen = %d)\n", dsklen);
+        logmsg(LOG_DSK, "SYNC IRQ (dsklen = %d)\n", dsklen);
         paula.raiseIrq(IrqSource::DSKSYN);
 
         // Enable DMA if the controller was waiting for it
@@ -405,7 +405,7 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
             paula.raiseIrq(IrqSource::DSKBLK);
             setState(DriveDmaState::OFF);
             
-            if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG,
+            if CONSTEXPR (DSK_CHECKSUM) logmsg(LOG_DEBUG,
                   "read: cnt = %llu check1 = %x check2 = %x\n", checkcnt, check1, check2);
             
             return;
@@ -473,8 +473,8 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
             setState(DriveDmaState::OFF);
             
             if CONSTEXPR (DSK_CHECKSUM) {
-                logme(LV_DEBUG, "write: cnt = %llu ", checkcnt);
-                logme(LV_DEBUG, "check1 = %x check2 = %x\n", check1, check2);
+                logmsg(LOG_DEBUG, "write: cnt = %llu ", checkcnt);
+                logmsg(LOG_DEBUG, "check1 = %x check2 = %x\n", check1, check2);
             }
 
             return;
@@ -552,13 +552,13 @@ DiskController::performTurboRead(FloppyDrive *drive)
     
     if CONSTEXPR (DSK_CHECKSUM) {
 
-        logme(LV_DEBUG, "Turbo read %s: cyl: %ld side: %ld offset: %ld ",
+        logmsg(LOG_DEBUG, "Turbo read %s: cyl: %ld side: %ld offset: %ld ",
               drive->objectName(),
               drive->head.cylinder,
               drive->head.head,
               drive->head.offset);
 
-        logme(LV_DEBUG, "checkcnt = %llu check1 = %x check2 = %x\n",
+        logmsg(LOG_DEBUG, "checkcnt = %llu check1 = %x check2 = %x\n",
               checkcnt, check1, check2);
     }
 }
@@ -584,7 +584,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
         drive->write16AndRotate(word);
     }
     
-    if CONSTEXPR (DSK_CHECKSUM) logme(LV_DEBUG,
+    if CONSTEXPR (DSK_CHECKSUM) logmsg(LOG_DEBUG,
           "Turbo write %s: checkcnt = %llu check1 = %x check2 = %x\n",
           drive->objectName(), checkcnt, check1, check2);
 }

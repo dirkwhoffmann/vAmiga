@@ -37,7 +37,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is free
             if (!agnus.busIsFree<BusOwner::BLITTER>()) {
-                logme(LOG_BLTTIM, "BLT_STRT1: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
+                logmsg(LOG_BLTTIM, "BLT_STRT1: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
                 break;
             }
 
@@ -49,7 +49,7 @@ Blitter::serviceEvent(EventID id)
 
             // Only proceed if the bus is a free
             if (!agnus.busIsFree<BusOwner::BLITTER>()) {
-                logme(LOG_BLTTIM, "BLT_STRT2: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
+                logmsg(LOG_BLTTIM, "BLT_STRT2: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
                 break;
             }
 
@@ -59,25 +59,25 @@ Blitter::serviceEvent(EventID id)
 
         case BLT_COPY_SLOW:
 
-            logme(LOG_BLT, "Copy instruction %d:%d\n", bltconUSE(), bltpc);
+            logmsg(LOG_BLT, "Copy instruction %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][0][bltconFE()][bltpc])();
             break;
 
         case BLT_COPY_FAKE:
 
-            logme(LOG_BLT, "Copy fake %d:%d\n", bltconUSE(), bltpc);
+            logmsg(LOG_BLT, "Copy fake %d:%d\n", bltconUSE(), bltpc);
             (this->*copyBlitInstr[bltconUSE()][1][bltconFE()][bltpc])();
             break;
 
         case BLT_LINE_SLOW:
             
-            logme(LOG_BLT, "Line instruction %d:%d\n", bltconUSEB(), bltpc);
+            logmsg(LOG_BLT, "Line instruction %d:%d\n", bltconUSEB(), bltpc);
             (this->*lineBlitInstr[bltconUSEBC()][0][bltpc])();
             break;
 
         case BLT_LINE_FAKE:
             
-            logme(LOG_BLT, "Line fake %d:%d\n", bltconUSEB(), bltpc);
+            logmsg(LOG_BLT, "Line fake %d:%d\n", bltconUSEB(), bltpc);
             (this->*lineBlitInstr[bltconUSEBC()][1][bltpc])();
             break;
 

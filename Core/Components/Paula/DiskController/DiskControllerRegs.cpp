@@ -26,7 +26,7 @@ DiskController::peekDSKDATR() const
 void
 DiskController::pokeDSKLEN(u16 value)
 {
-    logme(LOG_DSKREG, "pokeDSKLEN(%X)\n", value);
+    logmsg(LOG_DSKREG, "pokeDSKLEN(%X)\n", value);
 
     setDSKLEN(dsklen, value);
 }
@@ -34,7 +34,7 @@ DiskController::pokeDSKLEN(u16 value)
 void
 DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 {
-    logme(LOG_DSKREG, "setDSKLEN(%x) [%ld,%ld,%ld]\n",
+    logmsg(LOG_DSKREG, "setDSKLEN(%x) [%ld,%ld,%ld]\n",
           newValue, df0.head.cylinder, df0.head.head, df0.head.offset);
 
     FloppyDrive *drive = getSelectedDrive();
@@ -100,7 +100,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 void
 DiskController::pokeDSKDAT(u16 value)
 {
-    logme(LOG_DSKREG, "pokeDSKDAT\n");
+    logmsg(LOG_DSKREG, "pokeDSKDAT\n");
 }
 
 u16
@@ -111,7 +111,7 @@ DiskController::peekDSKBYTR()
     // Clear the DSKBYT bit, so it won't show up in the next read
     incoming &= 0x7FFF;
 
-    logme(LOG_DSKREG, "peekDSKBYTR() = %x\n", result);
+    logmsg(LOG_DSKREG, "peekDSKBYTR() = %x\n", result);
     return result;
 }
 
@@ -145,14 +145,14 @@ DiskController::computeDSKBYTR() const
 void
 DiskController::pokeDSKSYNC(u16 value)
 {
-    logme(LOG_DSKREG, "pokeDSKSYNC(%x)\n", value);
+    logmsg(LOG_DSKREG, "pokeDSKSYNC(%x)\n", value);
     
     if (value != 0x4489) {
         
         xfiles("DSKSYNC: Unusual sync mark $%04X\n", value);
         
         if (config.lockDskSync) {
-            logme(LOG_DSKREG, "Write to DSKSYNC blocked (%x)\n", value);
+            logmsg(LOG_DSKREG, "Write to DSKSYNC blocked (%x)\n", value);
             return;
         }
     }
@@ -196,9 +196,9 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     if (oldSelected != selected) {
         
         if (selected == -1) {
-            logme(LOG_DSKREG, "Deselecting df%ld\n", oldSelected);
+            logmsg(LOG_DSKREG, "Deselecting df%ld\n", oldSelected);
         } else {
-            logme(LOG_DSKREG, "Selecting df%ld\n", selected);
+            logmsg(LOG_DSKREG, "Selecting df%ld\n", selected);
         }
 
         // Inform the GUI

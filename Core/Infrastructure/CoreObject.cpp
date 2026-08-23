@@ -15,7 +15,7 @@
 namespace vamiga {
 
 string
-CoreObject::prefix(LogLevel level, const std::source_location &loc) const
+CoreObject::prefix(long level, const std::source_location &loc) const
 {
     const isize verbosity = 2;
 

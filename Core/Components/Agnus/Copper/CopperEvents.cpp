@@ -30,7 +30,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_REQ_DMA:
 
-            logme(LOG_COP, "COP_REQ_DMA\n");
+            logmsg(LOG_COP, "COP_REQ_DMA\n");
             
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
@@ -44,7 +44,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAKEUP:
             
-            logme(LOG_COP, "COP_WAKEUP\n");
+            logmsg(LOG_COP, "COP_WAKEUP\n");
             
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
@@ -68,7 +68,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAKEUP_BLIT:
             
-            logme(LOG_COP, "COP_WAKEUP_BLIT\n");
+            logmsg(LOG_COP, "COP_WAKEUP_BLIT\n");
             
             // Check if the Blitter is busy, keep on waiting
             if (agnus.blitter.isActive()) {
@@ -88,7 +88,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_FETCH:
 
-            logme(LOG_COP, "COP_FETCH\n");
+            logmsg(LOG_COP, "COP_FETCH\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
@@ -126,7 +126,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_MOVE:
 
-            logme(LOG_COP, "COP_MOVE\n");
+            logmsg(LOG_COP, "COP_MOVE\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
@@ -173,7 +173,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAIT_OR_SKIP:
 
-            logme(LOG_COP, "COP_WAIT_OR_SKIP\n");
+            logmsg(LOG_COP, "COP_WAIT_OR_SKIP\n");
             
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
@@ -191,7 +191,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT1:
             
-            logme(LOG_COP, "COP_WAIT1\n");
+            logmsg(LOG_COP, "COP_WAIT1\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
@@ -202,7 +202,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT2:
 
-            logme(LOG_COP, "COP_WAIT2\n");
+            logmsg(LOG_COP, "COP_WAIT2\n");
 
             // Clear the skip flag
             skip = false;
@@ -222,12 +222,12 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT_BLIT:
             
-            logme(LOG_COP, "COP_WAIT_BLIT\n");
+            logmsg(LOG_COP, "COP_WAIT_BLIT\n");
             
             // Wait for the next free cycle
             if (agnus.busOwner[agnus.pos.h] != BusOwner::NONE &&
                 agnus.busOwner[agnus.pos.h] != BusOwner::BLITTER) {
-                // logme("COP_WAIT_BLIT delay\n");
+                // logmsg("COP_WAIT_BLIT delay\n");
                 reschedule(); break;
             }
             
@@ -237,7 +237,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_SKIP1:
 
-            logme(LOG_COP, "COP_SKIP1\n");
+            logmsg(LOG_COP, "COP_SKIP1\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
@@ -248,7 +248,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_SKIP2:
 
-            logme(LOG_COP, "COP_SKIP2\n");
+            logmsg(LOG_COP, "COP_SKIP2\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }

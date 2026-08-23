@@ -26,7 +26,7 @@ RemoteServer::RemoteServer(Amiga& ref, isize id) : SubComponent(ref, id)
 void
 RemoteServer::shutDownServer()
 {
-    logme(LOG_SRV, "Shutting down\n");
+    logmsg(LOG_SRV, "Shutting down\n");
     try { stop(); } catch(...) { }
 }
 
@@ -149,7 +149,7 @@ RemoteServer::start()
 {
     if (!(isOff() || isWaiting())) return;
 
-    logme(LOG_SRV, "Starting server...\n");
+    logmsg(LOG_SRV, "Starting server...\n");
     switchState(SrvState::STARTING);
 
     // Make sure we continue with a terminated server thread
@@ -164,7 +164,7 @@ RemoteServer::stop()
 {
     if (isOff() || isStopping()) return;
 
-    logme(LOG_SRV, "Stopping server...\n");
+    logmsg(LOG_SRV, "Stopping server...\n");
     switchState(SrvState::STOPPING);
 
     // Interrupt the server thread
@@ -189,7 +189,7 @@ RemoteServer::switchState(SrvState newState)
     
     if (oldState != newState) {
         
-        logme(LOG_SRV, "Switching state: %s -> %s\n",
+        logmsg(LOG_SRV, "Switching state: %s -> %s\n",
               SrvStateEnum::key(state), SrvStateEnum::key(newState));
         
         // Switch state

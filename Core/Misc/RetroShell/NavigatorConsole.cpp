@@ -1479,13 +1479,13 @@ NavigatorConsole::initCommands(RSCommand &root)
                     }
                     if (path.isDirectory()) {
                         
-                        logme(LOG_RSH, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
+                        logmsg(LOG_RSH, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
                         fs->move(sourceNr, pathNr);
                     }
                     
                 } else if (missing.size() == 1) {
                     
-                    logme(LOG_RSH, "Moving '%s' to '%s' / '%s'\n",
+                    logmsg(LOG_RSH, "Moving '%s' to '%s' / '%s'\n",
                           source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
                     fs->move(sourceNr, pathNr, FSName(missing.back()));
 

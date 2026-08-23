@@ -154,11 +154,11 @@ Snapshot::takeScreenshot(Amiga &amiga)
 void
 Snapshot::compress(Compressor compressor)
 {
-    if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "compress(%s)\n", CompressorEnum::key(compressor));
+    if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "compress(%s)\n", CompressorEnum::key(compressor));
 
     if (!isCompressed()) {
 
-        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
         {   auto watch = utl::StopWatch(SNP_DEBUG, "");
 
@@ -173,19 +173,19 @@ Snapshot::compress(Compressor compressor)
             
             getHeader()->compressor = u8(compressor);
         }
-        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Compressed size: %ld bytes\n", data.size);
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Compressed size: %ld bytes\n", data.size);
     }
 }
 void
 Snapshot::uncompress()
 {
-    if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "uncompress(%s)\n", CompressorEnum::key(compressor()));
+    if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "uncompress(%s)\n", CompressorEnum::key(compressor()));
 
     if (isCompressed()) {
         
         isize expectedSize = getHeader()->rawSize;
         
-        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Uncompressing %ld bytes...", data.size);
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Uncompressing %ld bytes...", data.size);
         
         {   auto watch = utl::StopWatch(SNP_DEBUG, "");
         
@@ -200,11 +200,11 @@ Snapshot::uncompress()
             
             getHeader()->compressor = u8(Compressor::NONE);
         }
-        if CONSTEXPR (SNP_DEBUG) logme(LV_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
         
         if (getHeader()->rawSize != expectedSize) {
          
-            logme(LV_WARNING, "Snaphot size: %ld. Expected: %ld\n", data.size, expectedSize);
+            logmsg(LOG_WARN, "Snaphot size: %ld. Expected: %ld\n", data.size, expectedSize);
             fatalError;
         }
     }

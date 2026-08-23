@@ -179,7 +179,7 @@ bool
 OSDebugger::isRamPtr(u32 addr) const
 {
     if (!mem.inRam(addr)) {
-        logme(LV_WARNING, "Pointer outside RAM: %x\n", addr);
+        logmsg(LOG_WARN, "Pointer outside RAM: %x\n", addr);
     }
 
     return addr && mem.inRam(addr);
@@ -189,7 +189,7 @@ bool
 OSDebugger::isRamOrRomPtr(u32 addr) const
 {
     if (!mem.inRam(addr) && !mem.inRom(addr)) {
-        logme(LV_WARNING, "Pointer outside RAM and ROM: %x\n", addr);
+        logmsg(LOG_WARN, "Pointer outside RAM and ROM: %x\n", addr);
     }
     
     return addr && (mem.inRam(addr) || mem.inRom(addr));
@@ -199,10 +199,10 @@ bool
 OSDebugger::isValidPtr(u32 addr) const
 {
     if (!IS_EVEN(addr)) {
-        logme(LV_WARNING, "Odd pointer: %x\n", addr);
+        logmsg(LOG_WARN, "Odd pointer: %x\n", addr);
     }
     if (!mem.inRam(addr) && !mem.inRom(addr)) {
-        logme(LV_WARNING, "Pointer outside RAM and ROM: %x\n", addr);
+        logmsg(LOG_WARN, "Pointer outside RAM and ROM: %x\n", addr);
     }
 
     return addr && IS_EVEN(addr) && (mem.inRam(addr) || mem.inRom(addr));

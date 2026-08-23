@@ -1598,7 +1598,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 for (const auto &flag : *table) {
 
                     os << utl::tab(flag.name);
-                    os << LogLevelEnum::key(LogLevel(flag.get())) << std::endl;
+                    os << utl::dec(flag.get()) << std::endl;
                 }
             }
         }
@@ -1619,24 +1619,16 @@ DebuggerConsole::initCommands(RSCommand &root)
             root.add({
 
                 .tokens = { "log", "set", flag.name },
-                .ghelp  = { flag.help }
+                .chelp  = { flag.help },
+                .args   = {
+                    { .name = { "level", "Severity (0 = off, 1 = fatal, 2 = error, 3 = warn, 4 = info, 5 = debug, 6 = trace)" } }
+                },
+                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    (*logTables[values[0]])[values[1]].set(parseNum(args, "level"));
+
+                }, .payload = { t, i }
             });
-
-            // Register a setter for every severity level
-            for (const auto &[key, value] : LogLevelEnum::pairs()) {
-
-                root.add({
-
-                    .tokens = { "log", "set", flag.name, key },
-                    .chelp  = { LogLevelEnum::help(value) },
-
-                    .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                        (*logTables[values[0]])[values[1]].set(values[2]);
-
-                    }, .payload = { t, i, value }
-                });
-            }
         }
     }
 

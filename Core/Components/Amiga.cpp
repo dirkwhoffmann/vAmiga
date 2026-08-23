@@ -87,18 +87,18 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
 
 Amiga::~Amiga()
 {
-    logme(LOG_RUN, "Destroying emulator instance\n");
+    logmsg(LOG_RUN, "Destroying emulator instance\n");
 }
 
 string
-Amiga::prefix(LogLevel level, const std::source_location &loc) const
+Amiga::prefix(long level, const std::source_location &loc) const
 {
     constexpr isize verbosity = 5;
 
     std::string result;
     result.reserve(256);
 
-    if (level == LogLevel::Debug && verbosity) {
+    if (level == LOG_DEBUG && verbosity) {
 
         // Run-ahead prefix
         if (isRunAheadInstance()) {
@@ -461,7 +461,7 @@ Amiga::revertToFactorySettings()
 i64
 Amiga::get(Opt opt, isize objid) const
 {
-    logme(LOG_CNF, "get(%s, %ld)\n", OptEnum::key(opt), objid);
+    logmsg(LOG_CNF, "get(%s, %ld)\n", OptEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
     if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -478,13 +478,13 @@ Amiga::check(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            logme(LOG_CNF, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            logmsg(LOG_CNF, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->checkOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        logme(LOG_CNF, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        logmsg(LOG_CNF, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -503,13 +503,13 @@ Amiga::set(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            logme(LOG_CNF, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            logmsg(LOG_CNF, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->setOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        logme(LOG_CNF, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        logmsg(LOG_CNF, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -808,7 +808,7 @@ Amiga::_dump(Category category, std::ostream &os) const
 void
 Amiga::_powerOn()
 {
-    logme(LOG_RUN, "_powerOn\n");
+    logmsg(LOG_RUN, "_powerOn\n");
 
     hardReset();
     msgQueue.put(Msg::POWER, 1);
@@ -817,7 +817,7 @@ Amiga::_powerOn()
 void
 Amiga::_powerOff()
 {
-    logme(LOG_RUN, "_powerOff\n");
+    logmsg(LOG_RUN, "_powerOff\n");
 
     hardReset();
     msgQueue.put(Msg::POWER, 0);
@@ -826,7 +826,7 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    logme(LOG_RUN, "_run\n");
+    logmsg(LOG_RUN, "_run\n");
 
     msgQueue.put(Msg::RUN);
 }
@@ -834,7 +834,7 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-    logme(LOG_RUN, "_pause\n");
+    logmsg(LOG_RUN, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
     msgQueue.put(Msg::PAUSE);
@@ -843,7 +843,7 @@ Amiga::_pause()
 void
 Amiga::_halt()
 {
-    logme(LOG_RUN, "_halt\n");
+    logmsg(LOG_RUN, "_halt\n");
 
     msgQueue.put(Msg::SHUTDOWN);
 }
@@ -851,7 +851,7 @@ Amiga::_halt()
 void
 Amiga::_warpOn()
 {
-    logme(LOG_RUN, "_warpOn\n");
+    logmsg(LOG_RUN, "_warpOn\n");
 
     msgQueue.put(Msg::WARP, 1);
 }
@@ -859,7 +859,7 @@ Amiga::_warpOn()
 void
 Amiga::_warpOff()
 {
-    logme(LOG_RUN, "_warpOff\n");
+    logmsg(LOG_RUN, "_warpOff\n");
 
     msgQueue.put(Msg::WARP, 0);
 }
@@ -867,7 +867,7 @@ Amiga::_warpOff()
 void
 Amiga::_trackOn()
 {
-    logme(LOG_RUN, "_trackOn\n");
+    logmsg(LOG_RUN, "_trackOn\n");
 
     msgQueue.put(Msg::TRACK, 1);
 }
@@ -875,7 +875,7 @@ Amiga::_trackOn()
 void
 Amiga::_trackOff()
 {
-    logme(LOG_RUN, "_trackOff\n");
+    logmsg(LOG_RUN, "_trackOff\n");
 
     msgQueue.put(Msg::TRACK, 0);
 }
@@ -986,7 +986,7 @@ Amiga::update(CmdQueue &queue)
                 break;
 
             default:
-                logme(LV_FATAL, "Unhandled command: %s\n", CmdEnum::key(cmd.type));
+                logmsg(LOG_FATAL, "Unhandled command: %s\n", CmdEnum::key(cmd.type));
         }
     }
 

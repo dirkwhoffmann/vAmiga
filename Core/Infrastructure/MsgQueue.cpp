@@ -67,7 +67,7 @@ MsgQueue::put(const Message &msg)
 
         SYNCHRONIZED
 
-        logme(LOG_MSG, "%s [%llx]\n", MsgEnum::key(msg.type), msg.value);
+        logmsg(LOG_MSG, "%s [%llx]\n", MsgEnum::key(msg.type), msg.value);
 
         if (listener) {
 
@@ -85,7 +85,7 @@ MsgQueue::put(const Message &msg)
                     queue.write(msg);
                 }
             } else {
-                logme(LV_WARNING, "Message lost: %s [%llx]\n", MsgEnum::key(msg.type), msg.value);
+                logmsg(LOG_WARN, "Message lost: %s [%llx]\n", MsgEnum::key(msg.type), msg.value);
             }
         }
     }

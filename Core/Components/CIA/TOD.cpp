@@ -69,7 +69,7 @@ TOD::getCounterHi(Cycle timeStamp) const
 {
     u8 result = frozen ? latch.hi : timeStamp > lastInc ? tod.hi : preTod.hi;
 
-    logme(LOG_TOD, "getCounterHi: %02x\n", result);
+    logmsg(LOG_TOD, "getCounterHi: %02x\n", result);
     return result;
 }
 
@@ -78,7 +78,7 @@ TOD::getCounterMid(Cycle timeStamp) const
 {
     u8 result = frozen ? latch.mid : timeStamp > lastInc ? tod.mid : preTod.mid;
     
-    logme(LOG_TOD, "getCounterMid: %02x\n", result);
+    logmsg(LOG_TOD, "getCounterMid: %02x\n", result);
     return result;
 }
 
@@ -87,35 +87,35 @@ TOD::getCounterLo(Cycle timeStamp) const
 {
     u8 result = frozen ? latch.lo : timeStamp > lastInc ? tod.lo : preTod.lo;
     
-    logme(LOG_TOD, "getCounterLo: %02x\n", result);
+    logmsg(LOG_TOD, "getCounterLo: %02x\n", result);
     return result;
 }
 
 u8
 TOD::getAlarmHi() const
 {
-    logme(LOG_TOD, "getAlarmHi: %02x\n", alarm.hi);
+    logmsg(LOG_TOD, "getAlarmHi: %02x\n", alarm.hi);
     return alarm.hi;
 }
 
 u8
 TOD::getAlarmMid() const
 {
-    logme(LOG_TOD, "getAlarmMid: %02x\n", alarm.mid);
+    logmsg(LOG_TOD, "getAlarmMid: %02x\n", alarm.mid);
     return alarm.mid;
 }
 
 u8
 TOD::getAlarmLo() const
 {
-    logme(LOG_TOD, "getAlarmLo: %02x\n", alarm.lo);
+    logmsg(LOG_TOD, "getAlarmLo: %02x\n", alarm.lo);
     return alarm.lo;
 }
 
 void
 TOD::setCounterHi(u8 value)
 {
-    logme(LOG_TOD, "setCounterHi(%x)\n", value);
+    logmsg(LOG_TOD, "setCounterHi(%x)\n", value);
     tod.hi = value;
     
     checkIrq();
@@ -124,7 +124,7 @@ TOD::setCounterHi(u8 value)
 void
 TOD::setCounterMid(u8 value)
 {
-    logme(LOG_TOD, "setCounterMid(%x)\n", value);
+    logmsg(LOG_TOD, "setCounterMid(%x)\n", value);
     tod.mid = value;
     
     checkIrq();
@@ -133,7 +133,7 @@ TOD::setCounterMid(u8 value)
 void
 TOD::setCounterLo(u8 value)
 {
-    logme(LOG_TOD, "setCounterLo(%x)\n", value);
+    logmsg(LOG_TOD, "setCounterLo(%x)\n", value);
     tod.lo = value;
     
     checkIrq();
@@ -142,7 +142,7 @@ TOD::setCounterLo(u8 value)
 void
 TOD::setAlarmHi(u8 value)
 {
-    logme(LOG_TOD, "setAlarmHi(%x)\n", value);
+    logmsg(LOG_TOD, "setAlarmHi(%x)\n", value);
     alarm.hi = value;
     
     checkIrq();
@@ -151,7 +151,7 @@ TOD::setAlarmHi(u8 value)
 void
 TOD::setAlarmMid(u8 value)
 {
-    logme(LOG_TOD, "setAlarmMid(%x)\n", value);
+    logmsg(LOG_TOD, "setAlarmMid(%x)\n", value);
     alarm.mid = value;
     
     checkIrq();
@@ -160,7 +160,7 @@ TOD::setAlarmMid(u8 value)
 void
 TOD::setAlarmLo(u8 value)
 {
-    logme(LOG_TOD, "setAlarmLo(%x)\n", value);
+    logmsg(LOG_TOD, "setAlarmLo(%x)\n", value);
     alarm.lo = value;
     
     checkIrq();
@@ -179,7 +179,7 @@ TOD::increment()
     if (!incLoNibble(tod.mid)) goto check;
 
     if (tod.value == alarm.value) {
-        logme(LOG_TOD, "TOD bug hits: %x:%x:%x (%d,%d)\n",
+        logmsg(LOG_TOD, "TOD bug hits: %x:%x:%x (%d,%d)\n",
               tod.hi, tod.mid, tod.lo, frozen, stopped);
     }
     if (cia.config.todBug) checkIrq();
@@ -217,7 +217,7 @@ TOD::checkIrq()
 {
     if (!matching && tod.value == alarm.value) {
         
-        logme(LOG_TOD, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
+        logmsg(LOG_TOD, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
         cia.todInterrupt();
     }
     matching = (tod.value == alarm.value);

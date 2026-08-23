@@ -84,7 +84,7 @@ UART::peekSERDATR()
     if (!rbf) ovrun = false;
 
     u16 result = spypeekSERDATR();
-    logme(LOG_SER, "peekSERDATR() = %x\n", result);
+    logmsg(LOG_SER, "peekSERDATR() = %x\n", result);
     return result;
 }
 
@@ -115,7 +115,7 @@ UART::spypeekSERDATR() const
 void
 UART::pokeSERDAT(u16 value)
 {
-    logme(LOG_SER, "pokeSERDAT(%04x)\n", value);
+    logmsg(LOG_SER, "pokeSERDAT(%04x)\n", value);
 
     // Experimental findings:
     // From here, the TSRE bit goes high in
@@ -128,7 +128,7 @@ UART::pokeSERDAT(u16 value)
 void
 UART::setSERDAT(u16 value)
 {
-    logme(LOG_SER, "setSERDAT(%04x)\n", value);
+    logmsg(LOG_SER, "setSERDAT(%04x)\n", value);
 
     // Write value into the transmit buffer
     transmitBuffer = value;
@@ -142,7 +142,7 @@ UART::setSERDAT(u16 value)
 void
 UART::pokeSERPER(u16 value)
 {
-    logme(LOG_SPRREG, "pokeSERPER(%04x)\n", value);
+    logmsg(LOG_SPRREG, "pokeSERPER(%04x)\n", value);
 
     setSERPER(value);
 }
@@ -150,15 +150,15 @@ UART::pokeSERPER(u16 value)
 void
 UART::setSERPER(u16 value)
 {
-    logme(LOG_SER, "setSERPER(%04x)\n", value);
+    logmsg(LOG_SER, "setSERPER(%04x)\n", value);
     serper = value;
-    logme(LOG_SER, "New baud rate = %ld\n", baudRate());
+    logmsg(LOG_SER, "New baud rate = %ld\n", baudRate());
 }
 
 void
 UART::copyToTransmitShiftRegister()
 {
-    logme(LOG_SER, "Copying %04x into transmit shift register\n", transmitBuffer);
+    logmsg(LOG_SER, "Copying %04x into transmit shift register\n", transmitBuffer);
 
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
@@ -181,14 +181,14 @@ UART::copyToTransmitShiftRegister()
     transmitShiftReg <<= 1;
 
     // Trigger a TBE interrupt
-    logme(LOG_SER, "Triggering TBE interrupt\n");
+    logmsg(LOG_SER, "Triggering TBE interrupt\n");
     paula.scheduleIrqRel(IrqSource::TBE, DMA_CYCLES(2));
 }
 
 void
 UART::copyFromReceiveShiftRegister()
 {
-    logme(LOG_SER, "Copying %X into receive buffer\n", receiveShiftReg);
+    logmsg(LOG_SER, "Copying %X into receive buffer\n", receiveShiftReg);
     
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
@@ -198,10 +198,10 @@ UART::copyFromReceiveShiftRegister()
 
     // Update the overrun bit
     ovrun = GET_BIT(paula.intreq, 11);
-    if (ovrun) logme(LOG_SER, "OVERRUN BIT IS 1\n");
+    if (ovrun) logmsg(LOG_SER, "OVERRUN BIT IS 1\n");
 
     // Trigger the RBF interrupt (Read Buffer Full)
-    logme(LOG_SER, "Triggering RBF interrupt\n");
+    logmsg(LOG_SER, "Triggering RBF interrupt\n");
     paula.raiseIrq(IrqSource::RBF);
 }
 

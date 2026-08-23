@@ -70,7 +70,7 @@ SubComponent::isRunAheadInstance() const
 }
 
 string
-SubComponent::prefix(LogLevel level, const std::source_location &loc) const
+SubComponent::prefix(long level, const std::source_location &loc) const
 {
     return amiga.prefix(level, loc);
 }

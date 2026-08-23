@@ -22,15 +22,15 @@ namespace vamiga {
 #define LOG_FLAG_ENTRY(name, dflt, help) \
     { #name, help, false, \
       []() -> long { return (long)name; }, \
-      [](long value) { name = LogLevel(value); } },
+      [](long value) { name = value; } },
 
 #define DEBUG_FLAG_ENTRY(name, dflt, help) \
     { #name, help, true, \
       []() -> long { return (long)name; }, \
       [](long value) { name = (bool)value; } },
 
-const std::vector<FlagInfo> logFlags = { LOG_FLAGS(LOG_FLAG_ENTRY) };
-const std::vector<FlagInfo> debugFlags = { DEBUG_FLAGS(DEBUG_FLAG_ENTRY) };
+const std::vector<FlagInfo> logFlags = { VA_LOG_FLAGS(LOG_FLAG_ENTRY) };
+const std::vector<FlagInfo> debugFlags = { VA_DEBUG_FLAGS(DEBUG_FLAG_ENTRY) };
 
 #undef LOG_FLAG_ENTRY
 #undef DEBUG_FLAG_ENTRY

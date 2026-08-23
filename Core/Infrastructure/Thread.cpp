@@ -74,9 +74,9 @@ Thread::execute()
 
         // The emulator is out of sync
         if (missing > 0) {
-            logme(LOG_RUN, "Emulation is way too slow (%ld frames behind)\n", missing);
+            logmsg(LOG_RUN, "Emulation is way too slow (%ld frames behind)\n", missing);
         } else {
-            logme(LOG_RUN, "Emulation is way too fast (%ld time slices ahead)\n", -missing);
+            logmsg(LOG_RUN, "Emulation is way too fast (%ld time slices ahead)\n", -missing);
         }
 
         resync();
@@ -148,11 +148,11 @@ Thread::switchState(ExecState newState)
     auto invalid = [&]() {
         
         assert(false);
-        logme(LV_FATAL, "Invalid state transition: %s -> %s\n",
+        logmsg(LOG_FATAL, "Invalid state transition: %s -> %s\n",
               ExecStateEnum::key(state), ExecStateEnum::key(newState));
     };
 
-    logme(LOG_RUN,
+    logmsg(LOG_RUN,
           "switchState: %s -> %s\n",
           ExecStateEnum::key(state), ExecStateEnum::key(newState));
 
@@ -220,14 +220,14 @@ Thread::switchState(ExecState newState)
         }
     }
 
-    logme(LOG_RUN, "switchState: %s\n", ExecStateEnum::key(state));
+    logmsg(LOG_RUN, "switchState: %s\n", ExecStateEnum::key(state));
     assert(state == newState);
 }
 
 void
 Thread::powerOn()
 {
-    logme(LOG_RUN, "powerOn()\n");
+    logmsg(LOG_RUN, "powerOn()\n");
 
     if (isPoweredOff()) {
 
@@ -238,7 +238,7 @@ Thread::powerOn()
 void
 Thread::powerOff()
 {
-    logme(LOG_RUN, "powerOff()\n");
+    logmsg(LOG_RUN, "powerOff()\n");
 
     if (!isPoweredOff()) {
 
@@ -249,7 +249,7 @@ Thread::powerOff()
 void
 Thread::run()
 {
-    logme(LOG_RUN, "run()\n");
+    logmsg(LOG_RUN, "run()\n");
 
     if (!isRunning()) {
 
@@ -263,7 +263,7 @@ Thread::run()
 void
 Thread::pause()
 {
-    logme(LOG_RUN, "pause()\n");
+    logmsg(LOG_RUN, "pause()\n");
 
     if (isRunning()) {
 
@@ -274,7 +274,7 @@ Thread::pause()
 void
 Thread::halt()
 {
-    logme(LOG_RUN, "halt()\n");
+    logmsg(LOG_RUN, "halt()\n");
 
     if (state != ExecState::HALTED) {
 
@@ -337,14 +337,14 @@ Thread::trackOff(isize source)
 void
 Thread::wakeUp()
 {
-    // logme(LOG_RUN, "wakeup: %lld us\n", wakeupClock.restart().asMicroseconds());
+    // logmsg(LOG_RUN, "wakeup: %lld us\n", wakeupClock.restart().asMicroseconds());
     Wakeable::wakeUp();
 }
 
 void
 Thread::suspend() const
 {
-    logme(LOG_RUN, "Suspending (%ld)...\n", suspendCounter);
+    logmsg(LOG_RUN, "Suspending (%ld)...\n", suspendCounter);
     assert(isUserThread());
 
     if (suspendCounter++ == 0) {
@@ -357,12 +357,12 @@ Thread::suspend() const
 void
 Thread::resume() const
 {
-    logme(LOG_RUN, "Resuming (%ld)...\n", suspendCounter);
+    logmsg(LOG_RUN, "Resuming (%ld)...\n", suspendCounter);
     assert(isUserThread());
 
     if (suspendCounter <= 0) {
         
-        logme(LV_FATAL, "resume() called with no call to suspend()\n");
+        logmsg(LOG_FATAL, "resume() called with no call to suspend()\n");
         
     } else if (--suspendCounter == 0) {
         

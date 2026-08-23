@@ -30,12 +30,12 @@
  *
  * Debug flags come in two kinds, declared in the two tables below:
  *
- * - Logging flags gate a logme() call and nothing else. Disabling one
+ * - Logging flags gate a logmsg() call and nothing else. Disabling one
  *   removes the call (release builds) or simply keeps it silent (debug
  *   builds); the emulator behaves identically either way. They are typed
- *   'LogLevel', because their value doubles as the severity the message is
- *   issued with. OFF disables the call, any other LogLevel enables it
- *   at that severity.
+ *   'long', because their value doubles as the severity the message is
+ *   issued with. LOG_OFF disables the call, any other severity enables it
+ *   at that level.
  *
  * - Debug flags enable extra behavior with a real side effect (an
  *   integrity check, a redundant computation compared against the fast
@@ -53,141 +53,135 @@
 
 namespace vamiga {
 
-using utl::LogLevel;
+using utl::LOG_OFF;
+using utl::LOG_FATAL;
+using utl::LOG_ERROR;
+using utl::LOG_WARN;
+using utl::LOG_INFO;
+using utl::LOG_DEBUG;
+using utl::LOG_TRACE;
 using utl::FlagInfo;
-
-//
-// Fixed severities (always active, never OFF)
-//
-
-inline constexpr LogLevel LV_OFF     = LogLevel::Off;
-inline constexpr LogLevel LV_FATAL   = LogLevel::Fatal;
-inline constexpr LogLevel LV_ERROR   = LogLevel::Error;
-inline constexpr LogLevel LV_WARNING = LogLevel::Warn;
-inline constexpr LogLevel LV_INFO    = LogLevel::Info;
-inline constexpr LogLevel LV_DEBUG   = LogLevel::Debug;
-inline constexpr LogLevel LV_TRACE   = LogLevel::Trace;
 
 
 //
 // Logging flags
 //
 
-#define LOG_FLAGS(E)                                                          \
+#define VA_LOG_FLAGS(E)                                                          \
                                                                               \
     /* General */                                                             \
-    E(LOG_XFILES,         Off,  "Report paranormal activity")                 \
-    E(LOG_CNF,            Off,  "Configuration options")                      \
-    E(LOG_OBJ,            Off,  "Object life-times")                          \
-    E(LOG_DEF,            Off,  "User defaults")                              \
+    E(LOG_XFILES,         LOG_OFF,  "Report paranormal activity")             \
+    E(LOG_CNF,            LOG_OFF,  "Configuration options")                  \
+    E(LOG_OBJ,            LOG_OFF,  "Object life-times")                      \
+    E(LOG_DEF,            LOG_OFF,  "User defaults")                          \
                                                                               \
     /* Emulator */                                                            \
-    E(LOG_RUN,            Off,  "Run loop, component states")                 \
-    E(LOG_TIM,            Off,  "Thread synchronization")                     \
-    E(LOG_WARP,           Off,  "Warp mode")                                  \
-    E(LOG_CMD,            Off,  "Command queue")                              \
-    E(LOG_MSG,            Off,  "Message queue")                              \
+    E(LOG_RUN,            LOG_OFF,  "Run loop, component states")             \
+    E(LOG_TIM,            LOG_OFF,  "Thread synchronization")                 \
+    E(LOG_WARP,           LOG_OFF,  "Warp mode")                              \
+    E(LOG_CMD,            LOG_OFF,  "Command queue")                          \
+    E(LOG_MSG,            LOG_OFF,  "Message queue")                          \
                                                                               \
     /* Run ahead */                                                           \
-    E(LOG_RUA,            Off,  "Run-ahead activity")                         \
+    E(LOG_RUA,            LOG_OFF,  "Run-ahead activity")                     \
                                                                               \
     /* CPU */                                                                 \
-    E(LOG_CPU,            Off,  "CPU")                                        \
+    E(LOG_CPU,            LOG_OFF,  "CPU")                                    \
                                                                               \
     /* Memory access */                                                       \
-    E(LOG_OCSREG,         Off,  "General OCS register debugging")             \
-    E(LOG_ECSREG,         Off,  "Special ECS register debugging")             \
-    E(LOG_INVREG,         Off,  "Invalid register accesses")                  \
-    E(LOG_MEM,            Off,  "Memory")                                     \
+    E(LOG_OCSREG,         LOG_OFF,  "General OCS register debugging")         \
+    E(LOG_ECSREG,         LOG_OFF,  "Special ECS register debugging")         \
+    E(LOG_INVREG,         LOG_OFF,  "Invalid register accesses")              \
+    E(LOG_MEM,            LOG_OFF,  "Memory")                                 \
                                                                               \
     /* Agnus */                                                               \
-    E(LOG_DMA,            Off,  "DMA registers")                              \
-    E(LOG_DDF,            Off,  "Display data fetch")                         \
-    E(LOG_SEQ,            Off,  "Bitplane sequencer")                         \
-    E(LOG_NTSC,           Off,  "NTSC mode")                                  \
+    E(LOG_DMA,            LOG_OFF,  "DMA registers")                          \
+    E(LOG_DDF,            LOG_OFF,  "Display data fetch")                     \
+    E(LOG_SEQ,            LOG_OFF,  "Bitplane sequencer")                     \
+    E(LOG_NTSC,           LOG_OFF,  "NTSC mode")                              \
                                                                               \
     /* Copper */                                                              \
-    E(LOG_COPREG,         Off,  "Copper registers")                           \
-    E(LOG_COP,            Off,  "Copper execution")                           \
+    E(LOG_COPREG,         LOG_OFF,  "Copper registers")                       \
+    E(LOG_COP,            LOG_OFF,  "Copper execution")                       \
                                                                               \
     /* Blitter */                                                             \
-    E(LOG_BLTREG,         Off,  "Blitter registers")                          \
-    E(LOG_BLT_REG_GUARD,  Off,  "Register writes while Blitter runs")         \
-    E(LOG_BLT,            Off,  "Blitter execution")                          \
-    E(LOG_BLTTIM,         Off,  "Blitter timing")                             \
+    E(LOG_BLTREG,         LOG_OFF,  "Blitter registers")                      \
+    E(LOG_BLT_REG_GUARD,  LOG_OFF,  "Register writes while Blitter runs")     \
+    E(LOG_BLT,            LOG_OFF,  "Blitter execution")                      \
+    E(LOG_BLTTIM,         LOG_OFF,  "Blitter timing")                         \
                                                                               \
     /* Denise */                                                              \
-    E(LOG_BPLREG,         Off,  "Bitplane registers")                         \
-    E(LOG_BPLDAT,         Off,  "BPLxDAT registers")                          \
-    E(LOG_BPLMOD,         Off,  "BPLxMOD registers")                          \
-    E(LOG_SPRREG,         Off,  "Sprite registers")                           \
-    E(LOG_COLREG,         Off,  "Color registers")                            \
-    E(LOG_CLXREG,         Off,  "Collision detection registers")              \
-    E(LOG_DIW,            Off,  "Display window")                             \
-    E(LOG_SPR,            Off,  "Sprites")                                    \
-    E(LOG_CLX,            Off,  "Collision detection")                        \
+    E(LOG_BPLREG,         LOG_OFF,  "Bitplane registers")                     \
+    E(LOG_BPLDAT,         LOG_OFF,  "BPLxDAT registers")                      \
+    E(LOG_BPLMOD,         LOG_OFF,  "BPLxMOD registers")                      \
+    E(LOG_SPRREG,         LOG_OFF,  "Sprite registers")                       \
+    E(LOG_COLREG,         LOG_OFF,  "Color registers")                        \
+    E(LOG_CLXREG,         LOG_OFF,  "Collision detection registers")          \
+    E(LOG_DIW,            LOG_OFF,  "Display window")                         \
+    E(LOG_SPR,            LOG_OFF,  "Sprites")                                \
+    E(LOG_CLX,            LOG_OFF,  "Collision detection")                    \
                                                                               \
     /* Paula */                                                               \
-    E(LOG_INTREG,         Off,  "Interrupt registers")                        \
-    E(LOG_INT,            Off,  "Interrupt logic")                            \
+    E(LOG_INTREG,         LOG_OFF,  "Interrupt registers")                    \
+    E(LOG_INT,            LOG_OFF,  "Interrupt logic")                        \
                                                                               \
     /* CIAs */                                                                \
-    E(LOG_CIAREG,         Off,  "CIA registers")                              \
-    E(LOG_CIASER,         Off,  "CIA serial register")                        \
-    E(LOG_CIA,            Off,  "CIA execution")                              \
-    E(LOG_TOD,            Off,  "TODs (CIA 24-bit counters)")                 \
+    E(LOG_CIAREG,         LOG_OFF,  "CIA registers")                          \
+    E(LOG_CIASER,         LOG_OFF,  "CIA serial register")                    \
+    E(LOG_CIA,            LOG_OFF,  "CIA execution")                          \
+    E(LOG_TOD,            LOG_OFF,  "TODs (CIA 24-bit counters)")             \
                                                                               \
     /* Floppy drives */                                                       \
-    E(LOG_DSKREG,         Off,  "Disk controller registers")                  \
-    E(LOG_DSK,            Off,  "Disk controller execution")                  \
-    E(LOG_MFM,            Off,  "Disk encoder / decoder")                     \
-    E(LOG_IMG,            Off,  "Disk images")                                \
+    E(LOG_DSKREG,         LOG_OFF,  "Disk controller registers")              \
+    E(LOG_DSK,            LOG_OFF,  "Disk controller execution")              \
+    E(LOG_MFM,            LOG_OFF,  "Disk encoder / decoder")                 \
+    E(LOG_IMG,            LOG_OFF,  "Disk images")                            \
                                                                               \
     /* Hard drives */                                                         \
-    E(LOG_WT,             Off,  "Write-through mode")                         \
+    E(LOG_WT,             LOG_OFF,  "Write-through mode")                     \
                                                                               \
     /* Audio */                                                               \
-    E(LOG_AUDREG,         Off,  "Audio registers")                            \
-    E(LOG_AUD,            Off,  "Audio execution")                            \
-    E(LOG_AUDBUF,         Off,  "Audio buffers")                              \
-    E(LOG_AUDVOL,         Off,  "Audio volume")                               \
+    E(LOG_AUDREG,         LOG_OFF,  "Audio registers")                        \
+    E(LOG_AUD,            LOG_OFF,  "Audio execution")                        \
+    E(LOG_AUDBUF,         LOG_OFF,  "Audio buffers")                          \
+    E(LOG_AUDVOL,         LOG_OFF,  "Audio volume")                           \
                                                                               \
     /* Ports */                                                               \
-    E(LOG_POSREG,         Off,  "Beam position registers")                    \
-    E(LOG_JOYREG,         Off,  "Joystick registers")                         \
-    E(LOG_POTREG,         Off,  "Potentiometer registers")                    \
-    E(LOG_VID,            Off,  "Video port")                                 \
-    E(LOG_PRT,            Off,  "Control ports")                              \
-    E(LOG_SER,            Off,  "Serial port")                                \
-    E(LOG_POT,            Off,  "Potentiometer inputs")                       \
+    E(LOG_POSREG,         LOG_OFF,  "Beam position registers")                \
+    E(LOG_JOYREG,         LOG_OFF,  "Joystick registers")                     \
+    E(LOG_POTREG,         LOG_OFF,  "Potentiometer registers")                \
+    E(LOG_VID,            LOG_OFF,  "Video port")                             \
+    E(LOG_PRT,            LOG_OFF,  "Control ports")                          \
+    E(LOG_SER,            LOG_OFF,  "Serial port")                            \
+    E(LOG_POT,            LOG_OFF,  "Potentiometer inputs")                   \
                                                                               \
     /* Expansion boards */                                                    \
-    E(LOG_ZOR,            Off,  "Zorro space")                                \
-    E(LOG_ACF,            Off,  "Autoconfig")                                 \
-    E(LOG_FAS,            Off,  "FastRam")                                    \
-    E(LOG_HDR,            Off,  "Hard drive")                                 \
-    E(LOG_DBD,            Off,  "Debug board")                                \
+    E(LOG_ZOR,            LOG_OFF,  "Zorro space")                            \
+    E(LOG_ACF,            LOG_OFF,  "Autoconfig")                             \
+    E(LOG_FAS,            LOG_OFF,  "FastRam")                                \
+    E(LOG_HDR,            LOG_OFF,  "Hard drive")                             \
+    E(LOG_DBD,            LOG_OFF,  "Debug board")                            \
                                                                               \
     /* Real-time clock */                                                     \
-    E(LOG_RTC,            Off,  "Real-time clock")                            \
+    E(LOG_RTC,            LOG_OFF,  "Real-time clock")                        \
                                                                               \
     /* Keyboard */                                                            \
-    E(LOG_KBD,            Off,  "Keyboard")                                   \
-    E(LOG_KEY,            Off,  "Keyboard key events")                        \
+    E(LOG_KBD,            LOG_OFF,  "Keyboard")                               \
+    E(LOG_KEY,            LOG_OFF,  "Keyboard key events")                    \
                                                                               \
     /* Misc */                                                                \
-    E(LOG_RSH,            Off,  "RetroShell")                                 \
-    E(LOG_REC,            Off,  "Screen recorder")                            \
-    E(LOG_SCK,            Off,  "Sockets")                                    \
-    E(LOG_SRV,            Off,  "Remote server")                              \
-    E(LOG_GDB,            Off,  "GDB server")
+    E(LOG_RSH,            LOG_OFF,  "RetroShell")                             \
+    E(LOG_REC,            LOG_OFF,  "Screen recorder")                        \
+    E(LOG_SCK,            LOG_OFF,  "Sockets")                                \
+    E(LOG_SRV,            LOG_OFF,  "Remote server")                          \
+    E(LOG_GDB,            LOG_OFF,  "GDB server")
 
 
 //
 // Debug flags
 //
 
-#define DEBUG_FLAGS(E)                                                        \
+#define VA_DEBUG_FLAGS(E)                                                        \
                                                                               \
     /* General */                                                             \
     E(MIMIC_UAE,            false, "Mimic UAE quirks")                        \
@@ -249,29 +243,22 @@ inline constexpr LogLevel LV_TRACE   = LogLevel::Trace;
 
 
 //
-// Logging macro and flag declarations
+// Flag declarations
 //
 
-#define logme(key, format, ...) \
-    do { \
-        if CONSTEXPR (key != LogLevel::Off) \
-            log(key, std::source_location::current(), \
-                format __VA_OPT__(,) __VA_ARGS__); \
-    } while (0)
-
 #define DECLARE_LOG_FLAG(name, dflt, help) \
-    inline CONSTEXPR LogLevel name = LogLevel::dflt;
-LOG_FLAGS(DECLARE_LOG_FLAG)
+    inline CONSTEXPR long name = dflt;
+VA_LOG_FLAGS(DECLARE_LOG_FLAG)
 #undef DECLARE_LOG_FLAG
 
 #define DECLARE_DEBUG_FLAG(name, dflt, help) \
     inline CONSTEXPR bool name = dflt;
-DEBUG_FLAGS(DECLARE_DEBUG_FLAG)
+VA_DEBUG_FLAGS(DECLARE_DEBUG_FLAG)
 #undef DECLARE_DEBUG_FLAG
 
 
 //
-// Flag descriptors (debug builds only)
+// Flag descriptors (debug builds)
 //
 
 #ifndef NDEBUG
@@ -291,11 +278,8 @@ extern const std::vector<FlagInfo> debugFlags;
 /*
 #define fatal(format, ...) \
     do { \
-        logme(LV_FATAL, format __VA_OPT__(,) __VA_ARGS__); \
+        logmsg(LOG_FATAL, format __VA_OPT__(,) __VA_ARGS__); \
         assert(false); \
         std::terminate(); \
     } while(0)
 */
-
-#define xfiles(format, ...) \
-    logme(LOG_XFILES, format __VA_OPT__(,) __VA_ARGS__)
