@@ -13,7 +13,7 @@
 #include "utl/storage/ZipError.h"
 #include <fstream>
 #include <sstream>
-#include <zip.h>
+#include "zip.h"
 
 namespace utl {
 

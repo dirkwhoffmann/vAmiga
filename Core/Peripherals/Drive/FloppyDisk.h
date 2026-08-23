@@ -17,7 +17,7 @@
 #include "CoreComponent.h"
 #include "TrackDevice.h"
 
-namespace retro::vault::image {
+namespace retro::vault {
 
 class ADFFile;
 class IMGFile;
@@ -31,9 +31,9 @@ using retro::vault::TrackDevice;
 using retro::vault::FloppyDiskImage;
 using retro::vault::ImageFormat;
 using retro::vault::ImageFormatEnum;
-using retro::vault::image::ADFFile;
-using retro::vault::image::IMGFile;
-using retro::vault::image::STFile;
+using retro::vault::ADFFile;
+using retro::vault::IMGFile;
+using retro::vault::STFile;
 
 /* MFM encoded disk data of a standard 3.5" DD disk:
  *

@@ -336,7 +336,11 @@
 		50B9354B243481AB000C78B8 /* SnapshotViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B9354A243481AB000C78B8 /* SnapshotViewer.swift */; };
 		50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
 		50BCB9932EE1D88E000C53CF /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4DF2EE16FD500637C95 /* Buffer.cpp */; };
+		F0DECF612C99A2D9C515C300 /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */; };
+		7C176B0DB090FF1C8D71B940 /* ZipError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D35AF75E880BB23242A2A34 /* ZipError.cpp */; };
 		50BCB9942EE1D88E000C53CF /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503FC4DF2EE16FD500637C95 /* Buffer.cpp */; };
+		904444F946950B6D8622FCEC /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */; };
+		FF5099FB513B4F28EE0E81E9 /* ZipError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D35AF75E880BB23242A2A34 /* ZipError.cpp */; };
 		50BCB9982EE1DB0A000C53CF /* Bits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9972EE1DB07000C53CF /* Bits.cpp */; };
 		50BCB9992EE1DB0A000C53CF /* Bits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9972EE1DB07000C53CF /* Bits.cpp */; };
 		50BCB9A32EE2CD3D000C53CF /* Reportable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCB9A22EE2CD39000C53CF /* Reportable.cpp */; };
@@ -432,6 +436,14 @@
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
 		50E1B0A627CE7164005E41DA /* DiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1B0A427CE7164005E41DA /* DiskImage.cpp */; };
+		6CECB9F7AE2CD2D49B8A7266 /* BinaryImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */; };
+		A17D22BCBFBAF132DC57A499 /* BinaryImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */; };
+		C57A83C545449C7C9C1C4D18 /* Manifest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F35BFF8BB96044B444D8BE13 /* Manifest.cpp */; };
+		57403D160605ACF3A98F6216 /* Manifest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F35BFF8BB96044B444D8BE13 /* Manifest.cpp */; };
+		218C1E6444454C19696453FA /* SVMFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0B85F2F649119922836B8EE /* SVMFile.cpp */; };
+		2E752FBBFDF7E0689485C3B5 /* SVMFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0B85F2F649119922836B8EE /* SVMFile.cpp */; };
+		117FC7C96DAE1F4E7C05F5D5 /* SnapshotPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 62339E381932B34874DC6A15 /* SnapshotPool.cpp */; };
+		9FE591AB83C7F9620B082530 /* SnapshotPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 62339E381932B34874DC6A15 /* SnapshotPool.cpp */; };
 		50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */; };
 		50E1D2C426CCF8C9001FE199 /* FileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */; };
 		50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C526CCF942001FE199 /* FontExtensions.swift */; };
@@ -798,6 +810,8 @@
 		503FC4DB2EE157B300637C95 /* Hashable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Hashable.cpp; sourceTree = "<group>"; };
 		503FC4DE2EE16FCA00637C95 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		503FC4DF2EE16FD500637C95 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
+		F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZipArchive.cpp; sourceTree = "<group>"; };
+		1D35AF75E880BB23242A2A34 /* ZipError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZipError.cpp; sourceTree = "<group>"; };
 		503FC4E12EE17EBF00637C95 /* Dumpable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dumpable.h; sourceTree = "<group>"; };
 		503FC4E22EE17ECE00637C95 /* Dumpable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Dumpable.cpp; sourceTree = "<group>"; };
 		503FC4E52EE1B36000637C95 /* Strings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Strings.cpp; sourceTree = "<group>"; };
@@ -1280,6 +1294,16 @@
 		50DFA84027F350680009C216 /* DiagBoardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagBoardTypes.h; sourceTree = "<group>"; };
 		50E1B0A427CE7164005E41DA /* DiskImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskImage.cpp; sourceTree = "<group>"; };
 		50E1B0A527CE7164005E41DA /* DiskImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskImage.h; sourceTree = "<group>"; };
+		7E69AAC5C264DDEA8B4777C4 /* BinaryImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BinaryImage.h; sourceTree = "<group>"; };
+		DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryImage.cpp; sourceTree = "<group>"; };
+		8A04CE72810F681A291C6FBE /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		3D15F844F88274B2D7428EC3 /* Manifest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Manifest.h; sourceTree = "<group>"; };
+		F35BFF8BB96044B444D8BE13 /* Manifest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Manifest.cpp; sourceTree = "<group>"; };
+		CE8A5C0DB2564F17E978C79A /* SVMFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVMFile.h; sourceTree = "<group>"; };
+		B0B85F2F649119922836B8EE /* SVMFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SVMFile.cpp; sourceTree = "<group>"; };
+		3D9FDC5551974253E358815D /* SVMTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVMTypes.h; sourceTree = "<group>"; };
+		2A26809A07DD19C7488A9518 /* SnapshotPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SnapshotPool.h; sourceTree = "<group>"; };
+		62339E381932B34874DC6A15 /* SnapshotPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SnapshotPool.cpp; sourceTree = "<group>"; };
 		50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatatypeExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C526CCF942001FE199 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
@@ -1738,6 +1762,8 @@
 			isa = PBXGroup;
 			children = (
 				503FC4DF2EE16FD500637C95 /* Buffer.cpp */,
+				F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */,
+				1D35AF75E880BB23242A2A34 /* ZipError.cpp */,
 			);
 			path = storage;
 			sourceTree = "<group>";
@@ -2191,7 +2217,7 @@
 				506436E329C1D90B00768528 /* Components */,
 				505B801D23FE628F002407FE /* Ports */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
-				50BF4B642F055ADF00F1B9F2 /* RetroVault */,
+				50BF4B642F055ADF00F1B9F2 /* rvlib */,
 				508FE06621EA31E50043D0E9 /* Media */,
 				506436E129C1D82500768528 /* ThirdParty */,
 				50E98B52275A125700AA0CB9 /* Misc */,
@@ -2631,7 +2657,22 @@
 			path = D64;
 			sourceTree = "<group>";
 		};
-		50BF4B642F055ADF00F1B9F2 /* RetroVault */ = {
+		71E63A810FB5436B54FBDD35 /* SVM */ = {
+			isa = PBXGroup;
+			children = (
+				8A04CE72810F681A291C6FBE /* CMakeLists.txt */,
+				3D15F844F88274B2D7428EC3 /* Manifest.h */,
+				F35BFF8BB96044B444D8BE13 /* Manifest.cpp */,
+				CE8A5C0DB2564F17E978C79A /* SVMFile.h */,
+				B0B85F2F649119922836B8EE /* SVMFile.cpp */,
+				3D9FDC5551974253E358815D /* SVMTypes.h */,
+				2A26809A07DD19C7488A9518 /* SnapshotPool.h */,
+				62339E381932B34874DC6A15 /* SnapshotPool.cpp */,
+			);
+			path = SVM;
+			sourceTree = "<group>";
+		};
+		50BF4B642F055ADF00F1B9F2 /* rvlib */ = {
 			isa = PBXGroup;
 			children = (
 				5020D0462F49B5C1006D3BF1 /* rvconfig.h */,
@@ -2647,7 +2688,7 @@
 				5056506925440FDE00A79D27 /* FileSystems */,
 				5020D0422F4728FB006D3BF1 /* ThirdParty */,
 			);
-			path = RetroVault;
+			path = rvlib;
 			sourceTree = "<group>";
 		};
 		50BF4B652F055B6100F1B9F2 /* Amiga */ = {
@@ -2705,6 +2746,8 @@
 				50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */,
 				50BF4B2D2EFBF7C600F1B9F2 /* HardDiskImage.h */,
 				50BF4B2E2EFBF7CF00F1B9F2 /* HardDiskImage.cpp */,
+				7E69AAC5C264DDEA8B4777C4 /* BinaryImage.h */,
+				DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */,
 				505A193C2EDDF5ED000BB9C2 /* HDF */,
 				505A193E2EDDF60B000BB9C2 /* ADF */,
 				505A19402EDDF622000BB9C2 /* EADF */,
@@ -2713,6 +2756,7 @@
 				505A19432EDDF63C000BB9C2 /* DMS */,
 				505A19442EDDF647000BB9C2 /* EXE */,
 				50BF4B532F04706900F1B9F2 /* D64 */,
+				71E63A810FB5436B54FBDD35 /* SVM */,
 				50BF4B3D2F03D65600F1B9F2 /* Encoders */,
 			);
 			path = Images;
@@ -3052,6 +3096,8 @@
 				50144E362E7BE5EA009E15B4 /* SettingsWindowController.swift in Sources */,
 				509C365E260B177E004F160A /* Console.cpp in Sources */,
 				50BCB9932EE1D88E000C53CF /* Buffer.cpp in Sources */,
+				F0DECF612C99A2D9C515C300 /* ZipArchive.cpp in Sources */,
+				7C176B0DB090FF1C8D71B940 /* ZipError.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				50BF4BE32F0C0DB000F1B9F2 /* ImageError.cpp in Sources */,
@@ -3368,6 +3414,10 @@
 				50B81E0824E6BCCA004384C9 /* DiskControllerRegs.cpp in Sources */,
 				50BF4B6D2F055C0700F1B9F2 /* AnyImage.cpp in Sources */,
 				50E1B0A627CE7164005E41DA /* DiskImage.cpp in Sources */,
+				6CECB9F7AE2CD2D49B8A7266 /* BinaryImage.cpp in Sources */,
+				C57A83C545449C7C9C1C4D18 /* Manifest.cpp in Sources */,
+				218C1E6444454C19696453FA /* SVMFile.cpp in Sources */,
+				117FC7C96DAE1F4E7C05F5D5 /* SnapshotPool.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				5030C2E0252A2E8400107E00 /* AudioStream.cpp in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
@@ -3545,6 +3595,8 @@
 				50FB49C32F1113A300369491 /* C64Decoder.cpp in Sources */,
 				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,
 				50BCB9942EE1D88E000C53CF /* Buffer.cpp in Sources */,
+				904444F946950B6D8622FCEC /* ZipArchive.cpp in Sources */,
+				FF5099FB513B4F28EE0E81E9 /* ZipError.cpp in Sources */,
 				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,
 				503FC4F12EE1BA7C00637C95 /* Clock.cpp in Sources */,
 				5041A3302F1606F800684946 /* FSTraits.cpp in Sources */,
@@ -3589,6 +3641,10 @@
 				50FB49BB2F0FAFBA00369491 /* C64Encoder.cpp in Sources */,
 				503FC4CB2EE0AB0D00637C95 /* Files.cpp in Sources */,
 				50FC04CA27DA19E900C3E566 /* DiskImage.cpp in Sources */,
+				A17D22BCBFBAF132DC57A499 /* BinaryImage.cpp in Sources */,
+				57403D160605ACF3A98F6216 /* Manifest.cpp in Sources */,
+				2E752FBBFDF7E0689485C3B5 /* SVMFile.cpp in Sources */,
+				9FE591AB83C7F9620B082530 /* SnapshotPool.cpp in Sources */,
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
 				50AC25C62F4264670016265E /* RSError.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
@@ -3883,7 +3939,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
-					Core/RetroVault,
+					Core/rvlib,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3941,7 +3997,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
-					Core/RetroVault,
+					Core/rvlib,
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3982,7 +4038,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
-					Core/RetroVault,
+					Core/rvlib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				OTHER_LDFLAGS = "";
@@ -4007,7 +4063,7 @@
 				HEADER_SEARCH_PATHS = (
 					Core,
 					Core/utlib/include,
-					Core/RetroVault,
+					Core/rvlib,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
 				OTHER_LDFLAGS = "";

@@ -26,12 +26,12 @@ namespace retro::vault::amiga { class FileSystem; }
 
 namespace vamiga {
 
-using image::HDFFile;
+using retro::vault::HDFFile;
 
 class HardDrive final : public Drive, public TrackDevice {
 
     friend class Codec;
-    friend class image::HDFFile;
+    friend class retro::vault::HDFFile;
     friend class HdController;
 
     Descriptions descriptions = {

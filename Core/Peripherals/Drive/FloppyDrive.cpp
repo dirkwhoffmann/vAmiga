@@ -1299,10 +1299,40 @@ FloppyDrive::swapDisk(const fs::path &path)
     }
 }
 
+namespace {
+
+/* The library only offers a path-based factory for FloppyDiskImage
+ * (FloppyDiskImage::make(path)), which infers the format from the file
+ * itself. There is no buffer-based equivalent, so we replicate the format
+ * dispatch here for the in-memory case (e.g., disks dropped from the GUI or
+ * inserted via the public API without going through the file system).
+ */
+unique_ptr<FloppyDiskImage>
+makeFloppyDiskImage(const u8 *buf, isize len, ImageFormat fmt)
+{
+    switch (fmt) {
+
+        case ImageFormat::ADF:  return make_unique<ADFFile>(buf, len);
+        case ImageFormat::EADF: return make_unique<EADFFile>(buf, len);
+        case ImageFormat::IMG:  return make_unique<IMGFile>(buf, len);
+        case ImageFormat::ST:   return make_unique<STFile>(buf, len);
+        case ImageFormat::DMS:  return make_unique<DMSFile>(buf, len);
+        case ImageFormat::EXE:  return make_unique<EXEFile>(buf, len);
+        case ImageFormat::D64:  return make_unique<D64File>(buf, len);
+
+        default:
+            break;
+    }
+
+    throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+}
+
+}
+
 void
 FloppyDrive::swapDisk(const u8 *buf, isize len, ImageFormat fmt)
 {
-    auto file = FloppyDiskImage::make(buf, len, fmt);
+    auto file = makeFloppyDiskImage(buf, len, fmt);
     swapDisk(*file);
 }
 

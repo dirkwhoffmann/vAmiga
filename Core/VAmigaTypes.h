@@ -47,8 +47,8 @@
 
 // Media
 #include "Media/Rom/RomFileTypes.h"
-#include "RetroVault/FileSystems/Amiga/FSTypes.h"
-#include "RetroVault/Images/ImageTypes.h"
+#include "rvlib/FileSystems/Amiga/FSTypes.h"
+#include "rvlib/Images/ImageTypes.h"
 
 // Miscellaneous
 #include "Misc/LogicAnalyzer/LogicAnalyzerTypes.h"

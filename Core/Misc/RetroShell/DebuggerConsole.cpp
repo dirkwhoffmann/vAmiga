@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "RetroVault/rvdebug.h"
+#include "rvlib/rvdebug.h"
 #include "Console.h"
 #include "Emulator.h"
 #include "utl/abilities/Loggable.h"

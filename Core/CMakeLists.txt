@@ -66,7 +66,7 @@ add_subdirectory(Media)
 add_subdirectory(Misc)
 add_subdirectory(Peripherals)
 add_subdirectory(Ports)
-add_subdirectory(RetroVault)
+add_subdirectory(rvlib)
 add_subdirectory(ThirdParty)
 
 # Add libraries
@@ -82,7 +82,7 @@ endif()
 target_link_libraries(VACore
     PUBLIC
     utlib
-    RetroVault
+    rvlib
     Threads::Threads
     $<$<PLATFORM_ID:Darwin>:${COREMIDI_FRAMEWORK}>
     $<$<PLATFORM_ID:Darwin>:${COREFOUNDATION_FRAMEWORK}>

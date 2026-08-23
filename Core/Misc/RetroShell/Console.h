@@ -28,8 +28,8 @@ using retro::vault::Volume;
 using retro::vault::amiga::FileSystem;
 using retro::vault::amiga::FSName;
 using retro::vault::amiga::FSBlock;
-using retro::vault::image::ADFFile;
-using retro::vault::image::D64File;
+using retro::vault::ADFFile;
+using retro::vault::D64File;
 
 class ConsoleDelegate {
 
