@@ -273,7 +273,7 @@ CoreComponent::load(const u8 *buf)
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
 
-        logme(LOG_NULLDEV, "Loaded %llu bytes (expected %llu)\n", count, size);
+        logme(LV_OFF, "Loaded %llu bytes (expected %llu)\n", count, size);
         result += isize(count);
     });
 
@@ -310,7 +310,7 @@ CoreComponent::save(u8 *buffer)
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
 
-        logme(LOG_NULLDEV, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
+        logme(LV_OFF, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
         result += count;
     });
 

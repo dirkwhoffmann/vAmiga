@@ -313,7 +313,7 @@ Emulator::cloneRunAheadInstance()
         if (ahead != main) {
             
             main.diff(ahead);
-            fatal("Corrupted run-ahead clone detected");
+            logme(LV_FATAL, "Corrupted run-ahead clone detected");
         }
     }
 }
@@ -326,7 +326,7 @@ Emulator::recreateRunAheadInstance()
     auto &config = main.getConfig();
 
     // Clone the main instance
-    if CONSTEXPR (LOG_RUA != LogLevel::LV_OFF) {
+    if CONSTEXPR (LOG_RUA != LogLevel::Off) {
         utl::StopWatch watch("Run-ahead: Clone");
         cloneRunAheadInstance();
     } else {
@@ -334,7 +334,7 @@ Emulator::recreateRunAheadInstance()
     }
 
     // Advance to the proper frame
-    if CONSTEXPR (LOG_RUA != LogLevel::LV_OFF) {
+    if CONSTEXPR (LOG_RUA != LogLevel::Off) {
         utl::StopWatch watch("Run-ahead: Fast-forward");
         ahead.fastForward(config.runAhead - 1);
     } else {

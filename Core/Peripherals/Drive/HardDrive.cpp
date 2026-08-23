@@ -199,7 +199,7 @@ HardDrive::init(const HDFFile &hdf)
         
     // Print some debug information
     logme(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
-    if CONSTEXPR (LOG_HDR != LogLevel::LV_OFF) {
+    if CONSTEXPR (LOG_HDR != LogLevel::Off) {
         for (auto &driver : drivers) driver.dump();
     }
 }
@@ -539,7 +539,7 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
 {
     using amiga::FSFormat;
 
-    if CONSTEXPR (LOG_HDR != LogLevel::LV_OFF) {
+    if CONSTEXPR (LOG_HDR != LogLevel::Off) {
 
         logme(LOG_HDR, "Formatting hard drive\n");
         logme(LOG_HDR, "    File system : %s\n", amiga::FSFormatEnum::key(fsType));

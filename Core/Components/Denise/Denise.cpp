@@ -1367,7 +1367,7 @@ Denise::updateBorderBuffer()
     bBufferDiwOpen = hf ? 0 : PIXEL_CNT;
 
     // Print some debug info if requested
-    if CONSTEXPR (LOG_DIW != LogLevel::LV_OFF) {
+    if CONSTEXPR (LOG_DIW != LogLevel::Off) {
 
         logme(LOG_DIW, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
         diwChanges.dump();
@@ -1509,7 +1509,7 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
         
-        if CONSTEXPR (LOG_CLX != LogLevel::LV_OFF) {
+        if CONSTEXPR (LOG_CLX != LogLevel::Off) {
             
             if ((z & comp45) && (z & comp67)) logme(LOG_CLX, "Coll: 45 and 67\n");
             if ((z & comp23) && (z & comp67)) logme(LOG_CLX, "Coll: 23 and 67\n");
