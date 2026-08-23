@@ -78,6 +78,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
         &logicAnalyzer,
         &remoteManager,
         &retroShell,
+        &rshShell,
         &osDebugger,
         &regressionTester
     };
@@ -978,6 +979,7 @@ Amiga::update(CmdQueue &queue)
             case Cmd::RSH_EXECUTE:
 
                 retroShell.exec();
+                rshShell.exec();
                 break;
 
             case Cmd::FOCUS:

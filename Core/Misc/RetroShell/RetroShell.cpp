@@ -18,14 +18,26 @@
 
 namespace vamiga {
 
-RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
+RetroShell::RetroShell(Amiga& ref, isize id) : SubComponent(ref, id)
 {
     subComponents = std::vector<CoreComponent *> {
         
         &console
     };
 
+    // The main shell boots into the Commander. The remote shell stays idle
+    // until a client connects.
+    if (isPrimary()) commands = { InputLine {.input = "commander"} };
+
     info.bind([this] { return cacheInfo(); } );
+}
+
+void
+RetroShell::newSession()
+{
+    commands = { };
+    console.clear();
+    enterCommander();
 }
 
 void

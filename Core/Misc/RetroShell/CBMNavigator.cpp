@@ -348,7 +348,7 @@ Console::initCBMNavigatorCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            retroShell.enterCommander();
+            shell.enterCommander();
         }
     });
 
@@ -360,7 +360,7 @@ Console::initCBMNavigatorCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            retroShell.enterDebugger();
+            shell.enterDebugger();
         }
     });
 

@@ -124,7 +124,7 @@ Console::didActivate()
             
             *this << "Entering RetroShell Debugger" << '\n';
             *this << '\n';
-            emulator.trackOn(1);
+            emulator.trackOn(trackSource());
             break;
 
         case CommandSet::Navigator:
@@ -151,7 +151,7 @@ Console::didDeactivate()
 
         case CommandSet::Debugger:
             
-            emulator.trackOff(1);
+            emulator.trackOff(trackSource());
             break;
 
         default:
@@ -226,7 +226,7 @@ Console::operator<<(char value)
 {
     storage << value;
 
-    if (serialPort.getConfig().device == SerialPortDevice::COMMANDER) {
+    if (isPrimary() && serialPort.getConfig().device == SerialPortDevice::COMMANDER) {
         
         serialPort << value;
     }
@@ -239,7 +239,7 @@ Console::operator<<(const string& value)
 {
     storage << value;
     
-    if (serialPort.getConfig().device == SerialPortDevice::COMMANDER) {
+    if (isPrimary() && serialPort.getConfig().device == SerialPortDevice::COMMANDER) {
         
         serialPort << value;
     }
@@ -373,7 +373,7 @@ Console::setStream(std::ostream &os)
 void
 Console::needsDisplay()
 {
-    retroShell.isDirty = true;
+    shell.isDirty = true;
 }
 
 void
@@ -465,7 +465,7 @@ Console::press(RSKey key, bool shift)
                 
                 // TAB was pressed multiple times in a row
                 *this << input << '\n';
-                retroShell.asyncExec("help \"" + input + "\" TAB=" + std::to_string(tabPressed));
+                shell.asyncExec("help \"" + input + "\" TAB=" + std::to_string(tabPressed));
                 
             } else {
                 
@@ -556,7 +556,7 @@ Console::pressReturn(bool shift)
     }
 
     // Feed the command into the command queue
-    retroShell.asyncExec(input);
+    shell.asyncExec(input);
 
     // Clear the input line
     input = "";
@@ -1054,7 +1054,7 @@ Console::initCommonCommands(RSCommand &root)
             
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                retroShell.enterCommander();
+                shell.enterCommander();
 
                 os << "RetroShell Commander" << " " << Amiga::version() << "\n\n";
                 os << string(4, ' ') << "Type 'help' or press 'Tab' twice for help.\n";
@@ -1070,7 +1070,7 @@ Console::initCommonCommands(RSCommand &root)
             
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                retroShell.enterDebugger();
+                shell.enterDebugger();
             }
         });
         
@@ -1082,7 +1082,7 @@ Console::initCommonCommands(RSCommand &root)
             
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                retroShell.enterNavigator();
+                shell.enterNavigator();
             }
         });
         
@@ -1094,7 +1094,7 @@ Console::initCommonCommands(RSCommand &root)
             
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                retroShell.enterCBMNavigator();
+                shell.enterCBMNavigator();
             }
         });
         
@@ -1174,7 +1174,7 @@ Console::initCommonCommands(RSCommand &root)
                 auto path = host.makeAbsolute(args.at("path"));
                 auto stream = std::ifstream(path);
                 if (!stream.is_open()) throw IOError(IOError::FILE_NOT_FOUND, path);
-                retroShell.asyncExecScript(stream);
+                shell.asyncExecScript(stream);
             }
         });
         

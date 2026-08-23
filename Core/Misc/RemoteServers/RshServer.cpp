@@ -18,7 +18,8 @@ namespace vamiga {
 void
 RshServer::_initialize()
 {
-    retroShell.console.delegates.push_back(this);
+    // The remote server drives its own shell, independent of the GUI's one
+    rshShell.console.delegates.push_back(this);
 }
 
 void
@@ -39,6 +40,9 @@ RshServer::didStart()
 void
 RshServer::didConnect()
 {
+    // Hand the client a fresh shell
+    rshShell.newSession();
+
     if (config.verbose) {
         
         try {
@@ -54,7 +58,7 @@ RshServer::didConnect()
             *this << "Type 'help' for help.\n";
             *this << '\n';
 
-            *this << retroShell.prompt();
+            *this << rshShell.prompt();
 
         } catch (...) { };
     }
@@ -106,11 +110,18 @@ RshServer::doSend(const string &payload)
 void
 RshServer::doProcess(const string &payload)
 {
-    retroShell.asyncExec(InputLine {
+    rshShell.asyncExec(InputLine {
 
         .type = InputLine::Source::RSH,
         .input = payload
     });
+}
+
+void
+RshServer::didDisconnect()
+{
+    // Discard the client's session
+    rshShell.newSession();
 }
 
 void
@@ -136,7 +147,7 @@ void
 RshServer::didExecute(const InputLine &input, std::stringstream &ss)
 {
     *this << '\n' << ss.str() << '\n';
-    *this << retroShell.prompt();
+    *this << rshShell.prompt();
 }
 
 void
@@ -146,7 +157,7 @@ RshServer::didExecute(const InputLine &input, std::stringstream &ss, std::except
     if (!input.isRpcCommand()) { *this << input.input << '\n'; }
 
     *this << '\n' << ss.str() << e.what() << '\n';
-    *this << retroShell.prompt();
+    *this << rshShell.prompt();
 }
 
 }

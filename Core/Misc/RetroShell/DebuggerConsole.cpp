@@ -93,7 +93,7 @@ Console::initDebuggerCommands(RSCommand &root)
         
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            retroShell.enterNavigator();
+            shell.enterNavigator();
         }
     });
     
@@ -105,7 +105,7 @@ Console::initDebuggerCommands(RSCommand &root)
         
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            retroShell.enterCommander();
+            shell.enterCommander();
         }
     });
     
@@ -1527,7 +1527,7 @@ Console::initDebuggerCommands(RSCommand &root)
                 
                 const auto &task = args.at("task");
                 diagBoard.catchTask(args.at(task));
-                retroShell << "Waiting for task '" << args.at(task) << "' to start...\n";
+                shell << "Waiting for task '" << args.at(task) << "' to start...\n";
             }
     });
     

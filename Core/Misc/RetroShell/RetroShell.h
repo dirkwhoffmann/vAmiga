@@ -49,13 +49,20 @@ class RetroShell final : public SubComponent {
     
     friend class RshServer;
     
-    Descriptions descriptions = {{
-        
-        .type           = Class::RetroShell,
-        .name           = "RetroShell",
-        .description    = "Retro Shell",
-        .shell          = ""
-    }};
+    Descriptions descriptions = {
+        {
+            .type           = Class::RetroShell,
+            .name           = "RetroShell",
+            .description    = "Retro Shell",
+            .shell          = ""
+        },
+        {
+            .type           = Class::RetroShell,
+            .name           = "RshShell",
+            .description    = "Remote Retro Shell",
+            .shell          = ""
+        }
+    };
     
     Options options = {
         
@@ -73,7 +80,7 @@ private:
 public:
     
     // The console
-    Console console = Console(amiga, 0, storage);
+    Console console = Console(amiga, *this, objid, storage);
 
     // Indicates if the console has new contents
     bool isDirty = false;
@@ -81,7 +88,7 @@ public:
 private:
     
     // Command queue (stores all pending commands)
-    std::vector<InputLine> commands = { InputLine {.input = "commander"}};
+    std::vector<InputLine> commands;
 
 public:
     
@@ -99,8 +106,14 @@ public:
     
 public:
     
-    RetroShell(Amiga& ref);
+    RetroShell(Amiga& ref, isize id = 0);
     RetroShell& operator= (const RetroShell& other) { return *this; }
+    
+    // Returns true for the emulator's main shell
+    bool isPrimary() const { return objid == 0; }
+    
+    // Starts a fresh session (wipes the console, returns to the Commander)
+    void newSession();
     
     
     //

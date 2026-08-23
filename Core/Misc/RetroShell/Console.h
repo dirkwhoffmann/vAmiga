@@ -21,6 +21,8 @@
 
 namespace vamiga {
 
+class RetroShell;
+
 using retro::vault::BlockNr;
 using retro::vault::Volume;
 using retro::vault::amiga::FileSystem;
@@ -79,13 +81,20 @@ class Console final : public SubComponent, public ConsoleDelegate {
     friend class RshServer;
     friend class Interpreter;
     
-    Descriptions descriptions = {{
-        
-        .type           = Class::Console,
-        .name           = "Console",
-        .description    = "Console",
-        .shell          = ""
-    }};
+    Descriptions descriptions = {
+        {
+            .type           = Class::Console,
+            .name           = "Console",
+            .description    = "Console",
+            .shell          = ""
+        },
+        {
+            .type           = Class::Console,
+            .name           = "RshConsole",
+            .description    = "Remote Console",
+            .shell          = ""
+        }
+    };
     
     Options options = {
         
@@ -97,6 +106,9 @@ public:
     std::vector<ConsoleDelegate *> delegates;
 
 protected:
+    
+    // The shell this console belongs to
+    RetroShell &shell;
     
     // The currently active command set
     CommandSet commandSet = CommandSet::Commander;
@@ -168,9 +180,19 @@ protected:
     
 public:
     
-    Console(Amiga &amiga, isize id, TextStorage &storage) : SubComponent(amiga, id), storage(storage) { };
+    Console(Amiga &amiga, RetroShell &shell, isize id, TextStorage &storage)
+    : SubComponent(amiga, id), shell(shell), storage(storage) { };
     
     Console& operator= (const Console& other) { return *this; }
+    
+    // Returns true for the console of the emulator's main shell
+    bool isPrimary() const { return objid == 0; }
+    
+    /* Identifies this console as an instruction-tracking client. Each console
+     * gets its own source bit so that a remote client leaving the Debugger
+     * cannot switch off tracking for the main shell (and vice versa).
+     */
+    isize trackSource() const { return isPrimary() ? 1 : 2; }
     
     
     //

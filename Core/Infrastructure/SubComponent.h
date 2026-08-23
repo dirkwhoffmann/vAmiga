@@ -55,6 +55,7 @@ public:
     class RamExpansion &ramExpansion;
     class RemoteManager &remoteManager;
     class RetroShell &retroShell;
+    class RetroShell &rshShell;
     class RTC &rtc;
     class SerialPort &serialPort;
     class UART &uart;
