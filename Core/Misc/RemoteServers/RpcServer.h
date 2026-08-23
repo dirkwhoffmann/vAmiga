@@ -64,6 +64,8 @@ protected:
     void doProcess(const string &packet) override;
     void doSend(const string &packet)  override;
     void didStart() override;
+    void didConnect() override;
+    void didDisconnect() override;
 
 
     //

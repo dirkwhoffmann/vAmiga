@@ -786,7 +786,7 @@ Console::initNavigatorCommands(RSCommand &root)
                         msgQueue.setPayload( { "/export", name } );
                     }
                     
-                    msgQueue.put(Msg::RSH_EXPORT);
+                    msgQueue.put(Msg::RSH_EXPORT, shell.objid);
                 }
         });
         
@@ -889,7 +889,7 @@ Console::initNavigatorCommands(RSCommand &root)
                     
                     amigaFs->exporter.exportBlock(nr, "blob");
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
-                    msgQueue.put(Msg::RSH_EXPORT);
+                    msgQueue.put(Msg::RSH_EXPORT, shell.objid);
                     
                 } else {
                     

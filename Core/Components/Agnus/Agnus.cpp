@@ -588,8 +588,14 @@ Agnus::executeUntil(Cycle cycle) {
             if (isDue<SLOT_SNP>(cycle)) {
                 amiga.serviceSnpEvent(id[SLOT_KEY]);
             }
-            if (isDue<SLOT_RSH>(cycle)) {
+            if (isDue<SLOT_RSH0>(cycle)) {
                 retroShell.serviceEvent();
+            }
+            if (isDue<SLOT_RSH1>(cycle)) {
+                rshShell.serviceEvent();
+            }
+            if (isDue<SLOT_RSH2>(cycle)) {
+                rpcShell.serviceEvent();
             }
             if (isDue<SLOT_KEY>(cycle)) {
                 keyboard.serviceKeyEvent();

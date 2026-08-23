@@ -33,11 +33,46 @@ RetroShell::RetroShell(Amiga& ref, isize id) : SubComponent(ref, id)
 }
 
 void
+RetroShell::scheduleWakeup(Cycle delay)
+{
+    switch (objid) {
+
+        case 0:     agnus.scheduleRel<SLOT_RSH0>(delay, RSH_WAKEUP); break;
+        case 1:     agnus.scheduleRel<SLOT_RSH1>(delay, RSH_WAKEUP); break;
+        case 2:     agnus.scheduleRel<SLOT_RSH2>(delay, RSH_WAKEUP); break;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+RetroShell::cancelWakeup()
+{
+    switch (objid) {
+
+        case 0:     agnus.cancel<SLOT_RSH0>(); break;
+        case 1:     agnus.cancel<SLOT_RSH1>(); break;
+        case 2:     agnus.cancel<SLOT_RSH2>(); break;
+
+        default:
+            fatalError;
+    }
+}
+
+void
 RetroShell::newSession()
 {
-    commands = { };
-    console.clear();
-    enterCommander();
+    /* Called from the server threads. The lock keeps us from rebuilding the
+     * command tree while the emulator thread is walking it.
+     */
+    {   SYNCHRONIZED
+
+        commands = { };
+        cancelWakeup();
+        console.clear();
+        enterCommander();
+    }
 }
 
 void
@@ -64,7 +99,7 @@ RetroShell::enterConsole(CommandSet cs)
     console.setCommandSet(cs);
     
     // Inform the GUI about the change
-    msgQueue.put(Msg::RSH_SWITCH, isize(cs));
+    msgQueue.put(Msg::RSH_SWITCH, objid, isize(cs));
 }
 
 void
@@ -141,7 +176,7 @@ RetroShell::abortScript()
         if (!commands.empty()) {
             
             commands.clear();
-            agnus.cancel<SLOT_RSH>();
+            cancelWakeup();
         }
     }
 }
@@ -165,14 +200,14 @@ RetroShell::exec()
 
         } catch (ScriptInterruption &) {
 
-            msgQueue.put(Msg::RSH_WAIT);
+            msgQueue.put(Msg::RSH_WAIT, objid);
 
         } catch (...) {
 
             // Remove all remaining commands
             commands = { };
 
-            msgQueue.put(Msg::RSH_ERROR);
+            msgQueue.put(Msg::RSH_ERROR, objid);
         }
 
         // Print prompt
@@ -339,7 +374,7 @@ void
 RetroShell::serviceEvent()
 {
     emulator.put(Command(Cmd::RSH_EXECUTE));
-    agnus.cancel<SLOT_RSH>();
+    cancelWakeup();
 }
 
 }

@@ -21,7 +21,8 @@ using nlohmann::json;
 void
 RpcServer::_initialize()
 {
-    retroShell.console.delegates.push_back(this);
+    // The RPC server drives its own shell, independent of the GUI's one
+    rpcShell.console.delegates.push_back(this);
 }
 
 
@@ -29,6 +30,20 @@ void
 RpcServer::_dump(Category category, std::ostream &os) const
 {
     RemoteServer::_dump(category, os);
+}
+
+void
+RpcServer::didConnect()
+{
+    // Hand the client a fresh shell
+    rpcShell.newSession();
+}
+
+void
+RpcServer::didDisconnect()
+{
+    // Discard the client's session
+    rpcShell.newSession();
 }
 
 void
@@ -94,7 +109,7 @@ RpcServer::doProcess(const string &payload)
         }
 
         // Feed the command into the command queue
-        retroShell.asyncExec(InputLine {
+        rpcShell.asyncExec(InputLine {
 
             .id = request.value("id", 0),
             .type = InputLine::Source::RPC,

@@ -353,6 +353,9 @@ extension MyController {
         
         guard let emu = emu else { return }
         var value: Int { return Int(msg.value) }
+        var value2: Int { return Int(msg.value2) }
+        // RetroShell messages carry the id of the emitting shell (0 = main shell)
+        var isMainShell: Bool { return msg.value == 0 }
         var nr: Int { return Int(msg.drive.nr) }
         var cyl: Int { return Int(msg.drive.value) }
         var pc: Int { return Int(msg.cpu.pc) }
@@ -413,20 +416,19 @@ extension MyController {
             clearInfo()
 
         case .RSH_CLOSE:
-            renderer.console.close(delay: 0.25)
+            if isMainShell { renderer.console.close(delay: 0.25) }
             
         case .RSH_UPDATE:
-            renderer.console.isDirty = true
+            if isMainShell { renderer.console.isDirty = true }
 
         case .RSH_SWITCH:
             break
             
         case .RSH_WAIT:
-            renderer.console.isDirty = true
+            if isMainShell { renderer.console.isDirty = true }
             
         case .RSH_ERROR:
-            NSSound.beep()
-            renderer.console.isDirty = true
+            if isMainShell { NSSound.beep(); renderer.console.isDirty = true }
             
         case .RSH_EXPORT:
             break;

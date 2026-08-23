@@ -502,7 +502,9 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
-        case SLOT_RSH:
+        case SLOT_RSH0:
+        case SLOT_RSH1:
+        case SLOT_RSH2:
 
             switch (id) {
 

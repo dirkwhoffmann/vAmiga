@@ -79,6 +79,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
         &remoteManager,
         &retroShell,
         &rshShell,
+        &rpcShell,
         &osDebugger,
         &regressionTester
     };
@@ -980,6 +981,7 @@ Amiga::update(CmdQueue &queue)
 
                 retroShell.exec();
                 rshShell.exec();
+                rpcShell.exec();
                 break;
 
             case Cmd::FOCUS:
@@ -996,7 +998,9 @@ Amiga::update(CmdQueue &queue)
     if (cmdConfig) { msgQueue.put(Msg::CONFIG, isize(cmd.type)); }
 
     // Inform the GUI about new RetroShell content
-    if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(Msg::RSH_UPDATE); }
+    if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(Msg::RSH_UPDATE, 0); }
+    if (rshShell.isDirty)   { rshShell.isDirty = false;   msgQueue.put(Msg::RSH_UPDATE, 1); }
+    if (rpcShell.isDirty)   { rpcShell.isDirty = false;   msgQueue.put(Msg::RSH_UPDATE, 2); }
 
     // Update subcomponents
     remoteManager.update();

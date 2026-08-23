@@ -1116,7 +1116,7 @@ Console::initCommonCommands(RSCommand &root)
             
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                msgQueue.put(Msg::RSH_CLOSE);
+                msgQueue.put(Msg::RSH_CLOSE, shell.objid);
             }
         });
         
@@ -1190,7 +1190,7 @@ Console::initCommonCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto seconds = parseNum(args.at("seconds"));
-                agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
+                shell.scheduleWakeup(SEC(seconds));
                 throw ScriptInterruption();
             }
         });

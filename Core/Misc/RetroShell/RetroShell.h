@@ -59,7 +59,13 @@ class RetroShell final : public SubComponent {
         {
             .type           = Class::RetroShell,
             .name           = "RshShell",
-            .description    = "Remote Retro Shell",
+            .description    = "RetroShell Server Shell",
+            .shell          = ""
+        },
+        {
+            .type           = Class::RetroShell,
+            .name           = "RpcShell",
+            .description    = "RPC Server Shell",
             .shell          = ""
         }
     };
@@ -114,6 +120,19 @@ public:
     
     // Starts a fresh session (wipes the console, returns to the Commander)
     void newSession();
+    
+    
+    //
+    // Scheduling wake-up events
+    //
+    
+public:
+    
+    /* Each shell owns one of the SLOT_RSH<n> event slots. The functions below
+     * map the shell's object id onto the matching slot.
+     */
+    void scheduleWakeup(Cycle delay);
+    void cancelWakeup();
     
     
     //

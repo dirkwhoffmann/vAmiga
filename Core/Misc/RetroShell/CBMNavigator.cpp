@@ -619,7 +619,7 @@ Console::initCBMNavigatorCommands(RSCommand &root)
 
                     cbmFs->exporter.exportBlock(nr, "blob");
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
-                    msgQueue.put(Msg::RSH_EXPORT);
+                    msgQueue.put(Msg::RSH_EXPORT, shell.objid);
 
                 } else {
 

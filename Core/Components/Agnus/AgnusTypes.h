@@ -114,7 +114,9 @@ enum EventSlot : long
     SLOT_MSE1,                      // Port 1 mouse
     SLOT_MSE2,                      // Port 2 mouse
     SLOT_SNP,                       // Snapshots
-    SLOT_RSH,                       // Retro Shell
+    SLOT_RSH0,                      // Retro Shell (main shell)
+    SLOT_RSH1,                      // Retro Shell (RetroShell server)
+    SLOT_RSH2,                      // Retro Shell (RPC server)
     SLOT_KEY,                       // Auto-typing
     SLOT_SER,                       // Serial remote server
     SLOT_BTR,                       // Beam traps
@@ -173,7 +175,9 @@ struct EventSlotEnum : Reflectable<EventSlotEnum, EventSlot>
             case SLOT_MSE1:  return "MSE1";
             case SLOT_MSE2:  return "MSE2";
             case SLOT_SNP:   return "SNP";
-            case SLOT_RSH:   return "RSH";
+            case SLOT_RSH0:  return "RSH0";
+            case SLOT_RSH1:  return "RSH1";
+            case SLOT_RSH2:  return "RSH2";
             case SLOT_KEY:   return "KEY";
             case SLOT_SER:   return "SER";
             case SLOT_BTR:   return "BTR";
@@ -221,7 +225,9 @@ struct EventSlotEnum : Reflectable<EventSlotEnum, EventSlot>
             case SLOT_MSE1:  return "Port 1 Mouse";
             case SLOT_MSE2:  return "Port 2 Mouse";
             case SLOT_SNP:   return "Snapshots";
-            case SLOT_RSH:   return "Retro Shell";
+            case SLOT_RSH0:  return "Retro Shell";
+            case SLOT_RSH1:  return "Retro Shell (RSH)";
+            case SLOT_RSH2:  return "Retro Shell (RPC)";
             case SLOT_KEY:   return "Auto Typing";
             case SLOT_SER:   return "Null Modem Cable";
             case SLOT_BTR:   return "Beam Traps";

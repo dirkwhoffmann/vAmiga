@@ -151,6 +151,7 @@ public:
     LogicAnalyzer logicAnalyzer = LogicAnalyzer(*this);
     RetroShell retroShell = RetroShell(*this, 0);
     RetroShell rshShell = RetroShell(*this, 1);
+    RetroShell rpcShell = RetroShell(*this, 2);
     RemoteManager remoteManager = RemoteManager(*this);
     OSDebugger osDebugger = OSDebugger(*this);
     RegressionTester regressionTester = RegressionTester(*this);
@@ -262,6 +263,7 @@ public:
         CLONE(remoteManager)
         CLONE(retroShell)
         CLONE(rshShell)
+        CLONE(rpcShell)
         CLONE(osDebugger)
         CLONE(regressionTester)
 

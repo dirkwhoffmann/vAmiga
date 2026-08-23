@@ -91,7 +91,13 @@ class Console final : public SubComponent, public ConsoleDelegate {
         {
             .type           = Class::Console,
             .name           = "RshConsole",
-            .description    = "Remote Console",
+            .description    = "RetroShell Server Console",
+            .shell          = ""
+        },
+        {
+            .type           = Class::Console,
+            .name           = "RpcConsole",
+            .description    = "RPC Server Console",
             .shell          = ""
         }
     };
@@ -190,9 +196,10 @@ public:
     
     /* Identifies this console as an instruction-tracking client. Each console
      * gets its own source bit so that a remote client leaving the Debugger
-     * cannot switch off tracking for the main shell (and vice versa).
+     * cannot switch off tracking for another shell. Source 0 is used by the
+     * GUI's inspector.
      */
-    isize trackSource() const { return isPrimary() ? 1 : 2; }
+    isize trackSource() const { return objid + 1; }
     
     
     //

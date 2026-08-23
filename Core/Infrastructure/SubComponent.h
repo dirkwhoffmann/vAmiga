@@ -56,6 +56,7 @@ public:
     class RemoteManager &remoteManager;
     class RetroShell &retroShell;
     class RetroShell &rshShell;
+    class RetroShell &rpcShell;
     class RTC &rtc;
     class SerialPort &serialPort;
     class UART &uart;
