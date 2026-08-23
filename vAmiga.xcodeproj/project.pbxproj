@@ -452,6 +452,9 @@
 		50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
 		50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
+		CE1B55F098CEC92CB4B8AE2F /* MoiraCore68000.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6692862BC956F35326722F1 /* MoiraCore68000.cpp */; };
+		78FE86DFA5C543A5208229CF /* MoiraCore68010.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F702840675DEA2170BFD01E /* MoiraCore68010.cpp */; };
+		5D5D0980D267AA0BC11517BC /* MoiraCore68020.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */; };
 		50E5BF7F2BB1D2510004712B /* STFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5BF7D2BB1D2510004712B /* STFile.cpp */; };
 		50E5BF802BB1D2510004712B /* STFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5BF7D2BB1D2510004712B /* STFile.cpp */; };
 		50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
@@ -511,6 +514,9 @@
 		50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
 		50FC048727DA194200C3E566 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		50FC048827DA194200C3E566 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
+		48811686BB81021216C6EB83 /* MoiraCore68000.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6692862BC956F35326722F1 /* MoiraCore68000.cpp */; };
+		F92071195AED7B58B2229738 /* MoiraCore68010.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F702840675DEA2170BFD01E /* MoiraCore68010.cpp */; };
+		17EF7AB400CF86F6FB6D4CF9 /* MoiraCore68020.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */; };
 		50FC048927DA195600C3E566 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
 		50FC048A27DA195600C3E566 /* CIARegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegs.cpp */; };
 		50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
@@ -1328,6 +1334,10 @@
 		50E2BE35240D41EE00155AE4 /* MoiraConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraConfig.h; sourceTree = "<group>"; };
 		50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU_cpp.h; sourceTree = "<group>"; };
 		50E2BE37240D41EE00155AE4 /* Moira.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Moira.cpp; sourceTree = "<group>"; };
+		F6692862BC956F35326722F1 /* MoiraCore68000.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraCore68000.cpp; sourceTree = "<group>"; };
+		3F702840675DEA2170BFD01E /* MoiraCore68010.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraCore68010.cpp; sourceTree = "<group>"; };
+		43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraCore68020.cpp; sourceTree = "<group>"; };
+		BAECD0DC7EE27335A8CCA4CD /* MoiraCore_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraCore_cpp.h; sourceTree = "<group>"; };
 		50E2BE38240D41EE00155AE4 /* MoiraALU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU.h; sourceTree = "<group>"; };
 		50E5B9BD2807E65800502787 /* Defaults.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Defaults.cpp; sourceTree = "<group>"; };
 		50E5B9BE2807E65800502787 /* Defaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defaults.h; sourceTree = "<group>"; };
@@ -2822,6 +2832,10 @@
 				5034229628A6E2BE007018BB /* MoiraMacros.h */,
 				50E2BE34240D41DD00155AE4 /* Moira.h */,
 				50E2BE37240D41EE00155AE4 /* Moira.cpp */,
+				F6692862BC956F35326722F1 /* MoiraCore68000.cpp */,
+				3F702840675DEA2170BFD01E /* MoiraCore68010.cpp */,
+				43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */,
+				BAECD0DC7EE27335A8CCA4CD /* MoiraCore_cpp.h */,
 				50E2BE2E240D418500155AE4 /* MoiraInit.h */,
 				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE38240D41EE00155AE4 /* MoiraALU.h */,
@@ -3249,6 +3263,9 @@
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
+				CE1B55F098CEC92CB4B8AE2F /* MoiraCore68000.cpp in Sources */,
+				78FE86DFA5C543A5208229CF /* MoiraCore68010.cpp in Sources */,
+				5D5D0980D267AA0BC11517BC /* MoiraCore68020.cpp in Sources */,
 				50BF4B622F05078500F1B9F2 /* Codecs.cpp in Sources */,
 				500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */,
 				50392FAC2EF6AC0000DAE17A /* FSContract.cpp in Sources */,
@@ -3622,6 +3639,9 @@
 				50BF4BD72F0ADF3200F1B9F2 /* FileSystemLayer2.cpp in Sources */,
 				50FC04ED27DA1A4500C3E566 /* Socket.cpp in Sources */,
 				50FC048827DA194200C3E566 /* Moira.cpp in Sources */,
+				48811686BB81021216C6EB83 /* MoiraCore68000.cpp in Sources */,
+				F92071195AED7B58B2229738 /* MoiraCore68010.cpp in Sources */,
+				17EF7AB400CF86F6FB6D4CF9 /* MoiraCore68020.cpp in Sources */,
 				50EF2236281595AA00440C4D /* Defaults.cpp in Sources */,
 				50FC048427DA190400C3E566 /* Thread.cpp in Sources */,
 				50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */,

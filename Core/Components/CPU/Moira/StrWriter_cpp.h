@@ -67,6 +67,10 @@ static const char *mnemonics[]
     "fsinh",    "ftan",     "ftanh",    "ftentox",  "ftwotox"
 };
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 static int decDigits(u64 value) { return value ? 1 + (int)log10(value) : 1; }
 static int binDigits(u64 value) { return value ? 1 + (int)log2(value) : 1; }
 static int hexDigits(u64 value) { return (binDigits(value) + 3) / 4; }
@@ -217,6 +221,8 @@ StrWriter::operator<<(UInt32 u)
     return *this;
 }
 
+#endif
+
 template <Size S> StrWriter&
 StrWriter::operator<<(Imu<S> im)
 {
@@ -233,6 +239,10 @@ StrWriter::operator<<(Ims<S> im)
     return *this;
 }
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 StrWriter&
 StrWriter::operator<<(Imd im)
 {
@@ -240,6 +250,8 @@ StrWriter::operator<<(Imd im)
     sprintd(ptr, im.raw);
     return *this;
 }
+
+#endif
 
 template <Instr I> StrWriter&
 StrWriter::operator<<(Ins<I> i)
@@ -305,6 +317,10 @@ StrWriter::operator<<(Szb<S>)
 
     return *this;
 }
+
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
 
 StrWriter&
 StrWriter::operator<<(Cc cc)
@@ -714,6 +730,8 @@ StrWriter::operator<<(FRegList l)
 
     return *this;
 }
+
+#endif
 
 template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(const Ea<M, S> &ea)
@@ -1274,6 +1292,10 @@ StrWriter::operator<<(Ip<M, S> wrapper)
     return *this;
 }
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 StrWriter&
 StrWriter::operator<<(Scale s)
 {
@@ -1428,6 +1450,8 @@ StrWriter::operator<<(Tab tab)
     return *this;
 }
 
+#endif
+
 template <Instr I, Mode M, Size S> StrWriter&
 StrWriter::operator<<(const Av<I, M, S> &av)
 {
@@ -1563,6 +1587,10 @@ StrWriter::operator<<(const Av<I, M, S> &av)
     return *this;
 }
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 StrWriter&
 StrWriter::operator<<(Sep)
 {
@@ -1597,3 +1625,5 @@ StrWriter::operator<<(Finish)
 
     return *this;
 }
+
+#endif

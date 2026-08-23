@@ -5,6 +5,70 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+/* Register accessors and the address bus mask.
+ *
+ * These live here rather than in Moira.cpp so that they stay visible to the
+ * per-core translation units, which need to inline them into the instruction
+ * handlers. addrMask is evaluated on every memory access.
+ */
+template <Core C> u32
+Moira::addrMask() const
+{
+    if constexpr (C == Core::C68020) {
+
+        return cpuModel == Model::M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
+
+    } else {
+
+        return 0x00FFFFFF;
+    }
+}
+
+template <Size S> u32
+Moira::readD(int n) const
+{
+    return CLIP<S>(reg.d[n]);
+}
+
+template <Size S> u32
+Moira::readA(int n) const
+{
+    return CLIP<S>(reg.a[n]);
+}
+
+template <Size S> u32
+Moira::readR(int n) const
+{
+    return CLIP<S>(reg.r[n]);
+}
+
+template <Size S> void
+Moira::writeD(int n, u32 v)
+{
+    reg.d[n] = WRITE<S>(reg.d[n], v);
+}
+
+template <Size S> void
+Moira::writeA(int n, u32 v)
+{
+    reg.a[n] = WRITE<S>(reg.a[n], v);
+}
+
+template <Size S> void
+Moira::writeR(int n, u32 v)
+{
+    reg.r[n] = WRITE<S>(reg.r[n], v);
+}
+
+template <Mode M> void
+Moira::setFC()
+{
+    if constexpr (MOIRA_EMULATE_FC) {
+        
+        fcl = (M == Mode::DIPC || M == Mode::IXPC) ? FC::USER_PROG : FC::USER_DATA;
+    }
+}
+
 template <Core C, Mode M, Size S, Flags F> u32
 Moira::computeEA(u32 n) {
 
@@ -273,6 +337,10 @@ Moira::writeOp(int n, u32 ea, u32 val)
     }
 }
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 void
 Moira::updateAn(Mode M, Size S, int n)
 {
@@ -310,6 +378,8 @@ Moira::undoAnPD(Mode M, Size S, int n)
 {
     if ((int)M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
+
+#endif
 
 template <Mode M, Size S> void
 Moira::updateAn(int n)
@@ -691,6 +761,10 @@ Moira::jumpToVector(int nr)
     didJumpToVector(nr, reg.pc);
 }
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 int
 Moira::baseDispWords(u16 ext) const
 {
@@ -712,6 +786,8 @@ Moira::outerDispWords(u16 ext) const
 
     return outer_disp ? (outer_disp_long ? 2 : 1) : 0;
 }
+
+#endif
 
 template <Core C, Mode M, Size S> int
 Moira::penaltyCycles(u16 ext) const

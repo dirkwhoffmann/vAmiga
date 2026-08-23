@@ -5,6 +5,10 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 int
 Moira::disassemble(char *str, u32 addr) const
 {
@@ -115,6 +119,8 @@ Moira::dump16(char *str, u32 addr, int cnt) const
         U32_INC(addr, 2);
     }
 }
+
+#endif
 
 template <Size S> u32
 Moira::dasmRead(u32 addr) const

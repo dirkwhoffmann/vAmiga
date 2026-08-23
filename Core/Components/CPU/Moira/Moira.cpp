@@ -5,6 +5,11 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+/* Marks this file as the main translation unit. Non-templated function
+ * definitions inside the *_cpp.h files are compiled here and nowhere else.
+ */
+#define MOIRA_MAIN_TU
+
 #include "config.h"
 #include "MoiraConfig.h"
 #include "Moira.h"
@@ -168,19 +173,6 @@ Moira::addrMask() const
         
         default:
             return addrMask<Core::C68020>();
-    }
-}
-
-template <Core C> u32
-Moira::addrMask() const
-{
-    if constexpr (C == Core::C68020) {
-
-        return cpuModel == Model::M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
-
-    } else {
-
-        return 0x00FFFFFF;
     }
 }
 
@@ -560,42 +552,6 @@ Moira::setSupervisorFlags(bool s, bool m)
     if (mspIsVisible)  reg.sp = reg.msp;
 }
 
-template <Size S> u32
-Moira::readD(int n) const
-{
-    return CLIP<S>(reg.d[n]);
-}
-
-template <Size S> u32
-Moira::readA(int n) const
-{
-    return CLIP<S>(reg.a[n]);
-}
-
-template <Size S> u32
-Moira::readR(int n) const
-{
-    return CLIP<S>(reg.r[n]);
-}
-
-template <Size S> void
-Moira::writeD(int n, u32 v)
-{
-    reg.d[n] = WRITE<S>(reg.d[n], v);
-}
-
-template <Size S> void
-Moira::writeA(int n, u32 v)
-{
-    reg.a[n] = WRITE<S>(reg.a[n], v);
-}
-
-template <Size S> void
-Moira::writeR(int n, u32 v)
-{
-    reg.r[n] = WRITE<S>(reg.r[n], v);
-}
-
 u16
 Moira::availabilityMask(Instr I) const
 {
@@ -814,15 +770,6 @@ Moira::setFC(u8 value)
     if constexpr (MOIRA_EMULATE_FC) {
         
         fcl = (u8)value;
-    }
-}
-
-template <Mode M> void
-Moira::setFC()
-{
-    if constexpr (MOIRA_EMULATE_FC) {
-        
-        fcl = (M == Mode::DIPC || M == Mode::IXPC) ? FC::USER_PROG : FC::USER_DATA;
     }
 }
 

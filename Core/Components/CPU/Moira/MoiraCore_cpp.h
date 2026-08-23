@@ -1,0 +1,50 @@
+// -----------------------------------------------------------------------------
+// This file is part of Moira - A Motorola 68k emulator
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Published under the terms of the MIT License
+// -----------------------------------------------------------------------------
+
+/* Body of the per-core translation units.
+ *
+ * Building a jump table is the only place where the instruction handler
+ * templates are instantiated, since registering a handler takes its address.
+ * Instantiating all three cores in a single translation unit produces roughly
+ * 12,000 functions, which pushes the compiler's peak memory consumption beyond
+ * what some CI runners provide. This file is therefore compiled once per core,
+ * with MOIRA_CORE set to the core to instantiate.
+ *
+ * See MoiraCore68000.cpp, MoiraCore68010.cpp and MoiraCore68020.cpp.
+ */
+
+#ifndef MOIRA_CORE
+#error "MOIRA_CORE must be defined before including this file"
+#endif
+
+#include "config.h"
+#include "MoiraConfig.h"
+#include "Moira.h"
+#include "MoiraMacros.h"
+
+#include <cstdio>
+#include <algorithm>
+#include <cmath>
+#include <bit>
+#include <vector>
+#include <stdexcept>
+
+namespace vamiga::moira {
+
+using namespace Flag;
+
+#include "MoiraInit_cpp.h"
+#include "MoiraALU_cpp.h"
+#include "MoiraDataflow_cpp.h"
+#include "MoiraExceptions_cpp.h"
+#include "MoiraExec_cpp.h"
+#include "StrWriter_cpp.h"
+#include "MoiraDasm_cpp.h"
+
+template void Moira::createJumpTable<MOIRA_CORE>(Model, bool);
+
+}

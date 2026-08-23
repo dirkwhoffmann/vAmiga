@@ -153,6 +153,10 @@ parse(const char *s, int sum = 0)
     *s == '1' ? parse(s + 1, (sum << 1) + 1) : (u16)sum;
 }
 
+// The following definitions are not templated. They are compiled into the
+// main translation unit only (see MoiraCore_cpp.h).
+#ifdef MOIRA_MAIN_TU
+
 void
 Moira::createJumpTable(Model cpuModel, Model dasmModel)
 {
@@ -185,10 +189,14 @@ Moira::createJumpTable(Model cpuModel, Model dasmModel)
     }
 }
 
+#endif
+
+// Registers the instruction handlers for a subset of the instruction set
+// (prologue ... AND)
 template <Core C> void
-Moira::createJumpTable(Model model, bool regDasm)
+Moira::createJumpTable1(Model model, bool regDasm)
 {
-    u16 opcode;
+    [[maybe_unused]] u16 opcode;
 
     //
     // Start with clean tables
@@ -317,7 +325,13 @@ Moira::createJumpTable(Model model, bool regDasm)
     opcode = parse("1101 ---1 --00 1---");
     ____XXX_SS___XXX(opcode, Instr::ADDX, Mode::PD, Byte | Word | Long, AddxEa, CIMS)
     ____XXX_SS___XXX(opcode, Instr::ADDX, Mode::PD, Byte | Word | Long, AddxEa, CIMSloop)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (AND ... BKPT (68010+))
+template <Core C> void
+Moira::createJumpTable2(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // AND
     //
@@ -569,7 +583,13 @@ Moira::createJumpTable(Model model, bool regDasm)
     opcode = parse("0000 1000 10-- ----");
     __________MMMXXX(opcode, Instr::BCLR, 0b100000000000, Byte, BitImDy, CIMS)
     __________MMMXXX(opcode, Instr::BCLR, 0b001111111000, Byte, BitImEa, CIMS)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (BKPT (68010+) ... CLR)
+template <Core C> void
+Moira::createJumpTable3(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // BKPT (68010+)
     //
@@ -741,7 +761,13 @@ Moira::createJumpTable(Model model, bool regDasm)
         opcode = parse("0000 0100 11-- ----");
         __________MMMXXX(opcode, Instr::CHK2, 0b001001111110, Long, ChkCmp2, CIMS)
     }
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (CLR ... EOR)
+template <Core C> void
+Moira::createJumpTable4(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // CLR
     //
@@ -885,7 +911,13 @@ Moira::createJumpTable(Model model, bool regDasm)
         opcode = parse("0100 1100 01-- ----");
         __________MMMXXX(opcode, Instr::DIVL, 0b101111111111, Long, Divl, CIMS)
     }
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (EOR ... LINK)
+template <Core C> void
+Moira::createJumpTable5(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // EOR
     //
@@ -974,7 +1006,13 @@ Moira::createJumpTable(Model model, bool regDasm)
         opcode = parse("0100 1001 --00 0---");
         _____________XXX(opcode | 3 << 6, Instr::EXTB, Mode::DN, Long, Extb, CIMS)
     }
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (LINK ... MOVEC)
+template <Core C> void
+Moira::createJumpTable6(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // LINK
     //
@@ -1144,7 +1182,13 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     ____XXX___MMMXXX(opcode | 0 << 12, Instr::MOVEA, 0b111111111111, Long, Movea, CIMS)
     ____XXX___MMMXXX(opcode | 1 << 12, Instr::MOVEA, 0b111111111111, Word, Movea, CIMS)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (MOVEC ... MOVE from SR)
+template <Core C> void
+Moira::createJumpTable7(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // MOVEC
     //
@@ -1259,7 +1303,13 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     opcode = parse("0100 0100 11-- ----");
     __________MMMXXX(opcode, Instr::MOVETCCR, 0b101111111111, Word, MoveToCcr, CIMS)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (MOVE from SR ... OR)
+template <Core C> void
+Moira::createJumpTable8(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // MOVE from SR
     //
@@ -1374,7 +1424,13 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     opcode = parse("0100 1110 0111 0001");
     ________________(opcode, Instr::NOP, Mode::IP, Long, Nop, CIMS)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (OR ... RESET)
+template <Core C> void
+Moira::createJumpTable9(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // OR
     //
@@ -1520,7 +1576,13 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     opcode = parse("0100 1000 01-- ----");
     __________MMMXXX(opcode, Instr::PEA, 0b001001111110, Long, Pea, CIMS)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (RESET ... Scc)
+template <Core C> void
+Moira::createJumpTable10(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // RESET
     //
@@ -1599,7 +1661,13 @@ Moira::createJumpTable(Model model, bool regDasm)
     opcode = parse("1000 ---1 0000 1---");
     ____XXX______XXX(opcode, Instr::SBCD, Mode::PD, Byte, AbcdEa, CIMS)
     ____XXX______XXX(opcode, Instr::SBCD, Mode::PD, Byte, AbcdEa, CIMSloop)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (Scc ... TAS)
+template <Core C> void
+Moira::createJumpTable11(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // Scc
     //
@@ -1752,7 +1820,13 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     opcode = parse("0100 1000 0100 0---");
     _____________XXX(opcode, Instr::SWAP, Mode::DN, Word, Swap, CIMS)
-
+}
+// Registers the instruction handlers for a subset of the instruction set
+// (TAS ... end)
+template <Core C> void
+Moira::createJumpTable12(Model model, bool regDasm)
+{
+    [[maybe_unused]] u16 opcode;
 
     // TAS
     //
@@ -2038,4 +2112,22 @@ Moira::createJumpTable(Model model, bool regDasm)
         opcode = parse("1111 0010 0100 1---");
         _____________XXX(opcode, Instr::FDBcc, Mode::IP, Word, FDbcc, CIMS)
     }
+}
+
+// Registers all instruction handlers
+template <Core C> void
+Moira::createJumpTable(Model model, bool regDasm)
+{
+    createJumpTable1<C>(model, regDasm);
+    createJumpTable2<C>(model, regDasm);
+    createJumpTable3<C>(model, regDasm);
+    createJumpTable4<C>(model, regDasm);
+    createJumpTable5<C>(model, regDasm);
+    createJumpTable6<C>(model, regDasm);
+    createJumpTable7<C>(model, regDasm);
+    createJumpTable8<C>(model, regDasm);
+    createJumpTable9<C>(model, regDasm);
+    createJumpTable10<C>(model, regDasm);
+    createJumpTable11<C>(model, regDasm);
+    createJumpTable12<C>(model, regDasm);
 }
