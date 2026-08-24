@@ -130,16 +130,17 @@ enum class Opt : long
     RTC_MODEL,
     
     // Memory
+    MEM_BUS_WIDTH,
     MEM_CHIP_RAM,
     MEM_SLOW_RAM,
     MEM_FAST_RAM,
     MEM_EXT_START,
-    MEM_SAVE_ROMS,
     MEM_SLOW_RAM_DELAY,
     MEM_SLOW_RAM_MIRROR,
     MEM_BANKMAP,
     MEM_UNMAPPING_TYPE,
     MEM_RAM_INIT_PATTERN,
+    MEM_SAVE_ROMS,
     
     // Disk controller
     DC_SPEED,
@@ -331,17 +332,18 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::RTC_MODEL:                 return "RTC.MODEL";
                 
+            case Opt::MEM_BUS_WIDTH:             return "MEM.BUS_WIDTH";
             case Opt::MEM_CHIP_RAM:              return "MEM.CHIP_RAM";
             case Opt::MEM_SLOW_RAM:              return "MEM.SLOW_RAM";
             case Opt::MEM_FAST_RAM:              return "MEM.FAST_RAM";
             case Opt::MEM_EXT_START:             return "MEM.EXT_START";
-            case Opt::MEM_SAVE_ROMS:             return "MEM.SAVE_ROMS";
             case Opt::MEM_SLOW_RAM_DELAY:        return "MEM.SLOW_RAM_DELAY";
             case Opt::MEM_SLOW_RAM_MIRROR:       return "MEM.SLOW_RAM_MIRROR";
             case Opt::MEM_BANKMAP:               return "MEM.BANKMAP";
             case Opt::MEM_UNMAPPING_TYPE:        return "MEM.UNMAPPING_TYPE";
             case Opt::MEM_RAM_INIT_PATTERN:      return "MEM.RAM_INIT_PATTERN";
-                
+            case Opt::MEM_SAVE_ROMS:             return "MEM.SAVE_ROMS";
+
             case Opt::DC_SPEED:                  return "DC.SPEED";
             case Opt::DC_LOCK_DSKSYNC:           return "DC.LOCK_DSKSYNC";
             case Opt::DC_AUTO_DSKSYNC:           return "DC.AUTO_DSKSYNC";
@@ -515,17 +517,18 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::RTC_MODEL:                 return "Chip revision";
                 
+            case Opt::MEM_BUS_WIDTH:             return "Data bus width";
             case Opt::MEM_CHIP_RAM:              return "Chip RAM size";
             case Opt::MEM_SLOW_RAM:              return "Slow RAM size";
             case Opt::MEM_FAST_RAM:              return "Fast RAM size";
             case Opt::MEM_EXT_START:             return "Extension ROM location";
-            case Opt::MEM_SAVE_ROMS:             return "Include ROMs in snapshots";
             case Opt::MEM_SLOW_RAM_DELAY:        return "Emulate slow RAM bus delays";
             case Opt::MEM_SLOW_RAM_MIRROR:       return "ECS memory mirroring";
             case Opt::MEM_BANKMAP:               return "Memory mapping scheme";
             case Opt::MEM_UNMAPPING_TYPE:        return "Unmapped memory behavior";
             case Opt::MEM_RAM_INIT_PATTERN:      return "RAM initialization pattern";
-                
+            case Opt::MEM_SAVE_ROMS:             return "Include ROMs in snapshots";
+
             case Opt::DC_SPEED:                  return "Drive speed";
             case Opt::DC_LOCK_DSKSYNC:           return "Ignore writes to DSKSYNC";
             case Opt::DC_AUTO_DSKSYNC:           return "Always find a sync mark";

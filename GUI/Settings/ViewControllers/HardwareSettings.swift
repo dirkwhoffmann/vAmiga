@@ -55,6 +55,7 @@ class HardwareSettingsViewController: SettingsViewController {
     @IBOutlet weak var fastRamIcon: NSButton!
 
     // Memory Properties
+    @IBOutlet weak var busWidth: NSPopUpButton!
     @IBOutlet weak var ramInitPattern: NSPopUpButton!
     @IBOutlet weak var bankMap: NSPopUpButton!
     @IBOutlet weak var unmappingType: NSPopUpButton!
@@ -246,6 +247,7 @@ class HardwareSettingsViewController: SettingsViewController {
         fastRamInfo2.isHidden = config.fastRam == 0
 
         // Memory properties
+        bankMap.selectItem(withTag: config.bankMap)
         ramInitPattern.selectItem(withTag: config.ramInitPattern)
         bankMap.selectItem(withTag: config.bankMap)
         unmappingType.selectItem(withTag: config.unmappingType)
@@ -397,6 +399,11 @@ class HardwareSettingsViewController: SettingsViewController {
         config?.fastRam = sender.selectedTag()
     }
 
+    @IBAction func busWidthAction(_ sender: NSPopUpButton!) {
+
+        config?.busWidth = sender.selectedTag()
+    }
+    
     @IBAction func bankMapAction(_ sender: NSPopUpButton!) {
 
         config?.bankMap = sender.selectedTag()

@@ -127,16 +127,17 @@ Defaults::fallbacks()
 
     registerDefault(Opt::RTC_MODEL,                  (i64)RTCRevision::OKI);
 
+    registerDefault(Opt::MEM_BUS_WIDTH,              16);
     registerDefault(Opt::MEM_CHIP_RAM,               512);
     registerDefault(Opt::MEM_SLOW_RAM,               512);
     registerDefault(Opt::MEM_FAST_RAM,               0);
     registerDefault(Opt::MEM_EXT_START,              0xE0);
-    registerDefault(Opt::MEM_SAVE_ROMS,              true);
     registerDefault(Opt::MEM_SLOW_RAM_DELAY,         true);
     registerDefault(Opt::MEM_SLOW_RAM_MIRROR,        true);
     registerDefault(Opt::MEM_BANKMAP,                (i64)BankMap::A500);
     registerDefault(Opt::MEM_UNMAPPING_TYPE,         (i64)RamInitPattern::ALL_ZEROES);
     registerDefault(Opt::MEM_RAM_INIT_PATTERN,       (i64)UnmappedMemory::FLOATING);
+    registerDefault(Opt::MEM_SAVE_ROMS,              true);
 
     registerDefault(Opt::DC_SPEED,                   1);
     registerDefault(Opt::DC_LOCK_DSKSYNC,            false);

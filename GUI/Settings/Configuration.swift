@@ -72,6 +72,10 @@ class Configuration {
         get { return emu?.get(.AUD_FILTER_TYPE) ?? 0 }
         set { emu?.set(.AUD_FILTER_TYPE, value: newValue) }
     }
+    var busWidth: Int {
+        get { return emu?.get(.MEM_BUS_WIDTH) ?? 0 }
+        set { emu?.set(.MEM_BUS_WIDTH, value: newValue) }
+    }
     var chipRam: Int {
         get { return emu?.get(.MEM_CHIP_RAM) ?? 0 }
         set { emu?.set(.MEM_CHIP_RAM, value: newValue) }

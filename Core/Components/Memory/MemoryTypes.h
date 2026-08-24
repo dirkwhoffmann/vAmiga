@@ -251,6 +251,9 @@ typedef struct
     // First memory page where the extended ROM is blended it
     u32 extStart;
     
+    // Data bus width (16 or 32)
+    u8 busWidth;
+    
     // Indicates if snapshots should contain Roms
     bool saveRoms;
     

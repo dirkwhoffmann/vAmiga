@@ -120,16 +120,17 @@ class Memory final : public SubComponent {
 
     Options options = {
 
+        Opt::MEM_BUS_WIDTH,
         Opt::MEM_CHIP_RAM,
         Opt::MEM_SLOW_RAM,
         Opt::MEM_FAST_RAM,
         Opt::MEM_EXT_START,
-        Opt::MEM_SAVE_ROMS,
         Opt::MEM_SLOW_RAM_DELAY,
         Opt::MEM_SLOW_RAM_MIRROR,
         Opt::MEM_BANKMAP,
         Opt::MEM_UNMAPPING_TYPE,
-        Opt::MEM_RAM_INIT_PATTERN
+        Opt::MEM_RAM_INIT_PATTERN,
+        Opt::MEM_SAVE_ROMS
     };
 
     // Current configuration

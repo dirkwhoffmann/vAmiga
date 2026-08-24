@@ -123,16 +123,17 @@ OptionParser::create(Opt opt, i64 arg)
 
         case Opt::RTC_MODEL:                 return enumParser.template operator()<RTCRevisionEnum,RTCRevision>();
 
+        case Opt::MEM_BUS_WIDTH:             return numParser();
         case Opt::MEM_CHIP_RAM:              return numParser();
         case Opt::MEM_SLOW_RAM:              return numParser();
         case Opt::MEM_FAST_RAM:              return numParser();
         case Opt::MEM_EXT_START:             return numParser();
-        case Opt::MEM_SAVE_ROMS:             return boolParser();
         case Opt::MEM_SLOW_RAM_DELAY:        return boolParser();
         case Opt::MEM_SLOW_RAM_MIRROR:       return boolParser();
         case Opt::MEM_BANKMAP:               return enumParser.template operator()<BankMapEnum,BankMap>();
         case Opt::MEM_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum,UnmappedMemory>();
         case Opt::MEM_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum,RamInitPattern>();
+        case Opt::MEM_SAVE_ROMS:             return boolParser();
 
         case Opt::DC_SPEED:                  return numParser();
         case Opt::DC_LOCK_DSKSYNC:           return boolParser();

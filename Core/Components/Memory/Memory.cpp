@@ -125,16 +125,17 @@ Memory::getOption(Opt option) const
 {
     switch (option) {
             
+        case Opt::MEM_BUS_WIDTH:         return config.busWidth;
         case Opt::MEM_CHIP_RAM:          return config.chipSize / KB(1);
         case Opt::MEM_SLOW_RAM:          return config.slowSize / KB(1);
         case Opt::MEM_FAST_RAM:          return config.fastSize / KB(1);
         case Opt::MEM_EXT_START:         return config.extStart;
-        case Opt::MEM_SAVE_ROMS:         return config.saveRoms;
         case Opt::MEM_SLOW_RAM_DELAY:    return config.slowRamDelay;
         case Opt::MEM_SLOW_RAM_MIRROR:   return config.slowRamMirror;
         case Opt::MEM_BANKMAP:           return (i64)config.bankMap;
         case Opt::MEM_UNMAPPING_TYPE:    return (i64)config.unmappingType;
         case Opt::MEM_RAM_INIT_PATTERN:  return (i64)config.ramInitPattern;
+        case Opt::MEM_SAVE_ROMS:         return config.saveRoms;
 
         default:
             fatalError;
@@ -146,6 +147,13 @@ Memory::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
+        case Opt::MEM_BUS_WIDTH:
+
+            if (value != 16 && value != 32) {
+                throw CoreError(CoreError::OPT_INV_ARG, "16 or 32");
+            }
+            return;
+            
         case Opt::MEM_CHIP_RAM:
 
             if (!isPoweredOff()) {
@@ -186,7 +194,6 @@ Memory::checkOption(Opt opt, i64 value)
             }
             return;
 
-        case Opt::MEM_SAVE_ROMS:
         case Opt::MEM_SLOW_RAM_DELAY:
         case Opt::MEM_SLOW_RAM_MIRROR:
 
@@ -213,6 +220,10 @@ Memory::checkOption(Opt opt, i64 value)
             }
             return;
 
+        case Opt::MEM_SAVE_ROMS:
+            
+            return;
+
         default:
             throw CoreError(CoreError::OPT_UNSUPPORTED);
     }
@@ -223,7 +234,12 @@ void
 Memory::setOption(Opt option, i64 value)
 {
     switch (option) {
-            
+
+        case Opt::MEM_BUS_WIDTH:
+
+            config.busWidth = (u8)value;
+            return;
+
         case Opt::MEM_CHIP_RAM:
 
             mem.allocChip((i32)KB(value));
@@ -245,11 +261,6 @@ Memory::setOption(Opt option, i64 value)
             updateMemSrcTables();
             return;
             
-        case Opt::MEM_SAVE_ROMS:
-
-            config.saveRoms = value;
-            return;
-
         case Opt::MEM_SLOW_RAM_DELAY:
 
 
@@ -278,6 +289,11 @@ Memory::setOption(Opt option, i64 value)
             if (isPoweredOff()) fillRamWithInitPattern();
             return;
 
+        case Opt::MEM_SAVE_ROMS:
+
+            config.saveRoms = value;
+            return;
+            
         default:
             fatalError;
     }
