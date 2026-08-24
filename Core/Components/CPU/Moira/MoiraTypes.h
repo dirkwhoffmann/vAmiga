@@ -41,7 +41,7 @@ static constexpr Size Extended   = 12; // Extended precision (FPU)
 
 
 //
-// Port sizes, as reported by the DSACK pins (68020+)
+// Port sizes, as reported by the DSACK pins (68020)
 //
 
 /* A slave device tells the CPU how wide its data port is by asserting DSACK0
@@ -56,13 +56,12 @@ static constexpr Size Extended   = 12; // Extended precision (FPU)
  *
  * Bit 1 of a DSACK value holds DSACK1, bit 0 holds DSACK0. The CPU splits
  * every memory access into as many bus cycles as the reported port width
- * requires (see Moira::dsack).
+ * requires.
  */
-using Dsack = u8;
-static constexpr Dsack DSACK_32   = 0b00;   // Both DSACK lines asserted
-static constexpr Dsack DSACK_16   = 0b01;   // DSACK1 asserted
-static constexpr Dsack DSACK_8    = 0b10;   // DSACK0 asserted
-static constexpr Dsack DSACK_WAIT = 0b11;   // Neither line asserted
+static constexpr u8 DSACK_32   = 0b00;   // Both DSACK lines asserted
+static constexpr u8 DSACK_16   = 0b01;   // DSACK1 asserted
+static constexpr u8 DSACK_8    = 0b10;   // DSACK0 asserted
+static constexpr u8 DSACK_WAIT = 0b11;   // Neither line asserted
 
 /* Returns the width of the addressed port in bytes.
  *
@@ -70,7 +69,7 @@ static constexpr Dsack DSACK_WAIT = 0b11;   // Neither line asserted
  * wait states, so it is treated like the narrowest port, which is the most
  * conservative assumption in terms of bus cycles.
  */
-static constexpr int portSize(Dsack dsack)
+static constexpr int portSize(u8 dsack)
 {
     return dsack == DSACK_32 ? 4 : dsack == DSACK_16 ? 2 : 1;
 }

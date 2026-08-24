@@ -129,7 +129,7 @@ Moira::write32(u32 addr, u32 val) const
     mem.poke32 <Accessor::CPU> (addr, val);
 }
 
-moira::Dsack
+u8
 Moira::dsack(u32 addr) const
 {
     /* An Amiga has no 8 bit ports on the CPU bus, so the answer is either a
