@@ -211,7 +211,7 @@ Agnus::doSpriteDmaRead()
             break;
         }
 
-        case 4: {
+        case 3: {
 
             u64 w0 = mem.peek16<Accessor::AGNUS>(sprpt[channel]);
             u64 w1 = mem.peek16<Accessor::AGNUS>(sprpt[channel] | 0b010);
