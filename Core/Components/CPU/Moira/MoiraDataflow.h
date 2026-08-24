@@ -94,6 +94,9 @@ template <Core C, Mode M, Size S, Flags F = 0> u32 readM(u32 addr);
 // Reads a value from a specific address space
 template <Core C, AddrSpace AS, Size S, Flags F = 0> u32 read(u32 addr);
 
+// Reads an instruction word, either from memory or the instruction cache
+template <Core C, Flags F = 0> u16 readInstr(u32 addr);
+
 // Writes an operand to memory (without or with address error checking)
 template <Core C, Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
 

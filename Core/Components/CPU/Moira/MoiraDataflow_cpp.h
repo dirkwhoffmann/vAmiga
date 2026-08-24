@@ -474,6 +474,49 @@ Moira::read(u32 addr)
     return result;
 }
 
+template <Core C, Flags F> u16
+Moira::readInstr(u32 addr)
+{
+    // Update function code pins
+    setFC(FC::USER_PROG);
+    SYNC(2);
+
+    // Check for address errors
+    if (misaligned<C, Word>(addr)) {
+        throw AddressError(makeFrame<F>(addr));
+    }
+
+    // Check if a watchpoint has been reached
+    if ((flags & State::CHECK_WP) && debugger.watchpointMatches(addr, Word)) {
+        didReachWatchpoint(addr);
+    }
+
+    if constexpr (F & POLL) POLL_IPL;
+
+    u16 result;
+    if constexpr (C == Core::C68020) {
+
+        /* A hit in the cache or in the longword latch costs no bus cycle at
+         * all. A miss reads a whole longword, which needs a second cycle
+         * behind a 16 bit port.
+         */
+        /*
+        bool busAccess;
+        result = readInstructionCache(addr & addrMask<C>(), busAccess);
+        cp += busAccess ? (has32BitPort(addr & addrMask<C>()) ? 0 : 4) : -2;
+        */
+        result = read16(addr & addrMask<C>());
+        SYNC(2);
+        
+    } else {
+
+        result = read16(addr & addrMask<C>());
+        SYNC(2);
+    }
+
+    return result;
+}
+
 template <Core C, Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
@@ -652,7 +695,7 @@ Moira::prefetch()
     reg.pc0 = reg.pc;
 
     queue.ird = queue.irc;
-    queue.irc = (u16)read<C, AddrSpace::PROG, Word, F>(reg.pc + 2);
+    queue.irc = readInstr<C, F>(reg.pc + 2);
     readBuffer = queue.irc;
 }
 
@@ -661,7 +704,7 @@ Moira::fullPrefetch()
 {
     assert(!misaligned<C>(reg.pc));
 
-    queue.irc = (u16)read<C, AddrSpace::PROG, Word>(reg.pc);
+    queue.irc = readInstr<C>(reg.pc);
     if (delay) SYNC(delay);
     prefetch<C, F>();
 }
