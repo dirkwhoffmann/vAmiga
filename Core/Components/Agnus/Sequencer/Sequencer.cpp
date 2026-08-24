@@ -31,6 +31,7 @@ Sequencer::operator << (SerResetter &worker)
 
     initBplEvents();
     initDasEvents();
+    initSigRecorder();
 }
 
 void
