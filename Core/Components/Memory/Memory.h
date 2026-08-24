@@ -12,6 +12,7 @@
 #include "MemoryTypes.h"
 #include "MemoryDebugger.h"
 #include "RomFileTypes.h"
+#include "MoiraTypes.h"
 #include "utl/storage.h"
 #include "utl/wrappers.h"
 
@@ -518,8 +519,8 @@ public:
     template <Accessor acc> void poke16(u32 addr, u16 value);
     template <Accessor acc> void poke32(u32 addr, u32 value);
 
-    // Checks whether the CPU sees a 32 bit data port at the given address
-    bool is32BitPort(u32 addr) const;
+    // Returns the DSACK bits the CPU sees at the given address
+    u8 dsack(u32 addr) const;
 
     
     //

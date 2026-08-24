@@ -1640,10 +1640,10 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
     return IS_EVEN(addr) ? HI_BYTE(word) : LO_BYTE(word);
 }
 
-bool
-Memory::is32BitPort(u32 addr) const
+u8
+Memory::dsack(u32 addr) const
 {
-    if (!agnus.isAGA()) return false;
+    if (!agnus.isAGA()) return moira::DSACK_16;
 
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
 
@@ -1654,10 +1654,10 @@ Memory::is32BitPort(u32 addr) const
         case MemSrc::ROM_MIRROR:
         case MemSrc::EXT:
 
-            return true;
+            return moira::DSACK_32;
 
         default:
-            return false;
+            return moira::DSACK_16;
     }
 }
 
