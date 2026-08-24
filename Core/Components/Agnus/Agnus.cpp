@@ -336,12 +336,39 @@ Agnus::alignPtr(u32 ptr, u8 words)
 }
 */
 
+i16
+Agnus::bplMod(isize plane) const
+{
+    /* Normally, BPL1MOD belongs to the odd and BPL2MOD to the even bitplanes.
+     * The AGA bitplane scan doubling bit changes the meaning of both registers
+     * completely: the modulo is then selected by the parity of the rasterline
+     * instead of the plane number. This lets a program display every line
+     * twice, by setting up one modulo to advance the pointers and the other to
+     * cancel that advance out again (getbplmod() in WinUAE / Amiberry).
+     *
+     * The parity is anchored at the vertical start position of the display
+     * window, which makes the first displayed line the first line of a doubled
+     * pair. Sprite scan doubling anchors the same way (see sscan2Skips).
+     */
+    if (bscan2()) {
+        return ((sequencer.diwstrt >> 8) ^ (pos.v ^ 1)) & 1 ? bpl1mod : bpl2mod;
+    }
+    
+    return (plane & 1) ? bpl2mod : bpl1mod;
+}
+
 void
 Agnus::addBplMod(isize plane)
 {
     u32 p = bplpt[plane];
-    U32_INC(p, (plane & 1) ? bpl2mod : bpl1mod);
+    U32_INC(p, bplMod(plane));
     bplpt[plane] = p;
+}
+
+bool
+Agnus::bscan2() const
+{
+    return isAGA() && GET_BIT(fmode, 14);
 }
 
 bool

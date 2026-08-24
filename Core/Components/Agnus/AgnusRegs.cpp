@@ -578,13 +578,14 @@ Agnus::setFMODE(u16 value)
     logmsg(LOG_DMA, "setFMODE(%04x)\n", value);
 
     /* Bit 15 : SSCAN2   Global enable for sprite scan-doubling.
+     * Bit 14 : BSCAN2   Global enable for bitplane scan-doubling.
      * Bit 03 : SPAGEM   Sprite page mode (double CAS)
      * Bit 02 : SPR32    Sprite 32 bit wide mode
      * Bit 01 : BPAGEM   Bitplane Page Mode (double CAS)
      * Bit 00 : BLP32    Bitplane 32 bit wide mode
      */
     
-    value &= 0x800f;
+    value &= 0xc00f;
     
     if (fmode != value) {
         
