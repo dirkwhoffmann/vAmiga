@@ -15,5 +15,9 @@ void flushInstructionLatch();
 // Invalidates the cache entry associated with the provided address
 void invalidateCacheEntry(u32 addr);
 
+// Maps an address to a cache line and computes the matching tag
+u32 cacheIndex(u32 addr) const;
+u32 cacheTag(u32 addr) const;
+
 bool fillInstructionCache(u32 addr);
 u16 readInstructionCache(u32 addr, bool &busAccess);

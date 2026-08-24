@@ -525,7 +525,7 @@ Moira::readInstr(u32 addr)
         // Route read access through the instruction cache
         bool busAccess;
         result = readInstructionCache(addr & addrMask<C>(), busAccess);
-        cp += busAccess ? 0 : -2; // (has32BitPort(addr & addrMask<C>()) ? 0 : 4) : -2;
+        cp += busAccess ? (has32BitPort(addr & addrMask<C>()) ? 0 : 4) : -2;
                 
     } else {
 
@@ -780,6 +780,7 @@ Moira::fullPrefetch()
 {
     assert(!misaligned<C>(reg.pc));
 
+    flushInstructionLatch();
     queue.irc = readInstr<C>(reg.pc);
     if (delay) SYNC(delay);
     prefetch<C, F>();
@@ -801,7 +802,7 @@ Moira::readExt()
     assert(!misaligned<C>(reg.pc));
 
     reg.pc += 2;
-    queue.irc = (u16)read<C, AddrSpace::PROG, Word>(reg.pc);
+    queue.irc = readInstr<C>(reg.pc);
 }
 
 template <Core C, Size S> u32

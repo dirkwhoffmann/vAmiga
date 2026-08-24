@@ -25,17 +25,27 @@ Moira::flushInstructionLatch()
 void
 Moira::invalidateCacheEntry(u32 addr)
 {
-    iCache.cache[(addr & 0x000C) >> 2].valid = false;
+    iCache.cache[cacheIndex(addr)].valid = false;
+}
+
+u32
+Moira::cacheIndex(u32 addr) const
+{
+    return (addr >> 2) & (iCache.numCacheLines - 1);
+}
+
+u32
+Moira::cacheTag(u32 addr) const
+{
+    return (reg.sr.s ? 1u : 0u) | (addr & ~u32((iCache.numCacheLines << 2) - 1));
 }
 
 bool
 Moira::fillInstructionCache(u32 addr)
 {
     auto base  = addr & addrMask() & ~3;
-    auto index = (addr & 0xC) >> 2;
-    auto tag   = (addr & 0xFFFFFFF0);
-    
-    iCache.latch.addr = base;
+    auto index = cacheIndex(base);
+    auto tag   = cacheTag(base);
     
     if (iCache.cache[index].tag == tag && iCache.cache[index].valid) {
         
@@ -44,6 +54,7 @@ Moira::fillInstructionCache(u32 addr)
         //
         
         iCache.latch.data = iCache.cache[index].data;
+        iCache.latch.addr = base;
         return false;
         
     } else {
@@ -52,14 +63,20 @@ Moira::fillInstructionCache(u32 addr)
         // Cache miss
         //
         
-        iCache.latch.data = read32(base);
+        auto data = read32(base);
         
         if ((reg.cacr & 1) && !(reg.cacr & 2)) {
             
             iCache.cache[index].tag   = tag;
-            iCache.cache[index].data  = iCache.latch.data;
+            iCache.cache[index].data  = data;
             iCache.cache[index].valid = true;
         }
+        
+        /* Updated last, so that a read32 that throws leaves the latch
+         * untouched instead of marking stale data as valid.
+         */
+        iCache.latch.data = data;
+        iCache.latch.addr = base;
         return true;
     }
 }
