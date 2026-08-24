@@ -493,11 +493,13 @@ public:
 
     template <Accessor acc, MemSrc src> u8 peek8(u32 addr);
     template <Accessor acc, MemSrc src> u16 peek16(u32 addr);
+    template <Accessor acc, MemSrc src> u32 peek32(u32 addr);
     template <Accessor acc, MemSrc src> u8 spypeek8(u32 addr) const;
     template <Accessor acc, MemSrc src> u16 spypeek16(u32 addr) const;
     template <Accessor acc, MemSrc src> u32 spypeek32(u32 addr) const;
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
+    template <Accessor acc> u32 peek32(u32 addr);
     template <Accessor acc> u8 spypeek8(u32 addr) const;
     template <Accessor acc> u16 spypeek16(u32 addr) const;
     template <Accessor acc> u32 spypeek32(u32 addr) const;
@@ -505,21 +507,10 @@ public:
 
     template <Accessor acc, MemSrc src> void poke8(u32 addr, u8 value);
     template <Accessor acc, MemSrc src> void poke16(u32 addr, u16 value);
+    template <Accessor acc, MemSrc src> void poke32(u32 addr, u32 value);
     template <Accessor acc> void poke8(u32 addr, u8 value);
     template <Accessor acc> void poke16(u32 addr, u16 value);
-    
-    
-    //
-    // Performing AGA accesses (32 or 64 bits)
-    //
- 
-    // Reads two or four 16-bit words
-    template <Accessor acc> u32 peek32(u32 addr);
-    template <Accessor acc> u64 peek64(u32 addr);
-
-    // Reads two or four 16-bit words in reverse order
-    template <Accessor acc> u32 peek32rev(u32 addr);
-    template <Accessor acc> u64 peek64rev(u32 addr);
+    template <Accessor acc> void poke32(u32 addr, u32 value);
 
     
     //

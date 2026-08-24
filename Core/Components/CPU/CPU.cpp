@@ -79,6 +79,12 @@ Moira::read16(u32 addr) const
     return mem.peek16<Accessor::CPU>(addr);
 }
 
+u32
+Moira::read32(u32 addr) const
+{
+    return mem.peek32<Accessor::CPU>(addr);
+}
+
 u16
 Moira::read16Dasm(u32 addr) const
 {
@@ -112,6 +118,15 @@ Moira::write16(u32 addr, u16 val) const
         if (addr - reg.pc < 5) xfiles("write16 close to PC %x\n", reg.pc);
     }
     mem.poke16 <Accessor::CPU> (addr, val);
+}
+
+void
+Moira::write32(u32 addr, u32 val) const
+{
+    if CONSTEXPR (LOG_XFILES != LOG_OFF) {
+        if (addr - reg.pc < 5) xfiles("write32 close to PC %x\n", reg.pc);
+    }
+    mem.poke32 <Accessor::CPU> (addr, val);
 }
 
 u16

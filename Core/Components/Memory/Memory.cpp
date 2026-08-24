@@ -1603,6 +1603,29 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
 
 
 //
+// Peek (32 bit)
+//
+
+template <Accessor acc, MemSrc src> u32
+Memory::peek32(u32 addr)
+{
+    auto hi = peek16 <acc, src> (addr);
+    auto lo = peek16 <acc, src> (addr + 2);
+    
+    return HI_W_LO_W(hi, lo);
+}
+
+template <Accessor acc> u32
+Memory::peek32(u32 addr)
+{
+    auto hi = peek16 <acc> (addr);
+    auto lo = peek16 <acc> (addr + 2);
+    
+    return HI_W_LO_W(hi, lo);
+}
+
+
+//
 // Poke (CPU)
 //
 
@@ -1983,6 +2006,26 @@ Memory::poke16 <Accessor::AGNUS> (u32 addr, u16 value)
     }
 }
 
+
+//
+// Poke (32 bit)
+//
+
+template <Accessor acc, MemSrc src> void
+Memory::poke32(u32 addr, u32 value)
+{
+    poke16 <acc, src> (addr, HI_WORD(value));
+    poke16 <acc, src> (addr + 2, LO_WORD(value));
+}
+
+template <Accessor acc> void
+Memory::poke32(u32 addr, u32 value)
+{
+    poke16 <acc> (addr, HI_WORD(value));
+    poke16 <acc> (addr + 2, LO_WORD(value));
+}
+
+/*
 template <Accessor acc> u32
 Memory::peek32(u32 addr)
 {
@@ -2024,6 +2067,7 @@ Memory::peek64rev(u32 addr)
     
     return b4 << 48 | b3 << 32 | b2 << 16 | b1;
 }
+*/
 
 u8
 Memory::peekCIA8(u32 addr)
@@ -3019,13 +3063,7 @@ template void Memory::pokeCustom16 <Accessor::AGNUS> (u32 addr, u16 value);
 template u32 Memory::peek32 <Accessor::CPU> (u32 addr);
 template u32 Memory::peek32 <Accessor::AGNUS> (u32 addr);
 
-template u64 Memory::peek64 <Accessor::CPU> (u32 addr);
-template u64 Memory::peek64 <Accessor::AGNUS> (u32 addr);
-
-template u32 Memory::peek32rev <Accessor::CPU> (u32 addr);
-template u32 Memory::peek32rev <Accessor::AGNUS> (u32 addr);
-
-template u64 Memory::peek64rev <Accessor::CPU> (u32 addr);
-template u64 Memory::peek64rev <Accessor::AGNUS> (u32 addr);
+template void Memory::poke32 <Accessor::CPU> (u32 addr, u32 value);
+template void Memory::poke32 <Accessor::AGNUS> (u32 addr, u32 value);
 
 }
