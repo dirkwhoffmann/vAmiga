@@ -71,7 +71,19 @@ Moira::fillInstructionCache(u32 addr)
         // Cache miss
         //
         
-        auto data = read32(base);
+        /* Filling a cache line is a longword fetch, so it is split into as
+         * many bus cycles as the addressed port provides (see dsack). The
+         * cycle penalty for a narrow port is accounted for by the caller.
+         */
+        u32 data;
+        
+        switch (portSize(dsack(base))) {
+                
+            case 4:  data = read32(base); break;
+            case 2:  data = u32(read16(base)) << 16 | read16(base + 2); break;
+            default: data = u32(read8(base))  << 24 | u32(read8(base + 1)) << 16 |
+                            u32(read8(base + 2)) << 8 | u32(read8(base + 3)); break;
+        }
         
         if ((reg.cacr & 1) && !(reg.cacr & 2)) {
             

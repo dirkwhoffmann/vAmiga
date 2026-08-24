@@ -457,8 +457,24 @@ Moira::read(u32 addr)
 
     if constexpr (S == Word) {
 
+        auto a = addr & addrMask<C>();
+        
+        // An 8 bit port needs a second bus cycle to deliver a word
+        if constexpr (C >= Core::C68020) {
+            
+            if (portSize(dsack(a)) == 1) {
+                
+                result = u32(read8(a)) << 8;
+                SYNC(4);
+                if constexpr (F & POLL) POLL_IPL;
+                result |= u32(read8(a + 1));
+                SYNC(2);
+                return result;
+            }
+        }
+        
         if constexpr (F & POLL) POLL_IPL;
-        result = read16(addr & addrMask<C>());
+        result = read16(a);
         SYNC(2);
     }
 
@@ -468,15 +484,43 @@ Moira::read(u32 addr)
             
             if ((addr & 3) == 0) {
                 
-                /* A 32 bit port delivers the longword in a single bus cycle,
-                 * a 16 bit port needs a second one (see has32BitPort).
+                /* The addressed port decides how the transfer is carried out.
+                 * A 32 bit port delivers the longword in a single bus cycle,
+                 * a 16 bit port needs two and an 8 bit port four (see dsack).
                  */
-                auto wide = has32BitPort(addr & addrMask<C>());
+                auto a = addr & addrMask<C>();
                 
-                result = read32(addr & addrMask<C>());
-                if (!wide) SYNC(4);
-                if constexpr (F & POLL) POLL_IPL;
-                SYNC(2);
+                switch (portSize(dsack(a))) {
+                        
+                    case 4:
+                        
+                        result = read32(a);
+                        if constexpr (F & POLL) POLL_IPL;
+                        SYNC(2);
+                        break;
+                        
+                    case 2:
+                        
+                        result = read16(a) << 16;
+                        SYNC(4);
+                        if constexpr (F & POLL) POLL_IPL;
+                        result |= read16(a + 2);
+                        SYNC(2);
+                        break;
+                        
+                    default:
+                        
+                        result = u32(read8(a)) << 24;
+                        SYNC(4);
+                        result |= u32(read8(a + 1)) << 16;
+                        SYNC(4);
+                        result |= u32(read8(a + 2)) << 8;
+                        SYNC(4);
+                        if constexpr (F & POLL) POLL_IPL;
+                        result |= u32(read8(a + 3));
+                        SYNC(2);
+                        break;
+                }
                 
             } else {
                 
@@ -525,7 +569,7 @@ Moira::readInstr(u32 addr)
         // Route read access through the instruction cache
         bool busAccess;
         result = readInstructionCache(addr & addrMask<C>(), busAccess);
-        cp += busAccess ? (has32BitPort(addr & addrMask<C>()) ? 0 : 4) : -2;
+        cp += busAccess ? (portSize(dsack(addr & addrMask<C>())) == 4 ? 0 : 4) : -2;
                 
     } else {
 
@@ -572,8 +616,35 @@ Moira::write(u32 addr, u32 val)
 
     if constexpr (S == Word) {
 
+        auto a = addr & addrMask<C>();
+        
+        // An 8 bit port needs a second bus cycle to accept a word
+        if constexpr (C >= Core::C68020) {
+            
+            if (portSize(dsack(a)) == 1) {
+                
+                if constexpr (F & REVERSE) {
+                    
+                    write8(a + 1, u8(val));
+                    SYNC(4);
+                    if constexpr (F & POLL) POLL_IPL;
+                    write8(a, u8(val >> 8));
+                    SYNC(2);
+                    
+                } else {
+                    
+                    write8(a, u8(val >> 8));
+                    SYNC(4);
+                    if constexpr (F & POLL) POLL_IPL;
+                    write8(a + 1, u8(val));
+                    SYNC(2);
+                }
+                return;
+            }
+        }
+        
         if constexpr (F & POLL) POLL_IPL;
-        write16(addr & addrMask<C>(), (u16)val);
+        write16(a, (u16)val);
         SYNC(2);
     }
 
@@ -583,13 +654,66 @@ Moira::write(u32 addr, u32 val)
             
             if ((addr & 3) == 0) {
                 
-                // See read(): a 16 bit port needs a second bus cycle
-                auto wide = has32BitPort(addr & addrMask<C>());
+                // See read(): the port width decides how the transfer is split
+                auto a = addr & addrMask<C>();
                 
-                write32(addr & addrMask<C>(), val);
-                if (!wide) SYNC(4);
-                if constexpr (F & POLL) POLL_IPL;
-                SYNC(2);
+                switch (portSize(dsack(a))) {
+                        
+                    case 4:
+                        
+                        write32(a, val);
+                        if constexpr (F & POLL) POLL_IPL;
+                        SYNC(2);
+                        break;
+                        
+                    case 2:
+                        
+                        if constexpr (F & REVERSE) {
+                            
+                            write16(a + 2, u16(val & 0xFFFF));
+                            SYNC(4);
+                            if constexpr (F & POLL) POLL_IPL;
+                            write16(a, u16(val >> 16));
+                            SYNC(2);
+                            
+                        } else {
+                            
+                            write16(a, u16(val >> 16));
+                            SYNC(4);
+                            if constexpr (F & POLL) POLL_IPL;
+                            write16(a + 2, u16(val & 0xFFFF));
+                            SYNC(2);
+                        }
+                        break;
+                        
+                    default:
+                        
+                        if constexpr (F & REVERSE) {
+                            
+                            write8(a + 3, u8(val));
+                            SYNC(4);
+                            write8(a + 2, u8(val >> 8));
+                            SYNC(4);
+                            write8(a + 1, u8(val >> 16));
+                            SYNC(4);
+                            if constexpr (F & POLL) POLL_IPL;
+                            write8(a, u8(val >> 24));
+                            SYNC(2);
+                            
+                        } else {
+                            
+                            write8(a, u8(val >> 24));
+                            SYNC(4);
+                            write8(a + 1, u8(val >> 16));
+                            SYNC(4);
+                            write8(a + 2, u8(val >> 8));
+                            SYNC(4);
+                            if constexpr (F & POLL) POLL_IPL;
+                            write8(a + 3, u8(val));
+                            SYNC(2);
+                        }
+                        break;
+                }
                 
             } else {
                 

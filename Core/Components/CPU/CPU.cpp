@@ -129,10 +129,14 @@ Moira::write32(u32 addr, u32 val) const
     mem.poke32 <Accessor::CPU> (addr, val);
 }
 
-bool
-Moira::has32BitPort(u32 addr) const
+moira::Dsack
+Moira::dsack(u32 addr) const
 {
-    return mem.is32BitPort(addr);
+    /* An Amiga has no 8 bit ports on the CPU bus, so the answer is either a
+     * 32 bit port (AGA chip, fast, ROM and slow RAM) or a 16 bit port
+     * (everything else, including the custom chip and CIA registers).
+     */
+    return mem.is32BitPort(addr) ? moira::DSACK_32 : moira::DSACK_16;
 }
 
 u16
