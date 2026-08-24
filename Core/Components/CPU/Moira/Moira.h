@@ -14,9 +14,17 @@
 
 namespace vamiga::moira {
 
+namespace Version {
+
+inline constexpr int major = 5;
+inline constexpr int minor = 0;
+inline constexpr int patch = 0;
+inline constexpr int beta  = 1;
+
+}
+
 class Moira : public SubComponent {
     
-    friend class FPU;
     friend class Debugger;
     friend class Breakpoints;
     friend class Watchpoints;
@@ -137,6 +145,12 @@ public:
     //  Destroys the Moira instance
     virtual ~Moira();
     
+    // Returns a version string for this release
+    static std::string version();
+
+    // Returns a build number string for this release
+    static std::string build();
+    
 protected:
     
     // Creates or updates the jump tables for execution and disassembly
@@ -145,7 +159,14 @@ protected:
     
 private:
     
-    // Core routine for creating jump tables
+    /* Core routines for creating jump tables
+     *
+     * Jump table creation is deliberately split into several parts.
+     * As a single function it expands into several hundred kilobytes of
+     * straight-line code per core, which drives the compiler's memory
+     * consumption far beyond what some environments provide.
+     */
+    
     template <Core C> void createJumpTable(Model model, bool registerDasm);
     template <Core C> void createJumpTable1(Model model, bool registerDasm);
     template <Core C> void createJumpTable2(Model model, bool registerDasm);
@@ -159,12 +180,6 @@ private:
     template <Core C> void createJumpTable10(Model model, bool registerDasm);
     template <Core C> void createJumpTable11(Model model, bool registerDasm);
     template <Core C> void createJumpTable12(Model model, bool registerDasm);
-
-    /* Note: createJumpTable is deliberately split into twelve parts. As a
-     * single function it expands into several hundred kilobytes of
-     * straight-line code per core, which drives the compiler's memory
-     * consumption far beyond what some CI runners provide.
-     */
     
     
     //

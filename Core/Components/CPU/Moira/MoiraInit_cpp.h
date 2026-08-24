@@ -12,18 +12,9 @@
 // Registers an instruction handler
 #if MOIRA_ENABLE_DASM
 #define REGISTER_DASM(id,name,I,M,S) if (regDasm) dasm[id] = DASM_HANDLER(name,I,M,S);
-#else
-#define REGISTER_DASM(id,name,I,M,S) { }
-#endif
-
-#if MOIRA_BUILD_INSTR_INFO_TABLE
-/* Registered under the same condition as the disassembler handlers. The
- * disassembler reads its operand attributes from this table, so the two must
- * describe the same CPU model. When the CPU and disassembler models differ,
- * the jump table is built twice, and only the first pass carries regDasm.
- */
 #define REGISTER_INFO(id,name,I,M,S) if (regDasm) info[id] = InstrInfo {I,M,S};
 #else
+#define REGISTER_DASM(id,name,I,M,S) { }
 #define REGISTER_INFO(id,name,I,M,S) { }
 #endif
 

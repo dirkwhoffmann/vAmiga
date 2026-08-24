@@ -5,16 +5,11 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-/* Marks this file as the main translation unit. Non-templated function
- * definitions inside the *_cpp.h files are compiled here and nowhere else.
- */
-#define MOIRA_MAIN_TU
-
-#include "config.h"
 #include "MoiraConfig.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
 
+#include <cassert>
 #include <cstdio>
 #include <algorithm>
 #include <cmath>
@@ -25,6 +20,9 @@
 namespace vamiga::moira {
 
 using namespace Flag;
+
+// Mark this file as the main translation unit
+#define MOIRA_MAIN_TU
 
 #include "MoiraInit_cpp.h"
 #include "MoiraALU_cpp.h"
@@ -38,7 +36,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
 {
     exec = new ExecPtr[65536];
     loop = new ExecPtr[65536];
-    if (MOIRA_BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
+    if (MOIRA_ENABLE_DASM) info = new InstrInfo[65536];
     if (MOIRA_ENABLE_DASM) dasm = new DasmPtr[65536];
 
     createJumpTable(cpuModel, dasmModel);
@@ -66,6 +64,30 @@ Moira::~Moira()
     if (loop) delete [] loop;
     if (info) delete [] info;
     if (dasm) delete [] dasm;
+}
+
+std::string
+Moira::version()
+{
+    std::string result;
+    
+    result = std::to_string(Version::major) + "." + std::to_string(Version::minor);
+    if constexpr (Version::patch > 0) result += "." + std::to_string(Version::patch);
+    if constexpr (Version::beta > 0) result += 'b' + std::to_string(Version::beta);
+    
+    return result;
+}
+
+std::string
+Moira::build()
+{
+#ifdef NDEBUG
+    std::string db = "";
+#else
+    std::string db = " [DEBUG BUILD]";
+#endif
+    
+    return version() + db + " (" + __DATE__ + " " + __TIME__ + ")";
 }
 
 void
@@ -397,7 +419,7 @@ Moira::processException(const std::exception &exc)
             throw df;
         }
 
-    } catch (DoubleFault &) {
+    } catch (DoubleFault &df) {
 
         halt();
         return;
@@ -803,13 +825,13 @@ Moira::getIrqVector(u8 level) const {
 InstrInfo
 Moira::getInstrInfo(u16 op) const
 {
-    if constexpr (MOIRA_BUILD_INSTR_INFO_TABLE) {
+    if constexpr (MOIRA_ENABLE_DASM) {
 
         return info[op];
 
     } else {
 
-        throw std::runtime_error("This feature requires MOIRA_WANT_INSTR_INFO_TABLE = true\n");
+        throw std::runtime_error("This feature requires MOIRA_ENABLE_DASM = true\n");
     }
 }
 

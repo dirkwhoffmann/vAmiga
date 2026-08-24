@@ -55,34 +55,14 @@
 
 /* Set to true to enable the disassembler.
  *
- * The disassembler requires a jump table which consumes about 1.5MB of memory.
+ * The disassembler requires a jump table which consumes about 1MB of memory,
+ * plus 0.25MB for the instruction info table storing information about the
+ * instruction (Instr I), the addressing mode (Mode M), and the size attribute
+ * (Size S) for all 65536 opcode words.
  *
  * Disable to save space.
  */
 #define MOIRA_ENABLE_DASM true
-
-/* Set to true to build the InstrInfo lookup table.
- *
- * The instruction info table stores information about the instruction
- * (Instr I), the addressing mode (Mode M), and the size attribute (Size S) for
- * all 65536 opcode words. The table is meant to provide data for, e.g.,
- * external debuggers.
- *
- * Note that the disassembler reads the very same attributes from this table,
- * so the table is built unconditionally when MOIRA_ENABLE_DASM is set. This
- * option only matters when the disassembler is switched off.
- *
- * Disable to save space.
- */
-#define MOIRA_WANT_INSTR_INFO_TABLE false
-
-/* Indicates whether the InstrInfo lookup table is built.
- *
- * Derived from the two options above; the disassembler cannot work without
- * the table. Use this macro, not MOIRA_WANT_INSTR_INFO_TABLE, to check whether
- * the table is available.
- */
-#define MOIRA_BUILD_INSTR_INFO_TABLE (MOIRA_WANT_INSTR_INFO_TABLE || MOIRA_ENABLE_DASM)
 
 /* Enables Musashi compatibility mode.
  *

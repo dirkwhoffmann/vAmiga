@@ -10,6 +10,8 @@
 #include "MoiraTypes.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
+
+#include <cassert>
 #include <cstring>
 #include <cstdio>
 

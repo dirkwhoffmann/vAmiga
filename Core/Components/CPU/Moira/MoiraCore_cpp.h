@@ -9,10 +9,10 @@
  *
  * Building a jump table is the only place where the instruction handler
  * templates are instantiated, since registering a handler takes its address.
- * Instantiating all three cores in a single translation unit produces roughly
- * 12,000 functions, which pushes the compiler's peak memory consumption beyond
- * what some CI runners provide. This file is therefore compiled once per core,
- * with MOIRA_CORE set to the core to instantiate.
+ * Instantiating all three cores in a single translation unit produces over
+ * 10,000 functions, which pushes the compiler's peak memory consumption beyond
+ * what some build environments provide. This file is therefore compiled once
+ * per core, with MOIRA_CORE set to the core to instantiate.
  *
  * See MoiraCore68000.cpp, MoiraCore68010.cpp and MoiraCore68020.cpp.
  */
@@ -26,6 +26,7 @@
 #include "Moira.h"
 #include "MoiraMacros.h"
 
+#include <cassert>
 #include <cstdio>
 #include <algorithm>
 #include <cmath>
