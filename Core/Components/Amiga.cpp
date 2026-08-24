@@ -544,9 +544,11 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A1000_OCS_1MB:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::CPU_OVERCLOCKING, 0);
             set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
             set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
             set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
             break;
@@ -554,9 +556,11 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A500_OCS_1MB:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::CPU_OVERCLOCKING, 0);
             set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS);
             set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
             set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
             break;
@@ -564,9 +568,11 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A500_ECS_1MB:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::CPU_OVERCLOCKING, 0);
             set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
             set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
             set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
             break;
@@ -574,9 +580,11 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A500_PLUS_1MB:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::CPU_OVERCLOCKING, 0);
             set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
             set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
             set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
             break;
@@ -584,9 +592,11 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A1200_2MB:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68EC020);
+            set(Opt::CPU_OVERCLOCKING, 2);
             set(Opt::AGNUS_REVISION, (i64)AgnusRevision::AGA);
             set(Opt::DENISE_REVISION, (i64)DeniseRev::AGA);
             set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 32);
             set(Opt::MEM_CHIP_RAM, 2048);
             set(Opt::MEM_SLOW_RAM, 0);
             break;

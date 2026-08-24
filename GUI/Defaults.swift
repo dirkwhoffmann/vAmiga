@@ -809,6 +809,7 @@ extension DefaultsProxy {
         
         loginfo(.defaults)
         
+        remove(.MEM_BUS_WIDTH)
         remove(.MEM_CHIP_RAM)
         remove(.MEM_SLOW_RAM)
         remove(.MEM_FAST_RAM)
@@ -828,6 +829,7 @@ extension Configuration {
         
         emu?.suspend()
         
+        defaults.set(.MEM_BUS_WIDTH, busWidth)
         defaults.set(.MEM_CHIP_RAM, chipRam)
         defaults.set(.MEM_SLOW_RAM, slowRam)
         defaults.set(.MEM_FAST_RAM, fastRam)
@@ -846,6 +848,7 @@ extension Configuration {
         
         emu?.suspend()
         
+        busWidth = defaults.get(.MEM_BUS_WIDTH)
         chipRam = defaults.get(.MEM_CHIP_RAM)
         slowRam = defaults.get(.MEM_SLOW_RAM)
         fastRam = defaults.get(.MEM_FAST_RAM)

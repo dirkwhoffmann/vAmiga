@@ -247,7 +247,7 @@ class HardwareSettingsViewController: SettingsViewController {
         fastRamInfo2.isHidden = config.fastRam == 0
 
         // Memory properties
-        bankMap.selectItem(withTag: config.bankMap)
+        busWidth.selectItem(withTag: config.busWidth)
         ramInitPattern.selectItem(withTag: config.ramInitPattern)
         bankMap.selectItem(withTag: config.bankMap)
         unmappingType.selectItem(withTag: config.unmappingType)
@@ -281,8 +281,10 @@ class HardwareSettingsViewController: SettingsViewController {
 
             // Amiga 500
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
+            defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_1MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
+            defaults.set(.MEM_BUS_WIDTH, 16);
             defaults.set(.MEM_CHIP_RAM, 512);
             defaults.set(.MEM_BANKMAP, BankMap.A500.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
@@ -291,8 +293,10 @@ class HardwareSettingsViewController: SettingsViewController {
 
             // Amiga 1000
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
+            defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.OCS_OLD.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
+            defaults.set(.MEM_BUS_WIDTH, 16);
             defaults.set(.MEM_CHIP_RAM, 512);
             defaults.set(.MEM_BANKMAP, BankMap.A1000.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
@@ -301,8 +305,10 @@ class HardwareSettingsViewController: SettingsViewController {
 
             // Amiga 2000
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
+            defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
+            defaults.set(.MEM_BUS_WIDTH, 16);
             defaults.set(.MEM_CHIP_RAM, 512);
             defaults.set(.MEM_BANKMAP, BankMap.A2000B.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
@@ -311,8 +317,10 @@ class HardwareSettingsViewController: SettingsViewController {
 
             // Amiga 500+
             defaults.set(.CPU_REVISION, CPURevision._68000.rawValue)
+            defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.ECS.rawValue)
+            defaults.set(.MEM_BUS_WIDTH, 16);
             defaults.set(.MEM_CHIP_RAM, 1024);
             defaults.set(.MEM_BANKMAP, BankMap.A500.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
@@ -321,8 +329,10 @@ class HardwareSettingsViewController: SettingsViewController {
 
             // Amiga 1200
             defaults.set(.CPU_REVISION, CPURevision._68EC020.rawValue)
+            defaults.set(.CPU_OVERCLOCKING, 2)
             defaults.set(.AGNUS_REVISION, AgnusRevision.AGA.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.AGA.rawValue)
+            defaults.set(.MEM_BUS_WIDTH, 32);
             defaults.set(.MEM_CHIP_RAM, 2048);
             defaults.set(.MEM_BANKMAP, BankMap.A1200.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
