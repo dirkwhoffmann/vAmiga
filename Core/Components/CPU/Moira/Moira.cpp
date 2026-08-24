@@ -102,6 +102,7 @@ Moira::setModel(Model cpuModel, Model dasmModel)
         createJumpTable(cpuModel, dasmModel);
         
         reg.cacr &= cacrMask();
+        flushInstructionCache();
         flags &= ~State::LOOPING;
     }
 }
@@ -224,6 +225,8 @@ Moira::reset()
     ipl = 0;
     fcl = 2;
     fcSource = 0;
+    
+    flushInstructionCache();
 
     SYNC(16);
 
@@ -529,6 +532,12 @@ Moira::setSR(u16 val)
 void
 Moira::setCACR(u32 val)
 {
+    // Setting the CE bit invalidates the entry for the address in CAAR
+    if (GET_BIT(val, 2)) invalidateCacheEntry(reg.caar);
+
+    // Setting the C bit invalidates all entries
+    if (GET_BIT(val, 3)) flushInstructionCache();
+        
     reg.cacr = val & cacrMask();
     didChangeCACR(val);
 }

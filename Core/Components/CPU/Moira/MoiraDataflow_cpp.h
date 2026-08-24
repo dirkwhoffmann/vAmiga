@@ -496,18 +496,11 @@ Moira::readInstr(u32 addr)
     u16 result;
     if constexpr (C == Core::C68020) {
 
-        /* A hit in the cache or in the longword latch costs no bus cycle at
-         * all. A miss reads a whole longword, which needs a second cycle
-         * behind a 16 bit port.
-         */
-        /*
+        // Route read access through the instruction cache
         bool busAccess;
         result = readInstructionCache(addr & addrMask<C>(), busAccess);
-        cp += busAccess ? (has32BitPort(addr & addrMask<C>()) ? 0 : 4) : -2;
-        */
-        result = read16(addr & addrMask<C>());
-        SYNC(2);
-        
+        cp += busAccess ? 0 : -2; // (has32BitPort(addr & addrMask<C>()) ? 0 : 4) : -2;
+                
     } else {
 
         result = read16(addr & addrMask<C>());

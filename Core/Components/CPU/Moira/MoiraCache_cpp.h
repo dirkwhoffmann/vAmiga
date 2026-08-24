@@ -22,12 +22,18 @@ Moira::flushInstructionLatch()
     iCache.latch.data = 0xffffffff;
 }
 
+void
+Moira::invalidateCacheEntry(u32 addr)
+{
+    iCache.cache[(addr & 0x000C) >> 2].valid = false;
+}
+
 bool
 Moira::fillInstructionCache(u32 addr)
 {
     auto base  = addr & addrMask() & ~3;
-    auto index = (addr & 0x000C) >> 2;
-    auto tag   = (addr & 0xFFF0);
+    auto index = (addr & 0xC) >> 2;
+    auto tag   = (addr & 0xFFFFFFF0);
     
     iCache.latch.addr = base;
     
@@ -63,7 +69,7 @@ Moira::readInstructionCache(u32 addr, bool &busAccess)
 {
     auto base = addr & addrMask() & ~3;
 
-    if (iCache.latch.data == base) {
+    if (iCache.latch.addr == base) {
         
         // Direct hit
         busAccess = false;
