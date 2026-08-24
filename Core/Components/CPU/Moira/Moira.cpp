@@ -180,7 +180,7 @@ Moira::cacrMask() const
     switch (cpuModel) {
 
         case Model::M68020: case Model::M68EC020: return 0x0003;
-        case Model::M68030: case Model::M68EC030: return 0x3F13;
+        case Model::M68030: case Model::M68EC030: return 0x3313;
         
         default:
             return 0xFFFF;

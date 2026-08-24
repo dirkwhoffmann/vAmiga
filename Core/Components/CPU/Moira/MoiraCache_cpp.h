@@ -47,7 +47,15 @@ Moira::fillInstructionCache(u32 addr)
     auto index = cacheIndex(base);
     auto tag   = cacheTag(base);
     
-    if (iCache.cache[index].tag == tag && iCache.cache[index].valid) {
+    /* The cache is only consulted while it is enabled. Bit 0 (E) gates the
+     * lookup, not just the fill: clearing it has to stop valid lines from
+     * being served, or the CPU would keep executing stale opcodes after a
+     * program switches the cache off. Bit 1 (F) is deliberately not part of
+     * this condition. Freezing only prevents new entries from being
+     * allocated; entries that are already valid keep hitting. Both match
+     * fill_icache020() in WinUAE / Amiberry.
+     */
+    if ((reg.cacr & 1) && iCache.cache[index].valid && iCache.cache[index].tag == tag) {
         
         //
         // Cache hit
