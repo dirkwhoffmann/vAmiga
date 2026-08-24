@@ -463,12 +463,38 @@ Moira::read(u32 addr)
     }
 
     if constexpr (S == Long) {
-
-        result = read16(addr & addrMask<C>()) << 16;
-        SYNC(4);
-        if constexpr (F & POLL) POLL_IPL;
-        result |= read16((addr + 2) & addrMask<C>());
-        SYNC(2);
+        
+        if constexpr (C >= Core::C68020) {
+            
+            if ((addr & 3) == 0) {
+                
+                /* A 32 bit port delivers the longword in a single bus cycle,
+                 * a 16 bit port needs a second one (see has32BitPort).
+                 */
+                auto wide = has32BitPort(addr & addrMask<C>());
+                
+                result = read32(addr & addrMask<C>());
+                if (!wide) SYNC(4);
+                if constexpr (F & POLL) POLL_IPL;
+                SYNC(2);
+                
+            } else {
+                
+                result = read16(addr & addrMask<C>()) << 16;
+                SYNC(4);
+                if constexpr (F & POLL) POLL_IPL;
+                result |= read16((addr + 2) & addrMask<C>());
+                SYNC(2);
+            }
+            
+        } else {
+            
+            result = read16(addr & addrMask<C>()) << 16;
+            SYNC(4);
+            if constexpr (F & POLL) POLL_IPL;
+            result |= read16((addr + 2) & addrMask<C>());
+            SYNC(2);
+        }
     }
 
     return result;
@@ -552,6 +578,62 @@ Moira::write(u32 addr, u32 val)
     }
 
     if constexpr (S == Long) {
+        
+        if constexpr (C >= Core::C68020) {
+            
+            if ((addr & 3) == 0) {
+                
+                // See read(): a 16 bit port needs a second bus cycle
+                auto wide = has32BitPort(addr & addrMask<C>());
+                
+                write32(addr & addrMask<C>(), val);
+                if (!wide) SYNC(4);
+                if constexpr (F & POLL) POLL_IPL;
+                SYNC(2);
+                
+            } else {
+                
+                if constexpr (F & REVERSE) {
+                    
+                    write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
+                    SYNC(4);
+                    if constexpr (F & POLL) POLL_IPL;
+                    write16(addr & addrMask<C>(), u16(val >> 16));
+                    SYNC(2);
+                    
+                } else {
+                    
+                    write16(addr & addrMask<C>(), u16(val >> 16));
+                    SYNC(4);
+                    if constexpr (F & POLL) POLL_IPL;
+                    write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
+                    SYNC(2);
+                }
+            }
+            
+        } else {
+            
+            if constexpr (F & REVERSE) {
+                
+                write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
+                SYNC(4);
+                if constexpr (F & POLL) POLL_IPL;
+                write16(addr & addrMask<C>(), u16(val >> 16));
+                SYNC(2);
+                
+            } else {
+                
+                write16(addr & addrMask<C>(), u16(val >> 16));
+                SYNC(4);
+                if constexpr (F & POLL) POLL_IPL;
+                write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
+                SYNC(2);
+            }
+        }
+    }
+    
+    /*
+    if constexpr (S == Long) {
 
         if constexpr (F & REVERSE) {
 
@@ -570,6 +652,7 @@ Moira::write(u32 addr, u32 val)
             SYNC(2);
         }
     }
+    */
 }
 
 template <Core C, Size S> u32

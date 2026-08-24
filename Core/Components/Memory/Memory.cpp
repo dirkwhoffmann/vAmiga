@@ -1105,6 +1105,22 @@ Memory::peek16 <Accessor::CPU, MemSrc::CHIP> (u32 addr)
     return dataBus;
 }
 
+template<> u32
+Memory::peek32 <Accessor::CPU, MemSrc::CHIP> (u32 addr)
+{
+    ASSERT_CHIP_ADDR(addr);
+    agnus.executeUntilBusIsFree();
+
+    u32 result = READ_CHIP_32(addr);
+    dataBus = u16(result >> 16);
+
+    metrics.value.chipReads.raw++;
+    agnus.busAddr[agnus.pos.h] = addr;
+    agnus.busData[agnus.pos.h] = u16(result >> 16);
+
+    return result;
+}
+
 template<> u16
 Memory::spypeek16 <Accessor::CPU, MemSrc::CHIP> (u32 addr) const
 {
@@ -1159,14 +1175,19 @@ Memory::peek8 <Accessor::CPU, MemSrc::FAST> (u32 addr)
 template<> u16
 Memory::peek16 <Accessor::CPU, MemSrc::FAST> (u32 addr)
 {
-    if (!((addr - FAST_RAM_STRT) < (u32)config.fastSize)) {
-        printf("addr = %x (start: %x size: %x)\n", addr, FAST_RAM_STRT, (u32)config.fastSize);
-    }
-    
     ASSERT_FAST_ADDR(addr);
     
     metrics.value.fastReads.raw++;
     return READ_FAST_16(addr);
+}
+
+template<> u32
+Memory::peek32 <Accessor::CPU, MemSrc::FAST> (u32 addr)
+{
+    ASSERT_FAST_ADDR(addr);
+
+    metrics.value.fastReads.raw++;
+    return READ_FAST_32(addr);
 }
 
 template<> u16
@@ -1601,26 +1622,42 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
     return IS_EVEN(addr) ? HI_BYTE(word) : LO_BYTE(word);
 }
 
-
-//
-// Peek (32 bit)
-//
-
-template <Accessor acc, MemSrc src> u32
-Memory::peek32(u32 addr)
+bool
+Memory::is32BitPort(u32 addr) const
 {
-    auto hi = peek16 <acc, src> (addr);
-    auto lo = peek16 <acc, src> (addr + 2);
-    
-    return HI_W_LO_W(hi, lo);
+    if (!agnus.isAGA()) return false;
+
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+
+        case MemSrc::CHIP:
+        case MemSrc::CHIP_MIRROR:
+        case MemSrc::FAST:
+        case MemSrc::ROM:
+        case MemSrc::ROM_MIRROR:
+        case MemSrc::EXT:
+
+            return true;
+
+        default:
+            return false;
+    }
 }
 
-template <Accessor acc> u32
-Memory::peek32(u32 addr)
+template<> u32
+Memory::peek32 <Accessor::CPU> (u32 addr)
 {
-    auto hi = peek16 <acc> (addr);
-    auto lo = peek16 <acc> (addr + 2);
-    
+    addr &= 0xFFFFFF;
+
+    auto src = cpuMemSrc[addr >> 16];
+    if ((src == MemSrc::CHIP || src == MemSrc::CHIP_MIRROR) && agnus.isAGA()) {
+        return peek32 <Accessor::CPU, MemSrc::CHIP> (addr);
+    }
+    if (src == MemSrc::FAST && agnus.isAGA()) {
+        return peek32 <Accessor::CPU, MemSrc::FAST> (addr);
+    }
+
+    u32 hi = peek16 <Accessor::CPU> (addr);
+    u32 lo = peek16 <Accessor::CPU> (addr + 2);
     return HI_W_LO_W(hi, lo);
 }
 
@@ -1688,6 +1725,29 @@ Memory::poke16 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u16 value)
 }
 
 template <> void
+Memory::poke32 <Accessor::CPU, MemSrc::CHIP> (u32 addr, u32 value)
+{
+    ASSERT_CHIP_ADDR(addr);
+
+    if CONSTEXPR (BLT_MEM_GUARD) {
+        if (blitter.checkMemguard(addr & mem.chipMask) ||
+            blitter.checkMemguard((addr + 2) & mem.chipMask)) {
+            logmsg(LOG_WARN, "CPU(32) OVERWRITES BLITTER AT ADDR %x\n", addr);
+        }
+    }
+
+    agnus.executeUntilBusIsFree();
+
+    dataBus = u16(value >> 16);
+
+    metrics.value.chipWrites.raw++;
+    agnus.busAddr[agnus.pos.h] = addr;
+    agnus.busData[agnus.pos.h] = u16(value >> 16);
+
+    WRITE_CHIP_32(addr, value);
+}
+
+template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::SLOW> (u32 addr, u8 value)
 {
     ASSERT_SLOW_ADDR(addr);
@@ -1735,6 +1795,15 @@ Memory::poke16 <Accessor::CPU, MemSrc::FAST> (u32 addr, u16 value)
     
     metrics.value.fastWrites.raw++;
     WRITE_FAST_16(addr, value);
+}
+
+template <> void
+Memory::poke32 <Accessor::CPU, MemSrc::FAST> (u32 addr, u32 value)
+{
+    ASSERT_FAST_ADDR(addr);
+
+    metrics.value.fastWrites.raw++;
+    WRITE_FAST_32(addr, value);
 }
 
 template <> void
@@ -1960,6 +2029,26 @@ Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
             fatalError;
     }
 }
+
+template<> void
+Memory::poke32 <Accessor::CPU> (u32 addr, u32 value)
+{
+    addr &= 0xFFFFFF;
+
+    auto src = cpuMemSrc[addr >> 16];
+    if ((src == MemSrc::CHIP || src == MemSrc::CHIP_MIRROR) && agnus.isAGA()) {
+        poke32 <Accessor::CPU, MemSrc::CHIP> (addr, value);
+        return;
+    }
+    if (src == MemSrc::FAST && agnus.isAGA()) {
+        poke32 <Accessor::CPU, MemSrc::FAST> (addr, value);
+        return;
+    }
+
+    poke16 <Accessor::CPU> (addr, u16(value >> 16));
+    poke16 <Accessor::CPU> (addr + 2, u16(value & 0xFFFF));
+}
+
 
 //
 // Poke (Agnus)
@@ -3059,11 +3148,5 @@ Memory::search(u64 pattern, isize bytes)
 
 template void Memory::pokeCustom16 <Accessor::CPU> (u32 addr, u16 value);
 template void Memory::pokeCustom16 <Accessor::AGNUS> (u32 addr, u16 value);
-
-template u32 Memory::peek32 <Accessor::CPU> (u32 addr);
-template u32 Memory::peek32 <Accessor::AGNUS> (u32 addr);
-
-template void Memory::poke32 <Accessor::CPU> (u32 addr, u32 value);
-template void Memory::poke32 <Accessor::AGNUS> (u32 addr, u32 value);
 
 }

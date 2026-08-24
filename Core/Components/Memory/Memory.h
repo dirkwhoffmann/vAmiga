@@ -51,10 +51,12 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 // Reads a value from Chip RAM in big endian format
 #define READ_CHIP_8(x)      R8BE (chip + ((x) & chipMask))
 #define READ_CHIP_16(x)     R16BE(chip + ((x) & chipMask))
+#define READ_CHIP_32(x)     R32BE(chip + ((x) & chipMask))
 
 // Reads a value from Fast RAM in big endian format
 #define READ_FAST_8(x)      R8BE (fast + ((x) - FAST_RAM_STRT))
 #define READ_FAST_16(x)     R16BE(fast + ((x) - FAST_RAM_STRT))
+#define READ_FAST_32(x)     R32BE(fast + ((x) - FAST_RAM_STRT))
 
 // Reads a value from Slow RAM in big endian format
 #define READ_SLOW_8(x)      R8BE (slow + ((x) - SLOW_RAM_STRT))
@@ -79,10 +81,12 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 // Writes a value into Chip RAM in big endian format
 #define WRITE_CHIP_8(x,y)   W8BE (chip + ((x) & chipMask), (y))
 #define WRITE_CHIP_16(x,y)  W16BE(chip + ((x) & chipMask), (y))
+#define WRITE_CHIP_32(x,y)  W32BE(chip + ((x) & chipMask), (y))
 
 // Writes a value into Fast RAM in big endian format
 #define WRITE_FAST_8(x,y)   W8BE (fast + ((x) - FAST_RAM_STRT), (y))
 #define WRITE_FAST_16(x,y)  W16BE(fast + ((x) - FAST_RAM_STRT), (y))
+#define WRITE_FAST_32(x,y)  W32BE(fast + ((x) - FAST_RAM_STRT), (y))
 
 // Writes a value into Slow RAM in big endian format
 #define WRITE_SLOW_8(x,y)   W8BE (slow + ((x) - SLOW_RAM_STRT), (y))
@@ -511,6 +515,9 @@ public:
     template <Accessor acc> void poke8(u32 addr, u8 value);
     template <Accessor acc> void poke16(u32 addr, u16 value);
     template <Accessor acc> void poke32(u32 addr, u32 value);
+
+    // Checks whether the CPU sees a 32 bit data port at the given address
+    bool is32BitPort(u32 addr) const;
 
     
     //

@@ -345,6 +345,9 @@ protected:
     virtual void write16(u32 addr, u16 val) const = 0;
     virtual void write32(u32 addr, u32 val) const = 0;
 
+    // Indicates whether the addressed memory is connected to a 32 bit data
+    virtual bool has32BitPort(u32 addr) const { return false; }
+
     // Provides the interrupt vector for a given interrupt level in USER mode
     virtual u16 readIrqUserVector(u8 level) const { return 0; }
 
@@ -439,6 +442,9 @@ protected:
     void write16(u32 addr, u16 val) const;
     void write32(u32 addr, u32 val) const;
 
+    // Checks whether the addressed memory is connected to a 32 bit data port
+    bool has32BitPort(u32 addr) const;
+    
     // Provides the interrupt vector for a given interrupt level in USER mode
     u16 readIrqUserVector(u8 level) const;
 

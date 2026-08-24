@@ -129,6 +129,12 @@ Moira::write32(u32 addr, u32 val) const
     mem.poke32 <Accessor::CPU> (addr, val);
 }
 
+bool
+Moira::has32BitPort(u32 addr) const
+{
+    return mem.is32BitPort(addr);
+}
+
 u16
 Moira::readIrqUserVector(u8 level) const
 {
