@@ -65,6 +65,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 // Reads a value from Boot ROM or Kickstart ROM in big endian format
 #define READ_ROM_8(x)       R8BE (rom + ((x) & romMask))
 #define READ_ROM_16(x)      R16BE(rom + ((x) & romMask))
+#define READ_ROM_32(x)      R32BE(rom + ((x) & romMask))
 
 // Reads a value from Kickstart WOM in big endian format
 #define READ_WOM_8(x)       R8BE (wom + ((x) & womMask))
@@ -73,6 +74,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 // Reads a value from Extended ROM in big endian format
 #define READ_EXT_8(x)       R8BE (ext + ((x) & extMask))
 #define READ_EXT_16(x)      R16BE(ext + ((x) & extMask))
+#define READ_EXT_32(x)      R32BE(ext + ((x) & extMask))
 
 //
 // Writing

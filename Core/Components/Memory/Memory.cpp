@@ -1367,6 +1367,15 @@ Memory::peek16 <Accessor::CPU, MemSrc::ROM> (u32 addr)
     return READ_ROM_16(addr);
 }
 
+template<> u32
+Memory::peek32 <Accessor::CPU, MemSrc::ROM> (u32 addr)
+{
+    ASSERT_ROM_ADDR(addr);
+    
+    metrics.value.kickReads.raw++;
+    return READ_ROM_32(addr);
+}
+
 template<> u16
 Memory::spypeek16 <Accessor::CPU, MemSrc::ROM> (u32 addr) const
 {
@@ -1413,6 +1422,15 @@ Memory::peek16 <Accessor::CPU, MemSrc::EXT> (u32 addr)
     
     metrics.value.kickReads.raw++;
     return READ_EXT_16(addr);
+}
+
+template<> u32
+Memory::peek32 <Accessor::CPU, MemSrc::EXT> (u32 addr)
+{
+    ASSERT_EXT_ADDR(addr);
+    
+    metrics.value.kickReads.raw++;
+    return READ_EXT_32(addr);
 }
 
 template<> u16
@@ -1648,14 +1666,29 @@ Memory::peek32 <Accessor::CPU> (u32 addr)
 {
     addr &= 0xFFFFFF;
 
-    auto src = cpuMemSrc[addr >> 16];
-    if ((src == MemSrc::CHIP || src == MemSrc::CHIP_MIRROR) && agnus.isAGA()) {
-        return peek32 <Accessor::CPU, MemSrc::CHIP> (addr);
-    }
-    if (src == MemSrc::FAST && agnus.isAGA()) {
-        return peek32 <Accessor::CPU, MemSrc::FAST> (addr);
+    /* A 32 bit port delivers the longword in a single bus cycle. The sources
+     * listed below are exactly those reported as 32 bit ports by is32BitPort,
+     * which is what the CPU asks for through Moira::dsack. Keeping the two in
+     * sync matters: the CPU charges a single bus cycle for these accesses, so
+     * they must not be carried out as two word transfers behind its back.
+     */
+    if (agnus.isAGA()) {
+
+        switch (cpuMemSrc[addr >> 16]) {
+
+            case MemSrc::CHIP:
+            case MemSrc::CHIP_MIRROR:   return peek32 <Accessor::CPU, MemSrc::CHIP> (addr);
+            case MemSrc::FAST:          return peek32 <Accessor::CPU, MemSrc::FAST> (addr);
+            case MemSrc::ROM:
+            case MemSrc::ROM_MIRROR:    return peek32 <Accessor::CPU, MemSrc::ROM>  (addr);
+            case MemSrc::EXT:           return peek32 <Accessor::CPU, MemSrc::EXT>  (addr);
+
+            default:
+                break;
+        }
     }
 
+    // Everything else is a 16 bit port and takes two bus cycles
     u32 hi = peek16 <Accessor::CPU> (addr);
     u32 lo = peek16 <Accessor::CPU> (addr + 2);
     return HI_W_LO_W(hi, lo);
@@ -1941,6 +1974,12 @@ Memory::poke16 <Accessor::CPU, MemSrc::ROM> (u32 addr, u16 value)
 }
 
 template <> void
+Memory::poke32 <Accessor::CPU, MemSrc::ROM> (u32 addr, u32 value)
+{
+    poke8 <Accessor::CPU, MemSrc::ROM> (addr, (u8)value);
+}
+
+template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::WOM> (u32 addr, u8 value)
 {
     ASSERT_WOM_ADDR(addr);
@@ -1967,6 +2006,13 @@ Memory::poke8 <Accessor::CPU, MemSrc::EXT> (u32 addr, u8 value)
 
 template <> void
 Memory::poke16 <Accessor::CPU, MemSrc::EXT> (u32 addr, u16 value)
+{
+    ASSERT_EXT_ADDR(addr);
+    metrics.value.kickWrites.raw++;
+}
+
+template <> void
+Memory::poke32 <Accessor::CPU, MemSrc::EXT> (u32 addr, u32 value)
 {
     ASSERT_EXT_ADDR(addr);
     metrics.value.kickWrites.raw++;
@@ -2035,16 +2081,24 @@ Memory::poke32 <Accessor::CPU> (u32 addr, u32 value)
 {
     addr &= 0xFFFFFF;
 
-    auto src = cpuMemSrc[addr >> 16];
-    if ((src == MemSrc::CHIP || src == MemSrc::CHIP_MIRROR) && agnus.isAGA()) {
-        poke32 <Accessor::CPU, MemSrc::CHIP> (addr, value);
-        return;
-    }
-    if (src == MemSrc::FAST && agnus.isAGA()) {
-        poke32 <Accessor::CPU, MemSrc::FAST> (addr, value);
-        return;
+    // See peek32: a 32 bit port accepts the longword in a single bus cycle
+    if (agnus.isAGA()) {
+
+        switch (cpuMemSrc[addr >> 16]) {
+
+            case MemSrc::CHIP:
+            case MemSrc::CHIP_MIRROR:   poke32 <Accessor::CPU, MemSrc::CHIP> (addr, value); return;
+            case MemSrc::FAST:          poke32 <Accessor::CPU, MemSrc::FAST> (addr, value); return;
+            case MemSrc::ROM:
+            case MemSrc::ROM_MIRROR:    poke32 <Accessor::CPU, MemSrc::ROM>  (addr, value); return;
+            case MemSrc::EXT:           poke32 <Accessor::CPU, MemSrc::EXT>  (addr, value); return;
+
+            default:
+                break;
+        }
     }
 
+    // Everything else is a 16 bit port and takes two bus cycles
     poke16 <Accessor::CPU> (addr, u16(value >> 16));
     poke16 <Accessor::CPU> (addr + 2, u16(value & 0xFFFF));
 }
