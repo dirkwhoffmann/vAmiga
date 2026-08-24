@@ -75,6 +75,9 @@ protected:
     // Prefetch queue for fetching instructions
     PrefetchQueue queue {};
     
+    // Instruction cache (68020 only)
+    InstructionCache iCache {};
+    
     // Interrupt mode
     IrqMode irqMode {IrqMode::AUTO};
     
@@ -750,6 +753,7 @@ private:
     
 #include "MoiraInit.h"
 #include "MoiraALU.h"
+#include "MoiraCache.h"
 #include "MoiraDataflow.h"
 #include "MoiraExceptions.h"
 #include "MoiraDasm.h"

@@ -103,6 +103,10 @@ public:
         CLONE(queue.irc)
         CLONE(queue.ird)
 
+        CLONE_ARRAY(iCache.cache)
+        CLONE(iCache.latch.addr)
+        CLONE(iCache.latch.data)
+
         CLONE(irqMode)
         CLONE(ipl)
         CLONE(fcl)
@@ -170,7 +174,7 @@ private:
 
         << queue.irc
         << queue.ird
-
+                
         << irqMode
         << ipl
         << fcl
@@ -182,6 +186,15 @@ private:
         << writeBuffer
         << flags;
 
+        // Instruction cache
+        worker << iCache.latch.addr << iCache.latch.data;
+        for (isize i = 0; i < 64; ++i) {
+
+            worker << iCache.cache[i].data;
+            worker << iCache.cache[i].tag;
+            worker << iCache.cache[i].valid;
+        }
+        
         if (isResetter(worker)) return;
 
         worker

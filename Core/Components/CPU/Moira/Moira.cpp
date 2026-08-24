@@ -26,6 +26,7 @@ using namespace Flag;
 
 #include "MoiraInit_cpp.h"
 #include "MoiraALU_cpp.h"
+#include "MoiraCache_cpp.h"
 #include "MoiraDataflow_cpp.h"
 #include "MoiraExceptions_cpp.h"
 #include "MoiraExec_cpp.h"

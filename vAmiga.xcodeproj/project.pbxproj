@@ -1292,6 +1292,8 @@
 		50DA83E32C161961001209AA /* VAmiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAmiga.cpp; sourceTree = "<group>"; };
 		50DA83E72C1619E0001209AA /* VAmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaTypes.h; sourceTree = "<group>"; };
 		50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDataProvider.swift; sourceTree = "<group>"; };
+		50DC2445303C3F4B0054EA1F /* MoiraCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraCache.h; sourceTree = "<group>"; };
+		50DC2446303C3F5C0054EA1F /* MoiraCache_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraCache_cpp.h; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DE55392E874641001789C9 /* MyToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbarItems.swift; sourceTree = "<group>"; };
@@ -2825,6 +2827,8 @@
 				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE38240D41EE00155AE4 /* MoiraALU.h */,
 				50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */,
+				50DC2445303C3F4B0054EA1F /* MoiraCache.h */,
+				50DC2446303C3F5C0054EA1F /* MoiraCache_cpp.h */,
 				50E2BE2A240D418500155AE4 /* MoiraDataflow.h */,
 				50E2BE2C240D418500155AE4 /* MoiraDataflow_cpp.h */,
 				50E2BE27240D418500155AE4 /* MoiraExceptions.h */,

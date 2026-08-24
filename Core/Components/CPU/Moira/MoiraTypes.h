@@ -316,6 +316,27 @@ struct PrefetchQueue {
     u16 ird;                    // The instruction currently being executed
 };
 
+struct CacheLine {
+    
+    u32 data;
+    u32 tag;
+    bool valid;
+};
+
+struct CacheLatch {
+    
+    u32 addr;
+    u32 data;
+};
+
+struct InstructionCache {
+    
+    static constexpr int numCacheLines = 64;
+
+    CacheLine cache[numCacheLines];
+    CacheLatch latch;
+};
+
 /* Note: Instr, Mode and Size carry narrow underlying types so that this
  * struct occupies four bytes. The disassembler reads its operand attributes
  * from a table of 65536 of these.
