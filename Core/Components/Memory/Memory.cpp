@@ -1659,22 +1659,25 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
 u8
 Memory::dsack(u32 addr) const
 {
-    if (!agnus.isAGA()) return moira::DSACK_16;
-
-    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
-
-        case MemSrc::CHIP:
-        case MemSrc::CHIP_MIRROR:
-        case MemSrc::FAST:
-        case MemSrc::ROM:
-        case MemSrc::ROM_MIRROR:
-        case MemSrc::EXT:
-
-            return moira::DSACK_32;
-
-        default:
-            return moira::DSACK_16;
+    if (config.busWidth == 32) {
+        
+        switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+                
+            case MemSrc::CHIP:
+            case MemSrc::CHIP_MIRROR:
+            case MemSrc::FAST:
+            case MemSrc::ROM:
+            case MemSrc::ROM_MIRROR:
+            case MemSrc::EXT:
+                
+                return moira::DSACK_32;
+                
+            default:
+                return moira::DSACK_16;
+        }
     }
+    
+    return moira::DSACK_16;
 }
 
 template<> u32
