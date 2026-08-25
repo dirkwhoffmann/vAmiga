@@ -49,18 +49,23 @@
  * port; a narrower port (see dsack) needs two or four smaller transactions.
  */
 
-// Invalidates all cache lines if the instruction cache
+// Invalidates all cache lines and clears the latch (CACR bit 3, "clear all")
 void flushInstructionCache();
 
-// Clears the instruction cache latch
+// Clears the latch only, forcing the next fetch to consult the cache again
 void flushInstructionLatch();
 
-// Invalidates the cache entry associated with the provided address
+// Invalidates the single line the given address maps to (CACR bit 2, "clear entry")
 void invalidateCacheEntry(u32 addr);
 
-// Maps an address to a cache line and computes the matching tag
+// Maps an address to its cache line index
 u32 cacheIndex(u32 addr) const;
+
+// Computes the tag a line must carry to be considered valid for the given address
 u32 cacheTag(u32 addr) const;
 
+// Serves addr from the cache or refills the line from the bus; returns true on a miss
 bool fillInstructionCache(u32 addr);
+
+// Reads one instruction word via the latch/cache, reporting whether a bus access was made
 u16 readInstructionCache(u32 addr, bool &busAccess);
