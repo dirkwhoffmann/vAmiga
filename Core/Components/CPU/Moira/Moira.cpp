@@ -420,10 +420,10 @@ Moira::processException(const std::exception &exc)
 
         if (auto df = dynamic_cast<const DoubleFault *>(&exc); df) {
 
-            throw df;
+            throw *df;
         }
 
-    } catch (DoubleFault &df) {
+    } catch (const DoubleFault &df) {
 
         halt();
         return;
