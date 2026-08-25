@@ -5,6 +5,8 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+#if MOIRA_EMULATE_ICACHE
+
 void
 Moira::flushInstructionCache()
 {
@@ -45,14 +47,14 @@ Moira::fillInstructionCache(u32 addr)
     auto idx  = cacheIdx(base);
     auto tag  = cacheTag(base);
     
-    /* The cache is only consulted while it is enabled. Bit 0 (E) gates the
-     * lookup, not just the fill: clearing it has to stop valid lines from
-     * being served, or the CPU would keep executing stale opcodes after a
-     * program switches the cache off. Bit 1 (F) is deliberately not part of
-     * this condition. Freezing only prevents new entries from being
-     * allocated; entries that are already valid keep hitting. Both match
-     * fill_icache020() in WinUAE / Amiberry.
-     */
+    // The cache is only consulted while it is enabled. Bit 0 (E) gates the
+    // lookup, not just the fill: clearing it has to stop valid lines from
+    // being served, or the CPU would keep executing stale opcodes after a
+    // program switches the cache off. Bit 1 (F) is deliberately not part of
+    // this condition. Freezing only prevents new entries from being
+    // allocated; entries that are already valid keep hitting. Both match
+    // fill_icache020() in WinUAE / Amiberry.
+    
     if ((reg.cacr & 1) && iCache.cache[idx].valid && iCache.cache[idx].tag == tag) {
         
         //
@@ -69,10 +71,10 @@ Moira::fillInstructionCache(u32 addr)
         // Cache miss
         //
         
-        /* Filling a cache line is a longword fetch, so it is split into as
-         * many bus cycles as the addressed port provides (see dsack). The
-         * cycle penalty for a narrow port is accounted for by the caller.
-         */
+        // Filling a cache line is a longword fetch, so it is split into as
+        // many bus cycles as the addressed port provides (see dsack). The
+        // cycle penalty for a narrow port is accounted for by the caller.
+        
         u32 data;
         
         switch (portSize(dsack(base))) {
@@ -90,11 +92,12 @@ Moira::fillInstructionCache(u32 addr)
             iCache.cache[idx].valid = true;
         }
         
-        /* Updated last, so that a read32 that throws leaves the latch
-         * untouched instead of marking stale data as valid.
-         */
+        // Updated last, so that a read32 that throws leaves the latch
+        //untouched instead of marking stale data as valid.
+    
         iCache.latch.data = data;
         iCache.latch.addr = base;
+        
         return true;
     }
 }
@@ -117,3 +120,54 @@ Moira::readInstructionCache(u32 addr, bool &busAccess)
 
     return (addr & 2) ? LO_WORD(iCache.latch.data) : HI_WORD(iCache.latch.data);
 }
+
+#else
+
+// Dummy implementations used when the instruction cache is disabled at
+// compile time. Every fetch behaves like a permanent cache miss: it reads
+// straight from the bus and reports that a bus access was made.
+
+void
+Moira::flushInstructionCache()
+{
+
+}
+
+void
+Moira::flushInstructionLatch()
+{
+
+}
+
+void
+Moira::invalidateCacheEntry(u32)
+{
+
+}
+
+u32
+Moira::cacheIdx(u32) const
+{
+    return 0;
+}
+
+u32
+Moira::cacheTag(u32) const
+{
+    return 0;
+}
+
+bool
+Moira::fillInstructionCache(u32)
+{
+    return true;
+}
+
+u16
+Moira::readInstructionCache(u32 addr, bool &busAccess)
+{
+    busAccess = true;
+    return read16(addr);
+}
+
+#endif

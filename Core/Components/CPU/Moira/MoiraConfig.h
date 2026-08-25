@@ -53,6 +53,19 @@
  */
 #define MOIRA_EMULATE_FC true
 
+/* Set to true to emulate the 68020 instruction cache.
+ *
+ * The 68020 caches instruction fetches in a small on-chip cache (see
+ * MoiraCache.h). When this option is disabled, every instruction fetch is
+ * treated as a cache miss and goes straight to the bus, which is faster to
+ * emulate but does not reproduce the cycle savings a real cache provides.
+ * This setting has no effect for other supported models, which have no
+ * instruction cache.
+ *
+ * Enable to improve accuracy, disable to gain speed.
+ */
+#define MOIRA_EMULATE_ICACHE true
+
 /* Set to true to enable the disassembler.
  *
  * The disassembler requires a jump table which consumes about 1MB of memory,
