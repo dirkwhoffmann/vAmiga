@@ -10,7 +10,7 @@ Moira::flushInstructionCache()
 {
     flushInstructionLatch();
     
-    for (int i = 0; i < iCache.numCacheLines; i++) {
+    for (int i = 0; i < iCache.lineCnt; i++) {
         iCache.cache[i].valid = false;
     }
 }
@@ -25,27 +25,25 @@ Moira::flushInstructionLatch()
 void
 Moira::invalidateCacheEntry(u32 addr)
 {
-    iCache.cache[cacheIndex(addr)].valid = false;
+    iCache.cache[cacheIdx(addr)].valid = false;
 }
 
-u32
-Moira::cacheIndex(u32 addr) const
+u32 Moira::cacheIdx(u32 addr) const
 {
-    return (addr >> 2) & (iCache.numCacheLines - 1);
+    return (addr & InstructionCache::idxMask) >> 2;
 }
 
-u32
-Moira::cacheTag(u32 addr) const
+u32 Moira::cacheTag(u32 addr) const
 {
-    return (reg.sr.s ? 1u : 0u) | (addr & ~u32((iCache.numCacheLines << 2) - 1));
+    return (addr & InstructionCache::tagMask) | u32(reg.sr.s);
 }
 
 bool
 Moira::fillInstructionCache(u32 addr)
 {
-    auto base  = addr & addrMask() & ~3;
-    auto index = cacheIndex(base);
-    auto tag   = cacheTag(base);
+    auto base = addr & addrMask() & ~3;
+    auto idx  = cacheIdx(base);
+    auto tag  = cacheTag(base);
     
     /* The cache is only consulted while it is enabled. Bit 0 (E) gates the
      * lookup, not just the fill: clearing it has to stop valid lines from
@@ -55,13 +53,13 @@ Moira::fillInstructionCache(u32 addr)
      * allocated; entries that are already valid keep hitting. Both match
      * fill_icache020() in WinUAE / Amiberry.
      */
-    if ((reg.cacr & 1) && iCache.cache[index].valid && iCache.cache[index].tag == tag) {
+    if ((reg.cacr & 1) && iCache.cache[idx].valid && iCache.cache[idx].tag == tag) {
         
         //
         // Cache hit
         //
         
-        iCache.latch.data = iCache.cache[index].data;
+        iCache.latch.data = iCache.cache[idx].data;
         iCache.latch.addr = base;
         return false;
         
@@ -87,9 +85,9 @@ Moira::fillInstructionCache(u32 addr)
         
         if ((reg.cacr & 1) && !(reg.cacr & 2)) {
             
-            iCache.cache[index].tag   = tag;
-            iCache.cache[index].data  = data;
-            iCache.cache[index].valid = true;
+            iCache.cache[idx].tag   = tag;
+            iCache.cache[idx].data  = data;
+            iCache.cache[idx].valid = true;
         }
         
         /* Updated last, so that a read32 that throws leaves the latch

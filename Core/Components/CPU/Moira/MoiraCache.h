@@ -59,7 +59,7 @@ void flushInstructionLatch();
 void invalidateCacheEntry(u32 addr);
 
 // Maps an address to its cache line index
-u32 cacheIndex(u32 addr) const;
+u32 cacheIdx(u32 addr) const;
 
 // Computes the tag a line must carry to be considered valid for the given address
 u32 cacheTag(u32 addr) const;

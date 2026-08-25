@@ -366,9 +366,11 @@ struct CacheLatch {
 
 struct InstructionCache {
     
-    static constexpr int numCacheLines = 64;
-
-    CacheLine cache[numCacheLines];
+    static constexpr int lineCnt = 64;
+    static constexpr u32 idxMask = 0x000000FC;
+    static constexpr u32 tagMask = 0xFFFFFF00;
+    
+    CacheLine cache[lineCnt];
     CacheLatch latch;
 };
 
