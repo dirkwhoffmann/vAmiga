@@ -430,7 +430,7 @@ Moira::readM(u32 addr)
 }
 
 template <Core C, Flags F> u32
-Moira::readTwoWords(u32 lo, u32 hi)
+Moira::read2x16(u32 lo, u32 hi)
 {
     u32 result = read16(lo) << 16;
     SYNC(4);
@@ -441,7 +441,7 @@ Moira::readTwoWords(u32 lo, u32 hi)
 }
 
 template <Core C, Flags F> void
-Moira::writeTwoWords(u32 lo, u32 hi, u32 valHi, u32 valLo)
+Moira::write2x16(u32 lo, u32 hi, u32 valHi, u32 valLo)
 {
     if constexpr (F & REVERSE) {
 
@@ -462,7 +462,7 @@ Moira::writeTwoWords(u32 lo, u32 hi, u32 valHi, u32 valLo)
 }
 
 template <Core C, Flags F> u32
-Moira::readWordSplit8(u32 addr)
+Moira::read2x8(u32 addr)
 {
     u32 result = u32(read8(addr)) << 8;
     SYNC(4);
@@ -473,7 +473,7 @@ Moira::readWordSplit8(u32 addr)
 }
 
 template <Core C, Flags F> void
-Moira::writeWordSplit8(u32 addr, u32 val)
+Moira::write2x8(u32 addr, u32 val)
 {
     if constexpr (F & REVERSE) {
 
@@ -494,7 +494,7 @@ Moira::writeWordSplit8(u32 addr, u32 val)
 }
 
 template <Core C, Flags F> u32
-Moira::readByteQuad(u32 addr)
+Moira::read4x8(u32 addr)
 {
     u32 result = u32(read8(addr)) << 24;
     SYNC(4);
@@ -509,7 +509,7 @@ Moira::readByteQuad(u32 addr)
 }
 
 template <Core C, Flags F> void
-Moira::writeByteQuad(u32 addr, u32 val)
+Moira::write4x8(u32 addr, u32 val)
 {
     if constexpr (F & REVERSE) {
 
@@ -538,7 +538,7 @@ Moira::writeByteQuad(u32 addr, u32 val)
 }
 
 template <Core C, Flags F> u32
-Moira::readLong32(u32 addr)
+Moira::readLongSplit(u32 addr)
 {
     /* The addressed port decides how the transfer is carried out. A 32 bit
      * port delivers the longword in a single bus cycle, a 16 bit port needs
@@ -555,18 +555,18 @@ Moira::readLong32(u32 addr)
         }
         case 2:
 
-            return readTwoWords<C,F>(addr, addr + 2);
+            return read2x16<C,F>(addr, addr + 2);
 
         default:
 
-            return readByteQuad<C,F>(addr);
+            return read4x8<C,F>(addr);
     }
 }
 
 template <Core C, Flags F> void
-Moira::writeLong32(u32 addr, u32 val)
+Moira::writeLongSplit(u32 addr, u32 val)
 {
-    // See readLong32(): the port width decides how the transfer is split
+    // See readLongSplit(): the port width decides how the transfer is split
     switch (portSize(dsack(addr))) {
 
         case 4:
@@ -578,12 +578,12 @@ Moira::writeLong32(u32 addr, u32 val)
 
         case 2:
 
-            writeTwoWords<C,F>(addr, addr + 2, val >> 16, val & 0xFFFF);
+            write2x16<C,F>(addr, addr + 2, val >> 16, val & 0xFFFF);
             return;
 
         default:
 
-            writeByteQuad<C,F>(addr, val);
+            write4x8<C,F>(addr, val);
             return;
     }
 }
@@ -622,7 +622,7 @@ Moira::read(u32 addr)
         if constexpr (C >= Core::C68020) {
 
             if (portSize(dsack(a)) == 1) {
-                return readWordSplit8<C,F>(a);
+                return read2x8<C,F>(a);
             }
         }
 
@@ -636,14 +636,14 @@ Moira::read(u32 addr)
         if constexpr (C >= Core::C68020) {
 
             if ((addr & 3) == 0) {
-                result = readLong32<C,F>(addr & addrMask<C>());
+                result = readLongSplit<C,F>(addr & addrMask<C>());
             } else {
-                result = readTwoWords<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>());
+                result = read2x16<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>());
             }
 
         } else {
 
-            result = readTwoWords<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>());
+            result = read2x16<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>());
         }
     }
 
@@ -728,7 +728,7 @@ Moira::write(u32 addr, u32 val)
         if constexpr (C >= Core::C68020) {
 
             if (portSize(dsack(a)) == 1) {
-                writeWordSplit8<C,F>(a, val);
+                write2x8<C,F>(a, val);
                 return;
             }
         }
@@ -743,15 +743,15 @@ Moira::write(u32 addr, u32 val)
         if constexpr (C >= Core::C68020) {
 
             if ((addr & 3) == 0) {
-                writeLong32<C,F>(addr & addrMask<C>(), val);
+                writeLongSplit<C,F>(addr & addrMask<C>(), val);
             } else {
-                writeTwoWords<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>(),
+                write2x16<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>(),
                                   val >> 16, val & 0xFFFF);
             }
 
         } else {
 
-            writeTwoWords<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>(),
+            write2x16<C,F>(addr & addrMask<C>(), (addr + 2) & addrMask<C>(),
                               val >> 16, val & 0xFFFF);
         }
     }
