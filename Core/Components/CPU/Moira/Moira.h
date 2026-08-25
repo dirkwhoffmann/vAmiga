@@ -346,7 +346,7 @@ protected:
     virtual void write32(u32 addr, u32 val) const = 0;
 
     // Returns the DSACK bits for the addressed device (68020)
-    virtual Dsack dsack(u32 addr) const { return DSACK_16; }
+    virtual u8 dsack(u32 addr) const { return DSACK_16; }
 
     // Provides the interrupt vector for a given interrupt level in USER mode
     virtual u16 readIrqUserVector(u8 level) const { return 0; }

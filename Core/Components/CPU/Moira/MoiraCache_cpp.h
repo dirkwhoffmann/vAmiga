@@ -118,7 +118,7 @@ Moira::readInstructionCache(u32 addr, bool &busAccess)
         busAccess = fillInstructionCache(base);
     }
 
-    return (addr & 2) ? LO_WORD(iCache.latch.data) : HI_WORD(iCache.latch.data);
+    return (addr & 2) ? u16(iCache.latch.data & 0xFFFF) : u16(iCache.latch.data >> 16);
 }
 
 #else

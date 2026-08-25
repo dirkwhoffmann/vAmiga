@@ -533,11 +533,11 @@ void
 Moira::setCACR(u32 val)
 {
     // Setting the CE bit invalidates the entry for the address in CAAR
-    if (GET_BIT(val, 2)) invalidateCacheEntry(reg.caar);
+    if (val & (1 << 2)) invalidateCacheEntry(reg.caar);
 
     // Setting the C bit invalidates all entries
-    if (GET_BIT(val, 3)) flushInstructionCache();
-        
+    if (val & (1 << 3)) flushInstructionCache();
+
     reg.cacr = val & cacrMask();
     didChangeCACR(val);
 }
