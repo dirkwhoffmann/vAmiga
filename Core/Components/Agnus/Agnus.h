@@ -133,6 +133,23 @@ public:
     // AGA bitplane/sprite fetch mode register
     u16 fmode = 0;
 
+    /* ECS registers that are recognized and stored, but not yet acted upon.
+     * Real behavior (programmable horizontal/vertical blanking and sync) is
+     * not implemented; a write only updates the shadow value below.
+     */
+    u16 htotal = 0;
+    u16 hsstop = 0;
+    u16 hbstrt = 0;
+    u16 hbstop = 0;
+    u16 vtotal = 0;
+    u16 vsstop = 0;
+    u16 vbstrt = 0;
+    u16 vbstop = 0;
+    u16 hsstrt = 0;
+    u16 vsstrt = 0;
+    u16 hcenter = 0;
+    u16 hhposw = 0;
+
     // Disk DMA pointer
     u32 dskpt = 0;
 
@@ -270,6 +287,18 @@ private:
         << dmacon
         << dmaconInitial
         << fmode
+        << htotal
+        << hsstop
+        << hbstrt
+        << hbstop
+        << vtotal
+        << vsstop
+        << vbstrt
+        << vbstop
+        << hsstrt
+        << vsstrt
+        << hcenter
+        << hhposw
         << dskpt
         << audpt
         << audlc
@@ -618,6 +647,20 @@ public:
     template <int x> void setSPRxCTL(u16 value);
 
     void pokeBEAMCON0(u16 value);
+
+    // ECS registers recognized but not yet implemented (see field comment)
+    void pokeHTOTAL(u16 value);
+    void pokeHSSTOP(u16 value);
+    void pokeHBSTRT(u16 value);
+    void pokeHBSTOP(u16 value);
+    void pokeVTOTAL(u16 value);
+    void pokeVSSTOP(u16 value);
+    void pokeVBSTRT(u16 value);
+    void pokeVBSTOP(u16 value);
+    void pokeHSSTRT(u16 value);
+    void pokeVSSTRT(u16 value);
+    void pokeHCENTER(u16 value);
+    void pokeHHPOSW(u16 value);
 
     template <Accessor s> void pokeFMODE(u16 value);
     void setFMODE(u16 value);

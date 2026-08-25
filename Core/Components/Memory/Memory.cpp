@@ -3068,8 +3068,32 @@ Memory::pokeCustom16(u32 addr, u16 value)
             denise.pokeCOLORxx<30,s>(value); return;
         case 0x1BE >> 1: // COLOR31
             denise.pokeCOLORxx<31,s>(value); return;
+        case 0x1C0 >> 1: // HTOTAL (ECS)
+            agnus.pokeHTOTAL(value); return;
+        case 0x1C2 >> 1: // HSSTOP (ECS)
+            agnus.pokeHSSTOP(value); return;
+        case 0x1C4 >> 1: // HBSTRT (ECS)
+            agnus.pokeHBSTRT(value); return;
+        case 0x1C6 >> 1: // HBSTOP (ECS)
+            agnus.pokeHBSTOP(value); return;
+        case 0x1C8 >> 1: // VTOTAL (ECS)
+            agnus.pokeVTOTAL(value); return;
+        case 0x1CA >> 1: // VSSTOP (ECS)
+            agnus.pokeVSSTOP(value); return;
+        case 0x1CC >> 1: // VBSTRT (ECS)
+            agnus.pokeVBSTRT(value); return;
+        case 0x1CE >> 1: // VBSTOP (ECS)
+            agnus.pokeVBSTOP(value); return;
+        case 0x1D8 >> 1: // HHPOSW (AGA)
+            agnus.pokeHHPOSW(value); return;
         case 0x1DC >> 1: // BEAMCON0
             agnus.pokeBEAMCON0(value); return;
+        case 0x1DE >> 1: // HSSTRT (ECS)
+            agnus.pokeHSSTRT(value); return;
+        case 0x1E0 >> 1: // VSSTRT (ECS)
+            agnus.pokeVSSTRT(value); return;
+        case 0x1E2 >> 1: // HCENTER (ECS)
+            agnus.pokeHCENTER(value); return;
         case 0x1E4 >> 1: // DIWHIGH (ECS)
             agnus.pokeDIWHIGH<s>(value); return;
         case 0x1FC >> 1: // FMODE (AGA)

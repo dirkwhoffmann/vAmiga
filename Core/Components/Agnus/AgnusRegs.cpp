@@ -562,6 +562,94 @@ Agnus::pokeBEAMCON0(u16 value)
     if (pos.type == TV::NTSC) pos.lolToggle = !loldis;
 }
 
+/* The following registers are recognized and stored, but have no effect
+ * yet. See the field comment in Agnus.h.
+ */
+
+void
+Agnus::pokeHTOTAL(u16 value)
+{
+    xfiles("pokeHTOTAL(%04x)\n", value);
+    htotal = value;
+}
+
+void
+Agnus::pokeHSSTOP(u16 value)
+{
+    xfiles("pokeHSSTOP(%04x)\n", value);
+    hsstop = value;
+}
+
+void
+Agnus::pokeHBSTRT(u16 value)
+{
+    xfiles("pokeHBSTRT(%04x)\n", value);
+    hbstrt = value;
+}
+
+void
+Agnus::pokeHBSTOP(u16 value)
+{
+    xfiles("pokeHBSTOP(%04x)\n", value);
+    hbstop = value;
+}
+
+void
+Agnus::pokeVTOTAL(u16 value)
+{
+    xfiles("pokeVTOTAL(%04x)\n", value);
+    vtotal = value;
+}
+
+void
+Agnus::pokeVSSTOP(u16 value)
+{
+    xfiles("pokeVSSTOP(%04x)\n", value);
+    vsstop = value;
+}
+
+void
+Agnus::pokeVBSTRT(u16 value)
+{
+    xfiles("pokeVBSTRT(%04x)\n", value);
+    vbstrt = value;
+}
+
+void
+Agnus::pokeVBSTOP(u16 value)
+{
+    xfiles("pokeVBSTOP(%04x)\n", value);
+    vbstop = value;
+}
+
+void
+Agnus::pokeHSSTRT(u16 value)
+{
+    xfiles("pokeHSSTRT(%04x)\n", value);
+    hsstrt = value;
+}
+
+void
+Agnus::pokeVSSTRT(u16 value)
+{
+    xfiles("pokeVSSTRT(%04x)\n", value);
+    vsstrt = value;
+}
+
+void
+Agnus::pokeHCENTER(u16 value)
+{
+    xfiles("pokeHCENTER(%04x)\n", value);
+    hcenter = value;
+}
+
+void
+Agnus::pokeHHPOSW(u16 value)
+{
+    xfiles("pokeHHPOSW(%04x)\n", value);
+    hhposw = value;
+}
+
 template <Accessor s> void
 Agnus::pokeFMODE(u16 value)
 {
