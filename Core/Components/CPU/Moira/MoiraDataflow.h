@@ -103,6 +103,28 @@ template <Core C, Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
 // Writes a value to a specific address space
 template <Core C, AddrSpace AS, Size S, Flags F = 0> void write(u32 addr, u32 val);
 
+/* Bus transfer helpers used by read() and write() to split a wide access
+ * into the bus cycles a narrower port requires. Factored out because the
+ * same sub-patterns recur across the Word/Long, aligned/misaligned and
+ * 68020/pre-68020 cases.
+ */
+
+// Reads/writes two consecutive words (used for Long accesses split in half)
+template <Core C, Flags F = 0> u32 readTwoWords(u32 lo, u32 hi);
+template <Core C, Flags F = 0> void writeTwoWords(u32 lo, u32 hi, u32 valHi, u32 valLo);
+
+// Reads/writes a word through an 8 bit port (two byte-sized bus cycles)
+template <Core C, Flags F = 0> u32 readWordSplit8(u32 addr);
+template <Core C, Flags F = 0> void writeWordSplit8(u32 addr, u32 val);
+
+// Reads/writes a longword through an 8 bit port (four byte-sized bus cycles)
+template <Core C, Flags F = 0> u32 readByteQuad(u32 addr);
+template <Core C, Flags F = 0> void writeByteQuad(u32 addr, u32 val);
+
+// Reads/writes an aligned longword, dispatching on the addressed port width
+template <Core C, Flags F = 0> u32 readLong32(u32 addr);
+template <Core C, Flags F = 0> void writeLong32(u32 addr, u32 val);
+
 // Reads an immediate value from memory
 template <Core C, Size S> u32 readI();
 
