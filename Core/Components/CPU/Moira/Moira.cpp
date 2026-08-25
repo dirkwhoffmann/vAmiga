@@ -423,7 +423,7 @@ Moira::processException(const std::exception &exc)
             throw *df;
         }
 
-    } catch (const DoubleFault &df) {
+    } catch (const DoubleFault &) {
 
         halt();
         return;
