@@ -23,7 +23,8 @@ Denise::setDIWSTRT(u16 value)
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
     
     diwstrt = value;
-    setHSTRT(LO_BYTE(value));
+    setHSTRT(LO_BYTE(diwstrt));
+    setHSTOP(LO_BYTE(diwstop) | 0x100);
 }
 
 void
@@ -35,7 +36,8 @@ Denise::setDIWSTOP(u16 value)
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
 
     diwstop = value;
-    setHSTOP(LO_BYTE(value) | 0x100);
+    setHSTRT(LO_BYTE(diwstrt));
+    setHSTOP(LO_BYTE(diwstop) | 0x100);
 }
 
 void
