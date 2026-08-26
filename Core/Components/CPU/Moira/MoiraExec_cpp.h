@@ -2537,8 +2537,15 @@ Moira::execJsr(u16 opcode)
             // Jump to new address
             reg.pc = ea;
 
-            queue.irc = (u16)read<C, AddrSpace::PROG, Word>(ea);
-            prefetch<C>();
+            if constexpr (C == Core::C68020) {
+
+                fullPrefetch<C>();
+
+            } else {
+
+                queue.irc = (u16)read<C, AddrSpace::PROG, Word>(ea);
+                prefetch<C>();
+            }
             break;
     }
 
