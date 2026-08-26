@@ -93,9 +93,15 @@ protected:
     // Remembers the vector number of the most recent exception
     int exception {};
     
-    // Cycle penalty (for 68020+ extended addressing modes)
+    // Cycle penalty (68020 only)
     int cp {};
     
+    // Model time that has not been spent yet (68020 only)
+    int cpAccum {};
+
+    // Number of consecutive instructions that did not advance the clock (68020 only)
+    int cpStall {};
+
     // Controls exact timing of instructions running in loop mode (68010 only)
     int loopModeDelay {2};
     
@@ -316,6 +322,26 @@ public:
     
     // Returns instruction metadata for a given opcode
     InstrInfo getInstrInfo(u16 op) const;
+
+    //
+    // Advancing the clock
+    //
+
+protected:
+
+    /* Advances the clock by the cycle count computed for a 68020 instruction.
+     *
+     * Instruction fetches that hit the cache are modelled as a discount (see
+     * readInstructionWord), so the total can drop to zero or below, while the
+     * environment can only be stepped in whole bus cycles. The time is
+     * therefore accumulated and spent as soon as it amounts to at least one
+     * bus cycle, which keeps the discount fully effective. Should that not
+     * happen for CpStallMax instructions in a row, one bus cycle is borrowed:
+     * the environment is stepped from here alone, so without it the
+     emulation
+     * would make no progress and its main loop would never terminate.
+     */
+    void syncCp(int cycles);
 
     
     //

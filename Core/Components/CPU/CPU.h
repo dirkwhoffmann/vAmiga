@@ -113,6 +113,8 @@ public:
         CLONE(fcSource)
         CLONE(exception)
         CLONE(cp)
+        CLONE(cpAccum)
+        CLONE(cpStall)
         CLONE(loopModeDelay)
         CLONE(readBuffer)
         CLONE(writeBuffer)
@@ -181,6 +183,8 @@ private:
         << fcSource
         << exception
         << cp
+        << cpAccum
+        << cpStall
         << loopModeDelay
         << readBuffer
         << writeBuffer
