@@ -236,8 +236,9 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         }
 
         // Superimpose drawing flags
-        isize jj = j >= 1 ? j : PAL::HPOS_CNT + j;
-
+        // isize jj = j >= 1 ? j : PAL::HPOS_CNT + j;
+        isize jj = j;
+        
         if ((jj & mask) == (agnus.scrollOdd & mask))  id = (EventID)(id | 1);
         if ((jj & mask) == (agnus.scrollEven & mask)) id = (EventID)(id | 2);
 

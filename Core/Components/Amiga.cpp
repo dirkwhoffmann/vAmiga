@@ -100,7 +100,7 @@ Amiga::prefix(long level, const std::source_location &loc) const
     std::string result;
     result.reserve(256);
 
-    if (level == LOG_DEBUG && verbosity) {
+    if (level == LOG_TRACE && verbosity) {
 
         // Run-ahead prefix
         if (isRunAheadInstance()) {
