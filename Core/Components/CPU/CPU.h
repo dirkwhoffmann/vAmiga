@@ -107,8 +107,8 @@ public:
         CLONE(iCache.latch.addr)
         CLONE(iCache.latch.data)
         CLONE(budget.cp)
-        CLONE(budget.cpAccum)
-        CLONE(budget.cpStall)
+        CLONE(budget.accumulated)
+        CLONE(budget.stalled)
 
         CLONE(irqMode)
         CLONE(ipl)
@@ -177,8 +177,8 @@ private:
         << queue.irc
         << queue.ird
         << budget.cp
-        << budget.cpAccum
-        << budget.cpStall
+        << budget.accumulated
+        << budget.stalled
 
         << irqMode
         << ipl

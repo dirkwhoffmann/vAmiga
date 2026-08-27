@@ -380,10 +380,10 @@ struct CycleBudget { // 68020 only
     int cp {};
     
     // Cycles that have not been spent yet
-    int cpAccum {};
+    int accumulated {};
     
     // Number of consecutive instructions that did not advance the clock
-    int cpStall {};
+    int stalled {};
 };
 
 struct InstrInfo

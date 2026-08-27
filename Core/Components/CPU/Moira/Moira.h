@@ -96,15 +96,6 @@ protected:
     // Remembers the vector number of the most recent exception
     int exception {};
     
-    // Cycle penalty (68020 only)
-    // int cp {};
-    
-    // Model time that has not been spent yet (68020 only)
-    // int cpAccum {};
-
-    // Number of consecutive instructions that did not advance the clock (68020 only)
-    // int cpStall {};
-
     // Controls exact timing of instructions running in loop mode (68010 only)
     int loopModeDelay {2};
     

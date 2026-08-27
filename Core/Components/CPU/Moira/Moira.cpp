@@ -258,34 +258,34 @@ void
 Moira::syncCp(int cycles)
 {
     // Max number of instructions that may execute without advancing the clock
-    static constexpr int CpStallMax = 16;
+    static constexpr int maxStalled = 16;
 
     // Lower bound for the model time debt
-    static constexpr int CpAccumMin = -454;
+    static constexpr int maxAccum = -454;
 
     // Accumulate the cycle penalty (may become negative)
-    budget.cpAccum += cycles;
+    budget.accumulated += cycles;
 
-    if (budget.cpAccum >= 2) {
+    if (budget.accumulated >= 2) {
 
         // The CPU is ahead of its environment. Spend everything that amounts
         // to whole bus cycles
     
-        int step = budget.cpAccum & ~1;
-        budget.cpAccum -= step;
-        budget.cpStall = 0;
+        int step = budget.accumulated & ~1;
+        budget.accumulated -= step;
+        budget.stalled = 0;
         sync(step);
 
-    } else if (++budget.cpStall >= CpStallMax) {
+    } else if (++budget.stalled >= maxStalled) {
 
         // Nothing was spend for a while now. Since the environment is stepped
         // from here alone, it has to be moved forward regardless - otherwise
         // the emulation makes no progress and its main loop never terminates.
         // The borrowed bus cycle is booked as a debt.
         
-        budget.cpStall = 0;
-        budget.cpAccum -= 2;
-        if (budget.cpAccum < CpAccumMin) budget.cpAccum = CpAccumMin;
+        budget.stalled = 0;
+        budget.accumulated -= 2;
+        if (budget.accumulated < maxAccum) budget.accumulated = maxAccum;
         sync(2);
     }
 }
