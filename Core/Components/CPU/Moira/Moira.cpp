@@ -225,9 +225,7 @@ Moira::reset()
     ipl = 0;
     fcl = 2;
     fcSource = 0;
-    cp = 0;
-    cpAccum = 0;
-    cpStall = 0;
+    budget = { };
     
     flushInstructionCache();
 
@@ -266,28 +264,28 @@ Moira::syncCp(int cycles)
     static constexpr int CpAccumMin = -454;
 
     // Accumulate the cycle penalty (may become negative)
-    cpAccum += cycles;
+    budget.cpAccum += cycles;
 
-    if (cpAccum >= 2) {
+    if (budget.cpAccum >= 2) {
 
         // The CPU is ahead of its environment. Spend everything that amounts
         // to whole bus cycles
     
-        int step = cpAccum & ~1;
-        cpAccum -= step;
-        cpStall = 0;
+        int step = budget.cpAccum & ~1;
+        budget.cpAccum -= step;
+        budget.cpStall = 0;
         sync(step);
 
-    } else if (++cpStall >= CpStallMax) {
+    } else if (++budget.cpStall >= CpStallMax) {
 
         // Nothing was spend for a while now. Since the environment is stepped
         // from here alone, it has to be moved forward regardless - otherwise
         // the emulation makes no progress and its main loop never terminates.
         // The borrowed bus cycle is booked as a debt.
         
-        cpStall = 0;
-        cpAccum -= 2;
-        if (cpAccum < CpAccumMin) cpAccum = CpAccumMin;
+        budget.cpStall = 0;
+        budget.cpAccum -= 2;
+        if (budget.cpAccum < CpAccumMin) budget.cpAccum = CpAccumMin;
         sync(2);
     }
 }

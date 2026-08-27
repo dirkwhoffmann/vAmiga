@@ -78,6 +78,9 @@ protected:
     // Instruction cache (68020 only)
     InstructionCache iCache {};
     
+    // Speed trackers (68020 only)
+    CycleBudget budget {};
+    
     // Interrupt mode
     IrqMode irqMode {IrqMode::AUTO};
     
@@ -94,13 +97,13 @@ protected:
     int exception {};
     
     // Cycle penalty (68020 only)
-    int cp {};
+    // int cp {};
     
     // Model time that has not been spent yet (68020 only)
-    int cpAccum {};
+    // int cpAccum {};
 
     // Number of consecutive instructions that did not advance the clock (68020 only)
-    int cpStall {};
+    // int cpStall {};
 
     // Controls exact timing of instructions running in loop mode (68010 only)
     int loopModeDelay {2};

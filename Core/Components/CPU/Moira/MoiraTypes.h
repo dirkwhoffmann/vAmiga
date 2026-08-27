@@ -374,10 +374,18 @@ struct InstructionCache {
     CacheLatch latch;
 };
 
-/* Note: Instr, Mode and Size carry narrow underlying types so that this
- * struct occupies four bytes. The disassembler reads its operand attributes
- * from a table of 65536 of these.
- */
+struct CycleBudget { // 68020 only
+    
+    // Cycle penalty
+    int cp {};
+    
+    // Cycles that have not been spent yet
+    int cpAccum {};
+    
+    // Number of consecutive instructions that did not advance the clock
+    int cpStall {};
+};
+
 struct InstrInfo
 {
     Instr I;

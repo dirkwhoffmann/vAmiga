@@ -22,7 +22,7 @@
 
 #define CYCLES_68000(c) { }
 #define CYCLES_68010(c) { }
-#define CYCLES_68020(c) { if constexpr (C == Core::C68020) syncCp((c) + cp); }
+#define CYCLES_68020(c) { if constexpr (C == Core::C68020) syncCp((c) + budget.cp); }
 
 #else
 
@@ -32,7 +32,7 @@
 
 #define CYCLES_68000(c) { if constexpr (C == Core::C68000) sync(c); }
 #define CYCLES_68010(c) { if constexpr (C == Core::C68010) sync(c); }
-#define CYCLES_68020(c) { if constexpr (C == Core::C68020) syncCp((c) + cp); }
+#define CYCLES_68020(c) { if constexpr (C == Core::C68020) syncCp((c) + budget.cp); }
 
 #endif
 

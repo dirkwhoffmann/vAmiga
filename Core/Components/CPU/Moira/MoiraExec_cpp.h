@@ -8,7 +8,7 @@
 #define AVAILABILITY(core) \
 if constexpr ((core) == Core::C68010) { static_assert(C != Core::C68000); } \
 if constexpr ((core) == Core::C68020) { static_assert(C != Core::C68000 && C != Core::C68010); } \
-if constexpr (C == Core::C68020) cp = 0; \
+if constexpr (C == Core::C68020) budget.cp = 0; \
 if constexpr (MOIRA_WILL_EXECUTE) willExecute(__func__, I, M, S, opcode);
 
 #define FINALIZE \
@@ -3587,7 +3587,7 @@ Moira::execMoves(u16 opcode)
 
         if constexpr (S == Long) {
 
-            if (cpuModel == Model::M68020 || cpuModel == Model::M68EC020) cp += 2;
+            if (cpuModel == Model::M68020 || cpuModel == Model::M68EC020) budget.cp += 2;
         }
 
     } else {                    // Ea -> Rg
@@ -3632,7 +3632,7 @@ Moira::execMoves(u16 opcode)
         // Switch back to the old FC pin values
         fcSource = 0;
 
-        if (cpuModel == Model::M68020 || cpuModel == Model::M68EC020) cp += 2;
+        if (cpuModel == Model::M68020 || cpuModel == Model::M68EC020) budget.cp += 2;
     }
 
     prefetch<C, POLL>();

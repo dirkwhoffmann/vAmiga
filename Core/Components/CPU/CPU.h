@@ -106,15 +106,15 @@ public:
         CLONE_ARRAY(iCache.cache)
         CLONE(iCache.latch.addr)
         CLONE(iCache.latch.data)
+        CLONE(budget.cp)
+        CLONE(budget.cpAccum)
+        CLONE(budget.cpStall)
 
         CLONE(irqMode)
         CLONE(ipl)
         CLONE(fcl)
         CLONE(fcSource)
         CLONE(exception)
-        CLONE(cp)
-        CLONE(cpAccum)
-        CLONE(cpStall)
         CLONE(loopModeDelay)
         CLONE(readBuffer)
         CLONE(writeBuffer)
@@ -176,15 +176,15 @@ private:
 
         << queue.irc
         << queue.ird
-                
+        << budget.cp
+        << budget.cpAccum
+        << budget.cpStall
+
         << irqMode
         << ipl
         << fcl
         << fcSource
         << exception
-        << cp
-        << cpAccum
-        << cpStall
         << loopModeDelay
         << readBuffer
         << writeBuffer
