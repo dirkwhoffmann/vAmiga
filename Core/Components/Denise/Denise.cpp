@@ -1374,10 +1374,11 @@ Denise::updateBorderBuffer()
     }
 
     // Determine the initial value of Denise's horizontal counter
-    isize counter = HBLANK_MIN * 2;
-    
+    // (scaled up by 4 to run in super-hires / buffer resolution, matching hstrt/hstop)
+    isize counter = HBLANK_MIN * 2 * 4;
+
     // OCS Denise does not reset the counter in lines 0 - 8
-    if (agnus.pos.v < 9 && isOCS()) counter = (HBLANK_MIN * 2 + agnus.pos.v * 0x1C6) & 0x1FF;
+    if (agnus.pos.v < 9 && isOCS()) counter = (HBLANK_MIN * 2 * 4 + agnus.pos.v * 0x1C6 * 4) & 0x7FF;
 
     // Initialize trigger position (position of first register change if any)
     auto trigger = diwChanges.trigger();
@@ -1439,14 +1440,11 @@ Denise::updateBorderBuffer()
             hf = false;
         }
 
-        if (i % 4 == 3) {
+        // Advance the horizontal counter
+        counter = (counter + 1) & 0x7FF;
 
-            // Advance the horizontal counter
-            counter = (counter + 1) & 0x1FF;
-
-            // Wrap over at the end of a line
-            if (counter == 0x1C8 && (agnus.pos.v >= 9 || !isOCS())) counter = 2;
-        }
+        // Wrap over at the end of a line
+        if (counter == 0x1C8 * 4 && (agnus.pos.v >= 9 || !isOCS())) counter = 2 * 4;
 
         /* Set the border mask. The display window needs both a set flipflop
          * and a BPL1DAT write to open; everything before the first write is

@@ -122,7 +122,8 @@ SpriteInfo;
 
 typedef struct
 {
-    // Extracted information from DIWSTRT and DIWSTOP
+    // Extracted information from DIWSTRT and DIWSTOP.
+    // hstrt/hstop are measured in super-hires pixels (see Denise::hstrt).
     isize hstrt;
     isize hstop;
     isize vstrt;

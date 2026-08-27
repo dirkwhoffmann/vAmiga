@@ -135,9 +135,9 @@ extension Canvas {
 
         loginfo(.metal, "updateTextureRect(\(hstrt), \(vstrt), \(hstop), \(vstop))")
 
-        // Convert to pixel coordinates
-        x1 = CGFloat(4 * hstrt)
-        x2 = CGFloat(4 * hstop)
+        // hstrt/hstop already arrive in super-hires pixel coordinates
+        x1 = CGFloat(hstrt)
+        x2 = CGFloat(hstop)
         y1 = CGFloat(vstrt)
         y2 = CGFloat(vstop)
 

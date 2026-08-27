@@ -61,8 +61,8 @@ Denise::setHSTRT(isize val)
 {
     logmsg(LOG_DIW, "setHSTRT(%lx)\n", val);
 
-    // Record register change
-    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTRT, .value = (u16)val });
+    // Record register change, converted to super-hires (buffer) resolution
+    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTRT, .value = (u16)(4 * val) });
     markBorderBufferAsDirty();
 }
 
@@ -71,8 +71,8 @@ Denise::setHSTOP(isize val)
 {
     logmsg(LOG_DIW, "setHSTOP(%lx)\n", val);
 
-    // Record register change
-    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTOP, .value = (u16)val });
+    // Record register change, converted to super-hires (buffer) resolution
+    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTOP, .value = (u16)(4 * val) });
     markBorderBufferAsDirty();
 }
 

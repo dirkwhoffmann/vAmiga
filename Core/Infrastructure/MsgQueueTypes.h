@@ -267,7 +267,7 @@ typedef struct { i16 nr; i16 value; i16 volume; i16 pan; } DriveMsg;
 typedef struct { i16 nr; HdcState state; } HdcMsg;
 typedef struct { isize line; i16 delay; } ScriptMsg;
 typedef struct { void *snapshot; } SnapshotMsg;
-typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg;
+typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg; // hstrt/hstop in super-hires pixels
 
 typedef struct
 {

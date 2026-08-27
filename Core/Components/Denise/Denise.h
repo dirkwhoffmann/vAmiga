@@ -94,10 +94,18 @@ public:
     u16 diwstop;
     u16 diwhigh;
 
-    // Display window coordinates (extracted from DIWSTRT, DIWSTOP, and DIWHIGH)
+    /* Display window coordinates (extracted from DIWSTRT, DIWSTOP, and DIWHIGH).
+     * Measured in super-hires pixels, i.e., the same unit as the rasterline
+     * buffers (see Pixel and PIXEL_CNT below). This is four times finer than
+     * the lores-pixel granularity DIWSTRT/DIWSTOP are expressed in on the
+     * chip, which keeps the value in the same domain the border-buffer
+     * comparator and the sprite code already work in, and leaves room for
+     * AGA's finer horizontal DIW granularity to be plugged in later without
+     * a change of unit.
+     */
     isize hstrt;
     isize hstop;
-    
+
     /* Denise contains a flipflop controlling the horizontal display window.
      * It is cleared inside the border area and set inside the display area:
      *
@@ -105,9 +113,10 @@ public:
      *   - When hpos matches the position in DIWSTOP, the flipflop is reset.
      *
      * Because Denise counts ... -> $1C6 -> $1C7 -> $002 -> $003 -> ...
+     * (in lores units; hstrt/hstop store these values scaled up by 4)
      *
-     *   - The smallest recognised value for DIWSTRT is $002.
-     *   - The largest recognised value for DIWSTOP is $1C7.
+     *   - The smallest recognised value for DIWSTRT is $002 ($008 scaled).
+     *   - The largest recognised value for DIWSTOP is $1C7 ($71C scaled).
      */
     bool hflop;
 
