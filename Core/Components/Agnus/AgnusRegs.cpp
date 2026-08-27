@@ -411,8 +411,6 @@ Agnus::pokeDIWHIGH(u16 value)
 {
     logmsg(LOG_DIW, "pokeDIWHIGH<%s>(%04x)\n", AccessorEnum::key(s), value);
 
-    value &= 0x2727;
-
     recordRegisterChange(DMA_CYCLES(4), Reg::DIWHIGH, value, Accessor::AGNUS);
     recordRegisterChange(DMA_CYCLES(1), Reg::DIWHIGH, value, Accessor::DENISE);
 }

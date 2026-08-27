@@ -20,8 +20,8 @@ Denise::setDIWSTRT(u16 value)
     logmsg(LOG_DIW, "setDIWSTRT(%x)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
-    
+    // -- -- -- -- -- -- -- -- H9 H8 H7 H6 H5 H4 H3 H2  and  H10 = 0
+
     diwstrt = value;
     setHSTRT(4 * LO_BYTE(diwstrt));
     setHSTOP(4 * (LO_BYTE(diwstop) | 0x100));
@@ -33,7 +33,7 @@ Denise::setDIWSTOP(u16 value)
     logmsg(LOG_DIW, "setDIWSTOP(%x)\n", value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
-    // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
+    // -- -- -- -- -- -- -- -- H9 H8 H7 H6 H5 H4 H3 H2  and  H10 = 1
 
     diwstop = value;
     setHSTRT(4 * LO_BYTE(diwstrt));
@@ -51,9 +51,34 @@ Denise::setDIWHIGH(u16 value)
     // -- -- H8 -- -- -- -- -- -- -- H8 -- -- -- -- --
     //     (stop)                  (strt)
 
-    diwhigh = value;
-    setHSTRT(4 * (LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000)));
-    setHSTOP(4 * (LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000)));
+    switch (config.revision) {
+            
+        case DeniseRev::ECS:
+            
+            // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+            // -- -- HA -- -- -- -- -- -- -- HA -- -- -- -- --
+            //     (stop)                  (strt)
+            
+            diwhigh = value;
+            setHSTRT(4 * (LO_BYTE(diwstrt) | (GET_BIT(value,  5) ? 0x100 : 0x000)));
+            setHSTOP(4 * (LO_BYTE(diwstop) | (GET_BIT(value, 13) ? 0x100 : 0x000)));
+            break;
+            
+        case DeniseRev::AGA:
+            
+            // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+            // -- -- HA H1 H0 -- -- -- -- -- HA H1 H0 -- -- --
+            //     (stop)                  (strt)
+            
+            diwhigh = value;
+            setHSTRT((LO_BYTE(diwstrt) << 2) | ((value << 5) & 0x400) | ((value >>  3) & 0x3));
+            setHSTOP((LO_BYTE(diwstop) << 2) | ((value >> 3) & 0x400) | ((value >> 11) & 0x3));
+            break;
+            
+        default:
+            
+            break;
+    }
 }
 
 void

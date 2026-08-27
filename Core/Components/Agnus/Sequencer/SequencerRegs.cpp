@@ -175,7 +175,6 @@ Sequencer::setDIWHIGH(u16 value)
     //                 (stop)                  (strt)
 
     diwhigh = value;
-
     vstrt = HI_BYTE(diwstrt) | (diwhigh & 0x0007) << 8;
     vstop = HI_BYTE(diwstop) | (diwhigh & 0x0700);
 
