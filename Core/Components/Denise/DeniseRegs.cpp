@@ -23,21 +23,21 @@ Denise::setDIWSTRT(u16 value)
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0
     
     diwstrt = value;
-    setHSTRT(LO_BYTE(diwstrt));
-    setHSTOP(LO_BYTE(diwstop) | 0x100);
+    setHSTRT(4 * LO_BYTE(diwstrt));
+    setHSTOP(4 * (LO_BYTE(diwstop) | 0x100));
 }
 
 void
 Denise::setDIWSTOP(u16 value)
 {
     logmsg(LOG_DIW, "setDIWSTOP(%x)\n", value);
-    
+
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // -- -- -- -- -- -- -- -- H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1
 
     diwstop = value;
-    setHSTRT(LO_BYTE(diwstrt));
-    setHSTOP(LO_BYTE(diwstop) | 0x100);
+    setHSTRT(4 * LO_BYTE(diwstrt));
+    setHSTOP(4 * (LO_BYTE(diwstop) | 0x100));
 }
 
 void
@@ -52,8 +52,8 @@ Denise::setDIWHIGH(u16 value)
     //     (stop)                  (strt)
 
     diwhigh = value;
-    setHSTRT(LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000));
-    setHSTOP(LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000));
+    setHSTRT(4 * (LO_BYTE(diwstrt) | (GET_BIT(diwhigh,  5) ? 0x100 : 0x000)));
+    setHSTOP(4 * (LO_BYTE(diwstop) | (GET_BIT(diwhigh, 13) ? 0x100 : 0x000)));
 }
 
 void
@@ -61,8 +61,8 @@ Denise::setHSTRT(isize val)
 {
     logmsg(LOG_DIW, "setHSTRT(%lx)\n", val);
 
-    // Record register change, converted to super-hires (buffer) resolution
-    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTRT, .value = (u16)(4 * val) });
+    // Record register change (val is already in super-hires resolution)
+    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTRT, .value = (u16)val });
     markBorderBufferAsDirty();
 }
 
@@ -71,8 +71,8 @@ Denise::setHSTOP(isize val)
 {
     logmsg(LOG_DIW, "setHSTOP(%lx)\n", val);
 
-    // Record register change, converted to super-hires (buffer) resolution
-    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTOP, .value = (u16)(4 * val) });
+    // Record register change (val is already in super-hires resolution)
+    diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTOP, .value = (u16)val });
     markBorderBufferAsDirty();
 }
 
