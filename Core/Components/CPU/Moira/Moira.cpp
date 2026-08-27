@@ -261,7 +261,7 @@ Moira::syncCp(int cycles)
     static constexpr int maxStalled = 16;
 
     // Lower bound for the model time debt
-    static constexpr int maxAccum = -454;
+    static constexpr int minAccum = -454;
 
     // Accumulate the cycle penalty (may become negative)
     budget.accumulated += cycles;
@@ -285,7 +285,7 @@ Moira::syncCp(int cycles)
         
         budget.stalled = 0;
         budget.accumulated -= 2;
-        if (budget.accumulated < maxAccum) budget.accumulated = maxAccum;
+        if (budget.accumulated < minAccum) budget.accumulated = minAccum;
         sync(2);
     }
 }
