@@ -208,6 +208,7 @@ using utl::FlagInfo;
     /* Denise */                                                              \
     E(BPL_ON_STEROIDS,      false, "Disable drawing fast-paths")              \
     E(BORDER_DEBUG,         false, "Draw the border in debug colors")         \
+    E(BORDER_DISABLE,       false, "Never draw the border")                  \
     E(DENISE_ON_STEROIDS,   false, "Disable Denise fast-paths")               \
                                                                               \
     /* Floppy drives */                                                       \

@@ -1338,6 +1338,15 @@ Denise::borderColor(u16 con0, u16 con3) const
 void
 Denise::updateBorderBuffer()
 {
+    if CONSTEXPR (BORDER_DISABLE) {
+        
+        for (usize i = 0; i < sizeof(bBuffer); ++i)
+            bBuffer[i] = PixelEngine::BORDER_NONE;
+
+        diwChanges.clear();
+        return;
+    }
+    
     /* The buffer depends on where the display window was opened, which is a
      * property of the line that just ended and not of the DIW registers. A
      * line that opens it at a different position than the previous one needs
