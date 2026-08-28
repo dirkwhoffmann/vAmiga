@@ -351,12 +351,21 @@ Denise::pokeBPLxDAT(u16 value)
     assert(x < 8);
     logmsg(LOG_BPLREG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
 
-    if constexpr (s == Accessor::AGNUS) {
-        /*
-         logmsg("BPL%dDAT written by Agnus (%x)\n", x, value);
-         */
+    // In AGA, BPLxDAT is a 64 bit register that a bitplane fetch fills with up
+    // to four words (see setBPLxDATExt). A write from the CPU or the Copper
+    // carries a single word, which the chip fans out over that register.
+
+    if (agnus.isAGA()) {
+
+        auto words = isize(agnus.bplFetchWords());
+        u64 ext = 0;
+
+        for (isize i = words - 1; i >= 1; i--) ext = ext << 16 | value;
+        setBPLxDATExt<x>(ext, u8(words - 1));
+
+        // if ((agnus.fmode & 0b11) >= 2) value = mem.dataBus;
     }
-    
+
     setBPLxDAT<x>(value);
 }
 

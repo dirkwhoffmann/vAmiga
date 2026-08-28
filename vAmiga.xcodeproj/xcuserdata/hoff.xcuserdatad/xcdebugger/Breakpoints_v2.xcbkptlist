@@ -447,9 +447,9 @@
             filePath = "Core/Components/Denise/DeniseRegs.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "536"
-            endingLineNumber = "536"
-            landmarkName = "Denise::pokeSPRxDATB(value)"
+            startingLineNumber = "523"
+            endingLineNumber = "523"
+            landmarkName = "Denise::setSPRxDATA(value, ext)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
