@@ -1685,13 +1685,14 @@ Memory::peek32 <Accessor::CPU> (u32 addr)
 {
     addr &= 0xFFFFFF;
 
-    /* A 32 bit port delivers the longword in a single bus cycle. The sources
-     * listed below are exactly those reported as 32 bit ports by is32BitPort,
-     * which is what the CPU asks for through Moira::dsack. Keeping the two in
-     * sync matters: the CPU charges a single bus cycle for these accesses, so
-     * they must not be carried out as two word transfers behind its back.
+    /* A 32 bit port delivers the longword in a single bus cycle. Which sources
+     * qualify is decided by dsack(), the very function the CPU asks through
+     * Moira::dsack. Deriving the decision from it here rather than repeating
+     * its condition keeps the two in sync by construction: the CPU charges a
+     * single bus cycle for these accesses, so they must not be carried out as
+     * two word transfers behind its back.
      */
-    if (agnus.isAGA()) {
+    if (dsack(addr) == moira::DSACK_32) {
 
         switch (cpuMemSrc[addr >> 16]) {
 
@@ -2101,7 +2102,7 @@ Memory::poke32 <Accessor::CPU> (u32 addr, u32 value)
     addr &= 0xFFFFFF;
 
     // See peek32: a 32 bit port accepts the longword in a single bus cycle
-    if (agnus.isAGA()) {
+    if (dsack(addr) == moira::DSACK_32) {
 
         switch (cpuMemSrc[addr >> 16]) {
 

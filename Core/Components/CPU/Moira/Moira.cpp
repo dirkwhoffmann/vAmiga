@@ -258,7 +258,7 @@ void
 Moira::syncCp(int cycles)
 {
     // Max number of instructions that may execute without advancing the clock
-    static constexpr int maxStalled = 16;
+    static constexpr int maxStalled = 4;
 
     // Lower bound for the model time debt
     static constexpr int minAccum = -454;
