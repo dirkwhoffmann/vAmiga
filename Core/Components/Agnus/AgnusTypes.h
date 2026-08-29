@@ -371,7 +371,7 @@ enum EventID : u8
     BLT_COPY_FAKE,
     BLT_LINE_SLOW,
     BLT_LINE_FAKE,
-    BLT_BUSY,
+    BLT_BBUSY,
     BLT_EVENT_COUNT,
     
     // SEC slot
