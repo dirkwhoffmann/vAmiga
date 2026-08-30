@@ -421,28 +421,60 @@ Agnus::syncWithEClock()
 
     // Determine where we are in the current E clock cycle
     Cycle eClk = (clock >> 2) % 10;
-    
-    // We want to sync to position (2).
-    // If we are already too close, we seek (2) in the next E clock cycle.
-    Cycle delay = 0;
-    
-    switch (eClk) {
-            
-        case 0: delay = 4 * (2 + 10); break;
-        case 1: delay = 4 * (1 + 10); break;
-        case 2: delay = 4 * (0 + 10); break;
-        case 3: delay = 4 * 9;        break;
-        case 4: delay = 4 * 8;        break;
-        case 5: delay = 4 * 7;        break;
-        case 6: delay = 4 * 6;        break;
-        case 7: delay = 4 * (5 + 10); break;
-        case 8: delay = 4 * (4 + 10); break;
-        case 9: delay = 4 * (3 + 10); break;
 
-        default:
-            fatalError;
+    /* The Gayle based machines run the E clock two cycles later than the older
+     * models, so the CIAs are accessed at a different point of the cycle.
+     *
+     * In both tables, an entry of the form (n + 10) marks a position from
+     * which the target is less than six cycles away. An access occupies the
+     * six low clocks of the cycle, so such a target cannot be reached any more
+     * and the one in the next E clock cycle is taken instead.
+     */
+    Cycle delay = 0;
+
+    if (isAGA()) {
+
+        // We want to sync to position (4).
+        // If we are already too close, we seek (4) in the next E clock cycle.
+        switch (eClk) {
+
+            case 0: delay = 4 * (4 + 10); break;
+            case 1: delay = 4 * (3 + 10); break;
+            case 2: delay = 4 * (2 + 10); break;
+            case 3: delay = 4 * (1 + 10); break;
+            case 4: delay = 4 * (0 + 10); break;
+            case 5: delay = 4 * 9;        break;
+            case 6: delay = 4 * 8;        break;
+            case 7: delay = 4 * 7;        break;
+            case 8: delay = 4 * 6;        break;
+            case 9: delay = 4 * (5 + 10); break;
+
+            default:
+                fatalError;
+        }
+
+    } else {
+
+        // We want to sync to position (2).
+        // If we are already too close, we seek (2) in the next E clock cycle.
+        switch (eClk) {
+
+            case 0: delay = 4 * (2 + 10); break;
+            case 1: delay = 4 * (1 + 10); break;
+            case 2: delay = 4 * (0 + 10); break;
+            case 3: delay = 4 * 9;        break;
+            case 4: delay = 4 * 8;        break;
+            case 5: delay = 4 * 7;        break;
+            case 6: delay = 4 * 6;        break;
+            case 7: delay = 4 * (5 + 10); break;
+            case 8: delay = 4 * (4 + 10); break;
+            case 9: delay = 4 * (3 + 10); break;
+
+            default:
+                fatalError;
+        }
     }
-    
+
     // Doublecheck that we are going to sync to a DMA cycle
     assert(DMA_CYCLES(AS_DMA_CYCLES(clock + delay)) == clock + delay);
     

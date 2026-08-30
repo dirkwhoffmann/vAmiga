@@ -20,8 +20,6 @@ Denise::cacheInfo() const
 {
     DeniseInfo info;
 
-    // info.ecs = isECS();
-
     info.bplcon0 = bplcon0;
     info.bplcon1 = bplcon1;
     info.bplcon2 = bplcon2;
