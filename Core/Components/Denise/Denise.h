@@ -1016,10 +1016,16 @@ public:
     static bool lace(u16 v) { return GET_BIT(v, 2); }
     bool lace() const { return lace(bplcon0); }
     
-    static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
+    /* Hold-And-Modify is selected by bit 11 alone. However, OCS and ECS Denise
+     * only act on it in lores.
+     */
+    bool ham(u16 v) const { return GET_BIT(v, 11) && (lores(v) || isAGA()); }
     bool ham() const { return ham(bplcon0); }
-        
-    static bool ham8(u16 v) { return (v & 0xF810) == 0x0810; }
+
+    /* HAM6 and HAM8 place their control bits at opposite ends of the plane
+     * stack, and the chip tells them apart by the number of active planes
+     */
+    bool ham8(u16 v) const { return ham(v) && bpu(v) >= 7; }
     bool ham8() const { return ham8(bplcon0); }
 
     static bool ecsena(u16 v) { return GET_BIT(v, 0); }

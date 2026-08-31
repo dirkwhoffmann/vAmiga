@@ -196,13 +196,13 @@ PixelEngine::updateEHB()
 bool
 PixelEngine::hamMode() const
 {
-    return Denise::ham(bplcon0);
+    return denise.ham(bplcon0);
 }
 
 bool
 PixelEngine::hamMode8() const
 {
-    return Denise::ham8(bplcon0);
+    return denise.ham8(bplcon0);
 }
 
 bool
