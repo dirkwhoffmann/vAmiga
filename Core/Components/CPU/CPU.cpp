@@ -475,6 +475,9 @@ CPU::_didReset(bool hard)
         debugger.clearLog();
         if (emulator.isTracking()) flags |= moira::State::LOGGING;
 
+        // Arm the frame tracer if the very first frame is to be traced
+        if CONSTEXPR (TRACE_FRAME == 0) emulator.trackOn(TRACE_SOURCE);
+
     } else {
         
         /* "The RESET instruction causes the processor to assert RESET for 124
@@ -726,15 +729,15 @@ CPU::resyncOverclockedCpu()
 void
 CPU::eofHandler()
 {
-    if CONSTEXPR (TRACE_FRAME) {
+    if CONSTEXPR (TRACE_FRAME != -1) {
 
         if (agnus.pos.frame == TRACE_FRAME) {
 
-            emulator.trackOn(6);
+            emulator.trackOn(TRACE_SOURCE);
 
         } else if (agnus.pos.frame == TRACE_FRAME + 1) {
 
-            emulator.trackOff(6);
+            emulator.trackOff(TRACE_SOURCE);
         }
     }
 }

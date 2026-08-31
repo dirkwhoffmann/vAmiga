@@ -44,6 +44,9 @@ class CPU : public moira::Moira
     // The current configuration
     CPUConfig config = {};
 
+    // The frame tracer's locking bit to turn instruction logging on and off
+    static constexpr isize TRACE_SOURCE = 6;
+
 public:
 
     // The current state
