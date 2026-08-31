@@ -392,8 +392,8 @@ protected:
     
     // Called after an instruction has been executed
     virtual void didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode) { }
-    
-    
+
+
     //
     // Exception delegates
     //
@@ -440,7 +440,10 @@ protected:
     
     // Called when a software trap is hit
     virtual void didReachSoftwareTrap(u32 addr) { }
-    
+
+    // Called after an instruction has been appended to the log buffer
+    virtual void didLogInstruction(const Registers &reg) { }
+
 #else
     
     // Advances the internal clock by the specified number of cycles
@@ -537,7 +540,10 @@ protected:
     
     // Called when a software trap is hit
     void didReachSoftwareTrap(u32 addr);
-    
+
+    // Called after an instruction has been appended to the log buffer
+    void didLogInstruction(const Registers &reg);
+
 #endif
     
     //

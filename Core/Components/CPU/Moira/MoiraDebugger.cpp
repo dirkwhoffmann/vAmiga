@@ -319,6 +319,8 @@ Debugger::logInstruction()
 {
     logBuffer[logCnt % logBufferCapacity] = moira.reg;
     logCnt++;
+
+    moira.didLogInstruction(moira.reg);
 }
 
 const Registers &

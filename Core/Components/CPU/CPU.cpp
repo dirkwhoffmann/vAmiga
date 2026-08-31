@@ -191,6 +191,23 @@ Moira::didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
 }
 
 void
+Moira::didLogInstruction(const Registers &reg)
+{
+    if constexpr (CPU::TRACE_FRAME != -1) {
+        
+        if (agnus.pos.frame == CPU::TRACE_FRAME) {
+            
+            char pc[16], sr[18], instr[128];
+            Moira::dump24(pc, reg.pc0);
+            disassembleSR(sr, reg.sr);
+            disassemble(instr, reg.pc0);
+            
+            logmsg(LOG_TRACE, "%s  %s  %s\n", pc, sr, instr);
+        }
+    }
+}
+
+void
 Moira::willExecute(M68kException exc, u16 vector)
 {
     /*
@@ -703,6 +720,19 @@ CPU::resyncOverclockedCpu()
         clock += 2;
         agnus.execute();
         debt = 0;
+    }
+}
+
+void
+CPU::eofHandler()
+{
+    if (agnus.pos.frame == TRACE_FRAME) {
+
+        emulator.trackOn(6);
+
+    } else if (agnus.pos.frame == TRACE_FRAME + 1) {
+
+        emulator.trackOff(6);
     }
 }
 

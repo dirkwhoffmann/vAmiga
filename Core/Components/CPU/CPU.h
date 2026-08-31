@@ -46,6 +46,9 @@ class CPU : public moira::Moira
 
 public:
 
+    // The frame a complete CPU trace is recorded for (see CPU::eofHandler)
+    static constexpr i64 TRACE_FRAME = -1; // 100;
+    
     // The current state
     utl::Backed<CPUInfo> info;
 
@@ -278,6 +281,16 @@ public:
     
     // Resynchronizes an overclocked CPU with the Agnus clock
     void resyncOverclockedCpu();
+
+
+    //
+    // Frame boundaries
+    //
+
+public:
+
+    // Called by Agnus at the end of each frame
+    void eofHandler();
 
 
     //

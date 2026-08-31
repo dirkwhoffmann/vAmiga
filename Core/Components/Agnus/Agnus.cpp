@@ -918,6 +918,7 @@ Agnus::eofHandler()
 
     scheduleStrobe0Event();
 
+    cpu.eofHandler();
     denise.eofHandler();
     paula.eofHandler();
     sequencer.eofHandler();
