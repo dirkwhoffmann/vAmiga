@@ -68,7 +68,7 @@ Denise::_dump(Category category, std::ostream &os) const
         os << tab("Bitplanes");
         os << dec(bpu()) << std::endl;
         os << tab("Mode");
-        os << (ham() ? (ham8() ? "HAM8" : "HAM6") :
+        os << (isHAM8enabled() ? "HAM8" : isHAM6enabled() ? "HAM6" :
                dbplf() ? "Dual playfield" : "Single playfield") << std::endl;
         os << tab("ECSENA");
         os << bol(ecsena()) << std::endl;

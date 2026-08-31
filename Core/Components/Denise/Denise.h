@@ -1016,17 +1016,8 @@ public:
     static bool lace(u16 v) { return GET_BIT(v, 2); }
     bool lace() const { return lace(bplcon0); }
     
-    /* Hold-And-Modify is selected by bit 11 alone. However, OCS and ECS Denise
-     * only act on it in lores.
-     */
-    bool ham(u16 v) const { return GET_BIT(v, 11) && (lores(v) || isAGA()); }
+    static bool ham(u16 v) { return GET_BIT(v, 11); }
     bool ham() const { return ham(bplcon0); }
-
-    /* HAM6 and HAM8 place their control bits at opposite ends of the plane
-     * stack, and the chip tells them apart by the number of active planes
-     */
-    bool ham8(u16 v) const { return ham(v) && bpu(v) >= 7; }
-    bool ham8() const { return ham8(bplcon0); }
 
     static bool ecsena(u16 v) { return GET_BIT(v, 0); }
     bool ecsena() const { return ecsena(bplcon0); }
@@ -1138,7 +1129,22 @@ private:
      */
     u8 bpu(u16 v) const;
     u8 bpu() const { return bpu(bplcon0); }
-    
+
+    /* Checks whether HAM6 is in effect. The HAM bit alone is not enough:
+     * OCS and ECS Denise only act on it in lores, and on any chipset it is
+     * the 6-plane variant only as long as fewer than 7 planes are active
+     * (see isHAM8enabled).
+     */
+    bool isHAM6enabled(u16 v) const { return ham(v) && (lores(v) || isAGA()) && bpu(v) < 7; }
+    bool isHAM6enabled() const { return isHAM6enabled(bplcon0); }
+
+    /* Checks whether HAM8 is in effect. HAM8 is the AGA-only variant that
+     * reads eight planes instead of six; a plane count of 7 or 8 is what
+     * tells the two modes apart, not the resolution.
+     */
+    bool isHAM8enabled(u16 v) const { return ham(v) && (lores(v) || isAGA()) && bpu(v) >= 7; }
+    bool isHAM8enabled() const { return isHAM8enabled(bplcon0); }
+
 public:
 
     // Returns the first color register a sprite takes its colors from
