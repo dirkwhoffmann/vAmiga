@@ -48,7 +48,6 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::DENISE_HIDDEN_SPRITES:     return numParser();
         case Opt::DENISE_HIDDEN_LAYERS:      return numParser();
         case Opt::DENISE_HIDDEN_LAYER_ALPHA: return numParser();
-        case Opt::DENISE_LINE_MARKER:        return numParser();
         case Opt::DENISE_SHRES_BLEND:        return boolParser();
         case Opt::DENISE_CLX_SPR_SPR:        return boolParser();
         case Opt::DENISE_CLX_SPR_PLF:        return boolParser();

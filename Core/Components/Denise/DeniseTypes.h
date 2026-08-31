@@ -87,9 +87,6 @@ typedef struct
     // Alpha channel value for hidden layers
     u8 hiddenLayerAlpha;
 
-    // Highlights a certain raster line in a debug color (-1 to disable)
-    isize lineMarker;
-
     // Checks for sprite-sprite collisions
     bool clxSprSpr;
     

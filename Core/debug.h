@@ -219,6 +219,7 @@ using utl::isize;
     E(bool,  BORDER_DEBUG,        false, "Draw the border in debug colors")        \
     E(bool,  BORDER_DISABLE,      false, "Never draw the border")                  \
     E(bool,  DENISE_ON_STEROIDS,  false, "Disable Denise fast-paths")              \
+    E(isize, LINE_MARKER,         -1,    "Highlight a raster line (-1 to disable)")\
                                                                                    \
     /* Floppy drives */                                                            \
     E(bool,  ALIGN_HEAD,          false, "Make head movement deterministic")       \
