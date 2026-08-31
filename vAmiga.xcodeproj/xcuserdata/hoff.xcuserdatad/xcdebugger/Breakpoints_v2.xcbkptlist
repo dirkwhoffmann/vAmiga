@@ -531,6 +531,36 @@
             endingLineNumber = "584"
             landmarkName = "Agnus::pokeHBSTRT(value)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "25C88E99-0050-4D82-98A8-EC1DE1E583A6 - 10acd7ed38b1a1e2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::Memory::pokeCustom16&lt;(vamiga::Accessor)0&gt;(unsigned int, unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/AgnusRegs.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "585"
+                  endingLineNumber = "585">
+               </Location>
+               <Location
+                  uuid = "25C88E99-0050-4D82-98A8-EC1DE1E583A6 - e0fc55ebb8529ee3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::Memory::pokeCustom16&lt;(vamiga::Accessor)1&gt;(unsigned int, unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/AgnusRegs.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "585"
+                  endingLineNumber = "585">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -547,6 +577,36 @@
             endingLineNumber = "577"
             landmarkName = "Agnus::pokeHSSTOP(value)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B80AF784-29B3-4458-823D-79DCAA501E20 - 10acd7ed38b1a2c5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::Memory::pokeCustom16&lt;(vamiga::Accessor)0&gt;(unsigned int, unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/AgnusRegs.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "578"
+                  endingLineNumber = "578">
+               </Location>
+               <Location
+                  uuid = "B80AF784-29B3-4458-823D-79DCAA501E20 - e0fc55ebb8529dc4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::Memory::pokeCustom16&lt;(vamiga::Accessor)1&gt;(unsigned int, unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/AgnusRegs.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "578"
+                  endingLineNumber = "578">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -563,6 +623,36 @@
             endingLineNumber = "591"
             landmarkName = "Agnus::pokeHBSTOP(value)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B1FBED04-37B7-4D08-8775-3DD137789394 - 10acd7ed38b1a09b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::Memory::pokeCustom16&lt;(vamiga::Accessor)0&gt;(unsigned int, unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/AgnusRegs.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "592"
+                  endingLineNumber = "592">
+               </Location>
+               <Location
+                  uuid = "B1FBED04-37B7-4D08-8775-3DD137789394 - e0fc55ebb8529f9a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::Memory::pokeCustom16&lt;(vamiga::Accessor)1&gt;(unsigned int, unsigned short)"
+                  moduleName = "vAmiga"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/AgnusRegs.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "592"
+                  endingLineNumber = "592">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

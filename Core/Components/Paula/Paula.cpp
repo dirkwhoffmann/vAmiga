@@ -138,12 +138,24 @@ Paula::checkInterrupt()
 {
     u8 level = interruptLevel();
 
-    if ((iplPipe & 0xFF) != level) {
-
-        iplPipe = (iplPipe & ~0xFF) | level;
-        agnus.scheduleRel<SLOT_IPL>(0, IPL_CHANGE, 5);
-
-        logmsg(LOG_CPU, "iplPipe: %016llx\n", iplPipe);
+    switch (cpu.getConfig().revision) {
+            
+        case CPURev::CPU_68000:
+        case CPURev::CPU_68010:
+            
+            if ((iplPipe & 0xFF) != level) {
+                
+                iplPipe = (iplPipe & ~0xFF) | level;
+                agnus.scheduleRel<SLOT_IPL>(0, IPL_CHANGE, 5);
+                
+                logmsg(LOG_CPU, "iplPipe: %016llx\n", iplPipe);
+            }
+            break;
+            
+        default:
+            
+            cpu.setIPL(level);
+            break;
     }
 }
 
