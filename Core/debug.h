@@ -42,7 +42,12 @@
  *   path, forcing a specific code path, simulating an error condition,
  *   ...). Some of these also log a message as part of that action, but
  *   disabling the flag changes what the emulator *does*, not just what
- *   it prints. They are all typed 'bool'.
+ *   it prints. Each one carries its type in the first column. Most are
+ *   plain 'bool' switches, but a flag may also hold a parameter, as
+ *   'isize' does for TRACE_FRAME. RetroShell derives its interface from
+ *   that type: a bool flag is set with 'debug set <name> true|false',
+ *   anything else takes a numeric argument (see FlagInfo::boolean, which
+ *   the descriptor table computes from the declared type).
  *
  * Both tables are X-macro lists: each entry names a flag exactly once, and
  * is expanded both into the variable declaration and (in debug builds) into
@@ -61,6 +66,7 @@ using utl::LOG_INFO;
 using utl::LOG_DEBUG;
 using utl::LOG_TRACE;
 using utl::FlagInfo;
+using utl::isize;
 
 
 //
@@ -181,66 +187,69 @@ using utl::FlagInfo;
 // Debug flags
 //
 
-#define VA_DEBUG_FLAGS(E)                                                        \
-                                                                              \
-    /* General */                                                             \
-    E(MIMIC_UAE,            false, "Mimic UAE quirks")                        \
-                                                                              \
-    /* Emulator */                                                            \
-    E(SNP_DEBUG,            false, "Serialization (snapshots)")               \
-                                                                              \
-    /* Run ahead */                                                           \
-    E(RUA_CHECKSUM,         false, "Run-ahead instance integrity")            \
-    E(RUA_ON_STEROIDS,      false, "Update RUA instance every frame")         \
-                                                                              \
-    /* Agnus */                                                               \
-    E(SEQ_ON_STEROIDS,      false, "Disable sequencer fast-paths")            \
-                                                                              \
-    /* Copper */                                                              \
-    E(COP_CHECKSUM,         false, "Compute Copper checksums")                \
-                                                                              \
-    /* Blitter */                                                             \
-    E(BLT_CHECKSUM,         false, "Compute Blitter checksums")               \
-    E(BLT_MEM_GUARD,        false, "Guard memory while Blitter runs")         \
-    E(BLT_MINTERM_CHECK,    false, "Verify the Blitter minterm logic")        \
-    E(SLOW_BLT_DEBUG,       false, "Execute micro-instructions in a chunk")   \
-                                                                              \
-    /* Denise */                                                              \
-    E(BPL_ON_STEROIDS,      false, "Disable drawing fast-paths")              \
-    E(BORDER_DEBUG,         false, "Draw the border in debug colors")         \
-    E(BORDER_DISABLE,       false, "Never draw the border")                  \
-    E(DENISE_ON_STEROIDS,   false, "Disable Denise fast-paths")               \
-                                                                              \
-    /* Floppy drives */                                                       \
-    E(ALIGN_HEAD,           false, "Make head movement deterministic")        \
-    E(DSK_CHECKSUM,         false, "Compute disk checksums")                  \
-    E(FS_VERIFY,            false, "Verify file system integrity")            \
-                                                                              \
-    /* Hard drives */                                                         \
-    E(HDR_FS_LOAD_ALL,      false, "Don't filter out unneeded file systems")  \
-                                                                              \
-    /* Audio */                                                               \
-    E(DISABLE_AUDIRQ,       false, "Disable audio interrupts")                \
-                                                                              \
-    /* Ports */                                                               \
-    E(HOLD_MOUSE_L,         false, "Hold down the left mouse button")         \
-    E(HOLD_MOUSE_M,         false, "Hold down the middle mouse button")       \
-    E(HOLD_MOUSE_R,         false, "Hold down the right mouse button")        \
-                                                                              \
-    /* Forced error conditions */                                             \
-    E(LAUNCH_ERROR,         false, "Force a launch error")                    \
-    E(ROM_MISSING,          false, "Force a missing-ROM error")               \
-    E(CHIP_RAM_MISSING,     false, "Force a missing chip-RAM error")          \
-    E(AROS_NO_EXTROM,       false, "Force a missing AROS ext-ROM error")      \
-    E(AROS_RAM_LIMIT,       false, "Force an AROS RAM-limit error")           \
-    E(CHIP_RAM_LIMIT,       false, "Force a chip-RAM limit error")            \
-    E(SNAP_TOO_OLD,         false, "Force a 'snapshot too old' error")        \
-    E(SNAP_TOO_NEW,         false, "Force a 'snapshot too new' error")        \
-    E(SNAP_IS_BETA,         false, "Force a 'beta snapshot' error")           \
-    E(SNAP_CORRUPTED,       false, "Force a snapshot corruption error")       \
-    E(DISK_INVALID_LAYOUT,  false, "Force a disk layout error")               \
-    E(DISK_MODIFIED,        false, "Force the disk-modified flag")            \
-    E(HDR_MODIFIED,         false, "Force the drive-modified flag")
+#define VA_DEBUG_FLAGS(E)                                                          \
+                                                                                   \
+    /* General */                                                                  \
+    E(bool,  MIMIC_UAE,           false, "Mimic UAE quirks")                       \
+                                                                                   \
+    /* Emulator */                                                                 \
+    E(bool,  SNP_DEBUG,           false, "Serialization (snapshots)")              \
+                                                                                   \
+    /* Run ahead */                                                                \
+    E(bool,  RUA_CHECKSUM,        false, "Run-ahead instance integrity")           \
+    E(bool,  RUA_ON_STEROIDS,     false, "Update RUA instance every frame")        \
+                                                                                   \
+    /* CPU */                                                                      \
+    E(isize, TRACE_FRAME,         -1,    "Frame to trace (-1 = no tracing)")       \
+                                                                                   \
+    /* Agnus */                                                                    \
+    E(bool,  SEQ_ON_STEROIDS,     false, "Disable sequencer fast-paths")           \
+                                                                                   \
+    /* Copper */                                                                   \
+    E(bool,  COP_CHECKSUM,        false, "Compute Copper checksums")               \
+                                                                                   \
+    /* Blitter */                                                                  \
+    E(bool,  BLT_CHECKSUM,        false, "Compute Blitter checksums")              \
+    E(bool,  BLT_MEM_GUARD,       false, "Guard memory while Blitter runs")        \
+    E(bool,  BLT_MINTERM_CHECK,   false, "Verify the Blitter minterm logic")       \
+    E(bool,  SLOW_BLT_DEBUG,      false, "Execute micro-instructions in a chunk")  \
+                                                                                   \
+    /* Denise */                                                                   \
+    E(bool,  BPL_ON_STEROIDS,     false, "Disable drawing fast-paths")             \
+    E(bool,  BORDER_DEBUG,        false, "Draw the border in debug colors")        \
+    E(bool,  BORDER_DISABLE,      false, "Never draw the border")                  \
+    E(bool,  DENISE_ON_STEROIDS,  false, "Disable Denise fast-paths")              \
+                                                                                   \
+    /* Floppy drives */                                                            \
+    E(bool,  ALIGN_HEAD,          false, "Make head movement deterministic")       \
+    E(bool,  DSK_CHECKSUM,        false, "Compute disk checksums")                 \
+    E(bool,  FS_VERIFY,           false, "Verify file system integrity")           \
+                                                                                   \
+    /* Hard drives */                                                              \
+    E(bool,  HDR_FS_LOAD_ALL,     false, "Don't filter out unneeded file systems") \
+                                                                                   \
+    /* Audio */                                                                    \
+    E(bool,  DISABLE_AUDIRQ,      false, "Disable audio interrupts")               \
+                                                                                   \
+    /* Ports */                                                                    \
+    E(bool,  HOLD_MOUSE_L,        false, "Hold down the left mouse button")        \
+    E(bool,  HOLD_MOUSE_M,        false, "Hold down the middle mouse button")      \
+    E(bool,  HOLD_MOUSE_R,        false, "Hold down the right mouse button")       \
+                                                                                   \
+    /* Forced error conditions */                                                  \
+    E(bool,  LAUNCH_ERROR,        false, "Force a launch error")                   \
+    E(bool,  ROM_MISSING,         false, "Force a missing-ROM error")              \
+    E(bool,  CHIP_RAM_MISSING,    false, "Force a missing chip-RAM error")         \
+    E(bool,  AROS_NO_EXTROM,      false, "Force a missing AROS ext-ROM error")     \
+    E(bool,  AROS_RAM_LIMIT,      false, "Force an AROS RAM-limit error")          \
+    E(bool,  CHIP_RAM_LIMIT,      false, "Force a chip-RAM limit error")           \
+    E(bool,  SNAP_TOO_OLD,        false, "Force a 'snapshot too old' error")       \
+    E(bool,  SNAP_TOO_NEW,        false, "Force a 'snapshot too new' error")       \
+    E(bool,  SNAP_IS_BETA,        false, "Force a 'beta snapshot' error")          \
+    E(bool,  SNAP_CORRUPTED,      false, "Force a snapshot corruption error")      \
+    E(bool,  DISK_INVALID_LAYOUT, false, "Force a disk layout error")              \
+    E(bool,  DISK_MODIFIED,       false, "Force the disk-modified flag")           \
+    E(bool,  HDR_MODIFIED,        false, "Force the drive-modified flag")
 
 
 //
@@ -252,8 +261,8 @@ using utl::FlagInfo;
 VA_LOG_FLAGS(DECLARE_LOG_FLAG)
 #undef DECLARE_LOG_FLAG
 
-#define DECLARE_DEBUG_FLAG(name, dflt, help) \
-    inline CONSTEXPR bool name = dflt;
+#define DECLARE_DEBUG_FLAG(type, name, dflt, help) \
+    inline CONSTEXPR type name = dflt;
 VA_DEBUG_FLAGS(DECLARE_DEBUG_FLAG)
 #undef DECLARE_DEBUG_FLAG
 
@@ -270,17 +279,3 @@ extern const std::vector<FlagInfo> debugFlags;
 #endif
 
 }
-
-
-//
-// Convenience wrappers
-//
-
-/*
-#define fatal(format, ...) \
-    do { \
-        logmsg(LOG_FATAL, format __VA_OPT__(,) __VA_ARGS__); \
-        assert(false); \
-        std::terminate(); \
-    } while(0)
-*/

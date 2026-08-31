@@ -46,9 +46,6 @@ class CPU : public moira::Moira
 
 public:
 
-    // The frame a complete CPU trace is recorded for (see CPU::eofHandler)
-    static constexpr i64 TRACE_FRAME = -1; // 100;
-    
     // The current state
     utl::Backed<CPUInfo> info;
 
