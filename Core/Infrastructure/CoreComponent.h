@@ -26,7 +26,6 @@ struct Description {
     const char *name;               // Short name
     const char *description;        // Textual descripiton
     const char *shell;              // RetroShell access
-    // std::vector<string> help;       // RetroShell custom help strings
 };
 
 typedef std::vector<Description> Descriptions;

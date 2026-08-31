@@ -243,7 +243,7 @@ Moira::didExecute(M68kException exc, u16 vector)
 void
 Moira::cpuDidReset()
 {
-
+    emulator.isTracking() ? debugger.enableLogging() : debugger.disableLogging();
 }
 
 void
@@ -712,6 +712,9 @@ CPU::_didLoad()
      */
     debugger.breakpoints.setNeedsCheck(debugger.breakpoints.elements() != 0);
     debugger.watchpoints.setNeedsCheck(debugger.watchpoints.elements() != 0);
+    
+    // Restore the correct logging state
+    emulator.isTracking() ? debugger.enableLogging() : debugger.disableLogging();
 }
 
 void
@@ -733,11 +736,23 @@ CPU::eofHandler()
         if (agnus.pos.frame == TRACE_FRAME) {
 
             emulator.trackOn(TRACE_SOURCE);
-
+            
         } else if (agnus.pos.frame == TRACE_FRAME + 1) {
-
+            
             emulator.trackOff(TRACE_SOURCE);
         }
+        
+#ifndef NDEBUG
+        if (agnus.pos.frame == TRACE_FRAME) {
+
+            LOG_INT = LOG_TRACE;
+            
+        } else if (agnus.pos.frame == TRACE_FRAME + 1) {
+            
+            LOG_INT = LOG_OFF;
+        }
+#endif
+
     }
 }
 
@@ -746,6 +761,7 @@ CPU::disassembleRecordedInstr(isize i, isize *len) const
 {
     return disassembleInstr(debugger.logEntryAbs((int)i).pc0, len);
 }
+
 const char *
 CPU::disassembleRecordedWords(isize i, isize len) const
 {
