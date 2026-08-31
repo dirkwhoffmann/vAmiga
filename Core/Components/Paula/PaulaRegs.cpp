@@ -67,7 +67,19 @@ Paula::pokeINTREQ(u16 value)
 {
     logmsg(LOG_INTREG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), Reg::INTREQ, value);
+    switch (cpu.getConfig().revision) {
+            
+        case CPURev::CPU_68000:
+        case CPURev::CPU_68010:
+            
+            agnus.recordRegisterChange(DMA_CYCLES(1), Reg::INTREQ, value);
+            break;
+            
+        default:
+            
+            setINTREQ(value);
+            break;
+    }
 }
 
 void

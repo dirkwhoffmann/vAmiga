@@ -745,11 +745,15 @@ CPU::eofHandler()
 #ifndef NDEBUG
         if (agnus.pos.frame == TRACE_FRAME) {
 
-            LOG_INT = LOG_TRACE;
+            LOG_INT    = LOG_TRACE;
+            LOG_INTREG = LOG_TRACE;
+            LOG_BPLREG = LOG_TRACE;
             
         } else if (agnus.pos.frame == TRACE_FRAME + 1) {
             
-            LOG_INT = LOG_OFF;
+            LOG_INT    = LOG_OFF;
+            LOG_INTREG = LOG_OFF;
+            LOG_BPLREG = LOG_OFF;
         }
 #endif
 
