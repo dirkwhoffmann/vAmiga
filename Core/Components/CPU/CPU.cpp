@@ -197,12 +197,11 @@ Moira::didLogInstruction(const Registers &reg)
 
         if (agnus.pos.frame == TRACE_FRAME) {
 
-            char pc[16], sr[18], instr[128];
-            Moira::dump24(pc, reg.pc0);
+            char sr[18], instr[128];
             disassembleSR(sr, reg.sr);
             disassemble(instr, reg.pc0);
             
-            logmsg(LOG_TRACE, "%s  %s  %s\n", pc, sr, instr);
+            logmsg(LOG_TRACE, "%s  %s\n", sr, instr);
         }
     }
 }
