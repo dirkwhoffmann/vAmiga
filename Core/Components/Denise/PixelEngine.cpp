@@ -194,15 +194,15 @@ PixelEngine::updateEHB()
 }
 
 bool
-PixelEngine::hamMode() const
+PixelEngine::hamMode6() const
 {
-    return denise.isHAM6enabled(bplcon0);
+    return denise.hamMode6(bplcon0);
 }
 
 bool
 PixelEngine::hamMode8() const
 {
-    return denise.isHAM8enabled(bplcon0);
+    return denise.hamMode8(bplcon0);
 }
 
 bool
@@ -534,7 +534,7 @@ PixelEngine::colorize(isize line)
             colorizeShres(dst, pixel, trigger);
         } else if (hamMode8()) {
             colorizeHAM8(dst, pixel, trigger, hold);
-        } else if (hamMode()) {
+        } else if (hamMode6()) {
             colorizeHAM(dst, pixel, trigger, hold);
         } else {
             colorize(dst, pixel, trigger);

@@ -265,7 +265,7 @@ private:
 private:
 
     // Computed from the tracked bplcon0 / bplcon2 snapshots
-    bool hamMode() const;
+    bool hamMode6() const;
     bool hamMode8() const;
     bool shresMode() const;
     bool shresModeEcs() const;

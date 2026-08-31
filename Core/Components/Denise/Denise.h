@@ -1133,17 +1133,21 @@ private:
     /* Checks whether HAM6 is in effect. The HAM bit alone is not enough:
      * OCS and ECS Denise only act on it in lores, and on any chipset it is
      * the 6-plane variant only as long as fewer than 7 planes are active
-     * (see isHAM8enabled).
+     * (see hamMode8).
      */
-    bool isHAM6enabled(u16 v) const { return ham(v) && (lores(v) || isAGA()) && bpu(v) < 7; }
-    bool isHAM6enabled() const { return isHAM6enabled(bplcon0); }
+    bool hamMode6(u16 v) const { return ham(v) && (lores(v) || isAGA()) && bpu(v) < 7; }
+    bool hamMode6() const { return hamMode6(bplcon0); }
 
     /* Checks whether HAM8 is in effect. HAM8 is the AGA-only variant that
      * reads eight planes instead of six; a plane count of 7 or 8 is what
      * tells the two modes apart, not the resolution.
      */
-    bool isHAM8enabled(u16 v) const { return ham(v) && (lores(v) || isAGA()) && bpu(v) >= 7; }
-    bool isHAM8enabled() const { return isHAM8enabled(bplcon0); }
+    bool hamMode8(u16 v) const { return ham(v) && (lores(v) || isAGA()) && bpu(v) >= 7; }
+    bool hamMode8() const { return hamMode8(bplcon0); }
+
+    // Checks whether HAM6 or HAM8 is in effect
+    bool hamMode(u16 v) const { return ham(v) && (lores(v) || isAGA()); }
+    bool hamMode() const { return hamMode(bplcon0); }
 
 public:
 
