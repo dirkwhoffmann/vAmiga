@@ -308,7 +308,14 @@ Agnus::pokeBPLCON0(u16 value)
     logmsg(LOG_DMA, "pokeBPLCON0(%04x)\n", value);
 
     if (bplcon0 != value) {
-        recordRegisterChange(DMA_CYCLES(4), Reg::BPLCON0, value, Accessor::AGNUS);
+        if (isAGA()) {
+            /* TODO: The chosen AGA delay is unverified. It improves vAmigaTS test
+             * ham8_hires_a, but does not fix it entirely.
+             */
+            recordRegisterChange(DMA_CYCLES(2), Reg::BPLCON0, value, Accessor::AGNUS);
+        } else {
+            recordRegisterChange(DMA_CYCLES(4), Reg::BPLCON0, value, Accessor::AGNUS);
+        }
     }
 }
 

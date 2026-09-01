@@ -527,8 +527,8 @@
             filePath = "Core/Components/Agnus/AgnusRegs.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "584"
-            endingLineNumber = "584"
+            startingLineNumber = "591"
+            endingLineNumber = "591"
             landmarkName = "Agnus::pokeHBSTRT(value)"
             landmarkType = "7">
          </BreakpointContent>
@@ -543,8 +543,8 @@
             filePath = "Core/Components/Agnus/AgnusRegs.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "577"
-            endingLineNumber = "577"
+            startingLineNumber = "584"
+            endingLineNumber = "584"
             landmarkName = "Agnus::pokeHSSTOP(value)"
             landmarkType = "7">
          </BreakpointContent>
@@ -559,8 +559,8 @@
             filePath = "Core/Components/Agnus/AgnusRegs.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "591"
-            endingLineNumber = "591"
+            startingLineNumber = "598"
+            endingLineNumber = "598"
             landmarkName = "Agnus::pokeHBSTOP(value)"
             landmarkType = "7">
          </BreakpointContent>
