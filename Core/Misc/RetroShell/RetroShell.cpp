@@ -337,9 +337,13 @@ RetroShell::press(RSKey key, bool shift)
                 switch (console.getCommandSet()) {
                         
                     case CommandSet::Commander:     console.input = "debugger"; break;
-                    case CommandSet::Debugger:      console.input = "navigator"; break;
-                    case CommandSet::Navigator:     console.input = "cbmnavigator"; break;
-                    case CommandSet::CBMNavigator:  console.input = "commander"; break;
+                    // case CommandSet::Debugger:      console.input = "navigator"; break;
+                    // case CommandSet::Navigator:     console.input = "cbmnavigator"; break;
+                    // case CommandSet::CBMNavigator:  console.input = "commander"; break;
+
+                    default:
+                        console.input = "commander";
+                        break;
                 }
                 console.pressReturn(false);
                 return;
