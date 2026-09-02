@@ -212,27 +212,27 @@ Defaults::fallbacks()
 
     registerDefaults(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::RSH });
     registerDefaults(Opt::SRV_PORT,                   8081,                   { (i64)ServerType::RSH });
-    registerDefaults(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::RSH });
+    registerDefaults(Opt::SRV_TRANSPORT,              (i64)TransportProtocol::TCP, { (i64)ServerType::RSH });
     registerDefaults(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::RSH });
 
     registerDefaults(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::RPC });
     registerDefaults(Opt::SRV_PORT,                   8082,                   { (i64)ServerType::RPC });
-    registerDefaults(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::RPC });
+    registerDefaults(Opt::SRV_TRANSPORT,              (i64)TransportProtocol::TCP, { (i64)ServerType::RPC });
     registerDefaults(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::RPC });
 
     registerDefaults(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::GDB });
     registerDefaults(Opt::SRV_PORT,                   8083,                   { (i64)ServerType::GDB });
-    registerDefaults(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::GDB });
+    registerDefaults(Opt::SRV_TRANSPORT,              (i64)TransportProtocol::TCP, { (i64)ServerType::GDB });
     registerDefaults(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::GDB });
 
     registerDefaults(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::PROM });
     registerDefaults(Opt::SRV_PORT,                   8084,                   { (i64)ServerType::PROM });
-    registerDefaults(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::PROM });
+    registerDefaults(Opt::SRV_TRANSPORT,              (i64)TransportProtocol::HTTP, { (i64)ServerType::PROM });
     registerDefaults(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::PROM });
 
     registerDefaults(Opt::SRV_ENABLE,                 false,                  { (i64)ServerType::SER });
     registerDefaults(Opt::SRV_PORT,                   8085,                   { (i64)ServerType::SER });
-    registerDefaults(Opt::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::SER });
+    registerDefaults(Opt::SRV_TRANSPORT,              (i64)TransportProtocol::TCP, { (i64)ServerType::SER });
     registerDefaults(Opt::SRV_VERBOSE,                true,                   { (i64)ServerType::SER });
 
     defaults.values["ROM_PATH"] = "";

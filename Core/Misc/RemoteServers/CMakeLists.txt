@@ -4,8 +4,10 @@ target_sources(VACore PRIVATE
 
 RemoteManager.cpp
 RemoteServer.cpp
-SocketServer.cpp
-HttpServer.cpp
+Transport.cpp
+StdioTransport.cpp
+TcpTransport.cpp
+HttpTransport.cpp
 SerServer.cpp
 RshServer.cpp
 RpcServer.cpp

@@ -9,16 +9,19 @@
 
 #pragma once
 
-#include "SocketServer.h"
+#include "RemoteServer.h"
+#include "TcpTransport.h"
 #include "utl/storage.h"
 
 namespace vamiga {
 
-class SerServer final : public SocketServer {
+class SerServer final : public RemoteServer {
+
+    TcpTransport tcp = TcpTransport(*this);
 
     // A ringbuffer for buffering incoming bytes
     utl::SortedRingBuffer <u8, 8096> buffer;
-    
+
     /* Indicates if we are currenty running in buffering mode. In this mode,
      * incoming bytes are collected in the ring buffer withous passing them
      * to the UART. When a certain number of bytes has been received, buffering
@@ -31,21 +34,21 @@ class SerServer final : public SocketServer {
 
     // Used to determine when we need to leave buffering mode
     i64 skippedTransmissions = 0;
-    
+
     // Byte counters
     isize receivedBytes = 0;
     isize transmittedBytes = 0;
     isize processedBytes = 0;
     isize lostBytes = 0;
 
-    
+
 public:
-    
-    using SocketServer::SocketServer;
+
+    using RemoteServer::RemoteServer;
 
     SerServer& operator= (const SerServer& other) {
 
-        SocketServer::operator = (other);
+        RemoteServer::operator = (other);
         return *this;
     }
 
@@ -53,7 +56,7 @@ public:
     //
     // Methods from CoreObject
     //
-    
+
 private:
 
     void _dump(Category category, std::ostream &os) const override;
@@ -62,36 +65,45 @@ private:
     //
     // Methods from RemoteServer
     //
-    
+
 public:
-    
+
     bool canRun() override;
 
+private:
 
-    //
-    // Methods from SocketServer
-    //
+    Transport &transport() override;
+    const Transport &transport() const override;
+    bool isSupported(TransportProtocol protocol) const override;
 
 public:
 
-    string doReceive() override;
-    void doSend(const string &packet) override;
-    void doProcess(const string &packet) override;
+    void send(const string &payload) override;
+
+private:
+
+    //
+    // Methods from TransportDelegate
+    //
+
+    void didReceive(const string &payload) override;
     void didConnect() override;
     void didDisconnect() override;
 
+public:
+
     void processIncomingByte(u8 byte);
 
-    
+
     //
     // Servicing events
     //
-    
+
 public:
-    
+
     // Services an event in the SER slot
     void serviceSerEvent();
-    
+
     // Schedules the next event in the SER slot
     void scheduleNextEvent();
 };

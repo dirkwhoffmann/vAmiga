@@ -25,11 +25,35 @@ RpcServer::_initialize()
     rpcShell.console.delegates.push_back(this);
 }
 
-
 void
 RpcServer::_dump(Category category, std::ostream &os) const
 {
     RemoteServer::_dump(category, os);
+}
+
+Transport &
+RpcServer::transport()
+{
+    switch (config.transport) {
+
+        case TransportProtocol::TCP: return tcp;
+
+        default:
+            return tcp;
+            // fatalError;
+    }
+}
+
+const Transport &
+RpcServer::transport() const
+{
+    return const_cast<RpcServer *>(this)->transport();
+}
+
+bool
+RpcServer::isSupported(TransportProtocol protocol) const
+{
+    return protocol == TransportProtocol::TCP;
 }
 
 void
@@ -55,27 +79,10 @@ RpcServer::didStart()
     }
 }
 
-string
-RpcServer::doReceive()
-{
-    string payload = connection.recv();
-
-    // Remove LF and CR (if present)
-    payload = utl::rtrim(payload, "\n\r");
-
-    if (config.verbose) {
-
-        retroShell << "R: " << utl::makePrintable(payload) << "\n";
-        printf("R: %s\n", utl::makePrintable(payload).c_str());
-    }
-
-    return payload;
-}
-
 void
-RpcServer::doSend(const string &payload)
+RpcServer::send(const string &payload)
 {
-    connection.send(payload);
+    transport().send(payload);
 
     if (config.verbose) {
 
@@ -85,11 +92,20 @@ RpcServer::doSend(const string &payload)
 }
 
 void
-RpcServer::doProcess(const string &payload)
+RpcServer::didReceive(const string &payload)
 {
+    // Remove LF and CR (if present)
+    auto trimmed = utl::rtrim(payload, "\n\r");
+
+    if (config.verbose) {
+
+        retroShell << "R: " << utl::makePrintable(trimmed) << "\n";
+        printf("R: %s\n", utl::makePrintable(trimmed).c_str());
+    }
+
     try {
 
-        json request = json::parse(payload);
+        json request = json::parse(trimmed);
 
         // Check input format
         if (!request.contains("method")) {
@@ -120,7 +136,7 @@ RpcServer::doProcess(const string &payload)
         json response = {
 
             {"jsonrpc", "2.0"},
-            {"error", {{"code", RPC::PARSE_ERROR}, {"message", "Parse error: " + payload}}},
+            {"error", {{"code", RPC::PARSE_ERROR}, {"message", "Parse error: " + trimmed}}},
             {"id", nullptr}
         };
         send(response.dump());

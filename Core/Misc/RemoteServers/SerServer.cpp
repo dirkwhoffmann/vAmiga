@@ -27,9 +27,9 @@ SerServer::_dump(Category category, std::ostream &os) const
     using namespace utl;
 
     RemoteServer::_dump(category, os);
-    
+
     if (category == Category::State) {
-        
+
         os << tab("Received bytes");
         os << dec(receivedBytes) << std::endl;
         os << tab("Transmitted bytes");
@@ -49,34 +49,52 @@ SerServer::canRun()
     return SerialPortDevice(serialPort.getOption(Opt::SER_DEVICE)) == SerialPortDevice::NULLMODEM;
 }
 
-string
-SerServer::doReceive()
+Transport &
+SerServer::transport()
 {
-    auto result = connection.recv();
-    receivedBytes += (isize)result.size();
-    
-    if (config.verbose) {
-        retroShell << "R: " << utl::makePrintable(result) << "\n";
-    }
+    switch (config.transport) {
 
-    return result;
-}
+        case TransportProtocol::TCP: return tcp;
 
-void
-SerServer::doSend(const string &packet)
-{
-    transmittedBytes += (isize)packet.size();
-    connection.send(packet);
-    
-    if (config.verbose) {
-        retroShell << "T: " << utl::makePrintable(packet) << "\n";
+        default:
+            return tcp;
+            // fatalError;
     }
 }
 
-void
-SerServer::doProcess(const string &packet)
+const Transport &
+SerServer::transport() const
 {
-    for (auto c : packet) { processIncomingByte((u8)c); }
+    return const_cast<SerServer *>(this)->transport();
+}
+
+bool
+SerServer::isSupported(TransportProtocol protocol) const
+{
+    return protocol == TransportProtocol::TCP;
+}
+
+void
+SerServer::send(const string &payload)
+{
+    transmittedBytes += (isize)payload.size();
+    transport().send(payload);
+
+    if (config.verbose) {
+        retroShell << "T: " << utl::makePrintable(payload) << "\n";
+    }
+}
+
+void
+SerServer::didReceive(const string &payload)
+{
+    receivedBytes += (isize)payload.size();
+
+    if (config.verbose) {
+        retroShell << "R: " << utl::makePrintable(payload) << "\n";
+    }
+
+    for (auto c : payload) { processIncomingByte((u8)c); }
 }
 
 void
@@ -85,7 +103,7 @@ SerServer::processIncomingByte(u8 byte)
     if (!buffer.isFull()) {
 
         buffer.write(byte);
-        
+
         // When enough bytes have been received, leave buffering mode
         if (buffer.count() >= 8) buffering = false;
 
@@ -125,14 +143,14 @@ SerServer::serviceSerEvent()
 
 // Check if we're in MIDI mode
     if (serialPort.getConfig().device == SerialPortDevice::MIDI) {
-        
+
         // Handle MIDI input
         uint8_t midiByte;
         if (amiga.midiManager.receiveByte(&midiByte)) {
             uart.receiveShiftReg = midiByte;
             uart.copyFromReceiveShiftRegister();
         }
-        
+
         // Keep checking for more MIDI data
         scheduleNextEvent();
         return;
@@ -165,17 +183,17 @@ void
 SerServer::scheduleNextEvent()
 {
     assert(agnus.id[SLOT_SER] == SER_RECEIVE);
-    
+
     // Otherwise, emulate proper timing based on the current baud rate
     auto pulseWidth = uart.pulseWidth();
-    
+
     // If the pulseWidth is extremely low, fallback to a default value
     if (pulseWidth < 40) {
-        
+
         logmsg(LOG_SRV, "Very low SERPER value\n");
         pulseWidth = 12000;
     }
-    
+
     agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
 }
 

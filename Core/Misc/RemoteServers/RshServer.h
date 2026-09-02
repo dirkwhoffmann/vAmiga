@@ -9,20 +9,23 @@
 
 #pragma once
 
-#include "SocketServer.h"
+#include "RemoteServer.h"
 #include "Console.h"
+#include "TcpTransport.h"
 
 namespace vamiga {
 
-class RshServer final : public SocketServer, public ConsoleDelegate {
+class RshServer final : public RemoteServer, public ConsoleDelegate {
+
+    TcpTransport tcp = TcpTransport(*this);
 
 public:
-    
-    using SocketServer::SocketServer;
+
+    using RemoteServer::RemoteServer;
 
     RshServer& operator= (const RshServer& other) {
 
-        SocketServer::operator = (other);
+        RemoteServer::operator = (other);
         return *this;
     }
 
@@ -30,7 +33,7 @@ public:
     //
     // Methods from CoreObject
     //
-    
+
 private:
 
     void _initialize() override;
@@ -40,19 +43,28 @@ private:
     // Methods from RemoteServer
     //
 
-    virtual bool canRun() override { return true; }
+    bool canRun() override { return true; }
+
+    Transport &transport() override;
+    const Transport &transport() const override;
+    bool isSupported(TransportProtocol protocol) const override;
+
+public:
+
+    // Sends a packet, mapping control characters for terminal display
+    void send(const string &payload) override;
+
+private:
 
 
     //
-    // Methods from SocketServer
+    // Methods from TransportDelegate
     //
 
-    string doReceive() override;
-    void doProcess(const string &packet) override;
-    void doSend(const string &packet) override;
     void didStart() override;
     void didConnect() override;
     void didDisconnect() override;
+    void didReceive(const string &payload) override;
 
 
     //

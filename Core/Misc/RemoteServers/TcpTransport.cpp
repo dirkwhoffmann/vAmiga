@@ -1,0 +1,148 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
+//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
+
+#include "vaconfig.h"
+#include "TcpTransport.h"
+
+namespace vamiga {
+
+TcpTransport::~TcpTransport()
+{
+    stop();
+}
+
+void
+TcpTransport::disconnect()
+{
+    logmsg(LOG_SRV, "Disconnecting TCP transport...\n");
+
+    // Trigger an exception inside the server thread
+    connection.close();
+    listener.close();
+}
+
+void
+TcpTransport::main(u16 port, const string &endpoint)
+{
+    try {
+
+        mainLoop(port);
+
+    } catch (std::exception &err) {
+
+        logmsg(LOG_SRV, "Server thread interrupted\n");
+        delegate.didTerminate(err.what());
+    }
+}
+
+void
+TcpTransport::mainLoop(u16 port)
+{
+    // A stop() may already have landed while this thread was being spawned;
+    // switching to LISTENING now would erase it (see Transport::stopRequested).
+    if (terminating()) { switchState(SrvState::OFF); return; }
+
+    switchState(SrvState::LISTENING);
+
+    while (isListening() && !terminating()) {
+
+        try {
+
+            try {
+
+                // Try to be a client by connecting to an existing server
+                connection.connect(port);
+                logmsg(LOG_SRV, "Acting as a client\n");
+
+            } catch (...) {
+
+                // If there is no existing server, be the server
+                logmsg(LOG_SRV, "Acting as a server\n");
+
+                // Create a port listener
+                listener.bind(port);
+                listener.listen();
+
+                /* Wait for a client to connect. This polls rather than
+                 * parking inside accept(), because a thread blocked in
+                 * accept() can only be woken by closing the socket from the
+                 * outside -- and disconnect() may well run before this
+                 * socket even exists (stop() races the thread that start()
+                 * just spawned). That wakeup is then lost for good and the
+                 * thread blocks forever, taking the join() in
+                 * Transport::stop() with it -- and, since stop() runs on the
+                 * emulator thread, the whole emulator with it. Re-testing
+                 * terminating() on every pass cannot miss a stop, no matter
+                 * how the two threads interleave.
+                 */
+                while (!listener.waitForConnection(100) && !terminating()) { }
+
+                if (terminating()) {
+
+                    listener.close();
+                    break;
+                }
+
+                connection = listener.accept();
+            }
+
+            // Handle the session
+            sessionLoop();
+
+            // Close the port listener
+            listener.close();
+
+        } catch (std::exception &err) {
+
+            logmsg(LOG_SRV, "Main loop interrupted\n");
+
+            // Handle error if we haven't been interrupted purposely
+            if (!terminating()) delegate.didTerminate(err.what());
+        }
+    }
+
+    switchState(SrvState::OFF);
+}
+
+void
+TcpTransport::sessionLoop()
+{
+    switchState(SrvState::CONNECTED);
+
+    try {
+
+        // Receive and process packets
+        while (1) { deliver(connection.recv()); }
+
+    } catch (std::exception &err) {
+
+        logmsg(LOG_SRV, "Session loop interrupted\n");
+
+        // Handle error if we haven't been interrupted purposely
+        if (!terminating()) {
+
+            delegate.didTerminate(err.what());
+            switchState(SrvState::LISTENING);
+        }
+    }
+
+    connection.close();
+}
+
+void
+TcpTransport::send(const string &payload)
+{
+    if (isConnected()) {
+
+        connection.send(payload);
+        record(TrafficDirection::SENT, payload);
+    }
+}
+
+}

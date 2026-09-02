@@ -24,8 +24,33 @@ RshServer::_initialize()
 
 void
 RshServer::_dump(Category category, std::ostream &os) const
-{    
+{
     RemoteServer::_dump(category, os);
+}
+
+Transport &
+RshServer::transport()
+{
+    switch (config.transport) {
+
+        case TransportProtocol::TCP: return tcp;
+
+        default:
+            return tcp;
+            // fatalError;
+    }
+}
+
+const Transport &
+RshServer::transport() const
+{
+    return const_cast<RshServer *>(this)->transport();
+}
+
+bool
+RshServer::isSupported(TransportProtocol protocol) const
+{
+    return protocol == TransportProtocol::TCP;
 }
 
 void
@@ -44,7 +69,7 @@ RshServer::didConnect()
     rshShell.newSession();
 
     if (config.verbose) {
-        
+
         try {
 
             *this << "vAmiga RetroShell Remote Server ";
@@ -64,29 +89,35 @@ RshServer::didConnect()
     }
 }
 
-string
-RshServer::doReceive()
+void
+RshServer::didDisconnect()
 {
-    string payload = connection.recv();
-    
-    // Remove LF and CR (if present)
-    payload = utl::rtrim(payload, "\n\r");
-
-    // Ask the client to delete the input (will be replicated by RetroShell)
-    // connection.send("\033[A\33[2K\r");
-
-    return payload;
+    // Discard the client's session
+    rshShell.newSession();
 }
 
 void
-RshServer::doSend(const string &payload)
+RshServer::didReceive(const string &payload)
+{
+    // Remove LF and CR (if present)
+    auto trimmed = utl::rtrim(payload, "\n\r");
+
+    rshShell.asyncExec(InputLine {
+
+        .type = InputLine::Source::RSH,
+        .input = trimmed
+    });
+}
+
+void
+RshServer::send(const string &payload)
 {
     string mapped;
-    
+
     for (auto c : payload) {
-        
+
         switch (c) {
-                
+
             case '\r':
 
                 mapped += "\33[2K\r";
@@ -98,30 +129,13 @@ RshServer::doSend(const string &payload)
                 break;
 
             default:
-                
+
                 if (isprint(c)) mapped += c;
                 break;
         }
     }
-    
-    connection.send(mapped);
-}
 
-void
-RshServer::doProcess(const string &payload)
-{
-    rshShell.asyncExec(InputLine {
-
-        .type = InputLine::Source::RSH,
-        .input = payload
-    });
-}
-
-void
-RshServer::didDisconnect()
-{
-    // Discard the client's session
-    rshShell.newSession();
+    transport().send(mapped);
 }
 
 void

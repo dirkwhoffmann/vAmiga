@@ -17,8 +17,42 @@
 #include "PromServer.h"
 #include "SerServer.h"
 #include "utl/wrappers.h"
+#include <deque>
+#include <mutex>
 
 namespace vamiga {
+
+/* A bounded log keeping the most recently transmitted packets of all remote
+ * servers. The log is filled by the transport layers (via
+ * RemoteServer::recordTraffic) and can be read by the GUI. Because packets
+ * are recorded on the transports' session threads, all access is
+ * mutex-protected.
+ */
+class TrafficLog {
+
+    // Maximum number of entries to keep
+    static constexpr isize capacity = 512;
+
+    // Mutex protecting the log
+    mutable std::mutex mutex;
+
+    // The recorded entries
+    std::deque<TrafficEntry> entries;
+
+    // Sequence number of the next entry
+    isize counter = 0;
+
+public:
+
+    // Appends an entry and returns its sequence number
+    isize append(ServerType server, TrafficDirection direction, const string &payload);
+
+    // Returns all entries with a sequence number greater than nr
+    std::vector<TrafficEntry> read(isize nr = -1) const;
+
+    // Removes all entries
+    void clear();
+};
 
 class RemoteManager final : public SubComponent {
 
@@ -134,10 +168,43 @@ public:
     //
     // Running the launch daemon
     //
-    
+
 public:
 
     void update();
+
+
+    //
+    // Recording traffic
+    //
+
+private:
+
+    // Log of the most recently transmitted packets
+    TrafficLog trafficLog;
+
+public:
+
+    /* Records a transmitted or received packet and informs the GUI by
+     * posting a Msg::SRV_RECEIVE or Msg::SRV_SEND message. The message
+     * carries the server type in 'value' and the sequence number of the
+     * recorded entry in 'value2'. Empty payloads are ignored.
+     */
+    void recordTraffic(ServerType server, TrafficDirection direction, const string &payload);
+
+
+    //
+    // Sending packets
+    //
+
+public:
+
+    /* Sends a raw payload through the specified server. The caller is
+     * responsible for formatting the payload; this function performs no
+     * formatting of its own. It is delivered through the server's currently
+     * configured transport and silently dropped if no client is connected.
+     */
+    void send(ServerType server, const string &payload);
 };
 
 }

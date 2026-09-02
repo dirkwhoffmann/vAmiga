@@ -220,7 +220,7 @@ enum class Opt : long
     // Remote servers
     SRV_ENABLE,
     SRV_PORT,
-    SRV_PROTOCOL,
+    SRV_TRANSPORT,
     SRV_VERBOSE
 };
 
@@ -407,7 +407,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::SRV_ENABLE:               return "SRV.ENABLE";
             case Opt::SRV_PORT:                 return "SRV.PORT";
-            case Opt::SRV_PROTOCOL:             return "SRV.PROTOCOL";
+            case Opt::SRV_TRANSPORT:            return "SRV.TRANSPORT";
             case Opt::SRV_VERBOSE:              return "SRV.VERBOSE";
         }
         return "???";
@@ -591,7 +591,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::SRV_ENABLE:            return "Server enable status";
             case Opt::SRV_PORT:              return "Server port";
-            case Opt::SRV_PROTOCOL:          return "Server protocol";
+            case Opt::SRV_TRANSPORT:         return "Server transport";
             case Opt::SRV_VERBOSE:           return "Verbose mode";
         }
         return "???";

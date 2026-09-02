@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include "SocketServer.h"
+#include "RemoteServer.h"
 #include "RetroShellTypes.h"
 #include "Console.h"
+#include "TcpTransport.h"
 
 namespace vamiga {
 
@@ -26,15 +27,17 @@ const long SERVER_ERROR     = -32000; // Reserved for implementation-defined ser
 
 }
 
-class RpcServer final : public SocketServer, public ConsoleDelegate {
+class RpcServer final : public RemoteServer, public ConsoleDelegate {
+
+    TcpTransport tcp = TcpTransport(*this);
 
 public:
 
-    using SocketServer::SocketServer;
+    using RemoteServer::RemoteServer;
 
     RpcServer& operator= (const RpcServer& other) {
 
-        SocketServer::operator = (other);
+        RemoteServer::operator = (other);
         return *this;
     }
 
@@ -53,19 +56,26 @@ protected:
     // Methods from RemoteServer
     //
 
-    virtual bool canRun() override { return true; }
+    bool canRun() override { return true; }
 
-    
+    Transport &transport() override;
+    const Transport &transport() const override;
+    bool isSupported(TransportProtocol protocol) const override;
+
+public:
+
+    void send(const string &payload) override;
+
+private:
+
     //
-    // Methods from SocketServer
+    // Methods from TransportDelegate
     //
 
-    string doReceive() override;
-    void doProcess(const string &packet) override;
-    void doSend(const string &packet)  override;
     void didStart() override;
     void didConnect() override;
     void didDisconnect() override;
+    void didReceive(const string &payload) override;
 
 
     //

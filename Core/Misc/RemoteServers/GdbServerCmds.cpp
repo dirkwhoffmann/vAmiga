@@ -437,8 +437,8 @@ GdbServer::process(string package)
                 process(cmd, arg);
                 
             } else {
-                
-                if (ackMode) connection.send("-");
+
+                if (ackMode) send("-");
                 throw ServerError(ServerError::GDB_INVALID_CHECKSUM);
             }
             
