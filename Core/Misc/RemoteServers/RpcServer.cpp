@@ -11,6 +11,7 @@
 #include "RpcServer.h"
 #include "Emulator.h"
 #include "json.h"
+#include "httplib.h"
 #include "utl/support.h"
 #include <thread>
 
@@ -38,6 +39,7 @@ RpcServer::transport()
 
         case TransportProtocol::STDIO: return stdio;
         case TransportProtocol::TCP:   return tcp;
+        case TransportProtocol::HTTP:  return http;
 
         default:
             fatalError;
@@ -57,6 +59,7 @@ RpcServer::isSupported(TransportProtocol protocol) const
 
         case TransportProtocol::STDIO:  return true;
         case TransportProtocol::TCP:    return true;
+        case TransportProtocol::HTTP:   return true;
 
         default:
             return false;
@@ -110,9 +113,26 @@ RpcServer::didReceive(const string &payload)
         printf("R: %s\n", utl::makePrintable(trimmed).c_str());
     }
 
+    if (auto response = process(trimmed, false); response) {
+
+        send(*response);
+    }
+}
+
+void
+RpcServer::didReceive(const httplib::Request &req, httplib::Response &res)
+{
+    if (auto response = process(req.body, true); response) {
+        res.set_content(*response, "text/plain");
+    }
+}
+
+optional<string>
+RpcServer::process(const string &payload, bool blocking)
+{
     try {
 
-        json request = json::parse(trimmed);
+        json request = json::parse(payload);
 
         // Check input format
         if (!request.contains("method")) {
@@ -131,22 +151,23 @@ RpcServer::didReceive(const string &payload)
             throw CoreError(RPC::INVALID_PARAMS, "method  must be 'retroshell'");
         }
 
-        // Feed the command into the command queue
-        rpcShell.asyncExec(InputLine {
+        auto id = request.value("id", 0);
 
-            .id = request.value("id", 0),
-            .type = InputLine::Source::RPC,
-            .input = request["params"] });
+        if (blocking) {
+            return execBlocking(request["params"], id);
+        } else {
+            return execNonBlocking(request["params"], id);
+        }
 
     } catch (const json::parse_error &) {
 
         json response = {
 
             {"jsonrpc", "2.0"},
-            {"error", {{"code", RPC::PARSE_ERROR}, {"message", "Parse error: " + trimmed}}},
+            {"error", {{"code", RPC::PARSE_ERROR}, {"message", "Parse error: " + payload}}},
             {"id", nullptr}
         };
-        send(response.dump());
+        return response.dump();
 
     } catch (const CoreError &e) {
 
@@ -156,8 +177,42 @@ RpcServer::didReceive(const string &payload)
             {"error", {{"code", e.payload}, {"message", e.what()}}},
             {"id", nullptr}
         };
-        send(response.dump());
+        return response.dump();
     }
+}
+
+optional<string>
+RpcServer::execNonBlocking(const string &command, isize id)
+{
+    // Feed the command into the command queue and return a nullopt
+    rpcShell.asyncExec(InputLine {
+
+        .id = id,
+        .type = InputLine::Source::RPC,
+        .input = command
+    });
+
+    return { };
+}
+
+optional<string>
+RpcServer::execBlocking(const string &command, isize id)
+{
+    // To block the caller, we pass a promise to RetroShell
+    auto p = std::make_shared<std::promise<string>>();
+    auto future = p->get_future();
+
+    // Feed the command, with the promise attached, into the command queue
+    rpcShell.asyncExec(InputLine {
+
+        .id = id,
+        .type = InputLine::Source::RPC,
+        .input = command,
+        .promise = p
+    });
+
+    // Wait until the promise gets fulfilled
+    return future.get();
 }
 
 void
@@ -177,6 +232,9 @@ RpcServer::didExecute(const InputLine& input, std::stringstream &ss)
         {"result", ss.str()},
         {"id", input.id}
     };
+
+    // If a promise is attached, fulfill it
+    if (input.promise) { input.promise->set_value(response.dump()); }
 
     send(response.dump());
 }
@@ -208,6 +266,9 @@ RpcServer::didExecute(const InputLine& input, std::stringstream &ss, std::except
         }},
         {"id", input.id}
     };
+
+    // If a promise is attached, fulfill it
+    if (input.promise) { input.promise->set_value(response.dump()); }
 
     send(response.dump());
 }

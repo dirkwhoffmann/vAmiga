@@ -14,6 +14,7 @@
 #include "Console.h"
 #include "StdioTransport.h"
 #include "TcpTransport.h"
+#include "HttpTransport.h"
 
 namespace vamiga {
 
@@ -32,6 +33,7 @@ class RpcServer final : public RemoteServer, public ConsoleDelegate {
 
     StdioTransport stdio = StdioTransport(*this);
     TcpTransport tcp = TcpTransport(*this);
+    HttpTransport http = HttpTransport(*this);
 
 public:
 
@@ -59,6 +61,7 @@ protected:
     //
 
     bool canRun() override { return true; }
+    void start() override { transport().start(config.port, "/rpc"); }
 
     Transport &transport() override;
     const Transport &transport() const override;
@@ -78,6 +81,7 @@ private:
     void didConnect() override;
     void didDisconnect() override;
     void didReceive(const string &payload) override;
+    void didReceive(const httplib::Request &req, httplib::Response &res) override;
 
 
     //
@@ -87,6 +91,20 @@ private:
     void willExecute(const InputLine &input) override;
     void didExecute(const InputLine &input, std::stringstream &ss) override;
     void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) override;
+
+
+    //
+    // Handling requests
+    //
+
+    // Processes a received command, returning the response if one is available immediately
+    optional<string> process(const string &payload, bool blocking);
+
+    // Executes a RetroShell command asynchroneously (non blocking)
+    optional<string> execNonBlocking(const string &command, isize id);
+
+    // Executes a RetroShell command synchroneously (blocking)
+    optional<string> execBlocking(const string &command, isize id);
 };
 
 }
