@@ -45,23 +45,8 @@ MsgQueue::get(Message &msg)
     }
 }
 
-isize
-MsgQueue::get(isize count, Message *buffer)
-{
-    if (!enabled) return false;
-
-    {   SYNCHRONIZED
-
-        auto max = std::min(queue.count(), count);
-        for (isize i = 0; i < max; i++) {
-            buffer[i] = queue.read();
-        }
-        return max;
-    }
-}
-
 void
-MsgQueue::put(const Message &msg)
+MsgQueue::put(const Message &msg, const string &str)
 {
     if (enabled) {
 
@@ -71,30 +56,53 @@ MsgQueue::put(const Message &msg)
 
         if (listener) {
 
-            // Send the message immediately if a lister has been registered
-            callback(listener, msg);
+            // Send the message immediately if a listener has been registered.
+            // The string only needs to outlive this call, so a local copy is
+            // sufficient -- unlike the queued case below, nothing needs to
+            // keep it alive afterwards.
+            Message m = msg;
+            m.str = str.c_str();
+            callback(listener, m);
+
+        } else if (!queue.isFull()) {
+
+            // Coalesce with the oldest pending message if it has the same
+            // type, so a burst of identical messages doesn't fill up the
+            // queue while nobody is draining it.
+            auto *current = queue.currentAddr();
+
+            if (current->type == msg.type) {
+
+                auto r = queue.begin();
+                *current = msg;
+                attachments[r] = str;
+                queue.elements[r].str = attachments[r].c_str();
+
+            } else {
+
+                auto w = queue.end();
+                queue.write(msg);
+                attachments[w] = str;
+                queue.elements[w].str = attachments[w].c_str();
+            }
 
         } else {
 
-            // Otherwise, store it in the ring buffer
-            if (!queue.isFull()) {
-                auto *current = queue.currentAddr(); 
-                if (current->type == msg.type) {
-                    *current = msg; 
-                } else {
-                    queue.write(msg);
-                }
-            } else {
-                logmsg(LOG_WARN, "Message lost: %s [%llx]\n", MsgEnum::key(msg.type), msg.value);
-            }
+            logmsg(LOG_WARN, "Message lost: %s [%llx]\n", MsgEnum::key(msg.type), msg.value);
         }
     }
 }
 
 void
-MsgQueue::put(Msg type, i64 payload, i64 payload2)
+MsgQueue::put(Msg type, i64 payload, i64 payload2, const string &str)
 {
-    put( Message { .type = type, .value = payload, .value2 = payload2 } );
+    put( Message { .type = type, .value = payload, .value2 = payload2 }, str);
+}
+
+void
+MsgQueue::put(Msg type, const string &payload)
+{
+    put( Message { .type = type }, payload);
 }
 
 void

@@ -273,7 +273,7 @@ typedef struct
 {
     // Header
     Msg type;
-    
+
     // Payload
     union {
         struct { i64 value; i64 value2; };
@@ -284,6 +284,9 @@ typedef struct
         SnapshotMsg snapshot;
         ViewportMsg viewport;
     };
+
+    // Attached string (may be null)
+    const char *str;
 }
 Message;
 
