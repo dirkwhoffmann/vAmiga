@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "debug.h"
+#include "vadebug.h"
 
 //
 // Release settings

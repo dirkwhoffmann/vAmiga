@@ -44,7 +44,7 @@ inline constexpr long LOG_TRACE = 6;
  * Client code declares its flags in X-macro tables (see debug.h) and
  * expands those tables into a vector of descriptors. In projects that
  * combine several independent libraries, each with its own debug flags,
- * the descriptor gives RetroShell a uniform way to list and modify all of
+ * the descriptor provides a uniform way to list and modify all of
  * them without any library having to know about the others. Both accessors
  * funnel through 'long', so that logging, bool, and plain value flags can
  * share a single descriptor type.

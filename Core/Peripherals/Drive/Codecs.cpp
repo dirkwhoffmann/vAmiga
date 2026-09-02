@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "vaconfig.h"
 #include "Codecs.h"
 #include "DiskEncoder.h"
 #include "FileSystems/Amiga/FileSystem.h"

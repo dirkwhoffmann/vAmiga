@@ -21,7 +21,7 @@
 #error "MOIRA_CORE must be defined before including this file"
 #endif
 
-#include "config.h"
+#include "vaconfig.h"
 #include "MoiraConfig.h"
 #include "Moira.h"
 #include "MoiraMacros.h"

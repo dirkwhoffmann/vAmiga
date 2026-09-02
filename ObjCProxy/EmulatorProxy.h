@@ -9,7 +9,7 @@
 
 #pragma once
 
-#import "config.h"
+#import "vaconfig.h"
 #import "VAmigaTypes.h"
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>

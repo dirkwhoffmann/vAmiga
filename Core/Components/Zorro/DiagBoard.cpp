@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "vaconfig.h"
 #include "DiagBoardTypes.h"
 #include "DiagBoard.h"
 #include "DiagBoardRom.h"
