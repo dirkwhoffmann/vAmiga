@@ -10,6 +10,7 @@
 #pragma once
 
 #include "RemoteServer.h"
+#include "StdioTransport.h"
 #include "TcpTransport.h"
 #include "utl/storage.h"
 
@@ -17,6 +18,7 @@ namespace vamiga {
 
 class SerServer final : public RemoteServer {
 
+    StdioTransport stdio = StdioTransport(*this);
     TcpTransport tcp = TcpTransport(*this);
 
     // A ringbuffer for buffering incoming bytes

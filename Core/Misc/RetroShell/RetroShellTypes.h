@@ -10,6 +10,7 @@
 #pragma once
 
 #include "BasicTypes.h"
+#include <future>
 
 namespace vamiga {
 
@@ -119,6 +120,9 @@ struct InputLine {
 
     // The command to execute
     string input;
+
+    // A pointer to a promise (may be nullptr)
+    std::shared_ptr<std::promise<string>> promise;
 
     bool isUserCommand() const { return type == Source::USER; }
     bool isScriptCommand() const { return type == Source::SCRIPT; }

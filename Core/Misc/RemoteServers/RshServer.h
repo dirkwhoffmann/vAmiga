@@ -11,13 +11,17 @@
 
 #include "RemoteServer.h"
 #include "Console.h"
+#include "StdioTransport.h"
 #include "TcpTransport.h"
+#include "HttpTransport.h"
 
 namespace vamiga {
 
 class RshServer final : public RemoteServer, public ConsoleDelegate {
 
+    StdioTransport stdio = StdioTransport(*this);
     TcpTransport tcp = TcpTransport(*this);
+    HttpTransport http = HttpTransport(*this);
 
 public:
 
@@ -44,6 +48,7 @@ private:
     //
 
     bool canRun() override { return true; }
+    void start() override { transport().start(config.port, "/rsh"); }
 
     Transport &transport() override;
     const Transport &transport() const override;
@@ -65,6 +70,7 @@ private:
     void didConnect() override;
     void didDisconnect() override;
     void didReceive(const string &payload) override;
+    void didReceive(const httplib::Request &req, httplib::Response &res) override;
 
 
     //

@@ -11,6 +11,7 @@
 #include "RshServer.h"
 #include "Amiga.h"
 #include "RetroShell.h"
+#include "httplib.h"
 #include "utl/support.h"
 
 namespace vamiga {
@@ -33,11 +34,12 @@ RshServer::transport()
 {
     switch (config.transport) {
 
-        case TransportProtocol::TCP: return tcp;
+        case TransportProtocol::STDIO: return stdio;
+        case TransportProtocol::TCP:   return tcp;
+        case TransportProtocol::HTTP:  return http;
 
         default:
-            return tcp;
-            // fatalError;
+            fatalError;
     }
 }
 
@@ -50,7 +52,15 @@ RshServer::transport() const
 bool
 RshServer::isSupported(TransportProtocol protocol) const
 {
-    return protocol == TransportProtocol::TCP;
+    switch (protocol) {
+
+        case TransportProtocol::STDIO:  return true;
+        case TransportProtocol::TCP:    return true;
+        case TransportProtocol::HTTP:   return true;
+
+        default:
+            return false;
+    }
 }
 
 void
@@ -110,6 +120,28 @@ RshServer::didReceive(const string &payload)
 }
 
 void
+RshServer::didReceive(const httplib::Request &req, httplib::Response &res)
+{
+    // Remove LF and CR (if present)
+    auto trimmed = utl::rtrim(req.body, "\n\r");
+
+    // HTTP has no persistent session to stream output into, so the command
+    // is executed synchronously: a promise is attached to the input line
+    // and fulfilled from didExecute, and this function blocks on it.
+    auto promise = std::make_shared<std::promise<string>>();
+    auto future = promise->get_future();
+
+    rshShell.asyncExec(InputLine {
+
+        .type = InputLine::Source::RSH,
+        .input = trimmed,
+        .promise = promise
+    });
+
+    res.set_content(future.get(), "text/plain");
+}
+
+void
 RshServer::send(const string &payload)
 {
     string mapped;
@@ -160,6 +192,9 @@ RshServer::willExecute(const InputLine &input)
 void
 RshServer::didExecute(const InputLine &input, std::stringstream &ss)
 {
+    // If a promise is attached (HTTP), fulfill it instead of streaming
+    if (input.promise) { input.promise->set_value(ss.str()); return; }
+
     *this << '\n' << ss.str() << '\n';
     *this << rshShell.prompt();
 }
@@ -167,6 +202,9 @@ RshServer::didExecute(const InputLine &input, std::stringstream &ss)
 void
 RshServer::didExecute(const InputLine &input, std::stringstream &ss, std::exception &e)
 {
+    // If a promise is attached (HTTP), fulfill it instead of streaming
+    if (input.promise) { input.promise->set_value(ss.str() + e.what()); return; }
+
     // Echo the command if it came from somewhere else
     if (!input.isRpcCommand()) { *this << input.input << '\n'; }
 

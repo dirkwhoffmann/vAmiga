@@ -10,6 +10,7 @@
 #pragma once
 
 #include "RemoteServer.h"
+#include "StdioTransport.h"
 #include "TcpTransport.h"
 #include "ServerError.h"
 #include "OSDebugger.h"
@@ -37,6 +38,7 @@ enum class GdbCmd : long
 
 class GdbServer final : public RemoteServer {
 
+    StdioTransport stdio = StdioTransport(*this);
     TcpTransport tcp = TcpTransport(*this);
 
     // The name of the process to be debugged

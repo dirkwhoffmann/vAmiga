@@ -52,11 +52,11 @@ GdbServer::transport()
 {
     switch (config.transport) {
 
-        case TransportProtocol::TCP: return tcp;
+        case TransportProtocol::STDIO: return stdio;
+        case TransportProtocol::TCP:   return tcp;
 
         default:
-            return tcp;
-            // fatalError;
+            fatalError;
     }
 }
 
@@ -69,7 +69,14 @@ GdbServer::transport() const
 bool
 GdbServer::isSupported(TransportProtocol protocol) const
 {
-    return protocol == TransportProtocol::TCP;
+    switch (protocol) {
+
+        case TransportProtocol::STDIO:  return true;
+        case TransportProtocol::TCP:    return true;
+
+        default:
+            return false;
+    }
 }
 
 void
