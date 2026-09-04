@@ -78,8 +78,6 @@ private:
     //
 
     void didStart() override;
-    void didConnect() override;
-    void didDisconnect() override;
     void didReceive(const string &payload) override;
     void didReceive(const httplib::Request &req, httplib::Response &res) override;
 

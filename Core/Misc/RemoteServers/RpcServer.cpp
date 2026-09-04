@@ -22,8 +22,11 @@ using nlohmann::json;
 void
 RpcServer::_initialize()
 {
-    // The RPC server drives its own shell, independent of the GUI's one
-    rpcShell.console.delegates.push_back(this);
+    // The RPC server executes commands through the standard shell, the same
+    // one the GUI uses. InputLine::isRpcCommand() lets didExecute() tell
+    // RPC-issued commands apart from ones typed by the user or another
+    // server sharing the same shell.
+    retroShell.console.delegates.push_back(this);
 }
 
 void
@@ -64,20 +67,6 @@ RpcServer::isSupported(TransportProtocol protocol) const
         default:
             return false;
     }
-}
-
-void
-RpcServer::didConnect()
-{
-    // Hand the client a fresh shell
-    rpcShell.newSession();
-}
-
-void
-RpcServer::didDisconnect()
-{
-    // Discard the client's session
-    rpcShell.newSession();
 }
 
 void
@@ -185,7 +174,7 @@ optional<string>
 RpcServer::execNonBlocking(const string &command, isize id)
 {
     // Feed the command into the command queue and return a nullopt
-    rpcShell.asyncExec(InputLine {
+    retroShell.asyncExec(InputLine {
 
         .id = id,
         .type = InputLine::Source::RPC,
@@ -203,7 +192,7 @@ RpcServer::execBlocking(const string &command, isize id)
     auto future = p->get_future();
 
     // Feed the command, with the promise attached, into the command queue
-    rpcShell.asyncExec(InputLine {
+    retroShell.asyncExec(InputLine {
 
         .id = id,
         .type = InputLine::Source::RPC,
