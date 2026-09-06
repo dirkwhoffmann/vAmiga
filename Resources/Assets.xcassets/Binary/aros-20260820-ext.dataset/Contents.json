@@ -1,0 +1,12 @@
+{
+  "data" : [
+    {
+      "filename" : "aros-20260820-ext.bin",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

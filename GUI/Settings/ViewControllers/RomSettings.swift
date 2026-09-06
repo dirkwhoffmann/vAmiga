@@ -168,7 +168,7 @@ class RomSettingsViewController: SettingsViewController {
 
             switch UInt32(item.tag) {
 
-            case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219,
+            case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219, vamiga.CRC32_AROS_20260820,
                 vamiga.CRC32_DIAG121, vamiga.CRC32_DIAG13,
                 vamiga.CRC32_EMUTOS13:
 
@@ -232,6 +232,9 @@ class RomSettingsViewController: SettingsViewController {
         case vamiga.CRC32_AROS_20250219:    // 2025 version
             installAros(rom: "aros-20250219-rom", ext: "aros-20250219-ext")
 
+        case vamiga.CRC32_AROS_20260820:    // 2026 version
+            installAros(rom: "aros-20260820-rom", ext: "aros-20260820-ext")
+
         default:
             fatalError()
         }
@@ -272,7 +275,7 @@ class RomSettingsViewController: SettingsViewController {
         let crc32 = UInt32(tag)
 
         switch crc32 {
-        case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219:
+        case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219, vamiga.CRC32_AROS_20260820:
             installAros(crc32: crc32)
 
         case vamiga.CRC32_EMUTOS13:

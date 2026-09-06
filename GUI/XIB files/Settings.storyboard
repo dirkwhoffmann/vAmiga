@@ -1716,12 +1716,12 @@
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xvG-oM-4ob">
                                             <rect key="frame" x="17" y="11" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="bevel" bezelStyle="regularSquare" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" selectedItem="n53-So-Gkv" id="BGP-1P-xjp">
+                                            <popUpButtonCell key="cell" type="bevel" bezelStyle="regularSquare" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" id="BGP-1P-xjp">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" autoenablesItems="NO" id="fMI-RT-Oq2">
                                                     <items>
-                                                        <menuItem state="on" hidden="YES" id="n53-So-Gkv">
+                                                        <menuItem hidden="YES" id="n53-So-Gkv">
                                                             <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Amiga Kickstart 1.2" tag="2798523958" id="3gk-Ja-fOF">
@@ -1744,7 +1744,8 @@
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="pi2-7E-wUG"/>
-                                                        <menuItem title="Aros Kickstart Replacement Feb. 2025" tag="2736990563" id="jud-ZU-sNk"/>
+                                                        <menuItem title="Aros Kickstart Replacement Aug. 2026" tag="2062107767" id="jud-ZU-sNk"/>
+                                                        <menuItem title="Aros Kickstart Replacement Feb. 2025" tag="2736990563" id="T8U-Uc-8Kb"/>
                                                         <menuItem title="Aros Kickstart Replacement SVN 54705" tag="2631987209" id="jP5-fK-heq"/>
                                                         <menuItem title="Aros Kickstart Replacement SVN 55696" tag="1062194186" id="mtf-Y7-2l0"/>
                                                         <menuItem isSeparatorItem="YES" id="2in-8L-yTZ"/>
