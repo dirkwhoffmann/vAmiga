@@ -117,6 +117,7 @@ static const u32 CRC32_DIAG11                   = 0x4C4B5C05;
 static const u32 CRC32_DIAG12                   = 0x771CD0EA;
 static const u32 CRC32_DIAG121                  = 0x850209CD;
 static const u32 CRC32_DIAG13                   = 0x55E2E127;
+static const u32 CRC32_DIAG20                   = 0x157CE67A;
 static const u32 CRC32_LOGICA20                 = 0x8484F426;
 
 static const u32 CRC32_CPUBLTRO_F8_0_3_2        = 0x169C8FCE;

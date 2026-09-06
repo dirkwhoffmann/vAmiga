@@ -169,7 +169,7 @@ class RomSettingsViewController: SettingsViewController {
             switch UInt32(item.tag) {
 
             case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219, vamiga.CRC32_AROS_20260820,
-                vamiga.CRC32_DIAG121, vamiga.CRC32_DIAG13,
+                vamiga.CRC32_DIAG121, vamiga.CRC32_DIAG13, vamiga.CRC32_DIAG20,
                 vamiga.CRC32_EMUTOS13:
 
                 item.isEnabled = true
@@ -286,6 +286,9 @@ class RomSettingsViewController: SettingsViewController {
 
         case vamiga.CRC32_DIAG13:
             install(rom: "diagrom-13")
+
+        case vamiga.CRC32_DIAG20:
+            install(rom: "diagrom-20")
 
         default:
             if let url = UserDefaults.romUrl(crc32: crc32) {

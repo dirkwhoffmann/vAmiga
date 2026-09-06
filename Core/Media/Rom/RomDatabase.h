@@ -555,6 +555,13 @@ static std::vector<RomTraits> roms = {
         .model      = "",
         .vendor     = RomVendor::DIAG
     },{
+        .crc        = CRC32_DIAG20,
+        .title      = "Amiga DiagROM",
+        .revision   = "Version 2.0",
+        .released   = "March 2026",
+        .model      = "",
+        .vendor     = RomVendor::DIAG
+    },{
         .crc        = CRC32_CPUBLTRO_F8_0_3_2,
         .title      = "OCS CPUBLTRO",
         .revision   = "Version 0.3.2",

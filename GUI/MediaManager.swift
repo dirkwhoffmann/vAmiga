@@ -405,7 +405,7 @@ extension MediaManager {
         }
     }
     
-    func installDiagRom(crc32: UInt32 = vamiga.CRC32_DIAG13) {
+    func installDiagRom(crc32: UInt32 = vamiga.CRC32_DIAG20) {
         
         switch crc32 {
             
@@ -414,7 +414,10 @@ extension MediaManager {
             
         case vamiga.CRC32_DIAG13:
             install(rom: "diagrom-13")
-            
+
+        case vamiga.CRC32_DIAG20:
+            install(rom: "diagrom-20")
+
         default:
             fatalError()
         }
