@@ -22,6 +22,7 @@ enum class Opt : long
     // Host
     HOST_REFRESH_RATE,      ///< Refresh rate of the host display
     HOST_SAMPLE_RATE,       ///< Refresh rate of the host display
+    HOST_TEX_FORMAT,        ///< Texture format
     HOST_FRAMEBUF_WIDTH,    ///< Current width of the emulator window
     HOST_FRAMEBUF_HEIGHT,   ///< Current height of the emulator window
     
@@ -235,6 +236,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::HOST_REFRESH_RATE:         return "HOST.REFRESH_RATE";
             case Opt::HOST_SAMPLE_RATE:          return "HOST.SAMPLE_RATE";
+            case Opt::HOST_TEX_FORMAT:           return "HOST.TEX_FORMAT";
             case Opt::HOST_FRAMEBUF_WIDTH:       return "HOST.FRAMEBUF_WIDTH";
             case Opt::HOST_FRAMEBUF_HEIGHT:      return "HOST.FRAMEBUF_HEIGHT";
                 
@@ -419,6 +421,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::HOST_REFRESH_RATE:         return "Host video refresh rate";
             case Opt::HOST_SAMPLE_RATE:          return "Host audio sample rate";
+            case Opt::HOST_TEX_FORMAT:           return "Texture format";
             case Opt::HOST_FRAMEBUF_WIDTH:       return "Window width";
             case Opt::HOST_FRAMEBUF_HEIGHT:      return "Window height";
                 

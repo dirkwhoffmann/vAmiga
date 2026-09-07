@@ -258,7 +258,14 @@ PixelEngine::toTexel(const AmigaColor c) const
     u8 g = clamp(adjLut[3 * 256 + r8] + adjLut[4 * 256 + g8] + adjLut[5 * 256 + b8]);
     u8 b = clamp(adjLut[6 * 256 + r8] + adjLut[7 * 256 + g8] + adjLut[8 * 256 + b8]);
 
-    return TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
+    switch (host.getConfig().texFormat) {
+
+        case TexFormat::ABGR: return TEXEL(HI_HI_LO_LO(0xFF, b, g, r));
+        case TexFormat::ARGB: return TEXEL(HI_HI_LO_LO(0xFF, r, g, b));
+
+        default:
+            return TEXEL(HI_HI_LO_LO(r, g, b, 0xFF));
+    }
 }
 
 void

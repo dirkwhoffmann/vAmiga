@@ -17,6 +17,7 @@
 #include "Infrastructure/CoreObjectTypes.h"
 #include "Infrastructure/CoreComponentTypes.h"
 #include "Infrastructure/GuardListTypes.h"
+#include "Infrastructure/HostTypes.h"
 #include "Infrastructure/MsgQueueTypes.h"
 
 // Components

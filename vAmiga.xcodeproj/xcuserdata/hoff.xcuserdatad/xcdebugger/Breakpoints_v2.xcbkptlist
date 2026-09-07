@@ -465,8 +465,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "439"
             endingLineNumber = "439"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "PixelEngine::swapBuffers()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

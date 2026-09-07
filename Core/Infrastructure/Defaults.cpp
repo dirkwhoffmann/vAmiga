@@ -39,6 +39,7 @@ Defaults::fallbacks()
 
     registerDefault(Opt::HOST_REFRESH_RATE,          60);
     registerDefault(Opt::HOST_SAMPLE_RATE,           0);
+    registerDefault(Opt::HOST_TEX_FORMAT,            (i64)TexFormat::RGBA);
     registerDefault(Opt::HOST_FRAMEBUF_WIDTH,        0);
     registerDefault(Opt::HOST_FRAMEBUF_HEIGHT,       0);
 
