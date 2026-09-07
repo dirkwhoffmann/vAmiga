@@ -167,9 +167,6 @@ extension MyController: NSMenuItemValidation {
         // Apply new settings
         config.applyUserDefaults()
         pref.applyUserDefaults()
-        
-        // Launch the onboarding agent
-        renderer.onboarding.open(delay: 1.0)
     }
     
     @IBAction func importScriptAction(_ sender: Any!) {

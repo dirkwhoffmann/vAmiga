@@ -223,11 +223,6 @@ extension MyController {
             
             // Switch off
             emu?.powerOff()
-            
-            // Open the onboarding agent
-            if mydocument.launchURL == nil {
-                renderer.onboarding.open(delay: 1.0)
-            }
         }
         
         // Update toolbar

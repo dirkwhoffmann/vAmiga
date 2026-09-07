@@ -62,7 +62,6 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var metalLayer: CAMetalLayer! = nil
     var splashScreen: SplashScreen! = nil
-    var onboarding: Onboarding! = nil
     var canvas: Canvas! = nil
     var console: Console! = nil
     var dropZone: DropZone! = nil
@@ -194,7 +193,6 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         
         splashScreen.update(frames: frames)
-        onboarding.update(frames: frames)
         dropZone.update(frames: frames)
         console.update(frames: frames)
         canvas.update(frames: frames)
