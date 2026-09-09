@@ -3,7 +3,7 @@ LICENSE INFORMATION
 vAmiga consists of three major parts:
 
 1. The vAmiga application (as provided by this repository)
-2. The core Amiga emulator (everything inside directory `Emulator`)
+2. The core Amiga emulator (everything inside directory `Core`)
 3. The CPU emulator (everything inside directory `Emulator/CPU/Moira`)
 
 The top-level license of the vAmiga project is the GNU General Public License v3. The two subcomponents listed above are published under more liberate terms. In detail:
