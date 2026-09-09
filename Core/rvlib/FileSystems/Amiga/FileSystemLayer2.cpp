@@ -171,9 +171,6 @@ FileSystem::mkdir(BlockNr at, const FSName &name)
     auto udb = newUserDirBlock(name);
     fetch(udb).mutate().setParentDirRef(at);
     addToHashTable(at, udb);
-
-    // Same as createFile: an empty directory is never mutated again, so its
-    // checksum must be written here.
     fetch(udb).mutate().updateChecksum();
 
     return udb;
@@ -311,10 +308,6 @@ FileSystem::createFile(BlockNr at, const FSName &name)
     try {
 
         link(at, fhb);
-
-        // Checksums are otherwise only written as a side effect of a later
-        // mutation, so a file that never receives data keeps a zero checksum
-        // and AmigaDOS rejects the volume.
         fetch(fhb).mutate().updateChecksum();
         return fhb;
 
