@@ -147,7 +147,15 @@ HardDrive::init(const FileSystem &fs)
     ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
 
     // Copy over all blocks
-    fs.exporter.exportVolume(rawData(), geometry.numBytes());
+    auto bsize = geometry.bsize;
+    auto *block = scratch(bsize);
+
+    for (isize i = 0, n = fs.blocks(); i < n; i++) {
+
+        // exportBlock() zeroes the target if the block carries no data
+        fs.fetch(BlockNr(i)).exportBlock(block, bsize);
+        storage->write(block, i * bsize, bsize);
+    }
 }
 
 void
@@ -556,11 +564,13 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
 
     if (fsType != FSFormat::NODOS) {
 
-        // Convert the drive to an HDF
-        auto hdf = Codec::makeHDF(*this);
-
-        // Create a file system on top of the HDF
-        auto vol = Volume(*hdf);
+        /* Create a file system on top of this drive
+         *
+         * This used to detour via a full in-memory copy of the drive (an
+         * HDF). There is nothing the copy provided: Volume only needs a block
+         * device, and the drive is one.
+         */
+        auto vol = Volume(*this);
         auto fs = FileSystem(vol);
 
         // Format the file system and name it
@@ -613,7 +623,9 @@ HardDrive::read(isize offset, isize length, u32 addr)
         moveHead(offset / geometry.bsize);
 
         // Perform the read operation
-        mem.patch(addr, rawData() + offset, length);
+        auto *buf = scratch(length);
+        storage->read(buf, offset, length);
+        mem.patch(addr, buf, length);
 
         // Inform the GUI
         msgQueue.put(Msg::HDR_READ);
@@ -643,7 +655,9 @@ HardDrive::write(isize offset, isize length, u32 addr)
         if (!getFlag(DiskFlags::PROTECTED)) {
 
             // Perform the write operation
-            mem.spypeek <Accessor::CPU> (addr, length, rawData() + offset);
+            auto *buf = scratch(length);
+            mem.spypeek <Accessor::CPU> (addr, length, buf);
+            storage->write(buf, offset, length);
             
             // Mark disk as modified
             setFlag(DiskFlags::MODIFIED, true);
@@ -774,10 +788,37 @@ HardDrive::importFolder(const fs::path &path)
 void
 HardDrive::writeToFile(const fs::path &path)
 {
-    if (!path.empty()) {
+    if (path.empty()) return;
 
+    if (utl::lowercased(path.extension().string()) == ".hdz") {
+
+        // Compression has to see the whole image at once
         auto hdf = Codec::makeHDF(*this);
         hdf->writeToFile(path);
+        return;
+    }
+
+    std::ofstream stream(path, std::ios::binary);
+
+    if (!stream.is_open()) {
+        throw IOError(IOError::FILE_CANT_CREATE, path);
+    }
+
+    // Copy the image to disk in chunks, never holding all of it at once
+    constexpr isize chunkSize = 1024 * 1024;
+
+    for (isize offset = 0, total = size(); offset < total; ) {
+
+        auto count = std::min(chunkSize, total - offset);
+        auto *buf = scratch(count);
+
+        storage->read(buf, offset, count);
+        stream.write((const char *)buf, count);
+        offset += count;
+    }
+
+    if (!stream) {
+        throw IOError(IOError::FILE_CANT_WRITE, path);
     }
 }
 

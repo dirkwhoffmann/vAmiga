@@ -48,6 +48,7 @@ public:
     explicit HDFFile(const u8 *buf, isize len) { init(buf, len); }
     explicit HDFFile(const utl::Buffer<u8>& buffer) { init(buffer); }
     explicit HDFFile(const fs::path& path) { init(path); }
+    explicit HDFFile(const LinearDevice& device) { init(device); }
 
     using HardDiskImage::init;
 

@@ -9,6 +9,7 @@
 
 #include "rvconfig.h"
 #include "Images/BinaryImage.h"
+#include "Devices/LinearDevice.h"
 #include "utl/io.h"
 #include "utl/support.h"
 #include <fstream>
@@ -61,6 +62,17 @@ BinaryImage::init(const fs::path &p)
 
     // Initialize image with the vector contents
     init(buffer.data(), isize(buffer.size()));
+}
+
+void
+BinaryImage::init(const LinearDevice &device)
+{
+    // Allocate memory
+    data.alloc(device.size());
+
+    // Pull in the contents
+    device.read(data.ptr, 0, data.size);
+    didInitialize();
 }
 
 void

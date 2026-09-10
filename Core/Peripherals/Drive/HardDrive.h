@@ -115,6 +115,15 @@ private:
     // Keeps track of modified blocks (to update the run-ahead instance)
     utl::Buffer<bool> dirty;
 
+    /* Scratch space for transfers between the storage and Amiga memory
+     *
+     * The memory side of a transfer needs a contiguous host buffer, which the
+     * storage cannot be relied upon to provide. Kept as a member and grown on
+     * demand so that the emulation path does not allocate per request. Not
+     * part of the drive's state: it holds nothing between two transfers.
+     */
+    utl::Buffer<u8> xfer;
+
     // Current position of the read/write head
     DriveHead head;
 
@@ -341,18 +350,11 @@ public:
 
 private:
 
-    /* Direct access to the disk data
-     *
-     * The remaining call sites that cannot express themselves through read()
-     * and write() because they need a contiguous pointer into the image. Each
-     * of them has to be reworked before a lazily loading storage can be used,
-     * so they all go through here instead of reaching into the storage on
-     * their own. Returns nullptr if the storage keeps no such buffer.
-     */
-    u8 *rawData() const {
+    // Makes sure the transfer buffer can hold at least 'length' bytes
+    u8 *scratch(isize length) {
 
-        auto *raw = storage->buffer();
-        return raw ? raw->ptr : nullptr;
+        if (xfer.size < length) xfer.init(length);
+        return xfer.ptr;
     }
 
 

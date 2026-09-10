@@ -363,8 +363,7 @@ Amiga::saveWorkspace(const fs::path &path)
             
             try {
                 
-                auto hdf = Codec::makeHDF(drive);
-                hdf->writeToFile(path / file);
+                drive.writeToFile(path / file);
                 drive.markDiskAsUnmodified();
                                 
                 hd << "try " << name << " attach " << file << "\n";

@@ -83,7 +83,7 @@ Codec::makeIMG(const FloppyDrive &drive)
 std::unique_ptr<HDFFile>
 Codec::makeHDF(const HardDrive &drive)
 {
-    auto hdf = std::make_unique<HDFFile>(drive.rawData(), drive.size());
+    auto hdf = std::make_unique<HDFFile>(drive);
 
     // Overwrite the predicted geometry with the precise one
     hdf->geometry = drive.getGeometry();

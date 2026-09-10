@@ -13,6 +13,8 @@
 
 namespace retro::vault {
 
+class LinearDevice;
+
 /* An image that is a contiguous block of bytes, read into memory in one go.
  *
  * This is what almost every format in this library is: a floppy image, a hard
@@ -42,6 +44,14 @@ public:
     void init(const utl::Buffer<u8>& buffer);
     // void init(const string& str);
     void init(const fs::path& p);
+
+    /* Initializes the image with the contents of a device.
+     *
+     * The device is asked for its bytes rather than handing over a pointer to
+     * them, so this works for any device, including ones that do not keep the
+     * whole image in memory.
+     */
+    void init(const LinearDevice& device);
 
 
     //
