@@ -53,18 +53,25 @@ HardDrive::operator= (const HardDrive& other) {
     if CONSTEXPR (RUA_ON_STEROIDS) {
 
         // Clone all blocks
-        CLONE(data)
+        storage = other.storage->clone();
+
+    } else if (storage->size() != other.storage->size()) {
+
+        // The instances disagree in size. Nothing to salvage, clone everything
+        storage = other.storage->clone();
 
     } else {
 
         // Clone dirty blocks
-        data.resize(other.data.size);
+        u8 block[512];
+
         for (isize i = 0; i < other.dirty.size; i++) {
 
             if (other.dirty[i]) {
 
                 logmsg(LOG_RUA, "Cloning block %ld\n", i);
-                memcpy(data.ptr + 512 * i, other.data.ptr + 512 * i, 512);
+                other.storage->read(block, 512 * i, 512);
+                storage->write(block, 512 * i, 512);
             }
         }
     }
@@ -75,7 +82,7 @@ HardDrive::operator= (const HardDrive& other) {
 void
 HardDrive::init()
 {
-    data.dealloc();
+    storage->dealloc();
     dirty.dealloc();
 
     diskVendor = "VAMIGA";
@@ -117,7 +124,7 @@ HardDrive::init(const GeometryDescriptor &geometry)
     setFlag(DiskFlags::BOOTABLE, true);
 
     // Create the new drive
-    data.init(geometry.numBytes(), 0);
+    storage->alloc(geometry.numBytes(), 0);
     dirty.init(geometry.numBytes() / 512, true);
 }
 
@@ -140,7 +147,7 @@ HardDrive::init(const FileSystem &fs)
     ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
 
     // Copy over all blocks
-    fs.exporter.exportVolume(data.ptr, geometry.numBytes());
+    fs.exporter.exportVolume(rawData(), geometry.numBytes());
 }
 
 void
@@ -183,19 +190,19 @@ HardDrive::init(const HDFFile &hdf)
     // Check the drive geometry against the file size
     auto numBytes = hdf.data.size;
     
-    if (data.size < numBytes) {
+    if (storage->size() < numBytes) {
         
         logmsg(LOG_HDR, "HDF is too large. Ignoring excess bytes.\n");
-        numBytes = data.size;
+        numBytes = storage->size();
     }
-    if (data.size > hdf.data.size) {
+    if (storage->size() > hdf.data.size) {
         
         logmsg(LOG_HDR, "HDF is too small. Padding with zeroes.");
-        data.clear(0, hdf.data.size);
+        storage->clear(0, hdf.data.size, storage->size() - hdf.data.size);
     }
     
     // Copy over all blocks
-    hdf.copy(data.ptr, 0, numBytes);
+    storage->write(hdf.data.ptr, 0, numBytes);
         
     // Print some debug information
     logmsg(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
@@ -466,15 +473,13 @@ HardDrive::_dump(Category category, std::ostream &os) const
 void
 HardDrive::read(u8 *dst, isize offset, isize count) const
 {
-    assert(offset + count <= data.size);
-    memcpy((void *)dst, (void *)(data.ptr + offset), count);
+    storage->read(dst, offset, count);
 }
 
 void
 HardDrive::write(const u8 *src, isize offset, isize count)
 {
-    assert(offset + count <= data.size);
-    memcpy((void *)(data.ptr + offset), (void *)src, count);
+    storage->write(src, offset, count);
 }
 
 bool
@@ -486,7 +491,7 @@ HardDrive::isConnected() const
 bool
 HardDrive::hasDisk() const
 {
-    return data.ptr != nullptr;
+    return !storage->empty();
 }
 
 bool 
@@ -547,7 +552,7 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
     }
     
     // Only proceed if a disk is present
-    if (!data.ptr) return;
+    if (!hasDisk()) return;
 
     if (fsType != FSFormat::NODOS) {
 
@@ -608,7 +613,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
         moveHead(offset / geometry.bsize);
 
         // Perform the read operation
-        mem.patch(addr, data.ptr + offset, length);
+        mem.patch(addr, rawData() + offset, length);
 
         // Inform the GUI
         msgQueue.put(Msg::HDR_READ);
@@ -638,7 +643,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
         if (!getFlag(DiskFlags::PROTECTED)) {
 
             // Perform the write operation
-            mem.spypeek <Accessor::CPU> (addr, length, data.ptr + offset);
+            mem.spypeek <Accessor::CPU> (addr, length, rawData() + offset);
             
             // Mark disk as modified
             setFlag(DiskFlags::MODIFIED, true);
@@ -670,9 +675,9 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
         auto offset = isize(seg * geometry.bsize + 20);
 
         assert(offset >= 0);
-        assert(offset + bytesPerBlock <= data.size);
+        assert(offset + bytesPerBlock <= storage->size());
         
-        memcpy(driver.ptr + bytesRead, data.ptr + offset, bytesPerBlock);
+        storage->read(driver.ptr + bytesRead, offset, bytesPerBlock);
         bytesRead += bytesPerBlock;
     }
 }
@@ -680,7 +685,7 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
 i8
 HardDrive::verify(isize offset, isize length, u32 addr)
 {
-    assert(data.ptr);
+    assert(hasDisk());
 
     if (length % 512) {
         

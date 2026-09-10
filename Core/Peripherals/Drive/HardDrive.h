@@ -17,6 +17,7 @@
 #include "AgnusTypes.h"
 #include "Drive.h"
 #include "HardDiskImage.h"
+#include "BlockStorage.h"
 #include "HDFFile.h"
 #include "TrackDevice.h"
 #include "utl/storage.h"
@@ -27,6 +28,8 @@ namespace retro::vault::amiga { class FileSystem; }
 namespace vamiga {
 
 using retro::vault::HDFFile;
+using retro::vault::BlockStorage;
+using retro::vault::RamStorage;
 
 class HardDrive final : public Drive, public TrackDevice {
 
@@ -98,8 +101,16 @@ private:
     // Loadable file system drivers
     std::vector <DriverDescriptor> drivers;
 
-    // Disk data
-    utl::Buffer<u8> data;
+    /* Disk data
+     *
+     * The drive does not care where its bytes live; it only asks the storage
+     * object for them. Today this is always a RamStorage, which holds the
+     * entire image in memory, but the indirection is what will later allow a
+     * file-backed, lazily loaded store to be dropped in for large drives.
+     *
+     * Never null: an unallocated storage stands for "no disk inserted".
+     */
+    std::unique_ptr<BlockStorage> storage = std::make_unique<RamStorage>();
     
     // Keeps track of modified blocks (to update the run-ahead instance)
     utl::Buffer<bool> dirty;
@@ -246,9 +257,20 @@ private:
         << controllerRevision
         << geometry
         << ptable
-        << drivers
-        << data
-        << flags;
+        << drivers;
+
+        /* Serialize the disk contents
+         *
+         * Snapshots still carry the complete image. Storage that cannot hand
+         * out a contiguous buffer will need a different scheme (a reference to
+         * the backing image plus the dirty blocks), so this asserts rather
+         * than silently truncating.
+         */
+        auto *raw = storage->buffer();
+        assert(raw);
+        worker << *raw;
+
+        worker << flags;
 
     } SERIALIZERS(serialize);
 
@@ -313,9 +335,25 @@ private:
 
 public:
 
-    isize size() const override { return data.size; }
+    isize size() const override { return storage->size(); }
     void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
+
+private:
+
+    /* Direct access to the disk data
+     *
+     * The remaining call sites that cannot express themselves through read()
+     * and write() because they need a contiguous pointer into the image. Each
+     * of them has to be reworked before a lazily loading storage can be used,
+     * so they all go through here instead of reaching into the storage on
+     * their own. Returns nullptr if the storage keeps no such buffer.
+     */
+    u8 *rawData() const {
+
+        auto *raw = storage->buffer();
+        return raw ? raw->ptr : nullptr;
+    }
 
 
     //
