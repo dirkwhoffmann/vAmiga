@@ -1182,6 +1182,7 @@
 		50BF4B322EFD19FF00F1B9F2 /* TrackDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrackDevice.h; sourceTree = "<group>"; };
 		50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrackDevice.cpp; sourceTree = "<group>"; };
 		50BF4B362EFD244100F1B9F2 /* LinearDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinearDevice.h; sourceTree = "<group>"; };
+		50BF4C0A2F00000100F1B9F2 /* BlockStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockStorage.h; sourceTree = "<group>"; };
 		50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinearDevice.cpp; sourceTree = "<group>"; };
 		50BF4B3A2EFD5E7300F1B9F2 /* ByteView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ByteView.h; sourceTree = "<group>"; };
 		50BF4B3B2EFD618700F1B9F2 /* BitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BitView.h; sourceTree = "<group>"; };
@@ -1626,6 +1627,7 @@
 				50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */,
 				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
 				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
+				50BF4C0A2F00000100F1B9F2 /* BlockStorage.h */,
 				50BF4B362EFD244100F1B9F2 /* LinearDevice.h */,
 				50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */,
 				503E86A02EEEBBE800ED891D /* BlockDevice.h */,

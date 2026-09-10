@@ -171,6 +171,7 @@ FileSystem::mkdir(BlockNr at, const FSName &name)
     auto udb = newUserDirBlock(name);
     fetch(udb).mutate().setParentDirRef(at);
     addToHashTable(at, udb);
+    fetch(udb).mutate().updateChecksum();
 
     return udb;
 }
@@ -307,6 +308,7 @@ FileSystem::createFile(BlockNr at, const FSName &name)
     try {
 
         link(at, fhb);
+        fetch(fhb).mutate().updateChecksum();
         return fhb;
 
     } catch(...) {

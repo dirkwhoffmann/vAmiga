@@ -148,7 +148,7 @@ HdController::setOption(Opt option, i64 value)
 bool
 HdController::pluggedIn() const
 {
-    return drive.isConnected() && !drive.data.empty();
+    return drive.isConnected() && drive.hasDisk();
 }
 
 void
