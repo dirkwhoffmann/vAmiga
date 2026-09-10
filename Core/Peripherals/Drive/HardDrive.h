@@ -404,6 +404,13 @@ public:
 
     bool isConnected() const override;
 
+    /* Largest capacity this drive may have, in MB (0 = no limit)
+     *
+     * Read from the controller the drive hangs off, since that is what
+     * imposes it (see Opt::HDC_MB_LIMIT).
+     */
+    isize mbLimit() const;
+
     CylNr currentCyl() const override { return head.cylinder; }
     HeadNr currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }

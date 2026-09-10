@@ -158,6 +158,7 @@ Defaults::fallbacks()
     registerDefaults(Opt::DRIVE_EJECT_VOLUME,         50,                     { 0, 1, 2, 3 });
     registerDefaults(Opt::HDC_CONNECT,                true,                   { 0 });
     registerDefaults(Opt::HDC_CONNECT,                false,                  { 1, 2, 3 });
+    registerDefaults(Opt::HDC_MB_LIMIT,               0,                      { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_TYPE,                   (i64)HardDriveType::GENERIC, { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_PAN,                    300,                    { 0, 2 });
     registerDefaults(Opt::HDR_PAN,                    100,                    { 1, 3 });

@@ -97,6 +97,7 @@ HdController::getOption(Opt option) const
     switch (option) {
             
         case Opt::HDC_CONNECT:       return (i64)config.connected;
+        case Opt::HDC_MB_LIMIT:      return (i64)config.mbLimit;
 
         default:
             fatalError;
@@ -109,6 +110,13 @@ HdController::checkOption(Opt opt, i64 value)
     switch (opt) {
 
         case Opt::HDC_CONNECT:
+            return;
+
+        case Opt::HDC_MB_LIMIT:
+
+            if (value < 0) {
+                throw CoreError(CoreError::OPT_INV_ARG, "0 (no limit) or a positive value");
+            }
             return;
 
         default:
@@ -138,6 +146,11 @@ HdController::setOption(Opt option, i64 value)
                     msgQueue.put(Msg::HDC_CONNECT, DriveMsg { i16(objid), false, 0, 0 } );
                 }
             }
+            return;
+
+        case Opt::HDC_MB_LIMIT:
+
+            config.mbLimit = isize(value);
             return;
 
         default:

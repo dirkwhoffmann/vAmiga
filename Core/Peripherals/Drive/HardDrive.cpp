@@ -138,7 +138,7 @@ void
 HardDrive::init(const GeometryDescriptor &geometry)
 {
     // Throw an exception if the geometry is not supported
-    geometry.checkCompatibility();
+    geometry.checkCompatibility(mbLimit());
     
     // Wipe out the old drive
     init();
@@ -266,7 +266,7 @@ HardDrive::adoptLayout(const HDFLayout &layout)
     auto geo = layout.getGeometryDescriptor();
 
     // Throw before touching anything if the image does not add up
-    geo.checkCompatibility();
+    geo.checkCompatibility(mbLimit());
 
     auto parts = layout.getPartitionDescriptors();
     for (auto &it : parts) it.checkCompatibility(geo);
@@ -636,6 +636,12 @@ HardDrive::isConnected() const
     return amiga.hdcon[objid]->getOption(Opt::HDC_CONNECT);
 }
 
+isize
+HardDrive::mbLimit() const
+{
+    return isize(amiga.hdcon[objid]->getOption(Opt::HDC_MB_LIMIT));
+}
+
 bool
 HardDrive::hasDisk() const
 {
@@ -735,7 +741,7 @@ HardDrive::changeGeometry(isize c, isize h, isize s, isize b)
 void
 HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 {
-    geometry.checkCompatibility();
+    geometry.checkCompatibility(mbLimit());
 
     if (this->geometry.numBytes() == geometry.numBytes()) {
         

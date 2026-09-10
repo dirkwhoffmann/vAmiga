@@ -920,6 +920,20 @@ Console::initCommanderCommands(RSCommand &root)
         });
         
         root.add({
+
+            .tokens = { cmd, "limit" },
+            .chelp  = { "Limits the drive capacity the controller accepts" },
+            .args   = {
+                { .name = { "mb", "Capacity limit in MB (0 = no limit)" } }
+            },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                emulator.set(Opt::HDC_MB_LIMIT, utl::parseNum(args.at("mb")), values);
+
+            }, .payload = {i}
+        });
+
+        root.add({
             
             .tokens = { cmd, "protect" },
             .chelp  = { "Enables write protection" },

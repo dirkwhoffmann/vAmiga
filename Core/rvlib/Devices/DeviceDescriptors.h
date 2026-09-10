@@ -76,8 +76,15 @@ struct GeometryDescriptor : utl::Streamable {
     void dump() const;
     void dump(std::ostream &os) const;
 
-    // Throws an exception if inconsistent or unsupported values are present
-    void checkCompatibility() const;
+    /* Throws if this geometry cannot describe a usable drive.
+     *
+     * 'mbLimit' caps the capacity in MB; 0 imposes no cap. The limit belongs
+     * to the controller a drive is attached to, not to the geometry itself,
+     * so it has to come from the caller. 504 MB is the classic value -- what
+     * a controller addressing 1024 cylinders with 16 heads and 63 sectors
+     * can reach.
+     */
+    void checkCompatibility(isize mbLimit = 0) const;
 };
 
 struct PartitionDescriptor : utl::Streamable

@@ -151,6 +151,15 @@ struct HdcStateEnum : Reflectable<HdcStateEnum, HdcState>
 typedef struct
 {
     bool connected;
+
+    /* Largest drive this controller accepts, in MB (0 = no limit)
+     *
+     * Controllers of the era could only address so much, and an image beyond
+     * their reach would not have worked on the hardware being emulated. 504
+     * reproduces the classic IDE ceiling; 0 lets a drive be as large as its
+     * geometry allows.
+     */
+    isize mbLimit;
 }
 HdcConfig;
 

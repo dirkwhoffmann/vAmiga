@@ -48,7 +48,8 @@ class HdController : public ZorroBoard {
 
     Options options = {
 
-        Opt::HDC_CONNECT
+        Opt::HDC_CONNECT,
+        Opt::HDC_MB_LIMIT
     };
 
 public:
@@ -128,7 +129,8 @@ private:
 
         worker
 
-        << config.connected;
+        << config.connected
+        << config.mbLimit;
 
     } SERIALIZERS(serialize);
 

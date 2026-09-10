@@ -78,8 +78,9 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
             break;
 
         case HDR_TOO_LARGE:
-            set_msg(string("Hard drives with a maximum capacity of ") +
-                    "504 MB are supported");
+            set_msg(string("This controller is limited to hard drives of ") +
+                    (s.empty() ? string("the configured capacity") : s + " MB") +
+                    " or less");
             break;
 
         case HDR_UNSUPPORTED_CYL_CNT:

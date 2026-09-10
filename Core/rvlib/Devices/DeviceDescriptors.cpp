@@ -176,7 +176,7 @@ GeometryDescriptor::dump(std::ostream &os) const
 }
 
 void
-GeometryDescriptor::checkCompatibility() const
+GeometryDescriptor::checkCompatibility(isize mbLimit) const
 {
     // if CONSTEXPR (HDR_ACCEPT_ALL) return;
 
@@ -204,8 +204,8 @@ GeometryDescriptor::checkCompatibility() const
     if (cylinders == 0) {
         throw DeviceError(DeviceError::HDR_UNKNOWN_GEOMETRY);
     }
-    if (numBytes() > 504 * (1 << 20)) {
-        throw DeviceError(DeviceError::HDR_TOO_LARGE);
+    if (mbLimit && numBytes() > mbLimit * (1 << 20)) {
+        throw DeviceError(DeviceError::HDR_TOO_LARGE, std::to_string(mbLimit));
     }
     if ((cylinders < cMin && heads > 1) || cylinders > cMax) {
         throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_CNT, cylinders);

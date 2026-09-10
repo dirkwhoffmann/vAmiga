@@ -206,7 +206,7 @@ Stdio::~Stdio() {
 void
 Stdio::terminate() {
 
-    write(term[1], "x", 1);
+    (void)write(term[1], "x", 1);
 }
 
 string
