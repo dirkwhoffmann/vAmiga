@@ -17,8 +17,6 @@
 #include "AgnusTypes.h"
 #include "Drive.h"
 #include "HardDiskImage.h"
-#include "BlockStorage.h"
-#include "FileStorage.h"
 #include "HDFFile.h"
 #include "TrackDevice.h"
 #include "utl/storage.h"
@@ -30,10 +28,6 @@ namespace retro::vault::amiga { class FileSystem; }
 namespace vamiga {
 
 using retro::vault::HDFFile;
-using retro::vault::BlockStorage;
-using retro::vault::RamStorage;
-using retro::vault::FileStorage;
-using retro::vault::HDFLayout;
 
 class HardDrive final : public Drive, public TrackDevice {
 
@@ -105,16 +99,8 @@ private:
     // Loadable file system drivers
     std::vector <DriverDescriptor> drivers;
 
-    /* Disk data
-     *
-     * The drive does not care where its bytes live; it only asks the storage
-     * object for them. Today this is always a RamStorage, which holds the
-     * entire image in memory, but the indirection is what will later allow a
-     * file-backed, lazily loaded store to be dropped in for large drives.
-     *
-     * Never null: an unallocated storage stands for "no disk inserted".
-     */
-    std::unique_ptr<BlockStorage> storage = std::make_unique<RamStorage>();
+    // Disk data
+    utl::Buffer<u8> data;
     
     /* Blocks written since this instance was last synchronized with another
      *
@@ -139,34 +125,18 @@ private:
     mutable std::set<isize> dirty;
     mutable bool allDirty = true;
 
-    /* Granularity of the dirty set, in bytes
-     *
-     * Independent of the drive geometry on purpose. Any fixed partitioning of
-     * the address range does the job, and a constant keeps the bookkeeping
-     * correct even before a geometry has been assigned. Hard drives are
-     * required to use 512 byte blocks anyway (see checkCompatibility).
-     */
+    // Granularity of the dirty set, in bytes
     static constexpr isize dirtyBsize = 512;
 
     /* Ceiling on the number of individually tracked blocks
      *
      * The real bound is relative -- once half the disk is dirty, copying the
-     * blocks one at a time is slower than cloning the storage outright -- but
+     * blocks one at a time is slower than copying the buffer outright -- but
      * on a large disk half is still far too many to hold in a set, so this
      * caps it. Whichever bound is hit first makes the drive fall back to
-     * cloning everything. Together they also keep the set from growing
-     * without limit when run-ahead is switched off and nothing consumes it.
+     * copying everything.
      */
     static constexpr isize dirtyLimit = 16384;
-
-    /* Scratch space for transfers between the storage and Amiga memory
-     *
-     * The memory side of a transfer needs a contiguous host buffer, which the
-     * storage cannot be relied upon to provide. Kept as a member and grown on
-     * demand so that the emulation path does not allocate per request. Not
-     * part of the drive's state: it holds nothing between two transfers.
-     */
-    utl::Buffer<u8> xfer;
 
     // Current position of the read/write head
     DriveHead head;
@@ -203,36 +173,6 @@ public:
 
     // Creates a hard drive with the contents of an HDF file
     void init(const fs::path &path);
-
-private:
-
-    /* Creates a hard drive that reads an HDF image as it goes
-     *
-     * The image stays on disk and only the parts the guest actually touches
-     * are read; writes are held in memory and never reach the file. Throws if
-     * the image cannot serve as lazy storage, which leaves the caller free to
-     * fall back to loading it whole.
-     */
-    void initLazy(const fs::path &path);
-
-    // Decides whether an image is worth opening lazily
-    bool preferLazy(const fs::path &path) const;
-
-    // Takes over the descriptors an image reports about itself
-    void adoptLayout(const HDFLayout &layout);
-
-    // Keeps the file system drivers the partition table actually needs
-    void adoptDrivers(const std::vector<DriverDescriptor> &all);
-
-    /* Size from which an image is opened lazily rather than read into memory
-     *
-     * Below it, reading the image whole costs little and is the better
-     * understood path; above it, holding the image (twice over, once the
-     * run-ahead instance has its own copy) stops being reasonable.
-     */
-    static constexpr isize lazyThreshold = 256 * 1024 * 1024;
-
-public:
 
     const HardDriveTraits &getTraits() const {
 
@@ -340,44 +280,9 @@ private:
         << controllerRevision
         << geometry
         << ptable
-        << drivers;
-
-        /* Serialize the disk contents
-         *
-         * Snapshots carry the complete image, whatever the storage. When the
-         * storage keeps it in one buffer, that buffer *is* the snapshot's
-         * copy. When it does not -- a lazily opened image -- the contents are
-         * staged through a temporary one, which keeps the snapshot format the
-         * same at the price of holding the whole image for the duration.
-         *
-         * That price is exactly what a lazily opened drive exists to avoid,
-         * so this is a placeholder: a snapshot should reference the backing
-         * image and carry only the blocks that differ from it.
-         */
-        if (auto *raw = storage->buffer()) {
-
-            worker << *raw;
-
-        } else {
-
-            utl::Buffer<u8> staged;
-
-            if (isReader(worker)) {
-
-                worker << staged;
-                if (staged.size) {
-                    storage->write(staged.ptr, 0, std::min(staged.size, storage->size()));
-                }
-
-            } else {
-
-                staged.init(storage->size());
-                storage->read(staged.ptr, 0, staged.size);
-                worker << staged;
-            }
-        }
-
-        worker << flags;
+        << drivers
+        << data
+        << flags;
 
     } SERIALIZERS(serialize);
 
@@ -449,34 +354,9 @@ private:
 
 public:
 
-    isize size() const override { return storage->size(); }
+    isize size() const override { return data.size; }
     void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
-
-private:
-
-    // Makes sure the transfer buffer can hold at least 'length' bytes
-    u8 *scratch(isize length) {
-
-        if (xfer.size < length) xfer.init(length);
-        return xfer.ptr;
-    }
-
-
-    //
-    // Tracking modifications
-    //
-
-private:
-
-    // Records that a byte range has been written
-    void markDirty(isize offset, isize count);
-
-    // Records that the disk has changed in its entirety
-    void markAllDirty() const { allDirty = true; dirty.clear(); }
-
-    // Records that this instance agrees with the one it was cloned from
-    void markSynced() const { allDirty = false; dirty.clear(); }
 
 
     //
@@ -572,6 +452,22 @@ private:
     // Moves the drive head to the specified block
     void moveHead(isize lba);
     void moveHead(isize c, isize h, isize s);
+
+
+    //
+    // Tracking modifications
+    //
+
+private:
+
+    // Records that a byte range has been written
+    void markDirty(isize offset, isize count);
+
+    // Records that the disk has changed in its entirety
+    void markAllDirty() const { allDirty = true; dirty.clear(); }
+
+    // Records that this instance agrees with the one it was cloned from
+    void markSynced() const { allDirty = false; dirty.clear(); }
     
     
     //

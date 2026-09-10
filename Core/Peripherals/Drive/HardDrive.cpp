@@ -53,15 +53,14 @@ HardDrive::operator= (const HardDrive& other) {
     if CONSTEXPR (RUA_ON_STEROIDS) {
 
         // Clone all blocks
-        storage = other.storage->clone();
+        CLONE(data)
 
-    } else if (allDirty || other.allDirty ||
-               storage->size() != other.storage->size()) {
+    } else if (allDirty || other.allDirty || data.size != other.data.size) {
 
         /* Nothing reliable to salvage: one of the two lost track of what it
-         * changed, or they disagree in size. Clone everything.
+         * changed, or they disagree in size. Copy everything.
          */
-        storage = other.storage->clone();
+        CLONE(data)
 
     } else {
 
@@ -70,13 +69,11 @@ HardDrive::operator= (const HardDrive& other) {
          * own since the last clone. A block in both sets is simply copied
          * twice, which costs nothing worth avoiding.
          */
-        u8 block[dirtyBsize];
-
         auto sync = [&](isize nr) {
 
             logmsg(LOG_RUA, "Cloning block %ld\n", nr);
-            other.storage->read(block, nr * dirtyBsize, dirtyBsize);
-            storage->write(block, nr * dirtyBsize, dirtyBsize);
+            memcpy(data.ptr + dirtyBsize * nr,
+                   other.data.ptr + dirtyBsize * nr, dirtyBsize);
         };
 
         for (auto nr : dirty)       sync(nr);
@@ -99,7 +96,7 @@ HardDrive::markDirty(isize offset, isize count)
     auto last  = (offset + count - 1) / dirtyBsize;
 
     // Give up on tracking individual blocks if there are too many of them
-    auto limit = std::min(dirtyLimit, storage->size() / dirtyBsize / 2);
+    auto limit = std::min(dirtyLimit, data.size / dirtyBsize / 2);
 
     if (isize(dirty.size()) + (last - first + 1) > limit) {
 
@@ -113,11 +110,7 @@ HardDrive::markDirty(isize offset, isize count)
 void
 HardDrive::init()
 {
-    /* A fresh RamStorage rather than dealloc(), because dropping the
-     * contents of a file-backed storage would not drop the file behind it,
-     * and this drive is supposed to end up with no disk at all.
-     */
-    storage = std::make_unique<RamStorage>();
+    data.dealloc();
     markAllDirty();
 
     diskVendor = "VAMIGA";
@@ -159,7 +152,7 @@ HardDrive::init(const GeometryDescriptor &geometry)
     setFlag(DiskFlags::BOOTABLE, true);
 
     // Create the new drive
-    storage->alloc(geometry.numBytes(), 0);
+    data.init(geometry.numBytes(), 0);
     markAllDirty();
 }
 
@@ -182,15 +175,7 @@ HardDrive::init(const FileSystem &fs)
     ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
 
     // Copy over all blocks
-    auto bsize = geometry.bsize;
-    auto *block = scratch(bsize);
-
-    for (isize i = 0, n = fs.blocks(); i < n; i++) {
-
-        // exportBlock() zeroes the target if the block carries no data
-        fs.fetch(BlockNr(i)).exportBlock(block, bsize);
-        write(block, i * bsize, bsize);
-    }
+    fs.exporter.exportVolume(data.ptr, geometry.numBytes());
 }
 
 void
@@ -216,36 +201,7 @@ HardDrive::init(const HDFFile &hdf)
     ptable = hdf.ptable;
     
     // Copy over all needed file system drivers
-    adoptDrivers(hdf.drivers);
-    
-    // Check the drive geometry against the file size
-    auto numBytes = hdf.data.size;
-    
-    if (storage->size() < numBytes) {
-        
-        logmsg(LOG_HDR, "HDF is too large. Ignoring excess bytes.\n");
-        numBytes = storage->size();
-    }
-    if (storage->size() > hdf.data.size) {
-        
-        logmsg(LOG_HDR, "HDF is too small. Padding with zeroes.");
-        storage->clear(0, hdf.data.size, storage->size() - hdf.data.size);
-    }
-    
-    // Copy over all blocks
-    write(hdf.data.ptr, 0, numBytes);
-        
-    // Print some debug information
-    logmsg(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
-    if CONSTEXPR (LOG_HDR != LOG_OFF) {
-        for (auto &driver : drivers) driver.dump();
-    }
-}
-
-void
-HardDrive::adoptDrivers(const std::vector<DriverDescriptor> &all)
-{
-    for (const auto &driver : all) {
+    for (const auto &driver : hdf.drivers) {
 
         bool needed = HDR_FS_LOAD_ALL;
 
@@ -258,95 +214,29 @@ HardDrive::adoptDrivers(const std::vector<DriverDescriptor> &all)
         }
         if (needed) { drivers.push_back(driver); }
     }
-}
-
-void
-HardDrive::adoptLayout(const HDFLayout &layout)
-{
-    auto geo = layout.getGeometryDescriptor();
-
-    // Throw before touching anything if the image does not add up
-    geo.checkCompatibility(mbLimit());
-
-    auto parts = layout.getPartitionDescriptors();
-    for (auto &it : parts) it.checkCompatibility(geo);
-
-    auto all = layout.getDriverDescriptors();
-    for (auto &it : all) it.checkCompatibility();
-
-    geometry = geo;
-    ptable = parts;
-    adoptDrivers(all);
-
-    // Copy the product description (if provided by the image)
-    if (auto value = layout.getDiskProduct(); value) diskProduct = *value;
-    if (auto value = layout.getDiskVendor(); value) diskVendor = *value;
-    if (auto value = layout.getDiskRevision(); value) diskRevision = *value;
-    if (auto value = layout.getControllerProduct(); value) controllerProduct = *value;
-    if (auto value = layout.getControllerVendor(); value) controllerVendor = *value;
-    if (auto value = layout.getControllerRevision(); value) controllerRevision = *value;
-}
-
-bool
-HardDrive::preferLazy(const fs::path &path) const
-{
-    // Compressed images have to be unpacked in one go
-    if (utl::lowercased(path.extension().string()) != ".hdf") return false;
-
-    std::error_code ec;
-    auto bytes = fs::file_size(path, ec);
-
-    return !ec && isize(bytes) >= lazyThreshold;
-}
-
-void
-HardDrive::initLazy(const fs::path &path)
-{
-    // Read the image's own account of itself from its first blocks
-    auto probe = std::make_unique<FileStorage>(path);
-
-    HDFLayout layout([&probe](isize nr, u8 *dst) {
-
-        auto offset = nr * 512;
-        if (nr < 0 || offset + 512 > probe->size()) return false;
-
-        probe->read(dst, offset, 512);
-        return true;
-
-    }, probe->size());
-
-    /* Without a rigid disk block there is nothing near the front of the image
-     * that describes it, and working the geometry out means scanning for a
-     * root block -- across the whole image, which is precisely what opening
-     * it lazily is meant to avoid. Such images are read whole instead.
-     */
-    if (!layout.hasRDB()) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED, "no rigid disk block");
+    
+    // Check the drive geometry against the file size
+    auto numBytes = hdf.data.size;
+    
+    if (data.size < numBytes) {
+        
+        logmsg(LOG_HDR, "HDF is too large. Ignoring excess bytes.\n");
+        numBytes = data.size;
     }
-
-    // Wipe out the old drive
-    init();
-
-    // Take over what the image says about itself
-    adoptLayout(layout);
-
-    if (geometry.numBytes() > probe->size()) {
-        throw DeviceError(DeviceError::HDR_UNMATCHED_GEOMETRY);
+    if (data.size > hdf.data.size) {
+        
+        logmsg(LOG_HDR, "HDF is too small. Padding with zeroes.");
+        data.clear(0, hdf.data.size);
     }
-
-    // Images provided by the user are bootable by default
-    setFlag(DiskFlags::BOOTABLE, true);
-
-    /* Present exactly as many bytes as the geometry accounts for. An image
-     * may be longer than that -- some writers round the file up -- and a
-     * drive that reported the file's length instead would disagree with the
-     * same image loaded into memory, which is trimmed to the geometry.
-     */
-    storage = std::make_unique<FileStorage>(path, geometry.numBytes());
-    markAllDirty();
-
-    logmsg(LOG_HDR, "Opened %s lazily (%ld bytes)\n",
-           path.string().c_str(), storage->size());
+    
+    // Copy over all blocks
+    hdf.copy(data.ptr, 0, numBytes);
+        
+    // Print some debug information
+    logmsg(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
+    if CONSTEXPR (LOG_HDR != LOG_OFF) {
+        for (auto &driver : drivers) driver.dump();
+    }
 }
 
 void
@@ -364,16 +254,7 @@ HardDrive::init(const fs::path &path)
         importFolder(path);
         
     } else {
-
-        // Try to leave a large image on disk rather than pulling it into RAM
-        if (preferLazy(path)) {
-
-            try { initLazy(path); return; } catch (std::exception &e) {
-                logmsg(LOG_HDR, "Cannot open lazily (%s). Loading the image.\n",
-                       e.what());
-            }
-        }
-
+        
         try { init(HDFFile(path)); return; } catch(...) { }
         
         //throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
@@ -620,13 +501,15 @@ HardDrive::_dump(Category category, std::ostream &os) const
 void
 HardDrive::read(u8 *dst, isize offset, isize count) const
 {
-    storage->read(dst, offset, count);
+    assert(offset + count <= data.size);
+    memcpy((void *)dst, (void *)(data.ptr + offset), count);
 }
 
 void
 HardDrive::write(const u8 *src, isize offset, isize count)
 {
-    storage->write(src, offset, count);
+    assert(offset + count <= data.size);
+    memcpy((void *)(data.ptr + offset), (void *)src, count);
     markDirty(offset, count);
 }
 
@@ -645,7 +528,7 @@ HardDrive::mbLimit() const
 bool
 HardDrive::hasDisk() const
 {
-    return !storage->empty();
+    return data.ptr != nullptr;
 }
 
 bool 
@@ -706,7 +589,7 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
     }
     
     // Only proceed if a disk is present
-    if (!hasDisk()) return;
+    if (!data.ptr) return;
 
     if (fsType != FSFormat::NODOS) {
 
@@ -769,9 +652,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
         moveHead(offset / geometry.bsize);
 
         // Perform the read operation
-        auto *buf = scratch(length);
-        storage->read(buf, offset, length);
-        mem.patch(addr, buf, length);
+        mem.patch(addr, data.ptr + offset, length);
 
         // Inform the GUI
         msgQueue.put(Msg::HDR_READ);
@@ -801,9 +682,8 @@ HardDrive::write(isize offset, isize length, u32 addr)
         if (!getFlag(DiskFlags::PROTECTED)) {
 
             // Perform the write operation
-            auto *buf = scratch(length);
-            mem.spypeek <Accessor::CPU> (addr, length, buf);
-            write(buf, offset, length);
+            mem.spypeek <Accessor::CPU> (addr, length, data.ptr + offset);
+            markDirty(offset, length);
             
             // Mark disk as modified
             setFlag(DiskFlags::MODIFIED, true);
@@ -835,9 +715,9 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
         auto offset = isize(seg * geometry.bsize + 20);
 
         assert(offset >= 0);
-        assert(offset + bytesPerBlock <= storage->size());
+        assert(offset + bytesPerBlock <= data.size);
         
-        storage->read(driver.ptr + bytesRead, offset, bytesPerBlock);
+        memcpy(driver.ptr + bytesRead, data.ptr + offset, bytesPerBlock);
         bytesRead += bytesPerBlock;
     }
 }
@@ -845,7 +725,7 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
 i8
 HardDrive::verify(isize offset, isize length, u32 addr)
 {
-    assert(hasDisk());
+    assert(data.ptr);
 
     if (length % 512) {
         
@@ -934,51 +814,10 @@ HardDrive::importFolder(const fs::path &path)
 void
 HardDrive::writeToFile(const fs::path &path)
 {
-    if (path.empty()) return;
+    if (!path.empty()) {
 
-    /* Exporting to the very image this drive reads from would read and write
-     * the same file at once. Persist the pending changes instead, which is
-     * what "save it back" means for a lazily opened image anyway.
-     */
-    if (auto backing = storage->backingPath(); !backing.empty()) {
-
-        std::error_code ec;
-        if (fs::exists(path) && fs::equivalent(path, backing, ec) && !ec) {
-
-            storage->flush();
-            return;
-        }
-    }
-
-    if (utl::lowercased(path.extension().string()) == ".hdz") {
-
-        // Compression has to see the whole image at once
         auto hdf = Codec::makeHDF(*this);
         hdf->writeToFile(path);
-        return;
-    }
-
-    std::ofstream stream(path, std::ios::binary);
-
-    if (!stream.is_open()) {
-        throw IOError(IOError::FILE_CANT_CREATE, path);
-    }
-
-    // Copy the image to disk in chunks, never holding all of it at once
-    constexpr isize chunkSize = 1024 * 1024;
-
-    for (isize offset = 0, total = size(); offset < total; ) {
-
-        auto count = std::min(chunkSize, total - offset);
-        auto *buf = scratch(count);
-
-        storage->read(buf, offset, count);
-        stream.write((const char *)buf, count);
-        offset += count;
-    }
-
-    if (!stream) {
-        throw IOError(IOError::FILE_CANT_WRITE, path);
     }
 }
 

@@ -356,8 +356,6 @@
 		50BF4B342EFD1A0800F1B9F2 /* TrackDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */; };
 		50BF4B352EFD1A0800F1B9F2 /* TrackDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */; };
 		50BF4B382EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
-		50BF4C0E2F00000500F1B9F2 /* FileStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */; };
-		50BF4C0D2F00000400F1B9F2 /* FileStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */; };
 		50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
 		50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
 		50BF4B422F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
@@ -1186,9 +1184,6 @@
 		50BF4B322EFD19FF00F1B9F2 /* TrackDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrackDevice.h; sourceTree = "<group>"; };
 		50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrackDevice.cpp; sourceTree = "<group>"; };
 		50BF4B362EFD244100F1B9F2 /* LinearDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinearDevice.h; sourceTree = "<group>"; };
-		50BF4C0A2F00000100F1B9F2 /* BlockStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockStorage.h; sourceTree = "<group>"; };
-		50BF4C0B2F00000200F1B9F2 /* FileStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileStorage.h; sourceTree = "<group>"; };
-		50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileStorage.cpp; sourceTree = "<group>"; };
 		50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinearDevice.cpp; sourceTree = "<group>"; };
 		50BF4B3A2EFD5E7300F1B9F2 /* ByteView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ByteView.h; sourceTree = "<group>"; };
 		50BF4B3B2EFD618700F1B9F2 /* BitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BitView.h; sourceTree = "<group>"; };
@@ -1635,9 +1630,6 @@
 				50BCB9AA2EE2FA0F000C53CF /* DeviceError.cpp */,
 				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
 				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
-				50BF4C0A2F00000100F1B9F2 /* BlockStorage.h */,
-				50BF4C0B2F00000200F1B9F2 /* FileStorage.h */,
-				50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */,
 				50BF4B362EFD244100F1B9F2 /* LinearDevice.h */,
 				50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */,
 				503E86A02EEEBBE800ED891D /* BlockDevice.h */,
@@ -3245,7 +3237,6 @@
 				50001C652593230200D1FC91 /* DeviceDatabase.swift in Sources */,
 				50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */,
 				50BF4B382EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,
-				50BF4C0D2F00000400F1B9F2 /* FileStorage.cpp in Sources */,
 				50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */,
 				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
@@ -3694,7 +3685,6 @@
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
 				50BF4BE42F0C0DB000F1B9F2 /* ImageError.cpp in Sources */,
 				50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,
-				50BF4C0E2F00000500F1B9F2 /* FileStorage.cpp in Sources */,
 				5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */,
 				505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
