@@ -22,6 +22,7 @@
 #include "TrackDevice.h"
 #include "utl/storage.h"
 #include "utl/wrappers.h"
+#include <set>
 
 namespace retro::vault::amiga { class FileSystem; }
 
@@ -112,8 +113,48 @@ private:
      */
     std::unique_ptr<BlockStorage> storage = std::make_unique<RamStorage>();
     
-    // Keeps track of modified blocks (to update the run-ahead instance)
-    utl::Buffer<bool> dirty;
+    /* Blocks written since this instance was last synchronized with another
+     *
+     * Cloning a drive into the run-ahead instance does not have to copy the
+     * whole disk, only the blocks where the two can disagree. Those are the
+     * blocks the source has written since the last clone *and* the blocks the
+     * destination has written since then: the run-ahead instance keeps
+     * running after it was cloned, and its own writes have to be undone just
+     * as much as the source's have to be applied. Hence both instances track,
+     * and a clone consults the union.
+     *
+     * 'allDirty' is the giving-up state: everything counts as modified and
+     * the set is not maintained. Entered whenever the disk changes wholesale
+     * (reset, snapshot load, a new image), and whenever tracking individual
+     * blocks stops paying for itself (see dirtyLimit).
+     *
+     * Both are mutable because a clone reads its source through a const
+     * reference and has to mark it synchronized. They describe how this
+     * instance relates to another one, not what the drive holds, so they are
+     * part of neither its serialized state nor its identity.
+     */
+    mutable std::set<isize> dirty;
+    mutable bool allDirty = true;
+
+    /* Granularity of the dirty set, in bytes
+     *
+     * Independent of the drive geometry on purpose. Any fixed partitioning of
+     * the address range does the job, and a constant keeps the bookkeeping
+     * correct even before a geometry has been assigned. Hard drives are
+     * required to use 512 byte blocks anyway (see checkCompatibility).
+     */
+    static constexpr isize dirtyBsize = 512;
+
+    /* Ceiling on the number of individually tracked blocks
+     *
+     * The real bound is relative -- once half the disk is dirty, copying the
+     * blocks one at a time is slower than cloning the storage outright -- but
+     * on a large disk half is still far too many to hold in a set, so this
+     * caps it. Whichever bound is hit first makes the drive fall back to
+     * cloning everything. Together they also keep the set from growing
+     * without limit when run-ahead is switched off and nothing consumes it.
+     */
+    static constexpr isize dirtyLimit = 16384;
 
     /* Scratch space for transfers between the storage and Amiga memory
      *
@@ -356,6 +397,22 @@ private:
         if (xfer.size < length) xfer.init(length);
         return xfer.ptr;
     }
+
+
+    //
+    // Tracking modifications
+    //
+
+private:
+
+    // Records that a byte range has been written
+    void markDirty(isize offset, isize count);
+
+    // Records that the disk has changed in its entirety
+    void markAllDirty() const { allDirty = true; dirty.clear(); }
+
+    // Records that this instance agrees with the one it was cloned from
+    void markSynced() const { allDirty = false; dirty.clear(); }
 
 
     //

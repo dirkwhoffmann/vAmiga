@@ -55,35 +55,66 @@ HardDrive::operator= (const HardDrive& other) {
         // Clone all blocks
         storage = other.storage->clone();
 
-    } else if (storage->size() != other.storage->size()) {
+    } else if (allDirty || other.allDirty ||
+               storage->size() != other.storage->size()) {
 
-        // The instances disagree in size. Nothing to salvage, clone everything
+        /* Nothing reliable to salvage: one of the two lost track of what it
+         * changed, or they disagree in size. Clone everything.
+         */
         storage = other.storage->clone();
 
     } else {
 
-        // Clone dirty blocks
-        u8 block[512];
+        /* Copy over the blocks where the two can disagree: the ones the
+         * source has written, and the ones this instance has written on its
+         * own since the last clone. A block in both sets is simply copied
+         * twice, which costs nothing worth avoiding.
+         */
+        u8 block[dirtyBsize];
 
-        for (isize i = 0; i < other.dirty.size; i++) {
+        auto sync = [&](isize nr) {
 
-            if (other.dirty[i]) {
+            logmsg(LOG_RUA, "Cloning block %ld\n", nr);
+            other.storage->read(block, nr * dirtyBsize, dirtyBsize);
+            storage->write(block, nr * dirtyBsize, dirtyBsize);
+        };
 
-                logmsg(LOG_RUA, "Cloning block %ld\n", i);
-                other.storage->read(block, 512 * i, 512);
-                storage->write(block, 512 * i, 512);
-            }
-        }
+        for (auto nr : dirty)       sync(nr);
+        for (auto nr : other.dirty) sync(nr);
     }
 
+    // Both instances hold the same disk now
+    markSynced();
+    other.markSynced();
+
     return *this;
+}
+
+void
+HardDrive::markDirty(isize offset, isize count)
+{
+    if (allDirty || count <= 0) return;
+
+    auto first = offset / dirtyBsize;
+    auto last  = (offset + count - 1) / dirtyBsize;
+
+    // Give up on tracking individual blocks if there are too many of them
+    auto limit = std::min(dirtyLimit, storage->size() / dirtyBsize / 2);
+
+    if (isize(dirty.size()) + (last - first + 1) > limit) {
+
+        markAllDirty();
+        return;
+    }
+
+    for (auto nr = first; nr <= last; nr++) dirty.insert(nr);
 }
 
 void
 HardDrive::init()
 {
     storage->dealloc();
-    dirty.dealloc();
+    markAllDirty();
 
     diskVendor = "VAMIGA";
     diskProduct = "VDRIVE";
@@ -125,7 +156,7 @@ HardDrive::init(const GeometryDescriptor &geometry)
 
     // Create the new drive
     storage->alloc(geometry.numBytes(), 0);
-    dirty.init(geometry.numBytes() / 512, true);
+    markAllDirty();
 }
 
 void
@@ -154,7 +185,7 @@ HardDrive::init(const FileSystem &fs)
 
         // exportBlock() zeroes the target if the block carries no data
         fs.fetch(BlockNr(i)).exportBlock(block, bsize);
-        storage->write(block, i * bsize, bsize);
+        write(block, i * bsize, bsize);
     }
 }
 
@@ -210,7 +241,7 @@ HardDrive::init(const HDFFile &hdf)
     }
     
     // Copy over all blocks
-    storage->write(hdf.data.ptr, 0, numBytes);
+    write(hdf.data.ptr, 0, numBytes);
         
     // Print some debug information
     logmsg(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
@@ -253,8 +284,8 @@ HardDrive::_didReset(bool hard)
     if CONSTEXPR (HDR_MODIFIED)
         setFlag(DiskFlags::MODIFIED, true);
 
-    // Mark all blocks as dirty
-    dirty.clear(true);
+    // The disk changed in its entirety
+    markAllDirty();
 }
 
 i64
@@ -397,8 +428,8 @@ HardDrive::cacheInfo() const
 void
 HardDrive::_didLoad()
 {
-    // Mark all blocks as dirty
-    dirty.clear(true);
+    // The disk changed in its entirety
+    markAllDirty();
 }
 
 void
@@ -488,6 +519,7 @@ void
 HardDrive::write(const u8 *src, isize offset, isize count)
 {
     storage->write(src, offset, count);
+    markDirty(offset, count);
 }
 
 bool
@@ -657,7 +689,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
             // Perform the write operation
             auto *buf = scratch(length);
             mem.spypeek <Accessor::CPU> (addr, length, buf);
-            storage->write(buf, offset, length);
+            write(buf, offset, length);
             
             // Mark disk as modified
             setFlag(DiskFlags::MODIFIED, true);
