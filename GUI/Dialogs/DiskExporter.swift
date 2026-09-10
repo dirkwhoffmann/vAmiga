@@ -456,7 +456,7 @@ extension DiskExporter: NSFilePromiseProviderDelegate {
    
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         
-        var name = "Untitled" // vol?.name ?? "Untitled"
+        var name = vol?.name ?? "Untitled"
 
         switch formatPopup.selectedTag() {
             
