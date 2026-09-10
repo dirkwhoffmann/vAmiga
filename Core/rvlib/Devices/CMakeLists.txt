@@ -5,6 +5,7 @@ target_sources(rvlib PRIVATE
 BlockDevice.cpp
 DeviceError.cpp
 DeviceDescriptors.cpp
+FileStorage.cpp
 LinearDevice.cpp
 TrackDevice.cpp
 Volume.cpp

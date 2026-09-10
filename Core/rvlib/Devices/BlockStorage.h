@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Devices/DeviceTypes.h"
 #include "utl/common.h"
 #include "utl/storage.h"
 #include <cstring>
@@ -102,6 +103,27 @@ public:
      */
     virtual utl::Buffer<u8> *buffer() { return nullptr; }
     virtual const utl::Buffer<u8> *buffer() const { return nullptr; }
+
+
+    //
+    // Persisting
+    //
+
+public:
+
+    // Returns the file this storage reads from, if it has one
+    virtual fs::path backingPath() const { return {}; }
+
+    // Number of bytes written but not yet persisted
+    virtual isize pendingBytes() const { return 0; }
+
+    /* Writes pending changes back to the backing file.
+     *
+     * A no-op for storage that has no file behind it -- there is nowhere for
+     * the changes to go, and the caller is expected to export the contents
+     * instead.
+     */
+    virtual void flush() { }
 };
 
 

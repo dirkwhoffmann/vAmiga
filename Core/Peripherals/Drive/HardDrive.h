@@ -18,6 +18,7 @@
 #include "Drive.h"
 #include "HardDiskImage.h"
 #include "BlockStorage.h"
+#include "FileStorage.h"
 #include "HDFFile.h"
 #include "TrackDevice.h"
 #include "utl/storage.h"
@@ -31,6 +32,8 @@ namespace vamiga {
 using retro::vault::HDFFile;
 using retro::vault::BlockStorage;
 using retro::vault::RamStorage;
+using retro::vault::FileStorage;
+using retro::vault::HDFLayout;
 
 class HardDrive final : public Drive, public TrackDevice {
 
@@ -201,6 +204,36 @@ public:
     // Creates a hard drive with the contents of an HDF file
     void init(const fs::path &path);
 
+private:
+
+    /* Creates a hard drive that reads an HDF image as it goes
+     *
+     * The image stays on disk and only the parts the guest actually touches
+     * are read; writes are held in memory and never reach the file. Throws if
+     * the image cannot serve as lazy storage, which leaves the caller free to
+     * fall back to loading it whole.
+     */
+    void initLazy(const fs::path &path);
+
+    // Decides whether an image is worth opening lazily
+    bool preferLazy(const fs::path &path) const;
+
+    // Takes over the descriptors an image reports about itself
+    void adoptLayout(const HDFLayout &layout);
+
+    // Keeps the file system drivers the partition table actually needs
+    void adoptDrivers(const std::vector<DriverDescriptor> &all);
+
+    /* Size from which an image is opened lazily rather than read into memory
+     *
+     * Below it, reading the image whole costs little and is the better
+     * understood path; above it, holding the image (twice over, once the
+     * run-ahead instance has its own copy) stops being reasonable.
+     */
+    static constexpr isize lazyThreshold = 256 * 1024 * 1024;
+
+public:
+
     const HardDriveTraits &getTraits() const {
 
         static HardDriveTraits traits;
@@ -311,14 +344,38 @@ private:
 
         /* Serialize the disk contents
          *
-         * Snapshots still carry the complete image. Storage that cannot hand
-         * out a contiguous buffer will need a different scheme (a reference to
-         * the backing image plus the dirty blocks), so this asserts rather
-         * than silently truncating.
+         * Snapshots carry the complete image, whatever the storage. When the
+         * storage keeps it in one buffer, that buffer *is* the snapshot's
+         * copy. When it does not -- a lazily opened image -- the contents are
+         * staged through a temporary one, which keeps the snapshot format the
+         * same at the price of holding the whole image for the duration.
+         *
+         * That price is exactly what a lazily opened drive exists to avoid,
+         * so this is a placeholder: a snapshot should reference the backing
+         * image and carry only the blocks that differ from it.
          */
-        auto *raw = storage->buffer();
-        assert(raw);
-        worker << *raw;
+        if (auto *raw = storage->buffer()) {
+
+            worker << *raw;
+
+        } else {
+
+            utl::Buffer<u8> staged;
+
+            if (isReader(worker)) {
+
+                worker << staged;
+                if (staged.size) {
+                    storage->write(staged.ptr, 0, std::min(staged.size, storage->size()));
+                }
+
+            } else {
+
+                staged.init(storage->size());
+                storage->read(staged.ptr, 0, staged.size);
+                worker << staged;
+            }
+        }
 
         worker << flags;
 

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Images/HardDiskImage.h"
+#include "Images/HDF/HDFLayout.h"
 #include "Devices/DeviceDescriptors.h"
 #include "utl/common.h"
 #include "Images/ImageTypes.h"
@@ -117,11 +118,21 @@ public:
 
 public:
 
-    GeometryDescriptor getGeometryDescriptor() const;
-    PartitionDescriptor getPartitionDescriptor(isize part = 0) const;
-    std::vector<PartitionDescriptor> getPartitionDescriptors() const;
-    DriverDescriptor getDriverDescriptor(isize driver = 0) const;
-    std::vector<DriverDescriptor> getDriverDescriptors() const;
+    GeometryDescriptor getGeometryDescriptor() const {
+        return layout().getGeometryDescriptor();
+    }
+    PartitionDescriptor getPartitionDescriptor(isize part = 0) const {
+        return layout().getPartitionDescriptor(part);
+    }
+    std::vector<PartitionDescriptor> getPartitionDescriptors() const {
+        return layout().getPartitionDescriptors();
+    }
+    DriverDescriptor getDriverDescriptor(isize driver = 0) const {
+        return layout().getDriverDescriptor(driver);
+    }
+    std::vector<DriverDescriptor> getDriverDescriptors() const {
+        return layout().getDriverDescriptors();
+    }
 
 
     //
@@ -130,12 +141,12 @@ public:
 
 public:
 
-    optional<string> getDiskVendor() const { return rdbString(160, 8); }
-    optional<string> getDiskProduct() const { return rdbString(168, 16); }
-    optional<string> getDiskRevision() const { return rdbString(184, 4); }
-    optional<string> getControllerVendor() const { return rdbString(188, 8); }
-    optional<string> getControllerProduct() const { return rdbString(196, 16); }
-    optional<string> getControllerRevision() const { return rdbString(212, 4); }
+    optional<string> getDiskVendor() const { return layout().getDiskVendor(); }
+    optional<string> getDiskProduct() const { return layout().getDiskProduct(); }
+    optional<string> getDiskRevision() const { return layout().getDiskRevision(); }
+    optional<string> getControllerVendor() const { return layout().getControllerVendor(); }
+    optional<string> getControllerProduct() const { return layout().getControllerProduct(); }
+    optional<string> getControllerRevision() const { return layout().getControllerRevision(); }
 
 
     //
@@ -148,7 +159,7 @@ public:
     const GeometryDescriptor getGeometry() const { return geometry; }
 
     // Returns true if this image contains a rigid disk block
-    bool hasRDB() const;
+    bool hasRDB() const { return layout().hasRDB(); }
 
     // Returns the number of loadable file system drivers
     isize numDrivers() const { return isize(drivers.size()); }
@@ -160,7 +171,7 @@ public:
     u8 *partitionData(isize nr) const;
 
     // Predicts the number of blocks of this hard drive
-    isize predictNumBlocks() const;
+    isize predictNumBlocks() const { return layout().predictNumBlocks(); }
 
 
     //
@@ -169,26 +180,13 @@ public:
 
 private:
 
-    // Returns a pointer to a certain block if it exists
-    u8 *seekBlock(isize nr) const;
-
-    // Checks whether the provided pointer points to a Root Block
-    bool isRB(u8 *ptr) const;
-
-    // Return a pointer to the Root Block if it exists
-    u8 *seekRB() const;
-
-    // Return a pointer to the Rigid Disk Block if it exists
-    u8 *seekRDB() const;
-
-    // Returns a pointer to a certain partition block if it exists
-    u8 *seekPB(isize nr) const;
-
-    // Returns a pointer to a certain filesystem header block if it exists
-    u8 *seekFSH(isize nr) const;
+    // Reads this image's layout (geometry, partitions, drivers)
+    HDFLayout layout() const { return HDFLayout(*this); }
 
     // Returns a string from the Rigid Disk Block if it exists
-    optional<string> rdbString(isize offset, isize len) const;
+    optional<string> rdbString(isize offset, isize len) const {
+        return layout().rdbString(offset, len);
+    }
 
 
     //

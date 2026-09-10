@@ -113,7 +113,11 @@ HardDrive::markDirty(isize offset, isize count)
 void
 HardDrive::init()
 {
-    storage->dealloc();
+    /* A fresh RamStorage rather than dealloc(), because dropping the
+     * contents of a file-backed storage would not drop the file behind it,
+     * and this drive is supposed to end up with no disk at all.
+     */
+    storage = std::make_unique<RamStorage>();
     markAllDirty();
 
     diskVendor = "VAMIGA";
@@ -212,19 +216,7 @@ HardDrive::init(const HDFFile &hdf)
     ptable = hdf.ptable;
     
     // Copy over all needed file system drivers
-    for (const auto &driver : hdf.drivers) {
-
-        bool needed = HDR_FS_LOAD_ALL;
-
-        for (const auto &part : ptable) {
-            if (driver.dosType == part.dosType) {
-
-                needed = true;
-                break;
-            }
-        }
-        if (needed) { drivers.push_back(driver); }
-    }
+    adoptDrivers(hdf.drivers);
     
     // Check the drive geometry against the file size
     auto numBytes = hdf.data.size;
@@ -251,6 +243,113 @@ HardDrive::init(const HDFFile &hdf)
 }
 
 void
+HardDrive::adoptDrivers(const std::vector<DriverDescriptor> &all)
+{
+    for (const auto &driver : all) {
+
+        bool needed = HDR_FS_LOAD_ALL;
+
+        for (const auto &part : ptable) {
+            if (driver.dosType == part.dosType) {
+
+                needed = true;
+                break;
+            }
+        }
+        if (needed) { drivers.push_back(driver); }
+    }
+}
+
+void
+HardDrive::adoptLayout(const HDFLayout &layout)
+{
+    auto geo = layout.getGeometryDescriptor();
+
+    // Throw before touching anything if the image does not add up
+    geo.checkCompatibility();
+
+    auto parts = layout.getPartitionDescriptors();
+    for (auto &it : parts) it.checkCompatibility(geo);
+
+    auto all = layout.getDriverDescriptors();
+    for (auto &it : all) it.checkCompatibility();
+
+    geometry = geo;
+    ptable = parts;
+    adoptDrivers(all);
+
+    // Copy the product description (if provided by the image)
+    if (auto value = layout.getDiskProduct(); value) diskProduct = *value;
+    if (auto value = layout.getDiskVendor(); value) diskVendor = *value;
+    if (auto value = layout.getDiskRevision(); value) diskRevision = *value;
+    if (auto value = layout.getControllerProduct(); value) controllerProduct = *value;
+    if (auto value = layout.getControllerVendor(); value) controllerVendor = *value;
+    if (auto value = layout.getControllerRevision(); value) controllerRevision = *value;
+}
+
+bool
+HardDrive::preferLazy(const fs::path &path) const
+{
+    // Compressed images have to be unpacked in one go
+    if (utl::lowercased(path.extension().string()) != ".hdf") return false;
+
+    std::error_code ec;
+    auto bytes = fs::file_size(path, ec);
+
+    return !ec && isize(bytes) >= lazyThreshold;
+}
+
+void
+HardDrive::initLazy(const fs::path &path)
+{
+    // Read the image's own account of itself from its first blocks
+    auto probe = std::make_unique<FileStorage>(path);
+
+    HDFLayout layout([&probe](isize nr, u8 *dst) {
+
+        auto offset = nr * 512;
+        if (nr < 0 || offset + 512 > probe->size()) return false;
+
+        probe->read(dst, offset, 512);
+        return true;
+
+    }, probe->size());
+
+    /* Without a rigid disk block there is nothing near the front of the image
+     * that describes it, and working the geometry out means scanning for a
+     * root block -- across the whole image, which is precisely what opening
+     * it lazily is meant to avoid. Such images are read whole instead.
+     */
+    if (!layout.hasRDB()) {
+        throw DeviceError(DeviceError::HDR_UNSUPPORTED, "no rigid disk block");
+    }
+
+    // Wipe out the old drive
+    init();
+
+    // Take over what the image says about itself
+    adoptLayout(layout);
+
+    if (geometry.numBytes() > probe->size()) {
+        throw DeviceError(DeviceError::HDR_UNMATCHED_GEOMETRY);
+    }
+
+    // Images provided by the user are bootable by default
+    setFlag(DiskFlags::BOOTABLE, true);
+
+    /* Present exactly as many bytes as the geometry accounts for. An image
+     * may be longer than that -- some writers round the file up -- and a
+     * drive that reported the file's length instead would disagree with the
+     * same image loaded into memory, which is trimmed to the geometry.
+     */
+    storage = std::make_unique<FileStorage>(path, geometry.numBytes());
+    markAllDirty();
+
+    logmsg(LOG_HDR, "Opened %s lazily (%ld bytes)\n",
+           path.string().c_str(), storage->size());
+}
+
+void
 HardDrive::init(const fs::path &path)
 {
     if (!fs::exists(path)) {
@@ -265,7 +364,16 @@ HardDrive::init(const fs::path &path)
         importFolder(path);
         
     } else {
-        
+
+        // Try to leave a large image on disk rather than pulling it into RAM
+        if (preferLazy(path)) {
+
+            try { initLazy(path); return; } catch (std::exception &e) {
+                logmsg(LOG_HDR, "Cannot open lazily (%s). Loading the image.\n",
+                       e.what());
+            }
+        }
+
         try { init(HDFFile(path)); return; } catch(...) { }
         
         //throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
@@ -821,6 +929,20 @@ void
 HardDrive::writeToFile(const fs::path &path)
 {
     if (path.empty()) return;
+
+    /* Exporting to the very image this drive reads from would read and write
+     * the same file at once. Persist the pending changes instead, which is
+     * what "save it back" means for a lazily opened image anyway.
+     */
+    if (auto backing = storage->backingPath(); !backing.empty()) {
+
+        std::error_code ec;
+        if (fs::exists(path) && fs::equivalent(path, backing, ec) && !ec) {
+
+            storage->flush();
+            return;
+        }
+    }
 
     if (utl::lowercased(path.extension().string()) == ".hdz") {
 

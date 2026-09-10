@@ -788,6 +788,8 @@ public:
 
 template <class T> inline bool isChecker(T &worker) { return false; }
 template <> inline bool isChecker(SerChecker &worker) { return true; }
+template <class T> inline bool isReader(T &worker) { return false; }
+template <> inline bool isReader(SerReader &worker) { return true; }
 template <class T> inline bool isResetter(T &worker) { return false; }
 template <> inline bool isResetter(SerResetter &worker) { return true; }
 template <class T> inline bool isSoftResetter(T &worker) { return false; }

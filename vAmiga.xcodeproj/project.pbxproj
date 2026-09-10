@@ -356,6 +356,8 @@
 		50BF4B342EFD1A0800F1B9F2 /* TrackDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */; };
 		50BF4B352EFD1A0800F1B9F2 /* TrackDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */; };
 		50BF4B382EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
+		50BF4C0E2F00000500F1B9F2 /* FileStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */; };
+		50BF4C0D2F00000400F1B9F2 /* FileStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */; };
 		50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */; };
 		50BF4B412F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
 		50BF4B422F03D6D400F1B9F2 /* AmigaEncoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4B402F03D6D300F1B9F2 /* AmigaEncoder.cpp */; };
@@ -450,6 +452,7 @@
 		50EA98F929D4883500FE99B0 /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EA98F829D4883500FE99B0 /* A1000ANSI.xib */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
+		50BF4C112F00000800F1B9F2 /* HDFLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C102F00000700F1B9F2 /* HDFLayout.cpp */; };
 		50EF2236281595AA00440C4D /* Defaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5B9BD2807E65800502787 /* Defaults.cpp */; };
 		50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
 		50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
@@ -563,6 +566,7 @@
 		50FC04CB27DA19E900C3E566 /* FloppyDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */; };
 		50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */; };
 		50FC04CD27DA19E900C3E566 /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
+		50BF4C122F00000900F1B9F2 /* HDFLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C102F00000700F1B9F2 /* HDFLayout.cpp */; };
 		50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FC04CF27DA19F600C3E566 /* FSDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C01082577A8C000F9E05C /* FSDescriptor.cpp */; };
 		50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5029C6E427CA6209002F6CCC /* FileSystem.cpp */; };
@@ -1183,6 +1187,8 @@
 		50BF4B332EFD1A0700F1B9F2 /* TrackDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrackDevice.cpp; sourceTree = "<group>"; };
 		50BF4B362EFD244100F1B9F2 /* LinearDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LinearDevice.h; sourceTree = "<group>"; };
 		50BF4C0A2F00000100F1B9F2 /* BlockStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockStorage.h; sourceTree = "<group>"; };
+		50BF4C0B2F00000200F1B9F2 /* FileStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileStorage.h; sourceTree = "<group>"; };
+		50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileStorage.cpp; sourceTree = "<group>"; };
 		50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LinearDevice.cpp; sourceTree = "<group>"; };
 		50BF4B3A2EFD5E7300F1B9F2 /* ByteView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ByteView.h; sourceTree = "<group>"; };
 		50BF4B3B2EFD618700F1B9F2 /* BitView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BitView.h; sourceTree = "<group>"; };
@@ -1350,6 +1356,8 @@
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
+		50BF4C0F2F00000600F1B9F2 /* HDFLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFLayout.h; sourceTree = "<group>"; };
+		50BF4C102F00000700F1B9F2 /* HDFLayout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFLayout.cpp; sourceTree = "<group>"; };
 		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EFB0B82C1811C90013B73C /* Configurable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Configurable.cpp; sourceTree = "<group>"; };
 		50EFB0B92C1811C90013B73C /* Configurable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configurable.h; sourceTree = "<group>"; };
@@ -1628,6 +1636,8 @@
 				501C514127C0CE6600DF1DD5 /* DeviceDescriptors.h */,
 				501C514027C0CE6600DF1DD5 /* DeviceDescriptors.cpp */,
 				50BF4C0A2F00000100F1B9F2 /* BlockStorage.h */,
+				50BF4C0B2F00000200F1B9F2 /* FileStorage.h */,
+				50BF4C0C2F00000300F1B9F2 /* FileStorage.cpp */,
 				50BF4B362EFD244100F1B9F2 /* LinearDevice.h */,
 				50BF4B372EFD244700F1B9F2 /* LinearDevice.cpp */,
 				503E86A02EEEBBE800ED891D /* BlockDevice.h */,
@@ -1841,6 +1851,8 @@
 			children = (
 				505A19452EDDF6CF000BB9C2 /* CMakeLists.txt */,
 				50EAD99B256E76820053F9AC /* HDFFile.h */,
+				50BF4C0F2F00000600F1B9F2 /* HDFLayout.h */,
+				50BF4C102F00000700F1B9F2 /* HDFLayout.cpp */,
 				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 			);
 			path = HDF;
@@ -3161,6 +3173,7 @@
 				503FC4CA2EE0AB0D00637C95 /* Files.cpp in Sources */,
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
 				50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */,
+				50BF4C112F00000800F1B9F2 /* HDFLayout.cpp in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
 				509D048E2EDA46D700355638 /* FSAllocator.cpp in Sources */,
 				509C3663260B1D95004F160A /* CommanderConsole.cpp in Sources */,
@@ -3232,6 +3245,7 @@
 				50001C652593230200D1FC91 /* DeviceDatabase.swift in Sources */,
 				50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */,
 				50BF4B382EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,
+				50BF4C0D2F00000400F1B9F2 /* FileStorage.cpp in Sources */,
 				50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */,
 				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
@@ -3583,6 +3597,7 @@
 				509D07782EDB993F00355638 /* PosixAdapter.cpp in Sources */,
 				5099432A29C2114C00867E8F /* Amiga.cpp in Sources */,
 				50FC04CD27DA19E900C3E566 /* HDFFile.cpp in Sources */,
+				50BF4C122F00000900F1B9F2 /* HDFLayout.cpp in Sources */,
 				50FC04EF27DA1A4500C3E566 /* RemoteManager.cpp in Sources */,
 				50BCB9C92EE73B65000C53CF /* MediaError.cpp in Sources */,
 				50FC049027DA196500C3E566 /* Denise.cpp in Sources */,
@@ -3679,6 +3694,7 @@
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
 				50BF4BE42F0C0DB000F1B9F2 /* ImageError.cpp in Sources */,
 				50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,
+				50BF4C0E2F00000500F1B9F2 /* FileStorage.cpp in Sources */,
 				5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */,
 				505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
