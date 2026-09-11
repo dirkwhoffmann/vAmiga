@@ -405,6 +405,8 @@
 		50BF4C122F00000900F1B9F2 /* HDFLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C102F00000700F1B9F2 /* HDFLayout.cpp */; };
 		50BF4C222F00001200F1B9F2 /* FileBackedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C212F00001100F1B9F2 /* FileBackedBuffer.cpp */; };
 		50BF4C232F00001300F1B9F2 /* FileBackedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C212F00001100F1B9F2 /* FileBackedBuffer.cpp */; };
+		50BF4C322F00001600F1B9F2 /* BackedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C312F00001500F1B9F2 /* BackedBuffer.cpp */; };
+		50BF4C332F00001700F1B9F2 /* BackedBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF4C312F00001500F1B9F2 /* BackedBuffer.cpp */; };
 		50C246032E8ABACB00B134F6 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbol.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
@@ -1245,6 +1247,8 @@
 		50BF4C102F00000700F1B9F2 /* HDFLayout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFLayout.cpp; sourceTree = "<group>"; };
 		50BF4C202F00001000F1B9F2 /* FileBackedBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileBackedBuffer.h; sourceTree = "<group>"; };
 		50BF4C212F00001100F1B9F2 /* FileBackedBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileBackedBuffer.cpp; sourceTree = "<group>"; };
+		50BF4C302F00001400F1B9F2 /* BackedBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BackedBuffer.h; sourceTree = "<group>"; };
+		50BF4C312F00001500F1B9F2 /* BackedBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BackedBuffer.cpp; sourceTree = "<group>"; };
 		50C246022E8ABAC600B134F6 /* Symbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
@@ -1760,6 +1764,7 @@
 				503FC4DE2EE16FCA00637C95 /* Buffer.h */,
 				503FC4F32EE1BCFB00637C95 /* RingBuffer.h */,
 				50BF4C202F00001000F1B9F2 /* FileBackedBuffer.h */,
+				50BF4C302F00001400F1B9F2 /* BackedBuffer.h */,
 			);
 			path = storage;
 			sourceTree = "<group>";
@@ -1787,6 +1792,7 @@
 			children = (
 				503FC4DF2EE16FD500637C95 /* Buffer.cpp */,
 				50BF4C212F00001100F1B9F2 /* FileBackedBuffer.cpp */,
+				50BF4C312F00001500F1B9F2 /* BackedBuffer.cpp */,
 				F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */,
 				1D35AF75E880BB23242A2A34 /* ZipError.cpp */,
 			);
@@ -3131,6 +3137,7 @@
 				509C365E260B177E004F160A /* Console.cpp in Sources */,
 				50BCB9932EE1D88E000C53CF /* Buffer.cpp in Sources */,
 				50BF4C222F00001200F1B9F2 /* FileBackedBuffer.cpp in Sources */,
+				50BF4C322F00001600F1B9F2 /* BackedBuffer.cpp in Sources */,
 				F0DECF612C99A2D9C515C300 /* ZipArchive.cpp in Sources */,
 				7C176B0DB090FF1C8D71B940 /* ZipError.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
@@ -3634,6 +3641,7 @@
 				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,
 				50BCB9942EE1D88E000C53CF /* Buffer.cpp in Sources */,
 				50BF4C232F00001300F1B9F2 /* FileBackedBuffer.cpp in Sources */,
+				50BF4C332F00001700F1B9F2 /* BackedBuffer.cpp in Sources */,
 				904444F946950B6D8622FCEC /* ZipArchive.cpp in Sources */,
 				FF5099FB513B4F28EE0E81E9 /* ZipError.cpp in Sources */,
 				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,
