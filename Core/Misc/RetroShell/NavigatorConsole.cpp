@@ -837,7 +837,7 @@ Console::initNavigatorCommands(RSCommand &root)
 
                 navRequireFormattedFS();
 
-                ADFFile adf(amigaFs->getTraits().blocks);
+                ADFFile adf(amigaFs->getTraits().bytes);
                 amigaFs->exporter.exportVolume(adf);
                 df[values[0]]->insertImage(adf, false);
 

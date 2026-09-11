@@ -56,12 +56,6 @@ public:
     static void encodeEADF(const EADFFile &source, FloppyDisk &target);
     static void decodeEADF(EADFFile &target, const FloppyDisk &source);
 
-    static void encodeIMG(const IMGFile &source, FloppyDisk &target);
-    static void decodeIMG(IMGFile &target, const FloppyDisk &source);
-
-    static void encodeST(const STFile &source, FloppyDisk &target);
-    static void decodeST(STFile &target, const FloppyDisk &source);
-
     static void encodeDMS(const DMSFile &source, FloppyDisk &target);
 
     static void encodeEXE(const EXEFile &source, FloppyDisk &target);

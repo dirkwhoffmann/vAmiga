@@ -46,8 +46,6 @@ public:
 
     explicit HDFFile() { }
     explicit HDFFile(isize len) { init(len); }
-    explicit HDFFile(const u8 *buf, isize len) { init(buf, len); }
-    explicit HDFFile(const utl::Buffer<u8>& buffer) { init(buffer); }
     explicit HDFFile(const fs::path& path) { init(path); }
     explicit HDFFile(const LinearDevice& device) { init(device); }
 
@@ -164,12 +162,6 @@ public:
     // Returns the number of loadable file system drivers
     isize numDrivers() const { return isize(drivers.size()); }
 
-
-    // Returns the byte count and the location of a certain partition
-    isize partitionSize(isize nr) const;
-    isize partitionOffset(isize nr) const;
-    u8 *partitionData(isize nr) const;
-
     // Predicts the number of blocks of this hard drive
     isize predictNumBlocks() const { return layout().predictNumBlocks(); }
 
@@ -187,15 +179,6 @@ private:
     optional<string> rdbString(isize offset, isize len) const {
         return layout().rdbString(offset, len);
     }
-
-
-    //
-    // Serializing
-    //
-
-public:
-
-    isize writePartitionToFile(const fs::path &path, isize nr) const;
 };
 
 }

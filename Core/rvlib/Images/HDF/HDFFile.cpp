@@ -69,16 +69,18 @@ isize
 HDFFile::writeToFile(const fs::path &path, isize offset, isize len) const
 {
     if (utl::lowercased(path.extension().string()) == ".hdz") {
-     
-        auto copy = data;
+
+        // Compress the requested range and write the result as a whole
+        utl::Buffer<u8> copy;
+        copy.init(data.ptr + offset, len);
         copy.gzip();
-        copy.write(path, offset, len);
+        copy.write(path);
         return copy.size;
-        
+
     } else {
-        
+
         data.write(path, offset, len);
-        return data.size;
+        return len;
     }
 }
 
@@ -91,7 +93,6 @@ HDFFile::didInitialize()
         
         try {
             data.gunzip();
-            data.write("/tmp/hd.hdf");
         } catch (std::exception &err) {
             throw utl::IOError(utl::IOError::ZLIB_ERROR, err.what());
         }
@@ -202,58 +203,5 @@ HDFFile::getFileSystemDescriptor(isize nr) const
 }
 */
 
-
-isize
-HDFFile::partitionSize(isize nr) const
-{
-    auto &part = ptable[nr];
-    return (part.highCyl - part.lowCyl + 1) * part.heads * part.sectors * 512;
-}
-
-isize
-HDFFile::partitionOffset(isize nr) const
-{
-    auto &part = ptable[nr];
-    return part.lowCyl * part.heads * part.sectors * 512;
-}
-
-u8 *
-HDFFile::partitionData(isize nr) const
-{
-    return data.ptr + partitionOffset(nr);
-}
-
-
-
-
-
-
-
-
-
-/*
-FSFormat
-HDFFile::dos(isize blockNr) const
-{
-    if (auto block = seekBlock(blockNr); block) {
-
-        if (strncmp((const char *)block, "DOS", 3) || block[3] > 7) {
-            return FSFormat::NODOS;
-        }
-        return (FSFormat)block[3];
-    }
-
-    return FSFormat::NODOS;
-}
-*/
-
-isize
-HDFFile::writePartitionToFile(const fs::path &path, isize nr) const
-{
-    auto offset = partitionOffset(nr);
-    auto size = partitionSize(nr);
-
-    return writeToFile(path, offset, size);
-}
 
 }

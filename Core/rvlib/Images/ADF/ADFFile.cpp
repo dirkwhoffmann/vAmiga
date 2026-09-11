@@ -186,16 +186,18 @@ isize
 ADFFile::writeToFile(const fs::path &path, isize offset, isize len) const
 {
     if (utl::lowercased(path.extension().string()) == ".adz") {
-     
-        auto copy = data;
+
+        // Compress the requested range and write the result as a whole
+        utl::Buffer<u8> copy;
+        copy.init(data.ptr + offset, len);
         copy.gzip();
-        copy.write(path, offset, len);
+        copy.write(path);
         return copy.size;
-        
+
     } else {
-        
+
         data.write(path, offset, len);
-        return data.size;
+        return len;
     }
 }
 

@@ -268,7 +268,7 @@ Buffer<T>::write(const fs::path &path, isize offset, isize len) const
     if (!stream.is_open())
         throw IOError(IOError::FILE_CANT_WRITE, path);
 
-    write(stream);
+    write(stream, offset, len);
 }
 
 

@@ -41,8 +41,6 @@ public:
 
     void init(isize len);
     void init(const u8 *buf, isize len);
-    void init(const utl::Buffer<u8>& buffer);
-    // void init(const string& str);
     void init(const fs::path& p);
 
     /* Initializes the image with the contents of a device.

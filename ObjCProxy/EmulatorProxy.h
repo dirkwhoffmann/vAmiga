@@ -892,10 +892,6 @@ ImageInfo scan(const fs::path &url);
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 @end
 
-@protocol MakeWithBuffer <NSObject>
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-@end
-
 @protocol MakeWithDrive <NSObject>
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy

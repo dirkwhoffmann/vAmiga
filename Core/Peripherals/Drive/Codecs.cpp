@@ -257,36 +257,6 @@ Codec::decodeEADF(EADFFile &eadf, const FloppyDisk &disk)
 }
 
 void
-Codec::encodeIMG(const class IMGFile &source, FloppyDisk &disk)
-{
-    IMGFile img(source.data.ptr, source.data.size);
-    disk.encode(img);
-}
-
-void
-Codec::decodeIMG(class IMGFile &target, const FloppyDisk &disk)
-{
-    IMGFile img(target.data.ptr, target.data.size);
-    disk.decode(img);
-    target.data = img.data;
-}
-
-void
-Codec::encodeST(const class STFile &source, FloppyDisk &disk)
-{
-    IMGFile img(source.data.ptr, source.data.size);
-    disk.encode(img);
-}
-
-void
-Codec::decodeST(class STFile &target, const FloppyDisk &disk)
-{
-    IMGFile img(target.data.ptr, target.data.size);
-    disk.decode(img);
-    target.data = img.data;
-}
-
-void
 Codec::encodeDMS(const class DMSFile &source, FloppyDisk &disk)
 {
     disk.encode(source.getADF());

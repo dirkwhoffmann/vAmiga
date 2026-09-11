@@ -656,9 +656,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "225"
-            endingLineNumber = "225"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            endingLineNumber = "225">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

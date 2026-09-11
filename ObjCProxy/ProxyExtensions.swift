@@ -45,33 +45,6 @@ extension AmigaProxy {
     }
 }
 
-extension MakeWithBuffer {
-    
-    static func makeWith(buffer: UnsafeRawPointer, length: Int) throws -> Self {
-                
-        let exc = ExceptionWrapper()
-        let obj = make(withBuffer: buffer, length: length, exception: exc)
-        if exc.fault != 0 { throw AppError(exc) }
-        return obj!
-    }
-
-    static func make(with data: Data) throws -> Self {
-        
-        let exc = ExceptionWrapper()
-        let obj = make(with: data, exception: exc)
-        if exc.fault != 0 { throw AppError(exc) }
-        return obj!
-    }
-
-    private static func make(with data: Data, exception: ExceptionWrapper) -> Self? {
-        
-        return data.withUnsafeBytes { uwbp -> Self? in
-            
-            return make(withBuffer: uwbp.baseAddress!, length: uwbp.count, exception: exception)
-        }
-    }
-}
-
 extension MakeWithFile {
     
     static func make(with url: URL) throws -> Self {

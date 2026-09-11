@@ -27,20 +27,6 @@ BinaryImage::init(isize len)
 }
 
 void
-BinaryImage::init(const utl::Buffer<u8> &buffer)
-{
-    init(buffer.ptr, buffer.size);
-}
-
-/*
-void
-BinaryImage::init(const string &str)
-{
-    init((const u8 *)str.c_str(), (isize)str.length());
-}
-*/
-
-void
 BinaryImage::init(const fs::path &p)
 {
     if (!validateURL(p))
@@ -92,10 +78,9 @@ void
 BinaryImage::copy(u8 *buf, isize offset, isize len) const
 {
     assert(buf);
-    assert(offset >= 0 && offset < data.size);
-    assert(len >= 0 && offset + len <= data.size);
+    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
 
-    std::memcpy(buf + offset, data.ptr, len);
+    std::memcpy(buf, data.ptr + offset, len);
 }
 
 utl::ByteView
@@ -131,24 +116,23 @@ BinaryImage::byteView(isize offset, isize len)
 void
 BinaryImage::copy(u8 *buf, isize offset) const
 {
-    copy (buf, offset, data.size);
+    copy(buf, offset, data.size - offset);
 }
 
 void
 BinaryImage::save()
 {
-    /* getSize(), not size(). While this lived on AnyImage there was no size()
-     * in scope at all, so the call resolved to the inherited Loggable::size()
-     * -- the number of registered log channels -- and every save() wrote that
-     * many bytes. The buffer is right here now, so ask it.
-     */
-    save(utl::Range<isize>{0, getSize()});
+    // Replace the file on disk with the entire image
+    writeToFile(path);
 }
 
 void
 BinaryImage::save(const utl::Range<isize> range)
 {
-    std::ofstream file(path, std::ios::binary);
+    assert(range.lower >= 0 && range.upper <= data.size);
+
+    // Open the existing file without truncating it
+    std::fstream file(path, std::ios::binary | std::ios::in | std::ios::out);
     if (!file) throw utl::IOError(utl::IOError::FILE_CANT_WRITE, path);
 
     printf("Saving range %ld - %ld...\n", range.lower, range.upper - 1);
@@ -183,7 +167,7 @@ BinaryImage::writeToStream(std::ostream &stream, isize offset, isize len) const
 
     stream.write((char *)data.ptr + offset, len);
 
-    return data.size;
+    return len;
 }
 
 isize
@@ -200,7 +184,7 @@ BinaryImage::writeToFile(const fs::path &p, isize offset, isize len) const
     }
 
     isize result = writeToStream(stream, offset, len);
-    assert(result == data.size);
+    assert(result == len);
 
     return result;
 }

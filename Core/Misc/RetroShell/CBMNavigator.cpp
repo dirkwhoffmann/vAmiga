@@ -593,9 +593,9 @@ Console::initCBMNavigatorCommands(RSCommand &root)
 
                 cbmRequireFormattedFS();
 
-                ADFFile adf(cbmFs->getTraits().blocks);
-                cbmFs->exporter.exportVolume(adf);
-                df[values[0]]->insertImage(adf, false);
+                D64File d64(cbmFs->getTraits().bytes);
+                cbmFs->exporter.exportVolume(d64);
+                df[values[0]]->insertImage(d64, false);
 
             }, .payload = {i}
         });
