@@ -642,9 +642,10 @@ FileSystem::collect(const BlockNr nr, BlockIterator succ) const
 std::vector<const FSBlock *>
 FileSystem::collectDataBlocks(const FSBlock &node) const
 {
-    // Gather all blocks containing data block references
+    // Gather all blocks containing data block references (file header first,
+    // followed by the extension blocks in chain order)
     auto blocks = collectListBlocks(node);
-    blocks.push_back(&node);
+    blocks.insert(blocks.begin(), &node);
 
     // Setup the result vector
     std::vector<const FSBlock *> result;
