@@ -75,48 +75,49 @@ BinaryImage::init(const u8 *buf, isize len)
 }
 
 void
-BinaryImage::copy(u8 *buf, isize offset, isize len) const
+BinaryImage::gunzip()
 {
-    assert(buf);
-    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
-
-    std::memcpy(buf, data.ptr + offset, len);
+    try {
+        data.gunzip();
+    } catch (std::exception &err) {
+        throw utl::IOError(utl::IOError::ZLIB_ERROR, err.what());
+    }
 }
 
-utl::ByteView
-BinaryImage::byteView(isize offset) const
+void
+BinaryImage::resize(isize newSize)
 {
-    return byteView(offset, data.size - offset);
+    data.resize(newSize, 0);
 }
 
 utl::ByteView
 BinaryImage::byteView(isize offset, isize len) const
 {
-    assert(offset >= 0 && offset < data.size);
-    assert(len >= 0 && offset + len <= data.size);
+    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
 
     return utl::ByteView(data.ptr + offset, len);
 }
 
 utl::MutableByteView
-BinaryImage::byteView(isize offset)
+BinaryImage::mutableByteView(isize offset, isize len)
 {
-    return byteView(offset, data.size - offset);
-}
-
-utl::MutableByteView
-BinaryImage::byteView(isize offset, isize len)
-{
-    assert(offset >= 0 && offset < data.size);
-    assert(len >= 0 && offset + len <= data.size);
+    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
 
     return utl::MutableByteView(data.ptr + offset, len);
 }
 
 void
+BinaryImage::copy(u8 *buf, isize offset, isize len) const
+{
+    assert(buf);
+
+    std::memcpy(buf, byteView(offset, len).data(), len);
+}
+
+void
 BinaryImage::copy(u8 *buf, isize offset) const
 {
-    copy(buf, offset, data.size - offset);
+    copy(buf, offset, getSize() - offset);
 }
 
 void
@@ -129,7 +130,7 @@ BinaryImage::save()
 void
 BinaryImage::save(const utl::Range<isize> range)
 {
-    assert(range.lower >= 0 && range.upper <= data.size);
+    auto bytes = byteView(range.lower, range.size());
 
     // Open the existing file without truncating it
     std::fstream file(path, std::ios::binary | std::ios::in | std::ios::out);
@@ -141,7 +142,7 @@ BinaryImage::save(const utl::Range<isize> range)
     file.seekp(range.lower, std::ios::beg);
 
     // Write the data to the stream
-    file.write((char *)(data.ptr + range.lower), range.size());
+    file.write((const char *)bytes.data(), bytes.size());
 
     // Update the file on disk
     file.flush();
@@ -163,9 +164,7 @@ BinaryImage::saveAs(const fs::path &newPath)
 isize
 BinaryImage::writeToStream(std::ostream &stream, isize offset, isize len) const
 {
-    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
-
-    stream.write((char *)data.ptr + offset, len);
+    stream.write((const char *)byteView(offset, len).data(), len);
 
     return len;
 }
@@ -192,13 +191,13 @@ BinaryImage::writeToFile(const fs::path &p, isize offset, isize len) const
 isize
 BinaryImage::writeToStream(std::ostream &stream) const
 {
-    return writeToStream(stream, 0, data.size);
+    return writeToStream(stream, 0, getSize());
 }
 
 isize
 BinaryImage::writeToFile(const fs::path &p) const
 {
-    return writeToFile(p, 0, data.size);
+    return writeToFile(p, 0, getSize());
 }
 
 }

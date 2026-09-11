@@ -216,17 +216,17 @@ HardDrive::init(const HDFFile &hdf)
     }
     
     // Check the drive geometry against the file size
-    auto numBytes = hdf.data.size;
+    auto numBytes = hdf.getSize();
     
     if (data.size < numBytes) {
         
         logmsg(LOG_HDR, "HDF is too large. Ignoring excess bytes.\n");
         numBytes = data.size;
     }
-    if (data.size > hdf.data.size) {
+    if (data.size > hdf.getSize()) {
         
         logmsg(LOG_HDR, "HDF is too small. Padding with zeroes.");
-        data.clear(0, hdf.data.size);
+        data.clear(0, hdf.getSize());
     }
     
     // Copy over all blocks

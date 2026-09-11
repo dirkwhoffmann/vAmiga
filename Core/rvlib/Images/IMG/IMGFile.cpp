@@ -82,7 +82,7 @@ IMGFile::encode(TrackNr t) const
 
     // Encode track
     DOSEncoder encoder;
-    auto mfm = encoder.encodeTrack(byteView(t), t);
+    auto mfm = encoder.encodeTrack(trackView(t), t);
 
     // Copy the encoded track data
     track.assign(mfm.data(), mfm.data() + mfm.byteView().size());
@@ -102,7 +102,7 @@ IMGFile::decode(TrackNr t, utl::BitView bits)
     assert(bytes.size() == 9 * 512);
 
     // Copy back the decoded bytes
-    memcpy(byteView(t).data(), bytes.data(), bytes.size());
+    memcpy(mutableTrackView(t).data(), bytes.data(), bytes.size());
 }
 
 }

@@ -35,7 +35,7 @@ public:
     static optional<ImageInfo> about(const fs::path &path);
 
     // Checks if the buffer is in ADF format (throws if not)
-    static void ensureHDF(u8 *buf, isize len);
+    static void ensureHDF(isize len);
 
     
     //

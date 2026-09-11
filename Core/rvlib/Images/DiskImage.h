@@ -28,7 +28,7 @@ public:
 
 public:
 
-    isize size() const override { return data.size; }
+    isize size() const override { return getSize(); }
     void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
 
@@ -47,13 +47,18 @@ public:
 
 public:
 
-    using BinaryImage::byteView;
-    utl::ByteView byteView(TrackNr t) const;
-    utl::ByteView byteView(TrackNr t, SectorNr s) const;
-    utl::MutableByteView byteView(TrackNr t);
-    utl::MutableByteView byteView(TrackNr t, SectorNr s);
-    
-    
+    /* Views on a single track or sector.
+     *
+     * Named apart from byteView() on purpose: track and sector numbers are
+     * plain integers, so a byteView(t, s) would quietly stand in for
+     * byteView(offset, len).
+     */
+    utl::ByteView trackView(TrackNr t) const;
+    utl::ByteView sectorView(TrackNr t, SectorNr s) const;
+    utl::MutableByteView mutableTrackView(TrackNr t);
+    utl::MutableByteView mutableSectorView(TrackNr t, SectorNr s);
+
+
     //
     // Exporting
     //

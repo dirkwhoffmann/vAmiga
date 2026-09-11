@@ -58,7 +58,7 @@ EXEFile::didInitialize()
     using amiga::FSName;
 
     // Check if this file requires a high-density disk
-    bool hd = data.size > 853000;
+    bool hd = getSize() > 853000;
 
     // Create a suitable ADF
     adf.init(Diameter::INCH_35, hd ? Density::HD : Density::DD);
@@ -73,7 +73,8 @@ EXEFile::didInitialize()
     fs.makeBootable(BootBlockId::AMIGADOS_13);
 
     // Add the executable, a script directory, and a script
-    fs.createFile(fs.root(), FSName("file"), data);
+    auto exe = byteView(0, getSize());
+    fs.createFile(fs.root(), FSName("file"), exe.data(), exe.size());
     fs.createFile(fs.mkdir(fs.root(), FSName("s")), FSName("startup-sequence"), "file");
 
     // Finalize

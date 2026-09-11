@@ -33,7 +33,7 @@ HDFFile::about(const fs::path &path)
     
     if (suffix == ".HDF") {
         
-        // ensureHDF(nullptr, utl::getSizeOfFile(path));
+        // ensureHDF(utl::getSizeOfFile(path));
         return {{ ImageType::HARDDISK, ImageFormat::HDF }};
     }
     
@@ -41,7 +41,7 @@ HDFFile::about(const fs::path &path)
 }
 
 void
-HDFFile::ensureHDF(u8 *buf, isize len)
+HDFFile::ensureHDF(isize len)
 {
     // The size must be a multiple of 512 (block size)
     if (len % 512) throw ImageError(ImageError::SIZE_MISMATCH);
@@ -72,15 +72,14 @@ HDFFile::writeToFile(const fs::path &path, isize offset, isize len) const
 
         // Compress the requested range and write the result as a whole
         utl::Buffer<u8> copy;
-        copy.init(data.ptr + offset, len);
+        copy.init(byteView(offset, len).data(), len);
         copy.gzip();
         copy.write(path);
         return copy.size;
 
     } else {
 
-        data.write(path, offset, len);
-        return len;
+        return BinaryImage::writeToFile(path, offset, len);
     }
 }
 
@@ -88,20 +87,14 @@ void
 HDFFile::didInitialize()
 {
     if (utl::lowercased(path.extension().string()) == ".hdz") {
-        
-        logmsg(LOG_IMG, "Decompressing %ld bytes...\n", data.size);
-        
-        try {
-            data.gunzip();
-        } catch (std::exception &err) {
-            throw utl::IOError(utl::IOError::ZLIB_ERROR, err.what());
-        }
-        
-        logmsg(LOG_IMG, "Restored %ld bytes.\n", data.size);
+
+        logmsg(LOG_IMG, "Decompressing %ld bytes...\n", getSize());
+        gunzip();
+        logmsg(LOG_IMG, "Restored %ld bytes.\n", getSize());
     }
-        
+
     // Run a consistency check on the buffer contents
-    ensureHDF(data.ptr, data.size);
+    ensureHDF(getSize());
     
     // Retrieve geometry and partition information
     auto lay = layout();

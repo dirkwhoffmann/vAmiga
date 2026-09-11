@@ -94,7 +94,7 @@ Codec::makeHDF(const HardDrive &drive)
 void
 Codec::encodeEADF(const EADFFile &eadf, FloppyDisk &disk)
 {
-    assert(!eadf.data.empty());
+    assert(!eadf.empty());
 
     isize tracks   = eadf.storedTracks();
     // auto  diameter = eadf.getDiameter();
@@ -195,9 +195,10 @@ Codec::encodeExtendedTrack(const EADFFile &eadf, FloppyDisk &disk, TrackNr t)
 void
 Codec::decodeEADF(EADFFile &eadf, const FloppyDisk &disk)
 {
-    assert(!eadf.data.empty());
+    assert(!eadf.empty());
 
-    u8 *p = eadf.data.ptr;
+    auto view = eadf.mutableByteView(0, eadf.getSize());
+    u8 *p = view.data();
     auto numTracks = disk.numTracks();
 
     // Magic bytes
@@ -253,7 +254,7 @@ Codec::decodeEADF(EADFFile &eadf, const FloppyDisk &disk)
     }
 
     if CONSTEXPR (LOG_MFM != LOG_OFF)
-        fprintf(stderr, "Wrote %td bytes\n", p - eadf.data.ptr);
+        fprintf(stderr, "Wrote %td bytes\n", p - view.data());
 }
 
 void

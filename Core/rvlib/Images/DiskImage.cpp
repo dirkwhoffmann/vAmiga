@@ -59,39 +59,37 @@ DiskImage::make(const fs::path& path)
 void
 DiskImage::read(u8 *dst, isize offset, isize count) const
 {
-    assert(offset + count <= data.size);
-    memcpy((void *)dst, (void *)(data.ptr + offset), count);
+    memcpy((void *)dst, (const void *)byteView(offset, count).data(), count);
 }
 
 void
 DiskImage::write(const u8 *src, isize offset, isize count)
 {
-    assert(offset + count <= data.size);
-    memcpy((void *)(data.ptr + offset), (void *)src, count);
+    memcpy((void *)mutableByteView(offset, count).data(), (const void *)src, count);
 }
 
 utl::ByteView
-DiskImage::byteView(TrackNr t) const
+DiskImage::trackView(TrackNr t) const
 {
-    return utl::ByteView(data.ptr + boffset(TS{t,0}), numSectors(t) * bsize());
+    return byteView(boffset(TS{t,0}), numSectors(t) * bsize());
 }
 
 utl::ByteView
-DiskImage::byteView(TrackNr t, SectorNr s) const
+DiskImage::sectorView(TrackNr t, SectorNr s) const
 {
-    return utl::ByteView(data.ptr + boffset(TS{t,s}), bsize());
+    return byteView(boffset(TS{t,s}), bsize());
 }
 
 utl::MutableByteView
-DiskImage::byteView(TrackNr t)
+DiskImage::mutableTrackView(TrackNr t)
 {
-    return utl::MutableByteView(data.ptr + boffset(TS{t,0}), numSectors(t) * bsize());
+    return mutableByteView(boffset(TS{t,0}), numSectors(t) * bsize());
 }
 
 utl::MutableByteView
-DiskImage::byteView(TrackNr t, SectorNr s)
+DiskImage::mutableSectorView(TrackNr t, SectorNr s)
 {
-    return utl::MutableByteView(data.ptr + boffset(TS{t,s}), bsize());
+    return mutableByteView(boffset(TS{t,s}), bsize());
 }
 
 void

@@ -2163,7 +2163,7 @@ ImageInfo scan(const fs::path &url)
 - (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
 {
     string result;
-    auto p = [self file]->data.ptr + b * [self bsize] + offset;
+    auto p = [self file]->byteView(b * [self bsize] + offset, len).data();
 
     for (isize i = 0; i < len; i++) {
         result += isprint(int(p[i])) ? char(p[i]) : '.';

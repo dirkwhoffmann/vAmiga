@@ -54,7 +54,7 @@ DMSFile::didInitialize()
 
     int verbose = 0;
     if CONSTEXPR (LOG_IMG != LOG_OFF) verbose = 1;
-    if (extractDMS(data.ptr, (size_t)data.size, &adfData, &adfSize, verbose) == 0) {
+    if (extractDMS(byteView(0, getSize()).data(), size_t(getSize()), &adfData, &adfSize, verbose) == 0) {
 
         if CONSTEXPR (!DMS_CANT_CREATE) {
             adf.init(adfData, isize(adfSize));

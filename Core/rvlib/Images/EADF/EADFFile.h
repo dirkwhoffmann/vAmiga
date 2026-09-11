@@ -171,7 +171,7 @@ public: // TODO: MAKE PRIVATE
 private:
 
     // Returns a pointer to the first data byte of a certain track
-    u8 *trackData(isize t) const;
+    const u8 *trackData(isize t) const;
 
     // Convenience wrappers
     bool isStandardTrack(isize t) const { return typeOfTrack(t) == 0; }

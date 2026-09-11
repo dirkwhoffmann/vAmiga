@@ -15,19 +15,27 @@ namespace retro::vault {
 
 class LinearDevice;
 
-/* An image that is a contiguous block of bytes, read into memory in one go.
+/* An image that is a contiguous block of bytes.
  *
  * This is what almost every format in this library is: a floppy image, a hard
- * drive image, an executable. The file is slurped into 'data' by init(), and
- * everything below -- sizing, views, copying, hashing, dumping, exporting --
- * is a statement about that buffer.
+ * drive image, an executable. init() reads the file into memory, and
+ * everything below -- sizing, copying, hashing, dumping, exporting -- is a
+ * statement about those bytes.
+ *
+ * The bytes themselves are private. Everything, subclasses included, reaches
+ * them through two views:
+ *
+ *   byteView()         read-only
+ *   mutableByteView()  writable. Ask for it only when writing: storage that
+ *                      loads lazily (see utl::BackedBuffer) takes the region
+ *                      as modified.
+ *
+ * Keeping to these two is what allows the storage behind them to change.
  *
  * Formats that are not a buffer derive from AnyImage directly (see SVMFile)
  * and simply do not have these members.
  */
 class BinaryImage : public AnyImage, public utl::Dumpable {
-
-public:
 
     // The raw data of this file
     utl::Buffer<u8> data;
@@ -51,6 +59,21 @@ public:
      */
     void init(const LinearDevice& device);
 
+protected:
+
+    /* Changing the size after loading.
+     *
+     * Some formats are not stored as the image itself: an .adz or .hdz file is
+     * compressed, and a short ADF lacks cylinders. Subclasses fix that up in
+     * didInitialize() with these two.
+     */
+
+    // Replaces the contents with their gunzipped form
+    void gunzip();
+
+    // Grows or shrinks the image. Added bytes are zero.
+    void resize(isize newSize);
+
 
     //
     // Methods from Hashable
@@ -59,7 +82,7 @@ public:
 public:
 
     u64 hash(HashAlgorithm algorithm) const override {
-        return data.hash(algorithm);
+        return byteView(0, getSize()).hash(algorithm);
     }
 
 
@@ -70,7 +93,7 @@ public:
 public:
 
     Dumpable::DataProvider dataProvider() const override {
-        return data.dataProvider();
+        return byteView(0, getSize()).dataProvider();
     }
 
 
@@ -81,7 +104,6 @@ public:
 public:
 
     isize getSize() const { return data.size; }
-    u8* getData() const { return data.ptr; }
     bool empty() const { return data.empty(); }
 
 
@@ -91,10 +113,9 @@ public:
 
 public:
 
-    utl::ByteView byteView(isize offset = 0) const;
+    // Returns a view of bytes [offset, offset + len), which must lie within the image
     utl::ByteView byteView(isize offset, isize len) const;
-    utl::MutableByteView byteView(isize offset = 0);
-    utl::MutableByteView byteView(isize offset, isize len);
+    utl::MutableByteView mutableByteView(isize offset, isize len);
 
     // Copies the file contents into a buffer
     virtual void copy(u8 *dst, isize offset, isize len) const;
