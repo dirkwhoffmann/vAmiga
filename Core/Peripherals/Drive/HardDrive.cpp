@@ -133,6 +133,38 @@ HardDrive::init(const FileSystem &fs)
 }
 
 void
+HardDrive::describe(const FileSystem &fs)
+{
+    /* The file system was built on top of this drive, so the disk holds it
+     * already. Only the description changes, to a single partition spanning
+     * the file system. The disk is kept: a drive that lives in a file stays
+     * there.
+     */
+    auto disk = image;
+    setup(GeometryDescriptor(fs.bytes()));
+    image = disk;
+
+    // Update the partition table
+    ptable[0].name = fs.stat().name.cpp_str();
+    ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
+}
+
+void
+HardDrive::persist()
+{
+    if (isRunAheadInstance() || !fileBacked()) return;
+
+    try {
+
+        image->save();
+
+    } catch (std::exception &err) {
+
+        logmsg(LOG_HDR, "Cannot write to %s: %s\n", image->path.string().c_str(), err.what());
+    }
+}
+
+void
 HardDrive::init(std::unique_ptr<HDFFile> hdf)
 {
     assert(hdf);
@@ -340,6 +372,7 @@ HardDrive::getOption(Opt option) const
         case Opt::HDR_TYPE:          return (long)config.type;
         case Opt::HDR_PAN:           return (long)config.pan;
         case Opt::HDR_STEP_VOLUME:   return (long)config.stepVolume;
+        case Opt::HDR_WRITE_THROUGH: return (long)config.writeThrough;
 
         default:
             fatalError;
@@ -360,6 +393,7 @@ HardDrive::checkOption(Opt opt, i64 value)
 
         case Opt::HDR_PAN:
         case Opt::HDR_STEP_VOLUME:
+        case Opt::HDR_WRITE_THROUGH:
 
             return;
 
@@ -389,6 +423,14 @@ HardDrive::setOption(Opt option, i64 value)
         case Opt::HDR_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
+            return;
+
+        case Opt::HDR_WRITE_THROUGH:
+
+            config.writeThrough = bool(value);
+
+            // From now on the file mirrors the disk, starting with what has changed so far
+            if (config.writeThrough) persist();
             return;
 
         default:
@@ -565,6 +607,9 @@ HardDrive::write(const u8 *src, isize offset, isize count)
 
     // Have the run-ahead instance recreated, so that it sees the change
     emulator.markAsDirty();
+
+    // Update the file if requested
+    if (config.writeThrough) persist();
 }
 
 bool
@@ -663,8 +708,8 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
         // Write back all changes
         fs.flush();
 
-        // Initialize the hard drive with the created file system
-        init(fs);
+        // Describe the drive by the created file system (the disk holds it already)
+        describe(fs);
     }
 }
 
@@ -747,6 +792,9 @@ HardDrive::write(isize offset, isize length, u32 addr)
 
                 // Have the run-ahead instance recreated, so that it sees the change
                 emulator.markAsDirty();
+
+                // Update the file if requested
+                if (config.writeThrough) persist();
             }
 
             // Mark disk as modified
@@ -875,8 +923,8 @@ HardDrive::importFolder(const fs::path &path)
         fs.flush();
 
 
-        // Copy the file system back to the disk
-        init(fs);
+        // Describe the drive by the file system (the disk holds it already)
+        describe(fs);
     }
 }
 

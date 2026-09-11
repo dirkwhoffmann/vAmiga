@@ -167,6 +167,7 @@ enum class Opt : long
     HDR_TYPE,
     HDR_PAN,
     HDR_STEP_VOLUME,
+    HDR_WRITE_THROUGH,
     
     // Ports
     SER_DEVICE,
@@ -366,6 +367,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::HDR_TYPE:                  return "HDR.TYPE";
             case Opt::HDR_PAN:                   return "HDR.PAN";
             case Opt::HDR_STEP_VOLUME:           return "HDR.STEP_VOLUME";
+            case Opt::HDR_WRITE_THROUGH:         return "HDR.WRITE_THROUGH";
                 
             case Opt::SER_DEVICE:                return "SER.DEVICE";
             case Opt::SER_VERBOSE:               return "SER.VERBOSE";
@@ -552,6 +554,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::HDR_TYPE:                  return "Drive model";
             case Opt::HDR_PAN:                   return "Pan";
             case Opt::HDR_STEP_VOLUME:           return "Head step volume";
+            case Opt::HDR_WRITE_THROUGH:         return "Write changes to the file at once";
                 
             case Opt::SER_DEVICE:                return "Serial device type";
             case Opt::SER_VERBOSE:               return "Verbose";

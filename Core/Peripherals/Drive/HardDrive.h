@@ -66,7 +66,8 @@ class HardDrive final : public Drive, public TrackDevice {
 
         Opt::HDR_TYPE,
         Opt::HDR_PAN,
-        Opt::HDR_STEP_VOLUME
+        Opt::HDR_STEP_VOLUME,
+        Opt::HDR_WRITE_THROUGH
     };
 
 public:
@@ -216,6 +217,9 @@ private:
 
     // Describes a drive of the given geometry, without providing a disk yet
     void setup(const GeometryDescriptor &geometry);
+
+    // Describes the drive after a file system was built on it, keeping the disk
+    void describe(const amiga::FileSystem &fs);
 
 
     //
@@ -464,6 +468,15 @@ private:
     // Moves the drive head to the specified block
     void moveHead(isize lba);
     void moveHead(isize c, isize h, isize s);
+
+    /* Brings the file up to date (used for write-through)
+     *
+     * Only the main instance writes, and only a disk that lives in a file
+     * has somewhere to go. A failure is logged and otherwise ignored: the
+     * changes stay in memory, marked as modified, and are written along
+     * with the next change.
+     */
+    void persist();
 
 
     //

@@ -81,6 +81,9 @@ typedef struct
     HardDriveType type;
     i16 pan;
     u8 stepVolume;
+
+    // Write every change to the file at once (see HardDrive::persist)
+    bool writeThrough;
 }
 HardDriveConfig;
 
