@@ -274,10 +274,19 @@ private:
 
     /* Serializes the disk
      *
-     * In the format of a utl::Buffer<u8> -- a length, then the bytes -- which
-     * is how the drive stored it when it kept one, so older snapshots still
-     * load. A restored disk is held in memory: a snapshot carries the bytes,
-     * not the file they came from.
+     * A disk that lives in a file is stored as the path of that file and
+     * nothing else. Restoring a snapshot opens the file again, as it is then:
+     * changes that were never written to the file are not part of the
+     * snapshot. If the file cannot be opened anymore, or no longer covers the
+     * geometry, the drive is left without a disk (see _didLoad()).
+     *
+     * A disk built in memory has no file to go back to and is stored in full.
+     *
+     * Layout: an i64 comes first. -1 announces a path, stored as an i64 length
+     * and its characters (not as a serialized string, which is limited to 255
+     * characters). Any other value is the size of the disk, followed by its
+     * bytes. That is the format of a utl::Buffer<u8>, in which the drive used
+     * to store every disk, so older snapshots still load.
      */
     void serializeDisk(SerCounter &worker);
     void serializeDisk(SerChecker &worker);
@@ -285,7 +294,11 @@ private:
     void serializeDisk(SerWriter &worker);
     void serializeDisk(SerResetter &worker) { }
 
+    // Returns true if the disk lives in a file
+    bool fileBacked() const { return image && image->backed(); }
+
     void _didReset(bool hard) override;
+    void _didLoad() override;
 
 public:
 

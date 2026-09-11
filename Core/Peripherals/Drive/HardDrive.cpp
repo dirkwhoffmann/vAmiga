@@ -224,33 +224,61 @@ HardDrive::_didReset(bool hard)
         setFlag(DiskFlags::MODIFIED, true);
 }
 
+namespace {
+
+// First value of a serialized disk that is stored as a path (see serializeDisk)
+constexpr i64 diskIsPath = -1;
+
+}
+
 void
 HardDrive::serializeDisk(SerCounter &worker)
 {
-    worker.count += 8 + size();
+    if (fileBacked()) {
+        worker.count += 8 + 8 + isize(image->path.string().size());
+    } else {
+        worker.count += 8 + size();
+    }
 }
 
 void
 HardDrive::serializeDisk(SerChecker &worker)
 {
-    /* The size only. Checksums compare the main instance with its run-ahead
-     * counterpart, which share one disk, so its bytes cannot differ -- and
-     * hashing them would load all of them.
+    /* The bytes of a disk held in memory, which a snapshot stores in full,
+     * checked the way a utl::Buffer<u8> is checked (older snapshots were
+     * written with one). A disk that lives in a file counts as empty: the
+     * snapshot stores its path only, and whether the file still opens when
+     * the snapshot is restored must not decide whether the snapshot is taken
+     * for intact. The run-ahead instance shares the disk with the main
+     * instance, so comparing the two is not affected either way.
      */
-    i64 len = size();
-    worker << len;
+    auto bytes = image && !fileBacked() ? image->byteView(0, size()) : utl::ByteView();
+    worker.hash = utl::Hashable::fnvIt64(worker.hash, bytes.fnv64());
 }
 
 void
 HardDrive::serializeDisk(SerWriter &worker)
 {
-    i64 len = size();
-    worker << len;
+    if (fileBacked()) {
 
-    if (len) {
-
-        std::memcpy(worker.ptr, image->byteView(0, len).data(), size_t(len));
+        // Store the path of the file
+        auto path = image->path.string();
+        i64 marker = diskIsPath, len = i64(path.size());
+        worker << marker << len;
+        std::memcpy(worker.ptr, path.data(), path.size());
         worker.ptr += len;
+
+    } else {
+
+        // Store the disk in full
+        i64 len = size();
+        worker << len;
+
+        if (len) {
+
+            std::memcpy(worker.ptr, image->byteView(0, len).data(), size_t(len));
+            worker.ptr += len;
+        }
     }
 }
 
@@ -260,17 +288,48 @@ HardDrive::serializeDisk(SerReader &worker)
     i64 len;
     worker << len;
 
-    if (len) {
+    image = nullptr;
 
+    if (len == diskIsPath) {
+
+        i64 plen;
+        worker << plen;
+        auto path = fs::path(string((const char *)worker.ptr, size_t(plen)));
+        worker.ptr += plen;
+
+        // Open the file again, as it is now
+        try {
+
+            auto hdf = std::make_shared<HDFFile>(path);
+
+            if (hdf->getSize() >= geometry.numBytes()) {
+                image = hdf;
+            } else {
+                logmsg(LOG_HDR, "%s no longer covers the drive\n", path.string().c_str());
+            }
+
+        } catch (...) {
+
+            logmsg(LOG_HDR, "Cannot open %s\n", path.string().c_str());
+        }
+
+        // If the file cannot be used, the drive is left without a disk (see _didLoad)
+
+    } else if (len > 0) {
+
+        // Restore the disk in memory
         auto restored = std::make_shared<HDFFile>(isize(len));
         std::memcpy(restored->mutableByteView(0, len).data(), worker.ptr, size_t(len));
         worker.ptr += len;
         image = restored;
-
-    } else {
-
-        image = nullptr;
     }
+}
+
+void
+HardDrive::_didLoad()
+{
+    // A drive whose disk could not be restored has none (see serializeDisk)
+    if (!image) init();
 }
 
 i64
@@ -730,7 +789,12 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
 i8
 HardDrive::verify(isize offset, isize length, u32 addr)
 {
-    assert(image);
+    // A drive can lose its disk when a snapshot is restored (see _didLoad)
+    if (!image) {
+
+        logmsg(LOG_HDR, "No disk in drive\n");
+        return TDERR_DISKCHANGED;
+    }
 
     if (length % 512) {
 

@@ -124,6 +124,9 @@ public:
     isize getSize() const { return data.size(); }
     bool empty() const { return data.empty(); }
 
+    // Returns true if the image sits on top of the file it was read from or saved to
+    bool backed() const { return data.backed(); }
+
 
     //
     // Accessing data

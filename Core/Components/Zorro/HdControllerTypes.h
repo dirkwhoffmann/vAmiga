@@ -25,6 +25,7 @@ constexpr i8    IOERR_BADLENGTH     = -4;
 constexpr i8    IOERR_BADADDRESS    = -5;
 constexpr i8    IOERR_UNITBUSY      = -6;
 constexpr i8    IOERR_SELFTEST      = -7;
+constexpr i8    TDERR_DISKCHANGED   = 29;   // No disk in the drive (trackdisk.device)
 
 // Offsets into the IOStdReq struct
 constexpr u32   IO_COMMAND          = 0x1C;
