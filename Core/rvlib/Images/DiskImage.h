@@ -57,17 +57,6 @@ public:
     utl::ByteView sectorView(TrackNr t, SectorNr s) const;
     utl::MutableByteView mutableTrackView(TrackNr t);
     utl::MutableByteView mutableSectorView(TrackNr t, SectorNr s);
-
-
-    //
-    // Exporting
-    //
-
-public:
-
-    // Update portions of the image file on disk with the current contents
-    void saveBlocks(const utl::Range<BlockNr>);
-    void saveBlocks(const std::vector<utl::Range<BlockNr>>);
 };
 
 }

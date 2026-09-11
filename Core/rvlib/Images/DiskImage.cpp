@@ -92,16 +92,4 @@ DiskImage::mutableSectorView(TrackNr t, SectorNr s)
     return mutableByteView(boffset(TS{t,s}), bsize());
 }
 
-void
-DiskImage::saveBlocks(const utl::Range<BlockNr> range)
-{
-    save(utl::Range<isize>{range.lower * bsize(), range.upper * bsize()});
-}
-
-void
-DiskImage::saveBlocks(const std::vector<utl::Range<BlockNr>> ranges)
-{
-    for (auto &range: ranges) save(range);
-}
-
 }

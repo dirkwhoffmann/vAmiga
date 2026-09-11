@@ -102,42 +102,24 @@ BinaryImage::copy(u8 *buf, isize offset) const
 void
 BinaryImage::save()
 {
-    // Replace the file on disk with the entire image
-    writeToFile(path);
-}
+    // An image built in memory has nowhere to persist to yet
+    if (!data.backed()) { saveAs(path); return; }
 
-void
-BinaryImage::save(const utl::Range<isize> range)
-{
-    auto bytes = byteView(range.lower, range.size());
-
-    // Open the existing file without truncating it
-    std::fstream file(path, std::ios::binary | std::ios::in | std::ios::out);
-    if (!file) throw utl::IOError(utl::IOError::FILE_CANT_WRITE, path);
-
-    printf("Saving range %ld - %ld...\n", range.lower, range.upper - 1);
-
-    // Move to the correct position
-    file.seekp(range.lower, std::ios::beg);
-
-    // Write the data to the stream
-    file.write((const char *)bytes.data(), bytes.size());
-
-    // Update the file on disk
-    file.flush();
-}
-
-void
-BinaryImage::save(const std::vector<utl::Range<isize>> ranges)
-{
-    for (auto &range: ranges) save(range);
+    // Write the modified parts back to where the image came from
+    data.persist();
 }
 
 void
 BinaryImage::saveAs(const fs::path &newPath)
 {
+    // Write the entire image first, so that a failure changes nothing
+    writeToFile(newPath);
+
+    // Continue on top of the new file, which now holds exactly this image
+    auto size = getSize();
+    auto backing = makeBacking(newPath);
     path = newPath;
-    save();
+    data.init(size, std::move(backing));
 }
 
 isize

@@ -261,6 +261,9 @@ public:
     // Returns true if something has been modified since the last persist()
     bool dirty() const { return dirtyPages > 0; }
 
+    // Returns true if the buffer has a backing to load from and persist to
+    bool backed() const { return backing != nullptr; }
+
 
     //
     // Accessing

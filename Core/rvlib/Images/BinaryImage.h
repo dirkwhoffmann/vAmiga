@@ -142,12 +142,21 @@ public:
 
 public:
 
-    // Update the image or a portion of the image on disk
+    /* Writes the modifications back to the file the image came from.
+     *
+     * Only what has been modified is written (see utl::BackedBuffer::persist),
+     * in the file's own format -- a compressed file is packed again. An image
+     * that was built in memory has no file to go back to; for such an image,
+     * save() is saveAs(path).
+     */
     void save() override;
-    void save(const utl::Range<isize> range);
-    void save(const std::vector<utl::Range<isize>> ranges);
 
-    // Create a new image file on disk and update it with the current contents
+    /* Writes the entire image to a new file and continues on top of it.
+     *
+     * Later calls to save() go to the new file. The file is written before
+     * the image switches over, so if writing fails, nothing changes. Views
+     * taken before the call must not be used after it.
+     */
     void saveAs(const fs::path &path);
 
     virtual isize writeToStream(std::ostream &stream) const;
