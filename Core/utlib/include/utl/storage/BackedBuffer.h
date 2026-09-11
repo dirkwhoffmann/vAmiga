@@ -24,7 +24,7 @@ namespace utl {
  * told to overwrite bytes it holds; the only way it ever grows is extend().
  * Anything smarter -- a compressed file, say, that has to be unpacked when it
  * is opened and packed again when it is written -- is a Backing of its own,
- * doing that work in its constructor and in flush().
+ * doing that work in its constructor and in flush(). GzipBacking is one.
  */
 class Backing {
 
@@ -44,7 +44,12 @@ public:
     // Grows the backing to newSize bytes, the new ones being zero
     virtual void extend(isize newSize) = 0;
 
-    // Called once at the end of every persist() that wrote something
+    /* Called once at the end of every persist() that wrote something.
+     *
+     * What write() was given may be held back until here, and counts as
+     * persisted only once flush() has returned. A backing that cannot store
+     * it throws, and persist() then treats every page as unwritten.
+     */
     virtual void flush() { }
 };
 
@@ -89,6 +94,36 @@ public:
     void read(u8 *dst, isize offset, isize len) override;
     void write(const u8 *src, isize offset, isize len) override;
     void extend(isize newSize) override;
+};
+
+/* A backing that is a gzip compressed file, such as an .hdz or .adz image.
+ *
+ * A compressed file cannot be read or written in pieces, so the whole file is
+ * unpacked into memory when the backing is created, and everything else
+ * works on that. A buffer on top still loads lazily -- it copies pages out of
+ * the unpacked data as they are asked for -- but the unpacking is eager.
+ *
+ * flush() packs the data and rewrites the file in full. It compresses before
+ * it opens the file, so a failing compression leaves the file as it was; a
+ * failing write does not.
+ *
+ * An empty file holds nothing, and nothing is written as an empty file.
+ */
+class GzipBacking : public Backing {
+
+    fs::path path;
+    Buffer<u8> data;
+
+public:
+
+    // Unpacks the file. Throws if it cannot be read or is not gzip data.
+    explicit GzipBacking(const fs::path &path);
+
+    isize size() const override { return data.size; }
+    void read(u8 *dst, isize offset, isize len) override;
+    void write(const u8 *src, isize offset, isize len) override;
+    void extend(isize newSize) override;
+    void flush() override;
 };
 
 /* A byte buffer that loads its contents from a backing as they are needed.
@@ -251,8 +286,10 @@ public:
     /* Writes all modified pages to the backing.
      *
      * Does nothing if readOnly is set, if there is no backing, or if nothing
-     * has been modified. Pages are clean again once they have been written; if
-     * writing fails, the pages that have not made it stay dirty.
+     * has been modified. The pages become clean when all of them have been
+     * written and the backing has been flushed. If anything fails on the way,
+     * every modified page stays dirty, and the next persist() writes them all
+     * again.
      */
     void persist();
 

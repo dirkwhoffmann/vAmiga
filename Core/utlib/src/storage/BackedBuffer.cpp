@@ -125,6 +125,82 @@ BufferBacking::extend(isize newSize)
 
 
 //
+// GzipBacking
+//
+
+GzipBacking::GzipBacking(const fs::path &path) : path(path)
+{
+    if (!fs::exists(path))
+        throw IOError(IOError::FILE_NOT_FOUND, path);
+
+    std::ifstream in(path, std::ios::binary);
+
+    if (!in.is_open())
+        throw IOError(IOError::FILE_CANT_READ, path);
+
+    std::vector<u8> packed((std::istreambuf_iterator<char>(in)),
+                           std::istreambuf_iterator<char>());
+
+    if (in.bad())
+        throw IOError(IOError::FILE_CANT_READ, path);
+
+    if (packed.empty()) return;
+
+    data.init(packed.data(), isize(packed.size()));
+
+    try {
+        data.gunzip();
+    } catch (std::exception &err) {
+        throw IOError(IOError::ZLIB_ERROR, err.what());
+    }
+}
+
+void
+GzipBacking::read(u8 *dst, isize offset, isize len)
+{
+    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
+    if (len) std::memcpy(dst, data.ptr + offset, size_t(len));
+}
+
+void
+GzipBacking::write(const u8 *src, isize offset, isize len)
+{
+    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
+    if (len) std::memcpy(data.ptr + offset, src, size_t(len));
+}
+
+void
+GzipBacking::extend(isize newSize)
+{
+    if (newSize > data.size) data.resize(newSize, 0);
+}
+
+void
+GzipBacking::flush()
+{
+    // Compress first, so that a failure here leaves the file alone
+    std::vector<u8> packed;
+
+    if (data.size) try {
+        Compressible::gzip(data.ptr, data.size, packed);
+    } catch (std::exception &err) {
+        throw IOError(IOError::ZLIB_ERROR, err.what());
+    }
+
+    std::ofstream out(path, std::ios::binary | std::ios::trunc);
+
+    if (!out.is_open())
+        throw IOError(IOError::FILE_CANT_WRITE, path);
+
+    out.write((const char *)packed.data(), std::streamsize(packed.size()));
+    out.flush();
+
+    if (!out)
+        throw IOError(IOError::FILE_CANT_WRITE, path);
+}
+
+
+//
 // BackedBuffer
 //
 
@@ -267,13 +343,17 @@ BackedBuffer::persist()
         auto begin = p * pageSize;
         auto end = std::min(q * pageSize, bytes);
         backing->write(mem + begin, begin, end - begin);
-
-        for (auto i = p; i < q; i++) pages[i] = Page::Clean;
-        dirtyPages -= q - p;
         p = q;
     }
 
+    /* Only a completed flush makes the pages clean. A backing may hold on to
+     * what it was given until then -- a compressed file does, and so does a
+     * buffered stream -- so nothing is safe before flush() has returned.
+     */
     backing->flush();
+
+    for (auto &page : pages) if (page == Page::Dirty) page = Page::Clean;
+    dirtyPages = 0;
 }
 
 void
