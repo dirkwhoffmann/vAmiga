@@ -81,12 +81,16 @@ protected:
     /* Choosing the storage of an image read from a file.
      *
      * init(path) asks makeBacking() where the bytes come from, and imageSize()
-     * how large the image is, given how much the backing holds. Formats whose
-     * files are not the image itself override them: a compressed file needs a
-     * backing that unpacks it, a short ADF an image larger than its file.
+     * how large the image is. Formats whose files are not the image itself
+     * override them: a compressed file needs a backing that unpacks it, and a
+     * short file an image larger than itself.
+     *
+     * imageSize() is handed the backing, not just its size, so a format can
+     * look inside first -- an HDF reads its rigid disk block to learn how
+     * large the drive is meant to be. Nothing it reads stays loaded.
      */
     virtual std::unique_ptr<utl::Backing> makeBacking(const fs::path &path) const;
-    virtual isize imageSize(isize available) const { return available; }
+    virtual isize imageSize(utl::Backing &backing) const { return backing.size(); }
 
 
     //

@@ -212,10 +212,10 @@ ADFFile::makeBacking(const fs::path &path) const
 }
 
 isize
-ADFFile::imageSize(isize available) const
+ADFFile::imageSize(utl::Backing &backing) const
 {
     // Add some empty cylinders if the file contains less than 80
-    return std::max(available, isize(ADFSIZE_35_DD));
+    return std::max(backing.size(), isize(ADFSIZE_35_DD));
 }
 
 void

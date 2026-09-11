@@ -93,6 +93,35 @@ HDFFile::makeBacking(const fs::path &path) const
     return HardDiskImage::makeBacking(path);
 }
 
+isize
+HDFFile::imageSize(utl::Backing &backing) const
+{
+    auto available = backing.size();
+
+    // Look for a rigid disk block, reading straight from the backing
+    HDFLayout lay([&backing](isize nr, u8 *dst) {
+
+        auto offset = nr * HDFLayout::bsize;
+        if (nr < 0 || offset + HDFLayout::bsize > backing.size()) return false;
+
+        backing.read(dst, offset, HDFLayout::bsize);
+        return true;
+
+    }, available);
+
+    // Without one, the geometry is derived from the file, which fits by definition
+    if (!lay.hasRDB()) return available;
+
+    /* Pad a file that is shorter than the drive its RDB describes. A geometry
+     * that is not plausible is left alone here, for didInitialize() to reject,
+     * rather than turned into an absurdly large image first.
+     */
+    auto geometry = lay.getGeometryDescriptor();
+    try { geometry.checkCompatibility(); } catch (...) { return available; }
+
+    return std::max(available, geometry.numBytes());
+}
+
 void
 HDFFile::didInitialize()
 {

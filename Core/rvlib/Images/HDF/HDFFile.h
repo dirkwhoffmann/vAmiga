@@ -69,6 +69,7 @@ public:
     isize writeToFile(const fs::path &path, isize offset, isize len) const override;
     void didInitialize() override;
     std::unique_ptr<utl::Backing> makeBacking(const fs::path &path) const override;
+    isize imageSize(utl::Backing &backing) const override;
 
 
     //

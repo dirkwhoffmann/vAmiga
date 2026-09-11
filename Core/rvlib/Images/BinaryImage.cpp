@@ -38,10 +38,13 @@ BinaryImage::init(const fs::path &p)
     if (backing->size() == 0)
         throw utl::IOError(utl::IOError::FILE_CANT_READ, p);
 
+    // Determine the image size (before the backing is handed over below)
+    auto size = imageSize(*backing);
+
     this->path = p;
 
-    // Put the image on top of it. Nothing is read yet.
-    data.init(imageSize(backing->size()), std::move(backing));
+    // Put the image on top of it. Nothing is loaded yet.
+    data.init(size, std::move(backing));
     didInitialize();
 }
 
