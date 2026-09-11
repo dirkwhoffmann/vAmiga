@@ -570,7 +570,7 @@ public:
     void patch(u32 addr, u8 value);
     void patch(u32 addr, u16 value);
     void patch(u32 addr, u32 value);
-    void patch(u32 addr, u8 *buf, isize len);
+    void patch(u32 addr, const u8 *buf, isize len);
 
 
     //

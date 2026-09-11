@@ -3194,7 +3194,7 @@ Memory::patch(u32 addr, u32 value)
 }
 
 void
-Memory::patch(u32 addr, u8 *buf, isize len)
+Memory::patch(u32 addr, const u8 *buf, isize len)
 {
     assert(buf);
     

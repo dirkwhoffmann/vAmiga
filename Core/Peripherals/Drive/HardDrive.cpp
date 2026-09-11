@@ -29,10 +29,10 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 
 HardDrive::~HardDrive()
 {
-    
+
 }
 
-HardDrive& 
+HardDrive&
 HardDrive::operator= (const HardDrive& other) {
 
     CLONE(config)
@@ -50,68 +50,16 @@ HardDrive::operator= (const HardDrive& other) {
     CLONE(state)
     CLONE(flags)
 
-    if CONSTEXPR (RUA_ON_STEROIDS) {
-
-        // Clone all blocks
-        CLONE(data)
-
-    } else if (allDirty || other.allDirty || data.size != other.data.size) {
-
-        /* Nothing reliable to salvage: one of the two lost track of what it
-         * changed, or they disagree in size. Copy everything.
-         */
-        CLONE(data)
-
-    } else {
-
-        /* Copy over the blocks where the two can disagree: the ones the
-         * source has written, and the ones this instance has written on its
-         * own since the last clone. A block in both sets is simply copied
-         * twice, which costs nothing worth avoiding.
-         */
-        auto sync = [&](isize nr) {
-
-            logmsg(LOG_RUA, "Cloning block %ld\n", nr);
-            memcpy(data.ptr + dirtyBsize * nr,
-                   other.data.ptr + dirtyBsize * nr, dirtyBsize);
-        };
-
-        for (auto nr : dirty)       sync(nr);
-        for (auto nr : other.dirty) sync(nr);
-    }
-
-    // Both instances hold the same disk now
-    markSynced();
-    other.markSynced();
+    // Share the disk rather than copying it (see 'image')
+    image = other.image;
 
     return *this;
 }
 
 void
-HardDrive::markDirty(isize offset, isize count)
-{
-    if (allDirty || count <= 0) return;
-
-    auto first = offset / dirtyBsize;
-    auto last  = (offset + count - 1) / dirtyBsize;
-
-    // Give up on tracking individual blocks if there are too many of them
-    auto limit = std::min(dirtyLimit, data.size / dirtyBsize / 2);
-
-    if (isize(dirty.size()) + (last - first + 1) > limit) {
-
-        markAllDirty();
-        return;
-    }
-
-    for (auto nr = first; nr <= last; nr++) dirty.insert(nr);
-}
-
-void
 HardDrive::init()
 {
-    data.dealloc();
-    markAllDirty();
+    image = nullptr;
 
     diskVendor = "VAMIGA";
     diskProduct = "VDRIVE";
@@ -128,32 +76,37 @@ HardDrive::init()
 }
 
 void
-HardDrive::init(const GeometryDescriptor &geometry)
+HardDrive::setup(const GeometryDescriptor &geometry)
 {
     // Throw an exception if the geometry is not supported
     geometry.checkCompatibility(mbLimit());
-    
+
     // Wipe out the old drive
     init();
-    
+
     // Create the drive description
     this->geometry = geometry;
-    
+
     // Add a default partition spanning the entire disk
     auto partition = PartitionDescriptor(geometry);
-    
+
     // Make the partition bootable
     partition.flags |= 1;
-    
+
     // Add the descriptor to the partition table
     ptable.push_back(partition);
 
     // User-provided disks are bootable by default
     setFlag(DiskFlags::BOOTABLE, true);
+}
 
-    // Create the new drive
-    data.init(geometry.numBytes(), 0);
-    markAllDirty();
+void
+HardDrive::init(const GeometryDescriptor &geometry)
+{
+    setup(geometry);
+
+    // Create an empty disk in memory
+    image = std::make_shared<HDFFile>(geometry.numBytes());
 }
 
 void
@@ -169,39 +122,50 @@ HardDrive::init(const FileSystem &fs)
 
     // Create the drive
     init(geometry);
-        
+
     // Update the partition table
     ptable[0].name = fs.stat().name.cpp_str();
     ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
 
     // Copy over all blocks
-    fs.exporter.exportVolume(data.ptr, geometry.numBytes());
+    auto bytes = image->mutableByteView(0, geometry.numBytes());
+    fs.exporter.exportVolume(bytes.data(), bytes.size());
 }
 
 void
-HardDrive::init(const HDFFile &hdf)
+HardDrive::init(std::unique_ptr<HDFFile> hdf)
 {
-    auto geometry = hdf.getGeometry();
+    assert(hdf);
 
-    // Create the drive
-    init(geometry);
+    auto geometry = hdf->getGeometry();
+
+    /* The image has to cover the geometry. HDFFile pads short files to the
+     * size their RDB describes, so a well-formed image always does. Checked
+     * before anything else, so that a failure leaves the old drive in place.
+     */
+    if (hdf->getSize() < geometry.numBytes()) {
+        throw DeviceError(DeviceError::HDR_UNMATCHED_GEOMETRY);
+    }
+    if (hdf->getSize() > geometry.numBytes()) {
+        logmsg(LOG_HDR, "HDF is too large. Ignoring excess bytes.\n");
+    }
+
+    // Describe the drive
+    setup(geometry);
 
     // Copy the product description (if provided by the HDF)
-    if (auto value = hdf.getDiskProduct(); value) diskProduct = *value;
-    if (auto value = hdf.getDiskVendor(); value) diskVendor = *value;
-    if (auto value = hdf.getDiskRevision(); value) diskRevision = *value;
-    if (auto value = hdf.getControllerProduct(); value) controllerProduct = *value;
-    if (auto value = hdf.getControllerVendor(); value) controllerVendor = *value;
-    if (auto value = hdf.getControllerRevision(); value) controllerRevision = *value;
-    
-    // Copy geometry
-    geometry = hdf.geometry;
-    
+    if (auto value = hdf->getDiskProduct(); value) diskProduct = *value;
+    if (auto value = hdf->getDiskVendor(); value) diskVendor = *value;
+    if (auto value = hdf->getDiskRevision(); value) diskRevision = *value;
+    if (auto value = hdf->getControllerProduct(); value) controllerProduct = *value;
+    if (auto value = hdf->getControllerVendor(); value) controllerVendor = *value;
+    if (auto value = hdf->getControllerRevision(); value) controllerRevision = *value;
+
     // Copy partition table
-    ptable = hdf.ptable;
-    
+    ptable = hdf->ptable;
+
     // Copy over all needed file system drivers
-    for (const auto &driver : hdf.drivers) {
+    for (const auto &driver : hdf->drivers) {
 
         bool needed = HDR_FS_LOAD_ALL;
 
@@ -214,24 +178,10 @@ HardDrive::init(const HDFFile &hdf)
         }
         if (needed) { drivers.push_back(driver); }
     }
-    
-    // Check the drive geometry against the file size
-    auto numBytes = hdf.getSize();
-    
-    if (data.size < numBytes) {
-        
-        logmsg(LOG_HDR, "HDF is too large. Ignoring excess bytes.\n");
-        numBytes = data.size;
-    }
-    if (data.size > hdf.getSize()) {
-        
-        logmsg(LOG_HDR, "HDF is too small. Padding with zeroes.");
-        data.clear(0, hdf.getSize());
-    }
-    
-    // Copy over all blocks
-    hdf.copy(data.ptr, 0, numBytes);
-        
+
+    // Take over the image. Nothing is copied, and nothing is read yet.
+    image = std::move(hdf);
+
     // Print some debug information
     logmsg(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());
     if CONSTEXPR (LOG_HDR != LOG_OFF) {
@@ -248,15 +198,15 @@ HardDrive::init(const fs::path &path)
     }
 
     if (fs::is_directory(path)) {
-        
+
         logmsg(LOG_HDR, "Importing directory...\n");
-        
+
         importFolder(path);
-        
+
     } else {
-        
-        try { init(HDFFile(path)); return; } catch(...) { }
-        
+
+        try { init(std::make_unique<HDFFile>(path)); return; } catch(...) { }
+
         //throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
     }
 }
@@ -272,16 +222,62 @@ HardDrive::_didReset(bool hard)
 {
     if CONSTEXPR (HDR_MODIFIED)
         setFlag(DiskFlags::MODIFIED, true);
+}
 
-    // The disk changed in its entirety
-    markAllDirty();
+void
+HardDrive::serializeDisk(SerCounter &worker)
+{
+    worker.count += 8 + size();
+}
+
+void
+HardDrive::serializeDisk(SerChecker &worker)
+{
+    /* The size only. Checksums compare the main instance with its run-ahead
+     * counterpart, which share one disk, so its bytes cannot differ -- and
+     * hashing them would load all of them.
+     */
+    i64 len = size();
+    worker << len;
+}
+
+void
+HardDrive::serializeDisk(SerWriter &worker)
+{
+    i64 len = size();
+    worker << len;
+
+    if (len) {
+
+        std::memcpy(worker.ptr, image->byteView(0, len).data(), size_t(len));
+        worker.ptr += len;
+    }
+}
+
+void
+HardDrive::serializeDisk(SerReader &worker)
+{
+    i64 len;
+    worker << len;
+
+    if (len) {
+
+        auto restored = std::make_shared<HDFFile>(isize(len));
+        std::memcpy(restored->mutableByteView(0, len).data(), worker.ptr, size_t(len));
+        worker.ptr += len;
+        image = restored;
+
+    } else {
+
+        image = nullptr;
+    }
 }
 
 i64
 HardDrive::getOption(Opt option) const
 {
     switch (option) {
-            
+
         case Opt::HDR_TYPE:          return (long)config.type;
         case Opt::HDR_PAN:           return (long)config.pan;
         case Opt::HDR_STEP_VOLUME:   return (long)config.stepVolume;
@@ -305,7 +301,7 @@ HardDrive::checkOption(Opt opt, i64 value)
 
         case Opt::HDR_PAN:
         case Opt::HDR_STEP_VOLUME:
-            
+
             return;
 
         default:
@@ -319,7 +315,7 @@ HardDrive::setOption(Opt option, i64 value)
     switch (option) {
 
         case Opt::HDR_TYPE:
-            
+
             if (!HardDriveTypeEnum::isValid(value)) {
                 throw CoreError(CoreError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
@@ -346,7 +342,7 @@ HardDrive::connect()
 {
     // Attach a small default disk
     if (!hasDisk()) {
-        
+
         logmsg(LOG_WT, "Creating default disk...\n");
         init(MB(10));
         format(amiga::FSFormat::OFS, FSName(defaultName()));
@@ -410,15 +406,8 @@ HardDrive::cacheInfo() const
     // State
     info.state = state;
     info.head = head;
-    
-    return info;
-}
 
-void
-HardDrive::_didLoad()
-{
-    // The disk changed in its entirety
-    markAllDirty();
+    return info;
 }
 
 void
@@ -427,15 +416,15 @@ HardDrive::_dump(Category category, std::ostream &os) const
     using namespace utl;
 
     if (category == Category::Config) {
-        
+
         dumpConfig(os);
     }
-    
+
     if (category == Category::State) {
-        
+
         auto cap1 = geometry.numBytes() / MB(1);
         auto cap2 = ((100 * geometry.numBytes()) / MB(1)) % 100;
-        
+
         os << tab("Hard drive");
         os << dec(objid) << std::endl;
         os << tab("Head");
@@ -471,9 +460,9 @@ HardDrive::_dump(Category category, std::ostream &os) const
             auto fs = FileSystemFactory::fromHardDrive(*dev, *this, i);
             i == 0 ? fs->dumpInfo(os) : fs->dumpState(os);
         }
-        
+
         for (isize i = 0; i < isize(ptable.size()); i++) {
-            
+
             os << std::endl;
             os << tab("Partition");
             os << dec(i) << std::endl;
@@ -483,13 +472,13 @@ HardDrive::_dump(Category category, std::ostream &os) const
         }
     }
     */
-    
+
     if (category == Category::Partitions) {
-        
+
         for (usize i = 0; i < ptable.size(); i++) {
-            
+
             auto &part = ptable[i];
-            
+
             if (i != 0) os << std::endl;
             os << tab("Partition");
             os << dec(i) << std::endl;
@@ -501,16 +490,22 @@ HardDrive::_dump(Category category, std::ostream &os) const
 void
 HardDrive::read(u8 *dst, isize offset, isize count) const
 {
-    assert(offset + count <= data.size);
-    memcpy((void *)dst, (void *)(data.ptr + offset), count);
+    assert(offset + count <= size());
+    memcpy((void *)dst, (const void *)image->byteView(offset, count).data(), count);
 }
 
 void
 HardDrive::write(const u8 *src, isize offset, isize count)
 {
-    assert(offset + count <= data.size);
-    memcpy((void *)(data.ptr + offset), (void *)src, count);
-    markDirty(offset, count);
+    assert(offset + count <= size());
+
+    // The run-ahead instance leaves the shared disk alone (see 'image')
+    if (isRunAheadInstance()) return;
+
+    memcpy((void *)image->mutableByteView(offset, count).data(), (const void *)src, count);
+
+    // Have the run-ahead instance recreated, so that it sees the change
+    emulator.markAsDirty();
 }
 
 bool
@@ -528,16 +523,16 @@ HardDrive::mbLimit() const
 bool
 HardDrive::hasDisk() const
 {
-    return data.ptr != nullptr;
+    return image != nullptr;
 }
 
-bool 
+bool
 HardDrive::getFlag(DiskFlags mask) const
 {
     return (flags & long(mask)) == long(mask);
 }
 
-void 
+void
 HardDrive::setFlag(DiskFlags mask, bool value)
 {
     value ? flags |= long(mask) : flags &= ~long(mask);
@@ -587,9 +582,9 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
         logmsg(LOG_HDR, "    File system : %s\n", amiga::FSFormatEnum::key(fsType));
         logmsg(LOG_HDR, "           Name : %s\n", name.c_str());
     }
-    
+
     // Only proceed if a disk is present
-    if (!data.ptr) return;
+    if (!image) return;
 
     if (fsType != FSFormat::NODOS) {
 
@@ -608,7 +603,7 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
 
         // Write back all changes
         fs.flush();
-    
+
         // Initialize the hard drive with the created file system
         init(fs);
     }
@@ -627,11 +622,11 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
     geometry.checkCompatibility(mbLimit());
 
     if (this->geometry.numBytes() == geometry.numBytes()) {
-        
+
         this->geometry = geometry;
 
     } else {
-        
+
         throw DeviceError(DeviceError::HDR_UNMATCHED_GEOMETRY);
     }
 }
@@ -643,7 +638,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
 
     // Check arguments
     auto error = verify(offset, length, addr);
-    
+
     if (!error) {
 
         state = HardDriveState::READING;
@@ -652,15 +647,15 @@ HardDrive::read(isize offset, isize length, u32 addr)
         moveHead(offset / geometry.bsize);
 
         // Perform the read operation
-        mem.patch(addr, data.ptr + offset, length);
+        mem.patch(addr, image->byteView(offset, length).data(), length);
 
         // Inform the GUI
         msgQueue.put(Msg::HDR_READ);
-        
+
         // Go back to IDLE state after some time
         scheduleIdleEvent();
     }
-    
+
     return error;
 }
 
@@ -671,7 +666,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
 
     // Check arguments
     auto error = verify(offset, length, addr);
-    
+
     if (!error) {
 
         state = HardDriveState::WRITING;
@@ -681,21 +676,31 @@ HardDrive::write(isize offset, isize length, u32 addr)
 
         if (!getFlag(DiskFlags::PROTECTED)) {
 
-            // Perform the write operation
-            mem.spypeek <Accessor::CPU> (addr, length, data.ptr + offset);
-            markDirty(offset, length);
-            
+            /* Only the main instance writes. The run-ahead instance leaves
+             * the shared disk alone; the main instance will perform this very
+             * write once it gets here (see 'image').
+             */
+            if (!isRunAheadInstance()) {
+
+                // Perform the write operation
+                auto bytes = image->mutableByteView(offset, length);
+                mem.spypeek <Accessor::CPU> (addr, length, bytes.data());
+
+                // Have the run-ahead instance recreated, so that it sees the change
+                emulator.markAsDirty();
+            }
+
             // Mark disk as modified
             setFlag(DiskFlags::MODIFIED, true);
         }
-        
+
         // Inform the GUI
         msgQueue.put(Msg::HDR_WRITE);
-        
+
         // Go back to IDLE state after some time
         scheduleIdleEvent();
     }
-    
+
     return error;
 }
 
@@ -703,21 +708,21 @@ void
 HardDrive::readDriver(isize nr, Buffer<u8> &driver)
 {
     assert(usize(nr) < drivers.size());
-    
+
     auto &segList = drivers[nr].blocks;
     auto bytesPerBlock = geometry.bsize - 20;
 
     driver.init(isize(segList.size()) * bytesPerBlock);
-    
+
     isize bytesRead = 0;
     for (auto &seg : segList) {
 
         auto offset = isize(seg * geometry.bsize + 20);
 
         assert(offset >= 0);
-        assert(offset + bytesPerBlock <= data.size);
-        
-        memcpy(driver.ptr + bytesRead, data.ptr + offset, bytesPerBlock);
+        assert(offset + bytesPerBlock <= size());
+
+        memcpy(driver.ptr + bytesRead, image->byteView(offset, bytesPerBlock).data(), bytesPerBlock);
         bytesRead += bytesPerBlock;
     }
 }
@@ -725,28 +730,28 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
 i8
 HardDrive::verify(isize offset, isize length, u32 addr)
 {
-    assert(data.ptr);
+    assert(image);
 
     if (length % 512) {
-        
+
         logmsg(LOG_HDR, "Length must be a multiple of 512 bytes");
         return IOERR_BADLENGTH;
     }
 
     if (offset % 512) {
-        
+
         logmsg(LOG_HDR, "Offset is not aligned");
         return IOERR_BADADDRESS;
     }
 
     if (offset + length > geometry.numBytes()) {
-        
+
         logmsg(LOG_HDR, "Invalid block location");
         return IOERR_BADADDRESS;
     }
 
     if (!mem.inRam(addr) || !mem.inRam(u32(addr + length))) {
-        
+
         logmsg(LOG_HDR, "Invalid RAM location");
         return IOERR_BADADDRESS;
     }
@@ -768,11 +773,11 @@ void
 HardDrive::moveHead(isize c, isize h, isize s)
 {
     bool step = head.cylinder != c;
-    
+
     head.cylinder = c;
     head.head = h;
     head.offset = geometry.bsize * s;
-    
+
     if (step) {
         msgQueue.put(Msg::HDR_STEP, DriveMsg {
             i16(objid), i16(c), config.stepVolume, config.pan
@@ -787,9 +792,9 @@ HardDrive::importFolder(const fs::path &path)
 
         throw IOError(IOError::FILE_NOT_FOUND, path);
     }
-    
+
     if (fs::is_directory(path)) {
-        
+
         logmsg(LOG_HDR, "Importing directory...\n");
 
         // Retrieve some information about the first partition
@@ -801,11 +806,11 @@ HardDrive::importFolder(const fs::path &path)
 
         // Import all files
         fs.importer.import(fs.root(), path, true, true);
-        
+
         // Write back
         fs.flush();
 
-    
+
         // Copy the file system back to the disk
         init(fs);
     }
@@ -814,11 +819,8 @@ HardDrive::importFolder(const fs::path &path)
 void
 HardDrive::writeToFile(const fs::path &path)
 {
-    if (!path.empty()) {
-
-        auto hdf = Codec::makeHDF(*this);
-        hdf->writeToFile(path);
-    }
+    // Write straight from the image, in the format the file name asks for
+    if (image && !path.empty()) image->writeToFile(path, 0, size());
 }
 
 std::unique_ptr<HardDiskImage>
@@ -838,9 +840,9 @@ void
 HardDrive::scheduleIdleEvent()
 {
     auto delay = MSEC(100);
-    
+
     switch (objid) {
-            
+
         case 0: agnus.scheduleRel <SLOT_HD0> (delay, HDR_IDLE); break;
         case 1: agnus.scheduleRel <SLOT_HD1> (delay, HDR_IDLE); break;
         case 2: agnus.scheduleRel <SLOT_HD2> (delay, HDR_IDLE); break;

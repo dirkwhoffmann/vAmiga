@@ -21,7 +21,7 @@
 #include "TrackDevice.h"
 #include "utl/storage.h"
 #include "utl/wrappers.h"
-#include <set>
+#include <memory>
 
 namespace retro::vault::amiga { class FileSystem; }
 
@@ -64,7 +64,7 @@ class HardDrive final : public Drive, public TrackDevice {
 
     Options options = {
 
-        Opt::HDR_TYPE, 
+        Opt::HDR_TYPE,
         Opt::HDR_PAN,
         Opt::HDR_STEP_VOLUME
     };
@@ -78,10 +78,10 @@ private:
 
     // Write-through storage files
     static std::fstream wtStream[4];
-    
+
     // Current configuration
     HardDriveConfig config = {};
-    
+
     // Product information
     string diskVendor;
     string diskProduct;
@@ -92,62 +92,41 @@ private:
 
     // Hard disk geometry
     GeometryDescriptor geometry;
-    
+
     // Partition table
     std::vector <PartitionDescriptor> ptable;
 
     // Loadable file system drivers
     std::vector <DriverDescriptor> drivers;
 
-    // Disk data
-    utl::Buffer<u8> data;
-    
-    /* Blocks written since this instance was last synchronized with another
+    /* The disk (nullptr if there is none)
      *
-     * Cloning a drive into the run-ahead instance does not have to copy the
-     * whole disk, only the blocks where the two can disagree. Those are the
-     * blocks the source has written since the last clone *and* the blocks the
-     * destination has written since then: the run-ahead instance keeps
-     * running after it was cloned, and its own writes have to be undone just
-     * as much as the source's have to be applied. Hence both instances track,
-     * and a clone consults the union.
+     * An image, usually on top of a file, that the drive owns together with
+     * its run-ahead counterpart. Cloning the drive into the run-ahead instance
+     * copies the pointer, not the disk: both instances look at the same bytes.
      *
-     * 'allDirty' is the giving-up state: everything counts as modified and
-     * the set is not maintained. Entered whenever the disk changes wholesale
-     * (reset, snapshot load, a new image), and whenever tracking individual
-     * blocks stops paying for itself (see dirtyLimit).
+     * Only the main instance writes to it. The run-ahead instance runs ahead
+     * of the main instance, which performs each of its writes later on, so
+     * the run-ahead instance simply drops them. Whenever the main instance
+     * writes, it has the run-ahead instance recreated, which keeps the two
+     * from drifting apart.
      *
-     * Both are mutable because a clone reads its source through a const
-     * reference and has to mark it synchronized. They describe how this
-     * instance relates to another one, not what the drive holds, so they are
-     * part of neither its serialized state nor its identity.
+     * What this gives up: the run-ahead instance does not see its own writes.
+     * A block it writes and reads back within the look-ahead window still
+     * reads as it was, until the main instance has caught up.
      */
-    mutable std::set<isize> dirty;
-    mutable bool allDirty = true;
-
-    // Granularity of the dirty set, in bytes
-    static constexpr isize dirtyBsize = 512;
-
-    /* Ceiling on the number of individually tracked blocks
-     *
-     * The real bound is relative -- once half the disk is dirty, copying the
-     * blocks one at a time is slower than copying the buffer outright -- but
-     * on a large disk half is still far too many to hold in a set, so this
-     * caps it. Whichever bound is hit first makes the drive fall back to
-     * copying everything.
-     */
-    static constexpr isize dirtyLimit = 16384;
+    std::shared_ptr<HDFFile> image;
 
     // Current position of the read/write head
     DriveHead head;
 
     // Current drive state
     HardDriveState state = HardDriveState::IDLE;
-    
+
     // Disk state flags
     long flags = 0;
 
-    
+
     //
     // Initializing
     //
@@ -156,7 +135,7 @@ public:
 
     HardDrive(Amiga& ref, isize nr);
     ~HardDrive();
-    
+
     HardDrive& operator= (const HardDrive& other);
 
     // Creates a hard drive with a certain geometry
@@ -168,8 +147,8 @@ public:
     // Creates a hard drive with the contents of a file system
     void init(const amiga::FileSystem &fs);
 
-    // Creates a hard drive with the contents of an HDF or HDZ
-    void init(const HDFFile &hdf);
+    // Creates a hard drive on top of an HDF or HDZ image (the drive takes it over)
+    void init(std::unique_ptr<HDFFile> hdf);
 
     // Creates a hard drive with the contents of an HDF file
     void init(const fs::path &path);
@@ -179,7 +158,7 @@ public:
         static HardDriveTraits traits;
 
         traits.nr = objid;
-        
+
         traits.diskVendor = diskVendor.c_str();
         traits.diskProduct = diskProduct.c_str();
         traits.diskRevision = diskRevision.c_str();
@@ -213,7 +192,7 @@ public:
         traits.name = descr.name;
         traits.lowerCyl = descr.lowCyl;
         traits.upperCyl = descr.highCyl;
-        
+
         switch (descr.dosType) {
 
             case 0x444F5300: traits.fsType = FSFormat::OFS; break;
@@ -226,7 +205,7 @@ public:
             case 0x444F5307: traits.fsType = FSFormat::FFS_LNFS; break;
             default:         traits.fsType = FSFormat::NODOS; break;
         }
-        
+
         return traits;
     }
 
@@ -235,24 +214,27 @@ private:
     // Restors the initial state
     void init();
 
-    
+    // Describes a drive of the given geometry, without providing a disk yet
+    void setup(const GeometryDescriptor &geometry);
+
+
     //
     // Methods from CoreObject
     //
-    
+
 private:
-    
+
     void _dump(Category category, std::ostream &os) const override;
-    
-    
+
+
     //
     // Methods from CoreComponent
     //
-    
+
 private:
-    
+
     void _initialize() override;
-    
+
     template <class T>
     void serialize(T& worker)
     {
@@ -280,26 +262,42 @@ private:
         << controllerRevision
         << geometry
         << ptable
-        << drivers
-        << data
+        << drivers;
+
+        serializeDisk(worker);
+
+        worker
+
         << flags;
 
     } SERIALIZERS(serialize);
 
+    /* Serializes the disk
+     *
+     * In the format of a utl::Buffer<u8> -- a length, then the bytes -- which
+     * is how the drive stored it when it kept one, so older snapshots still
+     * load. A restored disk is held in memory: a snapshot carries the bytes,
+     * not the file they came from.
+     */
+    void serializeDisk(SerCounter &worker);
+    void serializeDisk(SerChecker &worker);
+    void serializeDisk(SerReader &worker);
+    void serializeDisk(SerWriter &worker);
+    void serializeDisk(SerResetter &worker) { }
+
     void _didReset(bool hard) override;
-    void _didLoad() override;
 
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
-    
+
     //
     // Methods from Drive
     //
-    
+
 public:
-    
+
     string getDiskVendor() const override { return diskVendor; }
     string getDiskProduct() const override { return diskProduct; }
     string getDiskRevision() const override { return diskRevision; }
@@ -335,15 +333,15 @@ public:
     //
 
 public:
-    
+
     const HardDriveConfig &getConfig() const { return config; }
     const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;
-    
+
 private:
-    
+
     void connect();
     void disconnect();
 
@@ -354,7 +352,8 @@ private:
 
 public:
 
-    isize size() const override { return data.size; }
+    // The capacity given by the geometry (the image may be larger)
+    isize size() const override { return image ? geometry.numBytes() : 0; }
     void read(u8 *dst, isize offset, isize count) const override;
     void write(const u8 *src, isize offset, isize count) override;
 
@@ -400,7 +399,7 @@ public:
 
     // Returns the current drive state
     HardDriveState getState() const { return state; }
-    
+
     // Gets or sets the 'modification' flag
     bool isModified() const { return flags & long(DiskFlags::MODIFIED); }
     void setModified(bool value) { value ? flags |= long(DiskFlags::MODIFIED) : flags &= ~long(DiskFlags::MODIFIED); }
@@ -410,14 +409,14 @@ public:
 
     // Checks whether the drive will work with the currently installed Rom
     bool isCompatible() const;
-       
+
     // Checks whether the drive is marked as bootable
     bool isBootable();
-    
+
     //
     // Formatting
     //
-    
+
     // Returns a default volume name
     string defaultName(isize partition = 0) const;
 
@@ -427,23 +426,23 @@ public:
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512);
     void changeGeometry(const GeometryDescriptor &geometry);
-    
-    
+
+
     //
     // Reading and writing
     //
-    
+
 public:
-    
+
     // Reads a data block from the hard drive and copies it into RAM
     i8 read(isize offset, isize length, u32 addr);
-    
+
     // Reads a data block from RAM and writes it onto the hard drive
     i8 write(isize offset, isize length, u32 addr);
-    
+
     // Reads a loadable file system
     void readDriver(isize nr, utl::Buffer<u8> &driver);
-    
+
 private:
 
     // Checks the given argument list for consistency
@@ -455,30 +454,14 @@ private:
 
 
     //
-    // Tracking modifications
-    //
-
-private:
-
-    // Records that a byte range has been written
-    void markDirty(isize offset, isize count);
-
-    // Records that the disk has changed in its entirety
-    void markAllDirty() const { allDirty = true; dirty.clear(); }
-
-    // Records that this instance agrees with the one it was cloned from
-    void markSynced() const { allDirty = false; dirty.clear(); }
-    
-    
-    //
     // Importing and exporting
     //
-    
+
 public:
-    
+
     // Imports files from a folder (deletes existing files)
     void importFolder(const fs::path &path);
-    
+
     // Exports the disk to a file
     void writeToFile(const fs::path &path);
 
@@ -489,15 +472,15 @@ public:
     //
     // Scheduling and serving events
     //
-    
+
 public:
-    
+
     // Schedules an event to revert to idle state
     void scheduleIdleEvent();
-    
+
     // Services a hard drive event
     template <EventSlot s> void serviceHdrEvent();
-    
+
 };
 
 }
