@@ -83,16 +83,19 @@ HDFFile::writeToFile(const fs::path &path, isize offset, isize len) const
     }
 }
 
+std::unique_ptr<utl::Backing>
+HDFFile::makeBacking(const fs::path &path) const
+{
+    // An .hdz file is compressed and has to be unpacked as a whole
+    if (utl::lowercased(path.extension().string()) == ".hdz") {
+        return std::make_unique<utl::GzipBacking>(path);
+    }
+    return HardDiskImage::makeBacking(path);
+}
+
 void
 HDFFile::didInitialize()
 {
-    if (utl::lowercased(path.extension().string()) == ".hdz") {
-
-        logmsg(LOG_IMG, "Decompressing %ld bytes...\n", getSize());
-        gunzip();
-        logmsg(LOG_IMG, "Restored %ld bytes.\n", getSize());
-    }
-
     // Run a consistency check on the buffer contents
     ensureHDF(getSize());
     

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Images/AnyImage.h"
+#include "utl/storage/BackedBuffer.h"
 
 namespace retro::vault {
 
@@ -18,19 +19,30 @@ class LinearDevice;
 /* An image that is a contiguous block of bytes.
  *
  * This is what almost every format in this library is: a floppy image, a hard
- * drive image, an executable. init() reads the file into memory, and
- * everything below -- sizing, copying, hashing, dumping, exporting -- is a
- * statement about those bytes.
+ * drive image, an executable. Everything below -- sizing, copying, hashing,
+ * dumping, exporting -- is a statement about those bytes.
  *
- * The bytes themselves are private. Everything, subclasses included, reaches
- * them through two views:
+ * The bytes live in a utl::BackedBuffer. An image read from a file sits on
+ * top of that file and loads its bytes as they are asked for, so opening a
+ * hard drive image of several gigabytes costs next to nothing until its
+ * blocks are used. Images built in memory -- from a size, from bytes, or from
+ * a device -- have no backing and hold all of their bytes.
+ *
+ * What lazy loading means for an image read from a file:
+ *
+ * - The image keeps the file open for as long as it lives.
+ * - It is not a snapshot. Parts not loaded yet are read when first asked for,
+ *   so nobody else may change the file in the meantime. Writing the image to
+ *   its own file (save(), writeToFile()) is safe; that case is handled.
+ *
+ * The bytes are private. Everything, subclasses included, reaches them through
+ * two views:
  *
  *   byteView()         read-only
- *   mutableByteView()  writable. Ask for it only when writing: storage that
- *                      loads lazily (see utl::BackedBuffer) takes the region
- *                      as modified.
+ *   mutableByteView()  writable. Ask for it only when writing: the region
+ *                      counts as modified from then on.
  *
- * Keeping to these two is what allows the storage behind them to change.
+ * Images cannot be copied, because two copies would share one backing.
  *
  * Formats that are not a buffer derive from AnyImage directly (see SVMFile)
  * and simply do not have these members.
@@ -38,7 +50,7 @@ class LinearDevice;
 class BinaryImage : public AnyImage, public utl::Dumpable {
 
     // The raw data of this file
-    utl::Buffer<u8> data;
+    utl::BackedBuffer data;
 
 
     //
@@ -47,32 +59,34 @@ class BinaryImage : public AnyImage, public utl::Dumpable {
 
 public:
 
+    // Creates an image of the given size, all zero
     void init(isize len);
+
+    // Creates an image holding a copy of the given bytes
     void init(const u8 *buf, isize len);
+
+    // Creates an image on top of a file, loading its contents lazily
     void init(const fs::path& p);
 
     /* Initializes the image with the contents of a device.
      *
      * The device is asked for its bytes rather than handing over a pointer to
      * them, so this works for any device, including ones that do not keep the
-     * whole image in memory.
+     * whole image in memory. All of them are copied.
      */
     void init(const LinearDevice& device);
 
 protected:
 
-    /* Changing the size after loading.
+    /* Choosing the storage of an image read from a file.
      *
-     * Some formats are not stored as the image itself: an .adz or .hdz file is
-     * compressed, and a short ADF lacks cylinders. Subclasses fix that up in
-     * didInitialize() with these two.
+     * init(path) asks makeBacking() where the bytes come from, and imageSize()
+     * how large the image is, given how much the backing holds. Formats whose
+     * files are not the image itself override them: a compressed file needs a
+     * backing that unpacks it, a short ADF an image larger than its file.
      */
-
-    // Replaces the contents with their gunzipped form
-    void gunzip();
-
-    // Grows or shrinks the image. Added bytes are zero.
-    void resize(isize newSize);
+    virtual std::unique_ptr<utl::Backing> makeBacking(const fs::path &path) const;
+    virtual isize imageSize(isize available) const { return available; }
 
 
     //
@@ -103,7 +117,7 @@ public:
 
 public:
 
-    isize getSize() const { return data.size; }
+    isize getSize() const { return data.size(); }
     bool empty() const { return data.empty(); }
 
 

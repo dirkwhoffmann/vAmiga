@@ -201,19 +201,26 @@ ADFFile::writeToFile(const fs::path &path, isize offset, isize len) const
     }
 }
 
+std::unique_ptr<utl::Backing>
+ADFFile::makeBacking(const fs::path &path) const
+{
+    // An .adz file is compressed and has to be unpacked as a whole
+    if (utl::lowercased(path.extension().string()) == ".adz") {
+        return std::make_unique<utl::GzipBacking>(path);
+    }
+    return FloppyDiskImage::makeBacking(path);
+}
+
+isize
+ADFFile::imageSize(isize available) const
+{
+    // Add some empty cylinders if the file contains less than 80
+    return std::max(available, isize(ADFSIZE_35_DD));
+}
+
 void
 ADFFile::didInitialize()
 {
-    if (utl::lowercased(path.extension().string()) == ".adz") {
-
-        logmsg(LOG_IMG, "Decompressing %ld bytes...\n", getSize());
-        gunzip();
-        logmsg(LOG_IMG, "Restored %ld bytes.\n", getSize());
-    }
-
-    // Add some empty cylinders if the file contains less than 80
-    if (getSize() < ADFSIZE_35_DD) resize(ADFSIZE_35_DD);
-
     // Run a consistency check on the buffer contents
     ensureADF();
 }

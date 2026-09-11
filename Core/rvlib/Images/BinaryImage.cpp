@@ -23,7 +23,7 @@ using utl::IOError;
 void
 BinaryImage::init(isize len)
 {
-    data.init(len);
+    data.init(len, nullptr);
 }
 
 void
@@ -32,32 +32,27 @@ BinaryImage::init(const fs::path &p)
     if (!validateURL(p))
         throw utl::IOError(utl::IOError::FILE_TYPE_MISMATCH, p);
 
-    std::fstream stream(p, std::ios::binary | std::ios::in);
+    // Open the file (throws if it does not exist or cannot be read)
+    auto backing = makeBacking(p);
 
-    if (!stream)
-        throw utl::IOError(utl::IOError::FILE_NOT_FOUND, p);
-
-    // Read file into a vector
-    std::vector<u8> buffer((std::istreambuf_iterator<char>(stream)),
-                           std::istreambuf_iterator<char>());
-
-    if (buffer.empty())
+    if (backing->size() == 0)
         throw utl::IOError(utl::IOError::FILE_CANT_READ, p);
 
     this->path = p;
 
-    // Initialize image with the vector contents
-    init(buffer.data(), isize(buffer.size()));
+    // Put the image on top of it. Nothing is read yet.
+    data.init(imageSize(backing->size()), std::move(backing));
+    didInitialize();
 }
 
 void
 BinaryImage::init(const LinearDevice &device)
 {
-    // Allocate memory
-    data.alloc(device.size());
+    data.init(device.size(), nullptr);
 
     // Pull in the contents
-    device.read(data.ptr, 0, data.size);
+    auto bytes = data.mutableByteView(0, data.size());
+    device.read(bytes.data(), 0, bytes.size());
     didInitialize();
 }
 
@@ -66,44 +61,28 @@ BinaryImage::init(const u8 *buf, isize len)
 {
     assert(buf);
 
-    // Allocate memory
-    data.alloc(len);
+    data.init(len, nullptr);
 
-    // Copy data
-    std::memcpy(data.ptr, buf, data.size);
+    if (len) std::memcpy(data.mutableByteView(0, len).data(), buf, size_t(len));
     didInitialize();
 }
 
-void
-BinaryImage::gunzip()
+std::unique_ptr<utl::Backing>
+BinaryImage::makeBacking(const fs::path &p) const
 {
-    try {
-        data.gunzip();
-    } catch (std::exception &err) {
-        throw utl::IOError(utl::IOError::ZLIB_ERROR, err.what());
-    }
-}
-
-void
-BinaryImage::resize(isize newSize)
-{
-    data.resize(newSize, 0);
+    return std::make_unique<utl::FileBacking>(p);
 }
 
 utl::ByteView
 BinaryImage::byteView(isize offset, isize len) const
 {
-    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
-
-    return utl::ByteView(data.ptr + offset, len);
+    return data.byteView(offset, len);
 }
 
 utl::MutableByteView
 BinaryImage::mutableByteView(isize offset, isize len)
 {
-    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
-
-    return utl::MutableByteView(data.ptr + offset, len);
+    return data.mutableByteView(offset, len);
 }
 
 void
@@ -175,6 +154,13 @@ BinaryImage::writeToFile(const fs::path &p, isize offset, isize len) const
     if (utl::isDirectory(p)) {
         throw utl::IOError(utl::IOError::FILE_IS_DIRECTORY);
     }
+
+    /* The target may be the very file this image is loaded from. Opening it
+     * for writing truncates it, so whatever is still in there only has to
+     * come in first.
+     */
+    std::error_code ec;
+    if (fs::equivalent(p, path, ec)) (void)byteView(0, getSize());
 
     std::ofstream stream(p, std::ofstream::binary);
 
