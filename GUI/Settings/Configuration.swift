@@ -155,6 +155,16 @@ class Configuration {
         emu?.set(.HDR_TYPE, drive: n, value: type)
     }
 
+    func hdnWriteThrough(_ n: Int) -> WriteThroughMode {
+        precondition(0 <= n && n <= 3)
+        return WriteThroughMode(rawValue: emu?.get(.HDR_WRITE_THROUGH, drive: n) ?? 0) ?? .NEVER
+    }
+
+    func setHdnWriteThrough(_ n: Int, mode: WriteThroughMode) {
+        precondition(0 <= n && n <= 3)
+        emu?.set(.HDR_WRITE_THROUGH, drive: n, value: mode.rawValue)
+    }
+
     var df0Connected: Bool {
         get { return dfnConnected(0) }
         set { setDfnConnected(0, connect: newValue) }

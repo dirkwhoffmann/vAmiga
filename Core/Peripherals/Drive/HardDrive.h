@@ -423,6 +423,12 @@ public:
     // Returns the current drive state
     HardDriveState getState() const { return state; }
 
+    // Returns the file the disk lives in (empty if the disk was built in memory)
+    fs::path getPath() const { return fileBacked() ? image->path : fs::path(); }
+
+    // Returns true if the disk holds changes the file does not have yet
+    bool needsPersisting() const { return fileBacked() && image->modified(); }
+
     // Gets or sets the 'modification' flag
     bool isModified() const { return flags & long(DiskFlags::MODIFIED); }
     void setModified(bool value) { value ? flags |= long(DiskFlags::MODIFIED) : flags &= ~long(DiskFlags::MODIFIED); }

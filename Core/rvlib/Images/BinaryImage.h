@@ -127,6 +127,13 @@ public:
     // Returns true if the image sits on top of the file it was read from or saved to
     bool backed() const { return data.backed(); }
 
+    /* Returns true if the image holds changes the file does not have yet
+     *
+     * An image without a backing has no file to compare itself to; for such
+     * an image, the answer says nothing (see save()).
+     */
+    bool modified() const { return data.dirty(); }
+
 
     //
     // Accessing data

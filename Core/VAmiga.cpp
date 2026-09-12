@@ -1347,6 +1347,20 @@ HardDriveAPI::importFiles(const fs::path &path)
     drive->importFolder(path);
 }
 
+fs::path
+HardDriveAPI::path() const
+{
+    VAMIGA_PUBLIC
+    return drive->getPath();
+}
+
+bool
+HardDriveAPI::needsPersisting() const
+{
+    VAMIGA_PUBLIC
+    return drive->needsPersisting();
+}
+
 void
 HardDriveAPI::persist()
 {

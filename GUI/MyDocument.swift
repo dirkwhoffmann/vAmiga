@@ -288,7 +288,6 @@ class MyDocument: NSDocument {
 
         try hdn.writeToFile(url: url)
         hdn.setFlag(.MODIFIED, value: false)
-        mm.noteNewRecentlyExportedHdrURL(url, hd: nr)
 
         loginfo(.media, "Hard Drive exported successfully")
     }

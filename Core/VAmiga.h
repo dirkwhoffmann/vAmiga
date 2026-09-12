@@ -855,6 +855,16 @@ public:
      */
     void importFiles(const std::filesystem::path &path);
 
+    /** @brief  Returns the file the disk lives in
+     *  @note   The path is empty for a drive that was built in memory.
+     */
+    std::filesystem::path path() const;
+
+    /** @brief  Indicates whether the disk holds changes the file does not have
+     *          yet, i.e. whether persist() has anything to do.
+     */
+    bool needsPersisting() const;
+
     /** @brief  Writes all changes back to the file the disk lives in
      *  @note   Only what has changed is written. For a drive that was built
      *          in memory, the call has no effect. Opt::HDR_WRITE_THROUGH

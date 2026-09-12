@@ -41,10 +41,10 @@ class MediaManager {
     var hd2OpenRecent: NSMenuItem! { return myAppDelegate.hd2OpenRecent }
     var hd3OpenRecent: NSMenuItem! { return myAppDelegate.hd3OpenRecent }
     
-    var hd0ExportRecent: NSMenuItem! { return myAppDelegate.hd0ExportRecent }
-    var hd1ExportRecent: NSMenuItem! { return myAppDelegate.hd1ExportRecent }
-    var hd2ExportRecent: NSMenuItem! { return myAppDelegate.hd2ExportRecent }
-    var hd3ExportRecent: NSMenuItem! { return myAppDelegate.hd3ExportRecent }
+    var hd0WriteTo: NSMenuItem! { return myAppDelegate.hd0WriteTo }
+    var hd1WriteTo: NSMenuItem! { return myAppDelegate.hd1WriteTo }
+    var hd2WriteTo: NSMenuItem! { return myAppDelegate.hd2WriteTo }
+    var hd3WriteTo: NSMenuItem! { return myAppDelegate.hd3WriteTo }
     
     // Shared list of recently inserted floppy disk URLs
     static var insertedFloppyDisks: [URL] = []
@@ -57,12 +57,6 @@ class MediaManager {
     
     // Shared list of recently attached hard drive URLs
     static var attachedHardDrives: [URL] = []
-    
-    // Unshared list of export URLs (one for each hard drive)
-    var exportedHardDrives0: [URL] = []
-    var exportedHardDrives1: [URL] = []
-    var exportedHardDrives2: [URL] = []
-    var exportedHardDrives3: [URL] = []
     
     // Pictograms used in menu items
     var diskMenuImage = Symbol.get(.floppy35, size: 16)
@@ -86,8 +80,28 @@ class MediaManager {
                      action: #selector(MyController.exportRecentDiskAction(_:)))
         initUrlMenus([hd0OpenRecent, hd1OpenRecent, hd2OpenRecent, hd3OpenRecent], count: 10,
                      action: #selector(MyController.attachRecentHdrAction(_:)))
-        initUrlMenus([hd0ExportRecent, hd1ExportRecent, hd2ExportRecent, hd3ExportRecent], count: 1,
-                     action: #selector(MyController.exportRecentHdrAction(_:)))
+        initWriteToMenus([hd0WriteTo, hd1WriteTo, hd2WriteTo, hd3WriteTo])
+    }
+    
+    /* Sets up the "Write To" menus
+     *
+     * Each of them holds a single item, which stands for the file the drive's
+     * disk lives in. The title is filled in when the menu is validated, since
+     * the file changes with the disk (see MyController.persistHdrAction).
+     */
+    func initWriteToMenus(_ menus: [NSMenuItem]) {
+        
+        for (index, menuItem) in menus.enumerated() {
+            
+            let menu = menuItem.submenu!
+            menu.removeAllItems()
+            
+            let item = NSMenuItem(title: "",
+                                  action: #selector(MyController.persistHdrAction(_:)),
+                                  keyEquivalent: "")
+            item.tag = index
+            menu.addItem(item)
+        }
     }
     
     func initUrlMenus(_ menus: [NSMenuItem], count: Int,
@@ -203,40 +217,6 @@ class MediaManager {
         attachedHardDrives = []
     }
     
-    func noteNewRecentlyExportedHdrURL(_ url: URL, hd n: Int) {
-        switch n {
-        case 0: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives0, size: 1)
-        case 1: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives1, size: 1)
-        case 2: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives2, size: 1)
-        case 3: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives3, size: 1)
-        default: fatalError()
-        }
-    }
-    
-    func getRecentlyExportedHdrURLs(hd n: Int) -> [URL] {
-        switch n {
-        case 0: return exportedHardDrives0
-        case 1: return exportedHardDrives1
-        case 2: return exportedHardDrives2
-        case 3: return exportedHardDrives3
-        default: fatalError()
-        }
-    }
-    
-    func getRecentlyExportedHdrURL(_ pos: Int, hd n: Int) -> URL? {
-        return getRecentlyExportedHdrURLs(hd: n).at(pos)
-    }
-    
-    func clearRecentlyExportedHdrURLs(hd n: Int) {
-        switch n {
-        case 0: exportedHardDrives0 = []
-        case 1: exportedHardDrives1 = []
-        case 2: exportedHardDrives2 = []
-        case 3: exportedHardDrives3 = []
-        default: fatalError()
-        }
-    }
-    
     func noteNewRecentlyOpenedURL(_ url: URL, type: ImageFormat) {
 
         switch type {
@@ -254,7 +234,6 @@ class MediaManager {
         switch type {
             
         case .ADF, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyExportedDiskURL(url, df: nr)
-        case .HDF, .HDZ:                         noteNewRecentlyExportedHdrURL(url, hd: nr)
             
         default:
             break
@@ -335,7 +314,6 @@ class MediaManager {
         if options.contains(.remember) {
             
             MediaManager.noteNewRecentlyAttachedHdrURL(url)
-            noteNewRecentlyExportedHdrURL(url, hd: n)
         }
     }
     

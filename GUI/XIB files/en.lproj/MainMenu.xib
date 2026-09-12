@@ -26,16 +26,16 @@
                 <outlet property="df3ExportRecent" destination="Non-0K-biL" id="gGx-mX-ScZ"/>
                 <outlet property="df3Menu" destination="2h1-jT-0o6" id="dfO-xV-ieM"/>
                 <outlet property="df3OpenRecent" destination="7lX-EE-IhD" id="bLG-cB-7x9"/>
-                <outlet property="hd0ExportRecent" destination="z1v-QA-WrJ" id="TDm-0r-IfB"/>
+                <outlet property="hd0WriteTo" destination="z1v-QA-WrJ" id="TDm-0r-IfB"/>
                 <outlet property="hd0Menu" destination="OYE-xa-ahL" id="ehz-vZ-bPG"/>
                 <outlet property="hd0OpenRecent" destination="hRI-K9-ade" id="XyM-DK-4j7"/>
-                <outlet property="hd1ExportRecent" destination="7Wg-3m-VRk" id="NxV-Y4-h2r"/>
+                <outlet property="hd1WriteTo" destination="7Wg-3m-VRk" id="NxV-Y4-h2r"/>
                 <outlet property="hd1Menu" destination="SoY-x2-Dd4" id="exs-xD-zqz"/>
                 <outlet property="hd1OpenRecent" destination="6hN-sv-cg3" id="rtY-uI-5Rn"/>
-                <outlet property="hd2ExportRecent" destination="Wjq-Ug-rnk" id="lIP-0k-Ryj"/>
+                <outlet property="hd2WriteTo" destination="Wjq-Ug-rnk" id="lIP-0k-Ryj"/>
                 <outlet property="hd2Menu" destination="Cna-Xa-SNM" id="jSm-kb-ROd"/>
                 <outlet property="hd2OpenRecent" destination="7xT-JF-SMY" id="NXj-uj-FOF"/>
-                <outlet property="hd3ExportRecent" destination="yIE-F0-g9J" id="cED-rb-lAm"/>
+                <outlet property="hd3WriteTo" destination="yIE-F0-g9J" id="cED-rb-lAm"/>
                 <outlet property="hd3Menu" destination="zgt-H4-oPS" id="AIW-bD-wSR"/>
                 <outlet property="hd3OpenRecent" destination="kf6-jr-Wzq" id="X1s-Ar-nwM"/>
             </connections>
@@ -609,11 +609,11 @@ CQ
                                     <action selector="exportHdrAction:" target="-1" id="hFW-6u-FNH"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" id="z1v-QA-WrJ">
+                            <menuItem title="Write To" id="z1v-QA-WrJ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="nGP-5C-NVK"/>
+                                <menu key="submenu" title="Write To" id="nGP-5C-NVK"/>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="q2u-0n-IZc"/>
+                                    <action selector="writeToHdrDummyAction:" target="-1" id="q2u-0n-IZc"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qgs-Zf-fdv"/>
@@ -634,6 +634,12 @@ CQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="writeProtectHdrAction:" target="-1" id="WYa-48-cOr"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Write Through" id="aQ1-Wt-itm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="aQ1-Wt-act"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -674,11 +680,11 @@ CQ
                                     <action selector="exportHdrAction:" target="-1" id="A8m-r4-tB2"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" tag="1" id="7Wg-3m-VRk">
+                            <menuItem title="Write To" tag="1" id="7Wg-3m-VRk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="0Bi-fu-lwA"/>
+                                <menu key="submenu" title="Write To" id="0Bi-fu-lwA"/>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="3Fh-cI-TsX"/>
+                                    <action selector="writeToHdrDummyAction:" target="-1" id="3Fh-cI-TsX"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1Vv-nd-7qq"/>
@@ -699,6 +705,12 @@ CQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="writeProtectHdrAction:" target="-1" id="2qL-bl-h0G"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Write Through" tag="1" id="bQ2-Wt-itm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="bQ2-Wt-act"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -739,11 +751,11 @@ CQ
                                     <action selector="exportHdrAction:" target="-1" id="jb3-i3-aFU"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" tag="2" id="Wjq-Ug-rnk">
+                            <menuItem title="Write To" tag="2" id="Wjq-Ug-rnk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="R8W-LO-NPB"/>
+                                <menu key="submenu" title="Write To" id="R8W-LO-NPB"/>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="RDC-Ub-6Ys"/>
+                                    <action selector="writeToHdrDummyAction:" target="-1" id="RDC-Ub-6Ys"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Qt6-t9-9qM"/>
@@ -764,6 +776,12 @@ CQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="writeProtectHdrAction:" target="-1" id="t5d-Ig-pZJ"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Write Through" tag="2" id="cQ3-Wt-itm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="cQ3-Wt-act"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -804,11 +822,11 @@ CQ
                                     <action selector="exportHdrAction:" target="-1" id="hK6-xK-wQy"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Export To" tag="3" id="yIE-F0-g9J">
+                            <menuItem title="Write To" tag="3" id="yIE-F0-g9J">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="r6T-Vb-Sf8"/>
+                                <menu key="submenu" title="Write To" id="r6T-Vb-Sf8"/>
                                 <connections>
-                                    <action selector="exportRecentHdrDummyAction:" target="-1" id="lMV-0X-vDj"/>
+                                    <action selector="writeToHdrDummyAction:" target="-1" id="lMV-0X-vDj"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="iU8-hM-UzT"/>
@@ -829,6 +847,12 @@ CQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="writeProtectHdrAction:" target="-1" id="0rF-yo-ck2"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Write Through" tag="3" id="dQ4-Wt-itm">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="writeThroughHdrAction:" target="-1" id="dQ4-Wt-act"/>
                                 </connections>
                             </menuItem>
                         </items>

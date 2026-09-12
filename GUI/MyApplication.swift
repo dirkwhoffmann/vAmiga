@@ -42,10 +42,10 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var hd2OpenRecent: NSMenuItem!
     @IBOutlet weak var hd3OpenRecent: NSMenuItem!
     
-    @IBOutlet weak var hd0ExportRecent: NSMenuItem!
-    @IBOutlet weak var hd1ExportRecent: NSMenuItem!
-    @IBOutlet weak var hd2ExportRecent: NSMenuItem!
-    @IBOutlet weak var hd3ExportRecent: NSMenuItem!
+    @IBOutlet weak var hd0WriteTo: NSMenuItem!
+    @IBOutlet weak var hd1WriteTo: NSMenuItem!
+    @IBOutlet weak var hd2WriteTo: NSMenuItem!
+    @IBOutlet weak var hd3WriteTo: NSMenuItem!
     
     // Replace the old document controller by instantiating a custom controller
     let myDocumentController = MyDocumentController()

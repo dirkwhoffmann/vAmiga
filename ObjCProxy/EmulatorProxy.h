@@ -805,6 +805,15 @@ ImageInfo scan(const fs::path &url);
 - (NSArray *) geometries;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
+// The file the disk lives in (nil for a drive that was built in memory)
+@property (readonly) NSURL *url;
+
+// Indicates whether the file is behind the disk
+@property (readonly) BOOL needsPersisting;
+
+// Writes all changes back to the file the disk lives in
+- (void)persist;
+
 @end
 
 //

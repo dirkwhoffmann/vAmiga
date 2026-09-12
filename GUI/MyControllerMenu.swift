@@ -94,14 +94,18 @@ extension MyController: NSMenuItemValidation {
             validateURLlist(MediaManager.attachedHardDrives, image: smallHdr)
             return true
             
-        case #selector(MyController.exportRecentHdrDummyAction(_:)):
-            let empty = mm.getRecentlyExportedHdrURL(0, hd: item.tag) == nil
-            return hdn.info.hasDisk && !empty
+        case #selector(MyController.writeToHdrDummyAction(_:)):
+            // Name the file inside, since the submenu stays shut when disabled
+            if let file = item.submenu?.items.first {
+                file.title = hdn.url?.lastPathComponent ?? ""
+                file.image = smallHdr
+            }
+            return hdn.needsPersisting
             
-        case #selector(MyController.exportRecentHdrAction(_:)):
-            let urls = mm.getRecentlyExportedHdrURLs(hd: item.tag >> 16)
-            validateURLlist(urls, image: smallHdr)
-            return true
+        case #selector(MyController.persistHdrAction(_:)):
+            item.title = hdn.url?.lastPathComponent ?? ""
+            item.image = smallHdr
+            return hdn.needsPersisting
             
         case #selector(MyController.writeProtectHdrAction(_:)):
             item.state = hdn.info.hasProtectedDisk ? .on : .off
@@ -110,6 +114,10 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.bootableHdrAction(_:)):
             item.state = hdn.getFlag(.BOOTABLE) ? .on : .off
             return hdn.info.hasDisk
+
+        case #selector(MyController.writeThroughHdrAction(_:)):
+            item.state = config.hdnWriteThrough(item.tag) != .NEVER ? .on : .off
+            return hdn.url != nil
             
         default:
             return item.isEnabled
@@ -686,38 +694,17 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
-    @IBAction func exportRecentHdrDummyAction(_ sender: NSMenuItem!) {}
-    @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
+    @IBAction func writeToHdrDummyAction(_ sender: NSMenuItem!) {}
+    @IBAction func persistHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = sender.tag >> 16
-        let slot = sender.tag & 0xFFFF
+        loginfo(.media, "persistHdrAction(hd: \(sender.tag))")
         
-        exportRecentAction(hd: drive, slot: slot)
-    }
-    
-    func exportRecentAction(hd n: Int, slot: Int) {
-        
-        loginfo(.media, "exportRecentAction(hd: \(n), slot: \(slot))")
-        
-        if let url = mm.getRecentlyExportedHdrURL(slot, hd: n) {
-            
-            do {
-                try mydocument.export(hardDrive: n, to: url)
-                
-            } catch {
-                showAlert(.cantExport(url: url), error: error)
-            }
-        }
+        emu?.hd(sender)?.persist()
     }
     
     @IBAction func clearRecentlyAttachedHdrsAction(_ sender: NSMenuItem!) {
         
         MediaManager.clearRecentlyAttachedHdrURLs()
-    }
-    
-    @IBAction func clearRecentlyExportedHdrsAction(_ sender: NSMenuItem!) {
-        
-        mm.clearRecentlyExportedHdrURLs(hd: sender.tag)
     }
     
     @IBAction func exportHdrAction(_ sender: NSMenuItem!) {
@@ -744,6 +731,12 @@ extension MyController: NSMenuItemValidation {
         if let hdn = emu?.hd(sender) {
             hdn.setFlag(.BOOTABLE, value: !hdn.getFlag(.BOOTABLE))
         }
+    }
+
+    @IBAction func writeThroughHdrAction(_ sender: NSMenuItem!) {
+        
+        let on = config.hdnWriteThrough(sender.tag) != .NEVER
+        config.setHdnWriteThrough(sender.tag, mode: on ? .NEVER : .ON_IDLE)
     }
     
     //

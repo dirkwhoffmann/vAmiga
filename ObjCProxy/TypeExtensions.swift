@@ -71,6 +71,7 @@ typealias SrvState = vamiga.SrvState
 typealias StateMachineInfo = vamiga.StateMachineInfo
 typealias UARTInfo = vamiga.UARTInfo
 typealias VideoFormat = vamiga.TV
+typealias WriteThroughMode = vamiga.WriteThroughMode
 typealias Warp = vamiga.Warp
 
 /*
