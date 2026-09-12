@@ -855,6 +855,13 @@ public:
      */
     void importFiles(const std::filesystem::path &path);
 
+    /** @brief  Writes all changes back to the file the disk lives in
+     *  @note   Only what has changed is written. For a drive that was built
+     *          in memory, the call has no effect. Opt::HDR_WRITE_THROUGH
+     *          performs this call on its own (see WriteThroughMode).
+     */
+    void persist();
+
     /** @brief  Exports the hard drive to an HDF file on disk
      */
     void writeToFile(const std::filesystem::path &path);

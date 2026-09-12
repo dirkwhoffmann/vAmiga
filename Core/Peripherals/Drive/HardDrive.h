@@ -77,9 +77,6 @@ public:
 
 private:
 
-    // Write-through storage files
-    static std::fstream wtStream[4];
-
     // Current configuration
     HardDriveConfig config = {};
 
@@ -126,6 +123,15 @@ private:
 
     // Disk state flags
     long flags = 0;
+
+    /* Set when the disk was written since the drive last went idle
+     *
+     * The idle handler acts on it: it has the run-ahead instance recreated
+     * and, in WriteThroughMode::ON_IDLE, brings the file up to date. Only the
+     * main instance sets it; it is part of no snapshot, since it says
+     * something about this run, not about the emulated machine.
+     */
+    bool pending = false;
 
 
     //
@@ -469,14 +475,6 @@ private:
     void moveHead(isize lba);
     void moveHead(isize c, isize h, isize s);
 
-    /* Brings the file up to date (used for write-through)
-     *
-     * Only the main instance writes, and only a disk that lives in a file
-     * has somewhere to go. A failure is logged and otherwise ignored: the
-     * changes stay in memory, marked as modified, and are written along
-     * with the next change.
-     */
-    void persist();
 
 
     //
@@ -487,6 +485,17 @@ public:
 
     // Imports files from a folder (deletes existing files)
     void importFolder(const fs::path &path);
+
+    /* Writes all changes back to the file the disk lives in
+     *
+     * Only what has changed is written. A disk built in memory has no file to
+     * go back to; for such a disk, and for the run-ahead instance, the call
+     * does nothing. A failure is logged and otherwise ignored: the changes
+     * stay in memory and are written again with the next call.
+     *
+     * Opt::HDR_WRITE_THROUGH has this called on its own (see WriteThroughMode).
+     */
+    void persist();
 
     // Exports the disk to a file
     void writeToFile(const fs::path &path);

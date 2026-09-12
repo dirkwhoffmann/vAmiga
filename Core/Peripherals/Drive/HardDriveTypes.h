@@ -43,6 +43,46 @@ struct HardDriveTypeEnum : Reflectable<HardDriveTypeEnum, HardDriveType>
     }
 };
 
+/* Decides when the changes made to a disk reach the file it lives in
+ *
+ * A disk that was built in memory has no file to go back to; for such a disk,
+ * the setting has no effect. Writing is always performed by the main
+ * instance, never by the run-ahead instance.
+ */
+enum class WriteThroughMode : long
+{
+    NEVER,      // The changes stay in memory
+    ON_IDLE,    // They are written when the drive goes idle
+    ALWAYS      // They are written straight away
+};
+
+struct WriteThroughModeEnum : Reflectable<WriteThroughModeEnum, WriteThroughMode>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(WriteThroughMode::ALWAYS);
+
+    static const char *_key(WriteThroughMode value)
+    {
+        switch (value) {
+
+            case WriteThroughMode::NEVER:     return "NEVER";
+            case WriteThroughMode::ON_IDLE:   return "ON_IDLE";
+            case WriteThroughMode::ALWAYS:    return "ALWAYS";
+        }
+        return "???";
+    }
+    static const char *help(WriteThroughMode value)
+    {
+        switch (value) {
+
+            case WriteThroughMode::NEVER:     return "Keep all changes in memory";
+            case WriteThroughMode::ON_IDLE:   return "Write back when the drive goes idle";
+            case WriteThroughMode::ALWAYS:    return "Write back after each write access";
+        }
+        return "???";
+    }
+};
+
 enum class HardDriveState : long
 {
     IDLE,
@@ -82,8 +122,8 @@ typedef struct
     i16 pan;
     u8 stepVolume;
 
-    // Write every change to the file at once (see HardDrive::persist)
-    bool writeThrough;
+    // Decides when a change reaches the file (see HardDrive::persist)
+    WriteThroughMode writeThrough;
 }
 HardDriveConfig;
 

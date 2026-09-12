@@ -934,6 +934,17 @@ Console::initCommanderCommands(RSCommand &root)
         });
 
         root.add({
+
+            .tokens = { cmd, "persist" },
+            .chelp  = { "Writes all changes back to the disk image" },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                amiga.hd[values[0]]->persist();
+
+            }, .payload = {i}
+        });
+
+        root.add({
             
             .tokens = { cmd, "protect" },
             .chelp  = { "Enables write protection" },

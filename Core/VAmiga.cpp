@@ -1348,6 +1348,13 @@ HardDriveAPI::importFiles(const fs::path &path)
 }
 
 void
+HardDriveAPI::persist()
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->persist();
+}
+
+void
 HardDriveAPI::writeToFile(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND

@@ -554,7 +554,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::HDR_TYPE:                  return "Drive model";
             case Opt::HDR_PAN:                   return "Pan";
             case Opt::HDR_STEP_VOLUME:           return "Head step volume";
-            case Opt::HDR_WRITE_THROUGH:         return "Write changes to the file at once";
+            case Opt::HDR_WRITE_THROUGH:         return "When to write changes to the file";
                 
             case Opt::SER_DEVICE:                return "Serial device type";
             case Opt::SER_VERBOSE:               return "Verbose";

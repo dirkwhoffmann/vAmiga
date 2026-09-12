@@ -20,8 +20,6 @@ namespace vamiga {
 
 using namespace retro::vault;
 
-std::fstream HardDrive::wtStream[4];
-
 HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 {
     info.bind([this] { return cacheInfo(); } );
@@ -60,6 +58,7 @@ void
 HardDrive::init()
 {
     image = nullptr;
+    pending = false;
 
     diskVendor = "VAMIGA";
     diskProduct = "VDRIVE";
@@ -147,21 +146,6 @@ HardDrive::describe(const FileSystem &fs)
     // Update the partition table
     ptable[0].name = fs.stat().name.cpp_str();
     ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
-}
-
-void
-HardDrive::persist()
-{
-    if (isRunAheadInstance() || !fileBacked()) return;
-
-    try {
-
-        image->save();
-
-    } catch (std::exception &err) {
-
-        logmsg(LOG_HDR, "Cannot write to %s: %s\n", image->path.string().c_str(), err.what());
-    }
 }
 
 void
@@ -393,8 +377,14 @@ HardDrive::checkOption(Opt opt, i64 value)
 
         case Opt::HDR_PAN:
         case Opt::HDR_STEP_VOLUME:
+
+            return;
+
         case Opt::HDR_WRITE_THROUGH:
 
+            if (!WriteThroughModeEnum::isValid(value)) {
+                throw CoreError(CoreError::OPT_INV_ARG, WriteThroughModeEnum::keyList());
+            }
             return;
 
         default:
@@ -427,10 +417,16 @@ HardDrive::setOption(Opt option, i64 value)
 
         case Opt::HDR_WRITE_THROUGH:
 
-            config.writeThrough = bool(value);
+            if (!WriteThroughModeEnum::isValid(value)) {
+                throw CoreError(CoreError::OPT_INV_ARG, WriteThroughModeEnum::keyList());
+            }
+            config.writeThrough = WriteThroughMode(value);
 
-            // From now on the file mirrors the disk, starting with what has changed so far
-            if (config.writeThrough) persist();
+            /* From now on the file follows the disk. It starts out holding
+             * what has changed so far, so that it does not stay behind by an
+             * amount nobody can tell.
+             */
+            if (config.writeThrough != WriteThroughMode::NEVER) persist();
             return;
 
         default:
@@ -605,11 +601,18 @@ HardDrive::write(const u8 *src, isize offset, isize count)
 
     memcpy((void *)image->mutableByteView(offset, count).data(), (const void *)src, count);
 
-    // Have the run-ahead instance recreated, so that it sees the change
+    /* Have the run-ahead instance recreated, so that it sees the change.
+     * Writes through this interface come from the host (formatting, importing
+     * a folder), not from the emulated machine, so no idle event follows that
+     * could take care of it (see serviceHdrEvent).
+     */
     emulator.markAsDirty();
 
-    // Update the file if requested
-    if (config.writeThrough) persist();
+    /* Bring the file up to date. In ON_IDLE mode this is left to whoever
+     * started the operation: writing after each block would rewrite the file
+     * thousands of times while a file system is being built.
+     */
+    if (config.writeThrough == WriteThroughMode::ALWAYS) persist();
 }
 
 bool
@@ -710,6 +713,9 @@ HardDrive::format(amiga::FSFormat fsType, FSName name)
 
         // Describe the drive by the created file system (the disk holds it already)
         describe(fs);
+
+        // Bring the file up to date (see write)
+        if (config.writeThrough != WriteThroughMode::NEVER) persist();
     }
 }
 
@@ -790,11 +796,15 @@ HardDrive::write(isize offset, isize length, u32 addr)
                 auto bytes = image->mutableByteView(offset, length);
                 mem.spypeek <Accessor::CPU> (addr, length, bytes.data());
 
-                // Have the run-ahead instance recreated, so that it sees the change
-                emulator.markAsDirty();
+                /* Let the idle handler deal with the change: it has the
+                 * run-ahead instance recreated and, in ON_IDLE mode, brings
+                 * the file up to date. Waiting for the end of the access
+                 * keeps a long transfer from recreating the run-ahead
+                 * instance, or rewriting the file, block by block.
+                 */
+                pending = true;
 
-                // Update the file if requested
-                if (config.writeThrough) persist();
+                if (config.writeThrough == WriteThroughMode::ALWAYS) persist();
             }
 
             // Mark disk as modified
@@ -925,6 +935,24 @@ HardDrive::importFolder(const fs::path &path)
 
         // Describe the drive by the file system (the disk holds it already)
         describe(fs);
+
+        // Bring the file up to date (see write)
+        if (config.writeThrough != WriteThroughMode::NEVER) persist();
+    }
+}
+
+void
+HardDrive::persist()
+{
+    if (isRunAheadInstance() || !fileBacked()) return;
+
+    try {
+
+        image->save();
+
+    } catch (std::exception &err) {
+
+        logmsg(LOG_HDR, "Cannot write to %s: %s\n", image->path.string().c_str(), err.what());
     }
 }
 
@@ -969,6 +997,19 @@ HardDrive::serviceHdrEvent()
 {
     agnus.cancel <s> ();
     state = HardDriveState::IDLE;
+
+    // Deal with what has been written since the drive was last idle
+    if (pending && !isRunAheadInstance()) {
+
+        pending = false;
+
+        // Have the run-ahead instance recreated, so that it sees the changes
+        emulator.markAsDirty();
+
+        // Update the file if requested
+        if (config.writeThrough == WriteThroughMode::ON_IDLE) persist();
+    }
+
     msgQueue.put(Msg::HDR_IDLE, objid);
 }
 
