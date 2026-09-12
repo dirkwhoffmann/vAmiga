@@ -44,7 +44,8 @@ void
 HDFFile::ensureHDF(isize len)
 {
     // The size must be a multiple of 512 (block size)
-    if (len % 512) throw ImageError(ImageError::SIZE_MISMATCH);
+    // if (len % 512) throw ImageError(ImageError::SIZE_MISMATCH);
+    
 }
 
 std::vector<string>

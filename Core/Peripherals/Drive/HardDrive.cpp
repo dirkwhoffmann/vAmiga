@@ -221,9 +221,7 @@ HardDrive::init(const fs::path &path)
 
     } else {
 
-        try { init(std::make_unique<HDFFile>(path)); return; } catch(...) { }
-
-        //throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+        init(std::make_unique<HDFFile>(path));
     }
 }
 
