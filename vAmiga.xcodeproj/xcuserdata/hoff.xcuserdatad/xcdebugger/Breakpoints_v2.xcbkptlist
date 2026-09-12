@@ -655,8 +655,8 @@
             filePath = "Core/rvlib/Images/HDF/HDFFile.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
             landmarkName = "unknown"
             landmarkType = "0">
          </BreakpointContent>
@@ -674,22 +674,6 @@
             startingLineNumber = "224"
             endingLineNumber = "224"
             landmarkName = "HardDrive::init(path)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "AF201DAC-374E-4814-B62B-3185A0C4D56C"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Core/rvlib/Images/BinaryImage.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "BinaryImage::init(p)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
