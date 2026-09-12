@@ -219,20 +219,9 @@ GeometryDescriptor::checkCompatibility(isize mbLimit) const
         throw DeviceError(DeviceError::HDR_UNKNOWN_GEOMETRY);
     }
 
-    // First layer: what the CHS fields of the emulated hardware can hold
-    if (cylinders > cMax) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_CYL_CNT, cylinders);
-    }
-    if (heads > hMax) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_HEAD_CNT, heads);
-    }
-    if (sectors > sMax) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_SEC_CNT, sectors);
-    }
-    if (bsize != 512) {
-        throw DeviceError(DeviceError::HDR_UNSUPPORTED_BSIZE);
-    }
-
+    // Check CHS values
+    // Right now, we accept all combinations
+    
     // Second layer: the capacity the caller is willing to accept
     if (mbLimit && numBytes() > mbLimit * (1 << 20)) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE, std::to_string(mbLimit));
