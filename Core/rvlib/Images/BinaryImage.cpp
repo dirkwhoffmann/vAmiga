@@ -89,6 +89,13 @@ BinaryImage::mutableByteView(isize offset, isize len)
 }
 
 void
+BinaryImage::detach()
+{
+    data.detach();
+    path.clear();
+}
+
+void
 BinaryImage::copy(u8 *buf, isize offset, isize len) const
 {
     assert(buf);

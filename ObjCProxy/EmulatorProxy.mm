@@ -1921,6 +1921,12 @@ ImageInfo scan(const fs::path &url)
     return [self drive]->needsPersisting();
 }
 
+- (void)loadIntoMemory:(ExceptionWrapper *)ex
+{
+    try { [self drive]->loadIntoMemory(); }
+    catch(Error &error) { [ex save:error]; }
+}
+
 - (void)persist
 {
     [self drive]->persist();

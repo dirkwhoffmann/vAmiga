@@ -284,6 +284,14 @@ BackedBuffer::init(isize size, Buffer<u8> &buffer, bool readOnly)
 }
 
 void
+BackedBuffer::detach()
+{
+    // Everything has to be in memory before the backing goes away
+    load(0, bytes);
+    backing = nullptr;
+}
+
+void
 BackedBuffer::dealloc()
 {
     std::free(mem);

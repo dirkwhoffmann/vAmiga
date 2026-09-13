@@ -865,6 +865,13 @@ public:
      */
     bool needsPersisting() const;
 
+    /** @brief  Loads the disk into memory and lets go of its image file
+     *  @note   A disk in memory becomes part of every snapshot, so the call
+     *          throws for a drive larger than HardDrive::memoryLimit. A drive
+     *          that is in memory already is left alone.
+     */
+    void loadIntoMemory();
+
     /** @brief  Writes all changes back to the file the disk lives in
      *  @note   Only what has changed is written. For a drive that was built
      *          in memory, the call has no effect. Opt::HDR_WRITE_THROUGH

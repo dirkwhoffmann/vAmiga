@@ -242,6 +242,15 @@ public:
     void init(isize size, const fs::path &path, bool readOnly = false);
     void init(isize size, Buffer<u8> &buffer, bool readOnly = false);
 
+    /* Loads everything and lets go of the backing.
+     *
+     * The buffer keeps its size and its contents, but has nowhere to persist
+     * to from then on: it is a plain buffer in memory. Modifications that
+     * were never persisted are kept, and so is their mark, but persist() has
+     * nothing left to write them to.
+     */
+    void detach();
+
     // Returns the buffer to the state of a default constructed one
     void dealloc();
 

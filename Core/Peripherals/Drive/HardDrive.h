@@ -145,6 +145,14 @@ public:
 
     HardDrive& operator= (const HardDrive& other);
 
+    /* The largest disk the drive is willing to hold in memory
+     *
+     * A disk that does not live in a file is part of every snapshot, in full.
+     * Beyond this size that is no longer practical, so such a disk has to
+     * stay in its file (see loadIntoMemory).
+     */
+    static constexpr isize memoryLimit = MB(256);
+
     // Creates a hard drive with a certain geometry
     void init(const GeometryDescriptor &geometry);
 
@@ -223,6 +231,9 @@ private:
 
     // Describes a drive of the given geometry, without providing a disk yet
     void setup(const GeometryDescriptor &geometry);
+
+    // Throws if a disk of the given size must not be held in memory
+    void checkMemoryLimit(isize bytes) const;
 
     // Describes the drive after a file system was built on it, keeping the disk
     void describe(const amiga::FileSystem &fs);
@@ -428,6 +439,16 @@ public:
 
     // Returns true if the disk holds changes the file does not have yet
     bool needsPersisting() const { return fileBacked() && image->modified(); }
+
+    /* Loads the disk into memory and lets go of the file it lived in.
+     *
+     * The disk keeps its contents, unsaved changes included, and becomes a
+     * disk like one that was created from scratch: part of every snapshot,
+     * and gone when the emulator is switched off without one. Throws if the
+     * disk is larger than memoryLimit. A disk that is in memory already, and
+     * a drive without a disk, are left alone.
+     */
+    void loadIntoMemory();
 
     // Gets or sets the 'modification' flag
     bool isModified() const { return flags & long(DiskFlags::MODIFIED); }

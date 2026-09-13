@@ -145,6 +145,14 @@ public:
     utl::ByteView byteView(isize offset, isize len) const;
     utl::MutableByteView mutableByteView(isize offset, isize len);
 
+    /* Loads the image into memory and lets go of its file.
+     *
+     * The image keeps its contents and forgets where they came from: it is
+     * then an image built in memory, like any other, and the file is no
+     * longer touched. Modifications that were never saved are kept.
+     */
+    void detach();
+
     // Copies the file contents into a buffer
     virtual void copy(u8 *dst, isize offset, isize len) const;
     virtual void copy(u8 *dst, isize offset = 0) const;

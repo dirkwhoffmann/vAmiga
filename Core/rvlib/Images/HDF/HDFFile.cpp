@@ -117,16 +117,7 @@ HDFFile::imageSize(utl::Backing &backing) const
      * that is not plausible is left alone here, for didInitialize() to reject,
      * rather than turned into an absurdly large image first.
      */
-    printf("Reading drive geometry...\n");
     auto geometry = lay.getGeometryDescriptor();
-    geometry.dump();
-    auto partition = lay.getPartitionDescriptor();
-    partition.dump();
-    auto drivers = lay.getDriverDescriptors();
-    for (auto &driver: drivers) {
-        driver.dump();
-    }
-    
     try { geometry.checkCompatibility(); } catch (...) { return available; }
 
     return std::max(available, geometry.numBytes());

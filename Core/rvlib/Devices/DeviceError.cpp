@@ -135,6 +135,12 @@ DeviceError::DeviceError(long code, const string &s) : utl::Error(code)
             set_msg("The hard drive is encoded in an unknown or unsupported format.");
             break;
 
+        case HDR_TOO_LARGE_FOR_MEM:
+            set_msg(string("A hard drive can be held in memory up to a size of ") +
+                    (s.empty() ? string("the configured capacity") : s + " MB") +
+                    ". A larger drive has to live in an image file.");
+            break;
+
         default:
             set_msg(string("Error code ") + std::to_string(payload) + " (" + errstr() + ").");
             break;

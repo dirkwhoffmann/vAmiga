@@ -1362,6 +1362,13 @@ HardDriveAPI::needsPersisting() const
 }
 
 void
+HardDriveAPI::loadIntoMemory()
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->loadIntoMemory();
+}
+
+void
 HardDriveAPI::persist()
 {
     VAMIGA_PUBLIC_SUSPEND

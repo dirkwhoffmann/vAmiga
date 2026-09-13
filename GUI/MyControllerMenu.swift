@@ -94,17 +94,26 @@ extension MyController: NSMenuItemValidation {
             validateURLlist(MediaManager.attachedHardDrives, image: smallHdr)
             return true
             
-        case #selector(MyController.writeToHdrDummyAction(_:)):
-            // Name the file inside, since the submenu stays shut when disabled
-            if let file = item.submenu?.items.first {
-                file.title = hdn.url?.lastPathComponent ?? ""
-                file.image = smallHdr
+        case #selector(MyController.storageHdrDummyAction(_:)):
+            // Everything below the separator is about the file (see below)
+            item.submenu?.items.forEach {
+                if $0.isSeparatorItem { $0.isHidden = hdn.url == nil }
             }
-            return hdn.needsPersisting
+            return hdn.info.hasDisk
+            
+        case #selector(MyController.storageMemoryAction(_:)):
+            item.state = hdn.url == nil ? .on : .off
+            return hdn.info.hasDisk
+            
+        case #selector(MyController.storageFileAction(_:)):
+            // The drive names its own file. Only a drive that has one can be on it.
+            item.title = hdn.url?.lastPathComponent ?? "Image File"
+            item.image = hdn.url == nil ? nil : smallHdr
+            item.state = hdn.url == nil ? .off : .on
+            return hdn.url != nil
             
         case #selector(MyController.persistHdrAction(_:)):
-            item.title = hdn.url?.lastPathComponent ?? ""
-            item.image = smallHdr
+            item.isHidden = hdn.url == nil
             return hdn.needsPersisting
             
         case #selector(MyController.writeProtectHdrAction(_:)):
@@ -116,6 +125,7 @@ extension MyController: NSMenuItemValidation {
             return hdn.info.hasDisk
 
         case #selector(MyController.writeThroughHdrAction(_:)):
+            item.isHidden = hdn.url == nil
             item.state = config.hdnWriteThrough(item.tag) != .NEVER ? .on : .off
             return hdn.url != nil
             
@@ -694,7 +704,22 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
-    @IBAction func writeToHdrDummyAction(_ sender: NSMenuItem!) {}
+    @IBAction func storageHdrDummyAction(_ sender: NSMenuItem!) {}
+
+    // The drive lives in its file already, so there is nothing to switch to
+    @IBAction func storageFileAction(_ sender: NSMenuItem!) {}
+
+    @IBAction func storageMemoryAction(_ sender: NSMenuItem!) {
+        
+        loginfo(.media, "storageMemoryAction(hd: \(sender.tag))")
+        
+        do {
+            try emu?.hd(sender)?.loadIntoMemory()
+        } catch {
+            showAlert(.cantLoadIntoMemory, error: error)
+        }
+    }
+
     @IBAction func persistHdrAction(_ sender: NSMenuItem!) {
         
         loginfo(.media, "persistHdrAction(hd: \(sender.tag))")

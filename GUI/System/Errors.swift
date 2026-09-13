@@ -89,6 +89,7 @@ enum Failure {
     case cantExport(url: URL)
     case cantInsert
     case cantLaunch
+    case cantLoadIntoMemory
     case cantOpen(url: URL)
     case cantRecord
     case cantRestore
@@ -152,6 +153,9 @@ enum Failure {
             
         case .cantInsert:
             return "Failed to insert disk."
+
+        case .cantLoadIntoMemory:
+            return "Failed to keep this hard drive in memory."
 
         case .cantLaunch:
             return "Failed to lauch the emulator." +

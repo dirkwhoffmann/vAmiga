@@ -811,6 +811,9 @@ ImageInfo scan(const fs::path &url);
 // Indicates whether the file is behind the disk
 @property (readonly) BOOL needsPersisting;
 
+// Loads the disk into memory and lets go of its image file
+- (void)loadIntoMemory:(ExceptionWrapper *)ex;
+
 // Writes all changes back to the file the disk lives in
 - (void)persist;
 

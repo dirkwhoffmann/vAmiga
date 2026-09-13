@@ -102,10 +102,31 @@ HardDrive::setup(const GeometryDescriptor &geometry)
 void
 HardDrive::init(const GeometryDescriptor &geometry)
 {
+    // The disk will live in memory, so it must not be too large
+    checkMemoryLimit(geometry.numBytes());
+
     setup(geometry);
 
     // Create an empty disk in memory
     image = std::make_shared<HDFFile>(geometry.numBytes());
+}
+
+void
+HardDrive::checkMemoryLimit(isize bytes) const
+{
+    if (bytes > memoryLimit) {
+        throw DeviceError(DeviceError::HDR_TOO_LARGE_FOR_MEM,
+                          std::to_string(memoryLimit / MB(1)));
+    }
+}
+
+void
+HardDrive::loadIntoMemory()
+{
+    if (!fileBacked()) return;
+
+    checkMemoryLimit(size());
+    image->detach();
 }
 
 void
