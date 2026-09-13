@@ -254,10 +254,83 @@ HdController::peek16(u32 addr)
     return result;
 }
 
+namespace {
+
+/* The commands this device understands, as NSCMD_DEVICEQUERY reports them.
+ *
+ * Zero terminated, and to be kept in step with processCmd: a command listed
+ * here must not answer IOERR_NOCMD. The 64-bit commands appear in their NSD
+ * form only, which is what a caller that got here through the query expects;
+ * the TD64 numbers work just as well, but are not advertised.
+ */
+const u16 nsdCommandList[] = {
+
+    u16(IoCommand::NSD_DEVICEQUERY),
+    u16(IoCommand::RESET),
+    u16(IoCommand::READ),
+    u16(IoCommand::WRITE),
+    u16(IoCommand::UPDATE),
+    u16(IoCommand::CLEAR),
+    u16(IoCommand::STOP),
+    u16(IoCommand::START),
+    u16(IoCommand::FLUSH),
+    u16(IoCommand::TD_MOTOR),
+    u16(IoCommand::TD_SEEK),
+    u16(IoCommand::TD_FORMAT),
+    u16(IoCommand::TD_REMOVE),
+    u16(IoCommand::TD_CHANGENUM),
+    u16(IoCommand::TD_CHANGESTATE),
+    u16(IoCommand::TD_PROTSTATUS),
+    u16(IoCommand::TD_GETDRIVETYPE),
+    u16(IoCommand::TD_ADDCHANGEINT),
+    u16(IoCommand::TD_REMCHANGEINT),
+    u16(IoCommand::NSD_TD_READ64),
+    u16(IoCommand::NSD_TD_WRITE64),
+    u16(IoCommand::NSD_TD_SEEK64),
+    u16(IoCommand::NSD_TD_FORMAT64),
+    0
+};
+
+}
+
+const u16 *
+HdController::nsdCommands()
+{
+    return nsdCommandList;
+}
+
+isize
+HdController::nsdCommandCount()
+{
+    return isize(sizeof(nsdCommandList) / sizeof(u16));
+}
+
+isize
+HdController::nsdCommandOffset()
+{
+    // Behind the Rom and the four magic registers (see spypeek16)
+    return EXPROM_SIZE + 8;
+}
+
+u32
+HdController::nsdCommandAddr() const
+{
+    return baseAddr + initDiagVec() + u32(nsdCommandOffset());
+}
+
 u8
 HdController::spypeek8(u32 addr) const
 {
     isize offset = (isize)(addr & 0xFFFF) - (isize)initDiagVec();
+    isize index = offset - nsdCommandOffset();
+
+    // Serve the NSD command list (see nsdCommands)
+    if (index >= 0 && index < 2 * nsdCommandCount()) {
+
+        auto entry = nsdCommands()[index / 2];
+        return u8(index & 1 ? entry : entry >> 8);
+    }
+
     return offset < rom.size ? rom[offset] : 0;
 }
 
@@ -298,7 +371,14 @@ HdController::spypeek16(u32 addr) const
             return 0;
             
         default:
-            
+
+            // Serve the NSD command list (see nsdCommands)
+            if (auto index = offset - nsdCommandOffset();
+                index >= 0 && index < 2 * nsdCommandCount()) {
+
+                return nsdCommands()[index / 2];
+            }
+
             // Return Rom code
             return offset < rom.size ? HI_LO(rom[offset], rom[offset + 1]) : 0;
     }
@@ -367,6 +447,29 @@ HdController::processCmd(u32 ptr)
     auto offset = isize(stdReq.io_Offset);
     auto length = isize(stdReq.io_Length);
     auto addr = u32(stdReq.io_Data);
+
+    /* The 64-bit commands carry the high half of the offset in io_Actual,
+     * which is an output field for every other command. This is the only way
+     * a drive beyond 4 GB can be addressed, and TD64 and NSD both do it this
+     * way (see IoCommand).
+     */
+    switch (cmd) {
+
+        case IoCommand::TD_READ64:
+        case IoCommand::TD_WRITE64:
+        case IoCommand::TD_SEEK64:
+        case IoCommand::TD_FORMAT64:
+        case IoCommand::NSD_TD_READ64:
+        case IoCommand::NSD_TD_WRITE64:
+        case IoCommand::NSD_TD_SEEK64:
+        case IoCommand::NSD_TD_FORMAT64:
+
+            offset |= isize(stdReq.io_Actual) << 32;
+            break;
+
+        default:
+            break;
+    }
     
     if CONSTEXPR (LOG_HDR != LOG_OFF) {
 
@@ -382,6 +485,8 @@ HdController::processCmd(u32 ptr)
     switch (cmd) {
             
         case IoCommand::READ:
+        case IoCommand::TD_READ64:
+        case IoCommand::NSD_TD_READ64:
 
             if (offset) changeHdcState(HdcState::READY);
             
@@ -391,9 +496,40 @@ HdController::processCmd(u32 ptr)
 
         case IoCommand::WRITE:
         case IoCommand::TD_FORMAT:
+        case IoCommand::TD_WRITE64:
+        case IoCommand::TD_FORMAT64:
+        case IoCommand::NSD_TD_WRITE64:
+        case IoCommand::NSD_TD_FORMAT64:
 
             error = drive.write(offset, length, addr);
             actual = u32(length);
+            break;
+
+        case IoCommand::TD_GETDRIVETYPE:
+
+            /* Announce that this device understands the NSD commands. A
+             * caller asks this before it trusts the query below.
+             */
+            actual = DRIVE_NEWSTYLE;
+            break;
+
+        case IoCommand::NSD_DEVICEQUERY:
+
+            // Describe the device and point the caller at the command list
+            if (!mem.inRam(addr) || !mem.inRam(u32(addr + NSD_QUERY_SIZE))) {
+
+                logmsg(LOG_HDR, "Invalid RAM location\n");
+                error = u8(IOERR_BADADDRESS);
+
+            } else {
+
+                mem.patch(addr + 0, u32(0));                        // DevQueryFormat
+                mem.patch(addr + 4, NSD_QUERY_SIZE);                // SizeAvailable
+                mem.patch(addr + 8, u16(NSDEVTYPE_TRACKDISK));      // DeviceType
+                mem.patch(addr + 10, u16(0));                       // DeviceSubType
+                mem.patch(addr + 12, nsdCommandAddr());             // SupportedCommands
+                actual = NSD_QUERY_SIZE;
+            }
             break;
 
         case IoCommand::RESET:
@@ -404,6 +540,8 @@ HdController::processCmd(u32 ptr)
         case IoCommand::FLUSH:
         case IoCommand::TD_MOTOR:
         case IoCommand::TD_SEEK:
+        case IoCommand::TD_SEEK64:
+        case IoCommand::NSD_TD_SEEK64:
         case IoCommand::TD_REMOVE:
         case IoCommand::TD_CHANGENUM:
         case IoCommand::TD_CHANGESTATE:

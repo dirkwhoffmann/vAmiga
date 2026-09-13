@@ -230,7 +230,20 @@ public:
     void poke16(u32 addr, u16 value) override;
 
 private:
-    
+
+    /* The NSD command list, and where it lives.
+     *
+     * NSCMD_DEVICEQUERY has to hand the caller a pointer to the list of
+     * commands this device understands, and that list has to stay readable
+     * for as long as the device exists. It is served from the board's own
+     * address window, just behind the Rom and the magic registers (see
+     * spypeek16), so nothing has to be allocated on the Amiga side.
+     */
+    static const u16 *nsdCommands();
+    static isize nsdCommandCount();
+    static isize nsdCommandOffset();
+    u32 nsdCommandAddr() const;
+
     void processCmd(u32 ptr);
     void processInit(u32 ptr);
     void processResource(u32 ptr);
