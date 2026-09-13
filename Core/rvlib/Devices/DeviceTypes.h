@@ -65,7 +65,7 @@ constexpr bool operator!=(const TSLink &a, const TSLink &b) noexcept {
  * GeometryDescriptor::checkCompatibility). A geometry beyond these values
  * cannot be described by the CHS fields it has to pass through.
  */
-static const isize HDR_C_MAX =  16383;
+static const isize HDR_C_MAX =  32768;
 static const isize HDR_H_MAX =  16;
 static const isize HDR_S_MAX =  256;
 
