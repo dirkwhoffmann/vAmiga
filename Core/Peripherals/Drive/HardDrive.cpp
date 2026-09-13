@@ -810,7 +810,16 @@ HardDrive::write(isize offset, isize length, u32 addr)
         // Move the drive head to the specified location
         moveHead(offset / geometry.bsize);
 
-        if (!getFlag(DiskFlags::PROTECTED)) {
+        if (getFlag(DiskFlags::PROTECTED)) {
+
+            /* Say so, rather than dropping the data and reporting success.
+             * A file system told that its write went through, when it did
+             * not, writes on top of that lie.
+             */
+            logmsg(LOG_HDR, "Disk is write protected\n");
+            error = TDERR_WRITEPROT;
+
+        } else {
 
             /* Only the main instance writes. The run-ahead instance leaves
              * the shared disk alone; the main instance will perform this very
@@ -898,7 +907,13 @@ HardDrive::verify(isize offset, isize length, u32 addr)
         return IOERR_BADADDRESS;
     }
 
-    if (!mem.inRam(addr) || !mem.inRam(u32(addr + length))) {
+    /* The last byte of the buffer, not the one behind it: a transfer that
+     * ends exactly at the end of the last Ram bank is perfectly fine, and
+     * checking one byte too far would refuse it.
+     */
+    auto last = u32(addr + std::max(isize(1), length) - 1);
+
+    if (!mem.inRam(addr) || !mem.inRam(last)) {
 
         logmsg(LOG_HDR, "Invalid RAM location");
         return IOERR_BADADDRESS;

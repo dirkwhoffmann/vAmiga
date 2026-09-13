@@ -282,6 +282,7 @@ const u16 nsdCommandList[] = {
     u16(IoCommand::TD_CHANGESTATE),
     u16(IoCommand::TD_PROTSTATUS),
     u16(IoCommand::TD_GETDRIVETYPE),
+    u16(IoCommand::TD_GETGEOMETRY),
     u16(IoCommand::TD_ADDCHANGEINT),
     u16(IoCommand::TD_REMCHANGEINT),
     u16(IoCommand::NSD_TD_READ64),
@@ -505,6 +506,12 @@ HdController::processCmd(u32 ptr)
             actual = u32(length);
             break;
 
+        case IoCommand::TD_PROTSTATUS:
+
+            // -1 means protected, 0 means writable
+            actual = drive.hasProtectedDisk() ? u32(-1) : 0;
+            break;
+
         case IoCommand::TD_GETDRIVETYPE:
 
             /* Announce that this device understands the NSD commands. A
@@ -513,10 +520,42 @@ HdController::processCmd(u32 ptr)
             actual = DRIVE_NEWSTYLE;
             break;
 
+        case IoCommand::TD_GETGEOMETRY:
+
+            // Describe the drive the way trackdisk.device does
+            if (!mem.inRam(addr) || !mem.inRam(u32(addr + DG_SIZE - 1))) {
+
+                logmsg(LOG_HDR, "Invalid RAM location\n");
+                error = u8(IOERR_BADADDRESS);
+
+            } else {
+
+                auto &geo = drive.getGeometry();
+
+                /* dg_TotalSectors is a 32-bit field. It cannot describe a
+                 * drive of more than 2 TB, which is far beyond what a
+                 * geometry can express anyway (see checkCompatibility).
+                 */
+                auto sectors = std::min(geo.numBlocks(), isize(0xFFFFFFFF));
+
+                mem.patch(addr +  0, u32(geo.bsize));               // dg_SectorSize
+                mem.patch(addr +  4, u32(sectors));                 // dg_TotalSectors
+                mem.patch(addr +  8, u32(geo.cylinders));           // dg_Cylinders
+                mem.patch(addr + 12, u32(geo.heads * geo.sectors)); // dg_CylSectors
+                mem.patch(addr + 16, u32(geo.heads));               // dg_Heads
+                mem.patch(addr + 20, u32(geo.sectors));             // dg_TrackSectors
+                mem.patch(addr + 24, u32(0));                       // dg_BufMemType
+                mem.patch(addr + 28, u8(DG_DIRECT_ACCESS));         // dg_DeviceType
+                mem.patch(addr + 29, u8(0));                        // dg_Flags
+                mem.patch(addr + 30, u16(0));                       // dg_Reserved
+                actual = DG_SIZE;
+            }
+            break;
+
         case IoCommand::NSD_DEVICEQUERY:
 
             // Describe the device and point the caller at the command list
-            if (!mem.inRam(addr) || !mem.inRam(u32(addr + NSD_QUERY_SIZE))) {
+            if (!mem.inRam(addr) || !mem.inRam(u32(addr + NSD_QUERY_SIZE - 1))) {
 
                 logmsg(LOG_HDR, "Invalid RAM location\n");
                 error = u8(IOERR_BADADDRESS);
@@ -545,7 +584,6 @@ HdController::processCmd(u32 ptr)
         case IoCommand::TD_REMOVE:
         case IoCommand::TD_CHANGENUM:
         case IoCommand::TD_CHANGESTATE:
-        case IoCommand::TD_PROTSTATUS:
         case IoCommand::TD_ADDCHANGEINT:
         case IoCommand::TD_REMCHANGEINT:
             

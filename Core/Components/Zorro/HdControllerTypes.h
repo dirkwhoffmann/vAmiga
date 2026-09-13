@@ -25,6 +25,7 @@ constexpr i8    IOERR_BADLENGTH     = -4;
 constexpr i8    IOERR_BADADDRESS    = -5;
 constexpr i8    IOERR_UNITBUSY      = -6;
 constexpr i8    IOERR_SELFTEST      = -7;
+constexpr i8    TDERR_WRITEPROT     = 28;   // The disk is write protected (trackdisk.device)
 constexpr i8    TDERR_DISKCHANGED   = 29;   // No disk in the drive (trackdisk.device)
 
 // Answer to TD_GETDRIVETYPE from a device that understands the NSD commands
@@ -35,6 +36,12 @@ constexpr u16   NSDEVTYPE_TRACKDISK = 5;
 
 // Size of the NSDeviceQueryResult structure this device fills in
 constexpr u32   NSD_QUERY_SIZE      = 16;
+
+// Size of the DriveGeometry structure this device fills in
+constexpr u32   DG_SIZE             = 32;
+
+// Device type reported by TD_GETGEOMETRY
+constexpr u8    DG_DIRECT_ACCESS    = 0;
 
 // Offsets into the IOStdReq struct
 constexpr u32   IO_COMMAND          = 0x1C;
