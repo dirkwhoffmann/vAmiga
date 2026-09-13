@@ -145,14 +145,6 @@ public:
 
     HardDrive& operator= (const HardDrive& other);
 
-    /* The largest disk the drive is willing to hold in memory
-     *
-     * A disk that does not live in a file is part of every snapshot, in full.
-     * Beyond this size that is no longer practical, so such a disk has to
-     * stay in its file (see loadIntoMemory).
-     */
-    static constexpr isize memoryLimit = MB(256);
-
     // Creates a hard drive with a certain geometry
     void init(const GeometryDescriptor &geometry);
 
@@ -348,6 +340,13 @@ public:
      */
     isize mbLimit() const;
 
+    /* Largest capacity a disk in memory may have, in MB (0 = no limit)
+     *
+     * The second limit, and usually the stricter one: a disk that does not
+     * live in a file is part of every snapshot (see Opt::HDC_MEM_LIMIT).
+     */
+    isize memLimit() const;
+
     CylNr currentCyl() const override { return head.cylinder; }
     HeadNr currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }
@@ -445,10 +444,20 @@ public:
      * The disk keeps its contents, unsaved changes included, and becomes a
      * disk like one that was created from scratch: part of every snapshot,
      * and gone when the emulator is switched off without one. Throws if the
-     * disk is larger than memoryLimit. A disk that is in memory already, and
-     * a drive without a disk, are left alone.
+     * disk is larger than the controller keeps in memory (see
+     * memLimit). A disk that is in memory already, and a drive without a
+     * disk, are left alone.
      */
     void loadIntoMemory();
+
+    /* Writes the disk to a file and continues on top of it.
+     *
+     * From then on the disk lives in that file, which holds it in full --
+     * unlike writeToFile(), which exports a copy and leaves the drive where
+     * it is. The file is written before the drive switches over, so a
+     * failure changes nothing.
+     */
+    void saveAs(const fs::path &path);
 
     // Gets or sets the 'modification' flag
     bool isModified() const { return flags & long(DiskFlags::MODIFIED); }

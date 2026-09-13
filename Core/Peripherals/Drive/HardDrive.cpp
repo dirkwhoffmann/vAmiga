@@ -114,9 +114,10 @@ HardDrive::init(const GeometryDescriptor &geometry)
 void
 HardDrive::checkMemoryLimit(isize bytes) const
 {
-    if (bytes > memoryLimit) {
-        throw DeviceError(DeviceError::HDR_TOO_LARGE_FOR_MEM,
-                          std::to_string(memoryLimit / MB(1)));
+    auto limit = memLimit();
+
+    if (limit && bytes > limit * MB(1)) {
+        throw DeviceError(DeviceError::HDR_TOO_LARGE_FOR_MEM, std::to_string(limit));
     }
 }
 
@@ -646,6 +647,12 @@ HardDrive::mbLimit() const
     return isize(amiga.hdcon[objid]->getOption(Opt::HDC_MB_LIMIT));
 }
 
+isize
+HardDrive::memLimit() const
+{
+    return isize(amiga.hdcon[objid]->getOption(Opt::HDC_MEM_LIMIT));
+}
+
 bool
 HardDrive::hasDisk() const
 {
@@ -973,6 +980,14 @@ HardDrive::persist()
 
         logmsg(LOG_HDR, "Cannot write to %s: %s\n", image->path.string().c_str(), err.what());
     }
+}
+
+void
+HardDrive::saveAs(const fs::path &path)
+{
+    if (!image || path.empty()) return;
+
+    image->saveAs(path);
 }
 
 void

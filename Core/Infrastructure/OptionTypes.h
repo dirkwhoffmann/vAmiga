@@ -162,6 +162,7 @@ enum class Opt : long
     // Hard drive controllers
     HDC_CONNECT,
     HDC_MB_LIMIT,
+    HDC_MEM_LIMIT,
     
     // Hard drives
     HDR_TYPE,
@@ -363,6 +364,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::HDC_CONNECT:               return "HDC.CONNECT";
             case Opt::HDC_MB_LIMIT:              return "HDC.MB_LIMIT";
+            case Opt::HDC_MEM_LIMIT:             return "HDC.MEM_LIMIT";
                 
             case Opt::HDR_TYPE:                  return "HDR.TYPE";
             case Opt::HDR_PAN:                   return "HDR.PAN";
@@ -550,6 +552,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::HDC_CONNECT:               return "Connection status";
             case Opt::HDC_MB_LIMIT:              return "Capacity limit in MB";
+            case Opt::HDC_MEM_LIMIT:             return "Capacity limit for disks in memory in MB";
                 
             case Opt::HDR_TYPE:                  return "Drive model";
             case Opt::HDR_PAN:                   return "Pan";

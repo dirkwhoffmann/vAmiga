@@ -935,6 +935,20 @@ Console::initCommanderCommands(RSCommand &root)
 
         root.add({
 
+            .tokens = { cmd, "memlimit" },
+            .chelp  = { "Limits the capacity of a drive that is kept in memory" },
+            .args   = {
+                { .name = { "mb", "Capacity limit in MB (0 = no limit)" } }
+            },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                emulator.set(Opt::HDC_MEM_LIMIT, utl::parseNum(args.at("mb")), values);
+
+            }, .payload = {i}
+        });
+
+        root.add({
+
             .tokens = { cmd, "persist" },
             .chelp  = { "Writes all changes back to the disk image" },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {

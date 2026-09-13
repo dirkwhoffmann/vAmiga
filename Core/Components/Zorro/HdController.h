@@ -49,7 +49,8 @@ class HdController : public ZorroBoard {
     Options options = {
 
         Opt::HDC_CONNECT,
-        Opt::HDC_MB_LIMIT
+        Opt::HDC_MB_LIMIT,
+        Opt::HDC_MEM_LIMIT
     };
 
 public:

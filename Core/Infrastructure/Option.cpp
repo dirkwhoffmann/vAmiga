@@ -151,6 +151,8 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::DRIVE_EJECT_VOLUME:        return numParser("%");
 
         case Opt::HDC_CONNECT:               return boolParser();
+        case Opt::HDC_MB_LIMIT:              return numParser(" MB");
+        case Opt::HDC_MEM_LIMIT:             return numParser(" MB");
 
         case Opt::HDR_TYPE:                  return enumParser.template operator()<HardDriveTypeEnum,HardDriveType>();
         case Opt::HDR_PAN:                   return numParser();

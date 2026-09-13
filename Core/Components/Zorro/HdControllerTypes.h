@@ -161,6 +161,14 @@ typedef struct
      * geometry allows.
      */
     isize mbLimit;
+
+    /* Largest disk this controller keeps in memory, in MB (0 = no limit)
+     *
+     * A disk that does not live in a file is part of every snapshot, in full.
+     * Beyond this size that is no longer practical, so such a disk has to
+     * stay in its file (see HardDrive::loadIntoMemory).
+     */
+    isize memLimit;
 }
 HdcConfig;
 

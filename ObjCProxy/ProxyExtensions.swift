@@ -266,6 +266,13 @@ extension HardDriveProxy {
         load(intoMemory: exception)
         if exception.fault != 0 { throw AppError(exception) }
     }
+
+    func saveAs(url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        save(as: url, exception: exception)
+        if exception.fault != 0 { throw AppError(exception) }
+    }
     
     func format(fs: FSFormat, name: String) throws {
 

@@ -1927,6 +1927,12 @@ ImageInfo scan(const fs::path &url)
     catch(Error &error) { [ex save:error]; }
 }
 
+- (void)saveAs:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self drive]->saveAs([url fileSystemRepresentation]); }
+    catch(Error &error) { [ex save:error]; }
+}
+
 - (void)persist
 {
     [self drive]->persist();

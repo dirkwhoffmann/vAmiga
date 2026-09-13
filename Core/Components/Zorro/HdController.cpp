@@ -98,6 +98,7 @@ HdController::getOption(Opt option) const
             
         case Opt::HDC_CONNECT:       return (i64)config.connected;
         case Opt::HDC_MB_LIMIT:      return (i64)config.mbLimit;
+        case Opt::HDC_MEM_LIMIT:     return (i64)config.memLimit;
 
         default:
             fatalError;
@@ -113,6 +114,7 @@ HdController::checkOption(Opt opt, i64 value)
             return;
 
         case Opt::HDC_MB_LIMIT:
+        case Opt::HDC_MEM_LIMIT:
 
             if (value < 0) {
                 throw CoreError(CoreError::OPT_INV_ARG, "0 (no limit) or a positive value");
@@ -151,6 +153,11 @@ HdController::setOption(Opt option, i64 value)
         case Opt::HDC_MB_LIMIT:
 
             config.mbLimit = isize(value);
+            return;
+
+        case Opt::HDC_MEM_LIMIT:
+
+            config.memLimit = isize(value);
             return;
 
         default:

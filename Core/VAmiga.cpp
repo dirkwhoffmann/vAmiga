@@ -1369,6 +1369,13 @@ HardDriveAPI::loadIntoMemory()
 }
 
 void
+HardDriveAPI::saveAs(const fs::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->saveAs(path);
+}
+
+void
 HardDriveAPI::persist()
 {
     VAMIGA_PUBLIC_SUSPEND

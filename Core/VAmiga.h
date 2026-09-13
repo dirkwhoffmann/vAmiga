@@ -867,10 +867,17 @@ public:
 
     /** @brief  Loads the disk into memory and lets go of its image file
      *  @note   A disk in memory becomes part of every snapshot, so the call
-     *          throws for a drive larger than HardDrive::memoryLimit. A drive
-     *          that is in memory already is left alone.
+     *          throws for a drive larger than Opt::HDC_MEM_LIMIT allows. A
+     *          drive that is in memory already is left alone.
      */
     void loadIntoMemory();
+
+    /** @brief  Writes the disk to a file and continues on top of it
+     *  @param  path    Path of the file to create
+     *  @note   Unlike writeToFile(), which exports a copy and leaves the
+     *          drive where it is.
+     */
+    void saveAs(const std::filesystem::path &path);
 
     /** @brief  Writes all changes back to the file the disk lives in
      *  @note   Only what has changed is written. For a drive that was built

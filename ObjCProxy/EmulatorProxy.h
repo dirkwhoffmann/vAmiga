@@ -814,6 +814,9 @@ ImageInfo scan(const fs::path &url);
 // Loads the disk into memory and lets go of its image file
 - (void)loadIntoMemory:(ExceptionWrapper *)ex;
 
+// Writes the disk to a file and continues on top of it
+- (void)saveAs:(NSURL *)url exception:(ExceptionWrapper *)ex;
+
 // Writes all changes back to the file the disk lives in
 - (void)persist;
 

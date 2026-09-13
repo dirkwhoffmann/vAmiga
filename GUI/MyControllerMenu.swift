@@ -106,11 +106,11 @@ extension MyController: NSMenuItemValidation {
             return hdn.info.hasDisk
             
         case #selector(MyController.storageFileAction(_:)):
-            // The drive names its own file. Only a drive that has one can be on it.
-            item.title = hdn.url?.lastPathComponent ?? "Image File"
+            // A drive names its own file. One without a file is offered a new one.
+            item.title = hdn.url?.lastPathComponent ?? "Image File..."
             item.image = hdn.url == nil ? nil : smallHdr
             item.state = hdn.url == nil ? .off : .on
-            return hdn.url != nil
+            return hdn.info.hasDisk
             
         case #selector(MyController.persistHdrAction(_:)):
             item.isHidden = hdn.url == nil
@@ -706,8 +706,34 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func storageHdrDummyAction(_ sender: NSMenuItem!) {}
 
-    // The drive lives in its file already, so there is nothing to switch to
-    @IBAction func storageFileAction(_ sender: NSMenuItem!) {}
+    @IBAction func storageFileAction(_ sender: NSMenuItem!) {
+        
+        loginfo(.media, "storageFileAction(hd: \(sender.tag))")
+        
+        // A drive that lives in a file already is where it belongs
+        if emu?.hd(sender)?.url != nil { return }
+        
+        // Ask for the file the disk is to live in from now on
+        let nr = sender.tag
+        
+        mySavePanel.configure(types: [ .hdf, .hdz ],
+                              prompt: "Save",
+                              title: "Save",
+                              nameFieldLabel: "Save As:",
+                              nameFieldStringValue: "hd\(nr).hdf")
+        
+        mySavePanel.open(for: window, { result in
+            
+            if result == .OK, let url = self.mySavePanel.url {
+                
+                do {
+                    try self.emu?.hd(nr)?.saveAs(url: url)
+                } catch {
+                    self.showAlert(.cantExport(url: url), error: error, async: true)
+                }
+            }
+        })
+    }
 
     @IBAction func storageMemoryAction(_ sender: NSMenuItem!) {
         
