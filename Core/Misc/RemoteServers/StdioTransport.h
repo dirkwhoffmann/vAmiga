@@ -29,10 +29,15 @@ public:
     Stdio();
     ~Stdio();
 
-    // Terminates a blocking read
-    void terminate();
+    /* Interrupts a blocking get()
+     *
+     * Returns false if the reader could not be woken up. terminate() is
+     * called while the server is being stopped, possibly from a destructor,
+     * so it reports a failure instead of throwing.
+     */
+    [[nodiscard]] bool terminate();
 
-    // Blocking read from stdin
+    // Blocking read from stdin (throws when stdin is closed or unreadable)
     string get();
 
     // Write to stdout

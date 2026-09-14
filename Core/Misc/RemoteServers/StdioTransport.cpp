@@ -42,7 +42,10 @@ StdioTransport::disconnect()
     logmsg(LOG_SRV, "Disconnecting stdio transport...\n");
 
     switchState(SrvState::STOPPING);
-    stdio.terminate();
+
+    if (!stdio.terminate()) {
+        logmsg(LOG_WARN, "Failed to interrupt the stdio reader\n");
+    }
 }
 
 void
@@ -123,10 +126,10 @@ Stdio::~Stdio()
     if (wakeEvent) CloseHandle((HANDLE)wakeEvent);
 }
 
-void
+bool
 Stdio::terminate()
 {
-    SetEvent((HANDLE)wakeEvent);
+    return SetEvent((HANDLE)wakeEvent) != 0;
 }
 
 string
@@ -203,10 +206,19 @@ Stdio::~Stdio() {
     close(term[1]);
 }
 
-void
+bool
 Stdio::terminate() {
 
-    (void)write(term[1], "x", 1);
+    // Wake up get() with a byte on the termination pipe
+    while (true) {
+
+        auto n = write(term[1], "x", 1);
+
+        if (n == 1) return true;
+        if (n < 0 && errno == EINTR) continue;
+
+        return false;
+    }
 }
 
 string
@@ -231,17 +243,25 @@ Stdio::get()
 
         // Clear the pipe and exit the loop
         char tmp;
-        read(term[0], &tmp, 1);
+        ssize_t n;
+        do { n = read(term[0], &tmp, 1); } while (n < 0 && errno == EINTR);
+
+        /* A byte left in the pipe would make every further select() return
+         * at once, so a failure here is not something to carry on from.
+         */
+        if (n != 1) throw std::runtime_error("termination pipe read error");
+
         return "";
     }
 
     // Check if stdin has data
     if (FD_ISSET(STDIN_FILENO, &fds)) {
 
-        auto n = read(STDIN_FILENO, buffer.data(), buffer.size());
+        ssize_t n;
+        do { n = read(STDIN_FILENO, buffer.data(), buffer.size()); } while (n < 0 && errno == EINTR);
 
         // Check for errors
-        if (n < 0) throw std::runtime_error("stdin read error");
+        if (n < 0) throw std::runtime_error(string("stdin read error: ") + strerror(errno));
 
         // Treat EOF as a disconnect. Returning an empty string here would
         // make the session loop spin at full speed, as every subsequent

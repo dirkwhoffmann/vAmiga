@@ -228,7 +228,7 @@ HardDrive::init(std::unique_ptr<HDFFile> hdf)
 }
 
 void
-HardDrive::init(const fs::path &path)
+HardDrive::init(const fs::path &path, StorageMode mode)
 {
     if (!fs::exists(path)) {
 
@@ -240,11 +240,22 @@ HardDrive::init(const fs::path &path)
         logmsg(LOG_HDR, "Importing directory...\n");
 
         importFolder(path);
-
-    } else {
-
-        init(std::make_unique<HDFFile>(path));
+        return;
     }
+
+    auto hdf = std::make_unique<HDFFile>(path);
+
+    /* Take the disk into memory before the drive takes it over, so that a
+     * disk that is too large, or cannot be read in full, leaves the old
+     * drive in place.
+     */
+    if (mode == StorageMode::MEMORY_BACKED) {
+
+        checkMemoryLimit(hdf->getGeometry().numBytes());
+        hdf->detach();
+    }
+
+    init(std::move(hdf));
 }
 
 void

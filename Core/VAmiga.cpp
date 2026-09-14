@@ -1319,10 +1319,10 @@ HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
 }
 
 void
-HardDriveAPI::attach(const fs::path &path)
+HardDriveAPI::attach(const fs::path &path, StorageMode mode)
 {
     VAMIGA_PUBLIC_SUSPEND
-    drive->init(path.string());
+    drive->init(path, mode);
 }
 
 void
@@ -1345,6 +1345,13 @@ HardDriveAPI::importFiles(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->importFolder(path);
+}
+
+StorageMode
+HardDriveAPI::getStorageMode() const
+{
+    VAMIGA_PUBLIC
+    return drive->getStorageMode();
 }
 
 fs::path

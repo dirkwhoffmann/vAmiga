@@ -157,8 +157,14 @@ public:
     // Creates a hard drive on top of an HDF or HDZ image (the drive takes it over)
     void init(std::unique_ptr<HDFFile> hdf);
 
-    // Creates a hard drive with the contents of an HDF file
-    void init(const fs::path &path);
+    /* Creates a hard drive with the contents of an HDF file
+     *
+     * FILE_BACKED keeps the disk on top of the file. MEMORY_BACKED loads it
+     * into memory and lets go of the file, as loadIntoMemory() does, and
+     * throws if the disk is larger than the controller keeps in memory. A
+     * directory is imported into the current disk, whatever the mode.
+     */
+    void init(const fs::path &path, StorageMode mode = StorageMode::FILE_BACKED);
 
     const HardDriveTraits &getTraits() const {
 
@@ -432,6 +438,11 @@ public:
 
     // Returns the current drive state
     HardDriveState getState() const { return state; }
+
+    // Returns where the disk lives (a drive without a disk counts as memory-backed)
+    StorageMode getStorageMode() const {
+        return fileBacked() ? StorageMode::FILE_BACKED : StorageMode::MEMORY_BACKED;
+    }
 
     // Returns the file the disk lives in (empty if the disk was built in memory)
     fs::path getPath() const { return fileBacked() ? image->path : fs::path(); }
