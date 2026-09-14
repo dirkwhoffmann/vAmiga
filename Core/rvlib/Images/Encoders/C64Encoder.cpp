@@ -122,7 +122,7 @@ C64Encoder::encodeTrack(utl::ByteView src, TrackNr t)
 
     // Compute start position inside the bit view
     // auto offset = isize(view.size() * defaults.stagger);
-    auto offset = 0;
+    isize offset = 0;
 
     // For each sector in this track ...
     isize totalBits = 0;
