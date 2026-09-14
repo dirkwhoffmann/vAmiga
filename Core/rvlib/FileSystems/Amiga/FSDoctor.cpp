@@ -33,7 +33,7 @@ if ((u32)value > (u32)exp) \
 if (!fs.block(value)) return FSBlockError::EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if ((u32)value != (u32)ref) { expected = ref; return FSBlockError::EXPECTED_SELFREF; } }
+if ((u32)value != (u32)ref) { expected = (u32)ref; return FSBlockError::EXPECTED_SELFREF; } }
 
 #define EXPECT_FILEHEADER_REF { \
 if (!fs.is(value, FSBlockType::FILEHEADER)) { \
@@ -59,7 +59,7 @@ if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF(nr) { \
 if (!fs.is(value, FSBlockType::BITMAP)) { \
-if (fs.getBmBlocks().size() > usize(nr)) { expected = fs.getBmBlocks()[nr]; } \
+if (fs.getBmBlocks().size() > usize(nr)) { expected = (u32)fs.getBmBlocks()[nr]; } \
 return FSBlockError::EXPECTED_BITMAP_BLOCK; } }
 
 #define EXPECT_OPTIONAL_BITMAP_REF(nr) { \
