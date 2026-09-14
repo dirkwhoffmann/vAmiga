@@ -1117,7 +1117,7 @@ Amiga::computeFrame()
             
             flags = 0;
             
-            if (action == pause) { throw StateChangeException((long)ExecState::PAUSED); }
+            if (action == pause) { throw StateChangeException(i64(ExecState::PAUSED)); }
             if (action == leave) { break; }
         }
     }
