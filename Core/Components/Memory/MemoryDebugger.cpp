@@ -137,7 +137,7 @@ MemoryDebugger::memSearch(const string &pattern, u32 addr, isize align)
 
     if (isize length = isize(pattern.length()); length > 0) {
 
-        for (u32 i = addr; i < 0xFFFFFF; i += align) {
+        for (u32 i = addr; i < 0xFFFFFF; i += (u32)align) {
 
             for (isize j = 0;; j++) {
 
