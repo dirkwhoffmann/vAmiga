@@ -226,17 +226,25 @@ Stdio::get()
 {
     std::array<char, 4096> buffer;
 
-    // Setup the descriptor set
     fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-    FD_SET(term[0], &fds);
+    int ret;
 
-    // Block until stdin or the termination pipe is ready
-    int ret = select(std::max(STDIN_FILENO, term[0]) + 1, &fds, nullptr, nullptr, nullptr);
+    do {
+
+        /* Setup the descriptor set. select() overwrites it, so it has to be
+         * set up again whenever a signal interrupts the call.
+         */
+        FD_ZERO(&fds);
+        FD_SET(STDIN_FILENO, &fds);
+        FD_SET(term[0], &fds);
+
+        // Block until stdin or the termination pipe is ready
+        ret = select(std::max(STDIN_FILENO, term[0]) + 1, &fds, nullptr, nullptr, nullptr);
+
+    } while (ret < 0 && errno == EINTR);
 
     // Check for errors
-    if (ret < 0) throw std::runtime_error("select() failed");
+    if (ret < 0) throw std::runtime_error(string("select() failed: ") + strerror(errno));
 
     // Check if the termination pipe has data
     if (FD_ISSET(term[0], &fds)) {
