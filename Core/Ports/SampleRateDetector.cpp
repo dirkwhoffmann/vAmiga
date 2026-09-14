@@ -36,7 +36,7 @@ SampleRateDetector::feed(isize samples)
         // Measure how much time has passed since the previous call
         double delay = delta.restart().asSeconds();
     
-        logmsg(LOG_TIM, "Requested %ld samples in %f seconds (%.0f)\n",
+        logmsg(LOG_TIM, "Requested %td samples in %f seconds (%.0f)\n",
                  samples, delay, double(samples) / delay);
 
         // Record the measured value

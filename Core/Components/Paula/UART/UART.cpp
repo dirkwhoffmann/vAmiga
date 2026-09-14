@@ -152,7 +152,7 @@ UART::setSERPER(u16 value)
 {
     logmsg(LOG_SER, "setSERPER(%04x)\n", value);
     serper = value;
-    logmsg(LOG_SER, "New baud rate = %ld\n", baudRate());
+    logmsg(LOG_SER, "New baud rate = %td\n", baudRate());
 }
 
 void

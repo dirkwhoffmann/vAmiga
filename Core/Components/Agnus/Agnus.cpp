@@ -711,7 +711,7 @@ Agnus::executeUntil(Cycle cycle) {
 template <isize nr> void
 Agnus::executeFirstSpriteCycle()
 {
-    logmsg(LOG_SPR, "executeFirstSpriteCycle<%ld>\n", nr);
+    logmsg(LOG_SPR, "executeFirstSpriteCycle<%td>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 
@@ -760,7 +760,7 @@ Agnus::executeFirstSpriteCycle()
 template <isize nr> void
 Agnus::executeSecondSpriteCycle()
 {
-    logmsg(LOG_SPR, "executeSecondSpriteCycle<%ld>\n", nr);
+    logmsg(LOG_SPR, "executeSecondSpriteCycle<%td>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 

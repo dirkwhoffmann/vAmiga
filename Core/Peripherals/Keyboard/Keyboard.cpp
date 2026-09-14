@@ -275,13 +275,13 @@ Keyboard::setSPLine(bool value, Cycle cycle)
 
     if (accept) {
 
-        logmsg(LOG_KBD, "Accepting handshake (SP low for %ld usec)\n", diff);
+        logmsg(LOG_KBD, "Accepting handshake (SP low for %td usec)\n", diff);
         processHandshake();
     }
 
     if (reject) {
 
-        logmsg(LOG_KBD, "REJECTING handshake (SP low for %ld usec)\n", diff);
+        logmsg(LOG_KBD, "REJECTING handshake (SP low for %td usec)\n", diff);
     }
 }
 

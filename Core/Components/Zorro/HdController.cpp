@@ -345,13 +345,13 @@ HdController::spypeek16(u32 addr) const
         case EXPROM_SIZE:
             
             // Return the number of partitions
-            logmsg(LOG_HDR, "Partitions: %ld\n", drive.numPartitions());
+            logmsg(LOG_HDR, "Partitions: %td\n", drive.numPartitions());
             return u16(drive.numPartitions());
             
         case EXPROM_SIZE + 2:
             
             // Number of filesystem drivers to add
-            logmsg(LOG_HDR, "Filesystem drivers: %ld\n", drive.numDrivers());
+            logmsg(LOG_HDR, "Filesystem drivers: %td\n", drive.numDrivers());
             return u16(drive.numDrivers());
             
         case EXPROM_SIZE + 4:
@@ -871,7 +871,7 @@ HdController::processInitSeg(u32 ptr)
                     if (s.target >= numHunks) {
                         throw CoreError(CoreError::HDC_INIT, "Invalid relocation target");
                     }
-                    logmsg(LOG_HDR, "Relocation target: %ld\n", s.target);
+                    logmsg(LOG_HDR, "Relocation target: %td\n", s.target);
                     
                     for (auto &offset : s.relocations) {
                         

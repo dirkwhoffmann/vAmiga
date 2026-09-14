@@ -359,7 +359,7 @@ Defaults::load(std::stringstream &stream)
         }
 
         if (accepted || skipped) {
-            logmsg(LOG_DEF, "%ld keys accepted, %ld ignored\n", accepted, skipped);
+            logmsg(LOG_DEF, "%td keys accepted, %td ignored\n", accepted, skipped);
         }
     }
 }

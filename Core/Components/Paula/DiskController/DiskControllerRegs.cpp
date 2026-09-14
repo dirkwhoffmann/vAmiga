@@ -34,7 +34,7 @@ DiskController::pokeDSKLEN(u16 value)
 void
 DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 {
-    logmsg(LOG_DSKREG, "setDSKLEN(%x) [%ld,%ld,%ld]\n",
+    logmsg(LOG_DSKREG, "setDSKLEN(%x) [%td,%td,%td]\n",
           newValue, df0.head.cylinder, df0.head.head, df0.head.offset);
 
     FloppyDrive *drive = getSelectedDrive();
@@ -60,7 +60,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     if (oldValue & newValue & 0x8000) {
 
         if (state != DriveDmaState::OFF) {
-            xfiles("DSKLEN: Written in DMA state %ld\n", isize(state));
+            xfiles("DSKLEN: Written in DMA state %td\n", isize(state));
         }
 
         // Only proceed if there are bytes to process
@@ -196,9 +196,9 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     if (oldSelected != selected) {
         
         if (selected == -1) {
-            logmsg(LOG_DSKREG, "Deselecting df%ld\n", oldSelected);
+            logmsg(LOG_DSKREG, "Deselecting df%td\n", oldSelected);
         } else {
-            logmsg(LOG_DSKREG, "Selecting df%ld\n", selected);
+            logmsg(LOG_DSKREG, "Selecting df%td\n", selected);
         }
 
         // Inform the GUI

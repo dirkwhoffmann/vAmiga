@@ -152,7 +152,7 @@ EADFFile::didInitialize()
 
         if (isStandardTrack(t)) {
 
-            logmsg(LOG_IMG, "Reading standard track %ld from EADF\n", t);
+            logmsg(LOG_IMG, "Reading standard track %td from EADF\n", t);
 
             // Copy bytes from the EADF
             track.data.assign(trackData(t), trackData(t) + usedBitsForTrack(t) / 8);
@@ -168,7 +168,7 @@ EADFFile::didInitialize()
 
         if (isExtendedTrack(t)) {
 
-            logmsg(LOG_IMG, "Reading extended track %ld from EADF\n", t);
+            logmsg(LOG_IMG, "Reading extended track %td from EADF\n", t);
 
             // Copy MFM bits from the EADF
             track.mfm.assign(trackData(t), trackData(t) + availableBytesForTrack(t));

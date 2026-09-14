@@ -101,7 +101,7 @@ Codec::encodeEADF(const EADFFile &eadf, FloppyDisk &disk)
     // auto  density  = eadf.getDensity();
 
     if CONSTEXPR (LOG_MFM != LOG_OFF)
-        fprintf(stderr, "Encoding Amiga disk with %ld tracks\n", tracks);
+        fprintf(stderr, "Encoding Amiga disk with %td tracks\n", tracks);
 
     // Create an empty ADF
     // auto adf = make_unique<ADFFile>(ADFFile::fileSize(diameter, density, tracks));
@@ -165,7 +165,7 @@ Codec::encodeStandardTrack(const EADFFile &eadf, ADFFile &adf, TrackNr t)
     if (eadf.typeOfTrack(t) == 0) {
 
         if CONSTEXPR (LOG_MFM != LOG_OFF)
-            fprintf(stderr, "Encoding standard track %ld\n", t);
+            fprintf(stderr, "Encoding standard track %td\n", t);
 
         auto numBits = eadf.usedBitsForTrack(t);
         assert(numBits % 8 == 0);
@@ -181,7 +181,7 @@ Codec::encodeExtendedTrack(const EADFFile &eadf, FloppyDisk &disk, TrackNr t)
     if (eadf.typeOfTrack(t) == 1) {
 
         if CONSTEXPR (LOG_MFM != LOG_OFF)
-            fprintf(stderr, "Encoding extended track %ld\n", t);
+            fprintf(stderr, "Encoding extended track %td\n", t);
 
         auto numBits = eadf.usedBitsForTrack(t);
         assert(numBits % 8 == 0);

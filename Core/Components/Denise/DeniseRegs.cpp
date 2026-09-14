@@ -84,7 +84,7 @@ Denise::setDIWHIGH(u16 value)
 void
 Denise::setHSTRT(isize val)
 {
-    logmsg(LOG_DIW, "setHSTRT(%lx)\n", val);
+    logmsg(LOG_DIW, "setHSTRT(%tx)\n", val);
 
     // Record register change (val is already in super-hires resolution)
     diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTRT, .value = (u16)val });
@@ -94,7 +94,7 @@ Denise::setHSTRT(isize val)
 void
 Denise::setHSTOP(isize val)
 {
-    logmsg(LOG_DIW, "setHSTOP(%lx)\n", val);
+    logmsg(LOG_DIW, "setHSTOP(%tx)\n", val);
 
     // Record register change (val is already in super-hires resolution)
     diwChanges.insert(agnus.pos.pixel(), RegChange { .reg = Reg::DIWSTOP, .value = (u16)val });
@@ -349,7 +349,7 @@ template <isize x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
     assert(x < 8);
-    logmsg(LOG_BPLREG, "pokeBPL%ldDAT(%X)\n", x + 1, value);
+    logmsg(LOG_BPLREG, "pokeBPL%tdDAT(%X)\n", x + 1, value);
 
     // In AGA, BPLxDAT is a 64 bit register that a bitplane fetch fills with up
     // to four words (see setBPLxDATExt). A write from the CPU or the Copper
@@ -374,7 +374,7 @@ template <isize x> void
 Denise::setBPLxDAT(u16 value)
 {
     assert(x < 8);
-    logmsg(LOG_BPLDAT, "setBPL%ldDAT(%X)\n", x + 1, value);
+    logmsg(LOG_BPLDAT, "setBPL%tdDAT(%X)\n", x + 1, value);
 
     bpldat[x] = value;
 
@@ -395,7 +395,7 @@ template <isize x> void
 Denise::setBPLxDAT(u16 value)
 {
     assert(x < 8);
-    logmsg(LOG_BPLDAT, "setBPL%ldDAT(%X)\n", x + 1, value);
+    logmsg(LOG_BPLDAT, "setBPL%tdDAT(%X)\n", x + 1, value);
 
     bpldat[x] = value;
 
@@ -449,7 +449,7 @@ template <isize x> void
 Denise::pokeSPRxPOS(u16 value)
 {
     assert(x < 8);
-    logmsg(LOG_SPRREG, "pokeSPR%ldPOS(%X)\n", x, value);
+    logmsg(LOG_SPRREG, "pokeSPR%tdPOS(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
@@ -464,7 +464,7 @@ template <isize x> void
 Denise::pokeSPRxCTL(u16 value)
 {
     assert(x < 8);
-    logmsg(LOG_SPRREG, "pokeSPR%ldCTL(%X)\n", x, value);
+    logmsg(LOG_SPRREG, "pokeSPR%tdCTL(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
@@ -480,7 +480,7 @@ template <isize x> void
 Denise::pokeSPRxDATA(u16 value)
 {
     assert(x < 8);
-    logmsg(LOG_SPRREG, "pokeSPR%ldDATA(%X)\n", x, value);
+    logmsg(LOG_SPRREG, "pokeSPR%tdDATA(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -498,7 +498,7 @@ template <isize x> void
 Denise::pokeSPRxDATB(u16 value)
 {
     assert(x < 8);
-    logmsg(LOG_SPRREG, "pokeSPR%ldDATB(%X)\n", x, value);
+    logmsg(LOG_SPRREG, "pokeSPR%tdDATB(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -520,7 +520,7 @@ template <isize x> void
 Denise::setSPRxDATA(u16 value, u64 ext)
 {
     assert(x < 8);
-    logmsg(LOG_SPRREG, "setSPR%ldDATA(%X,%llX)\n", x, value, ext);
+    logmsg(LOG_SPRREG, "setSPR%tdDATA(%X,%llX)\n", x, value, ext);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) { value = 0; ext = 0; }
@@ -551,7 +551,7 @@ template <isize x> void
 Denise::setSPRxDATB(u16 value, u64 ext)
 {
     assert(x < 8);
-    logmsg(LOG_SPRREG, "setSPR%ldDATB(%X,%llX)\n", x, value, ext);
+    logmsg(LOG_SPRREG, "setSPR%tdDATB(%X,%llX)\n", x, value, ext);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) { value = 0; ext = 0; }
@@ -579,7 +579,7 @@ Denise::peekCOLORxx(isize xx)
         result = mem.peekCustomFaulty16(u32(0x180 + 2 * xx));
     }
     
-    logmsg(LOG_COLREG, "peekCOLOR%02ld = %x\n", xx, result);
+    logmsg(LOG_COLREG, "peekCOLOR%02td = %x\n", xx, result);
     return result;
 }
 
@@ -638,7 +638,7 @@ Denise::colorRegValue(isize xx) const
 template <isize xx, Accessor s> void
 Denise::pokeCOLORxx(u16 value)
 {
-    logmsg(LOG_COLREG, "pokeCOLOR%02ld(%X)\n", xx, value);
+    logmsg(LOG_COLREG, "pokeCOLOR%02td(%X)\n", xx, value);
 
     // Record the color change
     recordColorChange(xx, value);

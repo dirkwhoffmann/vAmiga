@@ -552,7 +552,7 @@ DiskController::performTurboRead(FloppyDrive *drive)
     
     if CONSTEXPR (DSK_CHECKSUM) {
 
-        logmsg(LOG_DEBUG, "Turbo read %s: cyl: %ld side: %ld offset: %ld ",
+        logmsg(LOG_DEBUG, "Turbo read %s: cyl: %td side: %td offset: %td ",
               drive->objectName(),
               drive->head.cylinder,
               drive->head.head,

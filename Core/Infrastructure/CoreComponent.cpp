@@ -304,13 +304,13 @@ CoreComponent::save(u8 *buffer)
         // Check integrity
         if (count != c->size(false) || SNAP_CORRUPTED) {
 
-            logmsg(LOG_ERROR, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
+            logmsg(LOG_ERROR, "Saved %td bytes (expected %td)\n", count, c->size(false));
             if CONSTEXPR (SNP_DEBUG) { fatalError; }
 
             throw MediaError(MediaError::SNAP_CORRUPTED);
         }
 
-        logmsg(LOG_OFF, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
+        logmsg(LOG_OFF, "Saved %td bytes (expected %td)\n", count, c->size(false));
         result += count;
     });
 

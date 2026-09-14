@@ -158,7 +158,7 @@ Snapshot::compress(Compressor compressor)
 
     if (!isCompressed()) {
 
-        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Compressing %td bytes (hash: 0x%x)...", data.size, data.fnv32());
 
         {   auto watch = utl::StopWatch(SNP_DEBUG, "");
 
@@ -173,7 +173,7 @@ Snapshot::compress(Compressor compressor)
             
             getHeader()->compressor = u8(compressor);
         }
-        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Compressed size: %ld bytes\n", data.size);
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Compressed size: %td bytes\n", data.size);
     }
 }
 void
@@ -185,7 +185,7 @@ Snapshot::uncompress()
         
         isize expectedSize = getHeader()->rawSize;
         
-        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Uncompressing %ld bytes...", data.size);
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Uncompressing %td bytes...", data.size);
         
         {   auto watch = utl::StopWatch(SNP_DEBUG, "");
         
@@ -200,11 +200,11 @@ Snapshot::uncompress()
             
             getHeader()->compressor = u8(Compressor::NONE);
         }
-        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
+        if CONSTEXPR (SNP_DEBUG) logmsg(LOG_DEBUG, "Uncompressed size: %td bytes (hash: 0x%x)\n", data.size, data.fnv32());
         
         if (getHeader()->rawSize != expectedSize) {
          
-            logmsg(LOG_WARN, "Snaphot size: %ld. Expected: %ld\n", data.size, expectedSize);
+            logmsg(LOG_WARN, "Snaphot size: %td. Expected: %td\n", data.size, expectedSize);
             fatalError;
         }
     }

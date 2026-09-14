@@ -1371,7 +1371,7 @@ Denise::updateBorderBuffer()
     // Print some debug info if requested
     if CONSTEXPR (LOG_DIW != LOG_OFF) {
 
-        logmsg(LOG_DIW, "updateBorderBuffer (%ld,%ld)\n", hstrt, hstop);
+        logmsg(LOG_DIW, "updateBorderBuffer (%td,%td)\n", hstrt, hstop);
         diwChanges.dump();
     }
 
@@ -1400,14 +1400,14 @@ Denise::updateBorderBuffer()
                     case Reg::DIWSTRT:
 
                         hstrt = r.value;
-                        logmsg(LOG_DIW, "hstrt -> %ld (%lx)\n", hstrt, hstrt);
+                        logmsg(LOG_DIW, "hstrt -> %td (%tx)\n", hstrt, hstrt);
                         debugger.updateDiwH(hstrt, hstop);
                         break;
 
                     case Reg::DIWSTOP:
 
                         hstop = r.value;
-                        logmsg(LOG_DIW, "hstop -> %ld (%lx)\n", hstop, hstop);
+                        logmsg(LOG_DIW, "hstop -> %td (%tx)\n", hstop, hstop);
                         debugger.updateDiwH(hstrt, hstop);
                         break;
 
@@ -1432,13 +1432,13 @@ Denise::updateBorderBuffer()
         // Set or clear the horizontal DIW flipflop
         if (counter == hstrt) {
 
-            logmsg(LOG_DIW, "hflop -> 1 at %ld (%lx)\n", counter, counter);
+            logmsg(LOG_DIW, "hflop -> 1 at %td (%tx)\n", counter, counter);
             hf = true;
             bBufferDiwOpen = std::min(bBufferDiwOpen, Pixel(i));
         }
         if (counter == hstop) {
 
-            logmsg(LOG_DIW, "hflop -> 0 at %ld (%lx)\n", counter, counter);
+            logmsg(LOG_DIW, "hflop -> 0 at %td (%tx)\n", counter, counter);
             hf = false;
         }
 

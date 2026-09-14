@@ -506,7 +506,7 @@ Blitter::beginBlit()
 
             linecount++;
             check1 = check2 = Hashable::fnvInit32();
-            logmsg(LOG_DEBUG, "Line %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+            logmsg(LOG_DEBUG, "Line %td (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                     linecount, bltsizeH, bltsizeV,
                     bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                     bltcon0,
@@ -525,7 +525,7 @@ Blitter::beginBlit()
 
             copycount++;
             check1 = check2 = Hashable::fnvInit32();
-            logmsg(LOG_DEBUG, "Blit %ld (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+            logmsg(LOG_DEBUG, "Blit %td (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                     copycount,
                     bltsizeH, bltsizeV,
                     bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
@@ -548,7 +548,7 @@ Blitter::beginLineBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        if CONSTEXPR (BLT_CHECKSUM) logmsg(LOG_DEBUG, "Performing level %ld line blits.\n", level);
+        if CONSTEXPR (BLT_CHECKSUM) logmsg(LOG_DEBUG, "Performing level %td line blits.\n", level);
     }
     if (bltcon0 & BLTCON0_USEB) {
         xfiles("Performing line blit with channel B enabled\n");
@@ -574,7 +574,7 @@ Blitter::beginCopyBlit(isize level)
     static u64 verbose = 0;
 
     if (verbose++ == 0) {
-        if CONSTEXPR (BLT_CHECKSUM) logmsg(LOG_DEBUG, "Performing level %ld copy blits.\n", level);
+        if CONSTEXPR (BLT_CHECKSUM) logmsg(LOG_DEBUG, "Performing level %td copy blits.\n", level);
     }
 
     switch (level) {
@@ -591,7 +591,7 @@ Blitter::beginCopyBlit(isize level)
 void
 Blitter::clearBusyFlag()
 {
-    logmsg(LOG_BLTTIM, "(%ld,%ld) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
+    logmsg(LOG_BLTTIM, "(%td,%td) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -600,7 +600,7 @@ Blitter::clearBusyFlag()
 void
 Blitter::endBlit()
 {
-    logmsg(LOG_BLTTIM, "(%ld,%ld) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+    logmsg(LOG_BLTTIM, "(%td,%td) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
     if CONSTEXPR (BLT_MEM_GUARD) blitcount++;

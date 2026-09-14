@@ -462,7 +462,7 @@ Amiga::revertToFactorySettings()
 i64
 Amiga::get(Opt opt, isize objid) const
 {
-    logmsg(LOG_CNF, "get(%s, %ld)\n", OptEnum::key(opt), objid);
+    logmsg(LOG_CNF, "get(%s, %td)\n", OptEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
     if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -479,13 +479,13 @@ Amiga::check(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            logmsg(LOG_CNF, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            logmsg(LOG_CNF, "check(%s, %lld, %td)\n", OptEnum::key(opt), value, objid);
             target->checkOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        logmsg(LOG_CNF, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        logmsg(LOG_CNF, "check(%s, %lld, %td)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);
@@ -504,13 +504,13 @@ Amiga::set(Opt opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            logmsg(LOG_CNF, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+            logmsg(LOG_CNF, "set(%s, %lld, %td)\n", OptEnum::key(opt), value, objid);
             target->setOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        logmsg(LOG_CNF, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
+        logmsg(LOG_CNF, "set(%s, %lld, %td)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw CoreError(CoreError::OPT_INV_ID);

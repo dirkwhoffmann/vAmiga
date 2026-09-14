@@ -119,7 +119,7 @@ FloppyDisk::readBlock(u8 *dst, isize nr) const
     AmigaDecoder decoder;
 
     auto [t,s] = b2ts(nr);
-    logmsg(LOG_MFM, "readBlock: %ld (%ld,%ld)\n", nr, t, s);
+    logmsg(LOG_MFM, "readBlock: %td (%td,%td)\n", nr, t, s);
 
     auto bytes = decoder.decodeSector(track[t], t, s);
     assert(bytes.size() == bsize());
@@ -145,7 +145,7 @@ FloppyDisk::writeBlock(const u8 *src, isize nr)
     AmigaDecoder decoder;
 
     auto [t,s]  = b2ts(nr);
-    logmsg(LOG_MFM, "writeBlock: %ld (%ld,%ld)\n", nr, t, s);
+    logmsg(LOG_MFM, "writeBlock: %td (%td,%td)\n", nr, t, s);
 
     // Compute the MFM bit stream
     auto mfm = encoder.encodeSector(ByteView(src, bsize()), t, s);
@@ -403,7 +403,7 @@ FloppyDisk::decodeDisk(FloppyDiskImage &file) const
 {
     auto tracks = file.numTracks();
 
-    logmsg(LOG_IMG, "Decoding disk with %ld tracks\n", tracks);
+    logmsg(LOG_IMG, "Decoding disk with %td tracks\n", tracks);
 
     if (getDiameter() != file.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -420,7 +420,7 @@ void
 FloppyDisk::encode(const ADFFile &adf)
 {
     isize tracks = adf.numTracks();
-    logmsg(LOG_IMG, "Encoding Amiga disk with %ld tracks\n", tracks);
+    logmsg(LOG_IMG, "Encoding Amiga disk with %td tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter())
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -448,7 +448,7 @@ FloppyDisk::decode(ADFFile &adf) const
 {
     auto tracks = adf.numTracks();
 
-    logmsg(LOG_IMG, "Decoding Amiga disk with %ld tracks\n", tracks);
+    logmsg(LOG_IMG, "Decoding Amiga disk with %td tracks\n", tracks);
 
     if (getDiameter() != adf.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -466,7 +466,7 @@ FloppyDisk::encode(const class IMGFile &img)
 {
     isize tracks = img.numTracks();
 
-    logmsg(LOG_IMG, "Encoding DOS disk with %ld tracks\n", tracks);
+    logmsg(LOG_IMG, "Encoding DOS disk with %td tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -495,7 +495,7 @@ FloppyDisk::decode(class IMGFile &img) const
 {
     auto tracks = img.numTracks();
 
-    logmsg(LOG_IMG, "Decoding DOS disk (%ld tracks)\n", tracks);
+    logmsg(LOG_IMG, "Decoding DOS disk (%td tracks)\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -512,7 +512,7 @@ void
 FloppyDisk::encode(const class STFile &img)
 {
     isize tracks = img.numTracks();
-    logmsg(LOG_IMG, "Encoding ST disk with %ld tracks\n", tracks);
+    logmsg(LOG_IMG, "Encoding ST disk with %td tracks\n", tracks);
 
     if (getDiameter() != img.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -541,7 +541,7 @@ FloppyDisk::decode(class STFile &st) const
 {
     auto tracks = st.numTracks();
 
-    logmsg(LOG_IMG, "Decoding Atari ST disk (%ld tracks)\n", tracks);
+    logmsg(LOG_IMG, "Decoding Atari ST disk (%td tracks)\n", tracks);
 
     if (getDiameter() != st.getDiameter()) {
         throw DeviceError(DeviceError::DSK_INVALID_DIAMETER);
@@ -572,7 +572,7 @@ FloppyDisk::replaceTrack(TrackNr t, BitView mfm)
 void
 FloppyDisk::shiftTracks(isize offset)
 {
-    logmsg(LOG_DSK, "Shifting tracks by %ld bytes against each other\n", offset);
+    logmsg(LOG_DSK, "Shifting tracks by %td bytes against each other\n", offset);
 
     u8 spare[2 * 32768];
 

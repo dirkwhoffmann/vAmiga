@@ -74,9 +74,9 @@ Thread::execute()
 
         // The emulator is out of sync
         if (missing > 0) {
-            logmsg(LOG_RUN, "Emulation is way too slow (%ld frames behind)\n", missing);
+            logmsg(LOG_RUN, "Emulation is way too slow (%td frames behind)\n", missing);
         } else {
-            logmsg(LOG_RUN, "Emulation is way too fast (%ld time slices ahead)\n", -missing);
+            logmsg(LOG_RUN, "Emulation is way too fast (%td time slices ahead)\n", -missing);
         }
 
         resync();
@@ -344,7 +344,7 @@ Thread::wakeUp()
 void
 Thread::suspend() const
 {
-    logmsg(LOG_RUN, "Suspending (%ld)...\n", suspendCounter);
+    logmsg(LOG_RUN, "Suspending (%td)...\n", suspendCounter);
     assert(isUserThread());
 
     if (suspendCounter++ == 0) {
@@ -357,7 +357,7 @@ Thread::suspend() const
 void
 Thread::resume() const
 {
-    logmsg(LOG_RUN, "Resuming (%ld)...\n", suspendCounter);
+    logmsg(LOG_RUN, "Resuming (%td)...\n", suspendCounter);
     assert(isUserThread());
 
     if (suspendCounter <= 0) {

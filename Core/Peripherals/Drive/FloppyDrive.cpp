@@ -875,7 +875,7 @@ FloppyDrive::findSyncMark()
         break;
     }
 
-    logmsg(LOG_DSK, "Moving to SYNC mark at offset %ld\n", head.offset);
+    logmsg(LOG_DSK, "Moving to SYNC mark at offset %td\n", head.offset);
 }
 
 bool
@@ -945,7 +945,7 @@ FloppyDrive::step(isize dir)
             latestStep = latestStepDown = agnus.clock;
         }
 
-        if CONSTEXPR (DSK_CHECKSUM) logmsg(LOG_DEBUG, "Stepping down to cylinder %ld\n", head.cylinder);
+        if CONSTEXPR (DSK_CHECKSUM) logmsg(LOG_DEBUG, "Stepping down to cylinder %td\n", head.cylinder);
 
     } else {
 
@@ -966,7 +966,7 @@ FloppyDrive::step(isize dir)
             latestStep = latestStepUp = agnus.clock;
         }
 
-        if CONSTEXPR (DSK_CHECKSUM) logmsg(LOG_DEBUG, "Stepping up to cylinder %ld\n", head.cylinder);
+        if CONSTEXPR (DSK_CHECKSUM) logmsg(LOG_DEBUG, "Stepping up to cylinder %td\n", head.cylinder);
     }
     
     if (didStep) {

@@ -136,7 +136,7 @@ Paula::peekPOTxDAT() const
     if constexpr (x == 0) result = HI_LO(potCntY0, potCntX0);
     if constexpr (x == 1) result = HI_LO(potCntY1, potCntX1);
 
-    logmsg(LOG_POTREG, "peekPOT%ldDAT() = %x\n", x, result);
+    logmsg(LOG_POTREG, "peekPOT%tdDAT() = %x\n", x, result);
     return result;
 }
 

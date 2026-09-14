@@ -284,7 +284,7 @@ Blitter::pokeBLTALWM(u16 value)
 template <Accessor s> void
 Blitter::pokeBLTSIZE(u16 value)
 {
-    logmsg(LOG_BLTTIM, "(%ld,%ld) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
+    logmsg(LOG_BLTTIM, "(%td,%td) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     logmsg(LOG_BLTREG, "pokeBLTSIZE(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BLTSIZE, value);

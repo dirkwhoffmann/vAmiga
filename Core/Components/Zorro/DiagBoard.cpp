@@ -291,7 +291,7 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
         string name;
         if (bstr) {
             auto length = (isize)mem.spypeek8 <Accessor::CPU> (4 * ptr1);
-            logmsg(LOG_DBD, "Length = %ld\n", length);
+            logmsg(LOG_DBD, "Length = %td\n", length);
             osDebugger.read(4 * ptr1 + 1, name, length);
         } else {
             osDebugger.read(ptr1, name);

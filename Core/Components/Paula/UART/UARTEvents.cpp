@@ -111,7 +111,7 @@ UART::serviceRxdEvent(EventID id)
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
-        logmsg(LOG_SER, "Received packet %X (%c) (%ld)\n", receiveBuffer, (char)receiveBuffer, packetLength());
+        logmsg(LOG_SER, "Received packet %X (%c) (%td)\n", receiveBuffer, (char)receiveBuffer, packetLength());
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {

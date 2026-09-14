@@ -311,7 +311,7 @@ ADFFile::formatDisk(FSFormat dos, BootBlockId id, string name)
     retro::vault::amiga::FSFormatEnum::validate(dos);
 
     logmsg(LOG_IMG,
-            "Formatting disk (%ld, %s)\n",
+            "Formatting disk (%td, %s)\n",
             numBlocks(), retro::vault::amiga::FSFormatEnum::key(dos));
 
     // Only proceed if a file system is given
