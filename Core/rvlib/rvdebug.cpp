@@ -13,7 +13,7 @@ namespace retro::vault {
 #define LOG_FLAG_ENTRY(name, dflt, help) \
     { #name, help, false, \
       []() -> utl::isize { return (utl::isize)name; }, \
-      [](utl::isize value) { name = value; } },
+      [](utl::isize value) { name = (long)value; } },
 
 #define DEBUG_FLAG_ENTRY(name, dflt, help) \
     { #name, help, true, \
