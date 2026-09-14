@@ -545,11 +545,11 @@ typedef struct
     Cycle triggerRel;
     
     // Trigger frame relative to the current frame
-    long frameRel;
+    isize frameRel;
     
     // The trigger cycle translated to a beam position.
-    long vpos;
-    long hpos;
+    isize vpos;
+    isize hpos;
 }
 EventSlotInfo;
 
@@ -561,8 +561,8 @@ typedef struct
     Cycle ciaAClock;
     Cycle ciaBClock;
     i64 frame;
-    long vpos;
-    long hpos;
+    isize vpos;
+    isize hpos;
 }
 EventInfo;
 

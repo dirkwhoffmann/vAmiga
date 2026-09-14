@@ -299,7 +299,7 @@ GuardsAPI::elements() const
 }
 
 std::optional<GuardInfo>
-GuardsAPI::guardNr(long nr) const
+GuardsAPI::guardNr(isize nr) const
 {
     VAMIGA_PUBLIC
     return guards->guardNr(nr);

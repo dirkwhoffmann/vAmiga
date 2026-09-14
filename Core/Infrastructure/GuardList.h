@@ -55,8 +55,8 @@ public:
 
 public:
 
-    long elements() const { return guards.elements(); }
-    std::optional<GuardInfo> guardNr(long nr) const;
+    isize elements() const { return guards.elements(); }
+    std::optional<GuardInfo> guardNr(isize nr) const;
     std::optional<GuardInfo> guardAt(u32 addr) const;
     std::optional<GuardInfo> hit() const;
 
@@ -67,7 +67,7 @@ public:
 
 public:
 
-    bool isSet(long nr) const { return guards.isSet(nr); }
+    bool isSet(isize nr) const { return guards.isSet(nr); }
     bool isSetAt(u32 addr) const { return guards.isSetAt(addr); }
 
     void setAt(u32 target, isize ignores = 0);
@@ -84,9 +84,9 @@ public:
 
 public:
 
-    bool isEnabled(long nr) const { return guards.isEnabled(nr); }
+    bool isEnabled(isize nr) const { return guards.isEnabled(nr); }
     bool isEnabledAt(u32 addr) const { return guards.isEnabledAt(addr); }
-    bool isDisabled(long nr) const { return guards.isDisabled(nr); }
+    bool isDisabled(isize nr) const { return guards.isDisabled(nr); }
     bool isDisabledAt(u32 addr) const { return guards.isDisabledAt(addr); }
     bool eval(u32 addr, moira::Size S = moira::Byte) { return guards.eval(addr, S); }
 
@@ -99,7 +99,7 @@ public:
     void toggle(isize nr);
     void toggleAt(u32 target);
 
-    void ignore(long nr, long count);
+    void ignore(isize nr, isize count);
 
 
     //

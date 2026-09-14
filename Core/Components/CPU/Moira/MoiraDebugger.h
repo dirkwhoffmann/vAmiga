@@ -26,7 +26,7 @@ struct Guard {
     bool enabled = true;
 
     // Ignore counter
-    long ignore = 0;
+    isize ignore = 0;
 
 public:
 
@@ -46,13 +46,13 @@ class Guards {
 protected:
 
     // Capacity of the guards array
-    long capacity = 1;
+    isize capacity = 1;
 
     // Array holding all guards
     Guard *guards = new Guard[1];
 
     // Number of currently stored guards
-    long count = 0;
+    isize count = 0;
 
 public:
 
@@ -73,24 +73,24 @@ public:
     // Inspecting the guard list
     //
 
-    long elements() const { return count; }
-    Guard *guardNr(long nr) const;
+    isize elements() const { return count; }
+    Guard *guardNr(isize nr) const;
     Guard *guardAt(u32 addr) const;
 
-    std::optional<u32> guardAddr(long nr) const;
+    std::optional<u32> guardAddr(isize nr) const;
 
 
     //
     // Adding or removing guards
     //
 
-    bool isSet(long nr) const { return guardNr(nr) != nullptr; }
+    bool isSet(isize nr) const { return guardNr(nr) != nullptr; }
     bool isSetAt(u32 addr) const { return guardAt(addr) != nullptr; }
 
-    void setAt(u32 addr, long ignores = 0);
-    void replace(long nr, u32 addr);
+    void setAt(u32 addr, isize ignores = 0);
+    void replace(isize nr, u32 addr);
 
-    void remove(long nr);
+    void remove(isize nr);
     void removeAt(u32 addr);
     void removeAll() { count = 0; setNeedsCheck(false); }
 
@@ -99,24 +99,24 @@ public:
     // Enabling or disabling guards
     //
 
-    bool isEnabled(long nr) const;
+    bool isEnabled(isize nr) const;
     bool isEnabledAt(u32 addr) const;
-    bool isDisabled(long nr) const;
+    bool isDisabled(isize nr) const;
     bool isDisabledAt(u32 addr) const;
 
-    void enable(long nr) { setEnable(nr, true); }
+    void enable(isize nr) { setEnable(nr, true); }
     void enableAt(u32 addr) { setEnableAt(addr, true); }
     void enableAll() { setEnableAll(true); }
-    void disable(long nr) { setEnable(nr, false); }
+    void disable(isize nr) { setEnable(nr, false); }
     void disableAt(u32 addr) { setEnableAt(addr, false); }
     void disableAll() { setEnableAll(false); }
-    void toggle(long nr) { setEnable(nr, isDisabled(nr)); }
+    void toggle(isize nr) { setEnable(nr, isDisabled(nr)); }
     void toggleAt(u32 addr) { setEnableAt(addr, isDisabledAt(addr)); }
-    void setEnable(long nr, bool val);
+    void setEnable(isize nr, bool val);
     void setEnableAt(u32 addr, bool val);
     void setEnableAll(bool val);
 
-    void ignore(long nr, long count);
+    void ignore(isize nr, isize count);
 
 
     //
@@ -213,7 +213,7 @@ private:
     Registers logBuffer[logBufferCapacity];
 
     // Logging counter
-    long logCnt = 0;
+    isize logCnt = 0;
 
 
     //

@@ -593,7 +593,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "734"
             endingLineNumber = "734"
-            landmarkName = "CPU::_didLoad()"
+            landmarkName = "CPU::eofHandler()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -609,7 +609,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "738"
             endingLineNumber = "738"
-            landmarkName = "CPU::_didLoad()"
+            landmarkName = "CPU::eofHandler()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

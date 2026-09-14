@@ -360,8 +360,8 @@ typedef struct
     Cycle ciaAClock;
     Cycle ciaBClock;
     i64 frame;
-    long vpos;
-    long hpos;
+    isize vpos;
+    isize hpos;
 }
 AmigaInfo;
 

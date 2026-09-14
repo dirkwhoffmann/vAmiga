@@ -36,7 +36,7 @@ Blitter::_initialize()
                 inclPattern |= carry << bit; // inclusive fill
                 exclPattern ^= carry << bit; // exclusive fill
 
-                if (byte & (1 << bit)) carry = !carry;
+                if (byte & (isize(1) << bit)) carry = !carry;
             }
             fillPattern[0][carryIn][byte] = inclPattern;
             fillPattern[1][carryIn][byte] = exclPattern;

@@ -14,7 +14,7 @@
 namespace vamiga {
 
 std::optional<GuardInfo>
-GuardList::guardNr(long nr) const
+GuardList::guardNr(isize nr) const
 {
     if (auto *g = guards.guardNr(nr); g) {
         return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
@@ -62,7 +62,7 @@ GuardList::moveTo(isize nr, u32 newTarget)
 }
 
 void
-GuardList::ignore(long nr, long count)
+GuardList::ignore(isize nr, isize count)
 {
     if (!guards.guardNr(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.ignore(nr, count);

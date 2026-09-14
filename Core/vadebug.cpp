@@ -28,7 +28,7 @@ namespace vamiga {
 #define LOG_FLAG_ENTRY(name, dflt, help) \
     { #name, help, false, \
       []() -> isize { return (isize)name; }, \
-      [](isize value) { name = value; } },
+      [](isize value) { name = (long)value; } },
 
 #define DEBUG_FLAG_ENTRY(type, name, dflt, help) \
     { #name, help, std::is_same_v<type, bool>, \

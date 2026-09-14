@@ -767,7 +767,7 @@ Agnus::cacheInfo() const
 
         info.slotInfo[i].vpos = beam.v;
         info.slotInfo[i].hpos = beam.h;
-        info.slotInfo[i].frameRel = long(beam.frame - pos.frame);
+        info.slotInfo[i].frameRel = isize(beam.frame - pos.frame);
 
         info.slotInfo[i].eventName = eventName((EventSlot)i, id[i]);
     }

@@ -891,7 +891,7 @@ CPU::disassembleRange(std::ostream &os, std::pair<u32, u32> range, isize max) co
     isize numBytes = 0;
     auto pc = cpu.getPC0();
 
-    for (isize i = 0; i < max && addr <= range.second; i++, addr += numBytes) {
+    for (isize i = 0; i < max && addr <= range.second; i++, addr += u32(numBytes)) {
 
         // auto pc = disassembleAddr(addr);
         auto instr = disassembleInstr(addr, &numBytes);
@@ -936,7 +936,7 @@ CPU::processCommand(const Command &cmd)
         case Cmd::GUARD_SET_AT:      guards->setAt(addr); break;
         case Cmd::GUARD_REMOVE_NR:   guards->remove(nr); break;
         case Cmd::GUARD_MOVE_NR:     guards->moveTo(nr, u32(cmd.value2)); break;
-        case Cmd::GUARD_IGNORE_NR:   guards->ignore(nr, long(cmd.value2)); break;
+        case Cmd::GUARD_IGNORE_NR:   guards->ignore(nr, isize(cmd.value2)); break;
         case Cmd::GUARD_REMOVE_AT:   guards->removeAt(addr); break;
         case Cmd::GUARD_REMOVE_ALL:  guards->removeAll(); break;
         case Cmd::GUARD_ENABLE_NR:   guards->enable(nr); break;

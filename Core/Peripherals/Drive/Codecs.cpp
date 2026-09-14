@@ -41,7 +41,7 @@ Codec::makeEADF(const FloppyDisk &disk)
 {
     auto numTracks = disk.numTracks();
 
-    auto length = 0;
+    isize length = 0;
 
     length += 12;               // File header
     length += 12 * numTracks;   // Track headers

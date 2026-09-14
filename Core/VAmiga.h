@@ -336,7 +336,7 @@ public:
     /** @brief  Returns information about a guard.
      *  @param  nr      Number of the guard in the guard list
      */
-    std::optional<GuardInfo> guardNr(long nr) const;
+    std::optional<GuardInfo> guardNr(isize nr) const;
 
     /** @brief  Returns information about a guard.
      *  @param  target  The target of the guard to query
