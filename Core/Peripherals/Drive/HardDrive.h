@@ -149,7 +149,7 @@ public:
     void init(const GeometryDescriptor &geometry);
 
     // Creates a hard drive with a certain capacity in bytes
-    void init(isize size);
+    void init(i64 size);
 
     // Creates a hard drive with the contents of a file system
     void init(const amiga::FileSystem &fs);
@@ -231,7 +231,7 @@ private:
     void setup(const GeometryDescriptor &geometry);
 
     // Throws if a disk of the given size must not be held in memory
-    void checkMemoryLimit(isize bytes) const;
+    void checkMemoryLimit(i64 bytes) const;
 
     // Describes the drive after a file system was built on it, keeping the disk
     void describe(const amiga::FileSystem &fs);
@@ -511,10 +511,10 @@ public:
 public:
 
     // Reads a data block from the hard drive and copies it into RAM
-    i8 read(isize offset, isize length, u32 addr);
+    i8 read(i64 offset, i64 length, u32 addr);
 
     // Reads a data block from RAM and writes it onto the hard drive
-    i8 write(isize offset, isize length, u32 addr);
+    i8 write(i64 offset, i64 length, u32 addr);
 
     // Reads a loadable file system
     void readDriver(isize nr, utl::Buffer<u8> &driver);
@@ -522,10 +522,10 @@ public:
 private:
 
     // Checks the given argument list for consistency
-    i8 verify(isize offset, isize length, u32 addr);
+    i8 verify(i64 offset, i64 length, u32 addr);
 
     // Moves the drive head to the specified block
-    void moveHead(isize lba);
+    void moveHead(i64 lba);
     void moveHead(isize c, isize h, isize s);
 
 

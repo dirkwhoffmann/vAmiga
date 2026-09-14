@@ -112,9 +112,9 @@ HardDrive::init(const GeometryDescriptor &geometry)
 }
 
 void
-HardDrive::checkMemoryLimit(isize bytes) const
+HardDrive::checkMemoryLimit(i64 bytes) const
 {
-    auto limit = memLimit();
+    auto limit = i64(memLimit());
 
     if (limit && bytes > limit * MB(1)) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE_FOR_MEM, std::to_string(limit));
@@ -131,7 +131,7 @@ HardDrive::loadIntoMemory()
 }
 
 void
-HardDrive::init(isize size)
+HardDrive::init(i64 size)
 {
     init(GeometryDescriptor(size));
 }
@@ -779,9 +779,9 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 }
 
 i8
-HardDrive::read(isize offset, isize length, u32 addr)
+HardDrive::read(i64 offset, i64 length, u32 addr)
 {
-    logmsg(LOG_HDR, "read(%ld, %ld, %u)\n", offset, length, addr);
+    logmsg(LOG_HDR, "read(%lld, %lld, %u)\n", (long long)offset, (long long)length, addr);
 
     // Check arguments
     auto error = verify(offset, length, addr);
@@ -807,9 +807,9 @@ HardDrive::read(isize offset, isize length, u32 addr)
 }
 
 i8
-HardDrive::write(isize offset, isize length, u32 addr)
+HardDrive::write(i64 offset, i64 length, u32 addr)
 {
-    logmsg(LOG_HDR, "write(%ld, %ld, %u)\n", offset, length, addr);
+    logmsg(LOG_HDR, "write(%lld, %lld, %u)\n", (long long)offset, (long long)length, addr);
 
     // Check arguments
     auto error = verify(offset, length, addr);
@@ -880,7 +880,7 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
     isize bytesRead = 0;
     for (auto &seg : segList) {
 
-        auto offset = isize(seg * geometry.bsize + 20);
+        auto offset = i64(seg) * geometry.bsize + 20;
 
         assert(offset >= 0);
         assert(offset + bytesPerBlock <= size());
@@ -891,7 +891,7 @@ HardDrive::readDriver(isize nr, Buffer<u8> &driver)
 }
 
 i8
-HardDrive::verify(isize offset, isize length, u32 addr)
+HardDrive::verify(i64 offset, i64 length, u32 addr)
 {
     // A drive can lose its disk when a snapshot is restored (see _didLoad)
     if (!image) {
@@ -922,7 +922,7 @@ HardDrive::verify(isize offset, isize length, u32 addr)
      * ends exactly at the end of the last Ram bank is perfectly fine, and
      * checking one byte too far would refuse it.
      */
-    auto last = u32(addr + std::max(isize(1), length) - 1);
+    auto last = u32(addr + std::max(i64(1), length) - 1);
 
     if (!mem.inRam(addr) || !mem.inRam(last)) {
 
@@ -934,11 +934,11 @@ HardDrive::verify(isize offset, isize length, u32 addr)
 }
 
 void
-HardDrive::moveHead(isize lba)
+HardDrive::moveHead(i64 lba)
 {
-    isize c = lba / (geometry.heads * geometry.sectors);
-    isize h = (lba / geometry.sectors) % geometry.heads;
-    isize s = lba % geometry.sectors;
+    isize c = isize(lba / (geometry.heads * geometry.sectors));
+    isize h = isize((lba / geometry.sectors) % geometry.heads);
+    isize s = isize(lba % geometry.sectors);
 
     moveHead(c, h, s);
 }

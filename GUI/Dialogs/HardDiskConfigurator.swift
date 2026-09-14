@@ -174,7 +174,7 @@ class HardDiskConfigurator: DialogController {
         }
         
         // Check if the geometry is consistent with the HDF
-        let matching = cyls * heads * sectors * bsize == traits.bytes
+        let matching = Int64(cyls * heads * sectors * bsize) == traits.bytes
         warningText.isHidden = matching
         okButton.isEnabled = matching
     }

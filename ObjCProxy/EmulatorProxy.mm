@@ -1402,6 +1402,22 @@ ImageInfo scan(const fs::path &url)
     catch(Error &error) { [ex save:error]; }
 }
 
+- (NSURL *)url
+{
+    auto path = [self drive]->path();
+    return path.empty() ? nil : [NSURL fileURLWithPath:@(path.string().c_str())];
+}
+
+- (BOOL)needsPersisting
+{
+    return [self drive]->needsPersisting();
+}
+
+- (void)persist
+{
+    [self drive]->persist();
+}
+
 - (NSString *)readTrackBits:(NSInteger)track
 {
     return @([self drive]->readTrackBits(track).c_str());

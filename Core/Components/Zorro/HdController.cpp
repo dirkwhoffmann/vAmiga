@@ -445,8 +445,8 @@ HdController::processCmd(u32 ptr)
     
     // Extract information
     auto cmd = IoCommand(stdReq.io_Command);
-    auto offset = isize(stdReq.io_Offset);
-    auto length = isize(stdReq.io_Length);
+    auto offset = i64(stdReq.io_Offset);
+    auto length = i64(stdReq.io_Length);
     auto addr = u32(stdReq.io_Data);
 
     /* The 64-bit commands carry the high half of the offset in io_Actual,
@@ -465,7 +465,7 @@ HdController::processCmd(u32 ptr)
         case IoCommand::NSD_TD_SEEK64:
         case IoCommand::NSD_TD_FORMAT64:
 
-            offset |= isize(stdReq.io_Actual) << 32;
+            offset |= i64(stdReq.io_Actual) << 32;
             break;
 
         default:
@@ -477,7 +477,7 @@ HdController::processCmd(u32 ptr)
         [[maybe_unused]] auto unit = mem.spypeek32 <Accessor::CPU> (stdReq.io_Unit + 0x2A);
         [[maybe_unused]] auto blck = offset / 512;
         
-        logmsg(LOG_HDR, "%d.%ld: %s\n", unit, blck, IoCommandEnum::key(cmd));
+        logmsg(LOG_HDR, "%d.%lld: %s\n", unit, (long long)blck, IoCommandEnum::key(cmd));
     }
     
     // Update the usage profile
@@ -536,7 +536,7 @@ HdController::processCmd(u32 ptr)
                  * drive of more than 2 TB, which is far beyond what a
                  * geometry can express anyway (see checkCompatibility).
                  */
-                auto sectors = std::min(geo.numBlocks(), isize(0xFFFFFFFF));
+                auto sectors = std::min(i64(geo.numBlocks()), i64(0xFFFFFFFF));
 
                 mem.patch(addr +  0, u32(geo.bsize));               // dg_SectorSize
                 mem.patch(addr +  4, u32(sectors));                 // dg_TotalSectors

@@ -148,8 +148,8 @@ typedef struct
     
     // Derived values
     isize tracks;
-    isize blocks;
-    isize bytes;
+    i64 blocks;
+    i64 bytes;
     isize upperCyl;
     isize upperHead;
     isize upperTrack;

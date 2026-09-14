@@ -763,6 +763,15 @@ ImageInfo scan(const fs::path &url);
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (NSString *)readTrackBits:(NSInteger)track;
 
+// The file the disk lives in (always nil, floppy disks live in memory)
+@property (readonly) NSURL *url;
+
+// Indicates whether the file is behind the disk (always NO for floppy disks)
+@property (readonly) BOOL needsPersisting;
+
+// Writes all changes back to the file the disk lives in (no effect for floppy disks)
+- (void)persist;
+
 @end
 
 
