@@ -124,13 +124,20 @@ public:
     isize getSize() const { return data.size(); }
     bool empty() const { return data.empty(); }
 
-    // Returns true if the image sits on top of the file it was read from or saved to
-    bool backed() const { return data.backed(); }
+    /* Returns where the bytes of the image live
+     *
+     * FILE_BACKED if the image sits on top of the file it was read from or
+     * saved to, MEMORY_BACKED if it was built in memory or let go of its file
+     * (see detach()).
+     */
+    StorageMode getStorageMode() const {
+        return data.backed() ? StorageMode::FILE_BACKED : StorageMode::MEMORY_BACKED;
+    }
 
     /* Returns true if the image holds changes the file does not have yet
      *
-     * An image without a backing has no file to compare itself to; for such
-     * an image, the answer says nothing (see save()).
+     * A memory-backed image has no file to compare itself to; for such an
+     * image, the answer says nothing (see save()).
      */
     bool modified() const { return data.dirty(); }
 

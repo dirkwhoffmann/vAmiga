@@ -308,7 +308,7 @@ private:
     void serializeDisk(SerResetter &worker) { }
 
     // Returns true if the disk lives in a file
-    bool fileBacked() const { return image && image->backed(); }
+    bool fileBacked() const { return image && image->getStorageMode() == StorageMode::FILE_BACKED; }
 
     void _didReset(bool hard) override;
     void _didLoad() override;
