@@ -750,6 +750,29 @@ public:
      */
     void writeToFile(const std::filesystem::path& path);
 
+    /** @brief  Returns where the disk lives
+     *  @note   Floppy disks always live in memory (MEMORY_BACKED).
+     */
+    StorageMode getStorageMode() const;
+
+    /** @brief  Returns the file the disk lives in
+     *  @note   Always empty, since floppy disks always live in memory.
+     */
+    std::filesystem::path path() const;
+
+    /** @brief  Indicates whether the disk holds changes its file does not
+     *          have yet
+     *  @note   Always false for a floppy disk, which has no file. Whether the
+     *          disk has been modified since it was inserted is reported by
+     *          FloppyDriveInfo::hasModifiedDisk.
+     */
+    bool needsPersisting() const;
+
+    /** @brief  Writes all changes back to the file the disk lives in
+     *  @note   Does nothing for a floppy disk, which has no file.
+     */
+    void persist();
+
     /** @brief  Creates a textual bit representation of a track's data
      */
     string readTrackBits(isize track);

@@ -357,6 +357,23 @@ public:
     HeadNr currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }
 
+    StorageMode getStorageMode() const override {
+        return fileBacked() ? StorageMode::FILE_BACKED : StorageMode::MEMORY_BACKED;
+    }
+    fs::path getPath() const override { return fileBacked() ? image->path : fs::path(); }
+    bool needsPersisting() const override { return fileBacked() && image->modified(); }
+
+    /* Writes all changes back to the file the disk lives in
+     *
+     * Only what has changed is written. A disk built in memory has no file to
+     * go back to; for such a disk, and for the run-ahead instance, the call
+     * does nothing. A failure is logged and otherwise ignored: the changes
+     * stay in memory and are written again with the next call.
+     *
+     * Opt::HDR_WRITE_THROUGH has this called on its own (see WriteThroughMode).
+     */
+    void persist() override;
+
     bool getFlag(DiskFlags mask) const override;
     void setFlag(DiskFlags mask, bool value) override;
 
@@ -438,17 +455,6 @@ public:
 
     // Returns the current drive state
     HardDriveState getState() const { return state; }
-
-    // Returns where the disk lives (a drive without a disk counts as memory-backed)
-    StorageMode getStorageMode() const {
-        return fileBacked() ? StorageMode::FILE_BACKED : StorageMode::MEMORY_BACKED;
-    }
-
-    // Returns the file the disk lives in (empty if the disk was built in memory)
-    fs::path getPath() const { return fileBacked() ? image->path : fs::path(); }
-
-    // Returns true if the disk holds changes the file does not have yet
-    bool needsPersisting() const { return fileBacked() && image->modified(); }
 
     /* Loads the disk into memory and lets go of the file it lived in.
      *
@@ -532,17 +538,6 @@ public:
 
     // Imports files from a folder (deletes existing files)
     void importFolder(const fs::path &path);
-
-    /* Writes all changes back to the file the disk lives in
-     *
-     * Only what has changed is written. A disk built in memory has no file to
-     * go back to; for such a disk, and for the run-ahead instance, the call
-     * does nothing. A failure is logged and otherwise ignored: the changes
-     * stay in memory and are written again with the next call.
-     *
-     * Opt::HDR_WRITE_THROUGH has this called on its own (see WriteThroughMode).
-     */
-    void persist();
 
     // Exports the disk to a file
     void writeToFile(const fs::path &path);

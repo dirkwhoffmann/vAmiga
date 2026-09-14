@@ -1236,6 +1236,34 @@ FloppyDriveAPI::writeToFile(const std::filesystem::path& path)
     drive->writeToFile(path);
 }
 
+StorageMode
+FloppyDriveAPI::getStorageMode() const
+{
+    VAMIGA_PUBLIC
+    return drive->getStorageMode();
+}
+
+fs::path
+FloppyDriveAPI::path() const
+{
+    VAMIGA_PUBLIC
+    return drive->getPath();
+}
+
+bool
+FloppyDriveAPI::needsPersisting() const
+{
+    VAMIGA_PUBLIC
+    return drive->needsPersisting();
+}
+
+void
+FloppyDriveAPI::persist()
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->persist();
+}
+
 string
 FloppyDriveAPI::readTrackBits(isize track)
 {
