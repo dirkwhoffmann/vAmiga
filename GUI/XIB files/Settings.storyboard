@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -69,7 +68,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <clipView key="contentView" drawsBackground="NO" id="j0G-Jh-IbN">
                                     <rect key="frame" x="1" y="1" width="218" height="360"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="32" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="13" outlineTableColumn="5q6-FD-1Lw" id="gD7-UL-pCo" customClass="SettingsOutlineView" customModule="vAmiga" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="218" height="360"/>
@@ -91,7 +90,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="SidebarCell" id="e1G-5r-e3X">
-                                                            <rect key="frame" x="8" y="0.0" width="201" height="32"/>
+                                                            <rect key="frame" x="18" y="0.0" width="201" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GQl-eS-sZn">
@@ -1288,7 +1287,7 @@
                                 <autoresizingMask key="autoresizingMask"/>
                                 <clipView key="contentView" drawsBackground="NO" id="pqT-hI-mht">
                                     <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Id4-fh-SHh">
                                             <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
@@ -1808,10 +1807,10 @@
                         <outlet property="extDropView" destination="08F-7g-vhT" id="EbL-bh-pkl"/>
                         <outlet property="extMapAddr" destination="LDg-DL-t9p" id="QFa-wP-b0K"/>
                         <outlet property="extMapText" destination="h2C-uk-7V7" id="OMe-J9-EqG"/>
-                        <outlet property="extModel" destination="mrW-Sd-hvv" id="WYG-OS-Zjw"/>
                         <outlet property="extSubsubtitle" destination="lIj-Fy-Diw" id="8au-iX-xSP"/>
                         <outlet property="extSubtitle" destination="cfm-ed-mjt" id="qR6-Fg-DVQ"/>
                         <outlet property="extTitle" destination="HBZ-xo-bOq" id="WZo-Jx-Jr3"/>
+                        <outlet property="extType" destination="mrW-Sd-hvv" id="WYG-OS-Zjw"/>
                         <outlet property="lockImage" destination="l5c-bZ-iYF" id="ash-rb-Pww"/>
                         <outlet property="lockInfo1" destination="6Sc-75-E3J" id="4n9-oB-S7P"/>
                         <outlet property="lockInfo2" destination="bbr-sI-IhY" id="eIH-Bc-cGB"/>
@@ -1821,10 +1820,10 @@
                         <outlet property="romExpImage" destination="f5l-b4-qgh" id="U2e-t3-YA5"/>
                         <outlet property="romExpInfo1" destination="IRi-bh-3yt" id="uTw-Xw-aGY"/>
                         <outlet property="romExpInfo2" destination="MHS-KT-gfS" id="kJM-oj-2vf"/>
-                        <outlet property="romModel" destination="poN-Cm-c1w" id="NvR-Nz-W2p"/>
                         <outlet property="romSubsubtitle" destination="6xQ-RJ-Gy1" id="ECq-Yo-Ngc"/>
                         <outlet property="romSubtitle" destination="gz0-I1-pNu" id="xK9-ON-Lb3"/>
                         <outlet property="romTitle" destination="Fl2-7D-z0g" id="ntZ-Dt-25p"/>
+                        <outlet property="romType" destination="poN-Cm-c1w" id="NvR-Nz-W2p"/>
                     </connections>
                 </viewController>
                 <customObject id="PjL-cE-FKx" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -6713,7 +6712,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
+        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="steeringwheel" catalog="system" width="20" height="20"/>
         <image name="trash" catalog="system" width="19" height="22"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>

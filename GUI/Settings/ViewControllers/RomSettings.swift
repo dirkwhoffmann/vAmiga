@@ -14,14 +14,14 @@ class RomSettingsViewController: SettingsViewController {
     @IBOutlet weak var romTitle: NSTextField!
     @IBOutlet weak var romSubtitle: NSTextField!
     @IBOutlet weak var romSubsubtitle: NSTextField!
-    @IBOutlet weak var romModel: NSTextField!
+    @IBOutlet weak var romType: NSTextField!
     @IBOutlet weak var romDeleteButton: NSButton!
 
     @IBOutlet weak var extDropView: ExtRomDropView!
     @IBOutlet weak var extTitle: NSTextField!
     @IBOutlet weak var extSubtitle: NSTextField!
     @IBOutlet weak var extSubsubtitle: NSTextField!
-    @IBOutlet weak var extModel: NSTextField!
+    @IBOutlet weak var extType: NSTextField!
     @IBOutlet weak var extDeleteButton: NSButton!
     @IBOutlet weak var extMapText: NSTextField!
     @IBOutlet weak var extMapAddr: NSPopUpButton!
@@ -120,12 +120,12 @@ class RomSettingsViewController: SettingsViewController {
         romTitle.stringValue = String(cString: romTraits.title)
         romSubtitle.stringValue = String(cString: romTraits.revision)
         romSubsubtitle.stringValue = RomSettingsViewController.romDateString(romTraits.released)
-        romModel.stringValue = String(cString: retro.vault.RomTypeEnum.help(romTraits.type))
+        romType.stringValue = hasRom ? String(cString: retro.vault.RomTypeEnum.help(romTraits.type)) : ""
 
         extTitle.stringValue = String(cString: extTraits.title)
         extSubtitle.stringValue = String(cString: extTraits.revision)
         extSubsubtitle.stringValue = RomSettingsViewController.romDateString(extTraits.released)
-        extModel.stringValue = String(cString: retro.vault.RomTypeEnum.help(extTraits.type))
+        extType.stringValue = hasExt ? String(cString: retro.vault.RomTypeEnum.help(extTraits.type)) : ""
         extMapAddr.selectItem(withTag: Int(config.extStart))
 
         if romDropView.image == romUnknown {
