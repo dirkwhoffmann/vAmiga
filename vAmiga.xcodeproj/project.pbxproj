@@ -480,6 +480,12 @@
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* FloppyDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */; };
 		50F6EEBE21F4F61F0091155D /* FloppyDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */; };
+		50F7147430598852006C02B8 /* RomsC64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147130598852006C02B8 /* RomsC64.cpp */; };
+		50F7147530598852006C02B8 /* RomManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7146F30598852006C02B8 /* RomManager.cpp */; };
+		50F7147630598852006C02B8 /* RomsAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147030598852006C02B8 /* RomsAmiga.cpp */; };
+		50F7147830598852006C02B8 /* RomsC64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147130598852006C02B8 /* RomsC64.cpp */; };
+		50F7147930598852006C02B8 /* RomManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7146F30598852006C02B8 /* RomManager.cpp */; };
+		50F7147A30598852006C02B8 /* RomsAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147030598852006C02B8 /* RomsAmiga.cpp */; };
 		50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* FloppyDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */; };
@@ -1398,6 +1404,12 @@
 		50F6EEB721F4F5C60091155D /* FloppyDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDisk.h; sourceTree = "<group>"; };
 		50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyDrive.cpp; sourceTree = "<group>"; };
 		50F6EEBD21F4F61F0091155D /* FloppyDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDrive.h; sourceTree = "<group>"; };
+		50F7146D30598852006C02B8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		50F7146E30598852006C02B8 /* RomManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomManager.h; sourceTree = "<group>"; };
+		50F7146F30598852006C02B8 /* RomManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomManager.cpp; sourceTree = "<group>"; };
+		50F7147030598852006C02B8 /* RomsAmiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomsAmiga.cpp; sourceTree = "<group>"; };
+		50F7147130598852006C02B8 /* RomsC64.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomsC64.cpp; sourceTree = "<group>"; };
+		50F7147230598852006C02B8 /* RomTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomTypes.h; sourceTree = "<group>"; };
 		50F79C9F2C79B04A006A13A8 /* DiagRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagRom.h; sourceTree = "<group>"; };
 		50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
 		50FAC76E2515EBED00E47421 /* IMGFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGFile.cpp; sourceTree = "<group>"; };
@@ -2701,6 +2713,7 @@
 				503E869B2EEE9D5300ED891D /* Devices */,
 				50BF4B6E2F055C1200F1B9F2 /* Images */,
 				5056506925440FDE00A79D27 /* FileSystems */,
+				50F7147330598852006C02B8 /* Roms */,
 				5020D0422F4728FB006D3BF1 /* ThirdParty */,
 			);
 			path = rvlib;
@@ -2971,6 +2984,19 @@
 				50F54B2424B5D31D0078FDC9 /* crc_csum.h */,
 			);
 			path = xdms;
+			sourceTree = "<group>";
+		};
+		50F7147330598852006C02B8 /* Roms */ = {
+			isa = PBXGroup;
+			children = (
+				50F7146D30598852006C02B8 /* CMakeLists.txt */,
+				50F7146E30598852006C02B8 /* RomManager.h */,
+				50F7146F30598852006C02B8 /* RomManager.cpp */,
+				50F7147030598852006C02B8 /* RomsAmiga.cpp */,
+				50F7147130598852006C02B8 /* RomsC64.cpp */,
+				50F7147230598852006C02B8 /* RomTypes.h */,
+			);
+			path = Roms;
 			sourceTree = "<group>";
 		};
 		71E63A810FB5436B54FBDD35 /* SVM */ = {
@@ -3284,6 +3310,9 @@
 				50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
 				50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */,
+				50F7147430598852006C02B8 /* RomsC64.cpp in Sources */,
+				50F7147530598852006C02B8 /* RomManager.cpp in Sources */,
+				50F7147630598852006C02B8 /* RomsAmiga.cpp in Sources */,
 				504FC7D72D31887900F0B733 /* DashboardToolbar.swift in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */,
@@ -3678,6 +3707,9 @@
 				50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */,
 				50BF4BDC2F0ADF3200F1B9F2 /* FSBlock.cpp in Sources */,
 				50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */,
+				50F7147830598852006C02B8 /* RomsC64.cpp in Sources */,
+				50F7147930598852006C02B8 /* RomManager.cpp in Sources */,
+				50F7147A30598852006C02B8 /* RomsAmiga.cpp in Sources */,
 				50FC04C327DA19DA00C3E566 /* AnyFile.cpp in Sources */,
 				50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */,
 				50FB49BB2F0FAFBA00369491 /* C64Encoder.cpp in Sources */,

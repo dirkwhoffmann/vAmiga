@@ -57,21 +57,21 @@ class RomSettingsViewController: SettingsViewController {
 
         let hasRom          = romTraits.crc != 0
         let hasArosRom      = romTraits.vendor == .AROS
-        let hasDemoRom      = romTraits.vendor == .DEMO
-        let hasDiagRom      = romTraits.vendor == .DIAG
+        let hasDemoRom      = romTraits.type == .AMIGA_DEMO
+        let hasDiagRom      = romTraits.type == .AMIGA_DIAG
         let hasCommodoreRom = romTraits.vendor == .COMMODORE
         let hasHyperionRom  = romTraits.vendor == .HYPERION
         let hasEmutosRom    = romTraits.vendor == .EMUTOS
-        let hasPatchedRom   = romTraits.patched
-        let hasRelocatedRom = romTraits.relocated
+        let hasPatchedRom   = (romTraits.flags & retro.vault.RomFlags.Patched) != 0
+        let hasRelocatedRom = (romTraits.flags & retro.vault.RomFlags.Relocated) != 0
 
         let hasExt          = extTraits.crc != 0
         let hasArosExt      = extTraits.vendor == .AROS
-        let hasDiagExt      = extTraits.vendor == .DIAG
+        let hasDiagExt      = extTraits.type == .AMIGA_DIAG
         let hasCommodoreExt = extTraits.vendor == .COMMODORE
         let hasHyperionExt  = extTraits.vendor == .HYPERION
-        let hasPatchedExt   = extTraits.patched
-        let hasRelocatedExt = extTraits.relocated
+        let hasPatchedExt   = (extTraits.flags & retro.vault.RomFlags.Patched) != 0
+        let hasRelocatedExt = (extTraits.flags & retro.vault.RomFlags.Relocated) != 0
 
         let romMissing      = NSImage(named: "rom_missing")
         let romOrig         = NSImage(named: "rom_original")
@@ -119,13 +119,13 @@ class RomSettingsViewController: SettingsViewController {
         // Titles and subtitles
         romTitle.stringValue = String(cString: romTraits.title)
         romSubtitle.stringValue = String(cString: romTraits.revision)
-        romSubsubtitle.stringValue = String(cString: romTraits.released)
-        romModel.stringValue = String(cString: romTraits.model)
+        romSubsubtitle.stringValue = RomSettingsViewController.romDateString(romTraits.released)
+        romModel.stringValue = String(cString: retro.vault.RomTypeEnum.help(romTraits.type))
 
         extTitle.stringValue = String(cString: extTraits.title)
         extSubtitle.stringValue = String(cString: extTraits.revision)
-        extSubsubtitle.stringValue = String(cString: extTraits.released)
-        extModel.stringValue = String(cString: extTraits.model)
+        extSubsubtitle.stringValue = RomSettingsViewController.romDateString(extTraits.released)
+        extModel.stringValue = String(cString: retro.vault.RomTypeEnum.help(extTraits.type))
         extMapAddr.selectItem(withTag: Int(config.extStart))
 
         if romDropView.image == romUnknown {
@@ -158,6 +158,18 @@ class RomSettingsViewController: SettingsViewController {
         }
     }
 
+    // Formats a RomDate for display, e.g. "April 2025", "2022", or "" if unknown
+    static func romDateString(_ date: retro.vault.RomDate) -> String {
+
+        let months = ["", "January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"]
+
+        if date.year == 0 { return "" }
+        if date.month == 0 || date.month > 12 { return "\(date.year)" }
+
+        return "\(months[Int(date.month)]) \(date.year)"
+    }
+
     func refreshRomSelector() {
 
         presetPopup.autoenablesItems = false
@@ -168,9 +180,9 @@ class RomSettingsViewController: SettingsViewController {
 
             switch UInt32(item.tag) {
 
-            case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219, vamiga.CRC32_AROS_20260820,
-                vamiga.CRC32_DIAG121, vamiga.CRC32_DIAG13, vamiga.CRC32_DIAG20,
-                vamiga.CRC32_EMUTOS13:
+            case retro.vault.CRC32_AROS_54705, retro.vault.CRC32_AROS_55696, retro.vault.CRC32_AROS_20250219, retro.vault.CRC32_AROS_20260820,
+                retro.vault.CRC32_DIAG121, retro.vault.CRC32_DIAG13, retro.vault.CRC32_DIAG20,
+                retro.vault.CRC32_EMUTOS13:
 
                 item.isEnabled = true
 
@@ -216,23 +228,23 @@ class RomSettingsViewController: SettingsViewController {
 
     func installAros() {
 
-        installAros(crc32: vamiga.CRC32_AROS_20250219)
+        installAros(crc32: retro.vault.CRC32_AROS_20250219)
     }
 
     func installAros(crc32: UInt32) {
 
         switch crc32 {
 
-        case vamiga.CRC32_AROS_54705:       // Taken from UAE
+        case retro.vault.CRC32_AROS_54705:       // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case vamiga.CRC32_AROS_55696:       // Taken from SAE
+        case retro.vault.CRC32_AROS_55696:       // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
 
-        case vamiga.CRC32_AROS_20250219:    // 2025 version
+        case retro.vault.CRC32_AROS_20250219:    // 2025 version
             installAros(rom: "aros-20250219-rom", ext: "aros-20250219-ext")
 
-        case vamiga.CRC32_AROS_20260820:    // 2026 version
+        case retro.vault.CRC32_AROS_20260820:    // 2026 version
             installAros(rom: "aros-20260820-rom", ext: "aros-20260820-ext")
 
         default:
@@ -275,19 +287,19 @@ class RomSettingsViewController: SettingsViewController {
         let crc32 = UInt32(tag)
 
         switch crc32 {
-        case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219, vamiga.CRC32_AROS_20260820:
+        case retro.vault.CRC32_AROS_54705, retro.vault.CRC32_AROS_55696, retro.vault.CRC32_AROS_20250219, retro.vault.CRC32_AROS_20260820:
             installAros(crc32: crc32)
 
-        case vamiga.CRC32_EMUTOS13:
+        case retro.vault.CRC32_EMUTOS13:
             install(rom: "emutos-13")
 
-        case vamiga.CRC32_DIAG121:
+        case retro.vault.CRC32_DIAG121:
             install(rom: "diagrom-121")
 
-        case vamiga.CRC32_DIAG13:
+        case retro.vault.CRC32_DIAG13:
             install(rom: "diagrom-13")
 
-        case vamiga.CRC32_DIAG20:
+        case retro.vault.CRC32_DIAG20:
             install(rom: "diagrom-20")
 
         default:

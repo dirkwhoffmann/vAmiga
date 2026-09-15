@@ -266,8 +266,8 @@ typedef struct
     isize disalignmentH;
     isize disalignmentV;
     
-    bool flicker;
-    isize flickerWeight;
+    bool flickerFixer;
+    isize flickerJitter;
 }
 MonitorConfig;
 

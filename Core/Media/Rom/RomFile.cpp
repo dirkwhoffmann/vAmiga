@@ -10,7 +10,6 @@
 #include "vaconfig.h"
 #include "RomFile.h"
 #include "Macros.h"
-#include "RomDatabase.h"
 #include "MediaError.h"
 #include "utl/io.h"
 
