@@ -12,8 +12,10 @@
 #include "SubComponent.h"
 #include "ChangeRecorder.h"
 #include "Constants.h"
+#include "HostTypes.h"
 #include "Texture.h"
 #include "utl/concurrency.h"
+#include "utl/support/Bits.h"
 
 namespace vamiga {
 
@@ -49,6 +51,16 @@ private:
      * texture in the ring becomes the new working buffer.
      */
     Texture emuTexture[NUM_TEXTURES];
+
+    /* Parallel ring buffer holding the DMA debugger's raw, unblended
+     * per-channel visualization (see DmaDebugger::computeOverlay). Kept
+     * separate from emuTexture so the Layers inspector's preview can show
+     * DMA usage on its own, independent of whether it is also blended into
+     * the real picture (DMA_DEBUG_OVERLAY) -- mirrors VICII's own
+     * emuTexture/dmaTexture split in the C64 core. Indexed by the same
+     * activeBuffer as emuTexture, so both stay in lockstep.
+     */
+    Texture dmaTexture[NUM_TEXTURES];
 
     // The currently active buffer
     isize activeBuffer = 0;
@@ -308,7 +320,44 @@ public:
     
     // Converts an Amiga color into a texel, applying the monitor settings
     Texel toTexel(const AmigaColor c) const;
-    
+
+    /* Converts to and from a GpuColor<F>. Since GpuColor<F>'s rawValue is
+     * already packed exactly as a texel of format F (see Colors.h), this is
+     * now just a bitcast plus the TEXEL sub-pixel duplication -- there is no
+     * format-dependent shuffling left to do here at all, which is the point:
+     * the old fixed-layout GpuColor needed a matching pair of conversions at
+     * every read/write of an actual pixel buffer, and a mismatch there (or a
+     * caller that skipped them) silently mixed the wrong channel whenever
+     * the host wasn't running in ABGR. With F carried in the type, a
+     * GpuColor<F> and a Texel produced under HOST_TEX_FORMAT == F agree by
+     * construction.
+     *
+     * F is still a template parameter (rather than each Texel simply
+     * knowing its own format at runtime) because these run in per-pixel hot
+     * paths (DmaDebugger::computeOverlay runs this across every visible
+     * pixel of every scanline): callers should switch on
+     * host.getConfig().texFormat once, not per pixel, and call the matching
+     * instantiation from there on.
+     */
+    template <TexelFormat F> static constexpr GpuColor<F>
+    fromTexel(Texel t)
+    {
+        return GpuColor<F>(u32(t));
+    }
+
+    template <TexelFormat F> static constexpr Texel
+    toTexel(GpuColor<F> c)
+    {
+        return TEXEL(c.rawValue);
+    }
+
+    // One-off, runtime-dispatched construction of a GpuColor for whatever
+    // the host's current HOST_TEX_FORMAT happens to be, converted straight
+    // to a Texel -- for setup code that isn't a per-pixel hot path (e.g. the
+    // border debug color below). Prefer the templated overloads above on a
+    // hot path.
+    Texel toTexel(u8 r, u8 g, u8 b, u8 a = 0xFF) const;
+
 private:
     
     // Recomputes the color adjustment tables from the monitor settings
@@ -328,7 +377,12 @@ public:
     // Return a pointer into the pixel storage
     Texel *workingPtr(isize row = 0, isize col = 0);
     Texel *stablePtr(isize row = 0, isize col = 0);
-    
+
+    // Same as above, but for the DMA debugger's own texture (see dmaTexture)
+    Texture &getWorkingDmaBuffer();
+    const Texture &getStableDmaBuffer(isize offset = 0) const;
+    Texel *dmaWorkingPtr(isize row = 0, isize col = 0);
+
     // Swaps the working buffer and the stable buffer
     void swapBuffers();
     

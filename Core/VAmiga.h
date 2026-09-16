@@ -1258,6 +1258,16 @@ public:
     const u32 *getTexture() const;
     const u32 *getTexture(isize *nr, bool *lof, bool *prevlof) const;
 
+    /** @brief  Returns a pointer to the most recent stable DMA debugger
+     *          texture
+     *
+     * Holds the DMA debugger's raw, unblended per-channel visualization,
+     * independent of whether Opt::DMA_DEBUG_OVERLAY is also blending it into
+     * getTexture()'s picture. Same dimensions as getTexture(). Only
+     * meaningful while Opt::DMA_DEBUG_ENABLE is on; otherwise black.
+     */
+    const u32 *getDmaTexture() const;
+
     /** @brief Experimental
      */
     void findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const;

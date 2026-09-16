@@ -1029,6 +1029,13 @@ VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
     return (u32 *)frameBuffer.pixels.ptr;
 }
 
+const u32 *
+VideoPortAPI::getDmaTexture() const
+{
+    VAMIGA_PUBLIC
+    return (u32 *)emu->getDmaTexture().pixels.ptr;
+}
+
 void
 VideoPortAPI::findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const
 {

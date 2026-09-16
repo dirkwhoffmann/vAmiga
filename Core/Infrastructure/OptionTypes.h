@@ -86,6 +86,7 @@ enum class Opt : long
 
     // DMA Debugger
     DMA_DEBUG_ENABLE,
+    DMA_DEBUG_OVERLAY,
     DMA_DEBUG_MODE,
     DMA_DEBUG_OPACITY,
     DMA_DEBUG_CHANNEL0,
@@ -296,6 +297,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_FLICKER_JITTER:        return "MON.FLICKER_JITTER";
 
             case Opt::DMA_DEBUG_ENABLE:          return "DMA.DEBUG_ENABLE";
+            case Opt::DMA_DEBUG_OVERLAY:         return "DMA.DEBUG_OVERLAY";
             case Opt::DMA_DEBUG_MODE:            return "DMA.DEBUG_MODE";
             case Opt::DMA_DEBUG_OPACITY:         return "DMA.DEBUG_OPACITY";
             case Opt::DMA_DEBUG_CHANNEL0:        return "DMA.DEBUG_CHANNEL0";
@@ -484,6 +486,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_FLICKER_JITTER:        return "Interlace flicker jitter";
 
             case Opt::DMA_DEBUG_ENABLE:          return "DMA Debugger";
+            case Opt::DMA_DEBUG_OVERLAY:         return "Show as overlay";
             case Opt::DMA_DEBUG_MODE:            return "DMA Debugger style";
             case Opt::DMA_DEBUG_OPACITY:         return "Opacity";
             case Opt::DMA_DEBUG_CHANNEL0:        return "Copper DMA";

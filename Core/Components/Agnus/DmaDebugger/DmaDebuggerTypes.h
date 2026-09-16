@@ -112,7 +112,12 @@ typedef struct
 {
     // Global enable switch
     bool enabled;
-    
+
+    // If true, the visualization is blended into the displayed picture. If
+    // false, it is only computed into the dedicated DMA debug texture (see
+    // PixelEngine::dmaTexture), leaving the real picture untouched.
+    bool overlay;
+
     // Individual enable switch for each DMA channel
     bool visualize[isize(DmaChannel::COUNT)];
     

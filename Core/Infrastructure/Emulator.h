@@ -176,6 +176,7 @@ public:
     //
 
     const Texture &getTexture() const;
+    const Texture &getDmaTexture() const;
     void lockTexture() { textureLock.lock(); }
     void unlockTexture() { textureLock.unlock(); }
 

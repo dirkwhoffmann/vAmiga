@@ -13,7 +13,7 @@
 #include "FrameBufferTypes.h"
 #include "SubComponent.h"
 #include "Beamtraps.h"
-#include "Colors.h"
+#include "utl/color/Colors.h"
 #include "Constants.h"
 #include "utl/wrappers.h"
 
@@ -32,6 +32,7 @@ class DmaDebugger final : public SubComponent {
     Options options = {
         
         Opt::DMA_DEBUG_ENABLE,
+        Opt::DMA_DEBUG_OVERLAY,
         Opt::DMA_DEBUG_MODE,
         Opt::DMA_DEBUG_OPACITY,
         Opt::DMA_DEBUG_CHANNEL0,
@@ -176,8 +177,24 @@ public:
     
 private:
     
-    // Visualizes DMA usage for a certain range of DMA cycles
-    void computeOverlay(Texel *ptr, isize first, isize last, BusOwner *own, u16 *val);
+    /* Visualizes DMA usage for a certain range of DMA cycles. Always paints
+     * the raw, unblended per-channel colors into 'dmaPtr' (the DMA debug
+     * texture, see PixelEngine::dmaTexture), so the Layers inspector's
+     * preview has something to show independent of the overlay setting.
+     * Only additionally blends the result into 'emuPtr' (the real picture)
+     * when config.overlay is enabled.
+     *
+     * Dispatches once (per call, not per pixel) to the templated overload
+     * below, matching the host's current HOST_TEX_FORMAT. Fixing the format
+     * as a template parameter lets PixelEngine::toTexel<F>/fromTexel<F>
+     * fold their format switch away at compile time, so the per-pixel loop
+     * -- run across every visible pixel of every scanline -- carries no
+     * runtime format branching at all.
+     */
+    void computeOverlay(Texel *emuPtr, Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val);
+
+    template <TexelFormat F>
+    void computeOverlay(Texel *emuPtr, Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val);
 };
 
 }
