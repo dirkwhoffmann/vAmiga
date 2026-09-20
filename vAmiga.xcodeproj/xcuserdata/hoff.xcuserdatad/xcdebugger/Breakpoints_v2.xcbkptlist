@@ -433,8 +433,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "164"
             endingLineNumber = "164"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "PixelEngine::updateRGBA(nr)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -465,7 +465,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "439"
             endingLineNumber = "439"
-            landmarkName = "PixelEngine::swapBuffers()"
+            landmarkName = "PixelEngine::stablePtr(row, col)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
