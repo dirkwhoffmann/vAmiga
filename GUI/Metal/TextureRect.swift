@@ -124,7 +124,7 @@ extension Canvas {
     
     func updateTextureRect() {
 
-        if emu?.get(.DMA_DEBUG_ENABLE) != 0 {
+        if emu?.get(.XRAY_OVERLAY) != 0 {
             textureRect = entireNormalized
         } else {
             textureRect = visibleNormalized

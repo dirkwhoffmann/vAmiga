@@ -73,6 +73,7 @@ typealias UARTInfo = vamiga.UARTInfo
 typealias VideoFormat = vamiga.TV
 typealias WriteThroughMode = vamiga.WriteThroughMode
 typealias Warp = vamiga.Warp
+typealias XRayMode = vamiga.XRayMode
 
 /*
 extension HIDEvent: CustomStringConvertible {

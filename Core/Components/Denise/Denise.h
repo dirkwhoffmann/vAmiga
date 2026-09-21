@@ -46,7 +46,6 @@ class Denise final : public SubComponent {
         Opt::DENISE_HIDDEN_BITPLANES,
         Opt::DENISE_HIDDEN_SPRITES,
         Opt::DENISE_HIDDEN_LAYERS,
-        Opt::DENISE_HIDDEN_LAYER_ALPHA,
         Opt::DENISE_CLX_SPR_SPR,
         Opt::DENISE_CLX_SPR_PLF,
         Opt::DENISE_CLX_PLF_PLF

@@ -39,7 +39,7 @@ PixelEngine::clearAll()
     // Wipe out all textures
     for (isize i = 0; i < NUM_TEXTURES; i++) {
         emuTexture[i].clear();
-        dmaTexture[i].clear();
+        xrayTexture[i].clear();
     }
 }
 
@@ -443,31 +443,36 @@ PixelEngine::stablePtr(isize row, isize col)
 }
 
 Texture &
-PixelEngine::getWorkingDmaBuffer()
+PixelEngine::getWorkingXrayBuffer()
 {
-    return dmaTexture[activeBuffer];
+    return xrayTexture[activeBuffer];
 }
 
 const Texture &
-PixelEngine::getStableDmaBuffer(isize offset) const
+PixelEngine::getStableXrayBuffer(isize offset) const
 {
     auto nr = activeBuffer + offset - 1;
-    return dmaTexture[(nr + NUM_TEXTURES) % NUM_TEXTURES];
+    return xrayTexture[(nr + NUM_TEXTURES) % NUM_TEXTURES];
 }
 
 Texel *
-PixelEngine::dmaWorkingPtr(isize row, isize col)
+PixelEngine::xrayWorkingPtr(isize row, isize col)
 {
     assert(row >= 0 && row <= VPOS_MAX);
     assert(col >= 0 && col <= HPOS_MAX);
 
-    return getWorkingDmaBuffer().pixels.ptr + row * HPIXELS + col;
+    return getWorkingXrayBuffer().pixels.ptr + row * HPIXELS + col;
 }
 
 void
 PixelEngine::swapBuffers()
 {
     emulator.lockTexture();
+
+    // Merge the xray texture into the just-finished frame before it
+    // becomes the new stable buffer -- see mergeXray for why this now
+    // happens once per frame instead of line-by-line/chunk-by-chunk.
+    mergeXray();
 
     videoPort.buffersWillSwap();
 
@@ -855,47 +860,171 @@ PixelEngine::removeBorderOverSprites(Pixel from, Pixel to)
 }
 
 void
-PixelEngine::hide(isize line, u16 layers, u8 alpha)
+PixelEngine::mergeXray()
 {
-    // Pixel coordinates address super-hires pixels (see colorize)
-    auto *p = (u32 *)workingPtr(line);
+    // Dispatched once per call (not per pixel) -- see the declaration's
+    // comment in PixelEngine.h.
+    switch (static_cast<TexelFormat>(host.getConfig().texFormat)) {
 
-    for (Pixel i = 0; i < Denise::PIXEL_CNT; i++) {
+        case TexelFormat::ABGR: mergeXray<TexelFormat::ABGR>(); return;
+        case TexelFormat::ARGB: mergeXray<TexelFormat::ARGB>(); return;
 
-        u16 z = denise.zBuffer[i];
+        default: // RGBA
+            mergeXray<TexelFormat::RGBA>(); return;
+    }
+}
+
+template <TexelFormat F>
+void
+PixelEngine::mergeXray()
+{
+    auto &config = dmaDebugger.getConfig();
+    if (!config.overlay) return;
+
+    double opacity = double(config.opacity) / 255.0;
+    double bgWeight = 0;
+    double fgWeight = 0;
+
+    switch (config.displayMode) {
+
+        case DmaDisplayMode::FG_LAYER:
+
+            bgWeight = 0.0;
+            fgWeight = 1.0 - opacity;
+            break;
+
+        case DmaDisplayMode::BG_LAYER:
+
+            bgWeight = 1.0 - opacity;
+            fgWeight = 0.0;
+            break;
+
+        case DmaDisplayMode::ODD_EVEN_LAYERS:
+
+            bgWeight = opacity;
+            fgWeight = 1.0 - opacity;
+            break;
+
+        default:
+            fatalError;
+    }
+
+    auto *emu = getWorkingBuffer().pixels.ptr;
+    auto *xray = getWorkingXrayBuffer().pixels.ptr;
+
+    for (isize i = 0; i < PIXELS; i++) {
+
+        if (xray[i] != Texture::black) {
+
+            // An effect pixel is present here (painted by DmaDebugger::
+            // computeOverlay or hide, whichever mode is active) -- mix it
+            // with the real picture, not with pixels 2 apart -- a plain
+            // off-by-double that made the opacity slider blend against the
+            // wrong existing pixel (bleeding into the next DMA cycle).
+            if (fgWeight != 0.0) {
+                auto col = fromTexel<F>(xray[i]).mix(fromTexel<F>(emu[i]), fgWeight);
+                emu[i] = toTexel<F>(col);
+            } else {
+                emu[i] = xray[i];
+            }
+
+        } else if (bgWeight != 0.0) {
+
+            // Nothing to show here -- dim the real picture instead (only
+            // happens for XRAY_OVERLAY_STYLE::BG_LAYER/ODD_EVEN_LAYERS).
+            emu[i] = toTexel<F>(fromTexel<F>(emu[i]).shade(bgWeight));
+        }
+    }
+}
+
+void
+PixelEngine::hide(isize line, u16 layers)
+{
+    // Dispatched once per call (not per pixel) -- see the declaration's
+    // comment in PixelEngine.h.
+    switch (static_cast<TexelFormat>(host.getConfig().texFormat)) {
+
+        case TexelFormat::ABGR: hide<TexelFormat::ABGR>(line, layers); return;
+        case TexelFormat::ARGB: hide<TexelFormat::ARGB>(line, layers); return;
+
+        default: // RGBA
+            hide<TexelFormat::RGBA>(line, layers); return;
+    }
+}
+
+template <TexelFormat F>
+void
+PixelEngine::hide(isize line, u16 layers)
+{
+    auto *ptr = getWorkingXrayBuffer().pixels.ptr + line * HPIXELS;
+
+    // Resolve the ten possible Opt::XRAY_COLORn values into a light/dark
+    // checkerboard pair per slot, once per line -- same palette
+    // DmaDebugger uses for its own DMA channels 0-7, and the same two
+    // shade levels it precomputes for its channel colors (see
+    // DmaDebugger::setColor and DmaDebuggerTypes::XRAY_COLOR_COUNT).
+    auto &debugColor = dmaDebugger.getConfig().debugColor;
+    Texel colA[XRAY_COLOR_COUNT], colB[XRAY_COLOR_COUNT];
+    for (isize n = 0; n < XRAY_COLOR_COUNT; n++) {
+
+        RgbColor base(debugColor[n]);
+        colA[n] = toTexel<F>(GpuColor<F>(base.shade(0.3)));
+        colB[n] = toTexel<F>(GpuColor<F>(base.shade(0.1)));
+    }
+
+    // Row half of Texture::clear's checkerboard test ((row>>2)&1 ==
+    // (col>>3)&1 ? col1 : col2) -- constant for the whole line, so it is
+    // hoisted out of the column loop below.
+    bool rowBit = ((line >> 2) & 1) != 0;
+
+    /* AGA lets the visible sprite/playfield change on every pixel, not just
+     * every DMA cycle, so this must inspect the z-buffer at its native
+     * (superhires) resolution instead of sampling one representative
+     * sub-pixel per 4-texel cycle as the old, DMA-cycle-grained code did.
+     * Denise::zBuffer runs at twice the resolution of the (hires) xray
+     * texture, so hires column `col` maps to zBuffer index `2*col`.
+     *
+     * xrayBuf.clear() is not called here: with every column now visited
+     * individually anyway, painting the checkerboard directly (using the
+     * same ((row>>2)&1)==((col>>3)&1) test Texture::clear itself uses, so
+     * the squares align identically and differ only in color) avoids a
+     * separate baseline clear plus a second pass through the row.
+     */
+    for (isize col = 0; col < HPIXELS; col++) {
+
+        u16 z = denise.zBuffer[2 * col];
+        isize idx = -1;
 
         // Check for case 1: A sprite is visible
         if (Denise::isSpritePixel(z)) {
 
-            if (Denise::isSpritePixel<0>(z) && !(layers & 0x01)) continue;
-            if (Denise::isSpritePixel<1>(z) && !(layers & 0x02)) continue;
-            if (Denise::isSpritePixel<2>(z) && !(layers & 0x04)) continue;
-            if (Denise::isSpritePixel<3>(z) && !(layers & 0x08)) continue;
-            if (Denise::isSpritePixel<4>(z) && !(layers & 0x10)) continue;
-            if (Denise::isSpritePixel<5>(z) && !(layers & 0x20)) continue;
-            if (Denise::isSpritePixel<6>(z) && !(layers & 0x40)) continue;
-            if (Denise::isSpritePixel<7>(z) && !(layers & 0x80)) continue;
+            if      (Denise::isSpritePixel<0>(z) && (layers & 0x01)) idx = 0;
+            else if (Denise::isSpritePixel<1>(z) && (layers & 0x02)) idx = 1;
+            else if (Denise::isSpritePixel<2>(z) && (layers & 0x04)) idx = 2;
+            else if (Denise::isSpritePixel<3>(z) && (layers & 0x08)) idx = 3;
+            else if (Denise::isSpritePixel<4>(z) && (layers & 0x10)) idx = 4;
+            else if (Denise::isSpritePixel<5>(z) && (layers & 0x20)) idx = 5;
+            else if (Denise::isSpritePixel<6>(z) && (layers & 0x40)) idx = 6;
+            else if (Denise::isSpritePixel<7>(z) && (layers & 0x80)) idx = 7;
 
         } else {
 
-            // Check for case 2: Playfield 1 is visible
-            if ((Denise::upperPlayfield(z) == 1) && !(layers & 0x100)) continue;
-
-            // Check for case 3: layfield 2 is visible
-            if ((Denise::upperPlayfield(z) == 2) && !(layers & 0x200)) continue;
+            // Playfield 1 or playfield 2 is visible
+            if      ((Denise::upperPlayfield(z) == 1) && (layers & 0x100)) idx = 8;
+            else if ((Denise::upperPlayfield(z) == 2) && (layers & 0x200)) idx = 9;
         }
-        
-        u8 r = p[i] & 0xFF;
-        u8 g = (p[i] >> 8) & 0xFF;
-        u8 b = (p[i] >> 16) & 0xFF;
 
-        double scale = alpha / 255.0;
-        u8 bg = (line / 4) % 2 == (i / 16) % 2 ? 0x22 : 0x44;
-        u8 newr = (u8)(r * (1 - scale) + bg * scale);
-        u8 newg = (u8)(g * (1 - scale) + bg * scale);
-        u8 newb = (u8)(b * (1 - scale) + bg * scale);
-        
-        p[i] = 0xFF000000 | newb << 16 | newg << 8 | newr;
+        if (idx < 0) {
+
+            ptr[col] = Texture::black;
+            continue;
+        }
+
+        // Paint this column's assigned XRAY_COLOR checkerboard pixel into
+        // the xray texture alone -- see mergeXray for how (and whether) it
+        // ends up blended into the real picture.
+        bool colBit = ((col >> 3) & 1) != 0;
+        ptr[col] = rowBit == colBit ? colA[idx] : colB[idx];
     }
 }
 

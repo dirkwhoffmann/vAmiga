@@ -17,6 +17,40 @@ namespace vamiga {
 // Enumerations
 //
 
+enum class XRayMode
+{
+    XRAY_NONE,
+    XRAY_DMA,
+    XRAY_LAYERS
+};
+
+struct XRayModeEnum : Reflectable<XRayModeEnum, XRayMode>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(XRayMode::XRAY_LAYERS);
+
+    static const char *_key(XRayMode value)
+    {
+        switch (value) {
+
+            case XRayMode::XRAY_NONE:   return "XRAY_NONE";
+            case XRayMode::XRAY_DMA:    return "XRAY_DMA";
+            case XRayMode::XRAY_LAYERS: return "XRAY_LAYERS";
+        }
+        return "???";
+    }
+    static const char *help(XRayMode value)
+    {
+        switch (value) {
+
+            case XRayMode::XRAY_NONE:   return "Off";
+            case XRayMode::XRAY_DMA:    return "DMA debugger";
+            case XRayMode::XRAY_LAYERS: return "Layer inspector";
+        }
+        return "???";
+    }
+};
+
 enum class DmaDisplayMode
 {
     FG_LAYER,
@@ -103,6 +137,14 @@ struct DmaChannelEnum : Reflectable<DmaChannelEnum, DmaChannel>
     }
 };
 
+/* Number of persisted Opt::XRAY_COLORn slots. XRayMode::XRAY_DMA uses the
+ * first isize(DmaChannel::COUNT) of these, indexed by DmaChannel.
+ * XRayMode::XRAY_LAYERS (see PixelEngine::hide) uses all of them, indexed
+ * by sprite number 0-7, then playfield 1 and playfield 2 -- both modes
+ * share the same palette.
+ */
+constexpr isize XRAY_COLOR_COUNT = 10;
+
 
 //
 // Structures
@@ -110,19 +152,19 @@ struct DmaChannelEnum : Reflectable<DmaChannelEnum, DmaChannel>
 
 typedef struct
 {
-    // Global enable switch
-    bool enabled;
+    // X-Ray mode (off, DMA debugger, layer inspector)
+    XRayMode mode;
 
     // If true, the visualization is blended into the displayed picture. If
     // false, it is only computed into the dedicated DMA debug texture (see
-    // PixelEngine::dmaTexture), leaving the real picture untouched.
+    // PixelEngine::xrayTexture), leaving the real picture untouched.
     bool overlay;
 
     // Individual enable switch for each DMA channel
     bool visualize[isize(DmaChannel::COUNT)];
     
     // Color palette
-    u32 debugColor[isize(DmaChannel::COUNT)];
+    u32 debugColor[XRAY_COLOR_COUNT];
     
     // Display mode
     DmaDisplayMode displayMode;

@@ -578,6 +578,8 @@ typedef struct
     u16 ddfstop;
     u16 diwstrt;
     u16 diwstop;
+    u16 diwhigh;
+    u16 fmode;
     
     u16 bpl1mod;
     u16 bpl2mod;

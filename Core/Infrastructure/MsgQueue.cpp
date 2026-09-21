@@ -22,11 +22,20 @@ MsgQueue::setListener(const void *listener, Callback *callback)
         this->listener = listener;
         this->callback = callback;
 
-        // Send all pending messages
-        while (!queue.isEmpty()) {
+        /* Send all pending messages.
+         *
+         * Only when there is somewhere to send them: passing no callback is
+         * how a client detaches, and draining into it would call through a
+         * null pointer. The backlog is left in the queue for whoever
+         * attaches next.
+         */
+        if (callback) {
 
-            Message &msg = queue.read();
-            callback(listener, msg);
+            while (!queue.isEmpty()) {
+
+                Message &msg = queue.read();
+                callback(listener, msg);
+            }
         }
     }
 }

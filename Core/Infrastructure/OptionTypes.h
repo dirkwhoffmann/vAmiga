@@ -49,7 +49,6 @@ enum class Opt : long
     DENISE_HIDDEN_BITPLANES,
     DENISE_HIDDEN_SPRITES,
     DENISE_HIDDEN_LAYERS,
-    DENISE_HIDDEN_LAYER_ALPHA,
     DENISE_CLX_SPR_SPR,
     DENISE_CLX_SPR_PLF,
     DENISE_CLX_PLF_PLF,
@@ -84,28 +83,30 @@ enum class Opt : long
     MON_FLICKER_FIXER,      ///< Interlace flicker fixer (true = no flicker)
     MON_FLICKER_JITTER,     ///< Interlace flicker intensity
 
-    // DMA Debugger
-    DMA_DEBUG_ENABLE,
-    DMA_DEBUG_OVERLAY,
-    DMA_DEBUG_MODE,
-    DMA_DEBUG_OPACITY,
-    DMA_DEBUG_CHANNEL0,
-    DMA_DEBUG_CHANNEL1,
-    DMA_DEBUG_CHANNEL2,
-    DMA_DEBUG_CHANNEL3,
-    DMA_DEBUG_CHANNEL4,
-    DMA_DEBUG_CHANNEL5,
-    DMA_DEBUG_CHANNEL6,
-    DMA_DEBUG_CHANNEL7,
-    DMA_DEBUG_COLOR0,
-    DMA_DEBUG_COLOR1,
-    DMA_DEBUG_COLOR2,
-    DMA_DEBUG_COLOR3,
-    DMA_DEBUG_COLOR4,
-    DMA_DEBUG_COLOR5,
-    DMA_DEBUG_COLOR6,
-    DMA_DEBUG_COLOR7,
-    
+    // X-Ray
+    XRAY_MODE,
+    XRAY_OVERLAY,
+    XRAY_OVERLAY_STYLE,
+    XRAY_OVERLAY_OPACITY,
+    XRAY_DMA_CHANNEL0,
+    XRAY_DMA_CHANNEL1,
+    XRAY_DMA_CHANNEL2,
+    XRAY_DMA_CHANNEL3,
+    XRAY_DMA_CHANNEL4,
+    XRAY_DMA_CHANNEL5,
+    XRAY_DMA_CHANNEL6,
+    XRAY_DMA_CHANNEL7,
+    XRAY_COLOR0,
+    XRAY_COLOR1,
+    XRAY_COLOR2,
+    XRAY_COLOR3,
+    XRAY_COLOR4,
+    XRAY_COLOR5,
+    XRAY_COLOR6,
+    XRAY_COLOR7,
+    XRAY_COLOR8,
+    XRAY_COLOR9,
+
     // Logic analyzer
     LA_PROBE0,              ///< Probe on channel 0
     LA_PROBE1,              ///< Probe on channel 1
@@ -262,7 +263,6 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::DENISE_HIDDEN_SPRITES:     return "HIDDEN_SPRITES";
             case Opt::DENISE_HIDDEN_LAYERS:      return "HIDDEN_LAYERS";
             case Opt::DENISE_SHRES_BLEND:        return "SHRES_BLEND";
-            case Opt::DENISE_HIDDEN_LAYER_ALPHA: return "HIDDEN_LAYER_ALPHA";
             case Opt::DENISE_CLX_SPR_SPR:        return "CLX_SPR_SPR";
             case Opt::DENISE_CLX_SPR_PLF:        return "CLX_SPR_PLF";
             case Opt::DENISE_CLX_PLF_PLF:        return "CLX_PLF_PLF";
@@ -296,26 +296,28 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_FLICKER_FIXER:         return "MON.FLICKER_FIXER";
             case Opt::MON_FLICKER_JITTER:        return "MON.FLICKER_JITTER";
 
-            case Opt::DMA_DEBUG_ENABLE:          return "DMA.DEBUG_ENABLE";
-            case Opt::DMA_DEBUG_OVERLAY:         return "DMA.DEBUG_OVERLAY";
-            case Opt::DMA_DEBUG_MODE:            return "DMA.DEBUG_MODE";
-            case Opt::DMA_DEBUG_OPACITY:         return "DMA.DEBUG_OPACITY";
-            case Opt::DMA_DEBUG_CHANNEL0:        return "DMA.DEBUG_CHANNEL0";
-            case Opt::DMA_DEBUG_CHANNEL1:        return "DMA.DEBUG_CHANNEL1";
-            case Opt::DMA_DEBUG_CHANNEL2:        return "DMA.DEBUG_CHANNEL2";
-            case Opt::DMA_DEBUG_CHANNEL3:        return "DMA.DEBUG_CHANNEL3";
-            case Opt::DMA_DEBUG_CHANNEL4:        return "DMA.DEBUG_CHANNEL4";
-            case Opt::DMA_DEBUG_CHANNEL5:        return "DMA.DEBUG_CHANNEL5";
-            case Opt::DMA_DEBUG_CHANNEL6:        return "DMA.DEBUG_CHANNEL6";
-            case Opt::DMA_DEBUG_CHANNEL7:        return "DMA.DEBUG_CHANNEL7";
-            case Opt::DMA_DEBUG_COLOR0:          return "DMA.DEBUG_COLOR0";
-            case Opt::DMA_DEBUG_COLOR1:          return "DMA.DEBUG_COLOR1";
-            case Opt::DMA_DEBUG_COLOR2:          return "DMA.DEBUG_COLOR2";
-            case Opt::DMA_DEBUG_COLOR3:          return "DMA.DEBUG_COLOR3";
-            case Opt::DMA_DEBUG_COLOR4:          return "DMA.DEBUG_COLOR4";
-            case Opt::DMA_DEBUG_COLOR5:          return "DMA.DEBUG_COLOR5";
-            case Opt::DMA_DEBUG_COLOR6:          return "DMA.DEBUG_COLOR6";
-            case Opt::DMA_DEBUG_COLOR7:          return "DMA.DEBUG_COLOR7";
+            case Opt::XRAY_MODE:            return "XRAY.MODE";
+            case Opt::XRAY_OVERLAY:         return "XRAY.OVERLAY";
+            case Opt::XRAY_OVERLAY_STYLE: return "XRAY.OVERLAY_STYLE";
+            case Opt::XRAY_OVERLAY_OPACITY: return "XRAY.OVERLAY_OPACITY";
+            case Opt::XRAY_DMA_CHANNEL0:        return "XRAY.DMA_CHANNEL0";
+            case Opt::XRAY_DMA_CHANNEL1:        return "XRAY.DMA_CHANNEL1";
+            case Opt::XRAY_DMA_CHANNEL2:        return "XRAY.DMA_CHANNEL2";
+            case Opt::XRAY_DMA_CHANNEL3:        return "XRAY.DMA_CHANNEL3";
+            case Opt::XRAY_DMA_CHANNEL4:        return "XRAY.DMA_CHANNEL4";
+            case Opt::XRAY_DMA_CHANNEL5:        return "XRAY.DMA_CHANNEL5";
+            case Opt::XRAY_DMA_CHANNEL6:        return "XRAY.DMA_CHANNEL6";
+            case Opt::XRAY_DMA_CHANNEL7:        return "XRAY.DMA_CHANNEL7";
+            case Opt::XRAY_COLOR0:          return "XRAY.COLOR0";
+            case Opt::XRAY_COLOR1:          return "XRAY.COLOR1";
+            case Opt::XRAY_COLOR2:          return "XRAY.COLOR2";
+            case Opt::XRAY_COLOR3:          return "XRAY.COLOR3";
+            case Opt::XRAY_COLOR4:          return "XRAY.COLOR4";
+            case Opt::XRAY_COLOR5:          return "XRAY.COLOR5";
+            case Opt::XRAY_COLOR6:          return "XRAY.COLOR6";
+            case Opt::XRAY_COLOR7:          return "XRAY.COLOR7";
+            case Opt::XRAY_COLOR8:          return "XRAY.COLOR8";
+            case Opt::XRAY_COLOR9:          return "XRAY.COLOR9";
                 
             case Opt::LA_PROBE0:                 return "LA.PROBE0";
             case Opt::LA_PROBE1:                 return "LA.PROBE1";
@@ -451,7 +453,6 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::DENISE_HIDDEN_SPRITES:     return "Hide sprites";
             case Opt::DENISE_HIDDEN_LAYERS:      return "Hide playfields";
             case Opt::DENISE_SHRES_BLEND:        return "Blend super hires pixel pairs";
-            case Opt::DENISE_HIDDEN_LAYER_ALPHA: return "Hidden playfield opacity";
             case Opt::DENISE_CLX_SPR_SPR:        return "Detect sprite-sprite collisions";
             case Opt::DENISE_CLX_SPR_PLF:        return "Detect sprite-playfield collisions";
             case Opt::DENISE_CLX_PLF_PLF:        return "Detect playfield-playfield collisions";
@@ -485,27 +486,29 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_FLICKER_FIXER:         return "Interlace flicker fixer";
             case Opt::MON_FLICKER_JITTER:        return "Interlace flicker jitter";
 
-            case Opt::DMA_DEBUG_ENABLE:          return "DMA Debugger";
-            case Opt::DMA_DEBUG_OVERLAY:         return "Show as overlay";
-            case Opt::DMA_DEBUG_MODE:            return "DMA Debugger style";
-            case Opt::DMA_DEBUG_OPACITY:         return "Opacity";
-            case Opt::DMA_DEBUG_CHANNEL0:        return "Copper DMA";
-            case Opt::DMA_DEBUG_CHANNEL1:        return "Blitter DMA";
-            case Opt::DMA_DEBUG_CHANNEL2:        return "Disk DMA";
-            case Opt::DMA_DEBUG_CHANNEL3:        return "Audio DMA";
-            case Opt::DMA_DEBUG_CHANNEL4:        return "Sprite DMA";
-            case Opt::DMA_DEBUG_CHANNEL5:        return "Bitplane DMA";
-            case Opt::DMA_DEBUG_CHANNEL6:        return "CPU DMA";
-            case Opt::DMA_DEBUG_CHANNEL7:        return "Memory Refresh DMA";
-            case Opt::DMA_DEBUG_COLOR0:          return "Copper color";
-            case Opt::DMA_DEBUG_COLOR1:          return "Blitter color";
-            case Opt::DMA_DEBUG_COLOR2:          return "Disk color";
-            case Opt::DMA_DEBUG_COLOR3:          return "Audio color";
-            case Opt::DMA_DEBUG_COLOR4:          return "Sprite color";
-            case Opt::DMA_DEBUG_COLOR5:          return "Bitplane color";
-            case Opt::DMA_DEBUG_COLOR6:          return "CPU color";
-            case Opt::DMA_DEBUG_COLOR7:          return "Memory refresh color";
-                
+            case Opt::XRAY_MODE:            return "X-Ray mode";
+            case Opt::XRAY_OVERLAY:         return "Show as overlay";
+            case Opt::XRAY_OVERLAY_STYLE: return "DMA Debugger style";
+            case Opt::XRAY_OVERLAY_OPACITY: return "Opacity";
+            case Opt::XRAY_DMA_CHANNEL0:        return "Copper DMA";
+            case Opt::XRAY_DMA_CHANNEL1:        return "Blitter DMA";
+            case Opt::XRAY_DMA_CHANNEL2:        return "Disk DMA";
+            case Opt::XRAY_DMA_CHANNEL3:        return "Audio DMA";
+            case Opt::XRAY_DMA_CHANNEL4:        return "Sprite DMA";
+            case Opt::XRAY_DMA_CHANNEL5:        return "Bitplane DMA";
+            case Opt::XRAY_DMA_CHANNEL6:        return "CPU DMA";
+            case Opt::XRAY_DMA_CHANNEL7:        return "Memory Refresh DMA";
+            case Opt::XRAY_COLOR0:          return "Copper color";
+            case Opt::XRAY_COLOR1:          return "Blitter color";
+            case Opt::XRAY_COLOR2:          return "Disk color";
+            case Opt::XRAY_COLOR3:          return "Audio color";
+            case Opt::XRAY_COLOR4:          return "Sprite color";
+            case Opt::XRAY_COLOR5:          return "Bitplane color";
+            case Opt::XRAY_COLOR6:          return "CPU color";
+            case Opt::XRAY_COLOR7:          return "Memory refresh color";
+            case Opt::XRAY_COLOR8:          return "Playfield 1 color";
+            case Opt::XRAY_COLOR9:          return "Playfield 2 color";
+
             case Opt::LA_PROBE0:                 return "Probe on channel 0";
             case Opt::LA_PROBE1:                 return "Probe on channel 1";
             case Opt::LA_PROBE2:                 return "Probe on channel 2";

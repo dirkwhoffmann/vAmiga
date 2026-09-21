@@ -38,8 +38,6 @@ public:
     // Color aliases
     static constexpr Texel vblank   = grey4;    // VBLANK area
     static constexpr Texel hblank   = grey4;    // HBLANK area
-    static constexpr Texel cb1      = grey2;    // Checkerboard color 1
-    static constexpr Texel cb2      = grey4;    // Checkerboard color 2
 
     // Frame number
     i64 nr = 0;
@@ -55,10 +53,19 @@ public:
 
     Texture();
 
-    // Initializes (a portion of) the frame buffer with a checkerboard pattern
-    void clear();
-    void clear(isize row);
-    void clear(isize row, isize cycle);
+    /* Initializes (a portion of) the frame buffer with a checkerboard
+     * pattern woven from col1 and col2. Both colors are taken as-is --
+     * whoever calls this is responsible for packing them in the host's
+     * current HOST_TEX_FORMAT (see GpuColor<F>/PixelEngine::toTexel<F>);
+     * Texture itself has no notion of texel format. Defaults to the
+     * class's own predefined grey checkerboard, which -- like all the
+     * other named constants above -- is only really correct for formats
+     * with alpha in the top byte (ABGR/ARGB); pass explicit, properly
+     * converted colors wherever host format correctness matters.
+     */
+    void clear(Texel col1 = grey2, Texel col2 = grey4);
+    void clear(isize row, Texel col1 = grey2, Texel col2 = grey4);
+    void clear(isize row, isize cycle, Texel col1 = grey2, Texel col2 = grey4);
 };
 
 }

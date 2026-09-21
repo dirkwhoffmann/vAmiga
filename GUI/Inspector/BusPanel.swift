@@ -152,9 +152,9 @@ extension Inspector {
         // DMA debugger
         //
         
-        let bus = emu.get(.DMA_DEBUG_ENABLE) != 0
-        let opacity = emu.get(.DMA_DEBUG_OPACITY)
-        let mode = emu.get(.DMA_DEBUG_MODE)
+        let bus = emu.get(.XRAY_MODE) == XRayMode.XRAY_DMA.rawValue
+        let opacity = emu.get(.XRAY_OVERLAY_OPACITY)
+        let mode = emu.get(.XRAY_OVERLAY_STYLE)
         let info = emu.dmaDebugger.info
         
         busEnable.state = bus ? .on : .off
@@ -296,14 +296,14 @@ extension Inspector {
         let rgb = (r << 24) | (g << 16) | (b << 8)
 
         switch sender.tag {
-        case 0:  emu.set(.DMA_DEBUG_COLOR0, value: rgb)
-        case 1:  emu.set(.DMA_DEBUG_COLOR1, value: rgb)
-        case 2:  emu.set(.DMA_DEBUG_COLOR2, value: rgb)
-        case 3:  emu.set(.DMA_DEBUG_COLOR3, value: rgb)
-        case 4:  emu.set(.DMA_DEBUG_COLOR4, value: rgb)
-        case 5:  emu.set(.DMA_DEBUG_COLOR5, value: rgb)
-        case 6:  emu.set(.DMA_DEBUG_COLOR6, value: rgb)
-        case 7:  emu.set(.DMA_DEBUG_COLOR7, value: rgb)
+        case 0:  emu.set(.XRAY_COLOR0, value: rgb)
+        case 1:  emu.set(.XRAY_COLOR1, value: rgb)
+        case 2:  emu.set(.XRAY_COLOR2, value: rgb)
+        case 3:  emu.set(.XRAY_COLOR3, value: rgb)
+        case 4:  emu.set(.XRAY_COLOR4, value: rgb)
+        case 5:  emu.set(.XRAY_COLOR5, value: rgb)
+        case 6:  emu.set(.XRAY_COLOR6, value: rgb)
+        case 7:  emu.set(.XRAY_COLOR7, value: rgb)
         default: break
         }
 
@@ -312,22 +312,22 @@ extension Inspector {
 
     @IBAction func busEnableAction(_ sender: NSButton!) {
         
-        emu.set(.DMA_DEBUG_ENABLE, enable: sender.state == .on)
-        emu.set(.DMA_DEBUG_OVERLAY, enable: sender.state == .on)
+        emu.set(.XRAY_MODE, value: Int(sender.state == .on ? XRayMode.XRAY_DMA.rawValue : XRayMode.XRAY_NONE.rawValue))
+        emu.set(.XRAY_OVERLAY, enable: sender.state == .on)
         fullRefresh()
     }
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
         switch sender.tag {
-        case 0:  emu.set(.DMA_DEBUG_CHANNEL0, enable: sender.state == .on)
-        case 1:  emu.set(.DMA_DEBUG_CHANNEL1, enable: sender.state == .on)
-        case 2:  emu.set(.DMA_DEBUG_CHANNEL2, enable: sender.state == .on)
-        case 3:  emu.set(.DMA_DEBUG_CHANNEL3, enable: sender.state == .on)
-        case 4:  emu.set(.DMA_DEBUG_CHANNEL4, enable: sender.state == .on)
-        case 5:  emu.set(.DMA_DEBUG_CHANNEL5, enable: sender.state == .on)
-        case 6:  emu.set(.DMA_DEBUG_CHANNEL6, enable: sender.state == .on)
-        case 7:  emu.set(.DMA_DEBUG_CHANNEL7, enable: sender.state == .on)
+        case 0:  emu.set(.XRAY_DMA_CHANNEL0, enable: sender.state == .on)
+        case 1:  emu.set(.XRAY_DMA_CHANNEL1, enable: sender.state == .on)
+        case 2:  emu.set(.XRAY_DMA_CHANNEL2, enable: sender.state == .on)
+        case 3:  emu.set(.XRAY_DMA_CHANNEL3, enable: sender.state == .on)
+        case 4:  emu.set(.XRAY_DMA_CHANNEL4, enable: sender.state == .on)
+        case 5:  emu.set(.XRAY_DMA_CHANNEL5, enable: sender.state == .on)
+        case 6:  emu.set(.XRAY_DMA_CHANNEL6, enable: sender.state == .on)
+        case 7:  emu.set(.XRAY_DMA_CHANNEL7, enable: sender.state == .on)
         default: break
         }
         fullRefresh()
@@ -335,13 +335,13 @@ extension Inspector {
     
     @IBAction func busDisplayModeAction(_ sender: NSPopUpButton!) {
         
-        emu.set(.DMA_DEBUG_MODE, value: sender.selectedTag())
+        emu.set(.XRAY_OVERLAY_STYLE, value: sender.selectedTag())
         fullRefresh()
     }
     
     @IBAction func busOpacityAction(_ sender: NSSlider!) {
 
-        emu.set(.DMA_DEBUG_OPACITY, value: sender.integerValue)
+        emu.set(.XRAY_OVERLAY_OPACITY, value: sender.integerValue)
         fullRefresh()
     }
 }

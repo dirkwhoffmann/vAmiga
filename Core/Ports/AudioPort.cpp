@@ -190,8 +190,8 @@ AudioPort::checkOption(Opt opt, i64 value)
 
         case Opt::AUD_BUFFER_SIZE:
 
-            if (value < 512 || value > 65536) {
-                throw CoreError(CoreError::OPT_INV_ARG, "512 ... 65536");
+            if (value < 4096 || value > 65536) {
+                throw CoreError(CoreError::OPT_INV_ARG, "4096 ... 65536");
             }
             return;
             

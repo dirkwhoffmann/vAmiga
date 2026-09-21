@@ -726,6 +726,8 @@ Agnus::cacheInfo() const
     info.ddfstop  = sequencer.ddfstop;
     info.diwstrt  = sequencer.diwstrt;
     info.diwstop  = sequencer.diwstop;
+    info.diwhigh  = sequencer.diwhigh;
+    info.fmode    = fmode;
 
     info.bpl1mod  = bpl1mod;
     info.bpl2mod  = bpl2mod;
@@ -742,7 +744,7 @@ Agnus::cacheInfo() const
     info.bltpt[1] = blitter.bltbpt & ptrMask;
     info.bltpt[2] = blitter.bltcpt & ptrMask;
     info.bltpt[3] = blitter.bltdpt & ptrMask;
-    for (isize i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & ptrMask;
+    for (isize i = 0; i < 8; i++) info.bplpt[i] = bplpt[i] & ptrMask;
     for (isize i = 0; i < 4; i++) info.audpt[i] = audpt[i] & ptrMask;
     for (isize i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
     for (isize i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;

@@ -540,6 +540,14 @@ MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
     }
 }
 
+const char *
+MemoryDebuggerAPI::regName(u32 addr) const
+{
+    VAMIGA_PUBLIC
+    
+    return MemoryDebugger::regName(addr);
+}
+
 u8
 MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 {
@@ -1030,10 +1038,10 @@ VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
 }
 
 const u32 *
-VideoPortAPI::getDmaTexture() const
+VideoPortAPI::getXrayTexture() const
 {
     VAMIGA_PUBLIC
-    return (u32 *)emu->getDmaTexture().pixels.ptr;
+    return (u32 *)emu->getXrayTexture().pixels.ptr;
 }
 
 void
@@ -2292,6 +2300,13 @@ VAmiga::launch(const void *listener, Callback *func)
 {
     VAMIGA_PUBLIC
     emu->launch(listener, func);
+}
+
+void
+VAmiga::removeListener()
+{
+    VAMIGA_PUBLIC
+    emu->main.msgQueue.setListener(nullptr, nullptr);
 }
 
 bool

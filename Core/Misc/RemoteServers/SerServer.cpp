@@ -87,9 +87,11 @@ SerServer::send(const string &payload)
     transmittedBytes += (isize)payload.size();
     transport().send(payload);
 
+    /*
     if (config.verbose) {
         retroShell << "T: " << utl::makePrintable(payload) << "\n";
     }
+    */
 }
 
 void

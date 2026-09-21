@@ -31,26 +31,28 @@ class DmaDebugger final : public SubComponent {
     
     Options options = {
         
-        Opt::DMA_DEBUG_ENABLE,
-        Opt::DMA_DEBUG_OVERLAY,
-        Opt::DMA_DEBUG_MODE,
-        Opt::DMA_DEBUG_OPACITY,
-        Opt::DMA_DEBUG_CHANNEL0,
-        Opt::DMA_DEBUG_CHANNEL1,
-        Opt::DMA_DEBUG_CHANNEL2,
-        Opt::DMA_DEBUG_CHANNEL3,
-        Opt::DMA_DEBUG_CHANNEL4,
-        Opt::DMA_DEBUG_CHANNEL5,
-        Opt::DMA_DEBUG_CHANNEL6,
-        Opt::DMA_DEBUG_CHANNEL7,
-        Opt::DMA_DEBUG_COLOR0,
-        Opt::DMA_DEBUG_COLOR1,
-        Opt::DMA_DEBUG_COLOR2,
-        Opt::DMA_DEBUG_COLOR3,
-        Opt::DMA_DEBUG_COLOR4,
-        Opt::DMA_DEBUG_COLOR5,
-        Opt::DMA_DEBUG_COLOR6,
-        Opt::DMA_DEBUG_COLOR7
+        Opt::XRAY_MODE,
+        Opt::XRAY_OVERLAY,
+        Opt::XRAY_OVERLAY_STYLE,
+        Opt::XRAY_OVERLAY_OPACITY,
+        Opt::XRAY_DMA_CHANNEL0,
+        Opt::XRAY_DMA_CHANNEL1,
+        Opt::XRAY_DMA_CHANNEL2,
+        Opt::XRAY_DMA_CHANNEL3,
+        Opt::XRAY_DMA_CHANNEL4,
+        Opt::XRAY_DMA_CHANNEL5,
+        Opt::XRAY_DMA_CHANNEL6,
+        Opt::XRAY_DMA_CHANNEL7,
+        Opt::XRAY_COLOR0,
+        Opt::XRAY_COLOR1,
+        Opt::XRAY_COLOR2,
+        Opt::XRAY_COLOR3,
+        Opt::XRAY_COLOR4,
+        Opt::XRAY_COLOR5,
+        Opt::XRAY_COLOR6,
+        Opt::XRAY_COLOR7,
+        Opt::XRAY_COLOR8,
+        Opt::XRAY_COLOR9
     };
     
     // Current configuration
@@ -177,24 +179,25 @@ public:
     
 private:
     
-    /* Visualizes DMA usage for a certain range of DMA cycles. Always paints
-     * the raw, unblended per-channel colors into 'dmaPtr' (the DMA debug
-     * texture, see PixelEngine::dmaTexture), so the Layers inspector's
-     * preview has something to show independent of the overlay setting.
-     * Only additionally blends the result into 'emuPtr' (the real picture)
-     * when config.overlay is enabled.
+    /* Visualizes DMA usage for a certain range of DMA cycles. Paints only
+     * the raw per-channel colors into 'dmaPtr' (the xray texture, see
+     * PixelEngine::xrayTexture) -- never touches the emulator texture.
+     * Opacity/display-mode blending no longer happens here: PixelEngine::
+     * mergeXray applies that once for the whole frame, after both this and
+     * XRayMode::XRAY_LAYERS (PixelEngine::hide) have finished building
+     * their xray texture for every line.
      *
      * Dispatches once (per call, not per pixel) to the templated overload
      * below, matching the host's current HOST_TEX_FORMAT. Fixing the format
-     * as a template parameter lets PixelEngine::toTexel<F>/fromTexel<F>
-     * fold their format switch away at compile time, so the per-pixel loop
-     * -- run across every visible pixel of every scanline -- carries no
-     * runtime format branching at all.
+     * as a template parameter lets PixelEngine::toTexel<F> fold its format
+     * switch away at compile time, so the per-pixel loop -- run across
+     * every visible pixel of every scanline -- carries no runtime format
+     * branching at all.
      */
-    void computeOverlay(Texel *emuPtr, Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val);
+    void computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val);
 
     template <TexelFormat F>
-    void computeOverlay(Texel *emuPtr, Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val);
+    void computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val);
 };
 
 }

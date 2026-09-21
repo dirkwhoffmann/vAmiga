@@ -134,11 +134,11 @@ VideoPort::getTexture(isize offset) const
 }
 
 const Texture &
-VideoPort::getDmaTexture(isize offset) const
+VideoPort::getXrayTexture(isize offset) const
 {
     if (isPoweredOn()) {
 
-        return denise.pixelEngine.getStableDmaBuffer(offset);
+        return denise.pixelEngine.getStableXrayBuffer(offset);
     }
 
     return blank;

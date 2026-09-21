@@ -1027,7 +1027,7 @@ Console::initCommanderCommands(RSCommand &root)
         .chelp  = { "Opens the DMA debugger" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            emulator.set(Opt::DMA_DEBUG_ENABLE, true);
+            emulator.set(Opt::XRAY_MODE, (i64)XRayMode::XRAY_DMA);
         }
     });
     
@@ -1037,7 +1037,7 @@ Console::initCommanderCommands(RSCommand &root)
         .chelp  = { "Closes the DMA debugger" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            emulator.set(Opt::DMA_DEBUG_ENABLE, false);
+            emulator.set(Opt::XRAY_MODE, (i64)XRayMode::XRAY_NONE);
         }
     });
     

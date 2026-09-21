@@ -501,6 +501,13 @@ public:
      */
     MemSrc getMemSrc(Accessor acc, u32 addr) const;
     
+    /** @brief  Returns the name of the custom chip register an address selects
+     *
+     *  The address is decoded whether or not it names a register, so this is
+     *  only meaningful for an address getMemSrc() reports as CUSTOM.
+     */
+    const char *regName(u32 addr) const;
+
     /** @brief  Reads a value from memory without causing side effects.
      */
     u8 spypeek8(Accessor acc, u32 addr) const;
@@ -1258,15 +1265,16 @@ public:
     const u32 *getTexture() const;
     const u32 *getTexture(isize *nr, bool *lof, bool *prevlof) const;
 
-    /** @brief  Returns a pointer to the most recent stable DMA debugger
-     *          texture
+    /** @brief  Returns a pointer to the most recent stable X-Ray texture
      *
-     * Holds the DMA debugger's raw, unblended per-channel visualization,
-     * independent of whether Opt::DMA_DEBUG_OVERLAY is also blending it into
-     * getTexture()'s picture. Same dimensions as getTexture(). Only
-     * meaningful while Opt::DMA_DEBUG_ENABLE is on; otherwise black.
+     * Holds the X-Ray debugger's raw, unblended visualization -- either the
+     * per-channel DMA colors (Opt::XRAY_MODE == XRayMode::XRAY_DMA) or the
+     * cut-out graphics layers (XRayMode::XRAY_LAYERS) -- independent of
+     * whether Opt::XRAY_OVERLAY is also blending it into getTexture()'s
+     * picture. Same dimensions as getTexture(). Black while
+     * Opt::XRAY_MODE is XRayMode::XRAY_NONE.
      */
-    const u32 *getDmaTexture() const;
+    const u32 *getXrayTexture() const;
 
     /** @brief Experimental
      */
@@ -1979,6 +1987,16 @@ public:
      *  @param  func        The callback function.
      */
     void launch(const void *listener = nullptr, Callback *func = nullptr);
+
+    /** @brief  Stops delivering messages to the listener registered by launch()
+     *
+     *  The emulator outlives its client whenever the client is a stack or
+     *  static object torn down at exit: the core keeps running, keeps
+     *  posting, and calls into whatever the listener pointer used to be.
+     *  Call this before the client becomes unusable. It is synchronised
+     *  against message delivery, so it is safe while the emulator runs.
+     */
+    void removeListener();
     
     /** @brief  Returns true if the emulator has been launched.
      */

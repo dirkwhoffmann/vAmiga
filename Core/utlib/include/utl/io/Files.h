@@ -44,6 +44,12 @@ bool createDirectory(const fs::path &path);
 // Removes a file or directory
 void remove(const fs::path &path);
 
+/* Marks a directory as a package, so Finder presents it as a single file.
+ * Does nothing and reports false anywhere but macOS. Best-effort: see the
+ * implementation for why a failure is not worth propagating.
+ */
+bool setPackageBit(const fs::path &path) noexcept;
+
 // Returns the number of files in a directory
 isize numDirectoryItems(const fs::path &path);
 

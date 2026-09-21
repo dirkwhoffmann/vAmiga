@@ -81,11 +81,9 @@ typedef struct
     // Hides certain sprites
     u8 hiddenSprites;
     
-    // Hides certain graphics layers
+    // Hides certain graphics layers (only takes effect in XRayMode::XRAY_LAYERS,
+    // see Agnus::dmaDebugger)
     u16 hiddenLayers;
-    
-    // Alpha channel value for hidden layers
-    u8 hiddenLayerAlpha;
 
     // Checks for sprite-sprite collisions
     bool clxSprSpr;
@@ -135,19 +133,48 @@ typedef struct
     u16 bplcon0;
     u16 bplcon1;
     u16 bplcon2;
+    u16 bplcon3;
+    u16 bplcon4;
     i16 bpu;
     u16 bpldat[8];
     
     u16 diwstrt;
     u16 diwstop;
+    u16 diwhigh;
     ViewPortInfo viewport;
-    
+
     u16 joydat[2];
     u16 clxdat;
+    u16 clxcon;
+    u16 clxcon2;
     
-    u16 colorReg[32];
+    // The AGA color table is 256 entries deep (8 banks of 32, selected by
+    // BPLCON3's 3-bit BANK field), but only the first 4 banks (128 entries)
+    // are ever meaningfully addressed in practice, so that's all that's
+    // cached here -- see SiAmDeniseController's Colors tab, which shows
+    // one 32-swatch box per bank.
+    u16 colorReg[128];
     u32 color[32];
-    
+
+    // What CPU/Copper reads of COLOR00..COLOR31 (the 32 physical registers,
+    // not the full 128-entry table above) actually see right now --
+    // Denise::spypeekCOLORxx() itself returns 0 unless the chipset is AGA
+    // and RDRAM is set, since OCS/ECS never support reading these back at
+    // all. Shown on the Colors tab's own "Registers" box, separate from the
+    // swatch grid, which always shows every bank's true color regardless of
+    // whether it's currently readable.
+    u16 colorRegPeek[32];
+
+    // Raw hardware sprite registers, one entry per sprite -- distinct from
+    // sprite[] below, which holds the debugger's own latched/decoded view
+    // (armed height, hstrt/vstrt/vstop, attach, colors, pixel data) rather
+    // than these four registers as the chipset itself holds them right now.
+    // Shown on the Sprites tab's own "Registers" box.
+    u16 sprdata[8];
+    u16 sprdatb[8];
+    u16 sprpos[8];
+    u16 sprctl[8];
+
     SpriteInfo sprite[8];
 }
 DeniseInfo;

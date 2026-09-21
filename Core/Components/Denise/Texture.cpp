@@ -18,34 +18,34 @@ Texture::Texture()
 }
 
 void
-Texture::clear()
+Texture::clear(Texel col1, Texel col2)
 {
     auto *ptr = pixels.ptr;
 
     for (isize row = 0; row < VPIXELS; row++, ptr += HPIXELS) {
         for (isize col = 0; col < HPIXELS; col++) {
-            ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? cb1 : cb2;
+            ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
         }
     }
 }
 
 void
-Texture::clear(isize row)
+Texture::clear(isize row, Texel col1, Texel col2)
 {
     auto *ptr = pixels.ptr + row * HPIXELS;
 
     for (isize col = 0; col < HPIXELS; col++) {
-        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? cb1 : cb2;
+        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
     }
 }
 
 void
-Texture::clear(isize row, isize cycle)
+Texture::clear(isize row, isize cycle, Texel col1, Texel col2)
 {
     auto *ptr = pixels.ptr + row * HPIXELS + 4 * cycle;
 
-    for (isize col = 0; col < 4; col++) {
-        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? cb1 : cb2;
+    for (isize col = 4 * cycle; col < 4 * cycle + 4; col++) {
+        ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
     }
 }
 

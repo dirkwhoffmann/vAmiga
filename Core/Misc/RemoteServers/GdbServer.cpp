@@ -138,7 +138,7 @@ GdbServer::reply(const string &payload)
     send(packet);
 
     if (config.verbose) {
-        retroShell << "T: " << utl::makePrintable(packet) << "\n";
+        retroShell << "GdbServer T: " << utl::makePrintable(packet) << "\n";
     }
 }
 
