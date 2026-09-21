@@ -340,17 +340,17 @@ extension MediaManager {
     }
     */
     
-    func installAros(crc32: UInt32 = vamiga.CRC32_AROS_20250219) {
+    func installAros(crc32: UInt32 = retro.vault.CRC32_AROS_20250219) {
         
         switch crc32 {
             
-        case vamiga.CRC32_AROS_54705:       // Taken from UAE
+        case retro.vault.CRC32_AROS_54705:       // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
             
-        case vamiga.CRC32_AROS_55696:       // Taken from SAE
+        case retro.vault.CRC32_AROS_55696:       // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
             
-        case vamiga.CRC32_AROS_20250219:    // 2025 version
+        case retro.vault.CRC32_AROS_20250219:    // 2025 version
             installAros(rom: "aros-20250219-rom", ext: "aros-20250219-ext")
             
         default:
@@ -358,17 +358,17 @@ extension MediaManager {
         }
     }
     
-    func installDiagRom(crc32: UInt32 = vamiga.CRC32_DIAG20) {
+    func installDiagRom(crc32: UInt32 = retro.vault.CRC32_DIAG20) {
         
         switch crc32 {
             
-        case vamiga.CRC32_DIAG121:
+        case retro.vault.CRC32_DIAG121:
             install(rom: "diagrom-121")
             
-        case vamiga.CRC32_DIAG13:
+        case retro.vault.CRC32_DIAG13:
             install(rom: "diagrom-13")
 
-        case vamiga.CRC32_DIAG20:
+        case retro.vault.CRC32_DIAG20:
             install(rom: "diagrom-20")
 
         default:

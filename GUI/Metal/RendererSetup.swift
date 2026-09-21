@@ -170,8 +170,8 @@ extension Renderer {
         updateShaderOption(.MON_BLOOM_RADIUS, value: Int64(config.bloomRadius))
         updateShaderOption(.MON_BLOOM_BRIGHTNESS, value: Int64(config.bloomBrightness))
         updateShaderOption(.MON_BLOOM_WEIGHT, value: Int64(config.bloomWeight))
-        updateShaderOption(.MON_FLICKER, value: Int64(config.flicker))
-        updateShaderOption(.MON_FLICKER_WEIGHT, value: Int64(config.flickerWeight))
+        updateShaderOption(.MON_FLICKER_FIXER, value: Int64(config.flickerFixer))
+        updateShaderOption(.MON_FLICKER_JITTER, value: Int64(config.flickerJitter))
         updateShaderOption(.MON_DOTMASK, value: Int64(config.dotMask))
         updateShaderOption(.MON_DOTMASK, value: Int64(config.dotMask))
         updateShaderOption(.MON_DOTMASK_BRIGHTNESS, value: Int64(config.dotMaskBrightness))
@@ -232,10 +232,10 @@ extension Renderer {
             shaderOptions.disalignmentH = map(value, to: -0.004...0.004)
         case .MON_DISALIGNMENT_V:
             shaderOptions.disalignmentV = map(value, to: -0.004...0.004)
-        case .MON_FLICKER:
-            shaderOptions.flicker = Int32(value)
-        case .MON_FLICKER_WEIGHT:
-            shaderOptions.flickerWeight = map(value, to: 0...1)
+        case .MON_FLICKER_FIXER:
+            shaderOptions.flickerFixer = Int32(value)
+        case .MON_FLICKER_JITTER:
+            shaderOptions.flickerJitter = map(value, to: 0...1)
         default:
             break
         }

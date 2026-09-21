@@ -149,9 +149,9 @@ class VideoSettingsViewController: SettingsViewController {
         bloomWeightSlider.integerValue = config.bloomWeight
         bloomWeightSlider.isEnabled = config.bloom > 0
 
-        flickerPopUp.selectItem(withTag: Int(config.flicker))
-        flickerWeightSlider.integerValue = config.flickerWeight
-        flickerWeightSlider.isEnabled = config.flicker > 0
+        flickerPopUp.selectItem(withTag: Int(config.flickerFixer))
+        flickerWeightSlider.integerValue = config.flickerJitter
+        flickerWeightSlider.isEnabled = config.flickerFixer > 0
 
         dotMaskPopUp.selectItem(withTag: Int(config.dotMask))
         for i in 0 ... 4 {
@@ -347,13 +347,13 @@ class VideoSettingsViewController: SettingsViewController {
 
     @IBAction func flickerAction(_ sender: NSPopUpButton!) {
 
-        config?.flicker = sender.selectedTag()
+        config?.flickerFixer = sender.selectedTag()
         refresh()
     }
 
     @IBAction func flickerWeightAction(_ sender: NSSlider!) {
 
-        config?.flickerWeight = sender.integerValue
+        config?.flickerJitter = sender.integerValue
         refresh()
     }
 

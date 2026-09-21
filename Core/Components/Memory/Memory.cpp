@@ -20,7 +20,6 @@
 #include "RomFile.h"
 #include "RTC.h"
 #include "ZorroManager.h"
-#include "RomDatabase.h"
 #include "MediaError.h"
 #include "utl/io.h"
 
@@ -54,13 +53,13 @@ Memory::_dump(Category category, std::ostream &os) const
 
         os << tab("Rom");
         os << hex(romTraits.crc) << " (CRC32)  ";
-        os << romTraits.title << " " << romTraits.released << std::endl;
+        os << romTraits.title << " " << RomDateToString(romTraits.released) << std::endl;
         os << tab("Wom");
         os << hex(womTraits.crc) << " (CRC32)  ";
-        os << womTraits.title << " " << womTraits.released << std::endl;
+        os << womTraits.title << " " << RomDateToString(womTraits.released) << std::endl;
         os << tab("Extended Rom");
         os << hex(extTraits.crc) << " (CRC32)  ";
-        os << extTraits.title << " " << extTraits.released << std::endl;
+        os << extTraits.title << " " << RomDateToString(extTraits.released) << std::endl;
         os << tab("Chip Ram");
         os << hex(Hashable::crc32(chip, config.chipSize)) << " (CRC32)  " << std::endl;
         os << tab("Slow Ram");
@@ -639,40 +638,36 @@ Memory::fillRamWithInitPattern()
     }
 }
 
-const RomTraits &
+RomTraits
 Memory::getRomTraits(u32 crc)
 {
-    static RomTraits fallback;
-
     // Crawl through the Rom database
-    for (auto &traits : roms) if (traits.crc == crc) return traits;
+    if (auto traits = RomManager::shared().resolveCRC32(crc)) return *traits;
 
-    fallback = RomTraits {
+    return RomTraits {
 
         .crc = crc,
         .title = crc ? "Unknown ROM" : "",
         .revision = "",
-        .released = "",
-        .model = "",
-        .vendor = RomVendor::OTHER
+        .platform = RomPlatform::Amiga,
+        .vendor = RomVendor::UNKNOWN,
+        .type = RomType::UNKNOWN
     };
-
-    return fallback;
 }
 
-const RomTraits &
+RomTraits
 Memory::getRomTraits() const
 {
     return getRomTraits(Hashable::crc32(rom, config.romSize));
 }
 
-const RomTraits &
+RomTraits
 Memory::getWomTraits() const
 {
     return getRomTraits(Hashable::crc32(wom, config.womSize));
 }
 
-const RomTraits &
+RomTraits
 Memory::getExtTraits() const
 {
     return getRomTraits(Hashable::crc32(ext, config.extSize));

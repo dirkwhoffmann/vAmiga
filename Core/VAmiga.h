@@ -544,9 +544,9 @@ public:
 
     /** @brief  Provides details about the installed ROM, WOM, or ROM extension.
      */
-    const RomTraits &getRomTraits() const;
-    const RomTraits &getWomTraits() const;
-    const RomTraits &getExtTraits() const;
+    RomTraits getRomTraits() const;
+    RomTraits getWomTraits() const;
+    RomTraits getExtTraits() const;
 
     /// @}
     /// @name Handling ROMs
@@ -1258,6 +1258,16 @@ public:
     const u32 *getTexture() const;
     const u32 *getTexture(isize *nr, bool *lof, bool *prevlof) const;
 
+    /** @brief  Returns a pointer to the most recent stable DMA debugger
+     *          texture
+     *
+     * Holds the DMA debugger's raw, unblended per-channel visualization,
+     * independent of whether Opt::DMA_DEBUG_OVERLAY is also blending it into
+     * getTexture()'s picture. Same dimensions as getTexture(). Only
+     * meaningful while Opt::DMA_DEBUG_ENABLE is on; otherwise black.
+     */
+    const u32 *getDmaTexture() const;
+
     /** @brief Experimental
      */
     void findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const;
@@ -1674,6 +1684,18 @@ public:
     const RemoteManagerInfo &getCachedInfo() const;
 
     /// @}
+    /// @name Sending packets
+    /// @{
+
+    /** @brief  Sends a raw payload through the specified remote server.
+     *  It is delivered through the server's currently configured transport and
+     *  silently dropped if no client is connected.
+     *  @param  server   The server to send through.
+     *  @param  payload  The raw payload to send.
+     */
+    void send(ServerType server, const string &payload);
+
+    /// @}
 };
 
 
@@ -1727,10 +1749,14 @@ public:
     /** @brief  Returns a version string for this release.
      */
     static string version();
-    
+
     /** @brief  Returns a build-number string for this release.
      */
     static string build();
+
+    /** @brief  Returns a version string for the snapshot file format.
+     */
+    static string snapshotVersion();
     
     
     //

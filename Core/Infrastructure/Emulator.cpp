@@ -406,6 +406,26 @@ Emulator::getTexture() const
     return main.videoPort.getTexture();
 }
 
+const Texture &
+Emulator::getDmaTexture() const
+{
+    if (isRunning()) {
+
+        // In run-ahead mode, return the texture from the run-ahead instance
+        if (main.config.runAhead > 0) {
+            return ahead.videoPort.getDmaTexture();
+        }
+
+        // In run-behind mode, return a texture from the texture buffer
+        if (main.config.runAhead < 0) {
+            return main.videoPort.getDmaTexture(main.config.runAhead);
+        }
+    }
+
+    // Return the most recent texture from the main instance
+    return main.videoPort.getDmaTexture();
+}
+
 void
 Emulator::put(const Command &cmd)
 {

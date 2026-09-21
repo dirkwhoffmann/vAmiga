@@ -615,13 +615,13 @@ class Configuration {
         get { return emu?.get(.MON_BLOOM_WEIGHT) ?? 0 }
         set { emu?.set(.MON_BLOOM_WEIGHT, value: newValue) }
     }
-    var flicker: Int {
-        get { return emu?.get(.MON_FLICKER) ?? 0 }
-        set { emu?.set(.MON_FLICKER, value: newValue) }
+    var flickerFixer: Int {
+        get { return emu?.get(.MON_FLICKER_FIXER) ?? 0 }
+        set { emu?.set(.MON_FLICKER_FIXER, value: newValue) }
     }
-    var flickerWeight: Int {
-        get { return emu?.get(.MON_FLICKER_WEIGHT) ?? 0 }
-        set { emu?.set(.MON_FLICKER_WEIGHT, value: newValue) }
+    var flickerJitter: Int {
+        get { return emu?.get(.MON_FLICKER_JITTER) ?? 0 }
+        set { emu?.set(.MON_FLICKER_JITTER, value: newValue) }
     }
     var dotMask: Int {
         get { return emu?.get(.MON_DOTMASK) ?? 0 }

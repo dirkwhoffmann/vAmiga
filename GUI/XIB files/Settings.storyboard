@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -1808,10 +1808,10 @@
                         <outlet property="extDropView" destination="08F-7g-vhT" id="EbL-bh-pkl"/>
                         <outlet property="extMapAddr" destination="LDg-DL-t9p" id="QFa-wP-b0K"/>
                         <outlet property="extMapText" destination="h2C-uk-7V7" id="OMe-J9-EqG"/>
-                        <outlet property="extModel" destination="mrW-Sd-hvv" id="WYG-OS-Zjw"/>
                         <outlet property="extSubsubtitle" destination="lIj-Fy-Diw" id="8au-iX-xSP"/>
                         <outlet property="extSubtitle" destination="cfm-ed-mjt" id="qR6-Fg-DVQ"/>
                         <outlet property="extTitle" destination="HBZ-xo-bOq" id="WZo-Jx-Jr3"/>
+                        <outlet property="extType" destination="mrW-Sd-hvv" id="WYG-OS-Zjw"/>
                         <outlet property="lockImage" destination="l5c-bZ-iYF" id="ash-rb-Pww"/>
                         <outlet property="lockInfo1" destination="6Sc-75-E3J" id="4n9-oB-S7P"/>
                         <outlet property="lockInfo2" destination="bbr-sI-IhY" id="eIH-Bc-cGB"/>
@@ -1821,10 +1821,10 @@
                         <outlet property="romExpImage" destination="f5l-b4-qgh" id="U2e-t3-YA5"/>
                         <outlet property="romExpInfo1" destination="IRi-bh-3yt" id="uTw-Xw-aGY"/>
                         <outlet property="romExpInfo2" destination="MHS-KT-gfS" id="kJM-oj-2vf"/>
-                        <outlet property="romModel" destination="poN-Cm-c1w" id="NvR-Nz-W2p"/>
                         <outlet property="romSubsubtitle" destination="6xQ-RJ-Gy1" id="ECq-Yo-Ngc"/>
                         <outlet property="romSubtitle" destination="gz0-I1-pNu" id="xK9-ON-Lb3"/>
                         <outlet property="romTitle" destination="Fl2-7D-z0g" id="ntZ-Dt-25p"/>
+                        <outlet property="romType" destination="poN-Cm-c1w" id="NvR-Nz-W2p"/>
                     </connections>
                 </viewController>
                 <customObject id="PjL-cE-FKx" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

@@ -1323,8 +1323,8 @@ extension Keys {
          static let bloomRadius        = "Shaders.BloonRadius"
          static let bloomBrightness    = "Shaders.BloomBrightness"
          static let bloomWeight        = "Shaders.BloomWeight"
-         static let flicker            = "Shaders.Flicker"
-         static let flickerWeight      = "Shaders.FlickerWeight"
+         static let flickerFixer       = "Shaders.FlickerFixer"
+         static let flickerJitter      = "Shaders.FlickerJitter"
          static let dotMask            = "Shaders.DotMask"
          static let dotMaskBrightness  = "Shaders.DotMaskBrightness"
          static let scanlines          = "Shaders.Scanlines"
@@ -1418,8 +1418,8 @@ extension DefaultsProxy {
         remove(.MON_DISALIGNMENT)
         remove(.MON_DISALIGNMENT_H)
         remove(.MON_DISALIGNMENT_V)
-        remove(.MON_FLICKER)
-        remove(.MON_FLICKER_WEIGHT)
+        remove(.MON_FLICKER_FIXER)
+        remove(.MON_FLICKER_JITTER)
     }
 }
 
@@ -1490,8 +1490,8 @@ extension Configuration {
         defaults.set(.MON_BLOOM_RADIUS, bloomRadius)
         defaults.set(.MON_BLOOM_BRIGHTNESS, bloomBrightness)
         defaults.set(.MON_BLOOM_WEIGHT, bloomWeight)
-        defaults.set(.MON_FLICKER, flicker)
-        defaults.set(.MON_FLICKER_WEIGHT, flickerWeight)
+        defaults.set(.MON_FLICKER_FIXER, flickerFixer)
+        defaults.set(.MON_FLICKER_JITTER, flickerJitter)
         defaults.set(.MON_DOTMASK, dotMask)
         defaults.set(.MON_DOTMASK_BRIGHTNESS, dotMaskBrightness)
         defaults.set(.MON_SCANLINES, scanlines)
@@ -1562,8 +1562,8 @@ extension Configuration {
         bloomRadius = defaults.get(.MON_BLOOM_RADIUS)
         bloomBrightness = defaults.get(.MON_BLOOM_BRIGHTNESS)
         bloomWeight = defaults.get(.MON_BLOOM_WEIGHT)
-        flicker = defaults.get(.MON_FLICKER)
-        flickerWeight = defaults.get(.MON_FLICKER_WEIGHT)
+        flickerFixer = defaults.get(.MON_FLICKER_FIXER)
+        flickerJitter = defaults.get(.MON_FLICKER_JITTER)
         dotMask = defaults.get(.MON_DOTMASK)
         dotMaskBrightness = defaults.get(.MON_DOTMASK_BRIGHTNESS)
         scanlines = defaults.get(.MON_SCANLINES)

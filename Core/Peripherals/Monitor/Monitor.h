@@ -53,8 +53,8 @@ class Monitor final : public SubComponent {
         Opt::MON_DISALIGNMENT,
         Opt::MON_DISALIGNMENT_H,
         Opt::MON_DISALIGNMENT_V,
-        Opt::MON_FLICKER,
-        Opt::MON_FLICKER_WEIGHT
+        Opt::MON_FLICKER_FIXER,
+        Opt::MON_FLICKER_JITTER
     };
 
     // Current configuration

@@ -34,8 +34,8 @@ struct ShaderOptions: Codable {
     var bloomBrightness: Float
     var bloomWeight: Float
 
-    var flicker: Int32
-    var flickerWeight: Float
+    var flickerFixer: Int32
+    var flickerJitter: Float
 
     var dotMask: Int32
     var dotMaskBrightness: Float
@@ -59,8 +59,8 @@ extension ShaderOptions {
         bloomRadius: 0,
         bloomBrightness: 0,
         bloomWeight: 0,
-        flicker: 0,
-        flickerWeight: 0,
+        flickerFixer: 0,
+        flickerJitter: 0,
         dotMask: 0,
         dotMaskBrightness: 0,
         scanlines: 0,

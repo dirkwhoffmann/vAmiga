@@ -199,6 +199,9 @@ public:
     // Returns a build number string for this release
     static string build();
 
+    // Returns a version string for the snapshot file format
+    static string snapshotVersion();
+
     // Converts a time span to the (approximate) number of master cycles
     static Cycle usec(i64 delay) { return Cycle(delay * 28LL); }
     static Cycle msec(i64 delay) { return Cycle(delay * 28000LL); }

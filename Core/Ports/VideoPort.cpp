@@ -133,7 +133,18 @@ VideoPort::getTexture(isize offset) const
     return blank;
 }
 
-void 
+const Texture &
+VideoPort::getDmaTexture(isize offset) const
+{
+    if (isPoweredOn()) {
+
+        return denise.pixelEngine.getStableDmaBuffer(offset);
+    }
+
+    return blank;
+}
+
+void
 VideoPort::buffersWillSwap()
 {
     // Check if the texture has been grabbed

@@ -80,10 +80,11 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::MON_DISALIGNMENT:          return boolParser();
         case Opt::MON_DISALIGNMENT_H:        return numParser();
         case Opt::MON_DISALIGNMENT_V:        return numParser();
-        case Opt::MON_FLICKER:               return boolParser();
-        case Opt::MON_FLICKER_WEIGHT:        return numParser();
+        case Opt::MON_FLICKER_FIXER:         return boolParser();
+        case Opt::MON_FLICKER_JITTER:        return numParser();
 
         case Opt::DMA_DEBUG_ENABLE:          return boolParser();
+        case Opt::DMA_DEBUG_OVERLAY:         return boolParser();
         case Opt::DMA_DEBUG_MODE:            return enumParser.template operator()<DmaDisplayModeEnum,DmaDisplayMode>();
         case Opt::DMA_DEBUG_OPACITY:         return numParser("%");
         case Opt::DMA_DEBUG_CHANNEL0:        return boolParser();

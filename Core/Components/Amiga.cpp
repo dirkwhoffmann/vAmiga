@@ -36,8 +36,20 @@ string
 Amiga::build()
 {
     string db = debugBuild ? " [DEBUG BUILD]" : "";
-    
+
     return version() + db + " (" + __DATE__ + " " + __TIME__ + ")";
+}
+
+string
+Amiga::snapshotVersion()
+{
+    string result;
+
+    result = std::to_string(SNP_MAJOR) + "." + std::to_string(SNP_MINOR);
+    if constexpr (SNP_SUBMINOR > 0) result += "." + std::to_string(SNP_SUBMINOR);
+    if constexpr (SNP_BETA > 0) result += 'b' + std::to_string(SNP_BETA);
+
+    return result;
 }
 
 Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)

@@ -650,21 +650,21 @@ MemoryAPI::getCachedMetrics() const
     return mem->metrics.backed();
 }
 
-const RomTraits &
+RomTraits
 MemoryAPI::getRomTraits() const
 {
     VAMIGA_PUBLIC
     return mem->getRomTraits();
 }
 
-const RomTraits &
+RomTraits
 MemoryAPI::getWomTraits() const
 {
     VAMIGA_PUBLIC
     return mem->getWomTraits();
 }
 
-const RomTraits &
+RomTraits
 MemoryAPI::getExtTraits() const
 {
     VAMIGA_PUBLIC
@@ -1027,6 +1027,13 @@ VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
     *prevlof = frameBuffer.prevlof;
     
     return (u32 *)frameBuffer.pixels.ptr;
+}
+
+const u32 *
+VideoPortAPI::getDmaTexture() const
+{
+    VAMIGA_PUBLIC
+    return (u32 *)emu->getDmaTexture().pixels.ptr;
 }
 
 void
@@ -1769,6 +1776,13 @@ RemoteManagerAPI::getCachedInfo() const
     return remoteManager->info.backed();
 }
 
+void
+RemoteManagerAPI::send(ServerType server, const string &payload)
+{
+    VAMIGA_PUBLIC
+    remoteManager->send(server, payload);
+}
+
 
 //
 // RetroShellAPI
@@ -2053,6 +2067,12 @@ string
 VAmiga::build()
 {
     return Amiga::build();
+}
+
+string
+VAmiga::snapshotVersion()
+{
+    return Amiga::snapshotVersion();
 }
 
 const EmulatorInfo &

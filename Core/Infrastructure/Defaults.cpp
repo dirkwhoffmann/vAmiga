@@ -85,12 +85,13 @@ Defaults::fallbacks()
     registerDefault(Opt::MON_DISALIGNMENT,           0);
     registerDefault(Opt::MON_DISALIGNMENT_H,         250);
     registerDefault(Opt::MON_DISALIGNMENT_V,         250);
-    registerDefault(Opt::MON_FLICKER,                true);
-    registerDefault(Opt::MON_FLICKER_WEIGHT,         250);
+    registerDefault(Opt::MON_FLICKER_FIXER,          false);
+    registerDefault(Opt::MON_FLICKER_JITTER,         250);
 
     registerDefault(Opt::DMA_DEBUG_ENABLE,           false);
+    registerDefault(Opt::DMA_DEBUG_OVERLAY,          false);
     registerDefault(Opt::DMA_DEBUG_MODE,             (i64)DmaDisplayMode::FG_LAYER);
-    registerDefault(Opt::DMA_DEBUG_OPACITY,          50);
+    registerDefault(Opt::DMA_DEBUG_OPACITY,          128);
     registerDefault(Opt::DMA_DEBUG_CHANNEL0,         true);
     registerDefault(Opt::DMA_DEBUG_CHANNEL1,         true);
     registerDefault(Opt::DMA_DEBUG_CHANNEL2,         true);

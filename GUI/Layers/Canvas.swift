@@ -254,9 +254,9 @@ class Canvas: Layer {
         } else {
             
             // Case 3: Interlace mode, long frame followed by a short frame
-            if renderer.shaderOptions.flicker > 0 {
-                
-                let weight = 1.0 - renderer.shaderOptions.flickerWeight
+            if renderer.shaderOptions.flickerFixer > 0 {
+
+                let weight = 1.0 - renderer.shaderOptions.flickerJitter
                 mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
                 mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
                 flickerCnt += 1

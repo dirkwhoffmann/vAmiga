@@ -15,6 +15,7 @@ typealias Diameter = retro.vault.Diameter
 typealias Density = retro.vault.Density
 typealias ImageType = retro.vault.ImageType
 typealias ImageFormat = retro.vault.ImageFormat
+typealias RomTraits = retro.vault.RomTraits
 
 // 'retro::vault::amiga' namespace
 typealias BootBlockId = retro.vault.amiga.BootBlockId
@@ -60,7 +61,6 @@ typealias Palette = vamiga.Palette
 typealias PaulaInfo = vamiga.PaulaInfo
 typealias Probe = vamiga.Probe
 typealias RemoteServerInfo = vamiga.RemoteServerInfo
-typealias RomTraits = vamiga.RomTraits
 typealias RTCRevision = vamiga.RTCRevision
 typealias SamplingMethod = vamiga.SamplingMethod
 typealias SerialPortDevice = vamiga.SerialPortDevice

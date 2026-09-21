@@ -313,6 +313,7 @@ extension Inspector {
     @IBAction func busEnableAction(_ sender: NSButton!) {
         
         emu.set(.DMA_DEBUG_ENABLE, enable: sender.state == .on)
+        emu.set(.DMA_DEBUG_OVERLAY, enable: sender.state == .on)
         fullRefresh()
     }
     

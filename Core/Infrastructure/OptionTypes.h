@@ -81,11 +81,12 @@ enum class Opt : long
     MON_DISALIGNMENT,       ///< Cathode ray disalignment enable
     MON_DISALIGNMENT_H,     ///< Horizontal cathode ray disalignment
     MON_DISALIGNMENT_V,     ///< Vertical cathode ray disalignment
-    MON_FLICKER,            ///< Interlace flicker enable
-    MON_FLICKER_WEIGHT,     ///< Interlace flicker intensity
+    MON_FLICKER_FIXER,      ///< Interlace flicker fixer (true = no flicker)
+    MON_FLICKER_JITTER,     ///< Interlace flicker intensity
 
     // DMA Debugger
     DMA_DEBUG_ENABLE,
+    DMA_DEBUG_OVERLAY,
     DMA_DEBUG_MODE,
     DMA_DEBUG_OPACITY,
     DMA_DEBUG_CHANNEL0,
@@ -292,10 +293,11 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_DISALIGNMENT:          return "MON.DISALIGNMENT";
             case Opt::MON_DISALIGNMENT_H:        return "MON.DISALIGNMENT_H";
             case Opt::MON_DISALIGNMENT_V:        return "MON.DISALIGNMENT_V";
-            case Opt::MON_FLICKER:               return "MON.FLICKER";
-            case Opt::MON_FLICKER_WEIGHT:        return "MON.FLICKER_WEIGHT";
+            case Opt::MON_FLICKER_FIXER:         return "MON.FLICKER_FIXER";
+            case Opt::MON_FLICKER_JITTER:        return "MON.FLICKER_JITTER";
 
             case Opt::DMA_DEBUG_ENABLE:          return "DMA.DEBUG_ENABLE";
+            case Opt::DMA_DEBUG_OVERLAY:         return "DMA.DEBUG_OVERLAY";
             case Opt::DMA_DEBUG_MODE:            return "DMA.DEBUG_MODE";
             case Opt::DMA_DEBUG_OPACITY:         return "DMA.DEBUG_OPACITY";
             case Opt::DMA_DEBUG_CHANNEL0:        return "DMA.DEBUG_CHANNEL0";
@@ -480,10 +482,11 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_DISALIGNMENT:          return "Cathode rays disalignment";
             case Opt::MON_DISALIGNMENT_H:        return "Horizontal cathode ray shift";
             case Opt::MON_DISALIGNMENT_V:        return "Vertical cathode ray shift";
-            case Opt::MON_FLICKER:               return "Interlace flicker";
-            case Opt::MON_FLICKER_WEIGHT:        return "Interlace flicker intensity";
+            case Opt::MON_FLICKER_FIXER:         return "Interlace flicker fixer";
+            case Opt::MON_FLICKER_JITTER:        return "Interlace flicker jitter";
 
             case Opt::DMA_DEBUG_ENABLE:          return "DMA Debugger";
+            case Opt::DMA_DEBUG_OVERLAY:         return "Show as overlay";
             case Opt::DMA_DEBUG_MODE:            return "DMA Debugger style";
             case Opt::DMA_DEBUG_OPACITY:         return "Opacity";
             case Opt::DMA_DEBUG_CHANNEL0:        return "Copper DMA";

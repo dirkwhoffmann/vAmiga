@@ -45,8 +45,8 @@ Monitor::getOption(Opt option) const
         case Opt::MON_DISALIGNMENT:          return (i64)config.disalignment;
         case Opt::MON_DISALIGNMENT_H:        return (i64)config.disalignmentH;
         case Opt::MON_DISALIGNMENT_V:        return (i64)config.disalignmentV;
-        case Opt::MON_FLICKER:               return (i64)config.flicker;
-        case Opt::MON_FLICKER_WEIGHT:        return (i64)config.flickerWeight;
+        case Opt::MON_FLICKER_FIXER:         return (i64)config.flickerFixer;
+        case Opt::MON_FLICKER_JITTER:        return (i64)config.flickerJitter;
 
         default:
             fatalError;
@@ -132,8 +132,8 @@ Monitor::checkOption(Opt opt, i64 value)
         case Opt::MON_DISALIGNMENT:
         case Opt::MON_DISALIGNMENT_H:
         case Opt::MON_DISALIGNMENT_V:
-        case Opt::MON_FLICKER:
-        case Opt::MON_FLICKER_WEIGHT:
+        case Opt::MON_FLICKER_FIXER:
+        case Opt::MON_FLICKER_JITTER:
             
             if (value < 0 || value > 1000) {
                 throw CoreError(CoreError::OPT_INV_ARG, "0...1000");
@@ -286,14 +286,14 @@ Monitor::setOption(Opt opt, i64 value)
             config.disalignmentV = isize(value);
             break;
 
-        case Opt::MON_FLICKER:
+        case Opt::MON_FLICKER_FIXER:
             
-            config.flicker = bool(value);
+            config.flickerFixer = bool(value);
             break;
 
-        case Opt::MON_FLICKER_WEIGHT:
+        case Opt::MON_FLICKER_JITTER:
             
-            config.flickerWeight = isize(value);
+            config.flickerJitter = isize(value);
             break;
 
         default:
