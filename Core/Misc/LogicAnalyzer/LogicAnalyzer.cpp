@@ -60,6 +60,7 @@ LogicAnalyzer::getOption(Opt option) const
 {
     switch (option) {
             
+        case Opt::LA_CONNECT: return (i64)config.connect;
         case Opt::LA_PROBE0: return (i64)config.channel[0];
         case Opt::LA_PROBE1: return (i64)config.channel[1];
         case Opt::LA_PROBE2: return (i64)config.channel[2];
@@ -79,6 +80,10 @@ LogicAnalyzer::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
+        case Opt::LA_CONNECT:
+            
+            return;
+            
         case Opt::LA_PROBE0:
         case Opt::LA_PROBE1:
         case Opt::LA_PROBE2:
@@ -107,6 +112,11 @@ LogicAnalyzer::setOption(Opt option, i64 value)
     bool invalidate = false;
     
     switch (option) {
+            
+        case Opt::LA_CONNECT:
+            
+            config.connect = (bool)value;
+            break;
             
         case Opt::LA_PROBE3: c++; [[fallthrough]];
         case Opt::LA_PROBE2: c++; [[fallthrough]];
@@ -140,11 +150,14 @@ LogicAnalyzer::setOption(Opt option, i64 value)
 void
 LogicAnalyzer::checkEnable()
 {
+    /*
     bool enable =
     config.channel[0] != Probe::NONE ||
     config.channel[1] != Probe::NONE ||
     config.channel[2] != Probe::NONE ||
     config.channel[3] != Probe::NONE ;
+    */
+    bool enable = config.connect;
     
     enable ? agnus.syncEvent |= EVFL::PROBE : agnus.syncEvent &= ~EVFL::PROBE;
 }

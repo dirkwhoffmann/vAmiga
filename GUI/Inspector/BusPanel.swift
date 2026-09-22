@@ -202,7 +202,13 @@ extension Inspector {
     //
     // Action methods (Logic Analyzer)
     //
-    
+
+    @IBAction func laEnableAction(_ sender: NSButton!) {
+
+        emu?.set(.LA_CONNECT, enable: sender.state == .on);
+        fullRefresh()
+    }
+
     @IBAction func symAction(_ sender: NSButton!) {
 
         busLogicView.formatter.symbolic = sender.state == .on

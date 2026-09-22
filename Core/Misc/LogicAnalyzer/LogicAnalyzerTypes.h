@@ -51,6 +51,9 @@ struct ProbeEnum : Reflectable<ProbeEnum, Probe>
 
 typedef struct
 {
+    // Enable switch
+    bool connect;
+    
     // The logic analyzer channels
     Probe channel[4];
     

@@ -28,6 +28,7 @@ class LogicAnalyzer final : public SubComponent {
 
     Options options = {
 
+        Opt::LA_CONNECT,
         Opt::LA_PROBE0,
         Opt::LA_PROBE1,
         Opt::LA_PROBE2,
