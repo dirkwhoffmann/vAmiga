@@ -13,6 +13,7 @@
 #include "SubComponent.h"
 #include "Constants.h"
 #include "utl/wrappers.h"
+#include "utl/storage/RingBuffer.h"
 
 namespace vamiga {
 
@@ -49,8 +50,11 @@ public:
 
 private:
 
-    // Recorded signal traces
+    // Recorded signal traces (DEPRECATED)
     isize record[4][HPOS_CNT];
+    
+    // Recorded signal trace
+    RingBuffer<LogicAnalyzerSample, 512> trace;
     
 private:
     

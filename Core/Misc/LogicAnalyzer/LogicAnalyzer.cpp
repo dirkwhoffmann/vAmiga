@@ -190,8 +190,11 @@ LogicAnalyzer::recordSignals()
      the missing signal values.
      */
     
-    recordCurrent(agnus.pos.h);
     recordDelayed(agnus.pos.hPrev());
+
+    trace.put(LogicAnalyzerSample { .vpos = agnus.pos.v, .hpos = agnus.pos.hPrev() });
+    
+    recordCurrent(agnus.pos.h);
 }
 
 void

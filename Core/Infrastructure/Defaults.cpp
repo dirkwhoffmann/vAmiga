@@ -111,7 +111,7 @@ Defaults::fallbacks()
     registerDefault(Opt::XRAY_COLOR8,                0xFFFF00FF);
     registerDefault(Opt::XRAY_COLOR9,                0xFF00FFFF);
 
-    registerDefault(Opt::LA_CONNECT,                 false);
+    registerDefault(Opt::LA_CONNECT,                 true);
     registerDefault(Opt::LA_PROBE0,                  (i64)Probe::NONE);
     registerDefault(Opt::LA_PROBE1,                  (i64)Probe::NONE);
     registerDefault(Opt::LA_PROBE2,                  (i64)Probe::NONE);

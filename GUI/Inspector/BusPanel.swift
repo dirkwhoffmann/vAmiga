@@ -130,6 +130,10 @@ extension Inspector {
 
         cacheBus()
         
+        //
+        // Logic analyzer
+        //
+
         if full {
 
             if busProbe0.menu.items.isEmpty {
@@ -145,9 +149,10 @@ extension Inspector {
             refreshProbeSelector(busProbe2)
             refreshProbeSelector(busProbe3)
         }
-
-        if count % 2 == 0 { busLogicView.update() }
         
+        laEnable.state = emu.get(.LA_CONNECT) != 0 ? .on : .off
+        if count % 2 == 0 { busLogicView.update() }
+
         //
         // DMA debugger
         //

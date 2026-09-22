@@ -378,6 +378,12 @@ template <class T, isize capacity> struct RingBuffer
         w = next(w);
     }
 
+    void put(T element)
+    {
+        elements[w] = element;
+        if ((w = next(w)) == r) r = next(r);
+    }
+    
     void skip()
     {
         r = next(r);
