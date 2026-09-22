@@ -189,12 +189,14 @@ LogicAnalyzer::recordSignals()
      The second function is also called when the emulator pauses to complement
      the missing signal values.
      */
-    
-    recordDelayed(agnus.pos.hPrev());
 
+    recordDelayed(*trace.currentAddr());
     trace.put(LogicAnalyzerSample { .vpos = agnus.pos.v, .hpos = agnus.pos.hPrev() });
-    
+    recordCurrent(*trace.currentAddr());
+
+    // OLD CODE
     recordCurrent(agnus.pos.h);
+    recordDelayed(agnus.pos.hPrev());
 }
 
 void
@@ -216,6 +218,24 @@ LogicAnalyzer::recordCurrent(isize hpos)
 }
 
 void
+LogicAnalyzer::recordCurrent(LogicAnalyzerSample &sample)
+{
+    for (isize i = 0; i < 4; i++) {
+        
+        switch (config.channel[i]) {
+
+            case Probe::MEMORY:
+                
+                sample.values[i] = isize(mem.spypeek16<Accessor::CPU>(config.addr[i]));
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+void
 LogicAnalyzer::recordDelayed(isize hpos)
 {
     for (isize i = 0; i < 4; i++) {
@@ -227,6 +247,40 @@ LogicAnalyzer::recordDelayed(isize hpos)
                 record[i][hpos] = cpu.getIPL();
                 break;
 
+            default:
+                break;
+        }
+    }
+}
+
+void
+LogicAnalyzer::recordDelayed(LogicAnalyzerSample &sample)
+{
+    auto hpos = agnus.pos.h;
+    
+    if (hpos == 0) {
+        
+        // The previous cycle was a refresh cycle
+        sample.owner = BusOwner::REFRESH;
+        sample.dataBus = 0;
+        sample.addrBus = 0;
+        
+    } else {
+        
+        sample.owner = agnus.busOwner[hpos - 1];
+        sample.dataBus = agnus.busData[hpos - 1];
+        sample.addrBus = agnus.busAddr[hpos - 1];
+    }
+    
+    for (isize i = 0; i < 4; i++) {
+        
+        switch (config.channel[i]) {
+
+            case Probe::IPL:
+                
+                sample.values[i] = cpu.getIPL();
+                break;
+                
             default:
                 break;
         }

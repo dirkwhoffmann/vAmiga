@@ -135,9 +135,11 @@ private:
 
     // Records all signal values belonging to the current DMA cycle
     void recordCurrent(isize hpos);
-
+    void recordCurrent(LogicAnalyzerSample &sample);
+    
     // Records all signal values belonging to the previous DMA cycle
     void recordDelayed(isize hpos);
+    void recordDelayed(LogicAnalyzerSample &sample);
 
     // Enable or disables the logic analyzer based on the current config
     void checkEnable();
