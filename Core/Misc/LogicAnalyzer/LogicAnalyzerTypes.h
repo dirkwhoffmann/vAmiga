@@ -84,7 +84,6 @@ typedef struct
     const BusOwner *busOwner;
     const u32 *addrBus;
     const u16 *dataBus;
-    const isize *channel[4];
 }
 LogicAnalyzerInfo;
 

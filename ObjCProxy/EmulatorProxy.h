@@ -559,6 +559,9 @@ ImageInfo scan(const fs::path &url);
 
 @property (readonly) LogicAnalyzerInfo info;
 
+@property (readonly) NSInteger traceCount;
+- (LogicAnalyzerSample)traceSample:(NSInteger)nr;
+
 @end
 
 

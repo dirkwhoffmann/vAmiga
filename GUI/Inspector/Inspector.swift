@@ -788,7 +788,7 @@ class Inspector: DialogController {
         case .PAUSE:
             
             fullRefresh()
-            scrollToHPos()
+            scrollToLatest()
             
         case .STEP:
             

@@ -194,10 +194,10 @@ extension Inspector {
         colRefresh.setColor(info.refreshColor)
     }
     
-    func scrollToHPos() {
+    func scrollToLatest() {
         
-        let pos = (busLogicView.bounds.width / CGFloat(228)) * CGFloat(emu.amiga.info.hpos + 1)
-        let newx = pos - (busScrollView.bounds.width / 2)
+        // The most recent sample is always displayed in the rightmost segment
+        let newx = max(busLogicView.bounds.width - busScrollView.bounds.width, 0)
         NSAnimationContext.runAnimationGroup({ context in
             context.duration = 0.5
             busScrollView.contentView.animator().setBoundsOrigin(NSPoint(x: newx, y: 0))

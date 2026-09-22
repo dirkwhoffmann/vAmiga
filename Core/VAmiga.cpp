@@ -124,6 +124,20 @@ LogicAnalyzerAPI::getCachedInfo() const
     return logicAnalyzer->info.backed();
 }
 
+isize
+LogicAnalyzerAPI::getTraceCount() const
+{
+    VAMIGA_PUBLIC
+    return logicAnalyzer->traceCount();
+}
+
+LogicAnalyzerSample
+LogicAnalyzerAPI::getTraceSample(isize nr) const
+{
+    VAMIGA_PUBLIC
+    return logicAnalyzer->traceSample(nr);
+}
+
 const DmaDebuggerConfig &
 DmaDebuggerAPI::getConfig() const
 {

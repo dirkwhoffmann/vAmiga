@@ -11,7 +11,7 @@
 class LogicView: NSView {
 
     // Constants
-    let segments = 228
+    let segments = 256
     let signals = 6
     let signalHeight = CGFloat(24)
     
@@ -34,11 +34,14 @@ class LogicView: NSView {
     var bitWidth: [Int] = [ 24, 16, 16, 16, 16, 16 ]
     
     // Recorded data
-    var data: [[Int?]] = Array(repeating: Array(repeating: 0, count: 228), count: 6)
+    var data: [[Int?]] = Array(repeating: Array(repeating: 0, count: 256), count: 6)
+
+    // Horizontal position of the sample shown in each segment
+    var positions: [Int?] = Array(repeating: nil, count: 256)
 
     // Labels and colors for each segment
-    var labels: [String?] = Array(repeating: nil, count: 228)
-    var colors: [NSColor?] = Array(repeating: nil, count: 228)
+    var labels: [String?] = Array(repeating: nil, count: 256)
+    var colors: [NSColor?] = Array(repeating: nil, count: 256)
 
     // Number formatter
     let formatter = LogicViewFormatter()
@@ -64,29 +67,33 @@ class LogicView: NSView {
 
     func cacheData() {
 
-        guard let inspector = inspector, let emu = inspector.emu else { return }
+        guard let inspector = inspector, let la = inspector.emu?.logicAnalyzer else { return }
 
         lock.lock()
         defer { lock.unlock() }
 
-        let hpos = emu.amiga.info.hpos
-        let laInfo = emu.logicAnalyzer.info
-        let owners = laInfo.busOwner!
-        let addrBus = laInfo.addrBus!
-        let dataBus = laInfo.dataBus!
-        let channels = [ laInfo.channel.0, laInfo.channel.1, laInfo.channel.2, laInfo.channel.3 ]
         // Start from scratch
-        for i in 0..<segments { labels[i] = nil }
-        for i in 0..<segments { colors[i] = nil }
+        for i in 0..<segments { positions[i] = nil; labels[i] = nil; colors[i] = nil }
         for c in 0..<signals { for i in 0..<segments { data[c][i] = nil } }
 
-        // Update with new data
-        for i in 0..<hpos {
-            
-            // if (owners + i).pointee == .NONE { continue }
-            
-            switch (owners + i).pointee {
-                
+        /* Display the most recent samples of the trace. Sample 0 is the newest
+         * one, so the traversal fills the segments from right to left. If the
+         * trace holds less than 'segments' samples, the leftmost segments stay
+         * empty.
+         */
+        for nr in 0..<min(segments, la.traceCount) {
+
+            let sample = la.traceSample(nr)
+            let i = segments - 1 - nr
+
+            positions[i] = sample.hpos
+
+            // The last four channels display the probed signals
+            let probes = [ sample.values.0, sample.values.1, sample.values.2, sample.values.3 ]
+            for c in 2..<signals { data[c][i] = probes[c - 2] >= 0 ? probes[c - 2] : nil }
+
+            switch sample.owner {
+
             case .CPU:      labels[i] = "CPU"; colors[i] = inspector.colCPU.color
             case .REFRESH:  labels[i] = "REF"; colors[i] = inspector.colRefresh.color
             case .DISK:     labels[i] = "DSK"; colors[i] = inspector.colDisk.color
@@ -113,23 +120,10 @@ class LogicView: NSView {
             case .BLOCKED:  labels[i] = "BLK"; colors[i] = .red
             default:        labels[i] = "-"; colors[i] = .clear; continue
             }
-            
-            // The first two channel display the address and data bus
-            data[0][i] = Int((addrBus + i).pointee)
-            data[1][i] = Int((dataBus + i).pointee)
-        }
-        
-        // For the remaining channels, get the data from the logic analyzer
-        for c in 2..<signals {
-            
-            if let values = channels[c - 2] {
-                
-                for i in 0..<hpos {
-                    
-                    let value = (values + i).pointee
-                    data[c][i] = value >= 0 ? value : nil
-                }
-            }
+
+            // The first two channels display the address and data bus
+            data[0][i] = Int(sample.addrBus)
+            data[1][i] = Int(sample.dataBus)
         }
     }
 
@@ -183,10 +177,13 @@ class LogicView: NSView {
         
         for i in 0..<segments {
             
-            drawText(text: inspector.fmt8.string(for: i) ?? "?",
-                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - 0.5 * headerHeight + 2, width: dx, height: 0.5 * headerHeight - 2),
-                     font: system,
-                     color: .labelColor)
+            if let hpos = positions[i] {
+
+                drawText(text: inspector.fmt8.string(for: hpos) ?? "?",
+                         in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - 0.5 * headerHeight + 2, width: dx, height: 0.5 * headerHeight - 2),
+                         font: system,
+                         color: .labelColor)
+            }
             
             if let label = labels[i] {
                 

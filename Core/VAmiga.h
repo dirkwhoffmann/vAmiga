@@ -196,6 +196,15 @@ public:
      */
     const LogicAnalyzerInfo &getInfo() const;
     const LogicAnalyzerInfo &getCachedInfo() const;
+
+    /** @brief  Returns the number of samples held in the signal trace.
+     */
+    isize getTraceCount() const;
+
+    /** @brief  Returns a sample from the signal trace.
+     *  @param  nr  Sample number (0 = most recent sample).
+     */
+    LogicAnalyzerSample getTraceSample(isize nr) const;
 };
 
 class BlitterAPI : public API {

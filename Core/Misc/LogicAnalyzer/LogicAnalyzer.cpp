@@ -21,12 +21,14 @@ LogicAnalyzer::LogicAnalyzer(Amiga& ref) : SubComponent(ref)
 void
 LogicAnalyzer::_pause()
 {
-    recordDelayed(agnus.pos.h);
+    // Complement the missing signal values of the most recent sample
+    if (!trace.isEmpty()) recordDelayed(*trace.latestAddr());
 }
 
 void
 LogicAnalyzer::_didReset(bool hard)
 {
+    trace.clear();
     checkEnable();
 }
 
@@ -47,10 +49,6 @@ LogicAnalyzer::cacheInfo() const
     info.busOwner = agnus.busOwner;
     info.addrBus = agnus.busAddr;
     info.dataBus = agnus.busData;
-
-    for (isize i = 0; i < 4; i++) {
-        info.channel[i] = record[i];
-    }
 
     return info;
 }
@@ -141,8 +139,8 @@ LogicAnalyzer::setOption(Opt option, i64 value)
     }
 
     // Wipe out prerecorded data if necessary
-    if (invalidate) std::fill_n(record[c], HPOS_CNT, -1);
- 
+    if (invalidate) trace.clear();
+
     // Enable or disable the logic analyzer
     checkEnable();
 }
@@ -190,31 +188,17 @@ LogicAnalyzer::recordSignals()
      the missing signal values.
      */
 
-    recordDelayed(*trace.currentAddr());
-    trace.put(LogicAnalyzerSample { .vpos = agnus.pos.v, .hpos = agnus.pos.hPrev() });
-    recordCurrent(*trace.currentAddr());
+    // Complete the sample that was opened in the previous DMA cycle
+    if (!trace.isEmpty()) recordDelayed(*trace.latestAddr());
 
-    // OLD CODE
-    recordCurrent(agnus.pos.h);
-    recordDelayed(agnus.pos.hPrev());
-}
+    // Open a new sample for the current DMA cycle
+    trace.put(LogicAnalyzerSample {
 
-void
-LogicAnalyzer::recordCurrent(isize hpos)
-{
-    for (isize i = 0; i < 4; i++) {
-        
-        switch (config.channel[i]) {
-
-            case Probe::MEMORY:
-                
-                record[i][hpos] = isize(mem.spypeek16<Accessor::CPU>(config.addr[i]));
-                break;
-                
-            default:
-                break;
-        }
-    }
+        .vpos = agnus.pos.v,
+        .hpos = agnus.pos.h,
+        .values = { -1, -1, -1, -1 }
+    });
+    recordCurrent(*trace.latestAddr());
 }
 
 void
@@ -229,24 +213,6 @@ LogicAnalyzer::recordCurrent(LogicAnalyzerSample &sample)
                 sample.values[i] = isize(mem.spypeek16<Accessor::CPU>(config.addr[i]));
                 break;
                 
-            default:
-                break;
-        }
-    }
-}
-
-void
-LogicAnalyzer::recordDelayed(isize hpos)
-{
-    for (isize i = 0; i < 4; i++) {
-        
-        switch (config.channel[i]) {
-                
-            case Probe::IPL:
-
-                record[i][hpos] = cpu.getIPL();
-                break;
-
             default:
                 break;
         }

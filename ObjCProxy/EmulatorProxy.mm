@@ -860,6 +860,16 @@ ImageInfo scan(const fs::path &url)
     return [self la]->getInfo();
 }
 
+- (NSInteger)traceCount
+{
+    return [self la]->getTraceCount();
+}
+
+- (LogicAnalyzerSample)traceSample:(NSInteger)nr
+{
+    return [self la]->getTraceSample(nr);
+}
+
 @end
 
 
