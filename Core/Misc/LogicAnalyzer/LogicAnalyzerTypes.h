@@ -52,6 +52,7 @@ struct ProbeEnum : Reflectable<ProbeEnum, Probe>
 typedef struct {
     
     // Position
+    i64 frame;
     isize vpos;
     isize hpos;
 

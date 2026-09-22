@@ -23,12 +23,19 @@ LogicAnalyzer::_pause()
 {
     // Complement the missing signal values of the most recent sample
     if (!trace.isEmpty()) recordDelayed(*trace.latestAddr());
+
+    /* Hand the result over right away rather than waiting for the end of the
+     * frame, which is not going to arrive: a paused machine has to show what
+     * it actually recorded, up to and including the cycle it stopped on.
+     */
+    publish();
 }
 
 void
 LogicAnalyzer::_didReset(bool hard)
 {
     trace.clear();
+    publish();
     checkEnable();
 }
 
@@ -112,7 +119,16 @@ LogicAnalyzer::setOption(Opt option, i64 value)
     switch (option) {
             
         case Opt::LA_CONNECT:
-            
+
+            /* Drop the whole trace when the analyzer is switched off.
+             *
+             * Recording stops here, so whatever the buffer still holds is
+             * frozen history. Leaving it in place would have the panel keep
+             * displaying it as though it were live, and it would sit in front
+             * of the first samples taken after reconnecting.
+             */
+            if (!value) trace.clear();
+
             config.connect = (bool)value;
             break;
             
@@ -138,8 +154,25 @@ LogicAnalyzer::setOption(Opt option, i64 value)
             fatalError;
     }
 
-    // Wipe out prerecorded data if necessary
-    if (invalidate) trace.clear();
+    /* Wipe out prerecorded data if necessary.
+     *
+     * Only the affected channel's samples: the trace also carries the bus
+     * activity and the three other probes, none of which this option touched,
+     * and clearing the whole buffer would throw that recorded history away
+     * every time a probe is re-pointed.
+     */
+    if (invalidate) {
+
+        for (auto i = trace.begin(); i != trace.end(); i = trace.next(i)) {
+            trace.elements[i].values[c] = -1;
+        }
+    }
+
+    /* Both edits above (and the disconnect case) change the working buffer
+     * outside the recording path, and the machine may well be paused, so the
+     * result has to be handed over here instead of at the next frame end.
+     */
+    publish();
 
     // Enable or disable the logic analyzer
     checkEnable();
@@ -158,6 +191,21 @@ LogicAnalyzer::checkEnable()
     bool enable = config.connect;
     
     enable ? agnus.syncEvent |= EVFL::PROBE : agnus.syncEvent &= ~EVFL::PROBE;
+}
+
+void
+LogicAnalyzer::eofHandler()
+{
+    publish();
+}
+
+void
+LogicAnalyzer::publish()
+{
+    {   SYNCHRONIZED
+
+        stable = trace;
+    }
 }
 
 void
@@ -194,6 +242,7 @@ LogicAnalyzer::recordSignals()
     // Open a new sample for the current DMA cycle
     trace.put(LogicAnalyzerSample {
 
+        .frame = agnus.pos.frame,
         .vpos = agnus.pos.v,
         .hpos = agnus.pos.h,
         .values = { -1, -1, -1, -1 }

@@ -928,6 +928,7 @@ Agnus::eofHandler()
     controlPort1.joystick.eofHandler();
     controlPort2.joystick.eofHandler();
     mem.eofHandler();
+    logicAnalyzer.eofHandler();
 
     // Update statistics
     updateStats();

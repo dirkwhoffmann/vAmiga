@@ -13,17 +13,23 @@
 class LogicViewFormatter {
 
     var hex = false
+    var padding = false
     var symbolic = false
 
+    /* Zero padding follows the inspector's format setting rather than the
+     * radix. Hex used to be padded unconditionally here and decimal never,
+     * which made the logic analyzer disagree with the format the rest of the
+     * inspector was showing (Inspector.padding already drives fmt4...fmt32).
+     * The width is the natural one for a 'bitWidth'-wide value in the
+     * current radix.
+     */
     func string(from value: Int, bitWidth: Int) -> String {
 
-        switch bitWidth {
+        if !padding { return hex ? String(format: "%X", value) : String(value) }
 
-        case 8 where hex:   return String(format: "%02X", value)
-        case 16 where hex:  return String(format: "%04X", value)
-        case 24 where hex:  return String(format: "%06X", value)
-        case 32 where hex:  return String(format: "%08X", value)
-        default:            return String(value)
-        }
+        let digits = hex ? (bitWidth + 3) / 4 : String((1 << bitWidth) - 1).count
+
+        return hex ? String(format: "%0\(digits)X", value)
+                   : String(format: "%0\(digits)u", value)
     }
 }

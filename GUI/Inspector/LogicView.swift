@@ -81,7 +81,7 @@ class LogicView: NSView {
          * trace holds less than 'segments' samples, the leftmost segments stay
          * empty.
          */
-        for nr in 0..<min(segments, la.traceCount) {
+        for nr in 0..<max(0, min(segments, la.traceCount)) {
 
             let sample = la.traceSample(nr)
             let i = segments - 1 - nr
@@ -131,7 +131,7 @@ class LogicView: NSView {
 
         return cycle < segments ? data[channel][cycle] : nil
     }
-    
+
     //
     // Drawing
     //
@@ -173,6 +173,7 @@ class LogicView: NSView {
     func drawLabels() {
         
         formatter.hex = inspector.hex
+        formatter.padding = inspector.padding
         formatter.symbolic = inspector.busSymbolic.state == .on
         
         for i in 0..<segments {
