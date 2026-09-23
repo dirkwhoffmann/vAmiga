@@ -20,13 +20,31 @@ CmdQueue::put(const Command &cmd)
         logmsg(LOG_CMD, "%s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
 
         if (!queue.isFull()) {
+
             queue.write(cmd);
+
+            // Counted here, not before the check: a command that was dropped
+            // is never carried out, and wait() would sit there forever.
+            pending++;
+
         } else {
             logmsg(LOG_WARN, "Command lost: %s [%llx]\n", CmdEnum::key(cmd.type), cmd.value);
         }
 
         empty = false;
     }
+}
+
+void
+CmdQueue::done()
+{
+    if (--pending == 0) pending.notify_all();
+}
+
+void
+CmdQueue::wait()
+{
+    for (isize n; (n = pending.load()) != 0; ) pending.wait(n);
 }
 
 bool

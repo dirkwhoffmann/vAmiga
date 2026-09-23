@@ -35,7 +35,6 @@ enum class Opt : long
     AMIGA_RUN_AHEAD,        ///< Number of run-ahead frames
 
     // Workspaces
-    AMIGA_WS_COMPRESSION,   ///< Workspace media file compression
 
     // Agnus
     AGNUS_REVISION,
@@ -252,7 +251,6 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::AMIGA_VSYNC:               return "AMIGA.VSYNC";
             case Opt::AMIGA_SPEED_BOOST:         return "AMIGA.SPEED_BOOST";
             case Opt::AMIGA_RUN_AHEAD:           return "AMIGA.RUN_AHEAD";
-            case Opt::AMIGA_WS_COMPRESSION:      return "AMIGA.WS_COMPRESSION";
                 
             case Opt::AGNUS_REVISION:            return "AGNUS.REVISION";
             case Opt::AGNUS_PTR_DROPS:           return "AGNUS.PTR_DROPS";
@@ -297,28 +295,28 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_FLICKER_FIXER:         return "MON.FLICKER_FIXER";
             case Opt::MON_FLICKER_JITTER:        return "MON.FLICKER_JITTER";
 
-            case Opt::XRAY_MODE:                 return "XRAY.MODE";
-            case Opt::XRAY_OVERLAY:              return "XRAY.OVERLAY";
-            case Opt::XRAY_OVERLAY_STYLE:        return "XRAY.OVERLAY_STYLE";
-            case Opt::XRAY_OVERLAY_OPACITY:      return "XRAY.OVERLAY_OPACITY";
-            case Opt::XRAY_DMA_CHANNEL0:         return "XRAY.DMA_CHANNEL0";
-            case Opt::XRAY_DMA_CHANNEL1:         return "XRAY.DMA_CHANNEL1";
-            case Opt::XRAY_DMA_CHANNEL2:         return "XRAY.DMA_CHANNEL2";
-            case Opt::XRAY_DMA_CHANNEL3:         return "XRAY.DMA_CHANNEL3";
-            case Opt::XRAY_DMA_CHANNEL4:         return "XRAY.DMA_CHANNEL4";
-            case Opt::XRAY_DMA_CHANNEL5:         return "XRAY.DMA_CHANNEL5";
-            case Opt::XRAY_DMA_CHANNEL6:         return "XRAY.DMA_CHANNEL6";
-            case Opt::XRAY_DMA_CHANNEL7:         return "XRAY.DMA_CHANNEL7";
-            case Opt::XRAY_COLOR0:               return "XRAY.COLOR0";
-            case Opt::XRAY_COLOR1:               return "XRAY.COLOR1";
-            case Opt::XRAY_COLOR2:               return "XRAY.COLOR2";
-            case Opt::XRAY_COLOR3:               return "XRAY.COLOR3";
-            case Opt::XRAY_COLOR4:               return "XRAY.COLOR4";
-            case Opt::XRAY_COLOR5:               return "XRAY.COLOR5";
-            case Opt::XRAY_COLOR6:               return "XRAY.COLOR6";
-            case Opt::XRAY_COLOR7:               return "XRAY.COLOR7";
-            case Opt::XRAY_COLOR8:               return "XRAY.COLOR8";
-            case Opt::XRAY_COLOR9:               return "XRAY.COLOR9";
+            case Opt::XRAY_MODE:            return "XRAY.MODE";
+            case Opt::XRAY_OVERLAY:         return "XRAY.OVERLAY";
+            case Opt::XRAY_OVERLAY_STYLE: return "XRAY.OVERLAY_STYLE";
+            case Opt::XRAY_OVERLAY_OPACITY: return "XRAY.OVERLAY_OPACITY";
+            case Opt::XRAY_DMA_CHANNEL0:        return "XRAY.DMA_CHANNEL0";
+            case Opt::XRAY_DMA_CHANNEL1:        return "XRAY.DMA_CHANNEL1";
+            case Opt::XRAY_DMA_CHANNEL2:        return "XRAY.DMA_CHANNEL2";
+            case Opt::XRAY_DMA_CHANNEL3:        return "XRAY.DMA_CHANNEL3";
+            case Opt::XRAY_DMA_CHANNEL4:        return "XRAY.DMA_CHANNEL4";
+            case Opt::XRAY_DMA_CHANNEL5:        return "XRAY.DMA_CHANNEL5";
+            case Opt::XRAY_DMA_CHANNEL6:        return "XRAY.DMA_CHANNEL6";
+            case Opt::XRAY_DMA_CHANNEL7:        return "XRAY.DMA_CHANNEL7";
+            case Opt::XRAY_COLOR0:          return "XRAY.COLOR0";
+            case Opt::XRAY_COLOR1:          return "XRAY.COLOR1";
+            case Opt::XRAY_COLOR2:          return "XRAY.COLOR2";
+            case Opt::XRAY_COLOR3:          return "XRAY.COLOR3";
+            case Opt::XRAY_COLOR4:          return "XRAY.COLOR4";
+            case Opt::XRAY_COLOR5:          return "XRAY.COLOR5";
+            case Opt::XRAY_COLOR6:          return "XRAY.COLOR6";
+            case Opt::XRAY_COLOR7:          return "XRAY.COLOR7";
+            case Opt::XRAY_COLOR8:          return "XRAY.COLOR8";
+            case Opt::XRAY_COLOR9:          return "XRAY.COLOR9";
                 
             case Opt::LA_CONNECT:                return "LA.CONNECT";
             case Opt::LA_PROBE0:                 return "LA.PROBE0";
@@ -419,10 +417,10 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::DIAG_BOARD:                return "DIAG_BOARD";
                 
-            case Opt::SRV_ENABLE:                return "SRV.ENABLE";
-            case Opt::SRV_PORT:                  return "SRV.PORT";
-            case Opt::SRV_TRANSPORT:             return "SRV.TRANSPORT";
-            case Opt::SRV_VERBOSE:               return "SRV.VERBOSE";
+            case Opt::SRV_ENABLE:               return "SRV.ENABLE";
+            case Opt::SRV_PORT:                 return "SRV.PORT";
+            case Opt::SRV_TRANSPORT:            return "SRV.TRANSPORT";
+            case Opt::SRV_VERBOSE:              return "SRV.VERBOSE";
         }
         return "???";
     }
@@ -443,7 +441,6 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::AMIGA_VSYNC:               return "VSYNC mode";
             case Opt::AMIGA_SPEED_BOOST:         return "Speed adjustment";
             case Opt::AMIGA_RUN_AHEAD:           return "Run-ahead frames";
-            case Opt::AMIGA_WS_COMPRESSION:      return "Compress workspaces";
 
             case Opt::AGNUS_REVISION:            return "Chip revision";
             case Opt::AGNUS_PTR_DROPS:           return "Ignore certain register writes";
@@ -488,28 +485,28 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::MON_FLICKER_FIXER:         return "Interlace flicker fixer";
             case Opt::MON_FLICKER_JITTER:        return "Interlace flicker jitter";
 
-            case Opt::XRAY_MODE:                 return "X-Ray mode";
-            case Opt::XRAY_OVERLAY:              return "Show as overlay";
-            case Opt::XRAY_OVERLAY_STYLE:        return "DMA Debugger style";
-            case Opt::XRAY_OVERLAY_OPACITY:      return "Opacity";
-            case Opt::XRAY_DMA_CHANNEL0:         return "Copper DMA";
-            case Opt::XRAY_DMA_CHANNEL1:         return "Blitter DMA";
-            case Opt::XRAY_DMA_CHANNEL2:         return "Disk DMA";
-            case Opt::XRAY_DMA_CHANNEL3:         return "Audio DMA";
-            case Opt::XRAY_DMA_CHANNEL4:         return "Sprite DMA";
-            case Opt::XRAY_DMA_CHANNEL5:         return "Bitplane DMA";
-            case Opt::XRAY_DMA_CHANNEL6:         return "CPU DMA";
-            case Opt::XRAY_DMA_CHANNEL7:         return "Memory Refresh DMA";
-            case Opt::XRAY_COLOR0:               return "Copper color";
-            case Opt::XRAY_COLOR1:               return "Blitter color";
-            case Opt::XRAY_COLOR2:               return "Disk color";
-            case Opt::XRAY_COLOR3:               return "Audio color";
-            case Opt::XRAY_COLOR4:               return "Sprite color";
-            case Opt::XRAY_COLOR5:               return "Bitplane color";
-            case Opt::XRAY_COLOR6:               return "CPU color";
-            case Opt::XRAY_COLOR7:               return "Memory refresh color";
-            case Opt::XRAY_COLOR8:               return "Playfield 1 color";
-            case Opt::XRAY_COLOR9:               return "Playfield 2 color";
+            case Opt::XRAY_MODE:            return "X-Ray mode";
+            case Opt::XRAY_OVERLAY:         return "Show as overlay";
+            case Opt::XRAY_OVERLAY_STYLE: return "DMA Debugger style";
+            case Opt::XRAY_OVERLAY_OPACITY: return "Opacity";
+            case Opt::XRAY_DMA_CHANNEL0:        return "Copper DMA";
+            case Opt::XRAY_DMA_CHANNEL1:        return "Blitter DMA";
+            case Opt::XRAY_DMA_CHANNEL2:        return "Disk DMA";
+            case Opt::XRAY_DMA_CHANNEL3:        return "Audio DMA";
+            case Opt::XRAY_DMA_CHANNEL4:        return "Sprite DMA";
+            case Opt::XRAY_DMA_CHANNEL5:        return "Bitplane DMA";
+            case Opt::XRAY_DMA_CHANNEL6:        return "CPU DMA";
+            case Opt::XRAY_DMA_CHANNEL7:        return "Memory Refresh DMA";
+            case Opt::XRAY_COLOR0:          return "Copper color";
+            case Opt::XRAY_COLOR1:          return "Blitter color";
+            case Opt::XRAY_COLOR2:          return "Disk color";
+            case Opt::XRAY_COLOR3:          return "Audio color";
+            case Opt::XRAY_COLOR4:          return "Sprite color";
+            case Opt::XRAY_COLOR5:          return "Bitplane color";
+            case Opt::XRAY_COLOR6:          return "CPU color";
+            case Opt::XRAY_COLOR7:          return "Memory refresh color";
+            case Opt::XRAY_COLOR8:          return "Playfield 1 color";
+            case Opt::XRAY_COLOR9:          return "Playfield 2 color";
 
             case Opt::LA_CONNECT:                return "On / Off switch";
             case Opt::LA_PROBE0:                 return "Probe on channel 0";

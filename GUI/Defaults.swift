@@ -1033,7 +1033,6 @@ extension DefaultsProxy {
         remove(.DENISE_FRAME_SKIPPING)
         remove(.CIA_IDLE_SLEEP, [0, 1])
         remove(.AUD_FASTPATH)
-        remove(.AMIGA_WS_COMPRESSION)
     }
 }
 
@@ -1055,7 +1054,6 @@ extension Configuration {
         frameSkipping = defaults.get(.DENISE_FRAME_SKIPPING)
         ciaIdleSleep = defaults.get(.CIA_IDLE_SLEEP) != 0
         audioFastPath = defaults.get(.AUD_FASTPATH) != 0
-        wsCompressor = defaults.get(.AMIGA_WS_COMPRESSION)
         
         emu?.resume()
     }
@@ -1075,7 +1073,6 @@ extension Configuration {
         defaults.set(.DENISE_FRAME_SKIPPING, frameSkipping)
         defaults.set(.CIA_IDLE_SLEEP, [0,1], ciaIdleSleep)
         defaults.set(.AUD_FASTPATH, audioFastPath)
-        defaults.set(.AMIGA_WS_COMPRESSION, wsCompressor)
         defaults.save()
         
         emu?.resume()

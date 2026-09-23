@@ -373,10 +373,6 @@ class Configuration {
         get { return emu?.get(.AMIGA_RUN_AHEAD) ?? 0 }
         set { emu?.set(.AMIGA_RUN_AHEAD, value: newValue) }
     }
-    var wsCompressor: Int {
-        get { return emu?.get(.AMIGA_WS_COMPRESSION) ?? 0 }
-        set { emu?.set(.AMIGA_WS_COMPRESSION, value: newValue) }
-    }
 
     //
     // Compatibility

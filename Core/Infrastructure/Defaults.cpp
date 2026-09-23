@@ -50,7 +50,6 @@ Defaults::fallbacks()
     registerDefault(Opt::AMIGA_SPEED_BOOST,          100);
     registerDefault(Opt::AMIGA_RUN_AHEAD,            0);
 
-    registerDefault(Opt::AMIGA_WS_COMPRESSION,       true);
 
     registerDefault(Opt::AGNUS_REVISION,             (i64)AgnusRevision::ECS_1MB);
     registerDefault(Opt::AGNUS_PTR_DROPS,            true);
@@ -88,28 +87,28 @@ Defaults::fallbacks()
     registerDefault(Opt::MON_FLICKER_FIXER,          false);
     registerDefault(Opt::MON_FLICKER_JITTER,         250);
 
-    registerDefault(Opt::XRAY_MODE,                  (i64)XRayMode::XRAY_NONE);
-    registerDefault(Opt::XRAY_OVERLAY,               false);
-    registerDefault(Opt::XRAY_OVERLAY_STYLE,         (i64)DmaDisplayMode::FG_LAYER);
-    registerDefault(Opt::XRAY_OVERLAY_OPACITY,       50);
-    registerDefault(Opt::XRAY_DMA_CHANNEL0,          true);
-    registerDefault(Opt::XRAY_DMA_CHANNEL1,          true);
-    registerDefault(Opt::XRAY_DMA_CHANNEL2,          true);
-    registerDefault(Opt::XRAY_DMA_CHANNEL3,          true);
-    registerDefault(Opt::XRAY_DMA_CHANNEL4,          true);
-    registerDefault(Opt::XRAY_DMA_CHANNEL5,          true);
-    registerDefault(Opt::XRAY_DMA_CHANNEL6,          false);
-    registerDefault(Opt::XRAY_DMA_CHANNEL7,          true);
-    registerDefault(Opt::XRAY_COLOR0,                0xFFFF0000);
-    registerDefault(Opt::XRAY_COLOR1,                0xFFCC0000);
-    registerDefault(Opt::XRAY_COLOR2,                0x00FF0000);
-    registerDefault(Opt::XRAY_COLOR3,                0xFF00FF00);
-    registerDefault(Opt::XRAY_COLOR4,                0x0088FF00);
-    registerDefault(Opt::XRAY_COLOR5,                0x00FFFF00);
-    registerDefault(Opt::XRAY_COLOR6,                0xFFFFFF00);
-    registerDefault(Opt::XRAY_COLOR7,                0xFF000000);
-    registerDefault(Opt::XRAY_COLOR8,                0xFFFF00FF);
-    registerDefault(Opt::XRAY_COLOR9,                0xFF00FFFF);
+    registerDefault(Opt::XRAY_MODE,             (i64)XRayMode::XRAY_NONE);
+    registerDefault(Opt::XRAY_OVERLAY,          false);
+    registerDefault(Opt::XRAY_OVERLAY_STYLE,    (i64)DmaDisplayMode::FG_LAYER);
+    registerDefault(Opt::XRAY_OVERLAY_OPACITY,          50);
+    registerDefault(Opt::XRAY_DMA_CHANNEL0,         true);
+    registerDefault(Opt::XRAY_DMA_CHANNEL1,         true);
+    registerDefault(Opt::XRAY_DMA_CHANNEL2,         true);
+    registerDefault(Opt::XRAY_DMA_CHANNEL3,         true);
+    registerDefault(Opt::XRAY_DMA_CHANNEL4,         true);
+    registerDefault(Opt::XRAY_DMA_CHANNEL5,         true);
+    registerDefault(Opt::XRAY_DMA_CHANNEL6,         false);
+    registerDefault(Opt::XRAY_DMA_CHANNEL7,         true);
+    registerDefault(Opt::XRAY_COLOR0,           0xFFFF0000);
+    registerDefault(Opt::XRAY_COLOR1,           0xFFCC0000);
+    registerDefault(Opt::XRAY_COLOR2,           0x00FF0000);
+    registerDefault(Opt::XRAY_COLOR3,           0xFF00FF00);
+    registerDefault(Opt::XRAY_COLOR4,           0x0088FF00);
+    registerDefault(Opt::XRAY_COLOR5,           0x00FFFF00);
+    registerDefault(Opt::XRAY_COLOR6,           0xFFFFFF00);
+    registerDefault(Opt::XRAY_COLOR7,           0xFF000000);
+    registerDefault(Opt::XRAY_COLOR8,           0xFFFF00FF);
+    registerDefault(Opt::XRAY_COLOR9,           0xFF00FFFF);
 
     registerDefault(Opt::LA_CONNECT,                 true);
     registerDefault(Opt::LA_PROBE0,                  (i64)Probe::NONE);

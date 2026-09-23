@@ -184,9 +184,13 @@ RemoteManager::recordTraffic(ServerType server, TrafficDirection direction, cons
     // Store the packet in the traffic log
     auto nr = trafficLog.append(server, direction, payload);
 
-    // Inform the GUI
+    /* Inform the GUI. The packet itself rides along in the message's string
+     * attachment: the GUI has no way back to the traffic log from the message
+     * alone, and app-level RPC notifications (Silicium's "prefsChanged", say)
+     * are handled by reading this payload -- see SiAmController::rpcReceive().
+     */
     auto msg = direction == TrafficDirection::SENT ? Msg::SRV_SEND : Msg::SRV_RECEIVE;
-    msgQueue.put(msg, i64(server), i64(nr));
+    msgQueue.put(msg, i64(server), i64(nr), payload);
 }
 
 void

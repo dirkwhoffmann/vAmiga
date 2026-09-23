@@ -80,7 +80,6 @@ class Amiga final : public CoreComponent {
         Opt::AMIGA_VSYNC,
         Opt::AMIGA_SPEED_BOOST,
         Opt::AMIGA_RUN_AHEAD,
-        Opt::AMIGA_WS_COMPRESSION,
     };
     
     // The current configuration

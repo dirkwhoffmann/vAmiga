@@ -27,7 +27,6 @@ class PerformanceSettingsViewController: SettingsViewController {
     @IBOutlet weak var audioFastPath: NSButton!
 
     // Compression
-    @IBOutlet weak var wsCompressor: NSPopUpButton!
     @IBOutlet weak var snapCompressor: NSPopUpButton!
 
     override func viewDidLoad() {
@@ -67,7 +66,6 @@ class PerformanceSettingsViewController: SettingsViewController {
         audioFastPath.state = config.audioFastPath ? .on : .off
 
         // Compression
-        wsCompressor.selectItem(withTag: config.wsCompressor)
     }
 
     override func preset(tag: Int) {
@@ -145,8 +143,4 @@ class PerformanceSettingsViewController: SettingsViewController {
     // Action methods (Compressor)
     //
 
-    @IBAction func wsCompressorAction(_ sender: NSPopUpButton!) {
-
-        config?.wsCompressor = sender.selectedTag()
-    }
 }

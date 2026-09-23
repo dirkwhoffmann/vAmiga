@@ -123,30 +123,44 @@ RpcServer::process(const string &payload, bool blocking)
 
         json request = json::parse(payload);
 
-        // Check input format
+        /* Check the envelope. Only 'method' is required of every packet:
+         * 'params' is checked inside the branch that needs it, because what
+         * a method takes is the method's own business. Demanding it here
+         * would reject the parameterless app-level notifications that are
+         * none of the core's concern (Silicium's "svmChanged", say) before
+         * the fall-through below ever gets to ignore them.
+         */
         if (!request.contains("method")) {
-            throw CoreError(RPC::INVALID_REQUEST, "Missing 'method'");
-        }
-        if (!request.contains("params")) {
-            throw CoreError(RPC::INVALID_REQUEST, "Missing 'params'");
+            throw utl::Error(RPC::INVALID_REQUEST, "Missing 'method'");
         }
         if (!request["method"].is_string()) {
-            throw CoreError(RPC::INVALID_PARAMS, "'method' must be a string");
+            throw utl::Error(RPC::INVALID_PARAMS, "'method' must be a string");
         }
-        if (!request["params"].is_string()) {
-            throw CoreError(RPC::INVALID_PARAMS, "'params' must be a string");
-        }
-        if (request["method"] != "retroshell") {
-            throw CoreError(RPC::INVALID_PARAMS, "method  must be 'retroshell'");
+        if (request["method"] == "retroshell") {
+
+            if (!request.contains("params")) {
+                throw utl::Error(RPC::INVALID_REQUEST, "Missing 'params'");
+            }
+            if (!request["params"].is_string()) {
+                throw utl::Error(RPC::INVALID_PARAMS, "'params' must be a string");
+            }
+
+            auto id = request.value("id", 0);
+
+            if (blocking) {
+                return execBlocking(request["params"], id);
+            } else {
+                return execNonBlocking(request["params"], id);
+            }
         }
 
-        auto id = request.value("id", 0);
-
-        if (blocking) {
-            return execBlocking(request["params"], id);
-        } else {
-            return execNonBlocking(request["params"], id);
-        }
+        /* Any other method is not handled by the core. Such packets are
+         * app-level notifications (e.g., Silicium's "prefsChanged"), which
+         * the app processes by observing the traffic log (Msg::SRV_RECEIVE).
+         * The core sends no response for them, matching the JSON-RPC rule
+         * that notifications (requests without an "id") are never answered.
+         */
+        return { };
 
     } catch (const json::parse_error &) {
 
@@ -158,8 +172,17 @@ RpcServer::process(const string &payload, bool blocking)
         };
         return response.dump();
 
-    } catch (const CoreError &e) {
+    } catch (const utl::Error &e) {
 
+        /* utl::Error, not CoreError: the codes above are JSON-RPC wire codes
+         * (-32600 and friends), which have nothing to do with the core's own
+         * fault numbering. Routing them through CoreError landed them in its
+         * default branch, which discards the message it was given and reports
+         * "CoreError -32600 (???)." instead -- throwing away the one piece of
+         * information the client needs. CoreError derives from utl::Error, so
+         * a fault escaping a blocking retroshell call is still caught here,
+         * and still reports its own message and fault number.
+         */
         json response = {
 
             {"jsonrpc", "2.0"},

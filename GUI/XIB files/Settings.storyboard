@@ -3547,36 +3547,6 @@
                                     <action selector="warpModeAction:" target="Rvf-AP-e5x" id="4cI-S0-3cq"/>
                                 </connections>
                             </popUpButton>
-                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KCK-vW-dMz">
-                                <rect key="frame" x="365" y="188" width="88" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Workspaces:" id="yZe-qV-CfS">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rGA-tm-1eY">
-                                <rect key="frame" x="456" y="183" width="144" height="26"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="7xi-MS-9bo" id="wzS-1K-y2i">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
-                                    <menu key="menu" title="OtherViews" autoenablesItems="NO" id="UnC-DI-tH9">
-                                        <items>
-                                            <menuItem title="Off" state="on" id="7xi-MS-9bo">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="ADZ / HDZ" tag="1" id="HQq-Mb-ZlH">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="wsCompressorAction:" target="Rvf-AP-e5x" id="Pqr-Qk-nHE"/>
-                                </connections>
-                            </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A9B-Ws-OEw">
                                 <rect key="frame" x="204" y="311" width="25" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -3594,15 +3564,6 @@
                                 <rect key="frame" x="44" y="228" width="114" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Threading" id="7y6-cp-Vat">
-                                    <font key="font" metaFont="systemBold"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tVm-Ae-s4b">
-                                <rect key="frame" x="346" y="228" width="114" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Compression" id="A4h-2a-H2y">
                                     <font key="font" metaFont="systemBold"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -3732,7 +3693,6 @@
                         <outlet property="vSync" destination="IRe-4u-5X4" id="KGF-PR-Nwa"/>
                         <outlet property="warpBoot" destination="A9B-Ws-OEw" id="88f-k2-7bE"/>
                         <outlet property="warpMode" destination="KHb-6W-j0m" id="e0W-OK-Bky"/>
-                        <outlet property="wsCompressor" destination="rGA-tm-1eY" id="X3N-7r-QCs"/>
                     </connections>
                 </viewController>
                 <customObject id="APd-0T-Iwj" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

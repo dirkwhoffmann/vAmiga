@@ -106,8 +106,14 @@ Agnus::operator= (const Agnus& other) {
 void
 Agnus::operator << (SerResetter &worker)
 {
-    // Remember some events
+    /* Remember some events. The inspection slot carries its component mask in
+     * data[], and that mask says what an observer wants to watch rather than
+     * anything about the machine, so it has to outlive a reset the same way
+     * the event itself does -- otherwise resetting silently stops every
+     * snapshot and leaves the GUI reading values that never change again.
+     */
     auto insEvent = id[SLOT_INS];
+    auto insMask = data[SLOT_INS];
 
     serialize(worker);
 
@@ -138,7 +144,7 @@ Agnus::operator << (SerResetter &worker)
     diskController.scheduleFirstDiskEvent();
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
-    if (insEvent) scheduleRel <SLOT_INS> (0, insEvent);
+    if (insEvent) { data[SLOT_INS] = insMask; scheduleRel <SLOT_INS> (0, insEvent); }
 }
 
 i64

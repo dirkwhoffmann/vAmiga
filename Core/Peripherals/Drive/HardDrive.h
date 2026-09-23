@@ -115,6 +115,16 @@ private:
      */
     std::shared_ptr<HDFFile> image;
 
+public:
+
+    /* The file this drive's image is loaded from, empty when it was built in
+     * memory. Amiga::saveWorkspace() uses it to recognize a drive that is
+     * already sitting on one of the workspace's own files.
+     */
+    fs::path imagePath() const { return image ? image->path : fs::path(); }
+
+private:
+
     // Current position of the read/write head
     DriveHead head;
 

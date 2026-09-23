@@ -942,8 +942,46 @@ Agnus::serviceINSEvent()
         serialPort.info.record();
     }
 
-    // Reschedule the event
-    rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000007));
+    /* The disk subsystem and the audio state machines snapshot themselves here
+     * too. They used to be left out, which meant a GUI reading them had no
+     * snapshot to read and had to take the live value instead -- computing it
+     * on its own thread, from state this one is in the middle of changing.
+     * DiskController::computeDSKBYTR() asserts that agnus.clock has not run
+     * behind syncCycle, which is exactly the kind of pair that does not
+     * survive being read across a thread boundary.
+     */
+    if (mask & 1LL << long(Class::DiskController)) {
+        paula.diskController.info.record();
+    }
+    if (mask & 1LL << long(Class::StateMachine)) {
+        paula.channel0.info.record();
+        paula.channel1.info.record();
+        paula.channel2.info.record();
+        paula.channel3.info.record();
+    }
+    if (mask & 1LL << long(Class::FloppyDrive)) {
+        df0.info.record(); df1.info.record();
+        df2.info.record(); df3.info.record();
+    }
+    if (mask & 1LL << long(Class::HardDrive)) {
+        hd0.info.record(); hd1.info.record();
+        hd2.info.record(); hd3.info.record();
+    }
+    if (mask & 1LL << long(Class::HdController)) {
+        hd0con.info.record(); hd1con.info.record();
+        hd2con.info.record(); hd3con.info.record();
+    }
+
+    /* Reschedule the event.
+     *
+     * scheduleRel rather than rescheduleRel: the latter counts from the slot's
+     * current trigger, which is NEVER until something has actually scheduled
+     * the slot, so adding an interval to it left the event permanently out of
+     * reach and the first snapshot was also the last. Scheduling counts from
+     * the clock instead, and it fills in the event id, which the resetter
+     * needs in order to bring auto-inspection back after a reset.
+     */
+    scheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000007), INS_RECORD);
 }
 
 }

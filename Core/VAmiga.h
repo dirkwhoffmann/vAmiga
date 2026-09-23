@@ -2066,6 +2066,18 @@ public:
      */
     void set(Opt opt, i64 value, long id);
 
+    /** @brief  Waits until every command sent so far has been carried out.
+     *
+     *  Most calls on this API hand the emulator thread a command and return
+     *  at once, so a caller that reads back what it just changed, or exports
+     *  the configuration, can still see the old state. Calling this
+     *  afterwards closes that gap.
+     *
+     *  It must not be called while the emulator is suspended or halted:
+     *  neither polls the command queue, so the wait would never end.
+     */
+    void sync();
+
     /** @brief  Exports the current configuration.
      *
      *  The current configuration is exported in form of a RetroShell script.

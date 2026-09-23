@@ -349,7 +349,6 @@ typedef struct
     Compressor snapshotCompressor;
 
     //! Indicates whether workspace media files should be compressed
-    bool compressWorkspaces;
 }
 AmigaConfig;
 
