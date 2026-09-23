@@ -408,7 +408,6 @@ public:
 
 private:
 
-    void connect();
     void disconnect();
 
 
@@ -502,9 +501,6 @@ public:
     //
     // Formatting
     //
-
-    // Returns a default volume name
-    string defaultName(isize partition = 0) const;
 
     // Formats the disk
     void format(amiga::FSFormat fs, amiga::FSName name);

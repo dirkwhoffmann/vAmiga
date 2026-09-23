@@ -137,8 +137,15 @@ HdController::setOption(Opt option, i64 value)
 
                 if (value) {
 
+                    /* The drive is left as it is. Connecting a controller
+                     * used to furnish an empty slot with a blank 10 MB disk
+                     * and format it, which put a disk nobody asked for in
+                     * front of whatever was about to be attached. An empty
+                     * connected drive is a state the controller already
+                     * handles (see isConnected() below, which asks for a disk
+                     * as well).
+                     */
                     config.connected = true;
-                    drive.connect();
                     msgQueue.put(Msg::HDC_CONNECT, DriveMsg { i16(objid), true, 0, 0 } );
 
                 } else {

@@ -466,19 +466,6 @@ HardDrive::setOption(Opt option, i64 value)
 }
 
 void
-HardDrive::connect()
-{
-    // Attach a small default disk
-    if (!hasDisk()) {
-
-        logmsg(LOG_WT, "Creating default disk...\n");
-        init(MB(10));
-        format(amiga::FSFormat::OFS, FSName(defaultName()));
-        setFlag(DiskFlags::BOOTABLE, false);
-    }
-}
-
-void
 HardDrive::disconnect()
 {
     init();
@@ -703,16 +690,6 @@ void
 HardDrive::setProtectionFlag(bool value)
 {
     if (hasDisk()) setFlag(DiskFlags::PROTECTED, value);
-}
-
-string
-HardDrive::defaultName(isize partition) const
-{
-    if (objid >= 1) partition += amiga.hd0.numPartitions();
-    if (objid >= 2) partition += amiga.hd1.numPartitions();
-    if (objid >= 3) partition += amiga.hd2.numPartitions();
-
-    return "DH" + std::to_string(partition);
 }
 
 void
