@@ -4271,12 +4271,22 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
         return;
     }
 
-    result = divsMoira<C>(dividend, divisor);
-    writeD(dst, result);
-    prefetch<C, POLL>();
-
     [[maybe_unused]] auto cycles = cyclesDiv<C, I>(dividend, (u16)divisor) - 4;
-    SYNC(cycles);
+
+    if constexpr (C == Core::C68000) {
+
+        SYNC(cycles);
+        result = divsMoira<C>(dividend, divisor);
+        writeD(dst, result);
+        prefetch<C, POLL>();
+
+    } else {
+
+        result = divsMoira<C>(dividend, divisor);
+        writeD(dst, result);
+        prefetch<C, POLL>();
+        SYNC(cycles);
+    }
 }
 
 template <Core C, Instr I, Mode M, Size S> void
@@ -4399,12 +4409,22 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
         return;
     }
 
-    result = divuMoira<C>(dividend, divisor);
-    writeD(dst, result);
-    prefetch<C, POLL>();
-
     [[maybe_unused]] auto cycles = cyclesDiv<C, I>(dividend, (u16)divisor) - 4;
-    SYNC(cycles);
+
+    if constexpr (C == Core::C68000) {
+
+        SYNC(cycles);
+        result = divuMoira<C>(dividend, divisor);
+        writeD(dst, result);
+        prefetch<C, POLL>();
+
+    } else {
+
+        result = divuMoira<C>(dividend, divisor);
+        writeD(dst, result);
+        prefetch<C, POLL>();
+        SYNC(cycles);
+    }
 }
 
 template <Core C, Instr I, Mode M, Size S> void
