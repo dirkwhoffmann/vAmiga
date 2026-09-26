@@ -276,30 +276,47 @@ namespace {
 // First value of a serialized disk that is stored as a path (see serializeDisk)
 constexpr i64 diskIsPath = -1;
 
+// ... and of one the options kept out of the snapshot
+constexpr i64 diskIsOmitted = -2;
+
+}
+
+bool
+HardDrive::snapshotable() const
+{
+    if (!image || fileBacked()) return false;
+    if (!config.snapshots) return false;
+
+    return size() <= config.snapshotLimit * 1024 * 1024;
 }
 
 void
 HardDrive::serializeDisk(SerCounter &worker)
 {
+    // Counting and writing have to agree, so they ask the same question
     if (fileBacked()) {
         worker.count += 8 + 8 + isize(image->path.string().size());
-    } else {
+    } else if (snapshotable()) {
         worker.count += 8 + size();
+    } else {
+        worker.count += 8;
     }
 }
 
 void
 HardDrive::serializeDisk(SerChecker &worker)
 {
-    /* The bytes of a disk held in memory, which a snapshot stores in full,
-     * checked the way a utl::Buffer<u8> is checked (older snapshots were
-     * written with one). A disk that lives in a file counts as empty: the
-     * snapshot stores its path only, and whether the file still opens when
-     * the snapshot is restored must not decide whether the snapshot is taken
-     * for intact. The run-ahead instance shares the disk with the main
-     * instance, so comparing the two is not affected either way.
+    /* The bytes a snapshot actually carries, checked the way a utl::Buffer<u8>
+     * is checked (older snapshots were written with one). A disk that lives
+     * in a file counts as empty: the snapshot stores its path only, and
+     * whether the file still opens when the snapshot is restored must not
+     * decide whether the snapshot is taken for intact. So does one the
+     * options kept out -- what is not written cannot come back, and checking
+     * it would declare every such snapshot corrupt. The run-ahead instance
+     * shares the disk with the main instance, so comparing the two is not
+     * affected either way.
      */
-    auto bytes = image && !fileBacked() ? image->byteView(0, size()) : utl::ByteView();
+    auto bytes = snapshotable() ? image->byteView(0, size()) : utl::ByteView();
     worker.hash = utl::Hashable::fnvIt64(worker.hash, bytes.fnv64());
 }
 
@@ -315,7 +332,7 @@ HardDrive::serializeDisk(SerWriter &worker)
         std::memcpy(worker.ptr, path.data(), path.size());
         worker.ptr += len;
 
-    } else {
+    } else if (snapshotable()) {
 
         // Store the disk in full
         i64 len = size();
@@ -325,6 +342,17 @@ HardDrive::serializeDisk(SerWriter &worker)
 
             std::memcpy(worker.ptr, image->byteView(0, len).data(), size_t(len));
             worker.ptr += len;
+        }
+
+    } else {
+
+        // Say that it was left out, so the reader knows what it is missing
+        i64 marker = diskIsOmitted;
+        worker << marker;
+
+        if (image) {
+            logmsg(LOG_HDR, "hd%ld: Disk left out of the snapshot (%ld MB)\n",
+                   (long)objid, (long)(size() / (1024 * 1024)));
         }
     }
 }
@@ -336,6 +364,13 @@ HardDrive::serializeDisk(SerReader &worker)
     worker << len;
 
     image = nullptr;
+
+    if (len == diskIsOmitted) {
+
+        // The drive comes back empty (see serializeDisk)
+        logmsg(LOG_HDR, "hd%ld: Snapshot carries no disk\n", (long)objid);
+        return;
+    }
 
     if (len == diskIsPath) {
 
@@ -388,6 +423,8 @@ HardDrive::getOption(Opt option) const
         case Opt::HDR_PAN:           return (long)config.pan;
         case Opt::HDR_STEP_VOLUME:   return (long)config.stepVolume;
         case Opt::HDR_WRITE_THROUGH: return (long)config.writeThrough;
+        case Opt::HDR_SNAPSHOT:      return (long)config.snapshots;
+        case Opt::HDR_SNAPSHOT_LIMIT: return (long)config.snapshotLimit;
 
         default:
             fatalError;
@@ -408,7 +445,14 @@ HardDrive::checkOption(Opt opt, i64 value)
 
         case Opt::HDR_PAN:
         case Opt::HDR_STEP_VOLUME:
+        case Opt::HDR_SNAPSHOT:
 
+            return;
+
+        case Opt::HDR_SNAPSHOT_LIMIT:
+
+            // A limit of zero is allowed: it keeps every disk out
+            if (value < 0) throw CoreError(CoreError::OPT_INV_ARG, "0...");
             return;
 
         case Opt::HDR_WRITE_THROUGH:
@@ -444,6 +488,16 @@ HardDrive::setOption(Opt option, i64 value)
         case Opt::HDR_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
+            return;
+
+        case Opt::HDR_SNAPSHOT:
+
+            config.snapshots = bool(value);
+            return;
+
+        case Opt::HDR_SNAPSHOT_LIMIT:
+
+            config.snapshotLimit = isize(value);
             return;
 
         case Opt::HDR_WRITE_THROUGH:

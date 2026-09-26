@@ -13,6 +13,7 @@
 #include "Devices/LinearDevice.h"
 #include "utl/support.h"
 #include <cstring>
+#include <algorithm>
 
 namespace retro::vault {
 
@@ -50,7 +51,31 @@ HDFLayout::isRB(const u8 *ptr) const
 optional<isize>
 HDFLayout::seekRB() const
 {
-    for (isize nr = 0; bsize * (nr + 1) <= bytes; nr++) {
+    /* A file system keeps its root block in the middle, at
+     * (numReserved + highKey) / 2 with highKey the last block it uses. It
+     * cannot use more blocks than the image has, so the root block cannot
+     * lie past the middle of the image either, and it lies below the middle
+     * only by as much as the file system falls short of filling the image.
+     *
+     * For an image without a rigid disk block -- the only kind this is asked
+     * about -- that shortfall is a last, incomplete track: predictNumBlocks
+     * below guesses either the whole image or its block count rounded down
+     * to a multiple of 32, and nothing else -- which moves the root block
+     * down by at most 15. So the search is a window ending at the middle,
+     * twice as deep as that rounding can need, rather than a sweep over the
+     * whole image.
+     *
+     * What that spares is the image with no root block at all -- one that
+     * was never formatted, or one just created for a new drive -- which used
+     * to be read from end to end before it could say so, once per attach.
+     * At 2 GB that took five seconds.
+     */
+    constexpr isize numReserved = 2;
+    constexpr isize slack = 32;
+
+    const isize middle = (numReserved + bytes / bsize - 1) / 2;
+
+    for (isize nr = std::max(isize(0), middle - slack); nr <= middle; nr++) {
         if (isRB(seek(nr))) return nr;
     }
 

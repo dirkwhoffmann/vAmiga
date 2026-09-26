@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Images/AnyImage.h"
+#include "utl/io/TempFile.h"
 #include "utl/storage/BackedBuffer.h"
 
 namespace retro::vault {
@@ -52,6 +53,15 @@ class BinaryImage : public AnyImage, public utl::Dumpable {
     // The raw data of this file
     utl::BackedBuffer data;
 
+    /* Where the bytes really live when the image came from a packed file.
+     *
+     * A gzip compressed file cannot be read or written in pieces, so it is
+     * unpacked into a temporary file when the image is opened, and the image
+     * sits on that. Empty for a file that is the image itself, which is the
+     * normal case. See isPacked().
+     */
+    utl::TempFile unpacked;
+
 
     //
     // Initializing
@@ -78,19 +88,35 @@ public:
 
 protected:
 
-    /* Choosing the storage of an image read from a file.
+    /* How large the image in a file is.
      *
-     * init(path) asks makeBacking() where the bytes come from, and imageSize()
-     * how large the image is. Formats whose files are not the image itself
-     * override them: a compressed file needs a backing that unpacks it, and a
-     * short file an image larger than itself.
+     * By default exactly as large as the file, which is the normal case.
+     * Formats whose files are not the image itself override this: a short
+     * file may stand for a larger image. It is handed the file rather than
+     * its size, so a format can look inside first -- an HDF reads its rigid
+     * disk block to learn how large the drive is meant to be.
      *
-     * imageSize() is handed the backing, not just its size, so a format can
-     * look inside first -- an HDF reads its rigid disk block to learn how
-     * large the drive is meant to be. Nothing it reads stays loaded.
+     * The file it is given holds plain bytes: a compressed one has been
+     * unpacked by then (see isPacked()).
      */
-    virtual std::unique_ptr<utl::Backing> makeBacking(const fs::path &path) const;
-    virtual isize imageSize(utl::Backing &backing) const { return backing.size(); }
+    virtual isize imageSize(const fs::path &path) const;
+
+public:
+
+    /* Returns true if a file of this name holds its image gzip compressed.
+     *
+     * Compression is a property of the file name, not of the image: the same
+     * bytes are an .adf or an .adz, an .hdf or an .hdz. Reading such a file
+     * unpacks it, writing one packs it, and nothing between those two points
+     * knows about it.
+     */
+    static bool isPacked(const fs::path &path);
+
+private:
+
+    // Unpacks a compressed file into a temporary file, and back again
+    static utl::TempFile unpack(const fs::path &packed);
+    static void pack(const fs::path &plain, const fs::path &packed);
 
 
     //

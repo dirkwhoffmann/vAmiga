@@ -97,8 +97,9 @@ public:
 
     /* Predicts the number of blocks of this image.
      *
-     * Only meaningful for an image without an RDB, and expensive: with no
-     * RDB to consult, finding the root block means scanning the image.
+     * Only meaningful for an image without an RDB: with no RDB to consult,
+     * the block count is read off the root block, which has to be found
+     * first (see seekRB, which knows where to look).
      */
     isize predictNumBlocks() const;
 

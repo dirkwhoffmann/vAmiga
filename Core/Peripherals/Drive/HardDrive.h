@@ -65,9 +65,11 @@ class HardDrive final : public Drive, public TrackDevice {
     Options options = {
 
         Opt::HDR_TYPE,
+        Opt::HDR_WRITE_THROUGH,
+        Opt::HDR_SNAPSHOT,
+        Opt::HDR_SNAPSHOT_LIMIT,
         Opt::HDR_PAN,
-        Opt::HDR_STEP_VOLUME,
-        Opt::HDR_WRITE_THROUGH
+        Opt::HDR_STEP_VOLUME
     };
 
 public:
@@ -311,11 +313,18 @@ private:
      *
      * A disk built in memory has no file to go back to and is stored in full.
      *
+     * A disk in memory is left out altogether when the options say so (see
+     * HDR_SNAPSHOT and HDR_SNAPSHOT_LIMIT): a drive of several gigabytes
+     * would otherwise put every one of them into every snapshot. Restoring
+     * such a snapshot leaves the drive empty, as restoring one whose file has
+     * gone does.
+     *
      * Layout: an i64 comes first. -1 announces a path, stored as an i64 length
      * and its characters (not as a serialized string, which is limited to 255
-     * characters). Any other value is the size of the disk, followed by its
-     * bytes. That is the format of a utl::Buffer<u8>, in which the drive used
-     * to store every disk, so older snapshots still load.
+     * characters). -2 announces a disk that was left out. Any other value is
+     * the size of the disk, followed by its bytes. That is the format of a
+     * utl::Buffer<u8>, in which the drive used to store every disk, so older
+     * snapshots still load.
      */
     void serializeDisk(SerCounter &worker);
     void serializeDisk(SerChecker &worker);
@@ -325,6 +334,15 @@ private:
 
     // Returns true if the disk lives in a file
     bool fileBacked() const { return image && image->getStorageMode() == StorageMode::FILE_BACKED; }
+
+    /* Returns true if a snapshot is to carry the disk itself.
+     *
+     * Only a disk held in memory is ever carried: one that lives in a file is
+     * stored as its path, whatever the options say. The size limit counts the
+     * disk as the drive sees it, so a drive is either stored whole or not at
+     * all -- half a disk is no disk.
+     */
+    bool snapshotable() const;
 
     void _didReset(bool hard) override;
     void _didLoad() override;

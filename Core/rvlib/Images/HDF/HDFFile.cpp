@@ -18,6 +18,7 @@
 #include "utl/io.h"
 #include "utl/support.h"
 #include <format>
+#include <fstream>
 
 namespace retro::vault {
 
@@ -61,52 +62,26 @@ HDFFile::describeImage() const noexcept
 }
 
 isize
-HDFFile::writeToFile(const fs::path &path) const
+HDFFile::imageSize(const fs::path &path) const
 {
-    return writeToFile(path, 0, size());
-}
+    auto available = utl::getSizeOfFile(path);
 
-isize
-HDFFile::writeToFile(const fs::path &path, isize offset, isize len) const
-{
-    if (utl::lowercased(path.extension().string()) == ".hdz") {
+    std::ifstream in(path, std::ios::binary);
 
-        // Compress the requested range and write the result as a whole
-        utl::Buffer<u8> copy;
-        copy.init(byteView(offset, len).data(), len);
-        copy.gzip();
-        copy.write(path);
-        return copy.size;
+    if (!in.is_open())
+        throw utl::IOError(utl::IOError::FILE_CANT_READ, path);
 
-    } else {
-
-        return BinaryImage::writeToFile(path, offset, len);
-    }
-}
-
-std::unique_ptr<utl::Backing>
-HDFFile::makeBacking(const fs::path &path) const
-{
-    // An .hdz file is compressed and has to be unpacked as a whole
-    if (utl::lowercased(path.extension().string()) == ".hdz") {
-        return std::make_unique<utl::GzipBacking>(path);
-    }
-    return HardDiskImage::makeBacking(path);
-}
-
-isize
-HDFFile::imageSize(utl::Backing &backing) const
-{
-    auto available = backing.size();
-
-    // Look for a rigid disk block, reading straight from the backing
-    HDFLayout lay([&backing](isize nr, u8 *dst) {
+    // Look for a rigid disk block, reading straight from the file
+    HDFLayout lay([&in, available](isize nr, u8 *dst) {
 
         auto offset = nr * HDFLayout::bsize;
-        if (nr < 0 || offset + HDFLayout::bsize > backing.size()) return false;
+        if (nr < 0 || offset + HDFLayout::bsize > available) return false;
 
-        backing.read(dst, offset, HDFLayout::bsize);
-        return true;
+        in.clear();
+        in.seekg(offset);
+        in.read((char *)dst, HDFLayout::bsize);
+
+        return bool(in) && in.gcount() == HDFLayout::bsize;
 
     }, available);
 

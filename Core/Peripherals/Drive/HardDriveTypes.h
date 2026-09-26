@@ -124,6 +124,14 @@ typedef struct
 
     // Decides when a change reaches the file (see HardDrive::persist)
     WriteThroughMode writeThrough;
+
+    /* Decides whether a snapshot carries the disk itself, and how large a
+     * disk it is still worth carrying, in MB (see HardDrive::serializeDisk).
+     * A disk that lives in a file is stored as its path either way -- these
+     * two are about a disk held in memory, which has nowhere else to go.
+     */
+    bool snapshots;
+    isize snapshotLimit;
 }
 HardDriveConfig;
 

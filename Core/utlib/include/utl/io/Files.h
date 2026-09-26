@@ -41,6 +41,20 @@ bool isDirectory(const fs::path &path);
 // Creates a directory
 bool createDirectory(const fs::path &path);
 
+/* Creates a file of the given size which reads as zeros throughout.
+ *
+ * Only the last byte is written. Seeking past the end of a new file and
+ * writing there leaves a hole, and a hole reads as zeros -- so the file has
+ * the size asked for without that many bytes ever being handed to the disk.
+ * A file system that supports sparse files (APFS, ext4, NTFS) claims the
+ * space as it is written to later; one that does not claims it here. Either
+ * way, what is read back before anything is written is zeros.
+ *
+ * An existing file of that name is replaced. Reports false if the file
+ * could not be created or written, as createDirectory above does.
+ */
+bool createEmptyFile(const fs::path &path, isize size);
+
 // Removes a file or directory
 void remove(const fs::path &path);
 

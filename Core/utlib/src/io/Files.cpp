@@ -97,6 +97,32 @@ createDirectory(const fs::path &path)
     }
 }
 
+bool
+createEmptyFile(const fs::path &path, isize size)
+{
+    if (size < 0) return false;
+
+    try {
+
+        std::ofstream os(path, std::ios::binary | std::ios::trunc);
+        if (!os) return false;
+
+        // The hole is the file: see the note in Files.h
+        if (size > 0) {
+
+            os.seekp(std::streamoff(size - 1));
+            os.put('\0');
+        }
+
+        os.close();
+        return bool(os);
+
+    } catch (...) {
+
+        return false;
+    }
+}
+
 void
 remove(const fs::path &path)
 {

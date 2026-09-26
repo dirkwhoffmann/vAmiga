@@ -17,206 +17,14 @@
 
 namespace utl {
 
-//
-// FileBacking
-//
-
-FileBacking::FileBacking(const fs::path &path) : path(path)
+BackedBuffer::BackedBuffer(isize size)
 {
-    if (!fs::exists(path))
-        throw IOError(IOError::FILE_NOT_FOUND, path);
-
-    in.open(path, std::ios::binary);
-
-    if (!in.is_open())
-        throw IOError(IOError::FILE_CANT_READ, path);
-
-    bytes = isize(fs::file_size(path));
-}
-
-void
-FileBacking::read(u8 *dst, isize offset, isize len)
-{
-    assert(offset >= 0 && len >= 0 && offset + len <= bytes);
-
-    in.clear();
-    in.seekg(offset);
-    in.read((char *)dst, len);
-
-    if (!in || in.gcount() != len)
-        throw IOError(IOError::FILE_CANT_READ, path);
-}
-
-void
-FileBacking::write(const u8 *src, isize offset, isize len)
-{
-    assert(offset >= 0 && len >= 0 && offset + len <= bytes);
-
-    // Open the file for writing, without truncating it, when first needed
-    if (!out.is_open()) {
-
-        out.open(path, std::ios::binary | std::ios::in | std::ios::out);
-
-        if (!out.is_open())
-            throw IOError(IOError::FILE_CANT_WRITE, path);
-    }
-
-    out.seekp(offset);
-    out.write((const char *)src, len);
-
-    if (!out)
-        throw IOError(IOError::FILE_CANT_WRITE, path);
-}
-
-void
-FileBacking::extend(isize newSize)
-{
-    if (newSize <= bytes) return;
-
-    // Anything written so far must be in the file before it changes size
-    if (out.is_open()) out.flush();
-
-    std::error_code ec;
-    fs::resize_file(path, uintmax_t(newSize), ec);
-
-    if (ec)
-        throw IOError(IOError::FILE_CANT_WRITE, path);
-
-    bytes = newSize;
-}
-
-void
-FileBacking::flush()
-{
-    if (!out.is_open()) return;
-
-    out.flush();
-    auto good = bool(out);
-    out.close();
-
-    if (!good)
-        throw IOError(IOError::FILE_CANT_WRITE, path);
-}
-
-
-//
-// BufferBacking
-//
-
-void
-BufferBacking::read(u8 *dst, isize offset, isize len)
-{
-    assert(offset >= 0 && len >= 0 && offset + len <= buffer.size);
-    if (len) std::memcpy(dst, buffer.ptr + offset, size_t(len));
-}
-
-void
-BufferBacking::write(const u8 *src, isize offset, isize len)
-{
-    assert(offset >= 0 && len >= 0 && offset + len <= buffer.size);
-    if (len) std::memcpy(buffer.ptr + offset, src, size_t(len));
-}
-
-void
-BufferBacking::extend(isize newSize)
-{
-    if (newSize > buffer.size) buffer.resize(newSize, 0);
-}
-
-
-//
-// GzipBacking
-//
-
-GzipBacking::GzipBacking(const fs::path &path) : path(path)
-{
-    if (!fs::exists(path))
-        throw IOError(IOError::FILE_NOT_FOUND, path);
-
-    std::ifstream in(path, std::ios::binary);
-
-    if (!in.is_open())
-        throw IOError(IOError::FILE_CANT_READ, path);
-
-    std::vector<u8> packed((std::istreambuf_iterator<char>(in)),
-                           std::istreambuf_iterator<char>());
-
-    if (in.bad())
-        throw IOError(IOError::FILE_CANT_READ, path);
-
-    if (packed.empty()) return;
-
-    data.init(packed.data(), isize(packed.size()));
-
-    try {
-        data.gunzip();
-    } catch (std::exception &err) {
-        throw IOError(IOError::ZLIB_ERROR, err.what());
-    }
-}
-
-void
-GzipBacking::read(u8 *dst, isize offset, isize len)
-{
-    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
-    if (len) std::memcpy(dst, data.ptr + offset, size_t(len));
-}
-
-void
-GzipBacking::write(const u8 *src, isize offset, isize len)
-{
-    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
-    if (len) std::memcpy(data.ptr + offset, src, size_t(len));
-}
-
-void
-GzipBacking::extend(isize newSize)
-{
-    if (newSize > data.size) data.resize(newSize, 0);
-}
-
-void
-GzipBacking::flush()
-{
-    // Compress first, so that a failure here leaves the file alone
-    std::vector<u8> packed;
-
-    if (data.size) try {
-        Compressible::gzip(data.ptr, data.size, packed);
-    } catch (std::exception &err) {
-        throw IOError(IOError::ZLIB_ERROR, err.what());
-    }
-
-    std::ofstream out(path, std::ios::binary | std::ios::trunc);
-
-    if (!out.is_open())
-        throw IOError(IOError::FILE_CANT_WRITE, path);
-
-    out.write((const char *)packed.data(), std::streamsize(packed.size()));
-    out.flush();
-
-    if (!out)
-        throw IOError(IOError::FILE_CANT_WRITE, path);
-}
-
-
-//
-// BackedBuffer
-//
-
-BackedBuffer::BackedBuffer(isize size, std::unique_ptr<Backing> backing, bool readOnly)
-{
-    init(size, std::move(backing), readOnly);
+    init(size);
 }
 
 BackedBuffer::BackedBuffer(isize size, const fs::path &path, bool readOnly)
 {
     init(size, path, readOnly);
-}
-
-BackedBuffer::BackedBuffer(isize size, Buffer<u8> &buffer, bool readOnly)
-{
-    init(size, buffer, readOnly);
 }
 
 BackedBuffer::~BackedBuffer()
@@ -237,18 +45,22 @@ BackedBuffer::operator=(BackedBuffer &&other) noexcept
         dealloc();
 
         readOnly = std::exchange(other.readOnly, false);
-        backing = std::move(other.backing);
+        file = std::move(other.file);
+        in = std::move(other.in);
+        out = std::move(other.out);
+        fileBytes = std::exchange(other.fileBytes, 0);
         mem = std::exchange(other.mem, nullptr);
         bytes = std::exchange(other.bytes, 0);
         pages = std::move(other.pages);
         dirtyPages = std::exchange(other.dirtyPages, 0);
+        other.file.clear();
         other.pages.clear();
     }
     return *this;
 }
 
 void
-BackedBuffer::init(isize size, std::unique_ptr<Backing> backing, bool readOnly)
+BackedBuffer::init(isize size)
 {
     assert(size >= 0);
 
@@ -264,8 +76,6 @@ BackedBuffer::init(isize size, std::unique_ptr<Backing> backing, bool readOnly)
         if (!mem) throw std::bad_alloc();
     }
 
-    this->backing = std::move(backing);
-    this->readOnly = readOnly;
     bytes = size;
     pages.assign(size_t((size + pageSize - 1) / pageSize), Page::Absent);
     dirtyPages = 0;
@@ -274,21 +84,33 @@ BackedBuffer::init(isize size, std::unique_ptr<Backing> backing, bool readOnly)
 void
 BackedBuffer::init(isize size, const fs::path &path, bool readOnly)
 {
-    init(size, std::make_unique<FileBacking>(path), readOnly);
-}
+    if (!fs::exists(path))
+        throw IOError(IOError::FILE_NOT_FOUND, path);
 
-void
-BackedBuffer::init(isize size, Buffer<u8> &buffer, bool readOnly)
-{
-    init(size, std::make_unique<BufferBacking>(buffer), readOnly);
+    std::ifstream stream(path, std::ios::binary);
+
+    if (!stream.is_open())
+        throw IOError(IOError::FILE_CANT_READ, path);
+
+    // Nothing is allowed to fail after the buffer has been given its memory
+    init(size);
+
+    file = path;
+    in = std::move(stream);
+    fileBytes = isize(fs::file_size(path));
+    this->readOnly = readOnly;
 }
 
 void
 BackedBuffer::detach()
 {
-    // Everything has to be in memory before the backing goes away
+    // Everything has to be in memory before the file goes away
     load(0, bytes);
-    backing = nullptr;
+
+    in.close();
+    out.close();
+    file.clear();
+    fileBytes = 0;
 }
 
 void
@@ -296,8 +118,11 @@ BackedBuffer::dealloc()
 {
     std::free(mem);
 
+    in.close();
+    out.close();
+    file.clear();
+    fileBytes = 0;
     readOnly = false;
-    backing = nullptr;
     mem = nullptr;
     bytes = 0;
     pages.clear();
@@ -333,10 +158,10 @@ BackedBuffer::mutableByteView(isize offset, isize len)
 void
 BackedBuffer::persist()
 {
-    if (readOnly || !backing || !dirtyPages) return;
+    if (readOnly || !backed() || !dirtyPages) return;
 
-    // Give a short backing the buffer's size before writing into it
-    if (backing->size() < bytes) backing->extend(bytes);
+    // Give a short file the buffer's size before writing into it
+    growFile(bytes);
 
     auto count = isize(pages.size());
 
@@ -350,15 +175,14 @@ BackedBuffer::persist()
 
         auto begin = p * pageSize;
         auto end = std::min(q * pageSize, bytes);
-        backing->write(mem + begin, begin, end - begin);
+        writeFile(mem + begin, begin, end - begin);
         p = q;
     }
 
-    /* Only a completed flush makes the pages clean. A backing may hold on to
-     * what it was given until then -- a compressed file does, and so does a
-     * buffered stream -- so nothing is safe before flush() has returned.
+    /* Only a completed close makes the pages clean: a buffered stream holds on
+     * to what it was given, so nothing is safe before the stream is gone.
      */
-    backing->flush();
+    closeFile();
 
     for (auto &page : pages) if (page == Page::Dirty) page = Page::Clean;
     dirtyPages = 0;
@@ -390,14 +214,77 @@ BackedBuffer::fetch(isize first, isize last) const
     auto begin = first * pageSize;
     auto end = std::min(last * pageSize, bytes);
 
-    // Bytes up to 'covered' come from the backing, the rest is zero
-    auto available = backing ? backing->size() : 0;
-    auto covered = std::clamp(available, begin, end);
+    // Bytes up to 'covered' come from the file, the rest is zero
+    auto covered = std::clamp(fileBytes, begin, end);
 
-    if (covered > begin) backing->read(mem + begin, begin, covered - begin);
+    if (covered > begin) readFile(mem + begin, begin, covered - begin);
     if (end > covered) std::memset(mem + covered, 0, size_t(end - covered));
 
     for (auto p = first; p < last; p++) pages[p] = Page::Clean;
+}
+
+void
+BackedBuffer::readFile(u8 *dst, isize offset, isize len) const
+{
+    assert(offset >= 0 && len >= 0 && offset + len <= fileBytes);
+
+    in.clear();
+    in.seekg(offset);
+    in.read((char *)dst, len);
+
+    if (!in || in.gcount() != len)
+        throw IOError(IOError::FILE_CANT_READ, file);
+}
+
+void
+BackedBuffer::writeFile(const u8 *src, isize offset, isize len)
+{
+    assert(offset >= 0 && len >= 0 && offset + len <= fileBytes);
+
+    // Open the file for writing, without truncating it, when first needed
+    if (!out.is_open()) {
+
+        out.open(file, std::ios::binary | std::ios::in | std::ios::out);
+
+        if (!out.is_open())
+            throw IOError(IOError::FILE_CANT_WRITE, file);
+    }
+
+    out.seekp(offset);
+    out.write((const char *)src, len);
+
+    if (!out)
+        throw IOError(IOError::FILE_CANT_WRITE, file);
+}
+
+void
+BackedBuffer::growFile(isize newSize)
+{
+    if (newSize <= fileBytes) return;
+
+    // Anything written so far must be in the file before it changes size
+    if (out.is_open()) out.flush();
+
+    std::error_code ec;
+    fs::resize_file(file, uintmax_t(newSize), ec);
+
+    if (ec)
+        throw IOError(IOError::FILE_CANT_WRITE, file);
+
+    fileBytes = newSize;
+}
+
+void
+BackedBuffer::closeFile()
+{
+    if (!out.is_open()) return;
+
+    out.flush();
+    auto good = bool(out);
+    out.close();
+
+    if (!good)
+        throw IOError(IOError::FILE_CANT_WRITE, file);
 }
 
 }

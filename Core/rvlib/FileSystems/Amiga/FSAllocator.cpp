@@ -11,6 +11,7 @@
 #include "FileSystems/Amiga/FileSystem.h"
 #include "utl/support.h"
 #include <bit>
+#include <algorithm>
 
 namespace retro::vault::amiga {
 
@@ -296,26 +297,30 @@ FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noex
         return nullptr;
     }
 
-    // Locate the byte position (note: the long word ordering will be reversed)
+    // Locate the byte position
     nr = nr % bitsPerBlock;
-    isize rByte = nr / 8;
-
-    // Rectifiy the ordering
-    switch (rByte % 4) {
-        case 0: rByte += 3; break;
-        case 1: rByte += 1; break;
-        case 2: rByte -= 1; break;
-        case 3: rByte -= 3; break;
-    }
-
-    // Skip the checksum which is located in the first four bytes
-    rByte += 4;
+    isize rByte = allocationByte(nr / 8);
     assert(rByte >= 4 && rByte < traits.bsize);
 
     *byte = rByte;
     *bit = nr % 8;
 
     return &bm;
+}
+
+isize
+FSAllocator::allocationByte(isize nr) noexcept
+{
+    // Rectify the ordering (the bits are stored as big endian long words)
+    switch (nr % 4) {
+        case 0: nr += 3; break;
+        case 1: nr += 1; break;
+        case 2: nr -= 1; break;
+        case 3: nr -= 3; break;
+    }
+
+    // Skip the checksum, which occupies the first four bytes
+    return nr + 4;
 }
 
 /*
@@ -391,6 +396,58 @@ FSAllocator::setAllocBit(BlockNr nr, bool value)
 
         auto *data = bm->mutate().data();
         REPLACE_BIT(data[byte], bit, value);
+    }
+}
+
+void
+FSAllocator::setAllocBits(BlockNr from, BlockNr to, bool value)
+{
+    auto &bmBlocks = fs.getBmBlocks();
+    const isize bitsPerBlock = (traits.bsize - 4) * 8;
+
+    /* The first two blocks are always allocated and not part of the map, so
+     * the range is shifted down by two, exactly as a single lookup shifts a
+     * block number (see locateAllocationBit).
+     */
+    const isize first = std::max(isize(from), isize(2)) - 2;
+    const isize last = std::min(isize(to), traits.blocks - 1) - 2;
+
+    if (last < first) return;
+
+    for (isize i = first / bitsPerBlock; i <= last / bitsPerBlock; i++) {
+
+        if (i >= isize(bmBlocks.size())) {
+
+            logmsg(LOG_FS, "Bitmap block index %td is out of range\n", i);
+            return;
+        }
+
+        auto &bm = fs.fetch(bmBlocks[i]);
+
+        if (!bm.is(FSBlockType::BITMAP)) {
+
+            logmsg(LOG_FS, "Failed to lookup allocation bits in block %td\n", i);
+            continue;
+        }
+
+        // The part of the range this bitmap block holds, in its own numbering
+        const isize base = i * bitsPerBlock;
+        const isize lo = std::max(first, base) - base;
+        const isize hi = std::min(last, base + bitsPerBlock - 1) - base;
+
+        auto *data = bm.mutate().data();
+
+        for (isize byte = lo / 8; byte <= hi / 8; byte++) {
+
+            // Which bits of this byte the range covers. All of them, save at
+            // the two ends, which is what makes this worth doing.
+            const isize lsb = std::max(lo - byte * 8, isize(0));
+            const isize msb = std::min(hi - byte * 8, isize(7));
+            const u8 mask = u8(((1 << (msb - lsb + 1)) - 1) << lsb);
+
+            auto &b = data[allocationByte(byte)];
+            b = value ? u8(b | mask) : u8(b & ~mask);
+        }
     }
 }
 

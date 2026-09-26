@@ -1218,8 +1218,9 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     auto vol = Volume(adf);
     auto fs = FileSystem(vol);
 
-    // Format the file system
+    // Format the file system and name it
     fs.format(dos);
+    fs.setName(FSName(name));
 
     // If a path is given, import files
     if (!path.empty()) fs.importer.import(path);
@@ -1228,8 +1229,13 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
     // auto dev = make_unique<Device>(GeometryDescriptor(diameter(), density()));
     // auto fs = FileSystemFactory::createLowLevel(*dev, diameter(), density(), dos, path);
 
-    // Make the volume bootable
-    fs.makeBootable(bb);
+    /* Make the volume bootable
+     *
+     * Only a formatted volume has boot blocks to write to -- format() leaves
+     * an unformatted disk untouched, so asking for one here would walk into
+     * makeBootable()'s own assertion about block 0 and 1.
+     */
+    if (dos != FSFormat::NODOS) fs.makeBootable(bb);
 
     // Check file system consistency
     if CONSTEXPR (FS_VERIFY) fs.doctor.xray(true, std::cout, false);
