@@ -66,7 +66,6 @@ class HardDrive final : public Drive, public TrackDevice {
 
         Opt::HDR_TYPE,
         Opt::HDR_WRITE_THROUGH,
-        Opt::HDR_SNAPSHOT,
         Opt::HDR_SNAPSHOT_LIMIT,
         Opt::HDR_PAN,
         Opt::HDR_STEP_VOLUME
@@ -335,13 +334,7 @@ private:
     // Returns true if the disk lives in a file
     bool fileBacked() const { return image && image->getStorageMode() == StorageMode::FILE_BACKED; }
 
-    /* Returns true if a snapshot is to carry the disk itself.
-     *
-     * Only a disk held in memory is ever carried: one that lives in a file is
-     * stored as its path, whatever the options say. The size limit counts the
-     * disk as the drive sees it, so a drive is either stored whole or not at
-     * all -- half a disk is no disk.
-     */
+    // Returns true if the drive is small enough to be stored in snapshots
     bool snapshotable() const;
 
     void _didReset(bool hard) override;

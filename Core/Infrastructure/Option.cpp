@@ -160,7 +160,6 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::HDR_PAN:                   return numParser();
         case Opt::HDR_STEP_VOLUME:           return numParser("%");
         case Opt::HDR_WRITE_THROUGH:         return enumParser.template operator()<WriteThroughModeEnum,WriteThroughMode>();
-        case Opt::HDR_SNAPSHOT:              return boolParser();
         case Opt::HDR_SNAPSHOT_LIMIT:        return numParser(" MB");
 
         case Opt::SER_DEVICE:                return enumParser.template operator()<SerialPortDeviceEnum,SerialPortDevice>();

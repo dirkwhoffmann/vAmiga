@@ -276,7 +276,7 @@ namespace {
 // First value of a serialized disk that is stored as a path (see serializeDisk)
 constexpr i64 diskIsPath = -1;
 
-// ... and of one the options kept out of the snapshot
+// ... and of one the limit kept out of the snapshot
 constexpr i64 diskIsOmitted = -2;
 
 }
@@ -284,10 +284,7 @@ constexpr i64 diskIsOmitted = -2;
 bool
 HardDrive::snapshotable() const
 {
-    if (!image || fileBacked()) return false;
-    if (!config.snapshots) return false;
-
-    return size() <= config.snapshotLimit * 1024 * 1024;
+    return image && size() <= config.snapshotLimit * 1024 * 1024;
 }
 
 void
@@ -310,9 +307,9 @@ HardDrive::serializeDisk(SerChecker &worker)
      * is checked (older snapshots were written with one). A disk that lives
      * in a file counts as empty: the snapshot stores its path only, and
      * whether the file still opens when the snapshot is restored must not
-     * decide whether the snapshot is taken for intact. So does one the
-     * options kept out -- what is not written cannot come back, and checking
-     * it would declare every such snapshot corrupt. The run-ahead instance
+     * decide whether the snapshot is taken for intact. So does a disk past
+     * HDR_SNAPSHOT_LIMIT -- what is not written cannot come back, and
+     * checking it would declare every such snapshot corrupt. The run-ahead instance
      * shares the disk with the main instance, so comparing the two is not
      * affected either way.
      */
@@ -423,7 +420,6 @@ HardDrive::getOption(Opt option) const
         case Opt::HDR_PAN:           return (long)config.pan;
         case Opt::HDR_STEP_VOLUME:   return (long)config.stepVolume;
         case Opt::HDR_WRITE_THROUGH: return (long)config.writeThrough;
-        case Opt::HDR_SNAPSHOT:      return (long)config.snapshots;
         case Opt::HDR_SNAPSHOT_LIMIT: return (long)config.snapshotLimit;
 
         default:
@@ -445,7 +441,6 @@ HardDrive::checkOption(Opt opt, i64 value)
 
         case Opt::HDR_PAN:
         case Opt::HDR_STEP_VOLUME:
-        case Opt::HDR_SNAPSHOT:
 
             return;
 
@@ -488,11 +483,6 @@ HardDrive::setOption(Opt option, i64 value)
         case Opt::HDR_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
-            return;
-
-        case Opt::HDR_SNAPSHOT:
-
-            config.snapshots = bool(value);
             return;
 
         case Opt::HDR_SNAPSHOT_LIMIT:
@@ -565,6 +555,7 @@ HardDrive::cacheInfo() const
     info.hasUnmodifiedDisk = hasUnmodifiedDisk();
     info.hasProtectedDisk = hasProtectedDisk();
     info.hasUnprotectedDisk = hasUnprotectedDisk();
+    info.snapshotable = snapshotable();
 
     info.partitions = numPartitions();
 

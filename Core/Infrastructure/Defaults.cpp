@@ -165,7 +165,6 @@ Defaults::fallbacks()
     registerDefaults(Opt::HDC_MEM_LIMIT,              256,                    { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_TYPE,                   (i64)HardDriveType::GENERIC, { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_WRITE_THROUGH,          (i64)WriteThroughMode::NEVER, { 0, 1, 2, 3 });
-    registerDefaults(Opt::HDR_SNAPSHOT,               true,                   { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_SNAPSHOT_LIMIT,         128,                    { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_PAN,                    300,                    { 0, 2 });
     registerDefaults(Opt::HDR_PAN,                    100,                    { 1, 3 });
