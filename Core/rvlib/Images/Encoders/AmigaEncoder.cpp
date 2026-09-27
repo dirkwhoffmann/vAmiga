@@ -12,6 +12,7 @@
 #include "Images/Encoders/MFM.h"
 #include "Devices/DeviceError.h"
 #include "utl/support/Bits.h"
+#include <algorithm>
 
 namespace retro::vault {
 
@@ -32,10 +33,13 @@ AmigaEncoder::encodeTrack(utl::ByteView src, TrackNr t)
     logmsg(LOG_IMG, "Encoding Amiga track %td with %td sectors\n", t, count);
 
     // Start with a clean track
-    if (trackBuffer.empty()) trackBuffer.resize(16384, 0xAA);
+    auto trackBytes = count == 11 ? 12668 : 24636;
+    if (trackBuffer.empty()) trackBuffer.resize(trackBytes);
+    std::fill(trackBuffer.begin(), trackBuffer.end(), 0xAA);
 
     // Create views
-    auto bitView = utl::MutableBitView(trackBuffer.data(), count * ssize * 8);
+    auto trackBits = 8 * trackBytes;
+    auto bitView = utl::MutableBitView(trackBuffer.data(), trackBits);
     auto view = bitView.byteView();
 
     for (SectorNr s = 0; s < count; s++) {
