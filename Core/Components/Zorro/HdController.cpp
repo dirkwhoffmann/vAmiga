@@ -116,8 +116,8 @@ HdController::checkOption(Opt opt, i64 value)
         case Opt::HDC_MB_LIMIT:
         case Opt::HDC_MEM_LIMIT:
 
-            if (value < 0) {
-                throw CoreError(CoreError::OPT_INV_ARG, "0 (no limit) or a positive value");
+            if (value < 1 || value > 16384) {
+                throw CoreError(CoreError::OPT_INV_ARG, "1...16384");
             }
             return;
 

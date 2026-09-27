@@ -893,6 +893,12 @@ public:
      */
     void attach(isize c, isize h, isize s, isize b = 512);
 
+    /** @brief  Takes the disk out of the drive.
+     *  @note   The counterpart of attach(). The drive is left as it was
+     *          before anything was attached.
+     */
+    void detach();
+
     /** @brief  Imports files from a folder
      *  @note   All existing files are deleted prior to importing the folder.
      */
@@ -1783,13 +1789,6 @@ public:
     VAmiga();
     ~VAmiga();
 
-    /* Not copyable. The copy would share the one Emulator this object owns,
-     * and its destructor would halt that emulator and delete it out from
-     * under the original -- everything carries on working until the copy goes
-     * out of scope, and the crash lands somewhere else entirely. Writing
-     * 'auto core = ...' instead of 'auto &core = ...' is enough to do it, so
-     * the mistake is worth refusing at compile time.
-     */
     VAmiga(const VAmiga &) = delete;
     VAmiga &operator=(const VAmiga &) = delete;
     

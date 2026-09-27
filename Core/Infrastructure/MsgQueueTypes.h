@@ -98,6 +98,8 @@ enum class Msg : long
     HDC_STATE,
     
     // Hard drives
+    HDR_ATTACH,
+    HDR_DETACH,
     HDR_STEP,
     HDR_READ,
     HDR_WRITE,
@@ -216,6 +218,8 @@ struct MsgEnum : Reflectable<MsgEnum, Msg>
             case Msg::HDC_CONNECT:           return "HDC_CONNECT";
             case Msg::HDC_STATE:             return "HDC_STATE";
                 
+            case Msg::HDR_ATTACH:            return "HDR_ATTACH";
+            case Msg::HDR_DETACH:            return "HDR_DETACH";
             case Msg::HDR_STEP:              return "HDR_STEP";
             case Msg::HDR_READ:              return "HDR_READ";
             case Msg::HDR_WRITE:             return "HDR_WRITE";

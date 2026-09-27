@@ -120,9 +120,7 @@ public:
 
     ~BackedBuffer();
 
-    /* Copying is refused, because two buffers would share one file without
-     * knowing about each other.
-     */
+    // Copying is refused, because two buffers would share one file
     BackedBuffer(const BackedBuffer &) = delete;
     BackedBuffer &operator=(const BackedBuffer &) = delete;
 
@@ -145,13 +143,7 @@ public:
     void init(isize size);
     void init(isize size, const fs::path &path, bool readOnly = false);
 
-    /* Loads everything and lets go of the file.
-     *
-     * The buffer keeps its size and its contents, but has nowhere to persist
-     * to from then on: it is a plain buffer in memory. Modifications that
-     * were never persisted are kept, and so is their mark, but persist() has
-     * nothing left to write them to.
-     */
+    // Detaches the connected drive (if any)
     void detach();
 
     // Returns the buffer to the state of a default constructed one

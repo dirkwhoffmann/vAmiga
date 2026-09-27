@@ -177,6 +177,13 @@ public:
      */
     void init(const fs::path &path, StorageMode mode = StorageMode::FILE_BACKED);
 
+    /* Takes the disk out of the drive, leaving it as it was before anything
+     * was attached. The counterpart of the init() calls above; it says
+     * nothing about the controller the drive hangs off, which is connected
+     * and disconnected through Opt::HDC_CONNECT.
+     */
+    void detach();
+
     const HardDriveTraits &getTraits() const {
 
         static HardDriveTraits traits;

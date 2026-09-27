@@ -109,6 +109,8 @@ HardDrive::init(const GeometryDescriptor &geometry)
 
     // Create an empty disk in memory
     image = std::make_shared<HDFFile>(geometry.numBytes());
+
+    msgQueue.put(Msg::HDR_ATTACH, objid);
 }
 
 void
@@ -119,6 +121,17 @@ HardDrive::checkMemoryLimit(i64 bytes) const
     if (limit && bytes > limit * MB(1)) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE_FOR_MEM, std::to_string(limit));
     }
+}
+
+void
+HardDrive::detach()
+{
+    if (!image) return;
+
+    // Wipe the drive, disk and description alike
+    init();
+
+    msgQueue.put(Msg::HDR_DETACH, objid);
 }
 
 void
@@ -219,6 +232,8 @@ HardDrive::init(std::unique_ptr<HDFFile> hdf)
 
     // Take over the image. Nothing is copied, and nothing is read yet.
     image = std::move(hdf);
+
+    msgQueue.put(Msg::HDR_ATTACH, objid);
 
     // Print some debug information
     logmsg(LOG_HDR, "%zu (needed) file system drivers\n", drivers.size());

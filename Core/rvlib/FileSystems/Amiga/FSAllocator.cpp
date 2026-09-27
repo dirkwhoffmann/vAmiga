@@ -323,14 +323,6 @@ FSAllocator::allocationByte(isize nr) noexcept
     return nr + 4;
 }
 
-/*
-const FSBlock *
-FSAllocator::locateAllocationBit(BlockNr nr, isize *byte, isize *bit) const noexcept
-{
-    return const_cast<const FSBlock *>(const_cast<FSAllocator *>(this)->locateAllocationBit(nr, byte, bit));
-}
-*/
-
 isize
 FSAllocator::numUnallocated() const noexcept
 {

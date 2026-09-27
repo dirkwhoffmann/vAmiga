@@ -1398,6 +1398,14 @@ HardDriveAPI::format(amiga::FSFormat fs, const string &name)
 }
 
 void
+HardDriveAPI::detach()
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->detach();
+    emu->markAsDirty();
+}
+
+void
 HardDriveAPI::importFiles(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
