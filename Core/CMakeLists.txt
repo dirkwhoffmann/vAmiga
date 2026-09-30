@@ -73,19 +73,19 @@ add_subdirectory(ThirdParty)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+set(VA_CORE_LIBRARIES utlib rvlib Threads::Threads)
+
 if(APPLE)
-    find_library(COREMIDI_FRAMEWORK CoreMIDI REQUIRED)
-    find_library(COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+  find_library(COREMIDI_FRAMEWORK CoreMIDI REQUIRED)
+  find_library(COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+
+  list(APPEND VA_CORE_LIBRARIES ${COREMIDI_FRAMEWORK} ${COREFOUNDATION_FRAMEWORK})
 endif()
 
 # Link everything in a single call
 target_link_libraries(VACore
-    PUBLIC
-    utlib
-    rvlib
-    Threads::Threads
-    $<$<PLATFORM_ID:Darwin>:${COREMIDI_FRAMEWORK}>
-    $<$<PLATFORM_ID:Darwin>:${COREFOUNDATION_FRAMEWORK}>
+  PUBLIC
+  ${VA_CORE_LIBRARIES}
 )
 
 # Link zlib if available
