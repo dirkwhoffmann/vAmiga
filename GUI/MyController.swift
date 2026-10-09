@@ -579,6 +579,9 @@ extension MyController {
         case .HDC_STATE:
             statusBarIsDirty = true
             
+        case .HDR_ATTACH, .HDR_DETACH:
+            break
+            
         case .HDR_STEP:
             macAudio.playSound(MacAudio.Sounds.move, volume: volume, pan: pan)
             statusBarIsDirty = true
