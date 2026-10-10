@@ -14,6 +14,7 @@
 #include "Option.h"
 #include "Media.h"
 #include "utl/chrono.h"
+#include "utl/graphics/Images.h"
 #include "utl/io.h"
 #include <algorithm>
 #include <format>
@@ -399,6 +400,39 @@ Amiga::saveWorkspace(const fs::path &path)
         }
     };
 
+    auto exportPreview = [&]() {
+
+        /* Save the most recent frame, cropped to the largest visible area
+         * (no HBLANK, no VBLANK). The texture holds two GPU texels per Texel,
+         * i.e., one texel per super-hires pixel. Those are twice as wide as
+         * they are tall, so every line is repeated four times to get an image
+         * with the proportions the GUI shows.
+         */
+        constexpr isize vscale = 4;
+
+        auto &texture = denise.pixelEngine.getStableBuffer();
+        auto *texels = reinterpret_cast<const u32 *>(texture.pixels.ptr);
+
+        isize x1 = 8 * HBLANK_CNT;
+        isize x2 = 8 * HPOS_CNT;
+        isize y1 = agnus.isPAL() ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT;
+        isize y2 = agnus.isPAL() ? PAL::VPOS_CNT : NTSC::VPOS_CNT;
+        isize w = x2 - x1;
+        isize h = y2 - y1 - 1;
+
+        std::vector<u32> image(w * h * vscale);
+        for (isize y = 0; y < h; y++) {
+
+            auto *src = texels + (y1 + y) * 2 * HPIXELS + x1;
+            for (isize i = 0; i < vscale; i++)
+                std::copy(src, src + w, image.begin() + (y * vscale + i) * w);
+        }
+
+        auto format = static_cast<utl::TexelFormat>(host.getConfig().texFormat);
+        utl::exportImage(path / "preview.png", image.data(), w, h * vscale,
+                         utl::ImgFormat::PNG, format);
+    };
+
     // If a file with the specified name exists, delete it
     if (fs::exists(path) && !fs::is_directory(path)) fs::remove(path);
     
@@ -469,6 +503,9 @@ Amiga::saveWorkspace(const fs::path &path)
         ss << "\n# Hard drives\n\n";
         ss << hd.str();
     }
+
+    // Add a preview image to the workspace bundle
+    try { exportPreview(); } catch (...) { }
 
     // Write the script into the workspace bundle
     std::ofstream file(path / "config.retrosh");
