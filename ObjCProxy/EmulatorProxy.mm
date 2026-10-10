@@ -2432,6 +2432,16 @@ ImageInfo scan(const fs::path &url)
     catch(Error &error) { [ex save:error]; }
 }
 
+- (void)saveWorkspaceAsync:(NSURL *)url
+{
+    [self amiga]->saveWorkspaceAsync([url fileSystemRepresentation]);
+}
+
+- (void)saveSnapshotAsync:(NSURL *)url
+{
+    [self amiga]->saveSnapshotAsync([url fileSystemRepresentation]);
+}
+
 - (BOOL)getMessage:(Message *)msg
 {
     return [self amiga]->getMsg(*msg);

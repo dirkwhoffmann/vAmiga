@@ -13,15 +13,8 @@
 #include <vector>
 #include <fstream>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wall"
-#pragma GCC diagnostic ignored "-Wextra"
-
-// miniz is compiled as part of zip.c; only its declarations are needed here
 #define MINIZ_HEADER_FILE_ONLY
 #include "miniz.h"
-
-#pragma GCC diagnostic pop
 
 namespace utl {
 

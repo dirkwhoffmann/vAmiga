@@ -42,6 +42,9 @@ class MyDocument: NSDocument {
     // Gateway to the core emulator
     var emu: EmulatorProxy?
     
+    // Resumed when the core has finished saving a workspace
+    private var workspaceSaved: CheckedContinuation<AppError?, Never>?
+
     // Snapshots
     static let maxSnapshots: Int = 16
     private(set) var snapshots = ManagedArray<SnapshotProxy>(maxCount: maxSnapshots)
@@ -133,23 +136,32 @@ class MyDocument: NSDocument {
         
         if typeName == "de.dirkwhoffmann.retro.vamiga" {
             
-            do {
-                // Save the workspace
-                try emu?.amiga.saveWorkspace(url: url)
-                
-                // Save a plist file containing the machine properties
-                saveMachineDescription(to: url.appendingPathComponent("machine.plist"))
-                
-                // Update the document's title and save status
-                self.fileURL = url
-                self.windowForSheet?.title = url.deletingPathExtension().lastPathComponent
-                self.updateChangeCount(.changeCleared)
-                
-            } catch let error as AppError {
-                
-                throw NSError(error: error)
+            // Save the workspace. The emulator thread does the work, and it
+            // wipes the folder first, so everything the GUI adds to the
+            // bundle has to wait until the core reports completion.
+            if let emu = emu {
+                let error = await withCheckedContinuation { (continuation: CheckedContinuation<AppError?, Never>) in
+                    workspaceSaved = continuation
+                    emu.amiga.saveWorkspaceAsync(url)
+                }
+                if let error = error { throw NSError(error: error) }
             }
+            
+            // Save a plist file containing the machine properties
+            saveMachineDescription(to: url.appendingPathComponent("machine.plist"))
+            
+            // Update the document's title and save status
+            self.fileURL = url
+            self.windowForSheet?.title = url.deletingPathExtension().lastPathComponent
+            self.updateChangeCount(.changeCleared)
         }
+    }
+    
+    // Called by the controller when the core has finished saving a workspace
+    func workspaceDidSave(errorCode: Int, what: String) {
+        
+        workspaceSaved?.resume(returning: errorCode == 0 ? nil : AppError(errorCode, what))
+        workspaceSaved = nil
     }
     
     func saveMachineDescription(to url: URL) {

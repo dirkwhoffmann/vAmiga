@@ -349,6 +349,7 @@ extension MyController {
         guard let emu = emu else { return }
         var value: Int { return Int(msg.value) }
         var value2: Int { return Int(msg.value2) }
+        var attachedString: String { return msg.str.map { String(cString: $0) } ?? "" }
         // RetroShell messages carry the id of the emitting shell (0 = main shell)
         var isMainShell: Bool { return msg.value == 0 }
         var nr: Int { return Int(msg.drive.nr) }
@@ -633,9 +634,14 @@ extension MyController {
             statusBarIsDirty = true
             
         case .SNAPSHOT_SAVED:
-            break
+            if value != 0 {
+                showAlert(.cantSaveSnapshot, what: attachedString, async: true)
+            }
 
-        case .WORKSPACE_SAVED, .WORKSPACE_LOADED:
+        case .WORKSPACE_SAVED:
+            mydocument.workspaceDidSave(errorCode: value, what: attachedString)
+
+        case .WORKSPACE_LOADED:
             break
             
         case .SHAKING:

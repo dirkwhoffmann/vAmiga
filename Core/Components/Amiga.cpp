@@ -1362,15 +1362,24 @@ Amiga::processCommand(const Command &cmd)
             break;
 
         case Cmd::SAVE_WORKSPACE:
-
-            saveWorkspace(cmd.str);
+            
+            try {
+                saveWorkspace(cmd.str);
+            } catch (const std::exception &e) {
+                msgQueue.put(Msg::WORKSPACE_SAVED, -1, 0, e.what());
+            }
             break;
-
+        
+    
         case Cmd::SAVE_SNAPSHOT:
-
-            saveSnapshot(cmd.str);
+            
+            try {
+                saveSnapshot(cmd.str);
+            } catch (const std::exception &e) {
+                msgQueue.put(Msg::SNAPSHOT_SAVED, -1, 0, e.what());
+            }
             break;
-
+        
         case Cmd::HARD_RESET:
             
             emulator.hardReset();

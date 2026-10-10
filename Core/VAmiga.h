@@ -1302,12 +1302,9 @@ public:
 
     /** @brief  Returns a pointer to the most recent stable X-Ray texture
      *
-     * Holds the X-Ray debugger's raw, unblended visualization -- either the
-     * per-channel DMA colors (Opt::XRAY_MODE == XRayMode::XRAY_DMA) or the
-     * cut-out graphics layers (XRayMode::XRAY_LAYERS) -- independent of
-     * whether Opt::XRAY_OVERLAY is also blending it into getTexture()'s
-     * picture. Same dimensions as getTexture(). Black while
-     * Opt::XRAY_MODE is XRayMode::XRAY_NONE.
+     * The texture dimensions are given by constants vamiga::Texture::width
+     * and vamiga::Texture::height texels. Each texel is represented by a
+     * 32 bit color value.
      */
     const u32 *getXrayTexture() const;
 

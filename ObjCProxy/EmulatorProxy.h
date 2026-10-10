@@ -420,6 +420,8 @@ ImageInfo scan(const fs::path &url);
 
 - (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)saveWorkspaceAsync:(NSURL *)url;
+- (void)saveSnapshotAsync:(NSURL *)url;
 
 - (BOOL) getMessage:(Message *)msg;
 

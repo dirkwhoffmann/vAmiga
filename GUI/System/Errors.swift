@@ -95,6 +95,7 @@ enum Failure {
     case cantRestore
     case cantRun
     case cantSaveRoms
+    case cantSaveSnapshot
     case cantWriteThrough
     case noMetalSupport
     case unsupportedOSVersion
@@ -176,6 +177,9 @@ enum Failure {
         case .cantSaveRoms:
             return "Failed to save Roms."
             
+        case .cantSaveSnapshot:
+            return "Failed to save snapshot."
+
         case .cantWriteThrough:
             return "Unable to enable write-through mode."
 

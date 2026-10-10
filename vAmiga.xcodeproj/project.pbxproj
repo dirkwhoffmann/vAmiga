@@ -485,10 +485,10 @@
 		50F7147830598852006C02B8 /* RomsC64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147130598852006C02B8 /* RomsC64.cpp */; };
 		50F7147930598852006C02B8 /* RomManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7146F30598852006C02B8 /* RomManager.cpp */; };
 		50F7147A30598852006C02B8 /* RomsAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147030598852006C02B8 /* RomsAmiga.cpp */; };
-		50F71492305B2200006C02B8 /* Images.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71491305B2200006C02B8 /* Images.cpp */; };
-		50F71493305B2200006C02B8 /* Images.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71491305B2200006C02B8 /* Images.cpp */; };
 		50F71488305B21E9006C02B8 /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71486305B21E9006C02B8 /* Colors.cpp */; };
 		50F71489305B21E9006C02B8 /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71486305B21E9006C02B8 /* Colors.cpp */; };
+		50F71492305B2200006C02B8 /* Images.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71491305B2200006C02B8 /* Images.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
+		50F71493305B2200006C02B8 /* Images.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71491305B2200006C02B8 /* Images.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* FloppyDiskImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyDiskImage.cpp */; };
@@ -1412,9 +1412,9 @@
 		50F7147230598852006C02B8 /* RomTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomTypes.h; sourceTree = "<group>"; };
 		50F71483305B21CB006C02B8 /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 		50F71484305B21CB006C02B8 /* GraphicsTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsTypes.h; sourceTree = "<group>"; };
+		50F71486305B21E9006C02B8 /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
 		50F71490305B2200006C02B8 /* Images.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Images.h; sourceTree = "<group>"; };
 		50F71491305B2200006C02B8 /* Images.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Images.cpp; sourceTree = "<group>"; };
-		50F71486305B21E9006C02B8 /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
 		50F79C9F2C79B04A006A13A8 /* DiagRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagRom.h; sourceTree = "<group>"; };
 		50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
 		50FAC76E2515EBED00E47421 /* IMGFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGFile.cpp; sourceTree = "<group>"; };
