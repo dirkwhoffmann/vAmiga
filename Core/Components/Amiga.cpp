@@ -1025,6 +1025,8 @@ Amiga::update(CmdQueue &queue)
             case Cmd::ALARM_ABS:
             case Cmd::ALARM_REL:
             case Cmd::INSPECTION_TARGET:
+            case Cmd::SAVE_WORKSPACE:
+            case Cmd::SAVE_SNAPSHOT:
 
                 processCommand(cmd);
                 break;
@@ -1357,6 +1359,16 @@ Amiga::processCommand(const Command &cmd)
         case Cmd::INSPECTION_TARGET:
 
             setAutoInspectionMask(cmd.value);
+            break;
+
+        case Cmd::SAVE_WORKSPACE:
+
+            saveWorkspace(cmd.str);
+            break;
+
+        case Cmd::SAVE_SNAPSHOT:
+
+            saveSnapshot(cmd.str);
             break;
 
         case Cmd::HARD_RESET:

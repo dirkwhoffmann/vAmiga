@@ -66,18 +66,13 @@ MsgQueue::put(const Message &msg, const string &str)
         if (listener) {
 
             // Send the message immediately if a listener has been registered.
-            // The string only needs to outlive this call, so a local copy is
-            // sufficient -- unlike the queued case below, nothing needs to
-            // keep it alive afterwards.
             Message m = msg;
             m.str = str.c_str();
             callback(listener, m);
 
         } else if (!queue.isFull()) {
 
-            // Coalesce with the oldest pending message if it has the same
-            // type, so a burst of identical messages doesn't fill up the
-            // queue while nobody is draining it.
+            // Coalesce with the oldest pending message if it has the same type
             auto *current = queue.currentAddr();
 
             if (current->type == msg.type) {

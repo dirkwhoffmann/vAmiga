@@ -2107,7 +2107,8 @@ public:
     
     /** @brief  Feeds a command into the command queue.
      */
-    void put(const Command &cmd);
+    void put(const Command &cmd, const std::string &str = "");
+    void put(Cmd type, const std::string &str) { put(Command(type), str); }
     void put(Cmd type, i64 payload = 0, i64 payload2 = 0) { put(Command(type, payload, payload2)); }
     void put(Cmd type, ConfigCmd payload)  { put(Command(type, payload)); }
     void put(Cmd type, KeyCmd payload)  { put(Command(type, payload)); }

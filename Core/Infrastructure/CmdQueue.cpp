@@ -13,7 +13,7 @@
 namespace vamiga {
 
 void
-CmdQueue::put(const Command &cmd)
+CmdQueue::put(const Command &cmd, const string &str)
 {
     {   SYNCHRONIZED
 
@@ -21,10 +21,11 @@ CmdQueue::put(const Command &cmd)
 
         if (!queue.isFull()) {
 
+            auto w = queue.end();
             queue.write(cmd);
+            attachments[w] = str;
+            queue.elements[w].str = attachments[w].c_str();
 
-            // Counted here, not before the check: a command that was dropped
-            // is never carried out, and wait() would sit there forever.
             pending++;
 
         } else {

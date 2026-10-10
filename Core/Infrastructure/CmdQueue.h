@@ -20,8 +20,13 @@ namespace vamiga {
 /// Command queue
 class CmdQueue final : public CoreObject, Synchronizable {
 
+    static constexpr isize CAPACITY = 256;
+
     /// Ring buffer storing all pending commands
-    utl::RingBuffer <Command, 256> queue;
+    utl::RingBuffer <Command, CAPACITY> queue;
+
+    /// Attached string objects
+    string attachments[CAPACITY];
 
 public:
     
@@ -53,7 +58,7 @@ private:
 public:
 
     // Sends a command
-    void put(const Command &cmd);
+    void put(const Command &cmd, const string &str = "");
 
     // Polls a command
     bool poll(Command &cmd);

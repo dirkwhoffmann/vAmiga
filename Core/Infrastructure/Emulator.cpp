@@ -427,9 +427,9 @@ Emulator::getXrayTexture() const
 }
 
 void
-Emulator::put(const Command &cmd)
+Emulator::put(const Command &cmd, const string &str)
 {
-    cmdQueue.put(cmd);
+    cmdQueue.put(cmd, str);
 }
 
 }

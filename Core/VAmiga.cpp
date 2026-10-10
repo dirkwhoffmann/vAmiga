@@ -2411,10 +2411,10 @@ VAmiga::exportConfig(std::ostream &stream, bool diff) const
 }
 
 void
-VAmiga::put(const Command &cmd)
+VAmiga::put(const Command &cmd, const std::string &str)
 {
     VAMIGA_PUBLIC
-    emu->put(cmd);
+    emu->put(cmd, str);
 }
 
 
