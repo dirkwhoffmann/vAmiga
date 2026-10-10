@@ -10,7 +10,7 @@
 #include "vaconfig.h"
 #include "PixelEngine.h"
 #include "Amiga.h"
-#include "utl/graphics/Colors.h"
+#include "utl/gfx/Colors.h"
 #include "Denise.h"
 #include "DmaDebugger.h"
 #include "Emulator.h"

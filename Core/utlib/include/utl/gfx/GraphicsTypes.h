@@ -18,13 +18,4 @@ enum class TexelFormat
     RGBA                        // RRGGBBAA
 };
 
-// Image file formats supported by exportImage (see Images.h)
-enum class ImgFormat
-{
-    PNG,
-    BMP,
-    TGA,
-    JPG
-};
-
 }

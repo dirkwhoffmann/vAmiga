@@ -985,7 +985,6 @@
 		508AC36727B7F6FC006AD2E7 /* HdController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HdController.cpp; sourceTree = "<group>"; };
 		508AC36827B7F6FC006AD2E7 /* HdController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdController.h; sourceTree = "<group>"; };
 		508C6BCF23F7E77500D8938F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
-		508C8DA43078E92C00607881 /* stb_image_write.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image_write.h; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		508FDD9C2EF40D2B00FDBC32 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
@@ -1690,7 +1689,7 @@
 				508FDDA22EF53C5D00FDBC32 /* primitives */,
 				503FC4BC2EE091B700637C95 /* abilities */,
 				503FC4E92EE1B96D00637C95 /* chrono */,
-				50F71485305B21CB006C02B8 /* graphics */,
+				50F71485305B21CB006C02B8 /* gfx */,
 				503FC4F82EE1C35100637C95 /* concurrency */,
 				50BCB99E2EE2C834000C53CF /* io */,
 				503FC4E02EE16FE000637C95 /* storage */,
@@ -1731,7 +1730,7 @@
 				50BCB9B12EE346BA000C53CF /* types */,
 				503FC4C12EE091F600637C95 /* abilities */,
 				503FC4EC2EE1BA6700637C95 /* chrono */,
-				50F71487305B21E9006C02B8 /* graphics */,
+				50F71487305B21E9006C02B8 /* gfx */,
 				503FC4F42EE1BD0B00637C95 /* storage */,
 				50BCB9BC2EE45C2D000C53CF /* io */,
 				503FC4CF2EE0AB1D00637C95 /* support */,
@@ -2627,7 +2626,6 @@
 				502DD2CF2F9CAE5B00ACBE45 /* zip.c */,
 				9C47C0302D6215B100E57B41 /* lz4.h */,
 				9C47C0312D6215B100E57B41 /* lz4.c */,
-				508C8DA43078E92C00607881 /* stb_image_write.h */,
 			);
 			path = thirdparty;
 			sourceTree = "<group>";
@@ -3006,23 +3004,23 @@
 			path = Roms;
 			sourceTree = "<group>";
 		};
-		50F71485305B21CB006C02B8 /* graphics */ = {
+		50F71485305B21CB006C02B8 /* gfx */ = {
 			isa = PBXGroup;
 			children = (
 				50F71483305B21CB006C02B8 /* Colors.h */,
 				50F71484305B21CB006C02B8 /* GraphicsTypes.h */,
 				50F71490305B2200006C02B8 /* Images.h */,
 			);
-			path = graphics;
+			path = gfx;
 			sourceTree = "<group>";
 		};
-		50F71487305B21E9006C02B8 /* graphics */ = {
+		50F71487305B21E9006C02B8 /* gfx */ = {
 			isa = PBXGroup;
 			children = (
 				50F71486305B21E9006C02B8 /* Colors.cpp */,
 				50F71491305B2200006C02B8 /* Images.cpp */,
 			);
-			path = graphics;
+			path = gfx;
 			sourceTree = "<group>";
 		};
 		71E63A810FB5436B54FBDD35 /* SVM */ = {

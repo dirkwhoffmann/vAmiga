@@ -7,8 +7,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "utl/graphics/Images.h"
-#include "utl/graphics/Colors.h"
+#include "utl/gfx/Images.h"
+#include "utl/gfx/Colors.h"
 #include <bit>
 #include <vector>
 #include <fstream>
@@ -17,9 +17,9 @@
 #pragma GCC diagnostic ignored "-Wall"
 #pragma GCC diagnostic ignored "-Wextra"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#define STBI_WRITE_NO_STDIO
-#include "stb_image_write.h"
+// miniz is compiled as part of zip.c; only its declarations are needed here
+#define MINIZ_HEADER_FILE_ONLY
+#include "miniz.h"
 
 #pragma GCC diagnostic pop
 
@@ -31,7 +31,7 @@ namespace {
 constexpr TexelFormat nativeFormat =
     std::endian::native == std::endian::little ? TexelFormat::ABGR : TexelFormat::RGBA;
 
-constexpr int jpgQuality = 90;
+constexpr mz_uint pngLevel = 6;
 
 // Repacks a buffer of texels from format F into the native format
 template <TexelFormat F> void
@@ -44,19 +44,11 @@ convert(const u32 *src, u32 *dst, size_t count)
     }
 }
 
-void
-append(void *context, void *data, int size)
-{
-    auto *out = static_cast<std::vector<u8> *>(context);
-    auto *bytes = static_cast<const u8 *>(data);
-    out->insert(out->end(), bytes, bytes + size);
-}
-
 }
 
 void
-exportImage(const fs::path &path, const void *data, isize w, isize h,
-            ImgFormat imgFormat, TexelFormat texelFormat)
+exportPNG(const fs::path &path, const void *data, isize w, isize h,
+            TexelFormat texelFormat)
 {
     if (!data || w <= 0 || h <= 0)
         throw Error(0, "exportImage: invalid image data or dimensions");
@@ -64,7 +56,7 @@ exportImage(const fs::path &path, const void *data, isize w, isize h,
     auto count = size_t(w) * size_t(h);
     auto *pixels = static_cast<const u32 *>(data);
 
-    // Convert into a temporary buffer if the texels aren't in stb's layout
+    // Convert into a temporary buffer if the texels aren't in the RGBA byte layout the encoders expect
     std::vector<u32> tmp;
     if (texelFormat != nativeFormat) {
 
@@ -78,32 +70,17 @@ exportImage(const fs::path &path, const void *data, isize w, isize h,
         pixels = tmp.data();
     }
 
-    // Encode into memory and write the file ourselves. This keeps non-ASCII
-    // paths working, which stb's fopen-based writers don't guarantee.
-    std::vector<u8> out;
-    int ok = 0;
-    int ww = int(w), hh = int(h);
-
-    switch (imgFormat) {
-
-        case ImgFormat::PNG:
-            ok = stbi_write_png_to_func(append, &out, ww, hh, 4, pixels, ww * 4);
-            break;
-        case ImgFormat::BMP:
-            ok = stbi_write_bmp_to_func(append, &out, ww, hh, 4, pixels);
-            break;
-        case ImgFormat::TGA:
-            ok = stbi_write_tga_to_func(append, &out, ww, hh, 4, pixels);
-            break;
-        case ImgFormat::JPG:
-            ok = stbi_write_jpg_to_func(append, &out, ww, hh, 4, pixels, jpgQuality);
-            break;
-    }
-    if (!ok || out.empty())
+    // Encode into memory and write the file ourselves, which keeps
+    // non-ASCII paths working
+    size_t len = 0;
+    void *png = tdefl_write_image_to_png_file_in_memory_ex(pixels, int(w), int(h), 4, &len,
+                                                           pngLevel, MZ_FALSE);
+    if (!png)
         throw Error(0, "exportImage: image encoding failed");
 
     std::ofstream file(path, std::ios::binary);
-    file.write(reinterpret_cast<const char *>(out.data()), std::streamsize(out.size()));
+    file.write(static_cast<const char *>(png), std::streamsize(len));
+    mz_free(png);
     if (!file)
         throw Error(0, "exportImage: can't write " + path.string());
 }

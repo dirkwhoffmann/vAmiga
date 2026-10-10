@@ -14,7 +14,7 @@
 #include "Option.h"
 #include "Media.h"
 #include "utl/chrono.h"
-#include "utl/graphics/Images.h"
+#include "utl/gfx/Images.h"
 #include "utl/io.h"
 #include <algorithm>
 #include <format>
@@ -429,8 +429,7 @@ Amiga::saveWorkspace(const fs::path &path)
         }
 
         auto format = static_cast<utl::TexelFormat>(host.getConfig().texFormat);
-        utl::exportImage(path / "preview.png", image.data(), w, h * vscale,
-                         utl::ImgFormat::PNG, format);
+        utl::exportPNG(path / "preview.png", image.data(), w, h * vscale, format);
     };
 
     // If a file with the specified name exists, delete it

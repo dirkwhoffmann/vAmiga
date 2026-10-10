@@ -14,9 +14,8 @@
 
 namespace utl {
 
-// Writes an image to disk
-void exportImage(const fs::path &path, const void *data, isize w, isize h,
-                 ImgFormat imgFormat,
-                 TexelFormat texelFormat = TexelFormat::ABGR);
+// Writes an image to disk as a PNG file
+void exportPNG(const fs::path &path, const void *data, isize w, isize h,
+               TexelFormat texelFormat = TexelFormat::ABGR);
 
 }
