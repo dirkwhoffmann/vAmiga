@@ -11,7 +11,7 @@
 
 #include "utl/common.h"
 #include "utl/abilities/Streamable.h"
-#include "ColorTypes.h"
+#include "GraphicsTypes.h"
 
 namespace utl {
 

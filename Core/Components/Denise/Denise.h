@@ -11,7 +11,7 @@
 
 #include "DeniseTypes.h"
 #include "SubComponent.h"
-#include "utl/color/Colors.h"
+#include "utl/graphics/Colors.h"
 #include "DeniseDebugger.h"
 #include "Memory.h"
 #include "PixelEngine.h"

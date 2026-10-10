@@ -485,6 +485,8 @@
 		50F7147830598852006C02B8 /* RomsC64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147130598852006C02B8 /* RomsC64.cpp */; };
 		50F7147930598852006C02B8 /* RomManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7146F30598852006C02B8 /* RomManager.cpp */; };
 		50F7147A30598852006C02B8 /* RomsAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F7147030598852006C02B8 /* RomsAmiga.cpp */; };
+		50F71492305B2200006C02B8 /* Images.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71491305B2200006C02B8 /* Images.cpp */; };
+		50F71493305B2200006C02B8 /* Images.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71491305B2200006C02B8 /* Images.cpp */; };
 		50F71488305B21E9006C02B8 /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71486305B21E9006C02B8 /* Colors.cpp */; };
 		50F71489305B21E9006C02B8 /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F71486305B21E9006C02B8 /* Colors.cpp */; };
 		50F7D84F2DE25C1200CD6B41 /* MediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */; };
@@ -983,6 +985,7 @@
 		508AC36727B7F6FC006AD2E7 /* HdController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HdController.cpp; sourceTree = "<group>"; };
 		508AC36827B7F6FC006AD2E7 /* HdController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdController.h; sourceTree = "<group>"; };
 		508C6BCF23F7E77500D8938F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
+		508C8DA43078E92C00607881 /* stb_image_write.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image_write.h; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		508FDD9C2EF40D2B00FDBC32 /* Volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Volume.h; sourceTree = "<group>"; };
@@ -1409,7 +1412,9 @@
 		50F7147130598852006C02B8 /* RomsC64.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomsC64.cpp; sourceTree = "<group>"; };
 		50F7147230598852006C02B8 /* RomTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomTypes.h; sourceTree = "<group>"; };
 		50F71483305B21CB006C02B8 /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
-		50F71484305B21CB006C02B8 /* ColorTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorTypes.h; sourceTree = "<group>"; };
+		50F71484305B21CB006C02B8 /* GraphicsTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsTypes.h; sourceTree = "<group>"; };
+		50F71490305B2200006C02B8 /* Images.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Images.h; sourceTree = "<group>"; };
+		50F71491305B2200006C02B8 /* Images.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Images.cpp; sourceTree = "<group>"; };
 		50F71486305B21E9006C02B8 /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
 		50F79C9F2C79B04A006A13A8 /* DiagRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagRom.h; sourceTree = "<group>"; };
 		50F7D84E2DE25C0B00CD6B41 /* MediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaManager.swift; sourceTree = "<group>"; };
@@ -1685,7 +1690,7 @@
 				508FDDA22EF53C5D00FDBC32 /* primitives */,
 				503FC4BC2EE091B700637C95 /* abilities */,
 				503FC4E92EE1B96D00637C95 /* chrono */,
-				50F71485305B21CB006C02B8 /* color */,
+				50F71485305B21CB006C02B8 /* graphics */,
 				503FC4F82EE1C35100637C95 /* concurrency */,
 				50BCB99E2EE2C834000C53CF /* io */,
 				503FC4E02EE16FE000637C95 /* storage */,
@@ -1726,7 +1731,7 @@
 				50BCB9B12EE346BA000C53CF /* types */,
 				503FC4C12EE091F600637C95 /* abilities */,
 				503FC4EC2EE1BA6700637C95 /* chrono */,
-				50F71487305B21E9006C02B8 /* color */,
+				50F71487305B21E9006C02B8 /* graphics */,
 				503FC4F42EE1BD0B00637C95 /* storage */,
 				50BCB9BC2EE45C2D000C53CF /* io */,
 				503FC4CF2EE0AB1D00637C95 /* support */,
@@ -2622,6 +2627,7 @@
 				502DD2CF2F9CAE5B00ACBE45 /* zip.c */,
 				9C47C0302D6215B100E57B41 /* lz4.h */,
 				9C47C0312D6215B100E57B41 /* lz4.c */,
+				508C8DA43078E92C00607881 /* stb_image_write.h */,
 			);
 			path = thirdparty;
 			sourceTree = "<group>";
@@ -3000,21 +3006,23 @@
 			path = Roms;
 			sourceTree = "<group>";
 		};
-		50F71485305B21CB006C02B8 /* color */ = {
+		50F71485305B21CB006C02B8 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
 				50F71483305B21CB006C02B8 /* Colors.h */,
-				50F71484305B21CB006C02B8 /* ColorTypes.h */,
+				50F71484305B21CB006C02B8 /* GraphicsTypes.h */,
+				50F71490305B2200006C02B8 /* Images.h */,
 			);
-			path = color;
+			path = graphics;
 			sourceTree = "<group>";
 		};
-		50F71487305B21E9006C02B8 /* color */ = {
+		50F71487305B21E9006C02B8 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
 				50F71486305B21E9006C02B8 /* Colors.cpp */,
+				50F71491305B2200006C02B8 /* Images.cpp */,
 			);
-			path = color;
+			path = graphics;
 			sourceTree = "<group>";
 		};
 		71E63A810FB5436B54FBDD35 /* SVM */ = {
@@ -3322,6 +3330,7 @@
 				507C01AE2D25681400E29933 /* LogicView.swift in Sources */,
 				50AE8B1C27833D2500991F89 /* DeniseInfo.cpp in Sources */,
 				50F71489305B21E9006C02B8 /* Colors.cpp in Sources */,
+				50F71492305B2200006C02B8 /* Images.cpp in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50C9A6352C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */,
@@ -3746,6 +3755,7 @@
 				505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
 				50F71488305B21E9006C02B8 /* Colors.cpp in Sources */,
+				50F71493305B2200006C02B8 /* Images.cpp in Sources */,
 				503FC4E32EE17ED500637C95 /* Dumpable.cpp in Sources */,
 				50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */,
 				50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */,
