@@ -404,12 +404,8 @@ Amiga::saveWorkspace(const fs::path &path)
 
         /* Save the most recent frame, cropped to the largest visible area
          * (no HBLANK, no VBLANK). The texture holds two GPU texels per Texel,
-         * i.e., one texel per super-hires pixel. Those are twice as wide as
-         * they are tall, so every line is repeated four times to get an image
-         * with the proportions the GUI shows.
+         * i.e., one texel per super-hires pixel.
          */
-        constexpr isize vscale = 4;
-
         auto &texture = denise.pixelEngine.getStableBuffer();
         auto *texels = reinterpret_cast<const u32 *>(texture.pixels.ptr);
 
@@ -417,19 +413,11 @@ Amiga::saveWorkspace(const fs::path &path)
         isize x2 = 8 * HPOS_CNT;
         isize y1 = agnus.isPAL() ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT;
         isize y2 = agnus.isPAL() ? PAL::VPOS_CNT : NTSC::VPOS_CNT;
-        isize w = x2 - x1;
-        isize h = y2 - y1 - 1;
-
-        std::vector<u32> image(w * h * vscale);
-        for (isize y = 0; y < h; y++) {
-
-            auto *src = texels + (y1 + y) * 2 * HPIXELS + x1;
-            for (isize i = 0; i < vscale; i++)
-                std::copy(src, src + w, image.begin() + (y * vscale + i) * w);
-        }
-
         auto format = static_cast<utl::TexelFormat>(host.getConfig().texFormat);
-        utl::exportPNG(path / "preview.png", image.data(), w, h * vscale, format);
+
+        // Super-hires pixels are about four times higher than wide on screen
+        utl::exportPNG(path / "preview.png", texels + y1 * 2 * HPIXELS + x1,
+                       x2 - x1, y2 - y1 - 1, 2 * HPIXELS, 4, format);
     };
 
     // If a file with the specified name exists, delete it

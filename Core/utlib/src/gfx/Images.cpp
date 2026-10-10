@@ -10,6 +10,7 @@
 #include "utl/gfx/Images.h"
 #include "utl/gfx/Colors.h"
 #include <bit>
+#include <algorithm>
 #include <vector>
 #include <fstream>
 
@@ -41,24 +42,41 @@ convert(const u32 *src, u32 *dst, size_t count)
 
 void
 exportPNG(const fs::path &path, const void *data, isize w, isize h,
-            TexelFormat texelFormat)
+           TexelFormat texelFormat)
 {
-    if (!data || w <= 0 || h <= 0)
-        throw Error(0, "exportImage: invalid image data or dimensions");
+    exportPNG(path, data, w, h, w, 1, texelFormat);
+}
 
-    auto count = size_t(w) * size_t(h);
+void
+exportPNG(const fs::path &path, const void *data, isize w, isize h, isize stride,
+          isize vscale, TexelFormat texelFormat)
+{
+    if (!data || w <= 0 || h <= 0 || stride < w || vscale < 1)
+        throw Error(0, "exportPNG: invalid image data or dimensions");
+
     auto *pixels = static_cast<const u32 *>(data);
 
-    // Convert into a temporary buffer if the texels aren't in the RGBA byte layout the encoders expect
+    // Copy into a contiguous buffer if the rows aren't packed, have to be
+    // repeated, or the texels aren't in the RGBA byte layout the encoder expects
     std::vector<u32> tmp;
-    if (texelFormat != nativeFormat) {
+    if (stride != w || vscale != 1 || texelFormat != nativeFormat) {
 
-        tmp.resize(count);
-        switch (texelFormat) {
+        tmp.resize(size_t(w) * size_t(h * vscale));
+        for (isize y = 0; y < h; y++) {
 
-            case TexelFormat::ABGR: convert<TexelFormat::ABGR>(pixels, tmp.data(), count); break;
-            case TexelFormat::ARGB: convert<TexelFormat::ARGB>(pixels, tmp.data(), count); break;
-            case TexelFormat::RGBA: convert<TexelFormat::RGBA>(pixels, tmp.data(), count); break;
+            auto *src = pixels + y * stride;
+            auto *dst = tmp.data() + y * vscale * w;
+
+            switch (texelFormat) {
+
+                case TexelFormat::ABGR: convert<TexelFormat::ABGR>(src, dst, size_t(w)); break;
+                case TexelFormat::ARGB: convert<TexelFormat::ARGB>(src, dst, size_t(w)); break;
+                case TexelFormat::RGBA: convert<TexelFormat::RGBA>(src, dst, size_t(w)); break;
+            }
+
+            // Repeat the converted row
+            for (isize i = 1; i < vscale; i++)
+                std::copy(dst, dst + w, dst + i * w);
         }
         pixels = tmp.data();
     }
@@ -66,16 +84,16 @@ exportPNG(const fs::path &path, const void *data, isize w, isize h,
     // Encode into memory and write the file ourselves, which keeps
     // non-ASCII paths working
     size_t len = 0;
-    void *png = tdefl_write_image_to_png_file_in_memory_ex(pixels, int(w), int(h), 4, &len,
+    void *png = tdefl_write_image_to_png_file_in_memory_ex(pixels, int(w), int(h * vscale), 4, &len,
                                                            pngLevel, MZ_FALSE);
     if (!png)
-        throw Error(0, "exportImage: image encoding failed");
+        throw Error(0, "exportPNG: image encoding failed");
 
     std::ofstream file(path, std::ios::binary);
     file.write(static_cast<const char *>(png), std::streamsize(len));
     mz_free(png);
     if (!file)
-        throw Error(0, "exportImage: can't write " + path.string());
+        throw Error(0, "exportPNG: can't write " + path.string());
 }
 
 }
