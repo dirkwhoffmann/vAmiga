@@ -125,6 +125,7 @@ enum class Msg : long
     // Snapshots
     SNAPSHOT_TAKEN,
     SNAPSHOT_RESTORED,
+    SNAPSHOT_SAVED,
     
     // Workspaces
     WORKSPACE_LOADED,
@@ -240,6 +241,7 @@ struct MsgEnum : Reflectable<MsgEnum, Msg>
                 
             case Msg::SNAPSHOT_TAKEN:        return "SNAPSHOT_TAKEN";
             case Msg::SNAPSHOT_RESTORED:     return "SNAPSHOT_RESTORED";
+            case Msg::SNAPSHOT_SAVED:        return "SNAPSHOT_SAVED";
                 
             case Msg::WORKSPACE_LOADED:      return "WORKSPACE_LOADED";
             case Msg::WORKSPACE_SAVED:       return "WORKSPACE_SAVED";

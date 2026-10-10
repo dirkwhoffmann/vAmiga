@@ -1334,6 +1334,9 @@ void
 Amiga::saveSnapshot(const fs::path &path)
 {
     Snapshot(*this, config.snapshotCompressor).writeToFile(path);
+
+    // Inform the GUI
+    msgQueue.put(Msg::SNAPSHOT_SAVED);
 }
 
 void

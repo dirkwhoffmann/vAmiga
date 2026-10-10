@@ -632,6 +632,9 @@ extension MyController {
             assignSlots()
             statusBarIsDirty = true
             
+        case .SNAPSHOT_SAVED:
+            break
+
         case .WORKSPACE_SAVED, .WORKSPACE_LOADED:
             break
             
