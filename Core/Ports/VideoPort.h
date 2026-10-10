@@ -137,6 +137,29 @@ public:
     // Returns a pointer to the stable DMA debugger texture
     const class Texture &getXrayTexture(isize offset = 0) const;
 
+    /* Saves the stable emulator texture or DMA debugger texture as a PNG file.
+     *
+     * The cutout is given in texels of the texture: x counts super-hires
+     * pixels (0 ... 2 * HPIXELS), y counts lines (0 ... VPIXELS). The upper
+     * bounds x2 and y2 are exclusive. Without a cutout, the entire texture is
+     * saved. Lines are repeated four times to compensate for the elongated
+     * shape of super-hires pixels, so the image has the proportions the GUI
+     * shows. Throws if the cutout is empty or exceeds the texture.
+     */
+    void saveTexture(const fs::path &path, isize offset = 0) const;
+    void saveTexture(const fs::path &path, isize x1, isize x2, isize y1, isize y2,
+                     isize offset = 0) const;
+    void saveXrayTexture(const fs::path &path, isize offset = 0) const;
+    void saveXrayTexture(const fs::path &path, isize x1, isize x2, isize y1, isize y2,
+                         isize offset = 0) const;
+
+private:
+
+    void savePNG(const Texture &texture, const fs::path &path,
+                 isize x1, isize x2, isize y1, isize y2) const;
+
+public:
+
     // Informs the video port about a buffer swap
     void buffersWillSwap();
     

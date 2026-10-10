@@ -1308,6 +1308,22 @@ public:
      */
     const u32 *getXrayTexture() const;
 
+    /** @brief  Saves the most recent stable texture as a PNG file
+     *
+     * The cutout is given in texels of the texture (x: super-hires pixels,
+     * y: lines). The upper bounds x2 and y2 are exclusive. Without a cutout,
+     * the entire texture is saved.
+     */
+    void saveTexture(const std::filesystem::path &path) const;
+    void saveTexture(const std::filesystem::path &path,
+                     isize x1, isize x2, isize y1, isize y2) const;
+
+    /** @brief  Saves the most recent stable X-Ray texture as a PNG file
+     */
+    void saveXrayTexture(const std::filesystem::path &path) const;
+    void saveXrayTexture(const std::filesystem::path &path,
+                         isize x1, isize x2, isize y1, isize y2) const;
+
     /** @brief Experimental
      */
     void findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const;

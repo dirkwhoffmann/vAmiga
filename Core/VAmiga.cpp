@@ -1059,6 +1059,46 @@ VideoPortAPI::getXrayTexture() const
 }
 
 void
+VideoPortAPI::saveTexture(const fs::path &path) const
+{
+    VAMIGA_PUBLIC
+    emu->lockTexture();
+    try { videoPort->saveTexture(path); }
+    catch (...) { emu->unlockTexture(); throw; }
+    emu->unlockTexture();
+}
+
+void
+VideoPortAPI::saveTexture(const fs::path &path, isize x1, isize x2, isize y1, isize y2) const
+{
+    VAMIGA_PUBLIC
+    emu->lockTexture();
+    try { videoPort->saveTexture(path, x1, x2, y1, y2); }
+    catch (...) { emu->unlockTexture(); throw; }
+    emu->unlockTexture();
+}
+
+void
+VideoPortAPI::saveXrayTexture(const fs::path &path) const
+{
+    VAMIGA_PUBLIC
+    emu->lockTexture();
+    try { videoPort->saveXrayTexture(path); }
+    catch (...) { emu->unlockTexture(); throw; }
+    emu->unlockTexture();
+}
+
+void
+VideoPortAPI::saveXrayTexture(const fs::path &path, isize x1, isize x2, isize y1, isize y2) const
+{
+    VAMIGA_PUBLIC
+    emu->lockTexture();
+    try { videoPort->saveXrayTexture(path, x1, x2, y1, y2); }
+    catch (...) { emu->unlockTexture(); throw; }
+    emu->unlockTexture();
+}
+
+void
 VideoPortAPI::findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const
 {
     VAMIGA_PUBLIC_SUSPEND

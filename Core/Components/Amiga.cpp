@@ -402,22 +402,13 @@ Amiga::saveWorkspace(const fs::path &path)
 
     auto exportPreview = [&]() {
 
-        /* Save the most recent frame, cropped to the largest visible area
-         * (no HBLANK, no VBLANK). The texture holds two GPU texels per Texel,
-         * i.e., one texel per super-hires pixel.
-         */
-        auto &texture = denise.pixelEngine.getStableBuffer();
-        auto *texels = reinterpret_cast<const u32 *>(texture.pixels.ptr);
-
-        isize x1 = 8 * HBLANK_CNT;
-        isize x2 = 8 * HPOS_CNT;
-        isize y1 = agnus.isPAL() ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT;
-        isize y2 = agnus.isPAL() ? PAL::VPOS_CNT : NTSC::VPOS_CNT;
-        auto format = static_cast<utl::TexelFormat>(host.getConfig().texFormat);
-
-        // Super-hires pixels are about four times higher than wide on screen
-        utl::exportPNG(path / "preview.png", texels + y1 * 2 * HPIXELS + x1,
-                       x2 - x1, y2 - y1 - 1, 2 * HPIXELS, 4, format);
+        // Save the most recent frame, cropped to the largest visible area
+        // (no HBLANK, no VBLANK)
+        auto pal = agnus.isPAL();
+        videoPort.saveTexture(path / "preview.png",
+                              8 * HBLANK_CNT, 8 * HPOS_CNT,
+                              pal ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT,
+                              (pal ? PAL::VPOS_CNT : NTSC::VPOS_CNT) - 1);
     };
 
     // If a file with the specified name exists, delete it

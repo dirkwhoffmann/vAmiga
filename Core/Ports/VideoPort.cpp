@@ -11,6 +11,8 @@
 #include "VideoPort.h"
 #include "Agnus.h"
 #include "Denise.h"
+#include "Host.h"
+#include "utl/gfx/Images.h"
 
 namespace vamiga {
 
@@ -142,6 +144,49 @@ VideoPort::getXrayTexture(isize offset) const
     }
 
     return blank;
+}
+
+void
+VideoPort::saveTexture(const fs::path &path, isize offset) const
+{
+    savePNG(getTexture(offset), path, 0, 2 * HPIXELS, 0, VPIXELS);
+}
+
+void
+VideoPort::saveTexture(const fs::path &path, isize x1, isize x2, isize y1, isize y2,
+                       isize offset) const
+{
+    savePNG(getTexture(offset), path, x1, x2, y1, y2);
+}
+
+void
+VideoPort::saveXrayTexture(const fs::path &path, isize offset) const
+{
+    savePNG(getXrayTexture(offset), path, 0, 2 * HPIXELS, 0, VPIXELS);
+}
+
+void
+VideoPort::saveXrayTexture(const fs::path &path, isize x1, isize x2, isize y1, isize y2,
+                           isize offset) const
+{
+    savePNG(getXrayTexture(offset), path, x1, x2, y1, y2);
+}
+
+void
+VideoPort::savePNG(const Texture &texture, const fs::path &path,
+                   isize x1, isize x2, isize y1, isize y2) const
+{
+    constexpr isize stride = 2 * HPIXELS;
+    constexpr isize vscale = 4;
+
+    if (x1 < 0 || x2 > stride || x1 >= x2 || y1 < 0 || y2 > VPIXELS || y1 >= y2)
+        throw utl::Error(0, "Invalid texture cutout");
+
+    // Two GPU texels per Texel, i.e., one texel per super-hires pixel
+    auto *texels = reinterpret_cast<const u32 *>(texture.pixels.ptr);
+    auto format = static_cast<utl::TexelFormat>(host.getConfig().texFormat);
+
+    utl::exportPNG(path, texels + y1 * stride + x1, x2 - x1, y2 - y1, stride, vscale, format);
 }
 
 void
