@@ -344,7 +344,7 @@ Amiga::saveWorkspace(const fs::path &path)
             try {
 
                 auto adf = Codec::makeADF(drive);
-                adf->writeToFile(path / file);
+                adf->copy(path / file);
                 drive.markDiskAsUnmodified();
                 
                 df << "try " << name << " insert " << file << "\n";

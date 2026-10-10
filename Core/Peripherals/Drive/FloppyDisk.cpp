@@ -439,7 +439,7 @@ FloppyDisk::encode(const ADFFile &adf)
 
         string tmp = "/tmp/debug.adf";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        Codec::makeADF(*this)->writeToFile(tmp);
+        Codec::makeADF(*this)->copy(tmp);
     }
 }
 
@@ -486,7 +486,7 @@ FloppyDisk::encode(const class IMGFile &img)
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        Codec::makeIMG(*this)->writeToFile(tmp);
+        Codec::makeIMG(*this)->copy(tmp);
     }
 }
 
@@ -532,7 +532,7 @@ FloppyDisk::encode(const class STFile &img)
 
         string tmp = "/tmp/debug.img";
         fprintf(stderr, "Saving image to %s for debugging\n", tmp.c_str());
-        Codec::makeIMG(*this)->writeToFile(tmp);
+        Codec::makeIMG(*this)->copy(tmp);
     }
 }
 
@@ -610,10 +610,10 @@ FloppyDisk::writeToFile(const fs::path& path, ImageFormat fmt) const
 {
     switch (fmt) {
 
-        case ImageFormat::ADF:  Codec::makeADF(*this)->writeToFile(path); break;
-        case ImageFormat::EADF: Codec::makeEADF(*this)->writeToFile(path); break;
-        case ImageFormat::IMG:  Codec::makeIMG(*this)->writeToFile(path); break;
-        case ImageFormat::ST:   Codec::makeST(*this)->writeToFile(path); break;
+        case ImageFormat::ADF:  Codec::makeADF(*this)->copy(path); break;
+        case ImageFormat::EADF: Codec::makeEADF(*this)->copy(path); break;
+        case ImageFormat::IMG:  Codec::makeIMG(*this)->copy(path); break;
+        case ImageFormat::ST:   Codec::makeST(*this)->copy(path); break;
 
         default:
             throw IOError(IOError::FILE_TYPE_UNSUPPORTED);

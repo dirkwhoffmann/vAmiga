@@ -170,12 +170,10 @@ public:
 
     /* Creates a hard drive with the contents of an HDF file
      *
-     * FILE_BACKED keeps the disk on top of the file. MEMORY_BACKED loads it
-     * into memory and lets go of the file, as loadIntoMemory() does, and
-     * throws if the disk is larger than the controller keeps in memory. A
-     * directory is imported into the current disk, whatever the mode.
+     * The disk stays on top of the file (see loadIntoMemory() to let go of
+     * it). A directory is imported into the current disk.
      */
-    void init(const fs::path &path, StorageMode mode = StorageMode::FILE_BACKED);
+    void init(const fs::path &path);
 
     /* Takes the disk out of the drive, leaving it as it was before anything
      * was attached. The counterpart of the init() calls above; it says
@@ -339,7 +337,7 @@ private:
     void serializeDisk(SerResetter &worker) { }
 
     // Returns true if the disk lives in a file
-    bool fileBacked() const { return image && image->getStorageMode() == StorageMode::FILE_BACKED; }
+    bool fileBacked() const { return image && image->fileBacked(); }
 
     // Returns true if the drive is small enough to be stored in snapshots
     bool snapshotable() const;
@@ -385,9 +383,6 @@ public:
     HeadNr currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }
 
-    StorageMode getStorageMode() const override {
-        return fileBacked() ? StorageMode::FILE_BACKED : StorageMode::MEMORY_BACKED;
-    }
     fs::path getPath() const override { return fileBacked() ? image->path : fs::path(); }
     bool needsPersisting() const override { return fileBacked() && image->modified(); }
 
@@ -499,7 +494,8 @@ public:
      * From then on the disk lives in that file, which holds it in full --
      * unlike writeToFile(), which exports a copy and leaves the drive where
      * it is. The file is written before the drive switches over, so a
-     * failure changes nothing.
+     * failure changes nothing. A compressed file name (.hdz) is refused,
+     * because the drive cannot live in a compressed file.
      */
     void saveAs(const fs::path &path);
 

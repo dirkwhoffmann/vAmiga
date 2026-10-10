@@ -92,9 +92,6 @@ public:
      * warning wants to know, is hasModifiedDisk(), for either kind of disk.
      */
 
-    // Returns where the disk lives (a drive without a disk counts as memory-backed)
-    virtual StorageMode getStorageMode() const = 0;
-
     // Returns the file the disk lives in (empty for a memory-backed disk)
     virtual fs::path getPath() const = 0;
 

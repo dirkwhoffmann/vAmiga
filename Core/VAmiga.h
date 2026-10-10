@@ -786,11 +786,6 @@ public:
      */
     void writeToFile(const std::filesystem::path& path);
 
-    /** @brief  Returns where the disk lives
-     *  @note   Floppy disks always live in memory (MEMORY_BACKED).
-     */
-    StorageMode getStorageMode() const;
-
     /** @brief  Returns the file the disk lives in
      *  @note   Always empty, since floppy disks always live in memory.
      */
@@ -898,12 +893,9 @@ public:
 
     /** @brief  Attaches a hard drive provided by an URL to a media file.
      *  @param  path    Path to the media file.
-     *  @param  mode    Where the disk lives. FILE_BACKED keeps it on top of
-     *                  the file, MEMORY_BACKED loads it into memory and lets
-     *                  go of the file (see loadIntoMemory()).
+     *  @note   The disk stays on top of the file (see loadIntoMemory()).
      */
-    void attach(const std::filesystem::path &path,
-                StorageMode mode = StorageMode::FILE_BACKED);
+    void attach(const std::filesystem::path &path);
 
     /** @brief  Attaches a hard drive with a particular geometry.
      *  @param  c       Number of cylinders
@@ -923,11 +915,6 @@ public:
      *  @note   All existing files are deleted prior to importing the folder.
      */
     void importFiles(const std::filesystem::path &path);
-
-    /** @brief  Returns where the disk lives
-     *  @note   A drive without a disk counts as memory-backed.
-     */
-    StorageMode getStorageMode() const;
 
     /** @brief  Returns the file the disk lives in
      *  @note   The path is empty for a drive that was built in memory.
@@ -949,7 +936,9 @@ public:
     /** @brief  Writes the disk to a file and continues on top of it
      *  @param  path    Path of the file to create
      *  @note   Unlike writeToFile(), which exports a copy and leaves the
-     *          drive where it is.
+     *          drive where it is. A compressed file name (.hdz) is refused,
+     *          because the drive cannot live in a compressed file; use
+     *          writeToFile() to export one.
      */
     void saveAs(const std::filesystem::path &path);
 

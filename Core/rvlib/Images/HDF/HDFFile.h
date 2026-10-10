@@ -46,7 +46,7 @@ public:
 
     explicit HDFFile() { }
     explicit HDFFile(isize len) { init(len); }
-    explicit HDFFile(const fs::path& path) { init(path); }
+    explicit HDFFile(const fs::path& path) { init(path, compressorFor(path)); }
     explicit HDFFile(const LinearDevice& device) { init(device); }
 
     using HardDiskImage::init;
@@ -66,7 +66,6 @@ public:
     ImageFormat format() const noexcept override { return ImageFormat::HDF; }
     std::vector<string> describeImage() const noexcept override;
     void didInitialize() override;
-    isize imageSize(const fs::path &path) const override;
 
 
     //

@@ -39,6 +39,14 @@ AnyImage::about(const fs::path& url)
  * DiskImage::tryMake behaves the same way -- HDFFile::about throws on a .hdf
  * of the wrong size.
  */
+utl::Compressor
+AnyImage::compressorFor(const fs::path& path) noexcept
+{
+    auto suffix = utl::lowercased(path.extension().string());
+
+    return suffix == ".adz" || suffix == ".hdz" ? utl::Compressor::GZIP : utl::Compressor::NONE;
+}
+
 std::unique_ptr<AnyImage>
 AnyImage::tryMake(const fs::path& path)
 {

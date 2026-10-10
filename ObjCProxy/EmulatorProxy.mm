@@ -2155,7 +2155,7 @@ ImageInfo scan(const fs::path &url)
 
 - (NSInteger)writeToFile:(NSURL *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self file]->writeToFile([path fileSystemRepresentation]); }
+    try { return [self file]->copy([path fileSystemRepresentation]); }
     catch(Error &error) { [ex save:error]; return 0; }
 }
 

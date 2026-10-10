@@ -177,16 +177,12 @@ ADFFile::describeImage() const noexcept
     };
 }
 
-isize
-ADFFile::imageSize(const fs::path &path) const
-{
-    // Add some empty cylinders if the file contains less than 80
-    return std::max(utl::getSizeOfFile(path), isize(ADFSIZE_35_DD));
-}
-
 void
 ADFFile::didInitialize()
 {
+    // Add some empty cylinders if the file contains less than 80
+    if (getSize() < ADFSIZE_35_DD) resize(ADFSIZE_35_DD);
+
     // Run a consistency check on the buffer contents
     ensureADF();
 }

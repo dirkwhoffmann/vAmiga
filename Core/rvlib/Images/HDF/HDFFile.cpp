@@ -61,46 +61,23 @@ HDFFile::describeImage() const noexcept
     };
 }
 
-isize
-HDFFile::imageSize(const fs::path &path) const
-{
-    auto available = utl::getSizeOfFile(path);
-
-    std::ifstream in(path, std::ios::binary);
-
-    if (!in.is_open())
-        throw utl::IOError(utl::IOError::FILE_CANT_READ, path);
-
-    // Look for a rigid disk block, reading straight from the file
-    HDFLayout lay([&in, available](isize nr, u8 *dst) {
-
-        auto offset = nr * HDFLayout::bsize;
-        if (nr < 0 || offset + HDFLayout::bsize > available) return false;
-
-        in.clear();
-        in.seekg(offset);
-        in.read((char *)dst, HDFLayout::bsize);
-
-        return bool(in) && in.gcount() == HDFLayout::bsize;
-
-    }, available);
-
-    // Without one, the geometry is derived from the file, which fits by definition
-    if (!lay.hasRDB()) return available;
-
-    /* Pad a file that is shorter than the drive its RDB describes. A geometry
-     * that is not plausible is left alone here, for didInitialize() to reject,
-     * rather than turned into an absurdly large image first.
-     */
-    auto geometry = lay.getGeometryDescriptor();
-    try { geometry.checkCompatibility(); } catch (...) { return available; }
-
-    return std::max(available, geometry.numBytes());
-}
-
 void
 HDFFile::didInitialize()
 {
+    /* Pad a file that is shorter than the drive its RDB describes. A geometry
+     * that is not plausible is left alone here, for the checks below to
+     * reject, rather than turned into an absurdly large image first.
+     */
+    if (auto rdb = layout(); rdb.hasRDB()) {
+
+        auto geometry = rdb.getGeometryDescriptor();
+
+        try {
+            geometry.checkCompatibility();
+            if (geometry.numBytes() > getSize()) resize(geometry.numBytes());
+        } catch (...) { }
+    }
+
     // Run a consistency check on the buffer contents
     ensureHDF(getSize());
     

@@ -243,7 +243,7 @@ HardDrive::init(std::unique_ptr<HDFFile> hdf)
 }
 
 void
-HardDrive::init(const fs::path &path, StorageMode mode)
+HardDrive::init(const fs::path &path)
 {
     if (!fs::exists(path)) {
 
@@ -259,16 +259,6 @@ HardDrive::init(const fs::path &path, StorageMode mode)
     }
 
     auto hdf = std::make_unique<HDFFile>(path);
-
-    /* Take the disk into memory before the drive takes it over, so that a
-     * disk that is too large, or cannot be read in full, leaves the old
-     * drive in place.
-     */
-    if (mode == StorageMode::MEMORY_BACKED) {
-
-        checkMemoryLimit(hdf->getGeometry().numBytes());
-        hdf->detach();
-    }
 
     init(std::move(hdf));
 }
@@ -1050,14 +1040,25 @@ HardDrive::saveAs(const fs::path &path)
 {
     if (!image || path.empty()) return;
 
+    // The drive goes on living on the new file, which cannot be a compressed one
+    if (AnyImage::compressorFor(path) != utl::Compressor::NONE) {
+        throw IOError(IOError::FILE_TYPE_UNSUPPORTED);
+    }
+
     image->saveAs(path);
 }
 
 void
 HardDrive::writeToFile(const fs::path &path)
 {
+    if (!image || path.empty()) return;
+
+    // The file the drive lives in is updated in place
+    std::error_code ec;
+    if (fileBacked() && fs::equivalent(path, image->path, ec)) { image->save(); return; }
+
     // Write straight from the image, in the format the file name asks for
-    if (image && !path.empty()) image->writeToFile(path, 0, size());
+    image->copy(path, 0, size(), AnyImage::compressorFor(path));
 }
 
 std::unique_ptr<HardDiskImage>

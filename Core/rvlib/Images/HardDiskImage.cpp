@@ -46,7 +46,7 @@ HardDiskImage::writePartitionToStream(std::ostream &stream, isize nr) const
 {
     // partition() is measured in blocks, the stream functions take bytes
     auto range = partition(nr);
-    return writeToStream(stream, range.lower * bsize(), range.size() * bsize());
+    return copy(stream, range.lower * bsize(), range.size() * bsize());
 }
 
 isize
@@ -54,7 +54,7 @@ HardDiskImage::writePartitionToFile(const fs::path &path, isize nr) const
 {
     // partition() is measured in blocks, the file functions take bytes
     auto range = partition(nr);
-    return writeToFile(path, range.lower * bsize(), range.size() * bsize());
+    return copy(path, range.lower * bsize(), range.size() * bsize());
 }
 
 }

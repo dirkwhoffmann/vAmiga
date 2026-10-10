@@ -13,14 +13,13 @@
 #include "utl/abilities/Compressible.h"
 #include "utl/io.h"
 #include "utl/storage/Buffer.h"
-#include "utl/support.h"
 #include <fstream>
+#include <sstream>
 
 namespace retro::vault {
 
-using utl::ByteView;
-using utl::MutableByteView;
 using utl::IOError;
+using utl::Compressor;
 
 void
 BinaryImage::init(isize len)
@@ -29,28 +28,36 @@ BinaryImage::init(isize len)
 }
 
 void
-BinaryImage::init(const fs::path &p)
+BinaryImage::init(const fs::path &p, Compressor compressor)
 {
     if (!validateURL(p))
-        throw utl::IOError(utl::IOError::FILE_TYPE_MISMATCH, p);
+        throw IOError(IOError::FILE_TYPE_MISMATCH, p);
 
-    /* A compressed file is unpacked first, and the image is put on top of the
-     * result. Everything below this line therefore deals with plain bytes,
-     * whichever of the two the image was asked for.
-     */
-    if (isPacked(p)) unpacked = unpack(p);
-    const auto &source = isPacked(p) ? unpacked.path() : p;
+    if (compressor != Compressor::NONE) {
 
-    if (utl::getSizeOfFile(source) <= 0)
-        throw utl::IOError(utl::IOError::FILE_CANT_READ, p);
+        if (!fs::exists(p))
+            throw IOError(IOError::FILE_NOT_FOUND, p);
 
-    // Ask the format how large the image in that file is
-    auto size = imageSize(source);
+        utl::Buffer<u8> bytes;
+        bytes.init(p);
+
+        if (bytes.empty())
+            throw IOError(IOError::FILE_CANT_READ, p);
+
+        bytes.uncompress(compressor);
+
+        init(bytes.ptr, bytes.size);
+        path.clear();
+        return;
+    }
+
+    if (utl::getSizeOfFile(p) <= 0)
+        throw IOError(IOError::FILE_CANT_READ, p);
 
     this->path = p;
 
     // Put the image on top of the file. Nothing is loaded yet.
-    data.init(size, source);
+    data.init(utl::getSizeOfFile(p), p);
     didInitialize();
 }
 
@@ -66,9 +73,17 @@ BinaryImage::init(const LinearDevice &device)
 }
 
 void
-BinaryImage::init(const u8 *buf, isize len)
+BinaryImage::init(const u8 *buf, isize len, Compressor compressor)
 {
     assert(buf);
+
+    if (compressor != Compressor::NONE) {
+
+        utl::Buffer<u8> bytes(buf, len);
+        bytes.uncompress(compressor);
+        init(bytes.ptr, bytes.size);
+        return;
+    }
 
     data.init(len);
 
@@ -76,60 +91,10 @@ BinaryImage::init(const u8 *buf, isize len)
     didInitialize();
 }
 
-isize
-BinaryImage::imageSize(const fs::path &p) const
-{
-    return utl::getSizeOfFile(p);
-}
-
-bool
-BinaryImage::isPacked(const fs::path &p)
-{
-    auto suffix = utl::lowercased(p.extension().string());
-
-    return suffix == ".adz" || suffix == ".hdz";
-}
-
-utl::TempFile
-BinaryImage::unpack(const fs::path &packed)
-{
-    if (!fs::exists(packed))
-        throw utl::IOError(utl::IOError::FILE_NOT_FOUND, packed);
-
-    utl::Buffer<u8> data;
-    data.init(packed);
-
-    if (data.empty())
-        throw utl::IOError(utl::IOError::FILE_CANT_READ, packed);
-
-    try {
-        data.gunzip();
-    } catch (std::exception &err) {
-        throw utl::IOError(utl::IOError::ZLIB_ERROR, err.what());
-    }
-
-    // Unpack into a file of the format the packed one holds (.adz -> .adf)
-    utl::TempFile temp(utl::lowercased(packed.extension().string()) == ".adz" ?
-                       ".adf" : ".hdf");
-    data.write(temp.path());
-
-    return temp;
-}
-
 void
-BinaryImage::pack(const fs::path &plain, const fs::path &packed)
+BinaryImage::resize(isize len)
 {
-    utl::Buffer<u8> data;
-    data.init(plain);
-
-    // Compress first, so that a failure here leaves the target alone
-    try {
-        data.gzip();
-    } catch (std::exception &err) {
-        throw utl::IOError(utl::IOError::ZLIB_ERROR, err.what());
-    }
-
-    data.write(packed);
+    data.resize(len);
 }
 
 utl::ByteView
@@ -152,124 +117,99 @@ BinaryImage::detach()
 }
 
 void
-BinaryImage::copy(u8 *buf, isize offset, isize len) const
-{
-    assert(buf);
-
-    std::memcpy(buf, byteView(offset, len).data(), len);
-}
-
-void
 BinaryImage::copy(u8 *buf, isize offset) const
 {
     copy(buf, offset, getSize() - offset);
 }
 
 void
+BinaryImage::copy(u8 *buf, isize offset, isize len) const
+{
+    assert(buf);
+    std::memcpy(buf, byteView(offset, len).data(), len);
+}
+
+void
 BinaryImage::save()
 {
-    // An image built in memory has nowhere to persist to yet
-    if (!data.backed()) { saveAs(path); return; }
-
-    auto modified = data.dirty();
-
-    // Write the modified parts back to where the image came from
     data.persist();
-
-    /* An image from a packed file has just written into the temporary file
-     * it was unpacked into. The packed file is rewritten from that, in full,
-     * because a compressed file cannot be updated in pieces.
-     */
-    if (modified && !unpacked.empty()) pack(unpacked.path(), path);
 }
 
 void
 BinaryImage::saveAs(const fs::path &newPath)
 {
-    auto size = getSize();
-
-    if (isPacked(newPath)) {
-
-        /* Write the plain bytes to a temporary file, pack that into the new
-         * file, and go on living on the temporary one. Unpacking what was
-         * just written would give the same thing at twice the price.
-         */
-        utl::TempFile temp(".tmp");
-        writeToFile(temp.path());
-        pack(temp.path(), newPath);
-
-        path = newPath;
-        data.init(size, temp.path());
-        unpacked = std::move(temp);
-        return;
-    }
+    // Saving as the file the image already lives in is saving
+    std::error_code ec;
+    if (data.backed() && fs::equivalent(newPath, path, ec)) { save(); return; }
 
     // Write the entire image first, so that a failure changes nothing
-    writeToFile(newPath);
+    copy(newPath);
 
-    // Continue on top of the new file, which now holds exactly this image
+    // Continue on top of the new file
     path = newPath;
-    data.init(size, newPath);
-    unpacked.reset();
+    data.init(getSize(), newPath);
 }
 
 isize
-BinaryImage::writeToStream(std::ostream &stream, isize offset, isize len) const
+BinaryImage::copy(std::ostream &stream, isize offset, isize len, Compressor compressor) const
 {
+    if (compressor != Compressor::NONE) {
+
+        utl::Buffer<u8> bytes((const u8 *)byteView(offset, len).data(), len);
+        bytes.compress(compressor);
+        stream.write((const char *)bytes.ptr, bytes.size);
+
+        return bytes.size;
+    }
+
     stream.write((const char *)byteView(offset, len).data(), len);
 
     return len;
 }
 
 isize
-BinaryImage::writeToFile(const fs::path &p, isize offset, isize len) const
+BinaryImage::copy(const fs::path &p, isize offset, isize len, Compressor compressor) const
 {
-    if (utl::isDirectory(p)) {
-        throw utl::IOError(utl::IOError::FILE_IS_DIRECTORY);
-    }
-
-    /* A packed target is written in two steps: the plain bytes go to a
-     * temporary file, which is then packed into the target. The byte count
-     * is the one of the file that was asked for, so it counts packed bytes.
-     */
-    if (isPacked(p)) {
-
-        utl::TempFile temp(".tmp");
-        writeToFile(temp.path(), offset, len);
-        pack(temp.path(), p);
-
-        return isize(fs::file_size(p));
-    }
-
-    /* The target may be the very file this image is loaded from. Opening it
-     * for writing truncates it, so whatever is still in there only has to
-     * come in first.
-     */
     std::error_code ec;
-    if (fs::equivalent(p, path, ec)) (void)byteView(0, getSize());
+
+    if (utl::isDirectory(p))
+        throw IOError(IOError::FILE_IS_DIRECTORY);
+
+    if (data.backed() && fs::equivalent(p, path, ec))
+        throw IOError(IOError::FILE_IN_USE, p);
+
+    std::stringstream compressed;
+    if (compressor != Compressor::NONE) copy(compressed, offset, len, compressor);
 
     std::ofstream stream(p, std::ofstream::binary);
 
-    if (!stream.is_open()) {
-        throw utl::IOError(utl::IOError::FILE_CANT_WRITE, p);
+    if (!stream.is_open())
+        throw IOError(IOError::FILE_CANT_WRITE, p);
+
+    if (compressor != Compressor::NONE) {
+
+        const auto bytes = compressed.str();
+        stream.write(bytes.data(), std::streamsize(bytes.size()));
+
+        return isize(bytes.size());
     }
 
-    isize result = writeToStream(stream, offset, len);
+    isize result = copy(stream, offset, len);
     assert(result == len);
 
     return result;
 }
 
 isize
-BinaryImage::writeToStream(std::ostream &stream) const
+BinaryImage::copy(std::ostream &stream, Compressor compressor) const
 {
-    return writeToStream(stream, 0, getSize());
+    return copy(stream, 0, getSize(), compressor);
 }
 
 isize
-BinaryImage::writeToFile(const fs::path &p) const
+BinaryImage::copy(const fs::path &p, Compressor compressor) const
 {
-    return writeToFile(p, 0, getSize());
+    return copy(p, 0, getSize(), compressor);
 }
 
 }

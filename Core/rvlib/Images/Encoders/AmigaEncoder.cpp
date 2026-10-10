@@ -32,7 +32,7 @@ AmigaEncoder::encodeTrack(utl::ByteView src, TrackNr t)
 
     logmsg(LOG_IMG, "Encoding Amiga track %td with %td sectors\n", t, count);
 
-    // Start with a clean track
+    // Start with a clean track of the full length, i.e., including the gap
     auto trackBytes = count == 11 ? 12668 : 24636;
     if (trackBuffer.empty()) trackBuffer.resize(trackBytes);
     std::fill(trackBuffer.begin(), trackBuffer.end(), u8(0xAA));

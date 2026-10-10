@@ -249,7 +249,6 @@ public:
     void setProtectionFlag(bool value) override;
 
     // Floppy disks always live in memory, so there is no file to go back to
-    StorageMode getStorageMode() const override { return StorageMode::MEMORY_BACKED; }
     fs::path getPath() const override { return {}; }
     bool needsPersisting() const override { return false; }
     void persist() override { }
