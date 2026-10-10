@@ -98,6 +98,16 @@ public:
      */
     void saveWorkspace(const std::filesystem::path &path) const;
 
+    /** @brief  Saves a workspace to disk asynchronously.
+     *
+     *  The request is handed to the emulator thread, which carries it out
+     *  when it processes its command queue. The function returns immediately.
+     *  The GUI is informed by a WORKSPACE_SAVED message.
+     *
+     *  @param  path    Destination path
+     */
+    void saveWorkspaceAsync(const std::filesystem::path &path) const;
+
     /** @brief  Takes a snapshot
      *
      *  @param  compressor   The snapshot compression method
@@ -128,6 +138,16 @@ public:
      *  @param  path    Destination path
      */
     void saveSnapshot(const std::filesystem::path &path) const;
+
+    /** @brief  Saves a snapshot to disk asynchronously.
+     *
+     *  The request is handed to the emulator thread, which carries it out
+     *  when it processes its command queue. The function returns immediately.
+     *  The GUI is informed by a SNAPSHOT_SAVED message.
+     *
+     *  @param  path    Destination path
+     */
+    void saveSnapshotAsync(const std::filesystem::path &path) const;
 
     
     /// @}

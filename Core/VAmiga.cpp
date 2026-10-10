@@ -2444,6 +2444,13 @@ AmigaAPI::saveWorkspace(const fs::path &path) const
 }
 
 void
+AmigaAPI::saveWorkspaceAsync(const fs::path &path) const
+{
+    VAMIGA_PUBLIC
+    emu->put(Cmd::SAVE_WORKSPACE, path.string());
+}
+
+void
 AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -2481,6 +2488,13 @@ AmigaAPI::saveSnapshot(const fs::path &path) const
     VAMIGA_PUBLIC_SUSPEND
     amiga->saveSnapshot(path);
     
+}
+
+void
+AmigaAPI::saveSnapshotAsync(const fs::path &path) const
+{
+    VAMIGA_PUBLIC
+    emu->put(Cmd::SAVE_SNAPSHOT, path.string());
 }
 
 u64
