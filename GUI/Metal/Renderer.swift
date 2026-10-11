@@ -188,7 +188,7 @@ class Renderer: NSObject, MTKViewDelegate {
             // Process all pending messages
             var msg = Message()
             while emu?.amiga.getMessage(&msg) == true {
-                parent.process(message: msg)
+                parent.process(message: msg, attachment: msg.str.map { String(cString: $0) } ?? "")
             }
         }
         

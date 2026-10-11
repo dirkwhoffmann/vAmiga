@@ -7,14 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-@MainActor 
-protocol MessageReceiver {
-    
-    func process(message: Message)
-}
-
 @MainActor
-class MyController: NSWindowController, MessageReceiver {
+class MyController: NSWindowController, MessageListener {
     
     var pref: Preferences { return myAppDelegate.pref }
     
@@ -265,17 +259,8 @@ extension MyController {
             
             if BuildSettings.msgCallback {
                 
-                // Convert 'self' to a void pointer
-                let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
-                
-                try emu?.launch(myself) { (ptr, msg: Message) in
-                    
-                    // Convert void pointer back to 'self'
-                    let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
-                    
-                    // Process message in the main thread
-                    Task { @MainActor in myself.process(message: msg) }
-                }
+                // Messages arrive on the main thread, through processMessage
+                try emu?.launch(listener: self)
                 
             } else {
                 
@@ -342,14 +327,19 @@ extension MyController {
         }
     }
     
-    func process(message msg: Message) {
+    // Receives the messages of the emulator (see MessageListener)
+    func processMessage(_ msg: Message, attachment: String) {
+        
+        process(message: msg, attachment: attachment)
+    }
+    
+    func process(message msg: Message, attachment attachedString: String) {
         
         MainActor.assertIsolated()
         
         guard let emu = emu else { return }
         var value: Int { return Int(msg.value) }
         var value2: Int { return Int(msg.value2) }
-        var attachedString: String { return msg.str.map { String(cString: $0) } ?? "" }
         // RetroShell messages carry the id of the emitting shell (0 = main shell)
         var isMainShell: Bool { return msg.value == 0 }
         var nr: Int { return Int(msg.drive.nr) }

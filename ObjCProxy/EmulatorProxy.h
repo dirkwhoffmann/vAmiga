@@ -22,6 +22,21 @@ using namespace retro::vault::amiga;
 // Forward declarations
 //
 
+/* Receives the messages of the emulator.
+ *
+ * Messages are delivered on the main thread (hence the main actor on the Swift
+ * side), in the order they were sent. The string that a message may carry
+ * (error descriptions, for example) is passed on as an attachment, because the
+ * pointer in the message itself is only valid while the emulator thread is
+ * delivering it.
+ */
+NS_SWIFT_UI_ACTOR
+@protocol MessageListener <NSObject>
+
+- (void)processMessage:(Message)msg attachment:(NSString *)attachment;
+
+@end
+
 @class AudioPortProxy;
 @class AgnusProxy;
 @class AmigaProxy;
@@ -267,7 +282,7 @@ ImageInfo scan(const fs::path &url);
 @property (readonly) BOOL tracking;
 
 - (void)launch:(ExceptionWrapper *)ex;
-- (void)launch:(const void *)listener function:(Callback *)func exception:(ExceptionWrapper *)ex;
+- (void)launch:(id<MessageListener>)listener exception:(ExceptionWrapper *)ex;
 - (void)wakeUp;
 
 - (void)isReady:(ExceptionWrapper *)ex;
