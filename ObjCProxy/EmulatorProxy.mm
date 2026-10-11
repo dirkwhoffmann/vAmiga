@@ -1875,7 +1875,7 @@ ImageInfo scan(const fs::path &url)
 - (void)importFiles:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try {
-        [self drive]->importFiles([url fileSystemRepresentation]);
+        [self drive]->importFolder([url fileSystemRepresentation]);
     } catch(Error &error) {
         [ex save:error];
     }

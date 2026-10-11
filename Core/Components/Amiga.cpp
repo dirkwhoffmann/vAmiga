@@ -13,6 +13,7 @@
 #include "Emulator.h"
 #include "Option.h"
 #include "Media.h"
+#include "SVMFile.h"
 #include "utl/chrono.h"
 #include "utl/gfx/Images.h"
 #include "utl/io.h"
@@ -333,6 +334,128 @@ Amiga::loadWorkspace(const fs::path &path)
 void
 Amiga::saveWorkspace(const fs::path &path)
 {
+    writeWorkspace(path);
+
+    // Inform the GUI
+    msgQueue.put(Msg::WORKSPACE_SAVED);
+}
+
+void
+Amiga::loadWorkspace(retro::vault::SVMFile &svm)
+{
+    loadWorkspace(svm.root() / retro::vault::SVMFile::workspaceDir);
+}
+
+void
+Amiga::saveWorkspace(retro::vault::SVMFile &svm)
+{
+    updateWorkspace(svm);
+    svm.persist();
+
+    // Inform the GUI
+    msgQueue.put(Msg::WORKSPACE_SAVED);
+}
+
+void
+Amiga::saveSnapshot(retro::vault::SVMFile &svm)
+{
+    updateSnapshot(svm);
+    svm.persist();
+
+    // Inform the GUI
+    msgQueue.put(Msg::SNAPSHOT_SAVED);
+}
+
+void
+Amiga::hibernate(const fs::path &path, bool snapshot, bool workspace)
+{
+    retro::vault::SVMFile svm(retro::vault::SVMFile::Open, path);
+    hibernate(svm, snapshot, workspace);
+}
+
+void
+Amiga::hibernate(retro::vault::SVMFile &svm, bool snapshot, bool workspace)
+{
+    // Refuse before anything is done
+    if (snapshot && svm.isReadOnly()) throw Error(0, "The virtual machine is read-only.");
+
+    // Each part is persisted and reported when it is done
+    if (workspace) {
+
+        updateWorkspace(svm);
+        svm.persist();
+        msgQueue.put(Msg::WORKSPACE_SAVED);
+    }
+
+    if (snapshot) {
+
+        updateSnapshot(svm);
+        svm.persist();
+        msgQueue.put(Msg::SNAPSHOT_SAVED);
+    }
+
+    // Inform the GUI
+    msgQueue.put(Msg::HIBERNATED);
+}
+
+void
+Amiga::updateWorkspace(retro::vault::SVMFile &svm)
+{
+    using namespace retro::vault;
+
+    /* No need to clear the folder. writeWorkspace() removes old files itself,
+     * but spares the images the hard drives are sitting on.
+     */
+    writeWorkspace(svm.root() / SVMFile::workspaceDir);
+
+    // The preview image has been written along with the workspace
+    svm.getManifest().screenshot = "preview.png";
+}
+
+void
+Amiga::updateSnapshot(retro::vault::SVMFile &svm)
+{
+    using namespace retro::vault;
+
+    if (svm.isReadOnly()) throw Error(0, "The virtual machine is read-only.");
+
+    /* Bring the snapshot folder into being. Nothing else creates it, and the
+     * first snapshot of an SVM is exactly the case where it is not there yet.
+     */
+    auto folder = svm.root() / SVMFile::snapshotDir;
+    fs::create_directories(folder);
+
+    SnapshotInfo info {};
+    info.version    = snapshotVersion();
+    info.uuid       = utl::UUID::v4();
+    info.platform   = Platform::AMIGA;
+    info.created    = time(nullptr);
+    info.modified   = info.created;
+    info.screenshot = fs::path(info.uuid.toString() + ".png");
+    info.binary     = fs::path(info.uuid.toString() + ".vasnap");
+
+    // Take the screenshot and the snapshot, both of the same moment
+    savePreview(folder / info.screenshot);
+    Snapshot(*this, config.snapshotCompressor).writeToFile(folder / info.binary);
+
+    svm.getManifest().appendSnapshot(info);
+}
+
+void
+Amiga::savePreview(const fs::path &path)
+{
+    // Save the most recent frame, cropped to the largest visible area
+    // (no HBLANK, no VBLANK)
+    auto pal = agnus.isPAL();
+    videoPort.saveTexture(path,
+                          8 * HBLANK_CNT, 8 * HPOS_CNT,
+                          pal ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT,
+                          (pal ? PAL::VPOS_CNT : NTSC::VPOS_CNT) - 1);
+}
+
+void
+Amiga::writeWorkspace(const fs::path &path)
+{
     std::stringstream ss, df, hd;
 
     auto exportADF = [&](FloppyDrive& drive, string name) {
@@ -364,26 +487,6 @@ Amiga::saveWorkspace(const fs::path &path)
 
             string file = name + ".hdf";
 
-            /* A drive already sitting on one of this folder's own files stays
-             * on it, even when that is a compressed .hdz from an older
-             * workspace. The file is the drive: renaming it here would leave
-             * the image the drive is reading from behind under the old name
-             * and write a second copy under the new one. writeToFile() knows
-             * how to write a file the image itself is loaded from, so this
-             * updates it in place rather than replacing it.
-             */
-            if (const auto own = drive.getPath(); !own.empty()) {
-
-                std::error_code ec;
-                for (const auto *ext : { ".hdf", ".hdz" }) {
-
-                    if (fs::equivalent(own, path / (name + ext), ec)) {
-                        file = name + ext;
-                        break;
-                    }
-                }
-            }
-
             try {
                 
                 drive.writeToFile(path / file);
@@ -400,31 +503,8 @@ Amiga::saveWorkspace(const fs::path &path)
         }
     };
 
-    auto exportPreview = [&]() {
+    auto exportPreview = [&]() { savePreview(path / "preview.png"); };
 
-        // Save the most recent frame, cropped to the largest visible area
-        // (no HBLANK, no VBLANK)
-        auto pal = agnus.isPAL();
-        videoPort.saveTexture(path / "preview.png",
-                              8 * HBLANK_CNT, 8 * HPOS_CNT,
-                              pal ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT,
-                              (pal ? PAL::VPOS_CNT : NTSC::VPOS_CNT) - 1);
-    };
-
-    // If a file with the specified name exists, delete it
-    if (fs::exists(path) && !fs::is_directory(path)) fs::remove(path);
-    
-    // Create the directory if necessary
-    if (!fs::exists(path)) fs::create_directories(path);
-        
-    /* Remove old files, except the images the hard drives are sitting on.
-     *
-     * A file-backed drive *is* its file: exportHDF() below writes its changes
-     * back into it, and a drive whose file had just been deleted has nothing
-     * left to write -- it would silently export nothing and the machine would
-     * come back without the drive. Collected first and deleted afterwards, so
-     * the directory is not being changed while it is walked.
-     */
     auto isLiveDriveImage = [&](const fs::path &file) {
 
         for (auto *drive : { &hd0, &hd1, &hd2, &hd3 }) {
@@ -438,6 +518,13 @@ Amiga::saveWorkspace(const fs::path &path)
         return false;
     };
 
+    // If a file with the specified name exists, delete it
+    if (fs::exists(path) && !fs::is_directory(path)) fs::remove(path);
+    
+    // Create the directory if necessary
+    if (!fs::exists(path)) fs::create_directories(path);
+        
+    // Remove old files, except the images the hard drives are sitting on
     std::vector<fs::path> obsolete;
     for (const auto &entry : fs::directory_iterator(path)) {
         if (!isLiveDriveImage(entry.path())) obsolete.push_back(entry.path());
@@ -488,9 +575,6 @@ Amiga::saveWorkspace(const fs::path &path)
     // Write the script into the workspace bundle
     std::ofstream file(path / "config.retrosh");
     file << ss.str();
-    
-    // Inform the GUI
-    msgQueue.put(Msg::WORKSPACE_SAVED);
 }
 
 void
@@ -1006,6 +1090,9 @@ Amiga::update(CmdQueue &queue)
             case Cmd::INSPECTION_TARGET:
             case Cmd::SAVE_WORKSPACE:
             case Cmd::SAVE_SNAPSHOT:
+            case Cmd::HIBERNATE:
+            case Cmd::HDR_ATTACH:
+            case Cmd::HDR_IMPORT:
 
                 processCommand(cmd);
                 break;
@@ -1340,10 +1427,15 @@ Amiga::processCommand(const Command &cmd)
             setAutoInspectionMask(cmd.value);
             break;
 
+        // An SVM that is already open travels as a pointer, otherwise as a path
         case Cmd::SAVE_WORKSPACE:
             
             try {
-                saveWorkspace(cmd.str);
+                if (cmd.value2) {
+                    saveWorkspace(*reinterpret_cast<retro::vault::SVMFile *>(cmd.value2));
+                } else {
+                    saveWorkspace(cmd.str);
+                }
             } catch (const std::exception &e) {
                 msgQueue.put(Msg::WORKSPACE_SAVED, -1, 0, e.what());
             }
@@ -1353,9 +1445,49 @@ Amiga::processCommand(const Command &cmd)
         case Cmd::SAVE_SNAPSHOT:
             
             try {
-                saveSnapshot(cmd.str);
+                if (cmd.value2) {
+                    saveSnapshot(*reinterpret_cast<retro::vault::SVMFile *>(cmd.value2));
+                } else {
+                    saveSnapshot(cmd.str);
+                }
             } catch (const std::exception &e) {
                 msgQueue.put(Msg::SNAPSHOT_SAVED, -1, 0, e.what());
+            }
+            break;
+
+        case Cmd::HDR_ATTACH:
+
+            // Success is reported by the drive itself, a failure with the same message
+            try {
+                hd[cmd.value]->init(cmd.str, *reinterpret_cast<retro::vault::SVMFile *>(cmd.value2));
+            } catch (const std::exception &e) {
+                msgQueue.put(Msg::HDR_ATTACH, cmd.value, -1, e.what());
+            }
+            break;
+
+        case Cmd::HDR_IMPORT:
+
+            // Reports the result to the GUI, together with the drive's number
+            try {
+                hd[cmd.value]->importFolder(cmd.str);
+                hd[cmd.value]->persist();
+                msgQueue.put(Msg::HDR_IMPORTED, cmd.value);
+            } catch (const std::exception &e) {
+                msgQueue.put(Msg::HDR_IMPORTED, cmd.value, -1, e.what());
+            }
+            break;
+
+        case Cmd::HIBERNATE:
+
+            // Reports success to the GUI itself, a failure with the same message
+            try {
+                if (cmd.value2) {
+                    hibernate(*reinterpret_cast<retro::vault::SVMFile *>(cmd.value2), cmd.value & 1, cmd.value & 2);
+                } else {
+                    hibernate(cmd.str, cmd.value & 1, cmd.value & 2);
+                }
+            } catch (const std::exception &e) {
+                msgQueue.put(Msg::HIBERNATED, -1, 0, e.what());
             }
             break;
         

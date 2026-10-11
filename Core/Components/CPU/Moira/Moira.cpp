@@ -466,7 +466,9 @@ Moira::processException(const std::exception &exc)
         return;
     }
 
-    throw exc;
+    // Unhandled exception (we should not be here)
+    fprintf(stderr, "Moira: CPU halted at PC %06x: %s\n", reg.pc0, exc.what());
+    halt();
 }
 
 bool

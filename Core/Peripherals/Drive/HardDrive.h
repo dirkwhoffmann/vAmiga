@@ -24,6 +24,7 @@
 #include <memory>
 
 namespace retro::vault::amiga { class FileSystem; }
+namespace retro::vault { class SVMFile; }
 
 namespace vamiga {
 
@@ -174,6 +175,26 @@ public:
      * it). A directory is imported into the current disk.
      */
     void init(const fs::path &path);
+
+    /* Creates a hard drive with the contents of an HDF file and makes it part
+     * of the workspace of an SVM
+     *
+     * The file is copied into the workspace folder of the SVM, under the name
+     * of the drive (hd0.hdf for drive 0, and so on), and the drive is
+     * attached to the copy. A compressed file (.hdz) is uncompressed on the
+     * way. A directory is imported as it is.
+     */
+    void init(const fs::path &path, retro::vault::SVMFile &svm);
+
+    /* Creates a new hard drive in the workspace of an SVM
+     *
+     * An empty image of the given size is created as hdN.hdf (N being the
+     * number of the drive), attached, and formatted. Files can be added
+     * afterwards (see importFolder()). If anything goes wrong, the image is
+     * removed again.
+     */
+    void create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSFormat fsType,
+                const string &name);
 
     /* Takes the disk out of the drive, leaving it as it was before anything
      * was attached. The counterpart of the init() calls above; it says

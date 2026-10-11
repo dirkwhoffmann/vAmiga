@@ -10,6 +10,7 @@
 #include "vaconfig.h"
 #include "VAmiga.h"
 #include "Emulator.h"
+#include "SVMFile.h"
 #include "Codecs.h"
 #include "GuardList.h"
 #include "utl/concurrency.h"
@@ -1416,6 +1417,28 @@ HardDriveAPI::attach(const fs::path &path)
 }
 
 void
+HardDriveAPI::attach(const fs::path &path, retro::vault::SVMFile &svm)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->init(path, svm);
+}
+
+void
+HardDriveAPI::create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSFormat fs,
+                     const string &name)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->create(svm, megabytes, fs, name);
+}
+
+void
+HardDriveAPI::attachAsync(const fs::path &path, retro::vault::SVMFile &svm)
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::HDR_ATTACH, i64(drive->objid), i64(&svm)), path.string());
+}
+
+void
 HardDriveAPI::attach(isize c, isize h, isize s, isize b)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -1439,10 +1462,17 @@ HardDriveAPI::detach()
 }
 
 void
-HardDriveAPI::importFiles(const fs::path &path)
+HardDriveAPI::importFolder(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->importFolder(path);
+}
+
+void
+HardDriveAPI::importFolderAsync(const fs::path &path)
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::HDR_IMPORT, i64(drive->objid)), path.string());
 }
 
 fs::path
@@ -2477,6 +2507,27 @@ AmigaAPI::saveWorkspaceAsync(const fs::path &path) const
 }
 
 void
+AmigaAPI::loadWorkspace(retro::vault::SVMFile &svm)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->loadWorkspace(svm);
+}
+
+void
+AmigaAPI::saveWorkspace(retro::vault::SVMFile &svm) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->saveWorkspace(svm);
+}
+
+void
+AmigaAPI::saveWorkspaceAsync(retro::vault::SVMFile &svm) const
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::SAVE_WORKSPACE, i64(0), i64(&svm)));
+}
+
+void
 AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -2521,6 +2572,48 @@ AmigaAPI::saveSnapshotAsync(const fs::path &path) const
 {
     VAMIGA_PUBLIC
     emu->put(Cmd::SAVE_SNAPSHOT, path.string());
+}
+
+void
+AmigaAPI::saveSnapshot(retro::vault::SVMFile &svm) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->saveSnapshot(svm);
+}
+
+void
+AmigaAPI::saveSnapshotAsync(retro::vault::SVMFile &svm) const
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::SAVE_SNAPSHOT, i64(0), i64(&svm)));
+}
+
+void
+AmigaAPI::hibernate(const fs::path &path, bool snapshot, bool workspace) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->hibernate(path, snapshot, workspace);
+}
+
+void
+AmigaAPI::hibernateAsync(const fs::path &path, bool snapshot, bool workspace) const
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::HIBERNATE, i64(snapshot) | i64(workspace) << 1), path.string());
+}
+
+void
+AmigaAPI::hibernate(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->hibernate(svm, snapshot, workspace);
+}
+
+void
+AmigaAPI::hibernateAsync(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::HIBERNATE, i64(snapshot) | i64(workspace) << 1, i64(&svm)));
 }
 
 u64

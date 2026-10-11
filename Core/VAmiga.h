@@ -15,6 +15,7 @@
 #include <span>
 
 namespace retro::vault::amiga { class FileSystem; }
+namespace retro::vault { class SVMFile; }
 
 namespace vamiga {
 
@@ -108,6 +109,18 @@ public:
      */
     void saveWorkspaceAsync(const std::filesystem::path &path) const;
 
+    /** @brief  Loads, saves, or asynchronously saves the workspace of an SVM
+     *
+     *  These work on the workspace folder of an SVM that is already open.
+     *  Saving replaces the workspace, notes its preview image in the manifest
+     *  and persists the SVM. The asynchronous version uses the object on the
+     *  emulator thread: it must stay alive, and untouched, until the
+     *  WORKSPACE_SAVED message has arrived.
+     */
+    void loadWorkspace(retro::vault::SVMFile &svm);
+    void saveWorkspace(retro::vault::SVMFile &svm) const;
+    void saveWorkspaceAsync(retro::vault::SVMFile &svm) const;
+
     /** @brief  Takes a snapshot
      *
      *  @param  compressor   The snapshot compression method
@@ -148,6 +161,48 @@ public:
      *  @param  path    Destination path
      */
     void saveSnapshotAsync(const std::filesystem::path &path) const;
+
+    /** @brief  Saves a snapshot, including a screenshot, into an SVM
+     *
+     *  Works on an SVM that is already open: the snapshot is added to its
+     *  manifest, and the SVM is persisted. The asynchronous version uses the
+     *  object on the emulator thread: it must stay alive, and untouched,
+     *  until the SNAPSHOT_SAVED message has arrived.
+     */
+    void saveSnapshot(retro::vault::SVMFile &svm) const;
+    void saveSnapshotAsync(retro::vault::SVMFile &svm) const;
+
+    /** @brief  Hibernates the machine into a virtual machine bundle
+     *
+     *  Saves the workspace (if workspace is true) and a snapshot including a
+     *  screenshot (if snapshot is true) into the SVM, and updates its
+     *  manifest. The GUI is told with a WORKSPACE_SAVED and a SNAPSHOT_SAVED
+     *  message as soon as the respective part is done.
+     *
+     *  @param  path        Path of the SVM
+     *  @param  snapshot    Save a snapshot
+     *  @param  workspace   Save the workspace
+     */
+    void hibernate(const std::filesystem::path &path, bool snapshot, bool workspace) const;
+
+    /** @brief  Hibernates the machine asynchronously.
+     *
+     *  The request is handed to the emulator thread, which carries it out
+     *  when it processes its command queue. The function returns immediately.
+     *  The GUI is informed by a HIBERNATED message at the end, which carries
+     *  an error code and description if the operation failed.
+     */
+    void hibernateAsync(const std::filesystem::path &path, bool snapshot, bool workspace) const;
+
+    /** @brief  Hibernates the machine into an SVM that is already open
+     *
+     *  Works like the versions that take a path, but updates and persists the
+     *  given object. The asynchronous version uses it on the emulator thread:
+     *  it must stay alive, and untouched, until the HIBERNATED message has
+     *  arrived.
+     */
+    void hibernate(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const;
+    void hibernateAsync(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const;
 
     
     /// @}
@@ -897,6 +952,50 @@ public:
      */
     void attach(const std::filesystem::path &path);
 
+    /** @brief  Attaches a hard drive provided by a media file and makes it
+     *          part of the workspace of an SVM.
+     *
+     *  The file is copied into the workspace folder of the SVM, under the name
+     *  of the drive (hd0.hdf for drive 0, and so on), and the drive is attached
+     *  to the copy. A compressed file (.hdz) is uncompressed on the way. A
+     *  folder is imported as it is.
+     *
+     *  @param  path    Path to the media file.
+     *  @param  svm     The SVM whose workspace takes the file
+     *  @note   Saving the workspace afterwards makes the drive part of its
+     *          configuration.
+     */
+    void attach(const std::filesystem::path &path, retro::vault::SVMFile &svm);
+
+    /** @brief  Attaches a hard drive asynchronously and makes it part of the
+     *          workspace of an SVM (see the version of attach() above).
+     *
+     *  The request is handed to the emulator thread, which carries it out
+     *  when it processes its command queue. The function returns immediately.
+     *  The GUI is informed by an HDR_ATTACH message, which carries the number
+     *  of the drive and, if the operation failed, an error code and
+     *  description. The SVM is used on the emulator thread: it must stay
+     *  alive, and untouched, until the message has arrived.
+     *
+     *  @param  path    Path to the media file.
+     *  @param  svm     The SVM whose workspace takes the file
+     */
+    void attachAsync(const std::filesystem::path &path, retro::vault::SVMFile &svm);
+
+    /** @brief  Creates a new hard drive in the workspace of an SVM
+     *
+     *  An empty image of the given size is created as hdN.hdf, attached, and
+     *  formatted. This is quick, even for a large drive. Use importFolder()
+     *  to fill it.
+     *
+     *  @param  svm         The SVM whose workspace takes the image
+     *  @param  megabytes   Size of the drive
+     *  @param  fs          File system to install (NODOS leaves the drive blank)
+     *  @param  name        Name of the volume
+     */
+    void create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSFormat fs,
+                const string &name);
+
     /** @brief  Attaches a hard drive with a particular geometry.
      *  @param  c       Number of cylinders
      *  @param  h       Number of heads
@@ -914,7 +1013,18 @@ public:
     /** @brief  Imports files from a folder
      *  @note   All existing files are deleted prior to importing the folder.
      */
-    void importFiles(const std::filesystem::path &path);
+    void importFolder(const std::filesystem::path &path);
+
+    /** @brief  Imports files from a folder asynchronously
+     *
+     *  The request is handed to the emulator thread, which carries it out
+     *  when it processes its command queue. The function returns immediately.
+     *  The GUI is informed by an HDR_IMPORTED message, which carries the
+     *  number of the drive and, if the operation failed, an error code and
+     *  description. When it succeeds, the changes have been written to the
+     *  image file.
+     */
+    void importFolderAsync(const std::filesystem::path &path);
 
     /** @brief  Returns the file the disk lives in
      *  @note   The path is empty for a drive that was built in memory.
