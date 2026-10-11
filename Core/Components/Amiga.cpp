@@ -1436,8 +1436,8 @@ Amiga::processCommand(const Command &cmd)
                 } else {
                     saveWorkspace(cmd.str);
                 }
-            } catch (const std::exception &e) {
-                msgQueue.put(Msg::WORKSPACE_SAVED, -1, 0, e.what());
+            } catch (...) {
+                msgQueue.put(Msg::WORKSPACE_SAVED, std::current_exception());
             }
             break;
         
@@ -1450,8 +1450,8 @@ Amiga::processCommand(const Command &cmd)
                 } else {
                     saveSnapshot(cmd.str);
                 }
-            } catch (const std::exception &e) {
-                msgQueue.put(Msg::SNAPSHOT_SAVED, -1, 0, e.what());
+            } catch (...) {
+                msgQueue.put(Msg::SNAPSHOT_SAVED, std::current_exception());
             }
             break;
 
@@ -1460,8 +1460,8 @@ Amiga::processCommand(const Command &cmd)
             // Success is reported by the drive itself, a failure with the same message
             try {
                 hd[cmd.value]->init(cmd.str, *reinterpret_cast<retro::vault::SVMFile *>(cmd.value2));
-            } catch (const std::exception &e) {
-                msgQueue.put(Msg::HDR_ATTACH, cmd.value, -1, e.what());
+            } catch (...) {
+                msgQueue.put(Msg::HDR_ATTACH, cmd.value, 0, "", std::current_exception());
             }
             break;
 
@@ -1472,8 +1472,8 @@ Amiga::processCommand(const Command &cmd)
                 hd[cmd.value]->importFolder(cmd.str);
                 hd[cmd.value]->persist();
                 msgQueue.put(Msg::HDR_IMPORTED, cmd.value);
-            } catch (const std::exception &e) {
-                msgQueue.put(Msg::HDR_IMPORTED, cmd.value, -1, e.what());
+            } catch (...) {
+                msgQueue.put(Msg::HDR_IMPORTED, cmd.value, 0, "", std::current_exception());
             }
             break;
 
@@ -1486,8 +1486,8 @@ Amiga::processCommand(const Command &cmd)
                 } else {
                     hibernate(cmd.str, cmd.value & 1, cmd.value & 2);
                 }
-            } catch (const std::exception &e) {
-                msgQueue.put(Msg::HIBERNATED, -1, 0, e.what());
+            } catch (...) {
+                msgQueue.put(Msg::HIBERNATED, std::current_exception());
             }
             break;
         

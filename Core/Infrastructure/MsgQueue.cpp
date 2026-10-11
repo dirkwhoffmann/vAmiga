@@ -33,15 +33,16 @@ MsgQueue::setListener(const void *listener, Callback *callback)
 
             while (!queue.isEmpty()) {
 
-                Message &msg = queue.read();
-                callback(listener, msg);
+                Entry &entry = queue.read();
+                callback(listener, entry.message, entry.exception);
+                entry.exception = nullptr;
             }
         }
     }
 }
 
 bool
-MsgQueue::get(Message &msg)
+MsgQueue::get(Message &msg, std::exception_ptr &exception)
 {
     if (!enabled) return false;
 
@@ -49,13 +50,16 @@ MsgQueue::get(Message &msg)
 
         if (queue.isEmpty()) return false;
 
-        msg = queue.read();
+        Entry &entry = queue.read();
+        msg = entry.message;
+        exception = entry.exception;
+        entry.exception = nullptr;
         return true;
     }
 }
 
 void
-MsgQueue::put(const Message &msg, const string &str)
+MsgQueue::put(const Message &msg, const string &str, std::exception_ptr exception)
 {
     if (enabled) {
 
@@ -68,26 +72,27 @@ MsgQueue::put(const Message &msg, const string &str)
             // Send the message immediately if a listener has been registered.
             Message m = msg;
             m.str = str.c_str();
-            callback(listener, m);
+            callback(listener, m, exception);
 
         } else if (!queue.isFull()) {
 
             // Coalesce with the oldest pending message if it has the same type
             auto *current = queue.currentAddr();
 
-            if (current->type == msg.type) {
+            if (current->message.type == msg.type) {
 
                 auto r = queue.begin();
-                *current = msg;
+                current->message = msg;
+                current->exception = exception;
                 attachments[r] = str;
-                queue.elements[r].str = attachments[r].c_str();
+                queue.elements[r].message.str = attachments[r].c_str();
 
             } else {
 
                 auto w = queue.end();
-                queue.write(msg);
+                queue.write(Entry { msg, exception });
                 attachments[w] = str;
-                queue.elements[w].str = attachments[w].c_str();
+                queue.elements[w].message.str = attachments[w].c_str();
             }
 
         } else {
@@ -98,15 +103,21 @@ MsgQueue::put(const Message &msg, const string &str)
 }
 
 void
-MsgQueue::put(Msg type, i64 payload, i64 payload2, const string &str)
+MsgQueue::put(Msg type, i64 payload, i64 payload2, const string &str, std::exception_ptr exception)
 {
-    put( Message { .type = type, .value = payload, .value2 = payload2 }, str);
+    put( Message { .type = type, .value = payload, .value2 = payload2 }, str, exception);
 }
 
 void
 MsgQueue::put(Msg type, const string &payload)
 {
     put( Message { .type = type }, payload);
+}
+
+void
+MsgQueue::put(Msg type, std::exception_ptr exception)
+{
+    put( Message { .type = type }, "", exception );
 }
 
 void

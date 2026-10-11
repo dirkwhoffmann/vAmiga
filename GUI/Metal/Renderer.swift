@@ -187,8 +187,15 @@ class Renderer: NSObject, MTKViewDelegate {
             
             // Process all pending messages
             var msg = Message()
-            while emu?.amiga.getMessage(&msg) == true {
-                parent.process(message: msg, attachment: msg.str.map { String(cString: $0) } ?? "")
+            let exception = ExceptionWrapper()
+            while emu?.amiga.getMessage(&msg, exception: exception) == true {
+                
+                // A message that reports a failure comes with a description
+                let failed = exception.fault != 0 || exception.what != ""
+                parent.process(message: msg,
+                               attachment: msg.str.map { String(cString: $0) } ?? "",
+                               exception: failed ? exception : nil)
+                if failed { exception.fault = 0; exception.what = "" }
             }
         }
         

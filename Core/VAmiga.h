@@ -77,10 +77,11 @@ public:
 
     /** @brief  Reads a message from the message queue
      *
-     *  @param  msg    The returned message (if any)
+     *  @param  msg         The returned message (if any)
+     *  @param  exception   The exception the message reports (null if none)
      *  @return True if a message could be read, false if the queue was empty
      */
-    bool getMsg(Message &msg);
+    bool getMsg(Message &msg, std::exception_ptr &exception);
 
 
     /// @}
@@ -190,7 +191,7 @@ public:
      *  The request is handed to the emulator thread, which carries it out
      *  when it processes its command queue. The function returns immediately.
      *  The GUI is informed by a HIBERNATED message at the end, which carries
-     *  an error code and description if the operation failed.
+     *  the exception if the operation failed.
      */
     void hibernateAsync(const std::filesystem::path &path, bool snapshot, bool workspace) const;
 
@@ -973,9 +974,9 @@ public:
      *  The request is handed to the emulator thread, which carries it out
      *  when it processes its command queue. The function returns immediately.
      *  The GUI is informed by an HDR_ATTACH message, which carries the number
-     *  of the drive and, if the operation failed, an error code and
-     *  description. The SVM is used on the emulator thread: it must stay
-     *  alive, and untouched, until the message has arrived.
+     *  of the drive and, if the operation failed, the exception. The SVM is
+     *  used on the emulator thread: it must stay alive, and untouched, until
+     *  the message has arrived.
      *
      *  @param  path    Path to the media file.
      *  @param  svm     The SVM whose workspace takes the file
@@ -1020,9 +1021,8 @@ public:
      *  The request is handed to the emulator thread, which carries it out
      *  when it processes its command queue. The function returns immediately.
      *  The GUI is informed by an HDR_IMPORTED message, which carries the
-     *  number of the drive and, if the operation failed, an error code and
-     *  description. When it succeeds, the changes have been written to the
-     *  image file.
+     *  number of the drive and, if the operation failed, the exception. When
+     *  it succeeds, the changes have been written to the image file.
      */
     void importFolderAsync(const std::filesystem::path &path);
 
@@ -1457,7 +1457,7 @@ public:
 
     /** @brief  Reads a message from the message queue
      */
-    bool getMsg(Message &msg);
+    bool getMsg(Message &msg, std::exception_ptr &exception);
 
     /** @brief  Used by the WASM builds to pass additional data
      */

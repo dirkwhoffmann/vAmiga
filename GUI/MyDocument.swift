@@ -158,9 +158,9 @@ class MyDocument: NSDocument {
     }
     
     // Called by the controller when the core has finished saving a workspace
-    func workspaceDidSave(errorCode: Int, what: String) {
+    func workspaceDidSave(error: AppError?) {
         
-        workspaceSaved?.resume(returning: errorCode == 0 ? nil : AppError(errorCode, what))
+        workspaceSaved?.resume(returning: error)
         workspaceSaved = nil
     }
     

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <exception>
 #include "HdControllerTypes.h"
 
 namespace vamiga {
@@ -98,8 +99,8 @@ enum class Msg : long
     HDC_STATE,
     
     // Hard drives
-    HDR_ATTACH,         // A hard drive has been attached (value: drive, value2: error code, str: error description)
-    HDR_IMPORTED,       // A folder has been imported (value: drive, value2: error code, str: error description)
+    HDR_ATTACH,         // A hard drive has been attached (value: drive; carries the exception if it failed)
+    HDR_IMPORTED,       // A folder has been imported (value: drive; carries the exception if it failed)
     HDR_DETACH,
     HDR_STEP,
     HDR_READ,
@@ -126,14 +127,14 @@ enum class Msg : long
     // Snapshots
     SNAPSHOT_TAKEN,
     SNAPSHOT_RESTORED,
-    SNAPSHOT_SAVED,
+    SNAPSHOT_SAVED,     // A snapshot has been saved (carries the exception if it failed)
     
     // Workspaces
     WORKSPACE_LOADED,
-    WORKSPACE_SAVED,
+    WORKSPACE_SAVED,    // A workspace has been saved (carries the exception if it failed)
 
     // Hibernation
-    HIBERNATED,
+    HIBERNATED,         // The machine has been hibernated (carries the exception if it failed)
 
     // DMA Debugging
     DMA_DEBUG,
@@ -307,6 +308,11 @@ Message;
 // Signatures
 //
 
-typedef void Callback(const void *, Message);
+/* The callback receives the message and, for a message that reports a
+ * failure, the exception that caused it (null otherwise). Pointers inside the
+ * message are only valid for the duration of the call; the exception is a
+ * shared handle and can be kept.
+ */
+typedef void Callback(const void *, Message, std::exception_ptr);
 
 }
