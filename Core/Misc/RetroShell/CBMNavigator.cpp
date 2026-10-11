@@ -618,7 +618,6 @@ Console::initCBMNavigatorCommands(RSCommand &root)
                 if constexpr (vAmigaDOS) {
 
                     cbmFs->exporter.exportBlock(nr, "blob");
-                    msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT, shell.objid);
 
                 } else {

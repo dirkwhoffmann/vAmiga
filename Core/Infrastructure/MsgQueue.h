@@ -35,9 +35,6 @@ class MsgQueue final : CoreObject, utl::Synchronizable {
     // Attached string objects
     string attachments[CAPACITY];
 
-    // Used by WASM builds to pass additional parameters
-    std::vector<string> payload;
-
     // The registered listener
     const void *listener = nullptr;
 
@@ -94,9 +91,6 @@ public:
     void put(Msg type, ViewportMsg payload);
     void put(Msg type, SnapshotMsg payload);
 
-    // Gets or sets the payload (used by WASM builds)
-    string getPayload(isize index);
-    void setPayload(const std::vector<string> &payload);
 };
 
 }

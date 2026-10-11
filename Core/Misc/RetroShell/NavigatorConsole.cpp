@@ -772,18 +772,11 @@ Console::initNavigatorCommands(RSCommand &root)
                     if (args.contains("file")) {
                         
                         auto item = navParsePath(args, "file");
-                        // auto &item = amigaFs->fetch(itemNr);
-                        auto name = amigaFs->fetch(item).cppName();
-                        if (name.empty()) name = amigaFs->stat().name.cpp_str();
                         amigaFs->exporter.exportFiles(item, "/export", recursive, true);
-                        msgQueue.setPayload( { "/export", name } );
                         
                     } else {
                         
                         amigaFs->exporter.exportVolume("/export");
-                        auto name = amigaFs->stat().name.cpp_str();
-                        name += amigaFs->getTraits().adf() ? ".adf" : ".hdf";
-                        msgQueue.setPayload( { "/export", name } );
                     }
                     
                     msgQueue.put(Msg::RSH_EXPORT, shell.objid);
@@ -888,7 +881,6 @@ Console::initNavigatorCommands(RSCommand &root)
                 if constexpr (vAmigaDOS) {
                     
                     amigaFs->exporter.exportBlock(nr, "blob");
-                    msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT, shell.objid);
                     
                 } else {

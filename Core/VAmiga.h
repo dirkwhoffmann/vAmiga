@@ -1459,10 +1459,6 @@ public:
      */
     bool getMsg(Message &msg, std::exception_ptr &exception);
 
-    /** @brief  Used by the WASM builds to pass additional data
-     */
-    string getPayload(isize index);
-
     /** @brief  Reads multiple messages from the message queue
      */
     // isize getMsg(isize count, Message *buffer);

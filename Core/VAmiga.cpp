@@ -1649,14 +1649,6 @@ MsgQueueAPI::unlockMsgQueue()
     return msgQueue->unlock();
 }
 
-string
-MsgQueueAPI::getPayload(isize index)
-{
-    VAMIGA_PUBLIC
-    return msgQueue->getPayload(index);
-}
-
-
 //
 // DefaultsAPI
 //
