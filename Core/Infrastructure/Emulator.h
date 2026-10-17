@@ -37,8 +37,10 @@ private:
     // The main emulator instance
     Amiga main = Amiga(*this, 0);
 
+#ifndef VAMIGA_NO_RUNAHEAD
     // The run-ahead instance
     Amiga ahead = Amiga(*this, 1);
+#endif
 
     // Counts the number of created clones
     isize clones = 0;
@@ -151,11 +153,13 @@ private:
 
 private:
 
+#ifndef VAMIGA_NO_RUNAHEAD
     // Clones the run-ahead instance
     void cloneRunAheadInstance();
 
     // Clones the run-ahead instance and fast forwards it to the proper frame
     void recreateRunAheadInstance();
+#endif
 
 
     //

@@ -69,3 +69,13 @@ static constexpr bool vAmigaDOS = 1;
 #else
 static constexpr bool vAmigaDOS = 0;
 #endif
+
+/* Builds that never use run-ahead or run-behind (headless or embedded ones)
+ * can leave out the run-ahead instance and the run-behind texture ring by
+ * defining VAMIGA_NO_RUNAHEAD. AMIGA_RUN_AHEAD only accepts 0 then.
+ */
+#ifdef VAMIGA_NO_RUNAHEAD
+static constexpr bool runAheadSupport = 0;
+#else
+static constexpr bool runAheadSupport = 1;
+#endif

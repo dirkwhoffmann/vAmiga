@@ -237,6 +237,9 @@ Amiga::checkOption(Opt opt, i64 value)
             
         case Opt::AMIGA_RUN_AHEAD:
             
+            if (!runAheadSupport && value != 0) {
+                throw CoreError(CoreError::OPT_INV_ARG, "0 (built without run-ahead)");
+            }
             if (value < -7 || value > 7) {
                 throw CoreError(CoreError::OPT_INV_ARG, "-7...7");
             }
