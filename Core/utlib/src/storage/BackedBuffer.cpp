@@ -66,13 +66,17 @@ BackedBuffer::init(isize size)
 
     dealloc();
 
-    /* calloc rather than new[]: for a region of this size the allocator asks
-     * the operating system for fresh pages, which are zero already and are not
-     * backed by memory until they are touched.
+    /* malloc rather than calloc: the contents do not matter, because fetch()
+     * fills every page before it is handed out, and for a region of this size
+     * the allocator asks the operating system for fresh pages, which are not
+     * backed by memory until they are touched. calloc gives the same result
+     * on most platforms, but under Emscripten it writes zeros across the
+     * whole region, so the full size is committed at once and, WebAssembly
+     * memory being unable to shrink, never given back.
      */
     if (size) {
 
-        mem = (u8 *)std::calloc(size_t(size), 1);
+        mem = (u8 *)std::malloc(size_t(size));
         if (!mem) throw std::bad_alloc();
     }
 
