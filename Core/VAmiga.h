@@ -1031,11 +1031,6 @@ public:
      */
     std::filesystem::path path() const;
 
-    /** @brief  Indicates whether the disk holds changes the file does not have
-     *          yet, i.e. whether persist() has anything to do.
-     */
-    bool needsPersisting() const;
-
     /** @brief  Loads the disk into memory and lets go of its image file
      *  @note   A disk in memory becomes part of every snapshot, so the call
      *          throws for a drive larger than Opt::HDC_MEM_LIMIT allows. A

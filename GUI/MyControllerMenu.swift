@@ -114,7 +114,7 @@ extension MyController: NSMenuItemValidation {
             
         case #selector(MyController.persistHdrAction(_:)):
             item.isHidden = hdn.url == nil
-            return hdn.needsPersisting
+            return hdn.info.dirty
             
         case #selector(MyController.writeProtectHdrAction(_:)):
             item.state = hdn.info.hasProtectedDisk ? .on : .off

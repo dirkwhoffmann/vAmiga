@@ -186,13 +186,18 @@ CIA::cacheMetrics() const
     auto total = AS_CIA_CYCLES(agnus.clock);
     auto idle = idleTotal() + idleSince();
 
-    auto totalDiff = total - stats.totalCycles;
-    auto idleDiff = idle - stats.idleCycles;
+    auto totalDiff = total - prevTotalCycles;
+    auto idleDiff = idle - prevIdleCycles;
+
+    if (totalDiff < 0 || idleDiff < 0) { totalDiff = 0; idleDiff = 0; }
+
+    prevTotalCycles = total;
+    prevIdleCycles = idle;
 
     stats.totalCycles = total;
     stats.idleCycles = idle;
 
-    stats.idlePercentage =  totalDiff ? double(idleDiff) / double(totalDiff) : 1.0;
+    stats.idlePercentage = totalDiff ? double(idleDiff) / double(totalDiff) : 1.0;
 
     return stats;
 }

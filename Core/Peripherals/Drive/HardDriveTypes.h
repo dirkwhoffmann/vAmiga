@@ -125,14 +125,18 @@ typedef struct
     // Decides when a change reaches the file (see HardDrive::persist)
     WriteThroughMode writeThrough;
 
-    /* How large a disk a snapshot still carries, in MB (see
-     * HardDrive::serializeDisk). Zero keeps every disk out. A disk that
-     * lives in a file is stored as its path whatever this says -- the limit
-     * is about a disk held in memory, which has nowhere else to go.
+    /* Indicates whether a disk is included in snapshots (see
+     * HardDrive::serializeDisk). A disk that lives in a file is stored as its
+     * path whatever this says -- the option is about a disk held in memory,
+     * which has nowhere else to go. It cannot be enabled for a disk larger
+     * than hdrSnapshotLimit.
      */
-    isize snapshotLimit;
+    bool snapshot;
 }
 HardDriveConfig;
+
+// Largest disk a snapshot can carry, in MB
+constexpr isize hdrSnapshotLimit = 128;
 
 typedef struct
 {
@@ -194,7 +198,20 @@ typedef struct
     
     // Flags
     bool writeProtected;
+
+    /* The guest has written to the disk since it was attached, or since it was
+     * last marked as unmodified (e.g. by exporting it). What an unsaved-changes
+     * warning wants to know; it also applies to a disk that has no file.
+     * Persisting does not clear it.
+     */
     bool modified;
+
+    /* The disk holds changes its file does not have yet, i.e. persist() has
+     * something to do. Only a disk that lives in a file can be dirty, and
+     * persisting clears it. Changes that do not come from the guest (formatting,
+     * importing a folder) make a disk dirty without making it modified.
+     */
+    bool dirty;
     
     // State
     HardDriveState state;

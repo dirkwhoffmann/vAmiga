@@ -55,6 +55,12 @@ public:
     utl::Backed<CIAInfo> info;
     utl::Backed<CIAMetrics> metrics;
 
+private:
+
+    // The totals the previous call of cacheMetrics() has seen
+    mutable Cycle prevTotalCycles = 0;
+    mutable Cycle prevIdleCycles = 0;
+
 
     //
     // Action flags

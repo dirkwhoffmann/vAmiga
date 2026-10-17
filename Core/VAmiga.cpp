@@ -1482,13 +1482,6 @@ HardDriveAPI::path() const
     return drive->getPath();
 }
 
-bool
-HardDriveAPI::needsPersisting() const
-{
-    VAMIGA_PUBLIC
-    return drive->needsPersisting();
-}
-
 void
 HardDriveAPI::loadIntoMemory()
 {

@@ -359,7 +359,7 @@ constexpr i64 diskIsOmitted = -2;
 bool
 HardDrive::snapshotable() const
 {
-    return image && size() <= config.snapshotLimit * 1024 * 1024;
+    return image && config.snapshot && size() <= hdrSnapshotLimit * 1024 * 1024;
 }
 
 void
@@ -383,7 +383,7 @@ HardDrive::serializeDisk(SerChecker &worker)
      * in a file counts as empty: the snapshot stores its path only, and
      * whether the file still opens when the snapshot is restored must not
      * decide whether the snapshot is taken for intact. So does a disk past
-     * HDR_SNAPSHOT_LIMIT -- what is not written cannot come back, and
+     * HDR_SNAPSHOT -- what is not written cannot come back, and
      * checking it would declare every such snapshot corrupt. The run-ahead instance
      * shares the disk with the main instance, so comparing the two is not
      * affected either way.
@@ -495,7 +495,7 @@ HardDrive::getOption(Opt option) const
         case Opt::HDR_PAN:           return (long)config.pan;
         case Opt::HDR_STEP_VOLUME:   return (long)config.stepVolume;
         case Opt::HDR_WRITE_THROUGH: return (long)config.writeThrough;
-        case Opt::HDR_SNAPSHOT_LIMIT: return (long)config.snapshotLimit;
+        case Opt::HDR_SNAPSHOT:      return (long)config.snapshot;
 
         default:
             fatalError;
@@ -519,10 +519,13 @@ HardDrive::checkOption(Opt opt, i64 value)
 
             return;
 
-        case Opt::HDR_SNAPSHOT_LIMIT:
+        case Opt::HDR_SNAPSHOT:
 
-            // A limit of zero is allowed: it keeps every disk out
-            if (value < 0) throw CoreError(CoreError::OPT_INV_ARG, "0...");
+            // A disk that is too large cannot be included in snapshots
+            if (value && image && size() > hdrSnapshotLimit * 1024 * 1024) {
+                throw CoreError(CoreError::OPT_INV_ARG,
+                                "false (the disk exceeds " + std::to_string(hdrSnapshotLimit) + " MB)");
+            }
             return;
 
         case Opt::HDR_WRITE_THROUGH:
@@ -560,9 +563,10 @@ HardDrive::setOption(Opt option, i64 value)
             config.stepVolume = (u8)value;
             return;
 
-        case Opt::HDR_SNAPSHOT_LIMIT:
+        case Opt::HDR_SNAPSHOT:
 
-            config.snapshotLimit = isize(value);
+            checkOption(option, value);
+            config.snapshot = value;
             return;
 
         case Opt::HDR_WRITE_THROUGH:
@@ -637,6 +641,7 @@ HardDrive::cacheInfo() const
     // Flags
     info.writeProtected = getFlag(DiskFlags::PROTECTED);
     info.modified = getFlag(DiskFlags::MODIFIED);
+    info.dirty = needsPersisting();
 
     // State
     info.state = state;

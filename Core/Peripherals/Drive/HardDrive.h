@@ -67,7 +67,7 @@ class HardDrive final : public Drive, public TrackDevice {
 
         Opt::HDR_TYPE,
         Opt::HDR_WRITE_THROUGH,
-        Opt::HDR_SNAPSHOT_LIMIT,
+        Opt::HDR_SNAPSHOT,
         Opt::HDR_PAN,
         Opt::HDR_STEP_VOLUME
     };
@@ -339,7 +339,7 @@ private:
      * A disk built in memory has no file to go back to and is stored in full.
      *
      * A disk in memory is left out altogether when the options say so (see
-     * HDR_SNAPSHOT and HDR_SNAPSHOT_LIMIT): a drive of several gigabytes
+     * HDR_SNAPSHOT and hdrSnapshotLimit): a drive of several gigabytes
      * would otherwise put every one of them into every snapshot. Restoring
      * such a snapshot leaves the drive empty, as restoring one whose file has
      * gone does.

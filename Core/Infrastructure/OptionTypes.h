@@ -169,7 +169,7 @@ enum class Opt : long
     // Hard drives
     HDR_TYPE,
     HDR_WRITE_THROUGH,
-    HDR_SNAPSHOT_LIMIT,
+    HDR_SNAPSHOT,
     HDR_PAN,
     HDR_STEP_VOLUME,
 
@@ -375,7 +375,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::HDR_PAN:                   return "HDR.PAN";
             case Opt::HDR_STEP_VOLUME:           return "HDR.STEP_VOLUME";
             case Opt::HDR_WRITE_THROUGH:         return "HDR.WRITE_THROUGH";
-            case Opt::HDR_SNAPSHOT_LIMIT:        return "HDR.SNAPSHOT_LIMIT";
+            case Opt::HDR_SNAPSHOT:              return "HDR.SNAPSHOT";
                 
             case Opt::SER_DEVICE:                return "SER.DEVICE";
             case Opt::SER_VERBOSE:               return "SER.VERBOSE";
@@ -566,7 +566,7 @@ struct OptEnum : Reflectable<OptEnum, Opt>
             case Opt::HDR_PAN:                   return "Pan";
             case Opt::HDR_STEP_VOLUME:           return "Head step volume";
             case Opt::HDR_WRITE_THROUGH:         return "When to write changes to the file";
-            case Opt::HDR_SNAPSHOT_LIMIT:        return "Largest disk a snapshot stores";
+            case Opt::HDR_SNAPSHOT:              return "Include disk in snapshots";
                 
             case Opt::SER_DEVICE:                return "Serial device type";
             case Opt::SER_VERBOSE:               return "Verbose";

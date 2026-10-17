@@ -839,9 +839,6 @@ ImageInfo scan(const fs::path &url);
 // The file the disk lives in (nil for a drive that was built in memory)
 @property (readonly) NSURL *url;
 
-// Indicates whether the file is behind the disk
-@property (readonly) BOOL needsPersisting;
-
 // Loads the disk into memory and lets go of its image file
 - (void)loadIntoMemory:(ExceptionWrapper *)ex;
 

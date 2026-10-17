@@ -2005,11 +2005,6 @@ ImageInfo scan(const fs::path &url)
     return path.empty() ? nil : [NSURL fileURLWithPath:@(path.string().c_str())];
 }
 
-- (BOOL)needsPersisting
-{
-    return [self drive]->needsPersisting();
-}
-
 - (void)loadIntoMemory:(ExceptionWrapper *)ex
 {
     try { [self drive]->loadIntoMemory(); }
