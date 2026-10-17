@@ -34,6 +34,13 @@ target_link_libraries(VAHeadless PUBLIC VACore)
 
 # Specify compile options
 target_compile_definitions(VACore PUBLIC _USE_MATH_DEFINES)
+
+# Optionally leave out run-ahead (saves the second Amiga instance)
+option(VAMIGA_NO_RUNAHEAD "Build without run-ahead and run-behind" OFF)
+if(VAMIGA_NO_RUNAHEAD)
+  target_compile_definitions(VACore PUBLIC VAMIGA_NO_RUNAHEAD)
+endif()
+
 if(WIN32)
   target_link_libraries(VAHeadless PUBLIC ws2_32)
 endif()

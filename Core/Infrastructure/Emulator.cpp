@@ -48,8 +48,10 @@ Emulator::launch(const void *listener, Callback *func)
     // Connect the listener to the message queue of the main instance
     if (listener && func) { main.msgQueue.setListener(listener, func); }
 
+#ifndef VAMIGA_NO_RUNAHEAD
     // Disable the message queue of the run-ahead instance
     ahead.msgQueue.disable();
+#endif
 
     // Launch the emulator thread
     Thread::launch();
@@ -65,13 +67,17 @@ Emulator::initialize()
 
     // Initialize all components
     main.initialize();
+#ifndef VAMIGA_NO_RUNAHEAD
     ahead.initialize();
+#endif
 
     // Setup the default configuration
     revertToDefaultConfig();
 
+#ifndef VAMIGA_NO_RUNAHEAD
     // Get the runahead instance up-to-date
     ahead = main;
+#endif
 
     // Switch state
     state = ExecState::OFF;
@@ -90,6 +96,7 @@ Emulator::_dump(Category category, std::ostream &os) const
         defaults.dump(category, os);
     }
 
+#ifndef VAMIGA_NO_RUNAHEAD
     if (category == Category::RunAhead) {
 
         auto &pos = main.agnus.pos;
@@ -112,6 +119,7 @@ Emulator::_dump(Category category, std::ostream &os) const
         os << tab("Beam");
         os << " (" << dec(rua.v) << "," << dec(rua.h) << ")" << std::endl;
     }
+#endif
     
     if (category == Category::State) {
 
@@ -204,11 +212,15 @@ Emulator::revertToDefaultConfig()
 
     // Setup the default configuration
     main.resetConfig();
+#ifndef VAMIGA_NO_RUNAHEAD
     ahead.resetConfig();
+#endif
 
     // Perform a hard reset
     main.hardReset();
+#ifndef VAMIGA_NO_RUNAHEAD
     ahead.hardReset();
+#endif
 }
 
 void
@@ -266,6 +278,7 @@ Emulator::missingFrames() const
 void
 Emulator::computeFrame()
 {
+#ifndef VAMIGA_NO_RUNAHEAD
     auto &config = main.getConfig();
 
     if (config.runAhead > 0) {
@@ -292,6 +305,9 @@ Emulator::computeFrame()
         // Only run the main instance
         main.computeFrame();
     }
+#else
+    main.computeFrame();
+#endif
 }
 
 void
@@ -299,6 +315,8 @@ Emulator::isReady()
 {
     main.isReady();
 }
+
+#ifndef VAMIGA_NO_RUNAHEAD
 
 void
 Emulator::cloneRunAheadInstance()
@@ -341,6 +359,8 @@ Emulator::recreateRunAheadInstance()
         ahead.fastForward(config.runAhead - 1);
     }
 }
+
+#endif
 
 void
 Emulator::hardReset()
@@ -389,6 +409,7 @@ Emulator::finishFrame()
 const Texture &
 Emulator::getTexture() const
 {
+#ifndef VAMIGA_NO_RUNAHEAD
     if (isRunning()) {
 
         // In run-ahead mode, return the texture from the run-ahead instance
@@ -401,6 +422,7 @@ Emulator::getTexture() const
             return main.videoPort.getTexture(main.config.runAhead);
         }
     }
+#endif
 
     // Return the most recent texture from the main instance
     return main.videoPort.getTexture();
@@ -409,6 +431,7 @@ Emulator::getTexture() const
 const Texture &
 Emulator::getXrayTexture() const
 {
+#ifndef VAMIGA_NO_RUNAHEAD
     if (isRunning()) {
 
         // In run-ahead mode, return the texture from the run-ahead instance
@@ -421,6 +444,7 @@ Emulator::getXrayTexture() const
             return main.videoPort.getXrayTexture(main.config.runAhead);
         }
     }
+#endif
 
     // Return the most recent texture from the main instance
     return main.videoPort.getXrayTexture();
