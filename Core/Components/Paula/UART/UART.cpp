@@ -83,6 +83,9 @@ UART::peekSERDATR()
     // Clear the overrun bit if the interrupt has been acknowledged
     if (!rbf) ovrun = false;
 
+    // The CPU has seen the received byte (see rxPending())
+    rxUnread = false;
+
     u16 result = spypeekSERDATR();
     logmsg(LOG_SER, "peekSERDATR() = %x\n", result);
     return result;
@@ -185,6 +188,17 @@ UART::copyToTransmitShiftRegister()
     paula.scheduleIrqRel(IrqSource::TBE, DMA_CYCLES(2));
 }
 
+bool
+UART::rxPending() const
+{
+    /* A received byte has been taken once SERDATR has been read and the RBF
+     * interrupt has been acknowledged. Both orders occur: Kickstart's
+     * serial.device reads SERDATR and then clears RBF, AROS clears RBF in its
+     * interrupt dispatcher before the handler reads SERDATR.
+     */
+    return rxUnread || GET_BIT(paula.intreq, 11);
+}
+
 void
 UART::copyFromReceiveShiftRegister()
 {
@@ -192,6 +206,8 @@ UART::copyFromReceiveShiftRegister()
     
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
+    rxUnread = true;
+    rxTime = agnus.clock;
 
     // Record incoming data
     recordIncomingByte(receiveBuffer);

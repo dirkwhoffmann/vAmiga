@@ -176,6 +176,15 @@ SerServer::serviceSerEvent()
         // Exit buffering mode if now new symbols came in for quite a while
         if (++skippedTransmissions > 8) buffering = false;
 
+    } else if (uart.rxPending() && agnus.clock - uart.rxTime < maxHold) {
+
+        /* The CPU has not taken the previous byte yet. Hold this one back
+         * instead of overwriting it, as a sender honoring flow control would.
+         * The hold ends after maxHold, so a guest that does not read the port
+         * cannot stall it: the next byte then overwrites the unread one, as
+         * it always did.
+         */
+
     } else {
 
         // Hand the oldest buffer element over to the UART

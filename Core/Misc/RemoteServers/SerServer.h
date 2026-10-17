@@ -37,6 +37,9 @@ class SerServer final : public RemoteServer {
     // Used to determine when we need to leave buffering mode
     i64 skippedTransmissions = 0;
 
+    // Longest time a byte is held back while the CPU has not taken the last one
+    static constexpr Cycle maxHold = MSEC(100);
+
     // Byte counters
     isize receivedBytes = 0;
     isize transmittedBytes = 0;

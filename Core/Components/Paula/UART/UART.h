@@ -60,6 +60,12 @@ private:
     // Bit reception counter
     u8 recCnt;
 
+    // Indicates that SERDATR has not been read since the last byte came in
+    bool rxUnread;
+
+    // Time stamp of the last byte that came in
+    Cycle rxTime;
+
     // Experimental
     string payload;
 
@@ -82,6 +88,8 @@ public:
         CLONE(outBit)
         CLONE(ovrun)
         CLONE(recCnt)
+        CLONE(rxUnread)
+        CLONE(rxTime)
 
         return *this;
     }
@@ -105,7 +113,9 @@ private:
         << transmitShiftReg
         << outBit
         << ovrun
-        << recCnt;
+        << recCnt
+        << rxUnread
+        << rxTime;
 
     } SERIALIZERS(serialize);
 
@@ -173,6 +183,9 @@ private:
 
     // Returns true if the shift register is empty
     bool shiftRegEmpty() const { return transmitShiftReg == 0; }
+
+    // Returns true if the CPU has not taken the received byte yet
+    bool rxPending() const;
 
     // Copies the contents of the transmit buffer to the transmit shift register
     void copyToTransmitShiftRegister();
