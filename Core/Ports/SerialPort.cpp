@@ -27,6 +27,7 @@ SerialPort::getOption(Opt option) const
             
         case Opt::SER_DEVICE:    return (i64)config.device;
         case Opt::SER_VERBOSE:   return (i64)config.verbose;
+        case Opt::SER_HANDSHAKE: return (i64)config.handshake;
 
         default:
             fatalError;
@@ -46,6 +47,7 @@ SerialPort::checkOption(Opt opt, i64 value)
             return;
 
         case Opt::SER_VERBOSE:
+        case Opt::SER_HANDSHAKE:
 
             return;
 
@@ -66,7 +68,11 @@ SerialPort::setOption(Opt option, i64 value)
                 throw CoreError(CoreError::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
             }
             
+            // Unplugging the null modem cable releases the lines its peer drives
+            if (config.device == SerialPortDevice::NULLMODEM) setPeerLines(false);
+
             config.device = (SerialPortDevice)value;
+            if (config.device == SerialPortDevice::NULLMODEM) setPeerLines(config.handshake);
             
             // Initialize MIDI if selected
             if (config.device == SerialPortDevice::MIDI) {
@@ -86,6 +92,12 @@ SerialPort::setOption(Opt option, i64 value)
         case Opt::SER_VERBOSE:
 
             config.verbose = bool(value);
+            return;
+
+        case Opt::SER_HANDSHAKE:
+
+            config.handshake = bool(value);
+            if (config.device == SerialPortDevice::NULLMODEM) setPeerLines(config.handshake);
             return;
 
         default:
@@ -148,6 +160,9 @@ SerialPort::_didReset(bool hard)
 {
     incoming.clear();
     outgoing.clear();
+
+    // A reset clears the port pins; the null modem's peer still drives its lines
+    if (config.device == SerialPortDevice::NULLMODEM) setPeerLines(config.handshake);
 }
 
 bool
@@ -168,6 +183,20 @@ SerialPort::setPin(isize nr, bool value)
     assert(nr >= 1 && nr <= 25);
 
     setPort(1 << nr, value);
+}
+
+void
+SerialPort::setPeerLines(bool value)
+{
+    /* A null modem cable wired for hardware handshaking crosses RTS and CTS, and
+     * connects the peer's DTR to the Amiga's DSR and CD. With SER.HANDSHAKE set,
+     * the emulated peer is always ready, so it keeps CTS, DSR and CD asserted
+     * (serial.device does not transmit in 7-wire mode without them), and it
+     * starts sending a byte only while the Amiga's RTS is asserted (SerServer).
+     */
+    setCTS(value);
+    setDSR(value);
+    setCD(value);
 }
 
 void

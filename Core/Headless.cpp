@@ -542,6 +542,8 @@ Headless::smokeTestScript[] = {
     "serial",
     "serial set DEVICE NONE",
     "serial set DEVICE NULLMODEM",
+    "serial set HANDSHAKE true",
+    "serial set HANDSHAKE false",
     "serial set DEVICE LOOPBACK",
     "serial set DEVICE RETROSHELL",
 

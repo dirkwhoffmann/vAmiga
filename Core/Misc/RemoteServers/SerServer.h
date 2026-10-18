@@ -37,6 +37,9 @@ class SerServer final : public RemoteServer {
     // Used to determine when we need to leave buffering mode
     i64 skippedTransmissions = 0;
 
+    // The byte currently travelling on the line (-1 if the line is idle)
+    isize onTheLine = -1;
+
     // Byte counters
     isize receivedBytes = 0;
     isize transmittedBytes = 0;
