@@ -60,9 +60,9 @@ DmaDebugger::getOption(Opt option) const
 {
     switch (option) {
             
-        case Opt::XRAY_MODE:        return (i64)config.mode;
-        case Opt::XRAY_OVERLAY:     return config.overlay;
-        case Opt::XRAY_OVERLAY_STYLE: return (i64)config.displayMode;
+        case Opt::XRAY_MODE:            return (i64)config.mode;
+        case Opt::XRAY_OVERLAY:         return config.overlay;
+        case Opt::XRAY_OVERLAY_STYLE:   return (i64)config.displayMode;
         case Opt::XRAY_OVERLAY_OPACITY: return config.opacity;
 
         case Opt::XRAY_DMA_CHANNEL0:    return config.visualize[0];
@@ -74,16 +74,17 @@ DmaDebugger::getOption(Opt option) const
         case Opt::XRAY_DMA_CHANNEL6:    return config.visualize[6];
         case Opt::XRAY_DMA_CHANNEL7:    return config.visualize[7];
 
-        case Opt::XRAY_COLOR0:      return config.debugColor[0];
-        case Opt::XRAY_COLOR1:      return config.debugColor[1];
-        case Opt::XRAY_COLOR2:      return config.debugColor[2];
-        case Opt::XRAY_COLOR3:      return config.debugColor[3];
-        case Opt::XRAY_COLOR4:      return config.debugColor[4];
-        case Opt::XRAY_COLOR5:      return config.debugColor[5];
-        case Opt::XRAY_COLOR6:      return config.debugColor[6];
-        case Opt::XRAY_COLOR7:      return config.debugColor[7];
-        case Opt::XRAY_COLOR8:      return config.debugColor[8];
-        case Opt::XRAY_COLOR9:      return config.debugColor[9];
+        case Opt::XRAY_COLOR0:          return config.debugColor[0];
+        case Opt::XRAY_COLOR1:          return config.debugColor[1];
+        case Opt::XRAY_COLOR2:          return config.debugColor[2];
+        case Opt::XRAY_COLOR3:          return config.debugColor[3];
+        case Opt::XRAY_COLOR4:          return config.debugColor[4];
+        case Opt::XRAY_COLOR5:          return config.debugColor[5];
+        case Opt::XRAY_COLOR6:          return config.debugColor[6];
+        case Opt::XRAY_COLOR7:          return config.debugColor[7];
+        case Opt::XRAY_COLOR8:          return config.debugColor[8];
+        case Opt::XRAY_COLOR9:          return config.debugColor[9];
+        case Opt::XRAY_COMPOSITOR:      return (i64)config.compositor;
 
         default:
             fatalError;
@@ -103,6 +104,12 @@ DmaDebugger::checkOption(Opt opt, i64 value)
 
         case Opt::XRAY_OVERLAY:
 
+            return;
+
+        case Opt::XRAY_COMPOSITOR:
+            if (!XRayCompositorEnum::isValid(value)) {
+                throw CoreError(CoreError::OPT_INV_ARG, XRayCompositorEnum::keyList());
+            }
             return;
 
         case Opt::XRAY_OVERLAY_STYLE:
@@ -304,6 +311,11 @@ DmaDebugger::setOption(Opt option, i64 value)
 
             // Playfield 2 color (see PixelEngine::hide).
             config.debugColor[9] = u32(value);
+            return;
+
+        case Opt::XRAY_COMPOSITOR:
+
+            config.compositor = (XRayCompositor)value;
             return;
 
         default:

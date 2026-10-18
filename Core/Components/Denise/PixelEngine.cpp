@@ -881,6 +881,9 @@ PixelEngine::mergeXray()
     auto &config = dmaDebugger.getConfig();
     if (!config.overlay) return;
 
+    // The host merges the textures itself (e.g., in a shader)
+    if (config.compositor != XRayCompositor::CPU) return;
+
     double opacity = double(config.opacity) / 255.0;
     double bgWeight = 0;
     double fgWeight = 0;

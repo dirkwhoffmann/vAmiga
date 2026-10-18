@@ -103,6 +103,7 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::XRAY_COLOR7:          return numParser();
         case Opt::XRAY_COLOR8:          return numParser();
         case Opt::XRAY_COLOR9:          return numParser();
+        case Opt::XRAY_COMPOSITOR:      return enumParser.template operator()<XRayCompositorEnum,XRayCompositor>();
 
         case Opt::LA_CONNECT:                return boolParser();
         case Opt::LA_PROBE0:                 return enumParser.template operator()<ProbeEnum,Probe>();
