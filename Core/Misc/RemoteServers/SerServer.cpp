@@ -178,8 +178,8 @@ SerServer::serviceSerEvent()
 
     } else {
 
-        // Hand the oldest buffer element over to the UART
-        uart.receiveShiftReg = buffer.read();
+        // Hand the oldest buffer element over to the UART, followed by its stop bit
+        uart.receiveShiftReg = u16(buffer.read() | (1 << uart.packetLength()));
         uart.copyFromReceiveShiftRegister();
         processedBytes++;
         skippedTransmissions = 0;
@@ -203,7 +203,10 @@ SerServer::scheduleNextEvent()
         pulseWidth = 12000;
     }
 
-    agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
+    // One frame per event: a start bit, 8 or 9 data bits (SERPER.LONG) and a stop bit. This is
+    // the shortest frame a sender can put on the line, and the period the UART's own receiver
+    // (serviceRxdEvent) works with.
+    agnus.scheduleRel<SLOT_SER>((uart.packetLength() + 2) * pulseWidth, SER_RECEIVE);
 }
 
 }
