@@ -3651,7 +3651,7 @@
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CfA-32-MAB">
                                 <rect key="frame" x="132" y="122" width="107" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="-7" maxValue="7" tickMarkPosition="above" numberOfTickMarks="15" allowsTickMarkValuesOnly="YES" sliderType="linear" id="lZl-1V-KNN"/>
+                                <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="-6" maxValue="7" tickMarkPosition="above" numberOfTickMarks="14" allowsTickMarkValuesOnly="YES" sliderType="linear" id="lZl-1V-KNN"/>
                                 <connections>
                                     <action selector="runAheadAction:" target="Rvf-AP-e5x" id="xLR-9h-6WY"/>
                                 </connections>

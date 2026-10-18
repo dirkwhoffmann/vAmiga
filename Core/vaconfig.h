@@ -32,8 +32,10 @@ static constexpr int SNP_BETA       = 2;
 // Execution settings
 //
 
-static constexpr int DIAG_BOARD       = 0; // Plug in the diagnose board
-static constexpr int ALLOW_ALL_ROMS   = 1; // Disable the magic bytes check
+static constexpr int RUN_AHEAD_FRAMES   = 7; // Maximum number of run-ahead frames
+static constexpr int RUN_BEHIND_FRAMES  = 6; // Maximum number of run-behind frames
+static constexpr int DIAG_BOARD         = 0; // Plug in the diagnose board
+static constexpr int ALLOW_ALL_ROMS     = 1; // Disable the magic bytes check
 
 
 //

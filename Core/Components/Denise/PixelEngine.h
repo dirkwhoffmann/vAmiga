@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "vaconfig.h"
 #include "SubComponent.h"
 #include "ChangeRecorder.h"
 #include "Constants.h"
@@ -42,7 +43,10 @@ class PixelEngine final : public SubComponent {
 
 private:
 
-    static constexpr isize NUM_TEXTURES = 8;
+    /* One texture is the working buffer and one is the newest stable frame.
+     * All remaining ones can be accessed in run-behind mode.
+     */
+    static constexpr isize NUM_TEXTURES = RUN_BEHIND_FRAMES + 2;
     
     /* The emulator manages textures in a ring buffer to allow access to older
      * frames ("run-behind" feature). At any time, one texture serves as the
