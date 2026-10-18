@@ -132,6 +132,14 @@ typedef struct
      * than hdrSnapshotLimit.
      */
     bool snapshot;
+
+    /* Largest disk that may be kept in memory, in MB (1...16384)
+     *
+     * A disk that does not live in a file is part of every snapshot, in full.
+     * Beyond this size that is no longer practical, so such a disk has to
+     * stay in its file (see HardDrive::loadIntoMemory).
+     */
+    isize memLimit;
 }
 HardDriveConfig;
 

@@ -1033,7 +1033,7 @@ public:
 
     /** @brief  Loads the disk into memory and lets go of its image file
      *  @note   A disk in memory becomes part of every snapshot, so the call
-     *          throws for a drive larger than Opt::HDC_MEM_LIMIT allows. A
+     *          throws for a drive larger than Opt::HDR_MEM_LIMIT allows. A
      *          drive that is in memory already is left alone.
      */
     void loadIntoMemory();

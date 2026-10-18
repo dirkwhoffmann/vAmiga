@@ -155,13 +155,13 @@ OptionParser::create(Opt opt, i64 arg)
 
         case Opt::HDC_CONNECT:               return boolParser();
         case Opt::HDC_MB_LIMIT:              return numParser(" MB");
-        case Opt::HDC_MEM_LIMIT:             return numParser(" MB");
 
         case Opt::HDR_TYPE:                  return enumParser.template operator()<HardDriveTypeEnum,HardDriveType>();
         case Opt::HDR_PAN:                   return numParser();
         case Opt::HDR_STEP_VOLUME:           return numParser("%");
         case Opt::HDR_WRITE_THROUGH:         return enumParser.template operator()<WriteThroughModeEnum,WriteThroughMode>();
         case Opt::HDR_SNAPSHOT:              return boolParser();
+        case Opt::HDR_MEM_LIMIT:             return numParser(" MB");
 
         case Opt::SER_DEVICE:                return enumParser.template operator()<SerialPortDeviceEnum,SerialPortDevice>();
         case Opt::SER_VERBOSE:               return boolParser();

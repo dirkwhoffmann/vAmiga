@@ -851,6 +851,18 @@ Console::initCommanderCommands(RSCommand &root)
     
     root.add({
         
+        .tokens = { "hdcon[n]" },
+        .ghelp  = { "Hard drive controller n" },
+        .chelp  = { "Commands: hdcon0, hdcon1, hdcon2, hdcon3" }
+    });
+    
+    for (isize i = 0; i <= 3; i++) {
+        
+        registerComponent(*amiga.hdcon[i], rs::shadowed);
+    }
+    
+    root.add({
+        
         .tokens = { "hd[n]" },
         .ghelp  = { "Hard drive n" },
         .chelp  = { "Commands: hd0, hd1, hd2, hd3" }
@@ -919,34 +931,6 @@ Console::initCommanderCommands(RSCommand &root)
                 }, .payload = {i}
         });
         
-        root.add({
-
-            .tokens = { cmd, "limit" },
-            .chelp  = { "Limits the drive capacity the controller accepts" },
-            .args   = {
-                { .name = { "mb", "Capacity limit in MB (0 = no limit)" } }
-            },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                emulator.set(Opt::HDC_MB_LIMIT, utl::parseNum(args.at("mb")), values);
-
-            }, .payload = {i}
-        });
-
-        root.add({
-
-            .tokens = { cmd, "memlimit" },
-            .chelp  = { "Limits the capacity of a drive that is kept in memory" },
-            .args   = {
-                { .name = { "mb", "Capacity limit in MB (0 = no limit)" } }
-            },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                emulator.set(Opt::HDC_MEM_LIMIT, utl::parseNum(args.at("mb")), values);
-
-            }, .payload = {i}
-        });
-
         root.add({
 
             .tokens = { cmd, "persist" },

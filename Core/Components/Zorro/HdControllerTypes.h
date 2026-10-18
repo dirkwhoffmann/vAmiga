@@ -205,22 +205,14 @@ typedef struct
 {
     bool connected;
 
-    /* Largest drive this controller accepts, in MB (0 = no limit)
+    /* Largest drive this controller accepts, in MB (1...16384)
      *
      * Controllers of the era could only address so much, and an image beyond
      * their reach would not have worked on the hardware being emulated. 504
-     * reproduces the classic IDE ceiling; 0 lets a drive be as large as its
-     * geometry allows.
+     * reproduces the classic IDE ceiling; 16384 is the largest value the
+     * option accepts.
      */
     isize mbLimit;
-
-    /* Largest disk this controller keeps in memory, in MB (0 = no limit)
-     *
-     * A disk that does not live in a file is part of every snapshot, in full.
-     * Beyond this size that is no longer practical, so such a disk has to
-     * stay in its file (see HardDrive::loadIntoMemory).
-     */
-    isize memLimit;
 }
 HdcConfig;
 

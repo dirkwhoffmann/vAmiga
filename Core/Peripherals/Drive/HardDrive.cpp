@@ -119,7 +119,7 @@ HardDrive::checkMemoryLimit(i64 bytes) const
 {
     auto limit = i64(memLimit());
 
-    if (limit && bytes > limit * MB(1)) {
+    if (bytes > limit * MB(1)) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE_FOR_MEM, std::to_string(limit));
     }
 }
@@ -496,6 +496,7 @@ HardDrive::getOption(Opt option) const
         case Opt::HDR_STEP_VOLUME:   return (long)config.stepVolume;
         case Opt::HDR_WRITE_THROUGH: return (long)config.writeThrough;
         case Opt::HDR_SNAPSHOT:      return (long)config.snapshot;
+        case Opt::HDR_MEM_LIMIT:     return (long)config.memLimit;
 
         default:
             fatalError;
@@ -535,6 +536,13 @@ HardDrive::checkOption(Opt opt, i64 value)
             }
             return;
 
+        case Opt::HDR_MEM_LIMIT:
+
+            if (value < 1 || value > 16384) {
+                throw CoreError(CoreError::OPT_INV_ARG, "1...16384");
+            }
+            return;
+
         default:
             throw CoreError(CoreError::OPT_UNSUPPORTED);
     }
@@ -567,6 +575,12 @@ HardDrive::setOption(Opt option, i64 value)
 
             checkOption(option, value);
             config.snapshot = value;
+            return;
+
+        case Opt::HDR_MEM_LIMIT:
+
+            checkOption(option, value);
+            config.memLimit = isize(value);
             return;
 
         case Opt::HDR_WRITE_THROUGH:
@@ -773,7 +787,7 @@ HardDrive::mbLimit() const
 isize
 HardDrive::memLimit() const
 {
-    return isize(amiga.hdcon[objid]->getOption(Opt::HDC_MEM_LIMIT));
+    return config.memLimit;
 }
 
 bool

@@ -165,12 +165,12 @@ enum class Opt : long
     // Hard drive controllers
     HDC_CONNECT,
     HDC_MB_LIMIT,
-    HDC_MEM_LIMIT,
     
     // Hard drives
     HDR_TYPE,
     HDR_WRITE_THROUGH,
     HDR_SNAPSHOT,
+    HDR_MEM_LIMIT,
     HDR_PAN,
     HDR_STEP_VOLUME,
 
@@ -371,13 +371,13 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::HDC_CONNECT:               return "HDC.CONNECT";
             case Opt::HDC_MB_LIMIT:              return "HDC.MB_LIMIT";
-            case Opt::HDC_MEM_LIMIT:             return "HDC.MEM_LIMIT";
                 
             case Opt::HDR_TYPE:                  return "HDR.TYPE";
             case Opt::HDR_PAN:                   return "HDR.PAN";
             case Opt::HDR_STEP_VOLUME:           return "HDR.STEP_VOLUME";
             case Opt::HDR_WRITE_THROUGH:         return "HDR.WRITE_THROUGH";
             case Opt::HDR_SNAPSHOT:              return "HDR.SNAPSHOT";
+            case Opt::HDR_MEM_LIMIT:             return "HDR.MEM_LIMIT";
                 
             case Opt::SER_DEVICE:                return "SER.DEVICE";
             case Opt::SER_VERBOSE:               return "SER.VERBOSE";
@@ -563,13 +563,13 @@ struct OptEnum : Reflectable<OptEnum, Opt>
                 
             case Opt::HDC_CONNECT:               return "Connection status";
             case Opt::HDC_MB_LIMIT:              return "Capacity limit in MB";
-            case Opt::HDC_MEM_LIMIT:             return "Capacity limit for disks in memory in MB";
                 
             case Opt::HDR_TYPE:                  return "Drive model";
             case Opt::HDR_PAN:                   return "Pan";
             case Opt::HDR_STEP_VOLUME:           return "Head step volume";
             case Opt::HDR_WRITE_THROUGH:         return "When to write changes to the file";
             case Opt::HDR_SNAPSHOT:              return "Include disk in snapshots";
+            case Opt::HDR_MEM_LIMIT:             return "Capacity limit for disks in memory in MB";
                 
             case Opt::SER_DEVICE:                return "Serial device type";
             case Opt::SER_VERBOSE:               return "Verbose";

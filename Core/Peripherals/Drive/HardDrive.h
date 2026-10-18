@@ -68,6 +68,7 @@ class HardDrive final : public Drive, public TrackDevice {
         Opt::HDR_TYPE,
         Opt::HDR_WRITE_THROUGH,
         Opt::HDR_SNAPSHOT,
+        Opt::HDR_MEM_LIMIT,
         Opt::HDR_PAN,
         Opt::HDR_STEP_VOLUME
     };
@@ -386,17 +387,17 @@ public:
 
     bool isConnected() const override;
 
-    /* Largest capacity this drive may have, in MB (0 = no limit)
+    /* Largest capacity this drive may have, in MB
      *
      * Read from the controller the drive hangs off, since that is what
      * imposes it (see Opt::HDC_MB_LIMIT).
      */
     isize mbLimit() const;
 
-    /* Largest capacity a disk in memory may have, in MB (0 = no limit)
+    /* Largest capacity a disk in memory may have, in MB
      *
      * The second limit, and usually the stricter one: a disk that does not
-     * live in a file is part of every snapshot (see Opt::HDC_MEM_LIMIT).
+     * live in a file is part of every snapshot (see Opt::HDR_MEM_LIMIT).
      */
     isize memLimit() const;
 
