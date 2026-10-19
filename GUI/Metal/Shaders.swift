@@ -80,6 +80,10 @@ struct MergeUniforms {
 
     var longFrameScale: Float
     var shortFrameScale: Float
+
+    // X-ray overlay (only used by the kernels that merge the X-ray texture)
+    var xrayFgWeight: Float = 0
+    var xrayBgWeight: Float = 0
 }
 
 //
@@ -211,6 +215,20 @@ class MergeFilter: ComputeKernel {
     }
 }
 
+class MergeFilterXray: ComputeKernel {
+    
+    convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
+        self.init(name: "merge1X4YXray",
+                  device: device, library: library, cutout: cutout)
+    }
+}
+class ScaleFilterXray: ComputeKernel {
+    
+    convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
+        self.init(name: "scale1X4YXray",
+                  device: device, library: library, cutout: cutout)
+    }
+}
 class ScaleFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {

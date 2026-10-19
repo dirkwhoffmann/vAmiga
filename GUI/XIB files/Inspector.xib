@@ -96,6 +96,7 @@
                 <outlet property="busDisk" destination="miC-1p-caz" id="vMI-zj-Znm"/>
                 <outlet property="busDisplayMode" destination="KgO-cc-H8e" id="BQr-Pc-HsQ"/>
                 <outlet property="busEnable" destination="kTo-Re-4xy" id="TCJ-s0-huO"/>
+                <outlet property="busGPU" destination="CGK-JM-xhM" id="vqe-Sa-Nk3"/>
                 <outlet property="busLogicView" destination="6u0-z0-gfB" id="gZG-WM-eqV"/>
                 <outlet property="busOpacity" destination="zb3-gh-A7y" id="04J-oN-sm2"/>
                 <outlet property="busProbe0" destination="ZI7-j8-idY" id="WqE-x1-SMx"/>
@@ -2802,6 +2803,17 @@
                                                             <action selector="busOpacityAction:" target="-2" id="Nfo-im-01W"/>
                                                         </connections>
                                                     </slider>
+                                                    <button tag="7" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CGK-JM-xhM">
+                                                        <rect key="frame" x="27" y="30" width="118" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="check" title="GPU Acceleration" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="A8X-ec-TgI">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="message" size="11"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="busGPUAction:" target="-2" id="PYw-sP-Vh1"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                             </view>
                                         </box>

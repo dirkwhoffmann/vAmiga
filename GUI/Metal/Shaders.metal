@@ -69,6 +69,10 @@ struct MergeUniforms {
 
     float longFrameScale;
     float shortFrameScale;
+
+    // X-ray overlay (see overlayXray)
+    float xrayFgWeight;
+    float xrayBgWeight;
 };
 
 //
@@ -230,6 +234,66 @@ kernel void merge1X4Y(texture2d<half, access::read>  longFrame  [[ texture(0) ]]
 
         s = uniforms.shortFrameScale;
         result = shortFrame.read(uint2(gid.x, gid.y / 4));
+    }
+
+    output.write(result * vec<half,4>(s,s,s,1), gid);
+}
+
+
+//
+// X-ray overlay
+//
+
+/* Merges the X-ray texture into the emulator texture. This is what the
+ * emulator does on the CPU if Opt::XRAY_COMPOSITOR is set to CPU (see
+ * PixelEngine::mergeXray): A non-black X-ray pixel is an effect pixel that is
+ * mixed with the picture. A black one dims the picture.
+ */
+half4 overlayXray(half4 color, half4 xray, constant MergeUniforms &uniforms)
+{
+    if (any(xray.rgb > 0.0h)) {
+
+        float fg = uniforms.xrayFgWeight;
+        return fg != 0.0 ? half4(mix(xray.rgb, color.rgb, half(fg)), color.a) : xray;
+    }
+
+    float bg = uniforms.xrayBgWeight;
+    return bg != 0.0 ? half4(color.rgb * half(1.0 - bg), color.a) : color;
+}
+
+kernel void scale1X4YXray(texture2d<half, access::read>  input   [[ texture(0) ]],
+                          texture2d<half, access::read>  xray    [[ texture(1) ]],
+                          texture2d<half, access::write> output  [[ texture(2) ]],
+                          constant MergeUniforms         &uniforms [[ buffer(0) ]],
+                          uint2                          gid     [[ thread_position_in_grid ]])
+{
+    uint2 pos = uint2(gid.x, gid.y / 4);
+    half4 result = overlayXray(input.read(pos), xray.read(pos), uniforms);
+
+    output.write(result, gid);
+}
+
+kernel void merge1X4YXray(texture2d<half, access::read>  longFrame  [[ texture(0) ]],
+                          texture2d<half, access::read>  shortFrame [[ texture(1) ]],
+                          texture2d<half, access::read>  longXray   [[ texture(2) ]],
+                          texture2d<half, access::read>  shortXray  [[ texture(3) ]],
+                          texture2d<half, access::write> output     [[ texture(4) ]],
+                          constant MergeUniforms         &uniforms  [[ buffer(0) ]],
+                          uint2                          gid        [[ thread_position_in_grid ]])
+{
+    half4 result;
+    float s;
+    uint2 pos = uint2(gid.x, gid.y / 4);
+
+    if (gid.y % 4 < 2) {
+
+        s = uniforms.longFrameScale;
+        result = overlayXray(longFrame.read(pos), longXray.read(pos), uniforms);
+
+    } else {
+
+        s = uniforms.shortFrameScale;
+        result = overlayXray(shortFrame.read(pos), shortXray.read(pos), uniforms);
     }
 
     output.write(result * vec<half,4>(s,s,s,1), gid);

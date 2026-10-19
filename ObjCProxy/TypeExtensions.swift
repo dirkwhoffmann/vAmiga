@@ -74,6 +74,7 @@ typealias VideoFormat = vamiga.TV
 typealias WriteThroughMode = vamiga.WriteThroughMode
 typealias Warp = vamiga.Warp
 typealias XRayMode = vamiga.XRayMode
+typealias XRayCompositor = vamiga.XRayCompositor
 
 /*
 extension HIDEvent: CustomStringConvertible {

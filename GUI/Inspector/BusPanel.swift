@@ -173,6 +173,7 @@ extension Inspector {
         busRefresh.state = info.visualizeRefresh ? .on : .off
         busOpacity.integerValue = opacity
         busDisplayMode.selectItem(withTag: mode)
+        busGPU.state = emu.get(.XRAY_COMPOSITOR) != 0 ? .on : .off
         busBlitter.isEnabled = bus
         busCopper.isEnabled = bus
         busDisk.isEnabled = bus
@@ -353,6 +354,12 @@ extension Inspector {
     @IBAction func busOpacityAction(_ sender: NSSlider!) {
 
         emu.set(.XRAY_OVERLAY_OPACITY, value: sender.integerValue)
+        fullRefresh()
+    }
+    
+    @IBAction func busGPUAction(_ sender: NSButton!) {
+        
+        emu.set(.XRAY_COMPOSITOR, value: sender.state == .on ? 1 : 0)
         fullRefresh()
     }
 }

@@ -656,6 +656,7 @@ ImageInfo scan(const fs::path &url);
 - (void)lockTexture;
 - (void)unlockTexture;
 - (void)texture:(const u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
+- (const u32 *)xrayTexture;
 - (void)innerArea:(NSInteger *)x1 x2:(NSInteger *)x2 y1:(NSInteger *)y1 y2:(NSInteger *)y2;
 - (void)innerAreaNormalized:(double *)x1 x2:(double *)x2 y1:(double *)y1 y2:(double *)y2;
 

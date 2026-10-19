@@ -871,8 +871,6 @@ PixelEngine::removeBorderOverSprites(Pixel from, Pixel to)
 void
 PixelEngine::mergeXray()
 {
-    // Dispatched once per call (not per pixel) -- see the declaration's
-    // comment in PixelEngine.h.
     switch (static_cast<TexelFormat>(host.getConfig().texFormat)) {
 
         case TexelFormat::ABGR: mergeXray<TexelFormat::ABGR>(); return;

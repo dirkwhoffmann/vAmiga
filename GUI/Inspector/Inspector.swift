@@ -150,6 +150,7 @@ class Inspector: DialogController {
     @IBOutlet weak var busRefresh: NSButton!
     @IBOutlet weak var busOpacity: NSSlider!
     @IBOutlet weak var busDisplayMode: NSPopUpButton!
+    @IBOutlet weak var busGPU: NSButton!
     
     @IBOutlet weak var colCopper: NSColorWell!
     @IBOutlet weak var colBlitter: NSColorWell!

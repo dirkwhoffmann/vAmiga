@@ -18,6 +18,8 @@ class Canvas: Layer {
     var bloomFilter: ComputeKernel! { return ressourceManager.bloomFilter }
     var upscaler: ComputeKernel! { return ressourceManager.upscaler }
     var scanlineFilter: ComputeKernel! { return ressourceManager.scanlineFilter }
+    var mergeFilterXray: ComputeKernel! { return ressourceManager.mergeFilterXray }
+    var scaleFilterXray: ComputeKernel! { return ressourceManager.scaleFilterXray }
     
     // Indicates whether the recently drawn frames were long or short frames
     var currLOF = true
@@ -47,6 +49,18 @@ class Canvas: Layer {
     var lfTexture: MTLTexture! = nil
     var sfTexture: MTLTexture! = nil
     
+    /* X-ray textures (same size as the emulator textures)
+     * If the X-ray overlay is enabled, the emulator provides the DMA debugger
+     * output in separate textures. They are merged into the emulator textures
+     * by the merge kernels, so they undergo the same filter chain as the
+     * picture.
+     */
+    var lfXrayTexture: MTLTexture! = nil
+    var sfXrayTexture: MTLTexture! = nil
+    
+    // Indicates if the X-ray textures are merged by the GPU
+    var xrayActive = false
+
     /* Merge texture
      * The long frame and short frame textures are merged into this one.
      */
@@ -145,6 +159,12 @@ class Canvas: Layer {
         renderer.metalAssert(sfTexture != nil,
                              "The frame texture (short frames) could not be allocated.")
         
+        // X-ray textures
+        lfXrayTexture = device.makeTexture(size: TextureSize.original, usage: r)
+        sfXrayTexture = device.makeTexture(size: TextureSize.original, usage: r)
+        renderer.metalAssert(lfXrayTexture != nil && sfXrayTexture != nil,
+                             "The X-ray textures could not be allocated.")
+        
         // Merged emulator texture (long frame + short frame)
         mergeTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
         renderer.metalAssert(mergeTexture != nil,
@@ -190,10 +210,49 @@ class Canvas: Layer {
         emu?.wakeUp()
     }
     
+    /* Checks if the X-ray overlay is composed by the GPU, which is the case
+     * if the compositor is set to GPU. Then, the emulator skips merging the
+     * X-ray texture into the picture and the merge kernels do the job. Also
+     * computes the blending weights, which mirror PixelEngine::mergeXray in
+     * the emulator core.
+     */
+    func updateXrayState() {
+        
+        guard let emu = emu else { xrayActive = false; return }
+        
+        let gpu = emu.get(.XRAY_COMPOSITOR) == Int(XRayCompositor.GPU.rawValue)
+        let overlay = emu.get(.XRAY_OVERLAY) != 0
+        let enabled = emu.get(.XRAY_MODE) != XRayMode.XRAY_NONE.rawValue
+        
+        xrayActive = gpu && overlay && enabled
+        
+        if xrayActive {
+            
+            let opacity = Float(emu.get(.XRAY_OVERLAY_OPACITY)) / 255.0
+            
+            switch emu.get(.XRAY_OVERLAY_STYLE) {
+                
+            case 0: // Foreground layer
+                mergeUniforms.xrayBgWeight = 0
+                mergeUniforms.xrayFgWeight = 1.0 - opacity
+                
+            case 1: // Background layer
+                mergeUniforms.xrayBgWeight = 1.0 - opacity
+                mergeUniforms.xrayFgWeight = 0
+                
+            default: // Mixed layers
+                mergeUniforms.xrayBgWeight = opacity
+                mergeUniforms.xrayFgWeight = 1.0 - opacity
+            }
+        }
+    }
+    
     func updateTexture() {
         
         precondition(lfTexture != nil)
         precondition(sfTexture != nil)
+        
+        updateXrayState()
         
         var buffer: UnsafePointer<UInt32>!
         var nr = 0
@@ -216,6 +275,13 @@ class Canvas: Layer {
             lfTexture.replace(w: 2 * VAMIGA.HPIXELS, h: VAMIGA.VPIXELS, buffer: buffer)
         } else {
             sfTexture.replace(w: 2 * VAMIGA.HPIXELS, h: VAMIGA.VPIXELS, buffer: buffer)
+        }
+        
+        // Update the X-ray texture that belongs to the same frame
+        if xrayActive, let xray = emu?.videoPort.xrayTexture() {
+            
+            let target: MTLTexture = currLOF ? lfXrayTexture : sfXrayTexture
+            target.replace(w: 2 * VAMIGA.HPIXELS, h: VAMIGA.VPIXELS, buffer: xray)
         }
         
         // Release the texture lock
@@ -241,14 +307,28 @@ class Canvas: Layer {
             if currLOF {
                 
                 // Case 1: Non-interlace mode, two long frames in a row
-                scaleFilter.apply(commandBuffer: buffer,
-                                  textures: [lfTexture, mergeTexture])
+                if xrayActive {
+                    scaleFilterXray.apply(commandBuffer: buffer,
+                                          textures: [lfTexture, lfXrayTexture, mergeTexture],
+                                          options: &mergeUniforms,
+                                          length: MemoryLayout<MergeUniforms>.stride)
+                } else {
+                    scaleFilter.apply(commandBuffer: buffer,
+                                      textures: [lfTexture, mergeTexture])
+                }
                 
             } else {
                 
                 // Case 2: Non-interlace mode, two short frames in a row
-                scaleFilter.apply(commandBuffer: buffer,
-                                  textures: [sfTexture, mergeTexture])
+                if xrayActive {
+                    scaleFilterXray.apply(commandBuffer: buffer,
+                                          textures: [sfTexture, sfXrayTexture, mergeTexture],
+                                          options: &mergeUniforms,
+                                          length: MemoryLayout<MergeUniforms>.stride)
+                } else {
+                    scaleFilter.apply(commandBuffer: buffer,
+                                      textures: [sfTexture, mergeTexture])
+                }
             }
             
         } else {
@@ -267,10 +347,17 @@ class Canvas: Layer {
                 mergeUniforms.shortFrameScale = 1.0
             }
             
-            mergeFilter.apply(commandBuffer: buffer,
-                              textures: [lfTexture, sfTexture, mergeTexture],
-                              options: &mergeUniforms,
-                              length: MemoryLayout<MergeUniforms>.stride)
+            if xrayActive {
+                mergeFilterXray.apply(commandBuffer: buffer,
+                                      textures: [lfTexture, sfTexture, lfXrayTexture, sfXrayTexture, mergeTexture],
+                                      options: &mergeUniforms,
+                                      length: MemoryLayout<MergeUniforms>.stride)
+            } else {
+                mergeFilter.apply(commandBuffer: buffer,
+                                  textures: [lfTexture, sfTexture, mergeTexture],
+                                  options: &mergeUniforms,
+                                  length: MemoryLayout<MergeUniforms>.stride)
+            }
         }
         finalTexture = mergeTexture
         

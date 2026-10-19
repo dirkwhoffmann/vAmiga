@@ -38,6 +38,8 @@ class RessourceManager {
     // Shader galleries
     var mergeFilter: MergeFilter! = nil
     var scaleFilter: ScaleFilter! = nil
+    var mergeFilterXray: MergeFilterXray! = nil
+    var scaleFilterXray: ScaleFilterXray! = nil
     var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
     var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
     var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 2)
@@ -195,6 +197,8 @@ class RessourceManager {
         // Build merge and scale filters
         mergeFilter = MergeFilter(device: device, library: library, cutout: mc)
         scaleFilter = ScaleFilter(device: device, library: library, cutout: mc)
+        mergeFilterXray = MergeFilterXray(device: device, library: library, cutout: mc)
+        scaleFilterXray = ScaleFilterXray(device: device, library: library, cutout: mc)
         
         // Build enhancers (first-pass, in-texture upscaling)
         enhancerGallery[0] = BypassFilter(device: device, library: library, cutout: mc)

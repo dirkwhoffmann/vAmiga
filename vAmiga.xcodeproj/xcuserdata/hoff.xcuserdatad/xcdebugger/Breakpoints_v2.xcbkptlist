@@ -280,38 +280,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "341009BE-4904-4109-831A-0ACF7CB2EF0A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GUI/Metal/Shaders.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "init?(name:device:library:cutout:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E3F07161-74EB-44B8-8825-FDF2B037C7BC"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GUI/Metal/Shaders.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
-            landmarkName = "init?(name:device:library:cutout:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "77DE680E-1937-438A-A27D-CD036984E162"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -321,8 +289,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "485"
             endingLineNumber = "485"
-            landmarkName = "framebuffer"
-            landmarkType = "24">
+            landmarkName = "region(cgRect:)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -705,6 +673,66 @@
             endingLineNumber = "4118"
             landmarkName = "tdefl_write_image_to_png_file_in_memory_ex(pImage, w, h, num_chans, pLen_out, level, flip)"
             landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "31848CB7-9565-43DD-91A5-349DF8B9085F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Core/Components/Agnus/DmaDebugger/DmaDebugger.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "430"
+            endingLineNumber = "430"
+            landmarkName = "DmaDebugger::computeOverlay(dmaPtr, first, last, own, val)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "31848CB7-9565-43DD-91A5-349DF8B9085F - cf666798582e0a16"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::DmaDebugger::computeOverlay&lt;(utl::TexelFormat)0&gt;(unsigned long long*, long, long, vamiga::BusOwner*, unsigned short*)"
+                  moduleName = "vAmiga.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/DmaDebugger/DmaDebugger.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "430"
+                  endingLineNumber = "430">
+               </Location>
+               <Location
+                  uuid = "31848CB7-9565-43DD-91A5-349DF8B9085F - 3213e8c233031313"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::DmaDebugger::computeOverlay&lt;(utl::TexelFormat)1&gt;(unsigned long long*, long, long, vamiga::BusOwner*, unsigned short*)"
+                  moduleName = "vAmiga.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/DmaDebugger/DmaDebugger.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "430"
+                  endingLineNumber = "430">
+               </Location>
+               <Location
+                  uuid = "31848CB7-9565-43DD-91A5-349DF8B9085F - 76bd59059614180c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "void vamiga::DmaDebugger::computeOverlay&lt;(utl::TexelFormat)2&gt;(unsigned long long*, long, long, vamiga::BusOwner*, unsigned short*)"
+                  moduleName = "vAmiga.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Core/Components/Agnus/DmaDebugger/DmaDebugger.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "430"
+                  endingLineNumber = "430">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

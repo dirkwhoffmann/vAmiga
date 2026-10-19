@@ -1179,6 +1179,11 @@ ImageInfo scan(const fs::path &url)
     *nr = inr;
 }
 
+- (const u32 *)xrayTexture
+{
+    return [self port]->getXrayTexture();
+}
+
 - (void)innerArea:(NSInteger *)x1 x2:(NSInteger *)x2 y1:(NSInteger *)y1 y2:(NSInteger *)y2
 {
     isize xx1, xx2, yy1, yy2;
