@@ -21,13 +21,14 @@ enum class XRayMode
 {
     XRAY_NONE,
     XRAY_DMA,
-    XRAY_LAYERS
+    XRAY_LAYERS,
+    XRAY_CROSSHAIRS
 };
 
 struct XRayModeEnum : Reflectable<XRayModeEnum, XRayMode>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(XRayMode::XRAY_LAYERS);
+    static constexpr long maxVal = long(XRayMode::XRAY_CROSSHAIRS);
 
     static const char *_key(XRayMode value)
     {
@@ -36,6 +37,7 @@ struct XRayModeEnum : Reflectable<XRayModeEnum, XRayMode>
             case XRayMode::XRAY_NONE:   return "XRAY_NONE";
             case XRayMode::XRAY_DMA:    return "XRAY_DMA";
             case XRayMode::XRAY_LAYERS: return "XRAY_LAYERS";
+            case XRayMode::XRAY_CROSSHAIRS: return "XRAY_CROSSHAIRS";
         }
         return "???";
     }
@@ -46,6 +48,7 @@ struct XRayModeEnum : Reflectable<XRayModeEnum, XRayMode>
             case XRayMode::XRAY_NONE:   return "Off";
             case XRayMode::XRAY_DMA:    return "DMA debugger";
             case XRayMode::XRAY_LAYERS: return "Layer inspector";
+            case XRayMode::XRAY_CROSSHAIRS: return "Crosshairs";
         }
         return "???";
     }

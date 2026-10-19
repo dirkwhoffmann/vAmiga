@@ -19,6 +19,10 @@ class Beamtraps : public GuardList {
 
 public:
 
+    // Beam position at which the most recent trap fired
+    i16 hitV = 0;
+    i16 hitH = 0;
+
     Beamtraps(Agnus& ref);
     virtual ~Beamtraps() { }
 

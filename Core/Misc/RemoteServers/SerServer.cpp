@@ -150,7 +150,7 @@ SerServer::serviceSerEvent()
 {
     assert(agnus.id[SLOT_SER] == SER_RECEIVE);
 
-// Check if we're in MIDI mode
+    // Check if we're in MIDI mode
     if (serialPort.getConfig().device == SerialPortDevice::MIDI) {
 
         // Handle MIDI input

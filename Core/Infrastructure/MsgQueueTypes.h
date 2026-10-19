@@ -28,6 +28,7 @@ enum class Msg : long
     RUN,
     PAUSE,
     STEP,
+    STOP,               ///< A remote debugger requested a stop
     RESET,
     SHUTDOWN,
     ABORT,
@@ -164,6 +165,7 @@ struct MsgEnum : Reflectable<MsgEnum, Msg>
             case Msg::RUN:                   return "RUN";
             case Msg::PAUSE:                 return "PAUSE";
             case Msg::STEP:                  return "STEP";
+            case Msg::STOP:                  return "STOP";
             case Msg::RESET:                 return "RESET";
             case Msg::SHUTDOWN:              return "SHUTDOWN";
             case Msg::ABORT:                 return "ABORT";
@@ -276,6 +278,7 @@ struct MsgEnum : Reflectable<MsgEnum, Msg>
 //
 
 typedef struct { u32 pc; u8 vector; } CpuMsg;
+typedef struct { i16 v; i16 h; } BeamMsg;
 typedef struct { i16 nr; i16 value; i16 volume; i16 pan; } DriveMsg;
 typedef struct { i16 nr; HdcState state; } HdcMsg;
 typedef struct { isize line; i16 delay; } ScriptMsg;
@@ -291,6 +294,7 @@ typedef struct
     union {
         struct { i64 value; i64 value2; };
         CpuMsg cpu;
+        BeamMsg beam;
         DriveMsg drive;
         HdcMsg hdc;
         ScriptMsg script;

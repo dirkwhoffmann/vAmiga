@@ -121,39 +121,45 @@ MsgQueue::put(Msg type, std::exception_ptr exception)
 }
 
 void
-MsgQueue::put(Msg type, CpuMsg payload)
+MsgQueue::put(Msg type, CpuMsg payload, const string &str)
 {
-    put( Message { .type = type, .cpu = payload } );
+    put( Message { .type = type, .cpu = payload }, str);
 }
 
 void
-MsgQueue::put(Msg type, DriveMsg payload)
+MsgQueue::put(Msg type, BeamMsg payload, const string &str)
 {
-    put( Message { .type = type, .drive = payload } );
+    put( Message { .type = type, .beam = payload }, str);
 }
 
 void
-MsgQueue::put(Msg type, HdcMsg payload)
+MsgQueue::put(Msg type, DriveMsg payload, const string &str)
 {
-    put( Message { .type = type, .hdc = payload } );
+    put( Message { .type = type, .drive = payload }, str);
 }
 
 void
-MsgQueue::put(Msg type, ScriptMsg payload)
+MsgQueue::put(Msg type, HdcMsg payload, const string &str)
 {
-    put( Message { .type = type, .script = payload } );
+    put( Message { .type = type, .hdc = payload }, str);
 }
 
 void
-MsgQueue::put(Msg type, ViewportMsg payload)
+MsgQueue::put(Msg type, ScriptMsg payload, const string &str)
 {
-    put( Message { .type = type, .viewport = payload } );
+    put( Message { .type = type, .script = payload }, str);
 }
 
 void
-MsgQueue::put(Msg type, SnapshotMsg payload)
+MsgQueue::put(Msg type, ViewportMsg payload, const string &str)
 {
-    put( Message { .type = type, .snapshot = payload } );
+    put( Message { .type = type, .viewport = payload }, str);
+}
+
+void
+MsgQueue::put(Msg type, SnapshotMsg payload, const string &str)
+{
+    put( Message { .type = type, .snapshot = payload }, str);
 }
 
 }

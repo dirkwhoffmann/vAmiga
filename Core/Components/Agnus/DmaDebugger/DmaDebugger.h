@@ -131,6 +131,7 @@ public:
 private:
     
     void _dump(Category category, std::ostream &os) const override;
+    void _pause() override;
     
     
     //
@@ -177,6 +178,13 @@ public:
     
     // Called at the end of each frame
     void eofHandler();
+
+    /* Recomputes the xray texture for XRayMode::XRAY_CROSSHAIRS. The texture
+     * is filled with black and a crosshair is drawn, centered at the beam
+     * position found in the current AgnusInfo. 'xray' points to the first
+     * texel of the texture.
+     */
+    void computeCrosshairs(Texel *xray);
     
 private:
     

@@ -84,12 +84,13 @@ public:
 
     // Sends a message that reports a failure
     void put(Msg type, std::exception_ptr exception);
-    void put(Msg type, CpuMsg payload);
-    void put(Msg type, DriveMsg payload);
-    void put(Msg type, HdcMsg payload);
-    void put(Msg type, ScriptMsg payload);
-    void put(Msg type, ViewportMsg payload);
-    void put(Msg type, SnapshotMsg payload);
+    void put(Msg type, CpuMsg payload, const string &str = "");
+    void put(Msg type, BeamMsg payload, const string &str = "");
+    void put(Msg type, DriveMsg payload, const string &str = "");
+    void put(Msg type, HdcMsg payload, const string &str = "");
+    void put(Msg type, ScriptMsg payload, const string &str = "");
+    void put(Msg type, ViewportMsg payload, const string &str = "");
+    void put(Msg type, SnapshotMsg payload, const string &str = "");
 
 };
 

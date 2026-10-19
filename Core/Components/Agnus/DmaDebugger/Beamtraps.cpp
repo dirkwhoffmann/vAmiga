@@ -30,6 +30,8 @@ void
 Beamtraps::serviceEvent()
 {
     // printf("Beamtraps::serviceEvent()\n");
+    hitV = i16(agnus.pos.v);
+    hitH = i16(agnus.pos.h);
     agnus.amiga.setFlag(RL::BEAMTRAP_REACHED);
     scheduleNextEvent();
 }

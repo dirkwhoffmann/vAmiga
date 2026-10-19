@@ -387,6 +387,7 @@ public:
     Texture &getWorkingXrayBuffer();
     const Texture &getStableXrayBuffer(isize offset = 0) const;
     Texel *xrayWorkingPtr(isize row = 0, isize col = 0);
+    Texel *xrayStablePtr(isize row = 0, isize col = 0);
 
     // Swaps the working buffer and the stable buffer
     void swapBuffers();

@@ -456,6 +456,15 @@ PixelEngine::getStableXrayBuffer(isize offset) const
 }
 
 Texel *
+PixelEngine::xrayStablePtr(isize row, isize col)
+{
+    assert(row >= 0 && row <= VPOS_MAX);
+    assert(col >= 0 && col <= HPOS_MAX);
+
+    return getStableXrayBuffer().pixels.ptr + row * HPIXELS + col;
+}
+
+Texel *
 PixelEngine::xrayWorkingPtr(isize row, isize col)
 {
     assert(row >= 0 && row <= VPOS_MAX);
