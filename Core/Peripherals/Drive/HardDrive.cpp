@@ -16,6 +16,7 @@
 #include "MsgQueue.h"
 #include "SVMFile.h"
 #include "utl/io.h"
+#include <format>
 
 namespace vamiga {
 
