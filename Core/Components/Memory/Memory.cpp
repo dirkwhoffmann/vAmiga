@@ -168,7 +168,7 @@ Memory::checkOption(Opt opt, i64 value)
             if (!isPoweredOff()) {
                 throw CoreError(CoreError::OPT_LOCKED);
             }
-            if ((value % 256) != 0 || value > 1536) {
+            if (value % 256 != 0 || value > 1536) {
                 throw CoreError(CoreError::OPT_INV_ARG, "0, 256, 512, ..., 1536");
             }
             return;
@@ -178,7 +178,7 @@ Memory::checkOption(Opt opt, i64 value)
             if (!isPoweredOff()) {
                 throw CoreError(CoreError::OPT_LOCKED);
             }
-            if ((value % 64) != 0 || value > 8192) {
+            if (value % 64 != 0 || value > 8192) {
                 throw CoreError(CoreError::OPT_INV_ARG, "0, 64, 128, ..., 8192");
             }
             return;
