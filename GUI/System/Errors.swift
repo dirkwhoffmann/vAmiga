@@ -93,6 +93,7 @@ enum Failure {
     case cantOpen(url: URL)
     case cantRecord
     case cantRestore
+    case cantConfigure
     case cantRun
     case cantSaveRoms
     case cantSaveSnapshot
@@ -171,6 +172,9 @@ enum Failure {
         case .cantRestore:
             return "Failed to restore snapshot."
             
+        case .cantConfigure:
+            return "Failed to change the configuration."
+
         case .cantRun:
             return "Configuration error"
             

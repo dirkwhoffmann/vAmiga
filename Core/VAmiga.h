@@ -2182,6 +2182,8 @@ public:
      *
      *  @note If this function is called for an options that applies to multiple
      *  components, all components are configured with the specified value.
+     *  @note The value is validated when the emulator thread carries out the
+     *  command. A rejected value is reported by Msg::CONFIG_ERROR.
      */
     void set(Opt opt, i64 value);
     
@@ -2197,6 +2199,26 @@ public:
      *  an additional parameter to uniquely determine the configured component.
      */
     void set(Opt opt, i64 value, long id);
+
+    /** @brief  Checks if a configuration option would be accepted.
+     *
+     *  The check is performed in the calling thread and does not change the
+     *  configuration. It is not needed before set(), which validates the value
+     *  itself, but it lets a caller skip a request that is known to fail.
+     *
+     *  @param opt      The option to check
+     *  @param value    The option's value
+     *  @throw CoreError if the value would be rejected
+     */
+    void check(Opt opt, i64 value);
+
+    /** @brief  Checks if a configuration option would be accepted.
+     *  @param opt      The option to check
+     *  @param value    The option's value
+     *  @param id       The component to configure
+     *  @throw CoreError if the value would be rejected
+     */
+    void check(Opt opt, i64 value, long id);
 
     /** @brief  Waits until every command sent so far has been carried out.
      *

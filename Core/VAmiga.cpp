@@ -2405,16 +2405,28 @@ void
 VAmiga::set(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
-    emu->check(opt, value);
     put(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
     emu->markAsDirty();
+}
+
+void
+VAmiga::check(Opt opt, i64 value)
+{
+    VAMIGA_PUBLIC
+    emu->check(opt, value);
+}
+
+void
+VAmiga::check(Opt opt, i64 value, long id)
+{
+    VAMIGA_PUBLIC
+    emu->check(opt, value, { id });
 }
 
 void
 VAmiga::set(Opt opt, i64 value, long id)
 {
     VAMIGA_PUBLIC
-    emu->check(opt, value, { id });
     put(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
     emu->markAsDirty();
 }

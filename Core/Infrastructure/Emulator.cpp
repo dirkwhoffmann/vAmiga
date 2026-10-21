@@ -178,12 +178,6 @@ Emulator::check(Opt opt, i64 value, const std::vector<isize> objids)
 void
 Emulator::set(Opt opt, i64 value, const std::vector<isize> objids)
 {
-    /* The public API (VAmiga::set) checks the value before it posts a
-     * command. Callers inside the core, such as RetroShell, come in here
-     * directly, so the check has to happen here as well. Otherwise, an
-     * invalid value reaches the component's setOption(), which trusts it.
-     */
-    main.check(opt, value, objids);
     main.set(opt, value, objids);
 }
 

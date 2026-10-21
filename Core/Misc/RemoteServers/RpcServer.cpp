@@ -81,7 +81,6 @@ RpcServer::send(const string &payload)
 
     if (config.verbose) {
 
-        retroShell << "T: " << utl::makePrintable(payload) << "\n";
         printf("T: %s\n", utl::makePrintable(payload).c_str());
     }
 }
