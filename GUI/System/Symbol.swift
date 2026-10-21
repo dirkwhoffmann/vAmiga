@@ -125,7 +125,7 @@ enum Symbol {
         case .arrowLeft:        return [ "arrowshape.left" ]
         case .arrowRight:       return [ "arrowshape.right" ]
         case .arrowkeys:        return [ "arrowkeys" ]
-        case .gauge:            return [ "gauge.chart.lefthalf.righthalf", "gauge.with.needle" ]
+        case .gauge:            return [ "gauge.with.needle", "gauge.chart.lefthalf.righthalf" ]
         }
     }
 
