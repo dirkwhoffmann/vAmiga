@@ -14,6 +14,8 @@
 #include "utl/concurrency.h"
 #include "utl/storage.h"
 #include <atomic>
+#include <exception>
+#include <functional>
 
 namespace vamiga {
 
@@ -27,6 +29,26 @@ class CmdQueue final : public CoreObject, Synchronizable {
 
     /// Attached string objects
     string attachments[CAPACITY];
+
+public:
+
+    /* Completion handler of a command.
+     *
+     * Invoked on the emulator thread once the command has been carried out.
+     * The argument is null on success and holds the exception otherwise. If
+     * the command never makes it into the queue (the queue is full), the
+     * handler is called with an exception right away, on the sender's thread.
+     *
+     * Handlers must be short and must not block, call wait(), or touch UI
+     * objects. Capture shared ownership (e.g., a shared_ptr), not references:
+     * the handler runs later and on another thread.
+     */
+    using Completion = std::function<void(std::exception_ptr)>;
+
+private:
+
+    /// Completion handlers (parallel to the ring buffer)
+    Completion completions[CAPACITY];
 
 public:
     
@@ -58,10 +80,10 @@ private:
 public:
 
     // Sends a command
-    void put(const Command &cmd, const string &str = "");
+    void put(const Command &cmd, const string &str = "", Completion completion = nullptr);
 
-    // Polls a command
-    bool poll(Command &cmd);
+    // Polls a command together with its completion handler (may be empty)
+    bool poll(Command &cmd, Completion &completion);
 
     // Reports that a polled command has been carried out
     void done();

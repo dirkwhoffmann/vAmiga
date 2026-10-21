@@ -1041,12 +1041,13 @@ void
 Amiga::update(CmdQueue &queue)
 {
     Command cmd;
+    CmdQueue::Completion completion;
     bool cmdConfig = false;
 
     auto dfn = [&]() -> FloppyDrive& { return *df[cmd.value]; };
 
     // Process all commands
-    while (queue.poll(cmd)) {
+    while (queue.poll(cmd, completion)) {
 
         /* Report the command as carried out however this iteration ends. A
          * handler that throws would otherwise leave the command counted
@@ -1057,110 +1058,123 @@ Amiga::update(CmdQueue &queue)
             ~Done() { queue.done(); }
         } done { queue };
 
-        switch (cmd.type) {
+        std::exception_ptr error;
 
-            case Cmd::CONFIG:
+        try {
 
-                cmdConfig = true;
-                set(cmd.config.option, cmd.config.value, { cmd.config.id });
-                break;
+            switch (cmd.type) {
 
-            case Cmd::CONFIG_ALL:
+                case Cmd::CONFIG:
 
-                cmdConfig = true;
-                set(cmd.config.option, cmd.config.value, { });
-                break;
+                    cmdConfig = true;
+                    set(cmd.config.option, cmd.config.value, { cmd.config.id });
+                    break;
 
-            case Cmd::CONFIG_SCHEME:
+                case Cmd::CONFIG_ALL:
 
-                cmdConfig = true;
-                set(ConfigScheme(cmd.value));
-                break;
+                    cmdConfig = true;
+                    set(cmd.config.option, cmd.config.value, { });
+                    break;
 
-            case Cmd::HARD_RESET:
-            case Cmd::SOFT_RESET:
-            case Cmd::POWER_ON:
-            case Cmd::POWER_OFF:
-            case Cmd::RUN:
-            case Cmd::PAUSE:
-            case Cmd::WARP_ON:
-            case Cmd::WARP_OFF:
-            case Cmd::HALT:
-            case Cmd::ALARM_ABS:
-            case Cmd::ALARM_REL:
-            case Cmd::INSPECTION_TARGET:
-            case Cmd::SAVE_WORKSPACE:
-            case Cmd::SAVE_SNAPSHOT:
-            case Cmd::HIBERNATE:
-            case Cmd::HDR_ATTACH:
-            case Cmd::HDR_IMPORT:
+                case Cmd::CONFIG_SCHEME:
 
-                processCommand(cmd);
-                break;
+                    cmdConfig = true;
+                    set(ConfigScheme(cmd.value));
+                    break;
 
-            case Cmd::GUARD_SET_AT:
-            case Cmd::GUARD_MOVE_NR:
-            case Cmd::GUARD_IGNORE_NR:
-            case Cmd::GUARD_REMOVE_NR:
-            case Cmd::GUARD_REMOVE_AT:
-            case Cmd::GUARD_REMOVE_ALL:
-            case Cmd::GUARD_ENABLE_NR:
-            case Cmd::GUARD_ENABLE_AT:
-            case Cmd::GUARD_ENABLE_ALL:
-            case Cmd::GUARD_DISABLE_NR:
-            case Cmd::GUARD_DISABLE_AT:
-            case Cmd::GUARD_DISABLE_ALL:
+                case Cmd::HARD_RESET:
+                case Cmd::SOFT_RESET:
+                case Cmd::POWER_ON:
+                case Cmd::POWER_OFF:
+                case Cmd::RUN:
+                case Cmd::PAUSE:
+                case Cmd::WARP_ON:
+                case Cmd::WARP_OFF:
+                case Cmd::HALT:
+                case Cmd::ALARM_ABS:
+                case Cmd::ALARM_REL:
+                case Cmd::INSPECTION_TARGET:
+                case Cmd::SAVE_WORKSPACE:
+                case Cmd::SAVE_SNAPSHOT:
+                case Cmd::HIBERNATE:
+                case Cmd::HDR_ATTACH:
+                case Cmd::HDR_IMPORT:
 
-                cpu.processCommand(cmd);
-                break;
+                    processCommand(cmd);
+                    break;
 
-            case Cmd::KEY_PRESS:
-            case Cmd::KEY_RELEASE:
-            case Cmd::KEY_RELEASE_ALL:
-            case Cmd::KEY_TOGGLE:
-            case Cmd::KEY_LOCK:
-            case Cmd::KEY_UNLOCK:
+                case Cmd::GUARD_SET_AT:
+                case Cmd::GUARD_MOVE_NR:
+                case Cmd::GUARD_IGNORE_NR:
+                case Cmd::GUARD_REMOVE_NR:
+                case Cmd::GUARD_REMOVE_AT:
+                case Cmd::GUARD_REMOVE_ALL:
+                case Cmd::GUARD_ENABLE_NR:
+                case Cmd::GUARD_ENABLE_AT:
+                case Cmd::GUARD_ENABLE_ALL:
+                case Cmd::GUARD_DISABLE_NR:
+                case Cmd::GUARD_DISABLE_AT:
+                case Cmd::GUARD_DISABLE_ALL:
 
-                keyboard.processCommand(cmd);
-                break;
+                    cpu.processCommand(cmd);
+                    break;
 
-            case Cmd::MOUSE_MOVE_ABS:
-            case Cmd::MOUSE_MOVE_REL:
-            {
-                auto &port = cmd.coord.port ? controlPort2 : controlPort1;
-                port.processCommand(cmd); break;
-                break;
-            }
-            case Cmd::MOUSE_BUTTON:
-            case Cmd::JOY_EVENT:
-            {
-                auto &port = cmd.action.port ? controlPort2 : controlPort1;
-                port.processCommand(cmd); break;
-                break;
-            }
-            case Cmd::DSK_TOGGLE_WP:
-            case Cmd::DSK_MODIFIED:
-            case Cmd::DSK_UNMODIFIED:
+                case Cmd::KEY_PRESS:
+                case Cmd::KEY_RELEASE:
+                case Cmd::KEY_RELEASE_ALL:
+                case Cmd::KEY_TOGGLE:
+                case Cmd::KEY_LOCK:
+                case Cmd::KEY_UNLOCK:
 
-                dfn().processCommand(cmd);
-                break;
+                    keyboard.processCommand(cmd);
+                    break;
+
+                case Cmd::MOUSE_MOVE_ABS:
+                case Cmd::MOUSE_MOVE_REL:
+                {
+                    auto &port = cmd.coord.port ? controlPort2 : controlPort1;
+                    port.processCommand(cmd); break;
+                    break;
+                }
+                case Cmd::MOUSE_BUTTON:
+                case Cmd::JOY_EVENT:
+                {
+                    auto &port = cmd.action.port ? controlPort2 : controlPort1;
+                    port.processCommand(cmd); break;
+                    break;
+                }
+                case Cmd::DSK_TOGGLE_WP:
+                case Cmd::DSK_MODIFIED:
+                case Cmd::DSK_UNMODIFIED:
+
+                    dfn().processCommand(cmd);
+                    break;
 
                 
-            case Cmd::RSH_EXECUTE:
+                case Cmd::RSH_EXECUTE:
 
-                retroShell.exec();
-                rshShell.exec();
-                rpcShell.exec();
-                break;
+                    retroShell.exec();
+                    rshShell.exec();
+                    rpcShell.exec();
+                    break;
 
-            case Cmd::FOCUS:
+                case Cmd::FOCUS:
 
-                cmd.value ? focus() : unfocus();
-                break;
+                    cmd.value ? focus() : unfocus();
+                    break;
 
-            default:
-                logmsg(LOG_FATAL, "Unhandled command: %s\n", CmdEnum::key(cmd.type));
+                default:
+                    logmsg(LOG_FATAL, "Unhandled command: %s\n", CmdEnum::key(cmd.type));
+            }
+
+        } catch (std::exception &e) {
+
+            logmsg(LOG_WARN, "Command: %s Exception: %s\n", CmdEnum::key(cmd.type), e.what());
+            error = std::current_exception();
         }
+
+        // Tell the sender that the command has been carried out
+        if (completion) { try { completion(error); } catch (...) { } completion = nullptr; }
     }
 
     // Inform the GUI about a changed machine configuration

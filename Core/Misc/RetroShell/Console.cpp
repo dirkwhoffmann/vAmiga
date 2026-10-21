@@ -909,14 +909,19 @@ Console::exec(const InputLine& cmd)
 {
     std::stringstream ss;
 
+    // Reports the outcome to the sender, if the sender asked for it
+    auto complete = [&](std::exception_ptr error) {
+        if (cmd.completion) cmd.completion(ss.str(), error);
+    };
+
     // Inform the delegates
     for (auto &delegate: delegates) delegate->willExecute(cmd);
 
     // Skip empty script lines
-    if (cmd.isScriptCommand() && cmd.input.empty()) { return; }
+    if (cmd.isScriptCommand() && cmd.input.empty()) { complete(nullptr); return; }
 
     // Skip comments
-    if (cmd.isComment()) { return; }
+    if (cmd.isComment()) { complete(nullptr); return; }
 
     try {
 
@@ -943,11 +948,13 @@ Console::exec(const InputLine& cmd)
 
         // Dispatch output
         for (auto &delegate: delegates) delegate->didExecute(cmd, ss);
+        complete(nullptr);
 
     } catch (std::exception &err) {
 
         // Dispatch error message
         for (auto &delegate: delegates) delegate->didExecute(cmd, ss, err);
+        complete(std::current_exception());
 
         // Rethrow exception
         throw;
