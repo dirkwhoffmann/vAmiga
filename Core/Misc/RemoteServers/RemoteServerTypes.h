@@ -23,11 +23,11 @@ typedef struct
     // Enable status
     bool enable;
 
-    // The socket port number of this server
-    u16 port;
-
-    // The transport used to communicate with clients
+    // The transport protocol of this server
     TransportProtocol transport;
+
+    // The socket port of this server
+    u16 port;
 
     // If true, transmitted packets are shown in RetroShell
     bool verbose;

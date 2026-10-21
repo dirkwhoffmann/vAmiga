@@ -28,12 +28,12 @@ RemoteServer::_dump(Category category, std::ostream &os) const
     using namespace utl;
 
     if (category == Category::Config) {
-
+        
         dumpConfig(os);
     }
-
+    
     if (category == Category::State) {
-
+        
         os << tab("State");
         os << SrvStateEnum::key(getState()) << std::endl;
     }
@@ -42,7 +42,7 @@ RemoteServer::_dump(Category category, std::ostream &os) const
 void
 RemoteServer::_powerOff()
 {
-    try { stop(); } catch(...) { }
+
 }
 
 void
@@ -56,11 +56,11 @@ i64
 RemoteServer::getOption(Opt option) const
 {
     switch (option) {
-
-        case Opt::SRV_ENABLE:      return config.enable;
-        case Opt::SRV_PORT:        return config.port;
-        case Opt::SRV_TRANSPORT:   return (i64)config.transport;
-        case Opt::SRV_VERBOSE:     return config.verbose;
+            
+        case Opt::SRV_ENABLE:       return (i64)config.enable;
+        case Opt::SRV_PORT:         return (i64)config.port;
+        case Opt::SRV_TRANSPORT:    return (i64)config.transport;
+        case Opt::SRV_VERBOSE:      return (i64)config.verbose;
 
         default:
             fatalError;
@@ -93,11 +93,11 @@ RemoteServer::checkOption(Opt opt, i64 value)
 }
 
 void
-RemoteServer::setOption(Opt option, i64 value)
+RemoteServer::setOption(Opt opt, i64 value)
 {
-    checkOption(option, value);
+    checkOption(opt, value);
 
-    switch (option) {
+    switch (opt) {
 
         case Opt::SRV_ENABLE:
 
@@ -105,9 +105,9 @@ RemoteServer::setOption(Opt option, i64 value)
             return;
 
         case Opt::SRV_PORT:
-
+            
             if (config.port != (u16)value) {
-
+                
                 if (isOff()) {
 
                     config.port = (u16)value;
@@ -120,7 +120,7 @@ RemoteServer::setOption(Opt option, i64 value)
                 }
             }
             return;
-
+            
         case Opt::SRV_TRANSPORT:
 
             if (config.transport != (TransportProtocol)value) {
@@ -139,7 +139,7 @@ RemoteServer::setOption(Opt option, i64 value)
             return;
 
         case Opt::SRV_VERBOSE:
-
+            
             config.verbose = (bool)value;
             return;
 
@@ -161,10 +161,7 @@ RemoteServer::cacheInfo() const
 void
 RemoteServer::start()
 {
-    if (!(isOff() || isWaiting())) return;
-
-    waiting = false;
-    transport().start(config.port);
+    transport().start(config.port, endpoint());
 }
 
 void
@@ -172,14 +169,13 @@ RemoteServer::stop()
 {
     if (isOff() || isStopping()) return;
 
-    waiting = false;
     transport().stop();
 }
 
 void
 RemoteServer::waitForLaunch()
 {
-    if (isOff()) waiting = true;
+    transport().wait();
 }
 
 void

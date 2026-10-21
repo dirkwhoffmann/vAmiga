@@ -48,7 +48,7 @@ private:
     //
 
     bool canRun() override { return true; }
-    void start() override { transport().start(config.port, "/rsh"); }
+    string endpoint() const override { return "/rsh"; }
 
     Transport &transport() override;
     const Transport &transport() const override;

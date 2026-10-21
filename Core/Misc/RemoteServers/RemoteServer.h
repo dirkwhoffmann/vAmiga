@@ -33,7 +33,7 @@ class RemoteServer : public SubComponent, public TransportDelegate {
         .shell          = "server rsh"
     }, {
         .name           = "RpcServer",
-        .description    = "RPC Remote Server",
+        .description    = "JSON RPC Server",
         .shell          = "server rpc"
     }, {
         .name           = "GdbServer",
@@ -51,10 +51,13 @@ class RemoteServer : public SubComponent, public TransportDelegate {
 
     Options options = {
 
-        Opt::SRV_ENABLE,
-        Opt::SRV_PORT,
+        // ENABLE comes last so it is executed last when a config script is read,
+        // ensuring the server starts with the correct settings.
+
         Opt::SRV_TRANSPORT,
-        Opt::SRV_VERBOSE
+        Opt::SRV_PORT,
+        Opt::SRV_VERBOSE,
+        Opt::SRV_ENABLE
     };
 
 public:
@@ -63,17 +66,9 @@ public:
     utl::Backed<RemoteServerInfo> info;
 
 protected:
-
+    
     // Current configuration
     ServerConfig config = {};
-
-    /* Indicates that this server is enabled but waiting for its launch
-     * condition (canRun()) to become true. Unlike the transport's own state
-     * machine (owned by Transport, see transport().getState()), this flag is
-     * tracked here because it describes a precondition on *starting* the
-     * transport at all, not a state the transport itself passes through.
-     */
-    bool waiting = false;
 
 
     //
@@ -95,22 +90,23 @@ public:
     //
     // Methods from CoreObject
     //
-
+    
 protected:
 
     void _dump(Category category, std::ostream &os) const override;
-
-public:
-
-    const Descriptions &getDescriptions() const override { return descriptions; }
 
 
     //
     // Methods from CoreComponent
     //
 
-protected:
+private:
 
+    void _halt() override { try { stop(); } catch(...) { } };
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+protected:
+    
     void _powerOff() override;
 
     template <class T>
@@ -131,7 +127,7 @@ protected:
     virtual void operator << (SerResetter &worker) override { serialize(worker); }
     virtual void operator << (SerReader &worker) override { serialize(worker); }
     virtual void operator << (SerWriter &worker) override { serialize(worker); }
-
+    
     void _didLoad() override;
 
 
@@ -147,7 +143,7 @@ public:
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;
 
-
+    
     //
     // Analyzing
     //
@@ -170,11 +166,7 @@ private:
 public:
 
     virtual bool isSupported(TransportProtocol protocol) const = 0;
-
-    // Returns the combined state (WAITING is layered above the transport's
-    // own state -- see 'waiting')
-    virtual SrvState getState() const { return waiting ? SrvState::WAITING : transport().getState(); }
-
+    SrvState getState() const { return transport().getState(); }
     bool isOff() const { return getState() == SrvState::OFF; }
     bool isWaiting() const { return getState() == SrvState::WAITING; }
     bool isStarting() const { return getState() == SrvState::STARTING; }
@@ -185,7 +177,7 @@ public:
 
 
     //
-    // Starting and stopping the server
+    // Running the server
     //
 
 public:
@@ -194,7 +186,10 @@ public:
     virtual bool canRun() = 0;
 
     // Launch the remote server
-    virtual void start();
+    void start();
+
+    // Returns the endpoint the transport is started with (HTTP-based servers)
+    virtual string endpoint() const { return ""; }
 
     // Shuts down the remote server
     virtual void stop();
@@ -202,7 +197,7 @@ public:
     // Disconnects the client (if any)
     virtual void disconnect() { transport().disconnect(); }
 
-    // Switches into the WAITING state (called by the RemoteManager's launch daemon)
+    // Switches into the WAITING state
     void waitForLaunch();
 
 

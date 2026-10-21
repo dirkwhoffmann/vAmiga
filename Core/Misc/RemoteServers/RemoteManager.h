@@ -22,12 +22,7 @@
 
 namespace vamiga {
 
-/* A bounded log keeping the most recently transmitted packets of all remote
- * servers. The log is filled by the transport layers (via
- * RemoteServer::recordTraffic) and can be read by the GUI. Because packets
- * are recorded on the transports' session threads, all access is
- * mutex-protected.
- */
+// A bounded log keeping the most recently transmitted packets of all servers
 class TrafficLog {
 
     // Maximum number of entries to keep
@@ -69,16 +64,6 @@ class RemoteManager final : public SubComponent {
 
 public:
 
-    // Result of the latest inspection
-    utl::Backed<RemoteManagerInfo> info;
-
-private:
-
-    // Frame counter
-    usize frame = 0;
-
-public:
-    
     // The remote servers
     RshServer rshServer = RshServer(amiga, isize(ServerType::RSH));
     RpcServer rpcServer = RpcServer(amiga, isize(ServerType::RPC));
@@ -90,6 +75,14 @@ public:
     std::vector <RemoteServer *> servers = {
         &rshServer, &rpcServer, &gdbServer, &promServer, &serServer
     };
+
+    // Result of the latest inspection
+    utl::Backed<RemoteManagerInfo> info;
+
+private:
+
+    // Frame counter
+    usize frame = 0;
 
     
     //

@@ -41,7 +41,7 @@ public:
 
     RpcServer& operator= (const RpcServer& other) {
 
-        RemoteServer::operator = (other);
+        RemoteServer::operator=(other);
         return *this;
     }
 
@@ -60,12 +60,11 @@ protected:
     // Methods from RemoteServer
     //
 
-    bool canRun() override { return true; }
-    void start() override { transport().start(config.port, "/rpc"); }
-
     Transport &transport() override;
     const Transport &transport() const override;
     bool isSupported(TransportProtocol protocol) const override;
+    bool canRun() override { return true; }
+    string endpoint() const override { return "/rpc"; }
 
 public:
 
@@ -79,14 +78,14 @@ private:
 
     void didStart() override;
     void didReceive(const string &payload) override;
-    void didReceive(const httplib::Request &req, httplib::Response &res) override;
+    void didReceive(const struct httplib::Request &req, struct httplib::Response &res) override;
 
 
     //
     // Methods from ConsoleDelegate
     //
 
-    void willExecute(const InputLine &input) override;
+    void willExecute(const InputLine &input) override { };
     void didExecute(const InputLine &input, std::stringstream &ss) override;
     void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) override;
 
@@ -94,6 +93,8 @@ private:
     //
     // Handling requests
     //
+
+private:
 
     // Processes a received command, returning the response if one is available immediately
     optional<string> process(const string &payload, bool blocking);

@@ -46,7 +46,7 @@ protected:
 public:
 
     bool canRun() override { return true; }
-    void start() override { transport().start(config.port, "/metrics"); }
+    string endpoint() const override { return "/metrics"; }
 
 private:
 

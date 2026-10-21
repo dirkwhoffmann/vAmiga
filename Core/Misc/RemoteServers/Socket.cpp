@@ -74,9 +74,8 @@ void Socket::create()
         
         // Create a new socket
         socket = ::socket(AF_INET, SOCK_STREAM, 0);
-        if (socket == INVALID_SOCKET) {
+        if (socket == INVALID_SOCKET)
             throw ServerError(ServerError::SOCK_CANT_CREATE);
-        }
         
         // Set options
         int opt = 1;
@@ -85,9 +84,8 @@ void Socket::create()
                                   SO_REUSEADDR,
                                   (const char *)&opt,
                                   sizeof(opt));
-        if (success < 0) {
+        if (success < 0)
             throw ServerError(ServerError::SOCK_CANT_CREATE);
-        }
         
         logmsg(LOG_SCK, "Created new socket %lld\n", (i64)socket);
     }
@@ -102,11 +100,10 @@ Socket::connect(u16 port)
     struct sockaddr_in address;
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = bigEndian(port);
+    address.sin_port = utl::bigEndian(port);
     
-    if (::connect(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
+    if (::connect(socket, (struct sockaddr *)&address, sizeof(address)) < 0)
         throw ServerError(ServerError::SOCK_CANT_CONNECT);
-    }
 }
 
 void
@@ -118,27 +115,24 @@ Socket::bind(u16 port)
     struct sockaddr_in address;
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = bigEndian(port);
+    address.sin_port = utl::bigEndian(port);
     
-    if (::bind(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
+    if (::bind(socket, (struct sockaddr *)&address, sizeof(address)) < 0)
         throw ServerError(ServerError::SOCK_CANT_BIND);
-    }
 }
 
 void
 Socket::listen()
 {
-    if (::listen(socket, 3) < 0) {
+    if (::listen(socket, 3) < 0)
         throw ServerError(ServerError::SOCK_CANT_LISTEN);
-    }
 }
 
 bool
 Socket::waitForConnection(isize milliseconds)
 {
-    if (socket == INVALID_SOCKET) {
+    if (socket == INVALID_SOCKET)
         throw ServerError(ServerError::SOCK_CANT_ACCEPT);
-    }
 
     fd_set fds;
     FD_ZERO(&fds);
@@ -151,9 +145,7 @@ Socket::waitForConnection(isize milliseconds)
     // The first argument is ignored on Windows
     auto ret = ::select((int)socket + 1, &fds, nullptr, nullptr, &tv);
 
-    if (ret < 0) {
-        throw ServerError(ServerError::SOCK_CANT_ACCEPT);
-    }
+    if (ret < 0) throw ServerError(ServerError::SOCK_CANT_ACCEPT);
 
     return ret > 0;
 }
@@ -165,9 +157,8 @@ Socket::accept()
     auto addrlen = (socklen_t)sizeof(struct sockaddr_in);
     auto s = ::accept(socket, (struct sockaddr *)&address, &addrlen);
 
-    if (s == INVALID_SOCKET) {
+    if (s == INVALID_SOCKET)
         throw ServerError(ServerError::SOCK_CANT_ACCEPT);
-    }
     
     return Socket(s);
 }
@@ -189,17 +180,15 @@ Socket::recv()
 void
 Socket::send(u8 value)
 {
-    if (::send(socket, (const char *)&value, 1, 0) < 1) {
+    if (::send(socket, (const char *)&value, 1, 0) < 1)
         throw ServerError(ServerError::SOCK_CANT_SEND);
-    }
 }
 
 void
 Socket::send(const string &s)
 {
-    if (::send(socket, s.c_str(), (int)s.length(), 0) < 0) {
+    if (::send(socket, s.c_str(), (int)s.length(), 0) < 0)
         throw ServerError(ServerError::SOCK_CANT_SEND);
-    }
 }
 
 void

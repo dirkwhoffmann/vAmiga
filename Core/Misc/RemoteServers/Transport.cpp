@@ -36,9 +36,15 @@ Transport::deliver(const string &payload)
 }
 
 void
+Transport::wait()
+{
+    if (isOff()) switchState(SrvState::WAITING);
+}
+
+void
 Transport::start(u16 port, const string &endpoint)
 {
-    if (!isOff()) return;
+    if (!isOff() && !isWaiting()) return;
 
     logmsg(LOG_SRV, "Starting server...\n");
     switchState(SrvState::STARTING);
@@ -71,7 +77,8 @@ Transport::stop()
      */
     stopRequested = true;
 
-    if (!isOff()) {
+    // A waiting transport has no thread to interrupt
+    if (!isOff() && !isWaiting()) {
 
         logmsg(LOG_SRV, "Stopping server...\n");
         switchState(SrvState::STOPPING);

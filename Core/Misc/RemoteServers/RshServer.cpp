@@ -206,7 +206,7 @@ RshServer::didExecute(const InputLine &input, std::stringstream &ss, std::except
     if (input.promise) { input.promise->set_value(ss.str() + e.what()); return; }
 
     // Echo the command if it came from somewhere else
-    if (!input.isRpcCommand()) { *this << input.input << '\n'; }
+    if (!input.isRshCommand()) { *this << input.input << '\n'; }
 
     *this << '\n' << ss.str() << e.what() << '\n';
     *this << rshShell.prompt();

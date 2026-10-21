@@ -24,10 +24,7 @@ namespace vamiga {
 void
 Stdio::put(const string &str)
 {
-    /* Flush after every packet. stdout is fully buffered when connected to a
-     * pipe, and a packet sitting in the buffer is invisible to the client on
-     * the other end.
-     */
+    // Flush after every packet because stdout is fully buffered when connected to a pipe
     std::cout << str << std::flush;
 }
 
@@ -231,9 +228,7 @@ Stdio::get()
 
     do {
 
-        /* Setup the descriptor set. select() overwrites it, so it has to be
-         * set up again whenever a signal interrupts the call.
-         */
+        // Setup the descriptor set
         FD_ZERO(&fds);
         FD_SET(STDIN_FILENO, &fds);
         FD_SET(term[0], &fds);
@@ -254,9 +249,7 @@ Stdio::get()
         ssize_t n;
         do { n = read(term[0], &tmp, 1); } while (n < 0 && errno == EINTR);
 
-        /* A byte left in the pipe would make every further select() return
-         * at once, so a failure here is not something to carry on from.
-         */
+        // Check for errors
         if (n != 1) throw std::runtime_error("termination pipe read error");
 
         return "";
@@ -271,9 +264,7 @@ Stdio::get()
         // Check for errors
         if (n < 0) throw std::runtime_error(string("stdin read error: ") + strerror(errno));
 
-        // Treat EOF as a disconnect. Returning an empty string here would
-        // make the session loop spin at full speed, as every subsequent
-        // read would report EOF immediately, too.
+        // Treat EOF as a disconnect
         if (n == 0) throw std::runtime_error("stdin closed");
 
         return string(buffer.data(), n);

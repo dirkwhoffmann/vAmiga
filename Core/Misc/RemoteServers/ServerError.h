@@ -26,19 +26,19 @@ struct ServerError : public Error {
     static constexpr long SOCK_DISCONNECTED          = 8;
 
     // All servers
-    static constexpr long SERVER_PORT_IN_USE         = 9;
-    static constexpr long SERVER_ON                  = 10;
-    static constexpr long SERVER_OFF                 = 11;
-    static constexpr long SERVER_RUNNING             = 12;
-    static constexpr long SERVER_NOT_RUNNING         = 13;
-    static constexpr long SERVER_NO_CLIENT           = 14;
+    static constexpr long SERVER_PORT_IN_USE         = 10;
+    static constexpr long SERVER_ON                  = 11;
+    static constexpr long SERVER_OFF                 = 12;
+    static constexpr long SERVER_RUNNING             = 13;
+    static constexpr long SERVER_NOT_RUNNING         = 14;
+    static constexpr long SERVER_NO_CLIENT           = 15;
 
     // GDB server
-    static constexpr long GDB_NO_ACK                 = 15;
-    static constexpr long GDB_INVALID_FORMAT         = 16;
-    static constexpr long GDB_INVALID_CHECKSUM       = 17;
-    static constexpr long GDB_UNRECOGNIZED_CMD       = 18;
-    static constexpr long GDB_UNSUPPORTED_CMD        = 19;
+    static constexpr long GDB_NO_ACK                 = 30;
+    static constexpr long GDB_INVALID_FORMAT         = 31;
+    static constexpr long GDB_INVALID_CHECKSUM       = 32;
+    static constexpr long GDB_UNRECOGNIZED_CMD       = 33;
+    static constexpr long GDB_UNSUPPORTED_CMD        = 34;
 
     const char *errstr() const noexcept override {
 
