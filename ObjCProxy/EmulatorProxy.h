@@ -330,6 +330,10 @@ ImageInfo scan(const fs::path &url);
 - (void)put:(Cmd)type action:(GamePadCmd)cmd;
 - (void)put:(Cmd)type coord:(CoordCmd)cmd;
 
+
+// Returns the name of a configuration option (e.g., for error messages)
++ (NSString *)keyForOption:(NSInteger)opt;
+
 @end
 
 

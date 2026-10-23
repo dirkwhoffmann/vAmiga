@@ -186,6 +186,9 @@ class Inspector: DialogController {
     @IBOutlet weak var memAutoConfButton: NSButton!
 
     var displayedBank = 0
+    
+    // Indicates that the configuration has changed (the refresh is coalesced)
+    var configIsDirty = false
     var displayedBankType = MemorySource.CHIP
     var searchAddress = -1
     
@@ -722,6 +725,10 @@ class Inspector: DialogController {
     
     func continuousRefresh() {
         
+        if configIsDirty {
+            configIsDirty = false
+            fullRefresh()
+        }
         if isRunning { refresh(count: refreshCnt) }
         isRunning = emu.running
         refreshCnt += 1
@@ -775,7 +782,8 @@ class Inspector: DialogController {
                         
         case .CONFIG:
             
-            fullRefresh()
+            // Several messages may arrive in a row, so refresh later (see continuousRefresh)
+            configIsDirty = true
             
         case .POWER:
             

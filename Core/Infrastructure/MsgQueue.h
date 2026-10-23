@@ -85,6 +85,7 @@ public:
     // Sends a message that reports a failure
     void put(Msg type, std::exception_ptr exception);
     void put(Msg type, CpuMsg payload, const string &str = "");
+    void put(Msg type, ConfigMsg payload, const string &str = "", std::exception_ptr exception = nullptr);
     void put(Msg type, BeamMsg payload, const string &str = "");
     void put(Msg type, DriveMsg payload, const string &str = "");
     void put(Msg type, HdcMsg payload, const string &str = "");

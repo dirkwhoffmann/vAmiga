@@ -76,10 +76,13 @@ MsgQueue::put(const Message &msg, const string &str, std::exception_ptr exceptio
 
         } else if (!queue.isFull()) {
 
-            // Coalesce with the oldest pending message if it has the same type
+            /* Coalesce with the oldest pending message if it has the same type.
+             * Configuration messages are never merged, because each one
+             * reports a different option and may carry an exception.
+             */
             auto *current = queue.currentAddr();
 
-            if (current->message.type == msg.type) {
+            if (current->message.type == msg.type && msg.type != Msg::CONFIG) {
 
                 auto r = queue.begin();
                 current->message = msg;
@@ -124,6 +127,12 @@ void
 MsgQueue::put(Msg type, CpuMsg payload, const string &str)
 {
     put( Message { .type = type, .cpu = payload }, str);
+}
+
+void
+MsgQueue::put(Msg type, ConfigMsg payload, const string &str, std::exception_ptr exception)
+{
+    put( Message { .type = type, .config = payload }, str, exception);
 }
 
 void

@@ -133,6 +133,7 @@ class MyController: NSWindowController, MessageListener {
     
     // Refresh status
     var statusBarIsDirty = true
+    var settingsAreDirty = false
 }
 
 extension MyController {
@@ -282,6 +283,12 @@ extension MyController {
         
         guard let emu = emu else { return }
         
+        // Refresh the settings if the configuration has changed (once per frame)
+        if settingsAreDirty {
+            settingsAreDirty = false
+            settings?.refresh()
+        }
+        
         if frames % 5 == 0 {
             
             // Animate the inspectors
@@ -356,15 +363,20 @@ extension MyController {
             
         case .CONFIG:
             
+            // The settings are refreshed once per frame (see update(frames:))
             statusBarIsDirty = true
-            settings?.refresh()
-            
-        case .CONFIG_ERROR:
+            settingsAreDirty = true
+            if let exception = exception {
 
-            // Re-read the configuration to drop the rejected value
-            settings?.refresh()
-            let reason = (attachedString.isEmpty ? "" : attachedString + ": ") + (exception?.what ?? "")
-            showAlert(.cantConfigure, what: reason, async: true)
+                // Tell the user why the request has been rejected
+                let cfg = msg.config
+                var item = "configuration scheme"
+                if cfg.option >= 0 {
+                    item = EmulatorProxy.key(forOption: Int(cfg.option)) + " = \(cfg.value)"
+                    if cfg.id >= 0 { item += " (component \(cfg.id))" }
+                }
+                showAlert(.cantConfigure, what: item + ": " + exception.what, async: true)
+            }
 
         case .POWER:
             

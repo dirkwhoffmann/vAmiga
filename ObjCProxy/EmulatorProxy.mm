@@ -2528,6 +2528,11 @@ ImageInfo scan(const fs::path &url)
 
 @implementation EmulatorProxy
 
++ (NSString *)keyForOption:(NSInteger)opt
+{
+    return @(OptEnum::key(Opt(opt)));
+}
+
 @synthesize audioPort;
 @synthesize agnus;
 @synthesize amiga;
