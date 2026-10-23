@@ -95,17 +95,15 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 #define WRITE_SLOW_8(x,y)   W8BE (slow + ((x) - SLOW_RAM_STRT), (y))
 #define WRITE_SLOW_16(x,y)  W16BE(slow + ((x) - SLOW_RAM_STRT), (y))
 
-// Writes a value into Boot ROM or Kickstart ROM in big endian format
-#define WRITE_ROM_8(x,y)    W8BE (rom + ((x) & romMask), (y))
-#define WRITE_ROM_16(x,y)   W16BE(rom + ((x) & romMask), (y))
-
-// Writes a value into Kickstart WOM in big endian format
-#define WRITE_WOM_8(x,y)    W8BE (wom + ((x) & womMask), (y))
-#define WRITE_WOM_16(x,y)   W16BE(wom + ((x) & womMask), (y))
-
-// Writes a value into Extended ROM in big endian format
-#define WRITE_EXT_8(x,y)    W8BE (ext + ((x) & extMask), (y))
-#define WRITE_EXT_16(x,y)   W16BE(ext + ((x) & extMask), (y))
+/* Writes a value into Boot ROM, Kickstart ROM, Kickstart WOM or Extended ROM
+ * in big endian format. Each write invalidates the cached Rom traits.
+ */
+#define WRITE_ROM_8(x,y)    { W8BE (rom + ((x) & romMask), (y)); romTraits.invalidate(); }
+#define WRITE_ROM_16(x,y)   { W16BE(rom + ((x) & romMask), (y)); romTraits.invalidate(); }
+#define WRITE_WOM_8(x,y)    { W8BE (wom + ((x) & womMask), (y)); womTraits.invalidate(); }
+#define WRITE_WOM_16(x,y)   { W16BE(wom + ((x) & womMask), (y)); womTraits.invalidate(); }
+#define WRITE_EXT_8(x,y)    { W8BE (ext + ((x) & extMask), (y)); extTraits.invalidate(); }
+#define WRITE_EXT_16(x,y)   { W16BE(ext + ((x) & extMask), (y)); extTraits.invalidate(); }
 
 
 class Memory final : public SubComponent {
@@ -213,6 +211,11 @@ public:
     u32 extMask = 0;
     u32 chipMask = 0;
 
+    // Traits of the installed Roms
+    utl::Backed<RomTraits> romTraits;
+    utl::Backed<RomTraits> womTraits;
+    utl::Backed<RomTraits> extTraits;
+
     /* Indicates if the Kickstart Wom is writable. If an Amiga 1000 Boot Rom is
      * installed, a Kickstart WOM (Write Once Memory) is added automatically.
      * On startup, the WOM is unlocked which means that it is writable. During
@@ -263,6 +266,11 @@ public:
         CLONE(chipMask)
 
         CLONE(config)
+
+        // The cloned memory has new content
+        romTraits.invalidate();
+        womTraits.invalidate();
+        extTraits.invalidate();
         
         return *this;
     }
@@ -437,9 +445,9 @@ public:
     bool hasExt() const { return ext != nullptr; }
 
     // Erases an installed Rom
-    void eraseRom() { std::memset(rom, 0, config.romSize); }
-    void eraseWom() { std::memset(wom, 0, config.womSize); }
-    void eraseExt() { std::memset(ext, 0, config.extSize); }
+    void eraseRom() { std::memset(rom, 0, config.romSize); romTraits.invalidate(); }
+    void eraseWom() { std::memset(wom, 0, config.womSize); womTraits.invalidate(); }
+    void eraseExt() { std::memset(ext, 0, config.extSize); extTraits.invalidate(); }
     
     // Installs a Boot Rom or Kickstart Rom
     void loadRom(class RomFile &file);

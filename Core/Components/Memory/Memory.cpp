@@ -33,6 +33,9 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
     };
 
     info.bind([this] { return cacheInfo(); } );
+    romTraits.bind([this] { return getRomTraits(Hashable::crc32(rom, config.romSize)); } );
+    womTraits.bind([this] { return getRomTraits(Hashable::crc32(wom, config.womSize)); } );
+    extTraits.bind([this] { return getRomTraits(Hashable::crc32(ext, config.extSize)); } );
 }
 
 void
@@ -47,19 +50,19 @@ Memory::_dump(Category category, std::ostream &os) const
 
     if (category == Category::State) {
 
-        auto romTraits = getRomTraits();
-        auto womTraits = getWomTraits();
-        auto extTraits = getExtTraits();
+        auto rt = getRomTraits();
+        auto wt = getWomTraits();
+        auto et = getExtTraits();
 
         os << tab("Rom");
-        os << hex(romTraits.crc) << " (CRC32)  ";
-        os << romTraits.title << " " << RomDateToString(romTraits.released) << std::endl;
+        os << hex(rt.crc) << " (CRC32)  ";
+        os << rt.title << " " << RomDateToString(rt.released) << std::endl;
         os << tab("Wom");
-        os << hex(womTraits.crc) << " (CRC32)  ";
-        os << womTraits.title << " " << RomDateToString(womTraits.released) << std::endl;
+        os << hex(wt.crc) << " (CRC32)  ";
+        os << wt.title << " " << RomDateToString(wt.released) << std::endl;
         os << tab("Extended Rom");
-        os << hex(extTraits.crc) << " (CRC32)  ";
-        os << extTraits.title << " " << RomDateToString(extTraits.released) << std::endl;
+        os << hex(et.crc) << " (CRC32)  ";
+        os << et.title << " " << RomDateToString(et.released) << std::endl;
         os << tab("Chip Ram");
         os << hex(Hashable::crc32(chip, config.chipSize)) << " (CRC32)  " << std::endl;
         os << tab("Slow Ram");
@@ -426,6 +429,9 @@ Memory::operator << (SerReader &worker)
     worker.copy(rom, romSize);
     worker.copy(wom, womSize);
     worker.copy(ext, extSize);
+    romTraits.invalidate();
+    womTraits.invalidate();
+    extTraits.invalidate();
     worker.copy(chip, chipSize);
     worker.copy(slow, slowSize);
     worker.copy(fast, fastSize);
@@ -567,6 +573,7 @@ Memory::allocRom(i32 bytes, bool update)
 {
     config.romSize = bytes;
     alloc(romAllocator, bytes, romMask, update);
+    romTraits.invalidate();
 }
 
 void
@@ -574,6 +581,7 @@ Memory::allocWom(i32 bytes, bool update)
 {
     config.womSize = bytes;
     alloc(womAllocator, bytes, womMask, update);
+    womTraits.invalidate();
 }
 
 void
@@ -581,6 +589,7 @@ Memory::allocExt(i32 bytes, bool update)
 {
     config.extSize = bytes;
     alloc(extAllocator, bytes, extMask, update);
+    extTraits.invalidate();
 }
 
 void
@@ -658,31 +667,31 @@ Memory::getRomTraits(u32 crc)
 RomTraits
 Memory::getRomTraits() const
 {
-    return getRomTraits(Hashable::crc32(rom, config.romSize));
+    return romTraits.backed();
 }
 
 RomTraits
 Memory::getWomTraits() const
 {
-    return getRomTraits(Hashable::crc32(wom, config.womSize));
+    return womTraits.backed();
 }
 
 RomTraits
 Memory::getExtTraits() const
 {
-    return getRomTraits(Hashable::crc32(ext, config.extSize));
+    return extTraits.backed();
 }
 
 u32
 Memory::romFingerprint() const
 {
-    return Hashable::crc32(rom, config.romSize);
+    return romTraits.backed().crc;
 }
 
 u32
 Memory::extFingerprint() const
 {
-    return Hashable::crc32(ext, config.extSize);
+    return extTraits.backed().crc;
 }
 
 void
@@ -696,6 +705,7 @@ Memory::loadRom(RomFile &file)
 
     // Load Rom
     file.copy(rom);
+    romTraits.invalidate();
 
     // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
     hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
@@ -727,6 +737,7 @@ Memory::loadExt(RomFile &file)
 
     // Load Rom
     file.copy(ext);
+    extTraits.invalidate();
 }
 
 void
@@ -796,6 +807,7 @@ Memory::patchExpansionLib()
 
                     W32BE(rom + i, 0x426f0004);
                     W16BE(rom + i + 22, 0x0000);
+                    romTraits.invalidate();
                     return;
                 }
             }
