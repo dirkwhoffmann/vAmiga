@@ -199,6 +199,16 @@ public:
      * the promise, so waiting on the future would block forever.
      */
     std::future<void> send(const Command &cmd, const string &str = "");
+
+    /* Sends a command and waits until the emulator thread has carried it out.
+     * A command that fails makes this function throw the exception.
+     *
+     * Because waiting for a thread that does not process commands would block
+     * forever, the function throws CoreError::NOT_LAUNCHED if the emulator
+     * thread is not launched, halted, or suspended, or if it is called from the
+     * emulator thread itself.
+     */
+    void sendAndWait(const Command &cmd, const string &str = "");
     void put(Cmd type, const string &str) { put(Command(type), str); }
     void put(Cmd type, i64 payload = 0, i64 payload2 = 0) { put(Command(type, payload, payload2)); }
     void put(Cmd type, ConfigCmd payload) { put(Command(type, payload)); }

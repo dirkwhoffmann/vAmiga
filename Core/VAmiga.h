@@ -2200,6 +2200,23 @@ public:
      */
     void set(Opt opt, i64 value, long id);
 
+    /** @brief  Configures a component and waits until the change has been made.
+     *
+     *  These functions are the synchronous counterparts of set(). Instead of
+     *  handing the request to the emulator thread and returning at once, they
+     *  return when the emulator thread has carried it out. A rejected value
+     *  throws the corresponding exception (no Msg::CONFIG_ERROR is sent).
+     *  Because the command queue is processed in order, all requests issued
+     *  earlier have been carried out when the call returns.
+     *
+     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  carry out the request, because it is not launched, halted, or suspended.
+     *  The same applies if the function is called from the emulator thread.
+     */
+    void setAwait(ConfigScheme model);
+    void setAwait(Opt opt, i64 value);
+    void setAwait(Opt opt, i64 value, long id);
+
     /** @brief  Checks if a configuration option would be accepted.
      *
      *  The check is performed in the calling thread and does not change the
