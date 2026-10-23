@@ -139,25 +139,25 @@ LogicAnalyzerAPI::getTraceSample(isize nr) const
     return logicAnalyzer->traceSample(nr);
 }
 
-const DmaDebuggerConfig &
-DmaDebuggerAPI::getConfig() const
+const XRayConfig &
+XRayAPI::getConfig() const
 {
     VAMIGA_PUBLIC
-    return dmaDebugger->getConfig();
+    return xray->getConfig();
 }
 
-const DmaDebuggerInfo &
-DmaDebuggerAPI::getInfo() const
+const XRayInfo &
+XRayAPI::getInfo() const
 {
     VAMIGA_PUBLIC
-    return dmaDebugger->info.current();
+    return xray->info.current();
 }
 
-const DmaDebuggerInfo &
-DmaDebuggerAPI::getCachedInfo() const
+const XRayInfo &
+XRayAPI::getCachedInfo() const
 {
     VAMIGA_PUBLIC
-    return dmaDebugger->info.backed();
+    return xray->info.backed();
 }
 
 const AgnusConfig &
@@ -1999,8 +1999,8 @@ VAmiga::VAmiga() {
     agnus.agnus = &emu->main.agnus;
     agnus.logicAnalyzer.emu = emu;
     agnus.logicAnalyzer.logicAnalyzer = &emu->main.logicAnalyzer;
-    agnus.dmaDebugger.emu = emu;
-    agnus.dmaDebugger.dmaDebugger = &emu->main.agnus.dmaDebugger;
+    agnus.xray.emu = emu;
+    agnus.xray.xray = &emu->main.agnus.xray;
     agnus.copper.emu = emu;
     agnus.copper.copper = &emu->main.agnus.copper;
     agnus.blitter.emu = emu;

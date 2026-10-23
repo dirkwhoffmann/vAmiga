@@ -209,7 +209,7 @@ typedef struct
     // Opacity
     isize opacity;
 }
-DmaDebuggerConfig;
+XRayConfig;
 
 typedef struct
 {
@@ -231,6 +231,6 @@ typedef struct
     double cpuColor[3];
     double refreshColor[3];
 }
-DmaDebuggerInfo;
+XRayInfo;
 
 }

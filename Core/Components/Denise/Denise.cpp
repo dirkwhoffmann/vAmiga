@@ -1650,7 +1650,7 @@ Denise::hsyncHandler(isize vpos)
         pixelEngine.colorize(vpos);
 
         // Cut out certain graphics layers if requested
-        if (agnus.dmaDebugger.getConfig().mode == XRayMode::XRAY_LAYERS) {
+        if (agnus.xray.getConfig().mode == XRayMode::XRAY_LAYERS) {
             pixelEngine.hide(vpos, config.hiddenLayers);
         }
         
@@ -1714,7 +1714,6 @@ Denise::eofHandler()
     // In this area, the border mask has to be rebuild in each line.
     if (isOCS()) markBorderBufferAsDirty(10);
 
-    pixelEngine.eofHandler();
     debugger.eofHandler();
 }
 

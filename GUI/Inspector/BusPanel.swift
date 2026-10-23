@@ -160,7 +160,7 @@ extension Inspector {
         let bus = emu.get(.XRAY_MODE) == XRayMode.XRAY_DMA.rawValue
         let opacity = emu.get(.XRAY_OVERLAY_OPACITY)
         let mode = emu.get(.XRAY_OVERLAY_STYLE)
-        let info = emu.dmaDebugger.info
+        let info = emu.xray.info
         
         busEnable.state = bus ? .on : .off
         busCopper.state = info.visualizeCopper ? .on : .off

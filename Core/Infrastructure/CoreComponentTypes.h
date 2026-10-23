@@ -23,6 +23,7 @@ enum class Class : long
     
     // Internal components
     Agnus,
+    AgnusDebugger,
     Amiga,
     AudioFilter,
     Blitter,
@@ -34,7 +35,7 @@ enum class Class : long
     Denise,
     DeniseDebugger,
     DiskController,
-    DmaDebugger,
+    XRay,
     HdController,
     Host,
     LogicAnalyzer,

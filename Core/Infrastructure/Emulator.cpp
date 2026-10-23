@@ -378,7 +378,7 @@ void
 Emulator::finishLine()
 {
     if (isRunning()) return;
-    main.agnus.dmaDebugger.eolTrap = true;
+    main.agnus.debugger.eolTrap = true;
     run();
 }
 
@@ -386,7 +386,7 @@ void
 Emulator::finishFrame()
 {
     if (isRunning()) return;
-    main.agnus.dmaDebugger.eofTrap = true;
+    main.agnus.debugger.eofTrap = true;
     run();
 }
 

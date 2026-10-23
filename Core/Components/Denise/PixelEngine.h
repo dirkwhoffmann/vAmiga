@@ -57,7 +57,7 @@ private:
     Texture emuTexture[NUM_TEXTURES];
 
     /* Parallel ring buffer holding the X-Ray debugger's raw, unblended
-     * visualization -- either DmaDebugger::computeOverlay's per-channel DMA
+     * visualization -- either XRay::computeOverlay's per-channel DMA
      * colors (XRayMode::XRAY_DMA) or hide()'s cut-out layers
      * (XRayMode::XRAY_LAYERS). Kept separate from emuTexture so the Layers
      * inspector's preview can show it on its own, independent of whether it
@@ -339,7 +339,7 @@ public:
      *
      * F is still a template parameter (rather than each Texel simply
      * knowing its own format at runtime) because these run in per-pixel hot
-     * paths (DmaDebugger::computeOverlay runs this across every visible
+     * paths (XRay::computeOverlay runs this across every visible
      * pixel of every scanline): callers should switch on
      * host.getConfig().texFormat once, not per pixel, and call the matching
      * instantiation from there on.
@@ -395,9 +395,6 @@ public:
     // Called after each frame to switch the frame buffers
     void vsyncHandler();
 
-    // Called at the end of each frame
-    void eofHandler();
-
     //
     // Working with recorded register changes
     //
@@ -442,7 +439,7 @@ public:
     /* Merges the active xray texture into the active emulator texture for
      * the entire frame in one pass, called once from swapBuffers right
      * before the frame is presented -- now that both XRayMode::XRAY_DMA
-     * (DmaDebugger::computeOverlay) and XRayMode::XRAY_LAYERS (hide) build
+     * (XRay::computeOverlay) and XRayMode::XRAY_LAYERS (hide) build
      * their xray texture in full over the course of the frame without
      * touching the emulator texture themselves, there's no need to merge
      * line-by-line/chunk-by-chunk as each was computed.
@@ -454,13 +451,13 @@ public:
      * Texture::black), mixes it with the corresponding emulator pixel by
      * fgWeight; everywhere else, shades the emulator pixel by bgWeight
      * (zero -- a no-op -- unless XRAY_OVERLAY_STYLE is BG_LAYER or
-     * ODD_EVEN_LAYERS). This is exactly the blending DmaDebugger::
+     * ODD_EVEN_LAYERS). This is exactly the blending XRay::
      * computeOverlay used to do internally; moving it here is what makes
      * XRayMode::XRAY_LAYERS' cutout respect the opacity slider too.
      *
      * Dispatches once (per call, not per pixel) to the templated overload
      * below, matching the host's current HOST_TEX_FORMAT -- see
-     * DmaDebugger::computeOverlay's class comment for why.
+     * XRay::computeOverlay's class comment for why.
      */
     void mergeXray();
 
@@ -480,7 +477,7 @@ public:
      * cycle via Texture::clear, using that layer's assigned Opt::XRAY_COLORn
      * (the same palette slots XRayMode::XRAY_DMA's channels use) instead of
      * a fixed grey -- e.g. a yellow playfield 1 color makes its cutout a
-     * yellowish checkerboard. Mirrors DmaDebugger::computeOverlay: paints
+     * yellowish checkerboard. Mirrors XRay::computeOverlay: paints
      * only into the xray texture (see xrayTexture), so the Layers
      * inspector's preview has something to show, and never touches the
      * emulator texture directly -- see mergeXray for how (and whether) that
@@ -488,7 +485,7 @@ public:
      *
      * Dispatches once (per call, not per pixel) to the templated overload
      * below, matching the host's current HOST_TEX_FORMAT -- see
-     * DmaDebugger::computeOverlay's class comment for why.
+     * XRay::computeOverlay's class comment for why.
      */
     void hide(isize line, u16 layers);
 

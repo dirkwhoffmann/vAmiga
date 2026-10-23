@@ -139,7 +139,7 @@ enum class Msg : long
     HIBERNATED,         // The machine has been hibernated (carries the exception if it failed)
 
     // DMA Debugging
-    DMA_DEBUG,
+    XRAY,
     
     // Remote server
     SRV_STATE,
@@ -257,7 +257,7 @@ struct MsgEnum : Reflectable<MsgEnum, Msg>
             case Msg::WORKSPACE_LOADED:      return "WORKSPACE_LOADED";
             case Msg::WORKSPACE_SAVED:       return "WORKSPACE_SAVED";
 
-            case Msg::DMA_DEBUG:             return "DMA_DEBUG";
+            case Msg::XRAY:             return "XRAY";
                 
             case Msg::SRV_STATE:             return "SRV_STATE";
             case Msg::SRV_RECEIVE:           return "SRV_RECEIVE";

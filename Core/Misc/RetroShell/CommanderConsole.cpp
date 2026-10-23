@@ -1003,7 +1003,7 @@ Console::initCommanderCommands(RSCommand &root)
     // Miscellaneous (DMA Debugger)
     //
     
-    cmd = registerComponent(dmaDebugger);
+    cmd = registerComponent(xray);
     
     root.add({
         

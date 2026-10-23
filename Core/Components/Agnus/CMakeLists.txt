@@ -8,10 +8,12 @@ AgnusRegs.cpp
 AgnusDma.cpp
 AgnusEvents.cpp
 Beam.cpp
+Beamtraps.cpp
+AgnusDebugger.cpp
 
 )
 
 add_subdirectory(Sequencer)
 add_subdirectory(Copper)
 add_subdirectory(Blitter)
-add_subdirectory(DmaDebugger)
+add_subdirectory(XRay)

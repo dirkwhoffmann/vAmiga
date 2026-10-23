@@ -449,7 +449,7 @@ extension MyController {
         case .POWER_LED_OFF:
             powerLED.image = NSImage(named: "ledGrey")
             
-        case .DMA_DEBUG:
+        case .XRAY:
             msg.value != 0 ? renderer.zoomTextureOut() : renderer.zoomTextureIn()
             
         case .VIDEO_FORMAT:

@@ -183,7 +183,7 @@ Console::initDebuggerCommands(RSCommand &root)
         .chelp  = { "Complete the current line" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            dmaDebugger.eolTrap = true;
+            agnus.debugger.eolTrap = true;
             emulator.run();
         }
     });
@@ -194,7 +194,7 @@ Console::initDebuggerCommands(RSCommand &root)
         .chelp  = { "Complete the current frame" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            dmaDebugger.eofTrap = true;
+            agnus.debugger.eofTrap = true;
             emulator.run();
         }
     });
@@ -509,7 +509,7 @@ Console::initDebuggerCommands(RSCommand &root)
         .chelp  = { "List all beamtraps" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            dump(os, agnus.dmaDebugger, Category::Beamtraps);
+            dump(os, agnus.debugger, Category::Beamtraps);
         }
     });
     
@@ -526,7 +526,7 @@ Console::initDebuggerCommands(RSCommand &root)
                 
                 auto h = parseNum(args, "x");
                 auto v = parseNum(args, "y");
-                agnus.dmaDebugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(args, "ignores", 0));
+                agnus.debugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(args, "ignores", 0));
             }
     });
     
@@ -537,7 +537,7 @@ Console::initDebuggerCommands(RSCommand &root)
         .args   = { { .name = { "nr", "Beamtrap number" } } },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            agnus.dmaDebugger.beamtraps.remove(parseNum(args, "nr"));
+            agnus.debugger.beamtraps.remove(parseNum(args, "nr"));
         }
     });
     
@@ -548,7 +548,7 @@ Console::initDebuggerCommands(RSCommand &root)
         .args   = { { .name = { "nr", "Beamtrap number" } } },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            agnus.dmaDebugger.beamtraps.toggle(parseNum(args, "nr"));
+            agnus.debugger.beamtraps.toggle(parseNum(args, "nr"));
         }
     });
     

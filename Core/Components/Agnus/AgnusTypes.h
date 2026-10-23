@@ -14,7 +14,7 @@
 #include "BlitterTypes.h"
 #include "BusTypes.h"
 #include "CopperTypes.h"
-#include "DmaDebuggerTypes.h"
+#include "XRayTypes.h"
 #include "SequencerTypes.h"
 
 namespace vamiga {

@@ -892,14 +892,14 @@ ImageInfo scan(const fs::path &url)
 // DMA Debugger
 //
 
-@implementation DmaDebuggerProxy
+@implementation XRayProxy
 
-- (DmaDebuggerAPI *)debugger
+- (XRayAPI *)debugger
 {
-    return (DmaDebuggerAPI *)obj;
+    return (XRayAPI *)obj;
 }
 
-- (DmaDebuggerInfo)info
+- (XRayInfo)info
 {
     return [self debugger]->getInfo();
 }
@@ -2546,7 +2546,7 @@ ImageInfo scan(const fs::path &url)
 @synthesize df2;
 @synthesize df3;
 @synthesize diskController;
-@synthesize dmaDebugger;
+@synthesize xray;
 @synthesize hd0;
 @synthesize hd1;
 @synthesize hd2;
@@ -2587,7 +2587,7 @@ ImageInfo scan(const fs::path &url)
     cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
     denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
     diskController = [[DiskControllerProxy alloc] initWith:&vamiga->paula.diskController];
-    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->agnus.dmaDebugger];
+    xray = [[XRayProxy alloc] initWith:&vamiga->agnus.xray];
     df0 = [[FloppyDriveProxy alloc] initWith:&vamiga->df0];
     df1 = [[FloppyDriveProxy alloc] initWith:&vamiga->df1];
     df2 = [[FloppyDriveProxy alloc] initWith:&vamiga->df2];

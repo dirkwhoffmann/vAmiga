@@ -52,6 +52,8 @@
 		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
+		50A9D0032F5000000000AA03 /* AgnusDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */; };
+		50A9D0042F5000000000AA04 /* AgnusDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */; };
 		501B00152C629A0500749664 /* Beamtraps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00132C629A0500749664 /* Beamtraps.cpp */; };
 		501B00162C629A0500749664 /* Beamtraps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00132C629A0500749664 /* Beamtraps.cpp */; };
 		501B00192C63589500749664 /* GuardList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00172C63589500749664 /* GuardList.cpp */; };
@@ -440,7 +442,7 @@
 		50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C526CCF942001FE199 /* FontExtensions.swift */; };
 		50E1D2C826CCF97C001FE199 /* ChronoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */; };
 		50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */; };
-		50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
+		50E204EA2295A3F20082B63D /* XRay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* XRay.cpp */; };
 		50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50E5BF7F2BB1D2510004712B /* STFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5BF7D2BB1D2510004712B /* STFile.cpp */; };
@@ -545,7 +547,7 @@
 		50FC04AC27DA198E00C3E566 /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
 		50FC04AD27DA198E00C3E566 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
 		50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE024D9407F000AA367 /* BlitterRegs.cpp */; };
-		50FC04AF27DA199200C3E566 /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
+		50FC04AF27DA199200C3E566 /* XRay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* XRay.cpp */; };
 		50FC04B027DA199600C3E566 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
 		50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
@@ -727,6 +729,8 @@
 		5019B1EF254B292D00A7AB95 /* EXEFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEFile.h; sourceTree = "<group>"; };
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		501B00132C629A0500749664 /* Beamtraps.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Beamtraps.cpp; sourceTree = "<group>"; };
+		50A9D0012F5000000000AA01 /* AgnusDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusDebugger.h; sourceTree = "<group>"; };
+		50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDebugger.cpp; sourceTree = "<group>"; };
 		501B00142C629A0500749664 /* Beamtraps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beamtraps.h; sourceTree = "<group>"; };
 		501B00172C63589500749664 /* GuardList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GuardList.cpp; sourceTree = "<group>"; };
 		501B00182C63589500749664 /* GuardList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuardList.h; sourceTree = "<group>"; };
@@ -954,7 +958,7 @@
 		5073C59527BA79B200A9EF6F /* HdControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HdControllerTypes.h; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
-		50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebuggerTypes.h; sourceTree = "<group>"; };
+		50769B8B24BD7B01006FE743 /* XRayTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XRayTypes.h; sourceTree = "<group>"; };
 		507727EC242F2CE3009D01DA /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		507727ED242F2CE3009D01DA /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		5078A5D32529E7FA00FCE384 /* Sampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sampler.cpp; sourceTree = "<group>"; };
@@ -1320,8 +1324,8 @@
 		50E1D2C526CCF942001FE199 /* FontExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontExtensions.swift; sourceTree = "<group>"; };
 		50E1D2C726CCF97C001FE199 /* ChronoExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronoExtensions.swift; sourceTree = "<group>"; };
 		50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FastBlitter.cpp; sourceTree = "<group>"; };
-		50E204E82295A3F20082B63D /* DmaDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DmaDebugger.cpp; sourceTree = "<group>"; };
-		50E204E92295A3F20082B63D /* DmaDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebugger.h; sourceTree = "<group>"; };
+		50E204E82295A3F20082B63D /* XRay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XRay.cpp; sourceTree = "<group>"; };
+		50E204E92295A3F20082B63D /* XRay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XRay.h; sourceTree = "<group>"; };
 		50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm_cpp.h; sourceTree = "<group>"; };
 		50E2BE27240D418500155AE4 /* MoiraExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExceptions.h; sourceTree = "<group>"; };
 		50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit_cpp.h; sourceTree = "<group>"; };
@@ -1632,10 +1636,14 @@
 				50AE6EDE24D93EDD000AA367 /* AgnusRegs.cpp */,
 				504C48B324143AB4008ADAB3 /* AgnusDma.cpp */,
 				50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */,
+				501B00142C629A0500749664 /* Beamtraps.h */,
+				501B00132C629A0500749664 /* Beamtraps.cpp */,
+				50A9D0012F5000000000AA01 /* AgnusDebugger.h */,
+				50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */,
 				50AFEBBB278EF61700F422D5 /* Sequencer */,
 				50AEBEC924D3D3BE0037082D /* Copper */,
 				50AEBEC824D3D3B30037082D /* Blitter */,
-				50AFEBC0278EFB7400F422D5 /* DmaDebugger */,
+				50AFEBC0278EFB7400F422D5 /* XRay */,
 			);
 			path = Agnus;
 			sourceTree = "<group>";
@@ -2487,17 +2495,15 @@
 			path = Sequencer;
 			sourceTree = "<group>";
 		};
-		50AFEBC0278EFB7400F422D5 /* DmaDebugger */ = {
+		50AFEBC0278EFB7400F422D5 /* XRay */ = {
 			isa = PBXGroup;
 			children = (
 				50AFEBC1278EFB9700F422D5 /* CMakeLists.txt */,
-				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
-				50E204E92295A3F20082B63D /* DmaDebugger.h */,
-				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
-				501B00142C629A0500749664 /* Beamtraps.h */,
-				501B00132C629A0500749664 /* Beamtraps.cpp */,
+				50769B8B24BD7B01006FE743 /* XRayTypes.h */,
+				50E204E92295A3F20082B63D /* XRay.h */,
+				50E204E82295A3F20082B63D /* XRay.cpp */,
 			);
-			path = DmaDebugger;
+			path = XRay;
 			sourceTree = "<group>";
 		};
 		50B114B42E8FB08400EC854D /* Controls */ = {
@@ -3397,13 +3403,14 @@
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
 				505B331F2B46D25700D3736F /* vadebug.cpp in Sources */,
 				507C01B22D256B9400E29933 /* BusPanel.swift in Sources */,
-				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
+				50E204EA2295A3F20082B63D /* XRay.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				500B0D342E8017AB008FC5E1 /* PeripheralsSettings.swift in Sources */,
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
 				50AE6F8525D71FBE0004AFBC /* CoreError.cpp in Sources */,
 				501B00152C629A0500749664 /* Beamtraps.cpp in Sources */,
+				50A9D0032F5000000000AA03 /* AgnusDebugger.cpp in Sources */,
 				50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */,
 				5020D0402F45E698006D3BF1 /* FSError.cpp in Sources */,
 				50672CC02946100F004113F5 /* DebuggerConsole.cpp in Sources */,
@@ -3706,9 +3713,10 @@
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
 				50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */,
 				501B00162C629A0500749664 /* Beamtraps.cpp in Sources */,
+				50A9D0042F5000000000AA04 /* AgnusDebugger.cpp in Sources */,
 				50FC04E627DA1A1400C3E566 /* pfile.c in Sources */,
 				50BF4BDA2F0ADF3200F1B9F2 /* FSDoctor.cpp in Sources */,
-				50FC04AF27DA199200C3E566 /* DmaDebugger.cpp in Sources */,
+				50FC04AF27DA199200C3E566 /* XRay.cpp in Sources */,
 				503FC4EF2EE1BA7400637C95 /* Time.cpp in Sources */,
 				50BCB9982EE1DB0A000C53CF /* Bits.cpp in Sources */,
 				50BF4BD72F0ADF3200F1B9F2 /* FileSystemLayer2.cpp in Sources */,

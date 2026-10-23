@@ -12,10 +12,11 @@
 #include "AgnusTypes.h"
 #include "SubComponent.h"
 #include "Beam.h"
+#include "AgnusDebugger.h"
 #include "Blitter.h"
 #include "ChangeRecorder.h"
 #include "Copper.h"
-#include "DmaDebugger.h"
+#include "XRay.h"
 #include "Sequencer.h"
 #include "Memory.h"
 #include "utl/wrappers.h"
@@ -72,7 +73,8 @@ public:
     Sequencer sequencer = Sequencer(amiga);
     Copper copper = Copper(amiga);
     Blitter blitter = Blitter(amiga);
-    DmaDebugger dmaDebugger = DmaDebugger(amiga);
+    XRay xray = XRay(amiga);
+    AgnusDebugger debugger = AgnusDebugger(amiga);
 
 
     //

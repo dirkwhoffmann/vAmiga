@@ -8,56 +8,29 @@
 // -----------------------------------------------------------------------------
 
 #include "vaconfig.h"
-#include "DmaDebugger.h"
+#include "XRay.h"
 #include "Amiga.h"
 #include "Emulator.h"
 #include "utl/io.h"
 
 namespace vamiga {
 
-DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
+XRay::XRay(Amiga &ref) : SubComponent(ref)
 {
     info.bind([this] { return cacheInfo(); } );
 }
 
 void
-DmaDebugger::_dump(Category category, std::ostream &os) const
+XRay::_dump(Category category, std::ostream &os) const
 {
-    auto print = [&]() {
-
-        using namespace utl;
-
-        for (int i = 0; i < beamtraps.elements(); i++) {
-
-            auto bp = *beamtraps.guardNr(i);
-            auto v = std::to_string(HI_WORD(bp.addr));
-            auto h = std::to_string(LO_WORD(bp.addr));
-            os << tab("Beamtrap " + std::to_string(i));
-            os << "(" + v + "," + h + ")";
-
-            if (!bp.enabled) os << " (Disabled)";
-            else if (bp.ignore) os << " (Disabled for " << dec(bp.ignore) << " hits)";
-            os << std::endl;
-        }
-    };
-
     if (category == Category::Config) {
         
         dumpConfig(os);
     }
-
-    if (category == Category::Beamtraps) {
-
-        if (beamtraps.elements()) {
-            print();
-        } else {
-            os << "No beamtraps set" << std::endl;
-        }
-    }
 }
 
 i64
-DmaDebugger::getOption(Opt option) const
+XRay::getOption(Opt option) const
 {
     switch (option) {
             
@@ -93,7 +66,7 @@ DmaDebugger::getOption(Opt option) const
 }
 
 void
-DmaDebugger::checkOption(Opt opt, i64 value)
+XRay::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
@@ -146,7 +119,7 @@ DmaDebugger::checkOption(Opt opt, i64 value)
 }
 
 void
-DmaDebugger::setOption(Opt option, i64 value)
+XRay::setOption(Opt option, i64 value)
 {
     switch (option) {
 
@@ -159,7 +132,7 @@ DmaDebugger::setOption(Opt option, i64 value)
             // mode has painted its own pixels.
             pixelEngine.clearAll();
 
-            msgQueue.put(Msg::DMA_DEBUG, value);
+            msgQueue.put(Msg::XRAY, value);
             return;
 
         case Opt::XRAY_OVERLAY:
@@ -324,10 +297,10 @@ DmaDebugger::setOption(Opt option, i64 value)
     }
 }
 
-DmaDebuggerInfo
-DmaDebugger::cacheInfo() const
+XRayInfo
+XRay::cacheInfo() const
 {
-    DmaDebuggerInfo info;
+    XRayInfo info;
 
     info.visualizeCopper = config.visualize[isize(DmaChannel::COPPER)];
     info.visualizeBlitter = config.visualize[isize(DmaChannel::BLITTER)];
@@ -351,7 +324,7 @@ DmaDebugger::cacheInfo() const
 }
 
 void
-DmaDebugger::getColor(DmaChannel channel, double *rgb) const
+XRay::getColor(DmaChannel channel, double *rgb) const
 {
     DmaChannelEnum::validate(channel);
 
@@ -362,7 +335,7 @@ DmaDebugger::getColor(DmaChannel channel, double *rgb) const
 }
 
 void
-DmaDebugger::setColor(BusOwner owner, u32 rgba)
+XRay::setColor(BusOwner owner, u32 rgba)
 {
     BusOwnerEnum::key(owner);
 
@@ -375,11 +348,8 @@ DmaDebugger::setColor(BusOwner owner, u32 rgba)
 }
 
 void
-DmaDebugger::eolHandler()
+XRay::eolHandler()
 {
-    // Check if execution should be interrupted
-    if (eolTrap) { eolTrap = false; amiga.setFlag(RL::EOL_REACHED); }
-    
     if (config.mode == XRayMode::XRAY_DMA) {
         
         // Copy Agnus arrays before they get deleted
@@ -393,7 +363,7 @@ DmaDebugger::eolHandler()
 }
 
 void
-DmaDebugger::hsyncHandler(isize vpos)
+XRay::hsyncHandler(isize vpos)
 {
     assert(agnus.pos.h == 0x12);
 
@@ -411,7 +381,7 @@ DmaDebugger::hsyncHandler(isize vpos)
 }
 
 void
-DmaDebugger::computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val)
+XRay::computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val)
 {
     switch (static_cast<TexelFormat>(host.getConfig().texFormat)) {
 
@@ -425,7 +395,7 @@ DmaDebugger::computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *ow
 
 template <TexelFormat F>
 void
-DmaDebugger::computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val)
+XRay::computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *own, u16 *val)
 {
     for (isize i = first; i <= last; i++, dmaPtr += 4) {
 
@@ -453,7 +423,7 @@ DmaDebugger::computeOverlay(Texel *dmaPtr, isize first, isize last, BusOwner *ow
 }
 
 void
-DmaDebugger::_pause()
+XRay::_pause()
 {
     if (config.mode != XRayMode::XRAY_CROSSHAIRS) return;
 
@@ -464,7 +434,7 @@ DmaDebugger::_pause()
 }
 
 void
-DmaDebugger::computeCrosshairs(Texel *xray)
+XRay::computeCrosshairs(Texel *xray)
 {
     const auto &info = isPaused() ? agnus.info.current() : agnus.info.backed();
 
@@ -482,7 +452,7 @@ DmaDebugger::computeCrosshairs(Texel *xray)
 }
 
 void
-DmaDebugger::vSyncHandler()
+XRay::vSyncHandler()
 {
     // In crosshairs mode, start the new frame with a fresh texture
     if (config.mode == XRayMode::XRAY_CROSSHAIRS) {
@@ -507,13 +477,6 @@ DmaDebugger::vSyncHandler()
             dma[col] = Texture::black;
         }
     }
-}
-
-void
-DmaDebugger::eofHandler()
-{
-    // Check if execution should be interrupted
-    if (eofTrap) { eofTrap = false; amiga.setFlag(RL::EOF_REACHED); }
 }
 
 }

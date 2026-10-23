@@ -30,7 +30,7 @@ public:
     class Denise &denise;
     class DiagBoard &diagBoard;
     class DiskController &diskController;
-    class DmaDebugger &dmaDebugger;
+    class XRay &xray;
     class FloppyDrive &df0;
     class FloppyDrive &df1;
     class FloppyDrive &df2;

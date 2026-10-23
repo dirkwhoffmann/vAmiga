@@ -51,7 +51,7 @@ NS_SWIFT_UI_ACTOR
 @class DeniseProxy;
 @class DiskControllerProxy;
 @class DiskFileProxy;
-@class DmaDebuggerProxy;
+@class XRayProxy;
 @class FloppyDiskImageProxy;
 @class FloppyDriveProxy;
 @class GuardsProxy;
@@ -203,7 +203,7 @@ ImageInfo scan(const fs::path &url);
     CPUProxy *cpu;
     DeniseProxy *denise;
     DiskControllerProxy *diskController;
-    DmaDebuggerProxy *dmaDebugger;
+    XRayProxy *xray;
     FloppyDriveProxy *df0;
     FloppyDriveProxy *df1;
     FloppyDriveProxy *df2;
@@ -239,7 +239,7 @@ ImageInfo scan(const fs::path &url);
 @property (readonly, strong) CPUProxy *cpu;
 @property (readonly, strong) DeniseProxy *denise;
 @property (readonly, strong) DiskControllerProxy *diskController;
-@property (readonly, strong) DmaDebuggerProxy *dmaDebugger;
+@property (readonly, strong) XRayProxy *xray;
 @property (readonly, strong) FloppyDriveProxy *df0;
 @property (readonly, strong) FloppyDriveProxy *df1;
 @property (readonly, strong) FloppyDriveProxy *df2;
@@ -563,9 +563,9 @@ ImageInfo scan(const fs::path &url);
 // DMA Debugger
 //
 
-@interface DmaDebuggerProxy : Proxy { }
+@interface XRayProxy : Proxy { }
 
-@property (readonly) DmaDebuggerInfo info;
+@property (readonly) XRayInfo info;
 
 @end
 

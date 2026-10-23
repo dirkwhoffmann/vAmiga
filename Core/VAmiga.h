@@ -238,22 +238,22 @@ public:
 // Agnus
 //
 
-class DmaDebuggerAPI : public API {
+class XRayAPI : public API {
 
     friend class VAmiga;
     
 public:
 
-    class DmaDebugger *dmaDebugger = nullptr;
+    class XRay *xray = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
-    const DmaDebuggerConfig &getConfig() const;
+    const XRayConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
      */
-    const DmaDebuggerInfo &getInfo() const;
-    const DmaDebuggerInfo &getCachedInfo() const;
+    const XRayInfo &getInfo() const;
+    const XRayInfo &getCachedInfo() const;
 };
 
 class LogicAnalyzerAPI : public API {
@@ -349,7 +349,7 @@ public:
     
     CopperAPI copper;
     BlitterAPI blitter;
-    DmaDebuggerAPI dmaDebugger;
+    XRayAPI xray;
     LogicAnalyzerAPI logicAnalyzer;
     
     /** @brief  Returns the component's current configuration.

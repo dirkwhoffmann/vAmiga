@@ -82,7 +82,7 @@ typedef struct
     u8 hiddenSprites;
     
     // Hides certain graphics layers (only takes effect in XRayMode::XRAY_LAYERS,
-    // see Agnus::dmaDebugger)
+    // see Agnus::xray)
     u16 hiddenLayers;
 
     // Checks for sprite-sprite collisions

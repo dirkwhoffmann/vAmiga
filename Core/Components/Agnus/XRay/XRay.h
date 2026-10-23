@@ -9,24 +9,23 @@
 
 #pragma once
 
-#include "DmaDebuggerTypes.h"
+#include "XRayTypes.h"
 #include "FrameBufferTypes.h"
 #include "SubComponent.h"
-#include "Beamtraps.h"
 #include "utl/gfx/Colors.h"
 #include "Constants.h"
 #include "utl/wrappers.h"
 
 namespace vamiga {
 
-class DmaDebugger final : public SubComponent {
+class XRay final : public SubComponent {
     
     Descriptions descriptions = {{
         
-        .type           = Class::DmaDebugger,
-        .name           = "DmaDebugger",
+        .type           = Class::XRay,
+        .name           = "XRay",
         .description    = "DMA Debugger",
-        .shell          = "dmadebugger"
+        .shell          = "xray"
     }};
     
     Options options = {
@@ -57,12 +56,12 @@ class DmaDebugger final : public SubComponent {
     };
     
     // Current configuration
-    DmaDebuggerConfig config = {};
+    XRayConfig config = {};
 
 public:
 
     // Result of the latest inspection
-    utl::Backed<DmaDebuggerInfo> info;
+    utl::Backed<XRayInfo> info;
 
 private:
 
@@ -80,24 +79,16 @@ private:
     // HSYNC handler information (recorded in the EOL handler)
     isize pixel0 = 0;
     
-public:
-    
-    // Beamtraps
-    Beamtraps beamtraps = Beamtraps(agnus);
-    
-    bool eolTrap = false;
-    bool eofTrap = false;
-    
-    
+
     //
     // Initializing
     //
     
 public:
     
-    DmaDebugger(Amiga &ref);
+    XRay(Amiga &ref);
     
-    DmaDebugger& operator= (const DmaDebugger& other) {
+    XRay& operator= (const XRay& other) {
         
         CLONE_ARRAY(visualize)
         CLONE_ARRAY(busData)
@@ -140,7 +131,7 @@ private:
     
 public:
     
-    DmaDebuggerInfo cacheInfo() const;
+    XRayInfo cacheInfo() const;
 
     
     //
@@ -149,7 +140,7 @@ public:
     
 public:
     
-    const DmaDebuggerConfig &getConfig() const { return config; }
+    const XRayConfig &getConfig() const { return config; }
     const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
@@ -175,9 +166,6 @@ public:
     
     // Cleans by Agnus at the end of each frame
     void vSyncHandler();
-    
-    // Called at the end of each frame
-    void eofHandler();
 
     /* Recomputes the xray texture for XRayMode::XRAY_CROSSHAIRS. The texture
      * is filled with black and a crosshair is drawn, centered at the beam

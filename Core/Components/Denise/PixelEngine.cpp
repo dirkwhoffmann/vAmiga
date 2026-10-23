@@ -12,7 +12,7 @@
 #include "Amiga.h"
 #include "utl/gfx/Colors.h"
 #include "Denise.h"
-#include "DmaDebugger.h"
+#include "XRay.h"
 #include "Emulator.h"
 
 #include <algorithm>
@@ -277,7 +277,7 @@ PixelEngine::toTexel(u8 r, u8 g, u8 b, u8 a) const
     // One-off conversion: re-reads the host format and dispatches to the
     // matching compile-time-specialized instantiation. A hot loop should
     // do this switch itself, once, and call the template directly per pixel
-    // (see DmaDebugger::computeOverlay). HOST_TEX_FORMAT's own enum
+    // (see XRay::computeOverlay). HOST_TEX_FORMAT's own enum
     // (TexFormat) and utlib's GpuColor<F> template parameter (TexelFormat)
     // share the same three values in the same order, so a plain cast moves
     // between them.
@@ -500,13 +500,7 @@ PixelEngine::swapBuffers()
 void
 PixelEngine::vsyncHandler()
 {
-    dmaDebugger.vSyncHandler();
-}
-
-void
-PixelEngine::eofHandler()
-{
-    dmaDebugger.eofHandler();
+    xray.vSyncHandler();
 }
 
 void
@@ -885,7 +879,7 @@ template <TexelFormat F>
 void
 PixelEngine::mergeXray()
 {
-    auto &config = dmaDebugger.getConfig();
+    auto &config = xray.getConfig();
     if (!config.overlay) return;
 
     // The host merges the textures itself (e.g., in a shader)
@@ -920,22 +914,22 @@ PixelEngine::mergeXray()
     }
 
     auto *emu = getWorkingBuffer().pixels.ptr;
-    auto *xray = getWorkingXrayBuffer().pixels.ptr;
+    auto *xrayBuf = getWorkingXrayBuffer().pixels.ptr;
 
     for (isize i = 0; i < PIXELS; i++) {
 
-        if (xray[i] != Texture::black) {
+        if (xrayBuf[i] != Texture::black) {
 
-            // An effect pixel is present here (painted by DmaDebugger::
+            // An effect pixel is present here (painted by XRay::
             // computeOverlay or hide, whichever mode is active) -- mix it
             // with the real picture, not with pixels 2 apart -- a plain
             // off-by-double that made the opacity slider blend against the
             // wrong existing pixel (bleeding into the next DMA cycle).
             if (fgWeight != 0.0) {
-                auto col = fromTexel<F>(xray[i]).mix(fromTexel<F>(emu[i]), fgWeight);
+                auto col = fromTexel<F>(xrayBuf[i]).mix(fromTexel<F>(emu[i]), fgWeight);
                 emu[i] = toTexel<F>(col);
             } else {
-                emu[i] = xray[i];
+                emu[i] = xrayBuf[i];
             }
 
         } else if (bgWeight != 0.0) {
@@ -970,10 +964,10 @@ PixelEngine::hide(isize line, u16 layers)
 
     // Resolve the ten possible Opt::XRAY_COLORn values into a light/dark
     // checkerboard pair per slot, once per line -- same palette
-    // DmaDebugger uses for its own DMA channels 0-7, and the same two
+    // XRay uses for its own DMA channels 0-7, and the same two
     // shade levels it precomputes for its channel colors (see
-    // DmaDebugger::setColor and DmaDebuggerTypes::XRAY_COLOR_COUNT).
-    auto &debugColor = dmaDebugger.getConfig().debugColor;
+    // XRay::setColor and XRayTypes::XRAY_COLOR_COUNT).
+    auto &debugColor = xray.getConfig().debugColor;
     Texel colA[XRAY_COLOR_COUNT], colB[XRAY_COLOR_COUNT];
     for (isize n = 0; n < XRAY_COLOR_COUNT; n++) {
 
