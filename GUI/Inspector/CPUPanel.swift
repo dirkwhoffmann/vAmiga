@@ -172,12 +172,12 @@ extension Inspector {
     @IBAction
     func cpuSyntaxAction(_ sender: NSPopUpButton!) {
 
-        emu.set(.CPU_DASM_SYNTAX, value: sender.selectedTag())
+        emu.setAsync(.CPU_DASM_SYNTAX, value: sender.selectedTag())
     }
 
     @IBAction
     func cpuDasmRevAction(_ sender: NSPopUpButton!) {
 
-        emu.set(.CPU_DASM_REVISION, value: sender.selectedTag())
+        emu.setAsync(.CPU_DASM_REVISION, value: sender.selectedTag())
     }
 }

@@ -465,8 +465,18 @@ Emulator::sendAndWait(const Command &cmd, const string &str)
     if (isEmulatorThread()) {
         throw CoreError(CoreError::NOT_LAUNCHED, "The emulator thread cannot wait for itself.");
     }
-    if (!isLaunched() || isHalted()) {
-        throw CoreError(CoreError::NOT_LAUNCHED);
+
+    // Without an emulator thread, carry out the commands in the calling thread
+    if (!isLaunched()) {
+
+        auto future = send(cmd, str);
+        main.update(cmdQueue);
+        future.get();
+        return;
+    }
+
+    if (isHalted()) {
+        throw CoreError(CoreError::NOT_LAUNCHED, "The emulator thread has been halted.");
     }
     if (isSuspended()) {
         throw CoreError(CoreError::NOT_LAUNCHED, "The emulator thread is suspended.");
@@ -480,7 +490,7 @@ Emulator::sendAndWait(const Command &cmd, const string &str)
     // Wait, but keep an eye on the thread, which might halt in the meantime
     while (future.wait_for(std::chrono::milliseconds(50)) != std::future_status::ready) {
 
-        if (!isLaunched() || isHalted()) throw CoreError(CoreError::NOT_LAUNCHED);
+        if (isHalted()) throw CoreError(CoreError::NOT_LAUNCHED, "The emulator thread has been halted.");
     }
 
     // Rethrows the exception of a failed command

@@ -265,7 +265,7 @@ class MediaManager {
         
         func attach() throws {
             
-            emu.set(.HDC_CONNECT, drive: n, enable: true)
+            emu.setAsync(.HDC_CONNECT, drive: n, enable: true)
             try hdn.attach(url: url)
         }
         
@@ -310,7 +310,7 @@ class MediaManager {
         
         func detach() throws {
             
-            emu.set(.HDC_CONNECT, drive: n, enable: false)
+            emu.setAsync(.HDC_CONNECT, drive: n, enable: false)
         }
         
         if force || proceedWithUnsavedHardDisk(drive: hdn) {

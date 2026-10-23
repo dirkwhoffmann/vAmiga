@@ -2394,7 +2394,7 @@ VAmiga::get(Opt option, long id) const
 }
 
 void
-VAmiga::set(ConfigScheme model)
+VAmiga::setAsync(ConfigScheme model)
 {
     VAMIGA_PUBLIC_SUSPEND
     put(Cmd::CONFIG_SCHEME, (i64)model);
@@ -2402,7 +2402,7 @@ VAmiga::set(ConfigScheme model)
 }
 
 void
-VAmiga::set(Opt opt, i64 value)
+VAmiga::setAsync(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     put(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
@@ -2410,7 +2410,7 @@ VAmiga::set(Opt opt, i64 value)
 }
 
 void
-VAmiga::setAwait(ConfigScheme model)
+VAmiga::set(ConfigScheme model)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG_SCHEME, (i64)model));
@@ -2418,7 +2418,7 @@ VAmiga::setAwait(ConfigScheme model)
 }
 
 void
-VAmiga::setAwait(Opt opt, i64 value)
+VAmiga::set(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value }));
@@ -2426,7 +2426,7 @@ VAmiga::setAwait(Opt opt, i64 value)
 }
 
 void
-VAmiga::setAwait(Opt opt, i64 value, long id)
+VAmiga::set(Opt opt, i64 value, long id)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id }));
@@ -2448,7 +2448,7 @@ VAmiga::check(Opt opt, i64 value, long id)
 }
 
 void
-VAmiga::set(Opt opt, i64 value, long id)
+VAmiga::setAsync(Opt opt, i64 value, long id)
 {
     VAMIGA_PUBLIC
     put(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });

@@ -91,21 +91,21 @@ class Preferences {
     var autofire: Bool! {
         didSet {
             for emu in myAppDelegate.proxies {
-                emu?.set(.JOY_AUTOFIRE, enable: autofire)
+                emu?.setAsync(.JOY_AUTOFIRE, enable: autofire)
             }
         }
     }
     var autofireBursts: Bool! {
         didSet {
             for emu in myAppDelegate.proxies {
-                emu?.set(.JOY_AUTOFIRE_BURSTS, enable: autofireBursts)
+                emu?.setAsync(.JOY_AUTOFIRE_BURSTS, enable: autofireBursts)
             }
         }
     }
     var autofireBullets: Int! {
         didSet {
             for emu in myAppDelegate.proxies {
-                emu?.set(.JOY_AUTOFIRE_BULLETS, value: autofireBullets)
+                emu?.setAsync(.JOY_AUTOFIRE_BULLETS, value: autofireBullets)
             }
         }
     }
@@ -113,7 +113,7 @@ class Preferences {
         didSet {
             autofireFrequency = autofireFrequency.clamped(4, 50)
             for emu in myAppDelegate.proxies {
-                emu?.set(.JOY_AUTOFIRE_DELAY, value: autofireFrequency)
+                emu?.setAsync(.JOY_AUTOFIRE_DELAY, value: autofireFrequency)
             }
         }
     }

@@ -39,7 +39,7 @@ class Inspector: DialogController {
             fmt16.radix = hex ? 16 : 10
             fmt24.radix = hex ? 16 : 10
             fmt32.radix = hex ? 16 : 10
-            emu.set(.CPU_DASM_NUMBERS,
+            emu.setAsync(.CPU_DASM_NUMBERS,
                     value: (hex ? DasmNumbers.HEX : DasmNumbers.DEC).rawValue)
             fullRefresh()
         }

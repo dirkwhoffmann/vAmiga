@@ -200,13 +200,17 @@ public:
      */
     std::future<void> send(const Command &cmd, const string &str = "");
 
-    /* Sends a command and waits until the emulator thread has carried it out.
-     * A command that fails makes this function throw the exception.
+    /* Sends a command and waits until it has been carried out. A command that
+     * fails makes this function throw the exception.
      *
-     * Because waiting for a thread that does not process commands would block
-     * forever, the function throws CoreError::NOT_LAUNCHED if the emulator
-     * thread is not launched, halted, or suspended, or if it is called from the
-     * emulator thread itself.
+     * If the emulator thread has not been launched, nobody is competing for
+     * the command queue. In this case, the pending commands, including the
+     * new one, are carried out right here in the calling thread.
+     *
+     * Otherwise, the function waits for the emulator thread. Because waiting
+     * for a thread that does not process commands would block forever, the
+     * function throws CoreError::NOT_LAUNCHED if the emulator thread is halted
+     * or suspended, or if it is called from the emulator thread itself.
      */
     void sendAndWait(const Command &cmd, const string &str = "");
     void put(Cmd type, const string &str) { put(Command(type), str); }

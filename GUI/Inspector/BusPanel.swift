@@ -211,7 +211,7 @@ extension Inspector {
 
     @IBAction func laEnableAction(_ sender: NSButton!) {
 
-        emu?.set(.LA_CONNECT, enable: sender.state == .on);
+        emu?.setAsync(.LA_CONNECT, enable: sender.state == .on);
         fullRefresh()
     }
 
@@ -255,20 +255,20 @@ extension Inspector {
         let addr = Inspector.presets[index].1.1
                 
         switch channel {
-        case 0:  emu?.set(.LA_PROBE0, value: probe);
-        case 1:  emu?.set(.LA_PROBE1, value: probe);
-        case 2:  emu?.set(.LA_PROBE2, value: probe);
-        case 3:  emu?.set(.LA_PROBE3, value: probe);
+        case 0:  emu?.setAsync(.LA_PROBE0, value: probe);
+        case 1:  emu?.setAsync(.LA_PROBE1, value: probe);
+        case 2:  emu?.setAsync(.LA_PROBE2, value: probe);
+        case 3:  emu?.setAsync(.LA_PROBE3, value: probe);
         default: break
         }
         
         if let addr = addr {
             
             switch channel {
-            case 0:  emu?.set(.LA_ADDR0, value: addr)
-            case 1:  emu?.set(.LA_ADDR1, value: addr)
-            case 2:  emu?.set(.LA_ADDR2, value: addr)
-            case 3:  emu?.set(.LA_ADDR3, value: addr)
+            case 0:  emu?.setAsync(.LA_ADDR0, value: addr)
+            case 1:  emu?.setAsync(.LA_ADDR1, value: addr)
+            case 2:  emu?.setAsync(.LA_ADDR2, value: addr)
+            case 3:  emu?.setAsync(.LA_ADDR3, value: addr)
             default: break
             }
         }
@@ -283,10 +283,10 @@ extension Inspector {
             let probe = Probe.MEMORY.rawValue
             
             switch sender.tag {
-            case 0:  emu?.set(.LA_PROBE0, value: probe); emu?.set(.LA_ADDR0, value: addr)
-            case 1:  emu?.set(.LA_PROBE1, value: probe); emu?.set(.LA_ADDR1, value: addr)
-            case 2:  emu?.set(.LA_PROBE2, value: probe); emu?.set(.LA_ADDR2, value: addr)
-            case 3:  emu?.set(.LA_PROBE3, value: probe); emu?.set(.LA_ADDR3, value: addr)
+            case 0:  emu?.setAsync(.LA_PROBE0, value: probe); emu?.setAsync(.LA_ADDR0, value: addr)
+            case 1:  emu?.setAsync(.LA_PROBE1, value: probe); emu?.setAsync(.LA_ADDR1, value: addr)
+            case 2:  emu?.setAsync(.LA_PROBE2, value: probe); emu?.setAsync(.LA_ADDR2, value: addr)
+            case 3:  emu?.setAsync(.LA_PROBE3, value: probe); emu?.setAsync(.LA_ADDR3, value: addr)
             default: break
             }
             
@@ -308,14 +308,14 @@ extension Inspector {
         let rgb = (r << 24) | (g << 16) | (b << 8)
 
         switch sender.tag {
-        case 0:  emu.set(.XRAY_COLOR0, value: rgb)
-        case 1:  emu.set(.XRAY_COLOR1, value: rgb)
-        case 2:  emu.set(.XRAY_COLOR2, value: rgb)
-        case 3:  emu.set(.XRAY_COLOR3, value: rgb)
-        case 4:  emu.set(.XRAY_COLOR4, value: rgb)
-        case 5:  emu.set(.XRAY_COLOR5, value: rgb)
-        case 6:  emu.set(.XRAY_COLOR6, value: rgb)
-        case 7:  emu.set(.XRAY_COLOR7, value: rgb)
+        case 0:  emu.setAsync(.XRAY_COLOR0, value: rgb)
+        case 1:  emu.setAsync(.XRAY_COLOR1, value: rgb)
+        case 2:  emu.setAsync(.XRAY_COLOR2, value: rgb)
+        case 3:  emu.setAsync(.XRAY_COLOR3, value: rgb)
+        case 4:  emu.setAsync(.XRAY_COLOR4, value: rgb)
+        case 5:  emu.setAsync(.XRAY_COLOR5, value: rgb)
+        case 6:  emu.setAsync(.XRAY_COLOR6, value: rgb)
+        case 7:  emu.setAsync(.XRAY_COLOR7, value: rgb)
         default: break
         }
 
@@ -324,22 +324,22 @@ extension Inspector {
 
     @IBAction func busEnableAction(_ sender: NSButton!) {
         
-        emu.set(.XRAY_MODE, value: Int(sender.state == .on ? XRayMode.XRAY_DMA.rawValue : XRayMode.XRAY_NONE.rawValue))
-        emu.set(.XRAY_OVERLAY, enable: sender.state == .on)
+        emu.setAsync(.XRAY_MODE, value: Int(sender.state == .on ? XRayMode.XRAY_DMA.rawValue : XRayMode.XRAY_NONE.rawValue))
+        emu.setAsync(.XRAY_OVERLAY, enable: sender.state == .on)
         fullRefresh()
     }
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
         switch sender.tag {
-        case 0:  emu.set(.XRAY_DMA_CHANNEL0, enable: sender.state == .on)
-        case 1:  emu.set(.XRAY_DMA_CHANNEL1, enable: sender.state == .on)
-        case 2:  emu.set(.XRAY_DMA_CHANNEL2, enable: sender.state == .on)
-        case 3:  emu.set(.XRAY_DMA_CHANNEL3, enable: sender.state == .on)
-        case 4:  emu.set(.XRAY_DMA_CHANNEL4, enable: sender.state == .on)
-        case 5:  emu.set(.XRAY_DMA_CHANNEL5, enable: sender.state == .on)
-        case 6:  emu.set(.XRAY_DMA_CHANNEL6, enable: sender.state == .on)
-        case 7:  emu.set(.XRAY_DMA_CHANNEL7, enable: sender.state == .on)
+        case 0:  emu.setAsync(.XRAY_DMA_CHANNEL0, enable: sender.state == .on)
+        case 1:  emu.setAsync(.XRAY_DMA_CHANNEL1, enable: sender.state == .on)
+        case 2:  emu.setAsync(.XRAY_DMA_CHANNEL2, enable: sender.state == .on)
+        case 3:  emu.setAsync(.XRAY_DMA_CHANNEL3, enable: sender.state == .on)
+        case 4:  emu.setAsync(.XRAY_DMA_CHANNEL4, enable: sender.state == .on)
+        case 5:  emu.setAsync(.XRAY_DMA_CHANNEL5, enable: sender.state == .on)
+        case 6:  emu.setAsync(.XRAY_DMA_CHANNEL6, enable: sender.state == .on)
+        case 7:  emu.setAsync(.XRAY_DMA_CHANNEL7, enable: sender.state == .on)
         default: break
         }
         fullRefresh()
@@ -347,19 +347,19 @@ extension Inspector {
     
     @IBAction func busDisplayModeAction(_ sender: NSPopUpButton!) {
         
-        emu.set(.XRAY_OVERLAY_STYLE, value: sender.selectedTag())
+        emu.setAsync(.XRAY_OVERLAY_STYLE, value: sender.selectedTag())
         fullRefresh()
     }
     
     @IBAction func busOpacityAction(_ sender: NSSlider!) {
 
-        emu.set(.XRAY_OVERLAY_OPACITY, value: sender.integerValue)
+        emu.setAsync(.XRAY_OVERLAY_OPACITY, value: sender.integerValue)
         fullRefresh()
     }
     
     @IBAction func busGPUAction(_ sender: NSButton!) {
         
-        emu.set(.XRAY_COMPOSITOR, value: sender.state == .on ? 1 : 0)
+        emu.setAsync(.XRAY_COMPOSITOR, value: sender.state == .on ? 1 : 0)
         fullRefresh()
     }
 }

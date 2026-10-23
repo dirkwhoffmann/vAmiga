@@ -2748,60 +2748,60 @@ ImageInfo scan(const fs::path &url)
     return [self emu]->get(opt, (long)id);
 }
 
-- (BOOL)set:(Opt)opt value:(NSInteger)val
+- (BOOL)setAsync:(Opt)opt value:(NSInteger)val
 {
     try {
-        [self emu]->set(opt, val);
+        [self emu]->setAsync(opt, val);
         return true;
     } catch(Error &exception) {
         return false;
     }
 }
 
-- (BOOL)set:(Opt)opt enable:(BOOL)val
+- (BOOL)setAsync:(Opt)opt enable:(BOOL)val
 {
     try {
-        [self emu]->set(opt, val ? 1 : 0);
+        [self emu]->setAsync(opt, val ? 1 : 0);
         return true;
     } catch(Error &exception) {
         return false;
     }
 }
 
-- (BOOL)set:(Opt)opt id:(NSInteger)id value:(NSInteger)val
+- (BOOL)setAsync:(Opt)opt id:(NSInteger)id value:(NSInteger)val
 {
     try {
-        [self emu]->set(opt, val, id);
+        [self emu]->setAsync(opt, val, id);
         return true;
     } catch(Error &exception) {
         return false;
     }
 }
 
-- (BOOL)set:(Opt)opt id:(NSInteger)id enable:(BOOL)val
+- (BOOL)setAsync:(Opt)opt id:(NSInteger)id enable:(BOOL)val
 {
     try {
-        [self emu]->set(opt, val ? 1 : 0, id);
+        [self emu]->setAsync(opt, val ? 1 : 0, id);
         return true;
     } catch(Error &exception) {
         return false;
     }
 }
 
-- (BOOL)set:(Opt)opt drive:(NSInteger)id value:(NSInteger)val
+- (BOOL)setAsync:(Opt)opt drive:(NSInteger)id value:(NSInteger)val
 {
     try {
-        [self emu]->set(opt, val, (long)id);
+        [self emu]->setAsync(opt, val, (long)id);
         return true;
     } catch(Error &exception) {
         return false;
     }
 }
 
-- (BOOL)set:(Opt)opt drive:(NSInteger)id enable:(BOOL)val
+- (BOOL)setAsync:(Opt)opt drive:(NSInteger)id enable:(BOOL)val
 {
     try {
-        [self emu]->set(opt, val ? 1 : 0, (long)id);
+        [self emu]->setAsync(opt, val ? 1 : 0, (long)id);
         return true;
     } catch(Error &exception) {
         return false;

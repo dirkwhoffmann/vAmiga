@@ -314,13 +314,13 @@ extension MyController {
         if value < 50 { value = 50 }
         if value > 200 { value = 200 }
         
-        emu?.set(.AMIGA_SPEED_BOOST, value: value)
+        emu?.setAsync(.AMIGA_SPEED_BOOST, value: value)
     }
     
     @IBAction
     func speedResetAction(_ sender: Any!) {
         
-        emu?.set(.AMIGA_SPEED_BOOST, value: 100)
+        emu?.setAsync(.AMIGA_SPEED_BOOST, value: 100)
     }
     
     @IBAction

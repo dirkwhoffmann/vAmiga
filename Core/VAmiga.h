@@ -2167,55 +2167,68 @@ public:
      */
     i64 get(Opt option, long id) const;
     
-    /** Configures the emulator to match a specific Amiga model
-     *
-     *  @param model    The Amiga model to emulate
-     */
-    void set(ConfigScheme model);
-    
     /** @brief  Configures a component.
      *
-     *  This is the main function to set an configuration option.
+     *  This is the main function to set a configuration option. It returns
+     *  when the change has been made, so the new value is visible to get()
+     *  right away. Because the command queue is processed in order, all
+     *  requests issued earlier (e.g., via setAsync()) have been carried out as
+     *  well. A rejected value throws the corresponding exception.
+     *
+     *  If the emulator thread has not been launched yet, the change is made
+     *  immediately in the calling thread.
      *
      *  @param opt      The option to set
      *  @param value    The option's value
      *
      *  @note If this function is called for an options that applies to multiple
      *  components, all components are configured with the specified value.
-     *  @note The value is validated when the emulator thread carries out the
-     *  command. A rejected value is reported by Msg::CONFIG_ERROR.
+     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  carry out the request, because it is halted or suspended. The same
+     *  applies if the function is called from the emulator thread. Use
+     *  setAsync() in these situations.
      */
     void set(Opt opt, i64 value);
-    
+
     /** @brief  Configures a component.
      *
-     *  This is the main function to set an configuration option.
-     *
      *  @param opt      The option to set
-     *  @param id       The component to configure
      *  @param value    The option's value
+     *  @param id       The component to configure
      *
      *  @note This function must only be called for those options that require
      *  an additional parameter to uniquely determine the configured component.
+     *  @see set(Opt, i64)
      */
     void set(Opt opt, i64 value, long id);
 
-    /** @brief  Configures a component and waits until the change has been made.
+    /** Configures the emulator to match a specific Amiga model
      *
-     *  These functions are the synchronous counterparts of set(). Instead of
-     *  handing the request to the emulator thread and returning at once, they
-     *  return when the emulator thread has carried it out. A rejected value
-     *  throws the corresponding exception (no Msg::CONFIG_ERROR is sent).
-     *  Because the command queue is processed in order, all requests issued
-     *  earlier have been carried out when the call returns.
-     *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
-     *  carry out the request, because it is not launched, halted, or suspended.
-     *  The same applies if the function is called from the emulator thread.
+     *  @param model    The Amiga model to emulate
+     *  @see set(Opt, i64)
      */
-    void setAwait(ConfigScheme model);
-    void setAwait(Opt opt, i64 value);
-    void setAwait(Opt opt, i64 value, long id);
+    void set(ConfigScheme model);
+
+    /** @brief  Configures a component without waiting for the result.
+     *
+     *  These functions hand the request to the emulator thread and return at
+     *  once. They are the asynchronous counterparts of set(). Use them if
+     *  waiting is impossible or undesirable, e.g., when many options are
+     *  changed in a row (follow up with sync() if needed), when the call
+     *  happens inside a message callback (which runs on the emulator thread),
+     *  or when the emulator thread is suspended.
+     *
+     *  The value is validated when the emulator thread carries out the
+     *  command. A rejected value is reported by Msg::CONFIG_ERROR.
+     *
+     *  @param opt      The option to set
+     *  @param value    The option's value
+     *  @param id       The component to configure (only for options that
+     *                  require an additional parameter to determine it)
+     */
+    void setAsync(Opt opt, i64 value);
+    void setAsync(Opt opt, i64 value, long id);
+    void setAsync(ConfigScheme model);
 
     /** @brief  Checks if a configuration option would be accepted.
      *
