@@ -256,6 +256,8 @@ Defaults::fallbacks()
 void
 Defaults::_dump(Category category, std::ostream &os) const
 {
+    SYNCHRONIZED
+
     using namespace utl;
 
     for (const auto &it: fallbacks().values) {
@@ -440,6 +442,8 @@ Defaults::save(std::stringstream &stream)
 string
 Defaults::getRaw(const string &key) const
 {
+    SYNCHRONIZED
+
     if (values.contains(key)) return values.at(key);
     if (fallbacks().values.contains(key)) return fallbacks().values.at(key);
 
@@ -478,6 +482,8 @@ Defaults::get(Opt option, isize nr) const
 string
 Defaults::getFallbackRaw(const string &key) const
 {
+    SYNCHRONIZED
+
     if (fallbacks().values.contains(key)) return fallbacks().values.at(key);
 
     throw CoreError(CoreError::INVALID_KEY, key);

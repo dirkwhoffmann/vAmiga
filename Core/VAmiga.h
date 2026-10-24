@@ -2060,7 +2060,7 @@ public:
      *
      *  @throw Error if the file cannot be opened.
      */
-    void execScriptAsync(const fs::path &path);
+    void execScriptAsync(const std::filesystem::path &path);
     void execScriptAsync(std::stringstream &ss);
     void execScriptAsync(const std::ifstream &fs);
     void execScriptAsync(const string &contents);
