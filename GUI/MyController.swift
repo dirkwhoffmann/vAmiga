@@ -435,6 +435,9 @@ extension MyController {
         case .RSH_ERROR:
             if isMainShell { NSSound.beep(); renderer.console.isDirty = true }
             
+        case .RSH_DONE:
+            break
+
         case .RSH_EXPORT:
             break;
             

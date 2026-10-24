@@ -198,6 +198,8 @@ RetroShell::exec()
                 exec(cmd);
             }
 
+            msgQueue.put(Msg::RSH_DONE, objid);
+
         } catch (ScriptInterruption &) {
 
             msgQueue.put(Msg::RSH_WAIT, objid);
