@@ -2397,7 +2397,7 @@ void
 VAmiga::setAsync(ConfigScheme model)
 {
     VAMIGA_PUBLIC_SUSPEND
-    put(Cmd::CONFIG_SCHEME, (i64)model);
+    putAsync(Cmd::CONFIG_SCHEME, (i64)model);
     emu->markAsDirty();
 }
 
@@ -2405,7 +2405,7 @@ void
 VAmiga::setAsync(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
-    put(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
+    putAsync(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
     emu->markAsDirty();
 }
 
@@ -2451,7 +2451,7 @@ void
 VAmiga::setAsync(Opt opt, i64 value, long id)
 {
     VAMIGA_PUBLIC
-    put(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
+    putAsync(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
     emu->markAsDirty();
 }
 
@@ -2460,17 +2460,8 @@ VAmiga::sync()
 {
     VAMIGA_PUBLIC
 
-    /* A suspended thread is parked and a halted one is gone, so neither is
-     * going to empty the queue. Waiting on them is a caller's mistake rather
-     * than something to sit through, hence the assertion; in a release build
-     * it returns instead of hanging.
-     */
-    assert(!emu->isSuspended());
-    if (!emu->isLaunched() || emu->isHalted() || emu->isSuspended()) return;
-
-    // The thread sleeps between frames, so nudge it rather than wait for it
-    emu->wakeUp();
-    emu->cmdQueue.wait();
+    // A command that does nothing: once it has been carried out, so has everything before it
+    emu->sendAndWait(Command(Cmd::NONE));
 }
 
 void
@@ -2489,6 +2480,13 @@ VAmiga::exportConfig(std::ostream &stream, bool diff) const
 
 void
 VAmiga::put(const Command &cmd, const std::string &str)
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(cmd, str);
+}
+
+void
+VAmiga::putAsync(const Command &cmd, const std::string &str)
 {
     VAMIGA_PUBLIC
     emu->put(cmd, str);

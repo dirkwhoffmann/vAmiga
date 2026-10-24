@@ -323,12 +323,12 @@ ImageInfo scan(const fs::path &url);
 - (BOOL)setAsync:(Opt)opt drive:(NSInteger)id enable:(BOOL)val;
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
-- (void)put:(Cmd)cmd;
-- (void)put:(Cmd)type value:(NSInteger)value;
-- (void)put:(Cmd)type value:(NSInteger)value value2:(NSInteger)value2;
-- (void)put:(Cmd)type key:(KeyCmd)cmd;
-- (void)put:(Cmd)type action:(GamePadCmd)cmd;
-- (void)put:(Cmd)type coord:(CoordCmd)cmd;
+- (void)putAsync:(Cmd)cmd;
+- (void)putAsync:(Cmd)type value:(NSInteger)value;
+- (void)putAsync:(Cmd)type value:(NSInteger)value value2:(NSInteger)value2;
+- (void)putAsync:(Cmd)type key:(KeyCmd)cmd;
+- (void)putAsync:(Cmd)type action:(GamePadCmd)cmd;
+- (void)putAsync:(Cmd)type coord:(CoordCmd)cmd;
 
 
 // Returns the name of a configuration option (e.g., for error messages)
