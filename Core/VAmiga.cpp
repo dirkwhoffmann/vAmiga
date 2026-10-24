@@ -2302,6 +2302,7 @@ void
 VAmiga::warpOn(isize source)
 {
     VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
     emu->put(Cmd::WARP_ON, source);
 }
 
@@ -2309,6 +2310,7 @@ void
 VAmiga::warpOff(isize source)
 {
     VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
     emu->put(Cmd::WARP_OFF, source);
 }
 
@@ -2316,6 +2318,7 @@ void
 VAmiga::trackOn(isize source)
 {
     VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
     emu->put(Cmd::TRACK_ON, source);
 }
 
@@ -2323,6 +2326,7 @@ void
 VAmiga::trackOff(isize source)
 {
     VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
     emu->put(Cmd::TRACK_OFF, source);
 }
 

@@ -2875,7 +2875,7 @@ ImageInfo scan(const fs::path &url)
 
 - (void)warpOn
 {
-    [self emu]->warpOn();
+    [self emu]->warpOn(0);
 }
 
 - (void)warpOn:(NSInteger)source
@@ -2885,7 +2885,7 @@ ImageInfo scan(const fs::path &url)
 
 - (void)warpOff
 {
-    [self emu]->warpOff();
+    [self emu]->warpOff(0);
 }
 
 - (void)warpOff:(NSInteger)source
@@ -2895,7 +2895,7 @@ ImageInfo scan(const fs::path &url)
 
 - (void)trackOn
 {
-    [self emu]->trackOn();
+    [self emu]->trackOn(0);
 }
 
 - (void)trackOn:(NSInteger)source
@@ -2905,7 +2905,7 @@ ImageInfo scan(const fs::path &url)
 
 - (void)trackOff
 {
-    [self emu]->trackOff();
+    [self emu]->trackOff(0);
 }
 
 - (void)trackOff:(NSInteger)source

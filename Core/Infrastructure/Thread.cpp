@@ -285,7 +285,7 @@ Thread::halt()
 void
 Thread::warpOn(isize source)
 {
-    assert(source < 7);
+    assert(source >= 0 && source < 8);
 
     if (!GET_BIT(warp, source)) {
 
@@ -298,7 +298,7 @@ Thread::warpOn(isize source)
 void
 Thread::warpOff(isize source)
 {
-    assert(source < 7);
+    assert(source >= 0 && source < 8);
 
     if (GET_BIT(warp, source)) {
 
@@ -311,7 +311,7 @@ Thread::warpOff(isize source)
 void
 Thread::trackOn(isize source)
 {
-    assert(source < 7);
+    assert(source >= 0 && source < 8);
 
     if (!GET_BIT(track, source)) {
 
@@ -324,7 +324,7 @@ Thread::trackOn(isize source)
 void
 Thread::trackOff(isize source)
 {
-    assert(source < 7);
+    assert(source >= 0 && source < 8);
 
     if (GET_BIT(track, source)) {
 
