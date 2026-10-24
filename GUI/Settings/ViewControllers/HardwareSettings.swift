@@ -77,7 +77,7 @@ class HardwareSettingsViewController: SettingsViewController {
     /*
     var bootable: Bool {
 
-        do { try emu?.isReady() } catch { return false }
+        do { try emu?.checkReady() } catch { return false }
         return emu?.poweredOff ?? false
     }
     */

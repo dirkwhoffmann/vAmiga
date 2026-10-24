@@ -368,7 +368,7 @@ public:
     
 private:
 
-    void _isReady() const override;
+    void _checkReady() const override;
 
 
     //

@@ -118,10 +118,10 @@ extension EmulatorProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
     
-    func isReady() throws {
+    func checkReady() throws {
         
         let exception = ExceptionWrapper()
-        isReady(exception)
+        checkReady(exception)
         if exception.fault != 0 { throw AppError(exception) }
     }
     

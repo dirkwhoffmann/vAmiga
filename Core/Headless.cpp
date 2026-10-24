@@ -148,7 +148,7 @@ Headless::runScript(const fs::path &path)
 
     // Execute script
     const auto timeout = utl::Time::seconds(500.0);
-    vamiga.retroShell.execScript(path);
+    vamiga.retroShell.execScriptAsync(path);
     waitForWakeUp(timeout);
 }
 

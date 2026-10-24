@@ -298,9 +298,9 @@ Emulator::computeFrame()
 }
 
 void
-Emulator::isReady()
+Emulator::checkReady()
 {
-    main.isReady();
+    main.checkReady();
 }
 
 void

@@ -254,7 +254,7 @@ Thread::run()
     if (!isRunning()) {
 
         // Throw an exception if the emulator is not ready to run
-        isReady();
+        checkReady();
 
         switchState(ExecState::RUNNING);
     }

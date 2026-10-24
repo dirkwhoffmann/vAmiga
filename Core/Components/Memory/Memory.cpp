@@ -492,7 +492,7 @@ Memory::cacheInfo() const
 }
 
 void
-Memory::_isReady() const
+Memory::_checkReady() const
 {    
     auto traits = getRomTraits();
 

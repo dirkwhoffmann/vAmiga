@@ -1902,28 +1902,28 @@ RetroShellAPI::press(const string &s)
 }
 
 void
-RetroShellAPI::execScript(const fs::path &path)
+RetroShellAPI::execScriptAsync(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     retroShell->asyncExecScript(path);
 }
 
 void
-RetroShellAPI::execScript(std::stringstream &ss)
+RetroShellAPI::execScriptAsync(std::stringstream &ss)
 {
     VAMIGA_PUBLIC_SUSPEND
     retroShell->asyncExecScript(ss);
 }
 
 void
-RetroShellAPI::execScript(const std::ifstream &fs)
+RetroShellAPI::execScriptAsync(const std::ifstream &fs)
 {
     VAMIGA_PUBLIC_SUSPEND
     retroShell->asyncExecScript(fs);
 }
 
 void
-RetroShellAPI::execScript(const string &contents)
+RetroShellAPI::execScriptAsync(const string &contents)
 {
     VAMIGA_PUBLIC_SUSPEND
     retroShell->asyncExecScript(contents);
@@ -2231,10 +2231,10 @@ VAmiga::isTracking() const
 }
 
 void
-VAmiga::isReady() const
+VAmiga::checkReady() const
 {
     VAMIGA_PUBLIC
-    return emu->isReady();
+    return emu->checkReady();
 }
 
 void
@@ -2257,7 +2257,7 @@ VAmiga::run()
     VAMIGA_PUBLIC
     
     // Throw an exception if the emulator is not ready to run
-    isReady();
+    checkReady();
     
     emu->put(Cmd::RUN);
 }
@@ -2330,7 +2330,7 @@ void
 VAmiga::stepInto()
 {
     VAMIGA_PUBLIC
-    isReady();
+    checkReady();
     emu->sendAndWait(Command(Cmd::STEP_INTO));
 }
 
@@ -2338,7 +2338,7 @@ void
 VAmiga::stepOver()
 {
     VAMIGA_PUBLIC
-    isReady();
+    checkReady();
     emu->sendAndWait(Command(Cmd::STEP_OVER));
 }
 
@@ -2346,7 +2346,7 @@ void
 VAmiga::finishLine()
 {
     VAMIGA_PUBLIC
-    isReady();
+    checkReady();
     emu->sendAndWait(Command(Cmd::FINISH_LINE));
 }
 
@@ -2354,7 +2354,7 @@ void
 VAmiga::finishFrame()
 {
     VAMIGA_PUBLIC
-    isReady();
+    checkReady();
     emu->sendAndWait(Command(Cmd::FINISH_FRAME));
 }
 

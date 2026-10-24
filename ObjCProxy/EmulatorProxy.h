@@ -287,7 +287,7 @@ ImageInfo scan(const fs::path &url);
 - (void)launch:(id<MessageListener>)listener exception:(ExceptionWrapper *)ex;
 - (void)wakeUp;
 
-- (void)isReady:(ExceptionWrapper *)ex;
+- (void)checkReady:(ExceptionWrapper *)ex;
 - (void)powerOn;
 - (void)powerOff;
 - (void)run:(ExceptionWrapper *)ex;

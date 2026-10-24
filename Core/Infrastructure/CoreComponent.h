@@ -95,7 +95,7 @@ public:
     virtual bool isHalted() const;
 
     // Throws an exception if the emulator is not ready to power on
-    virtual void isReady() const;
+    virtual void checkReady() const;
 
     // Computes a checksum
     u64 checksum(bool recursive);
@@ -152,7 +152,7 @@ public:
 private:
 
     virtual void _initialize() { }
-    virtual void _isReady() const { } // Throws
+    virtual void _checkReady() const { } // Throws
     virtual void _powerOn() { }
     virtual void _powerOff() { }
     virtual void _run() { }
