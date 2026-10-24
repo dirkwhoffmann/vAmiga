@@ -56,12 +56,12 @@ public:
 
     // Result of the latest inspection
     utl::Backed<HdcInfo> info;
-    utl::Backed<HdcStats> metrics;
+    utl::Backed<HdcMetrics> metrics;
 
 private:
 
     // Current metrics
-    HdcStats _metrics = {};
+    HdcMetrics _metrics = {};
 
     // The hard drive this controller is connected to
     HardDrive &drive;
@@ -157,7 +157,7 @@ private:
 public:
 
     HdcInfo cacheInfo() const;
-    HdcStats cacheStats() const;
+    HdcMetrics cacheMetrics() const;
 
 
     //

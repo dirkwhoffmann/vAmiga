@@ -22,7 +22,7 @@ namespace vamiga {
 HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref, hdr.objid), drive(hdr)
 {
     info.bind([this] { return cacheInfo(); } );
-    metrics.bind([this] { return cacheStats(); } );
+    metrics.bind([this] { return cacheMetrics(); } );
 }
 
 void
@@ -61,8 +61,8 @@ HdController::cacheInfo() const
     return info;
 }
 
-HdcStats
-HdController::cacheStats() const
+HdcMetrics
+HdController::cacheMetrics() const
 {
     return _metrics;
 }

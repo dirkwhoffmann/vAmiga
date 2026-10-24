@@ -809,7 +809,7 @@ ImageInfo scan(const fs::path &url);
 @interface HdControllerProxy : CoreComponentProxy { }
 
 @property (readonly) HdcInfo info;
-@property (readonly) HdcStats stats;
+@property (readonly) HdcMetrics stats;
 
 @end
 

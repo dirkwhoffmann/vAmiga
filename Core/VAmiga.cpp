@@ -905,14 +905,14 @@ AudioPortAPI::getCachedInfo() const
 }
 
 const AudioPortMetrics &
-AudioPortAPI::getStats() const
+AudioPortAPI::getMetrics() const
 {
     VAMIGA_PUBLIC
     return port->metrics.current();
 }
 
 const AudioPortMetrics &
-AudioPortAPI::getCachedStats() const
+AudioPortAPI::getCachedMetrics() const
 {
     VAMIGA_PUBLIC
     return port->metrics.backed();
@@ -1529,15 +1529,15 @@ HdControllerAPI::getCachedInfo() const
     return controller->info.backed();
 }
 
-const HdcStats &
-HdControllerAPI::getStats() const
+const HdcMetrics &
+HdControllerAPI::getMetrics() const
 {
     VAMIGA_PUBLIC
     return controller->metrics.current();
 }
 
-const HdcStats &
-HdControllerAPI::getCachedStats() const
+const HdcMetrics &
+HdControllerAPI::getCachedMetrics() const
 {
     VAMIGA_PUBLIC
     return controller->metrics.backed();

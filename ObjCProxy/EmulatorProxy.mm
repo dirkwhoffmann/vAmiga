@@ -737,7 +737,7 @@ ImageInfo scan(const fs::path &url)
 
 - (AudioPortMetrics)stats
 {
-    return [self port]->getStats();
+    return [self port]->getMetrics();
 }
 
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n
@@ -1520,9 +1520,9 @@ ImageInfo scan(const fs::path &url)
     return [self controller]->getInfo();
 }
 
-- (HdcStats)stats
+- (HdcMetrics)stats
 {
-    return [self controller]->getStats();
+    return [self controller]->getMetrics();
 }
 
 @end

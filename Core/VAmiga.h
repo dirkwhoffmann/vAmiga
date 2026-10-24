@@ -29,9 +29,9 @@ using namespace retro::vault;
  * isPoweredOn(), isWarping(), ...) read the current value without
  * synchronizing with the emulator thread, so a value that is read while the
  * emulator runs may be outdated at once. The functions that return the state
- * of a component come in two flavors: getInfo() (and getMetrics(), getStats())
+ * of a component come in two flavors: getInfo() (and getMetrics())
  * reads the live state and is only consistent while the emulator is paused or
- * suspended. getCachedInfo() (and getCachedMetrics(), getCachedStats())
+ * suspended. getCachedInfo() (and getCachedMetrics())
  * returns the most recent snapshot recorded by the emulator thread and is the
  * one to use while the emulator runs.
  */
@@ -1076,15 +1076,15 @@ public:
 
     /** @brief  Returns statistical information about the components.
      *
-     *  getStats() reads the live state on the calling thread. The result is only
-     *  consistent if the emulator is paused or suspended. getCachedStats()
+     *  getMetrics() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedMetrics()
      *  returns the snapshot the emulator thread has recorded most recently,
      *  which is the one to use while the emulator runs. Both return references
      *  that can be overwritten by a later call or by the emulator thread, so
      *  copy the data if you need to keep it.
      */
-    const HdcStats &getStats() const;
-    const HdcStats &getCachedStats() const;
+    const HdcMetrics &getMetrics() const;
+    const HdcMetrics &getCachedMetrics() const;
 };
 
 class HardDriveAPI : public API {
@@ -1482,15 +1482,15 @@ public:
 
     /** @brief  Returns statistical information about the components.
      *
-     *  getStats() reads the live state on the calling thread. The result is only
-     *  consistent if the emulator is paused or suspended. getCachedStats()
+     *  getMetrics() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedMetrics()
      *  returns the snapshot the emulator thread has recorded most recently,
      *  which is the one to use while the emulator runs. Both return references
      *  that can be overwritten by a later call or by the emulator thread, so
      *  copy the data if you need to keep it.
      */
-    const AudioPortMetrics &getStats() const;
-    const AudioPortMetrics &getCachedStats() const;
+    const AudioPortMetrics &getMetrics() const;
+    const AudioPortMetrics &getCachedMetrics() const;
 
     /// @}
     /// @name Retrieving audio data
@@ -2637,6 +2637,20 @@ public:
      *  current texture has been handed over to the GPU.
      */
     void wakeUp();
+
+    /** @brief  Waits until every command sent so far has been carried out.
+     *
+     *  Most calls on this API hand the emulator thread a command and return
+     *  at once, so a caller that reads back what it just changed, or exports
+     *  the configuration, can still see the old state. Calling this
+     *  afterwards closes that gap.
+     *
+     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  carry out commands, because it has not been launched yet, is halted or
+     *  suspended. The same applies if the function is called from the emulator
+     *  thread.
+     */
+    void sync();
     
     
     /// @}
@@ -2871,20 +2885,6 @@ public:
     void putAsync(Cmd type, CoordCmd payload)  { putAsync(Command(type, payload)); }
     void putAsync(Cmd type, AlarmCmd payload)  { putAsync(Command(type, payload)); }
     
-    
-    /** @brief  Waits until every command sent so far has been carried out.
-     *
-     *  Most calls on this API hand the emulator thread a command and return
-     *  at once, so a caller that reads back what it just changed, or exports
-     *  the configuration, can still see the old state. Calling this
-     *  afterwards closes that gap.
-     *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
-     *  carry out commands, because it has not been launched yet, is halted or
-     *  suspended. The same applies if the function is called from the emulator
-     *  thread.
-     */
-    void sync();
     
     /// @}
 };

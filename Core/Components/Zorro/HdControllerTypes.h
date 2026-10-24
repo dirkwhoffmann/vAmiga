@@ -229,6 +229,6 @@ typedef struct
     // Tracks the number of executed commands
     isize cmdCount[29];
 }
-HdcStats;
+HdcMetrics;
 
 }
