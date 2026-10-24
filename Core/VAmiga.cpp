@@ -2288,6 +2288,9 @@ VAmiga::halt()
 {
     VAMIGA_PUBLIC
     
+    // Nothing to do without a running emulator thread
+    if (!emu->isLaunched()) return;
+
     // Signal the emulator to halt
     emu->put(Cmd::HALT);
     
@@ -2327,28 +2330,32 @@ void
 VAmiga::stepInto()
 {
     VAMIGA_PUBLIC
-    emu->stepInto();
+    isReady();
+    emu->sendAndWait(Command(Cmd::STEP_INTO));
 }
 
 void
 VAmiga::stepOver()
 {
     VAMIGA_PUBLIC
-    emu->stepOver();
+    isReady();
+    emu->sendAndWait(Command(Cmd::STEP_OVER));
 }
 
 void
 VAmiga::finishLine()
 {
     VAMIGA_PUBLIC
-    emu->finishLine();
+    isReady();
+    emu->sendAndWait(Command(Cmd::FINISH_LINE));
 }
 
 void
 VAmiga::finishFrame()
 {
     VAMIGA_PUBLIC
-    emu->finishFrame();
+    isReady();
+    emu->sendAndWait(Command(Cmd::FINISH_FRAME));
 }
 
 void

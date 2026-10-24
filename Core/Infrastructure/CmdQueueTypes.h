@@ -39,6 +39,10 @@ enum class Cmd : long
     WARP_OFF,               ///< Switch off warp mode
     TRACK_ON,               ///< Switch on track mode
     TRACK_OFF,              ///< Switch off track mode
+    STEP_INTO,             ///< Run the emulator for a single step
+    STEP_OVER,             ///< Run the emulator for a single step
+    FINISH_LINE,           ///< Run the emulator for a single step
+    FINISH_FRAME,          ///< Run the emulator for a single step
     HALT,                   ///< Terminate the emulator thread
 
     // Amiga
@@ -120,6 +124,10 @@ struct CmdEnum : Reflectable<CmdEnum, Cmd> {
             case Cmd::WARP_OFF:              return "WARP_OFF";
             case Cmd::TRACK_ON:              return "TRACK_ON";
             case Cmd::TRACK_OFF:             return "TRACK_OFF";
+            case Cmd::STEP_INTO:             return "STEP_INTO";
+            case Cmd::STEP_OVER:             return "STEP_OVER";
+            case Cmd::FINISH_LINE:           return "FINISH_LINE";
+            case Cmd::FINISH_FRAME:          return "FINISH_FRAME";
             case Cmd::HALT:                  return "HALT";
 
             case Cmd::ALARM_ABS:             return "ALARM_ABS";

@@ -2705,22 +2705,30 @@ ImageInfo scan(const fs::path &url)
 
 - (void)stepInto
 {
-    [self emu]->stepInto();
+    // Stepping is only possible if the emulator is not running. The GUI
+    // validates this, so a rejected request is ignored here
+    try { [self emu]->stepInto(); } catch (Error &) { }
 }
 
 - (void)stepOver
 {
-    [self emu]->stepOver();
+    // Stepping is only possible if the emulator is not running. The GUI
+    // validates this, so a rejected request is ignored here
+    try { [self emu]->stepOver(); } catch (Error &) { }
 }
 
 - (void)finishLine
 {
-    [self emu]->finishLine();
+    // Stepping is only possible if the emulator is not running. The GUI
+    // validates this, so a rejected request is ignored here
+    try { [self emu]->finishLine(); } catch (Error &) { }
 }
 
 - (void)finishFrame
 {
-    [self emu]->finishFrame();
+    // Stepping is only possible if the emulator is not running. The GUI
+    // validates this, so a rejected request is ignored here
+    try { [self emu]->finishFrame(); } catch (Error &) { }
 }
 
 - (void)launch:(ExceptionWrapper *)ex

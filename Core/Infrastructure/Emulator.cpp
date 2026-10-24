@@ -361,7 +361,8 @@ Emulator::softReset()
 void
 Emulator::stepInto()
 {
-    if (isRunning()) return;
+    if (isRunning()) throw CoreError(CoreError::RUNNING);
+
     main.cpu.debugger.stepInto();
     run();
 }
@@ -369,7 +370,8 @@ Emulator::stepInto()
 void
 Emulator::stepOver()
 {
-    if (isRunning()) return;
+    if (isRunning()) throw CoreError(CoreError::RUNNING);
+
     main.cpu.debugger.stepOver();
     run();
 }
@@ -377,7 +379,8 @@ Emulator::stepOver()
 void
 Emulator::finishLine()
 {
-    if (isRunning()) return;
+    if (isRunning()) throw CoreError(CoreError::RUNNING);
+
     main.agnus.debugger.eolTrap = true;
     run();
 }
@@ -385,7 +388,8 @@ Emulator::finishLine()
 void
 Emulator::finishFrame()
 {
-    if (isRunning()) return;
+    if (isRunning()) throw CoreError(CoreError::RUNNING);
+
     main.agnus.debugger.eofTrap = true;
     run();
 }
