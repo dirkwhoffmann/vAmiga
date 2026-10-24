@@ -277,10 +277,10 @@ class MediaManager {
                 
             } else if options.contains(.force) || askToPowerOff() {
                 
-                emu.powerOff()
+                emu.powerOffAsync()
                 try attach()
-                emu.powerOn()
-                try emu.run()
+                emu.powerOnAsync()
+                try emu.runAsync()
             }
         }
         
@@ -321,10 +321,10 @@ class MediaManager {
                 
             } else if force || askToPowerOff() {
                 
-                emu.powerOff()
+                emu.powerOffAsync()
                 try detach()
-                emu.powerOn()
-                try emu.run()
+                emu.powerOnAsync()
+                try emu.runAsync()
             }
         }
     }

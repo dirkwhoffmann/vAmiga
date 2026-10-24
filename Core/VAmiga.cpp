@@ -2241,11 +2241,25 @@ void
 VAmiga::powerOn()
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::POWER_ON));
+}
+
+void
+VAmiga::powerOnAsync()
+{
+    VAMIGA_PUBLIC
     emu->put(Cmd::POWER_ON);
 }
 
 void
 VAmiga::powerOff()
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::POWER_OFF));
+}
+
+void
+VAmiga::powerOffAsync()
 {
     VAMIGA_PUBLIC
     emu->put(Cmd::POWER_OFF);
@@ -2259,6 +2273,17 @@ VAmiga::run()
     // Throw an exception if the emulator is not ready to run
     checkReady();
     
+    emu->sendAndWait(Command(Cmd::RUN));
+}
+
+void
+VAmiga::runAsync()
+{
+    VAMIGA_PUBLIC
+    
+    // Throw an exception if the emulator is not ready to run
+    checkReady();
+    
     emu->put(Cmd::RUN);
 }
 
@@ -2266,11 +2291,25 @@ void
 VAmiga::pause()
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::PAUSE));
+}
+
+void
+VAmiga::pauseAsync()
+{
+    VAMIGA_PUBLIC
     emu->put(Cmd::PAUSE);
 }
 
-void 
+void
 VAmiga::hardReset()
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::HARD_RESET));
+}
+
+void 
+VAmiga::hardResetAsync()
 {
     VAMIGA_PUBLIC
     emu->put(Cmd::HARD_RESET);
@@ -2278,6 +2317,13 @@ VAmiga::hardReset()
 
 void
 VAmiga::softReset()
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::SOFT_RESET));
+}
+
+void
+VAmiga::softResetAsync()
 {
     VAMIGA_PUBLIC
     emu->put(Cmd::SOFT_RESET);
@@ -2303,11 +2349,27 @@ VAmiga::warpOn(isize source)
 {
     VAMIGA_PUBLIC
     if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
+    emu->sendAndWait(Command(Cmd::WARP_ON, source));
+}
+
+void
+VAmiga::warpOnAsync(isize source)
+{
+    VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
     emu->put(Cmd::WARP_ON, source);
 }
 
 void
 VAmiga::warpOff(isize source)
+{
+    VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
+    emu->sendAndWait(Command(Cmd::WARP_OFF, source));
+}
+
+void
+VAmiga::warpOffAsync(isize source)
 {
     VAMIGA_PUBLIC
     if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
@@ -2319,11 +2381,27 @@ VAmiga::trackOn(isize source)
 {
     VAMIGA_PUBLIC
     if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
+    emu->sendAndWait(Command(Cmd::TRACK_ON, source));
+}
+
+void
+VAmiga::trackOnAsync(isize source)
+{
+    VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
     emu->put(Cmd::TRACK_ON, source);
 }
 
 void
 VAmiga::trackOff(isize source)
+{
+    VAMIGA_PUBLIC
+    if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");
+    emu->sendAndWait(Command(Cmd::TRACK_OFF, source));
+}
+
+void
+VAmiga::trackOffAsync(isize source)
 {
     VAMIGA_PUBLIC
     if (source < 0 || source > 6) throw CoreError(CoreError::OPT_INV_ARG, "0...6");

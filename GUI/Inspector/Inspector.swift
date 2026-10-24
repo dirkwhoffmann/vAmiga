@@ -686,7 +686,7 @@ class Inspector: DialogController {
         panel.tabPosition = .none
    
         // Enter debug mode
-        emu.trackOn()
+        emu.trackOnAsync()
         amiga.autoInspectionMask = Int.max
         
         // Adjust window height to match what we see in interface builder
@@ -866,7 +866,7 @@ class Inspector: DialogController {
     func stopAndGoAction(_ sender: NSButton!) {
 
         if let emu = emu {
-            if emu.running { emu.pause() } else { try? emu.run() }
+            if emu.running { emu.pauseAsync() } else { try? emu.runAsync() }
         }
     }
 
@@ -912,7 +912,7 @@ extension Inspector {
         if parent.inspectors.isEmpty {
             
             // print("Leaving debug mode")
-            emu?.trackOff()
+            emu?.trackOffAsync()
             amiga.autoInspectionMask = 0
         }
     }

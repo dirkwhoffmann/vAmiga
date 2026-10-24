@@ -82,7 +82,7 @@ class InspectorToolbar: NSToolbar {
         
         switch sender.selectedSegment {
             
-        case 0: emu.running ? emu.pause() : try? emu.run()
+        case 0: emu.running ? emu.pauseAsync() : try? emu.runAsync()
         case 1: emu.stepOver()
         case 2: emu.stepInto()
         case 3: emu.finishLine()

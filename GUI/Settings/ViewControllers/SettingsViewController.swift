@@ -70,9 +70,9 @@ class SettingsViewController: NSViewController {
     @IBAction func unlockAction(_ sender: Any!) {
 
         if emu?.poweredOff == true {
-            try? emu?.run()
+            try? emu?.runAsync()
         } else {
-            emu?.powerOff()
+            emu?.powerOffAsync()
         }
         refresh()
     }

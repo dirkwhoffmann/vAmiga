@@ -125,10 +125,10 @@ extension EmulatorProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
     
-    func run() throws {
+    func runAsync() throws {
         
         let exception = ExceptionWrapper()
-        run(exception)
+        runAsync(exception)
         if exception.fault != 0 { throw AppError(exception) }
     }
 

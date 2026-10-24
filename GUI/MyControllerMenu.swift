@@ -398,7 +398,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func stopAndGoAction(_ sender: Any!) {
         
         if let emu = emu {
-            if emu.running { emu.pause() } else { try? emu.run() }
+            if emu.running { emu.pauseAsync() } else { try? emu.runAsync() }
         }
     }
     
@@ -414,20 +414,20 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func resetAction(_ sender: Any!) {
         
-        emu?.hardReset()
-        try? emu?.run()
+        emu?.hardResetAsync()
+        try? emu?.runAsync()
     }
     
     @IBAction func powerAction(_ sender: Any!) {
         
         if emu?.poweredOn == true {
             
-            emu?.powerOff()
+            emu?.powerOffAsync()
             
         } else {
             
             do {
-                try emu?.run()
+                try emu?.runAsync()
             } catch {
                 showAlert(.cantRun, error: error)
             }

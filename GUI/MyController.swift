@@ -209,15 +209,15 @@ extension MyController {
         do {
             
             // Press the virtual power switch
-            emu?.powerOn()
+            emu?.powerOnAsync()
             
             // Start emulation
-            try emu?.run()
+            try emu?.runAsync()
             
         } catch {
             
             // Switch off
-            emu?.powerOff()
+            emu?.powerOffAsync()
         }
         
         // Update toolbar

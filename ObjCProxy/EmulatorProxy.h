@@ -288,24 +288,24 @@ ImageInfo scan(const fs::path &url);
 - (void)wakeUp;
 
 - (void)checkReady:(ExceptionWrapper *)ex;
-- (void)powerOn;
-- (void)powerOff;
-- (void)run:(ExceptionWrapper *)ex;
-- (void)pause;
+- (void)powerOnAsync;
+- (void)powerOffAsync;
+- (void)runAsync:(ExceptionWrapper *)ex;
+- (void)pauseAsync;
 - (void)halt;
 - (void)suspend;
 - (void)resume;
-- (void)warpOn;
-- (void)warpOn:(NSInteger)source;
-- (void)warpOff;
-- (void)warpOff:(NSInteger)source;
-- (void)trackOn;
-- (void)trackOn:(NSInteger)source;
-- (void)trackOff;
-- (void)trackOff:(NSInteger)source;
+- (void)warpOnAsync;
+- (void)warpOnAsync:(NSInteger)source;
+- (void)warpOffAsync;
+- (void)warpOffAsync:(NSInteger)source;
+- (void)trackOnAsync;
+- (void)trackOnAsync:(NSInteger)source;
+- (void)trackOffAsync;
+- (void)trackOffAsync:(NSInteger)source;
 
-- (void)hardReset;
-- (void)softReset;
+- (void)hardResetAsync;
+- (void)softResetAsync;
 
 - (void)stepInto;
 - (void)stepOver;
