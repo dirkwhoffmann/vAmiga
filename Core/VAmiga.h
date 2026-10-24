@@ -22,6 +22,24 @@ namespace vamiga {
 using namespace retro::vault;
 
 
+/* Error handling
+ *
+ * Functions of this API report failures by throwing exceptions that are
+ * derived from class Error:
+ *
+ *   CoreError  : The request does not match the state of the emulator, e.g.,
+ *                an invalid option value, a missing ROM, or an emulator thread
+ *                that cannot carry out the request (see #Fault).
+ *   IOError    : A file could not be accessed.
+ *   MediaError : A ROM, snapshot, disk image or similar file is invalid or
+ *                not supported.
+ *
+ * Functions that hand a request to the emulator thread asynchronously (the
+ * ones with the suffix "Async" and the input events) cannot report failures
+ * that occur later on the emulator thread. Use the blocking counterpart if
+ * the result matters.
+ */
+
 //
 // Base class for all APIs
 //
@@ -91,12 +109,16 @@ public:
     /** @brief  Loads a workspace.
      *
      *  @param  path    Path to a workspace folder
+     *
+     *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void loadWorkspace(const std::filesystem::path &path);
 
     /** @brief  Saves a workspace to disk.
      *
      *  @param  path    Destination path
+     *
+     *  @throw Error if the file cannot be written.
      */
     void saveWorkspace(const std::filesystem::path &path) const;
 
@@ -117,6 +139,9 @@ public:
      *  and persists the SVM. The asynchronous version uses the object on the
      *  emulator thread: it must stay alive, and untouched, until the
      *  WORKSPACE_SAVED message has arrived.
+     *
+     *  @throw Error if the SVM file cannot be read or written, or if its content
+     *  is invalid (synchronous versions).
      */
     void loadWorkspace(retro::vault::SVMFile &svm);
     void saveWorkspace(retro::vault::SVMFile &svm) const;
@@ -144,12 +169,16 @@ public:
     /** @brief  Loads a snapshot
      *
      *  @param  path    Source path
+     *
+     *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void loadSnapshot(const std::filesystem::path &path);
 
     /** @brief  Saves a snapshot to disk.
      *
      *  @param  path    Destination path
+     *
+     *  @throw Error if the file cannot be written.
      */
     void saveSnapshot(const std::filesystem::path &path) const;
 
@@ -169,6 +198,9 @@ public:
      *  manifest, and the SVM is persisted. The asynchronous version uses the
      *  object on the emulator thread: it must stay alive, and untouched,
      *  until the SNAPSHOT_SAVED message has arrived.
+     *
+     *  @throw Error if the SVM file cannot be read or written, or if its content
+     *  is invalid (synchronous versions).
      */
     void saveSnapshot(retro::vault::SVMFile &svm) const;
     void saveSnapshotAsync(retro::vault::SVMFile &svm) const;
@@ -201,6 +233,9 @@ public:
      *  given object. The asynchronous version uses it on the emulator thread:
      *  it must stay alive, and untouched, until the HIBERNATED message has
      *  arrived.
+     *
+     *  @throw Error if the SVM file cannot be read or written, or if its content
+     *  is invalid (synchronous versions).
      */
     void hibernate(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const;
     void hibernateAsync(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const;
@@ -646,16 +681,22 @@ public:
 
     /** @brief  Loads a ROM from a file
      *          The ROM type is determined automatically.
+     *
+     *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void loadRom(const std::filesystem::path &path);
     void loadExt(const std::filesystem::path &path);
 
     /** @brief  Loads a ROM provided by a memory buffer
+     *
+     *  @throw Error if the data is not valid.
      */
     void loadRom(const u8 *buf, isize len);
     void loadExt(const u8 *buf, isize len);
 
     /** @brief  Saves a Rom to disk
+     *
+     *  @throw Error if the file cannot be written.
      */
     void saveRom(const std::filesystem::path &path);
     void saveWom(const std::filesystem::path &path);
@@ -816,6 +857,8 @@ public:
      *  @param  id  Boot block identifier
      *  @param  name  Name of the disk
      *  @param  path Optional folder to import
+     *
+     *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId id,
                          string name, const std::filesystem::path &path = {});
@@ -823,6 +866,8 @@ public:
     /** @brief  Inserts a disk created from an image file.
      *  @param  path   Path to the disk image.
      *  @param  wp      Write-protection status of the disk.
+     *
+     *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void insert(const std::filesystem::path& path, bool wp);
 
@@ -830,6 +875,8 @@ public:
      *  @param  buffer  Buffer holding the raw image data.
      *  @param  fmt     Format of the supplied image data.
      *  @param  wp      Write-protection status of the disk.
+     *
+     *  @throw Error if the data is not valid.
      */
     void insert(std::span<const u8> buffer, ImageFormat fmt, bool wp);
 
@@ -950,6 +997,8 @@ public:
     /** @brief  Attaches a hard drive provided by an URL to a media file.
      *  @param  path    Path to the media file.
      *  @note   The disk stays on top of the file (see loadIntoMemory()).
+     *
+     *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void attach(const std::filesystem::path &path);
 
@@ -965,6 +1014,9 @@ public:
      *  @param  svm     The SVM whose workspace takes the file
      *  @note   Saving the workspace afterwards makes the drive part of its
      *          configuration.
+     *
+     *  @throw Error if the SVM file cannot be read or written, or if its content
+     *  is invalid (synchronous versions).
      */
     void attach(const std::filesystem::path &path, retro::vault::SVMFile &svm);
 
@@ -993,6 +1045,9 @@ public:
      *  @param  megabytes   Size of the drive
      *  @param  fs          File system to install (NODOS leaves the drive blank)
      *  @param  name        Name of the volume
+     *
+     *  @throw Error if the SVM file cannot be read or written, or if its content
+     *  is invalid (synchronous versions).
      */
     void create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSFormat fs,
                 const string &name);
@@ -1013,6 +1068,8 @@ public:
 
     /** @brief  Imports files from a folder
      *  @note   All existing files are deleted prior to importing the folder.
+     *
+     *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void importFolder(const std::filesystem::path &path);
 
@@ -1044,6 +1101,8 @@ public:
      *          drive where it is. A compressed file name (.hdz) is refused,
      *          because the drive cannot live in a compressed file; use
      *          writeToFile() to export one.
+     *
+     *  @throw Error if the file cannot be written.
      */
     void saveAs(const std::filesystem::path &path);
 
@@ -1407,12 +1466,16 @@ public:
      * The cutout is given in texels of the texture (x: super-hires pixels,
      * y: lines). The upper bounds x2 and y2 are exclusive. Without a cutout,
      * the entire texture is saved.
+     *
+     *  @throw Error if the file cannot be written.
      */
     void saveTexture(const std::filesystem::path &path) const;
     void saveTexture(const std::filesystem::path &path,
                      isize x1, isize x2, isize y1, isize y2) const;
 
     /** @brief  Saves the most recent stable X-Ray texture as a PNG file
+     *
+     *  @throw Error if the file cannot be written.
      */
     void saveXrayTexture(const std::filesystem::path &path) const;
     void saveXrayTexture(const std::filesystem::path &path,
@@ -1546,10 +1609,14 @@ public:
     void save(const std::filesystem::path &path);
 
     /** @brief  Saves a storage file to stream
+     *
+     *  @throw Error if the file cannot be written.
      */
     void save(std::ofstream &stream);
 
     /** @brief  Saves a storage file to a string stream
+     *
+     *  @throw Error if the file cannot be written.
      */
     void save(std::stringstream &stream);
 
@@ -1780,6 +1847,8 @@ public:
      *  state. After the last script command has been executed,
      *  MSG\_SCRIPT\_DONE is sent. If shell execution has been aborted due
      *  to an error, MSG\_SCRIPT\_ABORT is sent.
+     *
+     *  @throw Error if the file cannot be opened.
      */
     void execScriptAsync(const fs::path &path);
     void execScriptAsync(std::stringstream &ss);
@@ -1802,6 +1871,8 @@ public:
     */
 
     /** @brief  Exports the file system in the file system navigator
+     *
+     *  @throw Error if the file cannot be written.
      */
     void exportBlocks(const std::filesystem::path &path);
 
