@@ -19,11 +19,12 @@ struct CoreError : public Error {
     static constexpr long UNKNOWN           =   1; ///< Unclassified error condition
 
     // Execution state
-    static constexpr long LAUNCH            = 100; ///< Launch error
-    static constexpr long NOT_LAUNCHED      = 104; ///< The emulator thread is not running
-    static constexpr long POWERED_OFF       = 101; ///< The emulator is powered off
-    static constexpr long POWERED_ON        = 102; ///< The emulator is powered on
-    static constexpr long RUNNING           = 103; ///< The emulator is running
+    static constexpr long LAUNCH_FAILED     = 100; ///< Launching the emulator thread failed
+    static constexpr long NOT_LAUNCHED      = 101; ///< The emulator thread is not running
+    static constexpr long ALREADY_LAUNCHED  = 102; ///< The emulator thread has been launched already
+    static constexpr long POWERED_OFF       = 103; ///< The emulator is powered off
+    static constexpr long POWERED_ON        = 104; ///< The emulator is powered on
+    static constexpr long RUNNING           = 105; ///< The emulator is running
 
     // Configuration
     static constexpr long OPT_UNSUPPORTED   = 200; ///< Unsupported configuration option
@@ -78,8 +79,9 @@ struct CoreError : public Error {
             case OK:                          return "OK";
             case UNKNOWN:                     return "UNKNOWN";
 
-            case LAUNCH:                      return "LAUNCH";
+            case LAUNCH_FAILED:               return "LAUNCH_FAILED";
             case NOT_LAUNCHED:                return "NOT_LAUNCHED";
+            case ALREADY_LAUNCHED:            return "ALREADY_LAUNCHED";
             case POWERED_OFF:                 return "POWERED_OFF";
             case POWERED_ON:                  return "POWERED_ON";
             case RUNNING:                     return "RUNNING";
