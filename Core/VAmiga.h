@@ -22,6 +22,20 @@ namespace vamiga {
 using namespace retro::vault;
 
 
+/* Thread safety
+ *
+ * The functions of this API must be called from a user thread, i.e., from any
+ * thread except the emulator thread. Simple queries (get(), isRunning(),
+ * isPoweredOn(), isWarping(), ...) read the current value without
+ * synchronizing with the emulator thread, so a value that is read while the
+ * emulator runs may be outdated at once. The functions that return the state
+ * of a component come in two flavors: getInfo() (and getMetrics(), getStats())
+ * reads the live state and is only consistent while the emulator is paused or
+ * suspended. getCachedInfo() (and getCachedMetrics(), getCachedStats())
+ * returns the most recent snapshot recorded by the emulator thread and is the
+ * one to use while the emulator runs.
+ */
+
 /* Error handling
  *
  * Functions of this API report failures by throwing exceptions that are
@@ -77,6 +91,13 @@ public:
     const AmigaConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const AmigaInfo &getInfo() const;
     const AmigaInfo &getCachedInfo() const;
@@ -286,6 +307,13 @@ public:
     const XRayConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const XRayInfo &getInfo() const;
     const XRayInfo &getCachedInfo() const;
@@ -304,6 +332,13 @@ public:
     const LogicAnalyzerConfig &getConfig() const;
     
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const LogicAnalyzerInfo &getInfo() const;
     const LogicAnalyzerInfo &getCachedInfo() const;
@@ -331,6 +366,13 @@ public:
     const BlitterConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const BlitterInfo &getInfo() const;
     const BlitterInfo &getCachedInfo() const;
@@ -345,6 +387,13 @@ public:
     class Copper *copper = nullptr;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const CopperInfo &getInfo() const;
     const CopperInfo &getCachedInfo() const;
@@ -392,11 +441,25 @@ public:
     const AgnusConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const AgnusInfo &getInfo() const;
     const AgnusInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
+     *
+     *  getMetrics() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedMetrics()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const AgnusMetrics &getMetrics() const;
     const AgnusMetrics &getCachedMetrics() const;
@@ -424,6 +487,13 @@ public:
     const CIAConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const CIAInfo &getInfo() const;
     const CIAInfo &getCachedInfo() const;
@@ -578,6 +648,13 @@ public:
     const CPUConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const CPUInfo &getInfo() const;
     const CPUInfo &getCachedInfo() const;
@@ -596,6 +673,13 @@ public:
     const DeniseConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const DeniseInfo &getInfo() const;
     const DeniseInfo &getCachedInfo() const;
@@ -660,11 +744,25 @@ public:
     const MemConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const MemInfo &getInfo() const;
     const MemInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
+     *
+     *  getMetrics() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedMetrics()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const MemMetrics &getMetrics() const;
     const MemMetrics &getCachedMetrics() const;
@@ -727,6 +825,13 @@ public:
     AudioChannelAPI(isize channel) : API(), channel(channel) { }
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const StateMachineInfo &getInfo() const;
     const StateMachineInfo &getCachedInfo() const;
@@ -745,6 +850,13 @@ public:
     const DiskControllerConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const DiskControllerInfo &getInfo() const;
     const DiskControllerInfo &getCachedInfo() const;
@@ -759,6 +871,13 @@ public:
     class UART *uart = nullptr;
     
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const UARTInfo &getInfo() const;
     const UARTInfo &getCachedInfo() const;
@@ -784,6 +903,13 @@ public:
     // const PaulaConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const PaulaInfo &getInfo() const;
     const PaulaInfo &getCachedInfo() const;
@@ -830,6 +956,13 @@ public:
     const FloppyDriveConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const FloppyDriveInfo &getInfo() const;
     const FloppyDriveInfo &getCachedInfo() const;
@@ -930,11 +1063,25 @@ public:
     // const HdcTraits &getTraits() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const HdcInfo &getInfo() const;
     const HdcInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
+     *
+     *  getStats() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedStats()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const HdcStats &getStats() const;
     const HdcStats &getCachedStats() const;
@@ -959,6 +1106,13 @@ public:
     const HardDriveConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const HardDriveInfo &getInfo() const;
     const HardDriveInfo &getCachedInfo() const;
@@ -1136,6 +1290,13 @@ public:
     const JoystickConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const JoystickInfo &getInfo() const;
     const JoystickInfo &getCachedInfo() const;
@@ -1163,6 +1324,13 @@ public:
     const KeyboardConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const KeyboardInfo &getInfo() const;
     const KeyboardInfo &getCachedInfo() const;
@@ -1301,11 +1469,25 @@ public:
     const AudioPortConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const AudioPortInfo &getInfo() const;
     const AudioPortInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
+     *
+     *  getStats() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedStats()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const AudioPortMetrics &getStats() const;
     const AudioPortMetrics &getCachedStats() const;
@@ -1373,6 +1555,13 @@ public:
     MouseAPI mouse;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const ControlPortInfo &getInfo() const;
     const ControlPortInfo &getCachedInfo() const;
@@ -1396,6 +1585,13 @@ public:
     const SerialPortConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const SerialPortInfo &getInfo() const;
     const SerialPortInfo &getCachedInfo() const;
@@ -1422,6 +1618,13 @@ public:
     const VideoPortConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const VideoPortInfo &getInfo() const;
     const VideoPortInfo &getCachedInfo() const;
@@ -1796,6 +1999,13 @@ public:
     ///
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const RetroShellInfo &getInfo() const;
     const RetroShellInfo &getCachedInfo() const;
@@ -1896,6 +2106,13 @@ public:
     /// @{
 
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const RemoteManagerInfo &getInfo() const;
     const RemoteManagerInfo &getCachedInfo() const;
@@ -1990,11 +2207,25 @@ public:
     /// @{
     
     /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const EmulatorInfo &getInfo() const;
     const EmulatorInfo &getCachedInfo() const;
     
     /** @brief  Returns statistical information about the components.
+     *
+     *  getMetrics() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedMetrics()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
      */
     const EmulatorMetrics &getMetrics() const;
     const EmulatorMetrics &getCachedMetrics() const;
@@ -2002,6 +2233,11 @@ public:
     /// @}
     /// @name Querying the emulator state
     /// @{
+
+    /* A word on thread safety: The functions below return the value at the time
+     * of the call without synchronizing with the emulator thread. A result
+     * obtained while the emulator is running may be outdated immediately.
+     */
     
     /** @brief  Returns true iff the emulator if the emulator is powered on.
      */
@@ -2456,6 +2692,10 @@ public:
      *  @note Some options require an additional parameter to uniquely
      *  determine the configured component. For those options, this function
      *  must not be called.
+     *
+     *  @note The value is read without synchronizing with the emulator thread.
+     *  A change requested by setAsync() shows up once the emulator thread has
+     *  carried it out (see sync()).
      */
     i64 get(Opt option) const;
     
@@ -2468,6 +2708,10 @@ public:
      *
      *  @note This function must only be called for those options that require
      *  an additional parameter to uniquely determine the configured component.
+     *
+     *  @note The value is read without synchronizing with the emulator thread.
+     *  A change requested by setAsync() shows up once the emulator thread has
+     *  carried it out (see sync()).
      */
     i64 get(Opt option, long id) const;
     
