@@ -2312,15 +2312,15 @@ VAmiga::warpOff(isize source)
 void
 VAmiga::trackOn(isize source)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->trackOn(source);
+    VAMIGA_PUBLIC
+    emu->put(Cmd::TRACK_ON, source);
 }
 
 void
 VAmiga::trackOff(isize source)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->trackOff(source);
+    VAMIGA_PUBLIC
+    emu->put(Cmd::TRACK_OFF, source);
 }
 
 void
