@@ -981,18 +981,18 @@ AudioPortAPI::copyInterleaved(float *buffer, isize n)
     return port->copyInterleaved(buffer, n);
 }
 
-void
-AudioPortAPI::drawL(u32 *buffer, isize width, isize height, u32 color) const
+float
+AudioPortAPI::drawL(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const
 {
     VAMIGA_PUBLIC
-    port->stream.drawL(buffer, width, height, color);
+    return port->stream.drawL(buffer, width, height, maxAmp, color);
 }
 
-void
-AudioPortAPI::drawR(u32 *buffer, isize width, isize height, u32 color) const
+float
+AudioPortAPI::drawR(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const
 {
     VAMIGA_PUBLIC
-    port->stream.drawR(buffer, width, height, color);
+    return port->stream.drawR(buffer, width, height, maxAmp, color);
 }
 
 
@@ -1766,10 +1766,10 @@ DefaultsAPI::get(const string &key) const
 }
 
 i64
-DefaultsAPI::get(Opt option, isize nr) const
+DefaultsAPI::get(Opt opt, isize nr) const
 {
     VAMIGA_PUBLIC
-    return defaults->get(option, nr);
+    return defaults->get(opt, nr);
 }
 
 string
@@ -1787,10 +1787,10 @@ DefaultsAPI::getFallback(const string &key) const
 }
 
 i64
-DefaultsAPI::getFallback(Opt option, isize nr) const
+DefaultsAPI::getFallback(Opt opt, isize nr) const
 {
     VAMIGA_PUBLIC
-    return defaults->getFallback(option, nr);
+    return defaults->getFallback(opt, nr);
 }
 
 void
@@ -1878,17 +1878,17 @@ DefaultsAPI::remove(const string &key)
 }
 
 void
-DefaultsAPI::remove(Opt option)
+DefaultsAPI::remove(Opt opt)
 {
     VAMIGA_PUBLIC
-    defaults->remove(option);
+    defaults->remove(opt);
 }
 
 void
-DefaultsAPI::remove(Opt option, std::vector <isize> objids)
+DefaultsAPI::remove(Opt opt, std::vector <isize> objids)
 {
     VAMIGA_PUBLIC
-    defaults->remove(option, objids);
+    defaults->remove(opt, objids);
 }
 
 
@@ -2544,17 +2544,17 @@ VAmiga::isLaunched() const
 }
 
 i64
-VAmiga::get(Opt option) const
+VAmiga::get(Opt opt) const
 {
     VAMIGA_PUBLIC
-    return emu->get(option);
+    return emu->get(opt);
 }
 
 i64
-VAmiga::get(Opt option, long id) const
+VAmiga::get(Opt opt, isize id) const
 {
     VAMIGA_PUBLIC
-    return emu->get(option, id);
+    return emu->get(opt, id);
 }
 
 void
@@ -2590,7 +2590,7 @@ VAmiga::set(Opt opt, i64 value)
 }
 
 void
-VAmiga::set(Opt opt, i64 value, long id)
+VAmiga::set(Opt opt, i64 value, isize id)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id }));
@@ -2605,14 +2605,14 @@ VAmiga::check(Opt opt, i64 value)
 }
 
 void
-VAmiga::check(Opt opt, i64 value, long id)
+VAmiga::check(Opt opt, i64 value, isize id)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value, { id });
 }
 
 void
-VAmiga::setAsync(Opt opt, i64 value, long id)
+VAmiga::setAsync(Opt opt, i64 value, isize id)
 {
     VAMIGA_PUBLIC
     putAsync(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });

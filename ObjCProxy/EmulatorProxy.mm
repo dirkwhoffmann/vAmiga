@@ -723,7 +723,9 @@ ImageInfo scan(const fs::path &url)
 
 - (void)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
 {
-    [self port]->drawL(buffer, w, h, c);
+    // The core returns the highest amplitude, which is used to scale the next frame
+    if (maxAmpL <= 0) maxAmpL = 0.01f;
+    maxAmpL = [self port]->drawL(buffer, w, h, maxAmpL, c);
 }
 
 - (void)drawWaveformL:(u32 *)buffer size:(NSSize)size color:(u32)c
@@ -736,7 +738,8 @@ ImageInfo scan(const fs::path &url)
 
 - (void)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
 {
-    [self port]->drawR(buffer, w, h, c);
+    if (maxAmpR <= 0) maxAmpR = 0.01f;
+    maxAmpR = [self port]->drawR(buffer, w, h, maxAmpR, c);
 }
 
 - (void)drawWaveformR:(u32 *)buffer size:(NSSize)size color:(u32)c

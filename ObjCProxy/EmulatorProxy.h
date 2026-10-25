@@ -496,7 +496,12 @@ ImageInfo scan(const fs::path &url);
 // Audio port
 //
 
-@interface AudioPortProxy : CoreComponentProxy { }
+@interface AudioPortProxy : CoreComponentProxy {
+
+    // Highest amplitudes seen by the waveform drawing functions (auto-scaling)
+    float maxAmpL;
+    float maxAmpR;
+}
 
 @property (readonly) AudioPortMetrics stats;
 

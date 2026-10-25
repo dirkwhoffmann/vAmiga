@@ -1627,11 +1627,23 @@ public:
     /// @name Visualizing waveforms
     /// @{
 
-    /** @brief  Draws a visual representation of the waveform.
-     *  The Mac app uses this function to visualize the contents of the
-     *  audio buffer in one of it's inspector panels. */
-    void drawL(u32 *buffer, isize width, isize height, u32 color) const;
-    void drawR(u32 *buffer, isize width, isize height, u32 color) const;
+    /** @brief  Draws the waveform of the left or the right audio channel.
+     *
+     *  The waveform is plotted into a texture buffer. The functions return the
+     *  highest amplitude found in the audio buffer. To implement auto-scaling,
+     *  pass the returned value as parameter 'maxAmp' in the next call. The
+     *  Mac app uses these functions to visualize the contents of the audio
+     *  buffer in one of its inspector panels.
+     *
+     *  @param  buffer  Texture buffer of size width * height
+     *  @param  width   Width of the texture in pixels
+     *  @param  height  Height of the texture in pixels
+     *  @param  maxAmp  Amplitude that is mapped to the full height
+     *  @param  color   Color of the waveform
+     *  @return The highest amplitude that was found.
+     */
+    float drawL(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const;
+    float drawR(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const;
 
     /// @}};
 };
@@ -1941,12 +1953,12 @@ public:
     i64 get(const string &key) const;
 
     /** @brief  Queries a key-value pair.
-     *  @param  option  A config option whose name is used as the prefix of the key.
+     *  @param  opt     A config option whose name is used as the prefix of the key.
      *  @param  nr      Optional number that is appened to the key as suffix.
      *  @result The value as an integer.
      *  @throw  CoreError (#ERROR\_INVALID\_KEY)
      */
-    i64 get(Opt option, isize nr = 0) const;
+    i64 get(Opt opt, isize nr = 0) const;
 
     /** @brief  Queries a fallback key-value pair.
      *  @param  key     The key.
@@ -1963,12 +1975,12 @@ public:
     i64 getFallback(const string &key) const;
 
     /** @brief  Queries a fallback key-value pair.
-     *  @param  option  A config option whose name is used as the key.
+     *  @param  opt     A config option whose name is used as the key.
      *  @param  nr      Optional number that is appened to the key as suffix.
      *  @result The value as an integer.
      *  @throw  CoreError (#ERROR\_INVALID\_KEY)
      */
-    i64 getFallback(Opt option, isize nr = 0) const;
+    i64 getFallback(Opt opt, isize nr = 0) const;
 
 
     /// @}
@@ -2062,17 +2074,17 @@ public:
     void remove(const string &key);
 
     /** @brief  Deletes a key-value pair
-     *  @param  option  The option's name forms the key.
+     *  @param  opt     The option's name forms the key.
      *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
-    void remove(Opt option);
+    void remove(Opt opt);
 
     /** @brief  Deletes multiple key-value pairs.
-     *  @param  option  The option's name forms the prefix of the keys.
+     *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
      *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
-    void remove(Opt option, std::vector <isize> objids);
+    void remove(Opt opt, std::vector <isize> objids);
 
     /// @}
 };
@@ -2799,7 +2811,7 @@ public:
      *
      *  This is the main function to query a configuration option.
      *
-     *  @param option   The option to query
+     *  @param opt      The option to query
      *
      *  @note Some options require an additional parameter to uniquely
      *  determine the configured component. For those options, this function
@@ -2809,13 +2821,13 @@ public:
      *  A change requested by setAsync() shows up once the emulator thread has
      *  carried it out (see sync()).
      */
-    i64 get(Opt option) const;
+    i64 get(Opt opt) const;
     
     /** @brief  Queries a configuration option.
      *
      *  This is the main function to query a configuration option.
      *
-     *  @param option   The option to query
+     *  @param opt      The option to query
      *  @param id       The component to query
      *
      *  @note This function must only be called for those options that require
@@ -2825,7 +2837,7 @@ public:
      *  A change requested by setAsync() shows up once the emulator thread has
      *  carried it out (see sync()).
      */
-    i64 get(Opt option, long id) const;
+    i64 get(Opt opt, isize id) const;
     
     /** @brief  Configures a component.
      *
@@ -2859,7 +2871,7 @@ public:
      *  an additional parameter to uniquely determine the configured component.
      *  @see set(Opt, i64)
      */
-    void set(Opt opt, i64 value, long id);
+    void set(Opt opt, i64 value, isize id);
 
     /** Configures the emulator to match a specific Amiga model
      *
@@ -2895,7 +2907,7 @@ public:
      *  @param value    The option's value
      *  @param id       The component to configure
      */
-    void setAsync(Opt opt, i64 value, long id);
+    void setAsync(Opt opt, i64 value, isize id);
     void setAsync(ConfigScheme model);
 
     /** @brief  Checks if a configuration option would be accepted.
@@ -2916,7 +2928,7 @@ public:
      *  @param id       The component to configure
      *  @throw CoreError if the value would be rejected
      */
-    void check(Opt opt, i64 value, long id);
+    void check(Opt opt, i64 value, isize id);
 
     /** @brief  Exports the current configuration.
      *
