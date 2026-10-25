@@ -479,55 +479,55 @@ ImageInfo scan(const fs::path &url)
 - (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
     isize result;
-    const char *str = [self cpu]->debugger.disassembleRecordedInstr((int)i, &result);
+    auto str = [self cpu]->debugger.disassembleRecordedInstr((int)i, &result);
     *len = (NSInteger)result;
     
-    return str ? @(str) : nullptr;
+    return @(str.c_str());
 }
 
 - (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
-    const char *str = [self cpu]->debugger.disassembleRecordedWords(i, len);
-    return str ? @(str) : nullptr;
+    auto str = [self cpu]->debugger.disassembleRecordedWords(i, len);
+    return @(str.c_str());
 }
 
 - (NSString *)disassembleRecordedFlags:(NSInteger)i
 {
-    const char *str = [self cpu]->debugger.disassembleRecordedFlags((int)i);
-    return str ? @(str) : nullptr;
+    auto str = [self cpu]->debugger.disassembleRecordedFlags((int)i);
+    return @(str.c_str());
 }
 
 - (NSString *)disassembleRecordedPC:(NSInteger)i
 {
-    const char *str = [self cpu]->debugger.disassembleRecordedPC((int)i);
-    return str ? @(str) : nullptr;
+    auto str = [self cpu]->debugger.disassembleRecordedPC((int)i);
+    return @(str.c_str());
 }
 
 - (NSString *)disassembleWord:(NSInteger)value
 {
-    const char *str = [self cpu]->debugger.disassembleWord((u16)value);
-    return str ? @(str) : nullptr;
+    auto str = [self cpu]->debugger.disassembleWord((u16)value);
+    return @(str.c_str());
 }
 
 - (NSString *)disassembleAddr:(NSInteger)addr
 {
-    const char *str = [self cpu]->debugger.disassembleAddr((u32)addr);
-    return str ? @(str) : nullptr;
+    auto str = [self cpu]->debugger.disassembleAddr((u32)addr);
+    return @(str.c_str());
 }
 
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     isize result;
-    const char *str = [self cpu]->debugger.disassembleInstr((u32)addr, &result);
+    auto str = [self cpu]->debugger.disassembleInstr((u32)addr, &result);
     *len = result;
     
-    return str ? @(str) : nullptr;
+    return @(str.c_str());
 }
 
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
-    const char *str = [self cpu]->debugger.disassembleWords((u32)addr, len);
-    return str ? @(str) : nullptr;
+    auto str = [self cpu]->debugger.disassembleWords((u32)addr, len);
+    return @(str.c_str());
 }
 
 - (NSString *)vectorName:(NSInteger)nr

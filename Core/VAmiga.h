@@ -621,18 +621,26 @@ public:
     void clearLog();
 
     /** @brief  Disassembles a recorded instruction from the log buffer
+     *  @param  i       Index of the instruction in the record buffer
+     *  @param  len     Length of the instruction in bytes (disassembleRecordedInstr),
+     *                  or number of words to show (disassembleRecordedWords).
+     *  @return The disassembled text.
      */
-    const char *disassembleRecordedInstr(isize i, isize *len);
-    const char *disassembleRecordedWords(isize i, isize len);
-    const char *disassembleRecordedFlags(isize i);
-    const char *disassembleRecordedPC(isize i);
+    string disassembleRecordedInstr(isize i, isize *len);
+    string disassembleRecordedWords(isize i, isize len);
+    string disassembleRecordedFlags(isize i);
+    string disassembleRecordedPC(isize i);
 
     /** @brief  Disassembles the instruction at the specified address
+     *  @param  addr    Address of the instruction
+     *  @param  len     Length of the instruction in bytes (disassembleInstr),
+     *                  or number of words to show (disassembleWords).
+     *  @return The disassembled text.
      */
-    const char *disassembleWord(u16 value);
-    const char *disassembleAddr(u32 addr);
-    const char *disassembleInstr(u32 addr, isize *len);
-    const char *disassembleWords(u32 addr, isize len);
+    string disassembleWord(u16 value);
+    string disassembleAddr(u32 addr);
+    string disassembleInstr(u32 addr, isize *len);
+    string disassembleWords(u32 addr, isize len);
 
     string vectorName(isize i);
 };
