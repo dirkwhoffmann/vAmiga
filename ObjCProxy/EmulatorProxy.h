@@ -408,15 +408,8 @@ ImageInfo scan(const fs::path &url);
 @property (readonly) NSInteger loggedInstructions;
 - (void)clearLog;
 
-- (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len;
-- (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len;
-- (NSString *)disassembleRecordedFlags:(NSInteger)i;
-- (NSString *)disassembleRecordedPC:(NSInteger)i;
-
-- (NSString *)disassembleWord:(NSInteger)value;
-- (NSString *)disassembleAddr:(NSInteger)addr;
-- (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len;
-- (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len;
+- (NSString *)disassemble:(NSInteger)addr format:(NSString *)fmt length:(NSInteger *)len;
+- (NSString *)disassembleRecorded:(NSInteger)nr format:(NSString *)fmt length:(NSInteger *)len;
 
 - (NSString *)vectorName:(NSInteger)nr;
 

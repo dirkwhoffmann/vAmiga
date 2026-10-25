@@ -476,57 +476,23 @@ ImageInfo scan(const fs::path &url)
     return [self cpu]->debugger.clearLog();
 }
 
-- (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
+- (NSString *)disassemble:(NSInteger)addr format:(NSString *)fmt length:(NSInteger *)len
 {
-    isize result;
-    auto str = [self cpu]->debugger.disassembleRecordedInstr((int)i, &result);
-    *len = (NSInteger)result;
-    
+    isize length = 0;
+
+    auto str = [self cpu]->debugger.disassemble((u32)addr, [fmt UTF8String], &length);
+    if (len) *len = (NSInteger)length;
+
     return @(str.c_str());
 }
 
-- (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
+- (NSString *)disassembleRecorded:(NSInteger)nr format:(NSString *)fmt length:(NSInteger *)len
 {
-    auto str = [self cpu]->debugger.disassembleRecordedWords(i, len);
-    return @(str.c_str());
-}
+    isize length = 0;
 
-- (NSString *)disassembleRecordedFlags:(NSInteger)i
-{
-    auto str = [self cpu]->debugger.disassembleRecordedFlags((int)i);
-    return @(str.c_str());
-}
+    auto str = [self cpu]->debugger.disassembleRecorded(nr, [fmt UTF8String], &length);
+    if (len) *len = (NSInteger)length;
 
-- (NSString *)disassembleRecordedPC:(NSInteger)i
-{
-    auto str = [self cpu]->debugger.disassembleRecordedPC((int)i);
-    return @(str.c_str());
-}
-
-- (NSString *)disassembleWord:(NSInteger)value
-{
-    auto str = [self cpu]->debugger.disassembleWord((u16)value);
-    return @(str.c_str());
-}
-
-- (NSString *)disassembleAddr:(NSInteger)addr
-{
-    auto str = [self cpu]->debugger.disassembleAddr((u32)addr);
-    return @(str.c_str());
-}
-
-- (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
-{
-    isize result;
-    auto str = [self cpu]->debugger.disassembleInstr((u32)addr, &result);
-    *len = result;
-    
-    return @(str.c_str());
-}
-
-- (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
-{
-    auto str = [self cpu]->debugger.disassembleWords((u32)addr, len);
     return @(str.c_str());
 }
 

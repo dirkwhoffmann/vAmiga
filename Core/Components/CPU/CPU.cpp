@@ -760,115 +760,81 @@ CPU::eofHandler()
     }
 }
 
-const char *
-CPU::disassembleRecordedInstr(isize i, isize *len) const
+string
+CPU::disass(const string &fmt, u32 addr, isize *len) const
 {
-    return disassembleInstr(debugger.logEntryAbs((int)i).pc0, len);
+    return disass(fmt, addr, reg, len);
 }
 
-const char *
-CPU::disassembleRecordedWords(isize i, isize len) const
+string
+CPU::disassRecorded(const string &fmt, isize nr, isize *len) const
 {
-    return disassembleWords(debugger.logEntryAbs((int)i).pc0, len);
+    auto &entry = debugger.logEntryAbs((int)nr);
+    return disass(fmt, entry.pc0, entry, len);
 }
 
-const char *
-CPU::disassembleRecordedFlags(isize i) const
+string
+CPU::disass(const string &fmt, u32 addr, const moira::Registers &regs, isize *len) const
 {
-    static char result[18];
-    
-    disassembleSR(result, debugger.logEntryAbs((int)i).sr);
+    string result;
+    char buffer[256];
+
+    // The instruction length is only computed if it is needed
+    int bytes = -1;
+    auto length = [&]() {
+
+        if (bytes < 0) { char tmp[128]; bytes = disassemble(tmp, addr); }
+        return bytes;
+    };
+
+    for (usize i = 0; i < fmt.size(); i++) {
+
+        if (fmt[i] != '%') { result += fmt[i]; continue; }
+
+        // Parse the number in front of the directive
+        isize num = 0; bool hasNum = false;
+        while (++i < fmt.size() && isdigit(fmt[i])) { num = 10 * num + (fmt[i] - '0'); hasNum = true; }
+        if (i >= fmt.size()) throw CoreError(CoreError::OPT_INV_ARG, "A directive after %");
+
+        // Pads the output to the requested width
+        auto pad = [&](const char *text) {
+
+            result += text;
+            for (isize n = isize(strlen(text)); n < num; n++) result += ' ';
+        };
+
+        switch (fmt[i]) {
+
+            case 'p': dump24(buffer, addr); pad(buffer); break;
+            case 'b': dump16(buffer, addr, length() / 2); pad(buffer); break;
+            case 'i': bytes = disassemble(buffer, addr); pad(buffer); break;
+            case 'f': disassembleSR(buffer, regs.sr); pad(buffer); break;
+
+            case 'd':
+            case 'a':
+
+                if (!hasNum || num > 7) throw CoreError(CoreError::OPT_INV_ARG, "0...7 in front of d or a");
+                dump32(buffer, fmt[i] == 'd' ? regs.d[num] : regs.a[num]);
+                result += buffer;
+                break;
+
+            default:
+                throw CoreError(CoreError::OPT_INV_ARG, string("p, b, i, f, d, or a after %, not ") + fmt[i]);
+        }
+    }
+
+    if (len) *len = length();
     return result;
-}
-
-const char *
-CPU::disassembleRecordedPC(isize i) const
-{
-    static char result[16];
-
-    Moira::dump24(result, debugger.logEntryAbs((int)i).pc0);
-    return result;
-}
-
-const char *
-CPU::disassembleAddr(u32 addr) const
-{
-    static char result[16];
-
-    Moira::dump24(result, addr);
-    return result;
-}
-
-const char *
-CPU::disassembleWord(u16 value) const
-{
-    static char result[16];
-
-    Moira::dump16(result, value);
-    return result;
-}
-
-const char *
-CPU::disassembleInstr(u32 addr, isize *len) const
-{
-    static char result[128];
-
-    int l = disassemble(result, addr);
-
-    if (len) *len = (isize)l;
-    return result;
-}
-
-const char *
-CPU::disassembleWords(u32 addr, isize len) const
-{
-    static char result[64];
-
-    dump16(result, addr, (int)len);
-    return result;
-}
-
-const char *
-CPU::disassembleInstr(isize *len) const
-{
-    return disassembleInstr(reg.pc0, len);
-}
-
-const char *
-CPU::disassembleWords(isize len) const
-{
-    return disassembleWords(reg.pc0, len);
-}
-
-const char *
-CPU::disassemblePC() const
-{
-    return disassembleAddr(reg.pc0);
 }
 
 void
 CPU::dumpLogBuffer(std::ostream &os, isize count) const
 {
-    isize numBytes = 0;
     isize num = debugger.loggedInstructions();
 
     for (isize i = num - count; i < num ; i++) {
 
-        if (i >= 0) {
-
-            auto pc = disassembleRecordedPC(i);
-            auto instr = disassembleRecordedInstr(i, &numBytes);
-            auto flags = disassembleRecordedFlags(i);
-
-            os << std::setfill('0');
-            os << "   ";
-            os << std::right << std::setw(6) << pc;
-            os << "  ";
-            os << flags;
-            os << "  ";
-            os << instr;
-            os << std::endl;
-        }
+        if (i >= 0) os << "   " << disassRecorded("%p  %f  %i", i) << std::endl;
     }
 }
 
@@ -893,11 +859,7 @@ CPU::disassembleRange(std::ostream &os, std::pair<u32, u32> range, isize max) co
 
     for (isize i = 0; i < max && addr <= range.second; i++, addr += u32(numBytes)) {
 
-        // auto pc = disassembleAddr(addr);
-        auto instr = disassembleInstr(addr, &numBytes);
-        auto data = disassembleWords(addr, numBytes / 2);
-
-        os << std::setfill(' ');
+        auto line = disass("%p  %15b   %i", addr, &numBytes);
 
         os << (addr == pc ? "->" : "  ");
 
@@ -909,12 +871,7 @@ CPU::disassembleRange(std::ostream &os, std::pair<u32, u32> range, isize max) co
             os << " ";
         }
 
-        os << std::right << std::setw(6) << disassembleAddr(addr);
-        os << "  ";
-        os << std::left << std::setw(15) << data;
-        os << "   ";
-        os << instr;
-        os << std::endl;
+        os << line << std::endl;
     }
 }
 

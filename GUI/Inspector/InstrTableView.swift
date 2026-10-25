@@ -68,8 +68,8 @@ class InstrTableView: NSTableView {
         for i in 0 ..< numRows {
             
             var bytes = 0
-            instrInRow[i] = cpu.disassembleInstr(addr, length: &bytes)
-            dataInRow[i] = cpu.disassembleWords(addr, length: bytes / 2)
+            instrInRow[i] = cpu.disassemble(addr, format: "%i", length: &bytes)
+            dataInRow[i] = cpu.disassemble(addr, format: "%b", length: &bytes)
                         
             if breakpoints!.isDisabled(at: addr) {
                 bpInRow[i] = BreakpointType.disabled
@@ -80,7 +80,7 @@ class InstrTableView: NSTableView {
             }
             
             addrInRow[i] = addr
-            addrStrInRow[i] = cpu.disassembleAddr(addr)
+            addrStrInRow[i] = cpu.disassemble(addr, format: "%p", length: &bytes)
             rowForAddr[addr] = i
             addr += bytes
         }

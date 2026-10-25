@@ -426,59 +426,17 @@ CPUDebuggerAPI::clearLog()
 }
 
 string
-CPUDebuggerAPI::disassembleRecordedInstr(isize i, isize *len)
+CPUDebuggerAPI::disassemble(u32 addr, const string &fmt, isize *len)
 {
     VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleRecordedInstr(i, len));
+    return cpu->disass(fmt, addr, len);
 }
 
 string
-CPUDebuggerAPI::disassembleRecordedWords(isize i, isize len)
+CPUDebuggerAPI::disassembleRecorded(isize nr, const string &fmt, isize *len)
 {
     VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleRecordedWords(i, len));
-}
-
-string
-CPUDebuggerAPI::disassembleRecordedFlags(isize i)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleRecordedFlags(i));
-}
-
-string
-CPUDebuggerAPI::disassembleRecordedPC(isize i)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleRecordedPC(i));
-}
-
-string
-CPUDebuggerAPI::disassembleWord(u16 value)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleWord(value));
-}
-
-string
-CPUDebuggerAPI::disassembleAddr(u32 addr)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleAddr(addr));
-}
-
-string
-CPUDebuggerAPI::disassembleInstr(u32 addr, isize *len)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleInstr(addr, len));
-}
-
-string
-CPUDebuggerAPI::disassembleWords(u32 addr, isize len)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return string(cpu->disassembleWords(addr, len));
+    return cpu->disassRecorded(fmt, nr, len);
 }
 
 string

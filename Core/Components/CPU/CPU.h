@@ -297,22 +297,31 @@ public:
     // Running the disassembler
     //
     
-    // Disassembles a recorded instruction from the log buffer
-    const char *disassembleRecordedInstr(isize i, isize *len) const;
-    const char *disassembleRecordedWords(isize i, isize len) const;
-    const char *disassembleRecordedFlags(isize i) const;
-    const char *disassembleRecordedPC(isize i) const;
+    /* Disassembles an instruction according to a format string. The
+     * following directives are supported:
+     *
+     *   %p  Instruction address
+     *   %b  Instruction words
+     *   %i  Instruction
+     *   %f  Status register flags
+     *   %Nd Data register DN (N = 0 ... 7)
+     *   %Na Address register AN (N = 0 ... 7)
+     *
+     * A number in front of %p, %b, %i, or %f pads the output with spaces to
+     * the given width. The register directives print the registers of the
+     * CPU state the instruction has been recorded in (or the current CPU state
+     * if the instruction is not taken from the log buffer). Throws CoreError
+     * (OPT_INV_ARG) if the format string is invalid. If 'len' is given, it
+     * receives the length of the instruction in bytes.
+     */
+    string disass(const string &fmt, u32 addr, isize *len = nullptr) const;
+    string disassRecorded(const string &fmt, isize nr, isize *len = nullptr) const;
 
-    // Disassembles the instruction at the specified address
-    const char *disassembleWord(u16 value) const;
-    const char *disassembleAddr(u32 addr) const;
-    const char *disassembleInstr(u32 addr, isize *len) const;
-    const char *disassembleWords(u32 addr, isize len) const;
+private:
 
-    // Disassembles the currently executed instruction
-    const char *disassembleInstr(isize *len) const;
-    const char *disassembleWords(isize len) const;
-    const char *disassemblePC() const;
+    string disass(const string &fmt, u32 addr, const moira::Registers &regs, isize *len) const;
+
+public:
 
     // Dumps a portion of the log buffer
     void dumpLogBuffer(std::ostream &os, isize count) const;

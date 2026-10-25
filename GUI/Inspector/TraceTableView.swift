@@ -38,9 +38,9 @@ class TraceTableView: NSTableView {
         for i in 0 ..< numRows {
             
             var len = 0
-            addrInRow[i] = cpu.disassembleRecordedPC(i)
-            instrInRow[i] = cpu.disassembleRecordedInstr(i, length: &len)
-            flagsInRow[i] = cpu.disassembleRecordedFlags(i)
+            addrInRow[i] = cpu.disassembleRecorded(i, format: "%p", length: &len)
+            instrInRow[i] = cpu.disassembleRecorded(i, format: "%i", length: &len)
+            flagsInRow[i] = cpu.disassembleRecorded(i, format: "%f", length: &len)
         }
     }
 
