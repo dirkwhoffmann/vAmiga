@@ -1982,6 +1982,15 @@ VAmiga::VAmiga() {
     agnus.xray.xray = &emu->main.agnus.xray;
     agnus.copper.emu = emu;
     agnus.copper.copper = &emu->main.agnus.copper;
+    agnus.copper.breakpoints.emu = emu;
+    agnus.copper.breakpoints.guards = &emu->main.agnus.copper.debugger.breakpoints;
+    agnus.copper.breakpoints.type = GuardType::COPPER_BREAKPOINT;
+    agnus.copper.watchpoints.emu = emu;
+    agnus.copper.watchpoints.guards = &emu->main.agnus.copper.debugger.watchpoints;
+    agnus.copper.watchpoints.type = GuardType::COPPER_WATCHPOINT;
+    agnus.beamtraps.emu = emu;
+    agnus.beamtraps.guards = &emu->main.agnus.debugger.beamtraps;
+    agnus.beamtraps.type = GuardType::BEAMTRAP;
     agnus.blitter.emu = emu;
     agnus.blitter.blitter = &emu->main.agnus.blitter;
 
@@ -2001,6 +2010,9 @@ VAmiga::VAmiga() {
     cpu.watchpoints.emu = emu;
     cpu.watchpoints.guards = &emu->main.cpu.watchpoints;
     cpu.watchpoints.type = GuardType::WATCHPOINT;
+    cpu.catchpoints.emu = emu;
+    cpu.catchpoints.guards = &emu->main.cpu.catchpoints;
+    cpu.catchpoints.type = GuardType::CATCHPOINT;
 
     denise.emu = emu;
     denise.denise = &emu->main.denise;
@@ -2089,9 +2101,6 @@ VAmiga::VAmiga() {
     keyboard.keyboard = &emu->main.keyboard;
 
     // Misc
-    copperBreakpoints.emu = emu;
-    copperBreakpoints.guards = &emu->main.agnus.copper.debugger.breakpoints;
-    copperBreakpoints.type = GuardType::COPPER_BREAKPOINT;
 
     msgQueue.emu = emu;
     msgQueue.msgQueue = &emu->main.msgQueue;

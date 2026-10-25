@@ -2553,7 +2553,7 @@ ImageInfo scan(const fs::path &url)
     controlPort1 = [[ControlPortProxy alloc] initWith:&vamiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWith:&vamiga->controlPort2];
     copper = [[CopperProxy alloc] initWith:&vamiga->agnus.copper];
-    copperBreakpoints = [[GuardsProxy alloc] initWith:&vamiga->copperBreakpoints];
+    copperBreakpoints = [[GuardsProxy alloc] initWith:&vamiga->agnus.copper.breakpoints];
     cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
     denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
     diskController = [[DiskControllerProxy alloc] initWith:&vamiga->paula.diskController];

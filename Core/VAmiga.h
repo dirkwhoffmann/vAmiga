@@ -384,138 +384,9 @@ public:
     const BlitterInfo &getCachedInfo() const;
 };
 
-class CopperAPI : public API {
-
-    friend class VAmiga;
-    
-public:
-
-    class Copper *copper = nullptr;
-
-    /** @brief  Returns the component's current state.
-     *
-     *  getInfo() reads the live state on the calling thread. The result is only
-     *  consistent if the emulator is paused or suspended. getCachedInfo()
-     *  returns the snapshot the emulator thread has recorded most recently,
-     *  which is the one to use while the emulator runs. Both return references
-     *  that can be overwritten by a later call or by the emulator thread, so
-     *  copy the data if you need to keep it.
-     */
-    const CopperInfo &getInfo() const;
-    const CopperInfo &getCachedInfo() const;
-
-    /** @brief  Disassembles a Copper instruction.
-     *  @param  list     The Cooper list to take the instruction from
-     *  @param  offset   Offset of the instruction relative to the start of the
-     *                   list.
-     *  @param  symbolic The output format. The flag indicates whether the
-     *                   instruction should be be disassembled in symbolic,
-     *                   human-readable form or in raw form as a sequence of
-     *                   hexadecimal numbers.
-     */
-    string disassemble(isize list, isize offset, bool symbolic) const;
-
-    /** @brief  Disassembles a Copper instruction.
-     *  @param  addr     The address of the Cooper instruction in memory.
-     *  @param  symbolic Output format.
-     */
-    string disassemble(u32 addr, bool symbolic) const;
-
-    /** @brief  Checks whether a Copper instruction is illegal.
-     *          A Copper instruction is classified as illegal if it is tries
-     *          custom chip register it has no access to.
-     *  @param  addr     The address of the Cooper instruction in memory.
-     */
-    bool isIllegalInstr(u32 addr) const;
-};
-
-class AgnusAPI : public API {
-
-    friend class VAmiga;
-    
-public:
-
-    class Agnus *agnus = nullptr;
-    
-    CopperAPI copper;
-    BlitterAPI blitter;
-    XRayAPI xray;
-    LogicAnalyzerAPI logicAnalyzer;
-    
-    /** @brief  Returns the component's current configuration.
-     */
-    const AgnusConfig &getConfig() const;
-
-    /** @brief  Returns the component's current state.
-     *
-     *  getInfo() reads the live state on the calling thread. The result is only
-     *  consistent if the emulator is paused or suspended. getCachedInfo()
-     *  returns the snapshot the emulator thread has recorded most recently,
-     *  which is the one to use while the emulator runs. Both return references
-     *  that can be overwritten by a later call or by the emulator thread, so
-     *  copy the data if you need to keep it.
-     */
-    const AgnusInfo &getInfo() const;
-    const AgnusInfo &getCachedInfo() const;
-
-    /** @brief  Returns statistical information about the components.
-     *
-     *  getMetrics() reads the live state on the calling thread. The result is only
-     *  consistent if the emulator is paused or suspended. getCachedMetrics()
-     *  returns the snapshot the emulator thread has recorded most recently,
-     *  which is the one to use while the emulator runs. Both return references
-     *  that can be overwritten by a later call or by the emulator thread, so
-     *  copy the data if you need to keep it.
-     */
-    const AgnusMetrics &getMetrics() const;
-    const AgnusMetrics &getCachedMetrics() const;
-
-    /** @brief  Provides details about the currently selected chip revision.
-     */
-    const AgnusTraits getTraits() const;
-};
-
-
 //
-// CIA
+// Guards (breakpoints, watchpoints, ...)
 //
-
-class CIAAPI : public API {
-
-    friend class VAmiga;
-    
-public:
-
-    class CIA *cia = nullptr;
-    
-    /** @brief  Returns the component's current configuration.
-     */
-    const CIAConfig &getConfig() const;
-
-    /** @brief  Returns the component's current state.
-     *
-     *  getInfo() reads the live state on the calling thread. The result is only
-     *  consistent if the emulator is paused or suspended. getCachedInfo()
-     *  returns the snapshot the emulator thread has recorded most recently,
-     *  which is the one to use while the emulator runs. Both return references
-     *  that can be overwritten by a later call or by the emulator thread, so
-     *  copy the data if you need to keep it.
-     */
-    const CIAInfo &getInfo() const;
-    const CIAInfo &getCachedInfo() const;
-
-    /** @brief  Returns statistical information about the components.
-     */
-    const CIAMetrics &getMetrics() const;
-    const CIAMetrics &getCachedMetrics() const;
-};
-
-
-//
-// CPU
-//
-
-namespace moira { class Guards; class Debugger; }
 
 class GuardsAPI : public API {
 
@@ -603,6 +474,143 @@ public:
 
 };
 
+class CopperAPI : public API {
+
+    friend class VAmiga;
+    
+public:
+
+    class Copper *copper = nullptr;
+
+    GuardsAPI breakpoints;
+    GuardsAPI watchpoints;
+
+    /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
+     */
+    const CopperInfo &getInfo() const;
+    const CopperInfo &getCachedInfo() const;
+
+    /** @brief  Disassembles a Copper instruction.
+     *  @param  list     The Cooper list to take the instruction from
+     *  @param  offset   Offset of the instruction relative to the start of the
+     *                   list.
+     *  @param  symbolic The output format. The flag indicates whether the
+     *                   instruction should be be disassembled in symbolic,
+     *                   human-readable form or in raw form as a sequence of
+     *                   hexadecimal numbers.
+     */
+    string disassemble(isize list, isize offset, bool symbolic) const;
+
+    /** @brief  Disassembles a Copper instruction.
+     *  @param  addr     The address of the Cooper instruction in memory.
+     *  @param  symbolic Output format.
+     */
+    string disassemble(u32 addr, bool symbolic) const;
+
+    /** @brief  Checks whether a Copper instruction is illegal.
+     *          A Copper instruction is classified as illegal if it is tries
+     *          custom chip register it has no access to.
+     *  @param  addr     The address of the Cooper instruction in memory.
+     */
+    bool isIllegalInstr(u32 addr) const;
+};
+
+class AgnusAPI : public API {
+
+    friend class VAmiga;
+    
+public:
+
+    class Agnus *agnus = nullptr;
+    
+    CopperAPI copper;
+    BlitterAPI blitter;
+    XRayAPI xray;
+    LogicAnalyzerAPI logicAnalyzer;
+    GuardsAPI beamtraps;
+    
+    /** @brief  Returns the component's current configuration.
+     */
+    const AgnusConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
+     */
+    const AgnusInfo &getInfo() const;
+    const AgnusInfo &getCachedInfo() const;
+
+    /** @brief  Returns statistical information about the components.
+     *
+     *  getMetrics() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedMetrics()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
+     */
+    const AgnusMetrics &getMetrics() const;
+    const AgnusMetrics &getCachedMetrics() const;
+
+    /** @brief  Provides details about the currently selected chip revision.
+     */
+    const AgnusTraits getTraits() const;
+};
+
+
+//
+// CIA
+//
+
+class CIAAPI : public API {
+
+    friend class VAmiga;
+    
+public:
+
+    class CIA *cia = nullptr;
+    
+    /** @brief  Returns the component's current configuration.
+     */
+    const CIAConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     *
+     *  getInfo() reads the live state on the calling thread. The result is only
+     *  consistent if the emulator is paused or suspended. getCachedInfo()
+     *  returns the snapshot the emulator thread has recorded most recently,
+     *  which is the one to use while the emulator runs. Both return references
+     *  that can be overwritten by a later call or by the emulator thread, so
+     *  copy the data if you need to keep it.
+     */
+    const CIAInfo &getInfo() const;
+    const CIAInfo &getCachedInfo() const;
+
+    /** @brief  Returns statistical information about the components.
+     */
+    const CIAMetrics &getMetrics() const;
+    const CIAMetrics &getCachedMetrics() const;
+};
+
+
+//
+// CPU
+//
+
+namespace moira { class Guards; class Debugger; }
+
 class CPUDebuggerAPI : public API {
 
     friend class VAmiga;
@@ -663,6 +671,7 @@ public:
     CPUDebuggerAPI debugger;
     GuardsAPI breakpoints;
     GuardsAPI watchpoints;
+    GuardsAPI catchpoints;
 
     /** @brief  Returns the component's current configuration.
      */
@@ -2203,7 +2212,6 @@ public:
     KeyboardAPI keyboard;
     
     // Misc
-    GuardsAPI copperBreakpoints; // TODO: Move inside AgnusAPI
     MsgQueueAPI msgQueue;
     DebuggerAPI debugger; // TODO: No longer needed? It's not 'wired'
     RemoteManagerAPI remoteManager;
