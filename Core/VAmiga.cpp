@@ -1282,7 +1282,7 @@ KeyboardAPI::unlock(KeyCode key, double delay)
 void KeyboardAPI::abortTyping()
 {
     VAMIGA_PUBLIC
-    keyboard->abortTyping();
+    emu->put(Cmd::KEY_ABORT_TYPING);
 }
 
 
@@ -1979,49 +1979,49 @@ RetroShellAPI::text() const
 void
 RetroShellAPI::press(RSKey key, bool shift)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->press(key, shift);
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::RSH_PRESS_KEY, i64(key), i64(shift)));
 }
 
 void
 RetroShellAPI::press(char c)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->press(c);
+    VAMIGA_PUBLIC
+    emu->put(Cmd::RSH_PRESS_CHAR, i64(c));
 }
 
 void
 RetroShellAPI::press(const string &s)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->press(s);
+    VAMIGA_PUBLIC
+    emu->put(Cmd::RSH_PRESS_TEXT, s);
 }
 
 void
 RetroShellAPI::execScriptAsync(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
+    VAMIGA_PUBLIC
     retroShell->asyncExecScript(path);
 }
 
 void
 RetroShellAPI::execScriptAsync(std::stringstream &ss)
 {
-    VAMIGA_PUBLIC_SUSPEND
+    VAMIGA_PUBLIC
     retroShell->asyncExecScript(ss);
 }
 
 void
 RetroShellAPI::execScriptAsync(const std::ifstream &fs)
 {
-    VAMIGA_PUBLIC_SUSPEND
+    VAMIGA_PUBLIC
     retroShell->asyncExecScript(fs);
 }
 
 void
 RetroShellAPI::execScriptAsync(const string &contents)
 {
-    VAMIGA_PUBLIC_SUSPEND
+    VAMIGA_PUBLIC
     retroShell->asyncExecScript(contents);
 }
 
@@ -2593,7 +2593,7 @@ VAmiga::get(Opt opt, isize id) const
 void
 VAmiga::setAsync(ConfigScheme model)
 {
-    VAMIGA_PUBLIC_SUSPEND
+    VAMIGA_PUBLIC
     putAsync(Cmd::CONFIG_SCHEME, (i64)model);
     emu->markAsDirty();
 }
@@ -2843,6 +2843,13 @@ AmigaAPI::setAutoInspectionMask(u64 mask)
 {
     VAMIGA_PUBLIC_SUSPEND
     amiga->setAutoInspectionMask(mask);
+}
+
+void
+AmigaAPI::setAutoInspectionMaskAsync(u64 mask)
+{
+    VAMIGA_PUBLIC
+    emu->put(Cmd::INSPECTION_TARGET, i64(mask));
 }
 
 bool

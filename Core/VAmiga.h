@@ -305,6 +305,9 @@ public:
      *  @param  mask A bit mask indicating the components under inspection
      */
     void setAutoInspectionMask(u64 mask);
+
+    /// Asynchronous version of setAutoInspectionMask(): queues the request and returns at once.
+    void setAutoInspectionMaskAsync(u64 mask);
     
     /// @}
 };

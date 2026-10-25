@@ -1168,6 +1168,26 @@ Amiga::update(CmdQueue &queue)
                     break;
 
                 
+                case Cmd::KEY_ABORT_TYPING:
+
+                    keyboard.abortTyping();
+                    break;
+
+                case Cmd::RSH_PRESS_KEY:
+
+                    retroShell.press(RSKey(cmd.value), cmd.value2);
+                    break;
+
+                case Cmd::RSH_PRESS_CHAR:
+
+                    retroShell.press(char(cmd.value));
+                    break;
+
+                case Cmd::RSH_PRESS_TEXT:
+
+                    retroShell.press(cmd.str);
+                    break;
+
                 case Cmd::RSH_EXECUTE:
 
                     retroShell.exec();
