@@ -422,11 +422,13 @@ public:
 
     /** @brief  Returns information about a guard.
      *  @param  nr      Number of the guard in the guard list
+     *  @return A copy of the guard's state, or nothing if it does not exist.
      */
     std::optional<GuardInfo> guardNr(isize nr) const;
 
     /** @brief  Returns information about a guard.
      *  @param  target  The target of the guard to query
+     *  @return A copy of the guard's state, or nothing if the target is not guarded.
      */
     std::optional<GuardInfo> guardAt(u32 target) const;
 
