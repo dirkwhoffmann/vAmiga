@@ -523,6 +523,9 @@ class GuardsAPI : public API {
     
 public:
 
+    // The guard list this API operates on
+    GuardId id = GuardId::CPU_BREAKPOINTS;
+
     class GuardList *guards = nullptr;
     
     /** @brief  Returns the number of guards in the guard list.

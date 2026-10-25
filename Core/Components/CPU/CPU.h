@@ -349,15 +349,6 @@ public:
     void willExecute(moira::M68kException exc, u16 vector);
     void didExecute(moira::M68kException exc, u16 vector);
 
-
-    //
-    // Processing commands
-    //
-
-public:
-
-    // Processes a command from the command queue
-    void processCommand(const Command &cmd);
 };
 
 }

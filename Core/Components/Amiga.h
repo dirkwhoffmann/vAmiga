@@ -512,6 +512,9 @@ public:
     // Processes a command from the command queue
     void processCommand(const Command &cmd);
 
+    // Returns the guard list identified by an ID
+    class GuardList &guardList(GuardId id);
+
     // End-of-line handler
     void eolHandler();
 

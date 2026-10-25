@@ -881,31 +881,4 @@ CPU::jump(u32 addr)
     debugger.jump(addr);
 }
 
-void
-CPU::processCommand(const Command &cmd)
-{
-    isize nr = isize(cmd.value);
-    u32 addr = u32(cmd.value);
-    auto guards = (GuardList *)cmd.sender;
-
-    switch (cmd.type) {
-
-        case Cmd::GUARD_SET_AT:      guards->setAt(addr); break;
-        case Cmd::GUARD_REMOVE_NR:   guards->remove(nr); break;
-        case Cmd::GUARD_MOVE_NR:     guards->moveTo(nr, u32(cmd.value2)); break;
-        case Cmd::GUARD_IGNORE_NR:   guards->ignore(nr, isize(cmd.value2)); break;
-        case Cmd::GUARD_REMOVE_AT:   guards->removeAt(addr); break;
-        case Cmd::GUARD_REMOVE_ALL:  guards->removeAll(); break;
-        case Cmd::GUARD_ENABLE_NR:   guards->enable(nr); break;
-        case Cmd::GUARD_ENABLE_AT:   guards->enableAt(addr); break;
-        case Cmd::GUARD_ENABLE_ALL:  guards->enableAll(); break;
-        case Cmd::GUARD_DISABLE_NR:  guards->disable(nr); break;
-        case Cmd::GUARD_DISABLE_AT:  guards->disableAt(addr); break;
-        case Cmd::GUARD_DISABLE_ALL: guards->disableAll(); break;
-            
-        default:
-            fatalError;
-    }
-}
-
 }

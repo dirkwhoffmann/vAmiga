@@ -10,6 +10,7 @@
 #pragma once
 
 #include "GuardListTypes.h"
+#include "CmdQueueTypes.h"
 #include "MoiraDebugger.h"
 
 namespace vamiga {
@@ -100,6 +101,9 @@ public:
     void toggleAt(u32 target);
 
     void ignore(isize nr, isize count);
+
+    // Carries out a command of type GUARD_xxx
+    void processCommand(const Command &cmd);
 
 
     //

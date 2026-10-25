@@ -170,4 +170,31 @@ GuardList::update() {
     setNeedsCheck(needsCheck);
 }
 
+
+void
+GuardList::processCommand(const Command &cmd)
+{
+    auto &g = cmd.guard;
+
+    switch (cmd.type) {
+
+        case Cmd::GUARD_SET_AT:      setAt(g.addr, g.ignores); break;
+        case Cmd::GUARD_REMOVE_NR:   remove(g.nr); break;
+        case Cmd::GUARD_MOVE_NR:     moveTo(g.nr, g.addr); break;
+        case Cmd::GUARD_IGNORE_NR:   ignore(g.nr, g.ignores); break;
+        case Cmd::GUARD_REMOVE_AT:   removeAt(g.addr); break;
+        case Cmd::GUARD_REMOVE_ALL:  removeAll(); break;
+        case Cmd::GUARD_ENABLE_NR:   enable(g.nr); break;
+        case Cmd::GUARD_ENABLE_AT:   enableAt(g.addr); break;
+        case Cmd::GUARD_ENABLE_ALL:  enableAll(); break;
+        case Cmd::GUARD_DISABLE_NR:  disable(g.nr); break;
+        case Cmd::GUARD_DISABLE_AT:  disableAt(g.addr); break;
+        case Cmd::GUARD_DISABLE_ALL: disableAll(); break;
+        case Cmd::GUARD_TOGGLE_NR:   toggle(g.nr); break;
+
+        default:
+            fatalError;
+    }
+}
+
 }

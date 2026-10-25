@@ -330,85 +330,85 @@ GuardsAPI::guardAt(u32 target) const
 void
 GuardsAPI::setAt(u32 target, isize ignores)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_SET_AT, (void *)guards, target, ignores));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_SET_AT, GuardCmd { .list = id, .addr = target, .ignores = ignores }));
 }
 
 void
 GuardsAPI::moveTo(isize nr, u32 newTarget)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_MOVE_NR, (void *)guards, nr, newTarget));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_MOVE_NR, GuardCmd { .list = id, .nr = nr, .addr = newTarget }));
 }
 
 void
 GuardsAPI::remove(isize nr)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_REMOVE_NR, (void *)guards, nr));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_REMOVE_NR, GuardCmd { .list = id, .nr = nr }));
 }
 
 void
 GuardsAPI::removeAt(u32 target)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_REMOVE_AT, (void *)guards, target));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_REMOVE_AT, GuardCmd { .list = id, .addr = target }));
 }
 
 void
 GuardsAPI::removeAll()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_REMOVE_ALL, (void *)guards));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_REMOVE_ALL, GuardCmd { .list = id }));
 }
 
 void
 GuardsAPI::enable(isize nr)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_ENABLE_NR, (void *)guards, nr));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_ENABLE_NR, GuardCmd { .list = id, .nr = nr }));
 }
 
 void
 GuardsAPI::enableAt(u32 target)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_ENABLE_AT, (void *)guards, target));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_ENABLE_AT, GuardCmd { .list = id, .addr = target }));
 }
 
 void
 GuardsAPI::enableAll()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_ENABLE_ALL, (void *)guards));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_ENABLE_ALL, GuardCmd { .list = id }));
 }
 
 void
 GuardsAPI::disable(isize nr)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_DISABLE_NR, (void *)guards, nr));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_DISABLE_NR, GuardCmd { .list = id, .nr = nr }));
 }
 
 void
 GuardsAPI::disableAt(u32 target)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_DISABLE_AT, (void *)guards, target));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_DISABLE_AT, GuardCmd { .list = id, .addr = target }));
 }
 
 void
 GuardsAPI::disableAll()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    emu->put(Command(Cmd::GUARD_DISABLE_ALL));
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_DISABLE_ALL, GuardCmd { .list = id }));
 }
 
 void
 GuardsAPI::toggle(isize nr)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    guards->toggle(nr);
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_TOGGLE_NR, GuardCmd { .list = id, .nr = nr }));
 }
 
 isize
@@ -1997,8 +1997,10 @@ VAmiga::VAmiga() {
     cpu.debugger.cpu = &emu->main.cpu;
     cpu.breakpoints.emu = emu;
     cpu.breakpoints.guards = &emu->main.cpu.breakpoints;
+    cpu.breakpoints.id = GuardId::CPU_BREAKPOINTS;
     cpu.watchpoints.emu = emu;
     cpu.watchpoints.guards = &emu->main.cpu.watchpoints;
+    cpu.watchpoints.id = GuardId::CPU_WATCHPOINTS;
 
     denise.emu = emu;
     denise.denise = &emu->main.denise;
@@ -2089,6 +2091,7 @@ VAmiga::VAmiga() {
     // Misc
     copperBreakpoints.emu = emu;
     copperBreakpoints.guards = &emu->main.agnus.copper.debugger.breakpoints;
+    copperBreakpoints.id = GuardId::COPPER_BREAKPOINTS;
 
     msgQueue.emu = emu;
     msgQueue.msgQueue = &emu->main.msgQueue;
