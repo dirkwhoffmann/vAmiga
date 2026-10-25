@@ -331,18 +331,39 @@ void
 GuardsAPI::setAt(u32 target, isize ignores)
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_SET_AT, GuardCmd { .list = type, .addr = target, .ignores = ignores }));
+}
+
+void
+GuardsAPI::setAtAsync(u32 target, isize ignores)
+{
+    VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_SET_AT, GuardCmd { .list = type, .addr = target, .ignores = ignores }));
 }
 
 void
-GuardsAPI::moveTo(isize nr, u32 newTarget)
+GuardsAPI::moveTo(isize nr, u32 target)
 {
     VAMIGA_PUBLIC
-    emu->put(Command(Cmd::GUARD_MOVE_NR, GuardCmd { .list = type, .nr = nr, .addr = newTarget }));
+    emu->sendAndWait(Command(Cmd::GUARD_MOVE_NR, GuardCmd { .list = type, .nr = nr, .addr = target }));
+}
+
+void
+GuardsAPI::moveToAsync(isize nr, u32 target)
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::GUARD_MOVE_NR, GuardCmd { .list = type, .nr = nr, .addr = target }));
 }
 
 void
 GuardsAPI::remove(isize nr)
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_REMOVE_NR, GuardCmd { .list = type, .nr = nr }));
+}
+
+void
+GuardsAPI::removeAsync(isize nr)
 {
     VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_REMOVE_NR, GuardCmd { .list = type, .nr = nr }));
@@ -352,11 +373,25 @@ void
 GuardsAPI::removeAt(u32 target)
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_REMOVE_AT, GuardCmd { .list = type, .addr = target }));
+}
+
+void
+GuardsAPI::removeAtAsync(u32 target)
+{
+    VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_REMOVE_AT, GuardCmd { .list = type, .addr = target }));
 }
 
 void
 GuardsAPI::removeAll()
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_REMOVE_ALL, GuardCmd { .list = type }));
+}
+
+void
+GuardsAPI::removeAllAsync()
 {
     VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_REMOVE_ALL, GuardCmd { .list = type }));
@@ -366,11 +401,25 @@ void
 GuardsAPI::enable(isize nr)
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_ENABLE_NR, GuardCmd { .list = type, .nr = nr }));
+}
+
+void
+GuardsAPI::enableAsync(isize nr)
+{
+    VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_ENABLE_NR, GuardCmd { .list = type, .nr = nr }));
 }
 
 void
 GuardsAPI::enableAt(u32 target)
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_ENABLE_AT, GuardCmd { .list = type, .addr = target }));
+}
+
+void
+GuardsAPI::enableAtAsync(u32 target)
 {
     VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_ENABLE_AT, GuardCmd { .list = type, .addr = target }));
@@ -380,11 +429,25 @@ void
 GuardsAPI::enableAll()
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_ENABLE_ALL, GuardCmd { .list = type }));
+}
+
+void
+GuardsAPI::enableAllAsync()
+{
+    VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_ENABLE_ALL, GuardCmd { .list = type }));
 }
 
 void
 GuardsAPI::disable(isize nr)
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_DISABLE_NR, GuardCmd { .list = type, .nr = nr }));
+}
+
+void
+GuardsAPI::disableAsync(isize nr)
 {
     VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_DISABLE_NR, GuardCmd { .list = type, .nr = nr }));
@@ -394,6 +457,13 @@ void
 GuardsAPI::disableAt(u32 target)
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_DISABLE_AT, GuardCmd { .list = type, .addr = target }));
+}
+
+void
+GuardsAPI::disableAtAsync(u32 target)
+{
+    VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_DISABLE_AT, GuardCmd { .list = type, .addr = target }));
 }
 
@@ -401,11 +471,25 @@ void
 GuardsAPI::disableAll()
 {
     VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_DISABLE_ALL, GuardCmd { .list = type }));
+}
+
+void
+GuardsAPI::disableAllAsync()
+{
+    VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_DISABLE_ALL, GuardCmd { .list = type }));
 }
 
 void
 GuardsAPI::toggle(isize nr)
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::GUARD_TOGGLE_NR, GuardCmd { .list = type, .nr = nr }));
+}
+
+void
+GuardsAPI::toggleAsync(isize nr)
 {
     VAMIGA_PUBLIC
     emu->put(Command(Cmd::GUARD_TOGGLE_NR, GuardCmd { .list = type, .nr = nr }));

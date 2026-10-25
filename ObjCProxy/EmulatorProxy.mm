@@ -376,27 +376,27 @@ ImageInfo scan(const fs::path &url)
 
 - (void)setAt:(NSInteger)addr
 {
-    [self guards]->setAt((u32)addr);
+    [self guards]->setAtAsync((u32)addr);
 }
 
 - (void)remove:(NSInteger)nr
 {
-    [self guards]->remove(nr);
+    [self guards]->removeAsync(nr);
 }
 
 - (void)removeAt:(NSInteger)addr
 {
-    [self guards]->removeAt((u32)addr);
+    [self guards]->removeAtAsync((u32)addr);
 }
 
 - (void)removeAll
 {
-    return [self guards]->removeAll();
+    return [self guards]->removeAllAsync();
 }
 
 - (void)replace:(NSInteger)nr addr:(NSInteger)addr
 {
-    [self guards]->moveTo(nr, (u32)addr);
+    [self guards]->moveToAsync(nr, (u32)addr);
 }
 
 - (BOOL)isEnabled:(NSInteger)nr
@@ -425,22 +425,22 @@ ImageInfo scan(const fs::path &url)
 
 - (void)enable:(NSInteger)nr
 {
-    [self guards]->enable(nr);
+    [self guards]->enableAsync(nr);
 }
 
 - (void)enableAt:(NSInteger)addr
 {
-    [self guards]->enableAt((u32)addr);
+    [self guards]->enableAtAsync((u32)addr);
 }
 
 - (void)disable:(NSInteger)nr
 {
-    [self guards]->disable(nr);
+    [self guards]->disableAsync(nr);
 }
 
 - (void)disableAt:(NSInteger)addr
 {
-    [self guards]->disableAt((u32)addr);
+    [self guards]->disableAtAsync((u32)addr);
 }
 
 @end
