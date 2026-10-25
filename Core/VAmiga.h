@@ -717,7 +717,16 @@ public:
     u8 spypeek8(Accessor acc, u32 addr) const;
     u16 spypeek16(Accessor acc, u32 addr) const;
 
-    /** @brief  Returns a string representations for a portion of memory.
+    /** @brief  Returns a string representation for a portion of memory.
+     *
+     *  ascDump() shows the bytes as characters, hexDump() as hexadecimal
+     *  numbers, and memDump() as hexadecimal numbers followed by characters.
+     *  Each group of 'sz' bytes forms one number and is followed by a space.
+     *
+     *  @param  acc     The accessor used to read the bytes.
+     *  @param  addr    First address to dump.
+     *  @param  bytes   Number of bytes to dump.
+     *  @param  sz      Group size in bytes (1, 2, or 4).
      */
     string ascDump(Accessor acc, u32 addr, isize bytes) const;
     string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;

@@ -67,7 +67,6 @@ template <Accessor A> string
 MemoryDebugger::hexDump(u32 addr, isize bytes, isize sz) const
 {
     assert(sz == 1 || bytes % 2 == 0);
-    assert(bytes <= 64);
 
     std::stringstream ss;
     utl::Dumpable::dump(ss, { .base = 16, .uppercase = true }, hexFormat(bytes, sz), provider<A>(addr, bytes));
@@ -78,7 +77,6 @@ template <Accessor A> string
 MemoryDebugger::memDump(u32 addr, isize bytes, isize sz) const
 {
     assert(sz == 1 || bytes % 2 == 0);
-    assert(bytes <= 32);
 
     std::stringstream ss;
     utl::Dumpable::dump(ss, { .base = 16, .uppercase = true }, hexFormat(bytes, sz) + "  " + ascFormat(bytes), provider<A>(addr, bytes));
