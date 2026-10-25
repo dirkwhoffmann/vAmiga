@@ -583,11 +583,11 @@ DeniseAPI::getCachedInfo() const
 //
 
 MemSrc
-MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
+MemoryDebuggerAPI::getMemSrc(Accessor src, u32 addr) const
 {
     VAMIGA_PUBLIC
     
-    switch (acc) {
+    switch (src) {
             
         case Accessor::CPU:      return mem->getMemSrc<Accessor::CPU>(addr);
         case Accessor::AGNUS:    return mem->getMemSrc<Accessor::AGNUS>(addr);
@@ -606,11 +606,11 @@ MemoryDebuggerAPI::regName(u32 addr) const
 }
 
 u8
-MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
+MemoryDebuggerAPI::spypeek8(Accessor src, u32 addr) const
 {
     VAMIGA_PUBLIC
     
-    switch (acc) {
+    switch (src) {
             
         case Accessor::CPU:      return mem->spypeek8<Accessor::CPU>(addr);
         case Accessor::AGNUS:    return mem->spypeek8<Accessor::AGNUS>(addr);
@@ -621,11 +621,11 @@ MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 }
 
 u16
-MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
+MemoryDebuggerAPI::spypeek16(Accessor src, u32 addr) const
 {
     VAMIGA_PUBLIC
     
-    switch (acc) {
+    switch (src) {
             
         case Accessor::CPU:      return mem->spypeek16<Accessor::CPU>(addr);
         case Accessor::AGNUS:    return mem->spypeek16<Accessor::AGNUS>(addr);
@@ -636,11 +636,11 @@ MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
 }
 
 string
-MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
+MemoryDebuggerAPI::ascDump(Accessor src, u32 addr, isize bytes) const
 {
     VAMIGA_PUBLIC
     
-    switch (acc) {
+    switch (src) {
             
         case Accessor::CPU:      return mem->debugger.ascDump<Accessor::CPU>(addr, bytes);
         case Accessor::AGNUS:    return mem->debugger.ascDump<Accessor::AGNUS>(addr, bytes);
@@ -651,11 +651,11 @@ MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
 }
 
 string
-MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+MemoryDebuggerAPI::hexDump(Accessor src, u32 addr, isize bytes, isize sz) const
 {
     VAMIGA_PUBLIC
     
-    switch (acc) {
+    switch (src) {
             
         case Accessor::CPU:      return mem->debugger.hexDump<Accessor::CPU>(addr, bytes, sz);
         case Accessor::AGNUS:    return mem->debugger.hexDump<Accessor::AGNUS>(addr, bytes, sz);
@@ -666,11 +666,11 @@ MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 }
 
 string
-MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+MemoryDebuggerAPI::memDump(Accessor src, u32 addr, isize bytes, isize sz) const
 {
     VAMIGA_PUBLIC
     
-    switch (acc) {
+    switch (src) {
             
         case Accessor::CPU:      return mem->debugger.memDump<Accessor::CPU>(addr, bytes, sz);
         case Accessor::AGNUS:    return mem->debugger.memDump<Accessor::AGNUS>(addr, bytes, sz);
