@@ -61,6 +61,10 @@ class InstrTableView: NSTableView {
         
         guard let cpu = cpu else { return }
 
+        // Suspend once for the whole table (the disassembler calls suspend as well)
+        emu?.suspend()
+        defer { emu?.resume() }
+
         numRows = 256
         rowForAddr = [:]
 

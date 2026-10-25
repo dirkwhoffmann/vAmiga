@@ -1810,8 +1810,7 @@ ImageInfo scan(const fs::path &url)
 
 -(NSString *)getText
 {
-    const char *str = [self shell]->text();
-    return str ? @(str) : nullptr;
+    return @([self shell]->text().c_str());
 }
 
 - (void)pressKey:(char)c

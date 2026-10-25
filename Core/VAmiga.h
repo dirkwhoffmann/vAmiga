@@ -636,7 +636,7 @@ public:
      *  @return The disassembled text.
      *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the format string is invalid.
      */
-    string disassemble(u32 addr, const string &fmt, isize *len = nullptr);
+    string disassemble(u32 addr, const string &fmt, isize *len = nullptr) const;
 
     /** @brief  Disassembles an instruction from the log buffer.
      *  @param  nr      Index of the instruction in the record buffer
@@ -647,9 +647,9 @@ public:
      *  @return The disassembled text.
      *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the format string is invalid.
      */
-    string disassembleRecorded(isize nr, const string &fmt, isize *len = nullptr);
+    string disassembleRecorded(isize nr, const string &fmt, isize *len = nullptr) const;
 
-    string vectorName(isize i);
+    string vectorName(isize i) const;
 };
 
 class CPUAPI : public API {
@@ -2047,12 +2047,12 @@ public:
     const RetroShellInfo &getInfo() const;
     const RetroShellInfo &getCachedInfo() const;
 
-    /** @brief  Returns a pointer to the text buffer.
+    /** @brief  Returns a copy of the text buffer.
      *  The text buffer contains the complete contents of the console. It
      *  will be expanded when new output is generated. When the buffer
      *  grows too large, old contents is cropped.
      */
-    const char *text();
+    string text() const;
 
     /// @}
     /// @name Typing characters and strings

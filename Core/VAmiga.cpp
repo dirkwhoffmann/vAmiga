@@ -426,23 +426,23 @@ CPUDebuggerAPI::clearLog()
 }
 
 string
-CPUDebuggerAPI::disassemble(u32 addr, const string &fmt, isize *len)
+CPUDebuggerAPI::disassemble(u32 addr, const string &fmt, isize *len) const
 {
     VAMIGA_PUBLIC_SUSPEND
     return cpu->disass(fmt, addr, len);
 }
 
 string
-CPUDebuggerAPI::disassembleRecorded(isize nr, const string &fmt, isize *len)
+CPUDebuggerAPI::disassembleRecorded(isize nr, const string &fmt, isize *len) const
 {
     VAMIGA_PUBLIC_SUSPEND
     return cpu->disassRecorded(fmt, nr, len);
 }
 
 string
-CPUDebuggerAPI::vectorName(isize i)
+CPUDebuggerAPI::vectorName(isize i) const
 {
-    VAMIGA_PUBLIC_SUSPEND
+    VAMIGA_PUBLIC
     return cpu->debugger.vectorName(u8(i));
 }
 
@@ -1377,7 +1377,7 @@ HardDriveAPI::setFlag(DiskFlags mask, bool value)
 std::vector<std::tuple<isize,isize,isize>>
 HardDriveAPI::geometries(isize numBlocks) const
 {
-    VAMIGA_PUBLIC_SUSPEND
+    VAMIGA_PUBLIC
     return GeometryDescriptor::driveGeometries(numBlocks);
 }
 
@@ -1852,11 +1852,11 @@ RetroShellAPI::getCachedInfo() const
     return retroShell->info.backed();
 }
 
-const char *
-RetroShellAPI::text()
+string
+RetroShellAPI::text() const
 {
     VAMIGA_PUBLIC_SUSPEND
-    return retroShell->text();
+    return string(retroShell->text());
 }
 
 void
