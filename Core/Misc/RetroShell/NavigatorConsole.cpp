@@ -390,22 +390,22 @@ Console::navParseDumpOpts(const Arguments &argv)
     if (o) {
 
         opt = { .base = 8 };
-        fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
+        fmt = { .size = size, .columns = columns, .offset = 0, .ascii = true };
 
     } else if (d) {
 
         opt = { .base = 10 };
-        fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
+        fmt = { .size = size, .columns = columns, .offset = 0, .ascii = true };
 
     } else if (a) {
 
         opt = { .base = 0 };
-        fmt = { .size = 0, .columns = 64, .offset = true, .ascii = true };
+        fmt = { .size = 0, .columns = 64, .offset = 0, .ascii = true };
 
     } else {
 
         opt = { .base = 16 };
-        fmt = { .size = size, .columns = columns, .offset = true, .ascii = true };
+        fmt = { .size = size, .columns = columns, .offset = 0, .ascii = true };
     }
 
     return { opt, fmt };
