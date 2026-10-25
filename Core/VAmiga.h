@@ -43,7 +43,7 @@ using namespace retro::vault;
  *
  *   CoreError  : The request does not match the state of the emulator, e.g.,
  *                an invalid option value, a missing ROM, or an emulator thread
- *                that cannot carry out the request (see #Fault).
+ *                that cannot carry out the request (see #CoreError).
  *   IOError    : A file could not be accessed.
  *   MediaError : A ROM, snapshot, disk image or similar file is invalid or
  *                not supported.
@@ -1791,23 +1791,23 @@ public:
     /// @name Loading and saving the key-value storage
 
     /** @brief  Loads a storage file from disk
-     *  @throw  CoreError (#Fault::FILE_NOT_FOUND)
-     *  @throw  CoreError (#Fault::SYNTAX)
+     *  @throw  IOError (#IOError::FILE_NOT_FOUND)
+     *  @throw  CoreError (#CoreError::SYNTAX)
      */
     void load(const std::filesystem::path &path);
 
     /** @brief  Loads a storage file from a stream
-     *  @throw  CoreError (#Fault::SYNTAX)
+     *  @throw  CoreError (#CoreError::SYNTAX)
      */
     void load(std::ifstream &stream);
 
     /** @brief  Loads a storage file from a string stream
-     *  @throw  CoreError (#Fault::SYNTAX)
+     *  @throw  CoreError (#CoreError::SYNTAX)
      */
     void load(std::stringstream &stream);
 
     /** @brief  Saves a storage file to disk
-     *  @throw  CoreError (#Fault::FILE_CANT_WRITE)
+     *  @throw  IOError (#IOError::FILE_CANT_WRITE)
      */
     void save(const std::filesystem::path &path);
 
@@ -1880,14 +1880,14 @@ public:
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  key     The key, given as a string.
      *  @param  value   The value, given as a string.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void set(const string &key, const string &value);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as a string.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void set(Opt opt, const string &value);
 
@@ -1895,14 +1895,14 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as a string.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void set(Opt opt, const string &value, std::vector<isize> objids);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void set(Opt opt, i64 value);
 
@@ -1910,7 +1910,7 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as an integer.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void set(Opt opt, i64 value, std::vector<isize> objids);
 
@@ -1923,7 +1923,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void setFallback(Opt opt, const string &value);
 
@@ -1937,7 +1937,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void setFallback(Opt opt, i64 value);
 
@@ -1959,20 +1959,20 @@ public:
 
     /** @brief  Deletes a key-value pair
      *  @param  key     The key of the key-value pair.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void remove(const string &key);
 
     /** @brief  Deletes a key-value pair
      *  @param  option  The option's name forms the key.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void remove(Opt option);
 
     /** @brief  Deletes multiple key-value pairs.
      *  @param  option  The option's name forms the prefix of the keys.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  CoreError (#CoreError::INVALID_KEY)
      */
     void remove(Opt option, std::vector <isize> objids);
 
@@ -2054,9 +2054,10 @@ public:
     /** @brief  Executes a script.
      *  The script is executed asynchronously. However, RetroShell will
      *  send messages back to the GUI thread to inform about the execution
-     *  state. After the last script command has been executed,
-     *  MSG\_SCRIPT\_DONE is sent. If shell execution has been aborted due
-     *  to an error, MSG\_SCRIPT\_ABORT is sent.
+     *  state. After the last pending command has been executed,
+     *  Msg::RSH_DONE is sent. If a command fails, the remaining commands are
+     *  dropped and Msg::RSH_ERROR is sent instead. A 'wait' command postpones
+     *  the rest of the script and sends Msg::RSH_WAIT.
      *
      *  @throw Error if the file cannot be opened.
      */
@@ -2292,7 +2293,7 @@ public:
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use powerOnAsync() in these situations.
@@ -2314,7 +2315,7 @@ public:
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use powerOffAsync() in these situations.
@@ -2340,7 +2341,7 @@ public:
      *
      *  The function returns when the emulator has been started.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use runAsync() in these situations.
@@ -2365,7 +2366,7 @@ public:
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use pauseAsync() in these situations.
@@ -2387,7 +2388,7 @@ public:
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use hardResetAsync() in these situations.
@@ -2408,7 +2409,7 @@ public:
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use softResetAsync() in these situations.
@@ -2443,12 +2444,12 @@ public:
      *  requested it. Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use warpOnAsync() in these situations.
@@ -2460,7 +2461,7 @@ public:
      *  This is the asynchronous counterpart of warpOn(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void warpOnAsync(isize source);
     
@@ -2471,12 +2472,12 @@ public:
      *  on to implement the warp mode option). Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use warpOffAsync() in these situations.
@@ -2488,7 +2489,7 @@ public:
      *  This is the asynchronous counterpart of warpOff(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void warpOffAsync(isize source);
     
@@ -2499,12 +2500,12 @@ public:
      *  requested it. Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use trackOnAsync() in these situations.
@@ -2516,7 +2517,7 @@ public:
      *  This is the asynchronous counterpart of trackOn(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void trackOnAsync(isize source);
     
@@ -2526,12 +2527,12 @@ public:
      *  when no other source requests it. Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use trackOffAsync() in these situations.
@@ -2543,7 +2544,7 @@ public:
      *  This is the asynchronous counterpart of trackOff(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#Fault::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void trackOffAsync(isize source);
     
@@ -2561,9 +2562,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#Fault::RUNNING) if the emulator is already running.
+     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void stepInto();
@@ -2588,9 +2589,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#Fault::RUNNING) if the emulator is already running.
+     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void stepOver();
@@ -2602,9 +2603,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#Fault::RUNNING) if the emulator is already running.
+     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void finishLine();
@@ -2616,9 +2617,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#Fault::RUNNING) if the emulator is already running.
+     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void finishFrame();
@@ -2645,7 +2646,7 @@ public:
      *  the configuration, can still see the old state. Calling this
      *  afterwards closes that gap.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out commands, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread.
@@ -2676,9 +2677,9 @@ public:
      *  registered here is invoked on the emulator thread and must not call into
      *  the API. Forward the message to a user thread instead.
      *
-     *  @throw CoreError (#Fault::ALREADY_LAUNCHED) if the emulator thread has
+     *  @throw CoreError (#CoreError::ALREADY_LAUNCHED) if the emulator thread has
      *  already been launched.
-     *  @throw CoreError (#Fault::LAUNCH_FAILED) if the emulator thread could not
+     *  @throw CoreError (#CoreError::LAUNCH_FAILED) if the emulator thread could not
      *  be launched.
      */
     void launch(const void *listener = nullptr, Callback *func = nullptr);
@@ -2742,7 +2743,7 @@ public:
      *
      *  @note If this function is called for an options that applies to multiple
      *  components, all components are configured with the specified value.
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use setAsync() in these situations (it can also be called before
@@ -2851,7 +2852,7 @@ public:
      *  Commands that carry a pointer to an object of the caller can rely on
      *  that object being alive for the whole duration of the command.
      *
-     *  @throw CoreError (#Fault::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the command, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use putAsync() in these situations (it can also be called before
