@@ -1299,13 +1299,6 @@ FloppyDriveAPI::getCachedInfo() const
     return drive->info.backed();
 }
 
-FloppyDisk &
-FloppyDriveAPI::getDisk() const
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return *(drive->disk);
-}
-
 bool
 FloppyDriveAPI::getFlag(DiskFlags mask) const
 {

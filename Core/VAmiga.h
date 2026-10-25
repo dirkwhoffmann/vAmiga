@@ -1065,11 +1065,6 @@ public:
     const FloppyDriveInfo &getInfo() const;
     const FloppyDriveInfo &getCachedInfo() const;
 
-    /** @brief  Getter for the raw disk object
-     *  @return A pointer to the disk object or nullptr if no disk is present.
-     */
-    class FloppyDisk &getDisk() const;
-
     /** @brief Queries a disk flag
      */
     bool getFlag(DiskFlags mask) const;
