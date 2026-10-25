@@ -1017,6 +1017,27 @@ SerialPortAPI::readOutgoingPrintableByte() const
 // Ports (VideoPort)
 //
 
+const VideoPortConfig &
+VideoPortAPI::getConfig() const
+{
+    VAMIGA_PUBLIC
+    return videoPort->getConfig();
+}
+
+const VideoPortInfo &
+VideoPortAPI::getInfo() const
+{
+    VAMIGA_PUBLIC
+    return videoPort->info.current();
+}
+
+const VideoPortInfo &
+VideoPortAPI::getCachedInfo() const
+{
+    VAMIGA_PUBLIC
+    return videoPort->info.backed();
+}
+
 void
 VideoPortAPI::lockTexture()
 {

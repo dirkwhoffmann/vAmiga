@@ -10,6 +10,7 @@
 #include "vaconfig.h"
 #include "Agnus.h"
 #include "Amiga.h"
+#include "Emulator.h"
 #include "CIA.h"
 #include "ControlPort.h"
 #include "CPU.h"
@@ -941,6 +942,38 @@ Agnus::serviceINSEvent()
     if (mask & 1LL << long(Class::SerialPort)) {
         serialPort.info.record();
     }
+    if (mask & 1LL << long(Class::VideoPort)) {
+        videoPort.info.record();
+    }
+    if (mask & 1LL << long(Class::AudioPort)) {
+        audioPort.info.record();
+        audioPort.metrics.record();
+    }
+    if (mask & 1LL << long(Class::Joystick)) {
+        controlPort1.joystick.info.record();
+        controlPort2.joystick.info.record();
+    }
+    if (mask & 1LL << long(Class::Keyboard)) {
+        keyboard.info.record();
+    }
+    if (mask & 1LL << long(Class::XRay)) {
+        xray.info.record();
+    }
+    if (mask & 1LL << long(Class::LogicAnalyzer)) {
+        logicAnalyzer.info.record();
+    }
+    if (mask & 1LL << long(Class::Emulator)) {
+        emulator.info.record();
+        emulator.metrics.record();
+    }
+    if (mask & 1LL << long(Class::RemoteManager)) {
+        remoteManager.info.record();
+    }
+    if (mask & 1LL << long(Class::RetroShell)) {
+        retroShell.info.record();
+        rshShell.info.record();
+        rpcShell.info.record();
+    }
 
     /* The disk subsystem and the audio state machines snapshot themselves here
      * too. They used to be left out, which meant a GUI reading them had no
@@ -970,6 +1003,8 @@ Agnus::serviceINSEvent()
     if (mask & 1LL << long(Class::HdController)) {
         hd0con.info.record(); hd1con.info.record();
         hd2con.info.record(); hd3con.info.record();
+        hd0con.metrics.record(); hd1con.metrics.record();
+        hd2con.metrics.record(); hd3con.metrics.record();
     }
 
     /* Reschedule the event.

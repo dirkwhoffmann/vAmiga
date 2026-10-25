@@ -84,6 +84,8 @@ RetroShell::_initialize()
 RetroShellInfo
 RetroShell::cacheInfo() const
 {
+    SYNCHRONIZED
+
     RetroShellInfo info;
 
     info.console = isize(console.getCommandSet());
