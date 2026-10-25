@@ -593,7 +593,7 @@ MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
         case Accessor::AGNUS:    return mem->getMemSrc<Accessor::AGNUS>(addr);
             
         default:
-            fatalError;
+            throw CoreError(CoreError::OPT_INV_ARG, "CPU or AGNUS");
     }
 }
 
@@ -616,7 +616,7 @@ MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
         case Accessor::AGNUS:    return mem->spypeek8<Accessor::AGNUS>(addr);
             
         default:
-            fatalError;
+            throw CoreError(CoreError::OPT_INV_ARG, "CPU or AGNUS");
     }
 }
 
@@ -631,7 +631,7 @@ MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
         case Accessor::AGNUS:    return mem->spypeek16<Accessor::AGNUS>(addr);
             
         default:
-            fatalError;
+            throw CoreError(CoreError::OPT_INV_ARG, "CPU or AGNUS");
     }
 }
 
@@ -646,7 +646,7 @@ MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
         case Accessor::AGNUS:    return mem->debugger.ascDump<Accessor::AGNUS>(addr, bytes);
             
         default:
-            fatalError;
+            throw CoreError(CoreError::OPT_INV_ARG, "CPU or AGNUS");
     }
 }
 
@@ -661,7 +661,7 @@ MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
         case Accessor::AGNUS:    return mem->debugger.hexDump<Accessor::AGNUS>(addr, bytes, sz);
             
         default:
-            fatalError;
+            throw CoreError(CoreError::OPT_INV_ARG, "CPU or AGNUS");
     }
 }
 
@@ -676,7 +676,7 @@ MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
         case Accessor::AGNUS:    return mem->debugger.memDump<Accessor::AGNUS>(addr, bytes, sz);
             
         default:
-            fatalError;
+            throw CoreError(CoreError::OPT_INV_ARG, "CPU or AGNUS");
     }
 }
 

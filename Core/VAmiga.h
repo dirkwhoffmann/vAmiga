@@ -784,6 +784,7 @@ public:
     /// @{
 
     /**  @brief  Returns the memory source for a given address
+     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     MemSrc getMemSrc(Accessor acc, u32 addr) const;
     
@@ -795,6 +796,7 @@ public:
     const char *regName(u32 addr) const;
 
     /** @brief  Reads a value from memory without causing side effects.
+     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     u8 spypeek8(Accessor acc, u32 addr) const;
     u16 spypeek16(Accessor acc, u32 addr) const;
@@ -804,6 +806,7 @@ public:
      *  @param  acc     The accessor used to read the bytes.
      *  @param  addr    First address to dump.
      *  @param  bytes   Number of bytes to dump.
+     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     string ascDump(Accessor acc, u32 addr, isize bytes) const;
 
@@ -817,6 +820,7 @@ public:
      *  @param  addr    First address to dump.
      *  @param  bytes   Number of bytes to dump.
      *  @param  sz      Group size in bytes (1, 2, or 4).
+     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
     string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
@@ -1831,28 +1835,6 @@ public:
 };
 
 //
-// Misc (Debugger)
-//
-
-class DebuggerAPI : public API {
-
-    friend class VAmiga;
-    
-public:
-
-    class Debugger *debugger = nullptr;
-    
-    /** @brief  Returns a string representations for a portion of memory.
-     */
-    /*
-    string ascDump(Accessor acc, u32 addr, isize bytes) const;
-    string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
-    string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
-     */
-};
-
-
-//
 // Misc (Defaults)
 //
 
@@ -2272,7 +2254,6 @@ public:
     
     // Misc
     MsgQueueAPI msgQueue;
-    DebuggerAPI debugger; // TODO: No longer needed? It's not 'wired'
     RemoteManagerAPI remoteManager;
     RetroShellAPI retroShell;
 
