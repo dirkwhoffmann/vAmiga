@@ -247,14 +247,14 @@ CIAAPI::getCachedInfo() const
     return cia->info.backed();
 }
 
-CIAMetrics
+const CIAMetrics &
 CIAAPI::getMetrics() const
 {
     VAMIGA_PUBLIC
     return cia->metrics.current();
 }
 
-CIAMetrics
+const CIAMetrics &
 CIAAPI::getCachedMetrics() const
 {
     VAMIGA_PUBLIC

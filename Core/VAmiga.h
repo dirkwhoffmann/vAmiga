@@ -500,8 +500,8 @@ public:
 
     /** @brief  Returns statistical information about the components.
      */
-    CIAMetrics getMetrics() const;
-    CIAMetrics getCachedMetrics() const;
+    const CIAMetrics &getMetrics() const;
+    const CIAMetrics &getCachedMetrics() const;
 };
 
 
