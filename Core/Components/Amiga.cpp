@@ -1451,16 +1451,16 @@ Amiga::saveSnapshot(const fs::path &path)
 }
 
 GuardList &
-Amiga::guardList(GuardId id)
+Amiga::guardList(GuardType type)
 {
-    switch (id) {
+    switch (type) {
 
-        case GuardId::CPU_BREAKPOINTS:      return cpu.breakpoints;
-        case GuardId::CPU_WATCHPOINTS:      return cpu.watchpoints;
-        case GuardId::CPU_CATCHPOINTS:      return cpu.catchpoints;
-        case GuardId::COPPER_BREAKPOINTS:   return agnus.copper.debugger.breakpoints;
-        case GuardId::COPPER_WATCHPOINTS:   return agnus.copper.debugger.watchpoints;
-        case GuardId::BEAMTRAPS:            return agnus.debugger.beamtraps;
+        case GuardType::BREAKPOINT:      return cpu.breakpoints;
+        case GuardType::WATCHPOINT:      return cpu.watchpoints;
+        case GuardType::CATCHPOINT:      return cpu.catchpoints;
+        case GuardType::COPPER_BREAKPOINT:   return agnus.copper.debugger.breakpoints;
+        case GuardType::COPPER_WATCHPOINT:   return agnus.copper.debugger.watchpoints;
+        case GuardType::BEAMTRAP:            return agnus.debugger.beamtraps;
 
         default:
             fatalError;

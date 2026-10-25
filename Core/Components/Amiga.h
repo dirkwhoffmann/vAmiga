@@ -513,7 +513,7 @@ public:
     void processCommand(const Command &cmd);
 
     // Returns the guard list identified by an ID
-    class GuardList &guardList(GuardId id);
+    class GuardList &guardList(GuardType type);
 
     // End-of-line handler
     void eolHandler();

@@ -524,7 +524,7 @@ class GuardsAPI : public API {
 public:
 
     // The guard list this API operates on
-    GuardId id = GuardId::CPU_BREAKPOINTS;
+    GuardType type = GuardType::BREAKPOINT;
 
     class GuardList *guards = nullptr;
     

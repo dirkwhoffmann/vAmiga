@@ -12,6 +12,7 @@
 #include "OptionTypes.h"
 #include "JoystickTypes.h"
 #include "KeyboardTypes.h"
+#include "GuardListTypes.h"
 #include "Aliases.h"
 
 namespace vamiga {
@@ -228,20 +229,10 @@ typedef struct
 }
 AlarmCmd;
 
-// Identifies a guard list (breakpoints, watchpoints, etc.)
-enum class GuardId : u8
-{
-    CPU_BREAKPOINTS,
-    CPU_WATCHPOINTS,
-    CPU_CATCHPOINTS,
-    COPPER_BREAKPOINTS,
-    COPPER_WATCHPOINTS,
-    BEAMTRAPS
-};
-
+// The guard list to modify is identified by a GuardType
 typedef struct
 {
-    GuardId list;       // The guard list to modify
+    GuardType list;       // The guard list to modify
     isize nr;           // Number of a guard in the list
     u32 addr;           // Target of a guard
     isize ignores;      // Ignore count

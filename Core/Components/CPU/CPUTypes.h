@@ -175,41 +175,6 @@ struct DasmNumbersEnum : Reflectable<DasmNumbersEnum, DasmNumbers>
     }
 };
 
-enum class GuardType : long
-{
-    BREAKPOINT,
-    WATCHPOINT,
-    CATCHPOINT,
-};
-
-struct GuardTypeEnum : Reflectable<GuardTypeEnum, GuardType>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = long(GuardType::CATCHPOINT);
-    
-    static const char *_key(GuardType value)
-    {
-        switch (value) {
-                
-            case GuardType::BREAKPOINT:  return "BREAKPOINT";
-            case GuardType::WATCHPOINT:  return "WATCHPOINT";
-            case GuardType::CATCHPOINT:  return "CATCHPOINT";
-        }
-        return "???";
-    }
-    static const char *help(GuardType value)
-    {
-        switch (value) {
-                
-            case GuardType::BREAKPOINT:  return "Breakpoint";
-            case GuardType::WATCHPOINT:  return "Watchpoint";
-            case GuardType::CATCHPOINT:  return "Catchpoint";
-        }
-        return "???";
-    }
-};
-
-
 //
 // Structures
 //
