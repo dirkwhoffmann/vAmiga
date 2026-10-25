@@ -20,25 +20,25 @@ namespace vamiga {
 
 enum class Msg : long
 {
-    NONE,
+    NONE,               ///< No message
     
     // Emulator state
     CONFIG,             ///< A configuration request has been carried out (the exception is attached if it failed)
-    POWER,
-    RUN,
-    PAUSE,
-    STEP,
+    POWER,              ///< The emulator was switched on (value = 1) or off (value = 0)
+    RUN,                ///< The emulator started to run
+    PAUSE,              ///< The emulator was paused
+    STEP,               ///< The emulator completed a single step (string attached)
     STOP,               ///< A remote debugger requested a stop
-    RESET,
-    SHUTDOWN,
-    ABORT,
-    WARP,
-    TRACK,
-    MUTE,
-    EASTER_EGG,
-    POWER_LED_ON,
-    POWER_LED_DIM,
-    POWER_LED_OFF,
+    RESET,              ///< A hard reset was performed
+    SHUTDOWN,           ///< The emulator thread is about to terminate
+    ABORT,              ///< The application is asked to terminate (value = exit code)
+    WARP,               ///< Warp mode was switched on (value = 1) or off (value = 0)
+    TRACK,              ///< Track mode was switched on (value = 1) or off (value = 0)
+    MUTE,               ///< The audio output was muted (value = 1) or unmuted (value = 0)
+    EASTER_EGG,         ///< The easter egg was triggered
+    POWER_LED_ON,       ///< The power LED is on
+    POWER_LED_DIM,      ///< The power LED is dimmed
+    POWER_LED_OFF,      ///< The power LED is off
     
     // Retro shell
     RSH_CLOSE,          ///< RetroShell has been closed
@@ -50,101 +50,101 @@ enum class Msg : long
     RSH_EXPORT,         ///< Data has been exported to the file system
 
     // Amiga
-    VIDEO_FORMAT,
+    VIDEO_FORMAT,       ///< The video format has changed (value = PAL or NTSC)
     
     // CPU
-    OVERCLOCKING,
+    OVERCLOCKING,       ///< The CPU overclocking factor has changed (value = factor)
     GUARD_UPDATED,      ///< A guard list has been modified (value = GuardType)
-    BREAKPOINT_REACHED,
-    WATCHPOINT_REACHED,
-    CATCHPOINT_REACHED,
-    SWTRAP_REACHED,
-    CPU_HALT,
+    BREAKPOINT_REACHED, ///< A CPU breakpoint was reached (cpu.pc = address)
+    WATCHPOINT_REACHED, ///< A CPU watchpoint was reached (cpu.pc = watched address)
+    CATCHPOINT_REACHED, ///< A CPU catchpoint was reached (cpu.pc = program counter, cpu.vector = vector)
+    SWTRAP_REACHED,     ///< A software trap was reached (cpu.pc = program counter)
+    CPU_HALT,           ///< The CPU has halted
     
     // Agnus
-    EOL_REACHED,
-    EOF_REACHED,
-    BEAMTRAP_REACHED,
+    EOL_REACHED,        ///< The end of a raster line was reached (string attached)
+    EOF_REACHED,        ///< The end of a frame was reached (string attached)
+    BEAMTRAP_REACHED,   ///< A beamtrap was reached (beam.v, beam.h = beam position)
     
     // Copper
-    COPPERBP_REACHED,
-    COPPERWP_REACHED,
+    COPPERBP_REACHED,   ///< A Copper breakpoint was reached (cpu.pc = Copper address)
+    COPPERWP_REACHED,   ///< A Copper watchpoint was reached (cpu.pc = watched address)
     
     // Denise
-    VIEWPORT,
+    VIEWPORT,           ///< The visible region of the texture has changed (viewport = coordinates)
 
     // Audio
-    AUDBUF_UNDERFLOW,
-    AUDBUF_OVERFLOW,
+    AUDBUF_UNDERFLOW,   ///< The audio buffer ran empty (value = milliseconds since the previous underflow)
+    AUDBUF_OVERFLOW,    ///< The audio buffer ran full (value = milliseconds since the previous overflow)
 
     // Memory
-    MEM_LAYOUT,
+    MEM_LAYOUT,         ///< The memory layout (bank mapping) has changed
     
     // Floppy drives
-    DRIVE_CONNECT,
-    DRIVE_SELECT,
-    DRIVE_READ,
-    DRIVE_WRITE,
-    DRIVE_LED,
-    DRIVE_MOTOR,
-    DRIVE_STEP,
-    DRIVE_POLL,
-    DISK_INSERT,
-    DISK_EJECT,
-    DISK_PROTECTED,
+    DRIVE_CONNECT,      ///< A floppy drive was connected or disconnected (drive.nr = drive, drive.value = connected)
+    DRIVE_SELECT,       ///< A floppy drive was selected (value = drive)
+    DRIVE_READ,         ///< A floppy drive is reading (value = drive)
+    DRIVE_WRITE,        ///< A floppy drive is writing (value = drive)
+    DRIVE_LED,          ///< The LED of a floppy drive changed (drive.nr = drive, drive.value = on or off)
+    DRIVE_MOTOR,        ///< The motor of a floppy drive changed (drive.nr = drive, drive.value = on or off)
+    DRIVE_STEP,         ///< A floppy drive moved its head (drive.nr = drive, drive.value = cylinder, drive.volume, drive.pan)
+    DRIVE_POLL,         ///< A floppy drive without a disk moved its head to poll for one (same payload as DRIVE_STEP)
+    DISK_INSERT,        ///< A disk was inserted (drive.nr = drive, drive.volume, drive.pan)
+    DISK_EJECT,         ///< A disk was ejected (drive.nr = drive, drive.volume, drive.pan)
+    DISK_PROTECTED,     ///< The write protection of the disk changed (value = protected)
     
     // Hard drive controllers
-    HDC_CONNECT,
-    HDC_STATE,
+    HDC_CONNECT,        ///< A hard drive controller was connected (drive.nr = drive)
+    HDC_STATE,          ///< The state of a hard drive controller changed (hdc.nr = drive, hdc.state)
     
     // Hard drives
-    HDR_ATTACH,         // A hard drive has been attached (value: drive; carries the exception if it failed)
-    HDR_IMPORTED,       // A folder has been imported (value: drive; carries the exception if it failed)
-    HDR_DETACH,
-    HDR_STEP,
-    HDR_READ,
-    HDR_WRITE,
-    HDR_IDLE,
+    HDR_ATTACH,         ///< A hard drive has been attached (value: drive; carries the exception if it failed)
+    HDR_IMPORTED,       ///< A folder has been imported (value: drive; carries the exception if it failed)
+    HDR_DETACH,         ///< A hard drive was detached (value = drive)
+    HDR_STEP,           ///< A hard drive moved its head (drive.nr = drive, drive.value = cylinder, drive.volume, drive.pan)
+    HDR_READ,           ///< A hard drive is reading
+    HDR_WRITE,          ///< A hard drive is writing
+    HDR_IDLE,           ///< A hard drive became idle (value = drive)
     
     // Monitor
-    MON_SETTING,
+    MON_SETTING,        ///< A monitor setting has changed (value = option, value2 = new value)
     
     // Keyboard
-    CTRL_AMIGA_AMIGA,
+    CTRL_AMIGA_AMIGA,   ///< The reset key combination (Ctrl + both Amiga keys) was pressed
     KB_PRESS,           ///< A key has been pressed
     KB_RELEASE,         ///< A key has been released
     KB_LOCK,            ///< A key has been locked
     KB_UNLOCK,          ///< A key has been unlocked
     
     // Mouse
-    SHAKING,
+    SHAKING,            ///< The mouse was shaken
     
     // Ports
-    SER_IN,
-    SER_OUT,
+    SER_IN,             ///< Data arrived at the serial port while its log buffer was empty
+    SER_OUT,            ///< Data was sent from the serial port while its log buffer was empty
     
     // Snapshots
-    SNAPSHOT_TAKEN,
-    SNAPSHOT_RESTORED,
-    SNAPSHOT_SAVED,     // A snapshot has been saved (carries the exception if it failed)
+    SNAPSHOT_TAKEN,     ///< An automatic snapshot was taken (snapshot.snapshot = heap object that the receiver must delete)
+    SNAPSHOT_RESTORED,  ///< A snapshot was restored
+    SNAPSHOT_SAVED,     ///< A snapshot has been saved (carries the exception if it failed)
     
     // Workspaces
-    WORKSPACE_LOADED,
-    WORKSPACE_SAVED,    // A workspace has been saved (carries the exception if it failed)
+    WORKSPACE_LOADED,   ///< A workspace was loaded
+    WORKSPACE_SAVED,    ///< A workspace has been saved (carries the exception if it failed)
 
     // Hibernation
-    HIBERNATED,         // The machine has been hibernated (carries the exception if it failed)
+    HIBERNATED,         ///< The machine has been hibernated (carries the exception if it failed)
 
     // DMA Debugging
-    XRAY,
+    XRAY,               ///< The X-Ray mode has changed (value = mode)
     
     // Remote server
-    SRV_STATE,
-    SRV_RECEIVE,
-    SRV_SEND,
+    SRV_STATE,          ///< A remote server changed its state (value = SrvState)
+    SRV_RECEIVE,        ///< A remote server received data (value = server, value2 = log entry, string = packet)
+    SRV_SEND,           ///< A remote server sent data (value = server, value2 = log entry, string = packet)
     
     // Scheduled alarms
-    ALARM
+    ALARM               ///< A scheduled alarm went off (value = the payload given when the alarm was set)
 };
 
 struct MsgEnum : Reflectable<MsgEnum, Msg>

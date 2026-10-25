@@ -1793,7 +1793,24 @@ public:
     void saveXrayTexture(const std::filesystem::path &path,
                          isize x1, isize x2, isize y1, isize y2) const;
 
-    /** @brief Experimental
+    /** @brief  Determines the area of the texture that contains picture data.
+     *
+     *  The function analyzes the current stable texture. It starts with a large
+     *  box and shrinks it from all four sides as long as the outermost row or
+     *  column only consists of pixels in the border color (the color of the
+     *  pixel in the upper left corner of the box). The result can be used to
+     *  crop the border of the picture. The emulator thread is suspended while
+     *  the texture is analyzed. If the texture contains no picture data, all
+     *  coordinates are 0.
+     *
+     *  findInnerArea() returns the coordinates in texture pixels,
+     *  findInnerAreaNormalized() returns them relative to the size of the
+     *  texture (0.0 ... 1.0).
+     *
+     *  @param  x1      Left edge of the picture area
+     *  @param  x2      Right edge of the picture area
+     *  @param  y1      Top edge of the picture area
+     *  @param  y2      Bottom edge of the picture area
      */
     void findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const;
     void findInnerAreaNormalized(double &x1, double &x2, double &y1, double &y2) const;
