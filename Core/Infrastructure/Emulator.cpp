@@ -465,6 +465,13 @@ Emulator::send(const Command &cmd, const string &str)
 }
 
 void
+Emulator::call(const std::function<void()> &fn)
+{
+    // Throws if the emulator thread cannot carry out the request (see sendAndWait)
+    sendAndWait(Command(Cmd::CALL, i64(0), i64(&fn)));
+}
+
+void
 Emulator::sendAndWait(const Command &cmd, const string &str)
 {
     // Refuse to wait if the command would never be carried out

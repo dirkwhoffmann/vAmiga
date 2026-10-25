@@ -101,8 +101,8 @@ enum class Cmd : long
     RSH_PRESS_CHAR,         ///< Type a character into RetroShell (value = character)
     RSH_PRESS_TEXT,         ///< Type a string into RetroShell (text attached)
     
-    // Experimental
-    FUNC,
+    // Calls
+    CALL,                   ///< Run a function on the emulator thread (value2 = pointer to a std::function<void()>)
 
     // Host machine
     FOCUS                   ///< The emulator windows got or lost focus
@@ -186,7 +186,7 @@ struct CmdEnum : Reflectable<CmdEnum, Cmd> {
             case Cmd::RSH_PRESS_CHAR:        return "RSH_PRESS_CHAR";
             case Cmd::RSH_PRESS_TEXT:        return "RSH_PRESS_TEXT";
                 
-            case Cmd::FUNC:                  return "FUNC";
+            case Cmd::CALL:                  return "CALL";
             case Cmd::FOCUS:                 return "FOCUS";
 
         }

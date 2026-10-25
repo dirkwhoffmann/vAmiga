@@ -505,8 +505,10 @@ CPUDebuggerAPI::loggedInstructions() const
 void
 CPUDebuggerAPI::clearLog()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    cpu->debugger.clearLog();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        cpu->debugger.clearLog();
+    });
 }
 
 string
@@ -739,32 +741,40 @@ MemoryAPI::getExtTraits() const
 void
 MemoryAPI::loadRom(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    mem->loadRom(path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        mem->loadRom(path);
+    });
     emu->markAsDirty();
 }
 
 void
 MemoryAPI::loadExt(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    mem->loadExt(path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        mem->loadExt(path);
+    });
     emu->markAsDirty();
 }
 
 void
 MemoryAPI::loadRom(const u8 *buf, isize len)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    mem->loadRom(buf, len);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        mem->loadRom(buf, len);
+    });
     emu->markAsDirty();
 }
 
 void
 MemoryAPI::loadExt(const u8 *buf, isize len)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    mem->loadExt(buf, len);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        mem->loadExt(buf, len);
+    });
     emu->markAsDirty();
 }
 
@@ -792,24 +802,30 @@ MemoryAPI::saveExt(const fs::path &path)
 void
 MemoryAPI::deleteRom()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    mem->deleteRom();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        mem->deleteRom();
+    });
     emu->markAsDirty();
 }
 
 void
 MemoryAPI::deleteWom()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    mem->deleteWom();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        mem->deleteWom();
+    });
     emu->markAsDirty();
 }
 
 void
 MemoryAPI::deleteExt()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    mem->deleteExt();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        mem->deleteExt();
+    });
     emu->markAsDirty();
 }
 
@@ -910,8 +926,10 @@ RTCAPI::getConfig() const
 void
 RTCAPI::update()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    rtc->update();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        rtc->update();
+    });
     emu->markAsDirty();
 }
 
@@ -1321,8 +1339,10 @@ FloppyDriveAPI::getFlag(DiskFlags mask) const
 void
 FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->setFlag(mask, value);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->setFlag(mask, value);
+    });
     emu->markAsDirty();
 }
 
@@ -1337,17 +1357,21 @@ void
 FloppyDriveAPI::insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId bb,
                                 string name, const std::filesystem::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->insertNew(fstype, bb, name, path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->insertNew(fstype, bb, name, path);
+    });
     emu->markAsDirty();
 }
 
 void
 FloppyDriveAPI::insert(const fs::path &path, bool wp)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->swapDisk(path);
-    if (drive->disk) drive->disk->setWriteProtection(wp);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->swapDisk(path);
+        if (drive->disk) drive->disk->setWriteProtection(wp);
+    });
     emu->markAsDirty();
 }
 
@@ -1361,17 +1385,21 @@ FloppyDriveAPI::insertAsync(const fs::path &path, bool wp)
 void
 FloppyDriveAPI::insert(std::span<const u8> buffer, ImageFormat fmt, bool wp)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->swapDisk(buffer.data(), isize(buffer.size()), fmt);
-    if (drive->disk) drive->disk->setWriteProtection(wp);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->swapDisk(buffer.data(), isize(buffer.size()), fmt);
+        if (drive->disk) drive->disk->setWriteProtection(wp);
+    });
     emu->markAsDirty();
 }
 
 void
 FloppyDriveAPI::ejectDisk()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->ejectDisk();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->ejectDisk();
+    });
     emu->markAsDirty();
 }
 
@@ -1399,8 +1427,10 @@ FloppyDriveAPI::needsPersisting() const
 void
 FloppyDriveAPI::persist()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->persist();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->persist();
+    });
 }
 
 string
@@ -1467,8 +1497,10 @@ HardDriveAPI::getFlag(DiskFlags mask)
 void
 HardDriveAPI::setFlag(DiskFlags mask, bool value)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->setFlag(mask, value);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->setFlag(mask, value);
+    });
 }
 
 std::vector<std::tuple<isize,isize,isize>>
@@ -1481,24 +1513,30 @@ HardDriveAPI::geometries(isize numBlocks) const
 void 
 HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->changeGeometry(c, h, s, b);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->changeGeometry(c, h, s, b);
+    });
     emu->markAsDirty();
 }
 
 void
 HardDriveAPI::attach(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->init(path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->init(path);
+    });
     emu->markAsDirty();
 }
 
 void
 HardDriveAPI::attach(const fs::path &path, retro::vault::SVMFile &svm)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->init(path, svm);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->init(path, svm);
+    });
     emu->markAsDirty();
 }
 
@@ -1506,8 +1544,10 @@ void
 HardDriveAPI::create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSFormat fs,
                      const string &name)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->create(svm, megabytes, fs, name);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->create(svm, megabytes, fs, name);
+    });
     emu->markAsDirty();
 }
 
@@ -1521,32 +1561,40 @@ HardDriveAPI::attachAsync(const fs::path &path, retro::vault::SVMFile &svm)
 void
 HardDriveAPI::attach(isize c, isize h, isize s, isize b)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    auto geometry = GeometryDescriptor(c, h, s, b);
-    drive->init(geometry);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        auto geometry = GeometryDescriptor(c, h, s, b);
+        drive->init(geometry);
+    });
     emu->markAsDirty();
 }
 
 void 
 HardDriveAPI::format(amiga::FSFormat fs, const string &name)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->format(fs, FSName(name));
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->format(fs, FSName(name));
+    });
 }
 
 void
 HardDriveAPI::detach()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->detach();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->detach();
+    });
     emu->markAsDirty();
 }
 
 void
 HardDriveAPI::importFolder(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->importFolder(path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->importFolder(path);
+    });
 }
 
 void
@@ -1566,22 +1614,28 @@ HardDriveAPI::path() const
 void
 HardDriveAPI::loadIntoMemory()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->loadIntoMemory();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->loadIntoMemory();
+    });
 }
 
 void
 HardDriveAPI::saveAs(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->saveAs(path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->saveAs(path);
+    });
 }
 
 void
 HardDriveAPI::persist()
 {
-    VAMIGA_PUBLIC_SUSPEND
-    drive->persist();
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        drive->persist();
+    });
 }
 
 void
@@ -2025,43 +2079,6 @@ RetroShellAPI::execScriptAsync(const string &contents)
     retroShell->asyncExecScript(contents);
 }
 
-/*
-void
-RetroShellAPI::import(const FloppyDrive &dfn)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->navigator.import(dfn);
-}
-
-void
-RetroShellAPI::import(const HardDrive &hdn, isize part)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->navigator.import(hdn, part);
-}
-
-void
-RetroShellAPI::importDf(isize n)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->navigator.importDf(n);
-}
-
-void
-RetroShellAPI::importHd(isize n, isize part)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->navigator.importHd(n, part);
-}
-
-void
-RetroShellAPI::import(const fs::path &path, bool recursive, bool contents)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->console.navImport(path, recursive, contents);
-}
-*/
-
 void
 RetroShellAPI::exportBlocks(const std::filesystem::path &path)
 {
@@ -2072,8 +2089,10 @@ RetroShellAPI::exportBlocks(const std::filesystem::path &path)
 void
 RetroShellAPI::setStream(std::ostream &os)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    retroShell->setStream(os);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        retroShell->setStream(os);
+    });
 }
 
 
@@ -2700,15 +2719,20 @@ VAmiga::putAsync(const Command &cmd, const std::string &str)
 std::unique_ptr<Snapshot>
 AmigaAPI::takeSnapshot(Compressor compressor, isize delay, bool repeat)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    return amiga->takeSnapshot(compressor, delay, repeat);
+    VAMIGA_PUBLIC
+
+    std::unique_ptr<Snapshot> result;
+    emu->call([&]{ result = amiga->takeSnapshot(compressor, delay, repeat); });
+    return result;
 }
 
 void
 AmigaAPI::loadWorkspace(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    amiga->loadWorkspace(path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        amiga->loadWorkspace(path);
+    });
 }
 
 void
@@ -2728,8 +2752,10 @@ AmigaAPI::saveWorkspaceAsync(const fs::path &path) const
 void
 AmigaAPI::loadWorkspace(retro::vault::SVMFile &svm)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    amiga->loadWorkspace(svm);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        amiga->loadWorkspace(svm);
+    });
 }
 
 void
@@ -2749,33 +2775,35 @@ AmigaAPI::saveWorkspaceAsync(retro::vault::SVMFile &svm) const
 void
 AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
-    VAMIGA_PUBLIC_SUSPEND
-
+    VAMIGA_PUBLIC
     emu->markAsDirty();
+    emu->call([&]{
+        try {
 
-    try {
+            // Restore the saved state
+            amiga->loadSnapshot(snapshot);
 
-        // Restore the saved state
-        amiga->loadSnapshot(snapshot);
+        } catch(Error &) {
 
-    } catch(Error &) {
-
-        /* If we reach this point, the emulator has been put into an
-         * inconsistent state due to corrupted snapshot data. We cannot
-         * continue emulation, because it would likely crash the
-         * application. Because we cannot revert to the old state either,
-         * we perform a hard reset to eliminate the inconsistency.
-         */
-        emu->put(Cmd::HARD_RESET);
-        throw;
-    }
+            /* If we reach this point, the emulator has been put into an
+             * inconsistent state due to corrupted snapshot data. We cannot
+             * continue emulation, because it would likely crash the
+             * application. Because we cannot revert to the old state either,
+             * we perform a hard reset to eliminate the inconsistency.
+             */
+            emu->put(Cmd::HARD_RESET);
+            throw;
+        }
+    });
 }
 
 void
 AmigaAPI::loadSnapshot(const fs::path &path)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    amiga->loadSnapshot(path);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        amiga->loadSnapshot(path);
+    });
 }
 
 void
@@ -2844,8 +2872,10 @@ AmigaAPI::getAutoInspectionMask() const
 void
 AmigaAPI::setAutoInspectionMask(u64 mask)
 {
-    VAMIGA_PUBLIC_SUSPEND
-    amiga->setAutoInspectionMask(mask);
+    VAMIGA_PUBLIC
+    emu->call([&]{
+        amiga->setAutoInspectionMask(mask);
+    });
 }
 
 void

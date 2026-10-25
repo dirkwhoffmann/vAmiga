@@ -1188,6 +1188,12 @@ Amiga::update(CmdQueue &queue)
                     retroShell.press(cmd.str);
                     break;
 
+                case Cmd::CALL:
+
+                    // The sender waits for the function (see Emulator::call)
+                    (*reinterpret_cast<const std::function<void()> *>(cmd.value2))();
+                    break;
+
                 case Cmd::RSH_EXECUTE:
 
                     retroShell.exec();
