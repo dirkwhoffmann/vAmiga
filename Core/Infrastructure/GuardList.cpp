@@ -49,7 +49,7 @@ GuardList::setAt(u32 target, isize ignores)
     if (guards.isSetAt(target)) throw CoreError(CoreError::GUARD_ALREADY_SET, target);
     guards.setAt(target, ignores);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -58,7 +58,7 @@ GuardList::moveTo(isize nr, u32 newTarget)
     if (!guards.guardNr(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.replace(nr, newTarget);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -67,7 +67,7 @@ GuardList::ignore(isize nr, isize count)
     if (!guards.guardNr(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.ignore(nr, count);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -76,7 +76,7 @@ GuardList::remove(isize nr)
     if (!guards.isSet(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.remove(nr);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -85,7 +85,7 @@ GuardList::removeAt(u32 target)
     if (!guards.isSetAt(target)) throw CoreError(CoreError::GUARD_NOT_FOUND, target);
     guards.removeAt(target);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -93,7 +93,7 @@ GuardList::removeAll()
 {
     guards.removeAll();
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -102,7 +102,7 @@ GuardList::enable(isize nr)
     if (!guards.isSet(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.enable(nr);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -111,7 +111,7 @@ GuardList::enableAt(u32 target)
     if (!guards.isSetAt(target)) throw CoreError(CoreError::GUARD_NOT_FOUND, target);
     guards.enableAt(target);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -119,7 +119,7 @@ GuardList::enableAll()
 {
     guards.enableAll();
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -128,7 +128,7 @@ GuardList::disable(isize nr)
     if (!guards.isSet(nr)) throw CoreError(CoreError::GUARD_NOT_FOUND, nr);
     guards.disable(nr);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -137,7 +137,7 @@ GuardList::disableAt(u32 target)
     if (!guards.isSetAt(target)) throw CoreError(CoreError::GUARD_NOT_FOUND, target);
     guards.disableAt(target);
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void
@@ -145,7 +145,7 @@ GuardList::disableAll()
 {
     guards.disableAll();
     update();
-    amiga.msgQueue.put(Msg::GUARD_UPDATED);
+    amiga.msgQueue.put(Msg::GUARD_UPDATED, i64(type));
 }
 
 void

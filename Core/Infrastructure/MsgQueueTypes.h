@@ -54,7 +54,7 @@ enum class Msg : long
     
     // CPU
     OVERCLOCKING,
-    GUARD_UPDATED,
+    GUARD_UPDATED,      ///< A guard list has been modified (value = GuardType)
     BREAKPOINT_REACHED,
     WATCHPOINT_REACHED,
     CATCHPOINT_REACHED,
@@ -65,13 +65,10 @@ enum class Msg : long
     EOL_REACHED,
     EOF_REACHED,
     BEAMTRAP_REACHED,
-    BEAMTRAP_UPDATED,
     
     // Copper
     COPPERBP_REACHED,
-    COPPERBP_UPDATED,
     COPPERWP_REACHED,
-    COPPERWP_UPDATED,
     
     // Denise
     VIEWPORT,
@@ -199,12 +196,9 @@ struct MsgEnum : Reflectable<MsgEnum, Msg>
             case Msg::EOL_REACHED:           return "EOL_REACHED";
             case Msg::EOF_REACHED:           return "EOF_REACHED";
             case Msg::BEAMTRAP_REACHED:      return "BEAMTRAP_REACHED";
-            case Msg::BEAMTRAP_UPDATED:      return "BEAMTRAP_UPDATED";
                 
             case Msg::COPPERBP_REACHED:      return "COPPERBP_REACHED";
-            case Msg::COPPERBP_UPDATED:      return "COPPERBP_UPDATED";
             case Msg::COPPERWP_REACHED:      return "COPPERWP_REACHED";
-            case Msg::COPPERWP_UPDATED:      return "COPPERWP_UPDATED";
                 
             case Msg::VIEWPORT:              return "VIEWPORT";
 

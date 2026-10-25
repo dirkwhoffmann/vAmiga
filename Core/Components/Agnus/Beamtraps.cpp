@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-Beamtraps::Beamtraps(Agnus& ref) : GuardList(ref.amiga), agnus(ref)
+Beamtraps::Beamtraps(Agnus& ref) : GuardList(ref.amiga, GuardType::BEAMTRAP), agnus(ref)
 {
 
 }

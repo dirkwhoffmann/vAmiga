@@ -476,7 +476,7 @@ extension MyController {
             activityBar.warningValue = 77.0 * acceleration
             activityBar.criticalValue = 105.0 * acceleration
             
-        case .COPPERBP_UPDATED, .COPPERWP_UPDATED, .GUARD_UPDATED:
+        case .GUARD_UPDATED:
             break
 
         case .BREAKPOINT_REACHED:

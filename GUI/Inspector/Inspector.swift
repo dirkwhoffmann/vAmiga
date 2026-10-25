@@ -810,7 +810,7 @@ class Inspector: DialogController {
             cpuInstrView.alertAddr = nil
             fullRefresh()
 
-        case .COPPERBP_UPDATED, .COPPERWP_UPDATED, .GUARD_UPDATED:
+        case .GUARD_UPDATED:
             
             fullRefresh()
 

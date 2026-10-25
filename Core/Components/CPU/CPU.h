@@ -53,9 +53,9 @@ public:
     utl::Backed<CPUInfo> info;
 
     // Breakpoints, Watchpoints, Catchpoints
-    GuardList breakpoints = GuardList(amiga, debugger.breakpoints);
-    GuardList watchpoints = GuardList(amiga, debugger.watchpoints);
-    GuardList catchpoints = GuardList(amiga, debugger.catchpoints);
+    GuardList breakpoints = GuardList(amiga, debugger.breakpoints, GuardType::BREAKPOINT);
+    GuardList watchpoints = GuardList(amiga, debugger.watchpoints, GuardType::WATCHPOINT);
+    GuardList catchpoints = GuardList(amiga, debugger.catchpoints, GuardType::CATCHPOINT);
 
     // Sub-cycle counter (overclocking)
     i64 debt;
