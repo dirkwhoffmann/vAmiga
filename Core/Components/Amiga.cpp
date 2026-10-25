@@ -358,9 +358,9 @@ Amiga::saveWorkspace(retro::vault::SVMFile &svm)
 }
 
 void
-Amiga::saveSnapshot(retro::vault::SVMFile &svm)
+Amiga::saveSnapshot(retro::vault::SVMFile &svm, Compressor compressor)
 {
-    updateSnapshot(svm);
+    updateSnapshot(svm, compressor);
     svm.persist();
 
     // Inform the GUI
@@ -390,7 +390,7 @@ Amiga::hibernate(retro::vault::SVMFile &svm, bool snapshot, bool workspace)
 
     if (snapshot) {
 
-        updateSnapshot(svm);
+        updateSnapshot(svm, Compressor::LZ4);
         svm.persist();
         msgQueue.put(Msg::SNAPSHOT_SAVED);
     }
@@ -414,7 +414,7 @@ Amiga::updateWorkspace(retro::vault::SVMFile &svm)
 }
 
 void
-Amiga::updateSnapshot(retro::vault::SVMFile &svm)
+Amiga::updateSnapshot(retro::vault::SVMFile &svm, Compressor compressor)
 {
     using namespace retro::vault;
 
@@ -437,7 +437,7 @@ Amiga::updateSnapshot(retro::vault::SVMFile &svm)
 
     // Take the screenshot and the snapshot, both of the same moment
     savePreview(folder / info.screenshot);
-    Snapshot(*this, config.snapshotCompressor).writeToFile(folder / info.binary);
+    Snapshot(*this, compressor).writeToFile(folder / info.binary);
 
     svm.getManifest().appendSnapshot(info);
 }
@@ -1448,9 +1448,9 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
 }
 
 void
-Amiga::saveSnapshot(const fs::path &path)
+Amiga::saveSnapshot(const fs::path &path, Compressor compressor)
 {
-    Snapshot(*this, config.snapshotCompressor).writeToFile(path);
+    Snapshot(*this, compressor).writeToFile(path);
 
     // Inform the GUI
     msgQueue.put(Msg::SNAPSHOT_SAVED);
@@ -1512,9 +1512,9 @@ Amiga::processCommand(const Command &cmd)
             
             try {
                 if (cmd.value2) {
-                    saveSnapshot(*reinterpret_cast<retro::vault::SVMFile *>(cmd.value2));
+                    saveSnapshot(*reinterpret_cast<retro::vault::SVMFile *>(cmd.value2), Compressor(cmd.value));
                 } else {
-                    saveSnapshot(cmd.str);
+                    saveSnapshot(cmd.str, Compressor(cmd.value));
                 }
             } catch (...) {
                 msgQueue.put(Msg::SNAPSHOT_SAVED, std::current_exception());

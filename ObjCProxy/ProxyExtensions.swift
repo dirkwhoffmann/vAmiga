@@ -23,10 +23,10 @@ extension AmigaProxy {
         if exception.fault != 0 { throw AppError(exception) }
     }
 
-    func saveSnapshot(url: URL) throws {
+    func saveSnapshot(url: URL, compressor: Compressor) throws {
 
         let exception = ExceptionWrapper()
-        saveSnapshot(to: url, exception: exception)
+        saveSnapshot(to: url, compressor: compressor, exception: exception)
         if exception.fault != 0 { throw AppError(exception) }
     }
 

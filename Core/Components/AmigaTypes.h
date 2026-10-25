@@ -345,10 +345,6 @@ typedef struct
     //! Delay between two auto-snapshots in seconds
     isize snapshotDelay;
 
-    //! Selects the snapshot compression method
-    Compressor snapshotCompressor;
-
-    //! Indicates whether workspace media files should be compressed
 }
 AmigaConfig;
 

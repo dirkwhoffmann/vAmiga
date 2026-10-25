@@ -335,7 +335,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = self.mySavePanel.url {
                 
                 do {
-                    try self.emu?.amiga.saveSnapshot(url: url)
+                    try self.emu?.amiga.saveSnapshot(url: url, compressor: self.pref.snapshotCompressor)
                 } catch {
                     self.showAlert(.cantExport(url: url), error: error, async: true)
                 }

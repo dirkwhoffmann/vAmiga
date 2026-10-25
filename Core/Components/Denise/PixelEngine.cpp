@@ -489,6 +489,7 @@ PixelEngine::swapBuffers()
     isize newActiveBuffer = (activeBuffer + 1) % NUM_TEXTURES;
 
     emuTexture[newActiveBuffer].nr = agnus.pos.frame;
+    xrayTexture[newActiveBuffer].nr = agnus.pos.frame;
     emuTexture[newActiveBuffer].lof = agnus.pos.lof;
     emuTexture[newActiveBuffer].prevlof = emuTexture[oldActiveBuffer].lof;
 

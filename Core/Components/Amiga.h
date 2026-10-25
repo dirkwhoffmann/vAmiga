@@ -468,7 +468,7 @@ private:
     void updateWorkspace(retro::vault::SVMFile &svm);
 
     // Adds a snapshot, including a screenshot, to an SVM and notes it in the manifest
-    void updateSnapshot(retro::vault::SVMFile &svm);
+    void updateSnapshot(retro::vault::SVMFile &svm, Compressor compressor);
 
 public:
     
@@ -491,8 +491,8 @@ public:
     void loadSnapshot(const Snapshot &file);
 
     // Saves a snapshot to a file, or into an SVM (see hibernate)
-    void saveSnapshot(const fs::path &path);
-    void saveSnapshot(retro::vault::SVMFile &svm);
+    void saveSnapshot(const fs::path &path, Compressor compressor);
+    void saveSnapshot(retro::vault::SVMFile &svm, Compressor compressor);
 
     // Services a snapshot event
     void serviceSnpEvent(EventID id);

@@ -430,12 +430,12 @@ ImageInfo scan(const fs::path &url);
 - (SnapshotProxy *) takeSnapshot:(Compressor)compressor;
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadSnapshotFromUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
-- (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)saveSnapshotToUrl:(NSURL *)url compressor:(Compressor)c exception:(ExceptionWrapper *)ex;
 
 - (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveWorkspaceAsync:(NSURL *)url;
-- (void)saveSnapshotAsync:(NSURL *)url;
+- (void)saveSnapshotAsync:(NSURL *)url compressor:(Compressor)c;
 
 - (BOOL) getMessage:(Message *)msg exception:(ExceptionWrapper *)ex;
 

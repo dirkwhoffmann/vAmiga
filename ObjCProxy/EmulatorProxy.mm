@@ -2445,9 +2445,9 @@ ImageInfo scan(const fs::path &url)
     catch(Error &error) { [ex save:error]; }
 }
 
-- (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex
+- (void)saveSnapshotToUrl:(NSURL *)url compressor:(Compressor)c exception:(ExceptionWrapper *)ex
 {
-    try { [self amiga]->saveSnapshot([url fileSystemRepresentation]); }
+    try { [self amiga]->saveSnapshot([url fileSystemRepresentation], c); }
     catch(Error &error) { [ex save:error]; }
 }
 
@@ -2468,9 +2468,9 @@ ImageInfo scan(const fs::path &url)
     [self amiga]->saveWorkspaceAsync([url fileSystemRepresentation]);
 }
 
-- (void)saveSnapshotAsync:(NSURL *)url
+- (void)saveSnapshotAsync:(NSURL *)url compressor:(Compressor)c
 {
-    [self amiga]->saveSnapshotAsync([url fileSystemRepresentation]);
+    [self amiga]->saveSnapshotAsync([url fileSystemRepresentation], c);
 }
 
 - (BOOL)getMessage:(Message *)msg exception:(ExceptionWrapper *)ex

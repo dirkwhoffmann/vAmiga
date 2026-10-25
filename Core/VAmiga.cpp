@@ -1122,6 +1122,18 @@ VideoPortAPI::getXrayTexture() const
     return (u32 *)emu->getXrayTexture().pixels.ptr;
 }
 
+const u32 *
+VideoPortAPI::getXrayTexture(isize *nr) const
+{
+    VAMIGA_PUBLIC
+
+    auto &texture = emu->getXrayTexture();
+
+    *nr = isize(texture.nr);
+
+    return (u32 *)texture.pixels.ptr;
+}
+
 void
 VideoPortAPI::saveTexture(const fs::path &path) const
 {
@@ -1353,6 +1365,7 @@ FloppyDriveAPI::ejectDisk()
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->ejectDisk();
+    emu->markAsDirty();
 }
 
 void
@@ -1462,7 +1475,8 @@ void
 HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
 {
     VAMIGA_PUBLIC_SUSPEND
-    return drive->changeGeometry(c, h, s, b);
+    drive->changeGeometry(c, h, s, b);
+    emu->markAsDirty();
 }
 
 void
@@ -1470,6 +1484,7 @@ HardDriveAPI::attach(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->init(path);
+    emu->markAsDirty();
 }
 
 void
@@ -1477,6 +1492,7 @@ HardDriveAPI::attach(const fs::path &path, retro::vault::SVMFile &svm)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->init(path, svm);
+    emu->markAsDirty();
 }
 
 void
@@ -1485,6 +1501,7 @@ HardDriveAPI::create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSForma
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->create(svm, megabytes, fs, name);
+    emu->markAsDirty();
 }
 
 void
@@ -1500,6 +1517,7 @@ HardDriveAPI::attach(isize c, isize h, isize s, isize b)
     VAMIGA_PUBLIC_SUSPEND
     auto geometry = GeometryDescriptor(c, h, s, b);
     drive->init(geometry);
+    emu->markAsDirty();
 }
 
 void 
@@ -2751,32 +2769,31 @@ AmigaAPI::loadSnapshot(const fs::path &path)
 }
 
 void
-AmigaAPI::saveSnapshot(const fs::path &path) const
+AmigaAPI::saveSnapshot(const fs::path &path, Compressor compressor) const
 {
     VAMIGA_PUBLIC_SUSPEND
-    amiga->saveSnapshot(path);
-    
+    amiga->saveSnapshot(path, compressor);
 }
 
 void
-AmigaAPI::saveSnapshotAsync(const fs::path &path) const
+AmigaAPI::saveSnapshotAsync(const fs::path &path, Compressor compressor) const
 {
     VAMIGA_PUBLIC
-    emu->put(Cmd::SAVE_SNAPSHOT, path.string());
+    emu->put(Command(Cmd::SAVE_SNAPSHOT, i64(compressor)), path.string());
 }
 
 void
-AmigaAPI::saveSnapshot(retro::vault::SVMFile &svm) const
+AmigaAPI::saveSnapshot(retro::vault::SVMFile &svm, Compressor compressor) const
 {
     VAMIGA_PUBLIC_SUSPEND
-    amiga->saveSnapshot(svm);
+    amiga->saveSnapshot(svm, compressor);
 }
 
 void
-AmigaAPI::saveSnapshotAsync(retro::vault::SVMFile &svm) const
+AmigaAPI::saveSnapshotAsync(retro::vault::SVMFile &svm, Compressor compressor) const
 {
     VAMIGA_PUBLIC
-    emu->put(Command(Cmd::SAVE_SNAPSHOT, i64(0), i64(&svm)));
+    emu->put(Command(Cmd::SAVE_SNAPSHOT, i64(compressor), i64(&svm)));
 }
 
 void

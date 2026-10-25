@@ -198,11 +198,12 @@ public:
 
     /** @brief  Saves a snapshot to disk.
      *
-     *  @param  path    Destination path
+     *  @param  path        Destination path
+     *  @param  compressor  Compression method
      *
      *  @throw Error if the file cannot be written.
      */
-    void saveSnapshot(const std::filesystem::path &path) const;
+    void saveSnapshot(const std::filesystem::path &path, Compressor compressor) const;
 
     /** @brief  Saves a snapshot to disk asynchronously.
      *
@@ -210,9 +211,10 @@ public:
      *  when it processes its command queue. The function returns immediately.
      *  The GUI is informed by a SNAPSHOT_SAVED message.
      *
-     *  @param  path    Destination path
+     *  @param  path        Destination path
+     *  @param  compressor  Compression method
      */
-    void saveSnapshotAsync(const std::filesystem::path &path) const;
+    void saveSnapshotAsync(const std::filesystem::path &path, Compressor compressor) const;
 
     /** @brief  Saves a snapshot, including a screenshot, into an SVM
      *
@@ -224,8 +226,8 @@ public:
      *  @throw Error if the SVM file cannot be read or written, or if its content
      *  is invalid (synchronous versions).
      */
-    void saveSnapshot(retro::vault::SVMFile &svm) const;
-    void saveSnapshotAsync(retro::vault::SVMFile &svm) const;
+    void saveSnapshot(retro::vault::SVMFile &svm, Compressor compressor) const;
+    void saveSnapshotAsync(retro::vault::SVMFile &svm, Compressor compressor) const;
 
     /** @brief  Hibernates the machine into a virtual machine bundle
      *
@@ -1788,6 +1790,7 @@ public:
      * 32 bit color value.
      */
     const u32 *getXrayTexture() const;
+    const u32 *getXrayTexture(isize *nr) const;
 
     /** @brief  Saves the most recent stable texture as a PNG file
      *
