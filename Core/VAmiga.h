@@ -279,8 +279,14 @@ public:
 
     /** @brief  Sets the current auto-inspection mask
      *
+     *  Each bit selects one component class (the bit position is the numeric
+     *  value of the Class entry). A component's getCachedInfo() and
+     *  getCachedMetrics() only return up-to-date snapshots while its class is
+     *  selected.
+     *
      *  @example The following call enables auto-inspections for the CIA chips
-     *  and Paula: setAutoInspectionMask(1 << COMP_CIA | 1 << COMP_PAULA);
+     *  and Paula:
+     *  setAutoInspectionMask(1LL << long(Class::CIA) | 1LL << long(Class::Paula));
      *
      *  @param  mask A bit mask indicating the components under inspection
      */
@@ -717,18 +723,25 @@ public:
     u8 spypeek8(Accessor acc, u32 addr) const;
     u16 spypeek16(Accessor acc, u32 addr) const;
 
-    /** @brief  Returns a string representation for a portion of memory.
+    /** @brief  Returns a string of characters for a portion of memory.
      *
-     *  ascDump() shows the bytes as characters, hexDump() as hexadecimal
-     *  numbers, and memDump() as hexadecimal numbers followed by characters.
-     *  Each group of 'sz' bytes forms one number and is followed by a space.
+     *  @param  acc     The accessor used to read the bytes.
+     *  @param  addr    First address to dump.
+     *  @param  bytes   Number of bytes to dump.
+     */
+    string ascDump(Accessor acc, u32 addr, isize bytes) const;
+
+    /** @brief  Returns a string of numbers for a portion of memory.
+     *
+     *  hexDump() shows the bytes as hexadecimal numbers, memDump() as
+     *  hexadecimal numbers followed by characters. Each group of 'sz' bytes
+     *  forms one number and is followed by a space.
      *
      *  @param  acc     The accessor used to read the bytes.
      *  @param  addr    First address to dump.
      *  @param  bytes   Number of bytes to dump.
      *  @param  sz      Group size in bytes (1, 2, or 4).
      */
-    string ascDump(Accessor acc, u32 addr, isize bytes) const;
     string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
     string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
 
@@ -2795,10 +2808,18 @@ public:
      *
      *  @param opt      The option to set
      *  @param value    The option's value
-     *  @param id       The component to configure (only for options that
-     *                  require an additional parameter to determine it)
      */
     void setAsync(Opt opt, i64 value);
+
+    /** @brief  Configures a component without waiting for the result.
+     *
+     *  Same as above, for options that require an additional parameter to
+     *  determine the component.
+     *
+     *  @param opt      The option to set
+     *  @param value    The option's value
+     *  @param id       The component to configure
+     */
     void setAsync(Opt opt, i64 value, long id);
     void setAsync(ConfigScheme model);
 
