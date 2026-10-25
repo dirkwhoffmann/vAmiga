@@ -67,9 +67,9 @@ struct GuardTypeEnum : Reflectable<GuardTypeEnum, GuardType>
 
 typedef struct
 {
-    u32 addr;
-    bool enabled;
-    isize ignore;
+    u32 addr;                               ///< Observed address
+    bool enabled;                           ///< The guard is enabled
+    isize ignore;                           ///< Number of hits that are ignored before the guard triggers
 }
 GuardInfo;
 

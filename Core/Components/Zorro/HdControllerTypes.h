@@ -203,7 +203,7 @@ struct HdcStateEnum : Reflectable<HdcStateEnum, HdcState>
 
 typedef struct
 {
-    bool connected;
+    bool connected;                         ///< The controller is connected
 
     /* Largest drive this controller accepts, in MB (1...16384)
      *
@@ -218,9 +218,9 @@ HdcConfig;
 
 typedef struct
 {
-    isize nr;
-    bool pluggedIn;
-    HdcState state;
+    isize nr;                               ///< Number of the controller
+    bool pluggedIn;                         ///< The controller is plugged in
+    HdcState state;                         ///< State of the controller
 }
 HdcInfo;
 

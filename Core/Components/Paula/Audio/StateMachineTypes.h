@@ -19,15 +19,15 @@ namespace vamiga {
 
 typedef struct
 {
-    isize state;
-    bool dma;
-    u16 audlenLatch;
-    u16 audlen;
-    u16 audperLatch;
-    i32 audper;
-    u16 audvolLatch;
-    u16 audvol;
-    u16 auddat;
+    isize state;                            ///< State of the audio state machine
+    bool dma;                               ///< Audio DMA is enabled for this channel
+    u16 audlenLatch;                        ///< Length latch (AUDxLEN)
+    u16 audlen;                             ///< Remaining length
+    u16 audperLatch;                        ///< Period latch (AUDxPER)
+    i32 audper;                             ///< Remaining period
+    u16 audvolLatch;                        ///< Volume latch (AUDxVOL)
+    u16 audvol;                             ///< Current volume
+    u16 auddat;                             ///< Data register (AUDxDAT)
 }
 StateMachineInfo;
 

@@ -58,7 +58,7 @@ struct RTCRevisionEnum : Reflectable<RTCRevisionEnum, RTCRevision>
 
 typedef struct
 {
-    RTCRevision model;
+    RTCRevision model;                      ///< Chip revision
 }
 RTCConfig;
 

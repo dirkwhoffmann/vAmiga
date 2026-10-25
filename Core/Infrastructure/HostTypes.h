@@ -74,7 +74,7 @@ typedef struct
 
     // Framebuffer dimensions
     isize frameBufferWidth;
-    isize frameBufferHeight;
+    isize frameBufferHeight;                ///< Height of the host frame buffer (in pixels)
 }
 HostConfig;
 

@@ -24,12 +24,12 @@ using retro::vault::Density;
 
 typedef struct
 {
-    retro::vault::amiga::FSFormat dos;
-    retro::vault::Diameter diameter;
-    retro::vault::Density density;
-    retro::vault::amiga::BootBlockType bootBlockType;
-    const char *bootBlockName;
-    bool hasVirus;
+    retro::vault::amiga::FSFormat dos;      ///< File system format
+    retro::vault::Diameter diameter;        ///< Disk diameter
+    retro::vault::Density density;          ///< Disk density
+    retro::vault::amiga::BootBlockType bootBlockType;///< Type of the boot block
+    const char *bootBlockName;              ///< Name of the boot block
+    bool hasVirus;                          ///< The boot block contains a known virus
 }
 FloppyDiskInfo;
 

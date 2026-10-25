@@ -514,106 +514,106 @@ static inline bool isBplxEvent(EventID id, int x)
 
 typedef struct
 {
-    bool isOCS;
-    bool isECS;
-    bool isAGA;
-    bool isPAL;
-    bool isNTSC;
+    bool isOCS;                             ///< The chip is an OCS Agnus
+    bool isECS;                             ///< The chip is an ECS Agnus
+    bool isAGA;                             ///< The chip is an AGA Alice
+    bool isPAL;                             ///< The chip runs with PAL timing
+    bool isNTSC;                            ///< The chip runs with NTSC timing
     
-    u16 idBits;
-    isize chipRamLimit;
-    isize vStrobeLine;
-    u16 ddfMask;
+    u16 idBits;                             ///< Chip identification bits as reported by VPOSR
+    isize chipRamLimit;                     ///< Amount of Chip RAM the chip can address (in KB)
+    isize vStrobeLine;                      ///< Raster line carrying the vertical strobe (1 for the old OCS chip, 0 otherwise)
+    u16 ddfMask;                            ///< Mask applied to the data fetch registers DDFSTRT and DDFSTOP
 }
 AgnusTraits;
 
 typedef struct
 {
-    AgnusRevision revision;
-    bool ptrDrops;
+    AgnusRevision revision;                 ///< Chip revision
+    bool ptrDrops;                          ///< Ignore certain DMA pointer register writes
 }
 AgnusConfig;
 
 typedef struct
 {
-    EventSlot slot;
-    EventID eventId;
-    const char *eventName;
+    EventSlot slot;                         ///< The event slot
+    EventID eventId;                        ///< Identifier of the scheduled event (0 if the slot is empty)
+    const char *eventName;                  ///< Name of the scheduled event
     
     // Trigger cycle of the event
     Cycle trigger;
-    Cycle triggerRel;
+    Cycle triggerRel;                       ///< Time until the event triggers (in master cycles)
     
     // Trigger frame relative to the current frame
     isize frameRel;
     
     // The trigger cycle translated to a beam position.
     isize vpos;
-    isize hpos;
+    isize hpos;                             ///< Horizontal position at which the event triggers
 }
 EventSlotInfo;
 
 typedef struct
 {
-    Cycle cpuClock;
-    Cycle cpuCycles;
-    Cycle dmaClock;
-    Cycle ciaAClock;
-    Cycle ciaBClock;
-    i64 frame;
-    isize vpos;
-    isize hpos;
+    Cycle cpuClock;                         ///< CPU clock (in master cycles)
+    Cycle cpuCycles;                        ///< CPU clock (in CPU cycles)
+    Cycle dmaClock;                         ///< Agnus (DMA) clock (in master cycles)
+    Cycle ciaAClock;                        ///< Clock of CIA A (in master cycles)
+    Cycle ciaBClock;                        ///< Clock of CIA B (in master cycles)
+    i64 frame;                              ///< Frame number
+    isize vpos;                             ///< Vertical beam position
+    isize hpos;                             ///< Horizontal beam position
 }
 EventInfo;
 
 typedef struct
 {
-    isize vpos;
-    isize hpos;
-    i64 frame;
+    isize vpos;                             ///< Vertical beam position
+    isize hpos;                             ///< Horizontal beam position
+    i64 frame;                              ///< Frame number
     
-    u16 dmacon;
-    u16 bplcon0;
-    u16 ddfstrt;
-    u16 ddfstop;
-    u16 diwstrt;
-    u16 diwstop;
-    u16 diwhigh;
-    u16 fmode;
+    u16 dmacon;                             ///< DMA control register (DMACON)
+    u16 bplcon0;                            ///< Bitplane control register 0 (BPLCON0)
+    u16 ddfstrt;                            ///< Display data fetch start (DDFSTRT)
+    u16 ddfstop;                            ///< Display data fetch stop (DDFSTOP)
+    u16 diwstrt;                            ///< Display window start (DIWSTRT)
+    u16 diwstop;                            ///< Display window stop (DIWSTOP)
+    u16 diwhigh;                            ///< Display window high bits (DIWHIGH, ECS)
+    u16 fmode;                              ///< Fetch mode register (FMODE, AGA)
     
-    u16 bpl1mod;
-    u16 bpl2mod;
-    u16 bltamod;
-    u16 bltbmod;
-    u16 bltcmod;
-    u16 bltdmod;
-    u16 bltcon0;
+    u16 bpl1mod;                            ///< Bitplane modulo for odd planes (BPL1MOD)
+    u16 bpl2mod;                            ///< Bitplane modulo for even planes (BPL2MOD)
+    u16 bltamod;                            ///< Blitter modulo for source A (BLTAMOD)
+    u16 bltbmod;                            ///< Blitter modulo for source B (BLTBMOD)
+    u16 bltcmod;                            ///< Blitter modulo for source C (BLTCMOD)
+    u16 bltdmod;                            ///< Blitter modulo for destination D (BLTDMOD)
+    u16 bltcon0;                            ///< Blitter control register 0 (BLTCON0)
     
-    u32 coppc0;
-    u32 dskpt;
-    u32 bplpt[8];
-    u32 audpt[4];
-    u32 audlc[4];
-    u32 bltpt[4];
-    u32 sprpt[8];
+    u32 coppc0;                             ///< Copper program counter (start of the current instruction)
+    u32 dskpt;                              ///< Disk DMA pointer (DSKPT)
+    u32 bplpt[8];                           ///< Bitplane DMA pointers (BPLxPT)
+    u32 audpt[4];                           ///< Audio DMA pointers (AUDxPT)
+    u32 audlc[4];                           ///< Audio DMA location latches (AUDxLC)
+    u32 bltpt[4];                           ///< Blitter DMA pointers (BLTxPT)
+    u32 sprpt[8];                           ///< Sprite DMA pointers (SPRxPT)
     
-    bool bls;
+    bool bls;                               ///< Blitter slowdown (BLS) signal
     
-    EventInfo eventInfo;
-    EventSlotInfo slotInfo[SLOT_COUNT];
+    EventInfo eventInfo;                    ///< Event scheduler summary
+    EventSlotInfo slotInfo[SLOT_COUNT];     ///< State of all event slots
 }
 AgnusInfo;
 
 typedef struct
 {
-    isize usage[BUS_COUNT];
+    isize usage[BUS_COUNT];                 ///< Number of DMA slots used by each bus owner
     
-    double copperActivity;
-    double blitterActivity;
-    double diskActivity;
-    double audioActivity;
-    double spriteActivity;
-    double bitplaneActivity;
+    double copperActivity;                  ///< Share of DMA slots used by the Copper
+    double blitterActivity;                 ///< Share of DMA slots used by the Blitter
+    double diskActivity;                    ///< Share of DMA slots used by disk DMA
+    double audioActivity;                   ///< Share of DMA slots used by audio DMA
+    double spriteActivity;                  ///< Share of DMA slots used by sprite DMA
+    double bitplaneActivity;                ///< Share of DMA slots used by bitplane DMA
 }
 AgnusMetrics;
 

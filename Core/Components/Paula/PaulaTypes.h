@@ -94,9 +94,9 @@ struct IrqSourceEnum : Reflectable<IrqSourceEnum, IrqSource>
 
 typedef struct
 {
-    u16 intreq;
-    u16 intena;
-    u16 adkcon;
+    u16 intreq;                             ///< Interrupt request register (INTREQ)
+    u16 intena;                             ///< Interrupt enable register (INTENA)
+    u16 adkcon;                             ///< Audio and disk control register (ADKCON)
 }
 PaulaInfo;
 

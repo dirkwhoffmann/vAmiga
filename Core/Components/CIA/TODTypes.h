@@ -18,9 +18,9 @@ namespace vamiga {
 
 typedef struct
 {
-    u32 value;
-    u32 latch;
-    u32 alarm;
+    u32 value;                              ///< Current counter value
+    u32 latch;                              ///< Latched counter value
+    u32 alarm;                              ///< Alarm value
 }
 TODInfo;
 

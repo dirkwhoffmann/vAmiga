@@ -240,13 +240,13 @@ typedef struct
 {
     // RAM size in bytes
     i32 chipSize;
-    i32 slowSize;
-    i32 fastSize;
+    i32 slowSize;                           ///< Slow RAM size (in bytes)
+    i32 fastSize;                           ///< Fast RAM size (in bytes)
     
     // ROM size in bytes
     i32 romSize;
-    i32 womSize;
-    i32 extSize;
+    i32 womSize;                            ///< Size of the Write-Once-Memory (in bytes)
+    i32 extSize;                            ///< Size of the Extension ROM (in bytes)
     
     // First memory page where the extended ROM is blended it
     u32 extStart;
@@ -276,20 +276,20 @@ MemConfig;
 
 typedef struct
 {
-    bool hasRom;
-    bool hasWom;
-    bool hasExt;
-    bool hasBootRom;
-    bool hasKickRom;
-    bool womLock;
+    bool hasRom;                            ///< A Kickstart ROM is installed
+    bool hasWom;                            ///< A Write-Once-Memory is installed
+    bool hasExt;                            ///< An Extension ROM is installed
+    bool hasBootRom;                        ///< The installed ROM is a Boot ROM
+    bool hasKickRom;                        ///< The installed ROM is a Kickstart ROM
+    bool womLock;                           ///< The Write-Once-Memory is write-protected
     
-    u32 romMask;
-    u32 womMask;
-    u32 extMask;
-    u32 chipMask;
+    u32 romMask;                            ///< Address mask of the ROM
+    u32 womMask;                            ///< Address mask of the Write-Once-Memory
+    u32 extMask;                            ///< Address mask of the Extension ROM
+    u32 chipMask;                           ///< Address mask of the Chip RAM
     
-    MemSrc cpuMemSrc[256];
-    MemSrc agnusMemSrc[256];
+    MemSrc cpuMemSrc[256];                  ///< Memory source of each 64 KB bank as seen by the CPU
+    MemSrc agnusMemSrc[256];                ///< Memory source of each 64 KB bank as seen by Agnus
 }
 MemInfo;
 

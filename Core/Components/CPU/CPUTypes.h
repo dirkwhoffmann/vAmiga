@@ -181,37 +181,37 @@ struct DasmNumbersEnum : Reflectable<DasmNumbersEnum, DasmNumbers>
 
 typedef struct
 {
-    CPURev revision;
-    DasmRev dasmRevision;
-    DasmSyntax dasmSyntax;
-    DasmNumbers dasmNumbers;
-    isize overclocking;
-    u32 regResetVal;
+    CPURev revision;                        ///< Chip revision
+    DasmRev dasmRevision;                   ///< Chip revision used by the disassembler
+    DasmSyntax dasmSyntax;                  ///< Disassembler syntax
+    DasmNumbers dasmNumbers;                ///< Disassembler number format
+    isize overclocking;                     ///< Overclocking factor
+    u32 regResetVal;                        ///< Register reset value
 }
 CPUConfig;
 
 typedef struct
 {
-    Cycle clock;
+    Cycle clock;                            ///< CPU clock (in master cycles)
     
-    u32 pc0;
-    u16 ird;
-    u16 irc;
-    u32 d[8];
-    u32 a[8];
-    u32 isp;
-    u32 usp;
-    u32 msp;
-    u32 vbr;
-    u16 sr;
-    u8 sfc;
-    u8 dfc;
-    u8 cacr;
-    u8 caar;
-    u8 ipl;
-    u8 fc;
+    u32 pc0;                                ///< Address of the current instruction
+    u16 ird;                                ///< Instruction register (decoder)
+    u16 irc;                                ///< Instruction register (prefetch queue)
+    u32 d[8];                               ///< Data registers D0 - D7
+    u32 a[8];                               ///< Address registers A0 - A7
+    u32 isp;                                ///< Interrupt stack pointer
+    u32 usp;                                ///< User stack pointer
+    u32 msp;                                ///< Master stack pointer
+    u32 vbr;                                ///< Vector base register
+    u16 sr;                                 ///< Status register
+    u8 sfc;                                 ///< Source function code register
+    u8 dfc;                                 ///< Destination function code register
+    u8 cacr;                                ///< Cache control register
+    u8 caar;                                ///< Cache address register
+    u8 ipl;                                 ///< Interrupt priority level on the interrupt lines
+    u8 fc;                                  ///< Function code pins
     
-    bool halt;
+    bool halt;                              ///< The CPU is halted
 }
 CPUInfo;
 

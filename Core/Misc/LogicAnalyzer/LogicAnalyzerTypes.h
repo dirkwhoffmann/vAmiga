@@ -82,9 +82,9 @@ LogicAnalyzerConfig;
 typedef struct
 {
 
-    const BusOwner *busOwner;
-    const u32 *addrBus;
-    const u16 *dataBus;
+    const BusOwner *busOwner;               ///< Bus owner of each recorded slot
+    const u32 *addrBus;                     ///< Address bus value of each recorded slot
+    const u16 *dataBus;                     ///< Data bus value of each recorded slot
 }
 LogicAnalyzerInfo;
 

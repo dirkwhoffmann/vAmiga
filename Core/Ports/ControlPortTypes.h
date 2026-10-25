@@ -58,14 +58,14 @@ struct ControlPortDeviceEnum : Reflectable<ControlPortDeviceEnum, ControlPortDev
 
 typedef struct
 {
-    bool m0v;
-    bool m0h;
-    bool m1v;
-    bool m1h;
-    u16 joydat;
-    u16 potgo;
-    u16 potgor;
-    u16 potdat;
+    bool m0v;                               ///< Mouse quadrature signal V0
+    bool m0h;                               ///< Mouse quadrature signal H0
+    bool m1v;                               ///< Mouse quadrature signal V1
+    bool m1h;                               ///< Mouse quadrature signal H1
+    u16 joydat;                             ///< Joystick/mouse data register (JOYxDAT)
+    u16 potgo;                              ///< Potentiometer control register (POTGO)
+    u16 potgor;                             ///< Potentiometer port data read register (POTGOR)
+    u16 potdat;                             ///< Potentiometer counter data register (POTxDAT)
 }
 ControlPortInfo;
 

@@ -106,25 +106,25 @@ typedef struct
     
     // Noise settings
     i16 pan;
-    u8 stepVolume;
-    u8 pollVolume;
-    u8 insertVolume;
-    u8 ejectVolume;
+    u8 stepVolume;                          ///< Head step volume
+    u8 pollVolume;                          ///< Disk polling step volume
+    u8 insertVolume;                        ///< Disk insertion volume
+    u8 ejectVolume;                         ///< Disk ejection volume
 }
 FloppyDriveConfig;
 
 typedef struct
 {
-    isize nr;
-    DriveHead head;
-    bool isConnected;
-    bool hasDisk;
-    bool hasModifiedDisk;
-    bool hasUnmodifiedDisk;
-    bool hasProtectedDisk;
-    bool hasUnprotectedDisk;
-    bool motor;
-    bool writing;
+    isize nr;                               ///< Number of the drive
+    DriveHead head;                         ///< Position of the drive head
+    bool isConnected;                       ///< The drive is connected
+    bool hasDisk;                           ///< A disk is inserted
+    bool hasModifiedDisk;                   ///< The inserted disk has unsaved changes
+    bool hasUnmodifiedDisk;                 ///< The inserted disk has no unsaved changes
+    bool hasProtectedDisk;                  ///< The inserted disk is write-protected
+    bool hasUnprotectedDisk;                ///< The inserted disk is not write-protected
+    bool motor;                             ///< The drive motor is on
+    bool writing;                           ///< The drive is writing
 }
 FloppyDriveInfo;
 

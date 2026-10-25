@@ -56,14 +56,14 @@ struct KbStateEnum : Reflectable<KbStateEnum, KbState>
 
 typedef struct
 {
-    bool accurate;
+    bool accurate;                          ///< Emulate the keyboard protocol accurately
 }
 KeyboardConfig;
 
 typedef struct
 {
-    KbState state;
-    u8 shiftReg;
+    KbState state;                          ///< State of the keyboard protocol
+    u8 shiftReg;                            ///< Shift register
     
 } KeyboardInfo;
 

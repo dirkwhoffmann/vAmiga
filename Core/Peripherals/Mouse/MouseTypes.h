@@ -19,9 +19,9 @@ namespace vamiga {
 
 typedef struct
 {
-    bool pullUpResistors;
-    bool shakeDetection;
-    isize velocity;
+    bool pullUpResistors;                   ///< Emulate pull-up resistors
+    bool shakeDetection;                    ///< Detect a shaken mouse
+    isize velocity;                         ///< Mouse velocity
 }
 MouseConfig;
 

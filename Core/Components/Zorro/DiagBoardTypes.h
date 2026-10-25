@@ -19,7 +19,7 @@ namespace vamiga {
 
 typedef struct
 {
-    bool enabled;
+    bool enabled;                           ///< The diagnose board is installed
 }
 DiagBoardConfig;
 

@@ -213,23 +213,23 @@ XRayConfig;
 
 typedef struct
 {
-    bool visualizeCopper;
-    bool visualizeBlitter;
-    bool visualizeDisk;
-    bool visualizeAudio;
-    bool visualizeSprites;
-    bool visualizeBitplanes;
-    bool visualizeCpu;
-    bool visualizeRefresh;
+    bool visualizeCopper;                   ///< Show Copper DMA
+    bool visualizeBlitter;                  ///< Show Blitter DMA
+    bool visualizeDisk;                     ///< Show disk DMA
+    bool visualizeAudio;                    ///< Show audio DMA
+    bool visualizeSprites;                  ///< Show sprite DMA
+    bool visualizeBitplanes;                ///< Show bitplane DMA
+    bool visualizeCpu;                      ///< Show CPU accesses
+    bool visualizeRefresh;                  ///< Show refresh cycles
     
-    double copperColor[3];
-    double blitterColor[3];
-    double diskColor[3];
-    double audioColor[3];
-    double spriteColor[3];
-    double bitplaneColor[3];
-    double cpuColor[3];
-    double refreshColor[3];
+    double copperColor[3];                  ///< Color of Copper DMA (RGB)
+    double blitterColor[3];                 ///< Color of Blitter DMA (RGB)
+    double diskColor[3];                    ///< Color of disk DMA (RGB)
+    double audioColor[3];                   ///< Color of audio DMA (RGB)
+    double spriteColor[3];                  ///< Color of sprite DMA (RGB)
+    double bitplaneColor[3];                ///< Color of bitplane DMA (RGB)
+    double cpuColor[3];                     ///< Color of CPU accesses (RGB)
+    double refreshColor[3];                 ///< Color of refresh cycles (RGB)
 }
 XRayInfo;
 

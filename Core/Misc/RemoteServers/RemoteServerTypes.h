@@ -36,7 +36,7 @@ ServerConfig;
 
 typedef struct
 {
-    SrvState state;
+    SrvState state;                         ///< State of the server
 }
 RemoteServerInfo;
 

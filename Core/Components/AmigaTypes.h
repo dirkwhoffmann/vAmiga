@@ -354,13 +354,13 @@ AmigaConfig;
 
 typedef struct
 {
-    Cycle cpuClock;
-    Cycle dmaClock;
-    Cycle ciaAClock;
-    Cycle ciaBClock;
-    i64 frame;
-    isize vpos;
-    isize hpos;
+    Cycle cpuClock;                         ///< CPU clock (in master cycles)
+    Cycle dmaClock;                         ///< Agnus (DMA) clock (in master cycles)
+    Cycle ciaAClock;                        ///< Clock of CIA A (in master cycles)
+    Cycle ciaBClock;                        ///< Clock of CIA B (in master cycles)
+    i64 frame;                              ///< Frame number
+    isize vpos;                             ///< Vertical beam position
+    isize hpos;                             ///< Horizontal beam position
 }
 AmigaInfo;
 

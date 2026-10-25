@@ -29,11 +29,11 @@ typedef struct
 {
     // Master volume (left and right channel)
     i64 volL;
-    i64 volR;
+    i64 volR;                               ///< Master volume (right)
 
     // Channel volumes and pan factors
     i64 vol[4];
-    i64 pan[4];
+    i64 pan[4];                             ///< Pan of each audio channel
 
     // Sample buffer capacity
     isize bufferSize;
@@ -51,12 +51,12 @@ AudioPortConfig;
 
 typedef struct
 {
-    isize bufferUnderflows;
-    isize bufferOverflows;
-    i64 producedSamples;
-    i64 idleSamples;
-    i64 consumedSamples;
-    double fillLevel;
+    isize bufferUnderflows;                 ///< Number of buffer underflows
+    isize bufferOverflows;                  ///< Number of buffer overflows
+    i64 producedSamples;                    ///< Number of generated samples
+    i64 idleSamples;                        ///< Number of samples produced while no audio was playing
+    i64 consumedSamples;                    ///< Number of samples consumed by the audio backend
+    double fillLevel;                       ///< Current fill level of the audio buffer
 }
 AudioPortMetrics;
 

@@ -78,8 +78,8 @@ typedef struct
      */
     i32 speed;
     
-    bool lockDskSync;
-    bool autoDskSync;
+    bool lockDskSync;                       ///< Ignore writes to DSKSYNC
+    bool autoDskSync;                       ///< Always find a sync mark
 }
 DiskControllerConfig;
 
@@ -94,15 +94,15 @@ inline bool isValidDriveSpeed(isize speed)
 
 typedef struct
 {
-    isize selectedDrive;
-    DriveDmaState state;
-    i32 fifo[6];
-    u8 fifoCount;
+    isize selectedDrive;                    ///< Number of the selected drive
+    DriveDmaState state;                    ///< State of the disk DMA
+    i32 fifo[6];                            ///< Contents of the disk FIFO
+    u8 fifoCount;                           ///< Number of bytes in the FIFO
     
-    u16 dsklen;
-    u16 dskbytr;
-    u16 dsksync;
-    u8 prb;
+    u16 dsklen;                             ///< Disk DMA length register (DSKLEN)
+    u16 dskbytr;                            ///< Disk data byte and status register (DSKBYTR)
+    u16 dsksync;                            ///< Disk sync register (DSKSYNC)
+    u8 prb;                                 ///< CIA B port register B (drive control lines)
 }
 DiskControllerInfo;
 

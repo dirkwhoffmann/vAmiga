@@ -15,12 +15,12 @@ namespace vamiga {
 
 typedef struct
 {
-    u16 serper;
-    isize baudRate;
-    u16 receiveBuffer;
-    u16 receiveShiftReg;
-    u16 transmitBuffer;
-    u16 transmitShiftReg;
+    u16 serper;                             ///< Serial period register (SERPER)
+    isize baudRate;                         ///< Baud rate
+    u16 receiveBuffer;                      ///< Receive buffer
+    u16 receiveShiftReg;                    ///< Receive shift register
+    u16 transmitBuffer;                     ///< Transmit buffer
+    u16 transmitShiftReg;                   ///< Transmit shift register
 }
 UARTInfo;
 

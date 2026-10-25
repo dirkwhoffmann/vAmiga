@@ -118,9 +118,9 @@ struct HardDriveStateEnum : Reflectable<HardDriveStateEnum, HardDriveState>
 
 typedef struct
 {
-    HardDriveType type;
-    i16 pan;
-    u8 stepVolume;
+    HardDriveType type;                     ///< Drive model
+    i16 pan;                                ///< Stereo position of the drive sounds
+    u8 stepVolume;                          ///< Head step volume
 
     // Decides when a change reaches the file (see HardDrive::persist)
     WriteThroughMode writeThrough;
@@ -153,53 +153,53 @@ typedef struct
     
     // Product information
     const char *diskVendor;
-    const char *diskProduct;
-    const char *diskRevision;
-    const char *controllerVendor;
-    const char *controllerProduct;
-    const char *controllerRevision;
+    const char *diskProduct;                ///< Product name of the disk
+    const char *diskRevision;               ///< Revision of the disk
+    const char *controllerVendor;           ///< Vendor of the controller
+    const char *controllerProduct;          ///< Product name of the controller
+    const char *controllerRevision;         ///< Revision of the controller
     
     // Physical layout
     isize cylinders;
-    isize heads;
-    isize sectors;
-    isize bsize;
+    isize heads;                            ///< Number of heads
+    isize sectors;                          ///< Number of sectors per track
+    isize bsize;                            ///< Block size (in bytes)
     
     // Derived values
     isize tracks;
-    i64 blocks;
-    i64 bytes;
-    isize upperCyl;
-    isize upperHead;
-    isize upperTrack;
+    i64 blocks;                             ///< Number of blocks
+    i64 bytes;                              ///< Capacity (in bytes)
+    isize upperCyl;                         ///< Highest cylinder
+    isize upperHead;                        ///< Highest head
+    isize upperTrack;                       ///< Highest track
 }
 HardDriveTraits;
 
 typedef struct
 {
-    isize nr;
-    string name;
-    isize lowerCyl;
-    isize upperCyl;
-    amiga::FSFormat fsType;
+    isize nr;                               ///< Number of the partition
+    string name;                            ///< Name of the partition
+    isize lowerCyl;                         ///< First cylinder
+    isize upperCyl;                         ///< Last cylinder
+    amiga::FSFormat fsType;                 ///< File system type
 }
 PartitionTraits;
 
 typedef struct
 {
-    isize nr;
+    isize nr;                               ///< Number of the drive
     
     // Drive properties
     bool isConnected;
-    bool isCompatible;
+    bool isCompatible;                      ///< The drive is compatible with the emulated controller
     
     // Disk properties
     bool hasDisk;
-    bool hasModifiedDisk;
-    bool hasUnmodifiedDisk;
-    bool hasProtectedDisk;
-    bool hasUnprotectedDisk;
-    bool snapshotable;
+    bool hasModifiedDisk;                   ///< The disk has unsaved changes
+    bool hasUnmodifiedDisk;                 ///< The disk has no unsaved changes
+    bool hasProtectedDisk;                  ///< The disk is write-protected
+    bool hasUnprotectedDisk;                ///< The disk is not write-protected
+    bool snapshotable;                      ///< The disk can be included in snapshots
 
     // Logical layout (partitions)
     isize partitions;
@@ -223,7 +223,7 @@ typedef struct
     
     // State
     HardDriveState state;
-    DriveHead head;
+    DriveHead head;                         ///< Position of the drive head
 }
 HardDriveInfo;
 

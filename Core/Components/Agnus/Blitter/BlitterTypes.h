@@ -52,50 +52,50 @@ constexpr u16 BLTCON1_SING    = 0x0002;
 
 typedef struct
 {
-    isize accuracy;
+    isize accuracy;                         ///< Blitter emulation accuracy
 }
 BlitterConfig;
 
 typedef struct
 {
-    u16 bltcon0;
-    u16 bltcon1;
-    u16 ash;
-    u16 bsh;
-    u16 minterm;
-    u32 bltapt;
-    u32 bltbpt;
-    u32 bltcpt;
-    u32 bltdpt;
-    u16 bltafwm;
-    u16 bltalwm;
-    i16 bltamod;
-    i16 bltbmod;
-    i16 bltcmod;
-    i16 bltdmod;
-    u16 aold;
-    u16 bold;
-    u16 anew;
-    u16 bnew;
-    u16 ahold;
-    u16 bhold;
-    u16 chold;
-    u16 dhold;
-    u16 barrelAin;
-    u16 barrelAout;
-    u16 barrelBin;
-    u16 barrelBout;
-    u16 mintermOut;
-    u16 fillIn;
-    u16 fillOut;
-    bool bbusy;
-    bool bzero;
-    bool firstWord;
-    bool lastWord;
-    bool fci;
-    bool fco;
-    bool fillEnable;
-    bool storeToDest;
+    u16 bltcon0;                            ///< Blitter control register 0 (BLTCON0)
+    u16 bltcon1;                            ///< Blitter control register 1 (BLTCON1)
+    u16 ash;                                ///< Barrel shifter distance for source A
+    u16 bsh;                                ///< Barrel shifter distance for source B
+    u16 minterm;                            ///< Minterm (logic function) selected by BLTCON0
+    u32 bltapt;                             ///< Pointer to source A
+    u32 bltbpt;                             ///< Pointer to source B
+    u32 bltcpt;                             ///< Pointer to source C
+    u32 bltdpt;                             ///< Pointer to destination D
+    u16 bltafwm;                            ///< First word mask for source A (BLTAFWM)
+    u16 bltalwm;                            ///< Last word mask for source A (BLTALWM)
+    i16 bltamod;                            ///< Modulo for source A
+    i16 bltbmod;                            ///< Modulo for source B
+    i16 bltcmod;                            ///< Modulo for source C
+    i16 bltdmod;                            ///< Modulo for destination D
+    u16 aold;                               ///< Previous word of source A
+    u16 bold;                               ///< Previous word of source B
+    u16 anew;                               ///< Current word of source A
+    u16 bnew;                               ///< Current word of source B
+    u16 ahold;                              ///< Holding register for source A
+    u16 bhold;                              ///< Holding register for source B
+    u16 chold;                              ///< Holding register for source C
+    u16 dhold;                              ///< Holding register for destination D
+    u16 barrelAin;                          ///< Input of the barrel shifter for source A
+    u16 barrelAout;                         ///< Output of the barrel shifter for source A
+    u16 barrelBin;                          ///< Input of the barrel shifter for source B
+    u16 barrelBout;                         ///< Output of the barrel shifter for source B
+    u16 mintermOut;                         ///< Output of the minterm logic
+    u16 fillIn;                             ///< Input of the fill logic
+    u16 fillOut;                            ///< Output of the fill logic
+    bool bbusy;                             ///< Blitter busy flag
+    bool bzero;                             ///< Blitter zero flag
+    bool firstWord;                         ///< The first word of a line is being processed
+    bool lastWord;                          ///< The last word of a line is being processed
+    bool fci;                               ///< Fill carry input
+    bool fco;                               ///< Fill carry output
+    bool fillEnable;                        ///< Fill mode is enabled
+    bool storeToDest;                       ///< The result is written to destination D
 }
 BlitterInfo;
 

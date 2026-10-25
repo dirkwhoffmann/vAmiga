@@ -231,43 +231,43 @@ typedef struct
 {
     // Colors
     Palette palette;
-    isize brightness;
-    isize contrast;
-    isize saturation;
+    isize brightness;                       ///< Monitor brightness
+    isize contrast;                         ///< Monitor contrast
+    isize saturation;                       ///< Monitor saturation
 
     // Geometry
     Center center;
-    isize hCenter;
-    isize vCenter;
-    Zoom zoom;
-    isize hZoom;
-    isize vZoom;
+    isize hCenter;                          ///< Horizontal center
+    isize vCenter;                          ///< Vertical center
+    Zoom zoom;                              ///< Zoom mode
+    isize hZoom;                            ///< Horizontal zoom
+    isize vZoom;                            ///< Vertical zoom
 
     // Effects
     Upscaler enhancer;
-    Upscaler upscaler;
+    Upscaler upscaler;                      ///< Upscaler
 
-    bool blur;
-    isize blurRadius;
+    bool blur;                              ///< Blur
+    isize blurRadius;                       ///< Blur radius
 
-    bool bloom;
-    isize bloomRadius;
-    isize bloomBrightness;
-    isize bloomWeight;
+    bool bloom;                             ///< Bloom
+    isize bloomRadius;                      ///< Bloom radius
+    isize bloomBrightness;                  ///< Bloom brightness
+    isize bloomWeight;                      ///< Bloom weight
 
-    Dotmask dotmask;
-    isize dotMaskBrightness;
+    Dotmask dotmask;                        ///< Dotmask
+    isize dotMaskBrightness;                ///< Dotmask brightness
 
-    Scanlines scanlines;
-    isize scanlineBrightness;
-    isize scanlineWeight;
+    Scanlines scanlines;                    ///< Scanlines
+    isize scanlineBrightness;               ///< Scanline brightness
+    isize scanlineWeight;                   ///< Scanline weight
 
-    bool disalignment;
-    isize disalignmentH;
-    isize disalignmentV;
+    bool disalignment;                      ///< Cathode ray disalignment
+    isize disalignmentH;                    ///< Horizontal cathode ray shift
+    isize disalignmentV;                    ///< Vertical cathode ray shift
     
-    bool flickerFixer;
-    isize flickerJitter;
+    bool flickerFixer;                      ///< Interlace flicker fixer
+    isize flickerJitter;                    ///< Interlace flicker jitter
 }
 MonitorConfig;
 

@@ -67,22 +67,22 @@ struct SerialPortDeviceEnum : Reflectable<SerialPortDeviceEnum, SerialPortDevice
 
 typedef struct
 {
-    SerialPortDevice device;
-    bool verbose;
+    SerialPortDevice device;                ///< Serial device type
+    bool verbose;                           ///< Verbose mode
 }
 SerialPortConfig;
 
 typedef struct
 {
-    u32 port;
+    u32 port;                               ///< State of the port pins
     
-    bool txd;
-    bool rxd;
-    bool rts;
-    bool cts;
-    bool dsr;
-    bool cd;
-    bool dtr;
+    bool txd;                               ///< Transmit data line
+    bool rxd;                               ///< Receive data line
+    bool rts;                               ///< Request to send line
+    bool cts;                               ///< Clear to send line
+    bool dsr;                               ///< Data set ready line
+    bool cd;                                ///< Carrier detect line
+    bool dtr;                               ///< Data terminal ready line
 }
 SerialPortInfo;
 
