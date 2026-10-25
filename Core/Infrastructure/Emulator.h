@@ -203,6 +203,17 @@ public:
      */
     void call(const std::function<void()> &fn);
 
+    /* Queues a function for the emulator thread and returns at once. The
+     * function is executed under the same conditions as in call(), but the
+     * caller does not wait for it. A failure of the function cannot be passed
+     * on to the caller. If 'done' is given, it is called on the emulator
+     * thread when the function has been carried out, with the exception it
+     * threw (or null). It is also called, on the calling thread, if the
+     * command queue is full and the request is dropped. Nothing is executed
+     * as long as the emulator thread has not been launched.
+     */
+    void callAsync(std::function<void()> fn, CmdQueue::Completion done = nullptr);
+
     /* Sends a command and returns a future that becomes ready once the
      * emulator thread has carried it out. A command that fails makes get()
      * throw the exception. This only works while the emulator

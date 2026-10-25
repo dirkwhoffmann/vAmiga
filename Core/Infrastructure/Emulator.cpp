@@ -472,6 +472,22 @@ Emulator::call(const std::function<void()> &fn)
 }
 
 void
+Emulator::callAsync(std::function<void()> fn, CmdQueue::Completion done)
+{
+    /* The function must outlive this call. It is kept alive by the completion
+     * handler, which the queue holds until the command has been carried out
+     * or dropped, so that nobody has to take care of freeing it.
+     */
+    auto holder = std::make_shared<std::function<void()>>(std::move(fn));
+
+    put(Command(Cmd::CALL, i64(0), i64(holder.get())), "",
+        [holder, done = std::move(done)](std::exception_ptr error) {
+
+        if (done) done(error);
+    });
+}
+
+void
 Emulator::sendAndWait(const Command &cmd, const string &str)
 {
     // Refuse to wait if the command would never be carried out
