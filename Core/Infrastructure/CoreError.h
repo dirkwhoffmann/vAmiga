@@ -49,29 +49,25 @@ struct CoreError : public Error {
 
     // Memory
     static constexpr long OUT_OF_MEMORY     = 500; ///< Out of memory
-    static constexpr long CHIP_RAM_MISSING  = 501;
-    static constexpr long CHIP_RAM_LIMIT    = 502;
-    static constexpr long AROS_RAM_LIMIT    = 503;
-    static constexpr long ROM_MISSING       = 504;
-    static constexpr long AROS_NO_EXTROM    = 505;
-
+    static constexpr long CHIP_RAM_MISSING  = 501; ///< No Chip RAM is installed
+    static constexpr long CHIP_RAM_LIMIT    = 502; ///< The Agnus revision cannot address the selected amount of Chip RAM
+    static constexpr long AROS_RAM_LIMIT    = 503; ///< The Aros Kickstart needs more memory than installed
+    static constexpr long ROM_MISSING       = 504; ///< No Kickstart Rom is installed
+    static constexpr long AROS_NO_EXTROM    = 505; ///< The Aros Kickstart needs an Extension Rom, but none is installed
     // Hard drive controller
-    static constexpr long HDC_INIT          = 600;
-
+    static constexpr long HDC_INIT          = 600; ///< A hard drive could not be initialized
     // Debugger
-    static constexpr long REG_READ_ONLY     = 700;
-    static constexpr long REG_WRITE_ONLY    = 701;
-    static constexpr long REG_UNUSED        = 702;
-    static constexpr long ADDR_UNALIGNED    = 703;
-
+    static constexpr long REG_READ_ONLY     = 700; ///< The register is read-only
+    static constexpr long REG_WRITE_ONLY    = 701; ///< The register is write-only
+    static constexpr long REG_UNUSED        = 702; ///< The register is unused
+    static constexpr long ADDR_UNALIGNED    = 703; ///< The address is not aligned
     // OS Debugger
-    static constexpr long OSDB              = 800;
-    static constexpr long HUNK_BAD_COOKIE   = 801;
-    static constexpr long HUNK_BAD_HEADER   = 802;
-    static constexpr long HUNK_NO_SECTIONS  = 803;
-    static constexpr long HUNK_UNSUPPORTED  = 804;
-    static constexpr long HUNK_CORRUPTED    = 805;
-
+    static constexpr long OSDB              = 800; ///< The OS debugger reported an error
+    static constexpr long HUNK_BAD_COOKIE   = 801; ///< The hunk file has an invalid magic cookie
+    static constexpr long HUNK_BAD_HEADER   = 802; ///< The hunk file has a bad header
+    static constexpr long HUNK_NO_SECTIONS  = 803; ///< The hunk file contains no hunks
+    static constexpr long HUNK_UNSUPPORTED  = 804; ///< The hunk file contains an unsupported hunk
+    static constexpr long HUNK_CORRUPTED    = 805; ///< The hunk structure is corrupted
     const char *errstr() const noexcept override {
 
         switch (payload) {

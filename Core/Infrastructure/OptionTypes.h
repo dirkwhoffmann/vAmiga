@@ -21,7 +21,7 @@ enum class Opt : long
 {
     // Host
     HOST_REFRESH_RATE,      ///< Refresh rate of the host display
-    HOST_SAMPLE_RATE,       ///< Refresh rate of the host display
+    HOST_SAMPLE_RATE,       ///< Host audio sample rate
     HOST_TEX_FORMAT,        ///< Texture format
     HOST_FRAMEBUF_WIDTH,    ///< Current width of the emulator window
     HOST_FRAMEBUF_HEIGHT,   ///< Current height of the emulator window
@@ -37,20 +37,20 @@ enum class Opt : long
     // Workspaces
 
     // Agnus
-    AGNUS_REVISION,
-    AGNUS_PTR_DROPS,
+    AGNUS_REVISION,         ///< Chip revision
+    AGNUS_PTR_DROPS,        ///< Ignore certain register writes
     
     // Denise
-    DENISE_REVISION,
-    DENISE_SHRES_BLEND,
-    DENISE_VIEWPORT_TRACKING,
-    DENISE_FRAME_SKIPPING,
-    DENISE_HIDDEN_BITPLANES,
-    DENISE_HIDDEN_SPRITES,
-    DENISE_HIDDEN_LAYERS,
-    DENISE_CLX_SPR_SPR,
-    DENISE_CLX_SPR_PLF,
-    DENISE_CLX_PLF_PLF,
+    DENISE_REVISION,        ///< Chip revision
+    DENISE_SHRES_BLEND,     ///< Blend super hires pixel pairs
+    DENISE_VIEWPORT_TRACKING,///< Track the currently used viewport
+    DENISE_FRAME_SKIPPING,  ///< Reduce frame rate in warp mode
+    DENISE_HIDDEN_BITPLANES,///< Hide bitplanes
+    DENISE_HIDDEN_SPRITES,  ///< Hide sprites
+    DENISE_HIDDEN_LAYERS,   ///< Hide playfields
+    DENISE_CLX_SPR_SPR,     ///< Detect sprite-sprite collisions
+    DENISE_CLX_SPR_PLF,     ///< Detect sprite-playfield collisions
+    DENISE_CLX_PLF_PLF,     ///< Detect playfield-playfield collisions
     
     // Monitor
     MON_PALETTE,            ///< Color palette
@@ -62,8 +62,8 @@ enum class Opt : long
     MON_VCENTER,            ///< Vertical centering
     MON_ZOOM,               ///< Zoom mode
     MON_HZOOM,              ///< Horizontal zoom
-    MON_VZOOM,              ///< Vertical centering
-    MON_ENHANCER,           ///< Pixel upscaler
+    MON_VZOOM,              ///< Vertical zoom
+    MON_ENHANCER,           ///< Enhancer
     MON_UPSCALER,           ///< Pixel upscaler
     MON_BLUR,               ///< Blur enable
     MON_BLUR_RADIUS,        ///< Blur radius
@@ -83,29 +83,29 @@ enum class Opt : long
     MON_FLICKER_JITTER,     ///< Interlace flicker intensity
 
     // X-Ray
-    XRAY_MODE,
-    XRAY_OVERLAY,
-    XRAY_OVERLAY_STYLE,
-    XRAY_OVERLAY_OPACITY,
-    XRAY_DMA_CHANNEL0,
-    XRAY_DMA_CHANNEL1,
-    XRAY_DMA_CHANNEL2,
-    XRAY_DMA_CHANNEL3,
-    XRAY_DMA_CHANNEL4,
-    XRAY_DMA_CHANNEL5,
-    XRAY_DMA_CHANNEL6,
-    XRAY_DMA_CHANNEL7,
-    XRAY_COLOR0,
-    XRAY_COLOR1,
-    XRAY_COLOR2,
-    XRAY_COLOR3,
-    XRAY_COLOR4,
-    XRAY_COLOR5,
-    XRAY_COLOR6,
-    XRAY_COLOR7,
-    XRAY_COLOR8,
-    XRAY_COLOR9,
-    XRAY_COMPOSITOR,
+    XRAY_MODE,              ///< X-Ray mode
+    XRAY_OVERLAY,           ///< Show as overlay
+    XRAY_OVERLAY_STYLE,     ///< DMA Debugger style
+    XRAY_OVERLAY_OPACITY,   ///< Opacity
+    XRAY_DMA_CHANNEL0,      ///< Copper DMA
+    XRAY_DMA_CHANNEL1,      ///< Blitter DMA
+    XRAY_DMA_CHANNEL2,      ///< Disk DMA
+    XRAY_DMA_CHANNEL3,      ///< Audio DMA
+    XRAY_DMA_CHANNEL4,      ///< Sprite DMA
+    XRAY_DMA_CHANNEL5,      ///< Bitplane DMA
+    XRAY_DMA_CHANNEL6,      ///< CPU DMA
+    XRAY_DMA_CHANNEL7,      ///< Memory Refresh DMA
+    XRAY_COLOR0,            ///< Copper color
+    XRAY_COLOR1,            ///< Blitter color
+    XRAY_COLOR2,            ///< Disk color
+    XRAY_COLOR3,            ///< Audio color
+    XRAY_COLOR4,            ///< Sprite color
+    XRAY_COLOR5,            ///< Bitplane color
+    XRAY_COLOR6,            ///< CPU color
+    XRAY_COLOR7,            ///< Memory refresh color
+    XRAY_COLOR8,            ///< Playfield 1 color
+    XRAY_COLOR9,            ///< Playfield 2 color
+    XRAY_COMPOSITOR,        ///< X-Ray compositor
 
     // Logic analyzer
     LA_CONNECT,             ///< Enable switch
@@ -122,82 +122,82 @@ enum class Opt : long
     VID_WHITE_NOISE,        ///< Generate white-noise when switched off
 
     // CPU
-    CPU_REVISION,
-    CPU_DASM_REVISION,
-    CPU_DASM_SYNTAX,
-    CPU_DASM_NUMBERS,
-    CPU_OVERCLOCKING,
-    CPU_RESET_VAL,
+    CPU_REVISION,           ///< Chip revision
+    CPU_DASM_REVISION,      ///< Chip revision (disassembler)
+    CPU_DASM_SYNTAX,        ///< Disassembler syntax
+    CPU_DASM_NUMBERS,       ///< Disassembler number format
+    CPU_OVERCLOCKING,       ///< Overclocking factor
+    CPU_RESET_VAL,          ///< Register reset value
     
     // Real-time clock
-    RTC_MODEL,
+    RTC_MODEL,              ///< Chip revision
     
     // Memory
-    MEM_BUS_WIDTH,
-    MEM_CHIP_RAM,
-    MEM_SLOW_RAM,
-    MEM_FAST_RAM,
-    MEM_EXT_START,
-    MEM_SLOW_RAM_DELAY,
-    MEM_SLOW_RAM_MIRROR,
-    MEM_BANKMAP,
-    MEM_UNMAPPING_TYPE,
-    MEM_RAM_INIT_PATTERN,
-    MEM_SAVE_ROMS,
+    MEM_BUS_WIDTH,          ///< Data bus width
+    MEM_CHIP_RAM,           ///< Chip RAM size
+    MEM_SLOW_RAM,           ///< Slow RAM size
+    MEM_FAST_RAM,           ///< Fast RAM size
+    MEM_EXT_START,          ///< Extension ROM location
+    MEM_SLOW_RAM_DELAY,     ///< Emulate slow RAM bus delays
+    MEM_SLOW_RAM_MIRROR,    ///< ECS memory mirroring
+    MEM_BANKMAP,            ///< Memory mapping scheme
+    MEM_UNMAPPING_TYPE,     ///< Unmapped memory behavior
+    MEM_RAM_INIT_PATTERN,   ///< RAM initialization pattern
+    MEM_SAVE_ROMS,          ///< Include ROMs in snapshots
     
     // Disk controller
-    DC_SPEED,
-    DC_LOCK_DSKSYNC,
-    DC_AUTO_DSKSYNC,
+    DC_SPEED,               ///< Drive speed
+    DC_LOCK_DSKSYNC,        ///< Ignore writes to DSKSYNC
+    DC_AUTO_DSKSYNC,        ///< Always find a sync mark
     
     // Floppy Drives
-    DRIVE_CONNECT,
-    DRIVE_TYPE,
-    DRIVE_MECHANICS,
-    DRIVE_RPM,
-    DRIVE_SWAP_DELAY,
-    DRIVE_PAN,
-    DRIVE_STEP_VOLUME,
-    DRIVE_POLL_VOLUME,
-    DRIVE_INSERT_VOLUME,
-    DRIVE_EJECT_VOLUME,
+    DRIVE_CONNECT,          ///< Connection status
+    DRIVE_TYPE,             ///< Drive model
+    DRIVE_MECHANICS,        ///< Emulate drive mechanics
+    DRIVE_RPM,              ///< Disk rotation speed
+    DRIVE_SWAP_DELAY,       ///< Disk swap delay
+    DRIVE_PAN,              ///< Pan
+    DRIVE_STEP_VOLUME,      ///< Head step volume
+    DRIVE_POLL_VOLUME,      ///< Disk polling step volume
+    DRIVE_INSERT_VOLUME,    ///< Disk insertion volume
+    DRIVE_EJECT_VOLUME,     ///< Disk ejection volume
     
     // Hard drive controllers
-    HDC_CONNECT,
-    HDC_MB_LIMIT,
+    HDC_CONNECT,            ///< Connection status
+    HDC_MB_LIMIT,           ///< Capacity limit in MB
     
     // Hard drives
-    HDR_TYPE,
-    HDR_WRITE_THROUGH,
-    HDR_SNAPSHOT,
-    HDR_MEM_LIMIT,
-    HDR_PAN,
-    HDR_STEP_VOLUME,
+    HDR_TYPE,               ///< Drive model
+    HDR_WRITE_THROUGH,      ///< When to write changes to the file
+    HDR_SNAPSHOT,           ///< Include disk in snapshots
+    HDR_MEM_LIMIT,          ///< Capacity limit for disks in memory in MB
+    HDR_PAN,                ///< Pan
+    HDR_STEP_VOLUME,        ///< Head step volume
 
     // Ports
-    SER_DEVICE,
-    SER_VERBOSE,
+    SER_DEVICE,             ///< Serial device type
+    SER_VERBOSE,            ///< Verbose
     
     // MIDI
-    MIDI_DEVICE_OUT,
-    MIDI_DEVICE_IN,
+    MIDI_DEVICE_OUT,        ///< MIDI output device
+    MIDI_DEVICE_IN,         ///< MIDI input device
 
     // Blitter
-    BLITTER_ACCURACY,
+    BLITTER_ACCURACY,       ///< Blitter accuracy level
     
     // CIAs
-    CIA_REVISION,
-    CIA_TODBUG,
-    CIA_ECLOCK_SYNCING,
-    CIA_IDLE_SLEEP,
+    CIA_REVISION,           ///< Chip revision
+    CIA_TODBUG,             ///< Emulate TOD bug
+    CIA_ECLOCK_SYNCING,     ///< Sync accesses with E-clock
+    CIA_IDLE_SLEEP,         ///< Enter idle state while not in use
     
     // Keyboard
-    KBD_ACCURACY,
+    KBD_ACCURACY,           ///< Keyboard emulation accuracy
     
     // Mouse
-    MOUSE_PULLUP_RESISTORS,
-    MOUSE_SHAKE_DETECTION,
-    MOUSE_VELOCITY,
+    MOUSE_PULLUP_RESISTORS, ///< Emulate pullup resistors
+    MOUSE_SHAKE_DETECTION,  ///< Detect a shaked mouse
+    MOUSE_VELOCITY,         ///< Mouse velocity
     
     // Joystick
     JOY_AUTOFIRE,           ///< Autofire status [on/off]
@@ -206,30 +206,30 @@ enum class Opt : long
     JOY_AUTOFIRE_DELAY,     ///< Delay between two button events [frames]
     
     // Paula audio
-    AUD_PAN0,
-    AUD_PAN1,
-    AUD_PAN2,
-    AUD_PAN3,
-    AUD_VOL0,
-    AUD_VOL1,
-    AUD_VOL2,
-    AUD_VOL3,
-    AUD_VOLL,
-    AUD_VOLR,
-    AUD_FILTER_TYPE,
-    AUD_BUFFER_SIZE,
-    AUD_SAMPLING_METHOD,
-    AUD_ASR,
-    AUD_FASTPATH,
+    AUD_PAN0,               ///< Channel 0 pan
+    AUD_PAN1,               ///< Channel 1 pan
+    AUD_PAN2,               ///< Channel 2 pan
+    AUD_PAN3,               ///< Channel 3 pan
+    AUD_VOL0,               ///< Channel 0 volume
+    AUD_VOL1,               ///< Channel 1 volume
+    AUD_VOL2,               ///< Channel 2 volume
+    AUD_VOL3,               ///< Channel 3 volume
+    AUD_VOLL,               ///< Master volume (left)
+    AUD_VOLR,               ///< Master volume (right)
+    AUD_FILTER_TYPE,        ///< Audio filter type
+    AUD_BUFFER_SIZE,        ///< Audio buffer capacity
+    AUD_SAMPLING_METHOD,    ///< Sampling method
+    AUD_ASR,                ///< Adaptive Sample Rate
+    AUD_FASTPATH,           ///< Boost performance
     
     // Expansion boards
-    DIAG_BOARD,
+    DIAG_BOARD,             ///< Diagnose board
     
     // Remote servers
-    SRV_ENABLE,
-    SRV_PORT,
-    SRV_TRANSPORT,
-    SRV_VERBOSE
+    SRV_ENABLE,             ///< Server enable status
+    SRV_PORT,               ///< Server port
+    SRV_TRANSPORT,          ///< Server transport
+    SRV_VERBOSE             ///< Verbose mode
 };
 
 struct OptEnum : Reflectable<OptEnum, Opt>
