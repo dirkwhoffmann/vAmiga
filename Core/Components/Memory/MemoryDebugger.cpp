@@ -11,71 +11,78 @@
 #include "MemoryDebugger.h"
 #include "Emulator.h"
 #include "utl/io.h"
+#include "utl/abilities/Dumpable.h"
 
 namespace vamiga {
 
-template <Accessor A> const char *
-MemoryDebugger::ascDump(u32 addr, isize bytes) const
+namespace {
+
+// Format strings for a single line of data
+string
+hexFormat(isize bytes, isize sz)
 {
-    assert(bytes < 256);
+    string unit = sz == 4 ? "%l " : sz == 2 ? "%w " : "%b ";
+    isize count = sz == 4 || sz == 2 ? bytes / sz : bytes;
 
-    static char str[256];
-
-    for (isize i = 0; i < bytes; i += 2) {
-
-        u16 word = mem.spypeek16 <A> ((u32)(addr + i));
-        str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
-        str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';
-    }
-    str[bytes] = 0;
-    return str;
+    string result;
+    for (isize i = 0; i < count; i++) result += unit;
+    return result;
 }
 
-template <Accessor A> const char *
+string
+ascFormat(isize bytes)
+{
+    string result;
+    for (isize i = 0; i < bytes; i++) result += "%c";
+    return result;
+}
+
+}
+
+template <Accessor A> utl::Dumpable::DataProvider
+MemoryDebugger::provider(u32 addr, isize bytes) const
+{
+    return [this, addr, bytes](isize offset, isize n) -> optional<isize> {
+
+        isize value = 0;
+
+        while (n-- > 0) {
+
+            if (offset >= bytes) return {};
+            value = value << 8 | mem.spypeek8 <A> (u32(addr + offset++));
+        }
+        return value;
+    };
+}
+
+template <Accessor A> string
+MemoryDebugger::ascDump(u32 addr, isize bytes) const
+{
+    std::stringstream ss;
+    utl::Dumpable::dump(ss, { .base = 16 }, ascFormat(bytes), provider<A>(addr, bytes));
+    return ss.str();
+}
+
+template <Accessor A> string
 MemoryDebugger::hexDump(u32 addr, isize bytes, isize sz) const
 {
     assert(sz == 1 || bytes % 2 == 0);
     assert(bytes <= 64);
 
-    static char str[256];
-    char *p = str;
-
-    for (isize i = 0; i < bytes; i++) {
-
-        u8 byte = mem.spypeek8 <A> (u32(addr + i));
-
-        u8 digit1 = HI_NIBBLE(byte);
-        u8 digit2 = LO_NIBBLE(byte);
-
-        *p++ = digit1 < 10 ? '0' + digit1 : 'A' + digit1 - 10;
-        *p++ = digit2 < 10 ? '0' + digit2 : 'A' + digit2 - 10;
-
-        if ((i + 1) % sz == 0) *p++ = ' ';
-    }
-    *p = 0;
-
-    return str;
+    std::stringstream ss;
+    utl::Dumpable::dump(ss, { .base = 16, .uppercase = true }, hexFormat(bytes, sz), provider<A>(addr, bytes));
+    return ss.str();
 }
 
-template <Accessor A> const char *
+template <Accessor A> string
 MemoryDebugger::memDump(u32 addr, isize bytes, isize sz) const
 {
     assert(sz == 1 || bytes % 2 == 0);
     assert(bytes <= 32);
 
-    static string str;
-    str = string(hexDump<A>(addr, bytes, sz)) + "  " + string(ascDump<A>(addr, bytes));
-    return str.c_str();
-
-    /*
-     static char str[256];
-
-     strncpy(str, hexDump<A>(addr, bytes, sz), 126);
-     strcat(str, "  ");
-     strncat(str, ascDump<A>(addr, bytes), 126);
-
-     return str;
-     */
+    std::stringstream ss;
+    utl::Dumpable::dump(ss, { .base = 16, .uppercase = true }, hexFormat(bytes, sz) + "  " + ascFormat(bytes), provider<A>(addr, bytes));
+    return ss.str();
 }
 
 template <Accessor A> isize
@@ -449,12 +456,12 @@ MemoryDebugger::convertNumeric(std::ostream &os, T value, const char *fmt) const
     }
 }
 
-template const char *MemoryDebugger::ascDump <Accessor::CPU> (u32, isize) const;
-template const char *MemoryDebugger::ascDump <Accessor::AGNUS> (u32, isize) const;
-template const char *MemoryDebugger::hexDump <Accessor::CPU> (u32, isize, isize) const;
-template const char *MemoryDebugger::hexDump <Accessor::AGNUS> (u32, isize, isize) const;
-template const char *MemoryDebugger::memDump <Accessor::CPU> (u32, isize, isize) const;
-template const char *MemoryDebugger::memDump <Accessor::AGNUS> (u32, isize, isize) const;
+template string MemoryDebugger::ascDump <Accessor::CPU> (u32, isize) const;
+template string MemoryDebugger::ascDump <Accessor::AGNUS> (u32, isize) const;
+template string MemoryDebugger::hexDump <Accessor::CPU> (u32, isize, isize) const;
+template string MemoryDebugger::hexDump <Accessor::AGNUS> (u32, isize, isize) const;
+template string MemoryDebugger::memDump <Accessor::CPU> (u32, isize, isize) const;
+template string MemoryDebugger::memDump <Accessor::AGNUS> (u32, isize, isize) const;
 template isize MemoryDebugger::ascDump <Accessor::CPU> (std::ostream&, u32, isize) const;
 template isize MemoryDebugger::ascDump <Accessor::AGNUS> (std::ostream&, u32, isize) const;
 template isize MemoryDebugger::hexDump <Accessor::CPU> (std::ostream&, u32, isize, isize) const;

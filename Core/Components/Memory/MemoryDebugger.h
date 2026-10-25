@@ -11,6 +11,7 @@
 
 #include "MemoryTypes.h"
 #include "SubComponent.h"
+#include "utl/abilities/Dumpable.h"
 
 namespace vamiga {
 
@@ -81,14 +82,21 @@ public:
 public:
     
     // Returns a memory dump in ASCII, hex, or both
-    template <Accessor A> const char *ascDump(u32 addr, isize bytes) const;
-    template <Accessor A> const char *hexDump(u32 addr, isize bytes, isize sz = 1) const;
-    template <Accessor A> const char *memDump(u32 addr, isize bytes, isize sz = 1) const;
+    template <Accessor A> string ascDump(u32 addr, isize bytes) const;
+    template <Accessor A> string hexDump(u32 addr, isize bytes, isize sz = 1) const;
+    template <Accessor A> string memDump(u32 addr, isize bytes, isize sz = 1) const;
 
     // Writes a memory dump into a stream. Returns the number of written bytes
     template <Accessor A> isize ascDump(std::ostream &os, u32 addr, isize lines) const;
     template <Accessor A> isize hexDump(std::ostream &os, u32 addr, isize lines, isize sz) const;
     template <Accessor A> isize memDump(std::ostream &os, u32 addr, isize lines, isize sz) const;
+
+private:
+
+    // Reads a range of memory without side effects
+    template <Accessor A> utl::Dumpable::DataProvider provider(u32 addr, isize bytes) const;
+
+public:
 
     // Searches a number sequence in memory
     i64 memSearch(const string &pattern, u32 addr, isize align);
