@@ -86,6 +86,7 @@ enum class Cmd : long
 
     // Joystick
     JOY_EVENT,              ///< Signal a joystick button event
+    JOY_STATE,              ///< Set the complete joystick state (directions and fire button)
 
     // Floppy disk
     DSK_TOGGLE_WP,          ///< Toggle write-protection
@@ -167,6 +168,7 @@ struct CmdEnum : Reflectable<CmdEnum, Cmd> {
             case Cmd::MOUSE_BUTTON:          return "MOUSE_BUTTON";
 
             case Cmd::JOY_EVENT:             return "JOY_EVENT";
+            case Cmd::JOY_STATE:             return "JOY_STATE";
 
             case Cmd::DSK_TOGGLE_WP:         return "DSK_TOGGLE_WP";
             case Cmd::DSK_MODIFIED:          return "DSK_MODIFIED";
@@ -224,6 +226,13 @@ GamePadCmd;
 
 typedef struct
 {
+    isize port;
+    u32 state;      // Bits 0-4: current state, bits 8-12: previous state (up, down, left, right, fire)
+}
+JoyStateCmd;
+
+typedef struct
+{
     i64 cycle;
     i64 value;
 }
@@ -257,6 +266,7 @@ struct Command
         CoordCmd coord;
         AlarmCmd alarm;
         GuardCmd guard;
+        JoyStateCmd joyState;
     };
 
     // Attached string (may be null)
@@ -271,6 +281,7 @@ struct Command
     Command(Cmd type, const CoordCmd &cmd) : type(type), coord(cmd) { }
     Command(Cmd type, const AlarmCmd &cmd) : type(type), alarm(cmd) { }
     Command(Cmd type, const GuardCmd &cmd) : type(type), guard(cmd) { }
+    Command(Cmd type, const JoyStateCmd &cmd) : type(type), joyState(cmd) { }
 };
 
 }

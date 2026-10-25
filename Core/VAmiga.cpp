@@ -1238,10 +1238,10 @@ KeyboardAPI::release(KeyCode key, double delay)
 }
 
 void
-KeyboardAPI::releaseAll()
+KeyboardAPI::releaseAll(double delay)
 {
     VAMIGA_PUBLIC
-    emu->put(Command(Cmd::KEY_RELEASE_ALL));
+    emu->put(Command(Cmd::KEY_RELEASE_ALL, KeyCmd { .delay = delay }));
 }
 
 bool
@@ -1623,6 +1623,21 @@ JoystickAPI::trigger(GamePadAction event)
 {
     VAMIGA_PUBLIC
     emu->put(Cmd::JOY_EVENT, GamePadCmd { .port = joystick->objid, .action = event });
+}
+
+void
+JoystickAPI::trigger(const std::array<bool, 5> &state, const std::array<bool, 5> &previous)
+{
+    VAMIGA_PUBLIC
+
+    u32 mask = 0;
+    for (usize i = 0; i < 5; i++) {
+
+        if (state[i]) mask |= 1u << i;
+        if (previous[i]) mask |= 1u << (i + 8);
+    }
+
+    emu->put(Command(Cmd::JOY_STATE, JoyStateCmd { .port = joystick->objid, .state = mask }));
 }
 
 

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "JoystickTypes.h"
+#include <array>
 #include "SubComponent.h"
 #include "utl/wrappers.h"
 
@@ -189,6 +190,13 @@ public:
     
     // Triggers a joystick event
     void trigger(GamePadAction event);
+
+    /* Sets the complete joystick state (up, down, left, right, fire). The
+     * directions are applied as given. The fire button is only forwarded if
+     * it differs in the previous state, because pressing the button again
+     * would toggle autofire.
+     */
+    void trigger(const std::array<bool, 5> &state, const std::array<bool, 5> &previous);
 
     // To be called after each frame
     void eofHandler();

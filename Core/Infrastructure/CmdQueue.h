@@ -22,7 +22,7 @@ namespace vamiga {
 /// Command queue
 class CmdQueue final : public CoreObject, Synchronizable {
 
-    static constexpr isize CAPACITY = 256;
+    static constexpr isize CAPACITY = 512;
 
     /// Ring buffer storing all pending commands
     utl::RingBuffer <Command, CAPACITY> queue;

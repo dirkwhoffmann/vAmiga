@@ -1148,6 +1148,12 @@ Amiga::update(CmdQueue &queue)
                     port.processCommand(cmd); break;
                     break;
                 }
+                case Cmd::JOY_STATE:
+                {
+                    auto &port = cmd.joyState.port ? controlPort2 : controlPort1;
+                    port.processCommand(cmd);
+                    break;
+                }
                 case Cmd::DSK_TOGGLE_WP:
                 case Cmd::DSK_MODIFIED:
                 case Cmd::DSK_UNMODIFIED:
