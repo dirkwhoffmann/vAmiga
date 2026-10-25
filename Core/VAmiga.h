@@ -1772,8 +1772,8 @@ public:
 
     /** @brief  Returns a pointer to the most recent stable texture
      *
-     * The texture dimensions are given by constants vamiga::Texture::width
-     * and vamiga::Texture::height texels. Each texel is represented by a
+     * The texture dimensions are given by constants vamiga::Tex::width
+     * and vamiga::Tex::height texels. Each texel is represented by a
      * 32 bit color value.
      */
     const u32 *getTexture() const;
@@ -1781,8 +1781,8 @@ public:
 
     /** @brief  Returns a pointer to the most recent stable X-Ray texture
      *
-     * The texture dimensions are given by constants vamiga::Texture::width
-     * and vamiga::Texture::height texels. Each texel is represented by a
+     * The texture dimensions are given by constants vamiga::Tex::width
+     * and vamiga::Tex::height texels. Each texel is represented by a
      * 32 bit color value.
      */
     const u32 *getXrayTexture() const;
