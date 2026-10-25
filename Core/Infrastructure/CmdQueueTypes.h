@@ -92,6 +92,7 @@ enum class Cmd : long
     DSK_TOGGLE_WP,          ///< Toggle write-protection
     DSK_MODIFIED,           ///< Signal that the disk has been saved
     DSK_UNMODIFIED,         ///< Signan that the disk needs saving
+    DSK_INSERT,             ///< Insert a disk (path attached, value = drive, value2 = write protection)
     
     // RetroShell
     RSH_EXECUTE,            ///< Execute a script command
@@ -173,6 +174,7 @@ struct CmdEnum : Reflectable<CmdEnum, Cmd> {
             case Cmd::DSK_TOGGLE_WP:         return "DSK_TOGGLE_WP";
             case Cmd::DSK_MODIFIED:          return "DSK_MODIFIED";
             case Cmd::DSK_UNMODIFIED:        return "DSK_UNMODIFIED";
+            case Cmd::DSK_INSERT:            return "DSK_INSERT";
                 
             case Cmd::RSH_EXECUTE:           return "RSH_EXECUTE";
                 

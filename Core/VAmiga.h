@@ -1105,6 +1105,13 @@ public:
      *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void insert(const std::filesystem::path& path, bool wp);
+    /** @brief  Asynchronous version of insert(): queues the request and returns at once.
+     *
+     *  The file is read on the emulator thread. Success and failure are both
+     *  reported by the usual message (e.g., CRT_ATTACHED). If the request
+     *  failed, the message carries the exception.
+     */
+    void insertAsync(const std::filesystem::path& path, bool wp);
 
     /** @brief  Inserts a disk created from an image stored in memory.
      *  @param  buffer  Buffer holding the raw image data.

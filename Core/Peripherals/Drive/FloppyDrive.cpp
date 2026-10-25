@@ -1282,25 +1282,35 @@ FloppyDrive::swapDisk(class FloppyDiskImage &file)
 void
 FloppyDrive::swapDisk(const fs::path &path)
 {
-    if (!fs::is_directory(path)) {
-
-        auto file = FloppyDiskImage::make(path);
-        swapDisk(*file);
-        return;
-    }
-        
     try {
 
-        insertNew(FSFormat::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), path);
+        if (!fs::is_directory(path)) {
 
-    }  catch (FSError &err) {
-        
-        if (err.fault() == FSError::FS_OUT_OF_SPACE) {
-
-            err.set_msg(string("The directory is too large. ") +
-                        string("The files do not fit onto a single ") +
-                        DensityEnum::key(density()) + " disk.");
+            auto file = FloppyDiskImage::make(path);
+            swapDisk(*file);
+            return;
         }
+
+        try {
+
+            insertNew(FSFormat::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), path);
+
+        }  catch (FSError &err) {
+
+            if (err.fault() == FSError::FS_OUT_OF_SPACE) {
+
+                err.set_msg(string("The directory is too large. ") +
+                            string("The files do not fit onto a single ") +
+                            DensityEnum::key(density()) + " disk.");
+            }
+            throw;
+        }
+
+    } catch (...) {
+
+        // Inform the GUI (the exception is also passed on to the caller)
+        msgQueue.put(Message { .type = Msg::DISK_INSERT, .drive = DriveMsg { i16(objid), 0, 0, 0 } },
+                     "", std::current_exception());
         throw;
     }
 }

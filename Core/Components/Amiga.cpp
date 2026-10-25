@@ -1161,6 +1161,12 @@ Amiga::update(CmdQueue &queue)
                     dfn().processCommand(cmd);
                     break;
 
+                case Cmd::DSK_INSERT:
+
+                    dfn().swapDisk(cmd.str);
+                    if (dfn().disk) dfn().disk->setWriteProtection(cmd.value2);
+                    break;
+
                 
                 case Cmd::RSH_EXECUTE:
 

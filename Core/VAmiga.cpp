@@ -506,7 +506,7 @@ void
 CPUDebuggerAPI::clearLog()
 {
     VAMIGA_PUBLIC_SUSPEND
-    return cpu->debugger.clearLog();
+    cpu->debugger.clearLog();
 }
 
 string
@@ -1352,6 +1352,13 @@ FloppyDriveAPI::insert(const fs::path &path, bool wp)
 }
 
 void
+FloppyDriveAPI::insertAsync(const fs::path &path, bool wp)
+{
+    VAMIGA_PUBLIC
+    emu->put(Command(Cmd::DSK_INSERT, i64(drive->objid), i64(wp)), path.string());
+}
+
+void
 FloppyDriveAPI::insert(std::span<const u8> buffer, ImageFormat fmt, bool wp)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -1721,14 +1728,14 @@ void
 MsgQueueAPI::lockMsgQueue()
 {
     VAMIGA_PUBLIC
-    return msgQueue->lock();
+    msgQueue->lock();
 }
 
 void
 MsgQueueAPI::unlockMsgQueue()
 {
     VAMIGA_PUBLIC
-    return msgQueue->unlock();
+    msgQueue->unlock();
 }
 
 //
@@ -2335,7 +2342,7 @@ void
 VAmiga::checkReady() const
 {
     VAMIGA_PUBLIC
-    return emu->checkReady();
+    emu->checkReady();
 }
 
 void
