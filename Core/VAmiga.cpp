@@ -2504,7 +2504,7 @@ VAmiga::halt()
     if (!emu->isLaunched()) return;
 
     // A suspended thread cannot process the halt command, so waiting for it would never end
-    if (emu->isSuspended()) throw CoreError(CoreError::NOT_LAUNCHED, "The emulator thread is suspended.");
+    if (emu->isSuspendedByCurrentThread()) throw CoreError(CoreError::NOT_LAUNCHED, "The emulator thread is suspended by the calling thread.");
 
     // Signal the emulator to halt
     emu->put(Cmd::HALT);

@@ -14,6 +14,7 @@
 #include "utl/chrono.h"
 #include "utl/concurrency.h"
 #include <thread>
+#include <atomic>
 #include <latch>
 
 namespace vamiga {
@@ -51,8 +52,13 @@ protected:
     u8 warp = 0;
     u8 track = 0;
 
+    // The thread that has suspended the emulator (a default id if there is none)
+    mutable std::atomic<std::thread::id> suspender { };
+
+    // The number of nested suspensions (only accessed by the suspending thread)
+    mutable isize suspendDepth = 0;
+
     // Counters
-    mutable isize suspendCounter = 0;
     isize frameCounter = 0;
     isize statsCounter = 0;
 
@@ -152,7 +158,11 @@ public:
 
     /** Returns the current suspension state.
      */
-    bool isSuspended() const { return suspendCounter > 0; }
+    bool isSuspended() const { return suspender.load() != std::thread::id(); }
+
+    /** Returns true if the calling thread has suspended the emulator.
+     */
+    bool isSuspendedByCurrentThread() const { return suspender.load() == std::this_thread::get_id(); }
     
     /** Suspends the thread.
      *  The thread is temporarily suspended

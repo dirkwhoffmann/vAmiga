@@ -351,31 +351,37 @@ Thread::wakeUp()
 void
 Thread::suspend() const
 {
-    logmsg(LOG_RUN, "Suspending (%td)...\n", suspendCounter);
     assert(isUserThread());
 
-    if (suspendCounter++ == 0) {
-        
-        suspensionLock.lock();
-        lock.lock();
-    }
+    /* Only one thread can hold the suspension at a time. A thread that
+     * already holds it can suspend again (nested suspensions), any other
+     * thread waits here until the holder has resumed the emulator.
+     */
+    suspensionLock.lock();
+    lock.lock();
+
+    if (suspendDepth++ == 0) suspender = std::this_thread::get_id();
+
+    logmsg(LOG_RUN, "Suspended (%td)\n", suspendDepth);
 }
 
 void
 Thread::resume() const
 {
-    logmsg(LOG_RUN, "Resuming (%td)...\n", suspendCounter);
     assert(isUserThread());
 
-    if (suspendCounter <= 0) {
-        
+    if (!isSuspendedByCurrentThread()) {
+
         logmsg(LOG_FATAL, "resume() called with no call to suspend()\n");
-        
-    } else if (--suspendCounter == 0) {
-        
-        lock.unlock();
-        suspensionLock.unlock();
+        return;
     }
+
+    logmsg(LOG_RUN, "Resuming (%td)...\n", suspendDepth);
+
+    if (--suspendDepth == 0) suspender = std::thread::id();
+
+    lock.unlock();
+    suspensionLock.unlock();
 }
 
 }
