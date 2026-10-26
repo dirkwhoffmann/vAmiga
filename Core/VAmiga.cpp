@@ -207,6 +207,13 @@ AgnusAPI::getTraits() const
 // Components (Blitter)
 //
 
+const BlitterConfig &
+BlitterAPI::getConfig() const
+{
+    VAMIGA_PUBLIC
+    return blitter->getConfig();
+}
+
 const BlitterInfo &
 BlitterAPI::getInfo() const
 {
@@ -745,7 +752,6 @@ MemoryAPI::loadRom(const fs::path &path)
     emu->call([&]{
         mem->loadRom(path);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -755,7 +761,6 @@ MemoryAPI::loadExt(const fs::path &path)
     emu->call([&]{
         mem->loadExt(path);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -765,7 +770,6 @@ MemoryAPI::loadRom(const u8 *buf, isize len)
     emu->call([&]{
         mem->loadRom(buf, len);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -775,7 +779,6 @@ MemoryAPI::loadExt(const u8 *buf, isize len)
     emu->call([&]{
         mem->loadExt(buf, len);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -806,7 +809,6 @@ MemoryAPI::deleteRom()
     emu->call([&]{
         mem->deleteRom();
     });
-    emu->markAsDirty();
 }
 
 void
@@ -816,7 +818,6 @@ MemoryAPI::deleteWom()
     emu->call([&]{
         mem->deleteWom();
     });
-    emu->markAsDirty();
 }
 
 void
@@ -826,7 +827,6 @@ MemoryAPI::deleteExt()
     emu->call([&]{
         mem->deleteExt();
     });
-    emu->markAsDirty();
 }
 
 
@@ -930,7 +930,6 @@ RTCAPI::update()
     emu->call([&]{
         rtc->update();
     });
-    emu->markAsDirty();
 }
 
 
@@ -1214,6 +1213,13 @@ VideoPortAPI::findInnerAreaNormalized(double &x1, double &x2, double &y1, double
 // Peripherals (Keyboard)
 //
 
+const KeyboardConfig &
+KeyboardAPI::getConfig() const
+{
+    VAMIGA_PUBLIC
+    return keyboard->getConfig();
+}
+
 const KeyboardInfo &
 KeyboardAPI::getInfo() const
 {
@@ -1343,7 +1349,6 @@ FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
     emu->call([&]{
         drive->setFlag(mask, value);
     });
-    emu->markAsDirty();
 }
 
 bool 
@@ -1361,7 +1366,6 @@ FloppyDriveAPI::insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId bb,
     emu->call([&]{
         drive->insertNew(fstype, bb, name, path);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1372,7 +1376,6 @@ FloppyDriveAPI::insert(const fs::path &path, bool wp)
         drive->swapDisk(path);
         if (drive->disk) drive->disk->setWriteProtection(wp);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1390,7 +1393,6 @@ FloppyDriveAPI::insert(std::span<const u8> buffer, ImageFormat fmt, bool wp)
         drive->swapDisk(buffer.data(), isize(buffer.size()), fmt);
         if (drive->disk) drive->disk->setWriteProtection(wp);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1400,7 +1402,6 @@ FloppyDriveAPI::ejectDisk()
     emu->call([&]{
         drive->ejectDisk();
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1517,7 +1518,6 @@ HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
     emu->call([&]{
         drive->changeGeometry(c, h, s, b);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1527,7 +1527,6 @@ HardDriveAPI::attach(const fs::path &path)
     emu->call([&]{
         drive->init(path);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1537,7 +1536,6 @@ HardDriveAPI::attach(const fs::path &path, retro::vault::SVMFile &svm)
     emu->call([&]{
         drive->init(path, svm);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1548,7 +1546,6 @@ HardDriveAPI::create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSForma
     emu->call([&]{
         drive->create(svm, megabytes, fs, name);
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1566,7 +1563,6 @@ HardDriveAPI::attach(isize c, isize h, isize s, isize b)
         auto geometry = GeometryDescriptor(c, h, s, b);
         drive->init(geometry);
     });
-    emu->markAsDirty();
 }
 
 void 
@@ -1585,7 +1581,6 @@ HardDriveAPI::detach()
     emu->call([&]{
         drive->detach();
     });
-    emu->markAsDirty();
 }
 
 void
@@ -1682,6 +1677,13 @@ HdControllerAPI::getCachedMetrics() const
 //
 // Peripherals (Joystick)
 //
+
+const JoystickConfig &
+JoystickAPI::getConfig() const
+{
+    VAMIGA_PUBLIC
+    return joystick->getConfig();
+}
 
 const JoystickInfo &
 JoystickAPI::getInfo() const
@@ -2078,6 +2080,43 @@ RetroShellAPI::execScriptAsync(const string &contents)
     VAMIGA_PUBLIC
     retroShell->asyncExecScript(contents);
 }
+
+/*
+void
+RetroShellAPI::import(const FloppyDrive &dfn)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.import(dfn);
+}
+
+void
+RetroShellAPI::import(const HardDrive &hdn, isize part)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.import(hdn, part);
+}
+
+void
+RetroShellAPI::importDf(isize n)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.importDf(n);
+}
+
+void
+RetroShellAPI::importHd(isize n, isize part)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.importHd(n, part);
+}
+
+void
+RetroShellAPI::import(const fs::path &path, bool recursive, bool contents)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->console.navImport(path, recursive, contents);
+}
+*/
 
 void
 RetroShellAPI::exportBlocks(const std::filesystem::path &path)
@@ -2617,7 +2656,6 @@ VAmiga::setAsync(ConfigScheme model)
 {
     VAMIGA_PUBLIC
     putAsync(Cmd::CONFIG_SCHEME, (i64)model);
-    emu->markAsDirty();
 }
 
 void
@@ -2625,7 +2663,6 @@ VAmiga::setAsync(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     putAsync(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
-    emu->markAsDirty();
 }
 
 void
@@ -2633,7 +2670,6 @@ VAmiga::set(ConfigScheme model)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG_SCHEME, (i64)model));
-    emu->markAsDirty();
 }
 
 void
@@ -2641,7 +2677,6 @@ VAmiga::set(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value }));
-    emu->markAsDirty();
 }
 
 void
@@ -2649,7 +2684,6 @@ VAmiga::set(Opt opt, i64 value, isize id)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id }));
-    emu->markAsDirty();
 }
 
 void
@@ -2671,7 +2705,6 @@ VAmiga::setAsync(Opt opt, i64 value, isize id)
 {
     VAMIGA_PUBLIC
     putAsync(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
-    emu->markAsDirty();
 }
 
 void
@@ -2776,7 +2809,6 @@ void
 AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
     VAMIGA_PUBLIC
-    emu->markAsDirty();
     emu->call([&]{
         try {
 

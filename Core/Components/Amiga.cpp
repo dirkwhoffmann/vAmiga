@@ -1056,6 +1056,9 @@ Amiga::update(CmdQueue &queue)
 
         std::exception_ptr error;
 
+        // Every command may change the state, so the run-ahead instance is outdated
+        emulator.markAsDirty();
+
         try {
 
             switch (cmd.type) {
