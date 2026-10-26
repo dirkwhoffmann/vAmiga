@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <atomic>
+
 #include "AudioPortTypes.h"
 #include "SubComponent.h"
 #include "AudioStream.h"
@@ -88,11 +90,11 @@ private:
     AudioPortMetrics stats = {};
     
     // Current sample rate
-    double sampleRate = 44100.0;
+    std::atomic<double> sampleRate { 44100.0 };
 
     // Variables needed to implement ASR (Adaptive Sample Rate)
     double sampleRateError = 0.0;
-    double sampleRateCorrection = 0.0;
+    std::atomic<double> sampleRateCorrection { 0.0 };
     
     // Fraction of a sample that hadn't been generated in synthesize
     double fraction = 0.0;

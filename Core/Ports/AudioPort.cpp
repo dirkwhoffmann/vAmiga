@@ -76,14 +76,17 @@ AudioPort::_dump(Category category, std::ostream &os) const
         os << tab("Channel 3 pan");
         os << flt(pan[3]) << std::endl;
         os << tab("Sample rate");
-        os << flt(sampleRate) << " Hz" << std::endl;
+        os << flt(double(sampleRate)) << " Hz" << std::endl;
     }
 }
 
 void
 AudioPort::_didReset(bool hard)
 {
-    stats = { };
+    {   utl::AutoMutex _audioLock(stream.mutex);
+
+        stats = { };
+    }
     for (isize i = 0; i < 4; i++) sampler[i].reset();
     clear();
 }
@@ -279,16 +282,19 @@ AudioPort::setOption(Opt option, i64 value)
 void
 AudioPort::setSampleRate(double hz)
 {
+    // The audio filter is in use while samples are synthesized
+    utl::AutoMutex _audioLock(stream.mutex);
+
     // Set the sample rate or get it from the detector if none is provided
     if (hz != 0.0) {
 
         sampleRate = hz;
-        logmsg(LOG_AUD, "setSampleRate(%.2f)\n", sampleRate);
+        logmsg(LOG_AUD, "setSampleRate(%.2f)\n", double(sampleRate));
 
     } else {
 
         sampleRate = detector.sampleRate();
-        logmsg(LOG_AUD, "setSampleRate(%.2f) (predicted)\n", sampleRate);
+        logmsg(LOG_AUD, "setSampleRate(%.2f) (predicted)\n", double(sampleRate));
     }
 
     // Inform the audio filter about the new sample rate
@@ -308,6 +314,9 @@ AudioPort::cacheInfo() const
 AudioPortMetrics
 AudioPort::cacheMetrics() const
 {
+    // The statistics are also updated by the audio thread
+    utl::AutoMutex _audioLock(stream.mutex);
+
     AudioPortMetrics result = stats;
 
     result.fillLevel = stream.fillLevel();
@@ -389,7 +398,7 @@ AudioPort::updateSampleRateCorrection()
     sampleRateCorrection = (sampleRateCorrection * 0.75) + (correction * 0.25);
     
     logmsg(LOG_AUDBUF, "ASR correction: %.0f Hz (fill: %.2f)\n",
-          sampleRateCorrection, stream.fillLevel());
+          double(sampleRateCorrection), stream.fillLevel());
 }
 
 void
@@ -516,7 +525,7 @@ AudioPort::handleBufferUnderflow()
 
         // Adjust the sample rate
         setSampleRate(double(host.getConfig().sampleRate));
-        logmsg(LOG_AUDBUF, "New sample rate = %.2f\n", sampleRate);
+        logmsg(LOG_AUDBUF, "New sample rate = %.2f\n", double(sampleRate));
 
         // Inform the GUI
         msgQueue.put(Msg::AUDBUF_UNDERFLOW, elapsedTime.asMilliseconds());
@@ -541,7 +550,7 @@ AudioPort::handleBufferOverflow()
 
         // Adjust the sample rate
         setSampleRate(double(host.getConfig().sampleRate));
-        logmsg(LOG_AUDBUF, "New sample rate = %.2f\n", sampleRate);
+        logmsg(LOG_AUDBUF, "New sample rate = %.2f\n", double(sampleRate));
 
         // Inform the GUI
         msgQueue.put(Msg::AUDBUF_OVERFLOW, elapsedTime.asMilliseconds());
@@ -551,12 +560,18 @@ AudioPort::handleBufferOverflow()
 void
 AudioPort::ignoreNextUnderOrOverflow()
 {
+    utl::AutoMutex _audioLock(stream.mutex);
     lastAlignment = utl::Time::now();
 }
 
 isize
 AudioPort::copyMono(float *buffer, isize n)
 {
+    /* This function runs on the audio thread. The emulator thread synthesizes
+     * samples and adjusts the sample rate under the same lock.
+     */
+    utl::AutoMutex _audioLock(stream.mutex);
+
     // Inform the sample rate detector about the number of requested samples
     detector.feed(n);
     
@@ -573,6 +588,11 @@ AudioPort::copyMono(float *buffer, isize n)
 isize
 AudioPort::copyStereo(float *left, float *right, isize n)
 {
+    /* This function runs on the audio thread. The emulator thread synthesizes
+     * samples and adjusts the sample rate under the same lock.
+     */
+    utl::AutoMutex _audioLock(stream.mutex);
+
     // Inform the sample rate detector about the number of requested samples
     detector.feed(n);
 
@@ -589,6 +609,11 @@ AudioPort::copyStereo(float *left, float *right, isize n)
 isize
 AudioPort::copyInterleaved(float *buffer, isize n)
 {
+    /* This function runs on the audio thread. The emulator thread synthesizes
+     * samples and adjusts the sample rate under the same lock.
+     */
+    utl::AutoMutex _audioLock(stream.mutex);
+
     // Inform the sample rate detector about the number of requested samples
     detector.feed(n);
 
