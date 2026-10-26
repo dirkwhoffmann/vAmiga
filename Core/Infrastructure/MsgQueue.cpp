@@ -31,11 +31,15 @@ MsgQueue::setListener(const void *listener, Callback *callback)
          */
         if (callback) {
 
-            while (!queue.isEmpty()) {
+            while (!entries.empty()) {
 
-                Entry &entry = queue.read();
-                callback(listener, entry.message, entry.exception);
-                entry.exception = nullptr;
+                Entry &entry = entries.front();
+
+                Message m = entry.message;
+                m.str = entry.str.c_str();
+                callback(listener, m, entry.exception);
+
+                entries.pop_front();
             }
         }
     }
@@ -48,12 +52,17 @@ MsgQueue::get(Message &msg, std::exception_ptr &exception)
 
     {   SYNCHRONIZED
 
-        if (queue.isEmpty()) return false;
+        if (entries.empty()) return false;
 
-        Entry &entry = queue.read();
+        Entry &entry = entries.front();
+
+        // Keep the attached string alive until the next call
+        current = std::move(entry.str);
         msg = entry.message;
+        msg.str = current.c_str();
         exception = entry.exception;
-        entry.exception = nullptr;
+
+        entries.pop_front();
         return true;
     }
 }
@@ -69,34 +78,14 @@ MsgQueue::put(const Message &msg, const string &str, std::exception_ptr exceptio
 
         if (listener) {
 
-            // Send the message immediately if a listener has been registered.
+            // Send the message immediately if a listener has been registered
             Message m = msg;
             m.str = str.c_str();
             callback(listener, m, exception);
 
-        } else if (!queue.isFull()) {
+        } else if (isize(entries.size()) < CAPACITY) {
 
-            /* Coalesce with the oldest pending message if it has the same type.
-             * Configuration messages are never merged, because each one
-             * reports a different option and may carry an exception.
-             */
-            auto *current = queue.currentAddr();
-
-            if (current->message.type == msg.type && msg.type != Msg::CONFIG) {
-
-                auto r = queue.begin();
-                current->message = msg;
-                current->exception = exception;
-                attachments[r] = str;
-                queue.elements[r].message.str = attachments[r].c_str();
-
-            } else {
-
-                auto w = queue.end();
-                queue.write(Entry { msg, exception });
-                attachments[w] = str;
-                queue.elements[w].message.str = attachments[w].c_str();
-            }
+            entries.push_back(Entry { msg, str, exception });
 
         } else {
 

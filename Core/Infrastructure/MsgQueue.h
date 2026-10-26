@@ -13,27 +13,31 @@
 #include "CoreObject.h"
 #include "utl/abilities/Synchronizable.h"
 #include "utl/storage.h"
+#include <deque>
 
 namespace vamiga {
 
 class MsgQueue final : CoreObject, utl::Synchronizable {
 
-    // vAmiga carries a heavier message load than other ports in this family
-    // (e.g., VirtualC64), so its ring buffer is kept larger.
-    static constexpr isize CAPACITY = 4096;
+    /* Maximum number of pending messages. Messages only pile up while no
+     * listener is registered (before a client attaches, or if the client
+     * polls with get()). A message that arrives at a full queue is dropped.
+     */
+    static constexpr isize CAPACITY = 65536;
 
-    // A pending message, together with the exception it reports (if any)
+    // A pending message, together with its attached string and the exception it reports (if any)
     struct Entry {
 
         Message message;
+        string str;
         std::exception_ptr exception;
     };
 
-    // Ring buffer storing all pending messages
-    utl::RingBuffer <Entry, CAPACITY> queue;
+    // All pending messages
+    std::deque<Entry> entries;
 
-    // Attached string objects
-    string attachments[CAPACITY];
+    // The attached string of the message that has been read last
+    string current;
 
     // The registered listener
     const void *listener = nullptr;
