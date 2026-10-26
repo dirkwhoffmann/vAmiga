@@ -23,7 +23,7 @@ enum class FrameType
     NTSC_SF_SL    // NTSC short frame starting with a short line
 };
 
-struct FrameTypeEnum : Reflectable<FrameTypeEnum, FrameType>
+struct FrameTypeEnum : utl::Reflectable<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FrameType::NTSC_SF_SL);

@@ -26,7 +26,7 @@ enum class KbState
     SEND
 };
 
-struct KbStateEnum : Reflectable<KbStateEnum, KbState>
+struct KbStateEnum : utl::Reflectable<KbStateEnum, KbState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(KbState::SEND);

@@ -38,7 +38,7 @@ enum class BoardState : long
     SHUTUP
 };
 
-struct BoardStateEnum : Reflectable<BoardStateEnum, BoardState>
+struct BoardStateEnum : utl::Reflectable<BoardStateEnum, BoardState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BoardState::SHUTUP);

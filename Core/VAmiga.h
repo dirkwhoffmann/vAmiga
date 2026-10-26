@@ -21,7 +21,6 @@ namespace retro::vault { class SVMFile; }
 
 namespace vamiga {
 
-using namespace retro::vault;
 
 
 /* Thread safety
@@ -218,7 +217,7 @@ public:
      *  @note   The function transfers the ownership to the caller. It is
      *          his responsibility of the caller to free the object.
      */
-    std::unique_ptr<Snapshot> takeSnapshot(Compressor compressor, isize delay = 0, bool repeat = false);
+    std::unique_ptr<Snapshot> takeSnapshot(utl::Compressor compressor, isize delay = 0, bool repeat = false);
 
     /** @brief  Loads a snapshot.
      *
@@ -247,7 +246,7 @@ public:
      *
      *  @throw Error if the file cannot be written.
      */
-    void saveSnapshot(const std::filesystem::path &path, Compressor compressor) const;
+    void saveSnapshot(const std::filesystem::path &path, utl::Compressor compressor) const;
 
     /** @brief  Saves a snapshot to disk asynchronously.
      *
@@ -258,7 +257,7 @@ public:
      *  @param  path        Destination path
      *  @param  compressor  Compression method
      */
-    void saveSnapshotAsync(const std::filesystem::path &path, Compressor compressor) const;
+    void saveSnapshotAsync(const std::filesystem::path &path, utl::Compressor compressor) const;
 
     /** @brief  Saves a snapshot, including a screenshot, into an SVM
      *
@@ -270,8 +269,8 @@ public:
      *  @throw Error if the SVM file cannot be read or written, or if its content
      *  is invalid (synchronous versions).
      */
-    void saveSnapshot(retro::vault::SVMFile &svm, Compressor compressor) const;
-    void saveSnapshotAsync(retro::vault::SVMFile &svm, Compressor compressor) const;
+    void saveSnapshot(retro::vault::SVMFile &svm, utl::Compressor compressor) const;
+    void saveSnapshotAsync(retro::vault::SVMFile &svm, utl::Compressor compressor) const;
 
     /** @brief  Hibernates the machine into a virtual machine bundle
      *
@@ -928,9 +927,9 @@ public:
 
     /** @brief  Provides details about the installed ROM, WOM, or ROM extension.
      */
-    RomTraits getRomTraits() const;
-    RomTraits getWomTraits() const;
-    RomTraits getExtTraits() const;
+    retro::vault::RomTraits getRomTraits() const;
+    retro::vault::RomTraits getWomTraits() const;
+    retro::vault::RomTraits getExtTraits() const;
 
     /// @}
     /// @name Handling ROMs
@@ -1154,14 +1153,14 @@ public:
      *
      *  @throw Error if the file cannot be read or does not contain valid data.
      */
-    void insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId id,
+    void insertBlankDisk(retro::vault::amiga::FSFormat fstype, retro::vault::amiga::BootBlockId id,
                          string name, const std::filesystem::path &path = {});
     /** @brief  Asynchronous version of insertBlankDisk(): queues the request and returns at once.
      *
      *  Success and failure are both reported by the usual message
      *  (DISK_INSERT). If the request failed, the message carries the exception.
      */
-    void insertBlankDiskAsync(amiga::FSFormat fstype, amiga::BootBlockId id,
+    void insertBlankDiskAsync(retro::vault::amiga::FSFormat fstype, retro::vault::amiga::BootBlockId id,
                               string name, const std::filesystem::path &path = {});
 
     /** @brief  Inserts a disk created from an image file.
@@ -1186,7 +1185,7 @@ public:
      *
      *  @throw Error if the data is not valid.
      */
-    void insert(std::span<const u8> buffer, ImageFormat fmt, bool wp);
+    void insert(std::span<const u8> buffer, retro::vault::ImageFormat fmt, bool wp);
 
     /** @brief  Ejects the current disk.
      */
@@ -1321,7 +1320,7 @@ public:
 
     /** @brief  Formats the hard drive
      */
-    void format(amiga::FSFormat fs, const string &name);
+    void format(retro::vault::amiga::FSFormat fs, const string &name);
 
     /** @brief  Attaches a hard drive provided by an URL to a media file.
      *  @param  path    Path to the media file.
@@ -1378,7 +1377,7 @@ public:
      *  @throw Error if the SVM file cannot be read or written, or if its content
      *  is invalid (synchronous versions).
      */
-    void create(retro::vault::SVMFile &svm, isize megabytes, amiga::FSFormat fs,
+    void create(retro::vault::SVMFile &svm, isize megabytes, retro::vault::amiga::FSFormat fs,
                 const string &name);
 
     /** @brief  Attaches a hard drive with a particular geometry.

@@ -28,7 +28,7 @@ enum class DriveDmaState
     FLUSH,   // Drive is finishing up the write process
 };
 
-struct DriveStateEnum : Reflectable<DriveStateEnum, DriveDmaState>
+struct DriveStateEnum : utl::Reflectable<DriveStateEnum, DriveDmaState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DriveDmaState::FLUSH);

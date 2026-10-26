@@ -25,7 +25,7 @@ enum class CPURev : long
     CPU_68EC020
 };
 
-struct CPURevEnum : Reflectable<CPURevEnum, CPURev>
+struct CPURevEnum : utl::Reflectable<CPURevEnum, CPURev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CPURev::CPU_68EC020);
@@ -65,7 +65,7 @@ enum class DasmRev : long
     DASM_68040
 };
 
-struct DasmRevEnum : Reflectable<DasmRevEnum, DasmRev>
+struct DasmRevEnum : utl::Reflectable<DasmRevEnum, DasmRev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DasmRev::DASM_68040);
@@ -113,7 +113,7 @@ enum class DasmSyntax : long
     MUSASHI
 };
 
-struct DasmSyntaxEnum : Reflectable<DasmSyntaxEnum, DasmSyntax>
+struct DasmSyntaxEnum : utl::Reflectable<DasmSyntaxEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DasmSyntax::MUSASHI);
@@ -150,7 +150,7 @@ enum class DasmNumbers : long
     DEC
 };
 
-struct DasmNumbersEnum : Reflectable<DasmNumbersEnum, DasmNumbers>
+struct DasmNumbersEnum : utl::Reflectable<DasmNumbersEnum, DasmNumbers>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DasmNumbers::DEC);

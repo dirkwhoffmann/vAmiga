@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-struct CoreError : public Error {
+struct CoreError : public utl::Error {
 
     static constexpr long OK                =   0; ///< No error
     static constexpr long UNKNOWN           =   1; ///< Unclassified error condition

@@ -153,7 +153,7 @@ enum class Msg : long
     ALARM               ///< A scheduled alarm went off (value = the payload given when the alarm was set)
 };
 
-struct MsgEnum : Reflectable<MsgEnum, Msg>
+struct MsgEnum : utl::Reflectable<MsgEnum, Msg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Msg::ALARM);

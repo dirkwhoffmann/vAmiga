@@ -113,7 +113,7 @@ enum class IoCommand
     NSD_TD_FORMAT64     = 0xC003
 };
 
-struct IoCommandEnum : Reflectable<IoCommandEnum, IoCommand>
+struct IoCommandEnum : utl::Reflectable<IoCommandEnum, IoCommand>
 {
     static constexpr long minVal = 0;
     // The NSD commands are deliberately outside this range (see IoCommand)
@@ -175,7 +175,7 @@ enum class HdcState
     READY           // The controller is fully operational
 };
 
-struct HdcStateEnum : Reflectable<HdcStateEnum, HdcState>
+struct HdcStateEnum : utl::Reflectable<HdcStateEnum, HdcState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HdcState::READY);

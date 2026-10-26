@@ -28,7 +28,7 @@ enum class CommandSet
     CBMNavigator    // Commands for browsing CBM file systems
 };
 
-struct CommandSetEnum : Reflectable<CommandSetEnum, CommandSet>
+struct CommandSetEnum : utl::Reflectable<CommandSetEnum, CommandSet>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CommandSet::CBMNavigator);
@@ -68,7 +68,7 @@ enum class RSKey
     CR
 };
 
-struct RSKeyEnum : Reflectable<RSKeyEnum, RSKey>
+struct RSKeyEnum : utl::Reflectable<RSKeyEnum, RSKey>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RSKey::CR);

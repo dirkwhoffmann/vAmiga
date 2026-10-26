@@ -24,7 +24,7 @@ enum class RTCRevision : long
     RICOH
 };
 
-struct RTCRevisionEnum : Reflectable<RTCRevisionEnum, RTCRevision>
+struct RTCRevisionEnum : utl::Reflectable<RTCRevisionEnum, RTCRevision>
 {
     static constexpr auto minVal = (long)RTCRevision::NONE;
     static constexpr auto maxVal = (long)RTCRevision::RICOH;

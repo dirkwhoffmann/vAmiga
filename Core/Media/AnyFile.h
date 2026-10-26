@@ -17,10 +17,9 @@
 
 namespace vamiga {
 
-using namespace utl;
 
 // Base class for all file-backed binary formats
-class AnyFile : public Hashable, public Dumpable, public Loggable {
+class AnyFile : public utl::Hashable, public utl::Dumpable, public utl::Loggable {
 
 public:
     
@@ -28,7 +27,7 @@ public:
     fs::path path;
 
     // The raw data of this file
-    Buffer<u8> data;
+    utl::Buffer<u8> data;
     
     
     //
@@ -41,7 +40,7 @@ public:
 
     void init(isize len);
     void init(const u8 *buf, isize len);
-    void init(const Buffer<u8> &buffer);
+    void init(const utl::Buffer<u8> &buffer);
     void init(const string &str);
     void init(const fs::path &path);
 
@@ -88,10 +87,10 @@ public:
 
 public:
 
-    ByteView byteView(isize offset = 0) const;
-    ByteView byteView(isize offset, isize len) const;
-    MutableByteView byteView(isize offset = 0);
-    MutableByteView byteView(isize offset, isize len);
+    utl::ByteView byteView(isize offset = 0) const;
+    utl::ByteView byteView(isize offset, isize len) const;
+    utl::MutableByteView byteView(isize offset = 0);
+    utl::MutableByteView byteView(isize offset, isize len);
 
     // Copies the file contents into a buffer
     virtual void copy(u8 *dst, isize offset, isize len) const;

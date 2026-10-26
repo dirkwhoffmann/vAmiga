@@ -26,7 +26,7 @@ enum class FloppyDriveType : long
     DD_525
 };
 
-struct FloppyDriveTypeEnum : Reflectable<FloppyDriveTypeEnum, FloppyDriveType>
+struct FloppyDriveTypeEnum : utl::Reflectable<FloppyDriveTypeEnum, FloppyDriveType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FloppyDriveType::DD_525);
@@ -53,7 +53,7 @@ enum class DriveMechanics
     A1010
 };
 
-struct DriveMechanicsEnum : Reflectable<DriveMechanicsEnum, DriveMechanics>
+struct DriveMechanicsEnum : utl::Reflectable<DriveMechanicsEnum, DriveMechanics>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DriveMechanics::A1010);

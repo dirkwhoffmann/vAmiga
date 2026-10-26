@@ -14,7 +14,6 @@
 
 namespace vamiga {
 
-using namespace retro::vault;
 
 //
 // Enumerations
@@ -27,7 +26,7 @@ enum class DiskFlags
     BOOTABLE   = 4
 };
 
-struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
+struct DiskFlagsEnum : utl::Reflectable<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
     static constexpr long maxVal = long(DiskFlags::BOOTABLE);
@@ -61,8 +60,8 @@ struct DiskFlagsEnum : Reflectable<DiskFlagsEnum, DiskFlags>
 
 struct DriveHead
 {
-    CylNr cylinder;
-    HeadNr head;
+    retro::vault::CylNr cylinder;
+    retro::vault::HeadNr head;
     isize offset;
 
     isize track() const { return 2 * cylinder + head; }

@@ -14,6 +14,14 @@
 #include "utl/hints.h"
 #include "utl/abilities/LogMacros.h"
 
+/* Internal code uses the names of utlib and rvlib without qualification. The
+ * directives live here and not in the public headers, so that they do not
+ * leak into the code of API clients.
+ */
+#include "utl/common.h"
+namespace retro::vault { }
+namespace vamiga { using namespace utl; using namespace retro::vault; }
+
 //
 // Release settings
 //

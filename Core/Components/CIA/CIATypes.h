@@ -25,7 +25,7 @@ enum class CIARev : long
     MOS_8520_PLCC
 };
 
-struct CIARevEnum : Reflectable<CIARevEnum, CIARev>
+struct CIARevEnum : utl::Reflectable<CIARevEnum, CIARev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CIARev::MOS_8520_PLCC);
@@ -70,7 +70,7 @@ enum class CIAReg : long
     CRB
 };
 
-struct CIARegEnum : Reflectable<CIARegEnum, CIAReg>
+struct CIARegEnum : utl::Reflectable<CIARegEnum, CIAReg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CIAReg::CRB);

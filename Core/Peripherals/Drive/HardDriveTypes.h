@@ -24,7 +24,7 @@ enum class HardDriveType : long
     GENERIC
 };
 
-struct HardDriveTypeEnum : Reflectable<HardDriveTypeEnum, HardDriveType>
+struct HardDriveTypeEnum : utl::Reflectable<HardDriveTypeEnum, HardDriveType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HardDriveType::GENERIC);
@@ -56,7 +56,7 @@ enum class WriteThroughMode : long
     ALWAYS      // They are written straight away
 };
 
-struct WriteThroughModeEnum : Reflectable<WriteThroughModeEnum, WriteThroughMode>
+struct WriteThroughModeEnum : utl::Reflectable<WriteThroughModeEnum, WriteThroughMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(WriteThroughMode::ALWAYS);
@@ -90,7 +90,7 @@ enum class HardDriveState : long
     WRITING
 };
 
-struct HardDriveStateEnum : Reflectable<HardDriveStateEnum, HardDriveState>
+struct HardDriveStateEnum : utl::Reflectable<HardDriveStateEnum, HardDriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HardDriveState::WRITING);
@@ -181,7 +181,7 @@ typedef struct
     string name;                            ///< Name of the partition
     isize lowerCyl;                         ///< First cylinder
     isize upperCyl;                         ///< Last cylinder
-    amiga::FSFormat fsType;                 ///< File system type
+    retro::vault::amiga::FSFormat fsType;                 ///< File system type
 }
 PartitionTraits;
 

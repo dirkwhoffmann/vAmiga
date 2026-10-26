@@ -38,7 +38,7 @@ enum class MemSrc : long
     EXT
 };
 
-struct MemSrcEnum : Reflectable<MemSrcEnum, MemSrc>
+struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = (long)MemSrc::EXT;
@@ -102,7 +102,7 @@ enum class Accessor : i8
     DENISE
 };
 
-struct AccessorEnum : Reflectable<AccessorEnum, Accessor>
+struct AccessorEnum : utl::Reflectable<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Accessor::DENISE);
@@ -132,7 +132,7 @@ enum class BankMap : long
     A1200
 };
 
-struct BankMapEnum : Reflectable<BankMapEnum, BankMap>
+struct BankMapEnum : utl::Reflectable<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BankMap::A1200);
@@ -170,7 +170,7 @@ enum class RamInitPattern
     RANDOMIZED
 };
 
-struct RamInitPatternEnum : Reflectable<RamInitPatternEnum, RamInitPattern>
+struct RamInitPatternEnum : utl::Reflectable<RamInitPatternEnum, RamInitPattern>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RamInitPattern::RANDOMIZED);
@@ -204,7 +204,7 @@ enum class UnmappedMemory
     ALL_ONES
 };
 
-struct UnmappedMemoryEnum : Reflectable<UnmappedMemoryEnum, UnmappedMemory>
+struct UnmappedMemoryEnum : utl::Reflectable<UnmappedMemoryEnum, UnmappedMemory>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(UnmappedMemory::ALL_ONES);

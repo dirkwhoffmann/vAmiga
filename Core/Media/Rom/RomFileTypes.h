@@ -17,6 +17,5 @@ namespace vamiga {
  * naming every Amiga Rom the database knows -- is shared by all cores and lives
  * in rvlib's RomManager. It used to be defined here.
  */
-using namespace retro::vault;
 
 }

@@ -75,7 +75,7 @@ static constexpr i8 BUS_BLITTER = i8(BusOwner::BLITTER);
 static constexpr i8 BUS_BLOCKED = i8(BusOwner::BLOCKED);
 static constexpr i8 BUS_COUNT = i8(BusOwner::COUNT);
 
-struct BusOwnerEnum : Reflectable<BusOwnerEnum, BusOwner>
+struct BusOwnerEnum : utl::Reflectable<BusOwnerEnum, BusOwner>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BusOwner::COUNT) -1;

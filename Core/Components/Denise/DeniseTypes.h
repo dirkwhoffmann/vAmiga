@@ -24,7 +24,7 @@ enum class DeniseRev : long
     AGA            // MOS 4203      (partially supported)
 };
 
-struct DeniseRevEnum : Reflectable<DeniseRevEnum, DeniseRev>
+struct DeniseRevEnum : utl::Reflectable<DeniseRevEnum, DeniseRev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DeniseRev::AGA);

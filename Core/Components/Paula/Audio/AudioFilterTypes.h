@@ -28,7 +28,7 @@ enum class FilterType : long
     HIGH
 };
 
-struct FilterTypeEnum : Reflectable<FilterTypeEnum, FilterType>
+struct FilterTypeEnum : utl::Reflectable<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FilterType::HIGH);

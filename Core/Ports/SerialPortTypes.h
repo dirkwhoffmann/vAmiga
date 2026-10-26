@@ -27,7 +27,7 @@ enum class SerialPortDevice
     MIDI
 };
 
-struct SerialPortDeviceEnum : Reflectable<SerialPortDeviceEnum, SerialPortDevice>
+struct SerialPortDeviceEnum : utl::Reflectable<SerialPortDeviceEnum, SerialPortDevice>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SerialPortDevice::MIDI);

@@ -7,6 +7,9 @@
 
 #pragma once
 
+// Provides the name lookup that the headers of the surrounding core rely on
+#include "vaconfig.h"
+
 /* Set to true to enable precise timing mode (68000 and 68010 only).
  *
  * When disabled, Moira calls the 'sync' function at the end of each instruction,

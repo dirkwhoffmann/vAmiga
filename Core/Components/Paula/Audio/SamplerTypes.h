@@ -24,7 +24,7 @@ enum class SamplingMethod
     LINEAR
 };
 
-struct SamplingMethodEnum : Reflectable<SamplingMethodEnum, SamplingMethod>
+struct SamplingMethodEnum : utl::Reflectable<SamplingMethodEnum, SamplingMethod>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SamplingMethod::LINEAR);

@@ -232,7 +232,7 @@ enum class Opt : long
     SRV_VERBOSE             ///< Verbose mode
 };
 
-struct OptEnum : Reflectable<OptEnum, Opt>
+struct OptEnum : utl::Reflectable<OptEnum, Opt>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Opt::SRV_VERBOSE);

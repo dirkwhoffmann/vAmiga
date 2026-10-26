@@ -27,7 +27,7 @@ enum class GuardType : long
     BEAMTRAP
 };
 
-struct GuardTypeEnum : Reflectable<GuardTypeEnum, GuardType>
+struct GuardTypeEnum : utl::Reflectable<GuardTypeEnum, GuardType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(GuardType::BEAMTRAP);

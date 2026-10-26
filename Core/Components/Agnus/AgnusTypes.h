@@ -43,7 +43,7 @@ enum class AgnusRevision : long
     AGA               // MOS 8374 [Alice]        (A1200, A4000)
 };
 
-struct AgnusRevisionEnum : Reflectable<AgnusRevisionEnum, AgnusRevision>
+struct AgnusRevisionEnum : utl::Reflectable<AgnusRevisionEnum, AgnusRevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(AgnusRevision::AGA);
@@ -130,7 +130,7 @@ constexpr bool isPrimarySlot(long s) { return s <= SLOT_SEC; }
 constexpr bool isSecondarySlot(long s) { return s > SLOT_SEC && s <= SLOT_TER; }
 constexpr bool isTertiarySlot(long s) { return s > SLOT_TER; }
 
-struct EventSlotEnum : Reflectable<EventSlotEnum, EventSlot>
+struct EventSlotEnum : utl::Reflectable<EventSlotEnum, EventSlot>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SLOT_COUNT - 1;
