@@ -10,6 +10,8 @@
 #pragma once
 
 #include "BasicTypes.h"
+#include "utl/hints.h"
+#include "utl/support/Bits.h"
 
 //
 // Optimizing code

@@ -5769,6 +5769,8 @@ Moira::execMove16AlAi(u16 opcode)
 }
 
 #include "MoiraExecMMU_cpp.h"
+#include "utl/hints.h"
+#include "utl/support/Bits.h"
 #include "MoiraExecFPU_cpp.h"
 
 #undef AVAILABILITY

@@ -9,9 +9,11 @@
 
 #pragma once
 
-#include "utl/abilities.h"
-#include "utl/storage.h"
-#include <iostream>
+#include "utl/abilities/Hashable.h"
+#include "utl/abilities/Dumpable.h"
+#include "utl/abilities/Loggable.h"
+#include "utl/storage/Buffer.h"
+#include <iosfwd>
 
 namespace vamiga {
 

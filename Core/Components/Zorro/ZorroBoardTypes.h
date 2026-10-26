@@ -18,21 +18,16 @@ namespace vamiga {
 //
 
 // Autoconfig related constants ('type' field)
-#define ERT_ZORROII         0xc0
-#define ERT_ZORROIII        0x80
-#define ERTF_MEMLIST        (1<<5)
-#define ERTF_DIAGVALID      (1<<4)
-#define ERTF_CHAINEDCONFIG  (1<<3)
+inline constexpr int ERT_ZORROII = 0xc0;
+inline constexpr int ERT_ZORROIII = 0x80;
+inline constexpr int ERTF_MEMLIST = (1<<5);
+inline constexpr int ERTF_DIAGVALID = (1<<4);
+inline constexpr int ERTF_CHAINEDCONFIG = (1<<3); // Autoconfig related constants ('flags' field)
 
-// Autoconfig related constants ('flags' field)
-
-#define ERFF_MEMSPACE       (1<<7)
-#define ERFF_NOSHUTUP       (1<<6)
-#define ERFF_EXTENDED       (1<<5)
-#define ERFF_ZORRO_III      (1<<4)
-
-
-//
+inline constexpr int ERFF_MEMSPACE = (1<<7);
+inline constexpr int ERFF_NOSHUTUP = (1<<6);
+inline constexpr int ERFF_EXTENDED = (1<<5);
+inline constexpr int ERFF_ZORRO_III = (1<<4); //
 // Enumerations
 //
 

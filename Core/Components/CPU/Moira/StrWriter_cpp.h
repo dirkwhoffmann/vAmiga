@@ -6,6 +6,7 @@
 // -----------------------------------------------------------------------------
 
 #include <cmath>
+#include "utl/support/Bits.h"
 
 static const char *mnemonics[]
 {

@@ -2015,4 +2015,5 @@ Moira::dasmMove16AlAi(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S
 }
 
 #include "MoiraDasmMMU_cpp.h"
+#include "utl/support/Bits.h"
 #include "MoiraDasmFPU_cpp.h"

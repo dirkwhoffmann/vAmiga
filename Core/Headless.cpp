@@ -137,14 +137,14 @@ Headless::runScript(const fs::path &path)
     // Create an emulator instance
     VAmiga vamiga;
 
+    // Launch the emulator thread
+    vamiga.launch(this, vamiga::process);
+
     // Plug in DiagRom
     vamiga.mem.loadRom(diagROM13, sizeofDiagRom13);
 
     // Redirect shell output to the console in verbose mode
     if (keys.find("verbose") != keys.end()) vamiga.retroShell.setStream(std::cout);
-
-    // Launch the emulator thread
-    vamiga.launch(this, vamiga::process);
 
     // Execute script
     const auto timeout = utl::Time::seconds(500.0);

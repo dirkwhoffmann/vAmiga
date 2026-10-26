@@ -10,6 +10,7 @@
 #pragma once
 
 #include "UARTTypes.h"
+#include "utl/support/Bits.h"
 #include "Constants.h"
 #include "SubComponent.h"
 #include "AgnusTypes.h"

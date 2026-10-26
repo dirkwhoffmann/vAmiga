@@ -5,6 +5,7 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+#include "utl/support/Bits.h"
 void
 Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {

@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include "utl/support/Bits.h"
+#include "utl/hints.h"
+
 #ifdef _MSC_VER
 #define unreachable     __assume(false)
 #else

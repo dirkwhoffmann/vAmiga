@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FloppyDiskTypes.h"
+#include "utl/hints.h"
 #include "DriveTypes.h"
 #include "ImageTypes.h"
 #include "ADFFile.h"

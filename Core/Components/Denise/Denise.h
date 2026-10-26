@@ -10,6 +10,7 @@
 #pragma once
 
 #include "DeniseTypes.h"
+#include "utl/support/Bits.h"
 #include "SubComponent.h"
 #include "utl/gfx/Colors.h"
 #include "DeniseDebugger.h"

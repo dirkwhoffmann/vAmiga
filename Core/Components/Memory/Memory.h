@@ -10,6 +10,7 @@
 #pragma once
 
 #include "MemoryTypes.h"
+#include "utl/support/Bits.h"
 #include "MemoryDebugger.h"
 #include "RomFileTypes.h"
 #include "MoiraTypes.h"

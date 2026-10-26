@@ -1,3 +1,4 @@
+#include "utl/hints.h"
 // -----------------------------------------------------------------------------
 // This file is part of Moira - A Motorola 68k emulator
 //

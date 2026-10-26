@@ -10,6 +10,7 @@
 #pragma once
 
 #include "SubComponent.h"
+#include "utl/hints.h"
 #include "ZorroBoardTypes.h"
 
 namespace vamiga {

@@ -5,6 +5,7 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+#include "utl/support/Bits.h"
 template <Core C> void
 Moira::writeStackFrameAEBE(StackFrame &frame)
 {

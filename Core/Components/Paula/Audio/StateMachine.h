@@ -10,6 +10,7 @@
 #pragma once
 
 #include "StateMachineTypes.h"
+#include "utl/support/Bits.h"
 #include "SubComponent.h"
 #include "Sampler.h"
 #include "Agnus.h"

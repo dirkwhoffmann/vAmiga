@@ -11,6 +11,8 @@
  * per-core translation units, which need to inline them into the instruction
  * handlers. addrMask is evaluated on every memory access.
  */
+#include "utl/support/Bits.h"
+#include "utl/hints.h"
 template <Core C> u32
 Moira::addrMask() const
 {

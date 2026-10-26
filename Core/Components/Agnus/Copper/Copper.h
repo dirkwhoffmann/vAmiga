@@ -10,6 +10,7 @@
 #pragma once
 
 #include "CopperTypes.h"
+#include "utl/support/Bits.h"
 #include "SubComponent.h"
 #include "AgnusTypes.h"
 #include "Beam.h"

@@ -5,6 +5,8 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
+#include "utl/support/Bits.h"
+#include "utl/hints.h"
 template <Size S> u32 MSBIT() {
 
     if constexpr (S == Byte) return 0x00000080;

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "AgnusTypes.h"
+#include "utl/support/Bits.h"
 #include "SubComponent.h"
 #include "Beam.h"
 #include "AgnusDebugger.h"
