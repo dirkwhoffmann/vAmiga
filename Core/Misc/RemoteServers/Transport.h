@@ -33,7 +33,7 @@ protected:
     TransportDelegate &delegate;
 
     // The current server state
-    SrvState state = SrvState::OFF;
+    std::atomic<SrvState> state { SrvState::OFF };
 
     // Sticky "go away" flag for the server thread
     std::atomic<bool> stopRequested { false };
