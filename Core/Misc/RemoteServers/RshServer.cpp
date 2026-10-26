@@ -9,6 +9,7 @@
 
 #include "vaconfig.h"
 #include "RshServer.h"
+#include <future>
 #include "Amiga.h"
 #include "RetroShell.h"
 #include "httplib.h"

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Roms/RomManager.h"
+#include "Roms/RomTypes.h"
 
 namespace vamiga {
 

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "vaconfig.h"
+#include "Roms/RomManager.h"
 #include "Memory.h"
 #include "Emulator.h"
 #include "Agnus.h"
@@ -651,7 +652,7 @@ RomTraits
 Memory::getRomTraits(u32 crc)
 {
     // Crawl through the Rom database
-    if (auto traits = RomManager::shared().resolveCRC32(crc)) return *traits;
+    if (auto traits = retro::vault::RomManager::shared().resolveCRC32(crc)) return *traits;
 
     return RomTraits {
 

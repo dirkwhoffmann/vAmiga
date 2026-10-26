@@ -13,7 +13,6 @@
 #include <functional>
 
 #include "BasicTypes.h"
-#include <future>
 
 namespace vamiga {
 
