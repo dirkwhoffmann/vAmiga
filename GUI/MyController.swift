@@ -672,6 +672,14 @@ extension MyController {
         case .ALARM:
             loginfo(.events, "Received Alarm \(msg.value)")
             
+        case .ROM_LOADED:
+            // A failure is reported to the caller of the load function
+            statusBarIsDirty = true
+            
+        case .HIBERNATED, .HDR_IMPORTED, .STOP:
+            // Results of requests that this app does not send
+            break
+            
         default:
             warn("Unknown message: \(msg)")
             fatalError()

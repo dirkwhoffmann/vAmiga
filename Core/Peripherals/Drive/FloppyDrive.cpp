@@ -1206,6 +1206,22 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 void
 FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path &path)
 {
+    try {
+
+        insertNewUnreported(dos, bb, name, path);
+
+    } catch (...) {
+
+        // Inform the GUI (the exception is also passed on to the caller)
+        msgQueue.put(Message { .type = Msg::DISK_INSERT, .drive = DriveMsg { i16(objid), 0, 0, 0 } },
+                     "", std::current_exception());
+        throw;
+    }
+}
+
+void
+FloppyDrive::insertNewUnreported(FSFormat dos, BootBlockId bb, string name, const fs::path &path)
+{
     logmsg(LOG_DSK,
           "insertNew(%s, %s, %s, %s)\n",
           FSFormatEnum::key(dos), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
@@ -1245,6 +1261,7 @@ FloppyDrive::insertNew(FSFormat dos, BootBlockId bb, string name, const fs::path
 
     // Insert the ADF
     swapDisk(adf);
+
 }
 
 void
@@ -1293,7 +1310,7 @@ FloppyDrive::swapDisk(const fs::path &path)
 
         try {
 
-            insertNew(FSFormat::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), path);
+            insertNewUnreported(FSFormat::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), path);
 
         }  catch (FSError &err) {
 

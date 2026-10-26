@@ -713,20 +713,40 @@ Memory::loadRom(RomFile &file)
     // Remove extended Rom (if any)
     deleteExt();
 
+    // Inform the GUI
+    msgQueue.put(Msg::ROM_LOADED, 0);
 }
 
 void
 Memory::loadRom(const fs::path &path)
 {
-    RomFile file(path);
-    loadRom(file);
+    try {
+
+        RomFile file(path);
+        loadRom(file);
+
+    } catch (...) {
+
+        // Inform the GUI (the exception is also passed on to the caller)
+        msgQueue.put(Message { .type = Msg::ROM_LOADED, .value = 0 }, "", std::current_exception());
+        throw;
+    }
 }
 
 void
 Memory::loadRom(const u8 *buf, isize len)
 {
-    RomFile file(buf, len);
-    loadRom(file);
+    try {
+
+        RomFile file(buf, len);
+        loadRom(file);
+
+    } catch (...) {
+
+        // Inform the GUI (the exception is also passed on to the caller)
+        msgQueue.put(Message { .type = Msg::ROM_LOADED, .value = 0 }, "", std::current_exception());
+        throw;
+    }
 }
 
 void
@@ -738,20 +758,41 @@ Memory::loadExt(RomFile &file)
     // Load Rom
     file.copy(ext);
     extTraits.invalidate();
+
+    // Inform the GUI
+    msgQueue.put(Msg::ROM_LOADED, 1);
 }
 
 void
 Memory::loadExt(const fs::path &path)
 {
-    RomFile file(path);
-    loadExt(file);
+    try {
+
+        RomFile file(path);
+        loadExt(file);
+
+    } catch (...) {
+
+        // Inform the GUI (the exception is also passed on to the caller)
+        msgQueue.put(Message { .type = Msg::ROM_LOADED, .value = 1 }, "", std::current_exception());
+        throw;
+    }
 }
 
 void
 Memory::loadExt(const u8 *buf, isize len)
 {
-    RomFile file(buf, len);
-    loadExt(file);
+    try {
+
+        RomFile file(buf, len);
+        loadExt(file);
+
+    } catch (...) {
+
+        // Inform the GUI (the exception is also passed on to the caller)
+        msgQueue.put(Message { .type = Msg::ROM_LOADED, .value = 1 }, "", std::current_exception());
+        throw;
+    }
 }
 
 void

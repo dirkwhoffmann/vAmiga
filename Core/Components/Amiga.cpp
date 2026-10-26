@@ -1462,7 +1462,16 @@ Amiga::scheduleNextSnpEvent()
 void
 Amiga::loadSnapshot(const fs::path &path)
 {
-    loadSnapshot(Snapshot(path));
+    try {
+
+        loadSnapshot(Snapshot(path));
+
+    } catch (...) {
+
+        // Inform the GUI (the exception is also passed on to the caller)
+        msgQueue.put(Msg::SNAPSHOT_RESTORED, std::current_exception());
+        throw;
+    }
 }
 
 void
@@ -1474,8 +1483,22 @@ Amiga::loadSnapshot(const Snapshot &snapshot)
     // Uncompress the snapshot
     snap.uncompress();
     
-    // Restore the saved state (may throw)
-    load(snap.getData() + sizeof(SnapshotHeader));
+    try {
+
+        // Restore the saved state (may throw)
+        load(snap.getData() + sizeof(SnapshotHeader));
+
+    } catch (...) {
+
+        /* If we reach this point, the emulator has been put into an
+         * inconsistent state due to corrupted snapshot data. We cannot
+         * continue emulation, because it would likely crash the
+         * application. Because we cannot revert to the old state either,
+         * we perform a hard reset to eliminate the inconsistency.
+         */
+        emulator.put(Command(Cmd::HARD_RESET));
+        throw;
+    }
     
     // Inform the GUI
     msgQueue.put(Msg::SNAPSHOT_RESTORED);

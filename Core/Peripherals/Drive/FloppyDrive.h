@@ -433,6 +433,10 @@ public:
     void insertNew(amiga::FSFormat fs, amiga::BootBlockId bb,
                    string name, const fs::path &path = {});
 
+    // Same as insertNew(), but a failure is only thrown, not sent to the GUI
+    void insertNewUnreported(amiga::FSFormat fs, amiga::BootBlockId bb,
+                             string name, const fs::path &path = {});
+
 private:
     
     template <EventSlot s> void ejectDisk(Cycle delay);

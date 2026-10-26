@@ -89,7 +89,7 @@ enum class Msg : long
     DRIVE_MOTOR,        ///< The motor of a floppy drive changed (drive.nr = drive, drive.value = on or off)
     DRIVE_STEP,         ///< A floppy drive moved its head (drive.nr = drive, drive.value = cylinder, drive.volume, drive.pan)
     DRIVE_POLL,         ///< A floppy drive without a disk moved its head to poll for one (same payload as DRIVE_STEP)
-    DISK_INSERT,        ///< A disk was inserted (drive.nr = drive, drive.volume, drive.pan)
+    DISK_INSERT,        ///< A disk was inserted (drive.nr = drive, drive.volume, drive.pan; carries the exception if it failed)
     DISK_EJECT,         ///< A disk was ejected (drive.nr = drive, drive.volume, drive.pan)
     DISK_PROTECTED,     ///< The write protection of the disk changed (value = protected)
     
@@ -123,9 +123,12 @@ enum class Msg : long
     SER_IN,             ///< Data arrived at the serial port while its log buffer was empty
     SER_OUT,            ///< Data was sent from the serial port while its log buffer was empty
     
+    // ROMs
+    ROM_LOADED,         ///< A ROM was loaded (value = 0: Kickstart ROM, 1: extension ROM; carries the exception if it failed)
+
     // Snapshots
     SNAPSHOT_TAKEN,     ///< An automatic snapshot was taken (snapshot.snapshot = heap object that the receiver must delete)
-    SNAPSHOT_RESTORED,  ///< A snapshot was restored
+    SNAPSHOT_RESTORED,  ///< A snapshot was restored (carries the exception if it failed)
     SNAPSHOT_SAVED,     ///< A snapshot has been saved (carries the exception if it failed)
     
     // Workspaces
@@ -243,6 +246,7 @@ struct MsgEnum : Reflectable<MsgEnum, Msg>
             case Msg::SER_IN:                return "SER_IN";
             case Msg::SER_OUT:               return "SER_OUT";
                 
+            case Msg::ROM_LOADED:            return "ROM_LOADED";
             case Msg::SNAPSHOT_TAKEN:        return "SNAPSHOT_TAKEN";
             case Msg::SNAPSHOT_RESTORED:     return "SNAPSHOT_RESTORED";
             case Msg::SNAPSHOT_SAVED:        return "SNAPSHOT_SAVED";

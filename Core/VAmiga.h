@@ -232,6 +232,12 @@ public:
      *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void loadSnapshot(const std::filesystem::path &path);
+    /** @brief  Asynchronous version of loadSnapshot(): queues the request and returns at once.
+     *
+     *  Success and failure are both reported by the usual message
+     *  (SNAPSHOT_RESTORED). If the request failed, the message carries the exception.
+     */
+    void loadSnapshotAsync(const std::filesystem::path &path);
 
     /** @brief  Saves a snapshot to disk.
      *
@@ -936,6 +942,13 @@ public:
      */
     void loadRom(const std::filesystem::path &path);
     void loadExt(const std::filesystem::path &path);
+    /** @brief  Asynchronous version of loadRom() and loadExt(): queues the request and returns at once.
+     *
+     *  Success and failure are both reported by a ROM_LOADED message. If the
+     *  request failed, the message carries the exception.
+     */
+    void loadRomAsync(const std::filesystem::path &path);
+    void loadExtAsync(const std::filesystem::path &path);
 
     /** @brief  Loads a ROM provided by a memory buffer
      *
@@ -1142,6 +1155,13 @@ public:
      */
     void insertBlankDisk(amiga::FSFormat fstype, amiga::BootBlockId id,
                          string name, const std::filesystem::path &path = {});
+    /** @brief  Asynchronous version of insertBlankDisk(): queues the request and returns at once.
+     *
+     *  Success and failure are both reported by the usual message
+     *  (DISK_INSERT). If the request failed, the message carries the exception.
+     */
+    void insertBlankDiskAsync(amiga::FSFormat fstype, amiga::BootBlockId id,
+                              string name, const std::filesystem::path &path = {});
 
     /** @brief  Inserts a disk created from an image file.
      *  @param  path   Path to the disk image.
@@ -2386,6 +2406,11 @@ public:
     //
     
     VAmiga();
+    /** @brief  Halts the emulator thread and destroys the emulator
+     *
+     *  A suspension that the calling thread still holds is released first,
+     *  because a suspended emulator thread cannot be halted.
+     */
     ~VAmiga();
 
     VAmiga(const VAmiga &) = delete;
@@ -2619,8 +2644,8 @@ public:
      *  @note The function blocks until the emulator thread has terminated. It
      *  does nothing if there is no running emulator thread (e.g., if the
      *  thread has already been halted), so it is safe to call it more than
-     *  once. It must not be called while the emulator thread is suspended,
-     *  because a suspended thread cannot terminate.
+     *  once. It throws a CoreError if the calling thread has suspended the
+     *  emulator thread, because a suspended thread cannot terminate.
      */
     void halt();
     
