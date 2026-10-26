@@ -2757,6 +2757,20 @@ VAmiga::exportConfig(std::ostream &stream, bool diff) const
 }
 
 void
+VAmiga::call(const std::function<void()> &fn)
+{
+    VAMIGA_PUBLIC
+    emu->call(fn);
+}
+
+void
+VAmiga::callAsync(std::function<void()> fn, std::function<void(std::exception_ptr)> done)
+{
+    VAMIGA_PUBLIC
+    emu->callAsync(std::move(fn), std::move(done));
+}
+
+void
 VAmiga::put(const Command &cmd, const std::string &str)
 {
     VAMIGA_PUBLIC
