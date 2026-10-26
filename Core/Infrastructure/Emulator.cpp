@@ -36,6 +36,8 @@ Emulator::Emulator()
 
     info.bind([this] { return cacheInfo(); } );
     metrics.bind([this] { return cacheMetrics(); } );
+
+    cmdQueue.onFull = [this] { main.msgQueue.put(Msg::QUEUE_FULL); };
 }
 
 Emulator::~Emulator()
