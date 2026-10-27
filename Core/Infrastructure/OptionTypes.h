@@ -175,14 +175,9 @@ enum class Opt : long
     HDR_STEP_VOLUME,        ///< Head step volume
 
     // Ports
-<<<<<<< HEAD
     SER_DEVICE,             ///< Serial device type
     SER_VERBOSE,            ///< Verbose
-=======
-    SER_DEVICE,
-    SER_VERBOSE,
     SER_HANDSHAKE,
->>>>>>> master
     
     // MIDI
     MIDI_DEVICE_OUT,        ///< MIDI output device
