@@ -173,6 +173,7 @@ Defaults::fallbacks()
 
     registerDefault(Opt::SER_DEVICE,                 (i64)SerialPortDevice::NONE);
     registerDefault(Opt::SER_VERBOSE,                0);
+    registerDefault(Opt::SER_HANDSHAKE,              0);
 
     registerDefault(Opt::DENISE_HIDDEN_BITPLANES,    0);
     registerDefault(Opt::DENISE_HIDDEN_SPRITES,      0);

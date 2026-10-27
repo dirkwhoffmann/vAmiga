@@ -132,6 +132,7 @@ SerServer::didConnect()
     transmittedBytes = 0;
     processedBytes = 0;
     lostBytes = 0;
+    onTheLine = -1;
 
     // Start scheduling messages
     assert(agnus.id[SLOT_SER] == EVENT_NONE);
@@ -165,6 +166,16 @@ SerServer::serviceSerEvent()
         return;
     }
 
+    // The frame started one event ago has now been shifted in completely
+    if (onTheLine >= 0) {
+
+        // Hand it over to the UART, followed by its stop bit
+        uart.receiveShiftReg = u16(onTheLine | (1 << uart.packetLength()));
+        uart.copyFromReceiveShiftRegister();
+        processedBytes++;
+        onTheLine = -1;
+    }
+
     // Original SerServer code for null modem
     if (buffer.isEmpty()) {
 
@@ -176,12 +187,13 @@ SerServer::serviceSerEvent()
         // Exit buffering mode if now new symbols came in for quite a while
         if (++skippedTransmissions > 8) buffering = false;
 
-    } else {
+    } else if (!serialPort.getConfig().handshake || serialPort.getRTS()) {
 
-        // Hand the oldest buffer element over to the UART
-        uart.receiveShiftReg = buffer.read();
-        uart.copyFromReceiveShiftRegister();
-        processedBytes++;
+        /* Start sending the oldest buffer element. With handshaking, the peer
+         * checks its CTS line, which is the Amiga's RTS, before each byte. A byte
+         * that has already started is completed.
+         */
+        onTheLine = buffer.read();
         skippedTransmissions = 0;
     }
 
@@ -203,7 +215,10 @@ SerServer::scheduleNextEvent()
         pulseWidth = 12000;
     }
 
-    agnus.scheduleRel<SLOT_SER>(8 * pulseWidth, SER_RECEIVE);
+    // One frame per event: a start bit, 8 or 9 data bits (SERPER.LONG) and a stop bit. This is
+    // the shortest frame a sender can put on the line, and the period the UART's own receiver
+    // (serviceRxdEvent) works with.
+    agnus.scheduleRel<SLOT_SER>((uart.packetLength() + 2) * pulseWidth, SER_RECEIVE);
 }
 
 }

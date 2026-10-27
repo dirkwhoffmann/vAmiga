@@ -175,8 +175,14 @@ enum class Opt : long
     HDR_STEP_VOLUME,        ///< Head step volume
 
     // Ports
+<<<<<<< HEAD
     SER_DEVICE,             ///< Serial device type
     SER_VERBOSE,            ///< Verbose
+=======
+    SER_DEVICE,
+    SER_VERBOSE,
+    SER_HANDSHAKE,
+>>>>>>> master
     
     // MIDI
     MIDI_DEVICE_OUT,        ///< MIDI output device
@@ -381,6 +387,7 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
                 
             case Opt::SER_DEVICE:                return "SER.DEVICE";
             case Opt::SER_VERBOSE:               return "SER.VERBOSE";
+            case Opt::SER_HANDSHAKE:             return "SER.HANDSHAKE";
             
             case Opt::MIDI_DEVICE_OUT:           return "MIDI_DEVICE_OUT";
             case Opt::MIDI_DEVICE_IN:            return "MIDI_DEVICE_IN";
@@ -573,6 +580,7 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
                 
             case Opt::SER_DEVICE:                return "Serial device type";
             case Opt::SER_VERBOSE:               return "Verbose";
+            case Opt::SER_HANDSHAKE:             return "RTS/CTS handshake on the null modem cable";
             
             case Opt::MIDI_DEVICE_OUT:           return "MIDI output device";
             case Opt::MIDI_DEVICE_IN:            return "MIDI input device";

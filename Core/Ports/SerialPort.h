@@ -39,7 +39,8 @@ class SerialPort final : public SubComponent {
     Options options = {
 
         Opt::SER_DEVICE,
-        Opt::SER_VERBOSE
+        Opt::SER_VERBOSE,
+        Opt::SER_HANDSHAKE
     };
 
     // Current configuration
@@ -168,6 +169,9 @@ public:
 private:
 
     void setPort(u32 mask, bool value);
+
+    // Drives the lines the null modem's peer controls (CTS, DSR, CD)
+    void setPeerLines(bool value);
 
 
     //

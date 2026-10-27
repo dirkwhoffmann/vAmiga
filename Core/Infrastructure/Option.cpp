@@ -165,6 +165,7 @@ OptionParser::create(Opt opt, i64 arg)
 
         case Opt::SER_DEVICE:                return enumParser.template operator()<SerialPortDeviceEnum,SerialPortDevice>();
         case Opt::SER_VERBOSE:               return boolParser();
+        case Opt::SER_HANDSHAKE:             return boolParser();
 
         case Opt::BLITTER_ACCURACY:          return numParser();
 
