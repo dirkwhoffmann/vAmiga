@@ -80,9 +80,14 @@ namespace vamiga {
 
 class API {
 
-public:
+    friend class VAmiga;
+    friend struct SuspendResume;
+
+protected:
 
     class Emulator *emu = nullptr;
+
+public:
 
     API() { }
     API(Emulator *emu) : emu(emu) { }
@@ -117,9 +122,9 @@ class AmigaAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Amiga *amiga = nullptr;
+
+public:
     
     /// @name Analyzing the emulator
     /// @{
@@ -353,9 +358,9 @@ class XRayAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class XRay *xray = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -378,9 +383,9 @@ class LogicAnalyzerAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class LogicAnalyzer *logicAnalyzer = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -412,9 +417,9 @@ class BlitterAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Blitter *blitter = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -457,13 +462,13 @@ class GuardsAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     // The guard list this API operates on
     GuardType type = GuardType::BREAKPOINT;
 
     class GuardList *guards = nullptr;
-    
+
+public:
+
     /** @brief  Returns the number of guards in the guard list.
      */
     isize elements() const;
@@ -581,9 +586,9 @@ class CopperAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Copper *copper = nullptr;
+
+public:
 
     GuardsAPI breakpoints;
     GuardsAPI watchpoints;
@@ -629,9 +634,9 @@ class AgnusAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Agnus *agnus = nullptr;
+
+public:
     
     CopperAPI copper;
     BlitterAPI blitter;
@@ -681,9 +686,9 @@ class CIAAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class CIA *cia = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -718,9 +723,9 @@ class CPUDebuggerAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class CPU *cpu = nullptr;
+
+public:
 
     /** @brief  Returns the number of instructions in the record buffer.
      *  @note   The record buffer is only filled in track mode. To save
@@ -772,9 +777,9 @@ class CPUAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class CPU *cpu = nullptr;
+
+public:
 
     CPUDebuggerAPI debugger;
     GuardsAPI breakpoints;
@@ -802,9 +807,9 @@ class DeniseAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Denise *denise = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -832,9 +837,9 @@ class MemoryDebuggerAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Memory *mem = nullptr;
+
+public:
     
     /// @name Debugging memory
     /// @{
@@ -888,9 +893,9 @@ class MemoryAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Memory *mem = nullptr;
+
+public:
     
     MemoryDebuggerAPI debugger;
 
@@ -983,9 +988,9 @@ class AudioChannelAPI : public API {
     friend class VAmiga;
     isize channel = 0;
     
-public:
-
     class Paula *paula = nullptr;
+
+public:
     
     AudioChannelAPI(isize channel) : API(), channel(channel) { }
 
@@ -1006,9 +1011,9 @@ class DiskControllerAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class DiskController *diskController = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1031,9 +1036,9 @@ class UARTAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class UART *uart = nullptr;
+
+public:
     
     /** @brief  Returns the component's current state.
      *
@@ -1052,9 +1057,9 @@ class PaulaAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Paula *paula = nullptr;
+
+public:
     
     AudioChannelAPI audioChannel0 = AudioChannelAPI(0);
     AudioChannelAPI audioChannel1 = AudioChannelAPI(1);
@@ -1084,9 +1089,9 @@ class RTCAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class RTC *rtc = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1112,9 +1117,9 @@ class FloppyDriveAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class FloppyDrive *drive = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1228,9 +1233,9 @@ class HdControllerAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class HdController *controller = nullptr;
+
+public:
     
     /** @brief  Provides details about the controller
      */
@@ -1265,9 +1270,9 @@ class HardDriveAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class HardDrive *drive = nullptr;
+
+public:
     
     HdControllerAPI controller;
 
@@ -1455,9 +1460,9 @@ class JoystickAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Joystick *joystick = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1501,9 +1506,9 @@ class KeyboardAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Keyboard *keyboard = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1583,9 +1588,9 @@ class MouseAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Mouse *mouse = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1647,9 +1652,9 @@ class AudioPortAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class AudioPort *port = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1746,9 +1751,9 @@ class ControlPortAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class ControlPort *controlPort = nullptr;
+
+public:
     
     JoystickAPI joystick;
     MouseAPI mouse;
@@ -1775,9 +1780,9 @@ class SerialPortAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class SerialPort *serialPort = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1817,9 +1822,9 @@ class VideoPortAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class VideoPort *videoPort = nullptr;
+
+public:
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1935,9 +1940,9 @@ class MsgQueueAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class MsgQueue *msgQueue = nullptr;
+
+public:
 
     /** @brief  Locks the message queue
      */
@@ -1989,9 +1994,9 @@ class DefaultsAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class Defaults *defaults = nullptr;
+
+public:
     
     DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
 
@@ -2199,9 +2204,9 @@ class RetroShellAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class RetroShell *retroShell = nullptr;
+
+public:
     
     /// @name Querying the console
     /// @{
@@ -2308,9 +2313,9 @@ class RemoteManagerAPI : public API {
 
     friend class VAmiga;
     
-public:
-
     class RemoteManager *remoteManager = nullptr;
+
+public:
     
     /// @name Analyzing the emulator
     /// @{
@@ -3145,6 +3150,76 @@ public:
     void putAsync(Cmd type, GamePadCmd payload)  { putAsync(Command(type, payload)); }
     void putAsync(Cmd type, CoordCmd payload)  { putAsync(Command(type, payload)); }
     void putAsync(Cmd type, AlarmCmd payload)  { putAsync(Command(type, payload)); }
+
+    /** @brief  Gives access to the internal components
+     *
+     *  @warning These are advanced interfaces. They return the internal objects
+     *  the APIs operate on, bypassing all synchronization the dedicated API
+     *  functions provide. Use them only while the emulator is suspended or from
+     *  within a function passed to call(). To make use of the objects, include
+     *  the corresponding internal headers. What they offer is not covered by
+     *  any compatibility promise.
+     *
+     *  The getters that take a number throw a CoreError
+     *  (CoreError::OPT_INV_ARG) if the number is out of range.
+     */
+    class Emulator &getEmulator();
+    /// Returns the Amiga.
+    class Amiga &getAmiga();
+    /// Returns Agnus.
+    class Agnus &getAgnus();
+    /// Returns the logic analyzer.
+    class LogicAnalyzer &getLogicAnalyzer();
+    /// Returns the X-Ray visualizer.
+    class XRay &getXRay();
+    /// Returns the Copper.
+    class Copper &getCopper();
+    /// Returns the Blitter.
+    class Blitter &getBlitter();
+    /// Returns a CIA chip (nr = 0 for CIA A, 1 for CIA B).
+    class CIA &getCIA(isize nr);
+    /// Returns the CPU.
+    class CPU &getCPU();
+    /// Returns Denise.
+    class Denise &getDenise();
+    /// Returns the memory.
+    class Memory &getMemory();
+    /// Returns Paula.
+    class Paula &getPaula();
+    /// Returns the disk controller.
+    class DiskController &getDiskController();
+    /// Returns the UART.
+    class UART &getUART();
+    /// Returns the real-time clock.
+    class RTC &getRTC();
+    /// Returns the audio port.
+    class AudioPort &getAudioPort();
+    /// Returns a control port (nr = 0 or 1).
+    class ControlPort &getControlPort(isize nr);
+    /// Returns the joystick of a control port (port = 0 or 1).
+    class Joystick &getJoystick(isize port);
+    /// Returns the mouse of a control port (port = 0 or 1).
+    class Mouse &getMouse(isize port);
+    /// Returns the serial port.
+    class SerialPort &getSerialPort();
+    /// Returns the video port.
+    class VideoPort &getVideoPort();
+    /// Returns a floppy drive (nr = 0 ... 3).
+    class FloppyDrive &getFloppyDrive(isize nr);
+    /// Returns a hard drive (nr = 0 ... 3).
+    class HardDrive &getHardDrive(isize nr);
+    /// Returns the controller of a hard drive (nr = 0 ... 3).
+    class HdController &getHdController(isize nr);
+    /// Returns the keyboard.
+    class Keyboard &getKeyboard();
+    /// Returns the message queue.
+    class MsgQueue &getMsgQueue();
+    /// Returns the remote server manager.
+    class RemoteManager &getRemoteManager();
+    /// Returns RetroShell.
+    class RetroShell &getRetroShell();
+    /// Returns the user defaults storage.
+    class Defaults &getDefaults();
     
     
     /// @}

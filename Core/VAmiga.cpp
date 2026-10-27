@@ -2954,4 +2954,197 @@ AmigaAPI::getMsg(Message &msg, std::exception_ptr &exception)
     return amiga->msgQueue.get(msg, exception);
 }
 
+
+//
+// Danger zone: raw access to the components
+//
+
+Emulator &
+VAmiga::getEmulator()
+{
+    return *emu;
+}
+
+Amiga &
+VAmiga::getAmiga()
+{
+    return *amiga.amiga;
+}
+
+Agnus &
+VAmiga::getAgnus()
+{
+    return *agnus.agnus;
+}
+
+LogicAnalyzer &
+VAmiga::getLogicAnalyzer()
+{
+    return *agnus.logicAnalyzer.logicAnalyzer;
+}
+
+XRay &
+VAmiga::getXRay()
+{
+    return *agnus.xray.xray;
+}
+
+Copper &
+VAmiga::getCopper()
+{
+    return *agnus.copper.copper;
+}
+
+Blitter &
+VAmiga::getBlitter()
+{
+    return *agnus.blitter.blitter;
+}
+
+CIA &
+VAmiga::getCIA(isize nr)
+{
+    if (nr < 0 || nr > 1) throw CoreError(CoreError::OPT_INV_ARG, "0...1");
+
+    return nr == 0 ? *ciaA.cia : *ciaB.cia;
+}
+
+CPU &
+VAmiga::getCPU()
+{
+    return *cpu.cpu;
+}
+
+Denise &
+VAmiga::getDenise()
+{
+    return *denise.denise;
+}
+
+Memory &
+VAmiga::getMemory()
+{
+    return *mem.mem;
+}
+
+Paula &
+VAmiga::getPaula()
+{
+    return *paula.paula;
+}
+
+DiskController &
+VAmiga::getDiskController()
+{
+    return *paula.diskController.diskController;
+}
+
+UART &
+VAmiga::getUART()
+{
+    return *paula.uart.uart;
+}
+
+RTC &
+VAmiga::getRTC()
+{
+    return *rtc.rtc;
+}
+
+AudioPort &
+VAmiga::getAudioPort()
+{
+    return *audioPort.port;
+}
+
+ControlPort &
+VAmiga::getControlPort(isize nr)
+{
+    if (nr < 0 || nr > 1) throw CoreError(CoreError::OPT_INV_ARG, "0...1");
+
+    return nr == 0 ? *controlPort1.controlPort : *controlPort2.controlPort;
+}
+
+Joystick &
+VAmiga::getJoystick(isize port)
+{
+    if (port < 0 || port > 1) throw CoreError(CoreError::OPT_INV_ARG, "0...1");
+
+    return port == 0 ? *controlPort1.joystick.joystick : *controlPort2.joystick.joystick;
+}
+
+Mouse &
+VAmiga::getMouse(isize port)
+{
+    if (port < 0 || port > 1) throw CoreError(CoreError::OPT_INV_ARG, "0...1");
+
+    return port == 0 ? *controlPort1.mouse.mouse : *controlPort2.mouse.mouse;
+}
+
+SerialPort &
+VAmiga::getSerialPort()
+{
+    return *serialPort.serialPort;
+}
+
+VideoPort &
+VAmiga::getVideoPort()
+{
+    return *videoPort.videoPort;
+}
+
+FloppyDrive &
+VAmiga::getFloppyDrive(isize nr)
+{
+    if (nr < 0 || nr > 3) throw CoreError(CoreError::OPT_INV_ARG, "0...3");
+
+    return *df[nr]->drive;
+}
+
+HardDrive &
+VAmiga::getHardDrive(isize nr)
+{
+    if (nr < 0 || nr > 3) throw CoreError(CoreError::OPT_INV_ARG, "0...3");
+
+    return *hd[nr]->drive;
+}
+
+HdController &
+VAmiga::getHdController(isize nr)
+{
+    if (nr < 0 || nr > 3) throw CoreError(CoreError::OPT_INV_ARG, "0...3");
+
+    return *hd[nr]->controller.controller;
+}
+
+Keyboard &
+VAmiga::getKeyboard()
+{
+    return *keyboard.keyboard;
+}
+
+MsgQueue &
+VAmiga::getMsgQueue()
+{
+    return *msgQueue.msgQueue;
+}
+
+RemoteManager &
+VAmiga::getRemoteManager()
+{
+    return *remoteManager.remoteManager;
+}
+
+RetroShell &
+VAmiga::getRetroShell()
+{
+    return *retroShell.retroShell;
+}
+
+Defaults &
+VAmiga::getDefaults()
+{
+    return *defaults.defaults;
+}
+
 }

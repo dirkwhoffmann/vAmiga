@@ -772,7 +772,11 @@ ImageInfo scan(const fs::path &url);
 // FloppyDriveProxy
 //
 
-@interface FloppyDriveProxy : CoreComponentProxy { }
+@interface FloppyDriveProxy : CoreComponentProxy {
+
+    // The emulator this drive belongs to
+    @public void *emu;
+}
 
 @property (readonly) FloppyDriveConfig config;
 @property (readonly) FloppyDriveInfo info;
@@ -819,6 +823,9 @@ ImageInfo scan(const fs::path &url);
 @interface HardDriveProxy : CoreComponentProxy { 
 
     HdControllerProxy *controller;
+
+    // The emulator this drive belongs to
+    @public void *emu;
 }
 
 @property (readonly, strong) HdControllerProxy *controller;

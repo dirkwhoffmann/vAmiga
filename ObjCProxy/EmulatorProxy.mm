@@ -2289,8 +2289,8 @@ ImageInfo scan(const fs::path &url)
                        format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex
 {
-    auto drive = (FloppyDriveAPI *)proxy->obj;
-    try { return [self make: drive->drive->exportDisk(fmt).release()]; }
+    auto &drive = ((VAmiga *)proxy->emu)->getFloppyDrive([proxy info].nr);
+    try { return [self make: drive.exportDisk(fmt).release()]; }
     catch(Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2351,8 +2351,8 @@ ImageInfo scan(const fs::path &url)
                        format:(ImageFormat)fmt
                     exception:(ExceptionWrapper *)ex
 {
-    auto drive = (HardDriveAPI *)proxy->obj;
-    try { return [self make: drive->drive->exportDisk(fmt).release()]; }
+    auto &drive = ((VAmiga *)proxy->emu)->getHardDrive([proxy info].nr);
+    try { return [self make: drive.exportDisk(fmt).release()]; }
     catch(Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2562,17 +2562,25 @@ ImageInfo scan(const fs::path &url)
     diskController = [[DiskControllerProxy alloc] initWith:&vamiga->paula.diskController];
     xray = [[XRayProxy alloc] initWith:&vamiga->agnus.xray];
     df0 = [[FloppyDriveProxy alloc] initWith:&vamiga->df0];
+    df0->emu = vamiga;
     df1 = [[FloppyDriveProxy alloc] initWith:&vamiga->df1];
+    df1->emu = vamiga;
     df2 = [[FloppyDriveProxy alloc] initWith:&vamiga->df2];
+    df2->emu = vamiga;
     df3 = [[FloppyDriveProxy alloc] initWith:&vamiga->df3];
+    df3->emu = vamiga;
     hd0 = [[HardDriveProxy alloc] initWith:&vamiga->hd0];
+    hd0->emu = vamiga;
     hd1 = [[HardDriveProxy alloc] initWith:&vamiga->hd1];
+    hd1->emu = vamiga;
     hd2 = [[HardDriveProxy alloc] initWith:&vamiga->hd2];
+    hd2->emu = vamiga;
     hd3 = [[HardDriveProxy alloc] initWith:&vamiga->hd3];
+    hd3->emu = vamiga;
     keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
     logicAnalyzer = [[LogicAnalyzerProxy alloc] initWith:&vamiga->agnus.logicAnalyzer];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
-    midiManager = [[MidiManagerProxy alloc] initWith:&vamiga->amiga.amiga->midiManager];
+    midiManager = [[MidiManagerProxy alloc] initWith:&vamiga->getAmiga().midiManager];
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];
     retroShell = [[RetroShellProxy alloc] initWith:&vamiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&vamiga->rtc];
