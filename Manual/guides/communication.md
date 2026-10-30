@@ -31,6 +31,22 @@ Which mechanism a function uses is part of its documentation. In general, plain-
 
 Because the queue is processed in order, a blocking call also guarantees that all earlier requests have been carried out.
 
+### Synchronizing with the emulator thread
+
+An asynchronous function returns before the emulator thread has carried out the request, so reading back what has just been changed may still return the old value. [sync()](@ref vamiga::VAmiga::sync) closes this gap. It blocks the calling thread until the emulator thread has carried out every command that was queued before the call, and it changes nothing itself. Use it when asynchronous calls have to be complete before the next step:
+
+```cpp
+vamiga.setAsync(Opt::AGNUS_REVISION, long(AgnusRevision::ECS_1MB));
+
+// Wait until the change has been applied
+vamiga.sync();
+
+// Returns the new revision
+auto revision = vamiga.get(Opt::AGNUS_REVISION);
+```
+
+Like the other blocking functions, `sync()` throws a [CoreError](@ref vamiga::CoreError) with code [NOT_LAUNCHED](@ref vamiga::CoreError::NOT_LAUNCHED) if the emulator thread cannot carry out commands, and it must not be called from the emulator thread.
+
 A blocking function throws a [CoreError](@ref vamiga::CoreError) with code [NOT_LAUNCHED](@ref vamiga::CoreError::NOT_LAUNCHED) if the emulator thread cannot carry out the request, i.e., if it has not been launched, has been halted, or has been suspended. Asynchronous requests can be issued in all these situations.
 
 Because an asynchronous request cannot throw to the caller, most functions report the outcome with the message that is sent on success anyway (e.g., `SNAPSHOT_SAVED`). If the operation failed, the message carries the exception as the third argument of the callback:
