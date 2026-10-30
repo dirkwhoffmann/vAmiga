@@ -28,3 +28,11 @@
   font-size: 13px;
   line-height: 20px;
 }
+
+/* Landing page: the hero logo is wider than tall, so let it use more width */
+@media (min-width: 640px) {
+  .VPHero .image-src {
+    max-width: 440px;
+    max-height: 320px;
+  }
+}
