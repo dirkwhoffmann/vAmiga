@@ -29,8 +29,8 @@ struct MediaError : public Error {
     static constexpr long SNAP_CORRUPTED    = 13; ///< Snapshot data is corrupted
 
     // Encrypted Roms
-    static constexpr long MISSING_ROM_KEY   = 30;
-    static constexpr long INVALID_ROM_KEY   = 31;
+    static constexpr long MISSING_ROM_KEY   = 30;  ///< No "rom.key" file was found (encrypted ROMs)
+    static constexpr long INVALID_ROM_KEY   = 31;  ///< The ROM key is invalid (encrypted ROMs)
 
     const char *errstr() const noexcept override {
 
@@ -50,10 +50,15 @@ struct MediaError : public Error {
         return "???";
     }
 
+    /// Creates an error with an error code and a descriptive string
     explicit MediaError(long fault, const string &s);
+    /// Creates an error with an error code and a descriptive string
     explicit MediaError(long fault, const char *s) : MediaError(fault, string(s)) { };
+    /// Creates an error with an error code and a file path
     explicit MediaError(long fault, const fs::path &p) : MediaError(fault, p.string()) { };
+    /// Creates an error with an error code and a number
     explicit MediaError(long fault, std::integral auto v) : MediaError(fault, std::to_string(v)) { };
+    /// Creates an error with an error code
     explicit MediaError(long fault) : MediaError(fault, "") { }
 };
 
