@@ -6,3 +6,4 @@ moxygen.log
 docs/index.md
 docs/api/
 docs/.vitepress/cache/
+docs/guide/

@@ -10,12 +10,12 @@
     its enumerations in "On this page".
   - Moxygen documents all enumerations on the namespace page. Each one is moved
     to a page of its own (enum-<Name>.md), and all links to it are redirected.
-  - The pages are moved to api/ (the overview page and everything else), so that
-    VitePress can show a sidebar for them. All links between pages are made
-    absolute. index.md is the landing page (home.md). The manual and the
-    developer's corner are plain Markdown pages that are not touched.
+  - The pages are sorted into guide/ (the guides) and api/ (the overview page and
+    everything else), so that VitePress can show a sidebar for each. All links between pages are made absolute.
+    index.md is the landing page (home.md). The images of the guides are copied
+    next to the pages.
 
-Usage: fix_markdown.py <docs-dir>
+Usage: fix_markdown.py <docs-dir> <guide-images-dir>
 """
 import re, shutil, sys
 from pathlib import Path
@@ -82,12 +82,14 @@ def slugs(page):
             for h in re.findall(r"(?m)^#{1,6} (.+?)\s*$", text)}
 
 def organize(docs):
-    """Moves the pages to api/ and repairs the links."""
+    """Moves the pages to guide/ and api/ and repairs the links."""
     target = {}
     for page in docs.glob("*.md"):
         name = page.name
         if name.startswith("page-api_"):
             target[name] = "api/" + name[len("page-api_"):].replace("_", "-")
+        elif name.startswith("page-guide_"):
+            target[name] = "guide/" + name[len("page-guide_"):].replace("_", "-")
         else:
             target[name] = "api/" + name
     known_slugs = {name: slugs(docs / name) for name in target}
@@ -95,7 +97,9 @@ def organize(docs):
         file, anchor = match.group(1), match.group(2) or ""
         if file not in target:
             return match.group(0)
-        if anchor:
+        if target[file].startswith("guide/"):
+            anchor = ""  # the anchors of Doxygen pages do not exist
+        elif anchor:
             # moxygen numbers anchors; VitePress headings carry no number
             known = known_slugs[file]
             name = anchor[1:]
@@ -110,7 +114,7 @@ def organize(docs):
         destination.write_text(text)
         (docs / name).unlink()
 
-def main(docs):
+def main(docs, images):
     docs = Path(docs)
     for page in docs.glob("*.md"):
         page.write_text(fix(page.read_text()))
@@ -121,8 +125,11 @@ def main(docs):
     (docs / "api.md").unlink(missing_ok=True)
     organize(docs)
     shutil.copy(Path(__file__).parent / "home.md", docs / "index.md")
+    for image in Path(images).iterdir():
+        if image.suffix in (".svg", ".png") and image.name != "icon.png":
+            shutil.copy(image, docs / "guide")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         sys.exit(__doc__)
     main(*sys.argv[1:])

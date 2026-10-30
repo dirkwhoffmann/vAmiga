@@ -109,6 +109,7 @@ INPUT                  = guides \
 FILE_PATTERNS          = *.h *.md
 RECURSIVE              = NO
 EXAMPLE_PATH           = ../Core
+IMAGE_PATH             = guides/images
 
 # The headers use C++20; the macros below only matter for a few attributes
 ENABLE_PREPROCESSING   = YES

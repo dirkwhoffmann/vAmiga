@@ -12,14 +12,13 @@
 #
 # The headers are parsed by Doxygen (Doxyfile), the XML is prepared by
 # prepare_xml.py and turned into Markdown by moxygen (fix_markdown.py sorts
-# the pages into api/). VitePress renders the site together with the manual
-# and the developer's corner (plain Markdown in docs/manual and docs/developer).
+# the pages into guide/ and api/). VitePress renders the site.
 # moxygen and VitePress are installed with "npm install".
 
 SCHEME ?= tokyo-night
 export SCHEME
 
-GENERATED = docs/*.md docs/api
+GENERATED = docs/*.md docs/guide docs/api
 
 markdown:
 	mkdir -p build
@@ -30,7 +29,7 @@ markdown:
 	@# class before it has been set. The result is correct, so the warning is filtered.
 	npx moxygen -c -p -a -f -F github -o 'docs/%s.md' build/xml > /dev/null 2> build/moxygen.err || { cat build/moxygen.err; exit 1; }
 	@grep -v 'namespace mismatch' build/moxygen.err || true
-	python3 fix_markdown.py docs
+	python3 fix_markdown.py docs guides/images
 
 all: markdown
 	npx vitepress build docs

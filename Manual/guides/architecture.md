@@ -1,0 +1,18 @@
+# Architecture {#guide_architecture}
+
+A typical app that uses the VAmiga core consists of two kinds of threads:
+
+- The **user threads** are the threads of the front-end. They call the API functions. Any thread except the emulator thread is a user thread.
+- The **emulator thread** is created by [launch()](@ref vamiga::VAmiga::launch). It lives as long as the emulator object and computes frames and audio samples.
+
+The threads never touch each other's data directly. Requests that change the state of the emulator are handed over through a *command queue* and carried out by the emulator thread. The emulator reports events back through a *message queue*.
+
+@image html architecture.svg ""
+
+The diagram shows the three situations a front-end deals with:
+
+1. **Launch.** Calling [launch()](@ref vamiga::VAmiga::launch) creates the emulator thread and registers the message callback. The callback is the only code of the front-end that runs on the emulator thread. It must not call back into the API, but forward the message to a user thread.
+2. **Asynchronous call.** Functions with an `Async` suffix, such as [runAsync()](@ref vamiga::VAmiga::runAsync), put a command into the queue and return at once. The emulator thread picks it up at the start of its next update cycle, so a state change never happens in the middle of a frame. The outcome arrives later as a message.
+3. **Blocking call.** Functions without a suffix, such as [powerOff()](@ref vamiga::VAmiga::powerOff), queue the same command, but wait until it has been carried out. They return the outcome directly, or throw an exception. Functions that send a message will do so for blocking calls, too. 
+
+Reading the state of the emulator does not involve the queue. Getters such as [isRunning()](@ref vamiga::VAmiga::isRunning) read the data directly, on the calling thread.

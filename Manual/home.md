@@ -4,7 +4,7 @@ title: vAmiga
 hero:
   name: vAmiga
   text: Documentation
-  tagline: Manual and API reference of the vAmiga emulator
+  tagline: Guide and API reference of the vAmiga emulator
   image:
     src: /icon.png
     alt: vAmiga
@@ -13,14 +13,10 @@ hero:
       text: Project Home
       link: https://dirkwhoffmann.github.io/vAmiga/
 features:
-  - icon: 📖
-    title: Manual
-    details: How to install and use vAmiga. Tutorials, how-to guides, and a reference of all settings and file formats.
-    link: /manual/Overview/About
   - icon: 🧭
-    title: Developer
-    details: Inside the emulator core. The class hierarchy, the emulator thread, the message queue, the run loop, and the event scheduler.
-    link: /developer/ClassHierarchy
+    title: Guide
+    details: How to build the core, the architecture of the emulator, how to communicate with it, and a small example application.
+    link: /guide/build
   - icon: 🛠️
     title: API
     details: An overview of the API and all classes, structs and enumerations of the emulation core.
