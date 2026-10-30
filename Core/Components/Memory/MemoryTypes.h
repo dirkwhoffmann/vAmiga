@@ -245,38 +245,38 @@ struct UnmappedMemoryEnum : utl::Reflectable<UnmappedMemoryEnum, UnmappedMemory>
 /// Configuration options of the memory.
 typedef struct
 {
-    // RAM size in bytes
+    /// RAM size in bytes
     i32 chipSize;
     i32 slowSize;                           ///< Slow RAM size (in bytes)
     i32 fastSize;                           ///< Fast RAM size (in bytes)
     
-    // ROM size in bytes
+    /// ROM size in bytes
     i32 romSize;
     i32 womSize;                            ///< Size of the Write-Once-Memory (in bytes)
     i32 extSize;                            ///< Size of the Extension ROM (in bytes)
     
-    // First memory page where the extended ROM is blended it
+    /// First memory page where the extended ROM is blended it
     u32 extStart;
     
-    // Data bus width (16 or 32)
+    /// Data bus width (16 or 32)
     u8 busWidth;
     
-    // Indicates if snapshots should contain Roms
+    /// Indicates if snapshots should contain Roms
     bool saveRoms;
     
-    // Indicates if slow Ram accesses need a free bus
+    /// Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;
     
-    // Special ECS feature
+    /// Special ECS feature
     bool slowRamMirror;
     
-    // Memory layout
+    /// Memory layout
     BankMap bankMap;
     
-    // Ram contents on startup
+    /// Ram contents on startup
     RamInitPattern ramInitPattern;
     
-    // Specifies how to deal with unmapped memory
+    /// Specifies how to deal with unmapped memory
     UnmappedMemory unmappingType;
 }
 MemConfig;
@@ -304,14 +304,46 @@ MemInfo;
 /// Statistics collected by the memory (access counters).
 typedef struct
 {
-    struct { isize raw; double accumulated; } chipReads;
-    struct { isize raw; double accumulated; } chipWrites;
-    struct { isize raw; double accumulated; } slowReads;
-    struct { isize raw; double accumulated; } slowWrites;
-    struct { isize raw; double accumulated; } fastReads;
-    struct { isize raw; double accumulated; } fastWrites;
-    struct { isize raw; double accumulated; } kickReads;
-    struct { isize raw; double accumulated; } kickWrites;
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } chipReads;  ///< Chip RAM reads
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } chipWrites;  ///< Chip RAM writes
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } slowReads;  ///< Slow RAM reads
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } slowWrites;  ///< Slow RAM writes
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } fastReads;  ///< Fast RAM reads
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } fastWrites;  ///< Fast RAM writes
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } kickReads;  ///< Kickstart ROM reads
+    struct
+    {
+        isize raw;              ///< Number of accesses since the last update
+        double accumulated;     ///< Exponentially weighted average of the access count
+    } kickWrites;  ///< Kickstart ROM writes
 }
 MemMetrics;
 

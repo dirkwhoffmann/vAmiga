@@ -55,17 +55,17 @@ struct ProbeEnum : utl::Reflectable<ProbeEnum, Probe>
 /// A sample recorded by the logic analyzer.
 typedef struct {
     
-    // Position
+    /// Position
     i64 frame;
-    isize vpos;
-    isize hpos;
+    isize vpos;                         ///< Vertical beam position
+    isize hpos;                         ///< Horizontal beam position
 
-    // Bus usage
+    /// Bus usage
     BusOwner owner;
-    u16 dataBus;
-    u32 addrBus;
+    u16 dataBus;                        ///< Value on the data bus
+    u32 addrBus;                        ///< Value on the address bus
     
-    // Probe values
+    /// Probe values
     isize values[4];
     
 } LogicAnalyzerSample;
@@ -73,13 +73,13 @@ typedef struct {
 /// Configuration options of the logic analyzer.
 typedef struct
 {
-    // Enable switch
+    /// Enable switch
     bool connect;
     
-    // The logic analyzer channels
+    /// The logic analyzer channels
     Probe channel[4];
     
-    // Probe address (in case of memory probing)
+    /// Probe address (in case of memory probing)
     u32 addr[4];
 }
 LogicAnalyzerConfig;

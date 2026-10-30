@@ -18,17 +18,18 @@ namespace vamiga {
 // Constants
 //
 
-// Autoconfig related constants ('type' field)
+/// Autoconfig related constants ('type' field)
 inline constexpr int ERT_ZORROII = 0xc0;
-inline constexpr int ERT_ZORROIII = 0x80;
-inline constexpr int ERTF_MEMLIST = (1<<5);
-inline constexpr int ERTF_DIAGVALID = (1<<4);
-inline constexpr int ERTF_CHAINEDCONFIG = (1<<3); // Autoconfig related constants ('flags' field)
+inline constexpr int ERT_ZORROIII = 0x80;  ///< Board type flag: Zorro III board
+inline constexpr int ERTF_MEMLIST = (1<<5);  ///< Board type flag: Link the board's memory into the system memory list
+inline constexpr int ERTF_DIAGVALID = (1<<4);  ///< Board type flag: The board contains a valid diagnostic area
+inline constexpr int ERTF_CHAINEDCONFIG = (1<<3);  ///< Board type flag: The next board is chained to this one
 
-inline constexpr int ERFF_MEMSPACE = (1<<7);
-inline constexpr int ERFF_NOSHUTUP = (1<<6);
-inline constexpr int ERFF_EXTENDED = (1<<5);
-inline constexpr int ERFF_ZORRO_III = (1<<4); //
+// Autoconfig related constants ('flags' field)
+inline constexpr int ERFF_MEMSPACE = (1<<7);  ///< Flag: The board occupies the memory address space
+inline constexpr int ERFF_NOSHUTUP = (1<<6);  ///< Flag: The board cannot be shut up
+inline constexpr int ERFF_EXTENDED = (1<<5);  ///< Flag: The board uses an extended size
+inline constexpr int ERFF_ZORRO_III = (1<<4); ///< Flag: The board is a Zorro III board
 // Enumerations
 //
 

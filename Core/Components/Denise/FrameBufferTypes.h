@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-/* The Texel datatype is utilized to access single texture elements. On the
+/** The Texel datatype is utilized to access single texture elements. On the
  * emulator side, one Texel covers a single Amiga hires pixel and holds two
  * RGBA values, one per super-hires pixel. On the GPU side a texel is always
  * 32 bit, so the GPU sees a texture of doubled horizontal resolution, i.e.
@@ -32,6 +32,7 @@ namespace vamiga {
  * cost is on the GPU side, which has to move twice as much memory per frame.
  */
 typedef u64 Texel;
+/// Repeats an RGBA value so that it fills a Texel (two GPU texels).
 #define TEXEL(rgba) ((u64)rgba << 32 | rgba)
 
 }

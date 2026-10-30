@@ -237,13 +237,13 @@ struct ScanlinesEnum : utl::Reflectable<ScanlinesEnum, Scanlines> {
 /// Configuration options of the monitor.
 typedef struct
 {
-    // Colors
+    /// Colors
     Palette palette;
     isize brightness;                       ///< Monitor brightness
     isize contrast;                         ///< Monitor contrast
     isize saturation;                       ///< Monitor saturation
 
-    // Geometry
+    /// Geometry
     Center center;
     isize hCenter;                          ///< Horizontal center
     isize vCenter;                          ///< Vertical center
@@ -251,7 +251,7 @@ typedef struct
     isize hZoom;                            ///< Horizontal zoom
     isize vZoom;                            ///< Vertical zoom
 
-    // Effects
+    /// Effects
     Upscaler enhancer;
     Upscaler upscaler;                      ///< Upscaler
 

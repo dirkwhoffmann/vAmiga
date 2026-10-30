@@ -284,47 +284,95 @@ struct MsgEnum : utl::Reflectable<MsgEnum, Msg>
 //
 
 /// Payload of CPU messages (the program counter).
-typedef struct { u32 pc; u8 vector; } CpuMsg;
+typedef struct
+{
+    u32 pc;         ///< Program counter
+    u8 vector;      ///< Exception vector number
+}
+CpuMsg;
 /// Payload of messages that carry a beam position.
-typedef struct { i16 v; i16 h; } BeamMsg;
+typedef struct
+{
+    i16 v;          ///< Vertical beam position
+    i16 h;          ///< Horizontal beam position
+}
+BeamMsg;
 /* Reports a configuration request. The option is -1 if the request has changed
  * several options (e.g., a configuration scheme, in which case 'value' is the
  * scheme) or if it is not known which ones. The component id is -1 if the
  * request was not targeted at a single component.
  */
 /// Payload of configuration messages.
-typedef struct { i32 option; i32 id; i64 value; } ConfigMsg;
+typedef struct
+{
+    i32 option;     ///< The option that has changed
+    i32 id;         ///< The component the option applies to
+    i64 value;      ///< The new value of the option
+}
+ConfigMsg;
 /// Payload of drive messages.
-typedef struct { i16 nr; i16 value; i16 volume; i16 pan; } DriveMsg;
+typedef struct
+{
+    i16 nr;         ///< Number of the drive
+    i16 value;      ///< Message-specific value (the cylinder for DRIVE_STEP)
+    i16 volume;     ///< Volume of the drive sound
+    i16 pan;        ///< Stereo position of the drive sound
+}
+DriveMsg;
 /// Payload of hard drive controller messages.
-typedef struct { i16 nr; HdcState state; } HdcMsg;
+typedef struct
+{
+    i16 nr;         ///< Number of the hard drive
+    HdcState state; ///< New state of the controller
+}
+HdcMsg;
 /// Payload of script messages.
-typedef struct { isize line; i16 delay; } ScriptMsg;
+typedef struct
+{
+    isize line;     ///< Line number in the script
+    i16 delay;      ///< Delay in seconds
+}
+ScriptMsg;
 /// Payload of snapshot messages.
-typedef struct { void *snapshot; } SnapshotMsg;
+typedef struct
+{
+    void *snapshot; ///< The snapshot that has been taken
+}
+SnapshotMsg;
+
 /// Payload of viewport messages.
-typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg; // hstrt/hstop in super-hires pixels
+typedef struct
+{
+    i16 hstrt;      ///< Left edge of the viewport (in super-hires pixels)
+    i16 vstrt;      ///< Top edge of the viewport (in lines)
+    i16 hstop;      ///< Right edge of the viewport (in super-hires pixels)
+    i16 vstop;      ///< Bottom edge of the viewport (in lines)
+}
+ViewportMsg;
 
 /// A message sent by the emulator.
 typedef struct
 {
-    // Header
+    /// Header
     Msg type;
 
     // Payload
     union {
-        struct { i64 value; i64 value2; };
-        CpuMsg cpu;
-        ConfigMsg config;
-        BeamMsg beam;
-        DriveMsg drive;
-        HdcMsg hdc;
-        ScriptMsg script;
-        SnapshotMsg snapshot;
-        ViewportMsg viewport;
+        struct {
+            i64 value;                  ///< First integer payload value
+            i64 value2;                 ///< Second integer payload value
+        };
+        CpuMsg cpu;                     ///< Payload of CPU messages
+        ConfigMsg config;               ///< Payload of configuration messages
+        BeamMsg beam;                   ///< Payload of beam messages
+        DriveMsg drive;                 ///< Payload of drive messages
+        HdcMsg hdc;                     ///< Payload of hard drive controller messages
+        ScriptMsg script;               ///< Payload of script messages
+        SnapshotMsg snapshot;           ///< Payload of snapshot messages
+        ViewportMsg viewport;           ///< Payload of viewport messages
     };
 
-    // Attached string (may be null)
+    /// Attached string (may be null)
     const char *str;
 }
 Message;
@@ -334,7 +382,7 @@ Message;
 // Signatures
 //
 
-/* The callback receives the message and, for a message that reports a
+/** The callback receives the message and, for a message that reports a
  * failure, the exception that caused it (null otherwise). Pointers inside the
  * message are only valid for the duration of the call; the exception is a
  * shared handle and can be kept.

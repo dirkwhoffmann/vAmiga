@@ -73,7 +73,7 @@ struct FilterTypeEnum : utl::Reflectable<FilterTypeEnum, FilterType>
 /// Configuration options of the audio filters.
 typedef struct
 {
-    // The selected audio filter type
+    /// The selected audio filter type
     FilterType filterType;
 }
 AudioFilterConfig;

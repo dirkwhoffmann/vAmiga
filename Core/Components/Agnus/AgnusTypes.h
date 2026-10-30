@@ -24,10 +24,10 @@ namespace vamiga {
 // Constants
 //
 
-// Time stamp used for messages that never trigger
+/// Time stamp used for messages that never trigger
 static constexpr i64 NEVER = INT64_MAX;
 
-// Inspection interval in seconds (interval between INS_xxx events)
+/// Inspection interval in seconds (interval between INS_xxx events)
 static constexpr double inspectionInterval = 0.1;
 
 
@@ -129,8 +129,11 @@ enum EventSlot : long
     SLOT_COUNT
 };
 
+/// Returns true if the slot is a primary event slot.
 constexpr bool isPrimarySlot(long s) { return s <= SLOT_SEC; }
+/// Returns true if the slot is a secondary event slot.
 constexpr bool isSecondarySlot(long s) { return s > SLOT_SEC && s <= SLOT_TER; }
+/// Returns true if the slot is a tertiary event slot.
 constexpr bool isTertiarySlot(long s) { return s > SLOT_TER; }
 
 struct EventSlotEnum : utl::Reflectable<EventSlotEnum, EventSlot>
@@ -495,6 +498,7 @@ enum EventID : u8
     INS_EVENT_COUNT
 };
 
+/// Returns true if the event is a bitplane event of the given bitplane.
 static inline bool isBplxEvent(EventID id, int x)
 {
     switch(id & ~0b11) {
@@ -547,14 +551,14 @@ typedef struct
     EventID eventId;                        ///< Identifier of the scheduled event (0 if the slot is empty)
     const char *eventName;                  ///< Name of the scheduled event
     
-    // Trigger cycle of the event
+    /// Trigger cycle of the event
     Cycle trigger;
     Cycle triggerRel;                       ///< Time until the event triggers (in master cycles)
     
-    // Trigger frame relative to the current frame
+    /// Trigger frame relative to the current frame
     isize frameRel;
     
-    // The trigger cycle translated to a beam position.
+    /// The trigger cycle translated to a beam position.
     isize vpos;
     isize hpos;                             ///< Horizontal position at which the event triggers
 }
@@ -638,13 +642,13 @@ AgnusMetrics;
  * serviceRegEvent()
  */
 
-typedef u32 EventFlags;
+typedef u32 EventFlags;                 ///< Bit mask of EVFL flags
 
 namespace EVFL
 {
-constexpr u32 EOL                = (1 << 0);
-constexpr u32 HSYNC              = (1 << 1);
-constexpr u32 PROBE              = (1 << 2);
+constexpr u32 EOL                = (1 << 0);  ///< Event flag: End of line
+constexpr u32 HSYNC              = (1 << 1);  ///< Event flag: Horizontal sync
+constexpr u32 PROBE              = (1 << 2);  ///< Event flag: Probe the logic analyzer
 };
 
 }

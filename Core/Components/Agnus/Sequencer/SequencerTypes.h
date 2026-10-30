@@ -15,33 +15,34 @@
 
 namespace vamiga {
 
-static constexpr u16 SIG_NONE           = 0b0000000000;
-static constexpr u16 SIG_CON            = 0b0000000001;
-static constexpr u16 SIG_BMAPEN_CLR     = 0b0000000010;
-static constexpr u16 SIG_BMAPEN_SET     = 0b0000000100;
-static constexpr u16 SIG_VFLOP_CLR      = 0b0000001000;
-static constexpr u16 SIG_VFLOP_SET      = 0b0000010000;
-static constexpr u16 SIG_BPHSTART       = 000000100000;
-static constexpr u16 SIG_BPHSTOP        = 0b0001000000;
-static constexpr u16 SIG_SHW            = 0b0010000000;
-static constexpr u16 SIG_RHW            = 0b0100000000;
-static constexpr u16 SIG_DONE           = 0b1000000000;
+static constexpr u16 SIG_NONE           = 0b0000000000;  ///< No signal
+static constexpr u16 SIG_CON            = 0b0000000001;  ///< Continue
+static constexpr u16 SIG_BMAPEN_CLR     = 0b0000000010;  ///< Clear the bitplane DMA enable flip-flop
+static constexpr u16 SIG_BMAPEN_SET     = 0b0000000100;  ///< Set the bitplane DMA enable flip-flop
+static constexpr u16 SIG_VFLOP_CLR      = 0b0000001000;  ///< Clear the vertical flip-flop
+static constexpr u16 SIG_VFLOP_SET      = 0b0000010000;  ///< Set the vertical flip-flop
+static constexpr u16 SIG_BPHSTART       = 000000100000;  ///< The DDFSTRT position has been reached
+static constexpr u16 SIG_BPHSTOP        = 0b0001000000;  ///< The DDFSTOP position has been reached
+static constexpr u16 SIG_SHW            = 0b0010000000;  ///< Start of the horizontal fetch window
+static constexpr u16 SIG_RHW            = 0b0100000000;  ///< End of the horizontal fetch window
+static constexpr u16 SIG_DONE           = 0b1000000000;  ///< The fetch sequence is complete
 
 /// State of the data-fetch logic of the sequencer.
 struct DDFState : utl::Streamable
 {
-    bool bpv = false;
-    bool bmapen = false;
-    bool shw = false;
-    bool rhw = false;
-    bool bphstart = false;
-    bool bphstop = false;
-    bool bprun = false;
-    bool lastFu = false;
-    bool stopreq = false;
-    u16  bplcon0 = 0;
-    u8   cnt = 0;
+    bool bpv = false;                   ///< Vertical bitplane DMA flip-flop (set inside the vertical DMA window)
+    bool bmapen = false;                ///< Bitplane DMA enable (DMACON)
+    bool shw = false;                   ///< DDF logic flip-flop (start of the horizontal fetch window)
+    bool rhw = false;                   ///< DDF logic flip-flop (end of the horizontal fetch window)
+    bool bphstart = false;              ///< Indicates that the DDFSTRT position has been reached
+    bool bphstop = false;               ///< Indicates that the DDFSTOP position has been reached
+    bool bprun = false;                 ///< Indicates that the bitplane fetch unit is running
+    bool lastFu = false;                ///< Indicates that the last fetch unit is being processed
+    bool stopreq = false;               ///< Indicates that the fetch unit has been asked to stop
+    u16  bplcon0 = 0;                   ///< Value of BPLCON0
+    u8   cnt = 0;                       ///< Fetch cycle counter within the fetch unit
 
+    /// Compares two states.
     bool operator==(const DDFState &rhs) const
     {
         return
@@ -58,12 +59,14 @@ struct DDFState : utl::Streamable
         this->cnt == rhs.cnt;
     }
 
+    /// Compares two states.
     bool operator!=(const DDFState &rhs) const
     {
         return !(*this == rhs);
     }
 
     template <class W>
+    /// Serializes the state (used for snapshots).
     W &operator<<(W& worker)
     {
         worker

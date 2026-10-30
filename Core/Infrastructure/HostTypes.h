@@ -66,16 +66,16 @@ struct TexFormatEnum : utl::Reflectable<TexFormatEnum, TexFormat> {
 /// Properties of the host computer (display refresh rate, audio sample rate, ...).
 typedef struct
 {
-    // Refresh rate of the host display
+    /// Refresh rate of the host display
     isize refreshRate;
 
-    // Audio sample rate of the host computer
+    /// Audio sample rate of the host computer
     isize sampleRate;
 
-    // Texture format
+    /// Texture format
     TexFormat texFormat;
 
-    // Framebuffer dimensions
+    /// Framebuffer dimensions
     isize frameBufferWidth;
     isize frameBufferHeight;                ///< Height of the host frame buffer (in pixels)
 }

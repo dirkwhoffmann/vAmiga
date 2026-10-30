@@ -117,19 +117,19 @@ RemoteManagerInfo;
 /// A packet recorded by a remote server.
 typedef struct
 {
-    // Sequence number (unique, monotonically increasing)
+    /// Sequence number (unique, monotonically increasing)
     isize nr;
 
-    // The server that received or sent the packet
+    /// The server that received or sent the packet
     ServerType server;
 
-    // Tells whether the packet was received or sent
+    /// Tells whether the packet was received or sent
     TrafficDirection direction;
 
-    // Host time stamp (milliseconds since epoch)
+    /// Host time stamp (milliseconds since epoch)
     i64 time;
 
-    // Packet contents
+    /// Packet contents
     string payload;
 }
 TrafficEntry;

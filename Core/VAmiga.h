@@ -87,11 +87,13 @@ class API {
 
 protected:
 
+    /// Pointer to the emulator instance this API object operates on.
     class Emulator *emu = nullptr;
 
 public:
 
     API() { }
+    /// Creates an API object that operates on the given emulator.
     API(Emulator *emu) : emu(emu) { }
 
     /** @brief  Suspends the emulator thread
@@ -146,6 +148,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const AmigaInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const AmigaInfo &getCachedInfo() const;
     
     /** @brief  Prints debug information about the component
@@ -211,7 +214,9 @@ public:
      *  is invalid (synchronous versions).
      */
     void loadWorkspace(retro::vault::SVMFile &svm);
+    /// Saves the workspace into an SVM that is already open.
     void saveWorkspace(retro::vault::SVMFile &svm) const;
+    /// Asynchronous version of saveWorkspace(): queues the request and returns at once.
     void saveWorkspaceAsync(retro::vault::SVMFile &svm) const;
 
     /** @brief  Takes a snapshot
@@ -278,6 +283,7 @@ public:
      *  is invalid (synchronous versions).
      */
     void saveSnapshot(retro::vault::SVMFile &svm, utl::Compressor compressor) const;
+    /// Asynchronous version of saveSnapshot(): queues the request and returns at once.
     void saveSnapshotAsync(retro::vault::SVMFile &svm, utl::Compressor compressor) const;
 
     /** @brief  Hibernates the machine into a virtual machine bundle
@@ -313,6 +319,7 @@ public:
      *  is invalid (synchronous versions).
      */
     void hibernate(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const;
+    /// Asynchronous version of hibernate(): queues the request and returns at once.
     void hibernateAsync(retro::vault::SVMFile &svm, bool snapshot, bool workspace) const;
 
     
@@ -380,6 +387,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const XRayInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const XRayInfo &getCachedInfo() const;
 };
 
@@ -406,6 +414,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const LogicAnalyzerInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const LogicAnalyzerInfo &getCachedInfo() const;
 
     /** @brief  Returns the number of samples held in the signal trace.
@@ -441,6 +450,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const BlitterInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const BlitterInfo &getCachedInfo() const;
 };
 
@@ -597,7 +607,9 @@ class CopperAPI : public API {
 
 public:
 
+    /// The Copper breakpoints
     GuardsAPI breakpoints;
+    /// The Copper watchpoints
     GuardsAPI watchpoints;
 
     /** @brief  Returns the component's current state.
@@ -610,6 +622,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const CopperInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const CopperInfo &getCachedInfo() const;
 
     /** @brief  Disassembles a Copper instruction.
@@ -646,10 +659,15 @@ class AgnusAPI : public API {
 
 public:
     
+    /// The Copper coprocessor
     CopperAPI copper;
+    /// The Blitter
     BlitterAPI blitter;
+    /// X-Ray (debug visualization of the bus activity)
     XRayAPI xray;
+    /// Logic analyzer
     LogicAnalyzerAPI logicAnalyzer;
+    /// Beam traps (halt the emulator at a specific beam position)
     GuardsAPI beamtraps;
     
     /** @brief  Returns the component's current configuration.
@@ -666,6 +684,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const AgnusInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const AgnusInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
@@ -678,6 +697,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const AgnusMetrics &getMetrics() const;
+    /// Returns the most recent metrics snapshot recorded by the emulator thread (see getMetrics()).
     const AgnusMetrics &getCachedMetrics() const;
 
     /** @brief  Provides details about the currently selected chip revision.
@@ -713,11 +733,13 @@ public:
      *  copy the data if you need to keep it.
      */
     const CIAInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const CIAInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
      */
     const CIAMetrics &getMetrics() const;
+    /// Returns the most recent metrics snapshot recorded by the emulator thread (see getMetrics()).
     const CIAMetrics &getCachedMetrics() const;
 };
 
@@ -792,9 +814,13 @@ class CPUAPI : public API {
 
 public:
 
+    /// The CPU debugger
     CPUDebuggerAPI debugger;
+    /// The CPU breakpoints
     GuardsAPI breakpoints;
+    /// The CPU watchpoints
     GuardsAPI watchpoints;
+    /// The CPU catchpoints
     GuardsAPI catchpoints;
 
     /** @brief  Returns the component's current configuration.
@@ -811,6 +837,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const CPUInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const CPUInfo &getCachedInfo() const;
 };
 
@@ -837,6 +864,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const DeniseInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const DeniseInfo &getCachedInfo() const;
 };
 
@@ -873,6 +901,7 @@ public:
      *  @throw  CoreError (CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     u8 spypeek8(Accessor src, u32 addr) const;
+    /// Reads a 16 bit value from memory without causing side effects (see spypeek8()).
     u16 spypeek16(Accessor src, u32 addr) const;
 
     /** @brief  Returns a string of characters for a portion of memory.
@@ -897,6 +926,7 @@ public:
      *  @throw  CoreError (CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     string hexDump(Accessor src, u32 addr, isize bytes, isize sz = 1) const;
+    /// Returns a memory dump that includes a text column (see hexDump()).
     string memDump(Accessor src, u32 addr, isize bytes, isize sz = 1) const;
 
     /// @}
@@ -911,6 +941,7 @@ class MemoryAPI : public API {
 
 public:
     
+    /// The memory debugger
     MemoryDebuggerAPI debugger;
 
     /// @name Analying the component
@@ -930,6 +961,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const MemInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const MemInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
@@ -942,12 +974,15 @@ public:
      *  copy the data if you need to keep it.
      */
     const MemMetrics &getMetrics() const;
+    /// Returns the most recent metrics snapshot recorded by the emulator thread (see getMetrics()).
     const MemMetrics &getCachedMetrics() const;
 
     /** @brief  Provides details about the installed ROM, WOM, or ROM extension.
      */
     retro::vault::RomTraits getRomTraits() const;
+    /// Returns the traits of the installed WOM (see getRomTraits()).
     retro::vault::RomTraits getWomTraits() const;
+    /// Returns the traits of the installed ROM extension (see getRomTraits()).
     retro::vault::RomTraits getExtTraits() const;
 
     /// @}
@@ -960,6 +995,7 @@ public:
      *  @throw Error if the file cannot be read or does not contain valid data.
      */
     void loadRom(const std::filesystem::path &path);
+    /// Loads a ROM extension from a file (see loadRom()).
     void loadExt(const std::filesystem::path &path);
     /** @brief  Asynchronous version of loadRom() and loadExt(): queues the request and returns at once.
      *
@@ -967,6 +1003,7 @@ public:
      *  request failed, the message carries the exception.
      */
     void loadRomAsync(const std::filesystem::path &path);
+    /// Asynchronous version of loadExt(): queues the request and returns at once.
     void loadExtAsync(const std::filesystem::path &path);
 
     /** @brief  Loads a ROM provided by a memory buffer
@@ -974,6 +1011,7 @@ public:
      *  @throw Error if the data is not valid.
      */
     void loadRom(const u8 *buf, isize len);
+    /// Loads a ROM extension from a memory buffer (see loadRom()).
     void loadExt(const u8 *buf, isize len);
 
     /** @brief  Saves a Rom to disk
@@ -981,13 +1019,17 @@ public:
      *  @throw Error if the file cannot be written.
      */
     void saveRom(const std::filesystem::path &path);
+    /// Saves the WOM to disk (see saveRom()).
     void saveWom(const std::filesystem::path &path);
+    /// Saves the ROM extension to disk (see saveRom()).
     void saveExt(const std::filesystem::path &path);
 
     /** @brief  Removes a ROM
      */
     void deleteRom();
+    /// Removes the WOM (see deleteRom()).
     void deleteWom();
+    /// Removes the ROM extension (see deleteRom()).
     void deleteExt();
 
     /// @}
@@ -1007,6 +1049,7 @@ class AudioChannelAPI : public API {
 
 public:
     
+    /// Creates the API object for the given audio channel (0 ... 3).
     AudioChannelAPI(isize channel) : API(), channel(channel) { }
 
     /** @brief  Returns the component's current state.
@@ -1019,6 +1062,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const StateMachineInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const StateMachineInfo &getCachedInfo() const;
 };
 
@@ -1045,6 +1089,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const DiskControllerInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const DiskControllerInfo &getCachedInfo() const;
 };
 
@@ -1067,6 +1112,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const UARTInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const UARTInfo &getCachedInfo() const;
 };
 
@@ -1079,11 +1125,17 @@ class PaulaAPI : public API {
 
 public:
     
+    /// Audio channel 0
     AudioChannelAPI audioChannel0 = AudioChannelAPI(0);
+    /// Audio channel 1
     AudioChannelAPI audioChannel1 = AudioChannelAPI(1);
+    /// Audio channel 2
     AudioChannelAPI audioChannel2 = AudioChannelAPI(2);
+    /// Audio channel 3
     AudioChannelAPI audioChannel3 = AudioChannelAPI(3);
+    /// The disk controller
     DiskControllerAPI diskController;
+    /// The UART
     UARTAPI uart;
 
     /** @brief  Returns the component's current configuration.
@@ -1100,6 +1152,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const PaulaInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const PaulaInfo &getCachedInfo() const;
 };
 
@@ -1155,6 +1208,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const FloppyDriveInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const FloppyDriveInfo &getCachedInfo() const;
 
     /** @brief Queries a disk flag
@@ -1272,6 +1326,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const HdcInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const HdcInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
@@ -1284,6 +1339,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const HdcMetrics &getMetrics() const;
+    /// Returns the most recent metrics snapshot recorded by the emulator thread (see getMetrics()).
     const HdcMetrics &getCachedMetrics() const;
 };
 
@@ -1296,6 +1352,7 @@ class HardDriveAPI : public API {
 
 public:
     
+    /// The hard drive controller (Zorro board)
     HdControllerAPI controller;
 
     /** @brief  Getter for the raw disk object
@@ -1316,11 +1373,13 @@ public:
      *  copy the data if you need to keep it.
      */
     const HardDriveInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const HardDriveInfo &getCachedInfo() const;
 
     /** @brief  Provides details about the hard drive and its partitions
      */
     const HardDriveTraits &getTraits() const;
+    /// Returns the traits of a partition (see getTraits()).
     const PartitionTraits &getPartitionTraits(isize nr) const;
 
     /** @brief Queries a disk flag
@@ -1501,6 +1560,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const JoystickInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const JoystickInfo &getCachedInfo() const;
 
     /** @brief  Triggers a joystick action.
@@ -1548,6 +1608,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const KeyboardInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const KeyboardInfo &getCachedInfo() const;
 
     /** @brief  Checks if a key is currently pressed.
@@ -1696,6 +1757,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const AudioPortInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const AudioPortInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
@@ -1708,6 +1770,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const AudioPortMetrics &getMetrics() const;
+    /// Returns the most recent metrics snapshot recorded by the emulator thread (see getMetrics()).
     const AudioPortMetrics &getCachedMetrics() const;
 
     /// @name Retrieving audio data
@@ -1762,6 +1825,7 @@ public:
      *  @return The highest amplitude that was found.
      */
     float drawL(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const;
+    /// Draws the waveform of the right channel (see drawL()).
     float drawR(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const;
 
     /// @}
@@ -1781,7 +1845,9 @@ class ControlPortAPI : public API {
 
 public:
     
+    /// The joystick connected to the port
     JoystickAPI joystick;
+    /// The mouse connected to the port
     MouseAPI mouse;
 
     /** @brief  Returns the component's current state.
@@ -1794,6 +1860,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const ControlPortInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const ControlPortInfo &getCachedInfo() const;
 };
 
@@ -1825,6 +1892,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const SerialPortInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const SerialPortInfo &getCachedInfo() const;
 
     /** @brief  Reads a printable character from the serial port buffers
@@ -1837,6 +1905,7 @@ public:
      *  @return The character, or -1 if the buffer is empty.
      */
     int readIncomingPrintableByte() const;
+    /// Reads a character from the data the port has sent (see readIncomingPrintableByte()).
     int readOutgoingPrintableByte() const;
 };
 
@@ -1868,6 +1937,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const VideoPortInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const VideoPortInfo &getCachedInfo() const;
 
     /// @name Retrieving video data
@@ -1898,6 +1968,7 @@ public:
      * are needed to weave the fields of an interlaced picture.
      */
     const u32 *getTexture() const;
+    /// Returns the most recent stable texture together with its frame number and long-frame flags.
     const u32 *getTexture(isize *nr, bool *lof, bool *prevlof) const;
 
     /** @brief  Returns a pointer to the most recent stable X-Ray texture
@@ -1908,6 +1979,7 @@ public:
      * (nr), which matches the number of the regular texture of the same frame.
      */
     const u32 *getXrayTexture() const;
+    /// Returns the most recent stable X-Ray texture together with its frame number.
     const u32 *getXrayTexture(isize *nr) const;
 
     /** @brief  Saves the most recent stable texture as a PNG file
@@ -1919,6 +1991,7 @@ public:
      *  @throw Error if the file cannot be written.
      */
     void saveTexture(const std::filesystem::path &path) const;
+    /// Saves a cutout of the most recent stable texture as a PNG file.
     void saveTexture(const std::filesystem::path &path,
                      isize x1, isize x2, isize y1, isize y2) const;
 
@@ -1927,6 +2000,7 @@ public:
      *  @throw Error if the file cannot be written.
      */
     void saveXrayTexture(const std::filesystem::path &path) const;
+    /// Saves a cutout of the most recent stable X-Ray texture as a PNG file.
     void saveXrayTexture(const std::filesystem::path &path,
                          isize x1, isize x2, isize y1, isize y2) const;
 
@@ -1950,6 +2024,7 @@ public:
      *  @param  y2      Bottom edge of the picture area
      */
     void findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const;
+    /// Determines the picture area relative to the texture size (see findInnerArea()).
     void findInnerAreaNormalized(double &x1, double &x2, double &y1, double &y2) const;
 };
 
@@ -2026,6 +2101,7 @@ class DefaultsAPI : public API {
 
 public:
     
+    /// Creates an API object that operates on the given defaults storage.
     DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
 
     ///
@@ -2250,6 +2326,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const RetroShellInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const RetroShellInfo &getCachedInfo() const;
 
     /** @brief  Returns a copy of the text buffer.
@@ -2304,8 +2381,11 @@ public:
      *  @throw Error if the file cannot be opened.
      */
     void execScriptAsync(const std::filesystem::path &path);
+    /// Executes a script provided by a string stream (see execScriptAsync()).
     void execScriptAsync(std::stringstream &ss);
+    /// Executes a script provided by a file stream (see execScriptAsync()).
     void execScriptAsync(const std::ifstream &fs);
+    /// Executes a script provided as a string (see execScriptAsync()).
     void execScriptAsync(const string &contents);
 
     
@@ -2359,6 +2439,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const RemoteManagerInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const RemoteManagerInfo &getCachedInfo() const;
 
     /// @}
@@ -2386,36 +2467,73 @@ class VAmiga : public API {
     
 public:
     
+    /// The user defaults storage, shared by all emulator instances.
     static DefaultsAPI defaults;
     
     // Components
+    /// The Amiga (state, snapshots, media, execution control)
     AmigaAPI amiga;
+    /// Agnus (DMA, beam position, sub-components)
     AgnusAPI agnus;
-    CIAAPI ciaA, ciaB;
+    /// CIA A
+    CIAAPI ciaA;
+    /// CIA B
+    CIAAPI ciaB;
+    /// The Motorola 68000 CPU
     CPUAPI cpu;
+    /// Denise (video output)
     DeniseAPI denise;
+    /// Memory (ROMs, RAM, access)
     MemoryAPI mem;
+    /// Paula (audio, disk controller, UART, interrupts)
     PaulaAPI paula;
+    /// The real-time clock
     RTCAPI rtc;
     
     // Ports
+    /// Audio port
     AudioPortAPI audioPort;
-    ControlPortAPI controlPort1, controlPort2;
+    /// Control port 1
+    ControlPortAPI controlPort1;
+    /// Control port 2
+    ControlPortAPI controlPort2;
+    /// Serial port
     SerialPortAPI serialPort;
+    /// Video port
     VideoPortAPI videoPort;
 
     // Peripherals
-    FloppyDriveAPI df0, df1, df2, df3;
-    HardDriveAPI hd0, hd1, hd2, hd3;
+    /// Floppy drive 0 (DF0)
+    FloppyDriveAPI df0;
+    /// Floppy drive 1 (DF1)
+    FloppyDriveAPI df1;
+    /// Floppy drive 2 (DF2)
+    FloppyDriveAPI df2;
+    /// Floppy drive 3 (DF3)
+    FloppyDriveAPI df3;
+    /// Hard drive 0 (DH0)
+    HardDriveAPI hd0;
+    /// Hard drive 1 (DH1)
+    HardDriveAPI hd1;
+    /// Hard drive 2 (DH2)
+    HardDriveAPI hd2;
+    /// Hard drive 3 (DH3)
+    HardDriveAPI hd3;
+    /// Keyboard
     KeyboardAPI keyboard;
     
     // Misc
+    /// Message queue
     MsgQueueAPI msgQueue;
+    /// Remote servers
     RemoteManagerAPI remoteManager;
+    /// RetroShell command interpreter
     RetroShellAPI retroShell;
 
     // Shortcuts
+    /// Array view of the floppy drives, indexed by drive number.
     FloppyDriveAPI *df[4] = { &df0, &df1, &df2, &df3 };
+    /// Array view of the hard drives, indexed by drive number.
     HardDriveAPI *hd[4] = { &hd0, &hd1, &hd2, &hd3 };
 
 
@@ -2464,6 +2582,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const EmulatorInfo &getInfo() const;
+    /// Returns the most recent state snapshot recorded by the emulator thread (see getInfo()).
     const EmulatorInfo &getCachedInfo() const;
     
     /** @brief  Returns statistical information about the components.
@@ -2476,6 +2595,7 @@ public:
      *  copy the data if you need to keep it.
      */
     const EmulatorMetrics &getMetrics() const;
+    /// Returns the most recent metrics snapshot recorded by the emulator thread (see getMetrics()).
     const EmulatorMetrics &getCachedMetrics() const;
 
     /// @}
@@ -3046,6 +3166,7 @@ public:
      *  @param id       The component to configure
      */
     void setAsync(Opt opt, i64 value, isize id);
+    /// Asynchronous version of set(ConfigScheme): queues the request and returns at once.
     void setAsync(ConfigScheme model);
 
     /** @brief  Checks if a configuration option would be accepted.
@@ -3080,6 +3201,7 @@ public:
      *              machine configurations.
      */
     void exportConfig(const std::filesystem::path &path, bool diff = false) const;
+    /// Writes the configuration into a stream (see exportConfig()).
     void exportConfig(std::ostream &stream, bool diff = false) const;
     
     
@@ -3157,12 +3279,19 @@ public:
      *  or mouse movements).
      */
     void put(const Command &cmd, const std::string &str = "");
+    /// Shorthand for put(Command(type, payload)).
     void put(Cmd type, const std::string &str) { put(Command(type), str); }
+    /// Shorthand for put(Command(type, payload)).
     void put(Cmd type, i64 payload = 0, i64 payload2 = 0) { put(Command(type, payload, payload2)); }
+    /// Shorthand for put(Command(type, payload)).
     void put(Cmd type, ConfigCmd payload)  { put(Command(type, payload)); }
+    /// Shorthand for put(Command(type, payload)).
     void put(Cmd type, KeyCmd payload)  { put(Command(type, payload)); }
+    /// Shorthand for put(Command(type, payload)).
     void put(Cmd type, GamePadCmd payload)  { put(Command(type, payload)); }
+    /// Shorthand for put(Command(type, payload)).
     void put(Cmd type, CoordCmd payload)  { put(Command(type, payload)); }
+    /// Shorthand for put(Command(type, payload)).
     void put(Cmd type, AlarmCmd payload)  { put(Command(type, payload)); }
 
     /** @brief  Feeds a command into the command queue without waiting for the result.
@@ -3174,12 +3303,19 @@ public:
      *  referenced by the command alive until it has been carried out (see sync()).
      */
     void putAsync(const Command &cmd, const std::string &str = "");
+    /// Shorthand for putAsync(Command(type, payload)).
     void putAsync(Cmd type, const std::string &str) { putAsync(Command(type), str); }
+    /// Shorthand for putAsync(Command(type, payload)).
     void putAsync(Cmd type, i64 payload = 0, i64 payload2 = 0) { putAsync(Command(type, payload, payload2)); }
+    /// Shorthand for putAsync(Command(type, payload)).
     void putAsync(Cmd type, ConfigCmd payload)  { putAsync(Command(type, payload)); }
+    /// Shorthand for putAsync(Command(type, payload)).
     void putAsync(Cmd type, KeyCmd payload)  { putAsync(Command(type, payload)); }
+    /// Shorthand for putAsync(Command(type, payload)).
     void putAsync(Cmd type, GamePadCmd payload)  { putAsync(Command(type, payload)); }
+    /// Shorthand for putAsync(Command(type, payload)).
     void putAsync(Cmd type, CoordCmd payload)  { putAsync(Command(type, payload)); }
+    /// Shorthand for putAsync(Command(type, payload)).
     void putAsync(Cmd type, AlarmCmd payload)  { putAsync(Command(type, payload)); }
 
     /** @brief  Gives access to the internal components

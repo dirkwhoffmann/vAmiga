@@ -208,50 +208,50 @@ struct CmdEnum : utl::Reflectable<CmdEnum, Cmd> {
 /// Payload of a command that changes a configuration option.
 typedef struct
 {
-    Opt option;
-    i64 value;
-    isize id;
+    Opt option;                         ///< The option to change
+    i64 value;                          ///< The new value of the option
+    isize id;                           ///< The component the option applies to (e.g., the drive number)
 }
 ConfigCmd;
 
 /// Payload of a command that carries a key event.
 typedef struct
 {
-    KeyCode keycode;
-    double delay;
+    KeyCode keycode;                    ///< Key code of the key event
+    double delay;                       ///< Delay in seconds before the event is performed
 }
 KeyCmd;
 
 /// Payload of a command that carries a coordinate.
 typedef struct
 {
-    isize port;
-    double x;
-    double y;
+    isize port;                         ///< Number of the control port
+    double x;                           ///< Horizontal coordinate
+    double y;                           ///< Vertical coordinate
 }
 CoordCmd;
 
 /// Payload of a command that carries a game pad action.
 typedef struct
 {
-    isize port;
-    GamePadAction action;
+    isize port;                         ///< Number of the control port
+    GamePadAction action;               ///< The action to perform
 }
 GamePadCmd;
 
 /// Payload of a command that carries a joystick state.
 typedef struct
 {
-    isize port;
-    u32 state;      // Bits 0-4: current state, bits 8-12: previous state (up, down, left, right, fire)
+    isize port;                         ///< Number of the control port
+    u32 state;      ///< Bits 0-4: current state, bits 8-12: previous state (up, down, left, right, fire)
 }
 JoyStateCmd;
 
 /// Payload of a command that schedules an alarm.
 typedef struct
 {
-    i64 cycle;
-    i64 value;
+    i64 cycle;                          ///< Master cycle at which the alarm fires
+    i64 value;                          ///< Value that is passed to the alarm handler
 }
 AlarmCmd;
 
@@ -259,47 +259,59 @@ AlarmCmd;
 /// Payload of a command that changes a guard.
 typedef struct
 {
-    GuardType list;       // The guard list to modify
-    isize nr;           // Number of a guard in the list
-    u32 addr;           // Target of a guard
-    isize ignores;      // Ignore count
+    GuardType list;       ///< The guard list to modify
+    isize nr;           ///< Number of a guard in the list
+    u32 addr;           ///< Target of a guard
+    isize ignores;      ///< Ignore count
 }
 GuardCmd;
 
 /// A command sent to the emulator thread.
 struct Command
 {
-    // Header
+    /// Header
     Cmd type;
 
-    // Sender
+    /// Sender
     void *sender;
     
     // Payload
     union {
 
-        struct { i64 value; i64 value2; };
-        ConfigCmd config;
-        KeyCmd key;
-        GamePadCmd action;
-        CoordCmd coord;
-        AlarmCmd alarm;
-        GuardCmd guard;
-        JoyStateCmd joyState;
+        struct {
+            i64 value;                  ///< First integer payload value
+            i64 value2;                 ///< Second integer payload value
+        };
+        ConfigCmd config;               ///< Payload of CONFIG commands
+        KeyCmd key;                     ///< Payload of key commands
+        GamePadCmd action;              ///< Payload of game pad commands
+        CoordCmd coord;                 ///< Payload of coordinate commands
+        AlarmCmd alarm;                 ///< Payload of alarm commands
+        GuardCmd guard;                 ///< Payload of guard commands
+        JoyStateCmd joyState;           ///< Payload of joystick state commands
     };
 
-    // Attached string (may be null)
+    /// Attached string (may be null)
     const char *str = nullptr;
 
     Command() { }
+    /// Creates a command with up to two integer payload values.
     Command(Cmd type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
+    /// Creates a command with a sender and up to two integer payload values.
     Command(Cmd type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }
+    /// Creates a command that changes a configuration option.
     Command(Cmd type, const ConfigCmd &cmd) : type(type), config(cmd) { }
+    /// Creates a command that carries a key event.
     Command(Cmd type, const KeyCmd &cmd) : type(type), key(cmd) { }
+    /// Creates a command that carries a game pad action.
     Command(Cmd type, const GamePadCmd &cmd) : type(type), action(cmd) { }
+    /// Creates a command that carries a coordinate.
     Command(Cmd type, const CoordCmd &cmd) : type(type), coord(cmd) { }
+    /// Creates a command that schedules an alarm.
     Command(Cmd type, const AlarmCmd &cmd) : type(type), alarm(cmd) { }
+    /// Creates a command that changes a guard.
     Command(Cmd type, const GuardCmd &cmd) : type(type), guard(cmd) { }
+    /// Creates a command that carries a joystick state.
     Command(Cmd type, const JoyStateCmd &cmd) : type(type), joyState(cmd) { }
 };
 

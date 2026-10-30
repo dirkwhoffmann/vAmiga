@@ -127,10 +127,10 @@ typedef struct
     i16 pan;                                ///< Stereo position of the drive sounds
     u8 stepVolume;                          ///< Head step volume
 
-    // Decides when a change reaches the file (see HardDrive::persist)
+    /// Decides when a change reaches the file (see HardDrive::persist)
     WriteThroughMode writeThrough;
 
-    /* Indicates whether a disk is included in snapshots (see
+    /** Indicates whether a disk is included in snapshots (see
      * HardDrive::serializeDisk). A disk that lives in a file is stored as its
      * path whatever this says -- the option is about a disk held in memory,
      * which has nowhere else to go. It cannot be enabled for a disk larger
@@ -138,7 +138,7 @@ typedef struct
      */
     bool snapshot;
 
-    /* Largest disk that may be kept in memory, in MB (1...16384)
+    /** Largest disk that may be kept in memory, in MB (1...16384)
      *
      * A disk that does not live in a file is part of every snapshot, in full.
      * Beyond this size that is no longer practical, so such a disk has to
@@ -148,16 +148,16 @@ typedef struct
 }
 HardDriveConfig;
 
-// Largest disk a snapshot can carry, in MB
+/// Largest disk a snapshot can carry, in MB
 constexpr isize hdrSnapshotLimit = 128;
 
 /// Static properties of a hard drive.
 typedef struct
 {
-    // Object information
+    /// Object information
     isize nr;
     
-    // Product information
+    /// Product information
     const char *diskVendor;
     const char *diskProduct;                ///< Product name of the disk
     const char *diskRevision;               ///< Revision of the disk
@@ -165,13 +165,13 @@ typedef struct
     const char *controllerProduct;          ///< Product name of the controller
     const char *controllerRevision;         ///< Revision of the controller
     
-    // Physical layout
+    /// Physical layout
     isize cylinders;
     isize heads;                            ///< Number of heads
     isize sectors;                          ///< Number of sectors per track
     isize bsize;                            ///< Block size (in bytes)
     
-    // Derived values
+    /// Derived values
     isize tracks;
     i64 blocks;                             ///< Number of blocks
     i64 bytes;                              ///< Capacity (in bytes)
@@ -197,11 +197,11 @@ typedef struct
 {
     isize nr;                               ///< Number of the drive
     
-    // Drive properties
+    /// Drive properties
     bool isConnected;
     bool isCompatible;                      ///< The drive is compatible with the emulated controller
     
-    // Disk properties
+    /// Disk properties
     bool hasDisk;
     bool hasModifiedDisk;                   ///< The disk has unsaved changes
     bool hasUnmodifiedDisk;                 ///< The disk has no unsaved changes
@@ -209,27 +209,27 @@ typedef struct
     bool hasUnprotectedDisk;                ///< The disk is not write-protected
     bool snapshotable;                      ///< The disk can be included in snapshots
 
-    // Logical layout (partitions)
+    /// Logical layout (partitions)
     isize partitions;
     
-    // Flags
+    /// Flags
     bool writeProtected;
 
-    /* The guest has written to the disk since it was attached, or since it was
+    /** The guest has written to the disk since it was attached, or since it was
      * last marked as unmodified (e.g. by exporting it). What an unsaved-changes
      * warning wants to know; it also applies to a disk that has no file.
      * Persisting does not clear it.
      */
     bool modified;
 
-    /* The disk holds changes its file does not have yet, i.e. persist() has
+    /** The disk holds changes its file does not have yet, i.e. persist() has
      * something to do. Only a disk that lives in a file can be dirty, and
      * persisting clears it. Changes that do not come from the guest (formatting,
      * importing a folder) make a disk dirty without making it modified.
      */
     bool dirty;
     
-    // State
+    /// State
     HardDriveState state;
     DriveHead head;                         ///< Position of the drive head
 }

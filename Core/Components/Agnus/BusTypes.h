@@ -48,34 +48,34 @@ enum class BusOwner : i8
     COUNT
 };
 
-static constexpr i8 BUS_NONE = i8(BusOwner::NONE);
-static constexpr i8 BUS_CPU = i8(BusOwner::CPU);
-static constexpr i8 BUS_REFRESH = i8(BusOwner::REFRESH);
-static constexpr i8 BUS_DISK = i8(BusOwner::DISK);
-static constexpr i8 BUS_AUD0 = i8(BusOwner::AUD0);
-static constexpr i8 BUS_AUD1 = i8(BusOwner::AUD1);
-static constexpr i8 BUS_AUD2 = i8(BusOwner::AUD2);
-static constexpr i8 BUS_AUD3 = i8(BusOwner::AUD3);
-static constexpr i8 BUS_BPL1 = i8(BusOwner::BPL1);
-static constexpr i8 BUS_BPL2 = i8(BusOwner::BPL2);
-static constexpr i8 BUS_BPL3 = i8(BusOwner::BPL3);
-static constexpr i8 BUS_BPL4 = i8(BusOwner::BPL4);
-static constexpr i8 BUS_BPL5 = i8(BusOwner::BPL5);
-static constexpr i8 BUS_BPL6 = i8(BusOwner::BPL6);
-static constexpr i8 BUS_BPL7 = i8(BusOwner::BPL7);
-static constexpr i8 BUS_BPL8 = i8(BusOwner::BPL8);
-static constexpr i8 BUS_SPRITE0 = i8(BusOwner::SPRITE0);
-static constexpr i8 BUS_SPRITE1 = i8(BusOwner::SPRITE1);
-static constexpr i8 BUS_SPRITE2 = i8(BusOwner::SPRITE2);
-static constexpr i8 BUS_SPRITE3 = i8(BusOwner::SPRITE3);
-static constexpr i8 BUS_SPRITE4 = i8(BusOwner::SPRITE4);
-static constexpr i8 BUS_SPRITE5 = i8(BusOwner::SPRITE5);
-static constexpr i8 BUS_SPRITE6 = i8(BusOwner::SPRITE6);
-static constexpr i8 BUS_SPRITE7 = i8(BusOwner::SPRITE7);
-static constexpr i8 BUS_COPPER = i8(BusOwner::COPPER);
-static constexpr i8 BUS_BLITTER = i8(BusOwner::BLITTER);
-static constexpr i8 BUS_BLOCKED = i8(BusOwner::BLOCKED);
-static constexpr i8 BUS_COUNT = i8(BusOwner::COUNT);
+static constexpr i8 BUS_NONE = i8(BusOwner::NONE);          ///< Alias of BusOwner::NONE
+static constexpr i8 BUS_CPU = i8(BusOwner::CPU);            ///< Alias of BusOwner::CPU
+static constexpr i8 BUS_REFRESH = i8(BusOwner::REFRESH);    ///< Alias of BusOwner::REFRESH
+static constexpr i8 BUS_DISK = i8(BusOwner::DISK);          ///< Alias of BusOwner::DISK
+static constexpr i8 BUS_AUD0 = i8(BusOwner::AUD0);          ///< Alias of BusOwner::AUD0
+static constexpr i8 BUS_AUD1 = i8(BusOwner::AUD1);          ///< Alias of BusOwner::AUD1
+static constexpr i8 BUS_AUD2 = i8(BusOwner::AUD2);          ///< Alias of BusOwner::AUD2
+static constexpr i8 BUS_AUD3 = i8(BusOwner::AUD3);          ///< Alias of BusOwner::AUD3
+static constexpr i8 BUS_BPL1 = i8(BusOwner::BPL1);          ///< Alias of BusOwner::BPL1
+static constexpr i8 BUS_BPL2 = i8(BusOwner::BPL2);          ///< Alias of BusOwner::BPL2
+static constexpr i8 BUS_BPL3 = i8(BusOwner::BPL3);          ///< Alias of BusOwner::BPL3
+static constexpr i8 BUS_BPL4 = i8(BusOwner::BPL4);          ///< Alias of BusOwner::BPL4
+static constexpr i8 BUS_BPL5 = i8(BusOwner::BPL5);          ///< Alias of BusOwner::BPL5
+static constexpr i8 BUS_BPL6 = i8(BusOwner::BPL6);          ///< Alias of BusOwner::BPL6
+static constexpr i8 BUS_BPL7 = i8(BusOwner::BPL7);          ///< Alias of BusOwner::BPL7
+static constexpr i8 BUS_BPL8 = i8(BusOwner::BPL8);          ///< Alias of BusOwner::BPL8
+static constexpr i8 BUS_SPRITE0 = i8(BusOwner::SPRITE0);    ///< Alias of BusOwner::SPRITE0
+static constexpr i8 BUS_SPRITE1 = i8(BusOwner::SPRITE1);    ///< Alias of BusOwner::SPRITE1
+static constexpr i8 BUS_SPRITE2 = i8(BusOwner::SPRITE2);    ///< Alias of BusOwner::SPRITE2
+static constexpr i8 BUS_SPRITE3 = i8(BusOwner::SPRITE3);    ///< Alias of BusOwner::SPRITE3
+static constexpr i8 BUS_SPRITE4 = i8(BusOwner::SPRITE4);    ///< Alias of BusOwner::SPRITE4
+static constexpr i8 BUS_SPRITE5 = i8(BusOwner::SPRITE5);    ///< Alias of BusOwner::SPRITE5
+static constexpr i8 BUS_SPRITE6 = i8(BusOwner::SPRITE6);    ///< Alias of BusOwner::SPRITE6
+static constexpr i8 BUS_SPRITE7 = i8(BusOwner::SPRITE7);    ///< Alias of BusOwner::SPRITE7
+static constexpr i8 BUS_COPPER = i8(BusOwner::COPPER);      ///< Alias of BusOwner::COPPER
+static constexpr i8 BUS_BLITTER = i8(BusOwner::BLITTER);    ///< Alias of BusOwner::BLITTER
+static constexpr i8 BUS_BLOCKED = i8(BusOwner::BLOCKED);    ///< Alias of BusOwner::BLOCKED
+static constexpr i8 BUS_COUNT = i8(BusOwner::COUNT);        ///< Alias of BusOwner::COUNT
 
 struct BusOwnerEnum : utl::Reflectable<BusOwnerEnum, BusOwner>
 {

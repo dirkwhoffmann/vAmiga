@@ -73,7 +73,7 @@ struct DriveStateEnum : utl::Reflectable<DriveStateEnum, DriveDmaState>
 /// Configuration options of the disk controller.
 typedef struct
 {
-    /* Acceleration factor. This value equals the number of words that get
+    /** Acceleration factor. This value equals the number of words that get
      * transfered into memory during a single disk DMA cycle. This value must
      * be 1 to emulate a real Amiga. If it set to, e.g., 2, the drive loads
      * twice as fast. A value of -1 indicates a turbo drive. In this case,
@@ -86,6 +86,7 @@ typedef struct
 }
 DiskControllerConfig;
 
+/// Returns true if the given value is a valid drive speed.
 inline bool isValidDriveSpeed(isize speed)
 {
     switch (speed) {

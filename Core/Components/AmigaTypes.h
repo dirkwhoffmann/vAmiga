@@ -367,24 +367,24 @@ AmigaInfo;
 // Private data types
 //
 
-typedef u32 RunLoopFlags;
+typedef u32 RunLoopFlags;               ///< Bit mask of RL flags
 
 namespace RL
 {
-constexpr u32 STOP               = (1 << 0);
-constexpr u32 SOFTSTOP_REACHED   = (1 << 1);
-constexpr u32 EOL_REACHED        = (1 << 2);
-constexpr u32 EOF_REACHED        = (1 << 3);
-constexpr u32 BREAKPOINT_REACHED = (1 << 4);
-constexpr u32 WATCHPOINT_REACHED = (1 << 5);
-constexpr u32 CATCHPOINT_REACHED = (1 << 6);
-constexpr u32 SWTRAP_REACHED     = (1 << 7);
-constexpr u32 BEAMTRAP_REACHED   = (1 << 8);
-constexpr u32 COPPERBP_REACHED   = (1 << 9);
-constexpr u32 COPPERWP_REACHED   = (1 << 10);
-constexpr u32 AUTO_SNAPSHOT      = (1 << 11);
-constexpr u32 USER_SNAPSHOT      = (1 << 12);
-constexpr u32 SYNC_THREAD        = (1 << 13);
+constexpr u32 STOP               = (1 << 0);  ///< Stop the emulator
+constexpr u32 SOFTSTOP_REACHED   = (1 << 1);  ///< A soft stop (end of the current instruction or frame) has been reached
+constexpr u32 EOL_REACHED        = (1 << 2);  ///< The end of a scanline has been reached
+constexpr u32 EOF_REACHED        = (1 << 3);  ///< The end of a frame has been reached
+constexpr u32 BREAKPOINT_REACHED = (1 << 4);  ///< A CPU breakpoint has been reached
+constexpr u32 WATCHPOINT_REACHED = (1 << 5);  ///< A CPU watchpoint has been reached
+constexpr u32 CATCHPOINT_REACHED = (1 << 6);  ///< A CPU catchpoint has been reached
+constexpr u32 SWTRAP_REACHED     = (1 << 7);  ///< A software trap has been reached
+constexpr u32 BEAMTRAP_REACHED   = (1 << 8);  ///< A beam trap has been reached
+constexpr u32 COPPERBP_REACHED   = (1 << 9);  ///< A Copper breakpoint has been reached
+constexpr u32 COPPERWP_REACHED   = (1 << 10);  ///< A Copper watchpoint has been reached
+constexpr u32 AUTO_SNAPSHOT      = (1 << 11);  ///< An automatic snapshot is due
+constexpr u32 USER_SNAPSHOT      = (1 << 12);  ///< A snapshot has been requested by the user
+constexpr u32 SYNC_THREAD        = (1 << 13);  ///< The emulator thread needs to synchronize with the timer
 };
 
 }

@@ -184,8 +184,8 @@ struct FSFamilyEnum : utl::Reflectable<FSFamilyEnum, FSFamily>
 /// Describes the contents of a disk image.
 struct ImageInfo {
 
-    ImageType   type;
-    ImageFormat format;
+    ImageType   type;                   ///< The image type
+    ImageFormat format;                 ///< The image format
 };
 
 }

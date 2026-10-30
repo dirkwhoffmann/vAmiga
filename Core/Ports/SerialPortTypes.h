@@ -72,7 +72,7 @@ typedef struct
 {
     SerialPortDevice device;                ///< Serial device type
     bool verbose;                           ///< Verbose mode
-    bool handshake;
+    bool handshake;                     ///< Enables the handshake lines
 }
 SerialPortConfig;
 
