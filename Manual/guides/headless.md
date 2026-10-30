@@ -16,9 +16,6 @@ The callback runs on the emulator thread. It only records the outcome (`RSH_ERRO
 void
 Headless::runScript(const fs::path &path)
 {
-    // Read the input script
-    // Script script(path);
-
     // Create an emulator instance
     VAmiga vamiga;
 
