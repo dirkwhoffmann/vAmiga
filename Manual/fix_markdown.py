@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+"""Prepares the Markdown written by moxygen for VitePress.
+
+  - Doxygen's anchor lines ("{#id}") are removed; VitePress derives the same
+    anchors from the headings.
+  - The front matter is rewritten: the title is the page heading (moxygen uses
+    the Doxygen id), the kind (class, struct, ...) is kept, and the
+    machine-generated description is dropped.
+  - The namespace page vamiga (all types and enumerations) gets a proper title and lists
+    its enumerations in "On this page".
+  - Moxygen documents all enumerations on the namespace page. Each one is moved
+    to a page of its own (enum-<Name>.md), and all links to it are redirected.
+  - The pages are moved to api/ (the overview page and everything else), so that
+    VitePress can show a sidebar for them. All links between pages are made
+    absolute. index.md is the landing page (home.md). The manual and the
+    developer's corner are plain Markdown pages that are not touched.
+
+Usage: fix_markdown.py <docs-dir>
+"""
+import re, shutil, sys
+from pathlib import Path
+
+def fix(text):
+    text = re.sub(r"(?m)^\{#[^}\n]*\}[ \t]*\n(?:[ \t]*\n)?", "", text)
+    front = re.match(r"---\n(.*?)\n---\n", text, re.S)
+    kind = re.search(r"(?m)^kind: .*$", front.group(1)) if front else None
+    body = re.sub(r"\A---\n.*?\n---\n", "", text, count=1, flags=re.S)
+    heading = re.search(r"(?m)^# (.+?)(?:\s*\{#[^}]*\})?\s*$", body)
+    title = heading.group(1).replace('"', "'") if heading else "VirtualC64"
+    # moxygen numbers the anchors of members ("#getinfo-7"); the headings that
+    # VitePress generates carry no such number.
+    slugs = {re.sub(r"[^\w-]", "", h.lower().replace(" ", "-"))
+             for h in re.findall(r"(?m)^#{1,4} (.+?)\s*$", body)}
+    def anchor(match):
+        name = match.group(1)
+        return f"](#{name})" if name in slugs else match.group(0)
+    body = re.sub(r"\]\(#([\w]+)-\d+\)", anchor, body)
+    return f'---\ntitle: "{title}"\n{kind.group(0) + chr(10) if kind else ""}---\n{body}'
+
+ENUM_ROW = re.compile(r"^\| \[`(\w+)`\]\(#([\w-]+)\)", re.M)
+
+def split_enums(docs):
+    """Moves every enumeration of vamiga.md to enum-<Name>.md."""
+    page = docs / "vamiga.md"
+    text = page.read_text()
+    start = text.index("\n## Enumerations\n")
+    end = text.index("\n## ", start + 1)
+    section = text[start:end]
+    anchors = {anchor: name for name, anchor in ENUM_ROW.findall(section)}
+    table_end = section.index("\n### ")
+    table = section[:table_end]
+    for block in re.split(r"\n(?=### )", section[table_end:].strip("\n")):
+        name = re.match(r"### (\w+)", block).group(1)
+        body = re.sub(r"^### \w+\n", "", block)
+        body = re.sub(r"(\n---\s*)+$", "", body.rstrip()) + "\n"
+        (docs / f"enum-{name}.md").write_text(f'---\ntitle: "{name}"\n---\n# {name}\n{body}')
+    page.write_text(text[:start] + table.rstrip("\n") + "\n" + text[end:])
+    return anchors
+
+def redirect(docs, anchors):
+    """Points links to an enumeration at its page."""
+    for page in docs.glob("*.md"):
+        # Inside the namespace page and the enumeration pages, "#name" is a link
+        # to the namespace page. Elsewhere it is a link within the page.
+        local = page.name == "vamiga.md" or page.name.startswith("enum-")
+        def link(match):
+            file, anchor = match.group(1), match.group(2)
+            # Links from other pages may still carry moxygen's anchor number
+            anchor = anchor if anchor in anchors else re.sub(r"-\d+$", "", anchor)
+            if anchor in anchors and (file or local):
+                return f"](enum-{anchors[anchor]}.md)"
+            return match.group(0)
+        text = page.read_text()
+        new = re.sub(r"\]\((vamiga\.md)?#([\w-]+)\)", link, text)
+        if new != text:
+            page.write_text(new)
+
+def slugs(page):
+    """The anchors VitePress generates for the headings of a page."""
+    text = re.sub(r"\A---\n.*?\n---\n", "", page.read_text(), count=1, flags=re.S)
+    return {re.sub(r"[^\w-]", "", re.sub(r"\s*\{#[^}]*\}$", "", h).lower().replace(" ", "-"))
+            for h in re.findall(r"(?m)^#{1,6} (.+?)\s*$", text)}
+
+def organize(docs):
+    """Moves the pages to api/ and repairs the links."""
+    target = {}
+    for page in docs.glob("*.md"):
+        name = page.name
+        if name.startswith("page-api_"):
+            target[name] = "api/" + name[len("page-api_"):].replace("_", "-")
+        else:
+            target[name] = "api/" + name
+    known_slugs = {name: slugs(docs / name) for name in target}
+    def link(match):
+        file, anchor = match.group(1), match.group(2) or ""
+        if file not in target:
+            return match.group(0)
+        if anchor:
+            # moxygen numbers anchors; VitePress headings carry no number
+            known = known_slugs[file]
+            name = anchor[1:]
+            if name not in known:
+                base = re.sub(r"-\d+$", "", name)
+                anchor = f"#{base}" if base in known else ""
+        return f"](/{target[file]}{anchor})"
+    for name, new in target.items():
+        text = re.sub(r"\]\(([\w.-]+\.md)(#[^)]*)?\)", link, (docs / name).read_text())
+        destination = docs / new
+        destination.parent.mkdir(exist_ok=True)
+        destination.write_text(text)
+        (docs / name).unlink()
+
+def main(docs):
+    docs = Path(docs)
+    for page in docs.glob("*.md"):
+        page.write_text(fix(page.read_text()))
+    namespace = docs / "vamiga.md"
+    namespace.write_text(namespace.read_text().replace('title: "vamiga"', 'title: "Types and Enumerations"\noutline: [2, 3]', 1)
+                         .replace("\n# vamiga\n", "\n# Types and Enumerations\n", 1))
+    redirect(docs, split_enums(docs))
+    (docs / "api.md").unlink(missing_ok=True)
+    organize(docs)
+    shutil.copy(Path(__file__).parent / "home.md", docs / "index.md")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit(__doc__)
+    main(*sys.argv[1:])

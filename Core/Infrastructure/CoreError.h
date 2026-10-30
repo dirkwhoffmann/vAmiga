@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -13,6 +14,7 @@
 
 namespace vamiga {
 
+/// Error thrown if a request does not match the state of the emulator.
 struct CoreError : public utl::Error {
 
     static constexpr long OK                =   0; ///< No error

@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -56,6 +57,7 @@ constexpr u32   IO_OFFSET           = 0x2C;
 // Enumerations
 //
 
+/// Command of the hard drive controller.
 enum class IoCommand
 {
     // Standard commands
@@ -168,6 +170,7 @@ struct IoCommandEnum : utl::Reflectable<IoCommandEnum, IoCommand>
     }
 };
 
+/// State of a hard drive controller.
 enum class HdcState
 {
     UNDETECTED,     // The controller waits to be detected by the OS
@@ -201,6 +204,7 @@ struct HdcStateEnum : utl::Reflectable<HdcStateEnum, HdcState>
 // Structures
 //
 
+/// Configuration options of a hard drive controller.
 typedef struct
 {
     bool connected;                         ///< The controller is connected
@@ -216,6 +220,7 @@ typedef struct
 }
 HdcConfig;
 
+/// State of a hard drive controller.
 typedef struct
 {
     isize nr;                               ///< Number of the controller
@@ -224,6 +229,7 @@ typedef struct
 }
 HdcInfo;
 
+/// Counters of the commands executed by a hard drive controller.
 typedef struct
 {
     // Tracks the number of executed commands

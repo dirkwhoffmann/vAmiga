@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Monitor color palette.
 enum class Palette
 {
     COLOR,
@@ -63,6 +65,7 @@ struct PaletteEnum : utl::Reflectable<PaletteEnum, Palette>
     }
 };
 
+/// Zoom level of the visible area.
 enum class Zoom
 {
     CUSTOM,
@@ -100,6 +103,7 @@ struct ZoomEnum : utl::Reflectable<ZoomEnum, Zoom>
     }
 };
 
+/// Centering mode of the visible area.
 enum class Center
 {
     CUSTOM,
@@ -131,6 +135,7 @@ struct CenterEnum : utl::Reflectable<CenterEnum, Center>
     }
 };
 
+/// Upscaling algorithm of the video port.
 enum class Upscaler : long
 {
     NONE,                      ///< No upscaler
@@ -160,6 +165,7 @@ struct UpscalerEnum : utl::Reflectable<UpscalerEnum, Upscaler> {
     }
 };
 
+/// Dot mask of the monitor effect.
 enum class Dotmask : long
 {
     NONE,                       ///< No dotmask
@@ -193,6 +199,7 @@ struct DotmaskEnum : utl::Reflectable<DotmaskEnum, Dotmask> {
     }
 };
 
+/// Scanline effect of the monitor.
 enum class Scanlines : long
 {
     NONE,                     ///< No scanlines
@@ -227,6 +234,7 @@ struct ScanlinesEnum : utl::Reflectable<ScanlinesEnum, Scanlines> {
 // Structures
 //
 
+/// Configuration options of the monitor.
 typedef struct
 {
     // Colors

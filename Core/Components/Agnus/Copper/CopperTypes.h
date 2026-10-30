@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Structures
 //
 
+/// State of the Copper (registers and program counter).
 typedef struct
 {
     isize copList;                          ///< Number of the active Copper list (1 or 2)

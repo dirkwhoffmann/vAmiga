@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -50,12 +51,14 @@ constexpr u16 BLTCON1_SING    = 0x0002;
 // Structures
 //
 
+/// Configuration options of the Blitter.
 typedef struct
 {
     isize accuracy;                         ///< Blitter emulation accuracy
 }
 BlitterConfig;
 
+/// State of the Blitter (registers and progress).
 typedef struct
 {
     u16 bltcon0;                            ///< Blitter control register 0 (BLTCON0)

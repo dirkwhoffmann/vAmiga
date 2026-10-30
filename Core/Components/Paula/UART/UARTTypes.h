@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -13,6 +14,7 @@
 
 namespace vamiga {
 
+/// State of the UART.
 typedef struct
 {
     u16 serper;                             ///< Serial period register (SERPER)

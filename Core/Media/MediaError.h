@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -15,6 +16,7 @@ namespace vamiga {
 
 using namespace utl;
 
+/// Error thrown if a media file is invalid or not supported.
 struct MediaError : public Error {
 
     static constexpr long OK                =   0; ///< No error

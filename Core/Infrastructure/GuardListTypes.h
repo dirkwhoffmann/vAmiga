@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Type of a guard.
 enum class GuardType : long
 {
     BREAKPOINT,
@@ -65,6 +67,7 @@ struct GuardTypeEnum : utl::Reflectable<GuardTypeEnum, GuardType>
 // Structures
 //
 
+/// Description of a guard (breakpoint, watchpoint, ...).
 typedef struct
 {
     u32 addr;                               ///< Observed address

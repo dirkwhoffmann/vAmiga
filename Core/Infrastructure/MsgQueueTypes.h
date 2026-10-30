@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -18,6 +19,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Message type.
 enum class Msg : long
 {
     NONE,               ///< No message
@@ -281,20 +283,29 @@ struct MsgEnum : utl::Reflectable<MsgEnum, Msg>
 // Structures
 //
 
+/// Payload of CPU messages (the program counter).
 typedef struct { u32 pc; u8 vector; } CpuMsg;
+/// Payload of messages that carry a beam position.
 typedef struct { i16 v; i16 h; } BeamMsg;
 /* Reports a configuration request. The option is -1 if the request has changed
  * several options (e.g., a configuration scheme, in which case 'value' is the
  * scheme) or if it is not known which ones. The component id is -1 if the
  * request was not targeted at a single component.
  */
+/// Payload of configuration messages.
 typedef struct { i32 option; i32 id; i64 value; } ConfigMsg;
+/// Payload of drive messages.
 typedef struct { i16 nr; i16 value; i16 volume; i16 pan; } DriveMsg;
+/// Payload of hard drive controller messages.
 typedef struct { i16 nr; HdcState state; } HdcMsg;
+/// Payload of script messages.
 typedef struct { isize line; i16 delay; } ScriptMsg;
+/// Payload of snapshot messages.
 typedef struct { void *snapshot; } SnapshotMsg;
+/// Payload of viewport messages.
 typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg; // hstrt/hstop in super-hires pixels
 
+/// A message sent by the emulator.
 typedef struct
 {
     // Header

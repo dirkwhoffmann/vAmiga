@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -19,6 +20,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Video standard.
 enum class TV : long
 {
     PAL,
@@ -50,6 +52,7 @@ struct TVEnum : utl::Reflectable<TVEnum, TV>
     }
 };
 
+/// Display resolution.
 enum class Resolution : long
 {
     LORES,      // Lores mode
@@ -84,6 +87,7 @@ struct ResolutionEnum : utl::Reflectable<ResolutionEnum, Resolution>
     }
 };
 
+/// When warp mode is entered automatically.
 enum class Warp : long
 {
     AUTO,
@@ -112,6 +116,7 @@ struct WarpEnum : utl::Reflectable<WarpEnum, Warp>
     }
 };
 
+/// Predefined machine configuration.
 enum class ConfigScheme : long
 {
     A1000_OCS_1MB,
@@ -152,6 +157,7 @@ struct ConfigSchemeEnum : utl::Reflectable<ConfigSchemeEnum, ConfigScheme>
     }
 };
 
+/// Custom chip register.
 enum class Reg : long
 {
     BLTDDAT,    DMACONR,    VPOSR,      VHPOSR,     DSKDATR,
@@ -319,6 +325,7 @@ struct RegEnum : utl::Reflectable<RegEnum, Reg>
 // Structures
 //
 
+/// Configuration options of the Amiga.
 typedef struct
 {
     //! Machine type (PAL or NTSC)
@@ -342,6 +349,7 @@ typedef struct
 }
 AmigaConfig;
 
+/// State of the Amiga (clock and frame counters).
 typedef struct
 {
     Cycle cpuClock;                         ///< CPU clock (in master cycles)

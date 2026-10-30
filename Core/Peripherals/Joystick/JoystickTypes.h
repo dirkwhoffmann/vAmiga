@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// An action performed on a game pad.
 enum class GamePadAction : long
 {
     PULL_UP = 0,    // Pull the joystick up
@@ -82,6 +84,7 @@ struct GamePadActionEnum : utl::Reflectable<GamePadActionEnum, GamePadAction>
 // Structures
 //
 
+/// Configuration options of a joystick.
 typedef struct
 {
     bool autofire;                          ///< Autofire
@@ -91,6 +94,7 @@ typedef struct
 }
 JoystickConfig;
 
+/// State of a joystick.
 typedef struct
 {
     bool button;                            ///< The fire button is pressed

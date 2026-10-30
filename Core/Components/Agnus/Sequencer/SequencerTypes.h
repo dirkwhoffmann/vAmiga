@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -26,6 +27,7 @@ static constexpr u16 SIG_SHW            = 0b0010000000;
 static constexpr u16 SIG_RHW            = 0b0100000000;
 static constexpr u16 SIG_DONE           = 0b1000000000;
 
+/// State of the data-fetch logic of the sequencer.
 struct DDFState : utl::Streamable
 {
     bool bpv = false;

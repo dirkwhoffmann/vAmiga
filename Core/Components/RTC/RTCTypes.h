@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Real-time clock chip revision.
 enum class RTCRevision : long
 {
     NONE,
@@ -56,6 +58,7 @@ struct RTCRevisionEnum : utl::Reflectable<RTCRevisionEnum, RTCRevision>
 // Structures
 //
 
+/// Configuration options of the real-time clock.
 typedef struct
 {
     RTCRevision model;                      ///< Chip revision

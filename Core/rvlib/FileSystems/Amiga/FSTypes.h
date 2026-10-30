@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ using namespace utl;
 
 struct FSBlock;
 
+/// File system format.
 enum class FSFormat : long
 {
     OFS      = 0,    // Original File System
@@ -112,6 +114,7 @@ inline bool isINTLVolumeType(FSFormat value)
     }
 }
 
+/// Type of a file system block.
 enum class FSBlockType : long
 {
     UNKNOWN,
@@ -171,6 +174,7 @@ struct FSBlockTypeEnum : Reflectable<FSBlockTypeEnum, FSBlockType>
     }
 };
 
+/// Type of a field inside a file system block.
 enum class FSItemType
 {
     UNKNOWN,
@@ -315,6 +319,7 @@ struct FSItemTypeEnum : Reflectable<FSItemTypeEnum, FSItemType>
 };
 
 
+/// Error found in a file system block.
 enum class FSBlockError : long
 {
     OK,
@@ -368,6 +373,7 @@ struct FSBlockErrorEnum : Reflectable<FSBlockErrorEnum, FSBlockError>
     }
 };
 
+/// Type of a boot block.
 enum class BootBlockType
 {
     STANDARD,
@@ -396,6 +402,7 @@ struct BootBlockTypeEnum : Reflectable<BootBlockTypeEnum, BootBlockType>
     }
 };
 
+/// Identifies a known boot block.
 enum class BootBlockId
 {
     NONE,
@@ -441,6 +448,7 @@ struct BootBlockIdEnum : Reflectable<BootBlockIdEnum, BootBlockId>
 // Structures
 //
 
+/// Static properties of an Amiga file system.
 struct FSTraits
 {
     FSFormat dos = FSFormat::NODOS;
@@ -456,6 +464,7 @@ struct FSTraits
     bool adf() const;
 };
 
+/// Result of a file system consistency check.
 typedef struct
 {
     // Block errors

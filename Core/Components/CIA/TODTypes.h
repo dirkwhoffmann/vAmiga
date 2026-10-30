@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -16,6 +17,7 @@ namespace vamiga {
 // Structures
 //
 
+/// State of a time-of-day counter.
 typedef struct
 {
     u32 value;                              ///< Current counter value

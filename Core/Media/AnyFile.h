@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -19,6 +20,7 @@ namespace vamiga {
 
 
 // Base class for all file-backed binary formats
+/// Base class of all files that can be loaded or saved.
 class AnyFile : public utl::Hashable, public utl::Dumpable, public utl::Loggable {
 
 public:

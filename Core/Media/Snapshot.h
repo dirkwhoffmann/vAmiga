@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -15,6 +16,7 @@
 
 namespace vamiga {
 
+/// A screenshot that is stored inside a snapshot.
 struct Thumbnail {
     
     // Image size
@@ -30,6 +32,7 @@ struct Thumbnail {
     void take(class Amiga &amiga, isize dx = 2, isize dy = 1);
 };
 
+/// Header of a snapshot file.
 struct SnapshotHeader {
     
     // Magic bytes ('V','A','S','N','A','P')
@@ -51,6 +54,7 @@ struct SnapshotHeader {
     Thumbnail screenshot;
 };
 
+/// A snapshot of the emulator state.
 class Snapshot : public AnyFile {
     
 public:

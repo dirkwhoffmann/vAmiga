@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -20,6 +21,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Source of an interrupt.
 enum class IrqSource : long
 {
     TBE,
@@ -92,6 +94,7 @@ struct IrqSourceEnum : utl::Reflectable<IrqSourceEnum, IrqSource>
 // Structures
 //
 
+/// State of Paula (interrupt and DMA registers).
 typedef struct
 {
     u16 intreq;                             ///< Interrupt request register (INTREQ)

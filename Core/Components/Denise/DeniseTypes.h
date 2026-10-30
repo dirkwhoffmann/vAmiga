@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Denise chip revision.
 enum class DeniseRev : long
 {
     OCS,           // MOS 8362R8
@@ -56,6 +58,7 @@ struct DeniseRevEnum : utl::Reflectable<DeniseRevEnum, DeniseRev>
 // Structures
 //
 
+/// Configuration options of Denise.
 typedef struct
 {
     // Emulated chip model
@@ -96,6 +99,7 @@ typedef struct
 }
 DeniseConfig;
 
+/// State of a sprite.
 typedef struct
 {
     // Number of lines the sprite was armed
@@ -115,6 +119,7 @@ typedef struct
 }
 SpriteInfo;
 
+/// Geometry of the visible area, derived from DIWSTRT and DIWSTOP.
 typedef struct
 {
     // Extracted information from DIWSTRT and DIWSTOP.
@@ -126,6 +131,7 @@ typedef struct
 }
 ViewPortInfo;
 
+/// State of Denise (registers and sprite state).
 typedef struct
 {
     // bool ecs;

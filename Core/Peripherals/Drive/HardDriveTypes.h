@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -19,6 +20,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Type of a hard drive.
 enum class HardDriveType : long
 {
     GENERIC
@@ -49,6 +51,7 @@ struct HardDriveTypeEnum : utl::Reflectable<HardDriveTypeEnum, HardDriveType>
  * the setting has no effect. Writing is always performed by the main
  * instance, never by the run-ahead instance.
  */
+/// When a hard drive writes its data through to the image file.
 enum class WriteThroughMode : long
 {
     NEVER,      // The changes stay in memory
@@ -83,6 +86,7 @@ struct WriteThroughModeEnum : utl::Reflectable<WriteThroughModeEnum, WriteThroug
     }
 };
 
+/// State of a hard drive.
 enum class HardDriveState : long
 {
     IDLE,
@@ -116,6 +120,7 @@ struct HardDriveStateEnum : utl::Reflectable<HardDriveStateEnum, HardDriveState>
 // Structures
 //
 
+/// Configuration options of a hard drive.
 typedef struct
 {
     HardDriveType type;                     ///< Drive model
@@ -146,6 +151,7 @@ HardDriveConfig;
 // Largest disk a snapshot can carry, in MB
 constexpr isize hdrSnapshotLimit = 128;
 
+/// Static properties of a hard drive.
 typedef struct
 {
     // Object information
@@ -175,6 +181,7 @@ typedef struct
 }
 HardDriveTraits;
 
+/// Static properties of a hard drive partition.
 typedef struct
 {
     isize nr;                               ///< Number of the partition
@@ -185,6 +192,7 @@ typedef struct
 }
 PartitionTraits;
 
+/// State of a hard drive.
 typedef struct
 {
     isize nr;                               ///< Number of the drive

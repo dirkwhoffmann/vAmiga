@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -44,7 +45,7 @@ namespace vamiga {
  *
  *   CoreError  : The request does not match the state of the emulator, e.g.,
  *                an invalid option value, a missing ROM, or an emulator thread
- *                that cannot carry out the request (see #CoreError).
+ *                that cannot carry out the request (see CoreError).
  *   IOError    : A file could not be accessed.
  *   MediaError : A ROM, snapshot, disk image or similar file is invalid or
  *                not supported.
@@ -78,6 +79,7 @@ namespace vamiga {
 // Base class for all APIs
 //
 
+/// Base class of all APIs.
 class API {
 
     friend class VAmiga;
@@ -118,6 +120,7 @@ public:
 // Components
 //
 
+/// API of the Amiga as a whole.
 class AmigaAPI : public API {
 
     friend class VAmiga;
@@ -335,7 +338,7 @@ public:
      *  getCachedMetrics() only return up-to-date snapshots while its class is
      *  selected.
      *
-     *  @example The following call enables auto-inspections for the CIA chips
+     *  Example: The following call enables auto-inspections for the CIA chips
      *  and Paula:
      *  setAutoInspectionMask(1LL << long(Class::CIA) | 1LL << long(Class::Paula));
      *
@@ -354,6 +357,7 @@ public:
 // Agnus
 //
 
+/// API of the X-Ray visualizer.
 class XRayAPI : public API {
 
     friend class VAmiga;
@@ -379,6 +383,7 @@ public:
     const XRayInfo &getCachedInfo() const;
 };
 
+/// API of the logic analyzer.
 class LogicAnalyzerAPI : public API {
 
     friend class VAmiga;
@@ -413,6 +418,7 @@ public:
     LogicAnalyzerSample getTraceSample(isize nr) const;
 };
 
+/// API of the Blitter.
 class BlitterAPI : public API {
 
     friend class VAmiga;
@@ -450,7 +456,7 @@ public:
  *  - The plain functions (e.g., setAt()) return when the emulator thread has
  *    carried out the request. A failure throws the corresponding exception
  *    (e.g., if a guard to remove does not exist). They throw
- *    CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot carry
+ *    CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot carry
  *    out the request, because it has not been launched yet, is halted or
  *    suspended, or if they are called from the emulator thread itself.
  *  - The functions with the Async suffix (e.g., setAtAsync()) queue the
@@ -582,6 +588,7 @@ public:
 
 };
 
+/// API of the Copper.
 class CopperAPI : public API {
 
     friend class VAmiga;
@@ -630,6 +637,7 @@ public:
     bool isIllegalInstr(u32 addr) const;
 };
 
+/// API of the Agnus chip.
 class AgnusAPI : public API {
 
     friend class VAmiga;
@@ -682,6 +690,7 @@ public:
 // CIA
 //
 
+/// API of a CIA chip.
 class CIAAPI : public API {
 
     friend class VAmiga;
@@ -719,6 +728,7 @@ public:
 
 namespace moira { class Guards; class Debugger; }
 
+/// API of the CPU debugger (disassembler and dumps).
 class CPUDebuggerAPI : public API {
 
     friend class VAmiga;
@@ -750,7 +760,7 @@ public:
      *                  current register contents.
      *  @param  len     If given, receives the length of the instruction in bytes.
      *  @return The disassembled text.
-     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the format string is invalid.
+     *  @throw  CoreError (CoreError::OPT_INV_ARG) if the format string is invalid.
      */
     string disassemble(u32 addr, const string &fmt, isize *len = nullptr) const;
 
@@ -761,7 +771,7 @@ public:
      *                  the time the instruction was recorded.
      *  @param  len     If given, receives the length of the instruction in bytes.
      *  @return The disassembled text.
-     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the format string is invalid.
+     *  @throw  CoreError (CoreError::OPT_INV_ARG) if the format string is invalid.
      */
     string disassembleRecorded(isize nr, const string &fmt, isize *len = nullptr) const;
 
@@ -773,6 +783,7 @@ public:
     string vectorName(isize i) const;
 };
 
+/// API of the CPU.
 class CPUAPI : public API {
 
     friend class VAmiga;
@@ -803,6 +814,7 @@ public:
     const CPUInfo &getCachedInfo() const;
 };
 
+/// API of the Denise chip.
 class DeniseAPI : public API {
 
     friend class VAmiga;
@@ -833,6 +845,7 @@ public:
 // Memory
 //
 
+/// API of the memory debugger (dumps and searches).
 class MemoryDebuggerAPI : public API {
 
     friend class VAmiga;
@@ -845,7 +858,7 @@ public:
     /// @{
 
     /**  @brief  Returns the memory source for a given address
-     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
+     *  @throw  CoreError (CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     MemSrc getMemSrc(Accessor src, u32 addr) const;
     
@@ -857,7 +870,7 @@ public:
     const char *regName(u32 addr) const;
 
     /** @brief  Reads a value from memory without causing side effects.
-     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
+     *  @throw  CoreError (CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     u8 spypeek8(Accessor src, u32 addr) const;
     u16 spypeek16(Accessor src, u32 addr) const;
@@ -867,7 +880,7 @@ public:
      *  @param  src     The accessor used to read the bytes.
      *  @param  addr    First address to dump.
      *  @param  bytes   Number of bytes to dump.
-     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
+     *  @throw  CoreError (CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     string ascDump(Accessor src, u32 addr, isize bytes) const;
 
@@ -881,7 +894,7 @@ public:
      *  @param  addr    First address to dump.
      *  @param  bytes   Number of bytes to dump.
      *  @param  sz      Group size in bytes (1, 2, or 4).
-     *  @throw  CoreError (#CoreError::OPT_INV_ARG) if the accessor is invalid.
+     *  @throw  CoreError (CoreError::OPT_INV_ARG) if the accessor is invalid.
      */
     string hexDump(Accessor src, u32 addr, isize bytes, isize sz = 1) const;
     string memDump(Accessor src, u32 addr, isize bytes, isize sz = 1) const;
@@ -889,6 +902,7 @@ public:
     /// @}
 };
 
+/// API of the memory.
 class MemoryAPI : public API {
 
     friend class VAmiga;
@@ -983,6 +997,7 @@ public:
 // Paula
 //
 
+/// API of an audio channel of Paula.
 class AudioChannelAPI : public API {
 
     friend class VAmiga;
@@ -1007,6 +1022,7 @@ public:
     const StateMachineInfo &getCachedInfo() const;
 };
 
+/// API of the disk controller.
 class DiskControllerAPI : public API {
 
     friend class VAmiga;
@@ -1032,6 +1048,7 @@ public:
     const DiskControllerInfo &getCachedInfo() const;
 };
 
+/// API of the UART.
 class UARTAPI : public API {
 
     friend class VAmiga;
@@ -1053,6 +1070,7 @@ public:
     const UARTInfo &getCachedInfo() const;
 };
 
+/// API of the Paula chip.
 class PaulaAPI : public API {
 
     friend class VAmiga;
@@ -1085,6 +1103,7 @@ public:
     const PaulaInfo &getCachedInfo() const;
 };
 
+/// API of the real-time clock.
 class RTCAPI : public API {
 
     friend class VAmiga;
@@ -1113,6 +1132,7 @@ public:
 // Peripherals (FloppyDrive)
 //
 
+/// API of a floppy drive.
 class FloppyDriveAPI : public API {
 
     friend class VAmiga;
@@ -1229,6 +1249,7 @@ public:
 // Peripherals (HardDrive)
 //
 
+/// API of a hard drive controller.
 class HdControllerAPI : public API {
 
     friend class VAmiga;
@@ -1266,6 +1287,7 @@ public:
     const HdcMetrics &getCachedMetrics() const;
 };
 
+/// API of a hard drive.
 class HardDriveAPI : public API {
 
     friend class VAmiga;
@@ -1456,6 +1478,7 @@ public:
 // Peripherals (Joystick)
 //
 
+/// API of a joystick.
 class JoystickAPI : public API {
 
     friend class VAmiga;
@@ -1502,6 +1525,7 @@ public:
 // Peripherals (Keyboard)
 //
 
+/// API of the keyboard.
 class KeyboardAPI : public API {
 
     friend class VAmiga;
@@ -1584,6 +1608,7 @@ public:
 // Peripherals (Mouse)
 //
 
+/// API of a mouse.
 class MouseAPI : public API {
 
     friend class VAmiga;
@@ -1648,6 +1673,7 @@ public:
 // Ports (AudioPort)
 //
 
+/// API of the audio port.
 class AudioPortAPI : public API {
 
     friend class VAmiga;
@@ -1684,7 +1710,6 @@ public:
     const AudioPortMetrics &getMetrics() const;
     const AudioPortMetrics &getCachedMetrics() const;
 
-    /// @}
     /// @name Retrieving audio data
     /// @{
 
@@ -1739,7 +1764,7 @@ public:
     float drawL(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const;
     float drawR(u32 *buffer, isize width, isize height, float maxAmp, u32 color) const;
 
-    /// @}};
+    /// @}
 };
 
 
@@ -1747,6 +1772,7 @@ public:
 // Ports (ControlPort)
 //
 
+/// API of a control port.
 class ControlPortAPI : public API {
 
     friend class VAmiga;
@@ -1776,6 +1802,7 @@ public:
 // Ports (SerialPort)
 //
 
+/// API of the serial port.
 class SerialPortAPI : public API {
 
     friend class VAmiga;
@@ -1818,6 +1845,7 @@ public:
 // Ports (VideoPort)
 //
 
+/// API of the video port.
 class VideoPortAPI : public API {
 
     friend class VAmiga;
@@ -1842,7 +1870,6 @@ public:
     const VideoPortInfo &getInfo() const;
     const VideoPortInfo &getCachedInfo() const;
 
-    /// @}
     /// @name Retrieving video data
     /// @{
 
@@ -1936,6 +1963,7 @@ public:
 // Misc (MsgQueue)
 //
 
+/// API of the message queue.
 class MsgQueueAPI : public API {
 
     friend class VAmiga;
@@ -2005,23 +2033,23 @@ public:
     /// @name Loading and saving the key-value storage
 
     /** @brief  Loads a storage file from disk
-     *  @throw  IOError (#IOError::FILE_NOT_FOUND)
-     *  @throw  CoreError (#CoreError::SYNTAX)
+     *  @throw  IOError (IOError::FILE_NOT_FOUND)
+     *  @throw  CoreError (CoreError::SYNTAX)
      */
     void load(const std::filesystem::path &path);
 
     /** @brief  Loads a storage file from a stream
-     *  @throw  CoreError (#CoreError::SYNTAX)
+     *  @throw  CoreError (CoreError::SYNTAX)
      */
     void load(std::ifstream &stream);
 
     /** @brief  Loads a storage file from a string stream
-     *  @throw  CoreError (#CoreError::SYNTAX)
+     *  @throw  CoreError (CoreError::SYNTAX)
      */
     void load(std::stringstream &stream);
 
     /** @brief  Saves a storage file to disk
-     *  @throw  IOError (#IOError::FILE_CANT_WRITE)
+     *  @throw  IOError (IOError::FILE_CANT_WRITE)
      */
     void save(const std::filesystem::path &path);
 
@@ -2045,14 +2073,14 @@ public:
     /** @brief  Queries a key-value pair.
      *  @param  key     The key.
      *  @result The value as a string.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  CoreError (CoreError::INVALID\_KEY)
      */
     string getRaw(const string &key) const;
 
     /** @brief  Queries a key-value pair.
      *  @param  key     The key.
      *  @result The value as an integer. 0 if the value cannot not be parsed.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  CoreError (CoreError::INVALID\_KEY)
      */
     i64 get(const string &key) const;
 
@@ -2060,21 +2088,21 @@ public:
      *  @param  opt     A config option whose name is used as the prefix of the key.
      *  @param  nr      Optional number that is appened to the key as suffix.
      *  @result The value as an integer.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  CoreError (CoreError::INVALID\_KEY)
      */
     i64 get(Opt opt, isize nr = 0) const;
 
     /** @brief  Queries a fallback key-value pair.
      *  @param  key     The key.
      *  @result The value as a string.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  CoreError (CoreError::INVALID\_KEY)
      */
     string getFallbackRaw(const string &key) const;
 
     /** @brief  Queries a fallback key-value pair.
      *  @param  key     The key.
      *  @result The value as an integer. 0 if the value cannot not be parsed.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  CoreError (CoreError::INVALID\_KEY)
      */
     i64 getFallback(const string &key) const;
 
@@ -2082,7 +2110,7 @@ public:
      *  @param  opt     A config option whose name is used as the key.
      *  @param  nr      Optional number that is appened to the key as suffix.
      *  @result The value as an integer.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  CoreError (CoreError::INVALID\_KEY)
      */
     i64 getFallback(Opt opt, isize nr = 0) const;
 
@@ -2094,14 +2122,14 @@ public:
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  key     The key, given as a string.
      *  @param  value   The value, given as a string.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void set(const string &key, const string &value);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as a string.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void set(Opt opt, const string &value);
 
@@ -2109,14 +2137,14 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as a string.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void set(Opt opt, const string &value, std::vector<isize> objids);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void set(Opt opt, i64 value);
 
@@ -2124,7 +2152,7 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as an integer.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void set(Opt opt, i64 value, std::vector<isize> objids);
 
@@ -2137,7 +2165,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void setFallback(Opt opt, const string &value);
 
@@ -2151,7 +2179,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void setFallback(Opt opt, i64 value);
 
@@ -2173,20 +2201,20 @@ public:
 
     /** @brief  Deletes a key-value pair
      *  @param  key     The key of the key-value pair.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void remove(const string &key);
 
     /** @brief  Deletes a key-value pair
      *  @param  opt     The option's name forms the key.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void remove(Opt opt);
 
     /** @brief  Deletes multiple key-value pairs.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#CoreError::INVALID_KEY)
+     *  @throw  CoreError (CoreError::INVALID_KEY)
      */
     void remove(Opt opt, std::vector <isize> objids);
 
@@ -2309,6 +2337,7 @@ public:
 // Misc (RemoteManager)
 //
 
+/// API of the remote manager.
 class RemoteManagerAPI : public API {
 
     friend class VAmiga;
@@ -2352,6 +2381,7 @@ public:
 // Top-level API
 //
 
+/// The emulator. Entry point of the API.
 class VAmiga : public API {
     
 public:
@@ -2503,14 +2533,14 @@ public:
     
     /** @brief  Switches the emulator on
      *
-     *  Powering on the emulator changes the internal state to #STATE\_PAUSED,
+     *  Powering on the emulator changes the internal state to ExecState::PAUSED,
      *  the same state that is entered when the user hits the pause button.
      *  Calling this function on an already powered-on emulator has no effect.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use powerOnAsync() in these situations.
@@ -2526,13 +2556,13 @@ public:
     
     /** @brief  Switches the emulator off
      *
-     *  Powering off the emulator changes the internal state to #STATE\_OFF.
+     *  Powering off the emulator changes the internal state to ExecState::OFF.
      *  Calling this function on an already powered-off emulator has no effect.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use powerOffAsync() in these situations.
@@ -2548,7 +2578,7 @@ public:
     
     /** @brief  Starts emulation
      *
-     *  Running the emulator changes the internal state to #STATE\_RUNNING,
+     *  Running the emulator changes the internal state to ExecState::RUNNING,
      *  which is the normal operation state. Frames are computed at normal
      *  pace, if warp mode is switched off, or as fast as possible, if warp
      *  mode is switched on. If this function is called for a powered-off
@@ -2558,7 +2588,7 @@ public:
      *
      *  The function returns when the emulator has been started.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use runAsync() in these situations.
@@ -2576,14 +2606,14 @@ public:
     
     /** @brief   Pauses emulation
      *
-     * Pausing the emulator changes the internal state from #STATE\_RUNNING
-     * to #STATE\_PAUSED after completing the current frame. The emulator
+     * Pausing the emulator changes the internal state from ExecState::RUNNING
+     * to ExecState::PAUSED after completing the current frame. The emulator
      * enters a frozen state where no more frames are computed.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use pauseAsync() in these situations.
@@ -2605,7 +2635,7 @@ public:
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use hardResetAsync() in these situations.
@@ -2626,7 +2656,7 @@ public:
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use softResetAsync() in these situations.
@@ -2642,7 +2672,7 @@ public:
     
     /** @brief   Terminates the emulator thread
      *
-     *  Halting the emulator changes the internal state to #STATE\_HALTED.
+     *  Halting the emulator changes the internal state to ExecState::HALTED.
      *  This state is part of the shutdown procedure and never entered during
      *  normal operation.
      *
@@ -2661,12 +2691,12 @@ public:
      *  requested it. Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use warpOnAsync() in these situations.
@@ -2678,7 +2708,7 @@ public:
      *  This is the asynchronous counterpart of warpOn(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void warpOnAsync(isize source);
     
@@ -2689,12 +2719,12 @@ public:
      *  on to implement the warp mode option). Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use warpOffAsync() in these situations.
@@ -2706,7 +2736,7 @@ public:
      *  This is the asynchronous counterpart of warpOff(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void warpOffAsync(isize source);
     
@@ -2717,12 +2747,12 @@ public:
      *  requested it. Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use trackOnAsync() in these situations.
@@ -2734,7 +2764,7 @@ public:
      *  This is the asynchronous counterpart of trackOn(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void trackOnAsync(isize source);
     
@@ -2744,12 +2774,12 @@ public:
      *  when no other source requests it. Valid sources are 0 to 6.
      *
      *  @param  source      The client requesting the change.
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      *
      *  The function returns when the emulator thread has carried out the
      *  request. A failure throws the corresponding exception.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use trackOffAsync() in these situations.
@@ -2761,7 +2791,7 @@ public:
      *  This is the asynchronous counterpart of trackOff(). The request is queued and
      *  carried out by the emulator thread at some later time (see sync()).
      *
-     *  @throw CoreError (#CoreError::OPT_INV_ARG) if the source is out of range.
+     *  @throw CoreError (CoreError::OPT_INV_ARG) if the source is out of range.
      */
     void trackOffAsync(isize source);
     
@@ -2779,9 +2809,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
+     *  @throw CoreError (CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void stepInto();
@@ -2806,9 +2836,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
+     *  @throw CoreError (CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void stepOver();
@@ -2820,9 +2850,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
+     *  @throw CoreError (CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void finishLine();
@@ -2834,9 +2864,9 @@ public:
      *  The function returns when the emulator has been started for the step. It
      *  is paused again when the step is done.
      *
-     *  @throw CoreError (#CoreError::RUNNING) if the emulator is already running.
+     *  @throw CoreError (CoreError::RUNNING) if the emulator is already running.
      *  @throw CoreError if the emulator is not ready to run (see checkReady()).
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void finishFrame();
@@ -2863,7 +2893,7 @@ public:
      *  the configuration, can still see the old state. Calling this
      *  afterwards closes that gap.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out commands, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread.
@@ -2894,9 +2924,9 @@ public:
      *  registered here is invoked on the emulator thread and must not call into
      *  the API. Forward the message to a user thread instead.
      *
-     *  @throw CoreError (#CoreError::ALREADY_LAUNCHED) if the emulator thread has
+     *  @throw CoreError (CoreError::ALREADY_LAUNCHED) if the emulator thread has
      *  already been launched.
-     *  @throw CoreError (#CoreError::LAUNCH_FAILED) if the emulator thread could not
+     *  @throw CoreError (CoreError::LAUNCH_FAILED) if the emulator thread could not
      *  be launched.
      */
     void launch(const void *listener = nullptr, Callback *func = nullptr);
@@ -2960,7 +2990,7 @@ public:
      *
      *  @note If this function is called for an options that applies to multiple
      *  components, all components are configured with the specified value.
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use setAsync() in these situations (it can also be called before
@@ -3043,6 +3073,7 @@ public:
      *  The current configuration is exported in form of a RetroShell script.
      *  Reading in the script at a later point will restore the configuration.
      *
+     *  @param path The path of the script file.
      *  @param diff When set to true, the script will only contains settings
      *              for items that differ from the default configuration.
      *              This feature is useful for debugging to compare two virtual
@@ -3084,7 +3115,7 @@ public:
      *  thread has suspended the emulator. An exception thrown by the function
      *  is passed on to the caller.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the request (see put()).
      */
     void call(const std::function<void()> &fn);
@@ -3117,7 +3148,7 @@ public:
      *  Commands that carry a pointer to an object of the caller can rely on
      *  that object being alive for the whole duration of the command.
      *
-     *  @throw CoreError (#CoreError::NOT_LAUNCHED) if the emulator thread cannot
+     *  @throw CoreError (CoreError::NOT_LAUNCHED) if the emulator thread cannot
      *  carry out the command, because it has not been launched yet, is halted or
      *  suspended. The same applies if the function is called from the emulator
      *  thread. Use putAsync() in these situations (it can also be called before

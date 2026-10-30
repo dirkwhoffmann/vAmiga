@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -13,6 +14,7 @@
 
 namespace vamiga {
 
+/// The component that owns the chip bus in a DMA cycle.
 enum class BusOwner : i8
 {
     NONE,

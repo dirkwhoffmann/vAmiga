@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
  * table to specify the source and target of a peek or poke operation,
  * respectively.
  */
+/// Source of a memory access.
 enum class MemSrc : long
 {
     NONE,
@@ -95,6 +97,7 @@ struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
     }
 };
 
+/// The component that performs a memory access.
 enum class Accessor : i8
 {
     CPU,
@@ -123,6 +126,7 @@ struct AccessorEnum : utl::Reflectable<AccessorEnum, Accessor>
     }
 };
 
+/// Memory bank layout of an Amiga model.
 enum class BankMap : long
 {
     A500,
@@ -163,6 +167,7 @@ struct BankMapEnum : utl::Reflectable<BankMapEnum, BankMap>
     }
 };
 
+/// Pattern that RAM is initialized with.
 enum class RamInitPattern
 {
     ALL_ZEROES,
@@ -197,6 +202,7 @@ struct RamInitPatternEnum : utl::Reflectable<RamInitPatternEnum, RamInitPattern>
     }
 };
 
+/// Value that is read from unmapped memory.
 enum class UnmappedMemory
 {
     FLOATING,
@@ -236,6 +242,7 @@ struct UnmappedMemoryEnum : utl::Reflectable<UnmappedMemoryEnum, UnmappedMemory>
 // Structures
 //
 
+/// Configuration options of the memory.
 typedef struct
 {
     // RAM size in bytes
@@ -274,6 +281,7 @@ typedef struct
 }
 MemConfig;
 
+/// State of the memory.
 typedef struct
 {
     bool hasRom;                            ///< A Kickstart ROM is installed
@@ -293,6 +301,7 @@ typedef struct
 }
 MemInfo;
 
+/// Statistics collected by the memory (access counters).
 typedef struct
 {
     struct { isize raw; double accumulated; } chipReads;

@@ -6,6 +6,8 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+/// @file
+
 #pragma once
 
 #include "BusTypes.h"
@@ -16,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Signal that is recorded by the logic analyzer.
 enum class Probe : long
 {
     NONE,
@@ -49,6 +52,7 @@ struct ProbeEnum : utl::Reflectable<ProbeEnum, Probe>
 // Structures
 //
 
+/// A sample recorded by the logic analyzer.
 typedef struct {
     
     // Position
@@ -66,6 +70,7 @@ typedef struct {
     
 } LogicAnalyzerSample;
 
+/// Configuration options of the logic analyzer.
 typedef struct
 {
     // Enable switch
@@ -79,6 +84,7 @@ typedef struct
 }
 LogicAnalyzerConfig;
 
+/// State of the logic analyzer.
 typedef struct
 {
 

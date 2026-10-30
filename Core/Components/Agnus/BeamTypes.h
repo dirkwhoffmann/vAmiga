@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -13,6 +14,7 @@
 
 namespace vamiga {
 
+/// Type of a video frame (PAL or NTSC, long or short).
 enum class FrameType
 {
     PAL_LF,       // PAL long frame

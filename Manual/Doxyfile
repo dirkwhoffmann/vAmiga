@@ -1,0 +1,140 @@
+# Doxyfile for the vAmiga public API reference
+#
+# Only the XML output is used; "make" turns it into the VitePress site (see
+# Makefile). Only the headers that make up the public API are listed in INPUT.
+# Everything below them (components, internals) is deliberately left out.
+
+PROJECT_NAME           = "vAmiga"
+PROJECT_NUMBER         = "v4.0"
+PROJECT_BRIEF          = "Commodore Amiga Emulator"
+OUTPUT_DIRECTORY       = build/doxygen
+CREATE_SUBDIRS         = NO
+OPTIMIZE_OUTPUT_FOR_C  = NO
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+BUILTIN_STL_SUPPORT    = YES
+TAB_SIZE               = 4
+
+# What to extract
+EXTRACT_ALL            = NO
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = NO
+HIDE_UNDOC_MEMBERS     = YES
+HIDE_UNDOC_CLASSES     = NO
+HIDE_SCOPE_NAMES       = YES
+SORT_MEMBER_DOCS       = NO
+SHOW_INCLUDE_FILES     = NO
+GENERATE_TODOLIST      = NO
+GENERATE_TESTLIST      = NO
+GENERATE_BUGLIST       = NO
+GENERATE_DEPRECATEDLIST= NO
+
+# Diagnostics
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_IF_INCOMPLETE_DOC = YES
+WARN_NO_PARAMDOC       = NO
+WARN_AS_ERROR          = FAIL_ON_WARNINGS
+WARN_FORMAT            = "$file:$line: $text"
+
+# Input
+INPUT                  = guides \
+                         ../Core/Components/Agnus/AgnusTypes.h \
+                         ../Core/Components/Agnus/BeamTypes.h \
+                         ../Core/Components/Agnus/Blitter/BlitterTypes.h \
+                         ../Core/Components/Agnus/BusTypes.h \
+                         ../Core/Components/Agnus/Copper/CopperTypes.h \
+                         ../Core/Components/Agnus/Sequencer/SequencerTypes.h \
+                         ../Core/Components/Agnus/XRay/XRayTypes.h \
+                         ../Core/Components/AmigaTypes.h \
+                         ../Core/Components/CIA/CIATypes.h \
+                         ../Core/Components/CIA/TODTypes.h \
+                         ../Core/Components/CPU/CPUTypes.h \
+                         ../Core/Components/CPU/Moira/MoiraTypes.h \
+                         ../Core/Components/Denise/DeniseTypes.h \
+                         ../Core/Components/Denise/FrameBufferTypes.h \
+                         ../Core/Components/Memory/MemoryTypes.h \
+                         ../Core/Components/Paula/Audio/AudioFilterTypes.h \
+                         ../Core/Components/Paula/Audio/SamplerTypes.h \
+                         ../Core/Components/Paula/Audio/StateMachineTypes.h \
+                         ../Core/Components/Paula/DiskController/DiskControllerTypes.h \
+                         ../Core/Components/Paula/PaulaTypes.h \
+                         ../Core/Components/Paula/UART/UARTTypes.h \
+                         ../Core/Components/RTC/RTCTypes.h \
+                         ../Core/Components/Zorro/DiagBoardTypes.h \
+                         ../Core/Components/Zorro/HdControllerTypes.h \
+                         ../Core/Components/Zorro/ZorroBoardTypes.h \
+                         ../Core/Infrastructure/BasicTypes.h \
+                         ../Core/Infrastructure/CmdQueueTypes.h \
+                         ../Core/Infrastructure/CoreComponentTypes.h \
+                         ../Core/Infrastructure/CoreError.h \
+                         ../Core/Infrastructure/CoreObjectTypes.h \
+                         ../Core/Infrastructure/EmulatorTypes.h \
+                         ../Core/Infrastructure/GuardListTypes.h \
+                         ../Core/Infrastructure/HostTypes.h \
+                         ../Core/Infrastructure/MsgQueueTypes.h \
+                         ../Core/Infrastructure/OptionTypes.h \
+                         ../Core/Infrastructure/ThreadTypes.h \
+                         ../Core/Media/AnyFile.h \
+                         ../Core/Media/MediaError.h \
+                         ../Core/Media/Rom/RomFileTypes.h \
+                         ../Core/Media/Snapshot.h \
+                         ../Core/Misc/LogicAnalyzer/LogicAnalyzerTypes.h \
+                         ../Core/Misc/RemoteServers/RemoteManagerTypes.h \
+                         ../Core/Misc/RemoteServers/RemoteServerTypes.h \
+                         ../Core/Misc/RemoteServers/TransportTypes.h \
+                         ../Core/Misc/RetroShell/RetroShellTypes.h \
+                         ../Core/Peripherals/Drive/DriveTypes.h \
+                         ../Core/Peripherals/Drive/FloppyDiskTypes.h \
+                         ../Core/Peripherals/Drive/FloppyDriveTypes.h \
+                         ../Core/Peripherals/Drive/HardDriveTypes.h \
+                         ../Core/Peripherals/Joystick/JoystickTypes.h \
+                         ../Core/Peripherals/Keyboard/KeyboardTypes.h \
+                         ../Core/Peripherals/Monitor/MonitorTypes.h \
+                         ../Core/Peripherals/Mouse/MouseTypes.h \
+                         ../Core/Ports/AudioPortTypes.h \
+                         ../Core/Ports/ControlPortTypes.h \
+                         ../Core/Ports/SerialPortTypes.h \
+                         ../Core/Ports/VideoPortTypes.h \
+                         ../Core/VAmiga.h \
+                         ../Core/VAmigaTypes.h \
+                         ../Core/rvlib/Devices/DeviceTypes.h \
+                         ../Core/rvlib/FileSystems/Amiga/FSTypes.h \
+                         ../Core/rvlib/Images/ImageTypes.h \
+                         ../Core/utlib/include/utl/io/IOError.h \
+                         ../Core/utlib/include/utl/types/Exception.h
+FILE_PATTERNS          = *.h *.md
+RECURSIVE              = NO
+EXAMPLE_PATH           = ../Core
+
+# The headers use C++20; the macros below only matter for a few attributes
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+PREDEFINED             = "__cplusplus=202002L"
+
+# HTML output is not needed
+GENERATE_HTML          = NO
+
+# Other output formats
+GENERATE_LATEX         = NO
+
+# XML output (input for moxygen)
+GENERATE_XML           = YES
+XML_OUTPUT             = xml
+XML_PROGRAMLISTING     = NO
+STRIP_FROM_PATH        = ../Core
+STRIP_FROM_INC_PATH    = ../Core
+
+# Diagrams
+HAVE_DOT               = NO
+EXCLUDE_SYMBOLS        = *Enum *::Enum vamiga::TransportDelegate vamiga::string* vamiga::vector* vamiga::unique_ptr* std::*
+DOT_IMAGE_FORMAT       = svg
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = NO
+INCLUDE_GRAPH          = NO
+INCLUDED_BY_GRAPH      = NO
+GENERATE_LEGEND        = NO
+HIDE_UNDOC_RELATIONS   = YES

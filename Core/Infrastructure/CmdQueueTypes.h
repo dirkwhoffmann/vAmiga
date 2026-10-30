@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -204,6 +205,7 @@ struct CmdEnum : utl::Reflectable<CmdEnum, Cmd> {
 // Structures
 //
 
+/// Payload of a command that changes a configuration option.
 typedef struct
 {
     Opt option;
@@ -212,6 +214,7 @@ typedef struct
 }
 ConfigCmd;
 
+/// Payload of a command that carries a key event.
 typedef struct
 {
     KeyCode keycode;
@@ -219,6 +222,7 @@ typedef struct
 }
 KeyCmd;
 
+/// Payload of a command that carries a coordinate.
 typedef struct
 {
     isize port;
@@ -227,6 +231,7 @@ typedef struct
 }
 CoordCmd;
 
+/// Payload of a command that carries a game pad action.
 typedef struct
 {
     isize port;
@@ -234,6 +239,7 @@ typedef struct
 }
 GamePadCmd;
 
+/// Payload of a command that carries a joystick state.
 typedef struct
 {
     isize port;
@@ -241,6 +247,7 @@ typedef struct
 }
 JoyStateCmd;
 
+/// Payload of a command that schedules an alarm.
 typedef struct
 {
     i64 cycle;
@@ -249,6 +256,7 @@ typedef struct
 AlarmCmd;
 
 // The guard list to modify is identified by a GuardType
+/// Payload of a command that changes a guard.
 typedef struct
 {
     GuardType list;       // The guard list to modify
@@ -258,6 +266,7 @@ typedef struct
 }
 GuardCmd;
 
+/// A command sent to the emulator thread.
 struct Command
 {
     // Header

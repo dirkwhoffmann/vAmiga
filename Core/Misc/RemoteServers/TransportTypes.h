@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -19,6 +20,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// State of a remote server.
 enum class SrvState : long
 {
     OFF,            // The server is inactive
@@ -55,6 +57,7 @@ struct SrvStateEnum : utl::Reflectable<SrvStateEnum, SrvState>
     }
 };
 
+/// Transport protocol of a remote server.
 enum class TransportProtocol
 {
     STDIO,

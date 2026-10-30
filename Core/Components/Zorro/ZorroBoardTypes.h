@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -31,6 +32,7 @@ inline constexpr int ERFF_ZORRO_III = (1<<4); //
 // Enumerations
 //
 
+/// State of a Zorro expansion board.
 enum class BoardState : long
 {
     AUTOCONF,

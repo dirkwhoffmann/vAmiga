@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -19,6 +20,7 @@ namespace vamiga {
  *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)
  *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600)
  */
+/// CIA chip revision.
 enum class CIARev : long
 {
     MOS_8520_DIP,
@@ -50,6 +52,7 @@ struct CIARevEnum : utl::Reflectable<CIARevEnum, CIARev>
     }
 };
 
+/// Registers of a CIA chip.
 enum class CIAReg : long
 {
     PRA,
@@ -109,6 +112,7 @@ struct CIARegEnum : utl::Reflectable<CIARegEnum, CIAReg>
 // Structures
 //
 
+/// Configuration options of a CIA chip.
 typedef struct
 {
     CIARev revision;                        ///< Chip revision
@@ -118,6 +122,7 @@ typedef struct
 }
 CIAConfig;
 
+/// State of a CIA port.
 typedef struct
 {
     u8 port;                                ///< State of the port pins
@@ -126,6 +131,7 @@ typedef struct
 }
 CIAPortInfo;
 
+/// State of a CIA timer.
 typedef struct
 {
     u16 count;                              ///< Current counter value
@@ -137,6 +143,7 @@ typedef struct
 }
 CIATimerInfo;
 
+/// State of a CIA chip.
 typedef struct
 {
     CIAPortInfo portA;                      ///< Port A
@@ -156,6 +163,7 @@ typedef struct
 }
 CIAInfo;
 
+/// Statistics collected by a CIA chip.
 typedef struct
 {
     Cycle totalCycles;                      ///< Total number of executed cycles

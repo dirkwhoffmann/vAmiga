@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -19,6 +20,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Flags describing the state of a disk.
 enum class DiskFlags
 {
     PROTECTED  = 1,
@@ -58,6 +60,7 @@ struct DiskFlagsEnum : utl::Reflectable<DiskFlagsEnum, DiskFlags>
 // Structures
 //
 
+/// Position of a drive head (cylinder, head, and offset into the track).
 struct DriveHead
 {
     retro::vault::CylNr cylinder;

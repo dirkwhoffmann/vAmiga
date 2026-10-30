@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -18,6 +19,7 @@ namespace vamiga {
 // Structures
 //
 
+/// Configuration options of a remote server.
 typedef struct
 {
     // Enable status
@@ -34,6 +36,7 @@ typedef struct
 }
 ServerConfig;
 
+/// State of a remote server.
 typedef struct
 {
     SrvState state;                         ///< State of the server

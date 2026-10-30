@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Type of a device connected to a control port.
 enum class ControlPortDevice
 {
     NONE,
@@ -56,6 +58,7 @@ struct ControlPortDeviceEnum : utl::Reflectable<ControlPortDeviceEnum, ControlPo
 // Structures
 //
 
+/// State of a control port.
 typedef struct
 {
     bool m0v;                               ///< Mouse quadrature signal V0

@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -19,6 +20,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Type of a floppy drive.
 enum class FloppyDriveType : long
 {
     DD_35,
@@ -47,6 +49,7 @@ struct FloppyDriveTypeEnum : utl::Reflectable<FloppyDriveTypeEnum, FloppyDriveTy
     }
 };
 
+/// Mechanical model of a floppy drive.
 enum class DriveMechanics
 {
     NONE,
@@ -83,6 +86,7 @@ struct DriveMechanicsEnum : utl::Reflectable<DriveMechanicsEnum, DriveMechanics>
 // Structures
 //
 
+/// Configuration options of a floppy drive.
 typedef struct
 {
     // Connection status
@@ -113,6 +117,7 @@ typedef struct
 }
 FloppyDriveConfig;
 
+/// State of a floppy drive.
 typedef struct
 {
     isize nr;                               ///< Number of the drive

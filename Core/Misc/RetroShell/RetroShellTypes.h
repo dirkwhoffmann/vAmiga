@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -20,6 +21,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Command set of a RetroShell console.
 enum class CommandSet
 {
     Commander,      // Commands for controlling the emulator
@@ -50,6 +52,7 @@ struct CommandSetEnum : utl::Reflectable<CommandSetEnum, CommandSet>
     }
 };
 
+/// Special key of a RetroShell console.
 enum class RSKey
 {
     UP,
@@ -104,8 +107,10 @@ struct RSKeyEnum : utl::Reflectable<RSKeyEnum, RSKey>
 // Structures
 //
 
+/// A line of input for a RetroShell console, together with its source.
 struct InputLine {
 
+    /// Origin of a RetroShell input line.
     enum class Source {
 
         USER,       // User-typed command
@@ -142,6 +147,7 @@ struct InputLine {
     bool isComment() const { return input.size() != 0 && input[0] == '#'; }
 };
 
+/// State of RetroShell.
 typedef struct
 {
     // Active console
@@ -153,6 +159,7 @@ typedef struct
 RetroShellInfo;
 
 // Used in operator overloads
+/// Vertical space (a number of blank lines) in RetroShell output.
 struct vspace { isize lines = 0; };
 
 }

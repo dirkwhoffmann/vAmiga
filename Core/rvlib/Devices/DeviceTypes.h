@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -41,6 +42,7 @@ using TrackNr  = isize;
 // Structures
 //
 
+/// A track/sector link of a disk image.
 struct TSLink
 {
     TrackNr t;
@@ -83,6 +85,7 @@ static const isize HDR_S_MIN =  16;
 // Enumerations
 //
 
+/// Diameter of a disk.
 enum class Diameter : long
 {
     INCH_35,
@@ -117,6 +120,7 @@ struct DiameterEnum : utl::Reflectable<DiameterEnum, Diameter>
     }
 };
 
+/// Density of a disk.
 enum class Density
 {
     SD,

@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// X-Ray visualization mode.
 enum class XRayMode
 {
     XRAY_NONE,
@@ -54,6 +56,7 @@ struct XRayModeEnum : utl::Reflectable<XRayModeEnum, XRayMode>
     }
 };
 
+/// Where X-Ray images are composited.
 enum class XRayCompositor
 {
     CPU,    // The emulator merges the xray texture into the picture
@@ -85,6 +88,7 @@ struct XRayCompositorEnum : utl::Reflectable<XRayCompositorEnum, XRayCompositor>
     }
 };
 
+/// How DMA activity is displayed by X-Ray.
 enum class DmaDisplayMode
 {
     FG_LAYER,
@@ -119,6 +123,7 @@ struct DmaDisplayModeEnum : utl::Reflectable<DmaDisplayModeEnum, DmaDisplayMode>
     }
 };
 
+/// DMA channels visualized by X-Ray.
 enum class DmaChannel
 {
     COPPER,
@@ -184,6 +189,7 @@ constexpr isize XRAY_COLOR_COUNT = 10;
 // Structures
 //
 
+/// Configuration options of the X-Ray visualizer.
 typedef struct
 {
     // X-Ray mode (off, DMA debugger, layer inspector)
@@ -211,6 +217,7 @@ typedef struct
 }
 XRayConfig;
 
+/// State of the X-Ray visualizer.
 typedef struct
 {
     bool visualizeCopper;                   ///< Show Copper DMA

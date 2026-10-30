@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// State of the disk DMA engine.
 enum class DriveDmaState
 {
     OFF,     // Drive is idle
@@ -68,6 +70,7 @@ struct DriveStateEnum : utl::Reflectable<DriveStateEnum, DriveDmaState>
 // Structures
 //
 
+/// Configuration options of the disk controller.
 typedef struct
 {
     /* Acceleration factor. This value equals the number of words that get
@@ -92,6 +95,7 @@ inline bool isValidDriveSpeed(isize speed)
     return false;
 }
 
+/// State of the disk controller.
 typedef struct
 {
     isize selectedDrive;                    ///< Number of the selected drive

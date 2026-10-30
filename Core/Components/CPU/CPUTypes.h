@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -18,6 +19,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// CPU revision.
 enum class CPURev : long
 {
     CPU_68000,
@@ -52,6 +54,7 @@ struct CPURevEnum : utl::Reflectable<CPURevEnum, CPURev>
     }
 };
 
+/// CPU revision the disassembler targets.
 enum class DasmRev : long
 {
     DASM_68000,
@@ -104,6 +107,7 @@ struct DasmRevEnum : utl::Reflectable<DasmRevEnum, DasmRev>
     }
 };
 
+/// Syntax style of the disassembler.
 enum class DasmSyntax : long
 {
     MOIRA,
@@ -144,6 +148,7 @@ struct DasmSyntaxEnum : utl::Reflectable<DasmSyntaxEnum, DasmSyntax>
     }
 };
 
+/// Number format of the disassembler.
 enum class DasmNumbers : long
 {
     HEX,
@@ -179,6 +184,7 @@ struct DasmNumbersEnum : utl::Reflectable<DasmNumbersEnum, DasmNumbers>
 // Structures
 //
 
+/// Configuration options of the CPU.
 typedef struct
 {
     CPURev revision;                        ///< Chip revision
@@ -190,6 +196,7 @@ typedef struct
 }
 CPUConfig;
 
+/// State of the CPU (registers and flags).
 typedef struct
 {
     Cycle clock;                            ///< CPU clock (in master cycles)

@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -18,6 +19,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// Type of a remote server.
 enum class ServerType : long
 {
     RSH,
@@ -59,6 +61,7 @@ struct ServerTypeEnum : utl::Reflectable<ServerTypeEnum, ServerType>
 };
 
 
+/// Direction of a network packet.
 enum class TrafficDirection : long
 {
     RECEIVED,       // The packet was received from a client
@@ -95,6 +98,7 @@ struct TrafficDirectionEnum : utl::Reflectable<TrafficDirectionEnum, TrafficDire
 // Structures
 //
 
+/// State of the remote manager.
 typedef struct
 {
     RemoteServerInfo rshInfo;               ///< State of the RetroShell server
@@ -110,6 +114,7 @@ RemoteManagerInfo;
  * assigned a monotonically increasing sequence number which is passed to the
  * GUI in the Msg::SRV_RECEIVE and Msg::SRV_SEND notification messages.
  */
+/// A packet recorded by a remote server.
 typedef struct
 {
     // Sequence number (unique, monotonically increasing)

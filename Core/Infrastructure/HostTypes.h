@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -22,6 +23,7 @@ namespace vamiga {
  * static_cast moves a value from this Reflectable-paired, UI/option-facing
  * enum to the one GpuColor<F> is templated on, and back.
  */
+/// Pixel format of a texture.
 enum class TexFormat : long
 {
     ABGR,                       ///< AABBGGRR
@@ -61,6 +63,7 @@ struct TexFormatEnum : utl::Reflectable<TexFormatEnum, TexFormat> {
 // Structures
 //
 
+/// Properties of the host computer (display refresh rate, audio sample rate, ...).
 typedef struct
 {
     // Refresh rate of the host display

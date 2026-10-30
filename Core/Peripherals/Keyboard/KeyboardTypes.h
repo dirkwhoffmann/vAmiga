@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/// State of the keyboard.
 enum class KbState
 {
     SELFTEST,
@@ -54,12 +56,14 @@ struct KbStateEnum : utl::Reflectable<KbStateEnum, KbState>
 // Structures
 //
 
+/// Configuration options of the keyboard.
 typedef struct
 {
     bool accurate;                          ///< Emulate the keyboard protocol accurately
 }
 KeyboardConfig;
 
+/// State of the keyboard.
 typedef struct
 {
     KbState state;                          ///< State of the keyboard protocol

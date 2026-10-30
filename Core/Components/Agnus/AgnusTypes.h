@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -34,6 +35,7 @@ static constexpr double inspectionInterval = 0.1;
 // Enumerations
 //
 
+/// Agnus chip revision.
 enum class AgnusRevision : long
 {
     OCS_OLD,          // MOS 8367                (A1000, A2000A)
@@ -75,6 +77,7 @@ struct AgnusRevisionEnum : utl::Reflectable<AgnusRevisionEnum, AgnusRevision>
     }
 };
 
+/// Slot of the event scheduler.
 enum EventSlot : long
 {
     // Primary slots
@@ -239,6 +242,7 @@ struct EventSlotEnum : utl::Reflectable<EventSlotEnum, EventSlot>
     }
 };
 
+/// Identifies an event of the event scheduler.
 enum EventID : u8
 {
     EVENT_NONE          = 0,
@@ -512,6 +516,7 @@ static inline bool isBplxEvent(EventID id, int x)
 // Structures
 //
 
+/// Static properties of an Agnus revision.
 typedef struct
 {
     bool isOCS;                             ///< The chip is an OCS Agnus
@@ -527,6 +532,7 @@ typedef struct
 }
 AgnusTraits;
 
+/// Configuration options of Agnus.
 typedef struct
 {
     AgnusRevision revision;                 ///< Chip revision
@@ -534,6 +540,7 @@ typedef struct
 }
 AgnusConfig;
 
+/// State of an event slot.
 typedef struct
 {
     EventSlot slot;                         ///< The event slot
@@ -553,6 +560,7 @@ typedef struct
 }
 EventSlotInfo;
 
+/// Clocks of the machine and the current beam position.
 typedef struct
 {
     Cycle cpuClock;                         ///< CPU clock (in master cycles)
@@ -566,6 +574,7 @@ typedef struct
 }
 EventInfo;
 
+/// State of Agnus (beam position, DMA, registers).
 typedef struct
 {
     isize vpos;                             ///< Vertical beam position
@@ -604,6 +613,7 @@ typedef struct
 }
 AgnusInfo;
 
+/// Statistics collected by Agnus (DMA usage).
 typedef struct
 {
     isize usage[BUS_COUNT];                 ///< Number of DMA slots used by each bus owner

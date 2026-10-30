@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -22,6 +23,7 @@ using retro::vault::Density;
 // Structures
 //
 
+/// Properties of a floppy disk.
 typedef struct
 {
     retro::vault::amiga::FSFormat dos;      ///< File system format

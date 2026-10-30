@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -17,6 +18,7 @@
 
 namespace vamiga {
 
+/// Method used to resample audio.
 enum class SamplingMethod
 {
     NONE,

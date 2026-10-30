@@ -6,6 +6,7 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #pragma once
 
@@ -18,6 +19,7 @@ namespace vamiga {
 // Structures
 //
 
+/// State of the audio port.
 typedef struct
 {
     // Indicates whether the final volume is zero
@@ -25,6 +27,7 @@ typedef struct
 }
 AudioPortInfo;
 
+/// Configuration options of the audio port.
 typedef struct
 {
     // Master volume (left and right channel)
@@ -49,6 +52,7 @@ typedef struct
 }
 AudioPortConfig;
 
+/// Statistics collected by the audio port.
 typedef struct
 {
     isize bufferUnderflows;                 ///< Number of buffer underflows
