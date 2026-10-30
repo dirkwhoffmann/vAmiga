@@ -3,8 +3,8 @@ layout: home
 title: vAmiga
 hero:
   name: vAmiga
-  text: Documentation
-  tagline: Guide and API reference of the vAmiga emulator
+  text: API Documentation
+  tagline: Public API of the vAmiga emulation core
   image:
     src: /icon.png
     alt: vAmiga
