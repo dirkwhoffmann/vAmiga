@@ -15,7 +15,7 @@
 # the pages into guide/ and api/). VitePress renders the site.
 # moxygen and VitePress are installed with "npm install".
 
-SCHEME ?= tokyo-night
+SCHEME ?= catppuccin
 export SCHEME
 
 GENERATED = docs/*.md docs/guide docs/api
