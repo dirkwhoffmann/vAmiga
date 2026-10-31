@@ -123,6 +123,7 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::CPU_DASM_NUMBERS:          return enumParser.template operator()<DasmNumbersEnum,DasmNumbers>();
         case Opt::CPU_OVERCLOCKING:          return numParser("x");
         case Opt::CPU_RESET_VAL:             return numParser();
+        case Opt::CPU_START_DELAY:           return numParser();
 
         case Opt::RTC_MODEL:                 return enumParser.template operator()<RTCRevisionEnum,RTCRevision>();
 

@@ -193,6 +193,7 @@ typedef struct
     DasmNumbers dasmNumbers;                ///< Disassembler number format
     isize overclocking;                     ///< Overclocking factor
     u32 regResetVal;                        ///< Register reset value
+    isize startDelay;                       ///< Delay before the CPU starts (in CPU cycles)
 }
 CPUConfig;
 

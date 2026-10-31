@@ -38,7 +38,8 @@ class CPU : public moira::Moira
         Opt::CPU_DASM_SYNTAX,
         Opt::CPU_DASM_NUMBERS,
         Opt::CPU_OVERCLOCKING,
-        Opt::CPU_RESET_VAL
+        Opt::CPU_RESET_VAL,
+        Opt::CPU_START_DELAY
     };
 
     // The current configuration
@@ -210,7 +211,8 @@ private:
         << config.revision
         << config.dasmRevision
         << config.overclocking
-        << config.regResetVal;
+        << config.regResetVal
+        << config.startDelay;
 
     } SERIALIZERS(serialize);
 

@@ -465,8 +465,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "454"
             endingLineNumber = "454"
-            landmarkName = "Defaults::get(key)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -561,7 +561,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "734"
             endingLineNumber = "734"
-            landmarkName = "CPU::eofHandler()"
+            landmarkName = "CPU::resyncOverclockedCpu()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -577,7 +577,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "738"
             endingLineNumber = "738"
-            landmarkName = "CPU::eofHandler()"
+            landmarkName = "CPU::resyncOverclockedCpu()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -176,6 +176,22 @@ Amiga::_willReset(bool hard)
 void
 Amiga::_didReset(bool hard)
 {
+    if (hard) {
+
+        // On a real Amiga, the beam counters run freely while the CPU is held
+        // in reset. When the CPU is released, the beam is therefore at an
+        // arbitrary position relative to the CPU. The emulator, in contrast,
+        // would always start the CPU at the same beam position, which makes
+        // timing coincidences in software (e.g., the PAL/NTSC detection race
+        // in Kickstart 1.3) either always or never occur for a given machine
+        // configuration. To avoid hitting such a coincidence by default, we
+        // let the CPU start a few cycles late.
+        
+        auto delay = cpu.getConfig().startDelay;
+        agnus.execute(CPU_AS_DMA_CYCLES(delay));
+        cpu.addWaitStates(CPU_CYCLES(delay));
+    }
+
     // Schedule initial events
     scheduleNextSnpEvent();
     

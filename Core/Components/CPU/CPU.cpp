@@ -335,6 +335,7 @@ CPU::getOption(Opt option) const
         case Opt::CPU_DASM_NUMBERS:  return (long)config.dasmNumbers;
         case Opt::CPU_OVERCLOCKING:  return (long)config.overclocking;
         case Opt::CPU_RESET_VAL:     return (long)config.regResetVal;
+        case Opt::CPU_START_DELAY:   return (long)config.startDelay;
 
         default:
             fatalError;
@@ -377,6 +378,13 @@ CPU::checkOption(Opt opt, i64 value)
         case Opt::CPU_OVERCLOCKING:
         case Opt::CPU_RESET_VAL:
 
+            return;
+
+        case Opt::CPU_START_DELAY:
+
+            if (value < 0 || value > 1000) {
+                throw CoreError(CoreError::OPT_INV_ARG, "0...1000");
+            }
             return;
 
         default:
@@ -448,6 +456,11 @@ CPU::setOption(Opt option, i64 value)
         case Opt::CPU_RESET_VAL:
 
             config.regResetVal = u32(value);
+            return;
+
+        case Opt::CPU_START_DELAY:
+
+            config.startDelay = isize(value);
             return;
 
         default:

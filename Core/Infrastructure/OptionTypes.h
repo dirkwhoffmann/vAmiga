@@ -130,6 +130,7 @@ enum class Opt : long
     CPU_DASM_NUMBERS,       ///< Disassembler number format
     CPU_OVERCLOCKING,       ///< Overclocking factor
     CPU_RESET_VAL,          ///< Register reset value
+    CPU_START_DELAY,        ///< Delay before the CPU starts
     
     // Real-time clock
     RTC_MODEL,              ///< Chip revision
@@ -342,6 +343,7 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
             case Opt::CPU_DASM_NUMBERS:          return "CPU.DASM_NUMBERS";
             case Opt::CPU_OVERCLOCKING:          return "CPU.OVERCLOCKING";
             case Opt::CPU_RESET_VAL:             return "CPU.RESET_VAL";
+            case Opt::CPU_START_DELAY:           return "CPU.START_DELAY";
                 
             case Opt::RTC_MODEL:                 return "RTC.MODEL";
                 
@@ -535,6 +537,7 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
             case Opt::CPU_DASM_NUMBERS:          return "Disassembler number format";
             case Opt::CPU_OVERCLOCKING:          return "Overclocking factor";
             case Opt::CPU_RESET_VAL:             return "Register reset value";
+            case Opt::CPU_START_DELAY:           return "Delay before the CPU starts";
                 
             case Opt::RTC_MODEL:                 return "Chip revision";
                 
