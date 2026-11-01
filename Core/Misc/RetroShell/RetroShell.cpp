@@ -78,7 +78,7 @@ RetroShell::newSession()
 void
 RetroShell::_initialize()
 {
-
+    exec();
 }
 
 RetroShellInfo
