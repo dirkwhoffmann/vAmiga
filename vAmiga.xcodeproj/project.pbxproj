@@ -52,8 +52,6 @@
 		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
-		50A9D0032F5000000000AA03 /* AgnusDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */; };
-		50A9D0042F5000000000AA04 /* AgnusDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */; };
 		501B00152C629A0500749664 /* Beamtraps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00132C629A0500749664 /* Beamtraps.cpp */; };
 		501B00162C629A0500749664 /* Beamtraps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00132C629A0500749664 /* Beamtraps.cpp */; };
 		501B00192C63589500749664 /* GuardList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00172C63589500749664 /* GuardList.cpp */; };
@@ -296,6 +294,8 @@
 		50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50A64B96257A63A600442964 /* FSBootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* FSBootBlockImage.cpp */; };
+		50A9D0032F5000000000AA03 /* AgnusDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */; };
+		50A9D0042F5000000000AA04 /* AgnusDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */; };
 		50AC25C62F4264670016265E /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AC25C52F4264620016265E /* RSError.cpp */; };
 		50AC25C72F4264670016265E /* RSError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AC25C52F4264620016265E /* RSError.cpp */; };
 		50AD904B276E104E0011ECCB /* TextStorage.h in Resources */ = {isa = PBXBuildFile; fileRef = 50AD904A276E104E0011ECCB /* TextStorage.h */; };
@@ -729,8 +729,6 @@
 		5019B1EF254B292D00A7AB95 /* EXEFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEFile.h; sourceTree = "<group>"; };
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		501B00132C629A0500749664 /* Beamtraps.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Beamtraps.cpp; sourceTree = "<group>"; };
-		50A9D0012F5000000000AA01 /* AgnusDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusDebugger.h; sourceTree = "<group>"; };
-		50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDebugger.cpp; sourceTree = "<group>"; };
 		501B00142C629A0500749664 /* Beamtraps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beamtraps.h; sourceTree = "<group>"; };
 		501B00172C63589500749664 /* GuardList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GuardList.cpp; sourceTree = "<group>"; };
 		501B00182C63589500749664 /* GuardList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuardList.h; sourceTree = "<group>"; };
@@ -1100,6 +1098,8 @@
 		50A6F50428C7AB6A002F31EA /* MoiraDasmFPU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDasmFPU_cpp.h; sourceTree = "<group>"; };
 		50A6F50528C7AB7F002F31EA /* MoiraExecMMU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExecMMU_cpp.h; sourceTree = "<group>"; };
 		50A6F50628C7AB8F002F31EA /* MoiraExecFPU_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExecFPU_cpp.h; sourceTree = "<group>"; };
+		50A9D0012F5000000000AA01 /* AgnusDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusDebugger.h; sourceTree = "<group>"; };
+		50A9D0022F5000000000AA02 /* AgnusDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDebugger.cpp; sourceTree = "<group>"; };
 		50AC25C52F4264620016265E /* RSError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RSError.cpp; sourceTree = "<group>"; };
 		50AD9048276DCB470011ECCB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50AD904A276E104E0011ECCB /* TextStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextStorage.h; sourceTree = "<group>"; };
@@ -4029,10 +4029,10 @@
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY = YES;
 				CODE_SIGN_ENTITLEMENTS = Resources/vAmiga.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 260901;
+				CURRENT_PROJECT_VERSION = 261101;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = 3NG65ZLYW7;
@@ -4059,7 +4059,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 5.0b2;
+				MARKETING_VERSION = 5.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
@@ -4088,10 +4088,10 @@
 				CLANG_UNDEFINED_BEHAVIOR_SANITIZER_NULLABILITY = YES;
 				CODE_SIGN_ENTITLEMENTS = Resources/vAmiga.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 260901;
+				CURRENT_PROJECT_VERSION = 261101;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
@@ -4118,7 +4118,7 @@
 				);
 				LLVM_LTO = YES_THIN;
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 5.0b2;
+				MARKETING_VERSION = 5.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";

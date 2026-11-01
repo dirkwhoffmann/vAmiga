@@ -30,13 +30,13 @@ namespace vamiga { using namespace utl; using namespace retro::vault; }
 static constexpr int VER_MAJOR      = 5;
 static constexpr int VER_MINOR      = 0;
 static constexpr int VER_SUBMINOR   = 0;
-static constexpr int VER_BETA       = 2;
+static constexpr int VER_BETA       = 0;
 
 // Snapshot version number
 static constexpr int SNP_MAJOR      = 5;
 static constexpr int SNP_MINOR      = 0;
 static constexpr int SNP_SUBMINOR   = 0;
-static constexpr int SNP_BETA       = 2;
+static constexpr int SNP_BETA       = 0;
 
 
 //
