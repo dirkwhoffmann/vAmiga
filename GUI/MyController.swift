@@ -220,6 +220,13 @@ extension MyController {
             emu?.powerOffAsync()
         }
         
+        // Pass in command line arguments as a RetroShell script
+        var script = ""
+        for arg in myAppDelegate.argv where arg.hasPrefix("-") {
+            script = script + arg.dropFirst() + "\n"
+        }
+        if !script.isEmpty { emu?.retroShell.execute(script) }
+        
         // Update toolbar
         toolbar.validateVisibleItems()
         
@@ -250,13 +257,6 @@ extension MyController {
     func launch() {
         
         do {
-            
-            // Pass in command line arguments as a RetroShell script
-            var script = ""
-            for arg in myAppDelegate.argv where arg.hasPrefix("-") {
-                script = script + arg.dropFirst() + "\n"
-            }
-            emu?.retroShell.execute(script)
             
             if BuildSettings.msgCallback {
                 
