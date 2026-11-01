@@ -232,6 +232,7 @@ bool
 Emulator::shouldWarp() const
 {
     auto &config = main.getConfig();
+    auto &dc = main.paula.diskController;
     
     if (main.agnus.clock < SEC(config.warpBoot)) {
         
@@ -240,7 +241,7 @@ Emulator::shouldWarp() const
     
     switch (config.warpMode) {
             
-        case Warp::AUTO:     return main.paula.diskController.spinning();
+        case Warp::AUTO:     return dc.spinning() && dc.getState() != DriveDmaState::OFF;
         case Warp::NEVER:    return false;
         case Warp::ALWAYS:   return true;
             
