@@ -237,7 +237,7 @@ GeometryDescriptor::checkCompatibility(isize mbLimit) const
     }
 
     // Second layer: the capacity the caller is willing to accept
-    if (mbLimit && numBytes() > mbLimit * (1 << 20)) {
+    if (mbLimit && numBytes() > i64(mbLimit) * 1024 * 1024) {
         throw DeviceError(DeviceError::HDR_TOO_LARGE, std::to_string(mbLimit));
     }
 }
