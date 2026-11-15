@@ -766,6 +766,7 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_BUS_WIDTH, 32);
             set(Opt::MEM_CHIP_RAM, 2048);
             set(Opt::MEM_SLOW_RAM, 0);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A1200);
             break;
             
         default:
