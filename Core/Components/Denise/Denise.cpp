@@ -839,10 +839,14 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
     u8 colxor = state.colxor;
     
     /* If the priority of a playfield is set to an illegal value (zpf1 or
-     * zpf2 will be 0 in that case), all pixels are drawn transparent.
+     * zpf2 will be 0 in that case), all pixels are drawn transparent on OCS
+     * and ECS. Lisa (AGA) draws the playfield as usual.
+     *
+     * Relevant tests in the vAmigaTS test suite:
+     * Denise/BPLCON0/invprio1 and Denise/BPLCON0/invprio3 (A1200 photos)
      */
-    u8 mask1 = state.zpf1 ? 0xFF : 0x00;
-    u8 mask2 = state.zpf2 ? 0xFF : 0x00;
+    u8 mask1 = state.zpf1 || isAGA() ? 0xFF : 0x00;
+    u8 mask2 = state.zpf2 || isAGA() ? 0xFF : 0x00;
     
     // u8 mask1 = state.zpf1 ? 0b1111 : 0b0000;
     // u8 mask2 = state.zpf2 ? 0b1111 : 0b0000;
