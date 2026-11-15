@@ -42,7 +42,7 @@ Texture::clear(isize row, Texel col1, Texel col2)
 void
 Texture::clear(isize row, isize cycle, Texel col1, Texel col2)
 {
-    auto *ptr = pixels.ptr + row * HPIXELS + 4 * cycle;
+    auto *ptr = pixels.ptr + row * HPIXELS;
 
     for (isize col = 4 * cycle; col < 4 * cycle + 4; col++) {
         ptr[col] = ((row >> 2) & 1) == ((col >> 3) & 1) ? col1 : col2;
