@@ -59,6 +59,9 @@ Defaults::fallbacks()
     registerDefault(Opt::DENISE_FRAME_SKIPPING,     16);
 
     registerDefault(Opt::MON_PALETTE,               (i64)Palette::COLOR);
+    registerDefault(Opt::MON_GAMMA_IN,              280);
+    registerDefault(Opt::MON_GAMMA_OUT,             220);
+    registerDefault(Opt::MON_BRIGHTNESS,            50);
     registerDefault(Opt::MON_BRIGHTNESS,            50);
     registerDefault(Opt::MON_CONTRAST,              100);
     registerDefault(Opt::MON_SATURATION,            50);
@@ -111,7 +114,7 @@ Defaults::fallbacks()
     registerDefault(Opt::XRAY_COLOR9,               0xFF00FFFF);
     registerDefault(Opt::XRAY_COMPOSITOR,           (i64)XRayCompositor::CPU);
 
-    registerDefault(Opt::LA_CONNECT,                true);
+    registerDefault(Opt::LA_CONNECT,                false);
     registerDefault(Opt::LA_PROBE0,                 (i64)Probe::NONE);
     registerDefault(Opt::LA_PROBE1,                 (i64)Probe::NONE);
     registerDefault(Opt::LA_PROBE2,                 (i64)Probe::NONE);

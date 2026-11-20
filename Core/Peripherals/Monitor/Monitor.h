@@ -28,6 +28,8 @@ class Monitor final : public SubComponent {
     Options options = {
 
         Opt::MON_PALETTE,
+        Opt::MON_GAMMA_IN,
+        Opt::MON_GAMMA_OUT,
         Opt::MON_BRIGHTNESS,
         Opt::MON_CONTRAST,
         Opt::MON_SATURATION,

@@ -20,6 +20,8 @@ Monitor::getOption(Opt option) const
     switch (option) {
             
         case Opt::MON_PALETTE:               return (i64)config.palette;
+        case Opt::MON_GAMMA_IN:              return (i64)config.brightness;
+        case Opt::MON_GAMMA_OUT:             return (i64)config.brightness;
         case Opt::MON_BRIGHTNESS:            return (i64)config.brightness;
         case Opt::MON_CONTRAST:              return (i64)config.contrast;
         case Opt::MON_SATURATION:            return (i64)config.saturation;
@@ -107,6 +109,14 @@ Monitor::checkOption(Opt opt, i64 value)
             }
             return;
 
+        case Opt::MON_GAMMA_IN:
+        case Opt::MON_GAMMA_OUT:
+
+            if (value < 100 || value > 300) {
+                throw CoreError(CoreError::OPT_INV_ARG, "100...300");
+            }
+            return;
+
         case Opt::MON_BRIGHTNESS:
         case Opt::MON_CONTRAST:
         case Opt::MON_SATURATION:
@@ -157,7 +167,19 @@ Monitor::setOption(Opt opt, i64 value)
             config.palette = Palette(value);
             pixelEngine.updateRGBA();
             break;
+
+        case Opt::MON_GAMMA_IN:
             
+            config.gammaIn = isize(value);
+            pixelEngine.updateRGBA();
+            break;
+
+        case Opt::MON_GAMMA_OUT:
+            
+            config.gammaOut = isize(value);
+            pixelEngine.updateRGBA();
+            break;
+
         case Opt::MON_BRIGHTNESS:
             
             config.brightness = isize(value);

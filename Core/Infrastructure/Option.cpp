@@ -53,6 +53,8 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::DENISE_CLX_PLF_PLF:        return boolParser();
 
         case Opt::MON_PALETTE:               return enumParser.template operator()<PaletteEnum,Palette>();
+        case Opt::MON_GAMMA_IN:              return numParser();
+        case Opt::MON_GAMMA_OUT:             return numParser();
         case Opt::MON_BRIGHTNESS:            return numParser("%");
         case Opt::MON_CONTRAST:              return numParser("%");
         case Opt::MON_SATURATION:            return numParser("%");

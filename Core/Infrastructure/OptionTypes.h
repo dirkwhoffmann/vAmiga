@@ -56,6 +56,8 @@ enum class Opt : long
     
     // Monitor
     MON_PALETTE,            ///< Color palette
+    MON_GAMMA_IN,           ///< Gamma correction factor (Amiga side)
+    MON_GAMMA_OUT,          ///< Gamma correction factor (Host side)
     MON_BRIGHTNESS,         ///< Brightness
     MON_CONTRAST,           ///< Contrast
     MON_SATURATION,         ///< Color saturation
@@ -273,6 +275,8 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
             case Opt::DENISE_CLX_PLF_PLF:        return "CLX_PLF_PLF";
                 
             case Opt::MON_PALETTE:               return "MON.PALETTE";
+            case Opt::MON_GAMMA_IN:              return "MON.GAMMA_IN";
+            case Opt::MON_GAMMA_OUT:             return "MON.GAMMA_OUT";
             case Opt::MON_BRIGHTNESS:            return "MON.BRIGHTNESS";
             case Opt::MON_CONTRAST:              return "MON.CONTRAST";
             case Opt::MON_SATURATION:            return "MON.SATURATION";
@@ -467,6 +471,8 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
             case Opt::DENISE_CLX_PLF_PLF:        return "Detect playfield-playfield collisions";
                 
             case Opt::MON_PALETTE:               return "Color palette";
+            case Opt::MON_GAMMA_IN:              return "Gamma correction (Amiga side)";
+            case Opt::MON_GAMMA_OUT:             return "Gamma correction (Host side)";
             case Opt::MON_BRIGHTNESS:            return "Monitor brightness";
             case Opt::MON_CONTRAST:              return "Monitor contrast";
             case Opt::MON_SATURATION:            return "Monitor saturation";

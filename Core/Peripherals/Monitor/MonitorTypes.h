@@ -239,6 +239,8 @@ typedef struct
 {
     /// Colors
     Palette palette;
+    isize gammaIn;                          ///< Gamma correction (Amiga side)
+    isize gammaOut;                         ///< Gamma correction (Host side)
     isize brightness;                       ///< Monitor brightness
     isize contrast;                         ///< Monitor contrast
     isize saturation;                       ///< Monitor saturation
