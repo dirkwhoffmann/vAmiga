@@ -1081,6 +1081,7 @@ Console::initCommonCommands(RSCommand &root)
             }
         });
         
+        /*
         root.add({
             
             .tokens = { "navigator" },
@@ -1092,6 +1093,7 @@ Console::initCommonCommands(RSCommand &root)
                 shell.enterNavigator();
             }
         });
+        */
         
         root.add({
             
