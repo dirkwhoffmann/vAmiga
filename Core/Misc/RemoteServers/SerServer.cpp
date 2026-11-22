@@ -170,7 +170,7 @@ SerServer::serviceSerEvent()
     if (onTheLine >= 0) {
 
         // Hand it over to the UART, followed by its stop bit
-        uart.receiveShiftReg = u16(onTheLine | (1 << uart.packetLength()));
+        uart.receiveShiftReg = u16(onTheLine | 1ULL << uart.packetLength());
         uart.copyFromReceiveShiftRegister();
         processedBytes++;
         onTheLine = -1;
