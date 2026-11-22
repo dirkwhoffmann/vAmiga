@@ -33,7 +33,7 @@ The next two options choose the emulated chip revisions of Agnus and Denise, two
 All custom chips can be classified into one of three generations. The first chip generation is called OCS (Original Chip Set). All original Amigas were equipped with these chips. The second generation is called ECS (Enhanced Chip Set) and was used by Commodore in the A500+ and the A600. Some ECS chips were also used in later revisions of the A500 and the A2000. Commodore shipped them with an ECS Agnus and an OCS Denise. My test computer pictured above also belongs to these models. It is equipped with an Agnus 8372A, a revision of the ECS generation. Denise, however, has revision number 8362R8, which is the OCS version of this chip.
 The third generation of custom chips was called AGA (Advanced Graphics Architecture). Commodore equipped the A1200 and A4000 with these chips.
 
-Both the OCS and ECS chipsets are supported by vAmiga. The AGA chipset is currently *not* supported and probably will never be.
+All three generations are supported by vAmiga. AGA support was added in version 5.0; the emulation of the AGA Denise (Lisa) is not complete yet.
 
 ## Agnus
 
@@ -57,6 +57,10 @@ vAmiga is able to emulate the following revisions of this chip:
 
    This option emulates the MOS 8375, which increased the range of addressable Chip Ram to 2 MB. It is used in the A500+ and A600, released in 1991 and 1992 respectively.
 
+- **AGA**
+
+  This option emulates the MOS 8374, called *Alice*, the AGA successor of Agnus. It was used in the A1200 and A4000.
+
 ## Denise
 
 - **OCS**
@@ -66,6 +70,10 @@ vAmiga is able to emulate the following revisions of this chip:
 - **ECS**
 
   This option selects the MOS 8373R4. The chip is sometimes referred to as *HiRes Denise* and was used in the Amiga 500+ and the Amiga 3000. Compared to its predecessor, it supports additional graphics modes and features an advanced sprite unit. It also offers a special *Border Blank* mode, which causes the border to be drawn in black color instead of the currently selected background color. Some games use this feature to surround the drawing area with a nicer looking border.
+
+- **AGA**
+
+  This option selects the MOS 4203, called *Lisa*, which was used in the A1200 and A4000. Its emulation is not complete yet.
 
 ## CIAs
 
