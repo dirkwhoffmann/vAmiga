@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25408" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25408"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -2623,6 +2623,7 @@
                         <outlet property="lockInfo1" destination="fCH-ya-jkW" id="ZFf-9E-kEt"/>
                         <outlet property="lockInfo2" destination="mfo-sG-Rhf" id="xZd-9A-P7b"/>
                         <outlet property="machineType" destination="wOW-z9-ocw" id="utk-Vk-yFp"/>
+                        <outlet property="presetPopup" destination="q7f-oT-loi" id="6yM-Kv-POr"/>
                         <outlet property="ramInitPattern" destination="jmT-m1-e7Z" id="fqf-BV-COe"/>
                         <outlet property="rtcIcon" destination="7xc-HP-4Ri" id="RL0-Em-pqa"/>
                         <outlet property="rtcInfo1" destination="Vzx-lr-m0E" id="oLB-N5-oCd"/>

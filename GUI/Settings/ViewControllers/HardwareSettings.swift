@@ -86,10 +86,19 @@ class HardwareSettingsViewController: SettingsViewController {
 
         super.refresh()
 
+        refreshToolbar()
         refreshChipset()
         refreshMemory()
     }
 
+    func refreshToolbar() {
+       
+        guard let emu = emu else { return }
+                
+        // Disable some controls
+        presetPopup.isEnabled = emu.poweredOff
+    }
+    
     func refreshChipset() {
 
         guard let emu = emu, let config = config else { return }

@@ -479,8 +479,8 @@
             filePath = "GUI/Settings/ViewControllers/HardwareSettings.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "335"
-            endingLineNumber = "335"
+            startingLineNumber = "344"
+            endingLineNumber = "344"
             landmarkName = "preset(tag:)"
             landmarkType = "7">
          </BreakpointContent>
