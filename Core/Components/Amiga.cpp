@@ -718,6 +718,7 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A1000);
             break;
             
         case ConfigScheme::A500_OCS_1MB:
@@ -730,6 +731,7 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
             break;
             
         case ConfigScheme::A500_ECS_1MB:
@@ -742,6 +744,7 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
             break;
             
         case ConfigScheme::A500_PLUS_1MB:
@@ -754,6 +757,7 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
             break;
  
         case ConfigScheme::A1200_2MB:
