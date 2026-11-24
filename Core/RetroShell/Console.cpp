@@ -930,6 +930,13 @@ Console::exec(const InputLine& cmd)
         for (auto &delegate: delegates) delegate->didExecute(cmd, ss);
         complete(nullptr);
 
+    } catch (ScriptInterruption &) {
+
+        // The command ran; it merely suspends the rest of the script
+        for (auto &delegate: delegates) delegate->didExecute(cmd, ss);
+        complete(nullptr);
+        throw;
+
     } catch (std::exception &err) {
 
         // Dispatch error message

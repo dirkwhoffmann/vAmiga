@@ -178,7 +178,16 @@ public:
     void unlock(KeyCode keycode);
     void unlockAll();
 
-    // Auto-types a string
+    /* Returns the key that types a character on a US keyboard, and whether
+     * it has to be combined with SHIFT. Newline maps to RETURN, tab to TAB,
+     * and backspace to BACKSPACE.
+     */
+    static optional<std::pair<KeyCode, bool>> keyFor(char c);
+
+    /* Auto-types a string. The key events are queued with increasing delays,
+     * so the function can be called from any thread. Characters without a
+     * key on a US keyboard are skipped.
+     */
     void autoType(const string &text);
 
     // Discards all pending key events

@@ -13,6 +13,7 @@
 #include "Denise.h"
 #include "Host.h"
 #include "utl/gfx/Images.h"
+#include <fstream>
 
 namespace vamiga {
 
@@ -172,9 +173,32 @@ VideoPort::saveXrayTexture(const fs::path &path, isize x1, isize x2, isize y1, i
     savePNG(getXrayTexture(offset), path, x1, x2, y1, y2);
 }
 
-void
-VideoPort::savePNG(const Texture &texture, const fs::path &path,
-                   isize x1, isize x2, isize y1, isize y2) const
+std::vector<u8>
+VideoPort::encodeTexture(isize offset) const
+{
+    return encodePNG(getTexture(offset), 0, 2 * HPIXELS, 0, VPIXELS);
+}
+
+std::vector<u8>
+VideoPort::encodeTexture(isize x1, isize x2, isize y1, isize y2, isize offset) const
+{
+    return encodePNG(getTexture(offset), x1, x2, y1, y2);
+}
+
+std::vector<u8>
+VideoPort::encodeXrayTexture(isize offset) const
+{
+    return encodePNG(getXrayTexture(offset), 0, 2 * HPIXELS, 0, VPIXELS);
+}
+
+std::vector<u8>
+VideoPort::encodeXrayTexture(isize x1, isize x2, isize y1, isize y2, isize offset) const
+{
+    return encodePNG(getXrayTexture(offset), x1, x2, y1, y2);
+}
+
+std::vector<u8>
+VideoPort::encodePNG(const Texture &texture, isize x1, isize x2, isize y1, isize y2) const
 {
     constexpr isize stride = 2 * HPIXELS;
     constexpr isize vscale = 4;
@@ -186,7 +210,19 @@ VideoPort::savePNG(const Texture &texture, const fs::path &path,
     auto *texels = reinterpret_cast<const u32 *>(texture.pixels.ptr);
     auto format = static_cast<utl::TexelFormat>(host.getConfig().texFormat);
 
-    utl::exportPNG(path, texels + y1 * stride + x1, x2 - x1, y2 - y1, stride, vscale, format);
+    return utl::encodePNG(texels + y1 * stride + x1, x2 - x1, y2 - y1, stride, vscale, format);
+}
+
+void
+VideoPort::savePNG(const Texture &texture, const fs::path &path,
+                   isize x1, isize x2, isize y1, isize y2) const
+{
+    auto png = encodePNG(texture, x1, x2, y1, y2);
+
+    std::ofstream file(path, std::ios::binary);
+    file.write(reinterpret_cast<const char *>(png.data()), std::streamsize(png.size()));
+    if (!file)
+        throw utl::Error(0, "Can't write " + path.string());
 }
 
 void

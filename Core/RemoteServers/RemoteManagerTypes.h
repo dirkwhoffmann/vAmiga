@@ -26,13 +26,14 @@ enum class ServerType : long
     RPC,
     GDB,
     PROM,
-    SER
+    SER,
+    MCP
 };
 
 struct ServerTypeEnum : utl::Reflectable<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(ServerType::SER);
+    static constexpr long maxVal = long(ServerType::MCP);
 
     static const char *_key(ServerType value)
     {
@@ -43,6 +44,7 @@ struct ServerTypeEnum : utl::Reflectable<ServerTypeEnum, ServerType>
             case ServerType::GDB:    return "GDB";
             case ServerType::PROM:   return "PROM";
             case ServerType::SER:    return "SER";
+            case ServerType::MCP:    return "MCP";
         }
         return "???";
     }
@@ -55,6 +57,7 @@ struct ServerTypeEnum : utl::Reflectable<ServerTypeEnum, ServerType>
             case ServerType::GDB:    return "Debug server";
             case ServerType::PROM:   return "Prometheus server";
             case ServerType::SER:    return "Serial port server";
+            case ServerType::MCP:    return "MCP server";
         }
         return "???";
     }
@@ -106,6 +109,7 @@ typedef struct
     RemoteServerInfo gdbInfo;               ///< State of the GDB server
     RemoteServerInfo promInfo;              ///< State of the Prometheus server
     RemoteServerInfo serInfo;               ///< State of the serial port server
+    RemoteServerInfo mcpInfo;               ///< State of the MCP server
 }
 RemoteManagerInfo;
 

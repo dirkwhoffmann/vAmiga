@@ -14,6 +14,7 @@ RpcServer.cpp
 GdbServer.cpp
 GdbServerCmds.cpp
 PromServer.cpp
+McpServer.cpp
 Socket.cpp
 
 )

@@ -47,6 +47,10 @@ class RemoteServer : public SubComponent, public TransportDelegate {
         .name           = "SerServer",
         .description    = "Serial Port Server",
         .shell          = "server ser"
+    }, {
+        .name           = "McpServer",
+        .description    = "Model Context Protocol Server",
+        .shell          = "server mcp"
     }};
 
     Options options = {

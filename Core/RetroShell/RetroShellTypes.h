@@ -116,7 +116,8 @@ struct InputLine {
         USER,       // User-typed command
         SCRIPT,     // Script command
         RPC,        // JSON RPC request
-        RSH         // RemoteShell request
+        RSH,        // RemoteShell request
+        MCP         // MCP tool call
     };
 
     /// Line number, RPC identifier, etc.
@@ -149,6 +150,8 @@ struct InputLine {
     bool isRpcCommand() const { return type == Source::RPC; }
     /// Returns true if the line is a RemoteShell request.
     bool isRshCommand() const { return type == Source::RSH; }
+    /// Returns true if the line is an MCP tool call.
+    bool isMcpCommand() const { return type == Source::MCP; }
     /// Returns true if the line is a comment.
     bool isComment() const { return input.size() != 0 && input[0] == '#'; }
 };

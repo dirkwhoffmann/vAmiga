@@ -621,6 +621,12 @@ Headless::smokeTestScript[] = {
     "server ser set VERBOSE true",
     "server ser set VERBOSE false",
 
+    "server",
+    "server mcp",
+    "server mcp set PORT 8000",
+    "server mcp set VERBOSE true",
+    "server mcp set VERBOSE false",
+
     // Enter debugger
     "debugger",
 

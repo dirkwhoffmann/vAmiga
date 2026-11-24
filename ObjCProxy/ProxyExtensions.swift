@@ -633,6 +633,7 @@ extension RemoteManagerProxy {
         count(info.gdbInfo)
         count(info.promInfo)
         count(info.serInfo)
+        count(info.mcpInfo)
 
         if numConnected > 0 { return Symbol.get(.serverConnected) }
         if numActive > 0 { return Symbol.get(.serverListening) }

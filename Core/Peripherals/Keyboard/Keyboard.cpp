@@ -10,6 +10,7 @@
 #include "vaconfig.h"
 #include "Keyboard.h"
 #include "Amiga.h"
+#include "Emulator.h"
 #include "utl/io.h"
 
 namespace vamiga {
@@ -233,6 +234,74 @@ Keyboard::wakeUp()
     }
 }
 
+optional<std::pair<KeyCode, bool>>
+Keyboard::keyFor(char c)
+{
+    // Keys of the main block on a US keyboard (unshifted, shifted)
+    static const struct { KeyCode code; char plain; char shifted; } keys[] = {
+
+        { 0x00, '`', '~' }, { 0x01, '1', '!' }, { 0x02, '2', '@' }, { 0x03, '3', '#' },
+        { 0x04, '4', '$' }, { 0x05, '5', '%' }, { 0x06, '6', '^' }, { 0x07, '7', '&' },
+        { 0x08, '8', '*' }, { 0x09, '9', '(' }, { 0x0A, '0', ')' }, { 0x0B, '-', '_' },
+        { 0x0C, '=', '+' }, { 0x0D, '\\', '|' },
+        { 0x10, 'q', 'Q' }, { 0x11, 'w', 'W' }, { 0x12, 'e', 'E' }, { 0x13, 'r', 'R' },
+        { 0x14, 't', 'T' }, { 0x15, 'y', 'Y' }, { 0x16, 'u', 'U' }, { 0x17, 'i', 'I' },
+        { 0x18, 'o', 'O' }, { 0x19, 'p', 'P' }, { 0x1A, '[', '{' }, { 0x1B, ']', '}' },
+        { 0x20, 'a', 'A' }, { 0x21, 's', 'S' }, { 0x22, 'd', 'D' }, { 0x23, 'f', 'F' },
+        { 0x24, 'g', 'G' }, { 0x25, 'h', 'H' }, { 0x26, 'j', 'J' }, { 0x27, 'k', 'K' },
+        { 0x28, 'l', 'L' }, { 0x29, ';', ':' }, { 0x2A, '\'', '"' },
+        { 0x31, 'z', 'Z' }, { 0x32, 'x', 'X' }, { 0x33, 'c', 'C' }, { 0x34, 'v', 'V' },
+        { 0x35, 'b', 'B' }, { 0x36, 'n', 'N' }, { 0x37, 'm', 'M' }, { 0x38, ',', '<' },
+        { 0x39, '.', '>' }, { 0x3A, '/', '?' }
+    };
+
+    switch (c) {
+
+        case ' ':   return std::pair { KeyCode(0x40), false };
+        case '\b':  return std::pair { KeyCode(0x41), false };
+        case '\t':  return std::pair { KeyCode(0x42), false };
+        case '\n':  return std::pair { KeyCode(0x44), false };
+
+        default:
+            break;
+    }
+
+    for (auto &key : keys) {
+
+        if (c == key.plain) return std::pair { key.code, false };
+        if (c == key.shifted) return std::pair { key.code, true };
+    }
+    return { };
+}
+
+void
+Keyboard::autoType(const string &text)
+{
+    constexpr KeyCode shift = 0x60;
+    constexpr double delta = 0.02;
+
+    double delay = 0.0;
+
+    auto put = [&](Cmd type, KeyCode code) {
+
+        emulator.put(Command(type, KeyCmd { .keycode = code, .delay = delay }));
+        delay += delta;
+    };
+
+    for (char c : text) {
+
+        if (c == '\r') continue;
+
+        auto key = keyFor(c);
+        if (!key) continue;
+
+        if (key->second) put(Cmd::KEY_PRESS, shift);
+        put(Cmd::KEY_PRESS, key->first);
+        put(Cmd::KEY_RELEASE, key->first);
+        if (key->second) put(Cmd::KEY_RELEASE, shift);
+    }
+}
+
 void
 Keyboard::abortTyping()
 {
@@ -421,6 +490,11 @@ Keyboard::processCommand(const Command &cmd)
 
         logmsg(LOG_KEY, "%s: Delayed for %f sec\n", CmdEnum::key(cmd.type), cmd.key.delay);
 
+        if (pending.isFull()) {
+
+            logmsg(LOG_WARN, "%s: Too many pending key events. Dropped.\n", CmdEnum::key(cmd.type));
+            return;
+        }
         pending.insert(agnus.clock + SEC(cmd.key.delay),
                        Command(cmd.type, KeyCmd { .keycode = cmd.key.keycode }));
         agnus.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);

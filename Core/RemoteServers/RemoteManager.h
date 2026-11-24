@@ -16,6 +16,7 @@
 #include "GdbServer.h"
 #include "PromServer.h"
 #include "SerServer.h"
+#include "McpServer.h"
 #include "utl/wrappers.h"
 #include <deque>
 #include <mutex>
@@ -71,10 +72,11 @@ public:
     GdbServer gdbServer = GdbServer(amiga, isize(ServerType::GDB));
     PromServer promServer = PromServer(amiga, isize(ServerType::PROM));
     SerServer serServer = SerServer(amiga, isize(ServerType::SER));
+    McpServer mcpServer = McpServer(amiga, isize(ServerType::MCP));
 
     // Convenience access
     std::vector <RemoteServer *> servers = {
-        &rshServer, &rpcServer, &gdbServer, &promServer, &serServer
+        &rshServer, &rpcServer, &gdbServer, &promServer, &serServer, &mcpServer
     };
 
     // Result of the latest inspection
@@ -101,6 +103,7 @@ public:
         CLONE(gdbServer)
         CLONE(promServer)
         CLONE(serServer)
+        CLONE(mcpServer)
 
         return *this;
     }
