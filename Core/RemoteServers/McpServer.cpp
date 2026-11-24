@@ -31,7 +31,7 @@ const char *currentVersion = "2026-07-28";
 const char *legacyVersions[] = { "2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05" };
 
 // Longest time a tool call may wait for the emulator
-const auto toolTimeout = std::chrono::seconds(30);
+const auto toolTimeout = std::chrono::milliseconds(30000);
 
 // Upper end of the 24-bit Amiga address space
 const long maxAddr = 0xFFFFFF;
@@ -485,6 +485,9 @@ McpServer::didReceive(const string &payload)
 {
     std::vector<string> lines;
 
+    // The transport the message has been received on
+    auto &via = transport();
+
     if (config.transport == TransportProtocol::STDIO) {
 
         // The stdio transport already hands out complete lines
@@ -511,7 +514,7 @@ McpServer::didReceive(const string &payload)
 
         if (config.verbose) printf("R: %s\n", utl::makePrintable(trimmed).c_str());
 
-        auto reply = process(trimmed, nullptr);
+        auto reply = process(trimmed, nullptr, via);
         if (!reply.body.empty()) send(reply.body + "\n");
     }
 }
@@ -529,14 +532,14 @@ McpServer::didReceive(const struct httplib::Request &req, struct httplib::Respon
 
     if (config.verbose) printf("R: %s\n", utl::makePrintable(req.body).c_str());
 
-    auto reply = process(req.body, &req);
+    auto reply = process(req.body, &req, http);
 
     res.status = reply.status;
     if (!reply.body.empty()) res.set_content(reply.body, "application/json");
 }
 
 McpServer::Reply
-McpServer::process(const string &message, const struct httplib::Request *req)
+McpServer::process(const string &message, const struct httplib::Request *req, const Transport &via)
 {
     json id = nullptr;
 
@@ -643,7 +646,7 @@ McpServer::process(const string &message, const struct httplib::Request *req)
 
             // Failing tools are reported as tool errors, not as protocol errors
             try {
-                result = callTool(name, args);
+                result = callTool(name, args, via);
                 result["isError"] = false;
             } catch (const std::exception &e) {
                 result = textResult(e.what());
@@ -669,9 +672,9 @@ McpServer::process(const string &message, const struct httplib::Request *req)
 }
 
 json
-McpServer::callTool(const string &name, const json &args)
+McpServer::callTool(const string &name, const json &args, const Transport &via)
 {
-    if (name == "retroshell")   return toolRetroShell(args);
+    if (name == "retroshell")   return toolRetroShell(args, via);
     if (name == "screenshot")   return toolScreenshot(args);
     if (name == "read_memory")  return toolReadMemory(args);
     if (name == "get_state")    return toolGetState(args);
@@ -684,12 +687,12 @@ McpServer::callTool(const string &name, const json &args)
 }
 
 json
-McpServer::toolRetroShell(const json &args)
+McpServer::toolRetroShell(const json &args, const Transport &via)
 {
     if (!args.contains("command") || !args["command"].is_string()) {
         throw std::invalid_argument("Missing string argument 'command'");
     }
-    return textResult(execBlocking(args["command"].get<string>()));
+    return textResult(execBlocking(args["command"].get<string>(), via));
 }
 
 json
@@ -1038,7 +1041,7 @@ McpServer::toolDisassemble(const json &args)
 }
 
 string
-McpServer::execBlocking(const string &command)
+McpServer::execBlocking(const string &command, const Transport &via)
 {
     struct Outcome { string output; std::exception_ptr error; };
 
@@ -1058,11 +1061,8 @@ McpServer::execBlocking(const string &command)
         }
     });
 
-    if (future.wait_for(toolTimeout) != std::future_status::ready) {
-        throw std::runtime_error("Timeout. Is the emulator running?");
-    }
-
-    auto outcome = future.get();
+    // Give up if the transport is shut down meanwhile (e.g., by this very command)
+    auto outcome = waitFor(future, via, toolTimeout);
     if (outcome.error) std::rethrow_exception(outcome.error);
 
     return outcome.output;

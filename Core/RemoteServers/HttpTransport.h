@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Transport.h"
+#include <mutex>
 
 namespace httplib { class Server; struct Request; struct Response; }
 
@@ -27,8 +28,13 @@ protected:
         return *this;
     }
 
-    // A simple third-party HTTP server
+    /* A simple third-party HTTP server. It is created and deleted by the
+     * server thread. Other threads may only stop it, while holding srvLock.
+     * Deleting it from outside would pull it out from under listen(), which
+     * keeps running until all requests in flight have been answered.
+     */
     httplib::Server *srv = nullptr;
+    std::mutex srvLock;
 
 
     //
