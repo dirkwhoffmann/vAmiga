@@ -113,30 +113,10 @@ Console::didActivate()
     }
     
     switch (commandSet) {
-
-        case CommandSet::Commander:
-            
-            *this << "Entering RetroShell Commander" << '\n';
-            *this << '\n';
-            break;
             
         case CommandSet::Debugger:
             
-            *this << "Entering RetroShell Debugger" << '\n';
-            *this << '\n';
             emulator.trackOn(trackSource());
-            break;
-
-        case CommandSet::Navigator:
-            
-            *this << "Entering RetroShell Navigator" << '\n';
-            *this << '\n';
-            break;
- 
-        case CommandSet::CBMNavigator:
-            
-            *this << "Entering RetroShell CBM Navigator " << '\n';
-            *this << '\n';
             break;
             
         default:
@@ -1078,6 +1058,7 @@ Console::initCommonCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 shell.enterDebugger();
+                amiga.dump(Category::Current, os);
             }
         });
         
