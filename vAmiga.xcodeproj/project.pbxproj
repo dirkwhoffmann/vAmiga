@@ -2271,6 +2271,8 @@
 				50BF4B642F055ADF00F1B9F2 /* rvlib */,
 				508FE06621EA31E50043D0E9 /* Media */,
 				506436E129C1D82500768528 /* ThirdParty */,
+				50BF1CCA276DBF2E00386540 /* RemoteServers */,
+				50B9C42A2609430F00A86C31 /* RetroShell */,
 				50E98B52275A125700AA0CB9 /* Misc */,
 			);
 			path = Core;
@@ -2896,8 +2898,6 @@
 				507C01B82D25C0AE00E29933 /* LogicAnalyzer */,
 				50AD904F2770CECD0011ECCB /* OSDebugger */,
 				50AD90502770CEDA0011ECCB /* RegressionTester */,
-				50BF1CCA276DBF2E00386540 /* RemoteServers */,
-				50B9C42A2609430F00A86C31 /* RetroShell */,
 			);
 			path = Misc;
 			sourceTree = "<group>";

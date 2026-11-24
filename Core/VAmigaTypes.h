@@ -53,6 +53,6 @@
 
 // Miscellaneous
 #include "Misc/LogicAnalyzer/LogicAnalyzerTypes.h"
-#include "Misc/RemoteServers/RemoteManagerTypes.h"
-#include "Misc/RemoteServers/RemoteServerTypes.h"
-#include "Misc/RetroShell/RetroShellTypes.h"
+#include "RemoteServers/RemoteManagerTypes.h"
+#include "RemoteServers/RemoteServerTypes.h"
+#include "RetroShell/RetroShellTypes.h"

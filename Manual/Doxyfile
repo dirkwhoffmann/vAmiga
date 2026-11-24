@@ -83,10 +83,10 @@ INPUT                  = guides \
                          ../Core/Media/Rom/RomFileTypes.h \
                          ../Core/Media/Snapshot.h \
                          ../Core/Misc/LogicAnalyzer/LogicAnalyzerTypes.h \
-                         ../Core/Misc/RemoteServers/RemoteManagerTypes.h \
-                         ../Core/Misc/RemoteServers/RemoteServerTypes.h \
-                         ../Core/Misc/RemoteServers/TransportTypes.h \
-                         ../Core/Misc/RetroShell/RetroShellTypes.h \
+                         ../Core/RemoteServers/RemoteManagerTypes.h \
+                         ../Core/RemoteServers/RemoteServerTypes.h \
+                         ../Core/RemoteServers/TransportTypes.h \
+                         ../Core/RetroShell/RetroShellTypes.h \
                          ../Core/Peripherals/Drive/DriveTypes.h \
                          ../Core/Peripherals/Drive/FloppyDiskTypes.h \
                          ../Core/Peripherals/Drive/FloppyDriveTypes.h \
