@@ -136,19 +136,18 @@ private:
      */
     Texel shresPalette[2][16];
 
-    /* ABGR values for a blended super hires pixel pair, indexed by the color
-     * index of the first sub-pixel and that of the second (see the shresBlend
-     * option). The two are averaged in Amiga color space rather than in the
-     * host's, because what smears the sub-pixels together on real hardware is
-     * the monitor's video amplifier, which low-passes the signal before the
-     * phosphor's non-linearity, not after it. Averaging the finished texels
-     * instead would make a $5,$5 pair noticeably darker than a $0,$A one, and
-     * the A500+ shows them as equal (Denise/Modes/shres/shramp1 to shramp7).
+    /* ABGR values for a blended super hires pixel pair (see the shresBlend
+     * option). Both members of a pair reach the same register, one showing
+     * its high bit pairs and the other its low bit pairs, so the blend only
+     * depends on the register. The two halves are averaged in Amiga color
+     * space rather than in the host's, because what smears the sub-pixels
+     * together on real hardware is the monitor's video amplifier, which
+     * low-passes the signal before the phosphor's non-linearity, not after
+     * it. Averaging the finished texels instead would make $5 noticeably
+     * darker than $2, and the A500+ shows them as equal
+     * (Denise/Modes/shres/shramp1 to shramp7).
      */
-    Texel shresPaletteBlend[16][16];
-
-    // Indicates that shresPaletteBlend is out of date (see updateShresBlend)
-    bool shresBlendDirty = true;
+    Texel shresPaletteBlend[16];
 
 
     /* Snapshots of BPLCON0 and BPLCON2 as of the most recently replayed
@@ -306,9 +305,6 @@ public:
 
 private:
 
-    // Rebuilds shresPaletteBlend if a register below 16 has changed
-    void updateShresBlend();
-
     /* Color index of an ECS super hires pixel. Super hires pixels are paired
      * up within aligned groups of four (one lores pixel), pixel 0 with pixel 2
      * and pixel 1 with pixel 3, so both members of a pair are always fetched
@@ -320,6 +316,12 @@ private:
         Pixel base = (k & ~3) | (k & 1);
         return ((mbuf[base + 2] & 3) * 4) + (mbuf[base] & 3);
     }
+
+    /* Selects the half of the register an ECS super hires pixel shows. The
+     * first member of a pair (pixel 0 or 1 of a group) shows the high bit
+     * pairs, the second member (pixel 2 or 3) the low bit pairs.
+     */
+    static isize shresHalf(Pixel k) { return (k >> 1) & 1; }
 
 public:
     

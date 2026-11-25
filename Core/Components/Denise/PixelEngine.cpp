@@ -156,9 +156,11 @@ PixelEngine::updateRGBA(isize nr)
     // Keep the super hires sub-pixel colors in sync
     if (nr < 16) {
 
-        shresPalette[0][nr] = toTexel(color[nr].shresHi());
-        shresPalette[1][nr] = toTexel(color[nr].shresLo());
-        shresBlendDirty = true;
+        auto hi = color[nr].shresHi(), lo = color[nr].shresLo();
+
+        shresPalette[0][nr] = toTexel(hi);
+        shresPalette[1][nr] = toTexel(lo);
+        shresPaletteBlend[nr] = toTexel(hi.mix(lo));
     }
 
     // Keep the background border color in sync with color register 0
@@ -173,20 +175,6 @@ PixelEngine::updateRGBA()
     
     // Update all cached RGBA values
     for (isize i = 0; i < 256; i++) updateRGBA(i);
-}
-
-void
-PixelEngine::updateShresBlend()
-{
-    for (isize i = 0; i < 16; i++) {
-
-        auto hi = color[i].shresHi();
-        for (isize j = 0; j < 16; j++) {
-
-            shresPaletteBlend[i][j] = toTexel(hi.mix(color[j].shresLo()));
-        }
-    }
-    shresBlendDirty = false;
 }
 
 void
@@ -664,45 +652,55 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
      * patterns have period 16; shindex1 to shindex5 and sh1bpl1 to sh1bpl5
      * pin down the index arithmetic itself.
      *
-     * The register is then not shown in full. Denise cannot drive the DAC
-     * with a whole 4 bit component twice per hires cell, so it sends the high
-     * bit pair of each component to the first sub-pixel and the low bit pair
-     * to the second (AmigaColor::shresHi and shresLo). A monitor blurs the
-     * two back together, which is why the perceived brightness follows the
-     * SUM of the two bit pairs rather than the register value: $3 comes out
-     * brighter than $4, $7 brighter than $8 and $B brighter than $C. All
-     * seven shramp tests show that inversion on an A500+, and it is what
-     * shsplit1 was looking for and failed to find with only two data points.
+     * The register is then not shown in full. Each pixel of a pair shows
+     * only two bits per RGB component: the first member (pixel 0 or 1 of the
+     * group) the high bit pair of each nibble, the second member (pixel 2 or
+     * 3) the low bit pair (AmigaColor::shresHi and shresLo). This is the
+     * layout the graphics library relies on. Hardware Reference Manual,
+     * Appendix C, encodes four colors with components ab--, gh--, ... into
+     * the registers such that COLORn holds color (n & 3) in the high bit
+     * pairs and color (n >> 2) in the low bit pairs. As the low two bits of
+     * the index come from the first member and the high two bits from the
+     * second, every pixel shows its own color under that encoding. Showing
+     * the high bit pairs on pixels 0 and 1 and the low bit pairs on pixels 2
+     * and 3 is the only assignment for which that holds; vAmiga 5.0 used
+     * pixels 0 and 2 instead and lost two out of four pixels (issue #1044).
+     *
+     * A monitor blurs the halves back together, which is why the perceived
+     * brightness follows the SUM of the two bit pairs rather than the
+     * register value: $3 comes out brighter than $4, $7 brighter than $8 and
+     * $B brighter than $C. All seven shramp tests show that inversion on an
+     * A500+, and it is what shsplit1 was looking for and failed to find with
+     * only two data points.
      */
     auto colorAt = [&](Pixel k) -> u32 {
 
         if (bbuf[k] != BORDER_NONE) return u32(borderPalette[bbuf[k]]);
 
-        return u32(shresPalette[k & 1][shresIndex(mbuf, k)]);
+        return u32(shresPalette[shresHalf(k)][shresIndex(mbuf, k)]);
     };
 
     if (denise.getConfig().shresBlend) {
 
-        /* A real monitor cannot resolve the two sub-pixels and shows their
-         * average instead. The frame buffer keeps both, but anything sampling
-         * it at hires resolution -- the regression screenshots among others --
-         * keeps only the first and drops the second, so an emulator picture
-         * can differ from a photo of the same test even when the emulation is
-         * right. Blending matches what a CRT shows at the cost of the detail,
-         * and it is the only setting in which the brightness inversion
-         * described above is visible at all: unblended, the screenshot holds
-         * the high bit pair alone.
+        /* A real monitor cannot resolve the two halves of a register and
+         * shows their average instead. The frame buffer keeps both, but
+         * anything sampling it at hires resolution -- the regression
+         * screenshots among others -- keeps every other pixel only, so an
+         * emulator picture can differ from a photo of the same test even when
+         * the emulation is right. Blending replaces both members of a pair
+         * by the average of the two halves of their register, which matches
+         * what a CRT shows at the cost of the detail. It is the only setting
+         * in which the brightness inversion described above shows up as a
+         * uniform brightness.
          */
-        if (shresBlendDirty) updateShresBlend();
-
         for (Pixel i = from; i < to; i++) {
 
-            Pixel lo = i & ~1, hi = i | 1;
+            Pixel partner = i ^ 2;
 
-            if (bbuf[lo] != BORDER_NONE || bbuf[hi] != BORDER_NONE) {
+            if (bbuf[i] != BORDER_NONE || bbuf[partner] != BORDER_NONE) {
 
                 // Averaging the finished texels is good enough for the border
-                u32 a = colorAt(lo), b = colorAt(hi), c = 0;
+                u32 a = colorAt(i), b = colorAt(partner), c = 0;
                 for (isize s = 0; s < 32; s += 8) {
                     c |= ((((a >> s) & 0xFF) + ((b >> s) & 0xFF)) / 2) << s;
                 }
@@ -710,8 +708,7 @@ PixelEngine::colorizeShres(u32 *dst, Pixel from, Pixel to)
 
             } else {
 
-                dst[i] = u32(shresPaletteBlend[shresIndex(mbuf, lo)]
-                                               [shresIndex(mbuf, hi)]);
+                dst[i] = u32(shresPaletteBlend[shresIndex(mbuf, i)]);
             }
         }
 
