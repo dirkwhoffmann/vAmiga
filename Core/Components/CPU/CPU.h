@@ -83,6 +83,7 @@ public:
         CLONE(clock)
         CLONE(reg.pc)
         CLONE(reg.pc0)
+        CLONE(reg.prev_pc0)
         CLONE(reg.sr.t1)
         CLONE(reg.sr.t0)
         CLONE(reg.sr.s)
@@ -104,21 +105,18 @@ public:
         CLONE(reg.cacr)
         CLONE(reg.caar)
 
+        CLONE(queue.edb)
         CLONE(queue.irc)
         CLONE(queue.ird)
 
-        CLONE_ARRAY(iCache.cache)
-        CLONE(iCache.latch.addr)
-        CLONE(iCache.latch.data)
-        CLONE(budget.cp)
+        CLONE(budget.penalty)
         CLONE(budget.accumulated)
         CLONE(budget.stalled)
 
-        CLONE(irqMode)
         CLONE(ipl)
+        CLONE(nmiTaken)
         CLONE(fcl)
         CLONE(fcSource)
-        CLONE(exception)
         CLONE(loopModeDelay)
         CLONE(readBuffer)
         CLONE(writeBuffer)
@@ -128,9 +126,13 @@ public:
 
         if (cpuModel != other.cpuModel) {
 
-            setModel((moira::Model)other.config.revision,
-                     (moira::Model)other.config.dasmRevision);
+            setModel((moira::CPUModel)other.config.revision,
+                     (moira::CPUModel)other.config.dasmRevision);
         }
+
+        // Instruction cache (setModel() resets it if the model changes)
+        iCache.copyContents(other.iCache);
+        iCache.refresh();
 
         return *this;
     }
@@ -157,6 +159,7 @@ private:
         << clock
         << reg.pc
         << reg.pc0
+        << reg.prev_pc0
         << reg.sr.t1
         << reg.sr.t0
         << reg.sr.s
@@ -178,31 +181,25 @@ private:
         << reg.cacr
         << reg.caar
 
+        << queue.edb
         << queue.irc
         << queue.ird
-        << budget.cp
+        << budget.penalty
         << budget.accumulated
         << budget.stalled
 
-        << irqMode
         << ipl
+        << nmiTaken
         << fcl
         << fcSource
-        << exception
         << loopModeDelay
         << readBuffer
         << writeBuffer
         << flags;
 
         // Instruction cache
-        worker << iCache.latch.addr << iCache.latch.data;
-        for (isize i = 0; i < 64; ++i) {
+        iCache.serializeContents(worker);
 
-            worker << iCache.cache[i].data;
-            worker << iCache.cache[i].tag;
-            worker << iCache.cache[i].valid;
-        }
-        
         if (isResetter(worker)) return;
 
         worker
@@ -319,11 +316,6 @@ public:
     string disass(const string &fmt, u32 addr, isize *len = nullptr) const;
     string disassRecorded(const string &fmt, isize nr, isize *len = nullptr) const;
 
-private:
-
-    string disass(const string &fmt, u32 addr, const moira::Registers &regs, isize *len) const;
-
-public:
 
     // Dumps a portion of the log buffer
     void dumpLogBuffer(std::ostream &os, isize count) const;

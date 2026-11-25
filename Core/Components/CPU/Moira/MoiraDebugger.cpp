@@ -5,7 +5,6 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-#include "vaconfig.h"
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
 #include "Moira.h"
@@ -15,7 +14,7 @@
 #include <cstring>
 #include <cstdio>
 
-namespace vamiga::moira {
+namespace MOIRA_NAMESPACE {
 
 
 //
@@ -47,7 +46,7 @@ Guards::~Guards()
 Guard *
 Guards::guardNr(isize nr) const
 {
-    return nr < count ? &guards[nr] : nullptr;
+    return nr >= 0 && nr < count ? &guards[nr] : nullptr;
 }
 
 Guard *
@@ -63,7 +62,7 @@ Guards::guardAt(u32 addr) const
 std::optional<u32>
 Guards::guardAddr(isize nr) const
 {
-    if (nr < count) return guards[nr].addr;
+    if (nr >= 0 && nr < count) return guards[nr].addr;
     return { };
 }
 
@@ -91,7 +90,7 @@ Guards::setAt(u32 addr, isize ignores)
 void
 Guards::remove(isize nr)
 {
-    if (nr < count) removeAt(guards[nr].addr);
+    if (nr >= 0 && nr < count) removeAt(guards[nr].addr);
 }
 
 void
@@ -112,7 +111,7 @@ Guards::removeAt(u32 addr)
 void
 Guards::replace(isize nr, u32 addr)
 {
-    if (nr >= count || isSetAt(addr)) return;
+    if (nr < 0 || nr >= count || isSetAt(addr)) return;
 
     guards[nr].addr = addr;
 }
@@ -260,8 +259,8 @@ Debugger::stepInto()
 void
 Debugger::stepOver()
 {
-    char tmp[64];
-    softStop = moira.getPC() + moira.disassemble(tmp, moira.getPC());
+    u32 pc = moira.getPC();
+    softStop = pc + moira.instrLength(pc);
     breakpoints.setNeedsCheck(true);
 }
 
@@ -308,10 +307,10 @@ Debugger::disableLogging()
     moira.flags &= ~State::LOGGING;
 }
 
-int
+isize
 Debugger::loggedInstructions() const
 {
-    return logCnt < logBufferCapacity ? (int)logCnt : logBufferCapacity;
+    return logCnt < logBufferCapacity ? logCnt : logBufferCapacity;
 }
 
 void
@@ -324,17 +323,72 @@ Debugger::logInstruction()
 }
 
 const Registers &
-Debugger::logEntryRel(int n) const
+Debugger::logEntryRel(isize n) const
 {
     assert(n < loggedInstructions());
     return logBuffer[(logCnt - 1 - n) % logBufferCapacity];
 }
 
 const Registers &
-Debugger::logEntryAbs(int n) const
+Debugger::logEntryAbs(isize n) const
 {
     assert(n < loggedInstructions());
     return logEntryRel(loggedInstructions() - n - 1);
+}
+
+std::string
+Debugger::disassembleRecorded(const std::string &fmt, isize nr, int *len) const
+{
+    auto &entry = logEntryAbs(nr);
+    return moira.disassemble(fmt, entry.pc0, entry, len);
+}
+
+void
+Debugger::dumpLogBuffer(std::ostream &os, isize count, const std::string &fmt) const
+{
+    isize num = loggedInstructions();
+
+    for (isize i = num - count; i < num ; i++) {
+
+        if (i >= 0) os << "   " << disassembleRecorded(fmt, i) << std::endl;
+    }
+}
+
+void
+Debugger::dumpLogBuffer(std::ostream &os, const std::string &fmt) const
+{
+    dumpLogBuffer(os, loggedInstructions(), fmt);
+}
+
+void
+Debugger::disassembleRange(std::ostream &os, u32 addr, isize count, const std::string &fmt) const
+{
+    disassembleRange(os, std::pair<u32, u32>(addr, UINT32_MAX), count, fmt);
+}
+
+void
+Debugger::disassembleRange(std::ostream &os, std::pair<u32, u32> range, isize max, const std::string &fmt) const
+{
+    u32 addr = range.first;
+    int numBytes = 0;
+    auto pc = moira.getPC0();
+
+    for (isize i = 0; i < max && addr <= range.second; i++, addr += u32(numBytes)) {
+
+        auto line = moira.disassemble(fmt, addr, &numBytes);
+
+        os << (addr == pc ? "->" : "  ");
+
+        if (breakpoints.isDisabledAt(addr)) {
+            os << "b";
+        } else if (breakpoints.isSetAt(addr)) {
+            os << "B";
+        } else {
+            os << " ";
+        }
+
+        os << line << std::endl;
+    }
 }
 
 std::string
@@ -383,8 +437,7 @@ Debugger::vectorName(u8 vectorNr)
 void
 Debugger::jump(u32 addr)
 {
-    moira.reg.pc = addr & ~1;
-    moira.fullPrefetch<Core::C68000, Flag::POLL>();
+    moira.jump(addr);
 }
 
 }

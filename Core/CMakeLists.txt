@@ -41,7 +41,6 @@ if(MSVC)
   target_compile_options(VACore PUBLIC /W4 /WX /bigobj /Zc:preprocessor)
   target_compile_options(VACore PUBLIC /wd4100 /wd4201 /wd4458)
   # target_compile_options(VACore PUBLIC /wd4324)
-  set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   target_compile_options(VACore PUBLIC -Wall -Werror)
   target_compile_options(VACore PUBLIC -Wno-restrict)
@@ -53,6 +52,14 @@ else()
   target_compile_options(VACore PUBLIC -Wno-unused-parameter)
   target_compile_options(VACore PUBLIC -Wno-gnu-anonymous-struct)
   target_compile_options(VACore PUBLIC -Wno-nested-anon-types)
+endif()
+
+# Compile Moira with the warning settings of its own build system
+file(GLOB_RECURSE MOIRA_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Components/CPU/Moira/*.cpp)
+if(MSVC)
+  set_source_files_properties(${MOIRA_SOURCES} PROPERTIES COMPILE_OPTIONS "/wd4127;/wd4324;/wd4702")
+else()
+  set_source_files_properties(${MOIRA_SOURCES} PROPERTIES COMPILE_OPTIONS "-Wno-unused-but-set-variable;-Wno-unused-but-set-parameter;-Wno-missing-field-initializers;-Wno-unused-function")
 endif()
 
 # Add include paths

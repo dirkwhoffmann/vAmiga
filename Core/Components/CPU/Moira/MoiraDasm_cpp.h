@@ -6,7 +6,7 @@
 // -----------------------------------------------------------------------------
 
 int
-Moira::disassemble(char *str, u32 addr) const
+Moira::disassembleInstr(char *str, u32 addr, bool cpuView) const
 {
     if constexpr (MOIRA_ENABLE_DASM == false) {
         throw std::runtime_error("This feature requires MOIRA_ENABLE_DASM = true\n");
@@ -17,8 +17,12 @@ Moira::disassemble(char *str, u32 addr) const
 
     StrWriter writer(str, instrStyle);
 
-    auto &nfo = info[opcode];
-    (this->*dasm[opcode])(writer, pc, opcode, nfo.I, nfo.M, nfo.S);
+    // The disassembler model's tables exist only if it differs from the CPU model
+    auto *infoTable = (!cpuView && infoAlt) ? infoAlt : info;
+    auto *dasmTable = (!cpuView && dasmAlt) ? dasmAlt : dasm;
+
+    auto &nfo = infoTable[opcode];
+    (this->*dasmTable[opcode])(writer, pc, opcode, nfo.I, nfo.M, nfo.S);
     writer << Finish{};
 
     // Post process disassembler output
@@ -69,18 +73,6 @@ Moira::disassembleSR(char *str, const StatusRegister &sr) const
 }
 
 void
-Moira::dump8(char *str, u8 value) const
-{
-    StrWriter(str, dataStyle) << UInt8{value} << Finish{};
-}
-
-void
-Moira::dump16(char *str, u16 value) const
-{
-    StrWriter(str, dataStyle) << UInt16{value} << Finish{};
-}
-
-void
 Moira::dump24(char *str, u32 value) const
 {
     StrWriter(str, dataStyle) << UInt24{value} << Finish{};
@@ -90,18 +82,6 @@ void
 Moira::dump32(char *str, u32 value) const
 {
     StrWriter(str, dataStyle) << UInt32{value} << Finish{};
-}
-
-void
-Moira::dump16(char *str, u16 values[], int cnt) const
-{
-    StrWriter writer(str, dataStyle);
-
-    for (int i = 0; i < cnt; i++) {
-
-        for (int j = 0; i && j < dataStyle.tab; j++) writer << ' ';
-        writer << UInt16{values[i]} << Finish{};
-    }
 }
 
 void
@@ -302,7 +282,7 @@ Moira::dasmAbcdRg(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
     auto src = Op(M, S, _____________xxx(op), addr);
     auto dst = Op(M, S, ____xxx_________(op), addr);
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Byte} << str.tab << src << Sep{} << dst;
 }
 
 void
@@ -311,7 +291,7 @@ Moira::dasmAbcdEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
     auto src = Op(M, S, _____________xxx(op), addr);
     auto dst = Op(M, S, ____xxx_________(op), addr);
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Byte} << str.tab << src << Sep{} << dst;
 }
 
 void
@@ -370,6 +350,7 @@ Moira::dasmAddqDn(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] M
     switch (str.style.syntax) {
 
         case  Syntax::MUSASHI:
+        case  Syntax::UAE:
 
             str << Ins{I} << Sz{S} << str.tab << Imd{src} << Sep{} << Dn{dst};
             break;
@@ -395,6 +376,11 @@ Moira::dasmAddqAn(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] M
             str << Ins{I} << Sz{S} << str.tab << Imd{src} << Sep{} << An{dst};
             break;
 
+        case Syntax::UAE:
+
+            str << (I == Instr::ADDQ ? "addaq" : "subaq") << Sz{S} << str.tab << Imd{src} << Sep{} << An{dst};
+            break;
+
         default:
 
             str << Ins{I} << Sz{S} << str.tab << Ims(src, S) << Sep{} << An{dst};
@@ -412,6 +398,7 @@ Moira::dasmAddqEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
     switch (str.style.syntax) {
 
         case  Syntax::MUSASHI:
+        case  Syntax::UAE:
 
             str << Ins{I} << Sz{S} << str.tab << Imd{src} << Sep{} << dst;
             break;
@@ -459,6 +446,15 @@ Moira::dasmAndRgEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
 }
 
 void
+Moira::dasmAndRgRg(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mode M, Size S) const
+{
+    auto src = Dn ( ____xxx_________(op) );
+    auto dst = Dn ( _____________xxx(op) );
+
+    str << Ins{I} << Sz{S} << str.tab << src << Sep{} << dst;
+}
+
+void
 Moira::dasmAndiRg(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mode M, Size S) const
 {
     auto src = dasmIncRead(addr, S);
@@ -489,7 +485,9 @@ Moira::dasmAndiccr(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] 
 {
     auto src = dasmIncRead(addr, S);
 
-    if (str.style.syntax == Syntax::MUSASHI) {
+    if (str.style.syntax == Syntax::UAE) {
+        str << Ins{I} << Usz{S} << str.tab << Imu(src, Word) << Sep{} << Ccr{};
+    } else if (str.style.syntax == Syntax::MUSASHI) {
         str << Ins{I} << str.tab << Imu(src, S) << Sep{} << Ccr{};
     } else {
         str << Ins{I} << Sz{S} << str.tab << Ims(src, S) << Sep{} << Ccr{};
@@ -552,7 +550,7 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S
 
         default:
 
-            if (w == 0) w = 32;
+            if (w == 0 && str.style.syntax != Syntax::UAE) w = 32;
 
             switch (ext & 0x0820) {
 
@@ -583,6 +581,7 @@ Moira::dasmBkpt(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) cons
     switch (str.style.syntax) {
 
         case  Syntax::MUSASHI:
+        case  Syntax::UAE:
 
             str << Ins{I} << str.tab << Imd(nr) << Av{I, M, S};
             break;
@@ -617,6 +616,11 @@ Moira::dasmCallm(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
         case Syntax::GNU_MIT:
 
             str << Ins{I} << str.tab << Ims(src, Byte) << Sep{} << dst;
+            break;
+
+        case Syntax::UAE:
+
+            str << Ins{I} << str.tab << "#" << (int)src << Sep{} << dst;
             break;
 
         default:
@@ -685,6 +689,12 @@ Moira::dasmCas2(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) cons
             rn1.raw < 8 ? str << "@(" << rn1 << ')' : str << rn1 << '@';
             str << fill;
             rn2.raw < 8 ? str << "@(" << rn2 << ')' : str << rn2 << '@';
+            break;
+
+        case Syntax::UAE:
+
+            str << dc1 << fill << dc2 << Sep{} << du1 << Sep{} << du2 << Sep{};
+            str << '(' << rn1 << ')' << fill << '(' << rn2 << ')';
             break;
 
         default:
@@ -1005,8 +1015,10 @@ void
 Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
     u32 dst = addr;
+    u32 rawDisp = S == Byte ? (u8)op : 0;
     U32_INC(dst, 2);
-    U32_INC(dst, S == Byte ? (i8)op : SEXT(dasmIncRead(addr, S), S));
+    if (S != Byte) rawDisp = dasmIncRead(addr, S);
+    U32_INC(dst, S == Byte ? (i8)op : SEXT(rawDisp, S));
 
     switch (str.style.syntax) {
 
@@ -1030,6 +1042,11 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
             str << Ins{I} << Szb{S} << str.tab << UInt(dst);
             break;
 
+        case Syntax::UAE:
+
+            str << Ins{I} << Usz{S == Byte && (u8)op == 0xFF ? Long : S} << str.tab << Imu(rawDisp, S);
+            break;
+
         default:
 
             str << Ins{I} << str.tab << UInt(dst) << Av{I, M, S};
@@ -1049,7 +1066,7 @@ Moira::dasmBitDxDy(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
     auto src = Dn       ( ____xxx_________(op)       );
     auto dst = Op(M, S, _____________xxx(op), addr);
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Long} << str.tab << src << Sep{} << dst;
 }
 
 void
@@ -1058,12 +1075,13 @@ Moira::dasmBitDxEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
     auto src = Dn       ( ____xxx_________(op)       );
     auto dst = Op(M, S, _____________xxx(op), addr);
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Byte} << str.tab << src << Sep{} << dst;
 }
 
 void
 Moira::dasmBitImDy(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
+    u32 rawExt = dasmRead(U32_ADD(addr, 2), Word);
     auto src = dasmIncRead(addr, S);
     auto dst = Op(M, S, _____________xxx(op), addr);
 
@@ -1072,7 +1090,12 @@ Moira::dasmBitImDy(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
         case Syntax::GNU:
         case Syntax::GNU_MIT:
 
-            str << Ins{I} << str.tab << Ims(src, S) << Sep{} << dst;
+            str << Ins{I} << Usz{Long} << str.tab << Ims(src, S) << Sep{} << dst;
+            break;
+
+        case Syntax::UAE:
+
+            str << Ins{I} << Usz{Long} << str.tab << Imu(rawExt, Word) << Sep{} << dst;
             break;
 
         default:
@@ -1084,6 +1107,7 @@ Moira::dasmBitImDy(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
 void
 Moira::dasmBitImEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
+    u32 rawExt = dasmRead(U32_ADD(addr, 2), Word);
     auto src = dasmIncRead(addr, S);
     auto dst = Op(M, S, _____________xxx(op), addr);
 
@@ -1093,6 +1117,11 @@ Moira::dasmBitImEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
         case Syntax::GNU_MIT:
 
             str << Ins{I} << str.tab << Ims(src, S) << Sep{} << dst;
+            break;
+
+        case Syntax::UAE:
+
+            str << Ins{I} << Usz{Byte} << str.tab << Imu(rawExt, Word) << Sep{} << dst;
             break;
 
         default:
@@ -1107,8 +1136,13 @@ Moira::dasmDbcc(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mod
     auto src = Dn ( _____________xxx(op) );
     auto dst = addr + 2;
 
-    U32_INC(dst, (i16)dasmIncRead(addr, Word));
+    auto rawDisp = dasmIncRead(addr, Word);
+    U32_INC(dst, (i16)rawDisp);
 
+    if (str.style.syntax == Syntax::UAE) {
+        str << Ins{I} << Usz{Word} << str.tab << src << Sep{} << Imu(rawDisp, Word);
+        return;
+    }
     str << Ins{I} << str.tab << src << Sep{} << UInt(dst);
 }
 
@@ -1118,7 +1152,7 @@ Moira::dasmExgDxDy(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] 
     auto src = Dn ( ____xxx_________(op) );
     auto dst = Dn ( _____________xxx(op) );
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Long} << str.tab << src << Sep{} << dst;
 }
 
 void
@@ -1127,7 +1161,7 @@ Moira::dasmExgAxDy(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] 
     auto src = Dn ( ____xxx_________(op) );
     auto dst = An ( _____________xxx(op) );
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Long} << str.tab << src << Sep{} << dst;
 }
 
 void
@@ -1136,7 +1170,7 @@ Moira::dasmExgAxAy(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] 
     auto src = An ( ____xxx_________(op) );
     auto dst = An ( _____________xxx(op) );
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Long} << str.tab << src << Sep{} << dst;
 }
 
 void
@@ -1178,7 +1212,7 @@ Moira::dasmLea(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
     auto src = Op(M, S, _____________xxx(op), addr);
     auto dst = An       ( ____xxx_________(op)       );
 
-    str << Ins{I} << str.tab << src << Sep{} << dst;
+    str << Ins{I} << Usz{Long} << str.tab << src << Sep{} << dst;
 }
 
 void
@@ -1197,7 +1231,7 @@ Moira::dasmLink(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) cons
 
         default:
 
-            str << Ins{I} << str.tab << src << Sep{} << Ims(dsp, S) << Av{I, M, S};
+            str << Ins{I} << Usz{S} << str.tab << src << Sep{} << Ims(dsp, S) << Av{I, M, S};
     }
 }
 
@@ -1310,6 +1344,10 @@ Moira::dasmMovemEaRg(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S)
     auto dst = RegRegList ( (u16)dasmIncRead(addr, Word)  );
     auto src = Op(M, S, _____________xxx(op), addr);
 
+    if (str.style.syntax == Syntax::UAE && dst.raw == 0) {
+        str << Ins{I} << Sz{S} << str.tab << src;
+        return;
+    }
     str << Ins{I} << Sz{S} << str.tab << src << Sep{} << dst;
 }
 
@@ -1320,6 +1358,10 @@ Moira::dasmMovemRgEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S)
     auto dst = Op(M, S, _____________xxx(op), addr);
 
     if (M == Mode(4)) { src.raw = REVERSE_16(src.raw); }
+    if (str.style.syntax == Syntax::UAE && src.raw == 0) {
+        str << Ins{I} << Sz{S} << str.tab << dst;
+        return;
+    }
     str << Ins{I} << Sz{S} << str.tab << src << Sep{} << dst;
 }
 
@@ -1387,7 +1429,7 @@ Moira::dasmMoveCcrRg(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S)
 
         default:
 
-            str << Ins{I} << Sz{S} << str.tab << Ccr{} << Sep{} << dst;
+            str << Ins{I} << (str.style.syntax == Syntax::UAE ? Sz{Byte} : Sz{S}) << str.tab << Ccr{} << Sep{} << dst;
     }
 }
 
@@ -1405,7 +1447,7 @@ Moira::dasmMoveCcrEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S)
 
         default:
 
-            str << Ins{I} << Sz{S} << str.tab << Ccr{} << Sep{} << dst;
+            str << Ins{I} << (str.style.syntax == Syntax::UAE ? Sz{Byte} : Sz{S}) << str.tab << Ccr{} << Sep{} << dst;
     }
 }
 
@@ -1429,7 +1471,7 @@ Moira::dasmMoveToCcr(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S)
 
         default:
 
-            str << Ins{I} << Sz{S} << str.tab << Op(M, Byte, src, addr) << Sep{} << Ccr{};
+            str << Ins{I} << (str.style.syntax == Syntax::UAE ? Sz{Byte} : Sz{S}) << str.tab << Op(M, Byte, src, addr) << Sep{} << Ccr{};
     }
 }
 
@@ -1502,7 +1544,7 @@ Moira::dasmMoveUspAn(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]
 
         default:
 
-            str << Ins{I} << str.tab << Usp{} << Sep{} << dst;
+            str << Ins{I} << Usz{Long} << str.tab << Usp{} << Sep{} << dst;
     }
 }
 
@@ -1521,7 +1563,7 @@ Moira::dasmMoveAnUsp(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]
 
         default:
 
-            str << Ins{I} << str.tab << src << Sep{} << Usp{};
+            str << Ins{I} << Usz{Long} << str.tab << src << Sep{} << Usp{};
     }
 }
 
@@ -1645,7 +1687,7 @@ Moira::dasmNbcdRg(StrWriter &str, u32 &addr, u16 op, [[maybe_unused]] Instr I, M
 {
     auto dst = Op(M, S, _____________xxx(op), addr);
 
-    str << Ins{Instr::NBCD} << str.tab << dst;
+    str << Ins{Instr::NBCD} << Usz{Byte} << str.tab << dst;
 }
 
 void
@@ -1653,7 +1695,7 @@ Moira::dasmNbcdEa(StrWriter &str, u32 &addr, u16 op, [[maybe_unused]] Instr I, M
 {
     auto dst = Op(M, S, _____________xxx(op), addr);
 
-    str << Ins{Instr::NBCD} << str.tab << dst;
+    str << Ins{Instr::NBCD} << Usz{Byte} << str.tab << dst;
 }
 
 void
@@ -1677,6 +1719,11 @@ Moira::dasmPackDn(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
             str << Ins{I} << str.tab << rx << Sep{} << ry << Sep{} << Ims(ext, S);
             break;
 
+        case Syntax::UAE:
+
+            str << Ins{I} << str.tab << rx << Sep{} << ry << Sep{} << Imu(ext, Word);
+            break;
+
         default:
 
             str << Ins{I} << str.tab << rx << Sep{} << ry << Sep{} << Imu(ext);
@@ -1695,7 +1742,7 @@ Moira::dasmPea(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
     auto src = Op(M, S, _____________xxx(op), addr);
 
-    str << Ins{I} << str.tab << src;
+    str << Ins{I} << Usz{Long} << str.tab << src;
 }
 
 void
@@ -1745,7 +1792,7 @@ Moira::dasmSccRg(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mo
 {
     auto src = Dn ( _____________xxx(op) );
 
-    str << Ins{I} << str.tab << src;
+    str << Ins{I} << Usz{Byte} << str.tab << src;
 }
 
 void
@@ -1753,7 +1800,7 @@ Moira::dasmSccEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
 {
     auto src = Op(M, S, _____________xxx(op), addr);
 
-    str << Ins{I} << str.tab << src;
+    str << Ins{I} << Usz{Byte} << str.tab << src;
 }
 
 void
@@ -1785,7 +1832,7 @@ Moira::dasmSwap(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mod
 {
     Dn reg = Dn ( _____________xxx(op) );
 
-    str << Ins{I} << str.tab << reg;
+    str << Ins{I} << Usz{Word} << str.tab << reg;
 }
 
 void
@@ -1793,7 +1840,7 @@ Moira::dasmTasRg(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mo
 {
     auto dst = Dn ( _____________xxx(op) );
 
-    str << Ins{I} << str.tab << dst;
+    str << Ins{I} << Usz{Byte} << str.tab << dst;
 }
 
 void
@@ -1801,12 +1848,16 @@ Moira::dasmTasEa(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
 {
     auto dst = Op(M, S, _____________xxx(op), addr);
 
-    str << Ins{I} << str.tab << dst;
+    str << Ins{I} << Usz{Byte} << str.tab << dst;
 }
 
 void
 Moira::dasmTrap(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mode M, [[maybe_unused]] Size S) const
 {
+    if (str.style.syntax == Syntax::UAE) {
+        str << Ins{I} << str.tab << Imd{____________xxxx(op)};
+        return;
+    }
     auto nr = Imu ( ____________xxxx(op) );
 
     str << Ins{I} << str.tab << nr;
@@ -1848,14 +1899,15 @@ Moira::dasmTrapcc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
 
                 case Byte:
 
-                    str << Ins{I} << str.tab;
+                    str << Ins{I};
+                    if (str.style.syntax != Syntax::UAE) str << str.tab;
                     break;
 
                 case Word:
                 case Long:
 
                     auto ext = dasmIncRead(addr, S);
-                    str << Ins{I} << str.tab << Imu(ext);
+                    str << Ins{I} << str.tab << Imu(ext, S);
                     break;
             }
     }
@@ -1877,7 +1929,7 @@ Moira::dasmUnlk(StrWriter &str, u32 &addr, u16 op, Instr I, [[maybe_unused]] Mod
 {
     auto reg = An ( _____________xxx(op) );
 
-    str << Ins{I} << str.tab << reg;
+    str << Ins{I} << Usz{Long} << str.tab << reg;
 }
 
 void
@@ -1893,6 +1945,11 @@ Moira::dasmUnpkDn(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
         case Syntax::GNU_MIT:
 
             str << Ins{I} << str.tab << rx << Sep{} << ry << Sep{} << Ims(ext, S);
+            break;
+
+        case Syntax::UAE:
+
+            str << Ins{I} << str.tab << rx << Sep{} << ry << Sep{} << Imu(ext, Word);
             break;
 
         default:
@@ -1915,7 +1972,7 @@ Moira::dasmCinv(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) cons
     auto scope = ___________xx___(op);
     auto cache = ________xx______(op);
 
-    const char *cname[4] = { "nc", "dc", "ic", "bc" };
+    const char *cname[4] = { str.style.syntax == Syntax::UAE ? "?" : "nc", "dc", "ic", "bc" };
 
     if (scope == 0) {
 
@@ -1924,11 +1981,6 @@ Moira::dasmCinv(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) cons
     }
 
     switch (scope) {
-
-        case 0b00:
-
-            str << Ins{I} << str.tab << "(illegal scope)";
-            break;
 
         case 0b01:
 
@@ -1958,17 +2010,10 @@ Moira::dasmCpush(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
 void
 Moira::dasmMove16PiPi(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
-    auto old = addr;
+    // The CPU ignores the remaining bits of the extension word (like the execution handler)
     auto ext = dasmIncRead(addr, Word);
     auto ax  = _____________xxx(op);
     auto ay  = _xxx____________(ext);
-
-    if ((ext & 0x8FFF) != 0x8000) {
-
-        addr = old;
-        dasmIllegal(str, addr, op, I, M, S);
-        return;
-    }
 
     str << Ins{I} << str.tab << Op(Mode::PI, Word, ax, addr) << Sep{} << Op(Mode::PI, Word, ay, addr);
     str << Av{I, M, S};
@@ -2015,5 +2060,64 @@ Moira::dasmMove16AlAi(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S
 }
 
 #include "MoiraDasmMMU_cpp.h"
-#include "utl/support/Bits.h"
 #include "MoiraDasmFPU_cpp.h"
+
+std::string
+Moira::disassemble(const std::string &fmt, u32 addr, int *len) const
+{
+    return disassemble(fmt, addr, reg, len);
+}
+
+std::string
+Moira::disassemble(const std::string &fmt, u32 addr, const Registers &regs, int *len) const
+{
+    std::string result;
+    char buffer[256];
+
+    // The instruction length is only computed if it is needed
+    int bytes = -1;
+    auto length = [&]() {
+
+        if (bytes < 0) { char tmp[128]; bytes = disassembleInstr(tmp, addr); }
+        return bytes;
+    };
+
+    for (size_t i = 0; i < fmt.size(); i++) {
+
+        if (fmt[i] != '%') { result += fmt[i]; continue; }
+
+        // Parse the number in front of the directive
+        int num = 0; bool hasNum = false;
+        while (++i < fmt.size() && isdigit((unsigned char)fmt[i])) { num = 10 * num + (fmt[i] - '0'); hasNum = true; }
+        if (i >= fmt.size()) throw std::runtime_error("A directive is expected after %");
+
+        // Pads the output to the requested width
+        auto pad = [&](const char *text) {
+
+            result += text;
+            for (int n = int(strlen(text)); n < num; n++) result += ' ';
+        };
+
+        switch (fmt[i]) {
+
+            case 'p': dump24(buffer, addr); pad(buffer); break;
+            case 'b': dump16(buffer, addr, length() / 2); pad(buffer); break;
+            case 'i': bytes = disassembleInstr(buffer, addr); pad(buffer); break;
+            case 'f': disassembleSR(buffer, regs.sr); pad(buffer); break;
+
+            case 'd':
+            case 'a':
+
+                if (!hasNum || num > 7) throw std::runtime_error("0...7 is expected in front of d or a");
+                dump32(buffer, fmt[i] == 'd' ? regs.d[num] : regs.a[num]);
+                result += buffer;
+                break;
+
+            default:
+                throw std::runtime_error(std::string("p, b, i, f, d, or a is expected after %, not ") + fmt[i]);
+        }
+    }
+
+    if (len) *len = length();
+    return result;
+}

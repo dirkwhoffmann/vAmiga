@@ -6,7 +6,6 @@
 // -----------------------------------------------------------------------------
 
 #include <cmath>
-#include "utl/support/Bits.h"
 
 static const char *mnemonics[]
 {
@@ -132,6 +131,34 @@ static void sprint_signed(char *&s, i64 value, const DasmNumberFormat &fmt)
     fmt.radix == 10 ? sprintd_signed(s, value) : sprintx_signed(s, value, fmt);
 }
 
+// Helpers for the UAE syntax (fixed-width hexadecimal numbers)
+static void uaeHex(char *&s, u32 value, int digits)
+{
+    *s++ = '$';
+    for (int i = digits - 1; i >= 0; i--) {
+
+        auto digit = char((value >> (4 * i)) & 0xF);
+        *s++ = digit <= 9 ? '0' + digit : 'a' + digit - 10;
+    }
+}
+
+static void uaeHexSigned(char *&s, i32 value, int digits)
+{
+    if (value < 0) { *s++ = '-'; value = -value; }
+    uaeHex(s, (u32)value, digits);
+}
+
+// Prints a number like printf("%0*x", digits, (int)value) does (the sign is extended)
+static void uaeHexExt(char *&s, i32 value, int digits)
+{
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%0*x", digits, (u32)value);
+    *s++ = '$';
+    for (char *c = buf; *c; c++) *s++ = *c;
+}
+
+static int uaeDigits(Size sz) { return sz == Byte ? 2 : sz == Word ? 4 : 8; }
+
 StrWriter&
 StrWriter::operator<<(char c)
 {
@@ -170,6 +197,7 @@ StrWriter::operator<<(Int i)
 StrWriter&
 StrWriter::operator<<(UInt u)
 {
+    if (style.syntax == Syntax::UAE) { uaeHex(ptr, u.raw, 8); return *this; }
     sprint(ptr, u.raw, style.numberFormat);
     return *this;
 }
@@ -222,6 +250,7 @@ StrWriter&
 StrWriter::operator<<(Imu im)
 {
     *ptr++ = '#';
+    if (style.syntax == Syntax::UAE) { uaeHex(ptr, CLIP(im.raw, im.sz), uaeDigits(im.sz)); return *this; }
     *this << UInt(CLIP(im.raw, im.sz));
     return *this;
 }
@@ -230,6 +259,7 @@ StrWriter&
 StrWriter::operator<<(Ims im)
 {
     *ptr++ = '#';
+    if (style.syntax == Syntax::UAE) { uaeHex(ptr, CLIP((u32)im.raw, im.sz), uaeDigits(im.sz)); return *this; }
     *this << Int(SEXT(im.raw, im.sz));
     return *this;
 }
@@ -238,6 +268,7 @@ StrWriter&
 StrWriter::operator<<(Imd im)
 {
     *ptr++ = '#';
+    if (style.syntax == Syntax::UAE) { uaeHex(ptr, im.raw & 0xFF, 2); return *this; }
     sprintd(ptr, im.raw);
     return *this;
 }
@@ -247,10 +278,24 @@ StrWriter::operator<<(Ins i)
 {
     if (i.raw == Instr::DBF) {
 
-        if (style.syntax == Syntax::GNU || style.syntax == Syntax::GNU_MIT) {
+        if (style.syntax == Syntax::GNU || style.syntax == Syntax::GNU_MIT || style.syntax == Syntax::UAE) {
             *this << "dbf";
         } else {
             *this << "dbra";
+        }
+
+    } else if (style.syntax == Syntax::UAE) {
+
+        // UAE prints the immediate variants with the plain mnemonic
+        switch (i.raw) {
+
+            case Instr::ORI: case Instr::ORICCR: case Instr::ORISR:          *this << "or";  break;
+            case Instr::ANDI: case Instr::ANDICCR: case Instr::ANDISR:   *this << "and"; break;
+            case Instr::EORI: case Instr::EORICCR: case Instr::EORISR:   *this << "eor"; break;
+            case Instr::SUBI:                                              *this << "sub"; break;
+            case Instr::ADDI:                                              *this << "add"; break;
+            case Instr::CMPI:                                              *this << "cmp"; break;
+            default:                                                       *this << mnemonics[(int)i.raw];
         }
 
     } else {
@@ -282,11 +327,33 @@ StrWriter::operator<<(Sz sz)
 }
 
 StrWriter&
+StrWriter::operator<<(ImPacked im)
+{
+    *ptr++ = '#';
+    *ptr++ = '$';
+    for (u32 v : { im.a, im.b, im.c }) {
+        for (int i = 7; i >= 0; i--) {
+            auto digit = char((v >> (4 * i)) & 0xF);
+            *ptr++ = digit <= 9 ? '0' + digit : 'a' + digit - 10;
+        }
+    }
+    return *this;
+}
+
+StrWriter&
+StrWriter::operator<<(Usz sz)
+{
+    if (style.syntax == Syntax::UAE) *this << Sz{sz.raw};
+    return *this;
+}
+
+StrWriter&
 StrWriter::operator<<(Szb sz)
 {
     switch (style.syntax) {
 
         case Syntax::MOIRA:
+        case Syntax::UAE:
 
             *ptr++ = '.';
             [[fallthrough]];
@@ -664,6 +731,31 @@ StrWriter::operator<<(RegRegList l)
 {
     switch (style.syntax) {
 
+        case Syntax::UAE:
+        {
+            // Mimic UAE's (quirky) register list algorithm
+            int prev = -1, last = -1;
+            bool first = true;
+            auto add = [&](int reg) {
+
+                if (prev < 0) { prev = last = reg; return; }
+                if (reg < 0 || prev + 1 != reg || (reg & 8) != (prev & 8)) {
+
+                    if (!first) *this << "/";
+                    *this << Rn{last};
+                    if (last != prev) {
+                        if (last + 2 == reg) { *this << "/" << Rn{prev}; } else { *this << "-" << Rn{prev}; }
+                    }
+                    last = reg;
+                    first = false;
+                }
+                prev = reg;
+            };
+            for (int i = 0; i < 16; i++) if (l.raw & (1 << i)) add(i);
+            add(-1);
+            break;
+        }
+
        case Syntax::GNU:
         case Syntax::GNU_MIT:
 
@@ -686,6 +778,31 @@ StrWriter::operator<<(RegRegList l)
 StrWriter&
 StrWriter::operator<<(FRegList l)
 {
+    if (style.syntax == Syntax::UAE) {
+
+        // Mimic UAE's (quirky) register list algorithm
+        int prev = -1, last = -1;
+        bool first = true;
+        auto add = [&](int reg) {
+
+            if (prev < 0) { prev = last = reg; return; }
+            if (reg < 0 || prev + 1 != reg) {
+
+                if (!first) *this << "/";
+                *this << Fp{last};
+                if (last != prev) {
+                    if (last + 2 == reg) { *this << "/" << Fp{prev}; } else { *this << "-" << Fp{prev}; }
+                }
+                last = reg;
+                first = false;
+            }
+            prev = reg;
+        };
+        for (int i = 0; i < 8; i++) if (l.raw & (1 << i)) add(i);
+        add(-1);
+        return *this;
+    }
+
     int r[8];
 
     // Step 1: Fill array r with the register list bits, e.g., 11101101
@@ -748,6 +865,7 @@ StrWriter::operator<<(Ai wrapper)
     switch (style.syntax) {
 
         case Syntax::MOIRA:
+        case Syntax::UAE:
         case Syntax::MUSASHI:
        case Syntax::GNU:
 
@@ -772,6 +890,7 @@ StrWriter::operator<<(Pi wrapper)
     switch (style.syntax) {
 
         case Syntax::MOIRA:
+        case Syntax::UAE:
         case Syntax::MUSASHI:
        case Syntax::GNU:
 
@@ -796,6 +915,7 @@ StrWriter::operator<<(Pd wrapper)
     switch (style.syntax) {
 
         case Syntax::MOIRA:
+        case Syntax::UAE:
         case Syntax::MUSASHI:
        case Syntax::GNU:
 
@@ -818,6 +938,13 @@ StrWriter::operator<<(Di wrapper)
     auto &ea = wrapper.ea;
 
     switch (style.syntax) {
+
+        case Syntax::UAE:
+
+            *ptr++ = '(';
+            uaeHexSigned(ptr, (i16)ea.ext1, 4);
+            *this << "," << An{ea.reg} << ")";
+            return *this;
 
         case Syntax::MOIRA:
         case Syntax::MUSASHI:
@@ -848,6 +975,11 @@ StrWriter::operator<<(Ix wrapper)
         case Syntax::MUSASHI:
 
             *this << IxMus{wrapper.ea};
+            break;
+
+        case Syntax::UAE:
+
+            *this << IxUae{wrapper.ea};
             break;
 
         case Syntax::GNU_MIT:
@@ -1046,6 +1178,72 @@ StrWriter::operator<<(IxMit wrapper)
 }
 
 StrWriter&
+StrWriter::operator<<(IxUae wrapper)
+{
+    auto &ea = wrapper.ea;
+    bool pcrel = ea.m == Mode(10);
+
+    u16 reg   = xxxx____________ (ea.ext1);
+    u16 lw    = ____x___________ (ea.ext1);
+    u16 scale = _____xx_________ (ea.ext1);
+
+    auto name = [&]() { pcrel ? (void)(*this << Pc{}) : (void)(*this << An{ea.reg}); };
+    auto index = [&]() {
+        *this << Rn{reg} << (lw ? ".l" : ".w");
+        if (scale) { *ptr++ = '*'; *ptr++ = '0' + (char)(1 << scale); }
+    };
+
+    if (!_______x________ (ea.ext1)) {
+
+        // Brief format
+        u8 disp = ________xxxxxxxx (ea.ext1);
+
+        *ptr++ = '(';
+        uaeHexSigned(ptr, (i8)disp, 2);
+        *ptr++ = ',';
+        name();
+        *ptr++ = ',';
+        index();
+        if (pcrel) {
+            *ptr++ = '=';
+            uaeHex(ptr, U32_ADD(U32_ADD(ea.pc, 2), (i8)disp), 8);
+        }
+        *ptr++ = ')';
+        return *this;
+    }
+
+    // Full format
+    u16  bs    = ________x_______ (ea.ext1);
+    u16  is    = _________x______ (ea.ext1);
+    u16  size  = __________xx____ (ea.ext1);
+    u16  iis   = _____________xxx (ea.ext1);
+
+    *ptr++ = '(';
+    if (iis & 3) {
+        *ptr++ = '[';
+    } else {
+        if (!bs) { name(); *ptr++ = ','; }
+        if (!is) { index(); *ptr++ = ','; }
+    }
+    if (size == 2) { uaeHexExt(ptr, (i16)ea.ext2, 4); *ptr++ = ','; }
+    if (size == 3) { uaeHexExt(ptr, (i32)ea.ext2, 8); *ptr++ = ','; }
+
+    if (iis & 3) {
+        if (!bs) { name(); *ptr++ = ','; }
+        if (!(iis & 4) && !is) { index(); *ptr++ = ','; }
+        if (ptr[-1] == ',') ptr--;
+        *ptr++ = ']'; *ptr++ = ',';
+        if ((iis & 4) && !is) { index(); *ptr++ = ','; }
+    }
+    if ((iis & 3) == 2) { uaeHexExt(ptr, (i16)ea.ext3, 4); *ptr++ = ','; }
+    if ((iis & 3) == 3) { uaeHexExt(ptr, (i32)ea.ext3, 8); *ptr++ = ','; }
+
+    if (ptr[-1] == ',') ptr--;
+    *ptr++ = ')';
+    return *this;
+}
+
+StrWriter&
 StrWriter::operator<<(IxMus wrapper)
 {
     assert(wrapper.ea.m == Mode(6) || wrapper.ea.m == Mode(10));
@@ -1155,6 +1353,12 @@ StrWriter::operator<<(Aw wrapper)
 
     switch (style.syntax) {
 
+        case Syntax::UAE:
+
+            uaeHexSigned(ptr, (i16)ea.ext1, 4);
+            *this << Sz{Word};
+            break;
+
         case Syntax::MOIRA:
         case Syntax::MOIRA_MIT:
         case Syntax::MUSASHI:
@@ -1178,6 +1382,11 @@ StrWriter::operator<<(Al wrapper)
     auto &ea = wrapper.ea;
 
     switch (style.syntax) {
+
+        case Syntax::UAE:
+
+            uaeHex(ptr, ea.ext1, 8);
+            break;
 
         case Syntax::MOIRA:
         case Syntax::MOIRA_MIT:
@@ -1203,6 +1412,13 @@ StrWriter::operator<<(DiPc wrapper)
     u32 resolved;
 
     switch (style.syntax) {
+
+        case Syntax::UAE:
+
+            *ptr++ = '(';
+            uaeHexSigned(ptr, (i16)ea.ext1, 4);
+            *this << "," << Pc{} << ")";
+            break;
 
         case Syntax::MOIRA:
         case Syntax::MUSASHI:
@@ -1259,6 +1475,7 @@ StrWriter::operator<<(Ip wrapper)
     switch (style.syntax) {
 
         case Syntax::MOIRA:
+        case Syntax::UAE:
         case Syntax::MUSASHI:
        case Syntax::GNU:
 
@@ -1283,6 +1500,7 @@ StrWriter::operator<<(Scale s)
     switch (style.syntax) {
 
         case Syntax::MOIRA:
+        case Syntax::UAE:
         case Syntax::MUSASHI:
        case Syntax::GNU:
 
@@ -1308,6 +1526,17 @@ StrWriter::operator<<(Fc fc)
     // 01DDD — Function code is specified as bits 2–0 of data register DDD
     // 00000 — Function code is specified as source function code register
     // 00001 — Function code is specified as destination function code register
+
+    if (style.syntax == Syntax::UAE) {
+
+        switch (fc.raw & 0x18) {
+
+            case 0x10:  *this << "#" << (int)(fc.raw & 7); break;
+            case 0x08:  *this << Dn(fc.raw & 7); break;
+            default:    (fc.raw & 1) ? (void)(*this << Dfc()) : (void)(*this << Sfc());
+        }
+        return *this;
+    }
 
     switch (fc.raw >> 3 & 0b11) {
 
@@ -1402,6 +1631,15 @@ StrWriter::operator<<(Fctrl fctrl)
     const char *prefix = style.syntax == Syntax::GNU_MIT || style.syntax == Syntax::MOIRA_MIT ? "%" : "";
     const char *delim = "";
 
+    if (style.syntax == Syntax::UAE) {
+
+        // UAE lists the control registers in the order FPCR, FPSR, FPIAR
+        if (fctrl.raw & 4) { *this << delim << "fpcr";  delim = "/"; }
+        if (fctrl.raw & 2) { *this << delim << "fpsr";  delim = "/"; }
+        if (fctrl.raw & 1) { *this << delim << "fpiar"; delim = "/"; }
+        return *this;
+    }
+
     if (fctrl.raw == 0 && style.syntax != Syntax::GNU) { *this << "{}"; }
     if (fctrl.raw & 1) { *this << delim << prefix << "fpiar"; delim = "/"; }
     if (fctrl.raw & 2) { *this << delim << prefix << "fpsr";  delim = "/"; }
@@ -1415,7 +1653,8 @@ StrWriter::operator<<(Tab tab)
 {
     switch (style.syntax) {
 
-       case Syntax::GNU:
+        case Syntax::UAE:
+        case Syntax::GNU:
         case Syntax::GNU_MIT:
 
             *ptr++ = ' ';
@@ -1432,7 +1671,7 @@ StrWriter::operator<<(Tab tab)
 StrWriter&
 StrWriter::operator<<(const Av &av)
 {
-    if (style.syntax == Syntax::GNU || style.syntax == Syntax::GNU_MIT) { return *this; }
+    if (style.syntax == Syntax::GNU || style.syntax == Syntax::GNU_MIT || style.syntax == Syntax::UAE) { return *this; }
 
     switch (av.I) {
 
@@ -1578,7 +1817,8 @@ StrWriter::operator<<(Sep)
             *ptr++ = ' ';
             break;
 
-       case Syntax::GNU:
+        case Syntax::UAE:
+        case Syntax::GNU:
         case Syntax::GNU_MIT:
 
             break;

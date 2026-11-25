@@ -74,6 +74,11 @@ Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
     }
 
     str << Ins{I} << str.tab;
+    if (str.style.syntax == Syntax::UAE) {
+        str << Fc{fc} << Sep{} << (int)mask;
+        if (mode == 0b110) str << Sep{} << Op(M, Word, reg, addr);
+        return;
+    }
     str << Fc{fc} << Sep{} << Imu{mask};
     if (mode == 0b110) str << Sep{} << Op(M, Word, reg, addr);
 }
@@ -108,8 +113,8 @@ Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op, [[maybe_unused]] Instr I,
 
         case 0: str << Ins{Instr::PFLUSHN} << str.tab << Op(M, Word, reg, addr); break;
         case 1: str << Ins{Instr::PFLUSH} << str.tab << Op(M, Word, reg, addr); break;
-        case 2: str << Ins{Instr::PFLUSHAN}; break;
-        case 3: str << Ins{Instr::PFLUSHA}; break;
+        case 2: str << Ins{Instr::PFLUSHAN}; if (str.style.syntax == Syntax::UAE) str << str.tab << Op(M, Word, reg, addr); break;
+        case 3: str << Ins{Instr::PFLUSHA}; if (str.style.syntax == Syntax::UAE) str << str.tab << Op(M, Word, reg, addr); break;
     }
 }
 
@@ -191,7 +196,7 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
 
             switch (preg) {
 
-                case 0b000: r = "psr";  s = Word; break;
+                case 0b000: r = str.style.syntax == Syntax::UAE ? "mmusr" : "psr";  s = Word; break;
                 case 0b001: r = "pcsr"; s = Word; break;
                 case 0b100: r = "bad";  s = Word; break;
                 case 0b101: r = "bac";  s = Word; break;
@@ -241,7 +246,8 @@ Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
     }
 
     str << Ins{I} << (rw ? "r" : "w") << str.tab;
-    str << Fc{fc} << Sep{} << Op(M, Word, reg, addr) << Sep{} << lev;
+    str << Fc{fc} << Sep{} << Op(M, Word, reg, addr) << Sep{};
+    if (str.style.syntax == Syntax::UAE) { str << "#" << (int)lev; } else { str << lev; }
     if (a) { str << Sep{} << An{an}; }
 }
 

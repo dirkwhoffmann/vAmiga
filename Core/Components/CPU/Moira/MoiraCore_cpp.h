@@ -21,7 +21,6 @@
 #error "MOIRA_CORE must be defined before including this file"
 #endif
 
-#include "vaconfig.h"
 #include "MoiraConfig.h"
 #include "Moira.h"
 #include "MoiraMacros.h"
@@ -34,7 +33,7 @@
 #include <vector>
 #include <stdexcept>
 
-namespace vamiga::moira {
+namespace MOIRA_NAMESPACE {
 
 using namespace Flag;
 
@@ -50,6 +49,6 @@ using namespace Flag;
  * for which the declaration in MoiraInit.h is enough.
  */
 
-template void Moira::createJumpTable<MOIRA_CORE>(Model, bool);
+template void Moira::createJumpTable<MOIRA_CORE>(CPUModel, bool, bool);
 
 }

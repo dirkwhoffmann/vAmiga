@@ -53,6 +53,7 @@ MOIRA_DECLARE(AddxRg)
 MOIRA_DECLARE(AddxEa)
 MOIRA_DECLARE(AndEaRg)
 MOIRA_DECLARE(AndRgEa)
+MOIRA_DECLARE(AndRgRg)
 MOIRA_DECLARE(AndiRg)
 MOIRA_DECLARE(AndiEa)
 MOIRA_DECLARE(Andiccr)
@@ -207,16 +208,12 @@ MOIRA_DECLARE(Move16AiAl)
 MOIRA_DECLARE(Move16AlAi)
 
 // Sub handlers
-template <Core C, Instr I, Mode M, Size S> void execMulsMoira(u16);
-template <Core C, Instr I, Mode M, Size S> void execMuluMoira(u16);
-template <Core C, Instr I, Mode M, Size S> void execMullMoira(u16);
-template <Core C, Instr I, Mode M, Size S> void execDivsMoira(u16, bool *);
-template <Core C, Instr I, Mode M, Size S> void execDivuMoira(u16, bool *);
-template <Core C, Instr I, Mode M, Size S> bool execDivlMoira(u16, bool *);
-
-template <Core C, Instr I, Mode M, Size S> void execMulsMusashi(u16);
-template <Core C, Instr I, Mode M, Size S> void execMuluMusashi(u16);
-template <Core C, Instr I, Mode M, Size S> void execMullMusashi(u16);
-template <Core C, Instr I, Mode M, Size S> void execDivsMusashi(u16, bool *);
-template <Core C, Instr I, Mode M, Size S> void execDivuMusashi(u16, bool *);
-template <Core C, Instr I, Mode M, Size S> bool execDivlMusashi(u16, bool *);
+template <Core C, Mode M> void execPMove(u16, MmuReg, bool);
+template <Core C, Instr I, Mode M, Size S, Mode DM> void execMoveDisp(u16);
+template <Core C, Instr I, Mode M, Size S> void execMulWord(u16);
+template <Core C, Instr I, Mode M, Size S> bool execDivWord(u16);
+template <Core C, Instr I, Mode M, Size S> bool execDivLong(u16);
+template <Core C> void move16(u32 src, u32 dst);
+template <Core C> void readRteFrame68000(u16 &newsr, u32 &newpc);
+template <Core C> bool readRteFrame68010(u16 &newsr, u32 &newpc);
+template <Core C> bool readRteFrame68020(u16 &newsr, u32 &newpc);

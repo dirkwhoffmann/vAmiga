@@ -135,10 +135,10 @@ Moira::dsack(u32 addr) const
     return mem.dsack(addr);
 }
 
-u16
-Moira::readIrqUserVector(u8 level) const
+IrqMode
+Moira::readIrqVector(u8 level, u8 *vector) const
 {
-    return 0;
+    return IrqMode::AUTO;
 }
 
 void
@@ -167,7 +167,7 @@ Moira::willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
         {
             
             char str[128];
-            disassemble(str, reg.pc0);
+            disassembleInstr(str, reg.pc0);
             printf("%s\n", str);
             break;
         }
@@ -191,6 +191,24 @@ Moira::didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
 }
 
 void
+Moira::willAccessBus(u32 addr, Size size, bool write)
+{
+
+}
+
+void
+Moira::willExecute(CpuSpaceType type, u8 arg)
+{
+
+}
+
+void
+Moira::didExecute(CpuSpaceType type, u8 arg)
+{
+
+}
+
+void
 Moira::didLogInstruction(const Registers &reg)
 {
     if CONSTEXPR (TRACE_FRAME != -1) {
@@ -199,7 +217,7 @@ Moira::didLogInstruction(const Registers &reg)
 
             char sr[18], instr[128];
             disassembleSR(sr, reg.sr);
-            disassemble(instr, reg.pc0);
+            disassembleInstr(instr, reg.pc0);
             
             logmsg(LOG_TRACE, "%s  %s\n", sr, instr);
         }
@@ -241,15 +259,27 @@ Moira::didExecute(M68kException exc, u16 vector)
 }
 
 void
-Moira::cpuDidReset()
+Moira::didResetCPU()
 {
     emulator.isTracking() ? debugger.enableLogging() : debugger.disableLogging();
 }
 
 void
-Moira::cpuDidHalt()
+Moira::didHaltCPU()
 {
     msgQueue.put(Msg::CPU_HALT);
+}
+
+void
+Moira::didEnableMMU()
+{
+
+}
+
+void
+Moira::didDisableMMU()
+{
+
 }
 
 void
@@ -395,8 +425,8 @@ CPU::checkOption(Opt opt, i64 value)
 void
 CPU::setOption(Opt option, i64 value)
 {
-    auto cpuModel = [&](CPURev rev) { return moira::Model(rev); };
-    auto dasmModel = [&](DasmRev rev) { return moira::Model(rev); };
+    auto cpuModel = [&](CPURev rev) { return moira::CPUModel(rev); };
+    auto dasmModel = [&](DasmRev rev) { return moira::CPUModel(rev); };
     auto syntax = [&](DasmSyntax rev) { return moira::Syntax(rev); };
 
     switch (option) {
@@ -415,9 +445,14 @@ CPU::setOption(Opt option, i64 value)
 
         case Opt::CPU_DASM_SYNTAX:
 
+        {
             config.dasmSyntax = DasmSyntax(value);
-            setDasmSyntax(syntax(config.dasmSyntax));
+
+            auto style = getDasmStyle();
+            style.syntax = syntax(config.dasmSyntax);
+            setDasmStyle(style);
             return;
+        }
 
         case Opt::CPU_DASM_NUMBERS:
 
@@ -426,24 +461,29 @@ CPU::setOption(Opt option, i64 value)
             switch (config.dasmNumbers) {
                     
                 case DasmNumbers::HEX:
-                    
-                    setDasmNumberFormat(moira::DasmNumberFormat {
+                {
+                    auto style = getDasmStyle();
+                    style.numberFormat = moira::DasmNumberFormat {
                         .prefix = "$",
                         .radix = 16,
                         .upperCase = false,
                         .plainZero = false
-                    });
+                    };
+                    setDasmStyle(style);
                     return;
-                    
+                }
                 case DasmNumbers::DEC:
-                    
-                    setDasmNumberFormat(moira::DasmNumberFormat {
+                {
+                    auto style = getDasmStyle();
+                    style.numberFormat = moira::DasmNumberFormat {
                         .prefix = "",
                         .radix = 10,
                         .upperCase = false,
                         .plainZero = false
-                    });
+                    };
+                    setDasmStyle(style);
                     return;
+                }
 
             }
             
@@ -528,7 +568,7 @@ CPU::cacheInfo() const
     info.cacr = (u8)getCACR();
     info.caar = (u8)getCAAR();
     info.ipl = (u8)getIPL();
-    info.fc = (u8)readFC();
+    info.fc = (u8)getFC();
 
     info.halt = isHalted();
 
@@ -632,8 +672,6 @@ CPU::_dump(Category category, std::ostream &os) const
         os << hex(readBuffer) << std::endl;
         os << tab("Write buffer");
         os << hex(readBuffer) << std::endl;
-        os << tab("Last exception");
-        os << dec(exception);
     }
     
     if (category == Category::Breakpoints) {
@@ -712,11 +750,14 @@ CPU::_trackOff()
 void
 CPU::_didLoad()
 {
-    auto cpuModel = (moira::Model)config.revision;
-    auto dasmModel = (moira::Model)config.dasmRevision;
+    auto cpuModel = (moira::CPUModel)config.revision;
+    auto dasmModel = (moira::CPUModel)config.dasmRevision;
 
     // Rectify the CPU type
     setModel(cpuModel, dasmModel);
+
+    // Derive the cache state from the restored CACR
+    iCache.refresh();
 
     /* Because we don't save breakpoints and watchpoints in a snapshot, the
      * CPU flags for checking breakpoints and watchpoints can be in a corrupt
@@ -776,68 +817,33 @@ CPU::eofHandler()
 string
 CPU::disass(const string &fmt, u32 addr, isize *len) const
 {
-    return disass(fmt, addr, reg, len);
+    try {
+
+        int bytes = 0;
+        auto result = disassemble(fmt, addr, &bytes);
+        if (len) *len = bytes;
+        return result;
+
+    } catch (const std::runtime_error &e) {
+
+        throw CoreError(CoreError::OPT_INV_ARG, e.what());
+    }
 }
 
 string
 CPU::disassRecorded(const string &fmt, isize nr, isize *len) const
 {
-    auto &entry = debugger.logEntryAbs((int)nr);
-    return disass(fmt, entry.pc0, entry, len);
-}
+    try {
 
-string
-CPU::disass(const string &fmt, u32 addr, const moira::Registers &regs, isize *len) const
-{
-    string result;
-    char buffer[256];
+        int bytes = 0;
+        auto result = debugger.disassembleRecorded(fmt, nr, &bytes);
+        if (len) *len = bytes;
+        return result;
 
-    // The instruction length is only computed if it is needed
-    int bytes = -1;
-    auto length = [&]() {
+    } catch (const std::runtime_error &e) {
 
-        if (bytes < 0) { char tmp[128]; bytes = disassemble(tmp, addr); }
-        return bytes;
-    };
-
-    for (usize i = 0; i < fmt.size(); i++) {
-
-        if (fmt[i] != '%') { result += fmt[i]; continue; }
-
-        // Parse the number in front of the directive
-        isize num = 0; bool hasNum = false;
-        while (++i < fmt.size() && isdigit(fmt[i])) { num = 10 * num + (fmt[i] - '0'); hasNum = true; }
-        if (i >= fmt.size()) throw CoreError(CoreError::OPT_INV_ARG, "A directive after %");
-
-        // Pads the output to the requested width
-        auto pad = [&](const char *text) {
-
-            result += text;
-            for (isize n = isize(strlen(text)); n < num; n++) result += ' ';
-        };
-
-        switch (fmt[i]) {
-
-            case 'p': dump24(buffer, addr); pad(buffer); break;
-            case 'b': dump16(buffer, addr, length() / 2); pad(buffer); break;
-            case 'i': bytes = disassemble(buffer, addr); pad(buffer); break;
-            case 'f': disassembleSR(buffer, regs.sr); pad(buffer); break;
-
-            case 'd':
-            case 'a':
-
-                if (!hasNum || num > 7) throw CoreError(CoreError::OPT_INV_ARG, "0...7 in front of d or a");
-                dump32(buffer, fmt[i] == 'd' ? regs.d[num] : regs.a[num]);
-                result += buffer;
-                break;
-
-            default:
-                throw CoreError(CoreError::OPT_INV_ARG, string("p, b, i, f, d, or a after %, not ") + fmt[i]);
-        }
+        throw CoreError(CoreError::OPT_INV_ARG, e.what());
     }
-
-    if (len) *len = length();
-    return result;
 }
 
 void

@@ -35,7 +35,7 @@ static constexpr int VER_BETA       = 0;
 // Snapshot version number
 static constexpr int SNP_MAJOR      = 5;
 static constexpr int SNP_MINOR      = 0;
-static constexpr int SNP_SUBMINOR   = 0;
+static constexpr int SNP_SUBMINOR   = 1;
 static constexpr int SNP_BETA       = 0;
 
 

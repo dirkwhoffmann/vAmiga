@@ -22,6 +22,9 @@ template <Core C, Instr I, Size S> u32 bcd(u32 op1, u32 op2);
 // Compare instructions (CMPx)
 template <Core C, Size S> void cmp(u32 op1, u32 op2);
 
+// Move instructions (sets N and Z according to the lower S bytes of data and clears V and C)
+template <Size S> void setMoveFlags(u32 data);
+
 // Logic instructions (NOT, NEG, NEGX, ANDx, ORx, EORx)
 template <Core C, Instr I, Size S> u32 logic(u32 op1);
 template <Core C, Instr I, Size S> u32 logic(u32 op1, u32 op2);
@@ -42,14 +45,10 @@ template <Core C, Size S> u64 mulls(u32 op1, u32 op2);
 template <Core C, Size S> u64 mullu(u32 op1, u32 op2);
 
 // Division (DIVS, DIVU, DIVSL, DIVUL)
-template <Core C> u32 divsMoira(u32 op1, u32 op2);
-template <Core C> u32 divuMoira(u32 op1, u32 op2);
-template <Core C> u32 divsMusashi(u32 op1, u32 op2);
-template <Core C> u32 divuMusashi(u32 op1, u32 op2);
-template <Size S> std::pair<u32,u32> divlsMoira(i64 op1, u32 op2);
-template <Size S> std::pair<u32,u32> divluMoira(u64 op1, u32 op2);
-template <Size S> std::pair<u32,u32> divlsMusashi(u64 op1, u32 op2);
-template <Size S> std::pair<u32,u32> divluMusashi(u64 op1, u32 op2);
+template <Core C> u32 divs(u32 op1, u32 op2);
+template <Core C> u32 divu(u32 op1, u32 op2);
+template <Size S> std::pair<u32,u32> divls(i64 op1, u32 op2);
+template <Size S> std::pair<u32,u32> divlu(u64 op1, u32 op2);
 
 
 //

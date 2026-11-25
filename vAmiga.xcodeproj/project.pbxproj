@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A1C08BF76B271A25C04CF3B /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */; };
+		4DAD4BF137D41E6B833E1B46 /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */; };
+		3018E73961DFEDE416432984 /* FPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ABAD7213EBA91477C81382E /* FPU.cpp */; };
+		ECBCC3E548710AC158B5DE5D /* FPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ABAD7213EBA91477C81382E /* FPU.cpp */; };
+		C6FF2E144ED8510CC2B01C85 /* FpuEnv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */; };
+		068CC6F76B3556983DD9E30A /* FpuEnv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */; };
+		A5743F268BDAF047C6C1738A /* FpuEnvMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49B21630C3C583D087A01616 /* FpuEnvMath.cpp */; };
+		85B833FD470208F011E84868 /* FpuEnvMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49B21630C3C583D087A01616 /* FpuEnvMath.cpp */; };
+		B9B6EE11E086B987ED8F58B8 /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18A567A08D1B999C922874C2 /* FpuFormats.cpp */; };
+		EDB3223D724489D42EFDBDFF /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18A567A08D1B999C922874C2 /* FpuFormats.cpp */; };
+		0D5B78BB774FE8BB9CB19C40 /* MFloat80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 09CCECEFF75C113C04106BA8 /* MFloat80.cpp */; };
+		8138A2EF8F3EA6BF5457E2A9 /* MFloat80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 09CCECEFF75C113C04106BA8 /* MFloat80.cpp */; };
+		A214861482740AB2834CFFD7 /* MMU030.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA313FA66C37509A516296EE /* MMU030.cpp */; };
+		05D646CB4B3ACDF197B9DDBC /* MMU030.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA313FA66C37509A516296EE /* MMU030.cpp */; };
+		6590847963D8A945488E3E57 /* MMU040.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */; };
+		FC2A76EBAE2A92AA4FCB9895 /* MMU040.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */; };
 		117FC7C96DAE1F4E7C05F5D5 /* SnapshotPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 62339E381932B34874DC6A15 /* SnapshotPool.cpp */; };
 		17EF7AB400CF86F6FB6D4CF9 /* MoiraCore68020.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */; };
 		1DAF3FDCA770130763960BA2 /* StdioTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91B552A8C4FF774242F1139A /* StdioTransport.cpp */; };
@@ -675,6 +691,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		207524B44C9995E19F357B7F /* MoiraInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraInterface.h; sourceTree = "<group>"; };
+		ACFFD505DEF3174116E92A1B /* MoiraInfo_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraInfo_cpp.h; sourceTree = "<group>"; };
+		05E1B2A069BFD4B0F9D9541C /* MoiraRegisters_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraRegisters_cpp.h; sourceTree = "<group>"; };
+		DB5168DC66495BA937FD9C99 /* Cache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cache.h; sourceTree = "<group>"; };
+		D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cache.cpp; sourceTree = "<group>"; };
+		F2C2BC5FD9447199E3F87168 /* FPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FPU.h; sourceTree = "<group>"; };
+		5ABAD7213EBA91477C81382E /* FPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FPU.cpp; sourceTree = "<group>"; };
+		42EA352EAC03E1BD4193F50F /* FpuEnv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FpuEnv.h; sourceTree = "<group>"; };
+		D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuEnv.cpp; sourceTree = "<group>"; };
+		49B21630C3C583D087A01616 /* FpuEnvMath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuEnvMath.cpp; sourceTree = "<group>"; };
+		F0CA95234DEA3D8A4DCADA78 /* FpuFormats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FpuFormats.h; sourceTree = "<group>"; };
+		18A567A08D1B999C922874C2 /* FpuFormats.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuFormats.cpp; sourceTree = "<group>"; };
+		992FB15137FA9468325F0BEF /* MFloat80.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MFloat80.h; sourceTree = "<group>"; };
+		09CCECEFF75C113C04106BA8 /* MFloat80.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MFloat80.cpp; sourceTree = "<group>"; };
+		61750D79964A9742ED0DEF5D /* Wide.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wide.h; sourceTree = "<group>"; };
+		FE6BB0B7CC8A2E3CB7950BEE /* MMU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU.h; sourceTree = "<group>"; };
+		4508EC5E9D9E6433FAB2B65C /* MMU030.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU030.h; sourceTree = "<group>"; };
+		BA313FA66C37509A516296EE /* MMU030.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MMU030.cpp; sourceTree = "<group>"; };
+		A7C5945E6FBEF5B0A5261767 /* MMU040.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU040.h; sourceTree = "<group>"; };
+		12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MMU040.cpp; sourceTree = "<group>"; };
 		1C297A142285734307A289D9 /* StdioTransport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StdioTransport.h; sourceTree = "<group>"; };
 		1D35AF75E880BB23242A2A34 /* ZipError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZipError.cpp; sourceTree = "<group>"; };
 		29F20FE8B3EA51536B8791BA /* Transport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Transport.cpp; sourceTree = "<group>"; };
@@ -1309,8 +1345,6 @@
 		50DA83E32C161961001209AA /* VAmiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAmiga.cpp; sourceTree = "<group>"; };
 		50DA83E72C1619E0001209AA /* VAmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaTypes.h; sourceTree = "<group>"; };
 		50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDataProvider.swift; sourceTree = "<group>"; };
-		50DC2445303C3F4B0054EA1F /* MoiraCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraCache.h; sourceTree = "<group>"; };
-		50DC2446303C3F5C0054EA1F /* MoiraCache_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraCache_cpp.h; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DE55392E874641001789C9 /* MyToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbarItems.swift; sourceTree = "<group>"; };
@@ -1498,6 +1532,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		86DE143C462E3C6D44255361 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				DB5168DC66495BA937FD9C99 /* Cache.h */,
+				D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
+		3B16279182A6B025142CAF5E /* FPU */ = {
+			isa = PBXGroup;
+			children = (
+				F2C2BC5FD9447199E3F87168 /* FPU.h */,
+				5ABAD7213EBA91477C81382E /* FPU.cpp */,
+				42EA352EAC03E1BD4193F50F /* FpuEnv.h */,
+				D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */,
+				49B21630C3C583D087A01616 /* FpuEnvMath.cpp */,
+				F0CA95234DEA3D8A4DCADA78 /* FpuFormats.h */,
+				18A567A08D1B999C922874C2 /* FpuFormats.cpp */,
+				992FB15137FA9468325F0BEF /* MFloat80.h */,
+				09CCECEFF75C113C04106BA8 /* MFloat80.cpp */,
+				61750D79964A9742ED0DEF5D /* Wide.h */,
+			);
+			path = FPU;
+			sourceTree = "<group>";
+		};
+		2BD63836E41035FCD1A80065 /* MMU */ = {
+			isa = PBXGroup;
+			children = (
+				FE6BB0B7CC8A2E3CB7950BEE /* MMU.h */,
+				4508EC5E9D9E6433FAB2B65C /* MMU030.h */,
+				BA313FA66C37509A516296EE /* MMU030.cpp */,
+				A7C5945E6FBEF5B0A5261767 /* MMU040.h */,
+				12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */,
+			);
+			path = MMU;
+			sourceTree = "<group>";
+		};
 		5009B7F5255702C00037288E /* Rom */ = {
 			isa = PBXGroup;
 			children = (
@@ -2864,6 +2936,7 @@
 			children = (
 				50CF463D262042FC00BB3B95 /* CMakeLists.txt */,
 				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
+				207524B44C9995E19F357B7F /* MoiraInterface.h */,
 				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
 				5034229628A6E2BE007018BB /* MoiraMacros.h */,
 				50E2BE34240D41DD00155AE4 /* Moira.h */,
@@ -2876,8 +2949,8 @@
 				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE38240D41EE00155AE4 /* MoiraALU.h */,
 				50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */,
-				50DC2445303C3F4B0054EA1F /* MoiraCache.h */,
-				50DC2446303C3F5C0054EA1F /* MoiraCache_cpp.h */,
+				ACFFD505DEF3174116E92A1B /* MoiraInfo_cpp.h */,
+				05E1B2A069BFD4B0F9D9541C /* MoiraRegisters_cpp.h */,
 				50E2BE2A240D418500155AE4 /* MoiraDataflow.h */,
 				50E2BE2C240D418500155AE4 /* MoiraDataflow_cpp.h */,
 				50E2BE27240D418500155AE4 /* MoiraExceptions.h */,
@@ -2893,6 +2966,9 @@
 				50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */,
 				50E2BE32240D418600155AE4 /* StrWriter.h */,
 				50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */,
+				86DE143C462E3C6D44255361 /* Cache */,
+				3B16279182A6B025142CAF5E /* FPU */,
+				2BD63836E41035FCD1A80065 /* MMU */,
 			);
 			path = Moira;
 			sourceTree = "<group>";
@@ -3181,6 +3257,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A1C08BF76B271A25C04CF3B /* Cache.cpp in Sources */,
+				3018E73961DFEDE416432984 /* FPU.cpp in Sources */,
+				C6FF2E144ED8510CC2B01C85 /* FpuEnv.cpp in Sources */,
+				A5743F268BDAF047C6C1738A /* FpuEnvMath.cpp in Sources */,
+				B9B6EE11E086B987ED8F58B8 /* FpuFormats.cpp in Sources */,
+				0D5B78BB774FE8BB9CB19C40 /* MFloat80.cpp in Sources */,
+				A214861482740AB2834CFFD7 /* MMU030.cpp in Sources */,
+				6590847963D8A945488E3E57 /* MMU040.cpp in Sources */,
 				3AE13359E763A27FCF35D298 /* rvdebug.cpp in Sources */,
 				508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */,
 				50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */,
@@ -3548,6 +3632,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DAD4BF137D41E6B833E1B46 /* Cache.cpp in Sources */,
+				ECBCC3E548710AC158B5DE5D /* FPU.cpp in Sources */,
+				068CC6F76B3556983DD9E30A /* FpuEnv.cpp in Sources */,
+				85B833FD470208F011E84868 /* FpuEnvMath.cpp in Sources */,
+				EDB3223D724489D42EFDBDFF /* FpuFormats.cpp in Sources */,
+				8138A2EF8F3EA6BF5457E2A9 /* MFloat80.cpp in Sources */,
+				05D646CB4B3ACDF197B9DDBC /* MMU030.cpp in Sources */,
+				FC2A76EBAE2A92AA4FCB9895 /* MMU040.cpp in Sources */,
 				C92E967AA7B5F69908564790 /* rvdebug.cpp in Sources */,
 				50FC048B27DA195600C3E566 /* CIAEvents.cpp in Sources */,
 				50E5BF802BB1D2510004712B /* STFile.cpp in Sources */,

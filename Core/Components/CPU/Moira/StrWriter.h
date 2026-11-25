@@ -7,7 +7,7 @@
 
 #pragma once
 
-namespace vamiga::moira {
+namespace MOIRA_NAMESPACE {
 
 //
 // Wrapper structures controlling the output format
@@ -25,11 +25,13 @@ struct UInt32 { u32 raw; UInt32(u32 v) : raw(v) { } };
 struct Imu { u32 raw; Size sz; Imu(u32 v, Size s = Long) : raw(v), sz(s) { } };
 struct Ims { i32 raw; Size sz; Ims(i32 v, Size s = Long) : raw(v), sz(s) { } };
 struct Imd { u32 raw; Imd(u32 v) : raw(v) { } };
+struct ImPacked { u32 a, b, c; };
 
 // Mnemonics
 struct Ins { Instr raw; Ins(Instr v) : raw(v) { } };
 struct Sz { Size raw; Sz(Size v) : raw(v) { } };
 struct Szb { Size raw; Szb(Size v) : raw(v) { } };
+struct Usz { Size raw; Usz(Size v) : raw(v) { } };   // Size suffix that is only printed in UAE syntax
 struct Cc { int raw; Cc(int v) : raw(v) { } };
 struct Cpcc { int raw; Cpcc(int v) : raw(v) { } };
 struct Fcc { int raw; Fcc(int v) : raw(v) { } };
@@ -64,6 +66,7 @@ struct Ix { const Ea &ea; };
 struct IxMot { const Ea &ea; };
 struct IxMit { const Ea &ea; };
 struct IxMus { const Ea &ea; };
+struct IxUae { const Ea &ea; };
 struct Aw { const Ea &ea; };
 struct Al { const Ea &ea; };
 struct DiPc { const Ea &ea; };
@@ -129,6 +132,8 @@ public:
     StrWriter& operator<<(Ins);
     StrWriter& operator<<(Sz);
     StrWriter& operator<<(Szb);
+    StrWriter& operator<<(Usz);
+    StrWriter& operator<<(ImPacked);
     StrWriter& operator<<(Cc);
     StrWriter& operator<<(Cpcc);
     StrWriter& operator<<(Fcc);
@@ -158,6 +163,7 @@ public:
     StrWriter& operator<<(IxMot);
     StrWriter& operator<<(IxMit);
     StrWriter& operator<<(IxMus);
+    StrWriter& operator<<(IxUae);
     StrWriter& operator<<(Aw);
     StrWriter& operator<<(Al);
     StrWriter& operator<<(DiPc);

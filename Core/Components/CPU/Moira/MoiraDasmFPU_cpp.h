@@ -5,7 +5,6 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-#include "utl/support/Bits.h"
 void
 Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
@@ -41,7 +40,7 @@ Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext, dasmModel)) {
 
             addr = old;
             dasmIllegal(str, addr, op, I, M, S);
@@ -152,7 +151,7 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) cons
             }
 
             // 68040 only instructions
-            if (hasFPU()) {
+            if (dasmModel == CPUModel::M68040) {
 
                 switch (cmd) {
 
@@ -213,7 +212,7 @@ Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) cons
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext, dasmModel)) {
 
             addr = old;
             dasmIllegal(str, addr, op, I, M, S);
@@ -234,7 +233,7 @@ Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext, dasmModel)) {
 
             addr = old;
             dasmIllegal(str, addr, op, I, M, S);
@@ -270,6 +269,7 @@ Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe_
         if (M == Mode::IM) {
 
             u64 val;
+            u32 w1 = 0, w2 = 0;
 
             switch (src) {
 
@@ -285,13 +285,17 @@ Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe_
                     str << Ins{I} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
-                case 2: // Double precision
+                case 2: // Extended precision
                 case 3: // Packed-Decimal Real
 
                     val = dasmIncRead(addr, Long);
-                    dasmIncRead(addr, Long);
-                    dasmIncRead(addr, Long); // Why???
-                    str << Ins{I} << Ffmt{src} << str.tab << "#<fixme>";
+                    w1 = dasmIncRead(addr, Long);
+                    w2 = dasmIncRead(addr, Long);
+                    if (src == 3 && str.style.syntax == Syntax::UAE) {
+                        str << Ins{I} << Ffmt{src} << str.tab << ImPacked{(u32)val, w1, w2};
+                    } else {
+                        str << Ins{I} << Ffmt{src} << str.tab << "#<fixme>";
+                    }
                     break;
 
                 case 5: // Double-precision real
@@ -317,6 +321,9 @@ Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe_
         str << Ins{I} << Ffmt{2} << str.tab << Fp{src};
     }
 
+    // UAE omits the destination if it equals the source register
+    if (str.style.syntax == Syntax::UAE && !(ext & 0x4000) && src == dst) return;
+
     str << Sep{} << Fp{dst};
 }
 
@@ -336,6 +343,7 @@ Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe
         if (M == Mode::IM) {
 
             u64 val;
+            u32 w1 = 0, w2 = 0;
 
             switch (src) {
 
@@ -351,13 +359,17 @@ Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe
                     str << "#<fixme>";
                     break;
 
-                case 2: // Double precision
+                case 2: // Extended precision
                 case 3: // Packed-Decimal Real
 
                     val = dasmIncRead(addr, Long);
-                    dasmIncRead(addr, Long);
-                    dasmIncRead(addr, Long); // Why???
-                    str << "#<fixme>";
+                    w1 = dasmIncRead(addr, Long);
+                    w2 = dasmIncRead(addr, Long);
+                    if (src == 3 && str.style.syntax == Syntax::UAE) {
+                        str << ImPacked{(u32)val, w1, w2};
+                    } else {
+                        str << "#<fixme>";
+                    }
                     break;
 
                 case 5: // Double-precision real
@@ -399,6 +411,7 @@ Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe
         if (M == Mode::IM) {
 
             u64 val;
+            u32 w1 = 0, w2 = 0;
 
             switch (src) {
 
@@ -414,13 +427,17 @@ Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe
                     str << Ins{I} << Ffmt{src} << str.tab << "#<fixme>";
                     break;
 
-                case 2: // Double precision
+                case 2: // Extended precision
                 case 3: // Packed-Decimal Real
 
                     val = dasmIncRead(addr, Long);
-                    dasmIncRead(addr, Long);
-                    dasmIncRead(addr, Long); // Why???
-                    str << Ins{I} << Ffmt{src} << str.tab << "#<fixme>";
+                    w1 = dasmIncRead(addr, Long);
+                    w2 = dasmIncRead(addr, Long);
+                    if (src == 3 && str.style.syntax == Syntax::UAE) {
+                        str << Ins{I} << Ffmt{src} << str.tab << ImPacked{(u32)val, w1, w2};
+                    } else {
+                        str << Ins{I} << Ffmt{src} << str.tab << "#<fixme>";
+                    }
                     break;
 
                 case 5: // Double-precision real
@@ -446,6 +463,11 @@ Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, [[maybe
     } else {
         str << Ins{I} << Ffmt{2} << str.tab << Fp{src};
     }
+
+    // UAE prints the (unused) destination register field
+    if (str.style.syntax == Syntax::UAE && ((ext & 0x4000) || ______xxx_______ (ext) != ___xxx__________ (ext))) {
+        str << Sep{} << Fp{______xxx_______ (ext)};
+    }
 }
 
 void
@@ -462,7 +484,7 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext, dasmModel)) {
 
             addr = old;
             dasmIllegal(str, addr, op, I, M, S);
@@ -478,7 +500,8 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
             else if (fac == 0x44) str << Ins{Instr::FDMOVE} << Ffmt{2};
             else str << Ins{I} << Ffmt{2};
 
-            str << str.tab << Fp(src) << Sep{} << Fp(dst);
+            str << str.tab << Fp(src);
+            if (str.style.syntax != Syntax::UAE || src != dst) str << Sep{} << Fp(dst);
             break;
 
         case 0b010:
@@ -490,6 +513,7 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
             if (M == Mode::IM) {
 
                 u64 val;
+            u32 w1 = 0, w2 = 0;
 
                 switch (src) {
 
@@ -504,13 +528,17 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
                         str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
                         break;
 
-                    case 2: // Double precision
+                    case 2: // Extended precision
                     case 3: // Packed-Decimal Real
 
                         val = dasmIncRead(addr, Long);
-                        dasmIncRead(addr, Long);
-                        dasmIncRead(addr, Long); // Why???
-                        str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
+                        w1 = dasmIncRead(addr, Long);
+                        w2 = dasmIncRead(addr, Long);
+                        if (src == 3 && str.style.syntax == Syntax::UAE) {
+                            str << str.tab << ImPacked{(u32)val, w1, w2} << Sep{} << Fp(dst);
+                        } else {
+                            str << str.tab << "#<fixme>" << Sep{} << Fp(dst);
+                        }
                         break;
 
                     case 5: // Double-precision real
@@ -540,18 +568,40 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) con
                 case 0b011:
 
                     str << Ins{I} << Ffmt{src} << str.tab << Fp(dst) << Sep{} << Op(M, Long, reg, addr);
-                    str << "{" << Ims(i8(fac << 1) >> 1, Byte) << "}";
+                    if (str.style.syntax == Syntax::UAE) {
+                        int k = fac & 0x7f;
+                        if (k & 0x40) k |= ~0x3f;
+                        if (k) str << " {" << k << "}";
+                    } else {
+                        str << "{" << Ims(i8(fac << 1) >> 1, Byte) << "}";
+                    }
                     break;
 
                 case 0b111:
 
                     str << Ins{I} << Ffmt{3} << str.tab << Fp{dst} << Sep{} << Op(M, Long, reg, addr);
-                    str << Sep{} << Dn(fac >> 4);
+                    if (str.style.syntax == Syntax::UAE) {
+                        str << " {" << Dn(fac >> 4) << "}";
+                    } else {
+                        str << Sep{} << Dn(fac >> 4);
+                    }
                     break;
 
                 default:
 
-                    str << Ins{I} << Ffmt{src} << str.tab << Fp{dst} << Sep{} << Op(M, Long, reg, addr);
+                    str << Ins{I} << Ffmt{src} << str.tab << Fp{dst} << Sep{};
+                    if (str.style.syntax == Syntax::UAE) {
+                        str << Op(M, src == 4 ? Word : src == 6 ? Byte : Long, reg, addr);
+                    } else {
+                        str << Op(M, Long, reg, addr);
+                    }
+
+                    // UAE appends the k-factor bits regardless of the format
+                    if (str.style.syntax == Syntax::UAE && (fac & 0x7f)) {
+                        int k = fac & 0x7f;
+                        if (k & 0x40) k |= ~0x3f;
+                        str << " {" << k << "}";
+                    }
                     break;
             }
             break;
@@ -569,7 +619,7 @@ Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext, dasmModel)) {
 
             addr = old;
             dasmIllegal(str, addr, op, I, M, S);
@@ -583,6 +633,9 @@ Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) c
 void
 Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) const
 {
+    // UAE interprets the register mask based on the addressing mode (not the mode bits of the extension word)
+    auto uaeMask = [&](u16 ext) -> u8 { return M == Mode(4) ? u8(ext & 0xFF) : u8(REVERSE_8(ext & 0xFF)); };
+
     auto old = addr;
     auto ext = dasmIncRead(addr);
     auto reg = _____________xxx (op);
@@ -594,7 +647,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
     // Catch illegal extension words
     if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
-        if (!isValidExtFPU(I, M, op, ext)) {
+        if (!isValidExtFPU(I, M, op, ext, dasmModel)) {
 
             addr = old;
             dasmIllegal(str, addr, op, I, M, S);
@@ -614,12 +667,13 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
                     return;
                 }
             }
-            if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
+            if ((lll == 0 && str.style.syntax != Syntax::UAE) || lll == 1 || lll == 2 || lll == 4) {
                 str << Ins{Instr::FMOVE} << Ffmt{0} << str.tab;
             } else {
                 str << Ins{Instr::FMOVEM} << Ffmt{0} << str.tab;
             }
-            str << Op(M, Long, reg, addr) << Sep{} << Fctrl{lll};
+            str << Op(M, Long, reg, addr);
+            if (lll || str.style.syntax != Syntax::UAE) str << Sep{} << Fctrl{lll};
             break;
 
         case 0b101: // Cntrl to Ea
@@ -632,7 +686,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
                     return;
                 }
             }
-            if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
+            if ((lll == 0 && str.style.syntax != Syntax::UAE) || lll == 1 || lll == 2 || lll == 4) {
                 str << Ins{Instr::FMOVE} << Ffmt{0} << str.tab;
             } else {
                 str << Ins{Instr::FMOVEM} << Ffmt{0} << str.tab;
@@ -647,11 +701,14 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
                 case 0b00: // Static list, predecrement addressing
 
                     str << Ins{I} << Ffmt{2} << str.tab;
-                    str << Op(M, Long, reg, addr) << Sep{};
+                    str << Op(M, Long, reg, addr);
                     if (ext & 0xFF) {
-                        str << FRegList(ext & 0xFF);
-                    } else {
-                        str << Imd{0};
+                        str << Sep{};
+                        u16 list = u16(ext & 0xFF);
+                        if (str.style.syntax == Syntax::UAE) list = u16(uaeMask(u16(ext)));
+                        str << FRegList(list);
+                    } else if (str.style.syntax != Syntax::UAE) {
+                        str << Sep{} << Imd{0};
                     }
                     break;
 
@@ -665,11 +722,14 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
                 case 0b10: // Static list, postincrement addressing
 
                     str << Ins{I} << Ffmt{2} << str.tab;
-                    str << Op(M, Long, reg, addr) << Sep{};
+                    str << Op(M, Long, reg, addr);
                     if (ext & 0xFF) {
-                        str << FRegList(REVERSE_8(ext & 0xFF));
-                    } else {
-                        str << Imd{0};
+                        str << Sep{};
+                        u16 list = u16(REVERSE_8(ext & 0xFF));
+                        if (str.style.syntax == Syntax::UAE) list = u16(uaeMask(u16(ext)));
+                        str << FRegList(list);
+                    } else if (str.style.syntax != Syntax::UAE) {
+                        str << Sep{} << Imd{0};
                     }
                     break;
 
@@ -690,8 +750,10 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
 
                     str << Ins{I} << Ffmt{2} << str.tab;
                     if (ext & 0xFF) {
-                        str << FRegList(ext & 0xFF);
-                    } else {
+                        u16 list = u16(ext & 0xFF);
+                        if (str.style.syntax == Syntax::UAE) list = u16(uaeMask(u16(ext)));
+                        str << FRegList(list);
+                    } else if (str.style.syntax != Syntax::UAE) {
                         str << Imd{0};
                     }
                     str << Sep{} << Op(M, Long, reg, addr);
@@ -708,8 +770,8 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op, Instr I, Mode M, Size S) co
 
                     str << Ins{I} << Ffmt{2} << str.tab;
                     if (ext & 0xFF) {
-                        str << FRegList(REVERSE_8(ext & 0xFF)) ;
-                    } else {
+                        str << FRegList(str.style.syntax == Syntax::UAE ? u16(uaeMask(u16(ext))) : u16(REVERSE_8(ext & 0xFF))) ;
+                    } else if (str.style.syntax != Syntax::UAE) {
                         str << Imd{0};
                     }
                     str << Sep{} << Op(M, Long, reg, addr);

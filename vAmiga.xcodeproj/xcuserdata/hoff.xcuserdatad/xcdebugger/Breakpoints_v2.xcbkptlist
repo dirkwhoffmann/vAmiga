@@ -561,7 +561,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "734"
             endingLineNumber = "734"
-            landmarkName = "CPU::resyncOverclockedCpu()"
+            landmarkName = "CPU::_dump(category, os)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -577,7 +577,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "738"
             endingLineNumber = "738"
-            landmarkName = "CPU::resyncOverclockedCpu()"
+            landmarkName = "CPU::_trackOn()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -609,7 +609,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "196"
             endingLineNumber = "196"
-            landmarkName = "Moira::didLogInstruction(reg)"
+            landmarkName = "Moira::willAccessBus(addr, size, write)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -929,11 +929,10 @@ Amiga::_dump(Category category, std::ostream &os) const
         bool dmaen = dmacon & DMAEN;
         auto intreq = paula.intreq;
         auto intena = (paula.intena & 0x8000) ? paula.intena : 0;
-        auto fc = cpu.readFC();
+        auto fc = cpu.getFC();
         char empty = '.';
 
-        char sr[32];
-        (void)cpu.disassembleSR(sr);
+        auto sr = cpu.disass("%f", cpu.getPC0());
 
         os << std::setfill('0');
         os << "DMACON  INTREQ / INTENA  STATUS REGISTER  IPL FCP" << std::endl;

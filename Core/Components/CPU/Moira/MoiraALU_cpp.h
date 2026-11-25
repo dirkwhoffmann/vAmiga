@@ -5,8 +5,6 @@
 // Published under the terms of the MIT License
 // -----------------------------------------------------------------------------
 
-#include "utl/support/Bits.h"
-#include "utl/hints.h"
 template <Size S> u32 MSBIT() {
 
     if constexpr (S == Byte) return 0x00000080;
@@ -83,11 +81,23 @@ template <Size S> bool ZERO(u64 data) {
     if constexpr (S == Long) return !(data & 0xFFFFFFFF);
 }
 
-template <Size S> u32 WRITE(u32 d1, u32 d2) {
+// Returns the n-th byte, word, or long word of data (counted from the least significant end)
+template <Size S, int n = 0> u32 READ(u32 data) {
 
-    if constexpr (S == Byte) return (d1 & 0xFFFFFF00) | (d2 & 0x000000FF);
-    if constexpr (S == Word) return (d1 & 0xFFFF0000) | (d2 & 0x0000FFFF);
-    if constexpr (S == Long) return d2;
+    static_assert(S * (n + 1) <= Long, "Portion exceeds 32 bits");
+
+    return CLIP<S>(data >> (8 * S * n));
+}
+
+// Replaces the n-th byte, word, or long word of d1 (counted from the least significant end) by d2
+template <Size S, int n = 0> u32 WRITE(u32 d1, u32 d2) {
+
+    static_assert(S * (n + 1) <= Long, "Portion exceeds 32 bits");
+
+    constexpr int shift = 8 * S * n;
+    constexpr u32 mask = u32((1ull << (8 * S)) - 1) << shift;
+
+    return (d1 & ~mask) | ((d2 << shift) & mask);
 }
 
 template <Cond C> bool
@@ -339,6 +349,8 @@ Moira::bcd(u32 op1, u32 op2)
         }
         case Instr::SBCD:
         case Instr::SBCD_LOOP:
+        case Instr::NBCD:           // NBCD is computed as an SBCD with a zero destination operand
+        case Instr::NBCD_LOOP:
         {
             // Subtract digits
             u16 lo = lo2 - lo1 - reg.sr.x;
@@ -380,9 +392,22 @@ Moira::bcd(u32 op1, u32 op2)
     return (u32)result;
 }
 
+template <Size S> void
+Moira::setMoveFlags(u32 data)
+{
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
+}
+
 template <Core C, Size S> void
 Moira::cmp(u32 op1, u32 op2)
 {
+    // Only the lower S bytes of the operands are taken into account (the borrow is derived from bit 8 * S)
+    op1 = CLIP<S>(op1);
+    op2 = CLIP<S>(op2);
+
     u64 result = U64_SUB(op2, op1);
 
     reg.sr.c = NBIT<S>(result >> 1);
@@ -586,6 +611,10 @@ Moira::addsub(u32 op1, u32 op2)
 {
     u64 result;
 
+    // Only the lower S bytes of the operands are taken into account (the carry is derived from bit 8 * S)
+    op1 = CLIP<S>(op1);
+    op2 = CLIP<S>(op2);
+
     switch (I) {
 
         case Instr::ADD:
@@ -717,7 +746,7 @@ Moira::mullu(u32 op1, u32 op2)
 }
 
 template <Core C> u32
-Moira::divsMoira(u32 op1, u32 op2)
+Moira::divs(u32 op1, u32 op2)
 {
     u32 result;
     bool overflow;
@@ -746,7 +775,7 @@ Moira::divsMoira(u32 op1, u32 op2)
 }
 
 template <Core C> u32
-Moira::divuMoira(u32 op1, u32 op2)
+Moira::divu(u32 op1, u32 op2)
 {
     u32 result;
     bool overflow;
@@ -772,70 +801,8 @@ Moira::divuMoira(u32 op1, u32 op2)
     return overflow ? op1 : result;
 }
 
-template <Core C> u32
-Moira::divsMusashi(u32 op1, u32 op2)
-{
-    u32 result;
-
-    if (op1 == 0x80000000 && (i32)op2 == -1) {
-
-        reg.sr.z = 0;
-        reg.sr.n = 0;
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-        result = 0;
-
-    } else {
-
-        i64 quotient  = (i64)(i32)op1 / (i16)op2;
-        i16 remainder = (i64)(i32)op1 % (i16)op2;
-
-        if (quotient == (i16)quotient) {
-
-            result = (quotient & 0xffff) | (u16)remainder << 16;
-
-            reg.sr.z = quotient;
-            reg.sr.n = NBIT<Word>(quotient);
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-
-        } else {
-
-            result = op1;
-            reg.sr.v = 1;
-        }
-    }
-
-    return result;
-}
-
-template <Core C> u32
-Moira::divuMusashi(u32 op1, u32 op2)
-{
-    u32 result;
-    i64 quotient  = op1 / op2;
-    u16 remainder = (u16)(op1 % op2);
-
-    if(quotient < 0x10000) {
-
-        result = (quotient & 0xffff) | remainder << 16;
-
-        reg.sr.z = quotient;
-        reg.sr.n = NBIT<Word>(quotient);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-
-    } else {
-
-        result = op1;
-        reg.sr.v = 1;
-    }
-
-    return result;
-}
-
 template <Size S> std::pair<u32,u32>
-Moira::divlsMoira(i64 a, u32 src)
+Moira::divls(i64 a, u32 src)
 {
     i64 quotient, remainder;
 
@@ -843,7 +810,6 @@ Moira::divlsMoira(i64 a, u32 src)
 
     if ((u64)a == 0x8000000000000000UL && (i32)src == -1) {
 
-        assert(S == Word);
         reg.sr.v = 1;
         return { u32(0), u32(0) };
 
@@ -855,7 +821,6 @@ Moira::divlsMoira(i64 a, u32 src)
         if ((quotient & u64(0xffffffff80000000)) != 0
             && (quotient & u64(0xffffffff80000000)) != u64(0xffffffff80000000)) {
 
-            assert(S != Word);
             reg.sr.v = 1;
             return { u32(0), u32(0) };
 
@@ -876,7 +841,7 @@ Moira::divlsMoira(i64 a, u32 src)
 }
 
 template <Size S> std::pair<u32,u32>
-Moira::divluMoira(u64 a, u32 src)
+Moira::divlu(u64 a, u32 src)
 {
     u64 quotient, remainder;
 
@@ -898,89 +863,15 @@ Moira::divluMoira(u64 a, u32 src)
     }
 }
 
-template <Size S> std::pair<u32,u32>
-Moira::divlsMusashi(u64 op1, u32 op2)
-{
-    u64 quotient, remainder;
-
-    if constexpr (S == Word) {
-
-        quotient  = (u64)((i64)((i32)op1) / (i64)((i32)op2));
-        remainder = (u64)((i64)((i32)op1) % (i64)((i32)op2));
-
-        reg.sr.n = NBIT<Long>(quotient);
-        reg.sr.z = ZERO<Long>(quotient);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-    }
-
-    if constexpr (S == Long) {
-
-        quotient  = u64(i64(op1) / i64(i32(op2)));
-        remainder = u64(i64(op1) % i64(i32(op2)));
-
-        if (i64(quotient) == i64(i32(quotient))) {
-
-            reg.sr.n = NBIT<Long>(quotient);
-            reg.sr.z = ZERO<Long>(quotient);
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-
-        } else {
-
-            reg.sr.v = 1;
-        }
-    }
-
-    return { u32(quotient), u32(remainder) };
-}
-
-template <Size S> std::pair<u32,u32>
-Moira::divluMusashi(u64 op1, u32 op2)
-{
-    u64 quotient, remainder;
-
-    if constexpr (S == Word) {
-
-        quotient  = op1 / op2;
-        remainder = op1 % op2;
-
-        reg.sr.n = NBIT<Long>(quotient);
-        reg.sr.z = ZERO<Long>(quotient);
-        reg.sr.v = 0;
-        reg.sr.c = 0;
-    }
-
-    if constexpr (S == Long) {
-
-        quotient  = op1 / op2;
-        remainder = op1 % op2;
-
-        if (quotient <= 0xffffffff) {
-
-            reg.sr.n = NBIT<Long>(quotient);
-            reg.sr.z = ZERO<Long>(quotient);
-            reg.sr.v = 0;
-            reg.sr.c = 0;
-
-        } else {
-
-            reg.sr.v = 1;
-        }
-    }
-
-    return { u32(quotient), u32(remainder) };
-}
-
 template <Core C, Instr I> int
 Moira::cyclesBit(u8 bit) const
 {
     switch (I)
     {
         case Instr::BTST: return 2;
-        case Instr::BCLR: return MOIRA_MIMIC_MUSASHI ? 6 : (bit > 15 ? 6 : 4);
+        case Instr::BCLR: return (compat == Compatibility::MUSASHI) ? 6 : (bit > 15 ? 6 : 4);
         case Instr::BSET:
-        case Instr::BCHG: return MOIRA_MIMIC_MUSASHI ? 4 : (bit > 15 ? 4 : 2);
+        case Instr::BCHG: return (compat == Compatibility::MUSASHI) ? 4 : (bit > 15 ? 4 : 2);
 
         default:
             fatalError;
@@ -1065,7 +956,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         int mcycles  = (dividend < 0) ? 7 : 6;
 
         // Check if quotient is larger than 16 bit
-        if ((abs(dividend) >> 16) >= abs(divisor)) {
+        if (((dividend < 0 ? 0u - (u32)dividend : (u32)dividend) >> 16) >= (u32)abs(divisor)) {
 
             result = (mcycles + 2) * 2;
 
@@ -1126,7 +1017,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         int mcycles  = (dividend < 0) ? 120 : 118;
 
         // Check if quotient is larger than 16 bit
-        if ((abs(dividend) >> 16) >= abs(divisor)) {
+        if (((dividend < 0 ? 0u - (u32)dividend : (u32)dividend) >> 16) >= (u32)abs(divisor)) {
 
             result = 16;
 
@@ -1270,6 +1161,9 @@ Moira::setUndefinedCHK2(i32 lower, i32 upper, i32 value)
 template <Core C, Size S> void
 Moira::setUndefinedDIVU(u32 dividend, u16 divisor)
 {
+    // The 68040 sets V and clears C. N and Z stay unchanged.
+    if (cpuModel >= CPUModel::M68EC040) { reg.sr.c = 0; return; }
+
     auto iDividend = i32(dividend);
 
     switch (C) {
@@ -1280,6 +1174,13 @@ Moira::setUndefinedDIVU(u32 dividend, u16 divisor)
             reg.sr.c = 0;
             reg.sr.n = 1;
             reg.sr.z = 0;
+
+            if constexpr (compat == Compatibility::UAE) {
+
+                // UAE mimics an unverified 68010 behavior: N is cleared if both operands
+                // are negative. Real hardware sets N in this case (vAmigaTS: addrerr30).
+                if (C == Core::C68010 && iDividend < 0 && i16(divisor) < 0) reg.sr.n = 0;
+            }
             break;
 
         case Core::C68020:
@@ -1292,8 +1193,12 @@ Moira::setUndefinedDIVU(u32 dividend, u16 divisor)
 template <Core C, Size S> void
 Moira::setUndefinedDIVS(i32 dividend, i16 divisor)
 {
-    auto uDividend = u32(std::abs(dividend));
-    auto uDivisor = u16(std::abs(divisor));
+    // The 68040 sets V and clears C. N and Z stay unchanged.
+    if (cpuModel >= CPUModel::M68EC040) { reg.sr.c = 0; return; }
+
+    // Negate in unsigned arithmetic (std::abs(INT32_MIN) is undefined)
+    auto uDividend = dividend < 0 ? 0u - u32(dividend) : u32(dividend);
+    auto uDivisor = u16(divisor < 0 ? 0u - u32(i32(divisor)) : u32(divisor));
 
     switch (C) {
 
@@ -1323,6 +1228,9 @@ Moira::setUndefinedDIVS(i32 dividend, i16 divisor)
 template <Core C, Size S> void
 Moira::setUndefinedDIVUL(i64 a, i32 divisor)
 {
+    // The 68040 sets V and clears C. N and Z stay unchanged.
+    if (cpuModel >= CPUModel::M68EC040) { reg.sr.c = 0; return; }
+
     i32 a32 = (i32)a;
     bool neg32 = a32 < 0;
 
@@ -1334,6 +1242,9 @@ Moira::setUndefinedDIVUL(i64 a, i32 divisor)
 template <Core C, Size S> void
 Moira::setUndefinedDIVSL(i64 a, i32 divisor)
 {
+    // The 68040 sets V and clears C. N and Z stay unchanged.
+    if (cpuModel >= CPUModel::M68EC040) { reg.sr.c = 0; return; }
+
     i32 a32 = (i32)a;
     bool neg64 = a < 0;
     bool neg32 = a32 < 0;
