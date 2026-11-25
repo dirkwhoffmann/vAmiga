@@ -339,7 +339,7 @@ Moira::writeStackFrame1011(u16 sr, u32 pc, u32 ia, u16 nr, u16 ssw, u32 addr, u3
  * UAE reports the stacked PC, the SSW and the pipe stages by simple rules. Many internal
  * words are not modeled. All frames use the long format ($B).
  */
-static bool hasIndexedOperand(u16 ird)
+static inline bool hasIndexedOperand(u16 ird)
 {
     auto indexed = [](u16 m, u16 r) { return m == 6 || (m == 7 && r == 3); };
 

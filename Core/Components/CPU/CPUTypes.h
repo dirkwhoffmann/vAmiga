@@ -24,13 +24,19 @@ enum class CPURev : long
 {
     CPU_68000,
     CPU_68010,
-    CPU_68EC020
+    CPU_68EC020,
+    CPU_68020,
+    CPU_68EC030,
+    CPU_68030,
+    CPU_68EC040,
+    CPU_68LC040,
+    CPU_68040
 };
 
 struct CPURevEnum : utl::Reflectable<CPURevEnum, CPURev>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(CPURev::CPU_68EC020);
+    static constexpr long maxVal = long(CPURev::CPU_68040);
     
     static const char *_key(CPURev value)
     {
@@ -39,6 +45,12 @@ struct CPURevEnum : utl::Reflectable<CPURevEnum, CPURev>
             case CPURev::CPU_68000:     return "68000";
             case CPURev::CPU_68010:     return "68010";
             case CPURev::CPU_68EC020:   return "68EC020";
+            case CPURev::CPU_68020:     return "68020";
+            case CPURev::CPU_68EC030:   return "68EC030";
+            case CPURev::CPU_68030:     return "68030";
+            case CPURev::CPU_68EC040:   return "68EC040";
+            case CPURev::CPU_68LC040:   return "68LC040";
+            case CPURev::CPU_68040:     return "68040";
         }
         return "???";
     }
@@ -46,9 +58,15 @@ struct CPURevEnum : utl::Reflectable<CPURevEnum, CPURev>
     {
         switch (value) {
                 
-            case CPURev::CPU_68000:     return "Motorola 68000 CPU";
-            case CPURev::CPU_68010:     return "Motorola 68010 CPU";
-            case CPURev::CPU_68EC020:   return "Motorola 68EC020 CPU";
+            case CPURev::CPU_68000:     return "Motorola 68000";
+            case CPURev::CPU_68010:     return "Motorola 68010";
+            case CPURev::CPU_68EC020:   return "Motorola 68EC020";
+            case CPURev::CPU_68020:     return "Motorola 68020";
+            case CPURev::CPU_68EC030:   return "Motorola 68EC030";
+            case CPURev::CPU_68030:     return "Motorola 68030";
+            case CPURev::CPU_68EC040:   return "Motorola 68EC040";
+            case CPURev::CPU_68LC040:   return "Motorola 68LC040";
+            case CPURev::CPU_68040:     return "Motorola 68040";
         }
         return "???";
     }
@@ -93,15 +111,15 @@ struct DasmRevEnum : utl::Reflectable<DasmRevEnum, DasmRev>
     {
         switch (value) {
                 
-            case DasmRev::DASM_68000:    return "Motorola 68000 instruction set";
-            case DasmRev::DASM_68010:    return "Motorola 68010 instruction set";
-            case DasmRev::DASM_68EC020:  return "Motorola 68EC020 instruction set";
-            case DasmRev::DASM_68020:    return "Motorola 68020 instruction set";
-            case DasmRev::DASM_68EC030:  return "Motorola 68EC030 instruction set";
-            case DasmRev::DASM_68030:    return "Motorola 68030 instruction set";
-            case DasmRev::DASM_68EC040:  return "Motorola 68EC040 instruction set";
-            case DasmRev::DASM_68LC040:  return "Motorola 68LC040 instruction set";
-            case DasmRev::DASM_68040:    return "Motorola 68040 instruction set";
+            case DasmRev::DASM_68000:    return "Motorola 68000";
+            case DasmRev::DASM_68010:    return "Motorola 68010";
+            case DasmRev::DASM_68EC020:  return "Motorola 68EC020";
+            case DasmRev::DASM_68020:    return "Motorola 68020";
+            case DasmRev::DASM_68EC030:  return "Motorola 60EC0302";
+            case DasmRev::DASM_68030:    return "Motorola 68030";
+            case DasmRev::DASM_68EC040:  return "Motorola 68EC040";
+            case DasmRev::DASM_68LC040:  return "Motorola 68LC040";
+            case DasmRev::DASM_68040:    return "Motorola 68040";
         }
         return "???";
     }
@@ -173,12 +191,48 @@ struct DasmNumbersEnum : utl::Reflectable<DasmNumbersEnum, DasmNumbers>
     {
         switch (value) {
                 
-            case DasmNumbers::HEX:      return "Hexadecimal numbers";
-            case DasmNumbers::DEC:      return "Decimal numbers";
+            case DasmNumbers::HEX:      return "Hexadecimal";
+            case DasmNumbers::DEC:      return "Decimal";
         }
         return "???";
     }
 };
+
+/// Coprocessor
+enum class Copro : long
+{
+    CP_NONE,
+    CP_68881,
+    CP_68882
+};
+
+struct CoproEnum : utl::Reflectable<CoproEnum, Copro>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(Copro::CP_68882);
+    
+    static const char *_key(Copro value)
+    {
+        switch (value) {
+                
+            case Copro::CP_NONE:       return "NONE";
+            case Copro::CP_68881:      return "68881";
+            case Copro::CP_68882:      return "68882";
+        }
+        return "???";
+    }
+    static const char *help(Copro value)
+    {
+        switch (value) {
+
+            case Copro::CP_NONE:       return "NONE";
+            case Copro::CP_68881:      return "M68881 FPU";
+            case Copro::CP_68882:      return "M68882 FPU";
+        }
+        return "???";
+    }
+};
+
 
 //
 // Structures
@@ -188,6 +242,7 @@ struct DasmNumbersEnum : utl::Reflectable<DasmNumbersEnum, DasmNumbers>
 typedef struct
 {
     CPURev revision;                        ///< Chip revision
+    Copro copro;                            ///< Coprocessor
     DasmRev dasmRevision;                   ///< Chip revision used by the disassembler
     DasmSyntax dasmSyntax;                  ///< Disassembler syntax
     DasmNumbers dasmNumbers;                ///< Disassembler number format

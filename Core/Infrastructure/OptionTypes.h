@@ -134,6 +134,9 @@ enum class Opt : long
     CPU_RESET_VAL,          ///< Register reset value
     CPU_START_DELAY,        ///< Delay before the CPU starts
     
+    // Coprocessor
+    CPU_COPROCESSOR,        ///< Coprocessor revision
+
     // Real-time clock
     RTC_MODEL,              ///< Chip revision
     
@@ -247,68 +250,68 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
     {
         switch (value) {
                 
-            case Opt::HOST_REFRESH_RATE:         return "HOST.REFRESH_RATE";
-            case Opt::HOST_SAMPLE_RATE:          return "HOST.SAMPLE_RATE";
-            case Opt::HOST_TEX_FORMAT:           return "HOST.TEX_FORMAT";
-            case Opt::HOST_FRAMEBUF_WIDTH:       return "HOST.FRAMEBUF_WIDTH";
-            case Opt::HOST_FRAMEBUF_HEIGHT:      return "HOST.FRAMEBUF_HEIGHT";
+            case Opt::HOST_REFRESH_RATE:        return "HOST.REFRESH_RATE";
+            case Opt::HOST_SAMPLE_RATE:         return "HOST.SAMPLE_RATE";
+            case Opt::HOST_TEX_FORMAT:          return "HOST.TEX_FORMAT";
+            case Opt::HOST_FRAMEBUF_WIDTH:      return "HOST.FRAMEBUF_WIDTH";
+            case Opt::HOST_FRAMEBUF_HEIGHT:     return "HOST.FRAMEBUF_HEIGHT";
                 
-            case Opt::AMIGA_VIDEO_FORMAT:        return "AMIGA.VIDEO_FORMAT";
-            case Opt::AMIGA_WARP_BOOT:           return "AMIGA.WARP_BOOT";
-            case Opt::AMIGA_WARP_MODE:           return "AMIGA.WARP_MODE";
-            case Opt::AMIGA_VSYNC:               return "AMIGA.VSYNC";
-            case Opt::AMIGA_SPEED_BOOST:         return "AMIGA.SPEED_BOOST";
-            case Opt::AMIGA_RUN_AHEAD:           return "AMIGA.RUN_AHEAD";
+            case Opt::AMIGA_VIDEO_FORMAT:       return "AMIGA.VIDEO_FORMAT";
+            case Opt::AMIGA_WARP_BOOT:          return "AMIGA.WARP_BOOT";
+            case Opt::AMIGA_WARP_MODE:          return "AMIGA.WARP_MODE";
+            case Opt::AMIGA_VSYNC:              return "AMIGA.VSYNC";
+            case Opt::AMIGA_SPEED_BOOST:        return "AMIGA.SPEED_BOOST";
+            case Opt::AMIGA_RUN_AHEAD:          return "AMIGA.RUN_AHEAD";
                 
-            case Opt::AGNUS_REVISION:            return "AGNUS.REVISION";
-            case Opt::AGNUS_PTR_DROPS:           return "AGNUS.PTR_DROPS";
+            case Opt::AGNUS_REVISION:           return "AGNUS.REVISION";
+            case Opt::AGNUS_PTR_DROPS:          return "AGNUS.PTR_DROPS";
                 
-            case Opt::DENISE_REVISION:           return "DENISE.REVISION";
-            case Opt::DENISE_VIEWPORT_TRACKING:  return "DENISE.VIEWPORT_TRACKING";
-            case Opt::DENISE_FRAME_SKIPPING:     return "DENISE.FRAME_SKIPPING";
-            case Opt::DENISE_HIDDEN_BITPLANES:   return "HIDDEN_BITPLANES";
-            case Opt::DENISE_HIDDEN_SPRITES:     return "HIDDEN_SPRITES";
-            case Opt::DENISE_HIDDEN_LAYERS:      return "HIDDEN_LAYERS";
-            case Opt::DENISE_SHRES_BLEND:        return "SHRES_BLEND";
-            case Opt::DENISE_CLX_SPR_SPR:        return "CLX_SPR_SPR";
-            case Opt::DENISE_CLX_SPR_PLF:        return "CLX_SPR_PLF";
-            case Opt::DENISE_CLX_PLF_PLF:        return "CLX_PLF_PLF";
+            case Opt::DENISE_REVISION:          return "DENISE.REVISION";
+            case Opt::DENISE_VIEWPORT_TRACKING: return "DENISE.VIEWPORT_TRACKING";
+            case Opt::DENISE_FRAME_SKIPPING:    return "DENISE.FRAME_SKIPPING";
+            case Opt::DENISE_HIDDEN_BITPLANES:  return "HIDDEN_BITPLANES";
+            case Opt::DENISE_HIDDEN_SPRITES:    return "HIDDEN_SPRITES";
+            case Opt::DENISE_HIDDEN_LAYERS:     return "HIDDEN_LAYERS";
+            case Opt::DENISE_SHRES_BLEND:       return "SHRES_BLEND";
+            case Opt::DENISE_CLX_SPR_SPR:       return "CLX_SPR_SPR";
+            case Opt::DENISE_CLX_SPR_PLF:       return "CLX_SPR_PLF";
+            case Opt::DENISE_CLX_PLF_PLF:       return "CLX_PLF_PLF";
                 
-            case Opt::MON_PALETTE:               return "MON.PALETTE";
-            case Opt::MON_GAMMA_IN:              return "MON.GAMMA_IN";
-            case Opt::MON_GAMMA_OUT:             return "MON.GAMMA_OUT";
-            case Opt::MON_BRIGHTNESS:            return "MON.BRIGHTNESS";
-            case Opt::MON_CONTRAST:              return "MON.CONTRAST";
-            case Opt::MON_SATURATION:            return "MON.SATURATION";
-            case Opt::MON_CENTER:                return "MON.CENTER";
-            case Opt::MON_HCENTER:               return "MON.HCENTER";
-            case Opt::MON_VCENTER:               return "MON.VCENTER";
-            case Opt::MON_ZOOM:                  return "MON.ZOOM";
-            case Opt::MON_HZOOM:                 return "MON.HZOOM";
-            case Opt::MON_VZOOM:                 return "MON.VZOOM";
-            case Opt::MON_ENHANCER:              return "MON.ENHANCER";
-            case Opt::MON_UPSCALER:              return "MON.UPSCALER";
-            case Opt::MON_BLUR:                  return "MON.BLUR";
-            case Opt::MON_BLUR_RADIUS:           return "MON.BLUR_RADIUS";
-            case Opt::MON_BLOOM:                 return "MON.BLOOM";
-            case Opt::MON_BLOOM_RADIUS:          return "MON.BLOOM_RADIUS";
-            case Opt::MON_BLOOM_BRIGHTNESS:      return "MON.BLOOM_BRIGHTNESS";
-            case Opt::MON_BLOOM_WEIGHT:          return "MON.BLOOM_WEIGHT";
-            case Opt::MON_DOTMASK:               return "MON.DOTMASK";
-            case Opt::MON_DOTMASK_BRIGHTNESS:    return "MON.DOTMASK_BRIGHTNESS";
-            case Opt::MON_SCANLINES:             return "MON.SCANLINES";
-            case Opt::MON_SCANLINE_BRIGHTNESS:   return "MON.SCANLINE_BRIGHTNESS";
-            case Opt::MON_SCANLINE_WEIGHT:       return "MON.SCANLINE_WEIGHT";
-            case Opt::MON_DISALIGNMENT:          return "MON.DISALIGNMENT";
-            case Opt::MON_DISALIGNMENT_H:        return "MON.DISALIGNMENT_H";
-            case Opt::MON_DISALIGNMENT_V:        return "MON.DISALIGNMENT_V";
-            case Opt::MON_FLICKER_FIXER:         return "MON.FLICKER_FIXER";
-            case Opt::MON_FLICKER_JITTER:        return "MON.FLICKER_JITTER";
+            case Opt::MON_PALETTE:              return "MON.PALETTE";
+            case Opt::MON_GAMMA_IN:             return "MON.GAMMA_IN";
+            case Opt::MON_GAMMA_OUT:            return "MON.GAMMA_OUT";
+            case Opt::MON_BRIGHTNESS:           return "MON.BRIGHTNESS";
+            case Opt::MON_CONTRAST:             return "MON.CONTRAST";
+            case Opt::MON_SATURATION:           return "MON.SATURATION";
+            case Opt::MON_CENTER:               return "MON.CENTER";
+            case Opt::MON_HCENTER:              return "MON.HCENTER";
+            case Opt::MON_VCENTER:              return "MON.VCENTER";
+            case Opt::MON_ZOOM:                 return "MON.ZOOM";
+            case Opt::MON_HZOOM:                return "MON.HZOOM";
+            case Opt::MON_VZOOM:                return "MON.VZOOM";
+            case Opt::MON_ENHANCER:             return "MON.ENHANCER";
+            case Opt::MON_UPSCALER:             return "MON.UPSCALER";
+            case Opt::MON_BLUR:                 return "MON.BLUR";
+            case Opt::MON_BLUR_RADIUS:          return "MON.BLUR_RADIUS";
+            case Opt::MON_BLOOM:                return "MON.BLOOM";
+            case Opt::MON_BLOOM_RADIUS:         return "MON.BLOOM_RADIUS";
+            case Opt::MON_BLOOM_BRIGHTNESS:     return "MON.BLOOM_BRIGHTNESS";
+            case Opt::MON_BLOOM_WEIGHT:         return "MON.BLOOM_WEIGHT";
+            case Opt::MON_DOTMASK:              return "MON.DOTMASK";
+            case Opt::MON_DOTMASK_BRIGHTNESS:   return "MON.DOTMASK_BRIGHTNESS";
+            case Opt::MON_SCANLINES:            return "MON.SCANLINES";
+            case Opt::MON_SCANLINE_BRIGHTNESS:  return "MON.SCANLINE_BRIGHTNESS";
+            case Opt::MON_SCANLINE_WEIGHT:      return "MON.SCANLINE_WEIGHT";
+            case Opt::MON_DISALIGNMENT:         return "MON.DISALIGNMENT";
+            case Opt::MON_DISALIGNMENT_H:       return "MON.DISALIGNMENT_H";
+            case Opt::MON_DISALIGNMENT_V:       return "MON.DISALIGNMENT_V";
+            case Opt::MON_FLICKER_FIXER:        return "MON.FLICKER_FIXER";
+            case Opt::MON_FLICKER_JITTER:       return "MON.FLICKER_JITTER";
 
-            case Opt::XRAY_MODE:            return "XRAY.MODE";
-            case Opt::XRAY_OVERLAY:         return "XRAY.OVERLAY";
-            case Opt::XRAY_OVERLAY_STYLE: return "XRAY.OVERLAY_STYLE";
-            case Opt::XRAY_OVERLAY_OPACITY: return "XRAY.OVERLAY_OPACITY";
+            case Opt::XRAY_MODE:                return "XRAY.MODE";
+            case Opt::XRAY_OVERLAY:             return "XRAY.OVERLAY";
+            case Opt::XRAY_OVERLAY_STYLE:       return "XRAY.OVERLAY_STYLE";
+            case Opt::XRAY_OVERLAY_OPACITY:     return "XRAY.OVERLAY_OPACITY";
             case Opt::XRAY_DMA_CHANNEL0:        return "XRAY.DMA_CHANNEL0";
             case Opt::XRAY_DMA_CHANNEL1:        return "XRAY.DMA_CHANNEL1";
             case Opt::XRAY_DMA_CHANNEL2:        return "XRAY.DMA_CHANNEL2";
@@ -317,119 +320,120 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
             case Opt::XRAY_DMA_CHANNEL5:        return "XRAY.DMA_CHANNEL5";
             case Opt::XRAY_DMA_CHANNEL6:        return "XRAY.DMA_CHANNEL6";
             case Opt::XRAY_DMA_CHANNEL7:        return "XRAY.DMA_CHANNEL7";
-            case Opt::XRAY_COLOR0:          return "XRAY.COLOR0";
-            case Opt::XRAY_COLOR1:          return "XRAY.COLOR1";
-            case Opt::XRAY_COLOR2:          return "XRAY.COLOR2";
-            case Opt::XRAY_COLOR3:          return "XRAY.COLOR3";
-            case Opt::XRAY_COLOR4:          return "XRAY.COLOR4";
-            case Opt::XRAY_COLOR5:          return "XRAY.COLOR5";
-            case Opt::XRAY_COLOR6:          return "XRAY.COLOR6";
-            case Opt::XRAY_COLOR7:          return "XRAY.COLOR7";
-            case Opt::XRAY_COLOR8:          return "XRAY.COLOR8";
-            case Opt::XRAY_COLOR9:          return "XRAY.COLOR9";
-            case Opt::XRAY_COMPOSITOR:      return "XRAY.COMPOSITOR";
+            case Opt::XRAY_COLOR0:              return "XRAY.COLOR0";
+            case Opt::XRAY_COLOR1:              return "XRAY.COLOR1";
+            case Opt::XRAY_COLOR2:              return "XRAY.COLOR2";
+            case Opt::XRAY_COLOR3:              return "XRAY.COLOR3";
+            case Opt::XRAY_COLOR4:              return "XRAY.COLOR4";
+            case Opt::XRAY_COLOR5:              return "XRAY.COLOR5";
+            case Opt::XRAY_COLOR6:              return "XRAY.COLOR6";
+            case Opt::XRAY_COLOR7:              return "XRAY.COLOR7";
+            case Opt::XRAY_COLOR8:              return "XRAY.COLOR8";
+            case Opt::XRAY_COLOR9:              return "XRAY.COLOR9";
+            case Opt::XRAY_COMPOSITOR:          return "XRAY.COMPOSITOR";
                 
-            case Opt::LA_CONNECT:                return "LA.CONNECT";
-            case Opt::LA_PROBE0:                 return "LA.PROBE0";
-            case Opt::LA_PROBE1:                 return "LA.PROBE1";
-            case Opt::LA_PROBE2:                 return "LA.PROBE2";
-            case Opt::LA_PROBE3:                 return "LA.PROBE3";
-            case Opt::LA_ADDR0:                  return "LA.ADDR0";
-            case Opt::LA_ADDR1:                  return "LA.ADDR1";
-            case Opt::LA_ADDR2:                  return "LA.ADDR2";
-            case Opt::LA_ADDR3:                  return "LA.ADDR3";
+            case Opt::LA_CONNECT:               return "LA.CONNECT";
+            case Opt::LA_PROBE0:                return "LA.PROBE0";
+            case Opt::LA_PROBE1:                return "LA.PROBE1";
+            case Opt::LA_PROBE2:                return "LA.PROBE2";
+            case Opt::LA_PROBE3:                return "LA.PROBE3";
+            case Opt::LA_ADDR0:                 return "LA.ADDR0";
+            case Opt::LA_ADDR1:                 return "LA.ADDR1";
+            case Opt::LA_ADDR2:                 return "LA.ADDR2";
+            case Opt::LA_ADDR3:                 return "LA.ADDR3";
                 
-            case Opt::VID_WHITE_NOISE:           return "VID.WHITE_NOISE";
+            case Opt::VID_WHITE_NOISE:          return "VID.WHITE_NOISE";
                 
-            case Opt::CPU_REVISION:              return "CPU.REVISION";
-            case Opt::CPU_DASM_REVISION:         return "CPU.DASM_REVISION";
-            case Opt::CPU_DASM_SYNTAX:           return "CPU.DASM_SYNTAX";
-            case Opt::CPU_DASM_NUMBERS:          return "CPU.DASM_NUMBERS";
-            case Opt::CPU_OVERCLOCKING:          return "CPU.OVERCLOCKING";
-            case Opt::CPU_RESET_VAL:             return "CPU.RESET_VAL";
-            case Opt::CPU_START_DELAY:           return "CPU.START_DELAY";
+            case Opt::CPU_REVISION:             return "CPU.REVISION";
+            case Opt::CPU_COPROCESSOR:          return "CPU.COPROCESSOR";
+            case Opt::CPU_DASM_REVISION:        return "CPU.DASM_REVISION";
+            case Opt::CPU_DASM_SYNTAX:          return "CPU.DASM_SYNTAX";
+            case Opt::CPU_DASM_NUMBERS:         return "CPU.DASM_NUMBERS";
+            case Opt::CPU_OVERCLOCKING:         return "CPU.OVERCLOCKING";
+            case Opt::CPU_RESET_VAL:            return "CPU.RESET_VAL";
+            case Opt::CPU_START_DELAY:          return "CPU.START_DELAY";
+                            
+            case Opt::RTC_MODEL:                return "RTC.MODEL";
                 
-            case Opt::RTC_MODEL:                 return "RTC.MODEL";
-                
-            case Opt::MEM_BUS_WIDTH:             return "MEM.BUS_WIDTH";
-            case Opt::MEM_CHIP_RAM:              return "MEM.CHIP_RAM";
-            case Opt::MEM_SLOW_RAM:              return "MEM.SLOW_RAM";
-            case Opt::MEM_FAST_RAM:              return "MEM.FAST_RAM";
-            case Opt::MEM_EXT_START:             return "MEM.EXT_START";
-            case Opt::MEM_SLOW_RAM_DELAY:        return "MEM.SLOW_RAM_DELAY";
-            case Opt::MEM_SLOW_RAM_MIRROR:       return "MEM.SLOW_RAM_MIRROR";
-            case Opt::MEM_BANKMAP:               return "MEM.BANKMAP";
-            case Opt::MEM_UNMAPPING_TYPE:        return "MEM.UNMAPPING_TYPE";
-            case Opt::MEM_RAM_INIT_PATTERN:      return "MEM.RAM_INIT_PATTERN";
-            case Opt::MEM_SAVE_ROMS:             return "MEM.SAVE_ROMS";
+            case Opt::MEM_BUS_WIDTH:            return "MEM.BUS_WIDTH";
+            case Opt::MEM_CHIP_RAM:             return "MEM.CHIP_RAM";
+            case Opt::MEM_SLOW_RAM:             return "MEM.SLOW_RAM";
+            case Opt::MEM_FAST_RAM:             return "MEM.FAST_RAM";
+            case Opt::MEM_EXT_START:            return "MEM.EXT_START";
+            case Opt::MEM_SLOW_RAM_DELAY:       return "MEM.SLOW_RAM_DELAY";
+            case Opt::MEM_SLOW_RAM_MIRROR:      return "MEM.SLOW_RAM_MIRROR";
+            case Opt::MEM_BANKMAP:              return "MEM.BANKMAP";
+            case Opt::MEM_UNMAPPING_TYPE:       return "MEM.UNMAPPING_TYPE";
+            case Opt::MEM_RAM_INIT_PATTERN:     return "MEM.RAM_INIT_PATTERN";
+            case Opt::MEM_SAVE_ROMS:            return "MEM.SAVE_ROMS";
 
-            case Opt::DC_SPEED:                  return "DC.SPEED";
-            case Opt::DC_LOCK_DSKSYNC:           return "DC.LOCK_DSKSYNC";
-            case Opt::DC_AUTO_DSKSYNC:           return "DC.AUTO_DSKSYNC";
+            case Opt::DC_SPEED:                 return "DC.SPEED";
+            case Opt::DC_LOCK_DSKSYNC:          return "DC.LOCK_DSKSYNC";
+            case Opt::DC_AUTO_DSKSYNC:          return "DC.AUTO_DSKSYNC";
                 
-            case Opt::DRIVE_CONNECT:             return "DRIVE.CONNECT";
-            case Opt::DRIVE_TYPE:                return "DRIVE.TYPE";
-            case Opt::DRIVE_MECHANICS:           return "DRIVE.MECHANICS";
-            case Opt::DRIVE_RPM:                 return "DRIVE.RPM";
-            case Opt::DRIVE_SWAP_DELAY:          return "DRIVE.SWAP_DELAY";
-            case Opt::DRIVE_PAN:                 return "DRIVE.PAN";
-            case Opt::DRIVE_STEP_VOLUME:         return "DRIVE.STEP_VOLUME";
-            case Opt::DRIVE_POLL_VOLUME:         return "DRIVE.POLL_VOLUME";
-            case Opt::DRIVE_INSERT_VOLUME:       return "DRIVE.INSERT_VOLUME";
-            case Opt::DRIVE_EJECT_VOLUME:        return "DRIVE.EJECT_VOLUME";
+            case Opt::DRIVE_CONNECT:            return "DRIVE.CONNECT";
+            case Opt::DRIVE_TYPE:               return "DRIVE.TYPE";
+            case Opt::DRIVE_MECHANICS:          return "DRIVE.MECHANICS";
+            case Opt::DRIVE_RPM:                return "DRIVE.RPM";
+            case Opt::DRIVE_SWAP_DELAY:         return "DRIVE.SWAP_DELAY";
+            case Opt::DRIVE_PAN:                return "DRIVE.PAN";
+            case Opt::DRIVE_STEP_VOLUME:        return "DRIVE.STEP_VOLUME";
+            case Opt::DRIVE_POLL_VOLUME:        return "DRIVE.POLL_VOLUME";
+            case Opt::DRIVE_INSERT_VOLUME:      return "DRIVE.INSERT_VOLUME";
+            case Opt::DRIVE_EJECT_VOLUME:       return "DRIVE.EJECT_VOLUME";
                 
-            case Opt::HDC_CONNECT:               return "HDC.CONNECT";
-            case Opt::HDC_MB_LIMIT:              return "HDC.MB_LIMIT";
+            case Opt::HDC_CONNECT:              return "HDC.CONNECT";
+            case Opt::HDC_MB_LIMIT:             return "HDC.MB_LIMIT";
                 
-            case Opt::HDR_TYPE:                  return "HDR.TYPE";
-            case Opt::HDR_PAN:                   return "HDR.PAN";
-            case Opt::HDR_STEP_VOLUME:           return "HDR.STEP_VOLUME";
-            case Opt::HDR_WRITE_THROUGH:         return "HDR.WRITE_THROUGH";
-            case Opt::HDR_SNAPSHOT:              return "HDR.SNAPSHOT";
-            case Opt::HDR_MEM_LIMIT:             return "HDR.MEM_LIMIT";
+            case Opt::HDR_TYPE:                 return "HDR.TYPE";
+            case Opt::HDR_PAN:                  return "HDR.PAN";
+            case Opt::HDR_STEP_VOLUME:          return "HDR.STEP_VOLUME";
+            case Opt::HDR_WRITE_THROUGH:        return "HDR.WRITE_THROUGH";
+            case Opt::HDR_SNAPSHOT:             return "HDR.SNAPSHOT";
+            case Opt::HDR_MEM_LIMIT:            return "HDR.MEM_LIMIT";
                 
-            case Opt::SER_DEVICE:                return "SER.DEVICE";
-            case Opt::SER_VERBOSE:               return "SER.VERBOSE";
-            case Opt::SER_HANDSHAKE:             return "SER.HANDSHAKE";
+            case Opt::SER_DEVICE:               return "SER.DEVICE";
+            case Opt::SER_VERBOSE:              return "SER.VERBOSE";
+            case Opt::SER_HANDSHAKE:            return "SER.HANDSHAKE";
             
-            case Opt::MIDI_DEVICE_OUT:           return "MIDI_DEVICE_OUT";
-            case Opt::MIDI_DEVICE_IN:            return "MIDI_DEVICE_IN";
+            case Opt::MIDI_DEVICE_OUT:          return "MIDI_DEVICE_OUT";
+            case Opt::MIDI_DEVICE_IN:           return "MIDI_DEVICE_IN";
 
-            case Opt::BLITTER_ACCURACY:          return "BLITTER.ACCURACY";
+            case Opt::BLITTER_ACCURACY:         return "BLITTER.ACCURACY";
                 
-            case Opt::CIA_REVISION:              return "CIA.REVISION";
-            case Opt::CIA_TODBUG:                return "CIA.TODBUG";
-            case Opt::CIA_ECLOCK_SYNCING:        return "CIA.ECLOCK_SYNCING";
-            case Opt::CIA_IDLE_SLEEP:            return "CIA.IDLE_SLEEP";
+            case Opt::CIA_REVISION:             return "CIA.REVISION";
+            case Opt::CIA_TODBUG:               return "CIA.TODBUG";
+            case Opt::CIA_ECLOCK_SYNCING:       return "CIA.ECLOCK_SYNCING";
+            case Opt::CIA_IDLE_SLEEP:           return "CIA.IDLE_SLEEP";
                 
-            case Opt::KBD_ACCURACY:              return "KBD.ACCURACY";
+            case Opt::KBD_ACCURACY:             return "KBD.ACCURACY";
                 
-            case Opt::MOUSE_PULLUP_RESISTORS:    return "MOUSE.PULLUP_RESISTORS";
-            case Opt::MOUSE_SHAKE_DETECTION:     return "MOUSE.SHAKE_DETECTION";
-            case Opt::MOUSE_VELOCITY:            return "MOUSE.VELOCITY";
+            case Opt::MOUSE_PULLUP_RESISTORS:   return "MOUSE.PULLUP_RESISTORS";
+            case Opt::MOUSE_SHAKE_DETECTION:    return "MOUSE.SHAKE_DETECTION";
+            case Opt::MOUSE_VELOCITY:           return "MOUSE.VELOCITY";
                 
-            case Opt::JOY_AUTOFIRE:              return "JOY.AUTOFIRE";
-            case Opt::JOY_AUTOFIRE_BURSTS:       return "JOY.AUTOFIRE_BURSTS";
-            case Opt::JOY_AUTOFIRE_BULLETS:      return "JOY.AUTOFIRE_BULLETS";
-            case Opt::JOY_AUTOFIRE_DELAY:        return "JOY.AUTOFIRE_DELAY";
+            case Opt::JOY_AUTOFIRE:             return "JOY.AUTOFIRE";
+            case Opt::JOY_AUTOFIRE_BURSTS:      return "JOY.AUTOFIRE_BURSTS";
+            case Opt::JOY_AUTOFIRE_BULLETS:     return "JOY.AUTOFIRE_BULLETS";
+            case Opt::JOY_AUTOFIRE_DELAY:       return "JOY.AUTOFIRE_DELAY";
                 
-            case Opt::AUD_PAN0:                  return "AUD.PAN0";
-            case Opt::AUD_PAN1:                  return "AUD.PAN1";
-            case Opt::AUD_PAN2:                  return "AUD.PAN2";
-            case Opt::AUD_PAN3:                  return "AUD.PAN3";
-            case Opt::AUD_VOL0:                  return "AUD.VOL0";
-            case Opt::AUD_VOL1:                  return "AUD.VOL1";
-            case Opt::AUD_VOL2:                  return "AUD.VOL2";
-            case Opt::AUD_VOL3:                  return "AUD.VOL3";
-            case Opt::AUD_VOLL:                  return "AUD.VOLL";
-            case Opt::AUD_VOLR:                  return "AUD.VOLR";
-            case Opt::AUD_FILTER_TYPE:           return "AUD.FILTER_TYPE";
-            case Opt::AUD_BUFFER_SIZE:           return "AUD.BUFFER_SIZE";
-            case Opt::AUD_SAMPLING_METHOD:       return "AUD.SAMPLING_METHOD";
-            case Opt::AUD_ASR:                   return "AUD.ASR";
-            case Opt::AUD_FASTPATH:              return "AUD.FASTPATH";
+            case Opt::AUD_PAN0:                 return "AUD.PAN0";
+            case Opt::AUD_PAN1:                 return "AUD.PAN1";
+            case Opt::AUD_PAN2:                 return "AUD.PAN2";
+            case Opt::AUD_PAN3:                 return "AUD.PAN3";
+            case Opt::AUD_VOL0:                 return "AUD.VOL0";
+            case Opt::AUD_VOL1:                 return "AUD.VOL1";
+            case Opt::AUD_VOL2:                 return "AUD.VOL2";
+            case Opt::AUD_VOL3:                 return "AUD.VOL3";
+            case Opt::AUD_VOLL:                 return "AUD.VOLL";
+            case Opt::AUD_VOLR:                 return "AUD.VOLR";
+            case Opt::AUD_FILTER_TYPE:          return "AUD.FILTER_TYPE";
+            case Opt::AUD_BUFFER_SIZE:          return "AUD.BUFFER_SIZE";
+            case Opt::AUD_SAMPLING_METHOD:      return "AUD.SAMPLING_METHOD";
+            case Opt::AUD_ASR:                  return "AUD.ASR";
+            case Opt::AUD_FASTPATH:             return "AUD.FASTPATH";
                 
-            case Opt::DIAG_BOARD:                return "DIAG_BOARD";
+            case Opt::DIAG_BOARD:               return "DIAG_BOARD";
                 
             case Opt::SRV_ENABLE:               return "SRV.ENABLE";
             case Opt::SRV_PORT:                 return "SRV.PORT";
@@ -443,68 +447,68 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
     {
         switch (value) {
                 
-            case Opt::HOST_REFRESH_RATE:         return "Host video refresh rate";
-            case Opt::HOST_SAMPLE_RATE:          return "Host audio sample rate";
-            case Opt::HOST_TEX_FORMAT:           return "Texture format";
-            case Opt::HOST_FRAMEBUF_WIDTH:       return "Window width";
-            case Opt::HOST_FRAMEBUF_HEIGHT:      return "Window height";
+            case Opt::HOST_REFRESH_RATE:        return "Host video refresh rate";
+            case Opt::HOST_SAMPLE_RATE:         return "Host audio sample rate";
+            case Opt::HOST_TEX_FORMAT:          return "Texture format";
+            case Opt::HOST_FRAMEBUF_WIDTH:      return "Window width";
+            case Opt::HOST_FRAMEBUF_HEIGHT:     return "Window height";
                 
-            case Opt::AMIGA_VIDEO_FORMAT:        return "Video format";
-            case Opt::AMIGA_WARP_BOOT:           return "Warp-boot duration";
-            case Opt::AMIGA_WARP_MODE:           return "Warp activation";
-            case Opt::AMIGA_VSYNC:               return "VSYNC mode";
-            case Opt::AMIGA_SPEED_BOOST:         return "Speed adjustment";
-            case Opt::AMIGA_RUN_AHEAD:           return "Run-ahead frames";
+            case Opt::AMIGA_VIDEO_FORMAT:       return "Video format";
+            case Opt::AMIGA_WARP_BOOT:          return "Warp-boot duration";
+            case Opt::AMIGA_WARP_MODE:          return "Warp activation";
+            case Opt::AMIGA_VSYNC:              return "VSYNC mode";
+            case Opt::AMIGA_SPEED_BOOST:        return "Speed adjustment";
+            case Opt::AMIGA_RUN_AHEAD:          return "Run-ahead frames";
 
-            case Opt::AGNUS_REVISION:            return "Chip revision";
-            case Opt::AGNUS_PTR_DROPS:           return "Ignore certain register writes";
+            case Opt::AGNUS_REVISION:           return "Chip revision";
+            case Opt::AGNUS_PTR_DROPS:          return "Ignore certain register writes";
                 
-            case Opt::DENISE_REVISION:           return "Chip revision";
-            case Opt::DENISE_VIEWPORT_TRACKING:  return "Track the currently used viewport";
-            case Opt::DENISE_FRAME_SKIPPING:     return "Reduce frame rate in warp mode";
-            case Opt::DENISE_HIDDEN_BITPLANES:   return "Hide bitplanes";
-            case Opt::DENISE_HIDDEN_SPRITES:     return "Hide sprites";
-            case Opt::DENISE_HIDDEN_LAYERS:      return "Hide playfields";
-            case Opt::DENISE_SHRES_BLEND:        return "Blend super hires pixel pairs";
-            case Opt::DENISE_CLX_SPR_SPR:        return "Detect sprite-sprite collisions";
-            case Opt::DENISE_CLX_SPR_PLF:        return "Detect sprite-playfield collisions";
-            case Opt::DENISE_CLX_PLF_PLF:        return "Detect playfield-playfield collisions";
+            case Opt::DENISE_REVISION:          return "Chip revision";
+            case Opt::DENISE_VIEWPORT_TRACKING: return "Track the currently used viewport";
+            case Opt::DENISE_FRAME_SKIPPING:    return "Reduce frame rate in warp mode";
+            case Opt::DENISE_HIDDEN_BITPLANES:  return "Hide bitplanes";
+            case Opt::DENISE_HIDDEN_SPRITES:    return "Hide sprites";
+            case Opt::DENISE_HIDDEN_LAYERS:     return "Hide playfields";
+            case Opt::DENISE_SHRES_BLEND:       return "Blend super hires pixel pairs";
+            case Opt::DENISE_CLX_SPR_SPR:       return "Detect sprite-sprite collisions";
+            case Opt::DENISE_CLX_SPR_PLF:       return "Detect sprite-playfield collisions";
+            case Opt::DENISE_CLX_PLF_PLF:       return "Detect playfield-playfield collisions";
                 
-            case Opt::MON_PALETTE:               return "Color palette";
-            case Opt::MON_GAMMA_IN:              return "Gamma correction (Amiga side)";
-            case Opt::MON_GAMMA_OUT:             return "Gamma correction (Host side)";
-            case Opt::MON_BRIGHTNESS:            return "Monitor brightness";
-            case Opt::MON_CONTRAST:              return "Monitor contrast";
-            case Opt::MON_SATURATION:            return "Monitor saturation";
-            case Opt::MON_CENTER:                return "Center mode";
-            case Opt::MON_HCENTER:               return "Horizontal center";
-            case Opt::MON_VCENTER:               return "Vertical center";
-            case Opt::MON_ZOOM:                  return "Zoom mode";
-            case Opt::MON_HZOOM:                 return "Horizontal zoom";
-            case Opt::MON_VZOOM:                 return "Vertical zoom";
-            case Opt::MON_ENHANCER:              return "Enhancer";
-            case Opt::MON_UPSCALER:              return "Upscaler";
-            case Opt::MON_BLUR:                  return "Blur";
-            case Opt::MON_BLUR_RADIUS:           return "Blur radius";
-            case Opt::MON_BLOOM:                 return "Bloom";
-            case Opt::MON_BLOOM_RADIUS:          return "Bloom radius";
-            case Opt::MON_BLOOM_BRIGHTNESS:      return "Bloom brightness";
-            case Opt::MON_BLOOM_WEIGHT:          return "Bloom weight";
-            case Opt::MON_DOTMASK:               return "Dotmask";
-            case Opt::MON_DOTMASK_BRIGHTNESS:    return "Dotmask brightness";
-            case Opt::MON_SCANLINES:             return "Scanlines";
-            case Opt::MON_SCANLINE_BRIGHTNESS:   return "Scanline brightness";
-            case Opt::MON_SCANLINE_WEIGHT:       return "Scanline weight";
-            case Opt::MON_DISALIGNMENT:          return "Cathode rays disalignment";
-            case Opt::MON_DISALIGNMENT_H:        return "Horizontal cathode ray shift";
-            case Opt::MON_DISALIGNMENT_V:        return "Vertical cathode ray shift";
-            case Opt::MON_FLICKER_FIXER:         return "Interlace flicker fixer";
-            case Opt::MON_FLICKER_JITTER:        return "Interlace flicker jitter";
+            case Opt::MON_PALETTE:              return "Color palette";
+            case Opt::MON_GAMMA_IN:             return "Gamma correction (Amiga side)";
+            case Opt::MON_GAMMA_OUT:            return "Gamma correction (Host side)";
+            case Opt::MON_BRIGHTNESS:           return "Monitor brightness";
+            case Opt::MON_CONTRAST:             return "Monitor contrast";
+            case Opt::MON_SATURATION:           return "Monitor saturation";
+            case Opt::MON_CENTER:               return "Center mode";
+            case Opt::MON_HCENTER:              return "Horizontal center";
+            case Opt::MON_VCENTER:              return "Vertical center";
+            case Opt::MON_ZOOM:                 return "Zoom mode";
+            case Opt::MON_HZOOM:                return "Horizontal zoom";
+            case Opt::MON_VZOOM:                return "Vertical zoom";
+            case Opt::MON_ENHANCER:             return "Enhancer";
+            case Opt::MON_UPSCALER:             return "Upscaler";
+            case Opt::MON_BLUR:                 return "Blur";
+            case Opt::MON_BLUR_RADIUS:          return "Blur radius";
+            case Opt::MON_BLOOM:                return "Bloom";
+            case Opt::MON_BLOOM_RADIUS:         return "Bloom radius";
+            case Opt::MON_BLOOM_BRIGHTNESS:     return "Bloom brightness";
+            case Opt::MON_BLOOM_WEIGHT:         return "Bloom weight";
+            case Opt::MON_DOTMASK:              return "Dotmask";
+            case Opt::MON_DOTMASK_BRIGHTNESS:   return "Dotmask brightness";
+            case Opt::MON_SCANLINES:            return "Scanlines";
+            case Opt::MON_SCANLINE_BRIGHTNESS:  return "Scanline brightness";
+            case Opt::MON_SCANLINE_WEIGHT:      return "Scanline weight";
+            case Opt::MON_DISALIGNMENT:         return "Cathode rays disalignment";
+            case Opt::MON_DISALIGNMENT_H:       return "Horizontal cathode ray shift";
+            case Opt::MON_DISALIGNMENT_V:       return "Vertical cathode ray shift";
+            case Opt::MON_FLICKER_FIXER:        return "Interlace flicker fixer";
+            case Opt::MON_FLICKER_JITTER:       return "Interlace flicker jitter";
 
-            case Opt::XRAY_MODE:            return "X-Ray mode";
-            case Opt::XRAY_OVERLAY:         return "Show as overlay";
-            case Opt::XRAY_OVERLAY_STYLE: return "DMA Debugger style";
-            case Opt::XRAY_OVERLAY_OPACITY: return "Opacity";
+            case Opt::XRAY_MODE:                return "X-Ray mode";
+            case Opt::XRAY_OVERLAY:             return "Show as overlay";
+            case Opt::XRAY_OVERLAY_STYLE:       return "DMA Debugger style";
+            case Opt::XRAY_OVERLAY_OPACITY:     return "Opacity";
             case Opt::XRAY_DMA_CHANNEL0:        return "Copper DMA";
             case Opt::XRAY_DMA_CHANNEL1:        return "Blitter DMA";
             case Opt::XRAY_DMA_CHANNEL2:        return "Disk DMA";
@@ -513,124 +517,125 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
             case Opt::XRAY_DMA_CHANNEL5:        return "Bitplane DMA";
             case Opt::XRAY_DMA_CHANNEL6:        return "CPU DMA";
             case Opt::XRAY_DMA_CHANNEL7:        return "Memory Refresh DMA";
-            case Opt::XRAY_COLOR0:          return "Copper color";
-            case Opt::XRAY_COLOR1:          return "Blitter color";
-            case Opt::XRAY_COLOR2:          return "Disk color";
-            case Opt::XRAY_COLOR3:          return "Audio color";
-            case Opt::XRAY_COLOR4:          return "Sprite color";
-            case Opt::XRAY_COLOR5:          return "Bitplane color";
-            case Opt::XRAY_COLOR6:          return "CPU color";
-            case Opt::XRAY_COLOR7:          return "Memory refresh color";
-            case Opt::XRAY_COLOR8:          return "Playfield 1 color";
-            case Opt::XRAY_COLOR9:          return "Playfield 2 color";
-            case Opt::XRAY_COMPOSITOR:      return "X-Ray compositor";
+            case Opt::XRAY_COLOR0:              return "Copper color";
+            case Opt::XRAY_COLOR1:              return "Blitter color";
+            case Opt::XRAY_COLOR2:              return "Disk color";
+            case Opt::XRAY_COLOR3:              return "Audio color";
+            case Opt::XRAY_COLOR4:              return "Sprite color";
+            case Opt::XRAY_COLOR5:              return "Bitplane color";
+            case Opt::XRAY_COLOR6:              return "CPU color";
+            case Opt::XRAY_COLOR7:              return "Memory refresh color";
+            case Opt::XRAY_COLOR8:              return "Playfield 1 color";
+            case Opt::XRAY_COLOR9:              return "Playfield 2 color";
+            case Opt::XRAY_COMPOSITOR:          return "X-Ray compositor";
 
-            case Opt::LA_CONNECT:                return "On / Off switch";
-            case Opt::LA_PROBE0:                 return "Probe on channel 0";
-            case Opt::LA_PROBE1:                 return "Probe on channel 1";
-            case Opt::LA_PROBE2:                 return "Probe on channel 2";
-            case Opt::LA_PROBE3:                 return "Probe on channel 3";
-            case Opt::LA_ADDR0:                  return "Channel 0 memory address";
-            case Opt::LA_ADDR1:                  return "Channel 1 memory address";
-            case Opt::LA_ADDR2:                  return "Channel 2 memory address";
-            case Opt::LA_ADDR3:                  return "Channel 3 memory address";
+            case Opt::LA_CONNECT:               return "On / Off switch";
+            case Opt::LA_PROBE0:                return "Probe on channel 0";
+            case Opt::LA_PROBE1:                return "Probe on channel 1";
+            case Opt::LA_PROBE2:                return "Probe on channel 2";
+            case Opt::LA_PROBE3:                return "Probe on channel 3";
+            case Opt::LA_ADDR0:                 return "Channel 0 memory address";
+            case Opt::LA_ADDR1:                 return "Channel 1 memory address";
+            case Opt::LA_ADDR2:                 return "Channel 2 memory address";
+            case Opt::LA_ADDR3:                 return "Channel 3 memory address";
                 
-            case Opt::VID_WHITE_NOISE:           return "White noise";
+            case Opt::VID_WHITE_NOISE:          return "White noise";
                 
-            case Opt::CPU_REVISION:              return "Chip revision";
-            case Opt::CPU_DASM_REVISION:         return "Chip revision (disassembler)";
-            case Opt::CPU_DASM_SYNTAX:           return "Disassembler syntax";
-            case Opt::CPU_DASM_NUMBERS:          return "Disassembler number format";
-            case Opt::CPU_OVERCLOCKING:          return "Overclocking factor";
-            case Opt::CPU_RESET_VAL:             return "Register reset value";
-            case Opt::CPU_START_DELAY:           return "Delay before the CPU starts";
+            case Opt::CPU_REVISION:             return "Chip revision";
+            case Opt::CPU_DASM_REVISION:        return "Disassembler instruction set";
+            case Opt::CPU_DASM_SYNTAX:          return "Disassembler syntax";
+            case Opt::CPU_DASM_NUMBERS:         return "Disassembler number format";
+            case Opt::CPU_OVERCLOCKING:         return "Overclocking factor";
+            case Opt::CPU_RESET_VAL:            return "Register reset value";
+            case Opt::CPU_START_DELAY:          return "Delay before the CPU starts";
                 
-            case Opt::RTC_MODEL:                 return "Chip revision";
+            case Opt::CPU_COPROCESSOR:          return "Coprocessor revision";
+            case Opt::RTC_MODEL:                return "Chip revision";
                 
-            case Opt::MEM_BUS_WIDTH:             return "Data bus width";
-            case Opt::MEM_CHIP_RAM:              return "Chip RAM size";
-            case Opt::MEM_SLOW_RAM:              return "Slow RAM size";
-            case Opt::MEM_FAST_RAM:              return "Fast RAM size";
-            case Opt::MEM_EXT_START:             return "Extension ROM location";
-            case Opt::MEM_SLOW_RAM_DELAY:        return "Emulate slow RAM bus delays";
-            case Opt::MEM_SLOW_RAM_MIRROR:       return "ECS memory mirroring";
-            case Opt::MEM_BANKMAP:               return "Memory mapping scheme";
-            case Opt::MEM_UNMAPPING_TYPE:        return "Unmapped memory behavior";
-            case Opt::MEM_RAM_INIT_PATTERN:      return "RAM initialization pattern";
-            case Opt::MEM_SAVE_ROMS:             return "Include ROMs in snapshots";
+            case Opt::MEM_BUS_WIDTH:            return "Data bus width";
+            case Opt::MEM_CHIP_RAM:             return "Chip RAM size";
+            case Opt::MEM_SLOW_RAM:             return "Slow RAM size";
+            case Opt::MEM_FAST_RAM:             return "Fast RAM size";
+            case Opt::MEM_EXT_START:            return "Extension ROM location";
+            case Opt::MEM_SLOW_RAM_DELAY:       return "Emulate slow RAM bus delays";
+            case Opt::MEM_SLOW_RAM_MIRROR:      return "ECS memory mirroring";
+            case Opt::MEM_BANKMAP:              return "Memory mapping scheme";
+            case Opt::MEM_UNMAPPING_TYPE:       return "Unmapped memory behavior";
+            case Opt::MEM_RAM_INIT_PATTERN:     return "RAM initialization pattern";
+            case Opt::MEM_SAVE_ROMS:            return "Include ROMs in snapshots";
 
-            case Opt::DC_SPEED:                  return "Drive speed";
-            case Opt::DC_LOCK_DSKSYNC:           return "Ignore writes to DSKSYNC";
-            case Opt::DC_AUTO_DSKSYNC:           return "Always find a sync mark";
+            case Opt::DC_SPEED:                 return "Drive speed";
+            case Opt::DC_LOCK_DSKSYNC:          return "Ignore writes to DSKSYNC";
+            case Opt::DC_AUTO_DSKSYNC:          return "Always find a sync mark";
                 
-            case Opt::DRIVE_CONNECT:             return "Connection status";
-            case Opt::DRIVE_TYPE:                return "Drive model";
-            case Opt::DRIVE_MECHANICS:           return "Emulate drive mechanics";
-            case Opt::DRIVE_RPM:                 return "Disk rotation speed";
-            case Opt::DRIVE_SWAP_DELAY:          return "Disk swap delay";
-            case Opt::DRIVE_PAN:                 return "Pan";
-            case Opt::DRIVE_STEP_VOLUME:         return "Head step volume";
-            case Opt::DRIVE_POLL_VOLUME:         return "Disk polling step volume";
-            case Opt::DRIVE_INSERT_VOLUME:       return "Disk insertion volume";
-            case Opt::DRIVE_EJECT_VOLUME:        return "Disk ejection volume";
+            case Opt::DRIVE_CONNECT:            return "Connection status";
+            case Opt::DRIVE_TYPE:               return "Drive model";
+            case Opt::DRIVE_MECHANICS:          return "Emulate drive mechanics";
+            case Opt::DRIVE_RPM:                return "Disk rotation speed";
+            case Opt::DRIVE_SWAP_DELAY:         return "Disk swap delay";
+            case Opt::DRIVE_PAN:                return "Pan";
+            case Opt::DRIVE_STEP_VOLUME:        return "Head step volume";
+            case Opt::DRIVE_POLL_VOLUME:        return "Disk polling step volume";
+            case Opt::DRIVE_INSERT_VOLUME:      return "Disk insertion volume";
+            case Opt::DRIVE_EJECT_VOLUME:       return "Disk ejection volume";
                 
-            case Opt::HDC_CONNECT:               return "Connection status";
-            case Opt::HDC_MB_LIMIT:              return "Capacity limit in MB";
+            case Opt::HDC_CONNECT:              return "Connection status";
+            case Opt::HDC_MB_LIMIT:             return "Capacity limit in MB";
                 
-            case Opt::HDR_TYPE:                  return "Drive model";
-            case Opt::HDR_PAN:                   return "Pan";
-            case Opt::HDR_STEP_VOLUME:           return "Head step volume";
-            case Opt::HDR_WRITE_THROUGH:         return "When to write changes to the file";
-            case Opt::HDR_SNAPSHOT:              return "Include disk in snapshots";
-            case Opt::HDR_MEM_LIMIT:             return "Capacity limit for disks in memory in MB";
+            case Opt::HDR_TYPE:                 return "Drive model";
+            case Opt::HDR_PAN:                  return "Pan";
+            case Opt::HDR_STEP_VOLUME:          return "Head step volume";
+            case Opt::HDR_WRITE_THROUGH:        return "When to write changes to the file";
+            case Opt::HDR_SNAPSHOT:             return "Include disk in snapshots";
+            case Opt::HDR_MEM_LIMIT:            return "Capacity limit for disks in memory in MB";
                 
-            case Opt::SER_DEVICE:                return "Serial device type";
-            case Opt::SER_VERBOSE:               return "Verbose";
-            case Opt::SER_HANDSHAKE:             return "RTS/CTS handshake on the null modem cable";
+            case Opt::SER_DEVICE:               return "Serial device type";
+            case Opt::SER_VERBOSE:              return "Verbose";
+            case Opt::SER_HANDSHAKE:            return "RTS/CTS handshake on the null modem cable";
             
-            case Opt::MIDI_DEVICE_OUT:           return "MIDI output device";
-            case Opt::MIDI_DEVICE_IN:            return "MIDI input device";
+            case Opt::MIDI_DEVICE_OUT:          return "MIDI output device";
+            case Opt::MIDI_DEVICE_IN:           return "MIDI input device";
 
-            case Opt::BLITTER_ACCURACY:          return "Blitter accuracy level";
+            case Opt::BLITTER_ACCURACY:         return "Blitter accuracy level";
                 
-            case Opt::CIA_REVISION:              return "Chip revision";
-            case Opt::CIA_TODBUG:                return "Emulate TOD bug";
-            case Opt::CIA_ECLOCK_SYNCING:        return "Sync accesses with E-clock";
-            case Opt::CIA_IDLE_SLEEP:            return "Enter idle state while not in use";
+            case Opt::CIA_REVISION:             return "Chip revision";
+            case Opt::CIA_TODBUG:               return "Emulate TOD bug";
+            case Opt::CIA_ECLOCK_SYNCING:       return "Sync accesses with E-clock";
+            case Opt::CIA_IDLE_SLEEP:           return "Enter idle state while not in use";
                 
-            case Opt::KBD_ACCURACY:              return "Keyboard emulation accuracy";
+            case Opt::KBD_ACCURACY:             return "Keyboard emulation accuracy";
                 
-            case Opt::MOUSE_PULLUP_RESISTORS:    return "Emulate pullup resistors";
-            case Opt::MOUSE_SHAKE_DETECTION:     return "Detect a shaked mouse";
-            case Opt::MOUSE_VELOCITY:            return "Mouse velocity";
+            case Opt::MOUSE_PULLUP_RESISTORS:   return "Emulate pullup resistors";
+            case Opt::MOUSE_SHAKE_DETECTION:    return "Detect a shaked mouse";
+            case Opt::MOUSE_VELOCITY:           return "Mouse velocity";
                 
-            case Opt::JOY_AUTOFIRE:              return "Autofire";
-            case Opt::JOY_AUTOFIRE_BURSTS:       return "Burst mode";
-            case Opt::JOY_AUTOFIRE_BULLETS:      return "Number of bullets per burst";
-            case Opt::JOY_AUTOFIRE_DELAY:        return "Autofire delay in frames";
+            case Opt::JOY_AUTOFIRE:             return "Autofire";
+            case Opt::JOY_AUTOFIRE_BURSTS:      return "Burst mode";
+            case Opt::JOY_AUTOFIRE_BULLETS:     return "Number of bullets per burst";
+            case Opt::JOY_AUTOFIRE_DELAY:       return "Autofire delay in frames";
                 
-            case Opt::AUD_PAN0:                  return "Channel 0 pan";
-            case Opt::AUD_PAN1:                  return "Channel 1 pan";
-            case Opt::AUD_PAN2:                  return "Channel 2 pan";
-            case Opt::AUD_PAN3:                  return "Channel 3 pan";
-            case Opt::AUD_VOL0:                  return "Channel 0 volume";
-            case Opt::AUD_VOL1:                  return "Channel 1 volume";
-            case Opt::AUD_VOL2:                  return "Channel 2 volume";
-            case Opt::AUD_VOL3:                  return "Channel 3 volume";
-            case Opt::AUD_VOLL:                  return "Master volume (left)";
-            case Opt::AUD_VOLR:                  return "Master volume (right)";
-            case Opt::AUD_FILTER_TYPE:           return "Audio filter type";
-            case Opt::AUD_BUFFER_SIZE:           return "Audio buffer capacity";
-            case Opt::AUD_SAMPLING_METHOD:       return "Sampling method";
-            case Opt::AUD_ASR:                   return "Adaptive Sample Rate";
-            case Opt::AUD_FASTPATH:              return "Boost performance";
+            case Opt::AUD_PAN0:                 return "Channel 0 pan";
+            case Opt::AUD_PAN1:                 return "Channel 1 pan";
+            case Opt::AUD_PAN2:                 return "Channel 2 pan";
+            case Opt::AUD_PAN3:                 return "Channel 3 pan";
+            case Opt::AUD_VOL0:                 return "Channel 0 volume";
+            case Opt::AUD_VOL1:                 return "Channel 1 volume";
+            case Opt::AUD_VOL2:                 return "Channel 2 volume";
+            case Opt::AUD_VOL3:                 return "Channel 3 volume";
+            case Opt::AUD_VOLL:                 return "Master volume (left)";
+            case Opt::AUD_VOLR:                 return "Master volume (right)";
+            case Opt::AUD_FILTER_TYPE:          return "Audio filter type";
+            case Opt::AUD_BUFFER_SIZE:          return "Audio buffer capacity";
+            case Opt::AUD_SAMPLING_METHOD:      return "Sampling method";
+            case Opt::AUD_ASR:                  return "Adaptive Sample Rate";
+            case Opt::AUD_FASTPATH:             return "Boost performance";
                 
-            case Opt::DIAG_BOARD:                return "Diagnose board";
+            case Opt::DIAG_BOARD:               return "Diagnose board";
                 
-            case Opt::SRV_ENABLE:            return "Server enable status";
-            case Opt::SRV_PORT:              return "Server port";
-            case Opt::SRV_TRANSPORT:         return "Server transport";
-            case Opt::SRV_VERBOSE:           return "Verbose mode";
+            case Opt::SRV_ENABLE:               return "Server enable status";
+            case Opt::SRV_PORT:                 return "Server port";
+            case Opt::SRV_TRANSPORT:            return "Server transport";
+            case Opt::SRV_VERBOSE:              return "Verbose mode";
         }
         return "???";
     }

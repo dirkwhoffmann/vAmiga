@@ -743,6 +743,7 @@ extension DefaultsProxy {
         
         remove(.AMIGA_VIDEO_FORMAT)
         remove(.CPU_REVISION)
+        remove(.CPU_COPROCESSOR)
         remove(.CPU_OVERCLOCKING)
         remove(.AGNUS_REVISION)
         remove(.DENISE_REVISION)
@@ -763,6 +764,7 @@ extension Configuration {
         
         machineType = defaults.get(.AMIGA_VIDEO_FORMAT)
         cpuRev = defaults.get(.CPU_REVISION)
+        copro = defaults.get(.CPU_COPROCESSOR)
         cpuSpeed = defaults.get(.CPU_OVERCLOCKING)
         agnusRev = defaults.get(.AGNUS_REVISION)
         deniseRev = defaults.get(.DENISE_REVISION)
@@ -781,6 +783,7 @@ extension Configuration {
         
         defaults.set(.AMIGA_VIDEO_FORMAT, machineType)
         defaults.set(.CPU_REVISION, cpuRev)
+        defaults.set(.CPU_COPROCESSOR, copro)
         defaults.set(.CPU_OVERCLOCKING, cpuSpeed)
         defaults.set(.AGNUS_REVISION, agnusRev)
         defaults.set(.DENISE_REVISION, deniseRev)

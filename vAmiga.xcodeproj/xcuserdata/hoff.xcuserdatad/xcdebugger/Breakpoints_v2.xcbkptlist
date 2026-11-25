@@ -463,8 +463,8 @@
             filePath = "Core/Infrastructure/Defaults.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "457"
-            endingLineNumber = "457"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
             landmarkName = "Defaults::getRaw(key)"
             landmarkType = "7">
          </BreakpointContent>
@@ -479,8 +479,8 @@
             filePath = "GUI/Settings/ViewControllers/HardwareSettings.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
             landmarkName = "preset(tag:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -559,8 +559,8 @@
             filePath = "Core/Components/CPU/CPU.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "734"
-            endingLineNumber = "734"
+            startingLineNumber = "750"
+            endingLineNumber = "750"
             landmarkName = "CPU::_dump(category, os)"
             landmarkType = "7">
          </BreakpointContent>
@@ -575,8 +575,8 @@
             filePath = "Core/Components/CPU/CPU.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "738"
-            endingLineNumber = "738"
+            startingLineNumber = "754"
+            endingLineNumber = "754"
             landmarkName = "CPU::_trackOn()"
             landmarkType = "7">
          </BreakpointContent>

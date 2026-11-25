@@ -1287,14 +1287,14 @@
                                 <rect key="frame" x="324" y="20" width="296" height="169"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <clipView key="contentView" drawsBackground="NO" id="pqT-hI-mht">
-                                    <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="279" height="169"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Id4-fh-SHh">
-                                            <rect key="frame" x="0.0" y="0.0" width="296" height="169"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="279" height="169"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="296" height="169"/>
+                                            <size key="minSize" width="279" height="169"/>
                                             <size key="maxSize" width="296" height="10000000"/>
                                             <connections>
                                                 <outlet property="delegate" destination="di1-gt-ffY" id="Mwy-8D-gXr"/>
@@ -2172,12 +2172,12 @@
                                             <menuItem title="68000" state="on" id="UqQ-f0-WNp"/>
                                             <menuItem title="68010" tag="1" id="G7I-3D-nl7"/>
                                             <menuItem title="68EC020" tag="2" id="1ma-hi-vaO"/>
-                                            <menuItem title="68020" tag="3" hidden="YES" id="kmw-KJ-Onw"/>
-                                            <menuItem title="68EC030" tag="4" hidden="YES" id="nhl-Yg-Aqo"/>
-                                            <menuItem title="68030" tag="5" hidden="YES" id="D0m-ye-eTT"/>
-                                            <menuItem title="68EC040" tag="6" hidden="YES" id="tdO-pQ-MLI"/>
-                                            <menuItem title="68LC040" tag="7" hidden="YES" id="3sW-ko-lbk"/>
-                                            <menuItem title="68040" tag="8" hidden="YES" id="xaE-mL-U6D"/>
+                                            <menuItem title="68020" tag="3" id="kmw-KJ-Onw"/>
+                                            <menuItem title="68EC030" tag="4" id="nhl-Yg-Aqo"/>
+                                            <menuItem title="68030" tag="5" id="D0m-ye-eTT"/>
+                                            <menuItem title="68EC040" tag="6" id="tdO-pQ-MLI"/>
+                                            <menuItem title="68LC040" tag="7" id="3sW-ko-lbk"/>
+                                            <menuItem title="68040" tag="8" id="xaE-mL-U6D"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
@@ -2194,32 +2194,15 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lfk-3F-DFm">
-                                <rect key="frame" x="120" y="332" width="193" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wkm-96-NNn">
+                                <rect key="frame" x="30" y="323" width="45" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem Ipsum" id="KZq-d0-fZs">
-                                    <font key="font" usesAppearanceFont="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="CP:" id="i38-N8-Ohf">
+                                    <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pAu-sq-J0k">
-                                <rect key="frame" x="120" y="315" width="193" height="14"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Lorem Ipsum" id="Rba-PD-SYv">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uOj-ui-8s4">
-                                <rect key="frame" x="82" y="315" width="40" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="rom_medium" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="VqN-Pf-5hN">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e8L-8t-72i">
                                 <rect key="frame" x="485" y="332" width="137" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -2592,6 +2575,24 @@
                                     <action selector="busWidthAction:" target="Fvs-sb-K8m" id="qoP-dy-QsI"/>
                                 </connections>
                             </popUpButton>
+                            <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rzx-TX-aFq" userLabel="System">
+                                <rect key="frame" x="78" y="319" width="156" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="nqK-yi-2y4" id="jur-9U-8u5" userLabel="System">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="message"/>
+                                    <menu key="menu" id="iiy-oz-yWU">
+                                        <items>
+                                            <menuItem title="None" state="on" id="nqK-yi-2y4"/>
+                                            <menuItem title="68881" tag="1" id="w6I-Uo-ZlY"/>
+                                            <menuItem title="68882" tag="2" id="Ltm-bD-2aa"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="cpRevAction:" target="Fvs-sb-K8m" id="dZx-dg-Cvh"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Y2F-xD-zJY"/>
                         <viewLayoutGuide key="layoutMargins" id="Q3s-aq-icm"/>
@@ -2608,8 +2609,8 @@
                         <outlet property="ciaInfo1" destination="XbH-EN-dYp" id="PpF-HS-weg"/>
                         <outlet property="ciaInfo2" destination="FBl-Zz-Om5" id="Chb-eq-r4f"/>
                         <outlet property="ciaRevision" destination="sa4-1t-GfK" id="v62-zD-6H8"/>
-                        <outlet property="cpuInfo1" destination="Lfk-3F-DFm" id="3sF-Zi-3co"/>
-                        <outlet property="cpuInfo2" destination="pAu-sq-J0k" id="U4U-Az-nbR"/>
+                        <outlet property="cpLabel" destination="wkm-96-NNn" id="z4D-GZ-qCk"/>
+                        <outlet property="cpRevision" destination="rzx-TX-aFq" id="B3L-dh-4pW"/>
                         <outlet property="cpuRevision" destination="nnM-oD-oh9" id="blQ-vq-c79"/>
                         <outlet property="cpuSpeed" destination="AoV-n0-N1W" id="dqN-HS-JmI"/>
                         <outlet property="deniseInfo1" destination="cnZ-sv-h6D" id="tGh-l2-hBI"/>

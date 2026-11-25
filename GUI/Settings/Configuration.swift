@@ -44,6 +44,10 @@ class Configuration {
         get { return emu?.get(.CPU_REVISION) ?? 0 }
         set { emu?.setAsync(.CPU_REVISION, value: newValue) }
     }
+    var copro: Int {
+        get { return emu?.get(.CPU_COPROCESSOR) ?? 0 }
+        set { emu?.setAsync(.CPU_COPROCESSOR, value: newValue) }
+    }
     var cpuDasmRev: Int {
         get { return emu?.get(.CPU_DASM_REVISION) ?? 0 }
         set { emu?.setAsync(.CPU_DASM_REVISION, value: newValue) }

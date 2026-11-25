@@ -127,13 +127,14 @@ Defaults::fallbacks()
     registerDefault(Opt::VID_WHITE_NOISE,           true);
 
     registerDefault(Opt::CPU_REVISION,              (i64)CPURev::CPU_68000);
+    registerDefault(Opt::CPU_COPROCESSOR,           (i64)Copro::CP_NONE);
     registerDefault(Opt::CPU_DASM_REVISION,         (i64)CPURev::CPU_68000);
     registerDefault(Opt::CPU_DASM_SYNTAX,           (i64)DasmSyntax::MOIRA);
     registerDefault(Opt::CPU_DASM_NUMBERS,          (i64)DasmNumbers::HEX);
     registerDefault(Opt::CPU_OVERCLOCKING,          0);
     registerDefault(Opt::CPU_RESET_VAL,             0);
     registerDefault(Opt::CPU_START_DELAY,           30);
-
+    
     registerDefault(Opt::RTC_MODEL,                 (i64)RTCRevision::OKI);
 
     registerDefault(Opt::MEM_BUS_WIDTH,             16);

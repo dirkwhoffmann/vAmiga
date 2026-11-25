@@ -3655,7 +3655,7 @@ Moira::execMovemRgEa(u16 opcode)
 
         // MAME does not decrement the stacked PC if the mask refill fails
         if constexpr (C == Core::C68000) {
-            e.stackFrame.pc += M == Mode::IX ? -2 : (M == Mode::AI || M == Mode::PI || M == Mode::PD) ? 2 : 0;
+            e.stackFrame.pc = U32_ADD(e.stackFrame.pc, M == Mode::IX ? -2 : (M == Mode::AI || M == Mode::PI || M == Mode::PD) ? 2 : 0);
         }
         throw;
     }

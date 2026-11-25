@@ -12,9 +12,9 @@ class HardwareSettingsViewController: SettingsViewController {
     // CPU
     @IBOutlet weak var cpuRevision: NSPopUpButton!
     @IBOutlet weak var cpuSpeed: NSPopUpButton!
-    @IBOutlet weak var cpuInfo1: NSTextField!
-    @IBOutlet weak var cpuInfo2: NSTextField!
-
+    @IBOutlet weak var cpRevision: NSPopUpButton!
+    @IBOutlet weak var cpLabel: NSTextField!
+    
     // Agnus
     @IBOutlet weak var agnusRevision: NSPopUpButton!
     @IBOutlet weak var machineType: NSPopUpButton!
@@ -109,25 +109,10 @@ class HardwareSettingsViewController: SettingsViewController {
         // CPU
         cpuRevision.selectItem(withTag: config.cpuRev)
         cpuSpeed.selectItem(withTag: config.cpuSpeed)
-        switch CPURevision(rawValue: config.cpuRev) {
-
-        case ._68000:
-            cpuInfo1.stringValue = "Motorola MC68000"
-            cpuInfo2.stringValue = "Original Amigas"
-
-        case ._68010:
-            cpuInfo1.stringValue = "Motorola MC68010"
-            cpuInfo2.stringValue = ""
-
-        case ._68EC020:
-            cpuInfo1.stringValue = "Motorola 68EC020"
-            cpuInfo2.stringValue = "A1200, A2500"
-
-        default:
-            cpuInfo1.stringValue = "Invalid"
-            cpuInfo2.stringValue = ""
-        }
-
+        
+        // Coprocessor
+        cpRevision.selectItem(withTag: config.copro)
+        
         // Agnus
         machineType.selectItem(withTag: config.machineType)
         agnusRevision.selectItem(withTag: config.agnusRev)
@@ -369,6 +354,11 @@ class HardwareSettingsViewController: SettingsViewController {
         config?.cpuRev = sender.selectedTag()
     }
 
+    @IBAction func cpRevAction(_ sender: NSPopUpButton!) {
+
+        config?.copro = sender.selectedTag()
+    }
+    
     @IBAction func cpuSpeedAction(_ sender: NSPopUpButton!) {
 
         config?.cpuSpeed = sender.selectedTag()

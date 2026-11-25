@@ -40,6 +40,7 @@ typealias ControlPortInfo = vamiga.ControlPortInfo
 typealias CopperInfo = vamiga.CopperInfo
 typealias CPUInfo = vamiga.CPUInfo
 typealias CPURevision = vamiga.CPURev
+typealias CPRevision = vamiga.Copro
 typealias DasmNumbers = vamiga.DasmNumbers
 typealias DasmSyntax = vamiga.DasmSyntax
 typealias DeniseInfo = vamiga.DeniseInfo

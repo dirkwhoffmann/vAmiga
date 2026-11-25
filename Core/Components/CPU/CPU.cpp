@@ -366,6 +366,7 @@ CPU::getOption(Opt option) const
         case Opt::CPU_OVERCLOCKING:  return (long)config.overclocking;
         case Opt::CPU_RESET_VAL:     return (long)config.regResetVal;
         case Opt::CPU_START_DELAY:   return (long)config.startDelay;
+        case Opt::CPU_COPROCESSOR:   return (long)config.copro;
 
         default:
             fatalError;
@@ -381,6 +382,13 @@ CPU::checkOption(Opt opt, i64 value)
 
             if (!CPURevEnum::isValid(value)) {
                 throw CoreError(CoreError::OPT_INV_ARG, CPURevEnum::keyList());
+            }
+            return;
+
+        case Opt::CPU_COPROCESSOR:
+
+            if (!CoproEnum::isValid(value)) {
+                throw CoreError(CoreError::OPT_INV_ARG, CoproEnum::keyList());
             }
             return;
 
@@ -416,7 +424,7 @@ CPU::checkOption(Opt opt, i64 value)
                 throw CoreError(CoreError::OPT_INV_ARG, "0...1000");
             }
             return;
-
+            
         default:
             throw CoreError(CoreError::OPT_UNSUPPORTED);
     }
@@ -425,9 +433,10 @@ CPU::checkOption(Opt opt, i64 value)
 void
 CPU::setOption(Opt option, i64 value)
 {
-    auto cpuModel = [&](CPURev rev) { return moira::CPUModel(rev); };
+    auto cpuModel  = [&](CPURev rev) { return moira::CPUModel(rev); };
+    auto cpModel   = [&](Copro rev) { return moira::CPModel(rev); };
     auto dasmModel = [&](DasmRev rev) { return moira::CPUModel(rev); };
-    auto syntax = [&](DasmSyntax rev) { return moira::Syntax(rev); };
+    auto syntax    = [&](DasmSyntax rev) { return moira::Syntax(rev); };
 
     switch (option) {
 
@@ -437,6 +446,13 @@ CPU::setOption(Opt option, i64 value)
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
             return;
 
+        case Opt::CPU_COPROCESSOR:
+
+            config.copro = Copro(value);
+            setCPModel(cpModel(config.copro));
+            return;
+
+            
         case Opt::CPU_DASM_REVISION:
 
             config.dasmRevision = DasmRev(value);
@@ -502,7 +518,7 @@ CPU::setOption(Opt option, i64 value)
 
             config.startDelay = isize(value);
             return;
-
+            
         default:
             fatalError;
     }

@@ -33,13 +33,15 @@ class CPU : public moira::Moira
 
     Options options = {
 
+        // CPU
         Opt::CPU_REVISION,
+        Opt::CPU_COPROCESSOR,
         Opt::CPU_DASM_REVISION,
         Opt::CPU_DASM_SYNTAX,
         Opt::CPU_DASM_NUMBERS,
         Opt::CPU_OVERCLOCKING,
         Opt::CPU_RESET_VAL,
-        Opt::CPU_START_DELAY
+        Opt::CPU_START_DELAY,        
     };
 
     // The current configuration
