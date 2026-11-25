@@ -11,6 +11,7 @@
 		17EF7AB400CF86F6FB6D4CF9 /* MoiraCore68020.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */; };
 		1DAF3FDCA770130763960BA2 /* StdioTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91B552A8C4FF774242F1139A /* StdioTransport.cpp */; };
 		218C1E6444454C19696453FA /* SVMFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0B85F2F649119922836B8EE /* SVMFile.cpp */; };
+		2D599035FCEA783F9150610A /* McpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6894D6DEC217623BC276D02 /* McpServer.cpp */; };
 		2DE71F3A2F22F0B700C29588 /* MidiManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DE71F392F22F0B700C29588 /* MidiManager.cpp */; };
 		2DE71F3B2F22F0B700C29588 /* MidiManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DE71F392F22F0B700C29588 /* MidiManager.cpp */; };
 		2DE71F3D2F22F0FC00C29588 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE71F3C2F22F0FC00C29588 /* CoreMIDI.framework */; };
@@ -195,8 +196,6 @@
 		506D57B92EC4B81200E21501 /* ServerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D57B82EC4B81100E21501 /* ServerSettings.swift */; };
 		506D57BB2EC4B84D00E21501 /* RangeField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D57BA2EC4B84A00E21501 /* RangeField.swift */; };
 		506D57BE2EC4BE6800E21501 /* RpcServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D57BD2EC4BE6700E21501 /* RpcServer.cpp */; };
-		B5F4A8F35C3F2D6A1F65AE20 /* McpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6894D6DEC217623BC276D02 /* McpServer.cpp */; };
-		2D599035FCEA783F9150610A /* McpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6894D6DEC217623BC276D02 /* McpServer.cpp */; };
 		506D57BF2EC4BE6800E21501 /* RpcServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D57BD2EC4BE6700E21501 /* RpcServer.cpp */; };
 		506E5B1D2DE8E3C300CEA916 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506E5B182DE8D6B000CEA916 /* Monitor.cpp */; };
 		506E5B1E2DE8E3C300CEA916 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506E5B182DE8D6B000CEA916 /* Monitor.cpp */; };
@@ -642,6 +641,7 @@
 		9C47C0332D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9FE591AB83C7F9620B082530 /* SnapshotPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 62339E381932B34874DC6A15 /* SnapshotPool.cpp */; };
 		A17D22BCBFBAF132DC57A499 /* BinaryImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */; };
+		B5F4A8F35C3F2D6A1F65AE20 /* McpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6894D6DEC217623BC276D02 /* McpServer.cpp */; };
 		C57A83C545449C7C9C1C4D18 /* Manifest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F35BFF8BB96044B444D8BE13 /* Manifest.cpp */; };
 		C92E967AA7B5F69908564790 /* rvdebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85057306D752DB7A83705901 /* rvdebug.cpp */; };
 		CE1B55F098CEC92CB4B8AE2F /* MoiraCore68000.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6692862BC956F35326722F1 /* MoiraCore68000.cpp */; };
@@ -946,8 +946,6 @@
 		506D57BA2EC4B84A00E21501 /* RangeField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeField.swift; sourceTree = "<group>"; };
 		506D57BC2EC4BE5A00E21501 /* RpcServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RpcServer.h; sourceTree = "<group>"; };
 		506D57BD2EC4BE6700E21501 /* RpcServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RpcServer.cpp; sourceTree = "<group>"; };
-		EFFA3EF8FE5ABADD12A6B7D8 /* McpServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = McpServer.h; sourceTree = "<group>"; };
-		E6894D6DEC217623BC276D02 /* McpServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = McpServer.cpp; sourceTree = "<group>"; };
 		506D57C02EC4BF2700E21501 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 		506D57C12EC4BF2E00E21501 /* json_fwd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_fwd.h; sourceTree = "<group>"; };
 		506E5B172DE8D6A200CEA916 /* Monitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Monitor.h; sourceTree = "<group>"; };
@@ -1465,6 +1463,8 @@
 		CE8A5C0DB2564F17E978C79A /* SVMFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVMFile.h; sourceTree = "<group>"; };
 		D27A61FD50FCA5D35107E483 /* TransportTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransportTypes.h; sourceTree = "<group>"; };
 		DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryImage.cpp; sourceTree = "<group>"; };
+		E6894D6DEC217623BC276D02 /* McpServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = McpServer.cpp; sourceTree = "<group>"; };
+		EFFA3EF8FE5ABADD12A6B7D8 /* McpServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = McpServer.h; sourceTree = "<group>"; };
 		F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZipArchive.cpp; sourceTree = "<group>"; };
 		F35BFF8BB96044B444D8BE13 /* Manifest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Manifest.cpp; sourceTree = "<group>"; };
 		F6692862BC956F35326722F1 /* MoiraCore68000.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraCore68000.cpp; sourceTree = "<group>"; };
@@ -3098,7 +3098,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2720;
 				ORGANIZATIONNAME = "Dirk Hoffmann";
 				TargetAttributes = {
 					508FDE6321EA1FA40043D0E9 = {
@@ -4040,7 +4040,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 261101;
+				CURRENT_PROJECT_VERSION = 261125;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = 3NG65ZLYW7;
@@ -4066,8 +4066,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 5.0;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 5.1;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
@@ -4099,7 +4099,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 261101;
+				CURRENT_PROJECT_VERSION = 261125;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
@@ -4125,8 +4125,8 @@
 					"@executable_path/../Frameworks",
 				);
 				LLVM_LTO = YES_THIN;
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 5.0;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 5.1;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4160,7 +4160,7 @@
 					Core/utlib/include,
 					Core/rvlib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -4185,7 +4185,7 @@
 					Core/utlib/include,
 					Core/rvlib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.5;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 6.0;

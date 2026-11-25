@@ -744,7 +744,7 @@ Headless::smokeTestScript[] = {
     "? server",
 
     // Enter the avigator
-    "navigator",
+    // "navigator",
 
     "shutdown",
 

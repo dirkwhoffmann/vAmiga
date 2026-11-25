@@ -28,7 +28,7 @@ namespace vamiga { using namespace utl; using namespace retro::vault; }
 
 // Version number
 static constexpr int VER_MAJOR      = 5;
-static constexpr int VER_MINOR      = 0;
+static constexpr int VER_MINOR      = 1;
 static constexpr int VER_SUBMINOR   = 0;
 static constexpr int VER_BETA       = 0;
 

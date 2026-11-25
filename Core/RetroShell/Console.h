@@ -41,11 +41,12 @@ public:
     virtual void didActivate() { };
     virtual void didDeactivate() { };
 
-    // Provides the output of an executed RetroShell command
+    // Called before a RetroShell command is executed
     virtual void willExecute(const InputLine &input) = 0;
 
-    virtual void didExecute(const InputLine &input, std::stringstream &ss) = 0; // DEPRECATED
-    virtual void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) = 0; // DEPRECATED
+    // Provides the output of an executed RetroShell command
+    virtual void didExecute(const InputLine &input, std::stringstream &ss) = 0;
+    virtual void didExecute(const InputLine &input, std::stringstream &ss, std::exception &e) = 0;
 };
 
 class HistoryBuffer {
@@ -467,8 +468,7 @@ protected:
 protected:
     
     string commanderPrompt();
-    // void commanderDidActivate();
-
+ 
     
     //
     // Command set: Debugger
@@ -477,8 +477,6 @@ protected:
 protected:
     
     string debuggerPrompt();
-    // void debuggerDidActivate();
-    // void debuggerDidDeactivate();
     void debuggerPause();
 
     
