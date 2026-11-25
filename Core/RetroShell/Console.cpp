@@ -926,6 +926,9 @@ Console::exec(const InputLine& cmd)
         // Call the command handler
         c->callback(ss, parsedArgs, c->payload);
 
+        // Switch the command set if the handler has requested it
+        shell.switchConsole();
+
         // Dispatch output
         for (auto &delegate: delegates) delegate->didExecute(cmd, ss);
         complete(nullptr);
@@ -933,6 +936,7 @@ Console::exec(const InputLine& cmd)
     } catch (ScriptInterruption &) {
 
         // The command ran; it merely suspends the rest of the script
+        shell.switchConsole();
         for (auto &delegate: delegates) delegate->didExecute(cmd, ss);
         complete(nullptr);
         throw;
@@ -940,6 +944,7 @@ Console::exec(const InputLine& cmd)
     } catch (std::exception &err) {
 
         // Dispatch error message
+        shell.switchConsole();
         for (auto &delegate: delegates) delegate->didExecute(cmd, ss, err);
         complete(std::current_exception());
 
