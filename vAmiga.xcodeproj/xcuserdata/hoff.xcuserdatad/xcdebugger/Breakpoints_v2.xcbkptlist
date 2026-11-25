@@ -433,7 +433,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "439"
             endingLineNumber = "439"
-            landmarkName = "PixelEngine::stablePtr(row, col)"
+            landmarkName = "PixelEngine::getStableXrayBuffer(offset)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
