@@ -7,22 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9A1C08BF76B271A25C04CF3B /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */; };
-		4DAD4BF137D41E6B833E1B46 /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */; };
-		3018E73961DFEDE416432984 /* FPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ABAD7213EBA91477C81382E /* FPU.cpp */; };
-		ECBCC3E548710AC158B5DE5D /* FPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ABAD7213EBA91477C81382E /* FPU.cpp */; };
-		C6FF2E144ED8510CC2B01C85 /* FpuEnv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */; };
-		068CC6F76B3556983DD9E30A /* FpuEnv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */; };
-		A5743F268BDAF047C6C1738A /* FpuEnvMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49B21630C3C583D087A01616 /* FpuEnvMath.cpp */; };
-		85B833FD470208F011E84868 /* FpuEnvMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49B21630C3C583D087A01616 /* FpuEnvMath.cpp */; };
-		B9B6EE11E086B987ED8F58B8 /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18A567A08D1B999C922874C2 /* FpuFormats.cpp */; };
-		EDB3223D724489D42EFDBDFF /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18A567A08D1B999C922874C2 /* FpuFormats.cpp */; };
-		0D5B78BB774FE8BB9CB19C40 /* MFloat80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 09CCECEFF75C113C04106BA8 /* MFloat80.cpp */; };
-		8138A2EF8F3EA6BF5457E2A9 /* MFloat80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 09CCECEFF75C113C04106BA8 /* MFloat80.cpp */; };
-		A214861482740AB2834CFFD7 /* MMU030.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA313FA66C37509A516296EE /* MMU030.cpp */; };
 		05D646CB4B3ACDF197B9DDBC /* MMU030.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA313FA66C37509A516296EE /* MMU030.cpp */; };
-		6590847963D8A945488E3E57 /* MMU040.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */; };
-		FC2A76EBAE2A92AA4FCB9895 /* MMU040.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */; };
+		068CC6F76B3556983DD9E30A /* FpuEnv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */; };
+		0D5B78BB774FE8BB9CB19C40 /* MFloat80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 09CCECEFF75C113C04106BA8 /* MFloat80.cpp */; };
 		117FC7C96DAE1F4E7C05F5D5 /* SnapshotPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 62339E381932B34874DC6A15 /* SnapshotPool.cpp */; };
 		17EF7AB400CF86F6FB6D4CF9 /* MoiraCore68020.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */; };
 		1DAF3FDCA770130763960BA2 /* StdioTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91B552A8C4FF774242F1139A /* StdioTransport.cpp */; };
@@ -32,10 +19,12 @@
 		2DE71F3B2F22F0B700C29588 /* MidiManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DE71F392F22F0B700C29588 /* MidiManager.cpp */; };
 		2DE71F3D2F22F0FC00C29588 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DE71F3C2F22F0FC00C29588 /* CoreMIDI.framework */; };
 		2E752FBBFDF7E0689485C3B5 /* SVMFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0B85F2F649119922836B8EE /* SVMFile.cpp */; };
+		3018E73961DFEDE416432984 /* FPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ABAD7213EBA91477C81382E /* FPU.cpp */; };
 		3AE13359E763A27FCF35D298 /* rvdebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85057306D752DB7A83705901 /* rvdebug.cpp */; };
 		40DF003EB8852D81BB5A432C /* HttpTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6A635514B6306106A68D4 /* HttpTransport.cpp */; };
 		461A234618007E4E6111FB72 /* HttpTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6A635514B6306106A68D4 /* HttpTransport.cpp */; };
 		48811686BB81021216C6EB83 /* MoiraCore68000.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6692862BC956F35326722F1 /* MoiraCore68000.cpp */; };
+		4DAD4BF137D41E6B833E1B46 /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */; };
 		50001C652593230200D1FC91 /* DeviceDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50001C642593230200D1FC91 /* DeviceDatabase.swift */; };
 		5004C3AA27BD520400A9161A /* HardDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5004C3A527BD516E00A9161A /* HardDrive.cpp */; };
 		5009B7FC2557051A0037288E /* EADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EADFFile.cpp */; };
@@ -156,6 +145,7 @@
 		5041A3332F1676ED00684946 /* FSDirEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041A3322F1676EC00684946 /* FSDirEntry.cpp */; };
 		5041A3342F1676ED00684946 /* FSDirEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041A3322F1676EC00684946 /* FSDirEntry.cpp */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
+		504238EE30B8696400475F62 /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504238ED30B8695500475F62 /* OnboardingButton.swift */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5042FB122D4E4E8200E4A167 /* FilePanel.swift */; };
 		5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */; };
@@ -647,24 +637,35 @@
 		5217B33D1248E9C5550EF105 /* Transport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29F20FE8B3EA51536B8791BA /* Transport.cpp */; };
 		57403D160605ACF3A98F6216 /* Manifest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F35BFF8BB96044B444D8BE13 /* Manifest.cpp */; };
 		5D5D0980D267AA0BC11517BC /* MoiraCore68020.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */; };
+		6590847963D8A945488E3E57 /* MMU040.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */; };
 		6CECB9F7AE2CD2D49B8A7266 /* BinaryImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */; };
 		78FE86DFA5C543A5208229CF /* MoiraCore68010.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F702840675DEA2170BFD01E /* MoiraCore68010.cpp */; };
 		7C176B0DB090FF1C8D71B940 /* ZipError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D35AF75E880BB23242A2A34 /* ZipError.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
+		8138A2EF8F3EA6BF5457E2A9 /* MFloat80.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 09CCECEFF75C113C04106BA8 /* MFloat80.cpp */; };
+		85B833FD470208F011E84868 /* FpuEnvMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49B21630C3C583D087A01616 /* FpuEnvMath.cpp */; };
 		8B2BF84DA240E41613EB250E /* Transport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29F20FE8B3EA51536B8791BA /* Transport.cpp */; };
 		904444F946950B6D8622FCEC /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		905FFEBA4184E2D305692ED8 /* TcpTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD39DE5EA29929015499187 /* TcpTransport.cpp */; };
+		9A1C08BF76B271A25C04CF3B /* Cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */; };
 		9C47C0322D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9C47C0332D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9FE591AB83C7F9620B082530 /* SnapshotPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 62339E381932B34874DC6A15 /* SnapshotPool.cpp */; };
 		A17D22BCBFBAF132DC57A499 /* BinaryImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */; };
+		A214861482740AB2834CFFD7 /* MMU030.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA313FA66C37509A516296EE /* MMU030.cpp */; };
+		A5743F268BDAF047C6C1738A /* FpuEnvMath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49B21630C3C583D087A01616 /* FpuEnvMath.cpp */; };
 		B5F4A8F35C3F2D6A1F65AE20 /* McpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6894D6DEC217623BC276D02 /* McpServer.cpp */; };
+		B9B6EE11E086B987ED8F58B8 /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18A567A08D1B999C922874C2 /* FpuFormats.cpp */; };
 		C57A83C545449C7C9C1C4D18 /* Manifest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F35BFF8BB96044B444D8BE13 /* Manifest.cpp */; };
+		C6FF2E144ED8510CC2B01C85 /* FpuEnv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */; };
 		C92E967AA7B5F69908564790 /* rvdebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 85057306D752DB7A83705901 /* rvdebug.cpp */; };
 		CE1B55F098CEC92CB4B8AE2F /* MoiraCore68000.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6692862BC956F35326722F1 /* MoiraCore68000.cpp */; };
 		D6A5B2BCC9A58EC21B077F7C /* StdioTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91B552A8C4FF774242F1139A /* StdioTransport.cpp */; };
+		ECBCC3E548710AC158B5DE5D /* FPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ABAD7213EBA91477C81382E /* FPU.cpp */; };
+		EDB3223D724489D42EFDBDFF /* FpuFormats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18A567A08D1B999C922874C2 /* FpuFormats.cpp */; };
 		F05F4081F733F66633E04379 /* TcpTransport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD39DE5EA29929015499187 /* TcpTransport.cpp */; };
 		F0DECF612C99A2D9C515C300 /* ZipArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F92071195AED7B58B2229738 /* MoiraCore68010.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F702840675DEA2170BFD01E /* MoiraCore68010.cpp */; };
+		FC2A76EBAE2A92AA4FCB9895 /* MMU040.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */; };
 		FF5099FB513B4F28EE0E81E9 /* ZipError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D35AF75E880BB23242A2A34 /* ZipError.cpp */; settings = {COMPILER_FLAGS = "-w"; }; };
 /* End PBXBuildFile section */
 
@@ -691,28 +692,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		207524B44C9995E19F357B7F /* MoiraInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraInterface.h; sourceTree = "<group>"; };
-		ACFFD505DEF3174116E92A1B /* MoiraInfo_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraInfo_cpp.h; sourceTree = "<group>"; };
 		05E1B2A069BFD4B0F9D9541C /* MoiraRegisters_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraRegisters_cpp.h; sourceTree = "<group>"; };
-		DB5168DC66495BA937FD9C99 /* Cache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cache.h; sourceTree = "<group>"; };
-		D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cache.cpp; sourceTree = "<group>"; };
-		F2C2BC5FD9447199E3F87168 /* FPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FPU.h; sourceTree = "<group>"; };
-		5ABAD7213EBA91477C81382E /* FPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FPU.cpp; sourceTree = "<group>"; };
-		42EA352EAC03E1BD4193F50F /* FpuEnv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FpuEnv.h; sourceTree = "<group>"; };
-		D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuEnv.cpp; sourceTree = "<group>"; };
-		49B21630C3C583D087A01616 /* FpuEnvMath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuEnvMath.cpp; sourceTree = "<group>"; };
-		F0CA95234DEA3D8A4DCADA78 /* FpuFormats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FpuFormats.h; sourceTree = "<group>"; };
-		18A567A08D1B999C922874C2 /* FpuFormats.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuFormats.cpp; sourceTree = "<group>"; };
-		992FB15137FA9468325F0BEF /* MFloat80.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MFloat80.h; sourceTree = "<group>"; };
 		09CCECEFF75C113C04106BA8 /* MFloat80.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MFloat80.cpp; sourceTree = "<group>"; };
-		61750D79964A9742ED0DEF5D /* Wide.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wide.h; sourceTree = "<group>"; };
-		FE6BB0B7CC8A2E3CB7950BEE /* MMU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU.h; sourceTree = "<group>"; };
-		4508EC5E9D9E6433FAB2B65C /* MMU030.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU030.h; sourceTree = "<group>"; };
-		BA313FA66C37509A516296EE /* MMU030.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MMU030.cpp; sourceTree = "<group>"; };
-		A7C5945E6FBEF5B0A5261767 /* MMU040.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU040.h; sourceTree = "<group>"; };
 		12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MMU040.cpp; sourceTree = "<group>"; };
+		18A567A08D1B999C922874C2 /* FpuFormats.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuFormats.cpp; sourceTree = "<group>"; };
 		1C297A142285734307A289D9 /* StdioTransport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StdioTransport.h; sourceTree = "<group>"; };
 		1D35AF75E880BB23242A2A34 /* ZipError.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZipError.cpp; sourceTree = "<group>"; };
+		207524B44C9995E19F357B7F /* MoiraInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraInterface.h; sourceTree = "<group>"; };
 		29F20FE8B3EA51536B8791BA /* Transport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Transport.cpp; sourceTree = "<group>"; };
 		2A26809A07DD19C7488A9518 /* SnapshotPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SnapshotPool.h; sourceTree = "<group>"; };
 		2DE71F382F22F0B700C29588 /* MidiManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidiManager.h; sourceTree = "<group>"; };
@@ -721,7 +707,10 @@
 		3D15F844F88274B2D7428EC3 /* Manifest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Manifest.h; sourceTree = "<group>"; };
 		3D9FDC5551974253E358815D /* SVMTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVMTypes.h; sourceTree = "<group>"; };
 		3F702840675DEA2170BFD01E /* MoiraCore68010.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraCore68010.cpp; sourceTree = "<group>"; };
+		42EA352EAC03E1BD4193F50F /* FpuEnv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FpuEnv.h; sourceTree = "<group>"; };
 		43CD3A9020E8C42F8463B6B3 /* MoiraCore68020.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraCore68020.cpp; sourceTree = "<group>"; };
+		4508EC5E9D9E6433FAB2B65C /* MMU030.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU030.h; sourceTree = "<group>"; };
+		49B21630C3C583D087A01616 /* FpuEnvMath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuEnvMath.cpp; sourceTree = "<group>"; };
 		4DD6A635514B6306106A68D4 /* HttpTransport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HttpTransport.cpp; sourceTree = "<group>"; };
 		50001C642593230200D1FC91 /* DeviceDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDatabase.swift; sourceTree = "<group>"; };
 		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
@@ -894,6 +883,7 @@
 		5041A3312F1676E600684946 /* FSDirEntry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDirEntry.h; sourceTree = "<group>"; };
 		5041A3322F1676EC00684946 /* FSDirEntry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDirEntry.cpp; sourceTree = "<group>"; };
 		5041C6272791AF0800D3C494 /* SequencerRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerRegs.cpp; sourceTree = "<group>"; };
+		504238ED30B8695500475F62 /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		5042F2DB26BE57E600126C05 /* Thread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		5042F2DC26BE57E600126C05 /* Thread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
 		5042F2DE26BE57F700126C05 /* ThreadTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadTypes.h; sourceTree = "<group>"; };
@@ -1480,6 +1470,8 @@
 		50FCCA7A262AAAEA00398342 /* Script.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Script.cpp; sourceTree = "<group>"; };
 		50FCCA7B262AAAEA00398342 /* Script.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Script.h; sourceTree = "<group>"; };
 		50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hdr_click.aiff; sourceTree = "<group>"; };
+		5ABAD7213EBA91477C81382E /* FPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FPU.cpp; sourceTree = "<group>"; };
+		61750D79964A9742ED0DEF5D /* Wide.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wide.h; sourceTree = "<group>"; };
 		62339E381932B34874DC6A15 /* SnapshotPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SnapshotPool.cpp; sourceTree = "<group>"; };
 		69FD06B21D00473F32C509F9 /* rvdebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rvdebug.h; sourceTree = "<group>"; };
 		6FD39DE5EA29929015499187 /* TcpTransport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TcpTransport.cpp; sourceTree = "<group>"; };
@@ -1487,21 +1479,31 @@
 		85057306D752DB7A83705901 /* rvdebug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rvdebug.cpp; sourceTree = "<group>"; };
 		8A04CE72810F681A291C6FBE /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		91B552A8C4FF774242F1139A /* StdioTransport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StdioTransport.cpp; sourceTree = "<group>"; };
+		992FB15137FA9468325F0BEF /* MFloat80.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MFloat80.h; sourceTree = "<group>"; };
 		9C47C0302D6215B100E57B41 /* lz4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lz4.h; sourceTree = "<group>"; };
 		9C47C0312D6215B100E57B41 /* lz4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lz4.c; sourceTree = "<group>"; };
+		A7C5945E6FBEF5B0A5261767 /* MMU040.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU040.h; sourceTree = "<group>"; };
 		AB19C42A442832E515D4A1C0 /* Transport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Transport.h; sourceTree = "<group>"; };
 		ABEA96290634CBF4B19CFA8D /* TcpTransport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TcpTransport.h; sourceTree = "<group>"; };
+		ACFFD505DEF3174116E92A1B /* MoiraInfo_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraInfo_cpp.h; sourceTree = "<group>"; };
 		B0B85F2F649119922836B8EE /* SVMFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SVMFile.cpp; sourceTree = "<group>"; };
 		B13322FA7892B23ECC6D71EA /* HttpTransport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpTransport.h; sourceTree = "<group>"; };
+		BA313FA66C37509A516296EE /* MMU030.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MMU030.cpp; sourceTree = "<group>"; };
 		BAECD0DC7EE27335A8CCA4CD /* MoiraCore_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraCore_cpp.h; sourceTree = "<group>"; };
 		CE8A5C0DB2564F17E978C79A /* SVMFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVMFile.h; sourceTree = "<group>"; };
 		D27A61FD50FCA5D35107E483 /* TransportTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransportTypes.h; sourceTree = "<group>"; };
+		D2E04C9DF75A1CAFA868DDE1 /* FpuEnv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FpuEnv.cpp; sourceTree = "<group>"; };
+		D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cache.cpp; sourceTree = "<group>"; };
 		DA7C1E3C68ECCA98E397EF91 /* BinaryImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryImage.cpp; sourceTree = "<group>"; };
+		DB5168DC66495BA937FD9C99 /* Cache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cache.h; sourceTree = "<group>"; };
 		E6894D6DEC217623BC276D02 /* McpServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = McpServer.cpp; sourceTree = "<group>"; };
 		EFFA3EF8FE5ABADD12A6B7D8 /* McpServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = McpServer.h; sourceTree = "<group>"; };
+		F0CA95234DEA3D8A4DCADA78 /* FpuFormats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FpuFormats.h; sourceTree = "<group>"; };
 		F25FA5D02783D9B672C871C7 /* ZipArchive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZipArchive.cpp; sourceTree = "<group>"; };
+		F2C2BC5FD9447199E3F87168 /* FPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FPU.h; sourceTree = "<group>"; };
 		F35BFF8BB96044B444D8BE13 /* Manifest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Manifest.cpp; sourceTree = "<group>"; };
 		F6692862BC956F35326722F1 /* MoiraCore68000.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraCore68000.cpp; sourceTree = "<group>"; };
+		FE6BB0B7CC8A2E3CB7950BEE /* MMU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMU.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1532,13 +1534,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		86DE143C462E3C6D44255361 /* Cache */ = {
+		2BD63836E41035FCD1A80065 /* MMU */ = {
 			isa = PBXGroup;
 			children = (
-				DB5168DC66495BA937FD9C99 /* Cache.h */,
-				D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */,
+				FE6BB0B7CC8A2E3CB7950BEE /* MMU.h */,
+				4508EC5E9D9E6433FAB2B65C /* MMU030.h */,
+				BA313FA66C37509A516296EE /* MMU030.cpp */,
+				A7C5945E6FBEF5B0A5261767 /* MMU040.h */,
+				12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */,
 			);
-			path = Cache;
+			path = MMU;
 			sourceTree = "<group>";
 		};
 		3B16279182A6B025142CAF5E /* FPU */ = {
@@ -1556,18 +1561,6 @@
 				61750D79964A9742ED0DEF5D /* Wide.h */,
 			);
 			path = FPU;
-			sourceTree = "<group>";
-		};
-		2BD63836E41035FCD1A80065 /* MMU */ = {
-			isa = PBXGroup;
-			children = (
-				FE6BB0B7CC8A2E3CB7950BEE /* MMU.h */,
-				4508EC5E9D9E6433FAB2B65C /* MMU030.h */,
-				BA313FA66C37509A516296EE /* MMU030.cpp */,
-				A7C5945E6FBEF5B0A5261767 /* MMU040.h */,
-				12ACCE9B3C63502C1B6C0CFE /* MMU040.cpp */,
-			);
-			path = MMU;
 			sourceTree = "<group>";
 		};
 		5009B7F5255702C00037288E /* Rom */ = {
@@ -2587,6 +2580,7 @@
 		50B114B42E8FB08400EC854D /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				504238ED30B8695500475F62 /* OnboardingButton.swift */,
 				506D57BA2EC4B84A00E21501 /* RangeField.swift */,
 				500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */,
 				5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */,
@@ -3126,6 +3120,15 @@
 			path = SVM;
 			sourceTree = "<group>";
 		};
+		86DE143C462E3C6D44255361 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				DB5168DC66495BA937FD9C99 /* Cache.h */,
+				D4CBDF87B73AA6D9402D22C5 /* Cache.cpp */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3297,6 +3300,7 @@
 				503FC4E62EE1B36400637C95 /* Strings.cpp in Sources */,
 				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,
 				505C010A2577A8C000F9E05C /* FSDescriptor.cpp in Sources */,
+				504238EE30B8696400475F62 /* OnboardingButton.swift in Sources */,
 				50BF4B492F03D72800F1B9F2 /* MFM.cpp in Sources */,
 				509D07772EDB993F00355638 /* PosixAdapter.cpp in Sources */,
 				50BF4BC72F0ADF3200F1B9F2 /* FileSystem.cpp in Sources */,
