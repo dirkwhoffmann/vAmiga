@@ -29,6 +29,7 @@ class SettingsSplitViewController: NSSplitViewController {
     lazy var capturesVC = instantiate("Captures") as! CapturesSettingsViewController
     lazy var controlsVC = instantiate("Controls") as! ControlsSettingsViewController
     lazy var devicesVC = instantiate("Devices") as! DevicesSettingsViewController
+    lazy var quickSetupVC = instantiate("QuickSetup") as! QuickSetupSettingsViewController
     lazy var romsVC = instantiate("Roms") as! RomSettingsViewController
     lazy var hardwareVC = instantiate("Hardware") as! HardwareSettingsViewController
     lazy var peripheralsVC = instantiate("Peripherals") as! PeripheralsSettingsViewController
@@ -71,12 +72,13 @@ class SettingsSplitViewController: NSSplitViewController {
         switch title {
 
         case "Emulator":        current = generalVC
-        case "Virtual Machine": current = romsVC
+        case "Virtual Machine": current = quickSetupVC
 
         case "General":         current = generalVC
         case "Captures":        current = capturesVC
         case "Controls":        current = controlsVC
         case "Devices":         current = devicesVC
+        case "Quick Setup":     current = quickSetupVC
         case "Roms":            current = romsVC
         case "Hardware":        current = hardwareVC
         case "Peripherals":     current = peripheralsVC

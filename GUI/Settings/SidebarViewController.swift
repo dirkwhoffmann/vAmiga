@@ -41,6 +41,7 @@ class SidebarViewController: NSViewController {
         ]),
         SidebarItem(title: "Virtual Machine", icon: "sparkles.tv", children: [
 
+            SidebarItem(title: "Quick Setup",   icon: "wand.and.stars"),
             SidebarItem(title: "Roms",          icon: "memorychip"),
             SidebarItem(title: "Hardware",      icon: "engine.combustion"),
             SidebarItem(title: "Peripherals",   icon: "externaldrive"),

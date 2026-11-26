@@ -1439,6 +1439,110 @@
             </objects>
             <point key="canvasLocation" x="3390" y="339"/>
         </scene>
+        <!--Quick Setup Settings View Controller-->
+        <scene sceneID="44P-xk-eOA">
+            <objects>
+                <viewController storyboardIdentifier="QuickSetup" id="Xxe-Xe-wi7" customClass="QuickSetupSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="ASh-H7-XBB" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="0cz-8c-9Si">
+                                <rect key="frame" x="-3" y="426" width="646" height="56"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="RKy-Ls-bj5">
+                                    <rect key="frame" x="0.0" y="0.0" width="646" height="56"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fvV-Au-b2M">
+                                            <rect key="frame" x="590" y="18" width="28" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="fzO-Ef-NY2">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="Xxe-Xe-wi7" id="Of5-uV-pwk"/>
+                                            </connections>
+                                        </button>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GIY-GE-NMM">
+                                            <rect key="frame" x="393" y="27" width="191" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Some options are locked." id="Q5j-U2-YhX">
+                                                <font key="font" metaFont="smallSystemBold"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s9y-wV-Go1">
+                                            <rect key="frame" x="393" y="13" width="191" height="14"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Click to power down and unlock." id="iLz-Fn-sgp">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ya6-oH-mJi">
+                                            <rect key="frame" x="112" y="15" width="200" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Quick Setup" id="yH3-6s-7M5">
+                                                <font key="font" textStyle="title1" name=".SFNS-Regular"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton id="2Ts-io-4gY" userLabel="System">
+                                            <rect key="frame" x="17" y="11" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="V90-Q8-adH" id="GaC-fo-p9K" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="message"/>
+                                                <menu key="menu" title="Restore" id="D8O-Ti-RTn">
+                                                    <items>
+                                                        <menuItem title="Revert to..." hidden="YES" id="V90-Q8-adH">
+                                                            <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
+                                                        </menuItem>
+                                                        <menuItem title="Standard Settings" id="hip-hS-l2t">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="Xxe-Xe-wi7" id="Gt5-mV-Bdm"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ocj-WA-tjP">
+                                            <rect key="frame" x="59" y="11" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aZg-Pd-xfI">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="Xxe-Xe-wi7" id="mbh-FD-3Ps"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </box>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="frY-xq-exW"/>
+                        <viewLayoutGuide key="layoutMargins" id="y13-Rm-RVH"/>
+                    </view>
+                    <connections>
+                        <outlet property="lockImage" destination="fvV-Au-b2M" id="hcL-Zl-Nqr"/>
+                        <outlet property="lockInfo1" destination="GIY-GE-NMM" id="CX9-FM-S0H"/>
+                        <outlet property="lockInfo2" destination="s9y-wV-Go1" id="HZZ-3Q-wNN"/>
+                    </connections>
+                </viewController>
+                <customObject id="IA4-no-rwv" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="710" y="904"/>
+        </scene>
         <!--Rom Settings View Controller-->
         <scene sceneID="Kl3-Ll-qlE">
             <objects>
