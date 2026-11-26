@@ -11,6 +11,7 @@
 
 #include "VAmiga.h"
 #include "utl/concurrency.h"
+#include <atomic>
 #include <map>
 
 namespace vamiga {
@@ -32,6 +33,12 @@ class Headless : Wakeable {
 
     // Return code
     int returnCode = 0;
+
+    /* Indicates that the script has been handed to RetroShell. Completion
+     * messages are ignored before, because the main shell executes a startup
+     * command while the emulator is launched and reports its completion, too.
+     */
+    std::atomic<bool> scriptQueued { false };
 
     
     //

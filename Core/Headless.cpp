@@ -134,6 +134,9 @@ Headless::runScript(const char **script)
 void
 Headless::runScript(const fs::path &path)
 {
+    // Ignore the shell messages of the new instance until the script is queued
+    scriptQueued = false;
+
     // Create an emulator instance
     VAmiga vamiga;
 
@@ -148,6 +151,7 @@ Headless::runScript(const fs::path &path)
 
     // Execute script
     const auto timeout = utl::Time::seconds(500.0);
+    scriptQueued = true;
     vamiga.retroShell.execScriptAsync(path);
     waitForWakeUp(timeout);
 }
@@ -174,6 +178,7 @@ Headless::process(Message msg)
             
         case Msg::RSH_ERROR:
 
+            if (!scriptQueued) break;
             returnCode = 1;
             wakeUp();
             break;
@@ -181,7 +186,7 @@ Headless::process(Message msg)
         case Msg::RSH_DONE:
 
             // The script runs in the main shell (id 0)
-            if (msg.value == 0) wakeUp();
+            if (scriptQueued && msg.value == 0) wakeUp();
             break;
 
         case Msg::ABORT:
