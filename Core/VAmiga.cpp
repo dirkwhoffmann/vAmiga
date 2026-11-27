@@ -2726,6 +2726,27 @@ VAmiga::set(ProfilePreset profile)
     emu->sendAndWait(Command(Cmd::CONFIG_PROFILE, (i64)profile));
 }
 
+bool
+VAmiga::matches(ModelPreset model) const
+{
+    VAMIGA_PUBLIC
+    return emu->matches(model);
+}
+
+bool
+VAmiga::matches(MonitorPreset monitor) const
+{
+    VAMIGA_PUBLIC
+    return emu->matches(monitor);
+}
+
+bool
+VAmiga::matches(ProfilePreset profile) const
+{
+    VAMIGA_PUBLIC
+    return emu->matches(profile);
+}
+
 void
 VAmiga::set(Opt opt, i64 value)
 {

@@ -3187,6 +3187,21 @@ public:
     /// Asynchronous version of set(ProfilePreset): queues the request and returns at once.
     void setAsync(ProfilePreset profile);
 
+    /** @brief  Checks if the current configuration matches a preset.
+     *
+     *  A configuration matches a preset if all options that are set by the
+     *  preset have the preset's values. Options that are not owned by the
+     *  preset are ignored.
+     *
+     *  @param model    The Amiga model to compare with
+     *  @return true if applying the preset would not change any option
+     */
+    bool matches(ModelPreset model) const;
+    /// Same as above, for a monitor preset.
+    bool matches(MonitorPreset monitor) const;
+    /// Same as above, for a profile preset.
+    bool matches(ProfilePreset profile) const;
+
     /** @brief  Checks if a configuration option would be accepted.
      *
      *  The check is performed in the calling thread and does not change the

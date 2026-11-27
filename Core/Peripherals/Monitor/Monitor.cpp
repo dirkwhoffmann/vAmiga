@@ -20,8 +20,8 @@ Monitor::getOption(Opt option) const
     switch (option) {
             
         case Opt::MON_PALETTE:               return (i64)config.palette;
-        case Opt::MON_GAMMA_IN:              return (i64)config.brightness;
-        case Opt::MON_GAMMA_OUT:             return (i64)config.brightness;
+        case Opt::MON_GAMMA_IN:              return (i64)config.gammaIn;
+        case Opt::MON_GAMMA_OUT:             return (i64)config.gammaOut;
         case Opt::MON_BRIGHTNESS:            return (i64)config.brightness;
         case Opt::MON_CONTRAST:              return (i64)config.contrast;
         case Opt::MON_SATURATION:            return (i64)config.saturation;

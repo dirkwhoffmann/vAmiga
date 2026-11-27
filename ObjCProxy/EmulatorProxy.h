@@ -323,6 +323,14 @@ ImageInfo scan(const fs::path &url);
 - (BOOL)setAsync:(Opt)opt drive:(NSInteger)id enable:(BOOL)val;
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
+// Presets (the getters return the matching preset or -1 if none matches)
+@property (readonly) NSInteger modelPreset;
+@property (readonly) NSInteger monitorPreset;
+@property (readonly) NSInteger profilePreset;
+- (void)setAsyncModel:(ModelPreset)model;
+- (void)setAsyncMonitor:(MonitorPreset)monitor;
+- (void)setAsyncProfile:(ProfilePreset)profile;
+
 - (void)putAsync:(Cmd)cmd;
 - (void)putAsync:(Cmd)type value:(NSInteger)value;
 - (void)putAsync:(Cmd)type value:(NSInteger)value value2:(NSInteger)value2;

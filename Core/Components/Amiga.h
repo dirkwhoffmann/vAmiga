@@ -59,6 +59,13 @@ class Amiga final : public CoreComponent {
 
     friend class Emulator;
 
+public:
+
+    // A list of option-value pairs (used to define presets)
+    using OptionList = std::vector<std::pair<Opt, i64>>;
+
+private:
+
     Descriptions descriptions = {
         {
             .type           = Class::Amiga,
@@ -381,6 +388,24 @@ public:
 
     // Configures the emulator for a specific usage profile
     void set(ProfilePreset profile);
+
+    // Returns the options that are set by a preset
+    static OptionList presetOptions(ModelPreset model);
+    static OptionList presetOptions(MonitorPreset monitor);
+    static OptionList presetOptions(ProfilePreset profile);
+
+    // Checks if the current configuration matches a preset
+    bool matches(ModelPreset model) const { return matches(presetOptions(model)); }
+    bool matches(MonitorPreset monitor) const { return matches(presetOptions(monitor)); }
+    bool matches(ProfilePreset profile) const { return matches(presetOptions(profile)); }
+
+private:
+
+    // Sets a list of options
+    void set(const OptionList &options);
+
+    // Checks if all options in a list have the specified values
+    bool matches(const OptionList &options) const;
 
 public:
 

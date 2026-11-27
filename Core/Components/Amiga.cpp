@@ -699,127 +699,95 @@ Amiga::set(const string &opt, const string &value, const std::vector<isize> obji
     set(Opt(utl::parseEnum<OptEnum>(opt)), value, objids);
 }
 
-void
-Amiga::set(ModelPreset model)
+Amiga::OptionList
+Amiga::presetOptions(ModelPreset model)
 {
     ModelPresetEnum::validate(model);
 
     /* A model preset only changes the hardware options. It leaves all other
      * options untouched, especially the ones owned by the monitor and the
-     * profile presets. Hardware options can only be changed in power-off
-     * state.
+     * profile presets.
      */
-    emulator.powerOff();
+    OptionList result = {
 
-    // Options that are identical for all models
-    set(Opt::CPU_COPROCESSOR, (i64)Copro::CP_NONE);
-    set(Opt::MEM_FAST_RAM, 0);
+        // Options that are identical for all models
+        { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
+        { Opt::MEM_FAST_RAM,        0 },
 
-    // Only the A3000 shipped with a built-in flicker fixer (display enhancer)
-    set(Opt::MON_FLICKER_FIXER, model == ModelPreset::A3000);
+        // Only the A3000 shipped with a built-in flicker fixer (display enhancer)
+        { Opt::MON_FLICKER_FIXER,   model == ModelPreset::A3000 }
+    };
 
-    switch(model) {
-            
+    auto add = [&](CPURev cpu, i64 overclocking, AgnusRevision agnus, DeniseRev denise,
+                   i64 busWidth, i64 chipRam, i64 slowRam, BankMap bankMap) {
+
+        result.insert(result.end(), {
+
+            { Opt::CPU_REVISION,        (i64)cpu },
+            { Opt::CPU_OVERCLOCKING,    overclocking },
+            { Opt::AGNUS_REVISION,      (i64)agnus },
+            { Opt::DENISE_REVISION,     (i64)denise },
+            { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+            { Opt::MEM_BUS_WIDTH,       busWidth },
+            { Opt::MEM_CHIP_RAM,        chipRam },
+            { Opt::MEM_SLOW_RAM,        slowRam },
+            { Opt::MEM_BANKMAP,         (i64)bankMap }
+        });
+    };
+
+    switch (model) {
+
         case ModelPreset::A500:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Opt::CPU_OVERCLOCKING, 0);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 16);
-            set(Opt::MEM_CHIP_RAM, 512);
-            set(Opt::MEM_SLOW_RAM, 512);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+
+            add(CPURev::CPU_68000, 0, AgnusRevision::OCS, DeniseRev::OCS,
+                16, 512, 512, BankMap::A500);
             break;
-            
+
         case ModelPreset::A1000:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Opt::CPU_OVERCLOCKING, 0);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 16);
-            set(Opt::MEM_CHIP_RAM, 512);
-            set(Opt::MEM_SLOW_RAM, 512);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A1000);
+
+            add(CPURev::CPU_68000, 0, AgnusRevision::OCS_OLD, DeniseRev::OCS,
+                16, 512, 512, BankMap::A1000);
             break;
-            
+
         case ModelPreset::A2000:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Opt::CPU_OVERCLOCKING, 0);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 16);
-            set(Opt::MEM_CHIP_RAM, 512);
-            set(Opt::MEM_SLOW_RAM, 512);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A2000B);
+
+            add(CPURev::CPU_68000, 0, AgnusRevision::ECS_1MB, DeniseRev::OCS,
+                16, 512, 512, BankMap::A2000B);
             break;
-            
+
         case ModelPreset::A500P:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Opt::CPU_OVERCLOCKING, 0);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 16);
-            set(Opt::MEM_CHIP_RAM, 512);
-            set(Opt::MEM_SLOW_RAM, 512);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+
+            add(CPURev::CPU_68000, 0, AgnusRevision::ECS_2MB, DeniseRev::ECS,
+                16, 512, 512, BankMap::A500);
             break;
-            
+
         case ModelPreset::A600:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Opt::CPU_OVERCLOCKING, 0);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 16);
-            set(Opt::MEM_CHIP_RAM, 1024);
-            set(Opt::MEM_SLOW_RAM, 0);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+
+            add(CPURev::CPU_68000, 0, AgnusRevision::ECS_2MB, DeniseRev::ECS,
+                16, 1024, 0, BankMap::A500);
             break;
- 
+
         case ModelPreset::A1200:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68EC020);
-            set(Opt::CPU_OVERCLOCKING, 2);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::AGA);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::AGA);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 32);
-            set(Opt::MEM_CHIP_RAM, 2048);
-            set(Opt::MEM_SLOW_RAM, 0);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A1200);
+
+            add(CPURev::CPU_68EC020, 2, AgnusRevision::AGA, DeniseRev::AGA,
+                32, 2048, 0, BankMap::A1200);
             break;
-            
+
         case ModelPreset::A3000:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68030);
-            set(Opt::CPU_OVERCLOCKING, 4);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 32);
-            set(Opt::MEM_CHIP_RAM, 1024);
-            set(Opt::MEM_SLOW_RAM, 0);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A2000B);
+
+            add(CPURev::CPU_68030, 4, AgnusRevision::ECS_2MB, DeniseRev::ECS,
+                32, 1024, 0, BankMap::A2000B);
             break;
-            
+
         default:
             fatalError;
     }
 
-    emulator.hardReset();
+    return result;
 }
 
-void
-Amiga::set(MonitorPreset monitor)
+Amiga::OptionList
+Amiga::presetOptions(MonitorPreset monitor)
 {
     MonitorPresetEnum::validate(monitor);
 
@@ -830,30 +798,33 @@ Amiga::set(MonitorPreset monitor)
      */
     auto crt = monitor == MonitorPreset::CRT;
 
-    set(Opt::MON_PALETTE, (i64)Palette::COLOR);
-    set(Opt::MON_GAMMA_IN, 280);
-    set(Opt::MON_GAMMA_OUT, 220);
-    set(Opt::MON_BRIGHTNESS, crt ? 60 : 50);
-    set(Opt::MON_CONTRAST, 100);
-    set(Opt::MON_SATURATION, 50);
-    set(Opt::MON_UPSCALER, (i64)Upscaler::NONE);
-    set(Opt::MON_ENHANCER, (i64)Upscaler::NONE);
-    set(Opt::MON_BLUR, true);
-    set(Opt::MON_BLUR_RADIUS, crt ? 1 : 0);
-    set(Opt::MON_BLOOM, crt);
-    set(Opt::MON_BLOOM_RADIUS, 200);
-    set(Opt::MON_BLOOM_BRIGHTNESS, 200);
-    set(Opt::MON_BLOOM_WEIGHT, 100);
-    set(Opt::MON_DOTMASK, (i64)(crt ? Dotmask::BISECTED : Dotmask::NONE));
-    set(Opt::MON_DOTMASK_BRIGHTNESS, 550);
-    set(Opt::MON_SCANLINES, (i64)(crt ? Scanlines::SUPERIMPOSE : Scanlines::NONE));
-    set(Opt::MON_SCANLINE_BRIGHTNESS, 550);
-    set(Opt::MON_SCANLINE_WEIGHT, 110);
-    set(Opt::MON_DISALIGNMENT, 0);
+    return {
+
+        { Opt::MON_PALETTE,             (i64)Palette::COLOR },
+        { Opt::MON_GAMMA_IN,            280 },
+        { Opt::MON_GAMMA_OUT,           220 },
+        { Opt::MON_BRIGHTNESS,          crt ? 60 : 50 },
+        { Opt::MON_CONTRAST,            100 },
+        { Opt::MON_SATURATION,          50 },
+        { Opt::MON_UPSCALER,            (i64)Upscaler::NONE },
+        { Opt::MON_ENHANCER,            (i64)Upscaler::NONE },
+        { Opt::MON_BLUR,                true },
+        { Opt::MON_BLUR_RADIUS,         crt ? 1 : 0 },
+        { Opt::MON_BLOOM,               crt },
+        { Opt::MON_BLOOM_RADIUS,        200 },
+        { Opt::MON_BLOOM_BRIGHTNESS,    200 },
+        { Opt::MON_BLOOM_WEIGHT,        100 },
+        { Opt::MON_DOTMASK,             (i64)(crt ? Dotmask::BISECTED : Dotmask::NONE) },
+        { Opt::MON_DOTMASK_BRIGHTNESS,  550 },
+        { Opt::MON_SCANLINES,           (i64)(crt ? Scanlines::SUPERIMPOSE : Scanlines::NONE) },
+        { Opt::MON_SCANLINE_BRIGHTNESS, 550 },
+        { Opt::MON_SCANLINE_WEIGHT,     110 },
+        { Opt::MON_DISALIGNMENT,        0 }
+    };
 }
 
-void
-Amiga::set(ProfilePreset profile)
+Amiga::OptionList
+Amiga::presetOptions(ProfilePreset profile)
 {
     ProfilePresetEnum::validate(profile);
 
@@ -862,17 +833,67 @@ Amiga::set(ProfilePreset profile)
      */
     auto gaming = profile == ProfilePreset::GAMING;
     auto productivity = profile == ProfilePreset::PRODUCTIVITY;
+    auto warp = profile == ProfilePreset::DEFAULT ? Warp::NEVER : Warp::AUTO;
+    auto mechanics = productivity ? DriveMechanics::NONE : DriveMechanics::A1010;
 
-    set(Opt::AMIGA_WARP_BOOT, productivity ? 10 : 0);
-    set(Opt::AMIGA_WARP_MODE, (i64)(profile == ProfilePreset::DEFAULT ? Warp::NEVER : Warp::AUTO));
-    set(Opt::AMIGA_VSYNC, gaming);
-    set(Opt::AMIGA_SPEED_BOOST, 100);
-    set(Opt::AMIGA_RUN_AHEAD, gaming ? 3 : 0);
-    set(Opt::DENISE_FRAME_SKIPPING, 16);
-    set(Opt::DC_SPEED, productivity ? -1 : 1);
-    set(Opt::DRIVE_MECHANICS, (i64)(productivity ? DriveMechanics::NONE : DriveMechanics::A1010));
-    set(Opt::BLITTER_ACCURACY, 2);
-    set(Opt::JOY_AUTOFIRE, false);
+    return {
+
+        { Opt::AMIGA_WARP_BOOT,         productivity ? 10 : 0 },
+        { Opt::AMIGA_WARP_MODE,         (i64)warp },
+        { Opt::AMIGA_VSYNC,             gaming },
+        { Opt::AMIGA_SPEED_BOOST,       100 },
+        { Opt::AMIGA_RUN_AHEAD,         gaming ? 3 : 0 },
+        { Opt::DENISE_FRAME_SKIPPING,   16 },
+        { Opt::DC_SPEED,                productivity ? -1 : 1 },
+        { Opt::DRIVE_MECHANICS,         (i64)mechanics },
+        { Opt::BLITTER_ACCURACY,        2 },
+        { Opt::JOY_AUTOFIRE,            false }
+    };
+}
+
+void
+Amiga::set(const OptionList &options)
+{
+    for (auto &[opt, value] : options) set(opt, value);
+}
+
+bool
+Amiga::matches(const OptionList &options) const
+{
+    for (auto &[opt, value] : options) {
+
+        // An option matches if it has the same value in all targets
+        for (isize objid = 0;; objid++) {
+
+            auto target = routeOption(opt, objid);
+            if (target == nullptr) break;
+            if (target->getOption(opt) != value) return false;
+        }
+    }
+    return true;
+}
+
+void
+Amiga::set(ModelPreset model)
+{
+    auto options = presetOptions(model);
+
+    // Hardware options can only be changed in power-off state
+    emulator.powerOff();
+    set(options);
+    emulator.hardReset();
+}
+
+void
+Amiga::set(MonitorPreset monitor)
+{
+    set(presetOptions(monitor));
+}
+
+void
+Amiga::set(ProfilePreset profile)
+{
+    set(presetOptions(profile));
 }
 
 Configurable *

@@ -121,6 +121,11 @@ public:
     void set(MonitorPreset monitor);
     void set(ProfilePreset profile);
 
+    // Checks if the current configuration matches a preset
+    bool matches(ModelPreset model) const;
+    bool matches(MonitorPreset monitor) const;
+    bool matches(ProfilePreset profile) const;
+
     // Powers off and reverts to the default configuration
     void revertToDefaultConfig();
 
