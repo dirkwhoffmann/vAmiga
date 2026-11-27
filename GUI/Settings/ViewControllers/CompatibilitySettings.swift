@@ -108,7 +108,7 @@ class CompatibilitySettingsViewController: SettingsViewController {
             // Accelerated
             defaults.set(.BLITTER_ACCURACY, 0)
             defaults.set(.DC_SPEED, -1)
-            defaults.set(.DRIVE_MECHANICS, [0, 1, 2, 3], 1)
+            defaults.set(.DRIVE_MECHANICS, [0, 1, 2, 3], Int(vamiga.DriveMechanics.NONE.rawValue))
             defaults.set(.KBD_ACCURACY, false)
             defaults.set(.CIA_ECLOCK_SYNCING, [0, 1], false)
 

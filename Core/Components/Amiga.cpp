@@ -704,13 +704,15 @@ Amiga::presetOptions(ModelPreset model)
 {
     ModelPresetEnum::validate(model);
 
-    /* A model preset only changes the hardware options. It leaves all other
-     * options untouched, especially the ones owned by the monitor and the
-     * profile presets.
+    /* A model preset sets all options of the Hardware and the Peripherals
+     * panel. It leaves all other options untouched, especially the ones owned
+     * by the monitor and the profile presets.
      */
     OptionList result = {
 
         // Options that are identical for all models
+        { Opt::MEM_RAM_INIT_PATTERN,    (i64)RamInitPattern::ALL_ZEROES },
+        { Opt::MEM_UNMAPPING_TYPE,      (i64)UnmappedMemory::FLOATING }
     };
 
     switch (model) {
@@ -725,6 +727,8 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AGNUS_REVISION,      (i64)AgnusRevision::OCS },
                 { Opt::DENISE_REVISION,     (i64)DeniseRev::OCS },
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
+                { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        512 },
                 { Opt::MEM_SLOW_RAM,        512 },
@@ -744,6 +748,8 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AGNUS_REVISION,      (i64)AgnusRevision::OCS_OLD },
                 { Opt::DENISE_REVISION,     (i64)DeniseRev::OCS },
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
+                { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        512 },
                 { Opt::MEM_SLOW_RAM,        512 },
@@ -763,6 +769,8 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_1MB },
                 { Opt::DENISE_REVISION,     (i64)DeniseRev::OCS },
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
+                { Opt::RTC_MODEL,           (i64)RTCRevision::OKI },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        512 },
                 { Opt::MEM_SLOW_RAM,        512 },
@@ -782,6 +790,8 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_2MB },
                 { Opt::DENISE_REVISION,     (i64)DeniseRev::ECS },
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
+                { Opt::RTC_MODEL,           (i64)RTCRevision::OKI },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        1024 },
                 { Opt::MEM_SLOW_RAM,        0 },
@@ -801,6 +811,8 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_2MB },
                 { Opt::DENISE_REVISION,     (i64)DeniseRev::ECS },
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_PLCC },
+                { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        1024 },
                 { Opt::MEM_SLOW_RAM,        0 },
@@ -820,6 +832,8 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AGNUS_REVISION,      (i64)AgnusRevision::AGA },
                 { Opt::DENISE_REVISION,     (i64)DeniseRev::AGA },
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_PLCC },
+                { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       32 },
                 { Opt::MEM_CHIP_RAM,        2048 },
                 { Opt::MEM_SLOW_RAM,        0 },
@@ -839,6 +853,8 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_2MB },
                 { Opt::DENISE_REVISION,     (i64)DeniseRev::ECS },
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
+                { Opt::RTC_MODEL,           (i64)RTCRevision::RICOH },
                 { Opt::MEM_BUS_WIDTH,       32 },
                 { Opt::MEM_CHIP_RAM,        1024 },
                 { Opt::MEM_SLOW_RAM,        0 },
@@ -858,9 +874,16 @@ Amiga::presetOptions(ModelPreset model)
 
     for (isize i = 0; i < 4; i++) {
 
-        result.push_back({ Opt::DRIVE_CONNECT, i < floppies, i });
-        result.push_back({ Opt::HDC_CONNECT, i < hardDrives, i });
+        result.insert(result.end(), {
+
+            { Opt::DRIVE_CONNECT,   i < floppies,                   i },
+            { Opt::DRIVE_TYPE,      (i64)FloppyDriveType::DD_35,    i },
+            { Opt::DRIVE_RPM,       300,                            i },
+            { Opt::HDC_CONNECT,     i < hardDrives,                 i },
+            { Opt::HDR_TYPE,        (i64)HardDriveType::GENERIC,    i }
+        });
     }
+    result.push_back({ Opt::SER_DEVICE, (i64)SerialPortDevice::NONE });
 
     return result;
 }
@@ -907,8 +930,10 @@ Amiga::presetOptions(ProfilePreset profile)
 {
     ProfilePresetEnum::validate(profile);
 
-    /* A profile preset changes how the emulator behaves. It leaves the
-     * hardware untouched, which includes all memory settings.
+    /* A profile preset changes how the emulator behaves. It sets all options
+     * of the Compatibility panel, using the accurate settings for gaming, the
+     * standard settings by default, and the accelerated settings for
+     * productivity. It leaves the hardware untouched.
      */
     auto gaming = profile == ProfilePreset::GAMING;
     auto productivity = profile == ProfilePreset::PRODUCTIVITY;
@@ -917,16 +942,35 @@ Amiga::presetOptions(ProfilePreset profile)
 
     return {
 
+        // Performance
         { Opt::AMIGA_WARP_BOOT,         productivity ? 10 : 0 },
         { Opt::AMIGA_WARP_MODE,         (i64)warp },
         { Opt::AMIGA_VSYNC,             gaming },
         { Opt::AMIGA_SPEED_BOOST,       100 },
         { Opt::AMIGA_RUN_AHEAD,         gaming ? 3 : 0 },
         { Opt::DENISE_FRAME_SKIPPING,   16 },
+
+        // Compatibility
+        { Opt::BLITTER_ACCURACY,        productivity ? 0 : 2 },
+        { Opt::AGNUS_PTR_DROPS,         true },
+        { Opt::CIA_TODBUG,              true },
+        { Opt::CIA_ECLOCK_SYNCING,      !productivity },
         { Opt::DC_SPEED,                productivity ? -1 : 1 },
+        { Opt::DC_LOCK_DSKSYNC,         false },
+        { Opt::DC_AUTO_DSKSYNC,         false },
         { Opt::DRIVE_MECHANICS,         (i64)mechanics },
-        { Opt::BLITTER_ACCURACY,        2 },
-        { Opt::JOY_AUTOFIRE,            false }
+        { Opt::KBD_ACCURACY,            !productivity },
+        { Opt::DENISE_CLX_SPR_SPR,      gaming },
+        { Opt::DENISE_CLX_SPR_PLF,      gaming },
+        { Opt::DENISE_CLX_PLF_PLF,      gaming },
+        { Opt::MEM_SLOW_RAM_DELAY,      true },
+        { Opt::MEM_SLOW_RAM_MIRROR,     true },
+
+        // Joystick
+        { Opt::JOY_AUTOFIRE,            false },
+        { Opt::JOY_AUTOFIRE_BURSTS,     false },
+        { Opt::JOY_AUTOFIRE_BULLETS,    3 },
+        { Opt::JOY_AUTOFIRE_DELAY,      5 }
     };
 }
 

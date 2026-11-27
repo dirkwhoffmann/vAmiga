@@ -1617,15 +1617,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="G8R-gW-mvc" userLabel="Intro">
-                                <rect key="frame" x="132" y="366" width="95" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="small" alignment="center" title="Heading" id="2ek-w9-9St">
-                                    <font key="font" size="15" name="Optima-Regular"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qdz-hL-2p1">
                                 <rect key="frame" x="260" y="117" width="37" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1649,7 +1640,6 @@
                     </view>
                     <connections>
                         <outlet property="apply" destination="YNZ-eC-Jy1" id="qYA-hr-Fuq"/>
-                        <outlet property="heading" destination="G8R-gW-mvc" id="ZRh-U3-SNi"/>
                         <outlet property="lockImage" destination="fvV-Au-b2M" id="hcL-Zl-Nqr"/>
                         <outlet property="lockInfo1" destination="GIY-GE-NMM" id="CX9-FM-S0H"/>
                         <outlet property="lockInfo2" destination="s9y-wV-Go1" id="HZZ-3Q-wNN"/>
@@ -6903,7 +6893,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="steeringwheel" catalog="system" width="20" height="20"/>
         <image name="trash" catalog="system" width="19" height="22"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>

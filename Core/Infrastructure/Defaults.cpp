@@ -145,8 +145,8 @@ Defaults::fallbacks()
     registerDefault(Opt::MEM_SLOW_RAM_DELAY,        true);
     registerDefault(Opt::MEM_SLOW_RAM_MIRROR,       true);
     registerDefault(Opt::MEM_BANKMAP,               (i64)BankMap::A2000B);
-    registerDefault(Opt::MEM_UNMAPPING_TYPE,        (i64)RamInitPattern::ALL_ZEROES);
-    registerDefault(Opt::MEM_RAM_INIT_PATTERN,      (i64)UnmappedMemory::FLOATING);
+    registerDefault(Opt::MEM_UNMAPPING_TYPE,        (i64)UnmappedMemory::FLOATING);
+    registerDefault(Opt::MEM_RAM_INIT_PATTERN,      (i64)RamInitPattern::ALL_ZEROES);
     registerDefault(Opt::MEM_SAVE_ROMS,             true);
 
     registerDefault(Opt::DC_SPEED,                  1);

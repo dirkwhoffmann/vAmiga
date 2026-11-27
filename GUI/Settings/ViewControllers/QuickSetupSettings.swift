@@ -16,7 +16,6 @@ class QuickSetupSettingsViewController: SettingsViewController {
     @IBOutlet weak var zoneButton: NSButton!
 
     // Description
-    @IBOutlet weak var heading: NSTextField!
     @IBOutlet weak var text: NSTextField!
     @IBOutlet weak var apply: NSButton!
 
@@ -192,6 +191,15 @@ class QuickSetupSettingsViewController: SettingsViewController {
         features.append(pal ? "PAL video (50 Hz)" : "NTSC video (60 Hz)")
         if value(.MON_FLICKER_FIXER) != 0 { features.append("Flicker fixer") }
 
+        switch value(.DC_SPEED) {
+        case -1: features.append("Turbo floppy drives")
+        case 1: break
+        case let speed: features.append("\(speed)× floppy speed")
+        }
+        if value(.DRIVE_MECHANICS) != 0 {
+            features.append("Authentic drive mechanics")
+        }
+
         //
         // Monitor
         //
@@ -213,19 +221,8 @@ class QuickSetupSettingsViewController: SettingsViewController {
         if value(.AMIGA_RUN_AHEAD) > 0 {
             features.append("\(spelledOut(value(.AMIGA_RUN_AHEAD)))-frame run-ahead")
         }
-        if value(.AMIGA_VSYNC) != 0 {
-            features.append("Host display sync (VSYNC)")
-        }
         if value(.AMIGA_WARP_BOOT) > 0 {
             features.append("\(spelledOut(value(.AMIGA_WARP_BOOT)))-second warp boot")
-        }
-        switch value(.DC_SPEED) {
-        case -1: features.append("Turbo floppy drives")
-        case 1: break
-        case let speed: features.append("\(speed)× floppy speed")
-        }
-        if value(.DRIVE_MECHANICS) != 0 {
-            features.append("Authentic drive mechanics")
         }
 
         //
@@ -239,7 +236,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
     func bulletList(_ items: [String]) -> NSAttributedString {
 
         let font = text.font ?? NSFont.systemFont(ofSize: NSFont.systemFontSize)
-        let indent = CGFloat(14)
+        let indent = CGFloat(16)
 
         let style = NSMutableParagraphStyle()
         style.tabStops = [NSTextTab(textAlignment: .left, location: indent)]
