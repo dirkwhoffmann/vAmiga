@@ -115,6 +115,18 @@ Agnus::operator << (SerResetter &worker)
     auto insEvent = id[SLOT_INS];
     auto insMask = data[SLOT_INS];
 
+    /* The RetroShell slots hold the wakeup events of paused command scripts.
+     * A script runs on behalf of the host, so a reset of the emulated machine
+     * must not cancel it. Otherwise, a script waiting across a reboot (e.g.,
+     * a Kickstart executing RESET) would never resume. We remember how many
+     * cycles are left, because a hard reset sets the clock back to zero.
+     */
+    auto rshEvent = std::array { id[SLOT_RSH0], id[SLOT_RSH1], id[SLOT_RSH2] };
+    auto rshDelay = std::array {
+        rshEvent[0] ? std::max(trigger[SLOT_RSH0] - clock, Cycle(0)) : 0,
+        rshEvent[1] ? std::max(trigger[SLOT_RSH1] - clock, Cycle(0)) : 0,
+        rshEvent[2] ? std::max(trigger[SLOT_RSH2] - clock, Cycle(0)) : 0 };
+
     serialize(worker);
 
     // Start with a long frame
@@ -145,6 +157,9 @@ Agnus::operator << (SerResetter &worker)
     scheduleFirstBplEvent();
     scheduleFirstDasEvent();
     if (insEvent) { data[SLOT_INS] = insMask; scheduleRel <SLOT_INS> (0, insEvent); }
+    if (rshEvent[0]) scheduleRel <SLOT_RSH0> (rshDelay[0], rshEvent[0]);
+    if (rshEvent[1]) scheduleRel <SLOT_RSH1> (rshDelay[1], rshEvent[1]);
+    if (rshEvent[2]) scheduleRel <SLOT_RSH2> (rshDelay[2], rshEvent[2]);
 }
 
 i64
