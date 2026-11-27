@@ -1530,52 +1530,32 @@
                                 </view>
                             </box>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="92e-TO-9Ux">
-                                <rect key="frame" x="89" y="392" width="42" height="16"/>
+                                <rect key="frame" x="29" y="148" width="68" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Model" id="1aa-z6-x2a">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Computer:" id="1aa-z6-x2a">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="HLL-fo-CDu">
-                                <rect key="frame" x="291" y="392" width="51" height="16"/>
+                                <rect key="frame" x="42" y="116" width="55" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Monitor" id="KoJ-QC-rj9">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Monitor:" id="KoJ-QC-rj9">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="n8g-WQ-sFW">
-                                <rect key="frame" x="502" y="392" width="43" height="16"/>
+                                <rect key="frame" x="50" y="86" width="47" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Profile" id="mQ1-bT-gTG">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Profile:" id="mQ1-bT-gTG">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="jTj-VW-bnn">
-                                <rect key="frame" x="15" y="59" width="192" height="287"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <view key="contentView" id="Vdl-rc-INY">
-                                    <rect key="frame" x="0.0" y="0.0" width="192" height="287"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="SRy-rK-GJV">
-                                            <rect key="frame" x="5" y="79" width="182" height="199"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" selectable="YES" alignment="center" id="gpr-KT-ZEk">
-                                                <font key="font" metaFont="system"/>
-                                                <string key="title">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                    </subviews>
-                                </view>
-                            </box>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YNZ-eC-Jy1">
                                 <rect key="frame" x="65" y="20" width="92" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1584,68 +1564,12 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p9q-ZU-RRU">
-                                <rect key="frame" x="271" y="20" width="92" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Apply" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hPq-rh-E8O">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zeQ-At-gCf">
-                                <rect key="frame" x="478" y="20" width="92" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Apply" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sOa-yr-Mgw">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="n5N-NG-w7w">
-                                <rect key="frame" x="221" y="59" width="192" height="287"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <view key="contentView" id="DAe-jI-0jc">
-                                    <rect key="frame" x="0.0" y="0.0" width="192" height="287"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="sJS-0t-lcO">
-                                            <rect key="frame" x="-2" y="78" width="182" height="199"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" selectable="YES" alignment="center" id="gD3-Jl-t2j">
-                                                <font key="font" metaFont="system"/>
-                                                <string key="title">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                    </subviews>
-                                </view>
-                            </box>
-                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="GVu-3y-dM6">
-                                <rect key="frame" x="428" y="59" width="192" height="287"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <view key="contentView" id="YeW-9y-ix0">
-                                    <rect key="frame" x="0.0" y="0.0" width="192" height="287"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="TdS-S1-11e">
-                                            <rect key="frame" x="-2" y="76" width="196" height="199"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" selectable="YES" alignment="center" id="sZy-UZ-Jgo">
-                                                <font key="font" metaFont="system"/>
-                                                <string key="title">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                    </subviews>
-                                </view>
-                            </box>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J8H-4R-tNP">
-                                <rect key="frame" x="15" y="360" width="192" height="24"/>
+                                <rect key="frame" x="103" y="143" width="192" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wva-Eb-fyy" id="YUo-FT-2rj">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <menu key="menu" id="L6G-UU-dbT">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="wva-Eb-fyy"/>
@@ -1656,11 +1580,11 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3XV-It-SKz">
-                                <rect key="frame" x="221" y="360" width="192" height="24"/>
+                                <rect key="frame" x="103" y="111" width="192" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="vJS-cj-IlP" id="iMR-eR-Etb">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <menu key="menu" id="Wko-U3-hjv">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="vJS-cj-IlP"/>
@@ -1671,11 +1595,11 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Th1-Zk-YdE">
-                                <rect key="frame" x="428" y="360" width="192" height="24"/>
+                                <rect key="frame" x="103" y="78" width="192" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="0pR-sw-egp" id="lNP-Cp-ohY">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <menu key="menu" id="bZ7-fD-4Wh">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="0pR-sw-egp"/>
@@ -1685,24 +1609,34 @@
                                     </menu>
                                 </popUpButtonCell>
                             </popUpButton>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zpv-2h-F9y">
+                                <rect key="frame" x="43" y="166" width="280" height="262"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="amiga-monitor" id="3Kl-o3-GAM"/>
+                            </imageView>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="2ZB-lG-caE">
+                                <rect key="frame" x="349" y="78" width="273" height="322"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="HQ5-vS-uAA">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="frY-xq-exW"/>
                         <viewLayoutGuide key="layoutMargins" id="y13-Rm-RVH"/>
                     </view>
                     <connections>
+                        <outlet property="apply" destination="YNZ-eC-Jy1" id="qYA-hr-Fuq"/>
                         <outlet property="lockImage" destination="fvV-Au-b2M" id="hcL-Zl-Nqr"/>
                         <outlet property="lockInfo1" destination="GIY-GE-NMM" id="CX9-FM-S0H"/>
                         <outlet property="lockInfo2" destination="s9y-wV-Go1" id="HZZ-3Q-wNN"/>
-                        <outlet property="modelApply" destination="YNZ-eC-Jy1" id="qYA-hr-Fuq"/>
                         <outlet property="modelPopup" destination="J8H-4R-tNP" id="dtr-AI-BvJ"/>
-                        <outlet property="modelText" destination="SRy-rK-GJV" id="6os-PL-xZl"/>
-                        <outlet property="presetPopup" destination="2Ts-io-4gY" id="qSp-Pr-Pop"/>
-                        <outlet property="monitorApply" destination="p9q-ZU-RRU" id="pC1-LA-VS3"/>
                         <outlet property="monitorPopup" destination="3XV-It-SKz" id="Tdh-3f-q4b"/>
-                        <outlet property="monitorText" destination="sJS-0t-lcO" id="wGg-jC-g6p"/>
-                        <outlet property="profileApply" destination="zeQ-At-gCf" id="Fb1-1G-ETQ"/>
+                        <outlet property="presetPopup" destination="2Ts-io-4gY" id="qSp-Pr-Pop"/>
                         <outlet property="profilePopup" destination="Th1-Zk-YdE" id="PRb-Th-Z5i"/>
-                        <outlet property="profileText" destination="TdS-S1-11e" id="Bf9-ud-BwC"/>
+                        <outlet property="text" destination="2ZB-lG-caE" id="J25-IC-8OG"/>
                     </connections>
                 </viewController>
                 <customObject id="IA4-no-rwv" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -6928,6 +6862,7 @@
         <image name="NSCaution" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
         <image name="ad-rv" width="542" height="542"/>
+        <image name="amiga-monitor" width="514" height="514"/>
         <image name="app.connected.to.app.below.fill" catalog="system" width="19" height="21"/>
         <image name="arrowkeys" catalog="system" width="33" height="22"/>
         <image name="book" catalog="system" width="22" height="18"/>
@@ -6945,7 +6880,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="steeringwheel" catalog="system" width="20" height="20"/>
         <image name="trash" catalog="system" width="19" height="22"/>
         <image name="wifi.circle.fill" catalog="system" width="15" height="15"/>

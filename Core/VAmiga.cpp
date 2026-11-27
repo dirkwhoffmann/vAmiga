@@ -2747,6 +2747,24 @@ VAmiga::matches(ProfilePreset profile) const
     return emu->matches(profile);
 }
 
+std::vector<std::pair<Opt, i64>>
+VAmiga::presetOptions(ModelPreset model)
+{
+    return Amiga::presetOptions(model);
+}
+
+std::vector<std::pair<Opt, i64>>
+VAmiga::presetOptions(MonitorPreset monitor)
+{
+    return Amiga::presetOptions(monitor);
+}
+
+std::vector<std::pair<Opt, i64>>
+VAmiga::presetOptions(ProfilePreset profile)
+{
+    return Amiga::presetOptions(profile);
+}
+
 void
 VAmiga::set(Opt opt, i64 value)
 {

@@ -2766,6 +2766,29 @@ matchingPreset(VAmiga *emu)
     [self emu]->setAsync(profile);
 }
 
+static NSDictionary<NSNumber *, NSNumber *> *
+toDictionary(const std::vector<std::pair<Opt, i64>> &options)
+{
+    NSMutableDictionary<NSNumber *, NSNumber *> *result = [NSMutableDictionary dictionary];
+    for (auto &[opt, value] : options) result[@((NSInteger)opt)] = @(value);
+    return result;
+}
+
++ (NSDictionary<NSNumber *, NSNumber *> *)optionsForModel:(ModelPreset)model
+{
+    return toDictionary(VAmiga::presetOptions(model));
+}
+
++ (NSDictionary<NSNumber *, NSNumber *> *)optionsForMonitor:(MonitorPreset)monitor
+{
+    return toDictionary(VAmiga::presetOptions(monitor));
+}
+
++ (NSDictionary<NSNumber *, NSNumber *> *)optionsForProfile:(ProfilePreset)profile
+{
+    return toDictionary(VAmiga::presetOptions(profile));
+}
+
 - (NSInteger)get:(Opt)opt id:(NSInteger)id
 {
     return [self emu]->get(opt, id);
