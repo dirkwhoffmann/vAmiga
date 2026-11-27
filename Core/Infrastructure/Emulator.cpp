@@ -214,24 +214,6 @@ Emulator::set(ProfilePreset profile)
     main.set(profile);
 }
 
-bool
-Emulator::matches(ModelPreset model) const
-{
-    return main.matches(model);
-}
-
-bool
-Emulator::matches(MonitorPreset monitor) const
-{
-    return main.matches(monitor);
-}
-
-bool
-Emulator::matches(ProfilePreset profile) const
-{
-    return main.matches(profile);
-}
-
 void
 Emulator::revertToDefaultConfig()
 {

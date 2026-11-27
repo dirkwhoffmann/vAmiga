@@ -2727,30 +2727,6 @@ ImageInfo scan(const fs::path &url)
     return [self emu]->get(opt);
 }
 
-template <typename E, typename T> static NSInteger
-matchingPreset(VAmiga *emu)
-{
-    for (auto i = E::minVal; i <= E::maxVal; i++) {
-        if (emu->matches(T(i))) return i;
-    }
-    return -1;
-}
-
-- (NSInteger)modelPreset
-{
-    return matchingPreset<ModelPresetEnum, ModelPreset>([self emu]);
-}
-
-- (NSInteger)monitorPreset
-{
-    return matchingPreset<MonitorPresetEnum, MonitorPreset>([self emu]);
-}
-
-- (NSInteger)profilePreset
-{
-    return matchingPreset<ProfilePresetEnum, ProfilePreset>([self emu]);
-}
-
 - (void)setAsyncModel:(ModelPreset)model
 {
     [self emu]->setAsync(model);

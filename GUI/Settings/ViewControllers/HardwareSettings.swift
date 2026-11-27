@@ -74,14 +74,6 @@ class HardwareSettingsViewController: SettingsViewController {
     // Methods from SettingsViewController
     //
 
-    /*
-    var bootable: Bool {
-
-        do { try emu?.checkReady() } catch { return false }
-        return emu?.poweredOff ?? false
-    }
-    */
-
     override func refresh() {
 
         super.refresh()

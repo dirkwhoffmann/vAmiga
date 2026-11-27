@@ -1565,7 +1565,7 @@
                                 </buttonCell>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J8H-4R-tNP">
-                                <rect key="frame" x="103" y="143" width="192" height="24"/>
+                                <rect key="frame" x="103" y="143" width="154" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wva-Eb-fyy" id="YUo-FT-2rj">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1615,7 +1615,7 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="amiga-monitor" id="3Kl-o3-GAM"/>
                             </imageView>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="2ZB-lG-caE">
-                                <rect key="frame" x="349" y="78" width="273" height="322"/>
+                                <rect key="frame" x="349" y="78" width="273" height="284"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" title="Multiline Label" id="HQ5-vS-uAA">
                                     <font key="font" metaFont="system"/>
@@ -1623,6 +1623,23 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" textFieldBorderShape="none" translatesAutoresizingMaskIntoConstraints="NO" id="qsI-nt-Lbl" userLabel="Intro">
+                                <rect key="frame" x="349" y="370" width="273" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" title="Select a model, a monitor, and a profile, and click Apply to configure the emulator in one step." id="qsI-nt-Cel">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qdz-hL-2p1">
+                                <rect key="frame" x="260" y="138" width="37" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="flag-eu" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="lgf-sJ-DKE">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="frY-xq-exW"/>
                         <viewLayoutGuide key="layoutMargins" id="y13-Rm-RVH"/>
@@ -1637,6 +1654,7 @@
                         <outlet property="presetPopup" destination="2Ts-io-4gY" id="qSp-Pr-Pop"/>
                         <outlet property="profilePopup" destination="Th1-Zk-YdE" id="PRb-Th-Z5i"/>
                         <outlet property="text" destination="2ZB-lG-caE" id="J25-IC-8OG"/>
+                        <outlet property="zoneButton" destination="Qdz-hL-2p1" id="oOS-Ux-o3v"/>
                     </connections>
                 </viewController>
                 <customObject id="IA4-no-rwv" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -6867,6 +6885,7 @@
         <image name="arrowkeys" catalog="system" width="33" height="22"/>
         <image name="book" catalog="system" width="22" height="18"/>
         <image name="computermouse" catalog="system" width="16" height="21"/>
+        <image name="flag-eu" width="512" height="512"/>
         <image name="fossil.shell" catalog="system" width="24" height="20"/>
         <image name="gamecontroller" catalog="system" width="28" height="18"/>
         <image name="gamepad" width="244" height="151"/>

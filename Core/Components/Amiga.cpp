@@ -857,22 +857,6 @@ Amiga::set(const OptionList &options)
     for (auto &[opt, value] : options) set(opt, value);
 }
 
-bool
-Amiga::matches(const OptionList &options) const
-{
-    for (auto &[opt, value] : options) {
-
-        // An option matches if it has the same value in all targets
-        for (isize objid = 0;; objid++) {
-
-            auto target = routeOption(opt, objid);
-            if (target == nullptr) break;
-            if (target->getOption(opt) != value) return false;
-        }
-    }
-    return true;
-}
-
 void
 Amiga::set(ModelPreset model)
 {

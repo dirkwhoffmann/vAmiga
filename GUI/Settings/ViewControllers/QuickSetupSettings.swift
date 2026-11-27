@@ -13,18 +13,14 @@ class QuickSetupSettingsViewController: SettingsViewController {
     @IBOutlet weak var modelPopup: NSPopUpButton!
     @IBOutlet weak var monitorPopup: NSPopUpButton!
     @IBOutlet weak var profilePopup: NSPopUpButton!
+    @IBOutlet weak var zoneButton: NSButton!
 
     // Description
     @IBOutlet weak var text: NSTextField!
     @IBOutlet weak var apply: NSButton!
 
-    // Popup tag of the entry representing a custom configuration
-    static let custom = -1
-
-    // The presets that matched the emulator configuration in the last refresh
-    private var shownModel: Int?
-    private var shownMonitor: Int?
-    private var shownProfile: Int?
+    // Selected video format
+    var pal = true { didSet { refresh() } }
 
     // Popup entries
     let modelItems: [(tag: Int, title: String)] = [
@@ -51,8 +47,6 @@ class QuickSetupSettingsViewController: SettingsViewController {
         (ProfilePreset.PRODUCTIVITY.rawValue, "Productivity")
     ]
 
-    override var showLock: Bool { true }
-
     override func viewDidLoad() {
 
         log(.lifetime)
@@ -60,9 +54,12 @@ class QuickSetupSettingsViewController: SettingsViewController {
         setup(modelPopup, items: modelItems)
         setup(monitorPopup, items: monitorItems)
         setup(profilePopup, items: profileItems)
+        select(model: .A2000, monitor: .TFT, profile: .DEFAULT, pal: true)
 
         apply.target = self
         apply.action = #selector(applyAction(_:))
+        zoneButton.target = self
+        zoneButton.action = #selector(zoneAction(_:))
     }
 
     func setup(_ popup: NSPopUpButton, items: [(tag: Int, title: String)]) {
@@ -73,9 +70,6 @@ class QuickSetupSettingsViewController: SettingsViewController {
             popup.addItem(withTitle: item.title)
             popup.lastItem!.tag = item.tag
         }
-        popup.menu!.addItem(NSMenuItem.separator())
-        popup.addItem(withTitle: "Custom")
-        popup.lastItem!.tag = Self.custom
 
         popup.target = self
         popup.action = #selector(popupAction(_:))
@@ -85,38 +79,21 @@ class QuickSetupSettingsViewController: SettingsViewController {
     // Selected presets
     //
 
-    /* Note: The rawValue initializers of imported C++ enums never fail. Hence,
-     * the custom entry must be filtered out explicitly.
-     */
-    func selectedTag(_ popup: NSPopUpButton) -> Int? {
+    var selectedModel: ModelPreset { ModelPreset(rawValue: modelPopup.selectedTag())! }
+    var selectedMonitor: MonitorPreset { MonitorPreset(rawValue: monitorPopup.selectedTag())! }
+    var selectedProfile: ProfilePreset { ProfilePreset(rawValue: profilePopup.selectedTag())! }
 
-        let tag = popup.selectedTag()
-        return tag == Self.custom ? nil : tag
-    }
+    func select(model: ModelPreset, monitor: MonitorPreset, profile: ProfilePreset, pal: Bool) {
 
-    var selectedModel: ModelPreset? { selectedTag(modelPopup).map { ModelPreset(rawValue: $0)! } }
-    var selectedMonitor: MonitorPreset? { selectedTag(monitorPopup).map { MonitorPreset(rawValue: $0)! } }
-    var selectedProfile: ProfilePreset? { selectedTag(profilePopup).map { ProfilePreset(rawValue: $0)! } }
-
-    // Indicates whether applying a popup's selection would change something
-    func isPending(_ popup: NSPopUpButton, current: Int) -> Bool {
-
-        return popup.selectedTag() != Self.custom && popup.selectedTag() != current
+        modelPopup.selectItem(withTag: model.rawValue)
+        monitorPopup.selectItem(withTag: monitor.rawValue)
+        profilePopup.selectItem(withTag: profile.rawValue)
+        self.pal = pal
     }
 
     //
     // Methods from SettingsViewController
     //
-
-    override func activate() {
-
-        // Show the current configuration, discarding unapplied selections
-        shownModel = nil
-        shownMonitor = nil
-        shownProfile = nil
-
-        super.activate()
-    }
 
     override func refresh() {
 
@@ -124,52 +101,30 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
         guard let emu = emu else { return }
 
-        // Select the matching presets if the configuration has changed
-        sync(modelPopup, current: emu.modelPreset, shown: &shownModel)
-        sync(monitorPopup, current: emu.monitorPreset, shown: &shownMonitor)
-        sync(profilePopup, current: emu.profilePreset, shown: &shownProfile)
-
-        // The hardware can only be changed in power-off state
-        presetPopup.isEnabled = emu.poweredOff
-        modelPopup.isEnabled = emu.poweredOff
-
-        // Only offer to apply if a selection differs from the configuration
-        let model = emu.poweredOff && isPending(modelPopup, current: emu.modelPreset)
-        let monitor = isPending(monitorPopup, current: emu.monitorPreset)
-        let profile = isPending(profilePopup, current: emu.profilePreset)
-        apply.isEnabled = model || monitor || profile
+        // Video format
+        zoneButton.image = NSImage(named: pal ? "flag-eu" : "flag-us")
+        zoneButton.toolTip = pal ? "PAL" : "NTSC"
 
         // Describe the configuration
         text.attributedStringValue = describe(emu)
-    }
-
-    func sync(_ popup: NSPopUpButton, current: Int, shown: inout Int?) {
-
-        if current != shown {
-
-            popup.selectItem(withTag: current)
-            shown = current
-        }
-
-        // Only offer the custom entry if the configuration is custom
-        popup.item(at: popup.indexOfItem(withTag: Self.custom))?.isHidden = current != Self.custom
     }
 
     //
     // Description
     //
 
-    // Describes the configuration the selected presets result in
+    // Describes the configuration that results from applying the selection
     func describe(_ emu: EmulatorProxy) -> NSAttributedString {
 
-        // Collect the option values of the selected presets
+        // Collect the option values of the presets that would be applied
         var preset: [Int: Int] = [:]
         func add(_ options: [NSNumber: NSNumber]) {
             for (opt, value) in options { preset[opt.intValue] = value.intValue }
         }
-        if let model = selectedModel { add(EmulatorProxy.options(forModel: model)) }
-        if let monitor = selectedMonitor { add(EmulatorProxy.options(forMonitor: monitor)) }
-        if let profile = selectedProfile { add(EmulatorProxy.options(forProfile: profile)) }
+        add(EmulatorProxy.options(forModel: selectedModel))
+        add(EmulatorProxy.options(forMonitor: selectedMonitor))
+        add(EmulatorProxy.options(forProfile: selectedProfile))
+        preset[Option.AMIGA_VIDEO_FORMAT.rawValue] = (pal ? VideoFormat.PAL : VideoFormat.NTSC).rawValue
 
         // Options not set by a preset keep their current values
         func value(_ opt: Option, _ id: Int = 0) -> Int {
@@ -273,8 +228,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
         // Compose the text
         //
 
-        let headline = modelPopup.selectedItem?.tag == Self.custom ?
-        "Custom Amiga" : (modelPopup.titleOfSelectedItem ?? "Amiga")
+        let headline = modelPopup.titleOfSelectedItem ?? "Amiga"
 
         let result = NSMutableAttributedString()
         result.append(NSAttributedString(
@@ -315,19 +269,29 @@ class QuickSetupSettingsViewController: SettingsViewController {
         refresh()
     }
 
+    @IBAction func zoneAction(_ sender: NSButton!) {
+
+        pal.toggle()
+    }
+
     @IBAction func applyAction(_ sender: NSButton!) {
 
-        guard let emu = emu else { return }
+        guard let emu = emu, let controller = controller else { return }
 
-        if emu.poweredOff, isPending(modelPopup, current: emu.modelPreset), let model = selectedModel {
-            emu.setAsyncModel(model)
-        }
-        if isPending(monitorPopup, current: emu.monitorPreset), let monitor = selectedMonitor {
-            emu.setAsyncMonitor(monitor)
-        }
-        if isPending(profilePopup, current: emu.profilePreset), let profile = selectedProfile {
-            emu.setAsyncProfile(profile)
-        }
+        // The hardware can only be changed in power-off state
+        let wasPoweredOn = emu.poweredOn
+        let wasRunning = emu.running
+        if wasPoweredOn && !controller.askToPowerOff() { return }
+
+        let format = pal ? VideoFormat.PAL : VideoFormat.NTSC
+        emu.setAsyncModel(selectedModel)
+        emu.setAsync(.AMIGA_VIDEO_FORMAT, value: format.rawValue)
+        emu.setAsyncMonitor(selectedMonitor)
+        emu.setAsyncProfile(selectedProfile)
+
+        // Restore the previous power state
+        if wasPoweredOn { emu.powerOnAsync() }
+        if wasRunning { try? emu.runAsync() }
     }
 
     override func preset(tag: Int) {
@@ -337,9 +301,8 @@ class QuickSetupSettingsViewController: SettingsViewController {
         case 0:
 
             // Standard settings
-            emu?.setAsyncModel(.A2000)
-            emu?.setAsyncMonitor(.TFT)
-            emu?.setAsyncProfile(.DEFAULT)
+            select(model: .A2000, monitor: .TFT, profile: .DEFAULT, pal: true)
+            applyAction(apply)
 
         default:
             fatalError()

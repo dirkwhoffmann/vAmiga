@@ -394,18 +394,10 @@ public:
     static OptionList presetOptions(MonitorPreset monitor);
     static OptionList presetOptions(ProfilePreset profile);
 
-    // Checks if the current configuration matches a preset
-    bool matches(ModelPreset model) const { return matches(presetOptions(model)); }
-    bool matches(MonitorPreset monitor) const { return matches(presetOptions(monitor)); }
-    bool matches(ProfilePreset profile) const { return matches(presetOptions(profile)); }
-
 private:
 
     // Sets a list of options
     void set(const OptionList &options);
-
-    // Checks if all options in a list have the specified values
-    bool matches(const OptionList &options) const;
 
 public:
 
