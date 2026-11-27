@@ -188,7 +188,7 @@ struct MonitorPresetEnum : utl::Reflectable<MonitorPresetEnum, MonitorPreset>
     {
         switch (value) {
 
-            case MonitorPreset::TFT:  return "Modern flat panel display";
+            case MonitorPreset::TFT:  return "Flat panel display";
             case MonitorPreset::CRT:  return "Cathode ray tube monitor";
         }
         return "???";

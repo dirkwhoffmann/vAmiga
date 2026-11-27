@@ -16,6 +16,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
     @IBOutlet weak var zoneButton: NSButton!
 
     // Description
+    @IBOutlet weak var heading: NSTextField!
     @IBOutlet weak var text: NSTextField!
     @IBOutlet weak var apply: NSButton!
 
@@ -46,6 +47,8 @@ class QuickSetupSettingsViewController: SettingsViewController {
         (ProfilePreset.GAMING.rawValue, "Gaming"),
         (ProfilePreset.PRODUCTIVITY.rawValue, "Productivity")
     ]
+
+    override var showLock: Bool { true }
 
     override func viewDidLoad() {
 
@@ -101,20 +104,23 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
         guard let emu = emu else { return }
 
+        // The configuration can only be changed in power-off state
+        apply.isEnabled = emu.poweredOff
+        presetPopup.isEnabled = emu.poweredOff
+
         // Video format
         zoneButton.image = NSImage(named: pal ? "flag-eu" : "flag-us")
         zoneButton.toolTip = pal ? "PAL" : "NTSC"
 
         // Describe the configuration
-        text.attributedStringValue = describe(emu)
+        text.attributedStringValue = bulletList(describe(emu))
     }
 
     //
     // Description
     //
 
-    // Describes the configuration that results from applying the selection
-    func describe(_ emu: EmulatorProxy) -> NSAttributedString {
+    func describe(_ emu: EmulatorProxy) -> [String] {
 
         // Collect the option values of the presets that would be applied
         var preset: [Int: Int] = [:]
@@ -137,8 +143,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
         // Model
         //
 
-        let cpus = ["68000", "68010", "68EC020", "68020", "68EC030",
-                    "68030", "68EC040", "68LC040", "68040"]
+        let cpus = ["68000", "68010", "68EC020", "68020", "68EC030", "68030", "68EC040", "68LC040", "68040"]
         let cpu = cpus.indices.contains(value(.CPU_REVISION)) ? cpus[value(.CPU_REVISION)] : "680x0"
         let pal = value(.AMIGA_VIDEO_FORMAT) == VideoFormat.PAL.rawValue
         let mhz = (pal ? 7.09379 : 7.15909) * Double(max(1, value(.CPU_OVERCLOCKING)))
@@ -148,13 +153,13 @@ class QuickSetupSettingsViewController: SettingsViewController {
         let denise = DeniseRevision(rawValue: value(.DENISE_REVISION))
         switch (agnus, denise) {
         case (.AGA, _), (_, .AGA):
-            features.append("Advanced Graphics Architecture (AGA)")
+            features.append("AGA Chip Set")
         case (.ECS_1MB, .ECS), (.ECS_2MB, .ECS):
-            features.append("Enhanced Chip Set (ECS)")
+            features.append("ECS Agnus with ECS Denise")
         case (.ECS_1MB, _), (.ECS_2MB, _):
             features.append("ECS Agnus with OCS Denise")
         default:
-            features.append("Original Chip Set (OCS)")
+            features.append("OCS Agnus with OCS Denise")
         }
 
         features.append("\(memory(value(.MEM_CHIP_RAM))) Chip RAM")
@@ -175,13 +180,13 @@ class QuickSetupSettingsViewController: SettingsViewController {
         }
         for type in order {
             let count = drives[type]!
-            features.append("\(count) \(type) floppy drive" + (count == 1 ? "" : "s"))
+            features.append("\(spelledOut(count)) \(type) floppy drive" + (count == 1 ? "" : "s"))
         }
         let hds = (0...3).filter { emu.get(.HDC_CONNECT, drive: $0) != 0 }.count
-        if hds > 0 { features.append("\(hds) hard drive" + (hds == 1 ? "" : "s")) }
+        if hds > 0 { features.append("\(spelledOut(hds)) hard drive" + (hds == 1 ? "" : "s")) }
 
         features.append(pal ? "PAL video (50 Hz)" : "NTSC video (60 Hz)")
-        if value(.MON_FLICKER_FIXER) != 0 { features.append("Built-in flicker fixer") }
+        if value(.MON_FLICKER_FIXER) != 0 { features.append("Flicker fixer") }
 
         //
         // Monitor
@@ -192,9 +197,9 @@ class QuickSetupSettingsViewController: SettingsViewController {
         if value(.MON_DOTMASK) != 0 { effects.append("dot mask") }
         if value(.MON_BLOOM) != 0 { effects.append("bloom") }
         if effects.isEmpty {
-            features.append("Crisp flat-panel picture")
+            features.append("Flat-panel picture")
         } else {
-            features.append("Classic CRT look with " + list(effects))
+            features.append("CRT look with " + list(effects))
         }
 
         //
@@ -202,18 +207,13 @@ class QuickSetupSettingsViewController: SettingsViewController {
         //
 
         if value(.AMIGA_RUN_AHEAD) > 0 {
-            features.append("\(value(.AMIGA_RUN_AHEAD))-frame run-ahead")
+            features.append("\(spelledOut(value(.AMIGA_RUN_AHEAD)))-frame run-ahead")
         }
         if value(.AMIGA_VSYNC) != 0 {
-            features.append("Synced to the host display (VSYNC)")
+            features.append("Host display sync (VSYNC)")
         }
         if value(.AMIGA_WARP_BOOT) > 0 {
             features.append("\(value(.AMIGA_WARP_BOOT))-second warp boot")
-        }
-        switch Warp(rawValue: value(.AMIGA_WARP_MODE)) {
-        case .AUTO: features.append("Automatic warp during disk access")
-        case .ALWAYS: features.append("Permanent warp mode")
-        default: break
         }
         switch value(.DC_SPEED) {
         case -1: features.append("Turbo floppy drives")
@@ -228,22 +228,32 @@ class QuickSetupSettingsViewController: SettingsViewController {
         // Compose the text
         //
 
-        let headline = modelPopup.titleOfSelectedItem ?? "Amiga"
+        return features
+    }
 
-        let result = NSMutableAttributedString()
-        result.append(NSAttributedString(
-            string: headline + "\n",
-            attributes: [.font: NSFont.boldSystemFont(ofSize: 17)]))
+    // Formats a list of items as a bullet list with a hanging indent
+    func bulletList(_ items: [String]) -> NSAttributedString {
+
+        let font = text.font ?? NSFont.systemFont(ofSize: NSFont.systemFontSize)
+        let indent = CGFloat(14)
 
         let style = NSMutableParagraphStyle()
-        style.headIndent = 14
-        style.paragraphSpacingBefore = 3
-        result.append(NSAttributedString(
-            string: features.map { "•\t" + $0 }.joined(separator: "\n"),
-            attributes: [.font: NSFont.systemFont(ofSize: NSFont.systemFontSize),
-                         .paragraphStyle: style]))
+        style.tabStops = [NSTextTab(textAlignment: .left, location: indent)]
+        style.defaultTabInterval = indent
+        style.headIndent = indent
+        style.paragraphSpacing = 4
 
-        return result
+        return NSAttributedString(
+            string: items.map { "•\t" + $0 }.joined(separator: "\n"),
+            attributes: [.font: font,
+                         .foregroundColor: text.textColor ?? NSColor.labelColor,
+                         .paragraphStyle: style])
+    }
+
+    func spelledOut(_ number: Int) -> String {
+
+        let words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven"]
+        return words.indices.contains(number) ? words[number] : "\(number)"
     }
 
     func memory(_ kb: Int) -> String {
@@ -276,22 +286,12 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
     @IBAction func applyAction(_ sender: NSButton!) {
 
-        guard let emu = emu, let controller = controller else { return }
+        guard let emu = emu, emu.poweredOff else { return }
 
-        // The hardware can only be changed in power-off state
-        let wasPoweredOn = emu.poweredOn
-        let wasRunning = emu.running
-        if wasPoweredOn && !controller.askToPowerOff() { return }
-
-        let format = pal ? VideoFormat.PAL : VideoFormat.NTSC
         emu.setAsyncModel(selectedModel)
-        emu.setAsync(.AMIGA_VIDEO_FORMAT, value: format.rawValue)
+        emu.setAsync(.AMIGA_VIDEO_FORMAT, value: (pal ? VideoFormat.PAL : VideoFormat.NTSC).rawValue)
         emu.setAsyncMonitor(selectedMonitor)
         emu.setAsyncProfile(selectedProfile)
-
-        // Restore the previous power state
-        if wasPoweredOn { emu.powerOnAsync() }
-        if wasRunning { try? emu.runAsync() }
     }
 
     override func preset(tag: Int) {

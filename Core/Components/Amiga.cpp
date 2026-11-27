@@ -711,72 +711,141 @@ Amiga::presetOptions(ModelPreset model)
     OptionList result = {
 
         // Options that are identical for all models
-        { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
-        { Opt::MEM_FAST_RAM,        0 },
-
-        // Only the A3000 shipped with a built-in flicker fixer (display enhancer)
-        { Opt::MON_FLICKER_FIXER,   model == ModelPreset::A3000 }
-    };
-
-    auto add = [&](CPURev cpu, i64 overclocking, AgnusRevision agnus, DeniseRev denise,
-                   i64 busWidth, i64 chipRam, i64 slowRam, BankMap bankMap) {
-
-        result.insert(result.end(), {
-
-            { Opt::CPU_REVISION,        (i64)cpu },
-            { Opt::CPU_OVERCLOCKING,    overclocking },
-            { Opt::AGNUS_REVISION,      (i64)agnus },
-            { Opt::DENISE_REVISION,     (i64)denise },
-            { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
-            { Opt::MEM_BUS_WIDTH,       busWidth },
-            { Opt::MEM_CHIP_RAM,        chipRam },
-            { Opt::MEM_SLOW_RAM,        slowRam },
-            { Opt::MEM_BANKMAP,         (i64)bankMap }
-        });
     };
 
     switch (model) {
 
         case ModelPreset::A500:
 
-            add(CPURev::CPU_68000, 0, AgnusRevision::OCS, DeniseRev::OCS,
-                16, 512, 512, BankMap::A500);
+            result.insert(result.end(), {
+
+                { Opt::CPU_REVISION,        (i64)CPURev::CPU_68000 },
+                { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
+                { Opt::CPU_OVERCLOCKING,    0 },
+                { Opt::AGNUS_REVISION,      (i64)AgnusRevision::OCS },
+                { Opt::DENISE_REVISION,     (i64)DeniseRev::OCS },
+                { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::MEM_BUS_WIDTH,       16 },
+                { Opt::MEM_CHIP_RAM,        512 },
+                { Opt::MEM_SLOW_RAM,        512 },
+                { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_BANKMAP,         (i64)BankMap::A500 },
+                { Opt::MON_FLICKER_FIXER,   false }
+            });
             break;
 
         case ModelPreset::A1000:
 
-            add(CPURev::CPU_68000, 0, AgnusRevision::OCS_OLD, DeniseRev::OCS,
-                16, 512, 512, BankMap::A1000);
+            result.insert(result.end(), {
+
+                { Opt::CPU_REVISION,        (i64)CPURev::CPU_68000 },
+                { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
+                { Opt::CPU_OVERCLOCKING,    0 },
+                { Opt::AGNUS_REVISION,      (i64)AgnusRevision::OCS_OLD },
+                { Opt::DENISE_REVISION,     (i64)DeniseRev::OCS },
+                { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::MEM_BUS_WIDTH,       16 },
+                { Opt::MEM_CHIP_RAM,        512 },
+                { Opt::MEM_SLOW_RAM,        512 },
+                { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_BANKMAP,         (i64)BankMap::A1000 },
+                { Opt::MON_FLICKER_FIXER,   false }
+            });
             break;
 
         case ModelPreset::A2000:
 
-            add(CPURev::CPU_68000, 0, AgnusRevision::ECS_1MB, DeniseRev::OCS,
-                16, 512, 512, BankMap::A2000B);
+            result.insert(result.end(), {
+
+                { Opt::CPU_REVISION,        (i64)CPURev::CPU_68000 },
+                { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
+                { Opt::CPU_OVERCLOCKING,    0 },
+                { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_1MB },
+                { Opt::DENISE_REVISION,     (i64)DeniseRev::OCS },
+                { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::MEM_BUS_WIDTH,       16 },
+                { Opt::MEM_CHIP_RAM,        512 },
+                { Opt::MEM_SLOW_RAM,        512 },
+                { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_BANKMAP,         (i64)BankMap::A2000B },
+                { Opt::MON_FLICKER_FIXER,   false }
+            });
             break;
 
         case ModelPreset::A500P:
 
-            add(CPURev::CPU_68000, 0, AgnusRevision::ECS_2MB, DeniseRev::ECS,
-                16, 512, 512, BankMap::A500);
+            result.insert(result.end(), {
+
+                { Opt::CPU_REVISION,        (i64)CPURev::CPU_68000 },
+                { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
+                { Opt::CPU_OVERCLOCKING,    0 },
+                { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_2MB },
+                { Opt::DENISE_REVISION,     (i64)DeniseRev::ECS },
+                { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::MEM_BUS_WIDTH,       16 },
+                { Opt::MEM_CHIP_RAM,        1024 },
+                { Opt::MEM_SLOW_RAM,        0 },
+                { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_BANKMAP,         (i64)BankMap::A500 },
+                { Opt::MON_FLICKER_FIXER,   false }
+            });
             break;
 
         case ModelPreset::A600:
 
-            add(CPURev::CPU_68000, 0, AgnusRevision::ECS_2MB, DeniseRev::ECS,
-                16, 1024, 0, BankMap::A500);
+            result.insert(result.end(), {
+
+                { Opt::CPU_REVISION,        (i64)CPURev::CPU_68000 },
+                { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
+                { Opt::CPU_OVERCLOCKING,    0 },
+                { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_2MB },
+                { Opt::DENISE_REVISION,     (i64)DeniseRev::ECS },
+                { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::MEM_BUS_WIDTH,       16 },
+                { Opt::MEM_CHIP_RAM,        1024 },
+                { Opt::MEM_SLOW_RAM,        0 },
+                { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_BANKMAP,         (i64)BankMap::A500 },
+                { Opt::MON_FLICKER_FIXER,   false }
+            });
             break;
 
         case ModelPreset::A1200:
 
-            add(CPURev::CPU_68EC020, 2, AgnusRevision::AGA, DeniseRev::AGA,
-                32, 2048, 0, BankMap::A1200);
+            result.insert(result.end(), {
+
+                { Opt::CPU_REVISION,        (i64)CPURev::CPU_68EC020 },
+                { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_NONE },
+                { Opt::CPU_OVERCLOCKING,    2 },
+                { Opt::AGNUS_REVISION,      (i64)AgnusRevision::AGA },
+                { Opt::DENISE_REVISION,     (i64)DeniseRev::AGA },
+                { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::MEM_BUS_WIDTH,       32 },
+                { Opt::MEM_CHIP_RAM,        2048 },
+                { Opt::MEM_SLOW_RAM,        0 },
+                { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_BANKMAP,         (i64)BankMap::A1200 },
+                { Opt::MON_FLICKER_FIXER,   false }
+            });
             break;
 
         case ModelPreset::A3000:
 
-            add(CPURev::CPU_68030, 4, AgnusRevision::ECS_2MB, DeniseRev::ECS,
-                32, 1024, 0, BankMap::A2000B);
+            result.insert(result.end(), {
+
+                { Opt::CPU_REVISION,        (i64)CPURev::CPU_68030 },
+                { Opt::CPU_COPROCESSOR,     (i64)Copro::CP_68882 },
+                { Opt::CPU_OVERCLOCKING,    4 },
+                { Opt::AGNUS_REVISION,      (i64)AgnusRevision::ECS_2MB },
+                { Opt::DENISE_REVISION,     (i64)DeniseRev::ECS },
+                { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
+                { Opt::MEM_BUS_WIDTH,       32 },
+                { Opt::MEM_CHIP_RAM,        1024 },
+                { Opt::MEM_SLOW_RAM,        0 },
+                { Opt::MEM_FAST_RAM,        1024 },
+                { Opt::MEM_BANKMAP,         (i64)BankMap::A2000B },
+                { Opt::MON_FLICKER_FIXER,   true }
+            });
             break;
 
         default:
