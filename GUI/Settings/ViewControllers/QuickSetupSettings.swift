@@ -179,6 +179,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
                 items: profileItems, customText: customProfileText)
 
         // The hardware can only be changed in power-off state
+        presetPopup.isEnabled = emu.poweredOff
         modelPopup.isEnabled = emu.poweredOff
         modelApply.isEnabled = modelApply.isEnabled && emu.poweredOff
     }
@@ -231,6 +232,22 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
         if let profile = ProfilePreset(rawValue: profilePopup.selectedTag()) {
             emu?.setAsyncProfile(profile)
+        }
+    }
+
+    override func preset(tag: Int) {
+
+        switch tag {
+
+        case 0:
+
+            // Standard settings
+            emu?.setAsyncModel(.A2000)
+            emu?.setAsyncMonitor(.TFT)
+            emu?.setAsyncProfile(.DEFAULT)
+
+        default:
+            fatalError()
         }
     }
 

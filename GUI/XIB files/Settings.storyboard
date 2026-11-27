@@ -1696,6 +1696,7 @@
                         <outlet property="modelApply" destination="YNZ-eC-Jy1" id="qYA-hr-Fuq"/>
                         <outlet property="modelPopup" destination="J8H-4R-tNP" id="dtr-AI-BvJ"/>
                         <outlet property="modelText" destination="SRy-rK-GJV" id="6os-PL-xZl"/>
+                        <outlet property="presetPopup" destination="2Ts-io-4gY" id="qSp-Pr-Pop"/>
                         <outlet property="monitorApply" destination="p9q-ZU-RRU" id="pC1-LA-VS3"/>
                         <outlet property="monitorPopup" destination="3XV-It-SKz" id="Tdh-3f-q4b"/>
                         <outlet property="monitorText" destination="sJS-0t-lcO" id="wGg-jC-g6p"/>
