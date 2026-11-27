@@ -310,6 +310,25 @@ Console::initCommanderCommands(RSCommand &root)
             }, .payload = { isize(it) }
         });
     }
+
+    root.add({
+        
+        .tokens = { cmd, "profile" },
+        .ghelp  = { "Configures the emulator for a usage profile" },
+    });
+    
+    for (auto &it : ProfilePresetEnum::elements()) {
+        
+        root.add({
+            
+            .tokens = { cmd, "profile", ProfilePresetEnum::key(it) },
+            .chelp  = { ProfilePresetEnum::help(it) },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+                
+                emulator.set(ProfilePreset(values[0]));
+            }, .payload = { isize(it) }
+        });
+    }
     
     
     //
@@ -525,6 +544,25 @@ Console::initCommanderCommands(RSCommand &root)
     //
     
     cmd = registerComponent(monitor);
+    
+    root.add({
+        
+        .tokens = { cmd, "init" },
+        .ghelp  = { "Configures the monitor to match a monitor type" },
+    });
+    
+    for (auto &it : MonitorPresetEnum::elements()) {
+        
+        root.add({
+            
+            .tokens = { cmd, "init", MonitorPresetEnum::key(it) },
+            .chelp  = { MonitorPresetEnum::help(it) },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+                
+                emulator.set(MonitorPreset(values[0]));
+            }, .payload = { isize(it) }
+        });
+    }
     
     
     //

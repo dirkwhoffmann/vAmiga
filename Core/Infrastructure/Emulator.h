@@ -118,6 +118,8 @@ public:
 
     // Configures the emulator to match a specific configuration
     void set(ModelPreset model);
+    void set(MonitorPreset monitor);
+    void set(ProfilePreset profile);
 
     // Powers off and reverts to the default configuration
     void revertToDefaultConfig();

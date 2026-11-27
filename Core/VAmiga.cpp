@@ -2685,6 +2685,20 @@ VAmiga::setAsync(ModelPreset model)
 }
 
 void
+VAmiga::setAsync(MonitorPreset monitor)
+{
+    VAMIGA_PUBLIC
+    putAsync(Cmd::CONFIG_MONITOR, (i64)monitor);
+}
+
+void
+VAmiga::setAsync(ProfilePreset profile)
+{
+    VAMIGA_PUBLIC
+    putAsync(Cmd::CONFIG_PROFILE, (i64)profile);
+}
+
+void
 VAmiga::setAsync(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
@@ -2696,6 +2710,20 @@ VAmiga::set(ModelPreset model)
 {
     VAMIGA_PUBLIC
     emu->sendAndWait(Command(Cmd::CONFIG_MODEL, (i64)model));
+}
+
+void
+VAmiga::set(MonitorPreset monitor)
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::CONFIG_MONITOR, (i64)monitor));
+}
+
+void
+VAmiga::set(ProfilePreset profile)
+{
+    VAMIGA_PUBLIC
+    emu->sendAndWait(Command(Cmd::CONFIG_PROFILE, (i64)profile));
 }
 
 void

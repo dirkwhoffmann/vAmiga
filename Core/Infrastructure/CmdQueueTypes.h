@@ -31,6 +31,8 @@ enum class Cmd : long
     CONFIG,                 ///< Configure the emulator
     CONFIG_ALL,             ///< Configure the emulator
     CONFIG_MODEL,           ///< Configure the emulator to match an Amiga model
+    CONFIG_MONITOR,         ///< Configure the monitor to match a monitor type
+    CONFIG_PROFILE,         ///< Configure the emulator for a usage profile
     HARD_RESET,             ///< Perform a hard reset
     SOFT_RESET,             ///< Perform a soft reset
     POWER_ON,               ///< Switch power on
@@ -123,6 +125,8 @@ struct CmdEnum : utl::Reflectable<CmdEnum, Cmd> {
             case Cmd::CONFIG:                return "CONFIG";
             case Cmd::CONFIG_ALL:            return "CONFIG_ALL";
             case Cmd::CONFIG_MODEL:          return "CONFIG_MODEL";
+            case Cmd::CONFIG_MONITOR:        return "CONFIG_MONITOR";
+            case Cmd::CONFIG_PROFILE:        return "CONFIG_PROFILE";
             case Cmd::HARD_RESET:            return "HARD_RESET";
             case Cmd::SOFT_RESET:            return "SOFT_RESET";
             case Cmd::POWER_ON:              return "POWER_ON";

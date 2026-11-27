@@ -376,6 +376,12 @@ public:
     // Configures the emulator to match a specific Amiga model
     void set(ModelPreset model);
 
+    // Configures the monitor to match a specific monitor type
+    void set(MonitorPreset monitor);
+
+    // Configures the emulator for a specific usage profile
+    void set(ProfilePreset profile);
+
 public:
 
     // Returns the target component for an option

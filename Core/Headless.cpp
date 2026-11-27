@@ -311,6 +311,9 @@ Headless::smokeTestScript[] = {
     "amiga init A600",
     "amiga init A1200",
     "amiga init A3000",
+    "amiga profile DEFAULT",
+    "amiga profile GAMING",
+    "amiga profile PRODUCTIVITY",
     "amiga power off",
     "amiga reset",
 
@@ -446,6 +449,8 @@ Headless::smokeTestScript[] = {
     "xray set DMA_CHANNEL7 false",
 
     "monitor",
+    "monitor init TFT",
+    "monitor init CRT",
     "monitor set PALETTE COLOR",
     "monitor set PALETTE BLACK_WHITE",
     "monitor set PALETTE PAPER_WHITE",

@@ -203,6 +203,18 @@ Emulator::set(ModelPreset model)
 }
 
 void
+Emulator::set(MonitorPreset monitor)
+{
+    main.set(monitor);
+}
+
+void
+Emulator::set(ProfilePreset profile)
+{
+    main.set(profile);
+}
+
+void
 Emulator::revertToDefaultConfig()
 {
     // Power off

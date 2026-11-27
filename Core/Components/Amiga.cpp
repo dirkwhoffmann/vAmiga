@@ -704,7 +704,19 @@ Amiga::set(ModelPreset model)
 {
     ModelPresetEnum::validate(model);
 
-    emulator.revertToDefaultConfig();
+    /* A model preset only changes the hardware options. It leaves all other
+     * options untouched, especially the ones owned by the monitor and the
+     * profile presets. Hardware options can only be changed in power-off
+     * state.
+     */
+    emulator.powerOff();
+
+    // Options that are identical for all models
+    set(Opt::CPU_COPROCESSOR, (i64)Copro::CP_NONE);
+    set(Opt::MEM_FAST_RAM, 0);
+
+    // Only the A3000 shipped with a built-in flicker fixer (display enhancer)
+    set(Opt::MON_FLICKER_FIXER, model == ModelPreset::A3000);
 
     switch(model) {
             
@@ -802,6 +814,65 @@ Amiga::set(ModelPreset model)
         default:
             fatalError;
     }
+
+    emulator.hardReset();
+}
+
+void
+Amiga::set(MonitorPreset monitor)
+{
+    MonitorPresetEnum::validate(monitor);
+
+    /* A monitor preset changes the image options. It leaves the geometry
+     * (centering, zoom) untouched, because it reflects the user's personal
+     * preference rather than the monitor type. The flicker fixer is owned by
+     * the model preset.
+     */
+    auto crt = monitor == MonitorPreset::CRT;
+
+    set(Opt::MON_PALETTE, (i64)Palette::COLOR);
+    set(Opt::MON_GAMMA_IN, 280);
+    set(Opt::MON_GAMMA_OUT, 220);
+    set(Opt::MON_BRIGHTNESS, crt ? 60 : 50);
+    set(Opt::MON_CONTRAST, 100);
+    set(Opt::MON_SATURATION, 50);
+    set(Opt::MON_UPSCALER, (i64)Upscaler::NONE);
+    set(Opt::MON_ENHANCER, (i64)Upscaler::NONE);
+    set(Opt::MON_BLUR, true);
+    set(Opt::MON_BLUR_RADIUS, crt ? 1 : 0);
+    set(Opt::MON_BLOOM, crt);
+    set(Opt::MON_BLOOM_RADIUS, 200);
+    set(Opt::MON_BLOOM_BRIGHTNESS, 200);
+    set(Opt::MON_BLOOM_WEIGHT, 100);
+    set(Opt::MON_DOTMASK, (i64)(crt ? Dotmask::BISECTED : Dotmask::NONE));
+    set(Opt::MON_DOTMASK_BRIGHTNESS, 550);
+    set(Opt::MON_SCANLINES, (i64)(crt ? Scanlines::SUPERIMPOSE : Scanlines::NONE));
+    set(Opt::MON_SCANLINE_BRIGHTNESS, 550);
+    set(Opt::MON_SCANLINE_WEIGHT, 110);
+    set(Opt::MON_DISALIGNMENT, 0);
+}
+
+void
+Amiga::set(ProfilePreset profile)
+{
+    ProfilePresetEnum::validate(profile);
+
+    /* A profile preset changes how the emulator behaves. It leaves the
+     * hardware untouched, which includes all memory settings.
+     */
+    auto gaming = profile == ProfilePreset::GAMING;
+    auto productivity = profile == ProfilePreset::PRODUCTIVITY;
+
+    set(Opt::AMIGA_WARP_BOOT, productivity ? 10 : 0);
+    set(Opt::AMIGA_WARP_MODE, (i64)(profile == ProfilePreset::DEFAULT ? Warp::NEVER : Warp::AUTO));
+    set(Opt::AMIGA_VSYNC, gaming);
+    set(Opt::AMIGA_SPEED_BOOST, 100);
+    set(Opt::AMIGA_RUN_AHEAD, gaming ? 3 : 0);
+    set(Opt::DENISE_FRAME_SKIPPING, 16);
+    set(Opt::DC_SPEED, productivity ? -1 : 1);
+    set(Opt::DRIVE_MECHANICS, (i64)(productivity ? DriveMechanics::NONE : DriveMechanics::A1010));
+    set(Opt::BLITTER_ACCURACY, 2);
+    set(Opt::JOY_AUTOFIRE, false);
 }
 
 Configurable *
@@ -1124,6 +1195,16 @@ Amiga::update(CmdQueue &queue)
                     set(ModelPreset(cmd.value));
                     break;
 
+                case Cmd::CONFIG_MONITOR:
+
+                    set(MonitorPreset(cmd.value));
+                    break;
+
+                case Cmd::CONFIG_PROFILE:
+
+                    set(ProfilePreset(cmd.value));
+                    break;
+
                 case Cmd::NONE:
 
                     // Does nothing (used as a barrier, see VAmiga::sync())
@@ -1268,9 +1349,13 @@ Amiga::update(CmdQueue &queue)
 
         // Tell the GUI about a configuration request (a sender that waits for
         // the outcome gets the exception from its completion handler instead)
-        if (cmd.type == Cmd::CONFIG || cmd.type == Cmd::CONFIG_ALL || cmd.type == Cmd::CONFIG_MODEL) {
+        auto isPreset = cmd.type == Cmd::CONFIG_MODEL ||
+                        cmd.type == Cmd::CONFIG_MONITOR ||
+                        cmd.type == Cmd::CONFIG_PROFILE;
 
-            ConfigMsg cfg = cmd.type == Cmd::CONFIG_MODEL ?
+        if (cmd.type == Cmd::CONFIG || cmd.type == Cmd::CONFIG_ALL || isPreset) {
+
+            ConfigMsg cfg = isPreset ?
                 ConfigMsg { .option = -1, .id = -1, .value = cmd.value } :
                 ConfigMsg { .option = i32(cmd.config.option),
                             .id = cmd.type == Cmd::CONFIG ? i32(cmd.config.id) : -1,

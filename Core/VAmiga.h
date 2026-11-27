@@ -3138,6 +3138,20 @@ public:
      */
     void set(ModelPreset model);
 
+    /** Configures the monitor to match a specific monitor type
+     *
+     *  @param monitor  The monitor type to emulate
+     *  @see set(Opt, i64)
+     */
+    void set(MonitorPreset monitor);
+
+    /** Configures the emulator for a specific usage profile
+     *
+     *  @param profile  The usage profile to apply
+     *  @see set(Opt, i64)
+     */
+    void set(ProfilePreset profile);
+
     /** @brief  Configures a component without waiting for the result.
      *
      *  These functions hand the request to the emulator thread and return at
@@ -3168,6 +3182,10 @@ public:
     void setAsync(Opt opt, i64 value, isize id);
     /// Asynchronous version of set(ModelPreset): queues the request and returns at once.
     void setAsync(ModelPreset model);
+    /// Asynchronous version of set(MonitorPreset): queues the request and returns at once.
+    void setAsync(MonitorPreset monitor);
+    /// Asynchronous version of set(ProfilePreset): queues the request and returns at once.
+    void setAsync(ProfilePreset profile);
 
     /** @brief  Checks if a configuration option would be accepted.
      *
