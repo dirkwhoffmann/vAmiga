@@ -85,6 +85,40 @@ class QuickSetupSettingsViewController: SettingsViewController {
     var selectedMonitor: MonitorPreset { MonitorPreset(rawValue: monitorPopup.selectedTag())! }
     var selectedProfile: ProfilePreset { ProfilePreset(rawValue: profilePopup.selectedTag())! }
 
+    // Returns the Roms the selected model shipped with, in order of preference
+    var shippedRoms: [UInt32] {
+
+        switch selectedModel {
+        case .A500, .A2000:
+            return [retro.vault.CRC32_KICK13_34_005_A500]
+        case .A1000:
+            return [retro.vault.CRC32_BOOT_A1000_8K,
+                    retro.vault.CRC32_BOOT_A1000_64K]
+        case .A500P:
+            return [retro.vault.CRC32_KICK204_37_175_A500]
+        case .A600:
+            return [retro.vault.CRC32_KICK205_37_350_A600HD,
+                    retro.vault.CRC32_KICK205_37_300_A600HD,
+                    retro.vault.CRC32_KICK205_37_299_A600]
+        case .A1200:
+            return [retro.vault.CRC32_KICK30_39_106_A1200]
+        case .A3000:
+            return [retro.vault.CRC32_KICK204_37_175_A3000,
+                    retro.vault.CRC32_KICK202_36_207_A3000]
+        default:
+            return []
+        }
+    }
+
+    // Returns the first shipped Rom the Rom manager has located on disk
+    var shippedRom: (crc: UInt32, url: URL)? {
+
+        for crc in shippedRoms {
+            if let url = EmulatorProxy.romURL(forCRC32: crc) { return (crc, url) }
+        }
+        return nil
+    }
+
     func select(model: ModelPreset, monitor: MonitorPreset, profile: ProfilePreset, pal: Bool) {
 
         modelPopup.selectItem(withTag: model.rawValue)
@@ -151,6 +185,18 @@ class QuickSetupSettingsViewController: SettingsViewController {
         let pal = value(.AMIGA_VIDEO_FORMAT) == VideoFormat.PAL.rawValue
         let mhz = (pal ? 7.09379 : 7.15909) * Double(max(1, value(.CPU_OVERCLOCKING)))
         features.append("Motorola \(cpu) CPU at \(Int(mhz.rounded())) MHz")
+
+        if let rom = shippedRom {
+            let traits = EmulatorProxy.romTraits(forCRC32: rom.crc)
+            if traits.type == .AMIGA_BOOT {
+                features.append("Boot ROM with Kickstart loaded from disk")
+            } else {
+                features.append("\(String(cString: traits.title)) in ROM")
+            }
+        } else if let crc = shippedRoms.first {
+            let traits = EmulatorProxy.romTraits(forCRC32: crc)
+            features.append("AROS ROM (\(String(cString: traits.title)) not found)")
+        }
 
         let agnus = AgnusRevision(rawValue: value(.AGNUS_REVISION))
         let denise = DeniseRevision(rawValue: value(.DENISE_REVISION))
@@ -293,6 +339,14 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
         guard let emu = emu, emu.poweredOff else { return }
 
+        // Install the Rom the model shipped with, or Aros if it is missing
+        if let rom = shippedRom {
+            emu.mem.deleteExt()
+            try? emu.mem.loadRom(rom.url)
+        } else {
+            controller?.mm.installAros()
+        }
+
         emu.setAsyncModel(selectedModel)
         emu.setAsync(.AMIGA_VIDEO_FORMAT, value: (pal ? VideoFormat.PAL : VideoFormat.NTSC).rawValue)
         emu.setAsyncMonitor(selectedMonitor)
@@ -319,6 +373,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
         log(.lifetime)
 
         // Save all settings the presets can change
+        try? config?.saveRomUserDefaults()
         config?.saveHardwareUserDefaults()
         config?.saveVideoUserDefaults()
         config?.savePerformanceUserDefaults()

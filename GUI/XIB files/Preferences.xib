@@ -1507,15 +1507,15 @@
                                             <rect key="frame" x="305" y="79" width="278" height="149"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" drawsBackground="NO" id="ZbA-Ci-i6F">
-                                                <rect key="frame" x="0.0" y="0.0" width="261" height="149"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="278" height="149"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="lue-lV-Oit">
-                                                        <rect key="frame" x="0.0" y="0.0" width="261" height="149"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="278" height="149"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="261" height="149"/>
+                                                        <size key="minSize" width="278" height="149"/>
                                                         <size key="maxSize" width="278" height="10000000"/>
                                                         <connections>
                                                             <outlet property="delegate" destination="-2" id="sDV-l9-oMY"/>

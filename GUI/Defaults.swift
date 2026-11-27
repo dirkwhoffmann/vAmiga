@@ -234,6 +234,16 @@ extension UserDefaults {
     
     static var romUrl: URL? { return romUrl(name: "rom.bin") }
     static var extUrl: URL? { return romUrl(name: "ext.bin") }
+
+    /* Rescans the Roms folder. Call this after a Rom has been written into it.
+     * rom.bin and ext.bin are skipped: they hold whatever Roms are currently
+     * installed and get overwritten, so the Rom manager must not index them.
+     */
+    @discardableResult
+    static func rescanRoms() -> Int {
+
+        return EmulatorProxy.scanRomFoldersExcluding(["rom.bin", "ext.bin"])
+    }
     static var hd0Url: URL? { return hdUrl(0) }
     static var hd1Url: URL? { return hdUrl(1) }
     static var hd2Url: URL? { return hdUrl(2) }

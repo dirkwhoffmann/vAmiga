@@ -98,6 +98,7 @@ class RomDropView: DropView {
                     if let url = UserDefaults.romUrl(fingerprint: hash) {
                         loginfo(1, "Saving \(url)")
                         try? emu.mem.saveRom(url)
+                        UserDefaults.rescanRoms()
                         parent.refreshRomSelector()
                     }
                 }

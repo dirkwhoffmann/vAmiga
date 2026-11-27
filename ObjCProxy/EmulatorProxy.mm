@@ -13,6 +13,7 @@
 #import "Emulator.h"
 #import "DiskImage.h"
 #import "RomFile.h"
+#import "Roms/RomManager.h"
 #import "utl/support/Strings.h"
 #import "utl/support/Strings.h"
 
@@ -2765,6 +2766,34 @@ toArray(const OptionList &options)
 + (NSArray<NSArray<NSNumber *> *> *)optionsForProfile:(ProfilePreset)profile
 {
     return toArray(VAmiga::presetOptions(profile));
+}
+
++ (NSURL *)romURLForCRC32:(uint32_t)crc
+{
+    if (auto path = retro::vault::RomManager::shared().getRomCRC32(crc)) {
+        return [NSURL fileURLWithPath:@(path->c_str())];
+    }
+    return nil;
+}
+
++ (RomTraits)romTraitsForCRC32:(uint32_t)crc
+{
+    return Memory::getRomTraits(crc);
+}
+
++ (void)addRomFolder:(NSURL *)url
+{
+    retro::vault::RomManager::shared().addFolder([url fileSystemRepresentation]);
+}
+
++ (NSInteger)scanRomFoldersExcluding:(NSArray<NSString *> *)names
+{
+    std::vector<string> excluded;
+    for (NSString *name in names) excluded.push_back([name UTF8String]);
+
+    return retro::vault::RomManager::shared().scanFolders([&](const fs::path &path) {
+        return std::find(excluded.begin(), excluded.end(), path.filename().string()) == excluded.end();
+    });
 }
 
 - (NSInteger)get:(Opt)opt id:(NSInteger)id

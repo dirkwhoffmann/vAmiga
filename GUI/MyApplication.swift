@@ -84,6 +84,14 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         
         token = ProcessInfo.processInfo.beginActivity(options: [ .idleSystemSleepDisabled, .suddenTerminationDisabled ], reason: "Running an emulator")
         loginfo(.lifetime, "Launched with arguments \(argv)")
+
+        // Locate the Rom files stored in the application support folder
+        if let folder = try? URL.appSupportFolder("Roms") {
+
+            EmulatorProxy.addRomFolder(folder)
+            let count = UserDefaults.rescanRoms()
+            loginfo(.lifetime, "Found \(count) Roms in \(folder.path)")
+        }
     }
     
     public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {

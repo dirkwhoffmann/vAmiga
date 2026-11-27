@@ -162,7 +162,7 @@ RomManager::clearScanResults()
 }
 
 isize
-RomManager::scanFolders()
+RomManager::scanFolders(const std::function<bool(const fs::path &)> &filter)
 {
     // Roms are small; anything larger is not worth hashing
     constexpr auto maxRomSize = 8 * 1024 * 1024;
@@ -184,6 +184,7 @@ RomManager::scanFolders()
             std::error_code fec;
 
             if (!it->is_regular_file(fec) || fec) continue;
+            if (filter && !filter(it->path())) continue;
 
             auto size = it->file_size(fec);
             if (fec || size == 0 || size > maxRomSize) continue;

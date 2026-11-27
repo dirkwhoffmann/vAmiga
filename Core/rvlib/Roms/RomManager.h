@@ -118,9 +118,10 @@ public:
      * subdirectories, and skips anything it cannot read rather than failing the
      * whole scan. Earlier folders win: the first file found for a checksum is
      * the one kept, so the folder list doubles as a precedence order. Returns
-     * the number of Roms located.
+     * the number of Roms located. If a filter is given, files it rejects are
+     * skipped without being read.
      */
-    isize scanFolders();
+    isize scanFolders(const std::function<bool(const fs::path &)> &filter = {});
 
     // Discards the scan results
     void clearScanResults();

@@ -332,6 +332,17 @@ ImageInfo scan(const fs::path &url);
 + (NSArray<NSArray<NSNumber *> *> *)optionsForMonitor:(MonitorPreset)monitor;
 + (NSArray<NSArray<NSNumber *> *> *)optionsForProfile:(ProfilePreset)profile;
 
+// Rom database
+// Returns the Rom file with this checksum, as found by the most recent folder scan
++ (NSURL *)romURLForCRC32:(uint32_t)crc;
+// Returns the database entry for this checksum
++ (RomTraits)romTraitsForCRC32:(uint32_t)crc;
+// Adds a folder to the list of folders searched for Rom files
++ (void)addRomFolder:(NSURL *)url;
+// Rescans all Rom folders, skipping the given file names, and returns the
+// number of Roms located
++ (NSInteger)scanRomFoldersExcluding:(NSArray<NSString *> *)names;
+
 - (void)putAsync:(Cmd)cmd;
 - (void)putAsync:(Cmd)type value:(NSInteger)value;
 - (void)putAsync:(Cmd)type value:(NSInteger)value value2:(NSInteger)value2;
