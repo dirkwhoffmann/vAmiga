@@ -327,9 +327,10 @@ ImageInfo scan(const fs::path &url);
 - (void)setAsyncModel:(ModelPreset)model;
 - (void)setAsyncMonitor:(MonitorPreset)monitor;
 - (void)setAsyncProfile:(ProfilePreset)profile;
-+ (NSDictionary<NSNumber *, NSNumber *> *)optionsForModel:(ModelPreset)model;
-+ (NSDictionary<NSNumber *, NSNumber *> *)optionsForMonitor:(MonitorPreset)monitor;
-+ (NSDictionary<NSNumber *, NSNumber *> *)optionsForProfile:(ProfilePreset)profile;
+// Preset options as [option, id, value] triples (id -1 = all components)
++ (NSArray<NSArray<NSNumber *> *> *)optionsForModel:(ModelPreset)model;
++ (NSArray<NSArray<NSNumber *> *> *)optionsForMonitor:(MonitorPreset)monitor;
++ (NSArray<NSArray<NSNumber *> *> *)optionsForProfile:(ProfilePreset)profile;
 
 - (void)putAsync:(Cmd)cmd;
 - (void)putAsync:(Cmd)type value:(NSInteger)value;

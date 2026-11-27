@@ -123,18 +123,22 @@ class QuickSetupSettingsViewController: SettingsViewController {
     func describe(_ emu: EmulatorProxy) -> [String] {
 
         // Collect the option values of the presets that would be applied
-        var preset: [Int: Int] = [:]
-        func add(_ options: [NSNumber: NSNumber]) {
-            for (opt, value) in options { preset[opt.intValue] = value.intValue }
+        struct Key: Hashable { let opt: Int; let id: Int }
+        var preset: [Key: Int] = [:]
+        func add(_ options: [[NSNumber]]) {
+            for o in options { preset[Key(opt: o[0].intValue, id: o[1].intValue)] = o[2].intValue }
         }
         add(EmulatorProxy.options(forModel: selectedModel))
         add(EmulatorProxy.options(forMonitor: selectedMonitor))
         add(EmulatorProxy.options(forProfile: selectedProfile))
-        preset[Option.AMIGA_VIDEO_FORMAT.rawValue] = (pal ? VideoFormat.PAL : VideoFormat.NTSC).rawValue
+        preset[Key(opt: Option.AMIGA_VIDEO_FORMAT.rawValue, id: -1)] =
+        (pal ? VideoFormat.PAL : VideoFormat.NTSC).rawValue
 
         // Options not set by a preset keep their current values
         func value(_ opt: Option, _ id: Int = 0) -> Int {
-            preset[opt.rawValue] ?? emu.get(opt, id: id)
+            preset[Key(opt: opt.rawValue, id: id)] ??
+            preset[Key(opt: opt.rawValue, id: -1)] ??
+            emu.get(opt, id: id)
         }
 
         var features: [String] = []
@@ -168,7 +172,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
         var drives: [String: Int] = [:]
         var order: [String] = []
-        for n in 0...3 where emu.get(.DRIVE_CONNECT, drive: n) != 0 {
+        for n in 0...3 where value(.DRIVE_CONNECT, n) != 0 {
             let type: String
             switch FloppyDriveType(rawValue: emu.get(.DRIVE_TYPE, drive: n)) {
             case .HD_35: type = "3.5″ HD"
@@ -182,7 +186,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
             let count = drives[type]!
             features.append("\(spelledOut(count)) \(type) floppy drive" + (count == 1 ? "" : "s"))
         }
-        let hds = (0...3).filter { emu.get(.HDC_CONNECT, drive: $0) != 0 }.count
+        let hds = (0...3).filter { value(.HDC_CONNECT, $0) != 0 }.count
         if hds > 0 { features.append("\(spelledOut(hds)) hard drive" + (hds == 1 ? "" : "s")) }
 
         features.append(pal ? "PAL video (50 Hz)" : "NTSC video (60 Hz)")
@@ -213,7 +217,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
             features.append("Host display sync (VSYNC)")
         }
         if value(.AMIGA_WARP_BOOT) > 0 {
-            features.append("\(value(.AMIGA_WARP_BOOT))-second warp boot")
+            features.append("\(spelledOut(value(.AMIGA_WARP_BOOT)))-second warp boot")
         }
         switch value(.DC_SPEED) {
         case -1: features.append("Turbo floppy drives")
@@ -252,8 +256,12 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
     func spelledOut(_ number: Int) -> String {
 
-        let words = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven"]
-        return words.indices.contains(number) ? words[number] : "\(number)"
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.numberStyle = .spellOut
+
+        let words = formatter.string(from: NSNumber(value: number)) ?? "\(number)"
+        return words.prefix(1).uppercased() + words.dropFirst()
     }
 
     func memory(_ kb: Int) -> String {

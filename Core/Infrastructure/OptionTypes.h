@@ -641,4 +641,16 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
     }
 };
 
+
+/// An option value as defined by a preset.
+struct OptionValue
+{
+    Opt option;     ///< The option to set
+    i64 value;      ///< The option's value
+    isize id = -1;  ///< The component to configure (-1 = all components)
+};
+
+/// A list of option values.
+using OptionList = std::vector<OptionValue>;
+
 }

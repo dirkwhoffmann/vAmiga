@@ -59,13 +59,6 @@ class Amiga final : public CoreComponent {
 
     friend class Emulator;
 
-public:
-
-    // A list of option-value pairs (used to define presets)
-    using OptionList = std::vector<std::pair<Opt, i64>>;
-
-private:
-
     Descriptions descriptions = {
         {
             .type           = Class::Amiga,

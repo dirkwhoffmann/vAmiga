@@ -153,8 +153,8 @@ Defaults::fallbacks()
     registerDefault(Opt::DC_LOCK_DSKSYNC,           false);
     registerDefault(Opt::DC_AUTO_DSKSYNC,           false);
 
-    registerDefaults(Opt::DRIVE_CONNECT,             true,                   { 0 });
-    registerDefaults(Opt::DRIVE_CONNECT,             false,                  { 1, 2, 3 });
+    registerDefaults(Opt::DRIVE_CONNECT,             true,                   { 0, 1 });
+    registerDefaults(Opt::DRIVE_CONNECT,             false,                  { 2, 3 });
     registerDefaults(Opt::DRIVE_TYPE,                (i64)FloppyDriveType::DD_35, { 0, 1, 2, 3 });
     registerDefaults(Opt::DRIVE_MECHANICS,           (i64)DriveMechanics::A1010, { 0, 1, 2, 3 });
     registerDefaults(Opt::DRIVE_RPM,                 300,                    { 0, 1, 2, 3 });
@@ -165,8 +165,7 @@ Defaults::fallbacks()
     registerDefaults(Opt::DRIVE_POLL_VOLUME,         0,                      { 0, 1, 2, 3 });
     registerDefaults(Opt::DRIVE_INSERT_VOLUME,       50,                     { 0, 1, 2, 3 });
     registerDefaults(Opt::DRIVE_EJECT_VOLUME,        50,                     { 0, 1, 2, 3 });
-    registerDefaults(Opt::HDC_CONNECT,               true,                   { 0 });
-    registerDefaults(Opt::HDC_CONNECT,               false,                  { 1, 2, 3 });
+    registerDefaults(Opt::HDC_CONNECT,               false,                  { 0, 1, 2, 3 });
     registerDefaults(Opt::HDC_MB_LIMIT,              16384,                  { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_TYPE,                  (i64)HardDriveType::GENERIC, { 0, 1, 2, 3 });
     registerDefaults(Opt::HDR_WRITE_THROUGH,         (i64)WriteThroughMode::NEVER, { 0, 1, 2, 3 });

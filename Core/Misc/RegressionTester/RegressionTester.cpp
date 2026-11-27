@@ -121,6 +121,14 @@ RegressionTester::apply(RegressionScheme scheme)
         default:
             fatalError;
     }
+
+    /* Pin the peripherals the reference images were recorded with. They used
+     * to be the default settings, which have changed in the meantime.
+     */
+    amiga.set(Opt::DRIVE_CONNECT, true, { 0 });
+    amiga.set(Opt::DRIVE_CONNECT, false, { 1, 2, 3 });
+    amiga.set(Opt::HDC_CONNECT, true, { 0 });
+    amiga.set(Opt::HDC_CONNECT, false, { 1, 2, 3 });
 }
 
 void

@@ -2742,27 +2742,29 @@ ImageInfo scan(const fs::path &url)
     [self emu]->setAsync(profile);
 }
 
-static NSDictionary<NSNumber *, NSNumber *> *
-toDictionary(const std::vector<std::pair<Opt, i64>> &options)
+static NSArray<NSArray<NSNumber *> *> *
+toArray(const OptionList &options)
 {
-    NSMutableDictionary<NSNumber *, NSNumber *> *result = [NSMutableDictionary dictionary];
-    for (auto &[opt, value] : options) result[@((NSInteger)opt)] = @(value);
+    NSMutableArray<NSArray<NSNumber *> *> *result = [NSMutableArray array];
+    for (auto &o : options) {
+        [result addObject:@[ @((NSInteger)o.option), @(o.id), @(o.value) ]];
+    }
     return result;
 }
 
-+ (NSDictionary<NSNumber *, NSNumber *> *)optionsForModel:(ModelPreset)model
++ (NSArray<NSArray<NSNumber *> *> *)optionsForModel:(ModelPreset)model
 {
-    return toDictionary(VAmiga::presetOptions(model));
+    return toArray(VAmiga::presetOptions(model));
 }
 
-+ (NSDictionary<NSNumber *, NSNumber *> *)optionsForMonitor:(MonitorPreset)monitor
++ (NSArray<NSArray<NSNumber *> *> *)optionsForMonitor:(MonitorPreset)monitor
 {
-    return toDictionary(VAmiga::presetOptions(monitor));
+    return toArray(VAmiga::presetOptions(monitor));
 }
 
-+ (NSDictionary<NSNumber *, NSNumber *> *)optionsForProfile:(ProfilePreset)profile
++ (NSArray<NSArray<NSNumber *> *> *)optionsForProfile:(ProfilePreset)profile
 {
-    return toDictionary(VAmiga::presetOptions(profile));
+    return toArray(VAmiga::presetOptions(profile));
 }
 
 - (NSInteger)get:(Opt)opt id:(NSInteger)id

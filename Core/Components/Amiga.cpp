@@ -699,7 +699,7 @@ Amiga::set(const string &opt, const string &value, const std::vector<isize> obji
     set(Opt(utl::parseEnum<OptEnum>(opt)), value, objids);
 }
 
-Amiga::OptionList
+OptionList
 Amiga::presetOptions(ModelPreset model)
 {
     ModelPresetEnum::validate(model);
@@ -852,10 +852,20 @@ Amiga::presetOptions(ModelPreset model)
             fatalError;
     }
 
+    // Peripherals
+    auto floppies = model == ModelPreset::A500 || model == ModelPreset::A1000 ? 1 : 2;
+    auto hardDrives = model == ModelPreset::A600 || model == ModelPreset::A3000 ? 1 : 0;
+
+    for (isize i = 0; i < 4; i++) {
+
+        result.push_back({ Opt::DRIVE_CONNECT, i < floppies, i });
+        result.push_back({ Opt::HDC_CONNECT, i < hardDrives, i });
+    }
+
     return result;
 }
 
-Amiga::OptionList
+OptionList
 Amiga::presetOptions(MonitorPreset monitor)
 {
     MonitorPresetEnum::validate(monitor);
@@ -892,7 +902,7 @@ Amiga::presetOptions(MonitorPreset monitor)
     };
 }
 
-Amiga::OptionList
+OptionList
 Amiga::presetOptions(ProfilePreset profile)
 {
     ProfilePresetEnum::validate(profile);
@@ -923,7 +933,14 @@ Amiga::presetOptions(ProfilePreset profile)
 void
 Amiga::set(const OptionList &options)
 {
-    for (auto &[opt, value] : options) set(opt, value);
+    for (auto &o : options) {
+
+        if (o.id < 0) {
+            set(o.option, o.value);
+        } else {
+            set(o.option, o.value, { o.id });
+        }
+    }
 }
 
 void

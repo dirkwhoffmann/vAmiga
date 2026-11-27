@@ -3190,13 +3190,13 @@ public:
     /** @brief  Returns the options that are set by a preset.
      *
      *  @param model    The Amiga model to look up
-     *  @return The option-value pairs in the order they are applied
+     *  @return The option values in the order they are applied
      */
-    static std::vector<std::pair<Opt, i64>> presetOptions(ModelPreset model);
+    static OptionList presetOptions(ModelPreset model);
     /// Same as above, for a monitor preset.
-    static std::vector<std::pair<Opt, i64>> presetOptions(MonitorPreset monitor);
+    static OptionList presetOptions(MonitorPreset monitor);
     /// Same as above, for a profile preset.
-    static std::vector<std::pair<Opt, i64>> presetOptions(ProfilePreset profile);
+    static OptionList presetOptions(ProfilePreset profile);
 
     /** @brief  Checks if a configuration option would be accepted.
      *

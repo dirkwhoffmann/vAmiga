@@ -2726,19 +2726,19 @@ VAmiga::set(ProfilePreset profile)
     emu->sendAndWait(Command(Cmd::CONFIG_PROFILE, (i64)profile));
 }
 
-std::vector<std::pair<Opt, i64>>
+OptionList
 VAmiga::presetOptions(ModelPreset model)
 {
     return Amiga::presetOptions(model);
 }
 
-std::vector<std::pair<Opt, i64>>
+OptionList
 VAmiga::presetOptions(MonitorPreset monitor)
 {
     return Amiga::presetOptions(monitor);
 }
 
-std::vector<std::pair<Opt, i64>>
+OptionList
 VAmiga::presetOptions(ProfilePreset profile)
 {
     return Amiga::presetOptions(profile);
