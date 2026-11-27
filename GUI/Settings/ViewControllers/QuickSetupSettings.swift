@@ -9,6 +9,21 @@
 
 class QuickSetupSettingsViewController: SettingsViewController {
 
+    // Model
+    @IBOutlet weak var modelPopup: NSPopUpButton!
+    @IBOutlet weak var modelText: NSTextField!
+    @IBOutlet weak var modelApply: NSButton!
+
+    // Monitor
+    @IBOutlet weak var monitorPopup: NSPopUpButton!
+    @IBOutlet weak var monitorText: NSTextField!
+    @IBOutlet weak var monitorApply: NSButton!
+
+    // Profile
+    @IBOutlet weak var profilePopup: NSPopUpButton!
+    @IBOutlet weak var profileText: NSTextField!
+    @IBOutlet weak var profileApply: NSButton!
+
     override func viewDidLoad() {
 
         log(.lifetime)
