@@ -15,6 +15,51 @@
 
 namespace vamiga {
 
+/* Machine setups used by the regression tests. They are frozen test fixtures
+ * and intentionally decoupled from ConfigScheme, which describes the models
+ * offered to the user. Changing a fixture alters the output of the vAmigaTS
+ * tests and requires the reference images to be regenerated.
+ */
+enum class RegressionScheme : long
+{
+    A1000_OCS_1MB,
+    A500_OCS_1MB,
+    A500_ECS_1MB,
+    A500_PLUS_1MB,
+    A1200_2MB
+};
+
+struct RegressionSchemeEnum : utl::Reflectable<RegressionSchemeEnum, RegressionScheme>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(RegressionScheme::A1200_2MB);
+
+    static const char *_key(RegressionScheme value)
+    {
+        switch (value) {
+
+            case RegressionScheme::A1000_OCS_1MB:  return "A1000_OCS_1MB";
+            case RegressionScheme::A500_OCS_1MB:   return "A500_OCS_1MB";
+            case RegressionScheme::A500_ECS_1MB:   return "A500_ECS_1MB";
+            case RegressionScheme::A500_PLUS_1MB:  return "A500_PLUS_1MB";
+            case RegressionScheme::A1200_2MB:      return "A1200_2MB";
+        }
+        return "???";
+    }
+    static const char *help(RegressionScheme value)
+    {
+        switch (value) {
+
+            case RegressionScheme::A1000_OCS_1MB:  return "Amiga 1000, OCS Chipset, 1MB RAM";
+            case RegressionScheme::A500_OCS_1MB:   return "Amiga 500, OCS Chipset, 1MB RAM";
+            case RegressionScheme::A500_ECS_1MB:   return "Amiga 500, ECS Chipset, 1MB RAM";
+            case RegressionScheme::A500_PLUS_1MB:  return "Amiga 500+, ECS Chipset, 1MB RAM";
+            case RegressionScheme::A1200_2MB:      return "Amiga 1200, AGA Chipset, 2MB RAM";
+        }
+        return "???";
+    }
+};
+
 class RegressionTester final : public SubComponent {
 
     Descriptions descriptions = {{
@@ -102,9 +147,16 @@ public:
 
 public:
 
-    // Reverts to factory settings
-    void prepare(ConfigScheme scheme, const fs::path &rom = {}, const fs::path &ext = {});
+    // Reverts to factory settings and applies a test fixture
+    void prepare(RegressionScheme scheme, const fs::path &rom = {}, const fs::path &ext = {});
     
+private:
+
+    // Configures the emulator according to a test fixture
+    void apply(RegressionScheme scheme);
+
+public:
+
     // Runs a test case
     void run(const fs::path &adf);
     

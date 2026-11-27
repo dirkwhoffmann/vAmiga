@@ -16,7 +16,7 @@
 namespace vamiga {
 
 void
-RegressionTester::prepare(ConfigScheme scheme, const fs::path &rom, const fs::path &ext)
+RegressionTester::prepare(RegressionScheme scheme, const fs::path &rom, const fs::path &ext)
 {
     // Only proceed if the /tmp folder exisits
     if (!utl::fileExists("/tmp")) throw IOError(IOError::DIR_NOT_FOUND, "/tmp");
@@ -26,7 +26,7 @@ RegressionTester::prepare(ConfigScheme scheme, const fs::path &rom, const fs::pa
 
     // Initialize the emulator according to the specified scheme
     emulator.powerOff();
-    emulator.set(scheme);
+    apply(scheme);
 
     // Load Kickstart Rom
     if (rom != "") amiga.mem.loadRom(rom);
@@ -35,13 +35,92 @@ RegressionTester::prepare(ConfigScheme scheme, const fs::path &rom, const fs::pa
     if (ext != "") amiga.mem.loadExt(ext);
     
     // Choose a color palette that stays stable across releases
-    emulator.set(Opt::MON_PALETTE, (i64)Palette::RGB);
+    emulator.set(Opt::MON_PALETTE, (i64)Palette::COLOR);
     
     // Choose a warp source that prevents the GUI from disabling warp mode
     constexpr isize warpSource = 1;
     
     // Run as fast as possible
     emulator.warpOn(warpSource);
+}
+
+void
+RegressionTester::apply(RegressionScheme scheme)
+{
+    RegressionSchemeEnum::validate(scheme);
+
+    emulator.revertToDefaultConfig();
+
+    switch(scheme) {
+            
+        case RegressionScheme::A1000_OCS_1MB:
+            
+            amiga.set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            amiga.set(Opt::CPU_OVERCLOCKING, 0);
+            amiga.set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
+            amiga.set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
+            amiga.set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            amiga.set(Opt::MEM_BUS_WIDTH, 16);
+            amiga.set(Opt::MEM_CHIP_RAM, 512);
+            amiga.set(Opt::MEM_SLOW_RAM, 512);
+            amiga.set(Opt::MEM_BANKMAP, (i64)BankMap::A1000);
+            break;
+            
+        case RegressionScheme::A500_OCS_1MB:
+            
+            amiga.set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            amiga.set(Opt::CPU_OVERCLOCKING, 0);
+            amiga.set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS);
+            amiga.set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
+            amiga.set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            amiga.set(Opt::MEM_BUS_WIDTH, 16);
+            amiga.set(Opt::MEM_CHIP_RAM, 512);
+            amiga.set(Opt::MEM_SLOW_RAM, 512);
+            amiga.set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+            break;
+            
+        case RegressionScheme::A500_ECS_1MB:
+            
+            amiga.set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            amiga.set(Opt::CPU_OVERCLOCKING, 0);
+            amiga.set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
+            amiga.set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
+            amiga.set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            amiga.set(Opt::MEM_BUS_WIDTH, 16);
+            amiga.set(Opt::MEM_CHIP_RAM, 512);
+            amiga.set(Opt::MEM_SLOW_RAM, 512);
+            amiga.set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+            break;
+            
+        case RegressionScheme::A500_PLUS_1MB:
+            
+            amiga.set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            amiga.set(Opt::CPU_OVERCLOCKING, 0);
+            amiga.set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
+            amiga.set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
+            amiga.set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            amiga.set(Opt::MEM_BUS_WIDTH, 16);
+            amiga.set(Opt::MEM_CHIP_RAM, 512);
+            amiga.set(Opt::MEM_SLOW_RAM, 512);
+            amiga.set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+            break;
+ 
+        case RegressionScheme::A1200_2MB:
+            
+            amiga.set(Opt::CPU_REVISION, (i64)CPURev::CPU_68EC020);
+            amiga.set(Opt::CPU_OVERCLOCKING, 2);
+            amiga.set(Opt::AGNUS_REVISION, (i64)AgnusRevision::AGA);
+            amiga.set(Opt::DENISE_REVISION, (i64)DeniseRev::AGA);
+            amiga.set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            amiga.set(Opt::MEM_BUS_WIDTH, 32);
+            amiga.set(Opt::MEM_CHIP_RAM, 2048);
+            amiga.set(Opt::MEM_SLOW_RAM, 0);
+            amiga.set(Opt::MEM_BANKMAP, (i64)BankMap::A1200);
+            break;
+            
+        default:
+            fatalError;
+    }
 }
 
 void

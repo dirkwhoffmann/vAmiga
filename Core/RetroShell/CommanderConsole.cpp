@@ -136,12 +136,12 @@ Console::initCommanderCommands(RSCommand &root)
         .ghelp  = { "Initializes the test environment" },
     });
     
-    for (auto &it : ConfigSchemeEnum::elements()) {
+    for (auto &it : RegressionSchemeEnum::elements()) {
  
         root.add({
             
-            .tokens = { "regression", "setup", ConfigSchemeEnum::key(it) },
-            .chelp  = { ConfigSchemeEnum::help(it) },
+            .tokens = { "regression", "setup", RegressionSchemeEnum::key(it) },
+            .chelp  = { RegressionSchemeEnum::help(it) },
             .args   = {
                 { .name = { "rom", "ROM file" }, .flags = rs::opt },
                 { .name = { "ext", "Extension ROM file" }, .flags = rs::opt }
@@ -151,16 +151,15 @@ Console::initCommanderCommands(RSCommand &root)
                     auto rom = args.contains("rom") ? host.makeAbsolute(args.at("rom")) : "";
                     auto ext = args.contains("ext") ? host.makeAbsolute(args.at("ext")) : "";
                     
-                    amiga.regressionTester.prepare(ConfigScheme(values[0]), rom, ext);
-                    emulator.set(ConfigScheme(values[0]));
+                    amiga.regressionTester.prepare(RegressionScheme(values[0]), rom, ext);
                 }, .payload = { isize(it) }
         });
         
         /*
         root.add({
             
-            .tokens = { "regression", "setup", ConfigSchemeEnum::key(it) },
-            .chelp  = { ConfigSchemeEnum::help(it) },
+            .tokens = { "regression", "setup", RegressionSchemeEnum::key(it) },
+            .chelp  = { RegressionSchemeEnum::help(it) },
             .args   = {
                 { .name = { "rom", "ROM file" }, .flags = rs::keyval | rs::opt },
                 { .name = { "ext", "Extension ROM file" }, .flags = rs::keyval | rs::opt }
@@ -170,8 +169,7 @@ Console::initCommanderCommands(RSCommand &root)
                     auto rom = args.contains("rom") ? host.makeAbsolute(args.at("rom")) : "";
                     auto ext = args.contains("ext") ? host.makeAbsolute(args.at("ext")) : "";
                     
-                    amiga.regressionTester.prepare(ConfigScheme(values[0]), rom, ext);
-                    emulator.set(ConfigScheme(values[0]));
+                    amiga.regressionTester.prepare(RegressionScheme(values[0]), rom, ext);
                 }, .payload = { isize(it) }
         });
         */
@@ -300,12 +298,12 @@ Console::initCommanderCommands(RSCommand &root)
         .ghelp  = { "Initializes the Amiga with a predefined scheme" },
     });
     
-    for (auto &it : ConfigSchemeEnum::elements()) {
+    for (auto &it : RegressionSchemeEnum::elements()) {
         
         root.add({
             
-            .tokens = { cmd, "init", ConfigSchemeEnum::key(it) },
-            .chelp  = { ConfigSchemeEnum::help(it) },
+            .tokens = { cmd, "init", RegressionSchemeEnum::key(it) },
+            .chelp  = { RegressionSchemeEnum::help(it) },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 emulator.set(ConfigScheme(values[0]));
