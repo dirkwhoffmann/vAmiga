@@ -3136,7 +3136,7 @@ public:
      *  @param model    The Amiga model to emulate
      *  @see set(Opt, i64)
      */
-    void set(ConfigScheme model);
+    void set(ModelPreset model);
 
     /** @brief  Configures a component without waiting for the result.
      *
@@ -3166,8 +3166,8 @@ public:
      *  @param id       The component to configure
      */
     void setAsync(Opt opt, i64 value, isize id);
-    /// Asynchronous version of set(ConfigScheme): queues the request and returns at once.
-    void setAsync(ConfigScheme model);
+    /// Asynchronous version of set(ModelPreset): queues the request and returns at once.
+    void setAsync(ModelPreset model);
 
     /** @brief  Checks if a configuration option would be accepted.
      *

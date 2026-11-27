@@ -197,9 +197,9 @@ Emulator::set(const string &opt, const string &value, const std::vector<isize> o
 }
 
 void
-Emulator::set(ConfigScheme scheme)
+Emulator::set(ModelPreset model)
 {
-    main.set(scheme);
+    main.set(model);
 }
 
 void

@@ -374,7 +374,7 @@ public:
     void set(const string &opt, const string &value, const std::vector<isize> objids = { });
 
     // Configures the emulator to match a specific Amiga model
-    void set(ConfigScheme model);
+    void set(ModelPreset model);
 
 public:
 

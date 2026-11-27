@@ -304,11 +304,13 @@ Headless::smokeTestScript[] = {
     "amiga set WARP_MODE AUTO",
     "amiga set WARP_MODE NEVER",
     
-    "amiga init A1000_OCS_1MB",
-    "amiga init A500_OCS_1MB",
-    "amiga init A500_ECS_1MB",
-    "amiga init A500_PLUS_1MB",
-    "amiga init A1200_2MB",
+    "amiga init A500",
+    "amiga init A1000",
+    "amiga init A2000",
+    "amiga init A500P",
+    "amiga init A600",
+    "amiga init A1200",
+    "amiga init A3000",
     "amiga power off",
     "amiga reset",
 

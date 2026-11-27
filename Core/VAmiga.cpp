@@ -2678,10 +2678,10 @@ VAmiga::get(Opt opt, isize id) const
 }
 
 void
-VAmiga::setAsync(ConfigScheme model)
+VAmiga::setAsync(ModelPreset model)
 {
     VAMIGA_PUBLIC
-    putAsync(Cmd::CONFIG_SCHEME, (i64)model);
+    putAsync(Cmd::CONFIG_MODEL, (i64)model);
 }
 
 void
@@ -2692,10 +2692,10 @@ VAmiga::setAsync(Opt opt, i64 value)
 }
 
 void
-VAmiga::set(ConfigScheme model)
+VAmiga::set(ModelPreset model)
 {
     VAMIGA_PUBLIC
-    emu->sendAndWait(Command(Cmd::CONFIG_SCHEME, (i64)model));
+    emu->sendAndWait(Command(Cmd::CONFIG_MODEL, (i64)model));
 }
 
 void

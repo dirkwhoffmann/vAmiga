@@ -295,18 +295,18 @@ Console::initCommanderCommands(RSCommand &root)
     root.add({
         
         .tokens = { cmd, "init" },
-        .ghelp  = { "Initializes the Amiga with a predefined scheme" },
+        .ghelp  = { "Initializes the Amiga to match a specific model" },
     });
     
-    for (auto &it : RegressionSchemeEnum::elements()) {
+    for (auto &it : ModelPresetEnum::elements()) {
         
         root.add({
             
-            .tokens = { cmd, "init", RegressionSchemeEnum::key(it) },
-            .chelp  = { RegressionSchemeEnum::help(it) },
+            .tokens = { cmd, "init", ModelPresetEnum::key(it) },
+            .chelp  = { ModelPresetEnum::help(it) },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                emulator.set(ConfigScheme(values[0]));
+                emulator.set(ModelPreset(values[0]));
             }, .payload = { isize(it) }
         });
     }

@@ -700,28 +700,15 @@ Amiga::set(const string &opt, const string &value, const std::vector<isize> obji
 }
 
 void
-Amiga::set(ConfigScheme scheme)
+Amiga::set(ModelPreset model)
 {
-    ConfigSchemeEnum::validate(scheme);
+    ModelPresetEnum::validate(model);
 
     emulator.revertToDefaultConfig();
 
-    switch(scheme) {
+    switch(model) {
             
-        case ConfigScheme::A1000_OCS_1MB:
-            
-            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Opt::CPU_OVERCLOCKING, 0);
-            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
-            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
-            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Opt::MEM_BUS_WIDTH, 16);
-            set(Opt::MEM_CHIP_RAM, 512);
-            set(Opt::MEM_SLOW_RAM, 512);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A1000);
-            break;
-            
-        case ConfigScheme::A500_OCS_1MB:
+        case ModelPreset::A500:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
             set(Opt::CPU_OVERCLOCKING, 0);
@@ -734,7 +721,20 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
             break;
             
-        case ConfigScheme::A500_ECS_1MB:
+        case ModelPreset::A1000:
+            
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::CPU_OVERCLOCKING, 0);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 16);
+            set(Opt::MEM_CHIP_RAM, 512);
+            set(Opt::MEM_SLOW_RAM, 512);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A1000);
+            break;
+            
+        case ModelPreset::A2000:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
             set(Opt::CPU_OVERCLOCKING, 0);
@@ -744,10 +744,10 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_BUS_WIDTH, 16);
             set(Opt::MEM_CHIP_RAM, 512);
             set(Opt::MEM_SLOW_RAM, 512);
-            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A2000B);
             break;
             
-        case ConfigScheme::A500_PLUS_1MB:
+        case ModelPreset::A500P:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
             set(Opt::CPU_OVERCLOCKING, 0);
@@ -759,8 +759,21 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_SLOW_RAM, 512);
             set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
             break;
+            
+        case ModelPreset::A600:
+            
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::CPU_OVERCLOCKING, 0);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 16);
+            set(Opt::MEM_CHIP_RAM, 1024);
+            set(Opt::MEM_SLOW_RAM, 0);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A500);
+            break;
  
-        case ConfigScheme::A1200_2MB:
+        case ModelPreset::A1200:
             
             set(Opt::CPU_REVISION, (i64)CPURev::CPU_68EC020);
             set(Opt::CPU_OVERCLOCKING, 2);
@@ -771,6 +784,19 @@ Amiga::set(ConfigScheme scheme)
             set(Opt::MEM_CHIP_RAM, 2048);
             set(Opt::MEM_SLOW_RAM, 0);
             set(Opt::MEM_BANKMAP, (i64)BankMap::A1200);
+            break;
+            
+        case ModelPreset::A3000:
+            
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68030);
+            set(Opt::CPU_OVERCLOCKING, 4);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_BUS_WIDTH, 32);
+            set(Opt::MEM_CHIP_RAM, 1024);
+            set(Opt::MEM_SLOW_RAM, 0);
+            set(Opt::MEM_BANKMAP, (i64)BankMap::A2000B);
             break;
             
         default:
@@ -1093,9 +1119,9 @@ Amiga::update(CmdQueue &queue)
                     set(cmd.config.option, cmd.config.value, { });
                     break;
 
-                case Cmd::CONFIG_SCHEME:
+                case Cmd::CONFIG_MODEL:
 
-                    set(ConfigScheme(cmd.value));
+                    set(ModelPreset(cmd.value));
                     break;
 
                 case Cmd::NONE:
@@ -1242,9 +1268,9 @@ Amiga::update(CmdQueue &queue)
 
         // Tell the GUI about a configuration request (a sender that waits for
         // the outcome gets the exception from its completion handler instead)
-        if (cmd.type == Cmd::CONFIG || cmd.type == Cmd::CONFIG_ALL || cmd.type == Cmd::CONFIG_SCHEME) {
+        if (cmd.type == Cmd::CONFIG || cmd.type == Cmd::CONFIG_ALL || cmd.type == Cmd::CONFIG_MODEL) {
 
-            ConfigMsg cfg = cmd.type == Cmd::CONFIG_SCHEME ?
+            ConfigMsg cfg = cmd.type == Cmd::CONFIG_MODEL ?
                 ConfigMsg { .option = -1, .id = -1, .value = cmd.value } :
                 ConfigMsg { .option = i32(cmd.config.option),
                             .id = cmd.type == Cmd::CONFIG ? i32(cmd.config.id) : -1,

@@ -117,7 +117,7 @@ public:
     void set(const string &opt, const string &value, const std::vector<isize> objids = { });
 
     // Configures the emulator to match a specific configuration
-    void set(ConfigScheme scheme);
+    void set(ModelPreset model);
 
     // Powers off and reverts to the default configuration
     void revertToDefaultConfig();

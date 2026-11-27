@@ -16,7 +16,7 @@
 namespace vamiga {
 
 /* Machine setups used by the regression tests. They are frozen test fixtures
- * and intentionally decoupled from ConfigScheme, which describes the models
+ * and intentionally decoupled from ModelPreset, which describes the models
  * offered to the user. Changing a fixture alters the output of the vAmigaTS
  * tests and requires the reference images to be regenerated.
  */

@@ -116,42 +116,115 @@ struct WarpEnum : utl::Reflectable<WarpEnum, Warp>
     }
 };
 
-/// Predefined machine configuration.
-enum class ConfigScheme : long
+/// Predefined Amiga model.
+enum class ModelPreset : long
 {
-    A1000_OCS_1MB,
-    A500_OCS_1MB,
-    A500_ECS_1MB,
-    A500_PLUS_1MB,
-    A1200_2MB
+    A500,       ///< Amiga 500
+    A1000,      ///< Amiga 1000
+    A2000,      ///< Amiga 2000
+    A500P,      ///< Amiga 500+
+    A600,       ///< Amiga 600
+    A1200,      ///< Amiga 1200
+    A3000       ///< Amiga 3000
 };
 
-struct ConfigSchemeEnum : utl::Reflectable<ConfigSchemeEnum, ConfigScheme>
+struct ModelPresetEnum : utl::Reflectable<ModelPresetEnum, ModelPreset>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(ConfigScheme::A1200_2MB);
+    static constexpr long maxVal = long(ModelPreset::A3000);
 
-    static const char *_key(ConfigScheme value)
+    static const char *_key(ModelPreset value)
     {
         switch (value) {
 
-            case ConfigScheme::A1000_OCS_1MB:  return "A1000_OCS_1MB";
-            case ConfigScheme::A500_OCS_1MB:   return "A500_OCS_1MB";
-            case ConfigScheme::A500_ECS_1MB:   return "A500_ECS_1MB";
-            case ConfigScheme::A500_PLUS_1MB:  return "A500_PLUS_1MB";
-            case ConfigScheme::A1200_2MB:      return "A1200_2MB";
+            case ModelPreset::A500:   return "A500";
+            case ModelPreset::A1000:  return "A1000";
+            case ModelPreset::A2000:  return "A2000";
+            case ModelPreset::A500P:  return "A500P";
+            case ModelPreset::A600:   return "A600";
+            case ModelPreset::A1200:  return "A1200";
+            case ModelPreset::A3000:  return "A3000";
         }
         return "???";
     }
-    static const char *help(ConfigScheme value)
+    static const char *help(ModelPreset value)
     {
         switch (value) {
 
-            case ConfigScheme::A1000_OCS_1MB:  return "Amiga 1000, OCS Chipset, 1MB RAM";
-            case ConfigScheme::A500_OCS_1MB:   return "Amiga 500, OCS Chipset, 1MB RAM";
-            case ConfigScheme::A500_ECS_1MB:   return "Amiga 500, ECS Chipset, 1MB RAM";
-            case ConfigScheme::A500_PLUS_1MB:  return "Amiga 500+, ECS Chipset, 1MB RAM";
-            case ConfigScheme::A1200_2MB:      return "Amiga 1200, AGA Chipset, 2MB RAM";
+            case ModelPreset::A500:   return "Amiga 500";
+            case ModelPreset::A1000:  return "Amiga 1000";
+            case ModelPreset::A2000:  return "Amiga 2000";
+            case ModelPreset::A500P:  return "Amiga 500+";
+            case ModelPreset::A600:   return "Amiga 600";
+            case ModelPreset::A1200:  return "Amiga 1200";
+            case ModelPreset::A3000:  return "Amiga 3000";
+        }
+        return "???";
+    }
+};
+
+/// Predefined monitor.
+enum class MonitorPreset : long
+{
+    TFT,        ///< Modern flat panel display
+    CRT         ///< Cathode ray tube monitor
+};
+
+struct MonitorPresetEnum : utl::Reflectable<MonitorPresetEnum, MonitorPreset>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(MonitorPreset::CRT);
+
+    static const char *_key(MonitorPreset value)
+    {
+        switch (value) {
+
+            case MonitorPreset::TFT:  return "TFT";
+            case MonitorPreset::CRT:  return "CRT";
+        }
+        return "???";
+    }
+    static const char *help(MonitorPreset value)
+    {
+        switch (value) {
+
+            case MonitorPreset::TFT:  return "Modern flat panel display";
+            case MonitorPreset::CRT:  return "Cathode ray tube monitor";
+        }
+        return "???";
+    }
+};
+
+/// Predefined usage profile.
+enum class ProfilePreset : long
+{
+    DEFAULT,        ///< Standard settings
+    GAMING,         ///< Optimized for games
+    PRODUCTIVITY    ///< Optimized for Workbench and applications
+};
+
+struct ProfilePresetEnum : utl::Reflectable<ProfilePresetEnum, ProfilePreset>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(ProfilePreset::PRODUCTIVITY);
+
+    static const char *_key(ProfilePreset value)
+    {
+        switch (value) {
+
+            case ProfilePreset::DEFAULT:       return "DEFAULT";
+            case ProfilePreset::GAMING:        return "GAMING";
+            case ProfilePreset::PRODUCTIVITY:  return "PRODUCTIVITY";
+        }
+        return "???";
+    }
+    static const char *help(ProfilePreset value)
+    {
+        switch (value) {
+
+            case ProfilePreset::DEFAULT:       return "Standard settings";
+            case ProfilePreset::GAMING:        return "Optimized for games";
+            case ProfilePreset::PRODUCTIVITY:  return "Optimized for Workbench and applications";
         }
         return "???";
     }
