@@ -188,11 +188,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
 
         if let rom = shippedRom {
             let traits = EmulatorProxy.romTraits(forCRC32: rom.crc)
-            if traits.type == .AMIGA_BOOT {
-                features.append("Boot ROM with Kickstart loaded from disk")
-            } else {
-                features.append("\(String(cString: traits.title)) in ROM")
-            }
+            features.append("\(String(cString: traits.title))")
         } else if let crc = shippedRoms.first {
             let traits = EmulatorProxy.romTraits(forCRC32: crc)
             features.append("AROS ROM (\(String(cString: traits.title)) not found)")
