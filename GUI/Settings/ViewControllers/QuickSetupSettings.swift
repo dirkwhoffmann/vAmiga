@@ -146,14 +146,16 @@ class QuickSetupSettingsViewController: SettingsViewController {
         zoneButton.toolTip = pal ? "PAL" : "NTSC"
 
         // Describe the configuration
-        text.attributedStringValue = bulletList(describe(emu))
+        let description = describe(emu)
+        text.attributedStringValue = bulletList(description.features, warnings: description.warnings)
     }
 
     //
     // Description
     //
 
-    func describe(_ emu: EmulatorProxy) -> [String] {
+    // Returns the feature list and the indices of the items to highlight as warnings
+    func describe(_ emu: EmulatorProxy) -> (features: [String], warnings: IndexSet) {
 
         // Collect the option values of the presets that would be applied
         struct Key: Hashable { let opt: Int; let id: Int }
@@ -175,6 +177,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
         }
 
         var features: [String] = []
+        var warnings = IndexSet()
 
         //
         // Model
@@ -192,6 +195,7 @@ class QuickSetupSettingsViewController: SettingsViewController {
         } else if let crc = shippedRoms.first {
             let traits = EmulatorProxy.romTraits(forCRC32: crc)
             features.append("AROS ROM (\(String(cString: traits.title)) not found)")
+            warnings.insert(features.count - 1)
         }
 
         let agnus = AgnusRevision(rawValue: value(.AGNUS_REVISION))
@@ -271,11 +275,12 @@ class QuickSetupSettingsViewController: SettingsViewController {
         // Compose the text
         //
 
-        return features
+        return (features, warnings)
     }
 
-    // Formats a list of items as a bullet list with a hanging indent
-    func bulletList(_ items: [String]) -> NSAttributedString {
+    // Formats a list of items as a bullet list with a hanging indent. Items
+    // whose indices are listed in 'warnings' are printed in the warning color.
+    func bulletList(_ items: [String], warnings: IndexSet = []) -> NSAttributedString {
 
         let font = text.font ?? NSFont.systemFont(ofSize: NSFont.systemFontSize)
         let indent = CGFloat(16)
@@ -286,11 +291,19 @@ class QuickSetupSettingsViewController: SettingsViewController {
         style.headIndent = indent
         style.paragraphSpacing = 4
 
-        return NSAttributedString(
-            string: items.map { "•\t" + $0 }.joined(separator: "\n"),
-            attributes: [.font: font,
-                         .foregroundColor: text.textColor ?? NSColor.labelColor,
-                         .paragraphStyle: style])
+        let color = text.textColor ?? NSColor.labelColor
+        let result = NSMutableAttributedString()
+
+        for (i, item) in items.enumerated() {
+
+            let line = (i > 0 ? "\n" : "") + "•\t" + item
+            result.append(NSAttributedString(
+                string: line,
+                attributes: [.font: font,
+                             .foregroundColor: warnings.contains(i) ? NSColor.systemOrange : color,
+                             .paragraphStyle: style]))
+        }
+        return result
     }
 
     func spelledOut(_ number: Int) -> String {
