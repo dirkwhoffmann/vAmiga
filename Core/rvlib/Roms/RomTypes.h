@@ -123,6 +123,8 @@ constexpr u32 CRC32_AROS_20260820_EXT        = 0x6f9a4ad2;
 constexpr u32 CRC32_EMUTOS13                 = 0x7123C1C1;
 constexpr u32 CRC32_EMUTOS14                 = 0x9DBDC96A;
 
+constexpr u32 CRC32_KICKSLOP_0_2_72          = 0xFD127C3F;
+
 constexpr u32 CRC32_DIAG11                   = 0x4C4B5C05;
 constexpr u32 CRC32_DIAG12                   = 0x771CD0EA;
 constexpr u32 CRC32_DIAG121                  = 0x850209CD;
@@ -225,6 +227,7 @@ enum class RomVendor
     AROS,
     HYPERION,
     EMUTOS,
+    THAOLIA,
     OTHER
 };
 
@@ -243,6 +246,7 @@ struct RomVendorEnum : utl::Reflectable<RomVendorEnum, RomVendor> {
             case RomVendor::AROS:       return "AROS";
             case RomVendor::HYPERION:   return "HYPERION";
             case RomVendor::EMUTOS:     return "EMUTOS";
+            case RomVendor::THAOLIA:    return "THAOLIA";
             case RomVendor::OTHER:      return "OTHER";
         }
         return "???";

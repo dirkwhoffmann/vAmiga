@@ -645,6 +645,14 @@ RomManager::registerAmigaRoms()
         .vendor     = RomVendor::EMUTOS,
         .type       = RomType::AMIGA_KICKSTART
     },{
+        .crc        = CRC32_KICKSLOP_0_2_72,
+        .title      = "KickSlopStart Kickstart replacement",
+        .revision   = "Version 0.2.72",
+        .released   = { 2026, 11 },
+        .platform   = RomPlatform::Amiga,
+        .vendor     = RomVendor::THAOLIA,
+        .type       = RomType::AMIGA_KICKSTART
+    },{
         .crc        = CRC32_DIAG11,
         .title      = "Amiga DiagROM",
         .revision   = "Version 1.1",

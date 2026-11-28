@@ -1968,7 +1968,13 @@
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                             <menu key="submenu" title="Install DiagROM" autoenablesItems="NO" id="rDg-Mn-001">
                                                                 <items>
-                                                                    <menuItem title="Version 1.3 (newest)" tag="1440932135" id="rDg-It-001">
+                                                                    <menuItem title="Version 2.0 (newest)" tag="360507002" id="rDg-It-003">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                        <connections>
+                                                                            <action selector="presetMenuAction:" target="wtk-Jg-WAA" id="rDg-Ac-003"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem title="Version 1.3" tag="1440932135" id="rDg-It-001">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                         <connections>
                                                                             <action selector="presetMenuAction:" target="wtk-Jg-WAA" id="rDg-Ac-001"/>
@@ -1978,6 +1984,19 @@
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                         <connections>
                                                                             <action selector="presetMenuAction:" target="wtk-Jg-WAA" id="rDg-Ac-002"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                </items>
+                                                            </menu>
+                                                        </menuItem>
+                                                        <menuItem title="Install Kickslopstart" id="rKs-Sb-001">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                            <menu key="submenu" title="Install Kickslopstart" autoenablesItems="NO" id="rKs-Mn-001">
+                                                                <items>
+                                                                    <menuItem title="Version 0.2.72" tag="4245847103" id="rKs-It-001">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                        <connections>
+                                                                            <action selector="presetMenuAction:" target="wtk-Jg-WAA" id="rKs-Ac-001"/>
                                                                         </connections>
                                                                     </menuItem>
                                                                 </items>

@@ -70,6 +70,7 @@ class RomSettingsViewController: SettingsViewController {
         let hasCommodoreRom = romTraits.vendor == .COMMODORE
         let hasHyperionRom  = romTraits.vendor == .HYPERION
         let hasEmutosRom    = romTraits.vendor == .EMUTOS
+        let hasThaoliaRom   = romTraits.vendor == .THAOLIA
         let hasPatchedRom   = (romTraits.flags & retro.vault.RomFlags.Patched) != 0
         let hasRelocatedRom = (romTraits.flags & retro.vault.RomFlags.Relocated) != 0
 
@@ -86,6 +87,7 @@ class RomSettingsViewController: SettingsViewController {
         let romHyperion     = NSImage(named: "rom_hyp")
         let romEmutos       = NSImage(named: "rom_emutos")
         let romAros         = NSImage(named: "rom_aros")
+        let romKickslop     = NSImage(named: "rom_kickslopstart")
         let romDemo         = NSImage(named: "rom_demo")
         let romDiag         = NSImage(named: "rom_diag")
         let romUnknown      = NSImage(named: "rom_unknown")
@@ -106,6 +108,7 @@ class RomSettingsViewController: SettingsViewController {
         hasHyperionRom  ? romHyperion :
         hasEmutosRom    ? romEmutos :
         hasArosRom      ? romAros :
+        hasThaoliaRom   ? romKickslop :
         hasDiagRom      ? romDiag :
         hasDemoRom      ? romDemo :
         hasCommodoreRom ? romOrig :
@@ -376,6 +379,12 @@ class RomSettingsViewController: SettingsViewController {
 
         case retro.vault.CRC32_DIAG13:
             install(rom: "diagrom-13")
+
+        case retro.vault.CRC32_DIAG20:
+            install(rom: "diagrom-20")
+
+        case retro.vault.CRC32_KICKSLOP_0_2_72:
+            install(rom: "kickslopstart-00-02-72")
 
         default:
             break
