@@ -44,6 +44,7 @@ class SidebarViewController: NSViewController {
             SidebarItem(title: "Quick Setup",   icon: "wand.and.stars"),
             SidebarItem(title: "Roms",          icon: "memorychip"),
             SidebarItem(title: "Hardware",      icon: "engine.combustion"),
+            SidebarItem(title: "Memory",        icon: "square.stack.3d.up"),
             SidebarItem(title: "Peripherals",   icon: "externaldrive"),
             SidebarItem(title: "Performance",   icon: "hare"),
             SidebarItem(title: "Compatibility", icon: "compass.drawing"),

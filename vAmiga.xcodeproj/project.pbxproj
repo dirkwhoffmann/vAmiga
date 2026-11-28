@@ -40,6 +40,7 @@
 		500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */; };
 		500B0D2D2E7DF5BA008FC5E1 /* SettingsOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */; };
 		500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */; };
+		5A3C0E112F40A00100ABCDEF /* MemorySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3C0E102F40A00100ABCDEF /* MemorySettings.swift */; };
 		500B0D342E8017AB008FC5E1 /* PeripheralsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */; };
 		500B0D362E8017BC008FC5E1 /* PerformanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */; };
 		500B0D382E8017E9008FC5E1 /* CompatibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */; };
@@ -733,6 +734,7 @@
 		500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextField.swift; sourceTree = "<group>"; };
 		500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOutlineView.swift; sourceTree = "<group>"; };
 		500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareSettings.swift; sourceTree = "<group>"; };
+		5A3C0E102F40A00100ABCDEF /* MemorySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorySettings.swift; sourceTree = "<group>"; };
 		500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsSettings.swift; sourceTree = "<group>"; };
 		500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSettings.swift; sourceTree = "<group>"; };
 		500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilitySettings.swift; sourceTree = "<group>"; };
@@ -1589,6 +1591,7 @@
 				501D20112E7FEE13007B1242 /* RomSettings.swift */,
 				E0F773394E9B047CA4F60D53 /* QuickSetupSettings.swift */,
 				500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */,
+				5A3C0E102F40A00100ABCDEF /* MemorySettings.swift */,
 				500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */,
 				500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */,
 				500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */,
@@ -3540,6 +3543,7 @@
 				5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */,
 				500B0D402E8099AA008FC5E1 /* CapturesSettings.swift in Sources */,
 				500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */,
+				5A3C0E112F40A00100ABCDEF /* MemorySettings.swift in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				9C47C0332D6215B100E57B41 /* lz4.c in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,

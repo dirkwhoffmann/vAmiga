@@ -32,6 +32,7 @@ class SettingsSplitViewController: NSSplitViewController {
     lazy var quickSetupVC = instantiate("QuickSetup") as! QuickSetupSettingsViewController
     lazy var romsVC = instantiate("Roms") as! RomSettingsViewController
     lazy var hardwareVC = instantiate("Hardware") as! HardwareSettingsViewController
+    lazy var memoryVC = instantiate("Memory") as! MemorySettingsViewController
     lazy var peripheralsVC = instantiate("Peripherals") as! PeripheralsSettingsViewController
     lazy var compatibilityVC = instantiate("Compatibility") as! CompatibilitySettingsViewController
     lazy var performanceVC = instantiate("Performance") as! PerformanceSettingsViewController
@@ -81,6 +82,7 @@ class SettingsSplitViewController: NSSplitViewController {
         case "Quick Setup":     current = quickSetupVC
         case "Roms":            current = romsVC
         case "Hardware":        current = hardwareVC
+        case "Memory":          current = memoryVC
         case "Peripherals":     current = peripheralsVC
         case "Performance":     current = performanceVC
         case "Compatibility":   current = compatibilityVC

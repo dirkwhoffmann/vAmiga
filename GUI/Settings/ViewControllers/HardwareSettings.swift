@@ -37,32 +37,6 @@ class HardwareSettingsViewController: SettingsViewController {
     @IBOutlet weak var rtcInfo2: NSTextField!
     @IBOutlet weak var rtcIcon: NSButton!
 
-    // Chip RAM
-    @IBOutlet weak var chipRamPopup: NSPopUpButton!
-    @IBOutlet weak var chipRamInfo1: NSTextField!
-    @IBOutlet weak var chipRamInfo2: NSTextField!
-
-    // Slow RAM
-    @IBOutlet weak var slowRamPopup: NSPopUpButton!
-    @IBOutlet weak var slowRamInfo1: NSTextField!
-    @IBOutlet weak var slowRamInfo2: NSTextField!
-    @IBOutlet weak var slowRamIcon: NSButton!
-
-    // Fast RAM
-    @IBOutlet weak var fastRamPopup: NSPopUpButton!
-    @IBOutlet weak var fastRamInfo1: NSTextField!
-    @IBOutlet weak var fastRamInfo2: NSTextField!
-    @IBOutlet weak var fastRamIcon: NSButton!
-
-    // Memory Properties
-    @IBOutlet weak var busWidth: NSPopUpButton!
-    @IBOutlet weak var ramInitPattern: NSPopUpButton!
-    @IBOutlet weak var bankMap: NSPopUpButton!
-    @IBOutlet weak var unmappingType: NSPopUpButton!
-
-    // Warning
-    @IBOutlet weak var warnImage: NSButton!
-
     override var showLock: Bool { true }
     
     override func viewDidLoad() {
@@ -80,7 +54,6 @@ class HardwareSettingsViewController: SettingsViewController {
 
         refreshToolbar()
         refreshChipset()
-        refreshMemory()
     }
 
     func refreshToolbar() {
@@ -197,62 +170,6 @@ class HardwareSettingsViewController: SettingsViewController {
         rtcRevision.isEnabled = poweredOff
     }
 
-    func refreshMemory() {
-
-        guard let emu = emu, let config = config else { return }
-
-        let poweredOff = emu.poweredOff
-        let traits = emu.agnus.traits
-        let badAgnus = traits.chipRamLimit < config.chipRam
-
-        // Chip RAM
-        let chipStart = 0
-        let chipEnd = chipStart + config.chipRam * 1024
-        chipRamPopup.selectItem(withTag: config.chipRam)
-        chipRamInfo1.stringValue = "DRAM"
-        chipRamInfo2.stringValue = String(format: "%06X - %06X", chipStart, chipEnd - 1)
-
-        // Slow RAM
-        let slowStart = 0xC00000
-        let slowEnd = slowStart + config.slowRam * 1024
-        slowRamPopup.selectItem(withTag: config.slowRam)
-        slowRamInfo1.stringValue = "DRAM"
-        slowRamInfo2.stringValue = String(format: "%06X - %06X", slowStart, slowEnd - 1)
-        slowRamIcon.isHidden = config.slowRam == 0
-        slowRamInfo1.isHidden = config.slowRam == 0
-        slowRamInfo2.isHidden = config.slowRam == 0
-
-        // Fast RAM
-        let fastStart = 0x200000
-        let fastEnd = fastStart + config.fastRam * 1024
-        fastRamPopup.selectItem(withTag: config.fastRam)
-        fastRamInfo1.stringValue = "DRAM"
-        fastRamInfo2.stringValue = String(format: "%06X - %06X", fastStart, fastEnd - 1)
-        fastRamIcon.isHidden = config.fastRam == 0
-        fastRamInfo1.isHidden = config.fastRam == 0
-        fastRamInfo2.isHidden = config.fastRam == 0
-
-        // Memory properties
-        busWidth.selectItem(withTag: config.busWidth)
-        ramInitPattern.selectItem(withTag: config.ramInitPattern)
-        bankMap.selectItem(withTag: config.bankMap)
-        unmappingType.selectItem(withTag: config.unmappingType)
-
-        // Disable some controls if emulator is powered on
-        chipRamPopup.isEnabled = poweredOff
-        slowRamPopup.isEnabled = poweredOff
-        fastRamPopup.isEnabled = poweredOff
-        ramInitPattern.isEnabled = poweredOff
-        bankMap.isEnabled = poweredOff
-        unmappingType.isEnabled = poweredOff
-
-        // Memory warning
-        warnImage.isHidden = !badAgnus
-        warnImage.toolTip =
-        "Chip Ram is not fully usable. " +
-        "The selected Agnus revision is limited to address \(traits.chipRamLimit) KB."
-    }
-
     override func preset(tag: Int) {
 
         let defaults = EmulatorProxy.defaults!
@@ -270,9 +187,6 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_1MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
-            defaults.set(.MEM_BUS_WIDTH, 16);
-            defaults.set(.MEM_CHIP_RAM, 512);
-            defaults.set(.MEM_BANKMAP, BankMap.A500.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 1:
@@ -282,9 +196,6 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.OCS_OLD.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
-            defaults.set(.MEM_BUS_WIDTH, 16);
-            defaults.set(.MEM_CHIP_RAM, 512);
-            defaults.set(.MEM_BANKMAP, BankMap.A1000.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.NONE.rawValue)
 
         case 2:
@@ -294,9 +205,6 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.OCS.rawValue)
-            defaults.set(.MEM_BUS_WIDTH, 16);
-            defaults.set(.MEM_CHIP_RAM, 512);
-            defaults.set(.MEM_BANKMAP, BankMap.A2000B.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
         case 3:
@@ -306,9 +214,6 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_OVERCLOCKING, 0)
             defaults.set(.AGNUS_REVISION, AgnusRevision.ECS_2MB.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.ECS.rawValue)
-            defaults.set(.MEM_BUS_WIDTH, 16);
-            defaults.set(.MEM_CHIP_RAM, 1024);
-            defaults.set(.MEM_BANKMAP, BankMap.A500.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
         case 4:
@@ -318,9 +223,6 @@ class HardwareSettingsViewController: SettingsViewController {
             defaults.set(.CPU_OVERCLOCKING, 2)
             defaults.set(.AGNUS_REVISION, AgnusRevision.AGA.rawValue)
             defaults.set(.DENISE_REVISION, DeniseRevision.AGA.rawValue)
-            defaults.set(.MEM_BUS_WIDTH, 32);
-            defaults.set(.MEM_CHIP_RAM, 2048);
-            defaults.set(.MEM_BANKMAP, BankMap.A1200.rawValue)
             defaults.set(.RTC_MODEL, RTCRevision.OKI.rawValue)
 
         default:
@@ -328,17 +230,17 @@ class HardwareSettingsViewController: SettingsViewController {
         }
 
         // Update the configuration
-        config?.applyHardwareUserDefaults()
+        config?.applyChipsetUserDefaults()
     }
 
     override func save() {
 
         log(.lifetime)
-        config?.saveHardwareUserDefaults()
+        config?.saveChipsetUserDefaults()
     }
 
     //
-    // Action function (Chipset)
+    // Action functions
     //
 
     @IBAction func cpuRevAction(_ sender: NSPopUpButton!) {
@@ -379,44 +281,5 @@ class HardwareSettingsViewController: SettingsViewController {
     @IBAction func realTimeClockAction(_ sender: NSPopUpButton!) {
 
         config?.rtClock = sender.selectedTag()
-    }
-
-    //
-    // Action function (Memory)
-    //
-
-    @IBAction func chipRamAction(_ sender: NSPopUpButton!) {
-
-        config?.chipRam = sender.selectedTag()
-    }
-
-    @IBAction func slowRamAction(_ sender: NSPopUpButton!) {
-
-        config?.slowRam = sender.selectedTag()
-    }
-
-    @IBAction func fastRamAction(_ sender: NSPopUpButton!) {
-
-        config?.fastRam = sender.selectedTag()
-    }
-
-    @IBAction func busWidthAction(_ sender: NSPopUpButton!) {
-
-        config?.busWidth = sender.selectedTag()
-    }
-    
-    @IBAction func bankMapAction(_ sender: NSPopUpButton!) {
-
-        config?.bankMap = sender.selectedTag()
-    }
-
-    @IBAction func unmappingTypeAction(_ sender: NSPopUpButton!) {
-
-        config?.unmappingType = sender.selectedTag()
-    }
-
-    @IBAction func ramInitPatternAction(_ sender: NSPopUpButton!) {
-
-        config?.ramInitPattern = sender.selectedTag()
     }
 }
