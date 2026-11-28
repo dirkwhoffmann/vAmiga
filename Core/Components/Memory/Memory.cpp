@@ -876,7 +876,25 @@ Memory::isRelocated()
 template <> MemSrc
 Memory::getMemSrc <Accessor::CPU> (u32 addr)
 {
-    return cpuMemSrc[(addr >> 16) & 0xFF];
+    if (unlikely(addr >> 24)) return getHiMemSrc(addr);
+    return cpuMemSrc[addr >> 16];
+}
+
+MemSrc
+Memory::getHiMemSrc(u32 addr) const
+{
+    assert(addr >> 24);
+
+    // Motherboard RAM (managed by Ramsey)
+    if (addr >= 0x07000000 && addr <= 0x07FFFFFF) return MemSrc::MOBO;
+
+    // Zorro III expansion space
+    if (addr >= 0x10000000 && addr <= 0x7FFFFFFF) return MemSrc::ZOR3;
+
+    // Zorro III auto config space
+    if (addr >= 0xFF000000 && addr <= 0xFF00FFFF) return MemSrc::ZOR3_AUTOCONF;
+
+    return MemSrc::NONE;
 }
 
 template <> MemSrc
@@ -963,7 +981,7 @@ Memory::updateCpuMemSrcTable()
     }
 
     // Auto-config (Zorro II)
-    cpuMemSrc[0xE8] = MemSrc::AUTOCONF;
+    cpuMemSrc[0xE8] = MemSrc::ZOR2_AUTOCONF;
     for (isize i = 0xE9; i <= 0xEF; i++) {
         assert(cpuMemSrc[i] == MemSrc::NONE);
     }
@@ -1356,7 +1374,7 @@ Memory::spypeek16 <Accessor::CPU, MemSrc::CUSTOM> (u32 addr) const
 }
 
 template<> u8
-Memory::peek8 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr)
+Memory::peek8 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
     
@@ -1374,7 +1392,7 @@ Memory::peek8 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr)
+Memory::peek16 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
 
@@ -1386,7 +1404,7 @@ Memory::peek16 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr) const
+Memory::spypeek16 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (u32 addr) const
 {
     auto hi = zorro.spypeekACF(addr);
     auto lo = zorro.spypeekACF(addr + 1);
@@ -1395,21 +1413,21 @@ Memory::spypeek16 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr) const
 }
 
 template<> u8
-Memory::peek8 <Accessor::CPU, MemSrc::ZOR> (u32 addr)
+Memory::peek8 <Accessor::CPU, MemSrc::ZOR2> (u32 addr)
 {
     dataBus = u16(zorro.peek8(addr));
     return u8(dataBus);
 }
 
 template<> u16
-Memory::peek16 <Accessor::CPU, MemSrc::ZOR> (u32 addr)
+Memory::peek16 <Accessor::CPU, MemSrc::ZOR2> (u32 addr)
 {
     dataBus = u16(zorro.peek16(addr));
     return dataBus;
 }
 
 template<> u16
-Memory::spypeek16 <Accessor::CPU, MemSrc::ZOR> (u32 addr) const
+Memory::spypeek16 <Accessor::CPU, MemSrc::ZOR2> (u32 addr) const
 {
     return zorro.spypeek16(addr);
 }
@@ -1507,7 +1525,7 @@ Memory::spypeek16 <Accessor::CPU, MemSrc::EXT> (u32 addr) const
 template<> u8
 Memory::peek8 <Accessor::CPU> (u32 addr)
 {
-    addr &= 0xFFFFFF;
+    if (unlikely(addr >> 24)) return peekHi8(addr);
     
     switch (cpuMemSrc[addr >> 16]) {
             
@@ -1521,8 +1539,8 @@ Memory::peek8 <Accessor::CPU> (u32 addr)
         case MemSrc::RTC:           return peek8 <Accessor::CPU, MemSrc::RTC>      (addr);
         case MemSrc::CUSTOM:        return peek8 <Accessor::CPU, MemSrc::CUSTOM>   (addr);
         case MemSrc::CUSTOM_MIRROR: return peek8 <Accessor::CPU, MemSrc::CUSTOM>   (addr);
-        case MemSrc::AUTOCONF:      return peek8 <Accessor::CPU, MemSrc::AUTOCONF> (addr);
-        case MemSrc::ZOR:           return peek8 <Accessor::CPU, MemSrc::ZOR>      (addr);
+        case MemSrc::ZOR2_AUTOCONF:      return peek8 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (addr);
+        case MemSrc::ZOR2:           return peek8 <Accessor::CPU, MemSrc::ZOR2>      (addr);
         case MemSrc::ROM:           return peek8 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::ROM_MIRROR:    return peek8 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::WOM:           return peek8 <Accessor::CPU, MemSrc::WOM>      (addr);
@@ -1536,7 +1554,7 @@ Memory::peek8 <Accessor::CPU> (u32 addr)
 template<> u16
 Memory::peek16 <Accessor::CPU> (u32 addr)
 {
-    addr &= 0xFFFFFF;
+    if (unlikely(addr >> 24)) return peekHi16(addr);
 
     switch (cpuMemSrc[addr >> 16]) {
             
@@ -1550,8 +1568,8 @@ Memory::peek16 <Accessor::CPU> (u32 addr)
         case MemSrc::RTC:           return peek16 <Accessor::CPU, MemSrc::RTC>      (addr);
         case MemSrc::CUSTOM:        return peek16 <Accessor::CPU, MemSrc::CUSTOM>   (addr);
         case MemSrc::CUSTOM_MIRROR: return peek16 <Accessor::CPU, MemSrc::CUSTOM>   (addr);
-        case MemSrc::AUTOCONF:      return peek16 <Accessor::CPU, MemSrc::AUTOCONF> (addr);
-        case MemSrc::ZOR:           return peek16 <Accessor::CPU, MemSrc::ZOR>      (addr);
+        case MemSrc::ZOR2_AUTOCONF:      return peek16 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (addr);
+        case MemSrc::ZOR2:           return peek16 <Accessor::CPU, MemSrc::ZOR2>      (addr);
         case MemSrc::ROM:           return peek16 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::ROM_MIRROR:    return peek16 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::WOM:           return peek16 <Accessor::CPU, MemSrc::WOM>      (addr);
@@ -1565,7 +1583,7 @@ Memory::peek16 <Accessor::CPU> (u32 addr)
 template<> u16
 Memory::spypeek16 <Accessor::CPU> (u32 addr) const
 {
-    addr &= 0xFFFFFF;
+    if (unlikely(addr >> 24)) return spypeekHi16(addr);
 
     switch (cpuMemSrc[addr >> 16]) {
             
@@ -1579,8 +1597,8 @@ Memory::spypeek16 <Accessor::CPU> (u32 addr) const
         case MemSrc::RTC:           return spypeek16 <Accessor::CPU, MemSrc::RTC>      (addr);
         case MemSrc::CUSTOM:        return spypeek16 <Accessor::CPU, MemSrc::CUSTOM>   (addr);
         case MemSrc::CUSTOM_MIRROR: return spypeek16 <Accessor::CPU, MemSrc::CUSTOM>   (addr);
-        case MemSrc::AUTOCONF:      return spypeek16 <Accessor::CPU, MemSrc::AUTOCONF> (addr);
-        case MemSrc::ZOR:           return spypeek16 <Accessor::CPU, MemSrc::ZOR>      (addr);
+        case MemSrc::ZOR2_AUTOCONF:      return spypeek16 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (addr);
+        case MemSrc::ZOR2:           return spypeek16 <Accessor::CPU, MemSrc::ZOR2>      (addr);
         case MemSrc::ROM:           return spypeek16 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::ROM_MIRROR:    return spypeek16 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::WOM:           return spypeek16 <Accessor::CPU, MemSrc::WOM>      (addr);
@@ -1708,9 +1726,12 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
 u8
 Memory::dsack(u32 addr) const
 {
+    // Beyond the 24-bit space, nothing is emulated yet that has a 32 bit port
+    if (unlikely(addr >> 24)) return moira::DSACK_16;
+
     if (config.busWidth == 32) {
         
-        switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
+        switch (cpuMemSrc[addr >> 16]) {
                 
             case MemSrc::CHIP:
             case MemSrc::CHIP_MIRROR:
@@ -1732,8 +1753,6 @@ Memory::dsack(u32 addr) const
 template<> u32
 Memory::peek32 <Accessor::CPU> (u32 addr)
 {
-    addr &= 0xFFFFFF;
-
     /* A 32 bit port delivers the longword in a single bus cycle. Which sources
      * qualify is decided by dsack(), the very function the CPU asks through
      * Moira::dsack. Deriving the decision from it here rather than repeating
@@ -1761,6 +1780,45 @@ Memory::peek32 <Accessor::CPU> (u32 addr)
     u32 hi = peek16 <Accessor::CPU> (addr);
     u32 lo = peek16 <Accessor::CPU> (addr + 2);
     return HI_W_LO_W(hi, lo);
+}
+
+u8
+Memory::peekHi8(u32 addr)
+{
+    switch (getHiMemSrc(addr)) {
+
+        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
+        case MemSrc::ZOR3:              // Not emulated yet
+        default:
+            return peek8 <Accessor::CPU, MemSrc::NONE> (addr);
+    }
+}
+
+u16
+Memory::peekHi16(u32 addr)
+{
+    switch (getHiMemSrc(addr)) {
+
+        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
+        case MemSrc::ZOR3:              // Not emulated yet
+        default:
+            return peek16 <Accessor::CPU, MemSrc::NONE> (addr);
+    }
+}
+
+u16
+Memory::spypeekHi16(u32 addr) const
+{
+    switch (getHiMemSrc(addr)) {
+
+        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
+        case MemSrc::ZOR3:              // Not emulated yet
+        default:
+            return spypeek16 <Accessor::CPU, MemSrc::NONE> (addr);
+    }
 }
 
 
@@ -1989,7 +2047,7 @@ Memory::poke16 <Accessor::CPU, MemSrc::CUSTOM> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr, u8 value)
+Memory::poke8 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (u32 addr, u8 value)
 {
     ASSERT_AUTO_ADDR(addr);
 
@@ -1998,7 +2056,7 @@ Memory::poke8 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr, u16 value)
+Memory::poke16 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (u32 addr, u16 value)
 {
     ASSERT_AUTO_ADDR(addr);
     
@@ -2008,14 +2066,14 @@ Memory::poke16 <Accessor::CPU, MemSrc::AUTOCONF> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <Accessor::CPU, MemSrc::ZOR> (u32 addr, u8 value)
+Memory::poke8 <Accessor::CPU, MemSrc::ZOR2> (u32 addr, u8 value)
 {
     dataBus = value;
     zorro.poke8(addr, value);
 }
 
 template <> void
-Memory::poke16 <Accessor::CPU, MemSrc::ZOR> (u32 addr, u16 value)
+Memory::poke16 <Accessor::CPU, MemSrc::ZOR2> (u32 addr, u16 value)
 {
     dataBus = value;
     zorro.poke16(addr, value);
@@ -2090,7 +2148,7 @@ Memory::poke32 <Accessor::CPU, MemSrc::EXT> (u32 addr, u32 value)
 template<> void
 Memory::poke8 <Accessor::CPU> (u32 addr, u8 value)
 {
-    addr &= 0xFFFFFF;
+    if (unlikely(addr >> 24)) { pokeHi8(addr, value); return; }
     
     switch (cpuMemSrc[addr >> 16]) {
             
@@ -2104,8 +2162,8 @@ Memory::poke8 <Accessor::CPU> (u32 addr, u8 value)
         case MemSrc::RTC:           poke8 <Accessor::CPU, MemSrc::RTC>      (addr, value); return;
         case MemSrc::CUSTOM:        poke8 <Accessor::CPU, MemSrc::CUSTOM>   (addr, value); return;
         case MemSrc::CUSTOM_MIRROR: poke8 <Accessor::CPU, MemSrc::CUSTOM>   (addr, value); return;
-        case MemSrc::AUTOCONF:      poke8 <Accessor::CPU, MemSrc::AUTOCONF> (addr, value); return;
-        case MemSrc::ZOR:           poke8 <Accessor::CPU, MemSrc::ZOR>      (addr, value); return;
+        case MemSrc::ZOR2_AUTOCONF:      poke8 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (addr, value); return;
+        case MemSrc::ZOR2:           poke8 <Accessor::CPU, MemSrc::ZOR2>      (addr, value); return;
         case MemSrc::ROM:           poke8 <Accessor::CPU, MemSrc::ROM>      (addr, value); return;
         case MemSrc::ROM_MIRROR:    poke8 <Accessor::CPU, MemSrc::ROM>      (addr, value); return;
         case MemSrc::WOM:           poke8 <Accessor::CPU, MemSrc::WOM>      (addr, value); return;
@@ -2119,7 +2177,7 @@ Memory::poke8 <Accessor::CPU> (u32 addr, u8 value)
 template<> void
 Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
 {
-    addr &= 0xFFFFFF;
+    if (unlikely(addr >> 24)) { pokeHi16(addr, value); return; }
     
     switch (cpuMemSrc[addr >> 16]) {
             
@@ -2133,8 +2191,8 @@ Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
         case MemSrc::RTC:           poke16 <Accessor::CPU, MemSrc::RTC>      (addr, value); return;
         case MemSrc::CUSTOM:        poke16 <Accessor::CPU, MemSrc::CUSTOM>   (addr, value); return;
         case MemSrc::CUSTOM_MIRROR: poke16 <Accessor::CPU, MemSrc::CUSTOM>   (addr, value); return;
-        case MemSrc::AUTOCONF:      poke16 <Accessor::CPU, MemSrc::AUTOCONF> (addr, value); return;
-        case MemSrc::ZOR:           poke16 <Accessor::CPU, MemSrc::ZOR>      (addr, value); return;
+        case MemSrc::ZOR2_AUTOCONF:      poke16 <Accessor::CPU, MemSrc::ZOR2_AUTOCONF> (addr, value); return;
+        case MemSrc::ZOR2:           poke16 <Accessor::CPU, MemSrc::ZOR2>      (addr, value); return;
         case MemSrc::ROM:           poke16 <Accessor::CPU, MemSrc::ROM>      (addr, value); return;
         case MemSrc::ROM_MIRROR:    poke16 <Accessor::CPU, MemSrc::ROM>      (addr, value); return;
         case MemSrc::WOM:           poke16 <Accessor::CPU, MemSrc::WOM>      (addr, value); return;
@@ -2148,8 +2206,6 @@ Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
 template<> void
 Memory::poke32 <Accessor::CPU> (u32 addr, u32 value)
 {
-    addr &= 0xFFFFFF;
-
     // See peek32: a 32 bit port accepts the longword in a single bus cycle
     if (dsack(addr) == moira::DSACK_32) {
 
@@ -2170,6 +2226,32 @@ Memory::poke32 <Accessor::CPU> (u32 addr, u32 value)
     // Everything else is a 16 bit port and takes two bus cycles
     poke16 <Accessor::CPU> (addr, u16(value >> 16));
     poke16 <Accessor::CPU> (addr + 2, u16(value & 0xFFFF));
+}
+
+void
+Memory::pokeHi8(u32 addr, u8 value)
+{
+    switch (getHiMemSrc(addr)) {
+
+        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
+        case MemSrc::ZOR3:              // Not emulated yet
+        default:
+            poke8 <Accessor::CPU, MemSrc::NONE> (addr, value);
+    }
+}
+
+void
+Memory::pokeHi16(u32 addr, u16 value)
+{
+    switch (getHiMemSrc(addr)) {
+
+        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
+        case MemSrc::ZOR3:              // Not emulated yet
+        default:
+            poke16 <Accessor::CPU, MemSrc::NONE> (addr, value);
+    }
 }
 
 
@@ -3206,7 +3288,8 @@ Memory::patch <MemSrc::EXT> (u32 addr, u8 value)
 void
 Memory::patch(u32 addr, u8 value)
 {
-    addr &= 0xFFFFFF;
+    // Nothing is patchable beyond the 24-bit space yet
+    if (unlikely(addr >> 24)) return;
     
     switch (cpuMemSrc[addr >> 16]) {
             

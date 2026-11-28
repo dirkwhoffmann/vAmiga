@@ -75,12 +75,15 @@ extension BankTableView: NSTableViewDataSource {
             case .RTC:           return "Real-time Clock"
             case .CUSTOM:        return "Chipset"
             case .CUSTOM_MIRROR: return "Chipset Mirror"
-            case .AUTOCONF:      return "Autoconf"
-            case .ZOR:           return "Zorro device"
+            case .ZOR2_AUTOCONF: return "Zorro II Autoconf"
+            case .ZOR2:          return "Zorro II device"
             case .ROM:           return "Rom"
             case .ROM_MIRROR:    return "Rom Mirror"
             case .WOM:           return "Wom"
             case .EXT:           return "Extended Rom"
+            case .MOBO:          return "Motherboard Ram"
+            case .ZOR3_AUTOCONF: return "Zorro III Autoconf"
+            case .ZOR3:          return "Zorro III device"
             default:             fatalError()
             }
 

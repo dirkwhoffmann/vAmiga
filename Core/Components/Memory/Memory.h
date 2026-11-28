@@ -480,6 +480,9 @@ public:
 
     // Returns the memory source for a given address
     template <Accessor A> MemSrc getMemSrc(u32 addr);
+
+    // Returns the CPU memory source for an address above the 24-bit space
+    MemSrc getHiMemSrc(u32 addr) const;
     
     // Updates both memory source lookup tables
     void updateMemSrcTables();
@@ -531,6 +534,17 @@ public:
 
     // Returns the DSACK bits the CPU sees at the given address
     u8 dsack(u32 addr) const;
+
+private:
+
+    // Accesses an address above the 24-bit space (32-bit CPUs only)
+    u8 peekHi8(u32 addr);
+    u16 peekHi16(u32 addr);
+    u16 spypeekHi16(u32 addr) const;
+    void pokeHi8(u32 addr, u8 value);
+    void pokeHi16(u32 addr, u16 value);
+
+public:
 
     
     //

@@ -73,12 +73,15 @@ extension Inspector {
             case .RTC:           color = MemColors.rtc
             case .CUSTOM:        color = MemColors.cust
             case .CUSTOM_MIRROR: color = MemColors.cust;     mirror = true
-            case .AUTOCONF:      color = MemColors.auto
-            case .ZOR:           color = MemColors.auto
+            case .ZOR2_AUTOCONF: color = MemColors.auto
+            case .ZOR2:          color = MemColors.auto
             case .ROM:           color = MemColors.rom
             case .ROM_MIRROR:    color = MemColors.rom;      mirror = true
             case .WOM:           color = MemColors.wom
             case .EXT:           color = MemColors.ext
+            case .MOBO:          color = MemColors.fast
+            case .ZOR3_AUTOCONF: color = MemColors.auto
+            case .ZOR3:          color = MemColors.auto
             default:             fatalError()
             }
             let ciBgColor = CIColor(color: MemColors.unmapped)!
@@ -265,7 +268,7 @@ extension Inspector {
     @IBAction
     func memAutoConfAction(_ sender: NSButton!) {
 
-        jumpTo(source: .AUTOCONF)
+        jumpTo(source: .ZOR2_AUTOCONF)
     }
 
     @IBAction

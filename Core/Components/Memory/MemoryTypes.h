@@ -32,18 +32,21 @@ enum class MemSrc : long
     RTC,
     CUSTOM,
     CUSTOM_MIRROR,
-    AUTOCONF,
-    ZOR,
+    ZOR2_AUTOCONF,
+    ZOR2,
     ROM,
     ROM_MIRROR,
     WOM,
-    EXT
+    EXT,
+    MOBO,
+    ZOR3_AUTOCONF,
+    ZOR3
 };
 
 struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = (long)MemSrc::EXT;
+    static constexpr long maxVal = (long)MemSrc::ZOR3;
     
     static const char *_key(long value) { return _key(MemSrc(value)); }
     static const char *_key(MemSrc value)
@@ -61,12 +64,15 @@ struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
             case MemSrc::RTC:            return "RTC";
             case MemSrc::CUSTOM:         return "CUSTOM";
             case MemSrc::CUSTOM_MIRROR:  return "CUSTOM_MIRROR";
-            case MemSrc::AUTOCONF:       return "AUTOCONF";
-            case MemSrc::ZOR:            return "ZOR";
+            case MemSrc::ZOR2_AUTOCONF:  return "ZOR2_AUTOCONF";
+            case MemSrc::ZOR2:           return "ZOR2";
             case MemSrc::ROM:            return "ROM";
             case MemSrc::ROM_MIRROR:     return "ROM_MIRROR";
             case MemSrc::WOM:            return "WOM";
             case MemSrc::EXT:            return "EXT";
+            case MemSrc::MOBO:           return "MOBO";
+            case MemSrc::ZOR3_AUTOCONF:  return "ZOR3_AUTOCONF";
+            case MemSrc::ZOR3:           return "ZOR3";
         }
         return "???";
     }
@@ -86,12 +92,15 @@ struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
             case MemSrc::RTC:            return "Real-time clock";
             case MemSrc::CUSTOM:         return "Custom chips";
             case MemSrc::CUSTOM_MIRROR:  return "Custom chips mirror";
-            case MemSrc::AUTOCONF:       return "Auto config";
-            case MemSrc::ZOR:            return "Zorro boards";
+            case MemSrc::ZOR2_AUTOCONF:  return "Zorro II auto config";
+            case MemSrc::ZOR2:           return "Zorro II boards";
             case MemSrc::ROM:            return "Kickstart ROM";
             case MemSrc::ROM_MIRROR:     return "Kickstart ROM mirror";
             case MemSrc::WOM:            return "Write-only memory";
             case MemSrc::EXT:            return "Extension ROM";
+            case MemSrc::MOBO:           return "Motherboard RAM";
+            case MemSrc::ZOR3_AUTOCONF:  return "Zorro III auto config";
+            case MemSrc::ZOR3:           return "Zorro III boards";
         }
         return "???";
     }

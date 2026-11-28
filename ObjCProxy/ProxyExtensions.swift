@@ -203,11 +203,14 @@ extension MemProxy {
         case .CIA, .CIA_MIRROR:         return "CIA"
         case .RTC:                      return "RTC"
         case .CUSTOM, .CUSTOM_MIRROR:   return regName(addr)
-        case .AUTOCONF:                 return "ACONF"
-        case .ZOR:                      return "ZORRO"
+        case .ZOR2_AUTOCONF:            return "ACONF"
+        case .ZOR2:                     return "ZORRO"
         case .ROM, .ROM_MIRROR:         return "ROM"
         case .WOM:                      return "WOM"
         case .EXT:                      return "ROM"
+        case .MOBO:                     return "MOBO"
+        case .ZOR3_AUTOCONF:            return "ACONF"
+        case .ZOR3:                     return "ZORRO"
         default:                        return nil
         }
     }
