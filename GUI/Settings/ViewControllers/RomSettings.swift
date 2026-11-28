@@ -11,16 +11,14 @@ class RomSettingsViewController: SettingsViewController {
 
     // Rom info
     @IBOutlet weak var romDropView: RomDropView!
-    @IBOutlet weak var romSelector: NSPopUpButton!
-    @IBOutlet weak var romTitle: NSTextField!
+    @IBOutlet weak var romSelector: NSComboButton!
     @IBOutlet weak var romSubtitle: NSTextField!
     @IBOutlet weak var romSubsubtitle: NSTextField!
     @IBOutlet weak var romType: NSTextField!
     @IBOutlet weak var romDeleteButton: NSButton!
 
     @IBOutlet weak var extDropView: ExtRomDropView!
-    @IBOutlet weak var extSelector: NSPopUpButton!
-    @IBOutlet weak var extTitle: NSTextField!
+    @IBOutlet weak var extSelector: NSComboButton!
     @IBOutlet weak var extSubtitle: NSTextField!
     @IBOutlet weak var extSubsubtitle: NSTextField!
     @IBOutlet weak var extType: NSTextField!
@@ -40,10 +38,9 @@ class RomSettingsViewController: SettingsViewController {
         log(.lifetime)
         refreshRomSelector()
 
-        romSelector.target = self
-        romSelector.action = #selector(romSelectorAction(_:))
-        extSelector.target = self
-        extSelector.action = #selector(extSelectorAction(_:))
+        // Clicking anywhere on the buttons opens the Rom menu
+        romSelector.style = .unified
+        extSelector.style = .unified
     }
     
     //
@@ -130,12 +127,10 @@ class RomSettingsViewController: SettingsViewController {
         refresh(selector: extSelector, extensions: true, installed: extTraits.crc)
 
         // Titles and subtitles
-        romTitle.stringValue = String(cString: romTraits.title)
         romSubtitle.stringValue = String(cString: romTraits.revision)
         romSubsubtitle.stringValue = RomSettingsViewController.romDateString(romTraits.released)
         romType.stringValue = hasRom ? String(cString: retro.vault.RomTypeEnum.help(romTraits.type)) : ""
 
-        extTitle.stringValue = String(cString: extTraits.title)
         extSubtitle.stringValue = String(cString: extTraits.revision)
         extSubsubtitle.stringValue = RomSettingsViewController.romDateString(extTraits.released)
         extType.stringValue = hasExt ? String(cString: retro.vault.RomTypeEnum.help(extTraits.type)) : ""
@@ -183,34 +178,43 @@ class RomSettingsViewController: SettingsViewController {
         return "\(months[Int(date.month)]) \(date.year)"
     }
 
-    // Lists "None" and the Roms the Rom manager has located on disk
-    func refresh(selector: NSPopUpButton, extensions: Bool, installed: UInt32) {
+    /* Lists "None" and the Roms the Rom manager has located on disk, checking
+     * the installed one. The button's title shows the installed Rom, which
+     * need not be in the menu, e.g. an unknown Rom or a bundled Aros Rom.
+     */
+    func refresh(selector: NSComboButton, extensions: Bool, installed: UInt32) {
 
-        let menu = selector.menu!
+        selector.title = installed == 0 ? "None" : libraryTitle(installed)
 
-        // Keep the first item: it is the pull-down button's own image
-        while menu.items.count > 1 { menu.removeItem(at: 1) }
+        let menu = NSMenu()
+        let action = extensions ? #selector(extSelectorAction(_:)) : #selector(romSelectorAction(_:))
 
-        let none = NSMenuItem(title: "None", action: nil, keyEquivalent: "")
-        none.tag = 0
-        none.state = installed == 0 ? .on : .off
-        menu.addItem(none)
+        func add(_ title: String, tag: UInt32) {
 
-        let roms = EmulatorProxy.availableRoms(extensions) ?? []
-        if !roms.isEmpty { menu.addItem(NSMenuItem.separator()) }
-
-        for crc in roms.map({ $0.uint32Value }) {
-
-            let traits = EmulatorProxy.romTraits(forCRC32: crc)
-            var title = String(cString: traits.title)
-            let revision = String(cString: traits.revision)
-            if !revision.isEmpty { title += " (\(revision))" }
-
-            let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
-            item.tag = Int(crc)
-            item.state = crc == installed ? .on : .off
+            let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
+            item.target = self
+            item.tag = Int(tag)
+            item.state = tag == installed ? .on : .off
             menu.addItem(item)
         }
+
+        add("None", tag: 0)
+
+        let roms = (EmulatorProxy.availableRoms(extensions) ?? []).map { $0.uint32Value }
+        if !roms.isEmpty { menu.addItem(NSMenuItem.separator()) }
+        for crc in roms { add(libraryTitle(crc), tag: crc) }
+
+        selector.menu = menu
+    }
+
+    // Returns the menu title of a Rom, e.g. "Kickstart 1.3 (Rev 34.005)"
+    func libraryTitle(_ crc: UInt32) -> String {
+
+        let traits = EmulatorProxy.romTraits(forCRC32: crc)
+        var title = String(cString: traits.title)
+        let revision = String(cString: traits.revision)
+        if !revision.isEmpty { title += " (\(revision))" }
+        return title
     }
 
     func refreshRomSelector() {
@@ -263,14 +267,16 @@ class RomSettingsViewController: SettingsViewController {
         refresh()
     }
 
-    @IBAction func romSelectorAction(_ sender: NSPopUpButton!) {
+    @IBAction func romSelectorAction(_ sender: NSMenuItem!) {
 
-        install(crc: UInt32(sender.selectedTag()), extension: false)
+        guard let emu = emu, UInt32(sender.tag) != emu.mem.romTraits.crc else { return }
+        install(crc: UInt32(sender.tag), extension: false)
     }
 
-    @IBAction func extSelectorAction(_ sender: NSPopUpButton!) {
+    @IBAction func extSelectorAction(_ sender: NSMenuItem!) {
 
-        install(crc: UInt32(sender.selectedTag()), extension: true)
+        guard let emu = emu, UInt32(sender.tag) != emu.mem.extTraits.crc else { return }
+        install(crc: UInt32(sender.tag), extension: true)
     }
 
     /* Keeps a copy of the installed Rom in the Rom library, provided that the
