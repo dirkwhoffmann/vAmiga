@@ -36,11 +36,15 @@ class RomSettingsViewController: SettingsViewController {
     override func viewDidLoad() {
 
         log(.lifetime)
-        refreshRomSelector()
 
-        // Clicking anywhere on the buttons opens the Rom menu
-        romSelector.style = .unified
-        extSelector.style = .unified
+        /* The combo buttons keep their split style, which shows the arrow.
+         * Clicking the title opens the same menu as clicking the arrow.
+         */
+        for selector in [romSelector!, extSelector!] {
+
+            selector.target = self
+            selector.action = #selector(selectorAction(_:))
+        }
     }
     
     //
@@ -217,40 +221,6 @@ class RomSettingsViewController: SettingsViewController {
         return title
     }
 
-    func refreshRomSelector() {
-
-        presetPopup.autoenablesItems = false
-
-        let fm = FileManager.default
-
-        for item in presetPopup.itemArray where item.tag != 0 {
-
-            switch UInt32(item.tag) {
-
-            case retro.vault.CRC32_AROS_54705, retro.vault.CRC32_AROS_55696, retro.vault.CRC32_AROS_20250219, retro.vault.CRC32_AROS_20260820,
-                retro.vault.CRC32_DIAG121, retro.vault.CRC32_DIAG13, retro.vault.CRC32_DIAG20,
-                retro.vault.CRC32_EMUTOS13:
-
-                item.isEnabled = true
-
-            default:
-                if let url = UserDefaults.romUrl(fingerprint: item.tag) {
-                    item.isEnabled = fm.fileExists(atPath: url.path)
-                } else {
-                    item.isEnabled = false
-                }
-            }
-
-            if item.isEnabled {
-                item.image = NSImage(systemSymbolName: "memorychip", 
-                                     accessibilityDescription: "Unlocked Kickstart")
-            } else {
-                item.image = NSImage(systemSymbolName: "lock",
-                                     accessibilityDescription: "Locked Kickstart")
-            }
-        }
-    }
-
     //
     // Action methods
     //
@@ -265,6 +235,14 @@ class RomSettingsViewController: SettingsViewController {
 
         emu?.mem.deleteExt()
         refresh()
+    }
+
+    @IBAction func selectorAction(_ sender: NSComboButton!) {
+
+        // The button is not flipped: y = 0 is its bottom edge
+        sender.menu.popUp(positioning: nil,
+                          at: NSPoint(x: 0, y: sender.isFlipped ? sender.bounds.height + 4 : -4),
+                          in: sender)
     }
 
     @IBAction func romSelectorAction(_ sender: NSMenuItem!) {
@@ -297,7 +275,6 @@ class RomSettingsViewController: SettingsViewController {
         if ext { try? emu.mem.saveExt(url) } else { try? emu.mem.saveRom(url) }
 
         UserDefaults.rescanRoms()
-        refreshRomSelector()
     }
 
     // Installs a Rom from the Rom library, or removes the Rom if crc is 0
@@ -400,13 +377,8 @@ class RomSettingsViewController: SettingsViewController {
         case retro.vault.CRC32_DIAG13:
             install(rom: "diagrom-13")
 
-        case retro.vault.CRC32_DIAG20:
-            install(rom: "diagrom-20")
-
         default:
-            if let url = UserDefaults.romUrl(crc32: crc32) {
-                try? emu?.mem.loadRom(url)
-            }
+            break
         }
 
         refresh()
