@@ -11,6 +11,7 @@ class RomSettingsViewController: SettingsViewController {
 
     // Rom info
     @IBOutlet weak var romDropView: RomDropView!
+    @IBOutlet weak var romSelector: NSPopUpButton!
     @IBOutlet weak var romTitle: NSTextField!
     @IBOutlet weak var romSubtitle: NSTextField!
     @IBOutlet weak var romSubsubtitle: NSTextField!
@@ -18,6 +19,7 @@ class RomSettingsViewController: SettingsViewController {
     @IBOutlet weak var romDeleteButton: NSButton!
 
     @IBOutlet weak var extDropView: ExtRomDropView!
+    @IBOutlet weak var extSelector: NSPopUpButton!
     @IBOutlet weak var extTitle: NSTextField!
     @IBOutlet weak var extSubtitle: NSTextField!
     @IBOutlet weak var extSubsubtitle: NSTextField!
@@ -37,6 +39,11 @@ class RomSettingsViewController: SettingsViewController {
 
         log(.lifetime)
         refreshRomSelector()
+
+        romSelector.target = self
+        romSelector.action = #selector(romSelectorAction(_:))
+        extSelector.target = self
+        extSelector.action = #selector(extSelectorAction(_:))
     }
     
     //
@@ -86,6 +93,8 @@ class RomSettingsViewController: SettingsViewController {
 
         // Lock controls if emulator is powered on
         romDropView.isEnabled = poweredOff
+        romSelector.isEnabled = poweredOff
+        extSelector.isEnabled = poweredOff
         romDeleteButton.isEnabled = poweredOff
         extDropView.isEnabled = poweredOff
         extDeleteButton.isEnabled = poweredOff
@@ -115,6 +124,10 @@ class RomSettingsViewController: SettingsViewController {
         extDropView.auxIcon.image =
         hasPatchedExt ? patched :
         hasRelocatedExt ? relocated : nil
+
+        // Rom library selectors
+        refresh(selector: romSelector, extensions: false, installed: romTraits.crc)
+        refresh(selector: extSelector, extensions: true, installed: extTraits.crc)
 
         // Titles and subtitles
         romTitle.stringValue = String(cString: romTraits.title)
@@ -170,6 +183,36 @@ class RomSettingsViewController: SettingsViewController {
         return "\(months[Int(date.month)]) \(date.year)"
     }
 
+    // Lists "None" and the Roms the Rom manager has located on disk
+    func refresh(selector: NSPopUpButton, extensions: Bool, installed: UInt32) {
+
+        let menu = selector.menu!
+
+        // Keep the first item: it is the pull-down button's own image
+        while menu.items.count > 1 { menu.removeItem(at: 1) }
+
+        let none = NSMenuItem(title: "None", action: nil, keyEquivalent: "")
+        none.tag = 0
+        none.state = installed == 0 ? .on : .off
+        menu.addItem(none)
+
+        let roms = EmulatorProxy.availableRoms(extensions) ?? []
+        if !roms.isEmpty { menu.addItem(NSMenuItem.separator()) }
+
+        for crc in roms.map({ $0.uint32Value }) {
+
+            let traits = EmulatorProxy.romTraits(forCRC32: crc)
+            var title = String(cString: traits.title)
+            let revision = String(cString: traits.revision)
+            if !revision.isEmpty { title += " (\(revision))" }
+
+            let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+            item.tag = Int(crc)
+            item.state = crc == installed ? .on : .off
+            menu.addItem(item)
+        }
+    }
+
     func refreshRomSelector() {
 
         presetPopup.autoenablesItems = false
@@ -217,6 +260,58 @@ class RomSettingsViewController: SettingsViewController {
     @IBAction func extDeleteAction(_ sender: NSButton!) {
 
         emu?.mem.deleteExt()
+        refresh()
+    }
+
+    @IBAction func romSelectorAction(_ sender: NSPopUpButton!) {
+
+        install(crc: UInt32(sender.selectedTag()), extension: false)
+    }
+
+    @IBAction func extSelectorAction(_ sender: NSPopUpButton!) {
+
+        install(crc: UInt32(sender.selectedTag()), extension: true)
+    }
+
+    /* Keeps a copy of the installed Rom in the Rom library, provided that the
+     * Rom database knows it. The copy is named after the Rom's checksum, which
+     * is where the preset menu and the Rom library selectors look for it.
+     */
+    func saveToLibrary(extension ext: Bool) {
+
+        guard let emu = emu else { return }
+
+        let crc = ext ? emu.mem.extTraits.crc : emu.mem.romTraits.crc
+        guard EmulatorProxy.isKnownRom(crc), let url = UserDefaults.romUrl(crc32: crc) else { return }
+
+        // Nothing to do if the library has it already
+        if FileManager.default.fileExists(atPath: url.path) { return }
+
+        loginfo(1, "Saving \(url)")
+        if ext { try? emu.mem.saveExt(url) } else { try? emu.mem.saveRom(url) }
+
+        UserDefaults.rescanRoms()
+        refreshRomSelector()
+    }
+
+    // Installs a Rom from the Rom library, or removes the Rom if crc is 0
+    func install(crc: UInt32, extension ext: Bool) {
+
+        guard let emu = emu else { return }
+
+        if crc == 0 {
+
+            if ext { emu.mem.deleteExt() } else { emu.mem.deleteRom() }
+
+        } else if let url = EmulatorProxy.romURL(forCRC32: crc) {
+
+            do {
+                if ext { try emu.mem.loadExt(url) } else { try emu.mem.loadRom(url) }
+            } catch {
+                controller?.showAlert(.cantOpen(url: url), error: error,
+                                      async: true, window: controller?.window)
+            }
+        }
         refresh()
     }
 

@@ -2781,6 +2781,29 @@ toArray(const OptionList &options)
     return Memory::getRomTraits(crc);
 }
 
++ (BOOL)isKnownRom:(uint32_t)crc
+{
+    return retro::vault::RomManager::shared().isKnownCRC32(crc);
+}
+
++ (NSArray<NSNumber *> *)availableRoms:(BOOL)extensions
+{
+    using namespace retro::vault;
+    auto &manager = RomManager::shared();
+
+    auto roms = manager.getRoms([extensions](const RomTraits &t) {
+
+        if (t.platform != RomPlatform::Amiga) return false;
+        return (t.type == RomType::AMIGA_EXTROM) == bool(extensions);
+    });
+
+    NSMutableArray<NSNumber *> *result = [NSMutableArray array];
+    for (auto &traits : roms) {
+        if (manager.getRomCRC32(traits.crc)) [result addObject:@(traits.crc)];
+    }
+    return result;
+}
+
 + (void)addRomFolder:(NSURL *)url
 {
     retro::vault::RomManager::shared().addFolder([url fileSystemRepresentation]);

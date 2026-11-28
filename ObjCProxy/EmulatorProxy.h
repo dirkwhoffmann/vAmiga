@@ -337,6 +337,11 @@ ImageInfo scan(const fs::path &url);
 + (NSURL *)romURLForCRC32:(uint32_t)crc;
 // Returns the database entry for this checksum
 + (RomTraits)romTraitsForCRC32:(uint32_t)crc;
+// Indicates whether the database knows a Rom with this checksum
++ (BOOL)isKnownRom:(uint32_t)crc;
+// Returns the CRC32s of the Amiga Roms the most recent folder scan located,
+// either the extension Roms or all others, in database order
++ (NSArray<NSNumber *> *)availableRoms:(BOOL)extensions;
 // Adds a folder to the list of folders searched for Rom files
 + (void)addRomFolder:(NSURL *)url;
 // Rescans all Rom folders, skipping the given file names, and returns the

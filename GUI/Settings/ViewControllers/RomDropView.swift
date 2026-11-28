@@ -87,22 +87,7 @@ class RomDropView: DropView {
         do {
             
             try emu.mem.loadRom(url)
-
-            // Check if we should keep this Rom
-            let hash = Int(emu.mem.romTraits.crc)
-
-            for item in parent.presetPopup.itemArray {
-
-                if item.tag == hash && hash != 0 {
-
-                    if let url = UserDefaults.romUrl(fingerprint: hash) {
-                        loginfo(1, "Saving \(url)")
-                        try? emu.mem.saveRom(url)
-                        UserDefaults.rescanRoms()
-                        parent.refreshRomSelector()
-                    }
-                }
-            }
+            parent.saveToLibrary(extension: false)
             return true
             
         } catch {
@@ -132,6 +117,7 @@ class ExtRomDropView: DropView {
         do {
             
             try emu.mem.loadExt(url)
+            parent.saveToLibrary(extension: true)
             return true
 
         } catch {
