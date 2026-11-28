@@ -137,10 +137,13 @@ Defaults::fallbacks()
     
     registerDefault(Opt::RTC_MODEL,                 (i64)RTCRevision::OKI);
 
+    registerDefault(Opt::RAMSEY_REVISION,           (i64)RamseyRevision::NONE);
+
     registerDefault(Opt::MEM_BUS_WIDTH,             16);
     registerDefault(Opt::MEM_CHIP_RAM,              512);
     registerDefault(Opt::MEM_SLOW_RAM,              512);
     registerDefault(Opt::MEM_FAST_RAM,              0);
+    registerDefault(Opt::MEM_MOBO_RAM,              0);
     registerDefault(Opt::MEM_EXT_START,             0xE0);
     registerDefault(Opt::MEM_SLOW_RAM_DELAY,        true);
     registerDefault(Opt::MEM_SLOW_RAM_MIRROR,       true);

@@ -40,13 +40,14 @@ enum class MemSrc : long
     EXT,
     MOBO,
     ZOR3_AUTOCONF,
-    ZOR3
+    ZOR3,
+    RAMSEY
 };
 
 struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = (long)MemSrc::ZOR3;
+    static constexpr long maxVal = (long)MemSrc::RAMSEY;
     
     static const char *_key(long value) { return _key(MemSrc(value)); }
     static const char *_key(MemSrc value)
@@ -73,6 +74,7 @@ struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
             case MemSrc::MOBO:           return "MOBO";
             case MemSrc::ZOR3_AUTOCONF:  return "ZOR3_AUTOCONF";
             case MemSrc::ZOR3:           return "ZOR3";
+            case MemSrc::RAMSEY:         return "RAMSEY";
         }
         return "???";
     }
@@ -101,6 +103,7 @@ struct MemSrcEnum : utl::Reflectable<MemSrcEnum, MemSrc>
             case MemSrc::MOBO:           return "Motherboard RAM";
             case MemSrc::ZOR3_AUTOCONF:  return "Zorro III auto config";
             case MemSrc::ZOR3:           return "Zorro III boards";
+            case MemSrc::RAMSEY:         return "Ramsey registers";
         }
         return "???";
     }
@@ -258,6 +261,7 @@ typedef struct
     i32 chipSize;
     i32 slowSize;                           ///< Slow RAM size (in bytes)
     i32 fastSize;                           ///< Fast RAM size (in bytes)
+    i32 moboSize;                           ///< Motherboard RAM size (in bytes)
     
     /// ROM size in bytes
     i32 romSize;

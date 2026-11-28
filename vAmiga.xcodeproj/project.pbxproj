@@ -64,6 +64,7 @@
 		501B00192C63589500749664 /* GuardList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00172C63589500749664 /* GuardList.cpp */; };
 		501B001A2C63589500749664 /* GuardList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00172C63589500749664 /* GuardList.cpp */; };
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
+		5A3C0E252F40A00100ABCDEF /* Ramsey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A3C0E242F40A00100ABCDEF /* Ramsey.cpp */; };
 		501C36322C1C17B1000FA274 /* CmdQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C36302C1C17B1000FA274 /* CmdQueue.cpp */; };
 		501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C36302C1C17B1000FA274 /* CmdQueue.cpp */; };
 		501C513B27C0084200DF1DD5 /* HardDiskConfigurator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */; };
@@ -559,6 +560,7 @@
 		50FC04AF27DA199200C3E566 /* XRay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* XRay.cpp */; };
 		50FC04B027DA199600C3E566 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
+		5A3C0E262F40A00100ABCDEF /* Ramsey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A3C0E242F40A00100ABCDEF /* Ramsey.cpp */; };
 		50FC04B227DA199C00C3E566 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
@@ -764,6 +766,10 @@
 		501B00182C63589500749664 /* GuardList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuardList.h; sourceTree = "<group>"; };
 		501B001B2C63C7E100749664 /* GuardListTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuardListTypes.h; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
+		5A3C0E242F40A00100ABCDEF /* Ramsey.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ramsey.cpp; sourceTree = "<group>"; };
+		5A3C0E232F40A00100ABCDEF /* Ramsey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ramsey.h; sourceTree = "<group>"; };
+		5A3C0E222F40A00100ABCDEF /* RamseyTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RamseyTypes.h; sourceTree = "<group>"; };
+		5A3C0E212F40A00100ABCDEF /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		501C362F2C1C176C000FA274 /* EmulatorTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulatorTypes.h; sourceTree = "<group>"; };
 		501C36302C1C17B1000FA274 /* CmdQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CmdQueue.cpp; sourceTree = "<group>"; };
@@ -2092,6 +2098,7 @@
 				502F7DCF2221709700AEEC65 /* Denise */,
 				502F7DD0222170AE00AEEC65 /* Agnus */,
 				505B801C23FE626E002407FE /* Memory */,
+				5A3C0E202F40A00100ABCDEF /* Ramsey */,
 				50EC7A2E29C9EC1000060CAA /* RTC */,
 				508AC36527B7F634006AD2E7 /* Zorro */,
 			);
@@ -3018,6 +3025,17 @@
 			path = Keyboard;
 			sourceTree = "<group>";
 		};
+		5A3C0E202F40A00100ABCDEF /* Ramsey */ = {
+			isa = PBXGroup;
+			children = (
+				5A3C0E212F40A00100ABCDEF /* CMakeLists.txt */,
+				5A3C0E222F40A00100ABCDEF /* RamseyTypes.h */,
+				5A3C0E232F40A00100ABCDEF /* Ramsey.h */,
+				5A3C0E242F40A00100ABCDEF /* Ramsey.cpp */,
+			);
+			path = Ramsey;
+			sourceTree = "<group>";
+		};
 		50EC7A2E29C9EC1000060CAA /* RTC */ = {
 			isa = PBXGroup;
 			children = (
@@ -3446,6 +3464,7 @@
 				50F7147630598852006C02B8 /* RomsAmiga.cpp in Sources */,
 				504FC7D72D31887900F0B733 /* DashboardToolbar.swift in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
+				5A3C0E252F40A00100ABCDEF /* Ramsey.cpp in Sources */,
 				500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				CE1B55F098CEC92CB4B8AE2F /* MoiraCore68000.cpp in Sources */,
@@ -3866,6 +3885,7 @@
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,
 				50AC25C62F4264670016265E /* RSError.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
+				5A3C0E262F40A00100ABCDEF /* Ramsey.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
 				50BF4BE42F0C0DB000F1B9F2 /* ImageError.cpp in Sources */,
 				50BF4B392EFD244800F1B9F2 /* LinearDevice.cpp in Sources */,

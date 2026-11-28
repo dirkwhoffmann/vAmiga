@@ -82,6 +82,7 @@ extension Inspector {
             case .MOBO:          color = MemColors.fast
             case .ZOR3_AUTOCONF: color = MemColors.auto
             case .ZOR3:          color = MemColors.auto
+            case .RAMSEY:        color = MemColors.cust
             default:             fatalError()
             }
             let ciBgColor = CIColor(color: MemColors.unmapped)!

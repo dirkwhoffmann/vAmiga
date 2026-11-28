@@ -23,6 +23,8 @@ using utl::Buffer;
 
 #define SLOW_RAM_STRT 0xC00000
 #define FAST_RAM_STRT ramExpansion.getBaseAddr()
+#define MOBO_RAM_END  0x08000000
+#define MOBO_RAM_STRT (MOBO_RAM_END - u32(config.moboSize))
 
 // Verifies address ranges
 #define ASSERT_CHIP_ADDR(x) \
@@ -31,6 +33,8 @@ assert(((x) % config.chipSize) == ((x) & chipMask));
 assert(((x) - FAST_RAM_STRT) < (u32)config.fastSize);
 #define ASSERT_SLOW_ADDR(x) \
 assert(((x) - SLOW_RAM_STRT) < (u32)config.slowSize);
+#define ASSERT_MOBO_ADDR(x) \
+assert(((x) - MOBO_RAM_STRT) < (u32)config.moboSize);
 #define ASSERT_ROM_ADDR(x) \
 assert(((x) % config.romSize) == ((x) & romMask));
 #define ASSERT_WOM_ADDR(x) \
@@ -64,6 +68,11 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 #define READ_SLOW_8(x)      R8BE (slow + ((x) - SLOW_RAM_STRT))
 #define READ_SLOW_16(x)     R16BE(slow + ((x) - SLOW_RAM_STRT))
 
+// Reads a value from Motherboard RAM in big endian format
+#define READ_MOBO_8(x)      R8BE (mobo + ((x) - MOBO_RAM_STRT))
+#define READ_MOBO_16(x)     R16BE(mobo + ((x) - MOBO_RAM_STRT))
+#define READ_MOBO_32(x)     R32BE(mobo + ((x) - MOBO_RAM_STRT))
+
 // Reads a value from Boot ROM or Kickstart ROM in big endian format
 #define READ_ROM_8(x)       R8BE (rom + ((x) & romMask))
 #define READ_ROM_16(x)      R16BE(rom + ((x) & romMask))
@@ -96,6 +105,11 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 #define WRITE_SLOW_8(x,y)   W8BE (slow + ((x) - SLOW_RAM_STRT), (y))
 #define WRITE_SLOW_16(x,y)  W16BE(slow + ((x) - SLOW_RAM_STRT), (y))
 
+// Writes a value into Motherboard RAM in big endian format
+#define WRITE_MOBO_8(x,y)   W8BE (mobo + ((x) - MOBO_RAM_STRT), (y))
+#define WRITE_MOBO_16(x,y)  W16BE(mobo + ((x) - MOBO_RAM_STRT), (y))
+#define WRITE_MOBO_32(x,y)  W32BE(mobo + ((x) - MOBO_RAM_STRT), (y))
+
 /* Writes a value into Boot ROM, Kickstart ROM, Kickstart WOM or Extended ROM
  * in big endian format. Each write invalidates the cached Rom traits.
  */
@@ -123,6 +137,7 @@ class Memory final : public SubComponent {
         Opt::MEM_CHIP_RAM,
         Opt::MEM_SLOW_RAM,
         Opt::MEM_FAST_RAM,
+        Opt::MEM_MOBO_RAM,
         Opt::MEM_EXT_START,
         Opt::MEM_SLOW_RAM_DELAY,
         Opt::MEM_SLOW_RAM_MIRROR,
@@ -152,7 +167,7 @@ public:
 
     /* About
      *
-     * There are 6 types of dynamically allocated memory:
+     * There are 7 types of dynamically allocated memory:
      *
      *     rom: Read-only memory
      *          Holds a Kickstart Rom or a Boot Rom (A1000).
@@ -181,6 +196,11 @@ public:
      *          seperate bus and doesn't slow down the Chip set when the CPU
      *          addresses it.
      *
+     *    mobo: Motherboard Ram
+     *          32-bit Fast Ram on the motherboard of the A3000 and A4000,
+     *          managed by Ramsey. It occupies the top of the 16 MB window
+     *          $07000000 - $07FFFFFF and is visible to 32-bit CPUs only.
+     *
      * Each memory type is represented by three variables:
      *
      *    A pointer to the allocates memory.
@@ -199,6 +219,7 @@ public:
     u8 *chip;
     u8 *slow;
     u8 *fast;
+    u8 *mobo;
 
     Buffer<u8> romAllocator = Buffer(&rom);
     Buffer<u8> womAllocator = Buffer(&wom);
@@ -206,6 +227,7 @@ public:
     Buffer<u8> chipAllocator = Buffer(&chip);
     Buffer<u8> slowAllocator = Buffer(&slow);
     Buffer<u8> fastAllocator = Buffer(&fast);
+    Buffer<u8> moboAllocator = Buffer(&mobo);
 
     u32 romMask = 0;
     u32 womMask = 0;
@@ -255,6 +277,7 @@ public:
         CLONE(chipAllocator)
         CLONE(slowAllocator)
         CLONE(fastAllocator)
+        CLONE(moboAllocator)
 
         CLONE(womIsLocked)
         CLONE_ARRAY(cpuMemSrc)
@@ -381,10 +404,12 @@ public:
     void allocChip(i32 bytes, bool update = true);
     void allocSlow(i32 bytes, bool update = true);
     void allocFast(i32 bytes, bool update = true);
+    void allocMobo(i32 bytes, bool update = true);
 
     void deleteChip() { allocChip(0); }
     void deleteSlow() { allocSlow(0); }
     void deleteFast() { allocFast(0); }
+    void deleteMobo() { allocMobo(0); }
 
     void allocRom(i32 bytes, bool update = true);
     void allocWom(i32 bytes, bool update = true);
@@ -410,12 +435,14 @@ public:
     bool hasChipRam() const { return chip != nullptr; }
     bool hasSlowRam() const { return slow != nullptr; }
     bool hasFastRam() const { return fast != nullptr; }
+    bool hasMoboRam() const { return mobo != nullptr; }
 
     // Returns the size of a certain Ram in bytes
     isize chipRamSize() const { return config.chipSize; }
     isize slowRamSize() const { return config.slowSize; }
     isize fastRamSize() const { return config.fastSize; }
-    isize ramSize() const { return config.chipSize + config.slowSize + config.fastSize; }
+    isize moboRamSize() const { return config.moboSize; }
+    isize ramSize() const { return config.chipSize + config.slowSize + config.fastSize + config.moboSize; }
 
 private:
     
@@ -491,6 +518,7 @@ public:
     bool inChipRam(u32 addr);
     bool inSlowRam(u32 addr);
     bool inFastRam(u32 addr);
+    bool inMoboRam(u32 addr);
     bool inRam(u32 addr);
     bool inRom(u32 addr);
     bool isUnmapped(u32 addr);
@@ -540,9 +568,11 @@ private:
     // Accesses an address above the 24-bit space (32-bit CPUs only)
     u8 peekHi8(u32 addr);
     u16 peekHi16(u32 addr);
+    u32 peekHi32(u32 addr);
     u16 spypeekHi16(u32 addr) const;
     void pokeHi8(u32 addr, u8 value);
     void pokeHi16(u32 addr, u16 value);
+    void pokeHi32(u32 addr, u32 value);
 
 public:
 

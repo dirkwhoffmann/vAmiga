@@ -21,6 +21,7 @@
 #include "Denise.h"
 #include "Memory.h"
 #include "Paula.h"
+#include "Ramsey.h"
 #include "RTC.h"
 
 // Ports
@@ -112,6 +113,7 @@ public:
     Denise denise = Denise(*this);
     Paula paula = Paula(*this);
     RTC rtc = RTC(*this);
+    Ramsey ramsey = Ramsey(*this);
 
     // Ports
     AudioPort audioPort = AudioPort(*this);
@@ -239,6 +241,7 @@ public:
         CLONE(audioPort)
         CLONE(videoPort)
         CLONE(rtc)
+        CLONE(ramsey)
         CLONE(denise)
         CLONE(paula)
         CLONE(zorro)

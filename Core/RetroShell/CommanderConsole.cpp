@@ -478,6 +478,13 @@ Console::initCommanderCommands(RSCommand &root)
     //
     
     cmd = registerComponent(rtc);
+
+
+    //
+    // Components (Ramsey)
+    //
+
+    cmd = registerComponent(ramsey);
     
     
     //

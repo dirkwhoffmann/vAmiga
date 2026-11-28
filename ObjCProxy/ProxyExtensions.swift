@@ -211,6 +211,7 @@ extension MemProxy {
         case .MOBO:                     return "MOBO"
         case .ZOR3_AUTOCONF:            return "ACONF"
         case .ZOR3:                     return "ZORRO"
+        case .RAMSEY:                   return "RAMSEY"
         default:                        return nil
         }
     }

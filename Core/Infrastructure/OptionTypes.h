@@ -139,12 +139,16 @@ enum class Opt : long
 
     // Real-time clock
     RTC_MODEL,              ///< Chip revision
+
+    // Memory controller
+    RAMSEY_REVISION,        ///< Chip revision
     
     // Memory
     MEM_BUS_WIDTH,          ///< Data bus width
     MEM_CHIP_RAM,           ///< Chip RAM size
     MEM_SLOW_RAM,           ///< Slow RAM size
     MEM_FAST_RAM,           ///< Fast RAM size
+    MEM_MOBO_RAM,           ///< Motherboard RAM size
     MEM_EXT_START,          ///< Extension ROM location
     MEM_SLOW_RAM_DELAY,     ///< Emulate slow RAM bus delays
     MEM_SLOW_RAM_MIRROR,    ///< ECS memory mirroring
@@ -354,11 +358,14 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
             case Opt::CPU_START_DELAY:          return "CPU.START_DELAY";
                             
             case Opt::RTC_MODEL:                return "RTC.MODEL";
+
+            case Opt::RAMSEY_REVISION:          return "RAMSEY.REVISION";
                 
             case Opt::MEM_BUS_WIDTH:            return "MEM.BUS_WIDTH";
             case Opt::MEM_CHIP_RAM:             return "MEM.CHIP_RAM";
             case Opt::MEM_SLOW_RAM:             return "MEM.SLOW_RAM";
             case Opt::MEM_FAST_RAM:             return "MEM.FAST_RAM";
+            case Opt::MEM_MOBO_RAM:             return "MEM.MOBO_RAM";
             case Opt::MEM_EXT_START:            return "MEM.EXT_START";
             case Opt::MEM_SLOW_RAM_DELAY:       return "MEM.SLOW_RAM_DELAY";
             case Opt::MEM_SLOW_RAM_MIRROR:      return "MEM.SLOW_RAM_MIRROR";
@@ -551,11 +558,13 @@ struct OptEnum : utl::Reflectable<OptEnum, Opt>
                 
             case Opt::CPU_COPROCESSOR:          return "Coprocessor revision";
             case Opt::RTC_MODEL:                return "Chip revision";
+            case Opt::RAMSEY_REVISION:          return "Chip revision";
                 
             case Opt::MEM_BUS_WIDTH:            return "Data bus width";
             case Opt::MEM_CHIP_RAM:             return "Chip RAM size";
             case Opt::MEM_SLOW_RAM:             return "Slow RAM size";
             case Opt::MEM_FAST_RAM:             return "Fast RAM size";
+            case Opt::MEM_MOBO_RAM:             return "Motherboard RAM size";
             case Opt::MEM_EXT_START:            return "Extension ROM location";
             case Opt::MEM_SLOW_RAM_DELAY:       return "Emulate slow RAM bus delays";
             case Opt::MEM_SLOW_RAM_MIRROR:      return "ECS memory mirroring";

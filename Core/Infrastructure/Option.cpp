@@ -130,10 +130,13 @@ OptionParser::create(Opt opt, i64 arg)
 
         case Opt::RTC_MODEL:                return enumParser.template operator()<RTCRevisionEnum,RTCRevision>();
 
+        case Opt::RAMSEY_REVISION:          return enumParser.template operator()<RamseyRevisionEnum,RamseyRevision>();
+
         case Opt::MEM_BUS_WIDTH:            return numParser();
         case Opt::MEM_CHIP_RAM:             return numParser();
         case Opt::MEM_SLOW_RAM:             return numParser();
         case Opt::MEM_FAST_RAM:             return numParser();
+        case Opt::MEM_MOBO_RAM:             return numParser();
         case Opt::MEM_EXT_START:            return numParser();
         case Opt::MEM_SLOW_RAM_DELAY:       return boolParser();
         case Opt::MEM_SLOW_RAM_MIRROR:      return boolParser();

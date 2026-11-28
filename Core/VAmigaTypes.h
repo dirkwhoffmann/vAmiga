@@ -28,6 +28,7 @@
 #include "Components/Denise/DeniseTypes.h"
 #include "Components/Memory/MemoryTypes.h"
 #include "Components/Paula/PaulaTypes.h"
+#include "Components/Ramsey/RamseyTypes.h"
 #include "Components/RTC/RTCTypes.h"
 #include "Components/Zorro/HdControllerTypes.h"
 #include "Components/Zorro/ZorroBoardTypes.h"

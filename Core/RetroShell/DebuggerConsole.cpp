@@ -865,6 +865,17 @@ Console::initDebuggerCommands(RSCommand &root)
             dump(os, rtc, Category::Registers);
         }
     });
+
+    root.add({
+
+        .tokens = { "r", "ramsey" },
+        .chelp  = { "Memory controller" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, ramsey, Category::Registers);
+        }
+    });
     
     root.add({
         
@@ -1110,6 +1121,17 @@ Console::initDebuggerCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             dump(os, rtc, Category::State );
+        }
+    });
+
+    root.add({
+
+        .tokens = { "?", "ramsey" },
+        .ghelp  = { "Memory controller" },
+        .chelp  = { "Inspect the internal state" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            dump(os, ramsey, Category::State );
         }
     });
     

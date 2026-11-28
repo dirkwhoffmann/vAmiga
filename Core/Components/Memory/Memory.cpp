@@ -19,6 +19,7 @@
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "RomFile.h"
+#include "Ramsey.h"
 #include "RTC.h"
 #include "ZorroManager.h"
 #include "MediaError.h"
@@ -70,6 +71,8 @@ Memory::_dump(Category category, std::ostream &os) const
         os << hex(Hashable::crc32(slow, config.slowSize)) << " (CRC32)  " << std::endl;
         os << tab("Fast Ram");
         os << hex(Hashable::crc32(fast, config.fastSize)) << " (CRC32)  " << std::endl;
+        os << tab("Motherboard Ram");
+        os << hex(Hashable::crc32(mobo, config.moboSize)) << " (CRC32)  " << std::endl;
 
         os << std::endl;
         os << tab("Data bus");
@@ -132,6 +135,7 @@ Memory::getOption(Opt option) const
         case Opt::MEM_CHIP_RAM:          return config.chipSize / KB(1);
         case Opt::MEM_SLOW_RAM:          return config.slowSize / KB(1);
         case Opt::MEM_FAST_RAM:          return config.fastSize / KB(1);
+        case Opt::MEM_MOBO_RAM:          return config.moboSize / KB(1);
         case Opt::MEM_EXT_START:         return config.extStart;
         case Opt::MEM_SLOW_RAM_DELAY:    return config.slowRamDelay;
         case Opt::MEM_SLOW_RAM_MIRROR:   return config.slowRamMirror;
@@ -184,6 +188,16 @@ Memory::checkOption(Opt opt, i64 value)
             }
             if (value % 64 != 0 || value > 8192) {
                 throw CoreError(CoreError::OPT_INV_ARG, "0, 64, 128, ..., 8192");
+            }
+            return;
+
+        case Opt::MEM_MOBO_RAM:
+
+            if (!isPoweredOff()) {
+                throw CoreError(CoreError::OPT_LOCKED);
+            }
+            if (value % 1024 != 0 || value < 0 || value > 16384) {
+                throw CoreError(CoreError::OPT_INV_ARG, "0, 1024, 2048, ..., 16384");
             }
             return;
 
@@ -256,6 +270,11 @@ Memory::setOption(Opt option, i64 value)
         case Opt::MEM_FAST_RAM:
 
             mem.allocFast((i32)KB(value));
+            return;
+
+        case Opt::MEM_MOBO_RAM:
+
+            mem.allocMobo((i32)KB(value));
             return;
             
         case Opt::MEM_EXT_START:
@@ -346,6 +365,9 @@ Memory::operator << (SerChecker &worker)
     if (config.fastSize) {
         for (isize i = 0; i < config.fastSize; i++) worker << fast[i];
     }
+    if (config.moboSize) {
+        for (isize i = 0; i < config.moboSize; i++) worker << mobo[i];
+    }
     if (config.saveRoms) {
 
         if (romAllocator.size) {
@@ -370,6 +392,7 @@ Memory::operator << (SerCounter &worker)
     i32 chipSize = config.chipSize;
     i32 slowSize = config.slowSize;
     i32 fastSize = config.fastSize;
+    i32 moboSize = config.moboSize;
 
     serialize(worker);
 
@@ -379,7 +402,8 @@ Memory::operator << (SerCounter &worker)
     << extSize
     << chipSize
     << slowSize
-    << fastSize;
+    << fastSize
+    << moboSize;
 
     worker.count += romSize;
     worker.count += womSize;
@@ -387,12 +411,13 @@ Memory::operator << (SerCounter &worker)
     worker.count += chipSize;
     worker.count += slowSize;
     worker.count += fastSize;
+    worker.count += moboSize;
 }
 
 void
 Memory::operator << (SerReader &worker)
 {
-    i32 romSize, womSize, extSize, chipSize, slowSize, fastSize;
+    i32 romSize, womSize, extSize, chipSize, slowSize, fastSize, moboSize;
 
     serialize(worker);
     
@@ -403,7 +428,8 @@ Memory::operator << (SerReader &worker)
     << extSize
     << chipSize
     << slowSize
-    << fastSize;
+    << fastSize
+    << moboSize;
 
     // Check the integrity of the new values before allocating memory
     if (romSize > KB(512)) throw MediaError(MediaError::SNAP_CORRUPTED);
@@ -412,6 +438,7 @@ Memory::operator << (SerReader &worker)
     if (chipSize > MB(2)) throw MediaError(MediaError::SNAP_CORRUPTED);
     if (slowSize > KB(1792)) throw MediaError(MediaError::SNAP_CORRUPTED);
     if (fastSize > MB(8)) throw MediaError(MediaError::SNAP_CORRUPTED);
+    if (moboSize > MB(16)) throw MediaError(MediaError::SNAP_CORRUPTED);
 
     // Allocate ROM space
     if (config.saveRoms) {
@@ -425,6 +452,7 @@ Memory::operator << (SerReader &worker)
     allocChip(chipSize, false);
     allocSlow(slowSize, false);
     allocFast(fastSize, false);
+    allocMobo(moboSize, false);
 
     // Load memory contents
     worker.copy(rom, romSize);
@@ -436,6 +464,7 @@ Memory::operator << (SerReader &worker)
     worker.copy(chip, chipSize);
     worker.copy(slow, slowSize);
     worker.copy(fast, fastSize);
+    worker.copy(mobo, moboSize);
 }
 
 void
@@ -450,6 +479,7 @@ Memory::operator << (SerWriter &worker)
     i32 chipSize = config.chipSize;
     i32 slowSize = config.slowSize;
     i32 fastSize = config.fastSize;
+    i32 moboSize = config.moboSize;
 
     // Save memory size information
     worker
@@ -458,7 +488,8 @@ Memory::operator << (SerWriter &worker)
     << extSize
     << chipSize
     << slowSize
-    << fastSize;
+    << fastSize
+    << moboSize;
 
     // Save memory contents
     worker.copy(rom, romSize);
@@ -467,6 +498,7 @@ Memory::operator << (SerWriter &worker)
     worker.copy(chip, chipSize);
     worker.copy(slow, slowSize);
     worker.copy(fast, fastSize);
+    worker.copy(mobo, moboSize);
 }
 
 MemInfo
@@ -570,6 +602,13 @@ Memory::allocFast(i32 bytes, bool update)
 }
 
 void
+Memory::allocMobo(i32 bytes, bool update)
+{
+    config.moboSize = bytes;
+    alloc(moboAllocator, bytes, update);
+}
+
+void
 Memory::allocRom(i32 bytes, bool update)
 {
     config.romSize = bytes;
@@ -626,6 +665,7 @@ Memory::fillRamWithInitPattern()
             if (chip) std::memset(chip, 0x00, config.chipSize);
             if (slow) std::memset(slow, 0x00, config.slowSize);
             if (fast) std::memset(fast, 0x00, config.fastSize);
+            if (mobo) std::memset(mobo, 0x00, config.moboSize);
             break;
             
         case RamInitPattern::ALL_ONES:
@@ -633,6 +673,7 @@ Memory::fillRamWithInitPattern()
             if (chip) std::memset(chip, 0xFF, config.chipSize);
             if (slow) std::memset(slow, 0xFF, config.slowSize);
             if (fast) std::memset(fast, 0xFF, config.fastSize);
+            if (mobo) std::memset(mobo, 0xFF, config.moboSize);
             break;
             
         case RamInitPattern::RANDOMIZED:
@@ -641,6 +682,7 @@ Memory::fillRamWithInitPattern()
             if (chip) for (isize i = 0; i < config.chipSize; i++) chip[i] = (u8)rand();
             if (slow) for (isize i = 0; i < config.slowSize; i++) slow[i] = (u8)rand();
             if (fast) for (isize i = 0; i < config.fastSize; i++) fast[i] = (u8)rand();
+            if (mobo) for (isize i = 0; i < config.moboSize; i++) mobo[i] = (u8)rand();
             break;
 
         default:
@@ -886,7 +928,7 @@ Memory::getHiMemSrc(u32 addr) const
     assert(addr >> 24);
 
     // Motherboard RAM (managed by Ramsey)
-    if (addr >= 0x07000000 && addr <= 0x07FFFFFF) return MemSrc::MOBO;
+    if (addr < MOBO_RAM_END && addr >= MOBO_RAM_STRT && ramsey.isPresent()) return MemSrc::MOBO;
 
     // Zorro III expansion space
     if (addr >= 0x10000000 && addr <= 0x7FFFFFFF) return MemSrc::ZOR3;
@@ -964,8 +1006,12 @@ Memory::updateCpuMemSrcTable()
     // Reserved
     cpuMemSrc[0xDD] = MemSrc::NONE;
 
-    // Custom chip set
-    cpuMemSrc[0xDE] = config.bankMap == BankMap::A1200 ? MemSrc::NONE : MemSrc::CUSTOM;
+    // Custom chip set or Ramsey registers
+    if (ramsey.isPresent()) {
+        cpuMemSrc[0xDE] = MemSrc::RAMSEY;
+    } else {
+        cpuMemSrc[0xDE] = config.bankMap == BankMap::A1200 ? MemSrc::NONE : MemSrc::CUSTOM;
+    }
     cpuMemSrc[0xDF] = MemSrc::CUSTOM;
     
     // Kickstart mirror, unmapped, or Extended Rom
@@ -1084,9 +1130,17 @@ Memory::inFastRam(u32 addr)
 }
 
 bool
+Memory::inMoboRam(u32 addr)
+{
+    if (addr <= 0xFFFFFF) return false;
+
+    return getHiMemSrc(addr) == MemSrc::MOBO;
+}
+
+bool
 Memory::inRam(u32 addr)
 {
-    return inChipRam(addr) || inSlowRam(addr) || inFastRam(addr);
+    return inChipRam(addr) || inSlowRam(addr) || inFastRam(addr) || inMoboRam(addr);
 }
 
 bool
@@ -1280,6 +1334,39 @@ Memory::spypeek16 <Accessor::CPU, MemSrc::FAST> (u32 addr) const
 }
 
 template<> u8
+Memory::peek8 <Accessor::CPU, MemSrc::MOBO> (u32 addr)
+{
+    ASSERT_MOBO_ADDR(addr);
+
+    metrics.value.fastReads.raw++;
+    return READ_MOBO_8(addr);
+}
+
+template<> u16
+Memory::peek16 <Accessor::CPU, MemSrc::MOBO> (u32 addr)
+{
+    ASSERT_MOBO_ADDR(addr);
+
+    metrics.value.fastReads.raw++;
+    return READ_MOBO_16(addr);
+}
+
+template<> u32
+Memory::peek32 <Accessor::CPU, MemSrc::MOBO> (u32 addr)
+{
+    ASSERT_MOBO_ADDR(addr);
+
+    metrics.value.fastReads.raw++;
+    return READ_MOBO_32(addr);
+}
+
+template<> u16
+Memory::spypeek16 <Accessor::CPU, MemSrc::MOBO> (u32 addr) const
+{
+    return READ_MOBO_16(addr);
+}
+
+template<> u8
 Memory::peek8 <Accessor::CPU, MemSrc::CIA> (u32 addr)
 {
     ASSERT_CIA_ADDR(addr);
@@ -1433,6 +1520,26 @@ Memory::spypeek16 <Accessor::CPU, MemSrc::ZOR2> (u32 addr) const
 }
 
 template<> u8
+Memory::peek8 <Accessor::CPU, MemSrc::RAMSEY> (u32 addr)
+{
+    dataBus = u16(ramsey.peek8(addr));
+    return u8(dataBus);
+}
+
+template<> u16
+Memory::peek16 <Accessor::CPU, MemSrc::RAMSEY> (u32 addr)
+{
+    dataBus = HI_LO(ramsey.peek8(addr), ramsey.peek8(addr + 1));
+    return dataBus;
+}
+
+template<> u16
+Memory::spypeek16 <Accessor::CPU, MemSrc::RAMSEY> (u32 addr) const
+{
+    return HI_LO(ramsey.spypeek8(addr), ramsey.spypeek8(addr + 1));
+}
+
+template<> u8
 Memory::peek8 <Accessor::CPU, MemSrc::ROM> (u32 addr)
 {
     ASSERT_ROM_ADDR(addr);
@@ -1545,6 +1652,7 @@ Memory::peek8 <Accessor::CPU> (u32 addr)
         case MemSrc::ROM_MIRROR:    return peek8 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::WOM:           return peek8 <Accessor::CPU, MemSrc::WOM>      (addr);
         case MemSrc::EXT:           return peek8 <Accessor::CPU, MemSrc::EXT>      (addr);
+        case MemSrc::RAMSEY:        return peek8 <Accessor::CPU, MemSrc::RAMSEY>   (addr);
 
         default:
             fatalError;
@@ -1574,6 +1682,7 @@ Memory::peek16 <Accessor::CPU> (u32 addr)
         case MemSrc::ROM_MIRROR:    return peek16 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::WOM:           return peek16 <Accessor::CPU, MemSrc::WOM>      (addr);
         case MemSrc::EXT:           return peek16 <Accessor::CPU, MemSrc::EXT>      (addr);
+        case MemSrc::RAMSEY:        return peek16 <Accessor::CPU, MemSrc::RAMSEY>   (addr);
 
         default:
             fatalError;
@@ -1603,6 +1712,7 @@ Memory::spypeek16 <Accessor::CPU> (u32 addr) const
         case MemSrc::ROM_MIRROR:    return spypeek16 <Accessor::CPU, MemSrc::ROM>      (addr);
         case MemSrc::WOM:           return spypeek16 <Accessor::CPU, MemSrc::WOM>      (addr);
         case MemSrc::EXT:           return spypeek16 <Accessor::CPU, MemSrc::EXT>      (addr);
+        case MemSrc::RAMSEY:        return spypeek16 <Accessor::CPU, MemSrc::RAMSEY>   (addr);
 
         default:
             fatalError;
@@ -1726,8 +1836,10 @@ Memory::spypeek8 <Accessor::AGNUS> (u32 addr) const
 u8
 Memory::dsack(u32 addr) const
 {
-    // Beyond the 24-bit space, nothing is emulated yet that has a 32 bit port
-    if (unlikely(addr >> 24)) return moira::DSACK_16;
+    // Beyond the 24-bit space, only Motherboard RAM has a 32 bit port yet
+    if (unlikely(addr >> 24)) {
+        return getHiMemSrc(addr) == MemSrc::MOBO ? moira::DSACK_32 : moira::DSACK_16;
+    }
 
     if (config.busWidth == 32) {
         
@@ -1753,6 +1865,8 @@ Memory::dsack(u32 addr) const
 template<> u32
 Memory::peek32 <Accessor::CPU> (u32 addr)
 {
+    if (unlikely(addr >> 24)) return peekHi32(addr);
+
     /* A 32 bit port delivers the longword in a single bus cycle. Which sources
      * qualify is decided by dsack(), the very function the CPU asks through
      * Moira::dsack. Deriving the decision from it here rather than repeating
@@ -1787,7 +1901,8 @@ Memory::peekHi8(u32 addr)
 {
     switch (getHiMemSrc(addr)) {
 
-        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::MOBO:              return peek8 <Accessor::CPU, MemSrc::MOBO> (addr);
+
         case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
         case MemSrc::ZOR3:              // Not emulated yet
         default:
@@ -1800,11 +1915,28 @@ Memory::peekHi16(u32 addr)
 {
     switch (getHiMemSrc(addr)) {
 
-        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::MOBO:              return peek16 <Accessor::CPU, MemSrc::MOBO> (addr);
+
         case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
         case MemSrc::ZOR3:              // Not emulated yet
         default:
             return peek16 <Accessor::CPU, MemSrc::NONE> (addr);
+    }
+}
+
+u32
+Memory::peekHi32(u32 addr)
+{
+    switch (getHiMemSrc(addr)) {
+
+        case MemSrc::MOBO:              return peek32 <Accessor::CPU, MemSrc::MOBO> (addr);
+
+        default:
+
+            // Everything else is a 16 bit port and takes two bus cycles
+            u32 hi = peekHi16(addr);
+            u32 lo = peek16 <Accessor::CPU> (addr + 2);
+            return HI_W_LO_W(hi, lo);
     }
 }
 
@@ -1813,7 +1945,8 @@ Memory::spypeekHi16(u32 addr) const
 {
     switch (getHiMemSrc(addr)) {
 
-        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::MOBO:              return spypeek16 <Accessor::CPU, MemSrc::MOBO> (addr);
+
         case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
         case MemSrc::ZOR3:              // Not emulated yet
         default:
@@ -1967,6 +2100,33 @@ Memory::poke32 <Accessor::CPU, MemSrc::FAST> (u32 addr, u32 value)
 }
 
 template <> void
+Memory::poke8 <Accessor::CPU, MemSrc::MOBO> (u32 addr, u8 value)
+{
+    ASSERT_MOBO_ADDR(addr);
+
+    metrics.value.fastWrites.raw++;
+    WRITE_MOBO_8(addr, value);
+}
+
+template <> void
+Memory::poke16 <Accessor::CPU, MemSrc::MOBO> (u32 addr, u16 value)
+{
+    ASSERT_MOBO_ADDR(addr);
+
+    metrics.value.fastWrites.raw++;
+    WRITE_MOBO_16(addr, value);
+}
+
+template <> void
+Memory::poke32 <Accessor::CPU, MemSrc::MOBO> (u32 addr, u32 value)
+{
+    ASSERT_MOBO_ADDR(addr);
+
+    metrics.value.fastWrites.raw++;
+    WRITE_MOBO_32(addr, value);
+}
+
+template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::CIA> (u32 addr, u8 value)
 {
     ASSERT_CIA_ADDR(addr);
@@ -2080,6 +2240,21 @@ Memory::poke16 <Accessor::CPU, MemSrc::ZOR2> (u32 addr, u16 value)
 }
 
 template <> void
+Memory::poke8 <Accessor::CPU, MemSrc::RAMSEY> (u32 addr, u8 value)
+{
+    dataBus = value;
+    ramsey.poke8(addr, value);
+}
+
+template <> void
+Memory::poke16 <Accessor::CPU, MemSrc::RAMSEY> (u32 addr, u16 value)
+{
+    dataBus = value;
+    ramsey.poke8(addr, HI_BYTE(value));
+    ramsey.poke8(addr + 1, LO_BYTE(value));
+}
+
+template <> void
 Memory::poke8 <Accessor::CPU, MemSrc::ROM> (u32 addr, u8 value)
 {
     ASSERT_ROM_ADDR(addr);
@@ -2168,6 +2343,7 @@ Memory::poke8 <Accessor::CPU> (u32 addr, u8 value)
         case MemSrc::ROM_MIRROR:    poke8 <Accessor::CPU, MemSrc::ROM>      (addr, value); return;
         case MemSrc::WOM:           poke8 <Accessor::CPU, MemSrc::WOM>      (addr, value); return;
         case MemSrc::EXT:           poke8 <Accessor::CPU, MemSrc::EXT>      (addr, value); return;
+        case MemSrc::RAMSEY:        poke8 <Accessor::CPU, MemSrc::RAMSEY>   (addr, value); return;
 
         default:
             fatalError;
@@ -2197,6 +2373,7 @@ Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
         case MemSrc::ROM_MIRROR:    poke16 <Accessor::CPU, MemSrc::ROM>      (addr, value); return;
         case MemSrc::WOM:           poke16 <Accessor::CPU, MemSrc::WOM>      (addr, value); return;
         case MemSrc::EXT:           poke16 <Accessor::CPU, MemSrc::EXT>      (addr, value); return;
+        case MemSrc::RAMSEY:        poke16 <Accessor::CPU, MemSrc::RAMSEY>   (addr, value); return;
 
         default:
             fatalError;
@@ -2206,6 +2383,8 @@ Memory::poke16 <Accessor::CPU> (u32 addr, u16 value)
 template<> void
 Memory::poke32 <Accessor::CPU> (u32 addr, u32 value)
 {
+    if (unlikely(addr >> 24)) { pokeHi32(addr, value); return; }
+
     // See peek32: a 32 bit port accepts the longword in a single bus cycle
     if (dsack(addr) == moira::DSACK_32) {
 
@@ -2233,7 +2412,8 @@ Memory::pokeHi8(u32 addr, u8 value)
 {
     switch (getHiMemSrc(addr)) {
 
-        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::MOBO:              poke8 <Accessor::CPU, MemSrc::MOBO> (addr, value); return;
+
         case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
         case MemSrc::ZOR3:              // Not emulated yet
         default:
@@ -2242,11 +2422,27 @@ Memory::pokeHi8(u32 addr, u8 value)
 }
 
 void
+Memory::pokeHi32(u32 addr, u32 value)
+{
+    switch (getHiMemSrc(addr)) {
+
+        case MemSrc::MOBO:              poke32 <Accessor::CPU, MemSrc::MOBO> (addr, value); return;
+
+        default:
+
+            // Everything else is a 16 bit port and takes two bus cycles
+            pokeHi16(addr, u16(value >> 16));
+            poke16 <Accessor::CPU> (addr + 2, u16(value & 0xFFFF));
+    }
+}
+
+void
 Memory::pokeHi16(u32 addr, u16 value)
 {
     switch (getHiMemSrc(addr)) {
 
-        case MemSrc::MOBO:              // Not emulated yet
+        case MemSrc::MOBO:              poke16 <Accessor::CPU, MemSrc::MOBO> (addr, value); return;
+
         case MemSrc::ZOR3_AUTOCONF:     // Not emulated yet
         case MemSrc::ZOR3:              // Not emulated yet
         default:
@@ -3265,6 +3461,13 @@ Memory::patch <MemSrc::FAST> (u32 addr, u8 value)
 }
 
 template <> void
+Memory::patch <MemSrc::MOBO> (u32 addr, u8 value)
+{
+    ASSERT_MOBO_ADDR(addr);
+    WRITE_MOBO_8(addr, value);
+}
+
+template <> void
 Memory::patch <MemSrc::ROM> (u32 addr, u8 value)
 {
     ASSERT_ROM_ADDR(addr);
@@ -3288,8 +3491,11 @@ Memory::patch <MemSrc::EXT> (u32 addr, u8 value)
 void
 Memory::patch(u32 addr, u8 value)
 {
-    // Nothing is patchable beyond the 24-bit space yet
-    if (unlikely(addr >> 24)) return;
+    // Beyond the 24-bit space, only Motherboard RAM is patchable yet
+    if (unlikely(addr >> 24)) {
+        if (getHiMemSrc(addr) == MemSrc::MOBO) patch <MemSrc::MOBO> (addr, value);
+        return;
+    }
     
     switch (cpuMemSrc[addr >> 16]) {
             

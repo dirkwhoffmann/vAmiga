@@ -84,6 +84,7 @@ extension BankTableView: NSTableViewDataSource {
             case .MOBO:          return "Motherboard Ram"
             case .ZOR3_AUTOCONF: return "Zorro III Autoconf"
             case .ZOR3:          return "Zorro III device"
+            case .RAMSEY:        return "Ramsey"
             default:             fatalError()
             }
 

@@ -63,6 +63,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
         &audioPort,
         &videoPort,
         &rtc,
+        &ramsey,
         &denise,
         &paula,
         &zorro,
@@ -729,10 +730,12 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
                 { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
                 { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
+                { Opt::RAMSEY_REVISION,     (i64)RamseyRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        512 },
                 { Opt::MEM_SLOW_RAM,        512 },
                 { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_MOBO_RAM,        0 },
                 { Opt::MEM_BANKMAP,         (i64)BankMap::A500 },
                 { Opt::MON_FLICKER_FIXER,   false }
             });
@@ -750,10 +753,12 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
                 { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
                 { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
+                { Opt::RAMSEY_REVISION,     (i64)RamseyRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        512 },
                 { Opt::MEM_SLOW_RAM,        512 },
                 { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_MOBO_RAM,        0 },
                 { Opt::MEM_BANKMAP,         (i64)BankMap::A1000 },
                 { Opt::MON_FLICKER_FIXER,   false }
             });
@@ -771,10 +776,12 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
                 { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
                 { Opt::RTC_MODEL,           (i64)RTCRevision::OKI },
+                { Opt::RAMSEY_REVISION,     (i64)RamseyRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        512 },
                 { Opt::MEM_SLOW_RAM,        512 },
                 { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_MOBO_RAM,        0 },
                 { Opt::MEM_BANKMAP,         (i64)BankMap::A2000B },
                 { Opt::MON_FLICKER_FIXER,   false }
             });
@@ -792,10 +799,12 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
                 { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
                 { Opt::RTC_MODEL,           (i64)RTCRevision::OKI },
+                { Opt::RAMSEY_REVISION,     (i64)RamseyRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        1024 },
                 { Opt::MEM_SLOW_RAM,        0 },
                 { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_MOBO_RAM,        0 },
                 { Opt::MEM_BANKMAP,         (i64)BankMap::A500 },
                 { Opt::MON_FLICKER_FIXER,   false }
             });
@@ -813,10 +822,12 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
                 { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_PLCC },
                 { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
+                { Opt::RAMSEY_REVISION,     (i64)RamseyRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       16 },
                 { Opt::MEM_CHIP_RAM,        1024 },
                 { Opt::MEM_SLOW_RAM,        0 },
                 { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_MOBO_RAM,        0 },
                 { Opt::MEM_BANKMAP,         (i64)BankMap::A500 },
                 { Opt::MON_FLICKER_FIXER,   false }
             });
@@ -834,10 +845,12 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
                 { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_PLCC },
                 { Opt::RTC_MODEL,           (i64)RTCRevision::NONE },
+                { Opt::RAMSEY_REVISION,     (i64)RamseyRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       32 },
                 { Opt::MEM_CHIP_RAM,        2048 },
                 { Opt::MEM_SLOW_RAM,        0 },
                 { Opt::MEM_FAST_RAM,        0 },
+                { Opt::MEM_MOBO_RAM,        0 },
                 { Opt::MEM_BANKMAP,         (i64)BankMap::A1200 },
                 { Opt::MON_FLICKER_FIXER,   false }
             });
@@ -855,10 +868,12 @@ Amiga::presetOptions(ModelPreset model)
                 { Opt::AMIGA_VIDEO_FORMAT,  (i64)TV::PAL },
                 { Opt::CIA_REVISION,        (i64)CIARev::MOS_8520_DIP },
                 { Opt::RTC_MODEL,           (i64)RTCRevision::RICOH },
+                { Opt::RAMSEY_REVISION,     (i64)RamseyRevision::NONE },
                 { Opt::MEM_BUS_WIDTH,       32 },
                 { Opt::MEM_CHIP_RAM,        1024 },
                 { Opt::MEM_SLOW_RAM,        0 },
                 { Opt::MEM_FAST_RAM,        1024 },
+                { Opt::MEM_MOBO_RAM,        0 },
                 { Opt::MEM_BANKMAP,         (i64)BankMap::A2000B },
                 { Opt::MON_FLICKER_FIXER,   true }
             });

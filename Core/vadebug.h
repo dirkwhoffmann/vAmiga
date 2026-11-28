@@ -171,6 +171,9 @@ using utl::isize;
     /* Real-time clock */                                                     \
     E(LOG_RTC,            LOG_OFF,  "Real-time clock")                        \
                                                                               \
+    /* Memory controller */                                                   \
+    E(LOG_RMY,            LOG_OFF,  "Ramsey")                                 \
+                                                                              \
     /* Keyboard */                                                            \
     E(LOG_KBD,            LOG_OFF,  "Keyboard")                               \
     E(LOG_KEY,            LOG_OFF,  "Keyboard key events")                    \

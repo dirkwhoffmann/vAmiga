@@ -220,6 +220,7 @@ Headless::reportSize()
     printf("             Paula : %zu bytes\n", sizeof(Paula));
     printf("       PixelEngine : %zu bytes\n", sizeof(PixelEngine));
     printf("     RemoteManager : %zu bytes\n", sizeof(RemoteManager));
+    printf("            Ramsey : %zu bytes\n", sizeof(Ramsey));
     printf("               RTC : %zu bytes\n", sizeof(RTC));
     printf("        RetroShell : %zu bytes\n", sizeof(RetroShell));
     printf("           Sampler : %zu bytes\n", sizeof(Sampler));
@@ -331,6 +332,9 @@ Headless::smokeTestScript[] = {
     "mem set FAST_RAM 2048",
     "mem set FAST_RAM 4096",
     "mem set FAST_RAM 8192",
+    "mem set MOBO_RAM 0",
+    "mem set MOBO_RAM 1024",
+    "mem set MOBO_RAM 16384",
     "mem set EXT_START 0xE0",
     "mem set EXT_START 0xF0",
     "mem set SAVE_ROMS true",
@@ -495,6 +499,11 @@ Headless::smokeTestScript[] = {
     "rtc set MODEL NONE",
     "rtc set MODEL OKI",
     "rtc set MODEL RICOH",
+
+    "ramsey",
+    "ramsey set REVISION NONE",
+    "ramsey set REVISION REV04",
+    "ramsey set REVISION REV07",
 
     "keyboard",
     "keyboard set ACCURACY 0",
@@ -714,6 +723,9 @@ Headless::smokeTestScript[] = {
 
     "",
     "? rtc",
+
+    "",
+    "? ramsey",
 
     "",
     "? zorro",

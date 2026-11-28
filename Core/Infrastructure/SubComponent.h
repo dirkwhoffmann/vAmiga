@@ -53,6 +53,7 @@ public:
     class Paula &paula;
     class PixelEngine &pixelEngine;
     class RamExpansion &ramExpansion;
+    class Ramsey &ramsey;
     class RemoteManager &remoteManager;
     class RetroShell &retroShell;
     class RetroShell &rshShell;

@@ -47,6 +47,7 @@ enum class Class : long
     OSDebugger,
     Paula,
     PixelEngine,
+    Ramsey,
     Recorder,
     RegressionTester,
     RemoteManager,
